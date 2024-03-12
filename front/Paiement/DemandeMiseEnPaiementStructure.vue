@@ -98,8 +98,18 @@
                                                         </thead>
                                                         <tbody>
                                                         <tr v-for="(value,id) in typeHeure.heures" class="detailHeure">
-                                                            <td v-if="value.heuresDemandees != 0 " style="width:20%;">{{ Number(value.heuresAPayer) }}
-                                                                hetd(s)
+                                                            <td v-if="value.heuresDemandees != 0 " style="width:20%;">
+                                                                <abbr v-if="value.datePaiement"
+                                                                      :title="'Payé en ' + value.periodeLibelle + ' le ' + formatDate(value.datePaiement) ">
+                                                                    <span class="number number-positif">{{ Number(value.heuresPayees) }} hetd(s)</span>
+                                                                </abbr>
+
+                                                                <abbr v-if="!value.datePaiement"
+                                                                      :title="'Demandé le ' + formatDate(value.dateDemande) ">
+                                                                    <span class="number number-positif">{{ Number(value.heuresDemandees) }} hetd(s)</span>
+                                                                </abbr>
+
+
                                                             </td>
                                                             <td v-if="value.heuresDemandees == 0 " style="width:20%;">
                                                                 <div class="input-group col-1">
@@ -222,7 +232,19 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr v-for="(value,id) in fonction.heures" class="detailHeure">
-                                                    <td v-if="value.heuresDemandees != 0 " style="width:10%;">{{ value.heuresAPayer }} hetd(s)</td>
+                                                    <td v-if="value.heuresDemandees != 0 " style="width:20%;">
+                                                        <abbr v-if="value.datePaiement"
+                                                              :title="'Payé en ' + value.periodeLibelle + ' le ' + formatDate(value.datePaiement) ">
+                                                            <span class="number number-positif">{{ Number(value.heuresPayees) }} hetd(s)</span>
+                                                        </abbr>
+
+                                                        <abbr v-if="!value.datePaiement"
+                                                              :title="'Demandé le ' + formatDate(value.dateDemande) ">
+                                                            <span class="number number-positif">{{ Number(value.heuresDemandees) }} hetd(s)</span>
+                                                        </abbr>
+
+
+                                                    </td>
                                                     <td v-if="value.heuresDemandees == 0 " style="width:20%;">
                                                         <div class="input-group col-1">
                                                             <input
@@ -249,7 +271,10 @@
                                                                 class="selectpicker"
                                                                 data-live-search="true"
                                                                 name="centreCout">
-                                                            <option value="">Aucun centre de cout</option>
+                                                            <option value="">{{
+                                                                    notValueCentreCoutValue(datas.centreCoutPaiement, value.typeHeureCode)
+                                                                }}
+                                                            </option>
                                                             <optgroup
                                                                 v-for="group in filtrerCentresCouts(datas.centreCoutPaiement,'referentiel')"
                                                                 :key="group.group"
@@ -358,7 +383,17 @@
                                                 <tbody>
 
                                                 <tr v-for="(value,id) in mission.heures" class="detailHeure">
-                                                    <td v-if="value.heuresDemandees != 0 " style="width:10%;">{{ value.heuresAPayer }} hetd(s)</td>
+                                                    <td v-if="value.heuresDemandees != 0 " style="width:20%;">
+                                                        <abbr v-if="value.datePaiement"
+                                                              :title="'Payé en ' + value.periodeLibelle + ' le ' + formatDate(value.datePaiement) ">
+                                                            <span class="number number-positif">{{ Number(value.heuresPayees) }} hetd(s)</span>
+                                                        </abbr>
+
+                                                        <abbr v-if="!value.datePaiement"
+                                                              :title="'Demandé le ' + formatDate(value.dateDemande) ">
+                                                            <span class="number number-positif">{{ Number(value.heuresDemandees) }} hetd(s)</span>
+                                                        </abbr>
+                                                    </td>
                                                     <td v-if="value.heuresDemandees == 0 " style="width:20%;">
                                                         <div class="input-group col-1">
                                                             <input
@@ -385,7 +420,10 @@
                                                                 data-live-search="true"
                                                                 name="centreCout"
                                                                 @change="enabledPaiement(mission.missionId,'mission')">
-                                                            <option value="">Aucun centre de cout</option>
+                                                            <option value="">{{
+                                                                    notValueCentreCoutValue(datas.centreCoutPaiement, value.typeHeureCode)
+                                                                }}
+                                                            </option>
                                                             <optgroup
                                                                 v-for="group in filtrerCentresCouts(datas.centreCoutPaiement,'mission')"
                                                                 :key="group.group"
@@ -499,13 +537,12 @@ export default {
     },
     data()
     {
-        console.log(this.datas);
+
         return {
             dotationPaieEtat: this.datas.budget.dotation.paieEtat,
             dotationRessourcesPropres: this.datas.budget.dotation.ressourcePropre,
             consommationPaieEtat: this.datas.budget.liquidation.paieEtat,
             consommationRessourcesPropres: this.datas.budget.liquidation.ressourcePropre,
-
 
         }
     },
@@ -530,10 +567,23 @@ export default {
             }
         },
     methods: {
+        getCentresCoutsPaiement()
+        {
+            unicaenVue.axios.get(unicaenVue.url('intervenant/:intervenant/mise-en-paiement/centre-cout-paiement/:structure', {
+                intervenant: this.intervenant,
+                structure: this.datas.id
+            }))
+                .then(response => {
+                    this.centresCoutsPaiement = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
         heuresStatutToString(value)
         {
 
-            if (value.heuresAPayer == value.heuresPayees) {
+            if (value.heuresAPayer == value.heuresPayees && value.heuresAPayer > 0) {
                 return '<span style="font-size:12px;line-height:20px;" class="badge bg-success">Paiement effectué</span>';
             }
             if (value.heuresAPayer == value.heuresDemandees) {
@@ -556,16 +606,18 @@ export default {
         supprimerDemandeMiseEnPaiement(id)
         {
             //On récupere le bouton d'ajout
-            this.btnToggle('remove-' + id);
+            this.btnState('remove-' + id, 'disabled');
             unicaenVue.axios.get(unicaenVue.url('paiement/:intervenant/supprimer-demande/:dmep', {intervenant: this.intervenant, dmep: id}))
                 .then(response => {
                     this.$emit('refresh');
-
+                    setTimeout(() => {
+                        this.btnState('remove-' + id, 'enabled');
+                    }, 4500);
                 })
                 .catch(error => {
                     this.$emit('refresh');
                     setTimeout(() => {
-                        this.btnToggle('remove-' + id);
+                        this.btnState('remove-' + id, 'enabled');
                     }, 2500);
                 })
         },
@@ -601,13 +653,15 @@ export default {
         {
 
             //On récupere le bouton d'ajout
-            this.btnToggle('add-' + id);
+            this.btnState('add-' + id, 'disabled');
             let options = {animation: true, delay: 15000, autohide: true};
             let inputHeure = document.getElementById('heures-' + id);
             let inputCentreCout = document.getElementById('centreCout-' + id);
             let inputDomaineFonctionnel = document.getElementById('domaineFonctionnel-' + id);
             let heureADemander = Number(inputHeure.value);
             let heureADemanderMax = Number(inputHeure.getAttribute('max'));
+            console.log("Heure à demander => " + heureADemander);
+            console.log("Heure Max =>" + heureADemanderMax);
             let domaineFonctionnelId = (inputDomaineFonctionnel) ? inputDomaineFonctionnel.value : '';
             let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
             let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
@@ -622,13 +676,14 @@ export default {
             //Si centre de cout non sélectionné
             if (centreCoutId == '') {
                 unicaenVue.flashMessenger.toast("Vous devez sélectionner un centre de coût pour demander la mise en paiement de ces heures", 'error', options)
-                this.btnToggle('add-' + id);
+                this.btnState('add-' + id, 'enabled');
                 return false;
             }
             //Si le nombre d'heure demandées est supérieur au nombre d'heures maximum pour cette ligne
             if (heureADemander > 0 && heureADemander > heureADemanderMax) {
+                console("Demande de mise en paiement impossible, vous demandez");
                 unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible, vous demandez " + heureADemander + " hetd(s) alors que vous pouvez demander maximum " + heureADemanderMax + " hetd(s)", 'error', options);
-                this.btnToggle('add-' + id);
+                this.btnState('add-' + id, 'enabled');
                 return false;
             }
             //Si je suis sur une demande de mise en paiement avec des fonds paie etat
@@ -636,7 +691,7 @@ export default {
                 let solde = this.dotationPaieEtat - (this.consommationPaieEtat + heureADemander);
                 if (solde <= 0) {
                     unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'paie etat' pour ces heures", 'error', options)
-                    this.btnToggle('add-' + id);
+                    this.btnState('add-' + id, 'enabled');
                     return false;
                 }
             }
@@ -645,7 +700,7 @@ export default {
                 let solde = this.dotationRessourcesPropres - (this.consommationRessourcesPropres + heureADemander);
                 if (solde <= 0) {
                     unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'ressources propres' pour ces heures", 'error', options)
-                    this.btnToggle('add-' + id);
+                    this.btnState('add-' + id, 'enabled');
                     return false;
                 }
             }
@@ -671,12 +726,15 @@ export default {
             unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas)
                 .then(response => {
                     this.$emit('refresh');
+                    setTimeout(() => {
+                        this.btnState('add-' + id, 'enabled');
+                    }, 4000);
 
                 })
                 .catch(error => {
                     console.error(error);
                     setTimeout(() => {
-                        this.btnToggle('add-' + id);
+                        this.btnState('add-' + id, 'enabled');
                     }, 2500);
                 })
 
@@ -687,7 +745,7 @@ export default {
         demanderToutesLesHeuresEnPaiement(codeStructure, libelleStructure)
         {
             //On récupere le bouton d'ajout
-            this.btnToggle('add-all-' + codeStructure);
+            this.btnState('add-all-' + codeStructure, 'disabled');
             let datas = [];
             let parent = document.getElementById("demande-mise-en-paiement-" + codeStructure);
             let demandesMiseEnPaiement = parent.getElementsByTagName("tr");
@@ -735,14 +793,14 @@ export default {
                 .then(response => {
                     this.$emit('refresh');
                     setTimeout(() => {
-                        this.btnToggle('add-all-' + codeStructure);
-                    }, 5000);
+                        this.btnState('add-all-' + codeStructure, 'enabled');
+                    }, 2500);
 
                 })
                 .catch(error => {
                     this.$emit('refresh');
                     setTimeout(() => {
-                        this.btnToggle('add-all-' + codeStructure);
+                        this.btnState('add-all-' + codeStructure, 'enabled');
                     }, 2500);
                 })
         },
@@ -752,8 +810,6 @@ export default {
             * Méthode permettant de filtrer les centres coûts disponibles par rapport
             * aux types d'heures à payer (fi, fa, fc etc...)
             * */
-
-
             let centresCoutesFiltered = [];
             for (var eotp in centresCouts) {
                 let group = eotp;
@@ -802,24 +858,35 @@ export default {
                 return chaine;
             }
         },
-        btnToggle(id)
+        btnState(id, state)
         {
             let btn = document.getElementById(id);
-            if (btn.disabled) {
-                btn.disabled = false;
-                btn.querySelector('#waiting').style.display = 'none';
-                btn.querySelector('#action').style.display = 'inline-block';
-            } else {
-                btn.disabled = true;
-                btn.querySelector('#waiting').style.display = 'inline-block';
-                btn.querySelector('#action').style.display = 'none';
+            if (btn) {
+                if (state == 'enabled') {
+                    btn.disabled = false;
+                    btn.querySelector('#waiting').style.display = 'none';
+                    btn.querySelector('#action').style.display = 'inline-block';
+                }
+                if (state == 'disabled') {
+                    btn.disabled = true;
+                    btn.querySelector('#waiting').style.display = 'inline-block';
+                    btn.querySelector('#action').style.display = 'none';
+                }
+                return true;
             }
+            return false;
 
-            return btn;
+        },
+        formatDate(val, format)
+        {
+            return unicaenVue.formatDate(val, format);
         }
 
 
+
+
     },
+
 
 
 

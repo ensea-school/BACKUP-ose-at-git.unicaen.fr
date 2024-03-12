@@ -684,7 +684,7 @@ class MiseEnPaiementService extends AbstractEntityService
             tp.intervenant_id 				    intervenant_id,
             tp.structure_id                     structure_id,
             MAX(s.code)                         structure_code,
-            MAX(s.libelle_long)   			    structure_libelle,
+            MAX(s.libelle_court)   			    structure_libelle,
             CASE
                 WHEN MAX(tp.service_id) IS NOT NULL THEN 'enseignement'
                 WHEN MAX(tp.service_referentiel_id) IS NOT NULL THEN 'referentiel'
@@ -726,7 +726,9 @@ class MiseEnPaiementService extends AbstractEntityService
             MAX(tp.mission_id)                  mission_id,
             MAX(tm.libelle) || 
             ' / ' || 
-            MAX(m.libelle_mission)              mission_libelle
+            MAX(m.libelle_mission)              mission_libelle,
+            MAX(mep.date_mise_en_paiement)      date_paiement,
+            MAX(mep.histo_creation)             date_demande
             
             
         FROM
@@ -820,6 +822,10 @@ class MiseEnPaiementService extends AbstractEntityService
                         'heuresAPayer'           => $value['HEURES_A_PAYER'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
+                        'periodeCode'            => $value['PERIODE_CODE'],
+                        'datePaiement'           => $value['DATE_PAIEMENT'],
+                        'dateDemande'            => $value['DATE_DEMANDE'],
                         'domaineFonctionnel'     => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
@@ -846,6 +852,10 @@ class MiseEnPaiementService extends AbstractEntityService
                         'heuresAPayer'           => $value['HEURES_A_PAYER'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
+                        'periodeCode'            => $value['PERIODE_CODE'],
+                        'datePaiement'           => $value['DATE_PAIEMENT'],
+                        'dateDemande'            => $value['DATE_DEMANDE'],
                         'domaineFonctionnel'     => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
@@ -882,6 +892,10 @@ class MiseEnPaiementService extends AbstractEntityService
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
                         'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
+                        'periodeCode'            => $value['PERIODE_CODE'],
+                        'datePaiement'           => $value['DATE_PAIEMENT'],
+                        'dateDemande'            => $value['DATE_DEMANDE'],
                         'domaineFonctionnel'     => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
@@ -908,6 +922,10 @@ class MiseEnPaiementService extends AbstractEntityService
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
                         'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
+                        'periodeCode'            => $value['PERIODE_CODE'],
+                        'datePaiement'           => $value['DATE_PAIEMENT'],
+                        'dateDemande'            => $value['DATE_DEMANDE'],
                         'domaineFonctionnel'     => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
@@ -945,6 +963,10 @@ class MiseEnPaiementService extends AbstractEntityService
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
                         'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
+                        'periodeCode'            => $value['PERIODE_CODE'],
+                        'datePaiement'           => $value['DATE_PAIEMENT'],
+                        'dateDemande'            => $value['DATE_DEMANDE'],
                         'domaineFonctionnel'     => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
@@ -969,6 +991,10 @@ class MiseEnPaiementService extends AbstractEntityService
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
                         'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
+                        'periodeCode'            => $value['PERIODE_CODE'],
+                        'datePaiement'           => $value['DATE_PAIEMENT'],
+                        'dateDemande'            => $value['DATE_DEMANDE'],
                         'domaineFonctionnel'     => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
@@ -1014,6 +1040,7 @@ class MiseEnPaiementService extends AbstractEntityService
                             'fi'                => $centreCout['FI'],
                             'fa'                => $centreCout['FA'],
                             'fc'                => $centreCout['FC'],
+                            'enseignement'      => $centreCout['ENSEIGNEMENT'],
                             'referentiel'       => $centreCout['REFERENTIEL'],
                             'fcMajorees'        => $centreCout['FC_MAJOREES'],
                             'mission'           => $centreCout['MISSION'],
@@ -1029,6 +1056,7 @@ class MiseEnPaiementService extends AbstractEntityService
                             'fi'                => $centreCout['FI'],
                             'fa'                => $centreCout['FA'],
                             'fc'                => $centreCout['FC'],
+                            'enseignement'      => $centreCout['ENSEIGNEMENT'],
                             'referentiel'       => $centreCout['REFERENTIEL'],
                             'fcMajorees'        => $centreCout['FC_MAJOREES'],
                             'mission'           => $centreCout['MISSION'],
@@ -1115,7 +1143,8 @@ class MiseEnPaiementService extends AbstractEntityService
         $sql  = "
         
         SELECT
-           	SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac) - SUM(tp.heures_demandees_aa + tp.heures_demandees_ac) solde
+           	SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac) - SUM(tp.heures_demandees_aa + tp.heures_demandees_ac) solde,
+           	SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac)                                                        total
         FROM
             tbl_paiement tp
         WHERE
@@ -1145,16 +1174,22 @@ class MiseEnPaiementService extends AbstractEntityService
             'intervenant' => $intervenant->getId(),
         ]);
         $soldeHeures     = 0;
+        $totalHeures     = 0;
         $heuresDemandees = $data['heures'];
+
         foreach ($dmeps as $dmep) {
             $soldeHeures += $dmep['SOLDE'];
+            $totalHeures += $data['TOTAL'];
         }
 
         //On vérifie que l'on peut mettre en demande de mise en paiement les heures demandées
         if ($heuresDemandees > $soldeHeures) {
             //Demande de mise en paiement impossible, vous demandez 125 hetd(s) alors que vous pouvez demander maximum 117.6 hetd(s)
-            throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous pouvez demander maximum ' . $soldeHeures . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
-            //throw new \Exception('Demande de mise en paiement refusée pour ' . $type . '. ' . $heuresDemandees . ' hetd demandés pour un restant à payer de ' . $soldeHeures . ' hetd', self::EXCEPTION_DMEP_INVALIDE);
+            if ($soldeHeures >= 0) {
+                throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous pouvez demander maximum ' . $soldeHeures . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
+            } else {
+                throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous avez déjà payé la totalité des heures pour cet enseignement (' . $totalHeures . ' hetd(s))', self::EXCEPTION_DMEP_INVALIDE);
+            }
         }
 
         if (empty($data['centreCoutId'])) {
@@ -1210,7 +1245,7 @@ class MiseEnPaiementService extends AbstractEntityService
                         'code'            => $intervenant->getCode(),
                         'nom_usuel'       => $intervenant->getNomUsuel(),
                         'prenom'          => $intervenant->getPrenom(),
-                        'structure'       => $intervenant->getStructure()->getLibelleCourt(),
+                        'structure'       => ($intervenant->getStructure()) ? $intervenant->getStructure()->getLibelleCourt() : '',
                         'statut'          => $intervenant->getStatut()->getLibelle(),
                         'typeIntervenant' => $intervenant->getStatut()->getTypeIntervenant()->getLibelle(),
                     ];

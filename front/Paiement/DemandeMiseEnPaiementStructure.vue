@@ -197,7 +197,7 @@
                                             </tbody>
                                             <tfoot>
                                             <tr class="table-light">
-                                                <th scope="row">Total</th>
+                                                <th scope="row">Total heures à payer</th>
                                                 <td>{{ totalHeure(typeHeure.heures) }} hetd(s)</td>
                                             </tr>
                                             </tfoot>

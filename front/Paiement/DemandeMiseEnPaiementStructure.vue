@@ -660,8 +660,6 @@ export default {
             let inputDomaineFonctionnel = document.getElementById('domaineFonctionnel-' + id);
             let heureADemander = Number(inputHeure.value);
             let heureADemanderMax = Number(inputHeure.getAttribute('max'));
-            console.log("Heure à demander => " + heureADemander);
-            console.log("Heure Max =>" + heureADemanderMax);
             let domaineFonctionnelId = (inputDomaineFonctionnel) ? inputDomaineFonctionnel.value : '';
             let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
             let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');

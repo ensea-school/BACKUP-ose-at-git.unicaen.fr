@@ -1,9 +1,6 @@
 <?php
 
-$title = 'Demande de mise en paiement';
-
-$this->headTitle()->append($title);
-echo $this->tag('h1', ['class' => 'page-header'])->html($title);
+$this->intervenant($intervenant)->renderTitle("Demande de mise en paiement");
 
 
 echo $this->vue('paiement/demande-mise-en-paiement', [

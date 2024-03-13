@@ -14,9 +14,7 @@
 * Correction sur le privilege d'administration des tags (#55439)
 * Empêcher de postuler à une offre d'emploi tant qu'elle n'est pas validée
 * Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
-
-
-
+* Impossible de choisir un centre de coût par défaut pour une structure 
 
 # OSE 23.3 (23/02/2024)
 

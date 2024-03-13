@@ -16,6 +16,10 @@
 * Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
 * Impossible de choisir un centre de coût par défaut pour une structure 
 
+## Améliorations
+
+* Dans la partie administration, structure, La liste des centres de coût par défaut possible pour une structure est maintenant filtrée pour choisir uniquement des centres de coût rattachés à cette structure.
+
 # OSE 23.3 (23/02/2024)
 
 ## Corrections de bugs

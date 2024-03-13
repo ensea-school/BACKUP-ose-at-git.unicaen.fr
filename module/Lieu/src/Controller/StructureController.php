@@ -25,7 +25,8 @@ class StructureController extends AbstractController
     protected array $structures = [];
 
 
-    public function indexAction()
+
+    public function indexAction ()
     {
         $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTURES_ADMINISTRATION_EDITION));
 
@@ -38,7 +39,7 @@ class StructureController extends AbstractController
 
 
 
-    public function listeAction()
+    public function listeAction ()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Structure::class,
@@ -51,20 +52,23 @@ class StructureController extends AbstractController
 
 
 
-    public function saisieAction()
+    public function saisieAction ()
     {
         /* @var $structure Structure */
         $structure = $this->getEvent()->getParam('structure');
 
-        $form = $this->getFormStructureSaisie();
+
         if (empty($structure)) {
-            $title = 'Création d\'une nouvelle Structure';
+            $title     = 'Création d\'une nouvelle Structure';
             $structure = $this->getServiceStructure()->newEntity();
         } else {
             $title = 'Édition d\'une Structure';
         }
 
+        $form = $this->getFormStructureSaisie($structure);
+        
         $form->bindRequestSave($structure, $this->getRequest(), function (Structure $structure) {
+
             try {
                 if (empty($structure->getSourceCode()) || !$structure->getSource()->getImportable()) {
                     $structure->setSourceCode($structure->getCode());
@@ -81,7 +85,7 @@ class StructureController extends AbstractController
 
 
 
-    public function deleteAction()
+    public function deleteAction ()
     {
         /** @var Structure $structure */
         $structure = $this->getEvent()->getParam('structure');
@@ -102,10 +106,10 @@ class StructureController extends AbstractController
 
 
 
-    public function voirAction()
+    public function voirAction ()
     {
         $structure = $this->getEvent()->getParam('structure');
-        $tab = $this->params()->fromQuery('tab', 'fiche');
+        $tab       = $this->params()->fromQuery('tab', 'fiche');
 
         if (!$structure) {
             throw new RuntimeException("Structure non spécifiée ou introuvable.");

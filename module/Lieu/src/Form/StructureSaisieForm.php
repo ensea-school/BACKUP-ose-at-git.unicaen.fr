@@ -2,14 +2,16 @@
 
 namespace Lieu\Form;
 
-use Paiement\Entity\Db\DomaineFonctionnel;
+use Application\Entity\Db\DomaineFonctionnel;
 use Application\Form\AbstractForm;
 use Laminas\Form\FormInterface;
 use Lieu\Entity\Db\AdresseNumeroCompl;
 use Lieu\Entity\Db\Pays;
 use Lieu\Entity\Db\Structure;
+use Lieu\Entity\Db\StructureAwareTrait;
 use Lieu\Entity\Db\Voirie;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Service\CentreCoutServiceAwareTrait;
 use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
@@ -24,6 +26,9 @@ class StructureSaisieForm extends AbstractForm
     use SchemaServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;
+    use StructureServiceAwareTrait;
+    use StructureAwareTrait;
+
 
     public function init ()
     {
@@ -66,11 +71,6 @@ class StructureSaisieForm extends AbstractForm
 
         $this->get('structure')->setEmptyOption('- Structure racine -');
 
-        $qb                  = $this->getServiceCentreCout()->finderByHistorique();
-        $centresCouts        = $this->getServiceCentreCout()->getList($qb);
-        $centresCoutsOrdered = $this->getServiceCentreCout()->formatCentresCouts($centresCouts);
-
-        $this->get('centreCoutDefault')->setValueOptions(['' => '(Sélectionnez un centre de coût)'] + $centresCoutsOrdered);
 
         $this->setValueOptions('domaineFonctionnelDefault', 'SELECT df FROM ' . DomaineFonctionnel::class . ' df WHERE df.histoDestruction IS NULL ORDER BY df.libelle');
         $this->get('domaineFonctionnelDefault')->setEmptyOption('(Sélectionnez un domaine fonctionnel)');
@@ -89,6 +89,21 @@ class StructureSaisieForm extends AbstractForm
         $this->addSubmit();
 
         return $this;
+    }
+
+
+
+    public function initCentreCout ()
+    {
+        $qb = $this->getServiceCentreCout()->finderByHistorique();
+        //Si on a une structure précise on filtre les centres de coût disponibles pour cette structure
+        if ($this->structure) {
+            $qb = $this->getServiceCentreCout()->finderByStructure($this->structure, $qb);
+        }
+        $centresCouts        = $this->getServiceCentreCout()->getList($qb);
+        $centresCoutsOrdered = $this->getServiceCentreCout()->formatCentresCouts($centresCouts);
+
+        $this->get('centreCoutDefault')->setValueOptions(['' => '(Sélectionnez un centre de coût)'] + $centresCoutsOrdered);
     }
 
 

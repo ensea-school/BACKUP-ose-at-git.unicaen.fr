@@ -8,184 +8,70 @@
  * @var $viewFile   string
  */
 
-
-$r = [
-    [
-        'KEY' => 'e-113957505-6',
-        'ANNEE_ID' => '2017',
-        'SERVICE_ID' => '89226',
-        'SERVICE_REFERENTIEL_ID' => NULL,
-        'MISSION_ID' => NULL,
-        'FORMULE_RES_SERVICE_ID' => '113957505',
-        'FORMULE_RES_SERVICE_REF_ID' => NULL,
-        'INTERVENANT_ID' => '20970',
-        'STRUCTURE_ID' => '229',
-        'TYPE_HEURES_ID' => '6',
-        'DOMAINE_FONCTIONNEL_ID' => '1',
-        'CENTRE_COUT_ID' => '2401',
-        'TAUX_REMU_ID' => '1',
-        'TAUX_CONGES_PAYES' => '1',
-        'SERVICE_HEURES' => '.74',
-        'HEURES' => '.12',
-        'HORAIRE_DEBUT' => NULL,
-        'HORAIRE_FIN' => NULL,
-        'PERIODE_ID' => '13',
-    ],
-    [
-        'KEY' => 'e-113957505-6',
-        'ANNEE_ID' => '2017',
-        'SERVICE_ID' => '89226',
-        'SERVICE_REFERENTIEL_ID' => NULL,
-        'MISSION_ID' => NULL,
-        'FORMULE_RES_SERVICE_ID' => '113957505',
-        'FORMULE_RES_SERVICE_REF_ID' => NULL,
-        'INTERVENANT_ID' => '20970',
-        'STRUCTURE_ID' => '229',
-        'TYPE_HEURES_ID' => '6',
-        'DOMAINE_FONCTIONNEL_ID' => '1',
-        'CENTRE_COUT_ID' => '2401',
-        'TAUX_REMU_ID' => '1',
-        'TAUX_CONGES_PAYES' => '1',
-        'SERVICE_HEURES' => '.74',
-        'HEURES' => '.08',
-        'HORAIRE_DEBUT' => NULL,
-        'HORAIRE_FIN' => NULL,
-        'PERIODE_ID' => '13',
-    ],
-    [
-        'KEY' => 'e-113957505-6',
-        'ANNEE_ID' => '2017',
-        'SERVICE_ID' => '89226',
-        'SERVICE_REFERENTIEL_ID' => NULL,
-        'MISSION_ID' => NULL,
-        'FORMULE_RES_SERVICE_ID' => '113957505',
-        'FORMULE_RES_SERVICE_REF_ID' => NULL,
-        'INTERVENANT_ID' => '20970',
-        'STRUCTURE_ID' => '229',
-        'TYPE_HEURES_ID' => '6',
-        'DOMAINE_FONCTIONNEL_ID' => '1',
-        'CENTRE_COUT_ID' => '2401',
-        'TAUX_REMU_ID' => '1',
-        'TAUX_CONGES_PAYES' => '1',
-        'SERVICE_HEURES' => '.74',
-        'HEURES' => '.12',
-        'HORAIRE_DEBUT' => NULL,
-        'HORAIRE_FIN' => NULL,
-        'PERIODE_ID' => '13',
-    ],
-    [
-        'KEY' => 'e-113957505-6',
-        'ANNEE_ID' => '2017',
-        'SERVICE_ID' => '89226',
-        'SERVICE_REFERENTIEL_ID' => NULL,
-        'MISSION_ID' => NULL,
-        'FORMULE_RES_SERVICE_ID' => '113957505',
-        'FORMULE_RES_SERVICE_REF_ID' => NULL,
-        'INTERVENANT_ID' => '20970',
-        'STRUCTURE_ID' => '229',
-        'TYPE_HEURES_ID' => '6',
-        'DOMAINE_FONCTIONNEL_ID' => '1',
-        'CENTRE_COUT_ID' => '2401',
-        'TAUX_REMU_ID' => '1',
-        'TAUX_CONGES_PAYES' => '1',
-        'SERVICE_HEURES' => '.74',
-        'HEURES' => '.08',
-        'HORAIRE_DEBUT' => NULL,
-        'HORAIRE_FIN' => NULL,
-        'PERIODE_ID' => '13',
-    ],
-    [
-        'KEY' => 'e-113957505-6',
-        'ANNEE_ID' => '2017',
-        'SERVICE_ID' => '89226',
-        'SERVICE_REFERENTIEL_ID' => NULL,
-        'MISSION_ID' => NULL,
-        'FORMULE_RES_SERVICE_ID' => '113957505',
-        'FORMULE_RES_SERVICE_REF_ID' => NULL,
-        'INTERVENANT_ID' => '20970',
-        'STRUCTURE_ID' => '229',
-        'TYPE_HEURES_ID' => '6',
-        'DOMAINE_FONCTIONNEL_ID' => '1',
-        'CENTRE_COUT_ID' => '2401',
-        'TAUX_REMU_ID' => '1',
-        'TAUX_CONGES_PAYES' => '1',
-        'SERVICE_HEURES' => '.74',
-        'HEURES' => '.12',
-        'HORAIRE_DEBUT' => NULL,
-        'HORAIRE_FIN' => NULL,
-        'PERIODE_ID' => '13',
-    ],
-    [
-        'KEY' => 'e-113957505-6',
-        'ANNEE_ID' => '2017',
-        'SERVICE_ID' => '89226',
-        'SERVICE_REFERENTIEL_ID' => NULL,
-        'MISSION_ID' => NULL,
-        'FORMULE_RES_SERVICE_ID' => '113957505',
-        'FORMULE_RES_SERVICE_REF_ID' => NULL,
-        'INTERVENANT_ID' => '20970',
-        'STRUCTURE_ID' => '229',
-        'TYPE_HEURES_ID' => '6',
-        'DOMAINE_FONCTIONNEL_ID' => '1',
-        'CENTRE_COUT_ID' => '2401',
-        'TAUX_REMU_ID' => '1',
-        'TAUX_CONGES_PAYES' => '1',
-        'SERVICE_HEURES' => '.74',
-        'HEURES' => '.08',
-        'HORAIRE_DEBUT' => NULL,
-        'HORAIRE_FIN' => NULL,
-        'PERIODE_ID' => '13',
-    ],
-    [
-        'KEY' => 'e-113957505-6',
-        'ANNEE_ID' => '2017',
-        'SERVICE_ID' => '89226',
-        'SERVICE_REFERENTIEL_ID' => NULL,
-        'MISSION_ID' => NULL,
-        'FORMULE_RES_SERVICE_ID' => '113957505',
-        'FORMULE_RES_SERVICE_REF_ID' => NULL,
-        'INTERVENANT_ID' => '20970',
-        'STRUCTURE_ID' => '229',
-        'TYPE_HEURES_ID' => '6',
-        'DOMAINE_FONCTIONNEL_ID' => '1',
-        'CENTRE_COUT_ID' => '2401',
-        'TAUX_REMU_ID' => '1',
-        'TAUX_CONGES_PAYES' => '1',
-        'SERVICE_HEURES' => '.74',
-        'HEURES' => '.09',
-        'HORAIRE_DEBUT' => NULL,
-        'HORAIRE_FIN' => NULL,
-        'PERIODE_ID' => '13',
-    ],
-    [
-        'KEY' => 'e-113957505-6',
-        'ANNEE_ID' => '2017',
-        'SERVICE_ID' => '89226',
-        'SERVICE_REFERENTIEL_ID' => NULL,
-        'MISSION_ID' => NULL,
-        'FORMULE_RES_SERVICE_ID' => '113957505',
-        'FORMULE_RES_SERVICE_REF_ID' => NULL,
-        'INTERVENANT_ID' => '20970',
-        'STRUCTURE_ID' => '229',
-        'TYPE_HEURES_ID' => '6',
-        'DOMAINE_FONCTIONNEL_ID' => '1',
-        'CENTRE_COUT_ID' => '2401',
-        'TAUX_REMU_ID' => '1',
-        'TAUX_CONGES_PAYES' => '1',
-        'SERVICE_HEURES' => '.74',
-        'HEURES' => '.08',
-        'HORAIRE_DEBUT' => NULL,
-        'HORAIRE_FIN' => NULL,
-        'PERIODE_ID' => '13',
-    ],
+/** @var \Formule\Service\FormulatorService $fs */
+$fs = $container->get(\Formule\Service\FormulatorService::class);
 
 
+$dir = getcwd() . '/data/formules/';
 
+$fichiers = scandir($dir);
 
-
-
-
-
-
-
+$fichiers = [
+    'FORMULE_ARTOIS.ods',
+    'FORMULE_ASSAS.ods',
+    'FORMULE_AVIGNON.ods',
+    'FORMULE_COTE_AZUR.ods',
+    'FORMULE_DAUPHINE.ods',
+    'FORMULE_GUYANE.ods',
+    'FORMULE_INSA_LYON.ods',
+    'FORMULE_LILLE.ods',
+    'FORMULE_LYON2.ods',
+    'FORMULE_MONTPELLIER.ods', // ne passe pas : nouveau format
+    'FORMULE_NANTERRE.ods',
+    'FORMULE_PARIS.ods',
+    'FORMULE_PARIS1.ods',
+    'FORMULE_PARIS8.ods',
+    'FORMULE_PARIS8_2021.ods',
+    'FORMULE_PICARDIE.ods',
+    'FORMULE_POITIERS.ods',
+    'FORMULE_POITIERS_2021.ods',
+    'FORMULE_RENNES1.ods',
+    'FORMULE_RENNES2.ods',
+    'FORMULE_REUNION.ods',
+    'FORMULE_REUNION_2022.ods',
+    'FORMULE_ROUEN.ods',
+    'FORMULE_SACLAY.ods',
+    'FORMULE_SORBONNE_NOUVELLE.ods',
+    'FORMULE_ST_ETIENNE.ods',
+    'FORMULE_UBO.ods', // ne passe pas
+    'FORMULE_ULHN.ods',
+//    'FORMULE_ULHN_2021.ods', // ne passe pas : ancien format
+    'FORMULE_UNICAEN.ods',
+//    'FORMULE_UNICAEN_2016.ods', // ne passe pas : très ancien format
+//    'FORMULE_UNISTRA.ods', // ne passe pas : ancien format
+    'FORMULE_UPEC.ods',
+    'FORMULE_UPEC_2022.ods',
+    'FORMULE_UVSQ.ods',
 ];
+
+$fichiers2 = [
+    'FORMULE_ROUEN.ods',
+    //'FORMULE_MONTPELLIER.ods'
+    //'FORMULE_ULHN_2021.ods',
+];
+
+/** @var \Formule\Service\FormulatorService $formulator */
+$formulator = $container->get(\Formule\Service\FormulatorService::class);
+
+foreach ($fichiers as $fichier) {
+    if (!str_starts_with($fichier, '.')) {
+        $filename = $dir . $fichier;
+        echo '<h1>' . $fichier . '</h1>';
+        $tableur = $formulator->charger($filename);
+        //echo $tableur->sheet()->html();
+        $formule = $tableur->formuleIntervenant();
+        var_dump($formule);
+        echo 'Version '.$tableur->version();
+
+    }
+}

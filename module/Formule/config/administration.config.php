@@ -16,7 +16,18 @@ return [
                     'privileges'    => [Privileges::FORMULE_ADMINISTRATION_VISUALISATION],
                     'may_terminate' => true,
                     'child_routes'  => [
-
+                        'telecharger-tableur' => [
+                            'route' => '/telecharger-tableur/:formule',
+                            'controller'    => Controller\AdministrationController::class,
+                            'action'        => 'telecharger-tableur',
+                            'privileges'    => [Privileges::FORMULE_ADMINISTRATION_VISUALISATION],
+                        ],
+                        'televerser-tableur' => [
+                            'route' => '/televerser-tableur',
+                            'controller'    => Controller\AdministrationController::class,
+                            'action'        => 'televerser-tableur',
+                            'privileges'    => [Privileges::FORMULE_ADMINISTRATION_EDITION],
+                        ]
                     ],
                 ],
             ],
@@ -46,5 +57,6 @@ return [
     ],
 
     'services' => [
+        Service\FormulatorService::class => Service\FormulatorServiceFactory::class,
     ],
 ];

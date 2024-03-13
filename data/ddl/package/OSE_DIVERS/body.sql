@@ -107,13 +107,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
       UPDATE structure SET enseignement = 1 WHERE id = str.id;
     END LOOP;
 
-    -- On retire les CC par défaut qui ne sont plus valables
+    -- On retire les CC par défaut qui ne sont plus valables (historisé) ou si la structure n'est pas raccorchée au centre de cout
     FOR str IN (
       SELECT
         str.id
       FROM
         structure str
-        LEFT JOIN centre_cout_structure ccs ON ccs.structure_id = str.id AND ccs.histo_destruction IS NULL
+        LEFT JOIN centre_cout_structure ccs ON str.centre_cout_id = ccs.centre_cout_id AND ccs.structure_id = str.id AND ccs.histo_destruction IS NULL
         LEFT JOIN centre_cout cc ON cc.id = ccs.centre_cout_id AND cc.histo_destruction IS NULL
       WHERE
         str.centre_cout_id IS NOT NULL

@@ -97,7 +97,7 @@ class StructureSaisieForm extends AbstractForm
     {
         $qb = $this->getServiceCentreCout()->finderByHistorique();
         //Si on a une structure précise on filtre les centres de coût disponibles pour cette structure
-        if ($this->structure) {
+        if ($this->structure && $this->structure->getCode()) {
             $qb = $this->getServiceCentreCout()->finderByStructure($this->structure, $qb);
         }
         $centresCouts        = $this->getServiceCentreCout()->getList($qb);

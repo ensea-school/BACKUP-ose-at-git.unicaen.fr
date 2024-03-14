@@ -16,12 +16,12 @@ SELECT
                 WHEN pourc_ecart >= 0 THEN
                     CASE
                         WHEN rank() OVER (PARTITION BY periode_id, intervenant_id   ORDER BY operation,centre_cout, pourcentage) = 1
-                        THEN pourcentage + pourc_ecart
+                        THEN pourcentage - pourc_ecart
                         ELSE pourcentage END
                 ELSE
                     CASE
                         WHEN rank() OVER (PARTITION BY periode_id, intervenant_id   ORDER BY operation, centre_cout, pourcentage) = 1
-                        THEN pourcentage - pourc_ecart
+                        THEN pourcentage + pourc_ecart
                         ELSE pourcentage END
        END))	pourcentage,
      nombres_heures,

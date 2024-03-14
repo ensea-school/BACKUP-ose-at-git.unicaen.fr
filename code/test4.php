@@ -69,7 +69,7 @@ foreach ($fichiers as $fichier) {
         echo '<h1>' . $fichier . '</h1>';
         $tableur = $formulator->charger($filename);
         //echo $tableur->sheet()->html();
-        $formule = $tableur->formuleIntervenant();
+        $formule = $tableur->formule();
         var_dump($formule);
         echo 'Version '.$tableur->version();
 

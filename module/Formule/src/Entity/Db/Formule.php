@@ -17,6 +17,10 @@ class Formule
 
     protected bool $active = true;
 
+    protected ?string $sqlIntervenant = null;
+
+    protected ?string $sqlVolumeHoraire = null;
+
     protected ?string $iParam1Libelle = null;
 
     protected ?string $iParam2Libelle = null;
@@ -142,6 +146,36 @@ class Formule
     public function setActive(bool $active): Formule
     {
         $this->active = $active;
+        return $this;
+    }
+
+
+
+    public function getSqlIntervenant(): ?string
+    {
+        return $this->sqlIntervenant;
+    }
+
+
+
+    public function setSqlIntervenant(?string $sqlIntervenant): Formule
+    {
+        $this->sqlIntervenant = $sqlIntervenant;
+        return $this;
+    }
+
+
+
+    public function getSqlVolumeHoraire(): ?string
+    {
+        return $this->sqlVolumeHoraire;
+    }
+
+
+
+    public function setSqlVolumeHoraire(?string $sqlVolumeHoraire): Formule
+    {
+        $this->sqlVolumeHoraire = $sqlVolumeHoraire;
         return $this;
     }
 

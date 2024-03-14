@@ -73,11 +73,13 @@ class FormuleTableur
     //@formatter:on
 
     private array $proprietes = [
-        'code'              => ['pos' => 'F3', 'cell' => null],
-        'libelle'           => ['pos' => 'F4', 'cell' => null],
-        'active'            => ['pos' => 'F5', 'cell' => null],
-        'delegationAnnee'   => ['pos' => 'F9', 'cell' => null],
-        'delegationFormule' => ['pos' => 'F10', 'cell' => null],
+        'code'              => ['sheet' => 2, 'pos' => 'F3', 'cell' => null],
+        'libelle'           => ['sheet' => 2, 'pos' => 'F4', 'cell' => null],
+        'active'            => ['sheet' => 2, 'pos' => 'F5', 'cell' => null],
+        'delegationAnnee'   => ['sheet' => 2, 'pos' => 'F9', 'cell' => null],
+        'delegationFormule' => ['sheet' => 2, 'pos' => 'F10', 'cell' => null],
+        'sqlIntervenant'    => ['sheet' => 3, 'pos' => 'A2', 'cell' => null],
+        'sqlVolumeHoraire'  => ['sheet' => 3, 'pos' => 'B2', 'cell' => null],
     ];
 
     private array $formuleCells = [];
@@ -280,13 +282,19 @@ class FormuleTableur
     protected function trouverProprietes(): void
     {
         try {
-            $sheet = $this->tableur->getSheet(2);
+            $this->tableur->getSheet(2);
         } catch (\Exception $e) {
             throw new \Exception('La feuille des nomenclatures n\'a pas été trouvée');
         }
 
+        try {
+            $this->tableur->getSheet(3);
+        } catch (\Exception $e) {
+            throw new \Exception('La feuille des interactions n\'a pas été trouvée');
+        }
+
         foreach ($this->proprietes as $pn => $pv) {
-            $this->proprietes[$pn]['cell'] = $sheet->getCell($pv['pos']);
+            $this->proprietes[$pn]['cell'] = $this->tableur->getSheet($pv['sheet'])->getCell($pv['pos']);
         }
     }
 
@@ -408,7 +416,7 @@ class FormuleTableur
                 /** @var Calc\Cell $valCell */
                 $valCell = $this->variables[$pp . '.param' . $i]['cell'];
                 $cell = $this->sheet->getCellByCoords($valCell->getCol() + $ppp['col'], $valCell->getRow() + $ppp['row']);
-                $value = trim($cell->getValue());
+                $value = trim($cell->getValue() ?? '');
                 if ('p' . $i == strtolower($value ?? '')) $value = null;
                 if ('param_' . $i == strtolower($value ?? '')) $value = null;
                 if ('param ' . $i == strtolower($value ?? '')) $value = null;
@@ -449,7 +457,7 @@ class FormuleTableur
             $value = $cell?->getValue();
         }
 
-        if (null == $value){
+        if (null == $value) {
             return null;
         }
 
@@ -491,20 +499,20 @@ class FormuleTableur
         $fi->setParam5($this->variableValue('i.param5'));
 
         $row = $this->mainLine;
-        while($this->variableValue('vh.structureCode', $row) && $this->variableValue('vh.typeInterventionCode', $row)){
+        while ($this->variableValue('vh.structureCode', $row) && $this->variableValue('vh.typeInterventionCode', $row)) {
             $vh = new FormuleVolumeHoraire();
             $fi->addVolumeHoraire($vh);
             $referentiel = Util::reduce($this->variableValue('vh.typeInterventionCode', $row)) == 'referentiel';
-            if ($referentiel){
+            if ($referentiel) {
                 $vh->setVolumeHoraireReferentiel($row);
                 $vh->setServiceReferentiel($row);
-            }else{
+            } else {
                 $vh->setVolumeHoraire($row);
                 $vh->setService($row);
             }
-            foreach( $this->variables as $vn => $v ){
-                if (str_starts_with($vn, 'vh.')){
-                    $method = 'set'.ucfirst(substr($vn, 3));
+            foreach ($this->variables as $vn => $v) {
+                if (str_starts_with($vn, 'vh.')) {
+                    $method = 'set' . ucfirst(substr($vn, 3));
                     $vh->$method($this->variableValue($vn, $row));
                 }
             }

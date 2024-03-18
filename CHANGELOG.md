@@ -15,6 +15,7 @@
 * Empêcher de postuler à une offre d'emploi tant qu'elle n'est pas validée
 * Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
 * Impossible de choisir un centre de coût par défaut pour une structure 
+* Problème de mise en paiement en masse avec les enveloppes budgétaires en ressources propres à 0 (#55672)
 
 ## Améliorations
 

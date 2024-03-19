@@ -24,7 +24,7 @@ class TypeHeuresService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass ()
     {
         return TypeHeures::class;
     }
@@ -36,7 +36,7 @@ class TypeHeuresService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public function getAlias ()
     {
         return 'th';
     }
@@ -49,7 +49,7 @@ class TypeHeuresService extends AbstractEntityService
      *
      * @return \OffreFormation\Entity\Db\TypeHeures
      */
-    public function getByCode($code)
+    public function getByCode ($code)
     {
         if (null == $code) return null;
 
@@ -58,7 +58,7 @@ class TypeHeuresService extends AbstractEntityService
 
 
 
-    public function finderByServiceaPayer(ServiceAPayerInterface $serviceAPayer, QueryBuilder $qb = null, $alias = null)
+    public function finderByServiceaPayer (ServiceAPayerInterface $serviceAPayer, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -71,17 +71,22 @@ class TypeHeuresService extends AbstractEntityService
             $codes[$th->getCode()] = $th->getCode();
         }
 
-        if ($this->getServiceParametres()->get('distinction_fi_fa_fc') == '1'){
+        if ($this->getServiceParametres()->get('distinction_fi_fa_fc') == '1') {
             if ($serviceAPayer->getHeuresComplFi() != 0) $codes[TypeHeures::FI] = TypeHeures::FI;
             if ($serviceAPayer->getHeuresComplFa() != 0) $codes[TypeHeures::FA] = TypeHeures::FA;
             if ($serviceAPayer->getHeuresComplFc() != 0) $codes[TypeHeures::FC] = TypeHeures::FC;
             if ($serviceAPayer->getHeuresComplFcMajorees() != 0) $codes[TypeHeures::FC_MAJOREES] = TypeHeures::FC_MAJOREES;
-        }else{
+        } else {
             $hc = $serviceAPayer->getHeuresComplFi()
                 + $serviceAPayer->getHeuresComplFa()
                 + $serviceAPayer->getHeuresComplFc()
                 + $serviceAPayer->getHeuresComplFcMajorees();
-            if ($hc != 0) $codes[TypeHeures::FI] = TypeHeures::ENSEIGNEMENT;
+            if ($hc != 0) {
+                $codes[TypeHeures::FI]          = TypeHeures::ENSEIGNEMENT;
+                $codes[TypeHeures::FA]          = TypeHeures::ENSEIGNEMENT;
+                $codes[TypeHeures::FC]          = TypeHeures::ENSEIGNEMENT;
+                $codes[TypeHeures::FC_MAJOREES] = TypeHeures::ENSEIGNEMENT;
+            }
         }
         if ($serviceAPayer->getHeuresComplReferentiel() != 0) $codes[TypeHeures::REFERENTIEL] = TypeHeures::REFERENTIEL;
         if ($serviceAPayer->getHeuresMission() != 0) $codes[TypeHeures::MISSION] = TypeHeures::MISSION;
@@ -99,7 +104,7 @@ class TypeHeuresService extends AbstractEntityService
      *
      * @return \OffreFormation\Entity\Db\TypeHeures[]
      */
-    public function getList(QueryBuilder $qb = null, $alias = null)
+    public function getList (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.ordre");

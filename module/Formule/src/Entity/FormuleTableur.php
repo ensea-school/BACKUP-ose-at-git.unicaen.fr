@@ -28,7 +28,7 @@ class FormuleTableur
         'i.typeIntervenant'            => ['name' => 'type_intervenant_code',          'type' => 'string', 'vmin' => 1, 'result' => false],
         'i.structureCode'              => ['name' => 'structure_code',                 'type' => 'string', 'vmin' => 1, 'result' => false],
         'i.typeVolumeHoraire'          => ['name' => 'type_volume_horaire_code',       'type' => 'string', 'vmin' => 1, 'result' => false],
-        'i.heuresServiceStatutaire'    => ['name' => 'heures_service_statutaire',      'type' => 'float',  'vmin' => 1, 'result' => false],
+        'i.heuresServiceStatutaire'    => ['name' => ['heures_service_statutaire','heures_decharge'],      'type' => 'float',  'vmin' => 1, 'result' => false],
         'i.heuresServiceModifie'       => ['name' => 'heures_service_modifie',         'type' => 'float',  'vmin' => 1, 'result' => false],
         'i.depassementServiceDuSansHC' => ['name' => 'depassement_service_du_sans_hc', 'type' => 'bool',   'vmin' => 1, 'result' => false],
         'i.param1'                     => ['name' => ['p1', 'param_1'],                'type' => 'string', 'vmin' => 1, 'result' => false],
@@ -468,6 +468,59 @@ class FormuleTableur
             'bool' => in_array($value, ['1', 1, 'Oui', 'oui', 'O', 'o']),
             default => $value,
         };
+    }
+
+
+
+    public function variableFromCol(string|int $col): ?string
+    {
+        if (is_string($col)) {
+            $col = Calc::letterToNumber($col);
+        }
+        foreach ($this->variables as $vn => $v) {
+            if (str_starts_with($vn, 'vh.')) {
+                /** @var Calc\Cell $cell */
+                $cell = $v['cell'];
+                if ($cell->getCol() == $col) {
+                    return $vn;
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+    public function variableFromName(string $name): ?string
+    {
+        $ivh = '';
+        if (str_starts_with($name, 'i_')){
+            $ivh = 'i.';
+            $name = substr($name, 2);
+        }elseif(str_starts_with($name, 'vh_')){
+            $ivh = 'vh.';
+            $name = substr($name, 3);
+        }
+
+        foreach ($this->variables as $vn => $v) {
+            if (str_starts_with($vn, $ivh)) {
+                $names = $v['name'];
+                if (!is_array($names)){
+                    $names = [$names];
+                }
+                if (in_array($name, $names)){
+                    return $vn;
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+    public function variableType(string $name): string
+    {
+        return $this->variables[$name]['type'];
     }
 
 

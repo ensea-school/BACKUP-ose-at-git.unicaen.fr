@@ -54,7 +54,7 @@ $fichiers = [
     'FORMULE_UVSQ.ods',
 ];
 
-$fichiers2 = [
+$fichiers = [
     'FORMULE_ROUEN.ods',
     //'FORMULE_MONTPELLIER.ods'
     //'FORMULE_ULHN_2021.ods',
@@ -68,10 +68,7 @@ foreach ($fichiers as $fichier) {
         $filename = $dir . $fichier;
         echo '<h1>' . $fichier . '</h1>';
         $tableur = $formulator->charger($filename);
-        //echo $tableur->sheet()->html();
-        $formule = $tableur->formule();
-        var_dump($formule);
-        echo 'Version '.$tableur->version();
 
+        phpDump($formulator->traduire($tableur));
     }
 }

@@ -58,5 +58,6 @@ return [
 
     'services' => [
         Service\FormulatorService::class => Service\FormulatorServiceFactory::class,
+        Service\TraducteurService::class => Service\TraducteurServiceFactory::class,
     ],
 ];

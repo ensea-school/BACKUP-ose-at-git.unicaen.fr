@@ -16,6 +16,7 @@
 * Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
 * Impossible de choisir un centre de coût par défaut pour une structure 
 * Problème de mise en paiement en masse avec les enveloppes budgétaires en ressources propres à 0 (#55672)
+* Correction des mises en paiement lors du passage de 'Distinction Fi,Fa,Fc' en 'Tous enseignements confondus', le regroupement n'était pas visuellement correcte (#54144)
 
 ## Améliorations
 

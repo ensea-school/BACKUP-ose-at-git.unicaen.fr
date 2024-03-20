@@ -3,7 +3,9 @@
 namespace Contrat\Tbl\Process;
 
 
+use Application\Entity\Db\Parametre;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 use ServiceAContractualiser;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
@@ -13,10 +15,26 @@ class ContratProcess implements ProcessInterface
 {
     use BddServiceAwareTrait;
     use ParametresServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
+    private string  $codeEns      = 'ENS';
 
-    /** @var array|ServiceAContractualiser[] */
-    protected array $services = [];
-    protected array $tblData = [];
+    private string  $codeMis      = 'MIS';
+
+    private array   $tauxRemuUuid = [];
+
+    protected array $services     = [];
+
+    protected array $tblData      = [];
+
+    //Regle sur les contrats enseignement "contrat_ens" des parametres generaux
+    private string $regleCE;
+
+    //Regle sur les contrats mission "contrat_mis" des parametres generaux
+    private string $regleCM;
+
+    //Regle sur les avenants "avenant" des parametres generaux
+    private string $regleA;
+
 
 
     public function __construct()
@@ -30,15 +48,11 @@ class ContratProcess implements ProcessInterface
     {
         $parametres = $this->getServiceParametres();
 
-        $regleCE = $parametres->get('contrat_ens');
-        $regleCM = $parametres->get('contrat_mis');
-        $regleA = $parametres->get('avenant');
-//        $this->process->setRegle($regleRLM);
-//        ou
-//        $this->variable = $regleRLM
+        $regleA       = $parametres->get('avenant');
+        $this->regleA = $regleA;
 
         $this->services = [];
-        $this->tblData = [];
+        $this->tblData  = [];
     }
 
 
@@ -53,56 +67,33 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function getData(array $params = []): array
-    {
-        $conn = $this->getServiceBdd()->getEntityManager()->getConnection();
-
-        $sql = 'SELECT * FROM ('
-            . $this->getServiceBdd()->injectKey($this->heuresAContractualiserSql(), $params)
-            . ') t '
-            . $this->getServiceBdd()->makeWhere($params);
-
-        $aPayerStmt = $conn->executeQuery($sql);
-        $res = [];
-        while ($lap = $aPayerStmt->fetchAssociative()) {
-            $res[] = $lap;
-
-        }
-
-        return $res;
-    }
-
-
-
-    public function testData(array $lapData): array
-    {
-        $this->init();
-
-        foreach ($lapData as $lap) {
-            $this->loadLigneAContractualiser($lap);
-        }
-
-        $this->traitement();
-
-        return $this->tblData;
-    }
-
-
-
     public function debug(array $params = []): array
     {
         $this->init();
         $this->heuresAContractualiserSql($params);
-        $this->traitement(false, false);
+        $this->traitement();
 
         return $this->services;
     }
 
 
 
-    protected function traitement(bool $export=true, bool $consolidation=true)
+    protected function traitement()
     {
-        /*traitement des données*/
+        foreach ($this->services as $servicesByUuid) {
+            $uuid = $servicesByUuid['UUID'];
+            if($this->tauxRemuUuid[$uuid] == false){
+                $servicesByUuid['TAUX_REMU'] = null;
+                $servicesByUuid['TAUX_REMU_MAJORE'] = null;
+            }else {
+                //Calcul de la valeur et date du taux
+                $tauxRemuId = $servicesByUuid['TAUX_REMU'];
+                $tauxRemuMajoreId = $servicesByUuid['TAUX_REMU_MAJORE'];
+                $tauxRemuValeur = $this->getServiceTauxRemu()->tauxValeur($tauxRemuId, );
+            }
+
+
+        }
     }
 
 
@@ -133,22 +124,31 @@ class ContratProcess implements ProcessInterface
             . ') t '
             . $this->getServiceBdd()->makeWhere($params);
 
-        $aPayerStmt = $conn->executeQuery($sql);
-        while ($lap = $aPayerStmt->fetchAssociative()) {
-            $this->loadLigneAContractualiser($lap);
+        $servicesContrat = $conn->executeQuery($sql);
+        $taux_remu_temp  = 0;
+
+        while ($serviceContrat = $servicesContrat->fetchAssociative()) {
+            $uuid      = $serviceContrat['UUID'];
+            $avenant   = $serviceContrat['AVENANT'];
+            $taux_remu = $serviceContrat['TAUX_REMU'];
+            if ($this->regleA == Parametre::AVENANT_DESACTIVE && $avenant == 2) {
+                $serviceContrat['ACTIF'] = 0;
+            }
+
+            $this->services[$uuid][] = $serviceContrat;
+            if (!$this->tauxRemuUuid[$uuid]) {
+                $taux_remu_temp            = $taux_remu;
+                $this->tauxRemuUuid[$uuid] = true;
+            } elseif ($taux_remu_temp != $taux_remu) {
+                $this->tauxRemuUuid[$uuid] = false;
+            }
         }
     }
 
 
 
-    protected function loadLigneAContractualiser(array $data)
-    {
-
-    }
-
-
-
-    protected function heuresAContractualiserSql(): string
+    protected
+    function heuresAContractualiserSql(): string
     {
         return $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT');
     }

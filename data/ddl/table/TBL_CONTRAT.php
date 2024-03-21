@@ -357,6 +357,18 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
+        'TYPE_SERVICE'            => [
+            'name'        => 'TYPE_SERVICE',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 20,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 30,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

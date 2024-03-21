@@ -116,6 +116,7 @@ WITH services AS (
 )
 
 SELECT
+    rownum  key,
     s.intervenant_id,
     s.contrat_id,
     ts.id                   type_service_id,
@@ -127,7 +128,7 @@ SELECT
     s.heures_td,
     s.heures_tp,
     s.heures_autres autres,
-    SUM(heures_totales) heures,
+    heures_totales heures,
     s.type_service_code
 FROM
     services s
@@ -140,16 +141,3 @@ FROM
     LEFT JOIN taux_remu             trm ON m.taux_remu_id = trm.id
     LEFT JOIN taux_remu             tmm ON tmm.id = m.taux_remu_majore_id
     LEFT JOIN taux_remu             tr ON tr.id = p.valeur
-GROUP BY
-    s.intervenant_id,
-    s.contrat_id,
-    ts.id,
-    s.structure_id,
-    s.service_id,
-    s.service_referentiel_id,
-    s.mission_id,
-    s.heures_cm,
-    s.heures_td,
-    s.heures_tp,
-    s.heures_autres,
-    s.type_service_code

@@ -21,6 +21,8 @@ class TraducteurService
 
     private string $tableurExpr;
 
+    private bool $debug = false;
+
     private array $expr;
 
     private $transfoActions = [
@@ -30,6 +32,14 @@ class TraducteurService
         'detectionVariables',
         'transfoTestsBool',
     ];
+
+
+
+    public function setDebug(bool $debug): TraducteurService
+    {
+        $this->debug = $debug;
+        return $this;
+    }
 
 
 
@@ -44,16 +54,23 @@ class TraducteurService
             $this->name = substr($this->name, 0, -strlen($mls));
         }
 
-        $this->tableurExpr = substr($this->cell->getFormule(), 3) ?? $this->cell->getValue();
-        $this->expr = $this->cell->getFormuleExpr();
+        $this->tableurExpr = substr($this->cell->getFormule() ?? '', 3) ?? $this->cell->getValue();
+        $expr = $this->cell->getFormuleExpr();
+        if ($expr){
+            $this->expr = $expr;
+        }else{
+            throw new \Exception('La cellule '.$this->cell->getName().' est vide. Or elle est utilisée dans une ou plusieurs expressions');
+        }
 
         $this->transformer();
         $php = $this->convertir();
 
-        echo '<h2>' . $this->name . '</h2>';
-        echo Calc\Display::formuleExpr($this->cell->getFormuleExpr());
-        echo Calc\Display::formuleExpr($this->expr);
-        phpDump($php);
+        if ($this->debug) {
+            echo '<h2>' . $this->name . '</h2>';
+            echo Calc\Display::formuleExpr($this->cell->getFormuleExpr());
+            echo Calc\Display::formuleExpr($this->expr);
+           phpDump($php);
+        }
 
         return $php;
     }
@@ -404,7 +421,9 @@ class TraducteurService
             $variable = '$this->intervenant()->get' . ucfirst(substr($name, 2)) . '()';
         } elseif (str_starts_with($name, 'vh.')) {
             $variable = '$this->volumeHoraire($l)->get' . ucfirst(substr($name, 3)) . '()';
-        } else {
+        } elseif($name == 'i_service_du') {
+            $variable = '$this->intervenant()->getServiceDu()';
+        }else{
             $variable = '[ERREUR POUR LA VARIABLE ' . $name . ']';
         }
 
@@ -436,8 +455,8 @@ class TraducteurService
         }
 
         $tradNames = [
-            'MIN' => 'LEAST',
-            'MAX' => 'GREATEST',
+            'MIN' => 'min',
+            'MAX' => 'max',
         ];
 
         if (isset($tradNames[$term['name']])) {
@@ -478,7 +497,7 @@ class TraducteurService
         if ($begin['col'] === $end['col'] && $begin['row'] <= $this->tableur->mainLine() && $end['row'] >= 500) {
             $col = Calc::numberToLetter($begin['col']);
 
-            return "calcFnc('$name','$col')";
+            return "\$this->$name('$col')";
         }
 
         return '[PB TRADUCTION]';
@@ -544,7 +563,7 @@ class TraducteurService
                 $fExpr[] = null;
                 $plExprs[$e] = $this->traductionExpr($fExpr);
             }
-            $php .= implode(' AND ', $plExprs);
+            $php .= implode(' && ', $plExprs);
         }
 
         if (count($expr) === 1) {
@@ -567,7 +586,7 @@ class TraducteurService
                 $fExpr[] = null;
                 $plExprs[$e] = $this->traductionExpr($fExpr);
             }
-            $php .= implode(' OR ', $plExprs);
+            $php .= implode(' || ', $plExprs);
         }
 
         if (count($expr) === 1) {
@@ -585,9 +604,9 @@ class TraducteurService
         $test = $term['exprs'][0];
 
         if (1 === count($test)) {
-            $php = $this->traductionExpr($test) . ' IS NULL';
+            $php = $this->traductionExpr($test) . ' == null';
         } elseif (count($test) > 1) {
-            $php = '(' . $this->traductionExpr($test) . ') IS NULL';
+            $php = '(' . $this->traductionExpr($test) . ') == null';
         }
 
         return $php;
@@ -608,7 +627,7 @@ class TraducteurService
             $plageSomme = $plage;
         }
 
-        if ($critere[0]['type'] != 'op') { // ajout du =, valeuir par défaut
+        if ($critere[0]['type'] != 'op') { // ajout du =, valeur par défaut
             $cc = $critere;
             $critere = [['type' => 'op', 'name' => '=']];
             foreach ($cc as $c) {
@@ -625,7 +644,7 @@ class TraducteurService
             $col = Calc::numberToLetter($plage['colBegin'] + $c);
             $colDest = Calc::numberToLetter($plageSomme['colBegin'] + $c);
 
-            $rowBegin = $plage['rowBegin'] - $this->mainLine;
+            $rowBegin = $plage['rowBegin'] - $this->tableur->mainLine();
             if ($rowBegin === 0) {
                 $rowBegin = 'l';
             } else {
@@ -635,7 +654,7 @@ class TraducteurService
             if ($plage['rowEnd'] >= 500) {
                 $rowEnd = 'ose_formule.volumes_horaires.length';
             } else {
-                $rowEnd = (string)($plage['rowEnd'] - $this->mainLine);
+                $rowEnd = (string)($plage['rowEnd'] - $this->tableur->mainLine());
             }
 
             $php .= "FOR sumIfRow IN $rowBegin .. $rowEnd LOOP\n";

@@ -6,6 +6,8 @@ use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
 use Formule\Entity\Db\Formule;
 use Formule\Service\FormulatorServiceAwareTrait;
+use UnicaenCode\Util;
+use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\VueModel;
 
 
@@ -46,6 +48,24 @@ class AdministrationController extends AbstractController
 
 
 
+    public function detailsAction()
+    {
+        /** @var Formule $formule */
+        $formule = $this->getEvent()->getParam('formule');
+
+        $variables = [
+            'formule'  => AxiosExtractor::extract($formule,['code', 'libelle']),
+            'phpClass' => Util::highlight($formule->getPhpClass(), 'php', false, ['show-line-numbers' => true]),
+        ];
+
+        $vueModel = new VueModel();
+        $vueModel->setTemplate('formule/administration/details');
+        $vueModel->setVariables($variables);
+        return $vueModel;
+    }
+
+
+
     public function telechargerTableurAction()
     {
         /** @var Formule $formule */
@@ -80,18 +100,16 @@ class AdministrationController extends AbstractController
         }
 
         $file     = $_FILES['fichier']['tmp_name'];
-        $filename = $_FILES['fichier']['name'];
 
-        $this->getServiceFormulator()->charger($file);
-
-        //$fc = new FormuleCalcul($file);
-
-
-
-
-        $variables = [
-
-        ];
+        $variables = [];
+        try{
+            $formule = $this->getServiceFormulator()->update($file);
+            ob_start();
+            phpDump($formule->getPhpClass());
+            $variables['phpClass'] = ob_get_clean();
+        }catch(\Exception $e){
+            $variables['error'] = $e->getMessage();
+        }
 
         $vueModel = new VueModel();
         $vueModel->setTemplate('formule/administration/formulator');

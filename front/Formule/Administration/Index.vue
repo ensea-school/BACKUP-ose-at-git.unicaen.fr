@@ -5,16 +5,14 @@
         <thead>
         <tr>
             <th>Libellé</th>
-            <th>Code</th>
             <th>Paramètres</th>
-            <th>Règles de délégation</th>
-            <th>Tableur</th>
+            <th>Règle de délégation</th>
+            <th>Ressources</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="formule in formules" :key="id">
-            <td>{{ formule.libelle }}</td>
-            <td>{{ formule.code }}</td>
+        <tr v-for="formule in formules" :key="id" :class="{ 'desactivee': !formule.active }" :title="!formule.active ? 'Cette formule est désactivée' : ''">
+            <td>{{ formule.libelle }}<br /><i>{{ formule.code }}</i></td>
             <td>
                 <div v-if="formule.iParam1Libelle" class="cartridge">
                     <span>intervenant</span><span>param1</span> {{ formule.iParam1Libelle }}
@@ -48,8 +46,12 @@
                     <span>volume horaire</span><span>param5</span> {{ formule.vhParam5Libelle }}
                 </div>
             </td>
-            <td>Todo...</td>
-            <td><a :href="this.telechargementUrl(formule)"><i class="fas fa-table-cells"></i></a></td>
+            <td v-if="formule.delegationAnnee">Avant {{ formule.delegationAnnee }}/{{ formule.delegationAnnee+1 }}, utilise <i>{{ formule.delegationFormule }}</i></td>
+            <td v-else></td>
+            <td>
+                <a :href="this.telechargementUrl(formule.id)"><i class="fas fa-table-cells"></i> tableur</a><br />
+                <a v-if="this.canEdit" :href="this.detailsUrl(formule.id)"><i class="fas fa-table-cells"></i> code PHP</a>
+            </td>
         </tr>
         </tbody>
 
@@ -92,13 +94,16 @@ export default {
     methods: {
         telechargementUrl(formule)
         {
-            return unicaenVue.url('formule/administration/telecharger-tableur/' + formule.id)
+            return unicaenVue.url('formule/administration/telecharger-tableur/' + formule)
         },
         televersementUrl()
         {
             return unicaenVue.url('formule/administration/televerser-tableur')
+        },
+        detailsUrl(formule)
+        {
+            return unicaenVue.url('formule/administration/details/' + formule)
         }
-
     },
 }
 
@@ -115,6 +120,12 @@ export default {
     margin-right: 20pt;
     margin-top: 0em;
     line-height: 42pt;
+}
+
+.desactivee {
+    background-color: #fdfdfd;
+    font-style: italic;
+    color: #bbb;
 }
 
 </style>

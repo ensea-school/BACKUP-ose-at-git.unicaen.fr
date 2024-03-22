@@ -4,8 +4,8 @@ namespace Formule\Service;
 
 
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Formule\Entity\Db\Formule;
 use Formule\Entity\FormuleTableur;
-use Unicaen\OpenDocument\Calc;
 use Unicaen\OpenDocument\Document;
 
 /**
@@ -20,8 +20,22 @@ class FormulatorService
 
 
 
+    public function update(string $filename): Formule
+    {
+        $em = $this->getServiceContext()->getEntityManager();
 
-    public function charger($filename)
+        $tableur = $this->charger($filename);
+        $formule = $tableur->formule();
+        $formule->setPhpClass($this->traduire($tableur));
+        $em->persist($formule);
+        $em->flush($formule);
+
+        return $formule;
+    }
+
+
+
+    public function charger(string $filename): FormuleTableur
     {
         $document = new Document();
         $document->loadFromFile($filename);
@@ -45,7 +59,7 @@ class FormulatorService
         $first = true;
         foreach( $cells as $cell ){
             if (!$first){
-                echo "\n\n\n";
+                $php .= "\n\n\n";
             }
             $php .= $this->getServiceTraducteur()->indent($this->getServiceTraducteur()->traduire($tableur, $cell),2);
             $first = false;
@@ -57,7 +71,5 @@ class FormulatorService
 
         return $php;
     }
-
-
 
 }

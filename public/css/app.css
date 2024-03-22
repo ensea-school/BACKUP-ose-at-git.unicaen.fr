@@ -29366,4 +29366,10 @@ span.sas-highlight {
   z-index: 5000;
 }
 
+/* Règles d'affichage de code source avec Geshi */
+.geshi ol {
+  padding-left: 3rem;
+  background-color: #eee;
+}
+
 /*# sourceMappingURL=app.css.map */

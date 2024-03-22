@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Formule\Entity\Db\Formule" table="FORMULE">
-        <id name="id" type="integer" column="ID"/>
-        <field name="code" type="string" column="CODE" length="30" nullable="false"/>
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <field name="code" type="string" column="CODE" length="50" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="100" nullable="false"/>
+        <field name="delegationAnnee" type="integer" column="DELEGATION_ANNEE" nullable="true"/>
+        <field name="delegationFormule" type="string" column="DELEGATION_FORMULE" length="50" nullable="true"/>
+        <field name="phpClass" type="string" column="PHP_CLASS" nullable="true"/>
         <field name="active" type="boolean" column="ACTIVE" nullable="false"/>
+        <field name="sqlIntervenant" type="string" column="SQL_INTERVENANT" nullable="true"/>
+        <field name="sqlVolumeHoraire" type="string" column="SQL_VOLUME_HORAIRE" nullable="true"/>
         <field name="iParam1Libelle" type="string" column="I_PARAM_1_LIBELLE" length="100" nullable="true"/>
         <field name="iParam2Libelle" type="string" column="I_PARAM_2_LIBELLE" length="100" nullable="true"/>
         <field name="iParam3Libelle" type="string" column="I_PARAM_3_LIBELLE" length="100" nullable="true"/>

@@ -303,3 +303,10 @@ span.sas-highlight {
     overflow-x: hidden;
     z-index: 5000;
 }
+
+
+/* Règles d'affichage de code source avec Geshi */
+.geshi ol {
+    padding-left: 3rem;
+    background-color:#eee;
+}

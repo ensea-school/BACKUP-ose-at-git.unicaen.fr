@@ -141,6 +141,18 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
+        'PHP_CLASS'          => [
+            'name'        => 'PHP_CLASS',
+            'type'        => 'clob',
+            'bdd-type'    => 'CLOB',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 19,
+            'commentaire' => NULL,
+        ],
         'SQL_INTERVENANT'    => [
             'name'        => 'SQL_INTERVENANT',
             'type'        => 'clob',

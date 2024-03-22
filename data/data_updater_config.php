@@ -82,9 +82,6 @@ return [
         'actions' => ['install', 'update'],
         'key'     => ['TYPE_INDICATEUR_ID', 'NUMERO'],
     ],
-    'FORMULE'                    => [
-        'actions' => ['install', 'update'],
-    ],
     'TYPE_HEURES'                => [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',

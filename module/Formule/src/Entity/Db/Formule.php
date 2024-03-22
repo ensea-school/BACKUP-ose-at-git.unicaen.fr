@@ -15,6 +15,8 @@ class Formule
 
     protected ?string $delegationFormule = null;
 
+    protected ?string $phpClass = null;
+
     protected bool $active = true;
 
     protected ?string $sqlIntervenant = null;
@@ -131,6 +133,21 @@ class Formule
     public function setDelegationFormule(?string $delegationFormule): Formule
     {
         $this->delegationFormule = $delegationFormule;
+        return $this;
+    }
+
+
+
+    public function getPhpClass(): ?string
+    {
+        return $this->phpClass;
+    }
+
+
+
+    public function setPhpClass(?string $phpClass): Formule
+    {
+        $this->phpClass = $phpClass;
         return $this;
     }
 

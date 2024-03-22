@@ -567,6 +567,7 @@ return [
         'VH_PARAM_3_LIBELLE',
         'VH_PARAM_4_LIBELLE',
         'VH_PARAM_5_LIBELLE',
+        'PHP_CLASS',
     ],
     'FORMULE_RESULTAT'                => [
         'ID',

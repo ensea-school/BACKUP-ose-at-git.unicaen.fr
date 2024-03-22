@@ -176,25 +176,6 @@ class DataSource
 
 
 
-    public function FORMULE()
-    {
-        $data = require getcwd() . '/data/formules.php';;
-        $formules = [];
-        foreach ($data as $id => $formule) {
-            $formule['ID'] = $id;
-            if (!isset($formule['ACTIVE'])) $formule['ACTIVE'] = true;
-            for ($i = 1; $i < 6; $i++) {
-                if (!isset($formule['I_PARAM_' . $i . '_LIBELLE'])) $formule['I_PARAM_' . $i . '_LIBELLE'] = null;
-                if (!isset($formule['VH_PARAM_' . $i . '_LIBELLE'])) $formule['VH_PARAM_' . $i . '_LIBELLE'] = null;
-            }
-            $formules[] = $formule;
-        }
-
-        return $formules;
-    }
-
-
-
     public function STATUT()
     {
         $donneesParDefaut = require getcwd() . '/data/donnees_par_defaut.php';

@@ -16,6 +16,12 @@ return [
                     'privileges'    => [Privileges::FORMULE_ADMINISTRATION_VISUALISATION],
                     'may_terminate' => true,
                     'child_routes'  => [
+                        'details' => [
+                            'route' => '/details/:formule',
+                            'controller'    => Controller\AdministrationController::class,
+                            'action'        => 'details',
+                            'privileges'    => [Privileges::FORMULE_ADMINISTRATION_VISUALISATION],
+                        ],
                         'telecharger-tableur' => [
                             'route' => '/telecharger-tableur/:formule',
                             'controller'    => Controller\AdministrationController::class,

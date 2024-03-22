@@ -8,18 +8,26 @@ use Formule\Entity\FormuleVolumeHoraire;
 
 class AbstractFormuleCalcul
 {
+    const RESCOLS = [
+        'HeuresServiceFi',
+        'HeuresServiceFa',
+        'HeuresServiceFc',
+        'HeuresServiceReferentiel',
+        'HeuresComplFi',
+        'HeuresComplFa',
+        'HeuresComplFc',
+        'HeuresComplReferentiel',
+        'HeuresPrimes',
+        'HeuresNonPayableFi',
+        'HeuresNonPayableFa',
+        'HeuresNonPayableFc',
+        'HeuresNonPayableReferentiel',
+    ];
+
     protected Formule $formule;
     protected FormuleIntervenant $intervenant;
 
     protected int $ligne = 0;
-
-
-
-    public function __construct(Formule $formule, FormuleIntervenant $intervenant)
-    {
-        $this->formule = $formule;
-        $this->intervenant = $intervenant;
-    }
 
 
 
@@ -34,7 +42,7 @@ class AbstractFormuleCalcul
     {
         $result = null;
         foreach ($this->intervenant->getVolumesHoraires() as $l => $vh) {
-            $cr = $this->$cellName($l);
+            $cr = $this->{'c_' . $cellName}($l);
             if ($result === null || $cr > $result) {
                 $result = $cr;
             }
@@ -49,7 +57,7 @@ class AbstractFormuleCalcul
     {
         $result = 0;
         foreach ($this->intervenant->getVolumesHoraires() as $l => $vh) {
-            $cr = $this->$cellName($l);
+            $cr = $this->{'c_' . $cellName}($l);
             $result += $cr;
         }
 
@@ -80,8 +88,23 @@ class AbstractFormuleCalcul
 
 
 
-    public function calculer()
+    public function calculer(FormuleIntervenant $intervenant, Formule $formule)
     {
+        $this->intervenant = $intervenant;
+        $this->formule = $formule;
 
+        $volumesHoraires = $this->intervenant->getVolumesHoraires();
+
+        foreach ($volumesHoraires as $l => $volumesHoraire) {
+            foreach (self::RESCOLS as $resCol) {
+                $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
+                if ($cellColPos) {
+                    $val = $this->{'c_' . $cellColPos}($l);
+                } else {
+                    $val = 0.0;
+                }
+                $volumesHoraire->{'set' . $resCol}($val);
+            }
+        }
     }
 }

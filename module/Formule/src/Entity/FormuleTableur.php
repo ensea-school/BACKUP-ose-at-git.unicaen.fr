@@ -436,6 +436,14 @@ class FormuleTableur
             $formule->$method($value);
         }
 
+        foreach( $this->variables as $name => $variable){
+            if ($variable['result'] == true){
+                $method = 'set'.ucfirst(substr($name, 3)).'Col';
+                $colPos = Calc::numberToLetter($variable['cell']->getCol());
+                $formule->$method($colPos);
+            }
+        }
+
         return $formule;
     }
 

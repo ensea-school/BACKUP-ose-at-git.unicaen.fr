@@ -14,6 +14,23 @@
         <field name="active" type="boolean" column="ACTIVE" nullable="false"/>
         <field name="sqlIntervenant" type="string" column="SQL_INTERVENANT" nullable="true"/>
         <field name="sqlVolumeHoraire" type="string" column="SQL_VOLUME_HORAIRE" nullable="true"/>
+
+        <field name="heuresServiceFiCol" type="string" column="HEURES_SERVICE_FI_COL" length="5" nullable="true"/>
+        <field name="heuresServiceFaCol" type="string" column="HEURES_SERVICE_FA_COL" length="5" nullable="true"/>
+        <field name="heuresServiceFcCol" type="string" column="HEURES_SERVICE_FC_COL" length="5" nullable="true"/>
+        <field name="heuresServiceReferentielCol" type="string" column="HEURES_SERVICE_REFERENTIEL_COL" length="5" nullable="true"/>
+
+        <field name="heuresComplFiCol" type="string" column="HEURES_COMPL_FI_COL" length="5" nullable="true"/>
+        <field name="heuresComplFaCol" type="string" column="HEURES_COMPL_FA_COL" length="5" nullable="true"/>
+        <field name="heuresComplFcCol" type="string" column="HEURES_COMPL_FC_COL" length="5" nullable="true"/>
+        <field name="heuresComplReferentielCol" type="string" column="HEURES_COMPL_REFERENTIEL_COL" length="5" nullable="true"/>
+        <field name="heuresPrimesCol" type="string" column="HEURES_PRIMES_COL" length="5" nullable="true"/>
+
+        <field name="heuresNonPayableFiCol" type="string" column="HEURES_NON_PAYABLE_FI_COL" length="5" nullable="true"/>
+        <field name="heuresNonPayableFaCol" type="string" column="HEURES_NON_PAYABLE_FA_COL" length="5" nullable="true"/>
+        <field name="heuresNonPayableFcCol" type="string" column="HEURES_NON_PAYABLE_FC_COL" length="5" nullable="true"/>
+        <field name="heuresNonPayableReferentielCol" type="string" column="HEURES_NON_PAYABLE_REFERENTIEL_COL" length="5" nullable="true"/>
+
         <field name="iParam1Libelle" type="string" column="I_PARAM_1_LIBELLE" length="100" nullable="true"/>
         <field name="iParam2Libelle" type="string" column="I_PARAM_2_LIBELLE" length="100" nullable="true"/>
         <field name="iParam3Libelle" type="string" column="I_PARAM_3_LIBELLE" length="100" nullable="true"/>

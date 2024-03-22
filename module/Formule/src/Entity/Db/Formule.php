@@ -20,29 +20,33 @@ class Formule
     protected bool $active = true;
 
     protected ?string $sqlIntervenant = null;
-
     protected ?string $sqlVolumeHoraire = null;
 
+    protected ?string $heuresServiceFiCol = null;
+    protected ?string $heuresServiceFaCol = null;
+    protected ?string $heuresServiceFcCol = null;
+    protected ?string $heuresServiceReferentielCol = null;
+    protected ?string $heuresComplFiCol = null;
+    protected ?string $heuresComplFaCol = null;
+    protected ?string $heuresComplFcCol = null;
+    protected ?string $heuresComplReferentielCol = null;
+    protected ?string $heuresPrimesCol = null;
+    protected ?string $heuresNonPayableFiCol = null;
+    protected ?string $heuresNonPayableFaCol = null;
+    protected ?string $heuresNonPayableFcCol = null;
+    protected ?string $heuresNonPayableReferentielCol = null;
+
     protected ?string $iParam1Libelle = null;
-
     protected ?string $iParam2Libelle = null;
-
     protected ?string $iParam3Libelle = null;
-
     protected ?string $iParam4Libelle = null;
-
     protected ?string $iParam5Libelle = null;
 
     protected ?string $vhParam1Libelle = null;
-
     protected ?string $vhParam2Libelle = null;
-
     protected ?string $vhParam3Libelle = null;
-
     protected ?string $vhParam4Libelle = null;
-
     protected ?string $vhParam5Libelle = null;
-
 
 
 
@@ -193,6 +197,201 @@ class Formule
     public function setSqlVolumeHoraire(?string $sqlVolumeHoraire): Formule
     {
         $this->sqlVolumeHoraire = $sqlVolumeHoraire;
+        return $this;
+    }
+
+
+
+    public function getHeuresServiceFiCol(): ?string
+    {
+        return $this->heuresServiceFiCol;
+    }
+
+
+
+    public function setHeuresServiceFiCol(?string $heuresServiceFiCol): Formule
+    {
+        $this->heuresServiceFiCol = $heuresServiceFiCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresServiceFaCol(): ?string
+    {
+        return $this->heuresServiceFaCol;
+    }
+
+
+
+    public function setHeuresServiceFaCol(?string $heuresServiceFaCol): Formule
+    {
+        $this->heuresServiceFaCol = $heuresServiceFaCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresServiceFcCol(): ?string
+    {
+        return $this->heuresServiceFcCol;
+    }
+
+
+
+    public function setHeuresServiceFcCol(?string $heuresServiceFcCol): Formule
+    {
+        $this->heuresServiceFcCol = $heuresServiceFcCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresServiceReferentielCol(): ?string
+    {
+        return $this->heuresServiceReferentielCol;
+    }
+
+
+
+    public function setHeuresServiceReferentielCol(?string $heuresServiceReferentielCol): Formule
+    {
+        $this->heuresServiceReferentielCol = $heuresServiceReferentielCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresComplFiCol(): ?string
+    {
+        return $this->heuresComplFiCol;
+    }
+
+
+
+    public function setHeuresComplFiCol(?string $heuresComplFiCol): Formule
+    {
+        $this->heuresComplFiCol = $heuresComplFiCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresComplFaCol(): ?string
+    {
+        return $this->heuresComplFaCol;
+    }
+
+
+
+    public function setHeuresComplFaCol(?string $heuresComplFaCol): Formule
+    {
+        $this->heuresComplFaCol = $heuresComplFaCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresComplFcCol(): ?string
+    {
+        return $this->heuresComplFcCol;
+    }
+
+
+
+    public function setHeuresComplFcCol(?string $heuresComplFcCol): Formule
+    {
+        $this->heuresComplFcCol = $heuresComplFcCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresComplReferentielCol(): ?string
+    {
+        return $this->heuresComplReferentielCol;
+    }
+
+
+
+    public function setHeuresComplReferentielCol(?string $heuresComplReferentielCol): Formule
+    {
+        $this->heuresComplReferentielCol = $heuresComplReferentielCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresPrimesCol(): ?string
+    {
+        return $this->heuresPrimesCol;
+    }
+
+
+
+    public function setHeuresPrimesCol(?string $heuresPrimesCol): Formule
+    {
+        $this->heuresPrimesCol = $heuresPrimesCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresNonPayableFiCol(): ?string
+    {
+        return $this->heuresNonPayableFiCol;
+    }
+
+
+
+    public function setHeuresNonPayableFiCol(?string $heuresNonPayableFiCol): Formule
+    {
+        $this->heuresNonPayableFiCol = $heuresNonPayableFiCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresNonPayableFaCol(): ?string
+    {
+        return $this->heuresNonPayableFaCol;
+    }
+
+
+
+    public function setHeuresNonPayableFaCol(?string $heuresNonPayableFaCol): Formule
+    {
+        $this->heuresNonPayableFaCol = $heuresNonPayableFaCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresNonPayableFcCol(): ?string
+    {
+        return $this->heuresNonPayableFcCol;
+    }
+
+
+
+    public function setHeuresNonPayableFcCol(?string $heuresNonPayableFcCol): Formule
+    {
+        $this->heuresNonPayableFcCol = $heuresNonPayableFcCol;
+        return $this;
+    }
+
+
+
+    public function getHeuresNonPayableReferentielCol(): ?string
+    {
+        return $this->heuresNonPayableReferentielCol;
+    }
+
+
+
+    public function setHeuresNonPayableReferentielCol(?string $heuresNonPayableReferentielCol): Formule
+    {
+        $this->heuresNonPayableReferentielCol = $heuresNonPayableReferentielCol;
         return $this;
     }
 

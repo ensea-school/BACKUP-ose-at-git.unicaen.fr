@@ -3,7 +3,9 @@
 namespace Formule\Service;
 
 
+use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleTableur;
+use Formule\Entity\FormuleVolumeHoraire;
 use Unicaen\OpenDocument\Calc;
 
 /**
@@ -31,8 +33,10 @@ class TraducteurService
         'traductionVariables',
         'detectionVariables',
         'transfoTestsBool',
+        'transfoStructureAffectation',
     ];
 
+    private string $transfoAction;
 
 
     public function setDebug(bool $debug): TraducteurService
@@ -56,10 +60,10 @@ class TraducteurService
 
         $this->tableurExpr = substr($this->cell->getFormule() ?? '', 3) ?? $this->cell->getValue();
         $expr = $this->cell->getFormuleExpr();
-        if ($expr){
+        if ($expr) {
             $this->expr = $expr;
-        }else{
-            throw new \Exception('La cellule '.$this->cell->getName().' est vide. Or elle est utilisée dans une ou plusieurs expressions');
+        } else {
+            throw new \Exception('La cellule ' . $this->cell->getName() . ' est vide. Or elle est utilisée dans une ou plusieurs expressions');
         }
 
         $this->transformer();
@@ -69,7 +73,7 @@ class TraducteurService
             echo '<h2>' . $this->name . '</h2>';
             echo Calc\Display::formuleExpr($this->cell->getFormuleExpr());
             echo Calc\Display::formuleExpr($this->expr);
-           phpDump($php);
+            phpDump($php);
         }
 
         return $php;
@@ -79,8 +83,11 @@ class TraducteurService
 
     protected function transformer(): void
     {
-        foreach ($this->expr as $i => $expr) {
-            $this->transfoParse($this->expr, $i);
+        foreach( $this->transfoActions as $transfoAction ) {
+            $this->transfoAction = $transfoAction;
+            foreach ($this->expr as $i => $expr) {
+                $this->transfoParse($this->expr, $i);
+            }
         }
     }
 
@@ -98,9 +105,7 @@ class TraducteurService
                 $sIndex++;
             }
         } else {
-            foreach ($this->transfoActions as $action) {
-                $this->$action($expr, $index);
-            }
+            $this->{$this->transfoAction}($expr, $index);
             if (isset($expr[$index]['exprs'])) {
                 $sIndex = 0;
                 while ($sIndex < count($expr[$index]['exprs'])) {
@@ -123,7 +128,11 @@ class TraducteurService
     protected function convertir(): string
     {
         $php = "// $this->name" . $this->tableurExpr . "\n";
-        $php .= "protected function c_$this->name(int \$l): float\n";
+        if ($this->name == $this->cell->getName()){
+            $php .= "protected function c_$this->name(): float\n";
+        }else{
+            $php .= "protected function c_$this->name(int \$l): float\n";
+        }
         $php .= "{\n";
         $php .= $this->indent($this->returnPhp($this->traductionExpr($this->expr)));
         $php .= "}\n";
@@ -251,24 +260,60 @@ class TraducteurService
             && $expr[$i + 2]['type'] == 'string'
         ) {
             $vType = $this->tableur->variableType($expr[$i]['name']);
-            if ('bool' == $vType){
+            if ('bool' == $vType) {
                 $op = $expr[$i + 1]['name'];
-                if (in_array($op,['=', '<>'])) {
+                if (in_array($op, ['=', '<>'])) {
                     $val = strtolower($expr[$i + 2]['content']);
                     $val = $val == 'oui' || $val == '1' || $val == 'o';
                     if ($op == '<>') {
                         $val = !$val;
                     }
-                    if ($val){
+                    if ($val) {
                         unset($expr[$i + 1]);
                         unset($expr[$i + 2]);
-                    }else{
+                    } else {
                         $expr[$i + 1] = $expr[$i];
                         $expr[$i] = ['type' => 'php', 'code' => '!'];
                         unset($expr[$i + 2]);
                     }
                 }
             }
+        }
+    }
+
+
+
+    private function transfoStructureAffectation(array &$expr, int $i): void
+    {
+        $transfo = false;
+
+        if ($expr[$i]['type'] == 'variable'
+            && $expr[$i]['name'] == 'vh.structureCode'
+            && isset($expr[$i + 2])
+            && $expr[$i + 1]['type'] == 'op' && ($expr[$i + 1]['name'] == '=' || $expr[$i + 1]['name'] == '<>')
+            && $expr[$i + 2]['type'] == 'variable' && $expr[$i + 2]['name'] == 'i.structureCode'
+        ) {
+            $transfo = true;
+        }
+
+        if ($expr[$i]['type'] == 'variable'
+            && $expr[$i]['name'] == 'i.structureCode'
+            && isset($expr[$i + 2])
+            && $expr[$i + 1]['type'] == 'op' && ($expr[$i + 1]['name'] == '=' || $expr[$i + 1]['name'] == '<>')
+            && $expr[$i + 2]['type'] == 'variable' && $expr[$i + 2]['name'] == 'vh.structureCode'
+        ) {
+            $transfo = true;
+        }
+
+        if ($transfo){
+            $op = $expr[$i + 1]['name'];
+            if ('=' == $op) {
+                unset($expr[$i]);
+            }else{
+                $expr[$i] = ['type' => 'php', 'code' => '!'];
+            }
+            $expr[$i+1] = ['type' => 'variable', 'name' => 'vh.structureAffectation'];
+            unset($expr[$i + 2]);
         }
     }
 
@@ -370,6 +415,7 @@ class TraducteurService
         $trads = [
             '&' => '||',
             '%' => '/ 100',
+            '=' => '==',
         ];
 
         $op = $term['name'];
@@ -402,12 +448,12 @@ class TraducteurService
         $col = Calc::numberToLetter($col);
 
         if ($row == 0) {
-            return "\$this->c('$col',l)";
+            return "\$this->c('$col',\$l)";
         } elseif ($row < $ml) {
-            return "\$this->c('$col$row')";
+            return "\$this->c_$col$row()";
         } else {
             $rowDiff = $row - $ml;
-            return "\$this->c('$col',l+$rowDiff)";
+            return "\$this->c('$col',\$l+$rowDiff)";
         }
     }
 
@@ -416,14 +462,25 @@ class TraducteurService
     private function traductionVariable(array &$expr, int $i): string
     {
         $name = $expr[$i]['name'];
+        $accesseurs = ['get', 'has', 'is'];
 
         if (str_starts_with($name, 'i.')) {
-            $variable = '$this->intervenant()->get' . ucfirst(substr($name, 2)) . '()';
+            foreach( $accesseurs as $accesseur ) {
+                $method = $accesseur.ucfirst(substr($name, 2));
+                if (method_exists(FormuleIntervenant::class, $method)) {
+                    $variable = '$this->intervenant()->' . $method . '()';
+                }
+            }
         } elseif (str_starts_with($name, 'vh.')) {
-            $variable = '$this->volumeHoraire($l)->get' . ucfirst(substr($name, 3)) . '()';
-        } elseif($name == 'i_service_du') {
+            foreach( $accesseurs as $accesseur ) {
+                $method = $accesseur.ucfirst(substr($name, 3));
+                if (method_exists(FormuleVolumeHoraire::class, $method)) {
+                    $variable = '$this->volumeHoraire($l)->' . $method . '()';
+                }
+            }
+        } elseif ($name == 'i_service_du') {
             $variable = '$this->intervenant()->getServiceDu()';
-        }else{
+        } else {
             $variable = '[ERREUR POUR LA VARIABLE ' . $name . ']';
         }
 

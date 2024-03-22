@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'FORMULE_ID_SEQ',
     'columns'     => [
-        'ACTIVE'             => [
+        'ACTIVE'                             => [
             'name'        => 'ACTIVE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'CODE'               => [
+        'CODE'                               => [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -33,7 +33,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'DELEGATION_ANNEE'   => [
+        'DELEGATION_ANNEE'                   => [
             'name'        => 'DELEGATION_ANNEE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -45,7 +45,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'DELEGATION_FORMULE' => [
+        'DELEGATION_FORMULE'                 => [
             'name'        => 'DELEGATION_FORMULE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -57,7 +57,163 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'ID'                 => [
+        'HEURES_COMPL_FA_COL'                => [
+            'name'        => 'HEURES_COMPL_FA_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 25,
+            'commentaire' => NULL,
+        ],
+        'HEURES_COMPL_FC_COL'                => [
+            'name'        => 'HEURES_COMPL_FC_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 26,
+            'commentaire' => NULL,
+        ],
+        'HEURES_COMPL_FI_COL'                => [
+            'name'        => 'HEURES_COMPL_FI_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 24,
+            'commentaire' => NULL,
+        ],
+        'HEURES_COMPL_REFERENTIEL_COL'       => [
+            'name'        => 'HEURES_COMPL_REFERENTIEL_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 27,
+            'commentaire' => NULL,
+        ],
+        'HEURES_NON_PAYABLE_FA_COL'          => [
+            'name'        => 'HEURES_NON_PAYABLE_FA_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 29,
+            'commentaire' => NULL,
+        ],
+        'HEURES_NON_PAYABLE_FC_COL'          => [
+            'name'        => 'HEURES_NON_PAYABLE_FC_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 30,
+            'commentaire' => NULL,
+        ],
+        'HEURES_NON_PAYABLE_FI_COL'          => [
+            'name'        => 'HEURES_NON_PAYABLE_FI_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 28,
+            'commentaire' => NULL,
+        ],
+        'HEURES_NON_PAYABLE_REFERENTIEL_COL' => [
+            'name'        => 'HEURES_NON_PAYABLE_REFERENTIEL_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 31,
+            'commentaire' => NULL,
+        ],
+        'HEURES_PRIMES_COL'                  => [
+            'name'        => 'HEURES_PRIMES_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 32,
+            'commentaire' => NULL,
+        ],
+        'HEURES_SERVICE_FA_COL'              => [
+            'name'        => 'HEURES_SERVICE_FA_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 21,
+            'commentaire' => NULL,
+        ],
+        'HEURES_SERVICE_FC_COL'              => [
+            'name'        => 'HEURES_SERVICE_FC_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 22,
+            'commentaire' => NULL,
+        ],
+        'HEURES_SERVICE_FI_COL'              => [
+            'name'        => 'HEURES_SERVICE_FI_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 20,
+            'commentaire' => NULL,
+        ],
+        'HEURES_SERVICE_REFERENTIEL_COL'     => [
+            'name'        => 'HEURES_SERVICE_REFERENTIEL_COL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 5,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 23,
+            'commentaire' => NULL,
+        ],
+        'ID'                                 => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +225,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'I_PARAM_1_LIBELLE'  => [
+        'I_PARAM_1_LIBELLE'                  => [
             'name'        => 'I_PARAM_1_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -81,7 +237,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'I_PARAM_2_LIBELLE'  => [
+        'I_PARAM_2_LIBELLE'                  => [
             'name'        => 'I_PARAM_2_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -93,7 +249,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'I_PARAM_3_LIBELLE'  => [
+        'I_PARAM_3_LIBELLE'                  => [
             'name'        => 'I_PARAM_3_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -105,7 +261,7 @@ return [
             'position'    => 11,
             'commentaire' => NULL,
         ],
-        'I_PARAM_4_LIBELLE'  => [
+        'I_PARAM_4_LIBELLE'                  => [
             'name'        => 'I_PARAM_4_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -117,7 +273,7 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
-        'I_PARAM_5_LIBELLE'  => [
+        'I_PARAM_5_LIBELLE'                  => [
             'name'        => 'I_PARAM_5_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -129,7 +285,7 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
-        'LIBELLE'            => [
+        'LIBELLE'                            => [
             'name'        => 'LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -141,7 +297,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'PHP_CLASS'          => [
+        'PHP_CLASS'                          => [
             'name'        => 'PHP_CLASS',
             'type'        => 'clob',
             'bdd-type'    => 'CLOB',
@@ -153,7 +309,7 @@ return [
             'position'    => 19,
             'commentaire' => NULL,
         ],
-        'SQL_INTERVENANT'    => [
+        'SQL_INTERVENANT'                    => [
             'name'        => 'SQL_INTERVENANT',
             'type'        => 'clob',
             'bdd-type'    => 'CLOB',
@@ -165,7 +321,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'SQL_VOLUME_HORAIRE' => [
+        'SQL_VOLUME_HORAIRE'                 => [
             'name'        => 'SQL_VOLUME_HORAIRE',
             'type'        => 'clob',
             'bdd-type'    => 'CLOB',
@@ -177,7 +333,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'VH_PARAM_1_LIBELLE' => [
+        'VH_PARAM_1_LIBELLE'                 => [
             'name'        => 'VH_PARAM_1_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -189,7 +345,7 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
-        'VH_PARAM_2_LIBELLE' => [
+        'VH_PARAM_2_LIBELLE'                 => [
             'name'        => 'VH_PARAM_2_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -201,7 +357,7 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
-        'VH_PARAM_3_LIBELLE' => [
+        'VH_PARAM_3_LIBELLE'                 => [
             'name'        => 'VH_PARAM_3_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -213,7 +369,7 @@ return [
             'position'    => 16,
             'commentaire' => NULL,
         ],
-        'VH_PARAM_4_LIBELLE' => [
+        'VH_PARAM_4_LIBELLE'                 => [
             'name'        => 'VH_PARAM_4_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -225,7 +381,7 @@ return [
             'position'    => 17,
             'commentaire' => NULL,
         ],
-        'VH_PARAM_5_LIBELLE' => [
+        'VH_PARAM_5_LIBELLE'                 => [
             'name'        => 'VH_PARAM_5_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',

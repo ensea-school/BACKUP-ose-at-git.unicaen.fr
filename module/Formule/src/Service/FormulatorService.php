@@ -5,7 +5,9 @@ namespace Formule\Service;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Formule\Entity\Db\Formule;
+use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleTableur;
+use Formule\Model\AbstractFormuleCalcul;
 use Unicaen\OpenDocument\Document;
 
 /**
@@ -18,6 +20,15 @@ class FormulatorService
     use ContextServiceAwareTrait;
     use TraducteurServiceAwareTrait;
 
+    private array $formulesCalculCache = [];
+
+
+
+    public function cacheDir(): string
+    {
+        return getcwd() . '/cache/formules/';
+    }
+
 
 
     public function update(string $filename): Formule
@@ -29,6 +40,8 @@ class FormulatorService
         $formule->setPhpClass($this->traduire($tableur));
         $em->persist($formule);
         $em->flush($formule);
+
+        $this->makeWithCacheFile($formule, false);
 
         return $formule;
     }
@@ -57,11 +70,11 @@ class FormulatorService
         $cells = $tableur->formuleCells();
 
         $first = true;
-        foreach( $cells as $cell ){
-            if (!$first){
+        foreach ($cells as $cell) {
+            if (!$first) {
                 $php .= "\n\n\n";
             }
-            $php .= $this->getServiceTraducteur()->indent($this->getServiceTraducteur()->traduire($tableur, $cell),2);
+            $php .= $this->getServiceTraducteur()->indent($this->getServiceTraducteur()->traduire($tableur, $cell), 2);
             $first = false;
         }
 
@@ -70,6 +83,46 @@ class FormulatorService
         $php = str_replace("/* TRAITEMENT */\n\n", $php, $template);
 
         return $php;
+    }
+
+
+
+    private function getFormuleCalcul(Formule $formule): AbstractFormuleCalcul
+    {
+        if (!isset($this->formulesCalculCache[$formule->getId()])) {
+            $this->formulesCalculCache[$formule->getId()] = $this->makeWithCacheFile($formule);
+        }
+        return $this->formulesCalculCache[$formule->getId()];
+    }
+
+
+
+    private function makeWithCacheFile(Formule $formule, $instanciate = true): ?AbstractFormuleCalcul
+    {
+        $dir = $this->cacheDir();
+        $filename = $dir . $formule->getCode() . '.php';
+
+        if (!file_exists($filename)) {
+            if (!file_exists($dir)) {
+                mkdir($dir);
+            }
+            file_put_contents($filename, $formule->getPhpClass());
+        }
+
+        if ($instanciate) {
+            require $filename;
+            return new \FormuleCalculateur();
+        } else {
+            return null;
+        }
+    }
+
+
+
+    public function calculer(FormuleIntervenant $intervenant, Formule $formule): void
+    {
+        $fc = $this->getFormuleCalcul($formule);
+        $fc->calculer($intervenant, $formule);
     }
 
 }

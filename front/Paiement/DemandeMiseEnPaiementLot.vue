@@ -386,7 +386,7 @@ export default {
         {
             let form = document.getElementById('formProcessDemandeMiseEnPaiement');
             let formData = new FormData(form);
-            if ((this.dotation.paieEtat >= this.totalConsommationPaieEtat && this.dotation.ressourcePropre > this.totalConsommationRessourcePropre) || !this.haveDotation) {
+            if ((this.dotation.paieEtat >= this.totalConsommationPaieEtat && this.dotation.ressourcePropre >= this.totalConsommationRessourcePropre) || !this.haveDotation) {
                 //On desactive le bouton de soumission
                 let btnPdmep = document.getElementById('btn-pdmep')
                 let btnPdmepInProgress = document.getElementById('btn-pdmep-inprogress')

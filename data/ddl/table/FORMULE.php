@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'FORMULE_ID_SEQ',
     'columns'     => [
         'ACTIVE'             => [
             'name'        => 'ACTIVE',

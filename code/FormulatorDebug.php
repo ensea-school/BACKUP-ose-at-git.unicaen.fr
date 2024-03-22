@@ -14,8 +14,8 @@ $fs = $container->get(\Formule\Service\FormulatorService::class);
 $dir = getcwd() . '/data/formules/';
 $fichiers = scandir($dir);
 $options = [];
-foreach($fichiers as $fichier){
-    if (!str_starts_with($fichier,'.')){
+foreach ($fichiers as $fichier) {
+    if (!str_starts_with($fichier, '.')) {
         $fichier = str_replace('.ods', '', $fichier);
         $options[$fichier] = $fichier;
     }
@@ -23,13 +23,17 @@ foreach($fichiers as $fichier){
 
 $params = \UnicaenCode\Util::codeGenerator()->generer([
     'formule' => [
-        'type' => 'select',
-        'label' => 'Formule à générer',
+        'type'    => 'select',
+        'label'   => 'Formule à générer',
         'options' => $options,
+    ],
+    'cellule' => [
+        'type'  => 'text',
+        'label' => 'Cellule à traduire (si non renseigné tout sera traduit)',
     ],
 ]);
 
-if (!$params['formule']){
+if (!$params['formule']) {
     return;
 }
 
@@ -41,7 +45,27 @@ $formulator = $container->get(\Formule\Service\FormulatorService::class);
 $traducteur = $container->get(\Formule\Service\TraducteurService::class);
 $traducteur->setDebug(true);
 
-$filename = $dir.'/'.$params['formule'].'.ods';
+$filename = $dir . '/' . $params['formule'] . '.ods';
 $tableur = $formulator->charger($filename);
+$mls = (string)$tableur->mainLine();
 
-phpDump($formulator->traduire($tableur));
+$cells = $tableur->formuleCells();
+$cellules = [];
+foreach ($cells as $cell) {
+    $name = $cell->getName();
+    if (str_ends_with($name, $mls)) {
+        $name = substr($name, 0, -strlen($mls));
+    }
+    if (!$params['cellule'] || $params['cellule'] == $name) {
+        $traducteur->traduire($tableur, $cell);
+    }
+    $cellules[] = $name;
+}
+
+echo '<form method="post">';
+echo '<input type="hidden" name="formule" value="' . $params['formule'] . '" />';
+echo '<h3>Liste des cellules de la feuille :</h3>';
+foreach ($cellules as $cname) {
+    echo '<button type="submit" class="btn btn-secondary" style="margin:2px" name="cellule" value="' . $cname . '">' . $cname . '</button>';
+}
+echo '</form>';

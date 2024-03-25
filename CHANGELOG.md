@@ -23,6 +23,7 @@
 
 * Dans la partie administration/structure, La liste des centres de coût par défaut possible pour une structure est maintenant filtrée pour choisir uniquement des centres de coût rattachés à cette structure.
 * Adaptation de l'export paie Siham préliquidation pour les missions étudiantes (congés payés)
+* Prise en charge de l'extension du numéro de voie (Bis, Ter etc...) dans l'export RH lors d'une PEC ou REN
 
 
 

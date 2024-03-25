@@ -273,9 +273,12 @@ class DossierService extends AbstractEntityService
         $oldDatas['RIB']    = $rib;
         $intervenantAdresse = $intervenant->getAdresse();
         /*Normalisation et nettoyage de l'adresse pour comparaison*/
-        $intervenantAdresse  = trim(strtolower($intervenantAdresse));
-        $intervenantAdresse  = str_replace(["\r\n", "\n", "\r", ",", "'"], ' ', $intervenantAdresse);
-        $intervenantAdresse  = preg_replace('/\s\s+/', ' ', $intervenantAdresse);
+        if (!empty($intervenantAdresse)) {
+            $intervenantAdresse = trim(strtolower($intervenantAdresse));
+            $intervenantAdresse = str_replace(["\r\n", "\n", "\r", ",", "'"], ' ', $intervenantAdresse);
+            $intervenantAdresse = preg_replace('/\s\s+/', ' ', $intervenantAdresse);
+        }
+
         $oldDatas['ADRESSE'] = (!empty($intervenantAdresse)) ? $intervenantAdresse : '(aucun)';
 
         //On calcule les champs différents

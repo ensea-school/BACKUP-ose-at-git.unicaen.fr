@@ -17,11 +17,14 @@
 * Impossible de choisir un centre de coût par défaut pour une structure 
 * Problème de mise en paiement en masse avec les enveloppes budgétaires en ressources propres à 0 (#55672)
 * Correction des mises en paiement lors du passage de 'Distinction Fi,Fa,Fc' en 'Tous enseignements confondus', le regroupement n'était pas visuellement correcte (#54144)
+* Corrections des formules de calcul de Rouen (#55241)
 
 ## Améliorations
 
 * Dans la partie administration/structure, La liste des centres de coût par défaut possible pour une structure est maintenant filtrée pour choisir uniquement des centres de coût rattachés à cette structure.
 * Adaptation de l'export paie Siham préliquidation pour les missions étudiantes (congés payés)
+
+
 
 # OSE 23.3 (23/02/2024)
 

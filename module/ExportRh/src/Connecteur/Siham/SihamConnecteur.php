@@ -223,6 +223,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $contrat[] =
                         ['dateDebutContrat'  => $dateEffet,
                          'dateFinContrat'    => $dateFin,
+                         'categorieContrat'  => isset($this->siham->getConfig()['contrat']['parameters']['categorieContrat']) ? $this->siham->getConfig()['contrat']['parameters']['categorieContrat'] : '',
                          'natureContrat'     => $this->siham->getConfig()['contrat']['parameters']['natureContrat'],
                          'typeContrat'       => $this->siham->getConfig()['contrat']['parameters']['typeContrat'],
                          'typeLienJuridique' => $this->siham->getConfig()['contrat']['parameters']['typeLienJuridique'],
@@ -517,6 +518,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                          'typeLienJuridique' => $this->siham->getConfig()['contrat']['parameters']['typeLienJuridique'],
                          'modeRemuneration'  => $this->siham->getConfig()['contrat']['parameters']['modeRemuneration'],
                          'modeDeGestion'     => $this->siham->getConfig()['contrat']['parameters']['modeDeGestion'],
+                         'categorieContrat'  => isset($this->siham->getConfig()['contrat']['parameters']['categorieContrat']) ? $this->siham->getConfig()['contrat']['parameters']['categorieContrat'] : '',
                          'gradeTG'           => $gradeTG,
                          'tauxHoraires'      => $infos['taux'],
                          'nbHeuresContrat'   => $infos['totalHeure'],

@@ -12,23 +12,15 @@ SELECT
 	fonds,
 	poste_reservation_credit,
 	--On impact le potentiel écart de pourcentage détecté pour s'assurer que la somme des pourcentages fasse 100%
- 	to_char((CASE
-                WHEN pourc_ecart >= 0 THEN
-                    CASE
-                        WHEN rank() OVER (PARTITION BY periode_id, intervenant_id   ORDER BY operation,centre_cout, pourcentage) = 1
-                        THEN pourcentage + pourc_ecart
-                        ELSE pourcentage END
-                ELSE
-                    CASE
-                        WHEN rank() OVER (PARTITION BY periode_id, intervenant_id   ORDER BY operation, centre_cout, pourcentage) = 1
-                        THEN pourcentage - pourc_ecart
-                        ELSE pourcentage END
-       END))	pourcentage,
+ 	CASE
+	    WHEN rank() OVER (PARTITION BY periode_id, intervenant_id   ORDER BY operation,centre_cout, pourcentage) = 1
+	    THEN pourcentage + pourc_ecart
+	    ELSE pourcentage END    	                                                                                          pourcentage,
      nombres_heures,
      flmodi,
      numord,
      numgrp,
-     intervenant_id																											intervenant_id,
+     intervenant_id																											  intervenant_id,
      type_intervenant_id                                                                                                      type_intervenant_id,
      periode_id,
      annee_id,
@@ -52,7 +44,7 @@ FROM (
 	       NULL                                                                               										fonds,
 	       NULL                                                                               										poste_reservation_credit,
 	       CASE WHEN montant_hetd > 0
-	       	    THEN ROUND(montant_hetd / SUM(montant_hetd) OVER( PARTITION BY periode_id,intervenant_id),2)*100
+	       	    THEN ROUND(montant_hetd / SUM(montant_hetd) OVER( PARTITION BY periode_id,intervenant_id)*100,2)
 	       	    ELSE 0  END																											pourcentage,
 	       CASE WHEN hetd >= 100 THEN FLOOR(hetd) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0)
 	       ELSE (lpad(FLOOR(hetd), 2, '0')) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0) END         						nombres_heures,

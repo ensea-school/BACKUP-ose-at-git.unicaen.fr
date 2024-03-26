@@ -10,7 +10,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "sass": "^1.57.1",
+    "sass": "1.72.0",
     "unicaen-vue": "file:./vendor/unicaen/vue"
   }
 }

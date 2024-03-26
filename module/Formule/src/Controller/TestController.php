@@ -16,6 +16,7 @@ use Laminas\View\Model\JsonModel;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenVue\View\Model\VueModel;
 
 /**
  * Description of FormuleController
@@ -31,11 +32,9 @@ class TestController extends AbstractController
 
     public function indexAction()
     {
-        $fti = $this->getServiceTest()->getList();
-
-        $formules = $this->em()->createQuery("SELECT f FROM " . Formule::class . " f ORDER BY f.id")->execute();
-
-        return compact('fti', 'formules');
+        $vm = new VueModel();
+        $vm->setTemplate('formule/test/index');
+        return $vm;
     }
 
 
@@ -45,16 +44,16 @@ class TestController extends AbstractController
         /* @var $formuleTestIntervenant FormuleTestIntervenant */
         $formuleTestIntervenant = $this->getEvent()->getParam('formuleTestIntervenant');
 
-        $formules          = $this->em()->createQuery("SELECT f FROM " . Formule::class . " f ORDER BY f.id")->execute();
-        $annees            = $this->em()->createQuery("SELECT a FROM " . Annee::class . " a WHERE a.id BETWEEN 2013 AND 2030 ORDER BY a.id")->execute();
+        $formules = $this->em()->createQuery("SELECT f FROM " . Formule::class . " f ORDER BY f.id")->execute();
+        $annees = $this->em()->createQuery("SELECT a FROM " . Annee::class . " a WHERE a.id BETWEEN 2013 AND 2030 ORDER BY a.id")->execute();
         $typesIntervenants = $this->em()->createQuery("SELECT ti FROM " . TypeIntervenant::class . " ti ORDER BY ti.id")->execute();
-        $typesVh           = $this->em()->createQuery("SELECT t FROM " . TypeVolumeHoraire::class . " t ORDER BY t.id")->execute();
-        $etatsVh           = $this->em()->createQuery("SELECT t FROM " . EtatVolumeHoraire::class . " t ORDER BY t.id")->execute();
-        $annee             = $this->getServiceContext()->getAnnee();
-        $formuleId         = $this->getServiceParametres()->get('formule');
+        $typesVh = $this->em()->createQuery("SELECT t FROM " . TypeVolumeHoraire::class . " t ORDER BY t.id")->execute();
+        $etatsVh = $this->em()->createQuery("SELECT t FROM " . EtatVolumeHoraire::class . " t ORDER BY t.id")->execute();
+        $annee = $this->getServiceContext()->getAnnee();
+        $formuleId = $this->getServiceParametres()->get('formule');
 
         if (!$formuleTestIntervenant) {
-            $title                  = 'Ajout d\'un test de formule';
+            $title = 'Ajout d\'un test de formule';
             $formuleTestIntervenant = new FormuleTestIntervenant();
         } else {
             $title = 'Modification d\'un test de formule';
@@ -65,9 +64,9 @@ class TestController extends AbstractController
             }
         }
 
-        $structures                      = $formuleTestIntervenant->getStructures();
-        $structures['__UNIV__']          = 'Université (établissement))'; // Établissement
-        $structures['__EXTERIEUR__']     = 'Extérieur (autre établissement))'; // Autre établissement
+        $structures = $formuleTestIntervenant->getStructures();
+        $structures['__UNIV__'] = 'Université (établissement))'; // Établissement
+        $structures['__EXTERIEUR__'] = 'Extérieur (autre établissement))'; // Autre établissement
         $structures['__new_structure__'] = '- Ajout d\'une nouvelle structure -'; // Pour pouvoir ajouter une structure
 
         return compact('formuleTestIntervenant', 'title', 'annee', 'formuleId', 'structures', 'formules', 'annees', 'typesIntervenants', 'typesVh', 'etatsVh');
@@ -101,39 +100,39 @@ class TestController extends AbstractController
         }
 
         $result = ['errors' => [], 'data' => []];
-        $data   = json_decode($this->params()->fromPost('data'), true);
+        $data = json_decode($this->params()->fromPost('data'), true);
         $formuleTestIntervenant->fromArray($data);
 
         $passed = true;
         if (!$formuleTestIntervenant->getLibelle()) {
             $result['errors'][] = 'Libellé manquant';
-            $passed             = false;
+            $passed = false;
         }
         if (!$formuleTestIntervenant->getFormule()) {
             $result['errors'][] = 'La formule à utiliser n\'est pas précisée';
-            $passed             = false;
+            $passed = false;
         }
         if (!$formuleTestIntervenant->getAnnee()) {
             $result['errors'][] = 'L\'année doit être renseignée';
-            $passed             = false;
+            $passed = false;
         }
         if (!$formuleTestIntervenant->getTypeIntervenant()) {
             $result['errors'][] = 'Le type d\'intervenant (permanent, vacataire) doit être renseigné';
-            $passed             = false;
+            $passed = false;
         }
         if ($formuleTestIntervenant->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT
             && !$formuleTestIntervenant->getStructureCode()
         ) {
             $result['errors'][] = 'La structure doit être renseignée';
-            $passed             = false;
+            $passed = false;
         }
         if (!$formuleTestIntervenant->getTypeVolumeHoraire()) {
             $result['errors'][] = 'Le type de volume horaire (prévu ou réalisé) doit être renseigné';
-            $passed             = false;
+            $passed = false;
         }
         if (!$formuleTestIntervenant->getEtatVolumeHoraire()) {
             $result['errors'][] = 'L\'état de volume horaire (saisi, validé, etc) doit être renseigné';
-            $passed             = false;
+            $passed = false;
         }
         if ($passed) {
             $this->getServiceTest()->save($formuleTestIntervenant);
@@ -156,11 +155,11 @@ class TestController extends AbstractController
             throw new  \Exception('Fichier tableau non transmis');
         }
 
-        $file     = $_FILES['fichier']['tmp_name'];
+        $file = $_FILES['fichier']['tmp_name'];
         $filename = $_FILES['fichier']['name'];
 
         $formuleId = $this->params()->fromPost('formule');
-        $formule   = $this->em()->find(Formule::class, $formuleId);
+        $formule = $this->em()->find(Formule::class, $formuleId);
 
         $fc = new FormuleCalcul($file);
 
@@ -175,7 +174,7 @@ class TestController extends AbstractController
 
     public function creerFromReelAction()
     {
-        $intervenant       = $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getEvent()->getParam('intervenant');
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
 

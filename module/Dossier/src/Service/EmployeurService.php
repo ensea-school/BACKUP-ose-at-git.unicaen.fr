@@ -65,7 +65,9 @@ class EmployeurService extends AbstractEntityService
     public function rechercheEmployeur($criteria = null, $limit = 50)
     {
         $employeurs = [];
-        $criteria   = Util::reduce($criteria);
+        if ($criteria) {
+            $criteria = Util::reduce($criteria);
+        }
 
 
         $sql = "

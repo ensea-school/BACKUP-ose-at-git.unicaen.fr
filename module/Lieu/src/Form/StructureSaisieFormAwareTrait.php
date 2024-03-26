@@ -2,6 +2,9 @@
 
 namespace Lieu\Form;
 
+
+use Lieu\Entity\Db\Structure;
+
 /**
  * Description of StructureSaisieFormAwareTrait
  *
@@ -18,7 +21,7 @@ trait StructureSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormStructureSaisie(?StructureSaisieForm $formStructureSaisie)
+    public function setFormStructureSaisie (?StructureSaisieForm $formStructureSaisie)
     {
         $this->formStructureSaisie = $formStructureSaisie;
 
@@ -27,12 +30,15 @@ trait StructureSaisieFormAwareTrait
 
 
 
-    public function getFormStructureSaisie(): ?StructureSaisieForm
+    public function getFormStructureSaisie (?Structure $structure): ?StructureSaisieForm
     {
         if (!empty($this->formStructureSaisie)) {
             return $this->formStructureSaisie;
         }
+        $form = \OseAdmin::instance()->container()->get('FormElementManager')->get(StructureSaisieForm::class);
+        $form->setStructure($structure);
+        $form->initCentreCout();
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(StructureSaisieForm::class);
+        return $form;
     }
 }

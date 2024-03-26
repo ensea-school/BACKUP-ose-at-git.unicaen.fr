@@ -1,19 +1,35 @@
 # Version stable
 
-[OSE 23.3](#ose-233-23022024)
+[OSE 23.4](#ose-234-26032024)
 
 
 
 # OSE 24 (à venir)
 
-# OSE 23.4 (à venir)
+
+
+# OSE 23.4 (26/03/2024)
 
 ## Corrections de bugs
 
 * Les modifications de service dû ne sont enregistrées que s'il y a un changement effectif de donnée (#55446)
 * Correction sur le privilege d'administration des tags (#55439)
 * Empêcher de postuler à une offre d'emploi tant qu'elle n'est pas validée
+* Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
+* Impossible de choisir un centre de coût par défaut pour une structure 
+* Problème de mise en paiement en masse avec les enveloppes budgétaires en ressources propres à 0 (#55672)
+* Correction des mises en paiement lors du passage de 'Distinction Fi,Fa,Fc' en 'Tous enseignements confondus', le regroupement n'était pas visuellement correcte (#54144)
+* Corrections des formules de calcul de Rouen (#55241)
+* Correction d'un problème d'erreur php lors de la migration des fonctions référentielles
+* Prise en compte de l'auto-validation des heures prévisionnelles pour le contrat
+* Afficher le bon libellé de la composante d'affectation fonctionnelle dans l'onglet Export RH (Siham)
 
+## Améliorations
+
+* Dans la partie administration/structure, La liste des centres de coût par défaut possible pour une structure est maintenant filtrée pour choisir uniquement des centres de coût rattachés à cette structure.
+* Adaptation de l'export paie Siham préliquidation pour les missions étudiantes (congés payés)
+* Prise en charge de l'extension du numéro de voie (Bis, Ter etc...) dans l'export RH lors d'une PEC ou REN
+* Possiblité de paramètrer par défaut la catégorie de contrat via l'export RH Siham
 
 
 

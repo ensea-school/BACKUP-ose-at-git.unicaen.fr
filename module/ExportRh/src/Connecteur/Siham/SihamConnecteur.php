@@ -28,14 +28,14 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function __construct (Siham $siham)
+    public function __construct(Siham $siham)
     {
         $this->siham = $siham;
     }
 
 
 
-    public function rechercherIntervenantRh ($nomUsuel = '', $prenom = '', $insee = ''): array
+    public function rechercherIntervenantRh($nomUsuel = '', $prenom = '', $insee = ''): array
     {
         $params = [
             'nomUsuel'    => $nomUsuel,
@@ -65,7 +65,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererAffectationEnCoursIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant): ?array
+    public function recupererAffectationEnCoursIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?array
     {
         $typeAffectation        = (isset($this->siham->getConfig()['type-affectation'])) ? $this->siham->getConfig()['type-affectation'] : ['FUN'];
         $affectations           = [];
@@ -102,7 +102,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererDonneesAdministrativesIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant): ?array
+    public function recupererDonneesAdministrativesIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?array
     {
         try {
             $codeRh = '';
@@ -136,7 +136,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function trouverCodeRhByInsee (\Intervenant\Entity\Db\Intervenant $intervenant): ?string
+    public function trouverCodeRhByInsee(\Intervenant\Entity\Db\Intervenant $intervenant): ?string
     {
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         $numeroInsee        = (!empty($intervenant->getNumeroInsee())) ? $intervenant->getNumeroInsee() : $intervenantDossier->getNumeroInsee();
@@ -158,7 +158,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererContratEnCoursIntervenantRh (Intervenant $intervenant): ?array
+    public function recupererContratEnCoursIntervenantRh(Intervenant $intervenant): ?array
     {
         $contrats               = [];
         $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
@@ -182,7 +182,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function prendreEnChargeIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
+    public function prendreEnChargeIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
     {
         try {
             /* Récupération du dossier de l'intervenant */
@@ -223,6 +223,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $contrat[] =
                         ['dateDebutContrat'  => $dateEffet,
                          'dateFinContrat'    => $dateFin,
+                         'categorieContrat'  => isset($this->siham->getConfig()['contrat']['parameters']['categorieContrat']) ? $this->siham->getConfig()['contrat']['parameters']['categorieContrat'] : '',
                          'natureContrat'     => $this->siham->getConfig()['contrat']['parameters']['natureContrat'],
                          'typeContrat'       => $this->siham->getConfig()['contrat']['parameters']['typeContrat'],
                          'typeLienJuridique' => $this->siham->getConfig()['contrat']['parameters']['typeLienJuridique'],
@@ -399,7 +400,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function getInfosContrat (Intervenant $intervenant): array
+    public function getInfosContrat(Intervenant $intervenant): array
     {
         $infos = [
             'totalHeure' => '',
@@ -419,7 +420,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererGradeTG (string $codeStatut): ?string
+    public function recupererGradeTG(string $codeStatut): ?string
     {
         $gradeTG = '';
 
@@ -432,8 +433,11 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public static function cleanDatas ($str, $strict = false, $encoding = 'UTF-8')
+    public static function cleanDatas($str, $strict = false, $encoding = 'UTF-8')
     {
+        if (empty($str)) {
+            return $str;
+        }
         $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ()…,<> /?€%!":’\'+.';
         $to   = 'AAAAAACDEEEEIIIIOOOOOOUUUUYNaaaaaacdeeeeiiiioooooouuuuyn                  ';
 
@@ -457,7 +461,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function renouvellerIntervenantRH (\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
+    public function renouvellerIntervenantRH(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
     {
         try {
             /* Récupération du dossier de l'intervenant */
@@ -514,6 +518,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                          'typeLienJuridique' => $this->siham->getConfig()['contrat']['parameters']['typeLienJuridique'],
                          'modeRemuneration'  => $this->siham->getConfig()['contrat']['parameters']['modeRemuneration'],
                          'modeDeGestion'     => $this->siham->getConfig()['contrat']['parameters']['modeDeGestion'],
+                         'categorieContrat'  => isset($this->siham->getConfig()['contrat']['parameters']['categorieContrat']) ? $this->siham->getConfig()['contrat']['parameters']['categorieContrat'] : '',
                          'gradeTG'           => $gradeTG,
                          'tauxHoraires'      => $infos['taux'],
                          'nbHeuresContrat'   => $infos['totalHeure'],
@@ -583,7 +588,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function synchroniserDonneesPersonnellesIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant, $datas): bool
+    public function synchroniserDonneesPersonnellesIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): bool
     {
         try {
 
@@ -697,7 +702,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant): ?IntervenantRh
+    public function recupererIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?IntervenantRh
     {
         $agent  = null;
         $codeRh = $this->trouverCodeRhByInsee($intervenant);
@@ -755,7 +760,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function cloreDossier (Intervenant $intervenant): ?bool
+    public function cloreDossier(Intervenant $intervenant): ?bool
     {
 
         try {
@@ -786,7 +791,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererListeUO (): ?array
+    public function recupererListeUO(): ?array
     {
         /*On récupére les UO avec le type paramétré*/
         $uo     = [];
@@ -811,49 +816,49 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererListePositions (): ?array
+    public function recupererListePositions(): ?array
     {
         return $this->siham->recupererListePositions();
     }
 
 
 
-    public function recupererListeEmplois (): ?array
+    public function recupererListeEmplois(): ?array
     {
         return $this->siham->recupererListeEmplois();
     }
 
 
 
-    public function recupererListeStatuts (): ?array
+    public function recupererListeStatuts(): ?array
     {
         return $this->siham->recupererListeStatuts();
     }
 
 
 
-    public function recupererListeModalites (): ?array
+    public function recupererListeModalites(): ?array
     {
         return $this->siham->recupererListeModalites();
     }
 
 
 
-    public function recupererListeContrats (): ?array
+    public function recupererListeContrats(): ?array
     {
         return $this->siham->recupererListeContrats();
     }
 
 
 
-    public function getConnecteurName (): string
+    public function getConnecteurName(): string
     {
         return 'siham';
     }
 
 
 
-    public function recupererFieldsetConnecteur (): Fieldset
+    public function recupererFieldsetConnecteur(): Fieldset
     {
         $fieldset = new SihamFieldset('connecteurForm', []);
 

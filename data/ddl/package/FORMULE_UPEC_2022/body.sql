@@ -62,13 +62,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC_2022 AS
       END IF;
     END IF;
 
-    feuille(c).cells(l).enCalcul := TRUE;
+    feuille(c).cells(l).enCalcul := true;
     val := calcCell( c, l );
     IF ose_formule.debug_actif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := FALSE;
+    feuille(c).cells(l).enCalcul := false;
 
     RETURN val;
   END;
@@ -956,7 +956,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC_2022 AS
       ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'us',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'vs',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'ws',l);
-      ose_formule.volumes_horaires.items(l).heures_primes            := mainCell('Heures compl. FC Maj.', 'xs',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'xs',l);
       ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'ur',l);
     END LOOP;
   END;
@@ -969,7 +969,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC_2022 AS
     SELECT
       fi.*,
       CASE WHEN si.code IN (''ENS_CH'',''ASS_MI_TPS'',''ENS_CH_LRU'',''DOCTOR'') THEN ''oui'' ELSE ''non'' END param_1,
-      CASE WHEN si.code IN (''LECTEUR'',''ATER'') THEN ''oui'' ELSE ''non'' END param_2,
+	  CASE WHEN si.code IN (''LECTEUR'',''ATER'') THEN ''oui'' ELSE ''non'' END param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5

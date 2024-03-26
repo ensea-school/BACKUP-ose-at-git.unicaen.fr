@@ -71,17 +71,22 @@ class TypeHeuresService extends AbstractEntityService
             $codes[$th->getCode()] = $th->getCode();
         }
 
-        if ($this->getServiceParametres()->get('distinction_fi_fa_fc') == '1'){
+        if ($this->getServiceParametres()->get('distinction_fi_fa_fc') == '1') {
             if ($serviceAPayer->getHeuresComplFi() != 0) $codes[TypeHeures::FI] = TypeHeures::FI;
             if ($serviceAPayer->getHeuresComplFa() != 0) $codes[TypeHeures::FA] = TypeHeures::FA;
             if ($serviceAPayer->getHeuresComplFc() != 0) $codes[TypeHeures::FC] = TypeHeures::FC;
             if ($serviceAPayer->getHeuresPrimes() != 0) $codes[TypeHeures::PRIMES] = TypeHeures::PRIMES;
-        }else{
+        } else {
             $hc = $serviceAPayer->getHeuresComplFi()
                 + $serviceAPayer->getHeuresComplFa()
                 + $serviceAPayer->getHeuresComplFc()
                 + $serviceAPayer->getHeuresPrimes();
-            if ($hc != 0) $codes[TypeHeures::FI] = TypeHeures::ENSEIGNEMENT;
+            if ($hc != 0) {
+                $codes[TypeHeures::FI]          = TypeHeures::ENSEIGNEMENT;
+                $codes[TypeHeures::FA]          = TypeHeures::ENSEIGNEMENT;
+                $codes[TypeHeures::FC]          = TypeHeures::ENSEIGNEMENT;
+                $codes[TypeHeures::PRIMES] = TypeHeures::ENSEIGNEMENT;
+            }
         }
         if ($serviceAPayer->getHeuresComplReferentiel() != 0) $codes[TypeHeures::REFERENTIEL] = TypeHeures::REFERENTIEL;
         if ($serviceAPayer->getHeuresMission() != 0) $codes[TypeHeures::MISSION] = TypeHeures::MISSION;

@@ -20,6 +20,7 @@
 * Corrections des formules de calcul de Rouen (#55241)
 * Correction d'un problème d'erreur php lors de la migration des fonctions référentielles
 * Prise en compte de l'auto-validation des heures prévisionnelles pour le contrat
+* Afficher le bon libellé de la composante d'affectation fonctionnelle dans l'onglet Export RH (Siham)
 
 ## Améliorations
 

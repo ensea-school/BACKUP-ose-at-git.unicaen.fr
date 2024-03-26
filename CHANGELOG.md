@@ -1,12 +1,14 @@
 # Version stable
 
-[OSE 23.3](#ose-233-23022024)
+[OSE 23.4](#ose-234-26032024)
 
 
 
 # OSE 24 (à venir)
 
-# OSE 23.4 (à venir)
+
+
+# OSE 23.4 (26/03/2024)
 
 ## Corrections de bugs
 
@@ -27,7 +29,8 @@
 * Dans la partie administration/structure, La liste des centres de coût par défaut possible pour une structure est maintenant filtrée pour choisir uniquement des centres de coût rattachés à cette structure.
 * Adaptation de l'export paie Siham préliquidation pour les missions étudiantes (congés payés)
 * Prise en charge de l'extension du numéro de voie (Bis, Ter etc...) dans l'export RH lors d'une PEC ou REN
-* Possiblité de paramètrer par défaut la categorie de contrat via l'export RH Siham
+* Possiblité de paramètrer par défaut la catégorie de contrat via l'export RH Siham
+
 
 
 # OSE 23.3 (23/02/2024)

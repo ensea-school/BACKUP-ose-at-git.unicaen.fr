@@ -367,6 +367,7 @@ return [
                 'typeLienJuridique' => 'TL01',
                 'modeRemuneration'  => 'MR08',
                 'modeDeGestion'     => 'MG08',
+                'categorieContrat'  => '1',
                 //Autovalidation des contrats oui ou non
                 'temoinValidite'    => '1',
                 'gradeTG'           => [

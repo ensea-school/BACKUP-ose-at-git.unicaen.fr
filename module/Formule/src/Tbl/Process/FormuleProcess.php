@@ -4,7 +4,7 @@ namespace Formule\Tbl\Process;
 
 
 use Formule\Entity\FormuleIntervenant;
-use Formule\Service\CalculateurServiceAwareTrait;
+use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Tbl\Process\Sub\ServiceDataManager;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\TableauBord;
@@ -16,7 +16,7 @@ use UnicaenTbl\TableauBord;
  */
 class FormuleProcess implements ProcessInterface
 {
-    use CalculateurServiceAwareTrait;
+    use FormulatorServiceAwareTrait
 
     protected ServiceDataManager $serviceDataManager;
 
@@ -38,7 +38,7 @@ class FormuleProcess implements ProcessInterface
     {
         $this->data = $this->serviceDataManager->load($params);
         foreach ($this->data as $formuleIntervenant) {
-            $this->getServiceCalculateur()->calculer($formuleIntervenant);
+            $this->getServiceFormulator()->calculer($formuleIntervenant);
         }
     }
 

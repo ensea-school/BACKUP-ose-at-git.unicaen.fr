@@ -863,7 +863,8 @@ export default {
         },
         formatDate(val, format)
         {
-            return unicaenVue.formatDate(val, format);
+            return Util.dateToString(val);
+
         }
 
 

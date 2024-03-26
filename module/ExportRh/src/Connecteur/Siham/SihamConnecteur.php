@@ -159,7 +159,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererContratEnCoursIntervenantRh (Intervenant $intervenant): ?array
+    public function recupererContratEnCoursIntervenantRh(Intervenant $intervenant): ?array
     {
         $contrats               = [];
         $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);

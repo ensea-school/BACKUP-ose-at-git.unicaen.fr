@@ -25,13 +25,14 @@ WITH services AS (
             JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
             JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id
             LEFT JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
-            JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
+            LEFT JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
             JOIN STRUCTURE str ON ep.structure_id = str.id
             LEFT JOIN contrat c ON c.id = vh.contrat_id
         WHERE
             vh.histo_destruction IS NULL
             AND tvh.code = 'PREVU'
             AND (v.id IS NOT NULL OR vh.auto_validation = 1)
+            AND (vvh.validation_id IS NOT NULL OR vh.auto_validation = 1)
         GROUP BY
             s.intervenant_id,
             c.id,

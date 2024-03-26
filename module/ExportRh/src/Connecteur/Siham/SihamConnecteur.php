@@ -11,6 +11,7 @@ use Intervenant\Entity\Db\Intervenant;
 use Laminas\Form\Fieldset;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
 use Lieu\Service\VoirieServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 use UnicaenSiham\Exception\SihamException;
 use UnicaenSiham\Service\Siham;

@@ -18,6 +18,8 @@
 * Problème de mise en paiement en masse avec les enveloppes budgétaires en ressources propres à 0 (#55672)
 * Correction des mises en paiement lors du passage de 'Distinction Fi,Fa,Fc' en 'Tous enseignements confondus', le regroupement n'était pas visuellement correcte (#54144)
 * Corrections des formules de calcul de Rouen (#55241)
+* Correction d'un problème d'erreur php lors de la migration des fonctions référentielles
+* Prise en compte de l'auto-validation des heures prévisionnelles pour le contrat
 
 ## Améliorations
 

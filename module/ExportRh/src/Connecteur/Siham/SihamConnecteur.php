@@ -215,11 +215,11 @@ class SihamConnecteur implements ConnecteurRhInterface
             //On récupére le nombre d'heures du contrat et le taux horaire appliqué
             $infos  = $this->getInfosContrat($intervenant);
             $config = $this->siham->getConfig();
-            if (array_key_exists('contrat', $this->siham->getConfig())) {
+            if ($this->siham->getConfig()['contrat']) {
                 //On récupere le gradeTG pour le contrat
                 $codeStatut = $datas['connecteurForm']['statut'];
-                $gradeTG    = $this->recupererGradeTG($codeStatut);
                 if ($this->siham->getConfig()['contrat']['active']) {
+                    $gradeTG   = $this->recupererGradeTG($codeStatut);
                     $contrat[] =
                         ['dateDebutContrat'  => $dateEffet,
                          'dateFinContrat'    => $dateFin,
@@ -381,7 +381,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             ];
 
             //Si la creation du contrat via les WS est activé
-            if (array_key_exists('contrat', $this->siham->getConfig())) {
+            if ($this->siham->getConfig()['contrat']) {
 
                 if ($this->siham->getConfig()['contrat']['active']) {
                     $params['listeContrats'] = $contrat;
@@ -503,13 +503,11 @@ class SihamConnecteur implements ConnecteurRhInterface
             $config  = $this->siham->getConfig();
             $contrat = [];
 
-            if (array_key_exists('contrat', $this->siham->getConfig())) {
+            if ($this->siham->getConfig()['contrat']) {
                 //On récupere le gradeTG pour le contrat
-
                 $codeStatut = $datas['connecteurForm']['statut'];
-                $gradeTG    = $this->recupererGradeTG($codeStatut);
-
                 if ($this->siham->getConfig()['contrat']['active']) {
+                    $gradeTG   = $this->recupererGradeTG($codeStatut);
                     $contrat[] =
                         ['dateDebutContrat'  => $dateEffet,
                          'dateFinContrat'    => $dateFin,
@@ -568,7 +566,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
             //Si la creation du contrat via les WS est activé
-            if (array_key_exists('contrat', $this->siham->getConfig())) {
+            if ($this->siham->getConfig()['contrat']) {
                 if ($this->siham->getConfig()['contrat']['active']) {
                     $params['listeContrats'] = $contrat;
                 }

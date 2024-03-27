@@ -53,17 +53,19 @@ class ExportRhForm extends AbstractForm
 
     public function setAffectationDefault (Intervenant $intervenant): self
     {
-
-        $intervenantAffectation = $intervenant->getStructure()->getLibelleCourt();
-        //On récupére les libellés de composante dispo dans le form
-        $elementAffectation = $this->get('connecteurForm')->get('affectation');
-        $listeComposantes   = $this->get('connecteurForm')->get('affectation')->getValueOptions();
-        foreach ($listeComposantes as $code => $composante) {
-            //On prend que le libelle court ed SIHAM pour le comparer au libelle court de OSE
-            $libelleAffectation = explode(' ', $composante, 2);
-            $libelleCourt       = $libelleAffectation[1];
-            if (strtolower($intervenantAffectation) == strtolower($libelleCourt)) {
-                $elementAffectation->setValue($code);
+        //Si l'intervenant n'a pas de structure on ne peut pas lui mettre une affectation par défaut pour sa prise en charge ou renouvellement
+        if ($intervenant->getStructure()) {
+            $intervenantAffectation = $intervenant->getStructure()->getLibelleCourt();
+            //On récupére les libellés de composante dispo dans le form
+            $elementAffectation = $this->get('connecteurForm')->get('affectation');
+            $listeComposantes   = $this->get('connecteurForm')->get('affectation')->getValueOptions();
+            foreach ($listeComposantes as $code => $composante) {
+                //On prend que le libelle court ed SIHAM pour le comparer au libelle court de OSE
+                $libelleAffectation = explode(' ', $composante, 2);
+                $libelleCourt       = $libelleAffectation[1];
+                if (strtolower($intervenantAffectation) == strtolower($libelleCourt)) {
+                    $elementAffectation->setValue($code);
+                }
             }
         }
 

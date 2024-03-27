@@ -31,7 +31,7 @@ class OffreEmploiService extends AbstractEntityService
      * @return string
      * @throws \RuntimeException
      */
-    public function getEntityClass (): string
+    public function getEntityClass(): string
     {
         return OffreEmploi::class;
     }
@@ -43,14 +43,14 @@ class OffreEmploiService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias (): string
+    public function getAlias(): string
     {
         return 'oe';
     }
 
 
 
-    public function data (array $parameters, ?Role $role = null)
+    public function data(array $parameters, ?Role $role = null)
     {
 
 
@@ -113,7 +113,7 @@ class OffreEmploiService extends AbstractEntityService
 
 
 
-    public function getOffreEmploiPrivileges (bool $public = false): array
+    public function getOffreEmploiPrivileges(bool $public = false): array
     {
 
         if ($public) {
@@ -126,7 +126,7 @@ class OffreEmploiService extends AbstractEntityService
                     $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
                     $extracted['canVisualiser'] = true;
                     $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
-                    $extracted['decretText'] = ($this->getServiceContext()->getIntervenant()) ? $this->getServiceContext()->getIntervenant()->getStatut()->getMissionDecret() : '';
+                    $extracted['decretText']    = ($this->getServiceContext()->getIntervenant()) ? $this->getServiceContext()->getIntervenant()->getStatut()->getMissionDecret() : '';
 
                     return $extracted;
                 },
@@ -143,7 +143,7 @@ class OffreEmploiService extends AbstractEntityService
                 $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
                 $extracted['canVisualiser'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
                 $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
-                $extracted['decretText'] = ($this->getServiceContext()->getIntervenant()) ? $this->getServiceContext()->getIntervenant()->getStatut()->getMissionDecret() : '';
+                $extracted['decretText']    = ($this->getServiceContext()->getIntervenant()) ? $this->getServiceContext()->getIntervenant()->getStatut()->getMissionDecret() : '';
 
                 return $extracted;
             },
@@ -153,7 +153,7 @@ class OffreEmploiService extends AbstractEntityService
 
 
 
-    public function dataPublic (array $parameters, ?Role $role = null)
+    public function dataPublic(array $parameters, ?Role $role = null)
     {
 
 
@@ -169,7 +169,7 @@ class OffreEmploiService extends AbstractEntityService
         WHERE 
           oe . histoDestruction IS null
         AND v.histoDestruction IS NULL
-        AND oe.dateLimite >= CURRENT_DATE()
+        AND oe.dateLimite >= CURRENT_DATE()-1
        ";
 
         $dql .= dqlAndWhere([
@@ -217,7 +217,7 @@ class OffreEmploiService extends AbstractEntityService
      *
      * @return OffreEmploi
      */
-    public function save ($entity)
+    public function save($entity)
     {
         parent::save($entity);
 

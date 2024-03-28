@@ -81,7 +81,7 @@ Dépendances requises :
 * git
 * wget
 * Apache 2 avec le module de réécriture d'URL (*rewrite*) activé
-* PHP 8.2 minimum avec les modules suivants :
+* PHP 8.2 avec les modules suivants :
     * cli
     * curl
     * intl

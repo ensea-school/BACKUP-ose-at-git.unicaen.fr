@@ -16,6 +16,7 @@ class ContratProcess implements ProcessInterface
     use BddServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
+
     private string  $codeEns      = 'ENS';
 
     private string  $codeMis      = 'MIS';
@@ -62,6 +63,7 @@ class ContratProcess implements ProcessInterface
         $this->init();
         $this->loadAContractualiser($params);
         $this->traitement();
+        $this->exporter();
         $this->enregistrement($tableauBord, $params);
     }
 
@@ -80,19 +82,28 @@ class ContratProcess implements ProcessInterface
 
     protected function traitement()
     {
-        foreach ($this->services as $servicesByUuid) {
-            $uuid = $servicesByUuid['UUID'];
-            if($this->tauxRemuUuid[$uuid] == false){
-                $servicesByUuid['TAUX_REMU'] = null;
-                $servicesByUuid['TAUX_REMU_MAJORE'] = null;
-            }else {
+        foreach ($this->services as $service) {
+            $uuid = $service['UUID'];
+            if ($this->tauxRemuUuid[$uuid] == false) {
+                $service['TAUX_REMU_ID']        = null;
+                $service['TAUX_REMU_MAJORE_ID'] = null;
+            } else {
                 //Calcul de la valeur et date du taux
-                $tauxRemuId = $servicesByUuid['TAUX_REMU'];
-                $tauxRemuMajoreId = $servicesByUuid['TAUX_REMU_MAJORE'];
-                $tauxRemuValeur = $this->getServiceTauxRemu()->tauxValeur($tauxRemuId, );
+                $tauxRemuId       = $service['TAUX_REMU_ID'];
+                $tauxRemuMajoreId = $service['TAUX_REMU_MAJORE_ID'];
+                if ($service['CONTRAT_ID'] != null) {
+                    $date                        = $service['DATE_DEBUT'] > $service['DATE_CREATION'] ? $service['DATE_DEBUT'] : $service['DATE_CREATION'];
+                    $tauxRemuValeur              = $this->getServiceTauxRemu()->tauxValeur($tauxRemuId, $date);
+                    $service['TAUX_REMU_VALEUR'] = $tauxRemuValeur;
+                    $service['TAUX_REMU_DATE']   = $date;
+
+                    if ($tauxRemuMajoreId != null) {
+                        $tauxRemuMajoreValeur               = $this->getServiceTauxRemu()->tauxValeur($tauxRemuMajoreId, $date);
+                        $service['TAUX_REMU_MAJORE_VALEUR'] = $tauxRemuMajoreValeur;
+                        $service['TAUX_REMU_MAJORE_DATE']   = $date;
+                    }
+                }
             }
-
-
         }
     }
 
@@ -135,11 +146,12 @@ class ContratProcess implements ProcessInterface
                 $serviceContrat['ACTIF'] = 0;
             }
 
-            $this->services[$uuid][] = $serviceContrat;
+            $this->services[]          = $serviceContrat;
+            $this->tauxRemuUuid[$uuid] = false;
             if (!$this->tauxRemuUuid[$uuid]) {
                 $taux_remu_temp            = $taux_remu;
                 $this->tauxRemuUuid[$uuid] = true;
-            } elseif ($taux_remu_temp != $taux_remu) {
+            } elseif ($taux_remu_temp != $taux_remu && $this->tauxRemuUuid[$uuid]) {
                 $this->tauxRemuUuid[$uuid] = false;
             }
         }
@@ -151,5 +163,47 @@ class ContratProcess implements ProcessInterface
     function heuresAContractualiserSql(): string
     {
         return $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT');
+    }
+
+
+
+    private function exporter()
+    {
+        if (empty($sap->lignesAPayer)) {
+            return;
+        }
+
+        foreach ($this->services as $service) {
+
+            $ldata           = [
+                "INTERVENANT_ID"          => $service["INTERVENANT_ID"],
+                "ANNEE_ID"                => $service["ANNEE_ID"],
+                "STRUCTURE_ID"            => $service["STRUCTURE_ID"],
+                "EDITE"                   => $service["EDITE"],
+                "SIGNE"                   => $service["SIGNE"],
+                "ACTIF"                   => $service["ACTIF"],
+                "AUTRE"                   => $service["AUTRE"],
+                "AUTRE_LIBELLE"           => $service["AUTRE_LIBELLE"],
+                "CM"                      => $service["CM"],
+                "CONTRAT_ID"              => $service["CONTRAT_ID"],
+                "CONTRAT_PARENT_ID"       => $service["CONTRAT_PARENT_ID"],
+                "DATE_CREATION"           => $service["DATE_CREATION"],
+                "DATE_DEBUT"              => $service["DATE_DEBUT"],
+                "DATE_FIN"                => $service["DATE_FIN"],
+                "HETD"                    => 0,//$service["HETD"],
+                "HEURES"                  => $service["HEURES"],
+                "MISSION_ID"              => $service["MISSION_ID"],
+                "SERVICE_ID"              => $service["SERVICE_ID"],
+                "SERVICE_REFERENTIEL_ID"  => $service["SERVICE_REFERENTIEL_ID"],
+                "TAUX_CONGES_PAYES"       => $service["TAUX_CONGES_PAYES"],
+                "TAUX_REMU_DATE"          => $service["TAUX_REMU_DATE"],
+                "TAUX_REMU_ID"            => $service["TAUX_REMU_ID"],
+                "TAUX_REMU_MAJORE_DATE"   => $service["TAUX_REMU_MAJORE_DATE"],
+                "TAUX_REMU_MAJORE_ID"     => $service["TAUX_REMU_MAJORE_ID"],
+                "TAUX_REMU_MAJORE_VALEUR" => $service["TAUX_REMU_MAJORE_VALEUR"],
+                "TAUX_REMU_VALEUR"        => $service["TAUX_REMU_VALEUR"],
+            ];
+            $this->tblData[] = $ldata;
+        }
     }
 }

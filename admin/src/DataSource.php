@@ -195,7 +195,7 @@ class DataSource
 
     public function FONCTION_REFERENTIEL()
     {
-        $donneesParDefaut = require $this->oseAdmin->getOseDir() . '/data/donnees_par_defaut.php';
+        $donneesParDefaut = require getcwd() . '/data/donnees_par_defaut.php';
         $data = $donneesParDefaut['FONCTION_REFERENTIEL'];
 
         $fonctions = [];

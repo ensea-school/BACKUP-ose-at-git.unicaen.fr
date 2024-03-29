@@ -1498,6 +1498,7 @@ return [
         'TAUX_REMU_MAJORE_DATE',
         'ACTIF',
         'TYPE_SERVICE',
+        'NBVH',
     ],
     'TBL_DMEP_LIQUIDATION'           => [
         'ID',

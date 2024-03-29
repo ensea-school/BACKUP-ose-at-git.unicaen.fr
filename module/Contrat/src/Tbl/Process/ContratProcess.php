@@ -90,7 +90,7 @@ class ContratProcess implements ProcessInterface
             } else {
                 //Calcul de la valeur et date du taux
                 $tauxRemuId       = $service['TAUX_REMU_ID'];
-                $tauxRemuMajoreId = $service['TAUX_REMU_MAJORE_ID'];
+                $tauxRemuMajoreId = isset($service['TAUX_REMU_MAJORE_ID'])?:null;
                 if ($service['CONTRAT_ID'] != null) {
                     $date                        = $service['DATE_DEBUT'] > $service['DATE_CREATION'] ? $service['DATE_DEBUT'] : $service['DATE_CREATION'];
                     $tauxRemuValeur              = $this->getServiceTauxRemu()->tauxValeur($tauxRemuId, $date);
@@ -101,6 +101,9 @@ class ContratProcess implements ProcessInterface
                         $tauxRemuMajoreValeur               = $this->getServiceTauxRemu()->tauxValeur($tauxRemuMajoreId, $date);
                         $service['TAUX_REMU_MAJORE_VALEUR'] = $tauxRemuMajoreValeur;
                         $service['TAUX_REMU_MAJORE_DATE']   = $date;
+                    }else{
+                        $service['TAUX_REMU_MAJORE_VALEUR'] = null;
+                        $service['TAUX_REMU_MAJORE_DATE']   = null;
                     }
                 }
             }
@@ -141,7 +144,7 @@ class ContratProcess implements ProcessInterface
         while ($serviceContrat = $servicesContrat->fetchAssociative()) {
             $uuid      = $serviceContrat['UUID'];
             $avenant   = $serviceContrat['AVENANT'];
-            $taux_remu = $serviceContrat['TAUX_REMU'];
+            $taux_remu = $serviceContrat['TAUX_REMU_ID'];
             if ($this->regleA == Parametre::AVENANT_DESACTIVE && $avenant == 2) {
                 $serviceContrat['ACTIF'] = 0;
             }
@@ -190,7 +193,7 @@ class ContratProcess implements ProcessInterface
                 "DATE_CREATION"           => $service["DATE_CREATION"],
                 "DATE_DEBUT"              => $service["DATE_DEBUT"],
                 "DATE_FIN"                => $service["DATE_FIN"],
-                "HETD"                    => 0,//$service["HETD"],
+                "HETD"                    => $service["HETD"],
                 "HEURES"                  => $service["HEURES"],
                 "MISSION_ID"              => $service["MISSION_ID"],
                 "SERVICE_ID"              => $service["SERVICE_ID"],
@@ -202,6 +205,8 @@ class ContratProcess implements ProcessInterface
                 "TAUX_REMU_MAJORE_ID"     => $service["TAUX_REMU_MAJORE_ID"],
                 "TAUX_REMU_MAJORE_VALEUR" => $service["TAUX_REMU_MAJORE_VALEUR"],
                 "TAUX_REMU_VALEUR"        => $service["TAUX_REMU_VALEUR"],
+                //A retirer apres refonte calcul workflow
+                "NBVH"                    => 0,
             ];
             $this->tblData[] = $ldata;
         }

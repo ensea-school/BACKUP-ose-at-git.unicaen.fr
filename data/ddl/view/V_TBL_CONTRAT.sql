@@ -14,6 +14,7 @@ WITH services AS (
             SUM(CASE WHEN ti.code = 'TP' THEN vh.heures ELSE 0 END)                         heures_tp,
             SUM(CASE WHEN ti.code NOT IN ('CM','TD','TP') THEN vh.heures ELSE 0 END)        heures_autres,
             SUM(vh.heures)                                                                  heures_totales,
+            SUM(frv.total)                                                                  hetd,
             'ENS'                                                                           type_service_code,
             CASE p.nom
                WHEN 'contrat_ens_composante'    THEN 'er_'+s.intervenant_id+'_'+str.id
@@ -27,6 +28,7 @@ WITH services AS (
             1.0                                                                             taux_conge
         FROM
             volume_horaire vh
+            LEFT JOIN formule_resultat_vh frv ON frv.volume_horaire_id = vh.id
             JOIN service s ON s.id = vh.service_id
             JOIN type_intervention ti ON ti.id = vh.type_intervention_id
             JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
@@ -76,6 +78,7 @@ WITH services AS (
             0                                                                                   heures_tp,
             SUM(vhr.heures)                                                                     heures_autres,
             SUM(vhr.heures)                                                                     heures_totales,
+            SUM(frvr.total)                                                                     hetd,
             'REF'                                                                               type_service_code,
             CASE p.nom
                WHEN 'contrat_ens_composante'    THEN 'er_'+sr.intervenant_id+'_'+str.id
@@ -89,6 +92,7 @@ WITH services AS (
             1.0                                                                                 taux_conge
         FROM
             volume_horaire_ref vhr
+            LEFT JOIN formule_resultat_vh_ref frvr ON frvr.volume_horaire_ref_id = vhr.id
             JOIN service_referentiel sr ON sr.id = vhr.service_referentiel_id
             JOIN fonction_referentiel fr ON fr.id = sr.fonction_id
             JOIN type_volume_horaire tvh ON tvh.id = vhr.type_volume_horaire_id
@@ -137,6 +141,7 @@ WITH services AS (
             0                                                                           heures_tp,
             SUM(vhm.heures)                                                             heures_autres,
             SUM(vhm.heures)                                                             heures_totales,
+            SUM(vhm.heures)                                                             hetd,
             'MIS'                                                                       type_service_code,
             CASE p.nom
                WHEN 'contrat_mis_mission'       THEN 'm_'+m.intervenant_id+'_'+m.id
@@ -238,7 +243,8 @@ SELECT
     tr.id                                                                                                               taux_remu_id,
     trm.id                                                                                                              taux_remu_majoree_id,
     1                                                                                                                   actif,
-    contrats_et_libelles.autre_libelles
+    contrats_et_libelles.autre_libelles                                                                                 autre_libelles,
+    s.hetd                                                                                                              hetd
 FROM
     services s
     JOIN TYPE_SERVICE ts ON ts.code = s.type_service_code

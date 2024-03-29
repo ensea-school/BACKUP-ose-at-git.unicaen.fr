@@ -16,6 +16,8 @@ use Laminas\View\Model\JsonModel;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenVue\Util;
+use UnicaenVue\View\Model\AxiosModel;
 use UnicaenVue\View\Model\VueModel;
 
 /**
@@ -35,6 +37,27 @@ class TestController extends AbstractController
         $vm = new VueModel();
         $vm->setTemplate('formule/test/index');
         return $vm;
+    }
+
+
+
+    public function indexDataAction()
+    {
+        $sql = "
+        SELECT 
+          fti.id      id, 
+          fti.libelle libelle,
+          f.libelle   formule,
+          a.libelle   annee
+        FROM 
+          formule_test_intervenant fti
+          JOIN formule f ON f.id = fti.formule_id
+          JOIN annee a ON a.id = fti.annee_id
+        WHERE
+          lower(fti.libelle || ' ' || f.libelle || ' ' || a.libelle) like :search
+        ";
+
+        return Util::tableAjaxData($this->em(), $this->axios()->fromPOst(), $sql);
     }
 
 
@@ -86,7 +109,7 @@ class TestController extends AbstractController
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
-        return new MessengerViewModel();
+        return new AxiosModel();
     }
 
 

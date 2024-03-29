@@ -14,6 +14,12 @@ return [
             'privileges'    => [Privileges::FORMULE_TESTS],
             'may_terminate' => true,
             'child_routes'  => [
+                'data'            => [
+                    'route'      => '/data',
+                    'controller' => Controller\TestController::class,
+                    'action'     => 'indexData',
+                    'privileges' => [Privileges::FORMULE_TESTS],
+                ],
                 'saisir'          => [
                     'route'       => '/saisir[/:formuleTestIntervenant]',
                     'constraints' => [

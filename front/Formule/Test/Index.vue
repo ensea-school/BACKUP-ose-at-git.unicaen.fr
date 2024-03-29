@@ -1,54 +1,34 @@
 <template>
-    <div>qsdqsd</div>
-    <div>qsdqsd</div>
-    <b-alert :model-value="true" variant="danger">coucou tout le monde!!!</b-alert>
-
-    <b-alert :model-value="true">Default Alert</b-alert>
-
-    <b-alert variant="success" :model-value="true">Success Alert</b-alert>
-
-    <BAlert v-model="showDismissibleAlert" variant="danger" dismissible> Dismissible Alert! </BAlert>
-
-    <div>qsdqsd</div>
-
-    <b-pagination v-model="this.page" total-rows="1000" per-page="10"/>
-    <b-table-simple bordered>
-        <b-thead>
-            <b-tr>
-                <b-th sticky-column>Sticky Column Header</b-th>
-                <b-th>Heading 1</b-th>
-                <b-th>Heading 2</b-th>
-                <b-th>Heading 3</b-th>
-                <b-th>Heading 4</b-th>
-            </b-tr>
-        </b-thead>
-        <b-tbody>
-            <b-tr>
-                <b-th>Sticky Column Row Header</b-th>
-                <b-td>Cell</b-td>
-                <b-td>Cell</b-td>
-                <b-td>Cell</b-td>
-                <b-td>Cell</b-td>
-            </b-tr>
-            <b-tr>
-                <b-th>Sticky Column Row Header</b-th>
-                <b-td>Cell</b-td>
-                <b-td>Cell</b-td>
-                <b-td>Cell</b-td>
-                <b-td>Cell</b-td>
-            </b-tr>
-        </b-tbody>
-    </b-table-simple>
-
-    <data-table :data="this.tdata" class="table table-bordered">
+    <u-table-ajax :data-url="this.dataUrl" @data="maj" ref="testsFormules">
         <thead>
         <tr>
-            <th>A</th>
-            <th>B</th>
+            <th column="ID">Id</th>
+            <th column="LIBELLE">Libellé</th>
+            <th column="FORMULE">Formule</th>
+            <th column="ANNEE">Année</th>
+            <th>&nbsp;</th>
         </tr>
         </thead>
-    </data-table>
-
+        <tbody>
+        <tr v-for="(line,i) in lines" :key="i">
+            <td>{{ line.ID }}</td>
+            <td>{{ line.LIBELLE }}</td>
+            <td>{{ line.FORMULE }}</td>
+            <td>{{ line.ANNEE }}</td>
+            <td style="width:1%;white-space: nowrap">
+                <a :href="editUrl(line.ID)"
+                   title="Modification du test de formule"
+                ><i class="fas fa-pencil"></i></a>
+                &nbsp;
+                <a :href="deleteUrl(line.ID)"
+                   title="Suppression du test de formule"
+                   data-content="Êtes-vous sur de vouloir supprimer ce test ?"
+                   data-title="Suppression du test de formule"
+                   @click.prevent="supprimerTest"><i class="fas fa-trash-can"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </u-table-ajax>
 </template>
 
 <script>
@@ -58,31 +38,30 @@ export default {
     data()
     {
         return {
-            page: 1,
-            tdata: [
-                [1, 'un'],
-                [2, 'deux'],
-                [3, 'trois'],
-                [4, 'quatre'],
-                [5, 'cinq'],
-                [6, 'six'],
-                [7, 'sept'],
-                [8, 'huit'],
-                [9, 'neuf'],
-                [10, 'dix'],
-                [11, 'trois'],
-                [12, 'douze'],
-                [13, 'treize'],
-                [14, 'quatorze'],
-            ],
-            preventableModal: false,
+            dataUrl: unicaenVue.url('formule-test/data'),
+            lines: [],
         };
     },
     methods: {
-        detailsUrl(formule)
+        maj(lines)
         {
-            return unicaenVue.url('formule/administration/details/' + formule)
-        }
+            this.lines = lines;
+        },
+        editUrl(id)
+        {
+            return unicaenVue.url('formule-test/saisir/:id', {id: id});
+        },
+        deleteUrl(id)
+        {
+            return unicaenVue.url('formule-test/supprimer/:id', {id: id});
+        },
+        supprimerTest(event)
+        {
+            popConfirm(event.currentTarget, (response) => {
+                this.$refs.testsFormules.getData();
+            });
+            return false;
+        },
     },
 }
 

@@ -65,7 +65,7 @@ class PaiementController extends AbstractController
      * éventuelles
      * (services sur des enseignements fermés, etc.)
      */
-    protected function initFilters ()
+    protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
             MiseEnPaiement::class,
@@ -79,14 +79,14 @@ class PaiementController extends AbstractController
 
 
 
-    public function indexAction ()
+    public function indexAction()
     {
         return [];
     }
 
 
 
-    public function demandeMiseEnPaiementAction ()
+    public function demandeMiseEnPaiementAction()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
@@ -103,7 +103,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function supprimerDemandeMiseEnPaiementAction ()
+    public function supprimerDemandeMiseEnPaiementAction()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
@@ -130,7 +130,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function ajouterDemandesMiseEnPaiementAction ()
+    public function ajouterDemandesMiseEnPaiementAction()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
@@ -188,7 +188,7 @@ class PaiementController extends AbstractController
                 if ($errorBudget > 1) {
                     $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demandes de mise en paiement n'ont pas pu être traité pour cette composante car votre budget ne permet plus d'en faire la demande.");
                 } else {
-                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demande de mise en paiement n'a pas pu être traité pour cette composante car car votre budget ne permet plus d'en faire la demande.");
+                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demande de mise en paiement n'a pas pu être traité pour cette composante car votre budget ne permet plus d'en faire la demande.");
                 }
             }
 
@@ -200,7 +200,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function getDemandesMiseEnPaiementAction ()
+    public function getDemandesMiseEnPaiementAction()
     {
         $structure = null;
         $role      = $this->getServiceContext()->getSelectedIdentityRole();
@@ -223,7 +223,7 @@ class PaiementController extends AbstractController
 
 
 
-    function demandeMiseEnPaiementLotAction ()
+    function demandeMiseEnPaiementLotAction()
     {
         $title        = 'Demande de mise en paiement par lot';
         $intervenants = [];
@@ -242,7 +242,7 @@ class PaiementController extends AbstractController
 
 
 
-    function processDemandeMiseEnPaiementLotAction ()
+    function processDemandeMiseEnPaiementLotAction()
     {
 
         if ($this->getRequest()->isPost()) {
@@ -265,7 +265,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function visualisationMiseEnPaiementAction ()
+    public function visualisationMiseEnPaiementAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -289,7 +289,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function editionMiseEnPaiementAction ()
+    public function editionMiseEnPaiementAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -392,7 +392,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function etatPaiementAction ()
+    public function etatPaiementAction()
     {
         $this->initFilters();
 
@@ -435,7 +435,7 @@ class PaiementController extends AbstractController
 
 
 
-    private function makeFilenameFromRecherche (MiseEnPaiementRecherche $recherche)
+    private function makeFilenameFromRecherche(MiseEnPaiementRecherche $recherche)
     {
         if ($recherche->getEtat() == MiseEnPaiement::A_METTRE_EN_PAIEMENT) {
             $filename = 'demande_mise_en_paiement';
@@ -452,7 +452,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function misesEnPaiementCsvAction ()
+    public function misesEnPaiementCsvAction()
     {
         $this->initFilters();
         $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -473,7 +473,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function extractionPaieAction ()
+    public function extractionPaieAction()
     {
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
@@ -512,7 +512,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function extractionPaiePrimeAction ()
+    public function extractionPaiePrimeAction()
     {
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
@@ -541,7 +541,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function imputationSihamAction ()
+    public function imputationSihamAction()
     {
         $this->initFilters();
 
@@ -578,7 +578,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function miseEnPaiementAction ()
+    public function miseEnPaiementAction()
     {
         $this->initFilters();
         $title        = 'Mise en paiement';
@@ -619,14 +619,14 @@ class PaiementController extends AbstractController
 
 
 
-    public function pilotageAction ()
+    public function pilotageAction()
     {
         return [];
     }
 
 
 
-    public function ecartsEtatsACtion ()
+    public function ecartsEtatsACtion()
     {
 
         //Contexte année et structure
@@ -647,7 +647,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function importNumeroPecAction ()
+    public function importNumeroPecAction()
     {
         $this->initFilters();
         $title = 'Import des numéros de prise en charge';
@@ -666,7 +666,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function detailsCalculsAction ()
+    public function detailsCalculsAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -686,7 +686,7 @@ class PaiementController extends AbstractController
     /**
      * @param Intervenant $intervenant
      */
-    private function updateTableauxBord ($intervenant)
+    private function updateTableauxBord($intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'paiement',

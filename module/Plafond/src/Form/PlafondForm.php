@@ -3,9 +3,7 @@
 namespace Plafond\Form;
 
 use Application\Form\AbstractForm;
-use Application\Hydrator\GenericHydrator;
 use Plafond\Entity\Db\Plafond;
-use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Service\PlafondServiceAwareTrait;
 use Laminas\InputFilter\InputFilterProviderInterface;
 

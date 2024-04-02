@@ -18,15 +18,15 @@ class PeriodeSaisieForm extends AbstractForm
 {
     use SourceServiceAwareTrait;
 
-    protected $hydratorElements = [
-        'id'                => ['type' => 'int'],
-        'libelleCourt'      => ['type' => 'string'],
-        'libelleLong'       => ['type' => 'string'],
-        'code'              => ['type' => 'string'],
-        'ordre'             => ['type' => 'int'],
-        'enseignement'      => ['type' => 'int'],
-        'paiement'          => ['type' => 'int'],
-        'ecartMois'         => ['type' => 'int'],
+    protected $spec = [
+        'id'                => ['hydrator' => ['type' => 'int']],
+        'libelleCourt'      => ['hydrator' => ['type' => 'string']],
+        'libelleLong'       => ['hydrator' => ['type' => 'string']],
+        'code'              => ['hydrator' => ['type' => 'string']],
+        'ordre'             => ['hydrator' => ['type' => 'int']],
+        'enseignement'      => ['hydrator' => ['type' => 'int']],
+        'paiement'          => ['hydrator' => ['type' => 'int']],
+        'ecartMois'         => ['hydrator' => ['type' => 'int']],
     ];
 
 
@@ -36,7 +36,7 @@ class PeriodeSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
 
-        $hydrator = new GenericHydrator($this->getServiceSource()->getEntityManager(), $this->hydratorElements);
+        $hydrator = new GenericHydrator($this->getServiceSource()->getEntityManager(), $this->spec);
         $this->setHydrator($hydrator);
 
         $this->setAttribute('action', $this->getCurrentUrl());

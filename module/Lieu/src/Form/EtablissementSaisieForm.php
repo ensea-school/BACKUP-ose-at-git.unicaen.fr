@@ -17,11 +17,11 @@ class EtablissementSaisieForm extends AbstractForm
 {
     use SourceServiceAwareTrait;
 
-    protected $hydratorElements = [
-        'id'           => ['type' => 'int'],
-        'departement'  => ['type' => 'string'],
-        'localisation' => ['type' => 'string'],
-        'libelle'      => ['type' => 'string'],
+    protected $spec = [
+        'id'           => ['hydrator' => ['type' => 'int']],
+        'departement'  => ['hydrator' => ['type' => 'string']],
+        'localisation' => ['hydrator' => ['type' => 'string']],
+        'libelle'      => ['hydrator' => ['type' => 'string']],
     ];
 
 
@@ -31,7 +31,7 @@ class EtablissementSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
 
-        $hydrator = new GenericHydrator($this->getServiceSource()->getEntityManager(), $this->hydratorElements);
+        $hydrator = new GenericHydrator($this->getServiceSource()->getEntityManager(), $this->spec);
         $this->setHydrator($hydrator);
 
         $this->setAttribute('action', $this->getCurrentUrl());

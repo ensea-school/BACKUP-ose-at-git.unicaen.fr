@@ -4,7 +4,7 @@ namespace Paiement\Form;
 
 use Application\Filter\DateTimeFromString;
 use Application\Form\AbstractForm;
-use Application\Hydrator\GenericHydrator;
+use Laminas\Hydrator\HydratorInterface;
 use Paiement\Entity\Db\TauxRemu;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
@@ -16,7 +16,7 @@ class TauxForm extends AbstractForm
 
     public function init()
     {
-        $hydratorForm = new tauxRemuHydrator($this->getEntityManager());
+        $hydratorForm = new TauxRemuHydrator($this->getEntityManager());
         $this->setHydrator($hydratorForm);
 
         $this->spec(TauxRemu::class);
@@ -54,16 +54,12 @@ class TauxForm extends AbstractForm
 }
 
 
-
-
-
-class tauxRemuHydrator extends GenericHydrator
+class TauxRemuHydrator implements HydratorInterface
 {
     use TauxRemuServiceAwareTrait;
 
-    public function extract($object): array
+    public function extract(object $object): array
     {
-
         $data = [
             'id'       => $object->getId(),
             'code'     => $object->getCode(),
@@ -79,7 +75,7 @@ class tauxRemuHydrator extends GenericHydrator
 
 
 
-    public function hydrate(array $data, $object)
+    public function hydrate(array $data, object $object)
     {
         $object->setValeur(DateTimeFromString::run($data['date']), $data['valeur']);
         $object->setCode($data['code']);

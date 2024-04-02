@@ -2,11 +2,12 @@
 
 namespace Application\Hydrator;
 
-use Application\Constants;
 use Application\Filter\DateTimeFromString;
+use Application\Util;
 use Doctrine\ORM\EntityManager;
 use Laminas\Form\Element\Date;
 use Laminas\Form\Element\DateTimeLocal;
+use Laminas\Stdlib\ArrayUtils;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
@@ -14,40 +15,33 @@ class GenericHydrator implements HydratorInterface
 {
     use EntityManagerAwareTrait;
 
-    protected $elements       = [];
+    protected $spec = [];
 
     protected $noGenericParse = [];
 
 
 
-    public function __construct(EntityManager $entityManager, array $elements = [])
+    public function __construct(EntityManager $entityManager, string|object|array $spec = null)
     {
         $this->setEntityManager($entityManager);
-        $this->elements = $elements;
+        if (null !== $spec) {
+            $this->spec = $spec;
+        }
     }
 
 
 
-    /**
-     * @return array
-     */
-    public function getElements(): array
+    public function spec(string|object|array $spec, array $ignore = [])
     {
-        return $this->elements;
+        $spec = Util::spec($spec, $ignore);
+        $this->spec = ArrayUtils::merge($this->spec, $spec);
     }
 
 
 
-    /**
-     * @param array $elements
-     *
-     * @return GenericHydrator
-     */
-    public function setElements(array $elements): GenericHydrator
+    public function specDump()
     {
-        $this->elements = $elements;
-
-        return $this;
+        Util::specDump($this->spec);
     }
 
 
@@ -58,9 +52,9 @@ class GenericHydrator implements HydratorInterface
         if (method_exists($object, 'getId')) {
             $data['id'] = (string)$object->getId();
         }
-        foreach ($this->elements as $name => $params) {
+        foreach ($this->spec as $name => $params) {
             if (!in_array($name, $this->noGenericParse)) {
-                $type   = isset($params['type']) ? $params['type'] : null;
+                $type = isset($params['type']) ? $params['type'] : null;
                 $getter = isset($params['getter']) ? $params['getter'] : null;
 
                 /* Récupération de la valeur */
@@ -99,10 +93,10 @@ class GenericHydrator implements HydratorInterface
 
     public function hydrate(array $data, $object)
     {
-        foreach ($this->elements as $name => $params) {
+        foreach ($this->spec as $name => $params) {
             if (!in_array($name, $this->noGenericParse)) {
-                $setter   = isset($params['setter']) ? $params['setter'] : 'set' . ucfirst($name);
-                $type     = ($setter instanceof \Closure) ? 'string' : (isset($params['type']) ? $params['type'] : null);
+                $setter = isset($params['setter']) ? $params['setter'] : 'set' . ucfirst($name);
+                $type = ($setter instanceof \Closure) ? 'string' : (isset($params['type']) ? $params['type'] : null);
                 $readOnly = isset($params['readonly']) ? (bool)$params['readonly'] : false;
 
                 if ($readOnly || !isset($data[$name])) continue;
@@ -142,7 +136,7 @@ class GenericHydrator implements HydratorInterface
 
     public function setReadOnly(string $element, bool $readOnly = true)
     {
-        $this->elements[$element]['readOnly'] = $readOnly;
+        $this->spec[$element]['readOnly'] = $readOnly;
     }
 
 

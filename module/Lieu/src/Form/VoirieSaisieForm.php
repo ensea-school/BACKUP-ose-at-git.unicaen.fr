@@ -13,18 +13,18 @@ use Laminas\Form\Element\Csrf;
 class VoirieSaisieForm extends AbstractForm
 {
 
-    protected $hydratorElements = [
-        'id'         => ['type' => 'int'],
-        'libelle'    => ['type' => 'string'],
-        'code'       => ['type' => 'string'],
-        'codeRh'     => ['type' => 'string'],
-        'sourceCode' => ['type' => 'string'],
+    protected $spec = [
+        'id'         => ['hydrator' => ['type' => 'int']],
+        'libelle'    => ['hydrator' => ['type' => 'string']],
+        'code'       => ['hydrator' => ['type' => 'string']],
+        'codeRh'     => ['hydrator' => ['type' => 'string']],
+        'sourceCode' => ['hydrator' => ['type' => 'string']],
     ];
 
 
     public function init()
     {
-        $hydrator = new GenericHydrator($this->getEntityManager(), $this->hydratorElements);
+        $hydrator = new GenericHydrator($this->getEntityManager(), $this->spec);
         $this->setHydrator($hydrator);
 
         $this->setAttribute('action', $this->getCurrentUrl());

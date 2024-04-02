@@ -3,6 +3,10 @@
 namespace Application;
 
 
+use Application\Interfaces\ParametreEntityInterface;
+use Doctrine\ORM\EntityManager;
+use Laminas\Stdlib\ArrayUtils;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 /**
@@ -36,7 +40,7 @@ class Util
             (isset($attribs2['class']) ? (array)$attribs2['class'] : [])
         );
 
-        $result          = array_merge($attribs1, $attribs2);
+        $result = array_merge($attribs1, $attribs2);
         $result['class'] = array_unique($classes);
 
         foreach ($result as $att => $value) {
@@ -88,13 +92,13 @@ class Util
 
         if (!array_key_exists($route, self::$rcaCache)) {
             $config = $container->get('config');
-            $r      = ['child_routes' => $config['router']['routes']];
+            $r = ['child_routes' => $config['router']['routes']];
 
             $elements = explode('/', $route);
 
-            $namespace  = null;
+            $namespace = null;
             $controller = null;
-            $action     = null;
+            $action = null;
 
             foreach ($elements as $element) {
                 if (isset($r['child_routes'][$element])) {
@@ -143,6 +147,164 @@ class Util
         }
 
         return PrivilegeController::getResourceId($controller, $action);
+    }
+
+
+
+    public static function spec(string|object|array $spec, array $ignore = [])
+    {
+        if (is_string($spec) && class_exists($spec)) {
+            return self::specFromClass($spec, $ignore);
+        }
+        if (is_object($spec)) {
+            return self::specFromObject($spec, $ignore);
+        }
+        if (is_array($spec)) {
+            return self::specFromArray($spec, $ignore);
+        }
+
+        throw new \Exception('La spécification fournie n\'est pas exploitable');
+    }
+
+
+
+    public static function specDump(array $spec)
+    {
+        echo '<pre>';
+        foreach ($spec as $name => $propSpec) {
+
+            echo '<h3>' . $name . '</h3>';
+            phpDump($propSpec);
+        }
+        echo '</pre>';
+    }
+
+
+
+    private static function specFromClass(string $class, array $ignore): array
+    {
+        $elements = [];
+        $rc = new \ReflectionClass($class);
+        $methods = $rc->getMethods();
+
+        if ($rc->implementsInterface(HistoriqueAwareInterface::class)) {
+            $ignore[] = 'histoCreation';
+            $ignore[] = 'histoCreateur';
+            $ignore[] = 'histoModification';
+            $ignore[] = 'histoModificateur';
+            $ignore[] = 'histoDestruction';
+            $ignore[] = 'histoDestructeur';
+        }
+        if ($rc->implementsInterface(ParametreEntityInterface::class)) {
+            $ignore[] = 'annee';
+        }
+
+        foreach ($methods as $method) {
+            $property = null;
+            if (str_starts_with($method->name, 'get')) {
+                $property = substr($method->name, 3);
+            } elseif (str_starts_with($method->name, 'is')) {
+                $property = substr($method->name, 2);
+            }
+
+            if ($property) {
+                if (!$rc->hasMethod('set' . $property)) {
+                    $property = null;
+                }
+            }
+
+            if ($property) {
+                $elKey = lcfirst($property);
+                if (!in_array($elKey, $ignore)) {
+                    $element = [
+                        'hydrator' => [
+                            'getter' => $method->name,
+                            'setter' => 'set' . $property,
+                        ],
+                    ];
+                    if ($method->hasReturnType()) {
+                        $rt = $method->getReturnType();
+                        if ($rt instanceof \ReflectionNamedType) {
+                            $element['hydrator']['type'] = $rt->getName();
+                        } elseif ($rt instanceof \ReflectionUnionType) {
+                            $element['hydrator']['type'] = $rt->getTypes()[0]->getName();
+                        }
+                    }
+                    $elements[$elKey] = $element;
+                }
+            }
+        }
+
+        /* Si c'est une entité Doctrine, on récupère les infos du mapping */
+        try {
+            /** @var EntityManager $em */
+            $em = \OseAdmin::instance()->container()->get(Constants::BDD);
+            $cmd = $em->getClassMetadata($class);
+        } catch (\Exception $e) {
+            $cmd = null;
+        }
+        if (!empty($elements) && !empty($cmd)) {
+            foreach ($elements as $property => $element) {
+                if ($cmd->hasField($property)) {
+                    $mapping = $cmd->getFieldMapping($property);
+                    self::elementAddMapping($elements[$property], $mapping);
+                }
+            }
+        }
+
+        /* Ajout d'un élément caché pour l'ID */
+        if ($cmd && $cmd->hasField('id')) {
+            $elements['id'] = ['type' => 'Hidden', 'name' => 'id'];
+        }
+
+        return self::specFromArray($elements, []);
+    }
+
+
+
+    private static function specFromObject(object $object, array $ignore): array
+    {
+        return self::specFromClass(get_class($object), $ignore);
+    }
+
+
+
+    private static function specFromArray(array $spec, array $ignore): array
+    {
+        foreach ($spec as $k => $v) {
+            if (in_array($k, $ignore)) {
+                unset($spec[$k]);
+            }
+        }
+
+        return $spec;
+    }
+
+
+
+    private static function elementAddMapping(array &$element, array $mapping)
+    {
+        /* Gestion du Required */
+        if (isset($mapping['nullable'])) {
+            if (!isset($element['input'])) {
+                $element['input'] = [];
+            }
+            $element['input']['required'] = !$mapping['nullable'];
+        }
+
+        /* Gestion des length */
+        if (($mapping['type'] ?? '') == 'string' && isset($mapping['length']) && $mapping['length']) {
+            if (!isset($element['input'])) {
+                $element['input'] = [];
+            }
+            if (!isset($element['input']['validators'])) {
+                $element['input']['validators'] = [];
+            }
+            $element['input']['validators'][] = [
+                'name'    => 'StringLength',
+                'options' => ['max' => $mapping['length']],
+            ];
+        }
     }
 
 }

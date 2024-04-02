@@ -5,24 +5,22 @@ namespace Application\Traits;
 use Application\Constants;
 use Application\Filter\FloatFromString;
 use Application\Hydrator\GenericHydrator;
-use Application\Interfaces\ParametreEntityInterface;
 use Doctrine\ORM\EntityManager;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Select;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Stdlib\ArrayUtils;
-use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Util;
 
 trait FormFieldsetTrait
 {
     use TranslatorTrait;
 
-    private ?EntityManager  $entityManager                  = null;
+    private ?EntityManager $entityManager = null;
 
     private ?FlashMessenger $controllerPluginFlashMessenger = null;
 
-    private array           $spec                           = [];
+    private array $spec = [];
 
 
 
@@ -51,10 +49,10 @@ trait FormFieldsetTrait
     /**
      * Generates a url given the name of a route.
      *
-     * @param string            $name               Name of the route
-     * @param array             $params             Parameters for the link
-     * @param array|\Traversable $options            Options for the route
-     * @param bool              $reuseMatchedParams Whether to reuse matched parameters
+     * @param string $name Name of the route
+     * @param array $params Parameters for the link
+     * @param array|\Traversable $options Options for the route
+     * @param bool $reuseMatchedParams Whether to reuse matched parameters
      *
      * @return string                         For the link href attribute
      * @see    \Laminas\Mvc\I18n\Router\RouteInterface::assemble()
@@ -82,13 +80,13 @@ trait FormFieldsetTrait
 
     public function readOnly(bool $readOnly = true, array $elements = [])
     {
-        if (empty($elements)){
+        if (empty($elements)) {
             $elements = $this->getElements();
         }
 
         /** @var $element \Laminas\Form\Element */
         foreach ($elements as $elementName) {
-            
+
             if ($element = $this->get($elementName)) {
                 switch (get_class($element)) {
                     case Select::class:
@@ -126,7 +124,7 @@ trait FormFieldsetTrait
      *
      * $params sert à fournir d'éventuels paramètres si $collection est une requête DQL
      *
-     * @param string       $name
+     * @param string $name
      * @param string|array $collection
      * @param              $params
      *
@@ -167,14 +165,14 @@ trait FormFieldsetTrait
      *
      * @param string $name
      * @param string $query
-     * @param array  $params
+     * @param array $params
      *
      * @return $this
      * @throws \Doctrine\DBAL\Exception
      */
     public function setValueOptionsSql(string $name, string $query, array $params = []): self
     {
-        $res     = $this->getEntityManager()->getConnection()->fetchAllAssociative($query, $params);
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($query, $params);
         $options = [];
         foreach ($res as $r) {
             $value = $r['VALUE'] ?? $r['ID'] ?? $r['CODE'] ?? $r['SOURCE_CODE'] ?? null;
@@ -192,30 +190,23 @@ trait FormFieldsetTrait
 
     public function spec(string|object|array $spec, array $ignore = [])
     {
-        if (is_string($spec) && class_exists($spec)) {
-            return $this->specFromClass($spec, $ignore);
-        }
-        if (is_object($spec)) {
-            return $this->specFromObject($spec, $ignore);
-        }
-        if (is_array($spec)) {
-            return $this->specFromArray($spec, $ignore);
+        $spec = \Application\Util::spec($spec, $ignore);
+
+        /* Construction des éléments de formulaires */
+        if (!empty($spec)) {
+            foreach ($spec as $property => $element) {
+                $this->makeElement($property, $spec[$property]);
+            }
         }
 
-        throw new \Exception('La spécification fournie n\'est pas exploitable');
+        $this->spec = ArrayUtils::merge($this->spec, $spec);
     }
 
 
 
     public function specDump()
     {
-        echo '<pre>';
-        foreach ($this->spec as $name => $spec) {
-
-            echo '<h3>' . $name . '</h3>';
-            phpDump($spec);
-        }
-        echo '</pre>';
+        \Application\Util::specDump($this->spec);
     }
 
 
@@ -256,115 +247,6 @@ trait FormFieldsetTrait
 
 
 
-    private function specFromClass(string $class, array $ignore): self
-    {
-        $elements = [];
-        $rc       = new \ReflectionClass($class);
-        $methods  = $rc->getMethods();
-
-        if ($rc->implementsInterface(HistoriqueAwareInterface::class)) {
-            $ignore[] = 'histoCreation';
-            $ignore[] = 'histoCreateur';
-            $ignore[] = 'histoModification';
-            $ignore[] = 'histoModificateur';
-            $ignore[] = 'histoDestruction';
-            $ignore[] = 'histoDestructeur';
-        }
-        if ($rc->implementsInterface(ParametreEntityInterface::class)) {
-            $ignore[] = 'annee';
-        }
-
-        foreach ($methods as $method) {
-            $property = null;
-            if (str_starts_with($method->name, 'get')) {
-                $property = substr($method->name, 3);
-            } elseif (str_starts_with($method->name, 'is')) {
-                $property = substr($method->name, 2);
-            }
-
-            if ($property) {
-                if (!$rc->hasMethod('set' . $property)) {
-                    $property = null;
-                }
-            }
-
-            if ($property) {
-                $elKey = lcfirst($property);
-                if (!in_array($elKey, $ignore)) {
-                    $element = [
-                        'hydrator' => [
-                            'getter' => $method->name,
-                            'setter' => 'set' . $property,
-                        ],
-                    ];
-                    if ($method->hasReturnType()) {
-                        $rt = $method->getReturnType();
-                        if ($rt instanceof \ReflectionNamedType) {
-                            $element['hydrator']['type'] = $rt->getName();
-                        } elseif ($rt instanceof \ReflectionUnionType) {
-                            $element['hydrator']['type'] = $rt->getTypes()[0]->getName();
-                        }
-                    }
-                    $elements[$elKey] = $element;
-                }
-            }
-        }
-
-        /* Si c'est une entité Doctrine, on récupère les infos du mapping */
-        try {
-            $cmd = $this->getEntityManager()->getClassMetadata($class);
-        } catch (\Exception $e) {
-            $cmd = null;
-        }
-        if (!empty($elements) && !empty($cmd)) {
-            foreach ($elements as $property => $element) {
-                if ($cmd->hasField($property)) {
-                    $mapping = $cmd->getFieldMapping($property);
-                    $this->elementAddMapping($elements[$property], $mapping);
-                }
-            }
-        }
-
-        /* Ajout d'un élément caché pour l'ID */
-        if ($cmd && $cmd->hasField('id')) {
-            $elements['id'] = ['type' => 'Hidden', 'name' => 'id'];
-        }
-
-        /* Construction des éléments de formulaires */
-        if (!empty($elements)) {
-            foreach ($elements as $property => $element) {
-                $this->makeElement($property, $elements[$property]);
-            }
-        }
-
-        $this->specFromArray($elements, []);
-
-        return $this;
-    }
-
-
-
-    private function specFromObject(object $object, array $ignore): self
-    {
-        return $this->specFromClass(get_class($object), $ignore);
-    }
-
-
-
-    private function specFromArray(array $spec, array $ignore): self
-    {
-        foreach ($spec as $k => $v) {
-            if (in_array($k, $ignore)) {
-                unset($spec[$k]);
-            }
-        }
-        $this->spec = ArrayUtils::merge($this->spec, $spec);
-
-        return $this;
-    }
-
-
-
     public function getInputFilterSpecification()
     {
         $filters = [];
@@ -376,33 +258,6 @@ trait FormFieldsetTrait
         }
 
         return $filters;
-    }
-
-
-
-    private function elementAddMapping(array &$element, array $mapping)
-    {
-        /* Gestion du Required */
-        if (isset($mapping['nullable'])) {
-            if (!isset($element['input'])) {
-                $element['input'] = [];
-            }
-            $element['input']['required'] = !$mapping['nullable'];
-        }
-
-        /* Gestion des length */
-        if (($mapping['type'] ?? '') == 'string' && isset($mapping['length']) && $mapping['length']) {
-            if (!isset($element['input'])) {
-                $element['input'] = [];
-            }
-            if (!isset($element['input']['validators'])) {
-                $element['input']['validators'] = [];
-            }
-            $element['input']['validators'][] = [
-                'name'    => 'StringLength',
-                'options' => ['max' => $mapping['length']],
-            ];
-        }
     }
 
 
@@ -419,7 +274,7 @@ trait FormFieldsetTrait
                         'label' => ucfirst($property),
                     ],
                 ];
-            break;
+                break;
             case 'bool':
             case 'boolean':
                 $spec = [
@@ -431,7 +286,7 @@ trait FormFieldsetTrait
                         'unchecked_value' => '0',
                     ],
                 ];
-            break;
+                break;
             case 'float':
                 $spec = [
                     'type'    => 'Text',
@@ -447,7 +302,7 @@ trait FormFieldsetTrait
                     ],
                 ];
 
-            break;
+                break;
             case 'int':
                 $spec = [
                     'type'    => 'Text',
@@ -461,7 +316,7 @@ trait FormFieldsetTrait
                         ],
                     ],
                 ];
-            break;
+                break;
             case \DateTime::class:
                 $spec = [
                     'type'       => 'Date',
@@ -476,7 +331,7 @@ trait FormFieldsetTrait
                         'placeholder' => "jj/mm/aaaa",
                     ],
                 ];
-            break;
+                break;
         }
 
         /* Si c'est une entité Doctrine, alors on présuppose qu'on a affaire à un Select */

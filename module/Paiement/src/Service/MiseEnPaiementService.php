@@ -14,6 +14,7 @@ use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
+use Lieu\Service\StructureServiceAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use Paiement\Entity\Db\CentreCout;
@@ -42,6 +43,7 @@ class MiseEnPaiementService extends AbstractEntityService
     use ServiceReferentielServiceAwareTrait;
     use MissionServiceAwareTrait;
     use ServiceServiceAwareTrait;
+    use StructureServiceAwareTrait;
     use TblPaiementServiceAwareTrait;
     use Traits\WorkflowServiceAwareTrait;
     use Traits\ParametresServiceAwareTrait;
@@ -59,7 +61,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass ()
+    public function getEntityClass()
     {
         return MiseEnPaiement::class;
     }
@@ -71,7 +73,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias ()
+    public function getAlias()
     {
         return 'mep';
     }
@@ -85,7 +87,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEtat ($etat, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtat($etat, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -103,7 +105,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function finderByTypeIntervenant (TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -120,7 +122,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function finderByStructure (?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -134,7 +136,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function finderByIntervenants ($intervenants, QueryBuilder $qb = null, $alias = null)
+    public function finderByIntervenants($intervenants, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -155,7 +157,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return array
      */
-    public function getEtatPaiement (MiseEnPaiementRecherche $recherche, array $options = [])
+    public function getEtatPaiement(MiseEnPaiementRecherche $recherche, array $options = [])
     {
         // initialisation
         $defaultOptions = [
@@ -284,7 +286,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return array
      */
-    public function getEtatPaiementCsv (MiseEnPaiementRecherche $recherche)
+    public function getEtatPaiementCsv(MiseEnPaiementRecherche $recherche)
     {
         // initialisation
         $annee = $this->getServiceContext()->getAnnee();
@@ -361,7 +363,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return array
      */
-    public function getTableauBord (?Structure $structure)
+    public function getTableauBord(?Structure $structure)
     {
         $annee = $this->getServiceContext()->getAnnee();
         $data  = [];
@@ -451,7 +453,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * @return array
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function getTblLiquidation ($structure = null)
+    public function getTblLiquidation($structure = null)
     {
         if (empty($structure)) return $this->getTblLiquidationMS();
         if (is_array($structure)) return $this->getTblLiquidationMS($structure);
@@ -499,7 +501,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * @return array|int[]
      * @throws \Doctrine\DBAL\Exception
      */
-    private function getTblLiquidationMS (array $structures = [])
+    private function getTblLiquidationMS(array $structures = [])
     {
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -545,7 +547,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function getBudgetPaiement (Structure $structure): array
+    public function getBudgetPaiement(Structure $structure): array
     {
         $budget = [
             'dotation'    => [
@@ -582,7 +584,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function demandesMisesEnPaiementIntervenant (?Intervenant $intervenant): void
+    public function demandesMisesEnPaiementIntervenant(?Intervenant $intervenant): void
     {
         if ($intervenant instanceof Intervenant) {
             $heuresADemander = $this->getServiceTblPaiement()->getDemandesMisesEnPaiementByIntervenant($intervenant);
@@ -617,7 +619,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function ajouterDemandeMiseEnPaiement (Intervenant $intervenant, array $datas): bool|MiseEnPaiement
+    public function ajouterDemandeMiseEnPaiement(Intervenant $intervenant, array $datas): bool|MiseEnPaiement
     {
 
         $data['heures']                                  = (array_key_exists('heures', $datas)) ? $datas['heures'] : '';
@@ -641,7 +643,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function supprimerDemandeMiseEnPaiement ($idMep): bool
+    public function supprimerDemandeMiseEnPaiement($idMep): bool
     {
         /**
          * @var MiseEnPaiement $mep
@@ -669,7 +671,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * @param ?Structure  $structure
      *
      */
-    public function getDemandeMiseEnPaiementResume (Intervenant $intervenant, ?Structure $structure = null)
+    public function getDemandeMiseEnPaiementResume(Intervenant $intervenant, ?Structure $structure = null)
     {
         //Centres de cout de la composante d'affectation de l'intervenant
         $centresCoutsPaiementAffectation = [];
@@ -796,7 +798,6 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
         foreach ($dmeps as $value) {
-            //On va chercher les centre de cout nécessaire aux mises en paiement
             //On traite ici les heures d'enseignement
             if ($value['TYPAGE'] == "enseignement") {
                 //Partie enseignements
@@ -1019,14 +1020,14 @@ class MiseEnPaiementService extends AbstractEntityService
             //On alimente les centres couts disponibles pour ces demandes de mise en paiement
             //Si le paramétrage est affectation, on va chercher une fois pour toutes les centres de couts de paiement de la structure d'affectation de l'intervenant
             if ($parametreCentreCout == 'affectation' && empty($centresCoutsPaiementAffectation)) {
-                $structure                       = $this->getEntityManager()->getRepository(Structure::class)->find($intervenant->getStructure()->getId());
+                $structure                       = $this->getServiceStructure()->get($intervenant->getStructure()->getId());
                 $centresCoutsPaiementAffectation = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
             }
 
             if (!array_key_exists('centreCoutPaiement', $dmep[$value['STRUCTURE_CODE']])) {
                 $dmep[$value['STRUCTURE_CODE']]['centreCoutPaiement'] = [];
                 if ($parametreCentreCout == 'enseignement') {
-                    $structure    = $this->getEntityManager()->getRepository(Structure::class)->find($value['STRUCTURE_ID']);
+                    $structure    = $this->getServiceStructure()->get($value['STRUCTURE_ID']);
                     $centresCouts = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
                 } else {
                     $centresCouts = $centresCoutsPaiementAffectation;
@@ -1077,7 +1078,7 @@ class MiseEnPaiementService extends AbstractEntityService
                 $dmep[$value['STRUCTURE_CODE']]['domaineFonctionnelPaiement'] = $listeDomainesFonctionnels;
             }
             //On va chercher le budget de la composante (dotation et liquidation)
-            $structure                                = $this->getEntityManager()->getRepository(Structure::class)->find($value['STRUCTURE_ID']);
+            $structure                                = $this->getServiceStructure()->get($value['STRUCTURE_ID']);
             $budget                                   = $this->getBudgetPaiement($structure);
             $dmep[$value['STRUCTURE_CODE']]['budget'] = $budget;
         }
@@ -1087,7 +1088,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function verifierBudgetDemandeMiseEnPaiement (array $demandes): array
+    public function verifierBudgetDemandeMiseEnPaiement(array $demandes): array
     {
         $demandesApprouvees                      = [];
         $totalHeuresDemandees['ressourcePropre'] = 0;
@@ -1096,12 +1097,14 @@ class MiseEnPaiementService extends AbstractEntityService
         //1 - On récupére le budget de la structure pour laquelle on a des heures à demander
         foreach ($demandes as $demande) {
             $structure = $this->getEntityManager()->getRepository(Structure::class)->find($demande['structureId']);
+            $structure = $this->getServiceStructure()->get($demande['structureId']);
             if ($structure instanceof Structure) {
 
                 $budget = $this->getBudgetPaiement($structure);
                 //2 - On récupére le centre de cout que nous souhaitons utiliser pour la demande de mise en paiement
 
                 $centreCout = $this->getEntityManager()->getRepository(CentreCout::class)->find($demande['centreCoutId']);
+                $centreCout = $this->getServiceCentreCout()->get($demande['centreCoutId']);
                 if ($centreCout instanceof CentreCout) {
                     //3 - on vérifier si il y a du budget dans le type de ressource auquel est rattaché ce centre de cout
                     if ($centreCout->getTypeRessource()->getCode() == 'ressources-propres') {
@@ -1141,76 +1144,73 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function verifierValiditeDemandeMiseEnPaiement (Intervenant $intervenant, $data)
+    public function verifierValiditeDemandeMiseEnPaiement(Intervenant $intervenant, $data)
     {
-        $type = "";
-        $sql  = "
-        
-        SELECT
-           	SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac) - SUM(tp.heures_demandees_aa + tp.heures_demandees_ac) solde,
-           	SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac)                                                        total
-        FROM
-            tbl_paiement tp
-        WHERE
-            tp.intervenant_id = :intervenant
+        $sql = "
+            SELECT
+                SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac)        total_heures_a_payer,
+                SUM(tp.heures_demandees_aa + tp.heures_demandees_ac)    total_heures_demandees,
+                SUM(tp.heures_payees_aa + tp.heures_payees_ac)          total_heures_payees,
+                service_id                                              service_id,
+                service_referentiel_id                                  service_referentiel_id,
+                mission_id                                              mission_id
+            FROM
+                tbl_paiement tp
+            WHERE
+                tp.intervenant_id = :intervenant
+            GROUP BY 
+                service_id,
+                service_referentiel_id,
+                mission_id
         ";
 
-        if (!empty($data['serviceId'])) {
-            $type = "le service d'enseignements avec id#" . $data['serviceId'];
-            $sql  .= " AND tp.service_id =  " . $data['serviceId'];
-        }
-        if (!empty($data['serviceReferentielId'])) {
-            $type = "le service referentiel avec id#" . $data['serviceReferentielId'];
-            $sql  .= " AND tp.service_referentiel_id =  " . $data['serviceReferentielId'];
-        }
-        if (!empty($data['missionId'])) {
-            $type = "la mission avec id#" . $data['missionId'];
-            $sql  .= " AND tp.mission_id =  " . $data['missionId'];
-        }
-
-        $sql .= "
-        GROUP BY
-            tp.intervenant_id ,
-            tp.structure_id  
-        ";
-
-        $dmeps           = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, [
+        $dmeps                = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, [
             'intervenant' => $intervenant->getId(),
         ]);
-        $soldeHeures     = 0;
-        $totalHeures     = 0;
-        $heuresDemandees = $data['heures'];
-
+        $totalHeuresAPayer    = 0;
+        $totalHeuresDemandees = 0;
+        $totalHeuresPayees    = 0;
+        $heuresDemandees      = $data['heures'];
+        $serviceId            = $data['serviceId'];
+        $serviceReferentielId = $data['serviceReferentielId'];
+        $missionId            = $data['missionId'];
         foreach ($dmeps as $dmep) {
-            $soldeHeures += $dmep['SOLDE'];
-            $totalHeures += $data['TOTAL'];
-        }
-
-        //On vérifie que l'on peut mettre en demande de mise en paiement les heures demandées
-        if ($heuresDemandees > $soldeHeures) {
-            //Demande de mise en paiement impossible, vous demandez 125 hetd(s) alors que vous pouvez demander maximum 117.6 hetd(s)
-            if ($soldeHeures >= 0) {
-                throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous pouvez demander maximum ' . $soldeHeures . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
-            } else {
-                throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous avez déjà payé la totalité des heures pour cet enseignement (' . $totalHeures . ' hetd(s))', self::EXCEPTION_DMEP_INVALIDE);
+            $totalHeuresDemandees += $dmep['TOTAL_HEURES_DEMANDEES'];
+            $totalHeuresPayees    += $dmep['TOTAL_HEURES_PAYEES'];
+            $totalHeuresAPayer    += $dmep['TOTAL_HEURES_A_PAYER'];
+            if ($serviceReferentielId === $dmep['SERVICE_REFERENTIEL_ID'] || $serviceId === $dmep['SERVICE_ID'] || $missionId === $dmep['MISSION_ID']) {
+                $soldeHeures = ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']);
+                if ($heuresDemandees > $soldeHeures) {
+                    if ($soldeHeures >= 0) {
+                        throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous pouvez demander maximum ' . ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']) . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
+                    } else {
+                        throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous avez déjà payé la totalité des heures pour cet enseignement (' . $dmep['TOTAL_HEURES_A_PAYER'] . ' hetd(s))', self::EXCEPTION_DMEP_INVALIDE);
+                    }
+                }
             }
         }
-
+        //On  vérifie qu'il y a bien un centre de cout
         if (empty($data['centreCoutId'])) {
             throw new \Exception('Vous devez renseigner un centre de cout pour demander ce paiement', self::EXCEPTION_DMEP_CENTRE_COUT);
         }
+        //On vérifie qu'il y a bien un domaine fonctionnel dans le cadre du référentiel et des missions
         if (!empty($data['missionId']) || !empty($data['formuleResServiceRefId'])) {
             if (empty($data['domaineFonctionnelId'])) {
                 throw new \Exception('Vous devez renseigner un domaine fonctionnel pour demander ce paiement', self::EXCEPTION_DMEP_DOMAINE_FONCTIONNEL);
             }
         }
+        //On vérifie en dernier si l'ensemble des heures déjà payé ne dépasse pas le nombre d'heures réalisées tout service confondu.
+        if (($totalHeuresAPayer - $totalHeuresDemandees) < $heuresDemandees) {
+            throw new \Exception('Demande de mise en paiement impossible, la somme des heures déjà demandée en paiement pour tous les services confondus ne permet plus de demander en paiement les ' . $heuresDemandees . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
+        }
+
 
         return true;
     }
 
 
 
-    public function getListByStructure (Structure $structure)
+    public function getListByStructure(Structure $structure)
     {
         $dql = "
         SELECT
@@ -1278,7 +1278,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * @param Periode                              $periodePaiement
      * @param \DateTime                            $dateMiseEnPaiement
      */
-    public function mettreEnPaiement (Structure $structure, $intervenants, Periode $periodePaiement, \DateTime $dateMiseEnPaiement)
+    public function mettreEnPaiement(Structure $structure, $intervenants, Periode $periodePaiement, \DateTime $dateMiseEnPaiement)
     {
         [$qb, $alias] = $this->initQuery();
         $this->finderByEtat(MiseEnPaiement::A_METTRE_EN_PAIEMENT, $qb);
@@ -1300,9 +1300,9 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return $this
      */
-    public function deleteHistorises (ServiceAPayerInterface $sap)
+    public function deleteHistorises(ServiceAPayerInterface $sap)
     {
-        $sap->getMiseEnPaiement()->map(function (MiseEnPaiement $mep) {
+        $sap->getMiseEnPaiement()->map(function (MiseEnPaiement $mep){
             if (!$mep->estNonHistorise()) {
                 $this->delete($mep, false);
             }
@@ -1313,7 +1313,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    private function hydrateFromChangements (MiseEnPaiement $object, $data)
+    private function hydrateFromChangements(MiseEnPaiement $object, $data)
     {
         if (isset($data['heures'])) {
             $object->setHeures((float)$data['heures']);

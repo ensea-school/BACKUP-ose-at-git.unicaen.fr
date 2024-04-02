@@ -28,39 +28,40 @@
                             <tbody>
                             <tr>
 
-                                <td>
-                                    <div v-if="this.dotationRessourcesPropres > 0" class="progress position-relative bg-secondary" style="height: 30px;">
+                                <td style="width:50%;">
+                                    <div v-if="this.dotationPaieEtat > 0" class="text-center progress position-relative bg-secondary"
+                                         style="height: 30px;">
                                         <span class="position-absolute top-50 start-50 translate-middle" style="color:white;">{{
                                                 this.consommationPaieEtat + ' sur ' + this.dotationPaieEtat
                                             }} HETD</span>
                                         <div :aria-valuemax="this.dotationPaieEtat"
                                              :aria-valuenow="this.consommationPaieEtat"
+                                             :class="'progress-bar progress-bar-striped '+ this.bgPaieEtat"
                                              :style="'width:' + this.pourcentagePaieEtat + '%;'"
                                              :title="this.pourcentagePaieEtat + '%'"
                                              aria-valuemin="0"
-                                             class="progress-bar progress-bar-striped bg-success"
                                              role="progressbar">
                                         </div>
                                     </div>
-                                    <div class="text-center">
+                                    <div v-if="this.dotationPaieEtat == 0" class="text-center">
                                         Aucune dotation paie état
                                     </div>
                                 </td>
-                                <td>
+                                <td style="width:50%;">
                                     <div v-if="this.dotationRessourcesPropres > 0" class="progress position-relative bg-secondary" style="height: 30px;">
                                         <span class="position-absolute top-50 start-50 translate-middle" style="color:white;">{{
                                                 this.consommationRessourcesPropres + ' sur ' + this.dotationRessourcesPropres
                                             }} HETD</span>
                                         <div :aria-valuemax="this.dotationRessourcesPropres"
                                              :aria-valuenow="this.consommationRessourcesPropres"
+                                             :class="'progress-bar progress-bar-striped '+ this.bgRessourcesPropres"
                                              :style="'width:' + this.pourcentageRessourcePropre + '%;'"
                                              :title="this.pourcentageRessourcePropre + '%'"
                                              aria-valuemin="0"
-                                             class="progress-bar progress-bar-striped bg-success"
                                              role="progressbar">
                                         </div>
                                     </div>
-                                    <div class="text-center">
+                                    <div v-if="this.dotationRessourcesPropres == 0" class="text-center">
                                         Aucune dotation ressources propres
                                     </div>
                                 </td>
@@ -564,7 +565,24 @@ export default {
             pourcentageRessourcePropre()
             {
                 return Math.round((this.consommationRessourcesPropres / this.dotationRessourcesPropres) * 100);
+            },
+            bgPaieEtat()
+            {
+                if (Math.round((this.consommationPaieEtat / this.dotationPaieEtat) * 100) > 100) {
+                    return 'bg-warning';
+                } else {
+                    return 'bg-success';
+                }
+            },
+            bgRessourcesPropres()
+            {
+                if (Math.round((this.consommationRessourcesPropres / this.dotationRessourcesPropres) * 100) > 100) {
+                    return 'bg-warning';
+                } else {
+                    return 'bg-success';
+                }
             }
+
         },
     methods: {
         heuresStatutToString(value)

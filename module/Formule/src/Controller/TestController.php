@@ -5,17 +5,18 @@ namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Annee;
+use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
+use Formule\Entity\Db\FormuleTestVolumeHoraire;
 use Formule\Model\FormuleCalcul;
 use Formule\Service\TestServiceAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Laminas\View\Model\JsonModel;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
-use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenVue\Util;
 use UnicaenVue\View\Model\AxiosModel;
 use UnicaenVue\View\Model\VueModel;
@@ -64,35 +65,62 @@ class TestController extends AbstractController
 
     public function saisirAction()
     {
+        $annee = $this->getServiceContext()->getAnnee();
+
+        $formules = $this->em()->createQuery("SELECT f.id, f.libelle FROM " . Formule::class . " f ORDER BY f.id")->getArrayResult();
+        $annees = $this->em()->createQuery("SELECT a.id, a.libelle FROM " . Annee::class . " a WHERE a.id BETWEEN 2013 AND " . ($annee->getId() + 5) . " ORDER BY a.id")->getArrayResult();
+        $typesIntervenants = $this->em()->createQuery("SELECT ti.id, ti.libelle FROM " . TypeIntervenant::class . " ti ORDER BY ti.id")->getArrayResult();
+        $typesVh = $this->em()->createQuery("SELECT t.id, t.libelle FROM " . TypeVolumeHoraire::class . " t ORDER BY t.id")->getArrayResult();
+        $etatsVh = $this->em()->createQuery("SELECT t.id, t.libelle FROM " . EtatVolumeHoraire::class . " t ORDER BY t.id")->getArrayResult();
+        $formuleId = $this->getServiceParametres()->get('formule');
+
+        //$structures = $formuleTestIntervenant->getStructures();
+        //$structures['__UNIV__'] = 'Université (établissement))'; // Établissement
+        //$structures['__EXTERIEUR__'] = 'Extérieur (autre établissement))'; // Autre établissement
+        //$structures['__new_structure__'] = '- Ajout d\'une nouvelle structure -'; // Pour pouvoir ajouter une structure
+
+        //return compact('formuleTestIntervenant', 'title', 'annee', 'formuleId', 'structures', 'formules', 'annees', 'typesIntervenants', 'typesVh', 'etatsVh');
+
+        $variables = [
+            'id'                   => (int)$this->params()->fromRoute('formuleTestIntervenant'),
+            'formules'             => $formules,
+            'annees'               => $annees,
+            'typesIntervenants'    => $typesIntervenants,
+            'typesVolumesHoraires' => $typesVh,
+            'etatsVolumesHoraires' => $etatsVh,
+            'defaultFormule'       => (int)$formuleId,
+        ];
+
+        $vm = new VueModel($variables);
+        $vm->setTemplate('formule/test/test');
+        return $vm;
+    }
+
+
+
+    public function testDataAction()
+    {
         /* @var $formuleTestIntervenant FormuleTestIntervenant */
         $formuleTestIntervenant = $this->getEvent()->getParam('formuleTestIntervenant');
 
-        $formules = $this->em()->createQuery("SELECT f FROM " . Formule::class . " f ORDER BY f.id")->execute();
-        $annees = $this->em()->createQuery("SELECT a FROM " . Annee::class . " a WHERE a.id BETWEEN 2013 AND 2030 ORDER BY a.id")->execute();
-        $typesIntervenants = $this->em()->createQuery("SELECT ti FROM " . TypeIntervenant::class . " ti ORDER BY ti.id")->execute();
-        $typesVh = $this->em()->createQuery("SELECT t FROM " . TypeVolumeHoraire::class . " t ORDER BY t.id")->execute();
-        $etatsVh = $this->em()->createQuery("SELECT t FROM " . EtatVolumeHoraire::class . " t ORDER BY t.id")->execute();
-        $annee = $this->getServiceContext()->getAnnee();
-        $formuleId = $this->getServiceParametres()->get('formule');
+        $intervenantHydrator = new GenericHydrator($this->em());
+        $intervenantHydrator->spec($formuleTestIntervenant);
+        $intervenantHydrator->setExtractType($intervenantHydrator::EXTRACT_TYPE_JSON);
 
-        if (!$formuleTestIntervenant) {
-            $title = 'Ajout d\'un test de formule';
-            $formuleTestIntervenant = new FormuleTestIntervenant();
-        } else {
-            $title = 'Modification d\'un test de formule';
-            try {
-                $this->getServiceTest()->calculer($formuleTestIntervenant);
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
+        $volumeHoraireHydrator = new GenericHydrator($this->em());
+        $volumeHoraireHydrator->spec(FormuleTestVolumeHoraire::class);
+        $volumeHoraireHydrator->setExtractType($volumeHoraireHydrator::EXTRACT_TYPE_JSON);
+
+        $data = [
+            'intervenant'     => $intervenantHydrator->extract($formuleTestIntervenant),
+            'volumesHoraires' => [],
+        ];
+
+        foreach( $formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire){
+            $data['volumesHoraires'][$volumeHoraire->getId()] = $volumeHoraireHydrator->extract($volumeHoraire);
         }
 
-        $structures = $formuleTestIntervenant->getStructures();
-        $structures['__UNIV__'] = 'Université (établissement))'; // Établissement
-        $structures['__EXTERIEUR__'] = 'Extérieur (autre établissement))'; // Autre établissement
-        $structures['__new_structure__'] = '- Ajout d\'une nouvelle structure -'; // Pour pouvoir ajouter une structure
-
-        return compact('formuleTestIntervenant', 'title', 'annee', 'formuleId', 'structures', 'formules', 'annees', 'typesIntervenants', 'typesVh', 'etatsVh');
+        return new AxiosModel($data);
     }
 
 

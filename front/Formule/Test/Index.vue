@@ -1,4 +1,6 @@
 <template>
+    <h1 class="page-header">Page de tests de formule de calcul des HETD</h1>
+
     <u-table-ajax :data-url="this.dataUrl" @data="maj" ref="testsFormules">
         <thead>
         <tr>
@@ -34,7 +36,6 @@
 <script>
 
 export default {
-    name: 'Test',
     data()
     {
         return {

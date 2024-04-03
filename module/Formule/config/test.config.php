@@ -29,6 +29,15 @@ return [
                     'action'      => 'saisir',
                     'privileges'  => [Privileges::FORMULE_TESTS],
                 ],
+                'test-data'            => [
+                    'route'      => '/test-data[/:formuleTestIntervenant]',
+                    'constraints' => [
+                        'formuleTestIntervenant' => '[0-9]*',
+                    ],
+                    'controller' => Controller\TestController::class,
+                    'action'     => 'testData',
+                    'privileges' => [Privileges::FORMULE_TESTS],
+                ],
                 'enregistrement'  => [
                     'route'       => '/enregistrement[/:formuleTestIntervenant]',
                     'constraints' => [

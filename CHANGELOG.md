@@ -7,6 +7,13 @@
 # OSE 24 (à venir)
 
 
+# OSE 23.5 (à venir)
+
+## Corrections de bugs
+
+* Procédure d'installation à nouveau fonctionnelle
+* Correctif apporté à la formule d'ASSAS (#55357)
+
 
 # OSE 23.4 (26/03/2024)
 

@@ -38,7 +38,7 @@ return [
         "visible": false
     },
     "TYPE": {
-        "libelle": "type"
+        "visible": false
     },
     "MATRICULE": {
         "libelle": "Matricule"

@@ -6,7 +6,7 @@ Il faut donc installer :
 * Une base de données Oracle
 * Un serveur web Apache + PHP
 
-Le serveur web peut être installé manuellement ou bien déployé via une image Docker.
+Le serveur web doit être installé par vos soins.
 Le serveur web n'héberge aucune donnée, hormis des fichiers de configuration et de cache. Toutes les données d'explloitation sont donc
 stockées en base de données.
 
@@ -65,11 +65,8 @@ export NLS_LANG="FRENCH"
 # Installation du serveur web
 
 Le serveur Web doit mainternant être installé.
-
-Vous pouvez, au choix :
-
-* L'installer vous-même (recommandé en production ou en pré-prod)
-* Ou bien le déployer à l'aide de Docker (recommandé en test ou pour développer)
+Il vous revient de réaliser cette opération en vous basant sur la version fournie par votre système d'exploitation.
+OSE n'impose pas de version bien spécifique d'Apache.
 
 ## Méthode manuelle, à adapter selon vos besoins
 
@@ -81,7 +78,7 @@ Dépendances requises :
 * git
 * wget
 * Apache 2 avec le module de réécriture d'URL (*rewrite*) activé
-* PHP 8.0 avec les modules suivants :
+* PHP 8.2 avec les modules suivants :
     * cli
     * curl
     * intl
@@ -228,63 +225,6 @@ Alias /ose			                /var/www/ose/public
 ```
 N'oubliez pas de recharger la configuration d'Apache (systemctl reload apache2)!
 
-## Avec Docker
-
-Cette méthode sera privilégiée si vous souhaitez installer une instance de OSE pour du test ou pour développer.
-Attention : vous utiliserez ici le `master` de OSE.
-
-### Création d'un réseau local
-```bash
-docker network create --driver bridge --subnet 172.21.0.0/16 --gateway 172.21.0.1 laures
-```
-
-### Récupération d'UnicaenImage
-
-L'image OSE repose sur UnicaenImage, qu'il faut donc installer préalablement :
-
-```bash
-git clone https://git.unicaen.fr/open-source/docker/unicaen-image
-cd unicaen-image
-
-HTTP_PROXY=http://proxy.unicaen.fr:3128 ; \
-PHP_VERSION=7.4 ; \
-docker build \
---rm \
---build-arg PHP_VERSION=${PHP_VERSION} \
---build-arg HTTP_PROXY=${HTTP_PROXY} \
---build-arg OCI8_PACKAGE="oci8" \
--f Dockerfile \
--t unicaen-dev-php${PHP_VERSION}-apache \
-.
-```
-
-### Construction de l'image OSE
-#### Environnement de développement
-```bash
-git clone https://git.unicaen.fr/open-source/OSE dev
-cd dev
-docker-compose build --no-cache
-docker-compose up -d
-docker exec ose-dev ose install
-```
-Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :
-172.21.0.10 ose-dev.pc-local
-
-OSE sera accessible sur votre machine, à l'adresse http://ose-dev.pc-local
-
-#### Environnement de test
-```bash
-git clone https://git.unicaen.fr/open-source/OSE test
-cd test
-docker-compose -f docker-compose-test.yml build --no-cache
-docker-compose -f docker-compose-test.yml up
-docker exec ose-test ose install 
-```
-
-Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :
-172.21.0.15 ose-test.pc-local
-
-OSE sera accessible sur votre machine, à l'adresse http://ose-test.pc-local
 
 # Configuration technique
 Personnalisez le fichier `config.local.php` pour adapter OSE à votre établissement.

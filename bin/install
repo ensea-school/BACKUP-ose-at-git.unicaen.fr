@@ -110,8 +110,8 @@ if ($intVersion > 0 && $intVersion < 18) {
 } else {
     // à partir de la v18, et toutes les branches
     $osedir = realpath($osedir);
-    $composerSetupFile = $osedir.'/composer-setup.php';
-    copy('https://getcomposer.org/installer', $composerSetupFile);
+    $composerSetupFile = 'composer-setup.php';
+    $c->passthru("cd $osedir;wget https://getcomposer.org/installer; mv installer $composerSetupFile");
     if (!hash_file('sha384', $composerSetupFile) === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') {
         die('Installateur de composer corrompu');
         unlink($composerSetupFile);

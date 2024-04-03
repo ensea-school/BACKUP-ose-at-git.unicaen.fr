@@ -200,11 +200,18 @@ class Util
         }
 
         foreach ($methods as $method) {
+            $parameters = $method->getParameters();
+            if (!empty($parameters)){
+                // un getter qui a des paramètres en entrée n'est pas exploitable ici
+                continue;
+            }
             $property = null;
             if (str_starts_with($method->name, 'get')) {
                 $property = substr($method->name, 3);
             } elseif (str_starts_with($method->name, 'is')) {
                 $property = substr($method->name, 2);
+            } elseif (str_starts_with($method->name, 'has')) {
+                $property = substr($method->name, 3);
             }
 
             if ($property) {

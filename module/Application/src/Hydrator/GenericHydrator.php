@@ -15,9 +15,17 @@ class GenericHydrator implements HydratorInterface
 {
     use EntityManagerAwareTrait;
 
+    const EXTRACT_TYPE_STRING   = 0;
+    const EXTRACT_TYPE_JSON = 1;
+    const EXTRACT_TYPE_ORIGINAL = 2;
+
     protected $spec = [];
 
     protected $noGenericParse = [];
+
+    protected string $dateTimeFormat = 'Y-m-d';
+
+    protected int $extractType = 0;
 
 
 
@@ -46,6 +54,36 @@ class GenericHydrator implements HydratorInterface
 
 
 
+    public function getDateTimeFormat(): string
+    {
+        return $this->dateTimeFormat;
+    }
+
+
+
+    public function setDateTimeFormat(string $dateTimeFormat): GenericHydrator
+    {
+        $this->dateTimeFormat = $dateTimeFormat;
+        return $this;
+    }
+
+
+
+    public function getExtractType(): int
+    {
+        return $this->extractType;
+    }
+
+
+
+    public function setExtractType(int $extractType): GenericHydrator
+    {
+        $this->extractType = $extractType;
+        return $this;
+    }
+
+
+
     public function extract($object): array
     {
         $data = [];
@@ -54,6 +92,7 @@ class GenericHydrator implements HydratorInterface
         }
         foreach ($this->spec as $name => $params) {
             if (!in_array($name, $this->noGenericParse)) {
+                $params = $params['hydrator'] ?? [];
                 $type = isset($params['type']) ? $params['type'] : null;
                 $getter = isset($params['getter']) ? $params['getter'] : null;
 
@@ -69,18 +108,34 @@ class GenericHydrator implements HydratorInterface
                     $value = $object->$gis();
                 }
 
-                /* Transformation en string */
-                if ('float' == $type && is_float($value)) {
-                    $value = floatToString($value);
-                } elseif ('int' == $type && is_int($value)) {
-                    $value = intToString($value);
-                } elseif (('bool' == $type || 'boolean' == $type) && is_bool($value)) {
-                    $value = booleanToString($value, '1', '0');
-                } elseif (\DateTime::class == $type && $value instanceof \DateTime) {
-                    $value = $value->format('Y-m-d');
-                } elseif ($type && class_exists($type) && $value instanceof $type && method_exists($value, 'getId')) {
-                    $value = (string)$value->getId();
+                switch ($this->extractType) {
+                    case self::EXTRACT_TYPE_STRING:
+                        if ('float' == $type && is_float($value)) {
+                            $value = floatToString($value);
+                        } elseif ('int' == $type && is_int($value)) {
+                            $value = intToString($value);
+                        } elseif (('bool' == $type || 'boolean' == $type) && is_bool($value)) {
+                            $value = booleanToString($value, '1', '0');
+                        } elseif (\DateTime::class == $type && $value instanceof \DateTime) {
+                            $dateFormat = $params['format'] ?? $this->dateTimeFormat;
+                            $value = $value->format($dateFormat);
+                        } elseif ($type && class_exists($type) && $value instanceof $type && method_exists($value, 'getId')) {
+                            $value = (string)$value->getId();
+                        }
+                        break;
+
+                    case self::EXTRACT_TYPE_ORIGINAL:
+                        // rien à faire : on laisse tout passer
+                        break;
+
+                    case self::EXTRACT_TYPE_JSON:
+                        // à la place des sous-entités on retourne les ID
+                        if ($type && class_exists($type) && $value instanceof $type && method_exists($value, 'getId')) {
+                            $value = $value->getId();
+                        }
+                        break;
                 }
+
 
                 $data[$name] = $value;
             }
@@ -95,6 +150,7 @@ class GenericHydrator implements HydratorInterface
     {
         foreach ($this->spec as $name => $params) {
             if (!in_array($name, $this->noGenericParse)) {
+                $params = $params['hydrator'] ?? [];
                 $setter = isset($params['setter']) ? $params['setter'] : 'set' . ucfirst($name);
                 $type = ($setter instanceof \Closure) ? 'string' : (isset($params['type']) ? $params['type'] : null);
                 $readOnly = isset($params['readonly']) ? (bool)$params['readonly'] : false;

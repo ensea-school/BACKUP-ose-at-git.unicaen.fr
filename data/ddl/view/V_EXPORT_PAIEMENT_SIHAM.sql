@@ -145,7 +145,7 @@ SELECT annee_id																			annee_id,
 	       		CASE WHEN type_intervenant_code = 'P'
 	       				  AND type_paiement = 'heures_a_payer' THEN '="0204"'
 	       			 WHEN type_intervenant_code = 'E'
-	       			 	  AND type_paiement = 'heures_a_payer' THEN '1578'
+	       			 	  AND type_paiement = 'heures_a_payer' THEN '="2251"'
 	       			 WHEN type_intervenant_code = 'S'
 	       			 	  AND type_paiement = 'heures_a_payer' THEN '="0125"'
 	       			 WHEN type_paiement = 'conges_payes' THEN '="0290"'

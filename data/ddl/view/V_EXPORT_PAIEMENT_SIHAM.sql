@@ -154,8 +154,8 @@ SELECT annee_id																			annee_id,
 	       	END 								     									code_indemnite_retenu,
        TO_CHAR(TRUNC(date_mise_en_paiement , 'MONTH'), 'YYYY-MM')        				du_mois,
        TO_CHAR(date_mise_en_paiement, 'YY')				                 				annee_de_paye,
-       TO_CHAR(date_mise_en_paiement, 'MM')                              				mois_de_paye,
-       '01'                                                              				numero_de_remise,
+       '="' || TO_CHAR(date_mise_en_paiement, 'MM') || '"'                 				mois_de_paye,
+       '="01"'                                                             				numero_de_remise,
        'G'                                                               				tg_specifique,
        'A definir'                                                       				dossier_de_paye,
         TO_CHAR(TRUNC(date_mise_en_paiement , 'MONTH'), 'DD/MM/YYYY')    				date_pecuniaire,
@@ -166,7 +166,7 @@ SELECT annee_id																			annee_id,
 		       CASE to_char(round(nbu - floor(nbu), 2) * 100, '00')
 		           WHEN ' 00' THEN ''
 		           ELSE ' ' || lpad(round(nbu - floor(nbu), 2) * 100, 2, '00') END
-		    ELSE libelle || ' CONGES PAYEES' END 										libelle,
+		    ELSE libelle || ' CONGES PAYES' END 										libelle,
         CASE WHEN mode_calcul IS NOT NULL THEN mode_calcul ELSE 'B' END  				mode_de_calcul,
        code_origine                                                      				code_origine,
        nom
@@ -225,7 +225,9 @@ FROM (
             0                                                                       	                     	    tnbu,
 			ROUND(p.montant,2)  								  	 			  									montant,
             p.taux_conges_payes																			   			taux_conges_payes,
-            COALESCE(p.unite_budgetaire, '') || ' ' || to_char(i.annee_id) || ' ' || to_char(i.annee_id + 1) 		libelle,
+            COALESCE(p.unite_budgetaire, '') || ' ' ||
+            TO_CHAR(date_mise_en_paiement, 'YY')	 || '-' ||
+            TO_CHAR(date_mise_en_paiement+1, 'YY')	 		libelle,
             si.code_indemnite																				   		code_indemnite,
             si.type_paie																					   		type_paie,
             si.code_indemnite_prime																			   		code_indemnite_prime,

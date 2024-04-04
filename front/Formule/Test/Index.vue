@@ -1,7 +1,7 @@
 <template>
     <h1 class="page-header">Page de tests de formule de calcul des HETD</h1>
 
-    <u-table-ajax :data-url="this.dataUrl" @data="maj" ref="testsFormules">
+    <u-table-ajax :data-url="this.dataUrl" v-model="lines" ref="testsFormules">
         <thead>
         <tr>
             <th column="ID">Id</th>
@@ -44,10 +44,6 @@ export default {
         };
     },
     methods: {
-        maj(lines)
-        {
-            this.lines = lines;
-        },
         editUrl(id)
         {
             return unicaenVue.url('formule-test/saisir/:id', {id: id});

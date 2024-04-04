@@ -50,6 +50,11 @@ return [
                 ],
             ],
         ],
+        'employeurtest'    => [
+            'route'      => '/employeurtest',
+            'controller' => EmployeurController::class,
+            'action'     => 'employeurtest',
+        ],
         'employeur-search' => [
             'route'         => '/employeur-search',
             'controller'    => EmployeurController::class,
@@ -223,7 +228,7 @@ return [
         ],
         [
             'controller' => EmployeurController::class,
-            'action'     => ['index', 'saisie', 'supprimer', 'employeur'],
+            'action'     => ['index', 'saisie', 'supprimer', 'employeur', 'employeurtest'],
             'privileges' => [Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION],
             'assertion'  => IntervenantDossierAssertion::class,
 

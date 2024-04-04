@@ -22,7 +22,7 @@ class EmployeurController extends AbstractController
     use EmployeurServiceAwareTrait;
     use EmployeurSaisieFormAwareTrait;
 
-    public function indexAction ()
+    public function indexAction()
     {
         $canEdit    = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_EDITION));
         $critere    = $this->params()->fromPost('critere');
@@ -34,7 +34,14 @@ class EmployeurController extends AbstractController
 
 
 
-    public function saisieAction ()
+    public function employeurtestAction()
+    {
+        return [];
+    }
+
+
+
+    public function saisieAction()
     {
         $employeur = $this->getEvent()->getParam('employeur');
 
@@ -48,7 +55,7 @@ class EmployeurController extends AbstractController
         $form = $this->getFormEmployeurSaisie();
 
 
-        $form->bindRequestSave($employeur, $this->getRequest(), function () use ($employeur, $form) {
+        $form->bindRequestSave($employeur, $this->getRequest(), function () use ($employeur, $form){
             /**
              * @var Employeur $employeur
              */
@@ -68,7 +75,7 @@ class EmployeurController extends AbstractController
 
 
 
-    public function supprimerAction ()
+    public function supprimerAction()
     {
         $employeur = $this->getEvent()->getParam('employeur');
         $this->getServiceEmployeur()->delete($employeur, true);
@@ -78,7 +85,7 @@ class EmployeurController extends AbstractController
 
 
 
-    public function rechercheAction ()
+    public function rechercheAction()
     {
 
 
@@ -95,7 +102,7 @@ class EmployeurController extends AbstractController
 
 
 
-    public function rechercheJsonAction ()
+    public function rechercheJsonAction()
     {
         $critere = $this->params()->fromPost('critere');
 

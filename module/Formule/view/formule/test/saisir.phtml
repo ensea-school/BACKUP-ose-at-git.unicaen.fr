@@ -425,7 +425,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     </div>
 
     <a class="btn btn-secondary" href="<?= $this->url('formule-test') ?>"><i class="fas fa-rotate-left"
-                                                                                    aria-hidden="true"></i>
+                                                                             aria-hidden="true"></i>
         Retour à la liste des formules</a>
 
 </div>
@@ -634,20 +634,20 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                             data['volumeHoraireTest'][index] = {};
                         }
 
-                        if (name == 'typeInterventionCode'){
-                            if (variable == 'AUTRE1'){
+                        if (name == 'typeInterventionCode') {
+                            if (variable == 'AUTRE1') {
                                 variable = that.element.find('.dinput[data-name=tauxAutre1Code]').val();
                             }
-                            if (variable == 'AUTRE2'){
+                            if (variable == 'AUTRE2') {
                                 variable = that.element.find('.dinput[data-name=tauxAutre2Code]').val();
                             }
-                            if (variable == 'AUTRE3'){
+                            if (variable == 'AUTRE3') {
                                 variable = that.element.find('.dinput[data-name=tauxAutre3Code]').val();
                             }
-                            if (variable == 'AUTRE4'){
+                            if (variable == 'AUTRE4') {
                                 variable = that.element.find('.dinput[data-name=tauxAutre4Code]').val();
                             }
-                            if (variable == 'AUTRE5'){
+                            if (variable == 'AUTRE5') {
                                 variable = that.element.find('.dinput[data-name=tauxAutre5Code]').val();
                             }
                         }
@@ -688,20 +688,20 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     }
 
                     if ('typeInterventionCode' == name) {
-                        if (value && value != 'CM' && value != 'TD' && value != 'TP' && value != 'REFERENTIEL'){
-                            if (that.element.find('.dinput[data-name=tauxAutre1Code]').val() == value){
+                        if (value && value != 'CM' && value != 'TD' && value != 'TP' && value != 'REFERENTIEL') {
+                            if (that.element.find('.dinput[data-name=tauxAutre1Code]').val() == value) {
                                 value = 'AUTRE1';
                             }
-                            if (that.element.find('.dinput[data-name=tauxAutre2Code]').val() == value){
+                            if (that.element.find('.dinput[data-name=tauxAutre2Code]').val() == value) {
                                 value = 'AUTRE2';
                             }
-                            if (that.element.find('.dinput[data-name=tauxAutre3Code]').val() == value){
+                            if (that.element.find('.dinput[data-name=tauxAutre3Code]').val() == value) {
                                 value = 'AUTRE3';
                             }
-                            if (that.element.find('.dinput[data-name=tauxAutre4Code]').val() == value){
+                            if (that.element.find('.dinput[data-name=tauxAutre4Code]').val() == value) {
                                 value = 'AUTRE4';
                             }
-                            if (that.element.find('.dinput[data-name=tauxAutre5Code]').val() == value){
+                            if (that.element.find('.dinput[data-name=tauxAutre5Code]').val() == value) {
                                 value = 'AUTRE5';
                             }
                         }
@@ -878,7 +878,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             {
                 var index = element.data('index');
 
-                this.element.find(".dinput[data-name='typeInterventionCode'] option[value='AUTRE"+index+"']").html(element.val());
+                this.element.find(".dinput[data-name='typeInterventionCode'] option[value='AUTRE" + index + "']").html(element.val());
 
                 this.typesInterventionUpdateVisibility();
             },
@@ -886,12 +886,12 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
             typesInterventionUpdateVisibility()
             {
-                this.element.find(".dinput[data-name='typeInterventionCode'] option").each(function(){
+                this.element.find(".dinput[data-name='typeInterventionCode'] option").each(function () {
                     var value = $(this).attr('value');
                     var label = $(this).html();
-                    if (value.substr(0,5) == 'AUTRE' && label == ''){
+                    if (value.substr(0, 5) == 'AUTRE' && label == '') {
                         $(this).hide();
-                    }else{
+                    } else {
                         $(this).show();
                     }
                 });

@@ -8,6 +8,7 @@ use Application\Entity\Db\Annee;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Doctrine\ORM\Query;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\Db\FormuleTestVolumeHoraire;
@@ -67,7 +68,26 @@ class TestController extends AbstractController
     {
         $annee = $this->getServiceContext()->getAnnee();
 
-        $formules = $this->em()->createQuery("SELECT f.id, f.libelle FROM " . Formule::class . " f ORDER BY f.id")->getArrayResult();
+        $fSql = "
+        SELECT 
+          f.id, 
+          f.libelle, 
+          f.iParam1Libelle,  
+          f.iParam2Libelle,
+          f.iParam3Libelle,
+          f.iParam4Libelle,
+          f.iParam5Libelle,
+          f.vhParam1Libelle,
+          f.vhParam2Libelle,
+          f.vhParam3Libelle,
+          f.vhParam4Libelle,
+          f.vhParam5Libelle
+        FROM " . Formule::class . " f 
+        INDEX BY f.id
+        ORDER BY f.libelle
+        ";
+
+        $formules = $this->em()->createQuery($fSql)->getArrayResult();
         $annees = $this->em()->createQuery("SELECT a.id, a.libelle FROM " . Annee::class . " a WHERE a.id BETWEEN 2013 AND " . ($annee->getId() + 5) . " ORDER BY a.id")->getArrayResult();
         $typesIntervenants = $this->em()->createQuery("SELECT ti.id, ti.libelle FROM " . TypeIntervenant::class . " ti ORDER BY ti.id")->getArrayResult();
         $typesVh = $this->em()->createQuery("SELECT t.id, t.libelle FROM " . TypeVolumeHoraire::class . " t ORDER BY t.id")->getArrayResult();
@@ -116,7 +136,7 @@ class TestController extends AbstractController
             'volumesHoraires' => [],
         ];
 
-        foreach( $formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire){
+        foreach ($formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire) {
             $data['volumesHoraires'][$volumeHoraire->getId()] = $volumeHoraireHydrator->extract($volumeHoraire);
         }
 

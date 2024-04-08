@@ -31,7 +31,7 @@ return [
         'employeur'        => [
             'route'         => '/employeur',
             'controller'    => EmployeurController::class,
-            'action'        => 'index',
+            'action'        => 'employeur',
             'may_terminate' => true,
             'child_routes'  => [
                 'saisie'    => [
@@ -50,16 +50,17 @@ return [
                 ],
             ],
         ],
+        'employeur-data'   => [
+            'route'         => '/employeur/get-data',
+            'controller'    => EmployeurController::class,
+            'action'        => 'data-employeur',
+            'may_terminate' => true,
+        ],
         'employeur-search' => [
             'route'         => '/employeur-search',
             'controller'    => EmployeurController::class,
             'action'        => 'recherche',
             'may_terminate' => true,
-        ],
-        'employeur-json'   => [
-            'route'      => '/employeur/json',
-            'controller' => EmployeurController::class,
-            'action'     => 'recherche-json',
         ],
         'autres-infos'     => [
             'route'         => '/autres',
@@ -230,7 +231,7 @@ return [
         ],
         [
             'controller' => EmployeurController::class,
-            'action'     => ['recherche-json', 'recherche',],
+            'action'     => ['recherche', 'data-employeur'],
             'roles'      => ['guest'],
 
         ],

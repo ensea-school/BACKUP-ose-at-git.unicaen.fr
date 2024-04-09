@@ -11,6 +11,7 @@ export default {
         isPourc: {type: Boolean, required: false, default: false},
         disabled: {type: Boolean, required: false, default: false},
         class: {type: String, required: false, default: ''},
+        maximumDigits: {required: false, default: 8},
     },
     data()
     {
@@ -89,7 +90,7 @@ export default {
     methods: {
         floatToString(value)
         {
-            if (undefined === value) {
+            if (undefined === value || null === value) {
                 return undefined;
             }
 
@@ -98,7 +99,7 @@ export default {
                 return this.fractions[test];
             }
             var locale = 'fr';
-            var options = {minimumFractionDigits: 0, maximumFractionDigits: 8, useGrouping: false};
+            var options = {minimumFractionDigits: 0, maximumFractionDigits: this.maximumDigits, useGrouping: false};
             var formatter = new Intl.NumberFormat(locale, options);
 
             return formatter.format(value);
@@ -114,6 +115,7 @@ export default {
                 value = Util.stringToFloat(value[0]) / Util.stringToFloat(value[1]);
             } else {
                 value = parseFloat(value.replace(',', '.'));
+                //value = Math.round(value * (10^this.maximumDigits)) / (10^this.maximumDigits);
             }
 
             return value;

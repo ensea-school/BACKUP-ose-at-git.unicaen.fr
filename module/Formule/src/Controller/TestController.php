@@ -94,13 +94,6 @@ class TestController extends AbstractController
         $etatsVh = $this->em()->createQuery("SELECT t.id, t.libelle FROM " . EtatVolumeHoraire::class . " t ORDER BY t.id")->getArrayResult();
         $formuleId = $this->getServiceParametres()->get('formule');
 
-        //$structures = $formuleTestIntervenant->getStructures();
-        //$structures['__UNIV__'] = 'Université (établissement))'; // Établissement
-        //$structures['__EXTERIEUR__'] = 'Extérieur (autre établissement))'; // Autre établissement
-        //$structures['__new_structure__'] = '- Ajout d\'une nouvelle structure -'; // Pour pouvoir ajouter une structure
-
-        //return compact('formuleTestIntervenant', 'title', 'annee', 'formuleId', 'structures', 'formules', 'annees', 'typesIntervenants', 'typesVh', 'etatsVh');
-
         $variables = [
             'id'                   => (int)$this->params()->fromRoute('formuleTestIntervenant'),
             'formules'             => $formules,
@@ -131,8 +124,22 @@ class TestController extends AbstractController
         $volumeHoraireHydrator->spec(FormuleTestVolumeHoraire::class);
         $volumeHoraireHydrator->setExtractType($volumeHoraireHydrator::EXTRACT_TYPE_JSON);
 
+        $iData = $intervenantHydrator->extract($formuleTestIntervenant);
+        $iData['serviceDu'] = $formuleTestIntervenant->getServiceDu();
+        $iData['heuresServiceFi'] = $formuleTestIntervenant->getHeuresServiceFi();
+        $iData['heuresServiceFa'] = $formuleTestIntervenant->getHeuresServiceFa();
+        $iData['heuresServiceFc'] = $formuleTestIntervenant->getHeuresServiceFc();
+        $iData['heuresServiceReferentiel'] = $formuleTestIntervenant->getHeuresServiceReferentiel();
+        $iData['heuresComplFi'] = $formuleTestIntervenant->getHeuresComplFi();
+        $iData['heuresComplFa'] = $formuleTestIntervenant->getHeuresComplFa();
+        $iData['heuresComplFc'] = $formuleTestIntervenant->getHeuresComplFc();
+        $iData['heuresComplReferentiel'] = $formuleTestIntervenant->getHeuresComplReferentiel();
+        $iData['heuresPrimes'] = $formuleTestIntervenant->getHeuresPrimes();
+        $iData['heuresService'] = $formuleTestIntervenant->getHeuresServiceFi() + $formuleTestIntervenant->getHeuresServiceFa() + $formuleTestIntervenant->getHeuresServiceFc() + $formuleTestIntervenant->getHeuresServiceReferentiel();
+        $iData['heuresCompl'] = $formuleTestIntervenant->getHeuresComplFi() + $formuleTestIntervenant->getHeuresComplFa() + $formuleTestIntervenant->getHeuresComplFc() + $formuleTestIntervenant->getHeuresComplReferentiel();
+
         $data = [
-            'intervenant'     => $intervenantHydrator->extract($formuleTestIntervenant),
+            'intervenant'     => $iData,
             'volumesHoraires' => [],
         ];
 

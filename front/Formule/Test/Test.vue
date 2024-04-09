@@ -32,7 +32,8 @@
                 </tr>
                 <tr>
                     <th>Structure</th>
-                    <td class="saisie"><select v-model="intervenant.structureCode" data-variable="intervenant" class="dinput"
+                    <td class="saisie"><select v-model="intervenant.structureCode" data-variable="intervenant"
+                                               class="dinput"
                                                @change="selectStructure">
                         <option v-for="(v,k) in structures" :value="k" :key="k">{{ v }}</option>
                     </select>
@@ -74,8 +75,9 @@
                     </select></td>
                 </tr>
 
-                <tr v-for="i in [1,2,3,4,5]" :key="i" :class="'i-param i-param-'+i" v-show="formule['iParam'+i+'Libelle']">
-                    <th class="i-param">{{ formule['iParam'+i+'Libelle'] }}</th>
+                <tr v-for="i in [1,2,3,4,5]" :key="i" :class="'i-param i-param-'+i"
+                    v-show="formule['iParam'+i+'Libelle']">
+                    <th class="i-param">{{ formule['iParam' + i + 'Libelle'] }}</th>
                     <td class="saisie"><input v-model="intervenant.param1" class="dinput"/></td>
                 </tr>
             </table>
@@ -93,8 +95,8 @@
 
             <!-- DEBUT types d'intervention -->
             <h2>Types d'intervention (HETD)</h2>
-            <div style="overflow:scroll">
-                <table class="table table-bordered table-xs types-interventions">
+            <div class="types-interventions">
+                <table class="table table-bordered table-xs">
                     <tr>
                         <th></th>
                         <th colspan="3">Standards</th>
@@ -178,57 +180,57 @@
 
             <!-- DEBUT résultats par intervenant -->
             <h2>Résultat</h2>
-            <table class="table table-xs table-bordered">
+            <table class="table table-xs table-bordered resultats">
                 <tr>
                     <th colspan="2">Service dû</th>
-                    <td class="doutput" data-type="float" data-name="cServiceDu"></td>
+                    <td><u-heures :valeur="intervenant.serviceDu" /></td>
                 </tr>
 
                 <tr>
                     <th rowspan="4">Service</th>
                     <th>FI</th>
-                    <td class="doutput">{{ intervenant.heuresServiceFi }}</td>
+                    <td><u-heures :valeur="intervenant.heuresServiceFi" /></td>
                 </tr>
                 <tr>
                     <th>FA</th>
-                    <td class="doutput">{{ intervenant.heuresServiceFa }}</td>
+                    <td><u-heures :valeur="intervenant.heuresServiceFa" /></td>
                 </tr>
                 <tr>
                     <th>FC</th>
-                    <td class="doutput">{{ intervenant.heuresServiceFc }}</td>
+                    <td><u-heures :valeur="intervenant.heuresServiceFc" /></td>
                 </tr>
                 <tr>
                     <th>Référentiel</th>
-                    <td class="doutput">{{ intervenant.heuresServiceReferentiel }}</td>
+                    <td><u-heures :valeur="intervenant.heuresServiceReferentiel" /></td>
                 </tr>
                 <tr>
                     <th colspan="2">Total service dû assuré</th>
-                    <td class="doutput">{{ intervenant.heuresService }}</td>
+                    <td><u-heures :valeur="intervenant.heuresService" /></td>
                 </tr>
                 <tr>
-                    <th rowspan="5">Heures compl.</th>
+                    <th rowspan="4">Heures compl.</th>
                     <th>FI</th>
-                    <td class="doutput">{{ intervenant.heuresComplFi }}</td>
+                    <td><u-heures :valeur="intervenant.heuresComplFi" /></td>
                 </tr>
                 <tr>
                     <th>FA</th>
-                    <td class="doutput">{{ intervenant.heuresComplFa }}</td>
+                    <td><u-heures :valeur="intervenant.heuresComplFa" /></td>
                 </tr>
                 <tr>
                     <th>FC</th>
-                    <td class="doutput">{{ intervenant.heuresComplFc }}</td>
+                    <td><u-heures :valeur="intervenant.heuresComplFc" /></td>
                 </tr>
                 <tr>
                     <th>Référentiel</th>
-                    <td class="doutput">{{ intervenant.heuresComplReferentiel }}</td>
+                    <td><u-heures :valeur="intervenant.heuresComplReferentiel" /></td>
                 </tr>
                 <tr>
                     <th colspan="2">Total heures compl. à payer</th>
-                    <td class="doutput">{{ intervenant.heuresCompl }}</td>
+                    <td><u-heures :valeur="intervenant.heuresCompl" /></td>
                 </tr>
                 <tr>
-                    <th>Primes</th>
-                    <td class="doutput">{{ intervenant.heuresPrimes }}</td>
+                    <th colspan="2">Primes</th>
+                    <td><u-heures :valeur="intervenant.heuresPrimes" /></td>
                 </tr>
             </table>
             <!-- FIN résultats par intervenant -->
@@ -236,32 +238,40 @@
         </div>
 
 
+        <!-- DEBUT saisie des volumes horaires -->
         <h2>Heures effectuées (A saisir de manière chronologique)</h2>
         <table class="table table-bordered table-xs table-hover fvh">
             <thead>
             <tr>
-                <th rowspan="3" style="width: 2em"></th>
-                <th colspan="9" class="vh-donnees">Données</th>
-                <th rowspan="3" style="width:2px">&nbsp;</th>
-                <th colspan="9"><select id="affRes" class="form-control">
-                    <option value="attendu">Résultats attendus (en HETD)</option>
-                    <option value="hetd" selected="selected">Résultats calculés (en HETD)</option>
-                    <option value="debug">Informations de débogage</option>
-                </select></th>
+                <th rowspan="3"></th>
+                <th colspan="14" class="vh-donnees">Données</th>
+                <th rowspan="3" class="spacer">&nbsp;</th>
+                <th colspan="9">
+                    <select v-model="resMode" class="form-select res-mode">
+                        <option value="attendu">Résultats attendus (en HETD)</option>
+                        <option value="hetd" selected="selected">Résultats calculés (en HETD)</option>
+                        <option value="debug">Informations de débogage</option>
+                    </select>
+                </th>
             </tr>
             <tr>
-                <th rowspan="2" style="width:8em">Structure</th>
+                <th rowspan="2" style="min-width:10em">Structure</th>
                 <th rowspan="2">Compte dans le service statutaire</th>
-                <th rowspan="2">Type d'intervention</th>
+                <th rowspan="2" style="min-width:5em">Type d'intervention</th>
                 <th colspan="3">Répartition</th>
                 <th colspan="2">Modulation</th>
                 <th colspan="5" class="vh-params">Paramètres</th>
                 <th rowspan="2">Heures</th>
-                <th colspan="4" class="attendu">Service</th>
-                <th colspan="5" class="attendu">Heures complémentaires</th>
-                <th colspan="4" class="resultats">Service</th>
-                <th colspan="5" class="resultats">Heures complémentaires</th>
-                <th class="debug" rowspan="2" style="width:300px">Informations de débogage</th>
+
+                <th colspan="4" v-show="resMode=='attendu'">Service</th>
+                <th colspan="4" v-show="resMode=='attendu'">Heures compl.</th>
+                <th rowspan="2" v-show="resMode=='attendu'">Primes</th>
+
+                <th colspan="4" v-show="resMode=='hetd'">Service</th>
+                <th colspan="4" v-show="resMode=='hetd'">Heures compl.</th>
+                <th rowspan="2" v-show="resMode=='hetd'">Primes</th>
+
+                <th rowspan="2" v-show="resMode=='debug'">Informations de débogage</th>
             </tr>
             <tr>
                 <th>Fi</th>
@@ -270,31 +280,31 @@
                 <th>Service dû</th>
                 <th>Service compl.</th>
                 <th v-for="i in [1,2,3,4,5]" :key="i" :class="`vh-param vh-param-`+i">Param. {{ i }}</th>
-                <th class="resultats">Fi</th>
-                <th class="resultats">Fa</th>
-                <th class="resultats">Fc</th>
-                <th class="resultats">Réfé-rentiel</th>
-                <th class="resultats">Fi</th>
-                <th class="resultats">Fa</th>
-                <th class="resultats">Fc</th>
-                <th class="resultats">Réfé-rentiel</th>
-                <th class="resultats">Primes</th>
 
-                <th class="attendu">Fi</th>
-                <th class="attendu">Fa</th>
-                <th class="attendu">Fc</th>
-                <th class="attendu">Réfé-rentiel</th>
-                <th class="attendu">Fi</th>
-                <th class="attendu">Fa</th>
-                <th class="attendu">Fc</th>
-                <th class="attendu">Réfé-rentiel</th>
-                <th class="attendu">Primes</th>
+                <th v-show="resMode=='attendu'">Fi</th>
+                <th v-show="resMode=='attendu'">Fa</th>
+                <th v-show="resMode=='attendu'">Fc</th>
+                <th v-show="resMode=='attendu'">Réfé-rentiel</th>
+                <th v-show="resMode=='attendu'">Fi</th>
+                <th v-show="resMode=='attendu'">Fa</th>
+                <th v-show="resMode=='attendu'">Fc</th>
+                <th v-show="resMode=='attendu'">Réfé-rentiel</th>
+
+                <th v-show="resMode=='hetd'">Fi</th>
+                <th v-show="resMode=='hetd'">Fa</th>
+                <th v-show="resMode=='hetd'">Fc</th>
+                <th v-show="resMode=='hetd'">Réfé-rentiel</th>
+                <th v-show="resMode=='hetd'">Fi</th>
+                <th v-show="resMode=='hetd'">Fa</th>
+                <th v-show="resMode=='hetd'">Fc</th>
+                <th v-show="resMode=='hetd'">Réfé-rentiel</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(vh, l) in volumesHoraires" :key="l">
                 <th>{{ l + 1 }}</th>
-                <td class="saisie"><select v-model="vh.structureCode" :data-variable="l" class="dinput" @change="selectStructure">
+                <td class="saisie"><select v-model="vh.structureCode" :data-variable="l" class="dinput"
+                                           @change="selectStructure">
                     <option v-for="(v,k) in structures" :value="k" :key="k">{{ v }}</option>
                 </select></td>
                 <td class="saisie"><select v-model="vh.serviceStatutaire" class="dinput">
@@ -307,7 +317,7 @@
                     </option>
                 </select></td>
                 <td>
-                    <u-input-float v-model="vh.tauxFi" is-pourc class="doutput" style="width:3em"/>
+                    <u-input-float v-model="vh.tauxFi" is-pourc class="doutput" readonly style="width:3em"/>
                     <span class="pourc">%</span>
                 </td>
                 <td>
@@ -329,53 +339,73 @@
                 <td v-for="p in [1,2,3,4,5]" :key="p" :class="`saisie vh-param vh-param-`+p"
                     style="width:5.7em"><input :v-model="vh['param'+p]" class="dinput"/>
                 </td>
-
                 <td class="saisie">
                     <u-input-float v-model="vh.heures" class="dinput"/>
                 </td>
-                <!--<td v-if="true" rowspan="16" style="width:2px">&nbsp;</td>-->
-                <td class="attendu">
-                    <u-input-float v-model="vh.heuresAttenduesServiceFi" class="dinput"/>
+
+                <td class="spacer"><!-- espace --></td>
+
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesServiceFi" maximum-digits="2" class="dinput"/>
                 </td>
-                <td class="attendu">
-                    <u-input-float v-model="vh.heuresAttenduesServiceFa" class="dinput"/>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesServiceFa" maximum-digits="2" class="dinput"/>
                 </td>
-                <td class="attendu">
-                    <u-input-float v-model="vh.heuresAttenduesServiceFc" class="dinput"/>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesServiceFc" maximum-digits="2" class="dinput"/>
                 </td>
-                <td class="attendu">
-                    <u-input-float v-model="vh.heuresAttenduesServiceReferentiel" class="dinput"/>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesServiceReferentiel" maximum-digits="2" class="dinput"/>
                 </td>
-                <td class="attendu">
-                    <u-input-float v-model="vh.heuresAttenduesComplFi" class="dinput"/>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesComplFi" maximum-digits="2" class="dinput"/>
                 </td>
-                <td class="attendu">
-                    <u-input-float v-model="vh.heuresAttenduesComplFa" class="dinput"/>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesComplFa" maximum-digits="2" class="dinput"/>
                 </td>
-                <td class="attendu">
-                    <u-input-float v-model="vh.heuresAttenduesComplFc" class="dinput"/>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesComplFc" maximum-digits="2" class="dinput"/>
                 </td>
-                <td class="attendu">
-                    <u-input-float v-model="vh.heuresAttenduesComplReferentiel" class="dinput"/>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesComplReferentiel" maximum-digits="2" class="dinput"/>
                 </td>
-                <td class="attendu">
-                    <u-input-float v-model="vh.heuresAttenduesPrimes" class="dinput"/>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesPrimes" maximum-digits="2" class="dinput"/>
                 </td>
 
-                <td class="attendu"><input v-model="vh.heuresServiceFi" class="dinput"/></td>
-                <td class="attendu"><input v-model="vh.heuresServiceFa" class="dinput"/></td>
-                <td class="attendu"><input v-model="vh.heuresServiceFc" class="dinput"/></td>
-                <td class="attendu"><input v-model="vh.heuresServiceReferentiel" class="dinput"/></td>
-                <td class="attendu"><input v-model="vh.heuresComplFi" class="dinput"/></td>
-                <td class="attendu"><input v-model="vh.heuresComplFa" class="dinput"/></td>
-                <td class="attendu"><input v-model="vh.heuresComplFc" class="dinput"/></td>
-                <td class="attendu"><input v-model="vh.heuresComplReferentiel" class="dinput"/></td>
-                <td class="attendu"><input v-model="vh.heuresPrimes" class="dinput"/></td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresServiceFi" maximum-digits="2" readonly class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresServiceFa" maximum-digits="2" readonly class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresServiceFc" maximum-digits="2" readonly class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresServiceReferentiel" maximum-digits="2" readonly class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresComplFi" maximum-digits="2" readonly class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresComplFa" maximum-digits="2" readonly class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresComplFc" maximum-digits="2" readonly class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresComplReferentiel" maximum-digits="2" readonly class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresPrimes" maximum-digits="2" readonly class="doutput"/>
+                </td>
 
-                <td class="attendu">Debug</td>
+                <td v-show="resMode=='debug'">Debug</td>
             </tr>
             </tbody>
         </table>
+        <!-- FIN saisie des volumes horaires -->
 
         <!-- DEBUT Débogage général -->
         <div>
@@ -399,7 +429,10 @@
 
 <script>
 
+import UHeures from "../../Application/UI/UHeures.vue";
+
 export default {
+    components: {UHeures},
     props: {
         id: {type: Number},
         formules: {type: Object},
@@ -419,6 +452,7 @@ export default {
             tauxAutre3Visibility: false,
             tauxAutre4Visibility: false,
             tauxAutre5Visibility: false,
+            resMode: 'hetd',
             intervenant: {
                 tauxCmServiceDu: 1.5,
                 tauxCmServiceCompl: 1.5,
@@ -493,23 +527,23 @@ export default {
             unicaenVue.axios.get(
                 unicaenVue.url("formule-test/test-data/:id", {id: this.id})
             ).then(response => {
-                if (!response.data.intervenant.tauxAutre1Code){
+                if (!response.data.intervenant.tauxAutre1Code) {
                     response.data.intervenant.tauxAutre1ServiceDu = undefined;
                     response.data.intervenant.tauxAutre1ServiceCompl = undefined;
                 }
-                if (!response.data.intervenant.tauxAutre2Code){
+                if (!response.data.intervenant.tauxAutre2Code) {
                     response.data.intervenant.tauxAutre2ServiceDu = undefined;
                     response.data.intervenant.tauxAutre2ServiceCompl = undefined;
                 }
-                if (!response.data.intervenant.tauxAutre3Code){
+                if (!response.data.intervenant.tauxAutre3Code) {
                     response.data.intervenant.tauxAutre3ServiceDu = undefined;
                     response.data.intervenant.tauxAutre3ServiceCompl = undefined;
                 }
-                if (!response.data.intervenant.tauxAutre4Code){
+                if (!response.data.intervenant.tauxAutre4Code) {
                     response.data.intervenant.tauxAutre4ServiceDu = undefined;
                     response.data.intervenant.tauxAutre4ServiceCompl = undefined;
                 }
-                if (!response.data.intervenant.tauxAutre5Code){
+                if (!response.data.intervenant.tauxAutre5Code) {
                     response.data.intervenant.tauxAutre5ServiceDu = undefined;
                     response.data.intervenant.tauxAutre5ServiceCompl = undefined;
                 }
@@ -556,9 +590,9 @@ export default {
 
             setTimeout(() => {
                 const variable = element.dataset.variable;
-                if ('intervenant' == variable){
+                if ('intervenant' == variable) {
                     this.intervenant.structureCode = structure;
-                }else{
+                } else {
                     this.volumesHoraires[variable].structureCode = structure;
                 }
             }, 200);
@@ -573,16 +607,20 @@ export default {
 </script>
 <style scoped>
 
-table.types-interventions * {
+.types-interventions {
+    overflow: scroll;
+}
+
+.types-interventions table * {
     border-width: 1px 1px;
 }
 
-table.types-interventions th {
+.types-interventions table th {
     min-width: 5em;
     white-space: nowrap;
 }
 
-table.types-interventions td {
+.types-interventions table td {
     min-width: 5em;
     white-space: nowrap;
 }
@@ -598,11 +636,16 @@ table.types-interventions td {
 .fvh td {
     white-space: nowrap;
     padding: 1px !important;
-    width: 3em;
+    min-width: 4em;
 }
 
 .fvh td .pourc {
     font-size: 8pt;
+}
+
+.spacer {
+    max-width: 5px !important;
+    min-width: 5px !important;
 }
 
 .dinput {
@@ -613,43 +656,19 @@ table.types-interventions td {
 }
 
 .doutput {
-    text-align: right;
-}
-
-input.doutput {
     border: none;
+    height: 2em;
+    width: 100%;
+    background-color: transparent;
 }
 
-.debug.doutput {
-    font-size: 8pt;
-    width: 400px;
-    white-space: unset;
+.res-mode {
+    width: 100%;
+    min-width: 300px;
 }
 
-.attendu {
-    display: none;
+.resultats td {
+    text-align:right;
 }
 
-.debug-info-table {
-    overflow: auto;
-}
-
-.debug-table {
-    font-size: 8pt;
-}
-
-.debug-table th {
-    text-align: center;
-    text-transform: uppercase;
-    background-color: #ccc;
-}
-
-.debug-table td {
-    text-align: right;
-    min-width: 20px;
-}
-
-td .zero {
-    color: gray;
-}
 </style>

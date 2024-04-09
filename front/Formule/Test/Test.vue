@@ -12,7 +12,7 @@
                 </tr>
                 <tr>
                     <th>Formule</th>
-                    <td class="saisie"><select v-model="intervenant.formule" class="dinput" @change="updateFormule">
+                    <td class="saisie"><select v-model="intervenant.formule" class="dinput">
                         <option v-for="formule in formules" :value="formule.id">{{ formule.libelle }}</option>
                     </select></td>
                 </tr>
@@ -183,54 +183,78 @@
             <table class="table table-xs table-bordered resultats">
                 <tr>
                     <th colspan="2">Service dû</th>
-                    <td><u-heures :valeur="intervenant.serviceDu" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.serviceDu ?? NaN"/>
+                    </td>
                 </tr>
 
                 <tr>
                     <th rowspan="4">Service</th>
                     <th>FI</th>
-                    <td><u-heures :valeur="intervenant.heuresServiceFi" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresServiceFi ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th>FA</th>
-                    <td><u-heures :valeur="intervenant.heuresServiceFa" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresServiceFa ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th>FC</th>
-                    <td><u-heures :valeur="intervenant.heuresServiceFc" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresServiceFc ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th>Référentiel</th>
-                    <td><u-heures :valeur="intervenant.heuresServiceReferentiel" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresServiceReferentiel ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th colspan="2">Total service dû assuré</th>
-                    <td><u-heures :valeur="intervenant.heuresService" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresService ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th rowspan="4">Heures compl.</th>
                     <th>FI</th>
-                    <td><u-heures :valeur="intervenant.heuresComplFi" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresComplFi ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th>FA</th>
-                    <td><u-heures :valeur="intervenant.heuresComplFa" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresComplFa ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th>FC</th>
-                    <td><u-heures :valeur="intervenant.heuresComplFc" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresComplFc ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th>Référentiel</th>
-                    <td><u-heures :valeur="intervenant.heuresComplReferentiel" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresComplReferentiel ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th colspan="2">Total heures compl. à payer</th>
-                    <td><u-heures :valeur="intervenant.heuresCompl" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresCompl ?? NaN"/>
+                    </td>
                 </tr>
                 <tr>
                     <th colspan="2">Primes</th>
-                    <td><u-heures :valeur="intervenant.heuresPrimes" /></td>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresPrimes ?? NaN"/>
+                    </td>
                 </tr>
             </table>
             <!-- FIN résultats par intervenant -->
@@ -244,7 +268,7 @@
             <thead>
             <tr>
                 <th rowspan="3"></th>
-                <th colspan="14" class="vh-donnees">Données</th>
+                <th :colspan="9+vhParamCount" class="vh-donnees">Données</th>
                 <th rowspan="3" class="spacer">&nbsp;</th>
                 <th colspan="9">
                     <select v-model="resMode" class="form-select res-mode">
@@ -260,7 +284,7 @@
                 <th rowspan="2" style="min-width:5em">Type d'intervention</th>
                 <th colspan="3">Répartition</th>
                 <th colspan="2">Modulation</th>
-                <th colspan="5" class="vh-params">Paramètres</th>
+                <th :colspan="vhParamCount" v-show="vhParamCount > 0">Paramètres</th>
                 <th rowspan="2">Heures</th>
 
                 <th colspan="4" v-show="resMode=='attendu'">Service</th>
@@ -279,7 +303,9 @@
                 <th>Fc</th>
                 <th>Service dû</th>
                 <th>Service compl.</th>
-                <th v-for="i in [1,2,3,4,5]" :key="i" :class="`vh-param vh-param-`+i">Param. {{ i }}</th>
+                <th v-for="i in [1,2,3,4,5]" :key="i" v-show="formule['vhParam'+i+'Libelle']">
+                    {{ formule['vhParam' + i + 'Libelle'] }}
+                </th>
 
                 <th v-show="resMode=='attendu'">Fi</th>
                 <th v-show="resMode=='attendu'">Fa</th>
@@ -302,7 +328,7 @@
             </thead>
             <tbody>
             <tr v-for="(vh, l) in volumesHoraires" :key="l">
-                <th>{{ l + 1 }}</th>
+                <th>{{ l }}</th>
                 <td class="saisie"><select v-model="vh.structureCode" :data-variable="l" class="dinput"
                                            @change="selectStructure">
                     <option v-for="(v,k) in structures" :value="k" :key="k">{{ v }}</option>
@@ -336,9 +362,12 @@
                     <u-input-float v-model="vh.ponderationServiceCompl" is-pourc class="dinput" style="width:3em"/>
                     <span class="pourc">%</span>
                 </td>
-                <td v-for="p in [1,2,3,4,5]" :key="p" :class="`saisie vh-param vh-param-`+p"
-                    style="width:5.7em"><input :v-model="vh['param'+p]" class="dinput"/>
-                </td>
+                <td v-show="formule.vhParam1Libelle"><input :v-model="vh.param1" class="dinput"/></td>
+                <td v-show="formule.vhParam2Libelle"><input :v-model="vh.param2" class="dinput"/></td>
+                <td v-show="formule.vhParam3Libelle"><input :v-model="vh.param3" class="dinput"/></td>
+                <td v-show="formule.vhParam4Libelle"><input :v-model="vh.param4" class="dinput"/></td>
+                <td v-show="formule.vhParam5Libelle"><input :v-model="vh.param5" class="dinput"/></td>
+
                 <td class="saisie">
                     <u-input-float v-model="vh.heures" class="dinput"/>
                 </td>
@@ -424,7 +453,8 @@
             Retour à la liste des formules</a>
 
     </div>
-    <button @click="charger">Charger</button>
+    <button @click="charger2">Charger2</button>
+    <button @click="charger3">Charger3</button>
 </template>
 
 <script>
@@ -512,6 +542,12 @@ export default {
         {
             this.typesIntervention[7] = code;
         },
+        'intervenant.formule'(id)
+        {
+            if (id) {
+                this.formule = this.formules[id];
+            }
+        },
     },
     computed: {
         filteredTypesIntervention()
@@ -519,13 +555,34 @@ export default {
             let ti = Object.values(this.typesIntervention).filter(value => value);
             ti.unshift('');
             return ti;
+        },
+        vhParamCount()
+        {
+            let count = 0;
+            for (let i = 1; i < 6; i++) {
+                if (this.formule['vhParam' + i + 'Libelle']) {
+                    count++;
+                }
+            }
+
+            return count;
         }
     },
     methods: {
+        charger2()
+        {
+            this.id2 = 10029;
+            this.charger();
+        },
+        charger3()
+        {
+            this.id2 = 10031;
+            this.charger();
+        },
         charger()
         {
             unicaenVue.axios.get(
-                unicaenVue.url("formule-test/test-data/:id", {id: this.id})
+                unicaenVue.url("formule-test/test-data/:id", {id: this.id2})
             ).then(response => {
                 if (!response.data.intervenant.tauxAutre1Code) {
                     response.data.intervenant.tauxAutre1ServiceDu = undefined;
@@ -569,12 +626,6 @@ export default {
             structures['__EXTERIEUR__'] = 'Extérieur (autre établissement)';
             structures['__new_structure__'] = '- Ajout d\'une nouvelle structure -';
             this.structures = structures;
-        },
-        updateFormule()
-        {
-            if (this.intervenant.formule) {
-                this.formule = this.formules[this.intervenant.formule];
-            }
         },
         selectStructure(event)
         {
@@ -668,7 +719,7 @@ export default {
 }
 
 .resultats td {
-    text-align:right;
+    text-align: right;
 }
 
 </style>

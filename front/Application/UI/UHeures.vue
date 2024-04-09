@@ -9,7 +9,6 @@ export default {
     },
     computed: {
         affichage: function () {
-            console.log(this.valeur);
             return Util.formattedHeures(this.valeur, true)
         }
     }

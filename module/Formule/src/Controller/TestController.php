@@ -143,8 +143,10 @@ class TestController extends AbstractController
             'volumesHoraires' => [],
         ];
 
+        $i = 1;
         foreach ($formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire) {
-            $data['volumesHoraires'][$volumeHoraire->getId()] = $volumeHoraireHydrator->extract($volumeHoraire);
+            $data['volumesHoraires'][$i] = $volumeHoraireHydrator->extract($volumeHoraire);
+            $i++;
         }
 
         return new AxiosModel($data);

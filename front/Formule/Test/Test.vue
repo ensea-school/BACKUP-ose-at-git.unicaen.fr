@@ -337,7 +337,7 @@
                     <option :value="true">Oui</option>
                     <option :value="false">Non</option>
                 </select></td>
-                <td class="saisie"><select v-model="vh.typeIntervention" class="dinput">
+                <td class="saisie"><select v-model="vh.typeInterventionCode" class="dinput">
                     <option v-for="ti in filteredTypesIntervention" :value="ti" :key="ti">
                         {{ ti }}
                     </option>
@@ -362,11 +362,11 @@
                     <u-input-float v-model="vh.ponderationServiceCompl" is-pourc class="dinput" style="width:3em"/>
                     <span class="pourc">%</span>
                 </td>
-                <td v-show="formule.vhParam1Libelle"><input :v-model="vh.param1" class="dinput"/></td>
-                <td v-show="formule.vhParam2Libelle"><input :v-model="vh.param2" class="dinput"/></td>
-                <td v-show="formule.vhParam3Libelle"><input :v-model="vh.param3" class="dinput"/></td>
-                <td v-show="formule.vhParam4Libelle"><input :v-model="vh.param4" class="dinput"/></td>
-                <td v-show="formule.vhParam5Libelle"><input :v-model="vh.param5" class="dinput"/></td>
+                <td v-show="formule.vhParam1Libelle"><input v-model="vh.param1" class="dinput"/></td>
+                <td v-show="formule.vhParam2Libelle"><input v-model="vh.param2" class="dinput"/></td>
+                <td v-show="formule.vhParam3Libelle"><input v-model="vh.param3" class="dinput"/></td>
+                <td v-show="formule.vhParam4Libelle"><input v-model="vh.param4" class="dinput"/></td>
+                <td v-show="formule.vhParam5Libelle"><input v-model="vh.param5" class="dinput"/></td>
 
                 <td class="saisie">
                     <u-input-float v-model="vh.heures" class="dinput"/>
@@ -453,16 +453,11 @@
             Retour à la liste des formules</a>
 
     </div>
-    <button @click="charger2">Charger2</button>
-    <button @click="charger3">Charger3</button>
 </template>
 
 <script>
 
-import UHeures from "../../Application/UI/UHeures.vue";
-
 export default {
-    components: {UHeures},
     props: {
         id: {type: Number},
         formules: {type: Object},
@@ -484,6 +479,7 @@ export default {
             tauxAutre5Visibility: false,
             resMode: 'hetd',
             intervenant: {
+                formule: undefined,
                 tauxCmServiceDu: 1.5,
                 tauxCmServiceCompl: 1.5,
                 tauxTpServiceDu: 1,
@@ -548,6 +544,19 @@ export default {
                 this.formule = this.formules[id];
             }
         },
+        volumesHoraires: {
+            deep: true,
+            handler(newItems)
+            {
+                let max = 0;
+                for(const vhi in this.volumesHoraires){
+                    if (vhi > max){
+                        max = vhi;
+                    }
+                }
+
+            }
+        },
     },
     computed: {
         filteredTypesIntervention()
@@ -569,20 +578,10 @@ export default {
         }
     },
     methods: {
-        charger2()
-        {
-            this.id2 = 10029;
-            this.charger();
-        },
-        charger3()
-        {
-            this.id2 = 10031;
-            this.charger();
-        },
         charger()
         {
             unicaenVue.axios.get(
-                unicaenVue.url("formule-test/test-data/:id", {id: this.id2})
+                unicaenVue.url("formule-test/test-data/:id", {id: this.id})
             ).then(response => {
                 if (!response.data.intervenant.tauxAutre1Code) {
                     response.data.intervenant.tauxAutre1ServiceDu = undefined;
@@ -651,7 +650,8 @@ export default {
     },
     mounted()
     {
-        this.updateStructures();
+        this.charger();
+
     },
 }
 

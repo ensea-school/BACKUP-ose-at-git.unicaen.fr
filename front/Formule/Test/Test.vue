@@ -329,47 +329,64 @@
             <tbody>
             <tr v-for="(vh, l) in volumesHoraires" :key="l">
                 <th>{{ l }}</th>
-                <td class="saisie"><select v-model="vh.structureCode" :data-variable="l" class="dinput"
-                                           @change="selectStructure">
+                <td><select v-model="vh.structureCode" :data-variable="l" class="dinput"
+                            @change="selectStructure">
                     <option v-for="(v,k) in structures" :value="k" :key="k">{{ v }}</option>
                 </select></td>
-                <td class="saisie"><select v-model="vh.serviceStatutaire" class="dinput">
+                <td><select v-model="vh.serviceStatutaire" class="dinput" v-show="vh.structureCode">
                     <option :value="true">Oui</option>
                     <option :value="false">Non</option>
                 </select></td>
-                <td class="saisie"><select v-model="vh.typeInterventionCode" class="dinput">
+                <td><select v-model="vh.typeInterventionCode" class="dinput" v-show="vh.structureCode">
                     <option v-for="ti in filteredTypesIntervention" :value="ti" :key="ti">
                         {{ ti }}
                     </option>
                 </select></td>
                 <td>
-                    <u-input-float v-model="vh.tauxFi" is-pourc class="doutput" readonly style="width:3em"/>
-                    <span class="pourc">%</span>
+                    <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
+                        <u-input-float v-model="vh.tauxFi" is-pourc class="doutput" readonly style="width:3em"/>
+                        <span class="pourc">%</span>
+                    </div>
                 </td>
                 <td>
-                    <u-input-float v-model="vh.tauxFa" is-pourc class="dinput" style="width:3em"/>
-                    <span class="pourc">%</span>
+                    <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
+                        <u-input-float v-model="vh.tauxFa" is-pourc class="dinput" style="width:3em"/>
+                        <span class="pourc">%</span>
+                    </div>
                 </td>
                 <td>
-                    <u-input-float v-model="vh.tauxFc" is-pourc class="dinput" style="width:3em"/>
-                    <span class="pourc">%</span>
+                    <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
+                        <u-input-float v-model="vh.tauxFc" is-pourc class="dinput" style="width:3em"/>
+                        <span class="pourc">%</span>
+                    </div>
                 </td>
                 <td>
-                    <u-input-float v-model="vh.ponderationServiceDu" is-pourc class="dinput" style="width:3em"/>
-                    <span class="pourc">%</span>
-                </td>
-                <td>
-                    <u-input-float v-model="vh.ponderationServiceCompl" is-pourc class="dinput" style="width:3em"/>
-                    <span class="pourc">%</span>
-                </td>
-                <td v-show="formule.vhParam1Libelle"><input v-model="vh.param1" class="dinput"/></td>
-                <td v-show="formule.vhParam2Libelle"><input v-model="vh.param2" class="dinput"/></td>
-                <td v-show="formule.vhParam3Libelle"><input v-model="vh.param3" class="dinput"/></td>
-                <td v-show="formule.vhParam4Libelle"><input v-model="vh.param4" class="dinput"/></td>
-                <td v-show="formule.vhParam5Libelle"><input v-model="vh.param5" class="dinput"/></td>
+                    <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
+                        <u-input-float v-model="vh.ponderationServiceDu" is-pourc class="dinput" style="width:3em"/>
+                        <span class="pourc"
+                        >%</span>
+                    </div>
 
-                <td class="saisie">
-                    <u-input-float v-model="vh.heures" class="dinput"/>
+                </td>
+                <td>
+                    <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
+                        <u-input-float v-model="vh.ponderationServiceCompl" is-pourc class="dinput" style="width:3em"/>
+                        <span class="pourc">%</span>
+                    </div>
+                </td>
+                <td v-show="formule.vhParam1Libelle"><input v-model="vh.param1" class="dinput"
+                                                            v-show="vh.structureCode"/></td>
+                <td v-show="formule.vhParam2Libelle"><input v-model="vh.param2" class="dinput"
+                                                            v-show="vh.structureCode"/></td>
+                <td v-show="formule.vhParam3Libelle"><input v-model="vh.param3" class="dinput"
+                                                            v-show="vh.structureCode"/></td>
+                <td v-show="formule.vhParam4Libelle"><input v-model="vh.param4" class="dinput"
+                                                            v-show="vh.structureCode"/></td>
+                <td v-show="formule.vhParam5Libelle"><input v-model="vh.param5" class="dinput"
+                                                            v-show="vh.structureCode"/></td>
+
+                <td>
+                    <u-input-float v-model="vh.heures" v-show="vh.structureCode" class="dinput"/>
                 </td>
 
                 <td class="spacer"><!-- espace --></td>
@@ -403,31 +420,39 @@
                 </td>
 
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresServiceFi" maximum-digits="2" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresServiceFi" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
                 </td>
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresServiceFa" maximum-digits="2" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresServiceFa" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
                 </td>
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresServiceFc" maximum-digits="2" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresServiceFc" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
                 </td>
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresServiceReferentiel" maximum-digits="2" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresServiceReferentiel" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
                 </td>
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresComplFi" maximum-digits="2" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresComplFi" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
                 </td>
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresComplFa" maximum-digits="2" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresComplFa" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
                 </td>
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresComplFc" maximum-digits="2" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresComplFc" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
                 </td>
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresComplReferentiel" maximum-digits="2" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresComplReferentiel" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
                 </td>
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresPrimes" maximum-digits="2" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresPrimes" maximum-digits="2" tabindex="-1" readonly class="doutput"/>
                 </td>
 
                 <td v-show="resMode=='debug'">Debug</td>
@@ -546,15 +571,40 @@ export default {
         },
         volumesHoraires: {
             deep: true,
+            flush: 'post',
             handler(newItems)
             {
                 let max = 0;
-                for(const vhi in this.volumesHoraires){
-                    if (vhi > max){
+                for (const vhi in this.volumesHoraires) {
+                    if (this.volumesHoraires[vhi].tauxFi !== 1 - this.volumesHoraires[vhi].tauxFa - this.volumesHoraires[vhi].tauxFc) {
+                        this.volumesHoraires[vhi].tauxFi = 1 - this.volumesHoraires[vhi].tauxFa - this.volumesHoraires[vhi].tauxFc;
+                    }
+                    if (this.volumesHoraires[vhi].structureCode === null || this.volumesHoraires[vhi].structureCode === '') {
+                        if (this.volumesHoraires[vhi].heures !== null) {
+                            this.volumesHoraires[vhi].heures = null;
+                        }
+                        if (this.volumesHoraires[vhi].typeInterventionCode !== null) {
+                            this.volumesHoraires[vhi].typeInterventionCode = null;
+                        }
+                    }
+
+                    if (vhi > max) {
                         max = vhi;
                     }
                 }
-
+                if (this.volumesHoraires[max].structureCode) {
+                    this.volumesHoraires[parseInt(max) + 1] = {
+                        structureCode: null,
+                        typeInterventionCode: null,
+                        tauxFi: 1,
+                        tauxFa: 0,
+                        tauxFc: 0,
+                        ponderationServiceDu: 1,
+                        ponderationServiceCompl: 1,
+                        heures: null,
+                    };
+                }
+                console.log(newItems);
             }
         },
     },
@@ -686,8 +736,8 @@ export default {
 
 .fvh td {
     white-space: nowrap;
-    padding: 1px !important;
     min-width: 4em;
+    padding: 0px;
 }
 
 .fvh td .pourc {

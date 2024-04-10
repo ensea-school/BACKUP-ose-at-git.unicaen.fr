@@ -16,6 +16,10 @@ $c->println("\n" . 'Mise à jour des définitions de la base de données. Merci 
 $ref = new Ddl();
 $ref->loadFromDir(getcwd() . '/data/ddl');
 
+// script provisoire pour traduire la DDL en Postgresql
+/** @TODO à retirer une fois la migration effectuée */
+$o2p = new \Unicaen\BddAdmin\Tools\Oracle2Postgresql();
+$o2p->translateDdl($ref);
 
 // Construction de la config de DDL pour filtrer
 $filters = require getcwd() . '/data/ddl_config.php';

@@ -13,7 +13,8 @@ class v23minimum extends AbstractMigration
 
     public function utile(): bool
     {
-        return !$this->manager->hasColumn('STRUCTURE', 'IDS');
+        return !$this->manager->hasColumn('STRUCTURE', 'IDS') // on est en v23
+            && $this->manager->hasTable('STRUCTURE'); // pour éviter de se taper le blocage en cas de nouvelle install
     }
 
 

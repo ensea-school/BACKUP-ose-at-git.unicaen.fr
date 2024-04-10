@@ -140,10 +140,7 @@ class MigrationManager
 
     public function tableRealExists($tableName): bool
     {
-        $sql = "SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME = :tableName";
-        $tn  = $this->getBdd()->select($sql, compact('tableName'), ['fetch' => Bdd::FETCH_ONE]);
-
-        return isset($tn['TABLE_NAME']) && $tn['TABLE_NAME'] == $tableName;
+        return $this->getBdd()->table()->exists($tableName);
     }
 
 

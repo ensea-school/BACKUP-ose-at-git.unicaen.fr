@@ -16,6 +16,10 @@
 * Renforcement du typage des données en entrée pour le chargement en masse des numéros de prise en charge (#56241)
 * Contrôle de la présence obligatoire d'un domaine fonctionnel pour la mise en paiement par lot pour les heures de missions et de services référentiel
 
+## Améliorations
+
+* Pour l'export des imputations budgétaires Siham, l'export proratise maintenant par code indémnité puis centre de coût
+
 
 # OSE 23.4 (26/03/2024)
 

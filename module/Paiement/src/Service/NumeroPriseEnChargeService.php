@@ -21,7 +21,7 @@ class NumeroPriseEnChargeService extends AbstractService
      *
      * @return AxiosModel Liste des erreurs rencontrées sous forme json
      */
-    public function treatImportFile (array $file, string $model = 'winpaie'): AxiosModel
+    public function treatImportFile(array $file, string $model = 'winpaie'): AxiosModel
     {
         $errors                = [];
         $nameFile              = $file['tmp_name'];
@@ -41,7 +41,7 @@ class NumeroPriseEnChargeService extends AbstractService
                     $datas = $this->genericTreatment($sheet);
                 break;
             }
-          
+
             $errors['file']    = $datas['errors'];
             $errors['message'] = (isset($datas['message'])) ? $datas['message'] : [];
             //On met à jour les numéros de prise en charge des intervenants
@@ -70,7 +70,7 @@ class NumeroPriseEnChargeService extends AbstractService
 
 
 
-    public function winpaieTreatment (Sheet $sheet): array
+    public function winpaieTreatment(Sheet $sheet): array
     {
         $lines  = [];
         $errors = [];
@@ -150,7 +150,7 @@ class NumeroPriseEnChargeService extends AbstractService
 
 
 
-    public function genericTreatment (Sheet $sheet): array
+    public function genericTreatment(Sheet $sheet): array
     {
         $lines  = [];
         $errors = [];
@@ -175,7 +175,8 @@ class NumeroPriseEnChargeService extends AbstractService
 
 
             $insee   = $sheet->getCellByCoords($colonneNames['insee'], $rowNum)->getContent();
-            $pec     = $sheet->getCellByCoords($colonneNames['numero pec'], $rowNum)->getContent();
+            $insee   = (!empty($insee)) ? preg_replace('/[^A-Za-z0-9]/', '', $insee) : '';
+            $pec     = intval($sheet->getCellByCoords($colonneNames['numero pec'], $rowNum)->getContent());
             $nom     = $sheet->getCellByCoords($colonneNames['nom'], $rowNum)->getContent();
             $lines[] = [
                 'insee' => $insee,

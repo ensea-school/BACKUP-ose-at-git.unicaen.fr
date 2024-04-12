@@ -8,6 +8,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractService;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
+use Mission\Entity\Db\Mission;
 use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\TblPaiement;
@@ -107,7 +108,8 @@ class ServiceAPayerService extends AbstractService
 
                 $dmep[$intervenant->getId()]['heures'][] = [
                     'heuresAPayer'       => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
-                    'missionId'          => $value->getMission()->getId(),
+                    //'missionId'          => ($value->getMission()) ? $value->getMission()->getId : '',
+                    'missionId'          => ($value->getMission()) ? $value->getMission()->getId() : '',
                     'serviceId'          => ($value->getFormuleResultatService()) ? $value->getFormuleResultatService()->getService()->getId() : '',
                     'serviceRefId'       => ($value->getFormuleResultatServiceReferentiel()) ? $value->getFormuleResultatServiceReferentiel()->getServiceReferentiel()->getId() : '',
                     'centreCout'         => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',

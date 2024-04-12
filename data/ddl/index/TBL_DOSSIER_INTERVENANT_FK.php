@@ -4,7 +4,7 @@
 
 return [
     'name'    => 'TBL_DOSSIER_INTERVENANT_FK',
-    'unique'  => FALSE,
+    'unique'  => TRUE,
     'table'   => 'TBL_DOSSIER',
     'columns' => [
         'INTERVENANT_ID',

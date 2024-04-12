@@ -31,7 +31,7 @@ class ServiceAPayerService extends AbstractService
      *
      * @return ServiceAPayerInterface[]
      */
-    public function getListByIntervenant (Intervenant $intervenant)
+    public function getListByIntervenant(Intervenant $intervenant)
     {
         $dql = "
         SELECT
@@ -58,7 +58,7 @@ class ServiceAPayerService extends AbstractService
 
 
 
-    public function getListByStructure (Structure $structure)
+    public function getListByStructure(Structure $structure)
     {
         $dql = "
         SELECT
@@ -104,11 +104,17 @@ class ServiceAPayerService extends AbstractService
                 }
 
                 $dmep[$intervenant->getId()]['heures'][] = [
-                    'heuresAPayer' => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
-                    'centreCout'   => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',
-                                       'code'                 => ($value->getCentreCout()) ? $value->getCentreCout()->getCode() : '',
-                                       'typeRessourceCode'    => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getCode() : '',
-                                       'typeRessourceLibelle' => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getLibelle() : '',
+                    'heuresAPayer'       => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
+                    'missionId'          => $value->getMission()->getId(),
+                    'serviceId'          => ($value->getFormuleResultatService()) ? $value->getFormuleResultatService()->getService()->getId() : '',
+                    'serviceRefId'       => ($value->getFormuleResultatServiceReferentiel()) ? $value->getFormuleResultatServiceReferentiel()->getServiceReferentiel()->getId() : '',
+                    'centreCout'         => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',
+                                             'code'                 => ($value->getCentreCout()) ? $value->getCentreCout()->getCode() : '',
+                                             'typeRessourceCode'    => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getCode() : '',
+                                             'typeRessourceLibelle' => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getLibelle() : '',
+                    ],
+                    'domaineFonctionnel' => ['libelle' => ($value->getDomaineFonctionel()) ? $value->getDomaineFonctionel()->getLibelle() : '',
+                                             'code'    => ($value->getDomaineFonctionel()) ? $value->getDomaineFonctionel()->getSourceCode() : '',
                     ],
                 ];
             }

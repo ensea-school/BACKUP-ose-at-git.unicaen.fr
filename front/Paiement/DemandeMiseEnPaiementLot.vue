@@ -91,8 +91,8 @@
                                 <th scope="col"><input id="allPermanents" checked="checked" class="checkbox-permanent" name="allPermanents" type="checkbox"
                                                        @click="toggleCheckbox"></th>
                                 <th scope="col">Intervenant</th>
-                                <th scope="col">HETD avec centre coût</th>
-                                <th scope="col">HETD sans centre coût</th>
+                                <th>HETD payables</th>
+                                <th>HETD non payables</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -115,7 +115,7 @@
                                     style="text-decoration:underline dotted;cursor: help;">
                                     {{ totalPayable(intervenant.heures) }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
-                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
+                                          title="Manque un centre de coût et/ou un domaine fonctionnel">{{ totalNonPayable(intervenant.heures) }} h</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -139,8 +139,8 @@
                                 <th><input id="allVacataire" checked="checked" class="checkbox-vacataire" name="allVacataire" type="checkbox"
                                            @click="toggleCheckbox"></th>
                                 <th>Intervenant</th>
-                                <th>HETD avec centre coût</th>
-                                <th>HETD sans centre coût</th>
+                                <th>HETD payables</th>
+                                <th>HETD non payables</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -165,7 +165,7 @@
                                         totalPayable(intervenant.heures)
                                     }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
-                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
+                                          title="Manque un centre de coût et/ou un domaine fonctionnel">{{ totalNonPayable(intervenant.heures) }} h</span></td>
 
                             </tr>
                             </tbody>
@@ -190,8 +190,8 @@
                                 <th><input id="allEtudiants" checked="checked" class="checkbox-etudiant" name="allEtudiants" type="checkbox"
                                            @click="toggleCheckbox"></th>
                                 <th>Intervenant</th>
-                                <th>HETD avec centre coût</th>
-                                <th>HETD sans centre coût</th>
+                                <th>HETD payables</th>
+                                <th>HETD non payables</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -212,7 +212,7 @@
                                     style="text-decoration:underline dotted;cursor: help;">
                                     {{ totalPayable(intervenant.heures) }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
-                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
+                                          title="Manque un centre de coût et/ou un domaine fonctionnel">{{ totalNonPayable(intervenant.heures) }} h</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -236,8 +236,8 @@
                                 <th><input id="allAutres" checked="checked" class="checkbox-autre" name="allAutres" type="checkbox" @click="toggleCheckbox">
                                 </th>
                                 <th>Intervenant</th>
-                                <th>HETD avec centre coût</th>
-                                <th>HETD sans centre coût</th>
+                                <th>HETD payables</th>
+                                <th>HETD non payables</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -260,7 +260,7 @@
                                     style="text-decoration:underline dotted;cursor: help;">
                                     {{ totalPayable(intervenant.heures) }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
-                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
+                                          title="Manque un centre de coût et/ou un domaine fonctionnel">{{ totalNonPayable(intervenant.heures) }} h</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -448,7 +448,15 @@ export default {
             let total = 0;
             heures.forEach((item, index) => {
                 if (item.centreCout.code != '') {
-                    total += item.heuresAPayer;
+                    if (item.missionId != '' || item.serviceRefId != '') {
+                        if (item.domaineFonctionnel.code != '') {
+                            total += item.heuresAPayer;
+
+                        }
+                    } else {
+                        total += item.heuresAPayer;
+                    }
+
                 }
             })
             return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
@@ -460,7 +468,15 @@ export default {
             heures.forEach((item, index) => {
                 if (item.centreCout.code == '') {
                     total += item.heuresAPayer;
+                } else {
+                    if (item.missionId != '' || item.serviceRefId != '') {
+                        if (item.domaineFonctionnel.code == '') {
+                            total += item.heuresAPayer;
+
+                        }
+                    }
                 }
+
             })
             return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
         },

@@ -219,7 +219,7 @@ return [
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
             'scale'       => '0',
-            'precision'   => 38,
+            'precision'   => 4,
             'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 33,

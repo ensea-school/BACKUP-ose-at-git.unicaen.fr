@@ -77,7 +77,7 @@ return [
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,
-            'default'     => 'null',
+            'default'     => NULL,
             'position'    => 8,
             'commentaire' => NULL,
         ],

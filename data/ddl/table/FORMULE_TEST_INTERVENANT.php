@@ -425,7 +425,7 @@ return [
             'scale'       => NULL,
             'precision'   => 126,
             'nullable'    => FALSE,
-            'default'     => '2/3',
+            'default'     => '(2 / 3)',
             'position'    => 22,
             'commentaire' => NULL,
         ],

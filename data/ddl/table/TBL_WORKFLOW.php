@@ -125,7 +125,7 @@ return [
             'scale'       => '0',
             'precision'   => NULL,
             'nullable'    => TRUE,
-            'default'     => 'null',
+            'default'     => NULL,
             'position'    => 5,
             'commentaire' => 'Eventuelle structure concernée',
         ],

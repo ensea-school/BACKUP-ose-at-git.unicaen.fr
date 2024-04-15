@@ -3,7 +3,6 @@
 
 // Initialisation
 $bdd = $oa->getBdd();
-$bdd->setLogger($c);
 
 //$ref = new Ddl();
 //$ref->loadFromDir(getcwd() . '/data/ddl-pg');

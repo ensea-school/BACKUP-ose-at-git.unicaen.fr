@@ -2,6 +2,7 @@
 
 namespace Mission;
 
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Mission\Controller\PrimeController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
@@ -104,15 +105,16 @@ return [
         'intervenant' => [
             'pages' => [
                 'prime' => [
-                    'label' => "Indemnités de fin de contrat",
-                    'title' => "Indemnités de fin de contrat",
-                    'route'        => 'intervenant/prime-mission',
-                    'paramsInject' => [
+                    'label'               => "Indemnités de fin de contrat",
+                    'title'               => "Indemnités de fin de contrat",
+                    'route'               => 'intervenant/prime-mission',
+                    'paramsInject'        => [
                         'intervenant',
                     ],
-                    'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(Controller\PrimeController::class, 'index'),
-                    'order'        => 14,
+                    'workflow-etape-code' => WfEtape::CODE_MISSION_PRIME,
+                    'withtarget'          => true,
+                    'resource'            => PrivilegeController::getResourceId(Controller\PrimeController::class, 'index'),
+                    'order'               => 14,
                 ],
             ],
         ],

@@ -368,6 +368,9 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         WHEN e.code = ''CANDIDATURE_SAISIE'' OR e.code = ''CANDIDATURE_VALIDATION'' THEN
           si.offre_emploi_postuler
 
+        WHEN e.code = ''MISSION_PRIME'' THEN
+          si.mission_indemnitees
+
         WHEN e.code = ''MISSION_SAISIE'' OR e.code = ''MISSION_VALIDATION'' OR e.code = ''MISSION_SAISIE_REALISE'' OR e.code = ''MISSION_VALIDATION_REALISE'' OR e.code = ''MISSION_PRIME'' THEN
           si.mission
 
@@ -378,9 +381,9 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           CASE WHEN si.service_prevu + si.referentiel_prevu = 0 THEN 0 ELSE 1 END
 
         WHEN e.code = ''PJ_SAISIE'' OR e.code = ''PJ_VALIDATION'' THEN
-          CASE WHEN EXISTS(
-            SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id
-            --SELECT intervenant_id FROM tbl_piece_jointe_demande WHERE intervenant_id = i.id
+          CASE
+             WHEN EXISTS(
+              SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id AND si.pj_active = 1
           ) THEN 1 ELSE 0 END
 
         WHEN e.code = ''SERVICE_VALIDATION'' THEN

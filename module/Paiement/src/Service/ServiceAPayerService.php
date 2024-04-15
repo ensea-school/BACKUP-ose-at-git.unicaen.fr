@@ -2,11 +2,14 @@
 
 namespace Paiement\Service;
 
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractService;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
+use Mission\Entity\Db\Mission;
+use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\TblPaiement;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -31,7 +34,7 @@ class ServiceAPayerService extends AbstractService
      *
      * @return ServiceAPayerInterface[]
      */
-    public function getListByIntervenant(Intervenant $intervenant)
+    public function getListByIntervenant (Intervenant $intervenant)
     {
         $dql = "
         SELECT
@@ -58,7 +61,7 @@ class ServiceAPayerService extends AbstractService
 
 
 
-    public function getListByStructure(Structure $structure)
+    public function getListByStructure (Structure $structure)
     {
         $dql = "
         SELECT
@@ -105,7 +108,8 @@ class ServiceAPayerService extends AbstractService
 
                 $dmep[$intervenant->getId()]['heures'][] = [
                     'heuresAPayer'       => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
-                    'missionId'          => $value->getMission()->getId(),
+                    //'missionId'          => ($value->getMission()) ? $value->getMission()->getId : '',
+                    'missionId'          => ($value->getMission()) ? $value->getMission()->getId() : '',
                     'serviceId'          => ($value->getFormuleResultatService()) ? $value->getFormuleResultatService()->getService()->getId() : '',
                     'serviceRefId'       => ($value->getFormuleResultatServiceReferentiel()) ? $value->getFormuleResultatServiceReferentiel()->getServiceReferentiel()->getId() : '',
                     'centreCout'         => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',

@@ -1,0 +1,20 @@
+{
+  "_vendor-2e5f87a4.js": {
+    "file": "assets/vendor-2e5f87a4.js"
+  },
+  "main.css": {
+    "file": "assets/main-8b28e4d2.css",
+    "src": "main.css"
+  },
+  "main.js": {
+    "css": [
+      "assets/main-8b28e4d2.css"
+    ],
+    "file": "assets/main-3799723e.js",
+    "imports": [
+      "_vendor-2e5f87a4.js"
+    ],
+    "isEntry": true,
+    "src": "main.js"
+  }
+}

@@ -15,6 +15,7 @@
 * Correctif apporté à la formule d'ASSAS (#55357)
 * Renforcement du typage des données en entrée pour le chargement en masse des numéros de prise en charge (#56241)
 * Contrôle de la présence obligatoire d'un domaine fonctionnel pour la mise en paiement par lot pour les heures de missions et de services référentiel
+* Missions : Le gestionnaire peut maintenant sélectionner une sous-structure (#55566)
 
 ## Améliorations
 

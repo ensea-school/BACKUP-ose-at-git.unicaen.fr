@@ -20,6 +20,7 @@
 ## Améliorations
 
 * Pour l'export des imputations budgétaires Siham, l'export proratise maintenant par code indémnité puis centre de coût
+* Possibilité de désactiver par statut d'intervenant l'étapes "Indémnités de fin de contrat" (Mission étudiante) et l'étape "Pièces justificatives (#51245 et #56269)
 
 
 # OSE 23.4 (26/03/2024)

@@ -22,14 +22,7 @@
 use Unicaen\BddAdmin\Bdd;
 
 /* Paramètres d'accès à votre BDD */
-$config = [
-    'driver'   => 'Postgresql',
-    'host'     => 'host.docker.internal',
-    'port'     => '5432',
-    'dbname'   => 'ose-dev',
-    'username' => 'laurent',
-    'password' => 'oustBN6',
-];
+$config = $oa->config()->get('bdd');
 
 $bdd = new Bdd($config);
 
@@ -45,12 +38,5 @@ $bdd->setOptions([
 ]);
 
 
-// Récupération du schéma de référence, issu du répertoire spécifié via l'option Bdd::OPTION_DDL_DIR
-$ref = $bdd->getRefDdl();
-
-// Filtre pour l'appliquer les modification que pour la DDL et ne supprime pas les objets autres
-// C'est facultatif, à activer selon contexte
-$filters = $ref->makeFilters();
-
-// On met à jour la BDD
-$bdd->alter($ref, $filters);
+$data = $bdd->select('select * from annee');
+var_dump($data);

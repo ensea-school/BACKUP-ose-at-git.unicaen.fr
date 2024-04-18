@@ -308,6 +308,12 @@ class OseAdmin
                 $this->bdd->setLogger($this->console());
             }
 
+            $this->bdd->setOptions([
+                Bdd::OPTION_DDL_DIR => getcwd() . '/data/ddl',
+                Bdd::OPTION_MIGRATION_DIR => getcwd() . '/admin/migration/',
+                Bdd::OPTION_COLUMNS_POSITIONS_FILE => getcwd() . '/data/ddl_columns_pos.php',
+            ]);
+
             try {
                 $this->bdd->setOption('source-id', $this->getSourceOseId());
                 $this->bdd->setOption('histo-user-id', $this->getOseAppliId());

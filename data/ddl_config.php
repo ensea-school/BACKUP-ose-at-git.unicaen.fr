@@ -1,7 +1,12 @@
 <?php
 
+$oseMViewsExludes = [];
+
+if (($_SERVER['IGNORE_MV_EXT_SERVICE'] ?? "false") == "true") {
+    $oseMViewsExludes[] = 'MV_EXT_SERVICE';
+}
+
 return [
-    'explicit'          => true,
     'table'             => [
         'includes' => [
             'TBL_DEMS',
@@ -22,9 +27,7 @@ return [
             'TBL_NOEUD',
             'MV_LIEN',
         ],
-        'excludes' => [
-            //'MV_EXT_SERVICE',
-        ],
+        'excludes' => $oseMViewsExludes,
     ],
     'view'              => [
         'includes'    => [

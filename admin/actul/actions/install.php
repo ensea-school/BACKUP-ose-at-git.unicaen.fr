@@ -17,7 +17,7 @@ $ca->init();
 $ddl = $ca->getDdl();
 
 // On ne touche pas à autre chose que la partie ACTUL!!
-$filters = $ddl->filterOnlyDdl();
+$filters = $ddl->makeFilters();
 
 // Mise à jour de la BDD (structures)
 $oa->getBdd()->alter($ddl, $filters);

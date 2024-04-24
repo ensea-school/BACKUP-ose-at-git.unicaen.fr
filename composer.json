@@ -24,7 +24,9 @@
         "unicaen/bddadmin"                            : "0.9.0",
         "laminas/laminas-cache-storage-adapter-memory": "2.3.0",
         "laminas/laminas-text"                        : "2.11",
-        "unicaen/console"                             : "6.1.0"
+        "unicaen/console"                             : "6.1.0",
+        "unicaen/signature"                           : "0.0.11",
+        "symfony/monolog-bundle"                      : "^3.10"
     },
     "require-dev"      : {
         "squizlabs/php_codesniffer"         : "*",

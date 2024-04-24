@@ -32,6 +32,7 @@ $modules = [
     'UnicaenTbl',
     'UnicaenSiham',
     'UnicaenVue',
+    'UnicaenSignature',
     'Application',
     'Agrement',
     'Intervenant',
@@ -49,6 +50,7 @@ $modules = [
     'Contrat',
     'Lieu',
     'Parametre',
+    'Signature',
     'Formule',
 ];
 

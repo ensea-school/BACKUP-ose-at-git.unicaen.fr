@@ -19,7 +19,7 @@ class SignatureAddSignatureDocumentOseCommand extends OseCommandAbstract
     protected function configure()
     {
         $this
-            ->setDescription("Envoie un document pour signature dans esup signature")
+            ->setDescription("Envoie un document pour la signature dans esup signature")
             ->addArgument("documentPath", InputArgument::REQUIRED, "Chemin absolue du contrat à faire signer");
     }
 

@@ -37,6 +37,7 @@ $modules = $conf['modules'];
 function scanCommandFiles($modules)
 {
     $path = __DIR__ . '/../module';
+    global $app;
 
     foreach ($modules as $module) {
         $dir = $modulePath = __DIR__ . '/../module/' . $module . '/src/Command';

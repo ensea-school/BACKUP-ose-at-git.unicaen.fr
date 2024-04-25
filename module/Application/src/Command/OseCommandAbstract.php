@@ -70,6 +70,9 @@ abstract class OseCommandAbstract extends Command
         $outputStyle = new OutputFormatterStyle('red', 'default', ['bold']);
         $output->getFormatter()->setStyle('title', $outputStyle);
 
+        $outputStyle = new OutputFormatterStyle('cyan', 'default', ['bold']);
+        $output->getFormatter()->setStyle('block', $outputStyle);
+
         $outputStyle = new OutputFormatterStyle('green', 'default', ['bold']);
         $output->getFormatter()->setStyle('green', $outputStyle);
     }

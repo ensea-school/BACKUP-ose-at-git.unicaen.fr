@@ -25,7 +25,7 @@
         "laminas/laminas-cache-storage-adapter-memory": "2.3.0",
         "laminas/laminas-text"                        : "2.11",
         "unicaen/console"                             : "6.1.0",
-        "unicaen/signature"                           : "0.0.11",
+        "unicaen/signature"                           : "dev-alc-dev",
         "symfony/monolog-bundle"                      : "^3.10"
     },
     "require-dev"      : {

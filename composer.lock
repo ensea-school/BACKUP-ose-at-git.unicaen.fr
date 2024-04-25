@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab861cf45fae7519867cd12784e7141e",
+    "content-hash": "aaca09758223fc048c532f69f2fcd311",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -528,16 +528,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.8.3",
+            "version": "3.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "db922ba9436b7b18a23d1653a0b41ff2369ca41c"
+                "reference": "b05e48a745f722801f55408d0dbd8003b403dbbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/db922ba9436b7b18a23d1653a0b41ff2369ca41c",
-                "reference": "db922ba9436b7b18a23d1653a0b41ff2369ca41c",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/b05e48a745f722801f55408d0dbd8003b403dbbd",
+                "reference": "b05e48a745f722801f55408d0dbd8003b403dbbd",
                 "shasum": ""
             },
             "require": {
@@ -621,7 +621,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.8.3"
+                "source": "https://github.com/doctrine/dbal/tree/3.8.4"
             },
             "funding": [
                 {
@@ -637,7 +637,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-03T15:55:06+00:00"
+            "time": "2024-04-25T07:04:44+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -8214,11 +8214,11 @@
         },
         {
             "name": "unicaen/signature",
-            "version": "0.0.11",
+            "version": "dev-alc-dev",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/signature.git",
-                "reference": "95222e4e30112a88e28a3343bf2447733f2676bd"
+                "reference": "a245f1f57ba3eb8f356e6b6501bdd0154f566fb3"
             },
             "require": {
                 "fightbulc/moment": "^1.30",
@@ -8235,7 +8235,7 @@
                 ]
             },
             "description": "Module de signature électronique",
-            "time": "2024-04-19T17:59:41+00:00"
+            "time": "2024-04-24T15:12:47+00:00"
         },
         {
             "name": "unicaen/siham",
@@ -11146,7 +11146,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "unicaen/signature": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

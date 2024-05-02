@@ -202,10 +202,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- AB=IF([.$H20]="Référentiel";[.DE20]+[.DK20]+[.DQ20];0)
+      -- AB=IF([.$H20]="Référentiel";[.$DE20]+[.$DK20]+[.$DQ20]+[.$DS20];0)
       WHEN 'AB' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('DE',l) + cell('DK',l) + cell('DQ',l);
+          RETURN cell('DE',l) + cell('DK',l) + cell('DQ',l) + cell('DS',l);
         ELSE
           RETURN 0;
         END IF;
@@ -1180,6 +1180,20 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
           RETURN cell('DP',l) * cell('AE',l);
         ELSE
           RETURN 0;
+        END IF;
+
+
+
+      -- DS=IF([.$D20]="Oui";0;IF([.$DN$17]=0;[.$M20];0))
+      WHEN 'DS' THEN
+        IF vh.service_statutaire THEN
+          RETURN 0;
+        ELSE
+          IF cell('DN17') = 0 THEN
+            RETURN vh.heures;
+          ELSE
+            RETURN 0;
+          END IF;
         END IF;
 
 

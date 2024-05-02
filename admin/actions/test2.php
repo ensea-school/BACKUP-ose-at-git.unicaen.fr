@@ -30,7 +30,7 @@ $bdd->setOptions([
     /* Facultatif, permet de spécifier une fois pour toutes le répertoire où sera renseignée la DDL de votre BDD */
     Bdd::OPTION_DDL_DIR => getcwd() . '/data/ddl',
 
-    /* Facultatif, spécifie le répertoire où seront stockées vos scripts de migration si vous en avez */
+    /* Facultatif, spécifie le répertoire où seront stockés vos scripts de migration si vous en avez */
     //Bdd::OPTION_MIGRATION_DIR => getcwd() . '/admin/migration/',
 
     /* Facultatif, permet de personnaliser l'ordonnancement des colonnes dans les tables */
@@ -38,5 +38,10 @@ $bdd->setOptions([
 ]);
 
 
-$data = $bdd->select('select * from annee');
-var_dump($data);
+$ddl = $bdd->getRefDdl();
+$o2p = new \Unicaen\BddAdmin\Tools\Oracle2Postgresql();
+$o2p->translateDdl($ddl);
+
+$sql = $bdd->diff($ddl)->toScript();
+
+echo $sql;

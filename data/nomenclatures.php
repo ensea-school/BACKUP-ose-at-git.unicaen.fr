@@ -6,21 +6,26 @@ return [
             'ID'      => 2,
             'CODE'    => 'B',
             'LIBELLE' => 'BIS',
+            'CODE_RH' => 'B',
+
         ],
         [
             'ID'      => 3,
             'CODE'    => 'T',
             'LIBELLE' => 'TER',
+            'CODE_RH' => 'T',
         ],
         [
             'ID'      => 4,
             'CODE'    => 'Q',
             'LIBELLE' => 'QUATER',
+            'CODE_RH' => 'Q',
         ],
         [
             'ID'      => 5,
             'CODE'    => 'C',
             'LIBELLE' => 'QUINQUIES',
+            'CODE_RH' => 'C',
         ],
     ],
 

@@ -7,12 +7,22 @@
 # OSE 24 (à venir)
 
 
-# OSE 23.5 (à venir)
+# OSE 23.5 (19/04/2024)
 
 ## Corrections de bugs
 
 * Procédure d'installation à nouveau fonctionnelle
 * Correctif apporté à la formule d'ASSAS (#55357)
+* Renforcement du typage des données en entrée pour le chargement en masse des numéros de prise en charge (#56241)
+* Contrôle de la présence obligatoire d'un domaine fonctionnel pour la mise en paiement par lot pour les heures de missions et de services référentiel
+* Missions : Le gestionnaire peut maintenant sélectionner une sous-structure (#55566)
+* Rouen : corrections dans la formule de calcul des HC (#55241)
+* La Réunion : corrections dans la formule de calcul des HC (#55792)
+
+## Améliorations
+
+* Pour l'export des imputations budgétaires Siham, l'export proratise maintenant par code indémnité puis centre de coût
+* Possibilité de désactiver par statut d'intervenant les étapes "Indémnités de fin de contrat" (Mission étudiante) et "Pièces justificatives (#51245 et #56269)
 
 
 # OSE 23.4 (26/03/2024)

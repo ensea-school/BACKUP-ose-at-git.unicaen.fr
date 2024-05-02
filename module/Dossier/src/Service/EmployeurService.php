@@ -3,7 +3,8 @@
 namespace Dossier\Service;
 
 use Application\Service\AbstractEntityService;
-use UnicaenApp\Util;
+use UnicaenVue\Util;
+use UnicaenVue\View\Model\AxiosModel;
 
 class EmployeurService extends AbstractEntityService
 {
@@ -40,7 +41,7 @@ class EmployeurService extends AbstractEntityService
         ";
 
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
-
+        
         return $res;
     }
 
@@ -66,7 +67,7 @@ class EmployeurService extends AbstractEntityService
     {
         $employeurs = [];
         if ($criteria) {
-            $criteria = Util::reduce($criteria);
+            $criteria = \UnicaenApp\Util::reduce($criteria);
         }
 
 
@@ -104,6 +105,30 @@ class EmployeurService extends AbstractEntityService
 
 
         return $employeurs;
+    }
+
+
+
+    public function getDataEmployeur(array $post): AxiosModel
+    {
+
+        $sql = "
+                SELECT
+                e.id                id,
+                e.raison_sociale    raison_sociale,
+                e.nom_commercial    nom_commercial,
+                e.siren             siren,
+                s.importable        importable
+                FROM
+                    employeur e
+                JOIN source s ON e.source_id = s.id
+                WHERE
+                  lower(e.critere_recherche) like :search
+                ";
+
+        $em = $this->getEntityManager();
+
+        return Util::tableAjaxData($em, $post, $sql);
     }
 
 }

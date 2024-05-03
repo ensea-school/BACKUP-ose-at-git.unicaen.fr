@@ -350,13 +350,13 @@
                 </td>
                 <td>
                     <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
-                        <u-input-float v-model="vh.tauxFa" is-pourc class="dinput" style="width:3em"/>
+                        <u-input-float v-model="vh.tauxFa" is-pourc class="dinput" :data-variable="l" @change="majTauxFi" style="width:3em"/>
                         <span class="pourc">%</span>
                     </div>
                 </td>
                 <td>
                     <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
-                        <u-input-float v-model="vh.tauxFc" is-pourc class="dinput" style="width:3em"/>
+                        <u-input-float v-model="vh.tauxFc" is-pourc class="dinput" :data-variable="l" @change="majTauxFi" style="width:3em"/>
                         <span class="pourc">%</span>
                     </div>
                 </td>
@@ -569,9 +569,7 @@ export default {
                 this.formule = this.formules[id];
             }
         },
-        volumesHoraires: {
-            deep: true,
-            flush: 'post',
+        /*volumesHoraires: {
             handler(newItems)
             {
                 let max = 0;
@@ -606,7 +604,7 @@ export default {
                 }
                 console.log(newItems);
             }
-        },
+        },*/
     },
     computed: {
         filteredTypesIntervention()
@@ -655,6 +653,10 @@ export default {
                 }
                 this.intervenant = response.data.intervenant;
                 this.volumesHoraires = response.data.volumesHoraires;
+                if (this.volumesHoraires[this.lastVolumeHoraireIndex()] && this.volumesHoraires[this.lastVolumeHoraireIndex()].structureCode){
+                    // Si la dernièr volume horaire a une structure non nulle, alors on ajoute un nouveau volume horaire vide
+                    this.addVolumeHoraire();
+                }
                 this.updateStructures();
             });
         },
@@ -681,6 +683,40 @@ export default {
             if ('__new_structure__' == event.target.value) {
                 this.addStructure(event.target);
             }
+            if (event.target.dataset.variable != 'intervenant'){
+                // si le select de structure n'est pas celui de l'intervenant, mais d'un volume horaire
+                const vhi = parseInt(event.target.dataset.variable);
+
+                if (vhi == this.lastVolumeHoraireIndex()){
+                    // Si on est sur la dernière ligne
+                    if (this.volumesHoraires[vhi].structureCode) {
+                        // et que la structure du dernier n'est pas vide
+                        // alors, on ajoute un nouvel item pour pouvoir faire la saisie
+                        this.addVolumeHoraire();
+                    }
+                }
+            }
+        },
+        majTauxFi(event){
+            const vhi = event.target.dataset.variable;
+            this.volumesHoraires[vhi].tauxFi = 1 - this.volumesHoraires[vhi].tauxFa - this.volumesHoraires[vhi].tauxFc;
+        },
+        lastVolumeHoraireIndex()
+        {
+            return parseInt(Object.keys(this.volumesHoraires).pop());
+        },
+        addVolumeHoraire()
+        {
+            this.volumesHoraires[this.lastVolumeHoraireIndex()+1] = {
+                structureCode: null,
+                typeInterventionCode: null,
+                tauxFi: 1,
+                tauxFa: 0,
+                tauxFc: 0,
+                ponderationServiceDu: 1,
+                ponderationServiceCompl: 1,
+                heures: null,
+            };
         },
         addStructure(element)
         {

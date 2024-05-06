@@ -450,7 +450,7 @@ class TraducteurService
         if ($row == 0) {
             return "\$this->c('$col',\$l)";
         } elseif ($row < $ml) {
-            return "\$this->c_$col$row()";
+            return "\$this->cg('$col$row')";
         } else {
             $rowDiff = $row - $ml;
             return "\$this->c('$col',\$l+$rowDiff)";

@@ -328,7 +328,7 @@
             </thead>
             <tbody>
             <tr v-for="(vh, l) in volumesHoraires" :key="l">
-                <th>{{ l+1 }}</th>
+                <th>{{ l + 1 }}</th>
                 <td><select v-model="vh.structureCode" :data-variable="l" class="dinput"
                             @change="selectStructure">
                     <option v-for="(v,k) in structures" :value="k" :key="k">{{ v }}</option>
@@ -350,13 +350,15 @@
                 </td>
                 <td>
                     <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
-                        <u-input-float v-model="vh.tauxFa" is-pourc class="dinput" :data-variable="l" @change="majTauxFi" style="width:3em"/>
+                        <u-input-float v-model="vh.tauxFa" is-pourc class="dinput" :data-variable="l"
+                                       @change="majTauxFi" style="width:3em"/>
                         <span class="pourc">%</span>
                     </div>
                 </td>
                 <td>
                     <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
-                        <u-input-float v-model="vh.tauxFc" is-pourc class="dinput" :data-variable="l" @change="majTauxFi" style="width:3em"/>
+                        <u-input-float v-model="vh.tauxFc" is-pourc class="dinput" :data-variable="l"
+                                       @change="majTauxFi" style="width:3em"/>
                         <span class="pourc">%</span>
                     </div>
                 </td>
@@ -386,7 +388,8 @@
                                                             v-show="vh.structureCode"/></td>
 
                 <td>
-                    <u-input-float v-model="vh.heures" v-show="!['', null].includes(vh.typeInterventionCode)" class="dinput" @change="calculer"/>
+                    <u-input-float v-model="vh.heures" v-show="!['', null].includes(vh.typeInterventionCode)"
+                                   class="dinput" @change="calculer"/>
                 </td>
 
                 <td class="spacer"><!-- espace --></td>
@@ -455,28 +458,31 @@
                     <u-input-float v-model="vh.heuresPrimes" maximum-digits="2" tabindex="-1" readonly class="doutput"/>
                 </td>
 
-                <td v-show="resMode=='debug'">Debug</td>
+                <td v-show="resMode=='debug'" class="debug-td">
+                    <div v-if="debug.vh && debug.vh[l]">
+                    <span v-for="(val,cell) in debug.vh[l]" class="debug-cell">
+                        {{ cell }} <span class="debug-val">{{ val }}</span>
+                    </span>&nbsp;
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
         <!-- FIN saisie des volumes horaires -->
 
         <!-- DEBUT Débogage général -->
-        <div>
-            <h2>Informations de débogage
-                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#debug-info"
-                        aria-expanded="false" aria-controls="debug-info">
-                    Afficher/masquer
-                </button>
-            </h2>
-            <div class="collapse debug-info" id="debug-info"></div>
+        <div v-if="resMode=='debug' && debug.global">
+            <h4>Débogage : calculs globaux</h4>
+            <span v-for="(val,cell) in debug.global" class="debug-cell">
+                {{ cell }} <span class="debug-val">{{ val }}</span>
+            </span>&nbsp;
         </div>
         <!-- FIN Débogage général -->
 
+        <div>
         <a class="btn btn-secondary" :href="indexUrl"><i class="fas fa-rotate-left" aria-hidden="true"></i>
             Retour à la liste des formules</a>
-
+        </div>
     </div>
 </template>
 
@@ -503,6 +509,7 @@ export default {
             tauxAutre4Visibility: false,
             tauxAutre5Visibility: false,
             resMode: 'hetd',
+            debug: {},
             intervenant: {
                 formule: undefined,
                 tauxCmServiceDu: 1.5,
@@ -597,6 +604,7 @@ export default {
             ).then(response => {
                 this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
                 this.volumesHoraires = response.data.volumesHoraires;
+                this.debug = {};
                 this.addVolumeHoraire();
                 this.updateStructures();
             });
@@ -604,7 +612,7 @@ export default {
         enregistrer()
         {
             unicaenVue.axios.post(
-                unicaenVue.url("formule-test/enregistrer/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0 }),
+                unicaenVue.url("formule-test/enregistrer/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0}),
                 {
                     intervenant: this.intervenant,
                     volumesHoraires: this.volumesHoraires,
@@ -612,6 +620,7 @@ export default {
             ).then(response => {
                 this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
                 this.volumesHoraires = response.data.volumesHoraires;
+                this.debug = response.data.debug;
                 this.addVolumeHoraire();
                 this.updateStructures();
             });
@@ -619,7 +628,7 @@ export default {
         calculer()
         {
             unicaenVue.axios.post(
-                unicaenVue.url("formule-test/enregistrer/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0 }),
+                unicaenVue.url("formule-test/enregistrer/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0}),
                 {
                     intervenant: this.intervenant,
                     volumesHoraires: this.volumesHoraires,
@@ -628,6 +637,7 @@ export default {
             ).then(response => {
                 this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
                 this.volumesHoraires = response.data.volumesHoraires;
+                this.debug = response.data.debug;
                 this.addVolumeHoraire();
                 this.updateStructures();
             });
@@ -680,11 +690,11 @@ export default {
             if ('__new_structure__' == event.target.value) {
                 this.addStructure(event.target);
             }
-            if (event.target.dataset.variable != 'intervenant'){
+            if (event.target.dataset.variable != 'intervenant') {
                 // si le select de structure n'est pas celui de l'intervenant, mais d'un volume horaire
                 const vhi = parseInt(event.target.dataset.variable);
 
-                if (vhi == this.lastVolumeHoraireIndex()){
+                if (vhi == this.lastVolumeHoraireIndex()) {
                     // Si on est sur la dernière ligne
                     if (this.volumesHoraires[vhi].structureCode) {
                         // et que la structure du dernier n'est pas vide
@@ -694,15 +704,16 @@ export default {
                 }
             }
         },
-        majTauxFi(event){
+        majTauxFi(event)
+        {
             const vhi = event.target.dataset.variable;
             this.volumesHoraires[vhi].tauxFi = 1 - this.volumesHoraires[vhi].tauxFa - this.volumesHoraires[vhi].tauxFc;
         },
         lastVolumeHoraireIndex()
         {
-            if (this.volumesHoraires.length == 0){
+            if (this.volumesHoraires.length == 0) {
                 return -1;
-            }else {
+            } else {
                 return parseInt(Object.keys(this.volumesHoraires).pop());
             }
         },
@@ -808,6 +819,31 @@ export default {
 
 .resultats td {
     text-align: right;
+}
+
+
+
+
+.debug-cell {
+    background-color: #ccc;
+    color: black;
+    margin: 2px;
+    padding: 3px;
+    border-radius: 5px;
+    font-size: 8pt;
+    white-space: nowrap;
+    float: left;
+}
+
+.debug-val {
+    background-color: white;
+    padding: 3px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: black;
+    font-size: 8pt;
 }
 
 </style>

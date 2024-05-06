@@ -26,6 +26,7 @@ class AbstractFormuleCalcul
 
     protected Formule $formule;
     protected FormuleIntervenant $intervenant;
+    protected array $debug = [];
 
     protected int $ligne = 0;
 
@@ -47,6 +48,7 @@ class AbstractFormuleCalcul
                 $result = $cr;
             }
         }
+        //$this->debug['global']['max('.$cellName.')'] = $result;
 
         return $result;
     }
@@ -60,6 +62,7 @@ class AbstractFormuleCalcul
             $cr = $this->{'c_' . $cellName}($l);
             $result += $cr;
         }
+        //$this->debug['global']['somme('.$cellName.')'] = $result;
 
         return $result;
     }
@@ -69,7 +72,23 @@ class AbstractFormuleCalcul
     protected function c(string $name, int $l)
     {
         $cname = 'c_' . $name;
-        return $this->$cname($l);
+        $resultat = $this->$cname($l);
+        $this->debug['vh'][$l][$name] = $resultat;
+        //$this->debug['global'][$name] = $resultat;
+
+        return $resultat;
+    }
+
+
+
+    protected function cg(string $name)
+    {
+        $cname = 'c_' . $name;
+        $resultat = $this->$cname();
+
+        $this->debug['global'][$name] = $resultat;
+
+        return $resultat;
     }
 
 
@@ -88,10 +107,14 @@ class AbstractFormuleCalcul
 
 
 
-    public function calculer(FormuleIntervenant $intervenant, Formule $formule)
+    public function calculer(FormuleIntervenant $intervenant, Formule $formule): array
     {
         $this->intervenant = $intervenant;
         $this->formule = $formule;
+        $this->debug = [
+            'vh' => [],
+            'global' => [],
+        ];
 
         $volumesHoraires = $this->intervenant->getVolumesHoraires();
 
@@ -100,11 +123,14 @@ class AbstractFormuleCalcul
                 $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
                 if ($cellColPos) {
                     $val = $this->{'c_' . $cellColPos}($l);
+                    $this->debug['vh'][$l][$cellColPos] = $val;
                 } else {
                     $val = 0.0;
                 }
                 $volumesHoraire->{'set' . $resCol}($val);
             }
         }
+
+        return $this->debug;
     }
 }

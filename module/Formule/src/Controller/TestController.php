@@ -131,11 +131,13 @@ class TestController extends AbstractController
 
         $this->getServiceTest()->fromJson($formuleTestIntervenant, $intervenantData, $volumesHorairesData);
 
-        $this->getServiceFormulator()->calculer($formuleTestIntervenant, $formuleTestIntervenant->getFormule());
+        $debug = $this->getServiceFormulator()->calculer($formuleTestIntervenant, $formuleTestIntervenant->getFormule());
+
         if (!$simpleCalcul) {
             $this->getServiceTest()->save($formuleTestIntervenant);
         }
         $data = $this->getServiceTest()->toJson($formuleTestIntervenant);
+        $data['debug'] = $debug;
 
         return new AxiosModel($data);
     }

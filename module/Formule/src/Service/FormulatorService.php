@@ -119,10 +119,10 @@ class FormulatorService
 
 
 
-    public function calculer(FormuleIntervenant $intervenant, Formule $formule): void
+    public function calculer(FormuleIntervenant $intervenant, Formule $formule): array
     {
         $fc = $this->getFormuleCalcul($formule);
-        $fc->calculer($intervenant, $formule);
+        return $fc->calculer($intervenant, $formule);
     }
 
 }

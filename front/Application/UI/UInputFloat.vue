@@ -11,6 +11,7 @@ export default {
         isPourc: {type: Boolean, required: false, default: false},
         disabled: {type: Boolean, required: false, default: false},
         class: {type: String, required: false, default: ''},
+        fraction: {type: Boolean, required: false, default: false},
         maximumDigits: {required: false, default: 8},
     },
     data()
@@ -95,7 +96,7 @@ export default {
             }
 
             const test = Math.round(value * 1000000) / 1000000;
-            if (undefined !== this.fractions[test]) {
+            if (this.fraction && undefined !== this.fractions[test]) {
                 return this.fractions[test];
             }
             var locale = 'fr';

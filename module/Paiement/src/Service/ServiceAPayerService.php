@@ -68,9 +68,11 @@ class ServiceAPayerService extends AbstractService
             tp
         FROM
             " . TblPaiement::class . " tp
+        JOIN tp.intervenant i 
         WHERE
             tp. structure = :structure
         AND tp.annee = :annee
+        ORDER BY i.prenom ASC
         ";
 
         /** @var TblPaiement[] $meps */

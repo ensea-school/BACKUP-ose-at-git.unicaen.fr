@@ -85,9 +85,16 @@
 
 
             <!-- DEBUT actions -->
-            <b-button variant="primary" @click="enregistrer">Enregistrer et recalculer les HETD</b-button>
-            <button class="exporter btn btn-secondary">Télécharger</button>
-            <input type="file" id="importbtn" class="importer">
+            <div class="mb-2">
+                <b-button variant="primary" @click="enregistrer">Enregistrer et recalculer les HETD</b-button>
+            </div>
+            <div>
+                <button class="exporter btn btn-secondary" @click="exporter">Télécharger</button>
+                &nbsp;
+                <span class="btn btn-secondary">Téléverser</span>
+                <input type="file" id="importbtn" class="importer" @change="importer">
+            </div>
+
             <!-- FIN actions -->
         </div>
 
@@ -126,51 +133,56 @@
                     <tr>
                         <th>En service</th>
                         <td class="saisie">
-                            <u-input-float v-model="intervenant.tauxCmServiceDu" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxCmServiceDu" :fraction="true" class="dinput"/>
                         </td>
                         <td>1</td>
                         <td class="saisie">
-                            <u-input-float v-model="intervenant.tauxTpServiceDu" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxTpServiceDu" :fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre1Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre1ServiceDu" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre1ServiceDu" :fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre2Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre2ServiceDu" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre2ServiceDu" :fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre3Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre3ServiceDu" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre3ServiceDu" :fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre4Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre4ServiceDu" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre4ServiceDu" :fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre5Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre5ServiceDu" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre5ServiceDu" :fraction="true" class="dinput"/>
                         </td>
                     </tr>
                     <tr>
                         <th>Au-delà du service</th>
                         <td class="saisie">
-                            <u-input-float v-model="intervenant.tauxCmServiceCompl" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxCmServiceCompl" :fraction="true" class="dinput"/>
                         </td>
                         <td>1</td>
                         <td class="saisie">
-                            <u-input-float v-model="intervenant.tauxTpServiceCompl" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxTpServiceCompl" :fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre1Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre1ServiceCompl" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre1ServiceCompl" :fraction="true"
+                                           class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre2Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre2ServiceCompl" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre2ServiceCompl" :fraction="true"
+                                           class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre3Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre3ServiceCompl" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre3ServiceCompl" :fraction="true"
+                                           class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre4Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre4ServiceCompl" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre4ServiceCompl" :fraction="true"
+                                           class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre5Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre5ServiceCompl" fraction="true" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre5ServiceCompl" :fraction="true"
+                                           class="dinput"/>
                         </td>
                     </tr>
                 </table>
@@ -480,8 +492,8 @@
         <!-- FIN Débogage général -->
 
         <div>
-        <a class="btn btn-secondary" :href="indexUrl"><i class="fas fa-rotate-left" aria-hidden="true"></i>
-            Retour à la liste des formules</a>
+            <a class="btn btn-secondary" :href="indexUrl"><i class="fas fa-rotate-left" aria-hidden="true"></i>
+                Retour à la liste des formules</a>
         </div>
     </div>
 </template>
@@ -642,6 +654,48 @@ export default {
                 this.updateStructures();
             });
         },
+        exporter: function () {
+            const content = {
+                intervenant: this.intervenant,
+                volumesHoraires: this.volumesHoraires,
+            };
+            const filename = content.libelle;
+
+            var a = document.createElement('a');
+            var blob = new Blob([JSON.stringify(content)], {'type': 'text/json'});
+            a.href = window.URL.createObjectURL(blob);
+            a.download = 'Test de formule ' + filename + '.json';
+            a.click();
+        },
+
+
+        importer: function (event) {
+            const file = event.target.files[0];
+
+            // Vérifiez si le fichier est de type JSON
+            if (!file.type.match('application/json')) {
+                console.error("Le fichier n'est pas de type JSON.");
+                return;
+            }
+
+            const reader = new FileReader();
+
+            // Lorsque la lecture du fichier est terminée
+            reader.onload = (e) => {
+                try {
+                    const jsonContent = JSON.parse(e.target.result);
+                    this.intervenant = jsonContent.intervenant;
+                    this.volumesHoraires = jsonContent.volumesHoraires;
+                    this.updateStructures();
+                } catch (error) {
+                    console.error("Erreur lors de l'analyse du contenu JSON :", error);
+                }
+            };
+
+            // Lire le contenu du fichier en tant que texte
+            reader.readAsText(file);
+        },
+
         dropTauxNonUtilises(data)
         {
             if (!data.tauxAutre1Code) {
@@ -822,8 +876,6 @@ export default {
 }
 
 
-
-
 .debug-cell {
     background-color: #ccc;
     color: black;
@@ -844,6 +896,10 @@ export default {
     border-bottom-right-radius: 5px;
     color: black;
     font-size: 8pt;
+}
+
+.importer {
+    display: none;
 }
 
 </style>

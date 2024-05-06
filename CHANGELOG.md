@@ -7,6 +7,13 @@
 # OSE 24 (à venir)
 
 
+# OSE 23.5 (à venir)
+
+## Améliorations
+
+* Classement des intervenants par ordre alphabétique dans la page de demande de mise en paiement par lot (#56558)
+
+
 # OSE 23.5 (19/04/2024)
 
 ## Corrections de bugs

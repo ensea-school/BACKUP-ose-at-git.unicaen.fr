@@ -174,7 +174,7 @@ class GenericHydrator implements HydratorInterface
                 if ('Date' == $type || 'DateTime' == $type || Date::class == $type || DateTimeLocal::class == $type || 'DateTimeLocal' == $type) {
                     $value = DateTimeFromString::run($value);
                 }
-                if (class_exists($type) && $this->isEntity($type) && $value) {
+                if (class_exists($type ?? '') && $this->isEntity($type) && $value) {
                     $value = $this->getEntityManager()->find($type, $value);
                 }
 

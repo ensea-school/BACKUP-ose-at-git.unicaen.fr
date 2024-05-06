@@ -18,7 +18,7 @@ class FormuleIntervenant implements FormuleHeuresInterface
     protected ?EtatVolumeHoraire $etatVolumeHoraire = null;
 
     // Paramètres globaux
-    protected ?TypeIntervenant $typeIntervenant;
+    protected ?TypeIntervenant $typeIntervenant = null;
     protected ?string $structureCode = null;
     protected float $heuresServiceStatutaire = 0.0;
     protected float $heuresServiceModifie = 0.0;

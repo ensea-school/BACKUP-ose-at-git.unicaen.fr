@@ -41,7 +41,7 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
     public function setFormuleIntervenant(?FormuleIntervenant $formuleIntervenant): FormuleVolumeHoraire
     {
-        if (!$formuleIntervenant instanceof FormuleTestIntervenant) {
+        if ($formuleIntervenant && !$formuleIntervenant instanceof FormuleTestIntervenant) {
             throw new \Exception('Classe incompatible : un FormuleTestIntervenant doit être fourni obligatoirement');
         }
         $this->formuleIntervenant = $formuleIntervenant;

@@ -2,7 +2,9 @@
 
 namespace Formule\Service;
 
+use Application\Hydrator\GenericHydrator;
 use Application\Service\AbstractEntityService;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use RuntimeException;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
@@ -20,7 +22,6 @@ use UnicaenApp\Util;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  *
- * @method FormuleTestIntervenant get($id)
  * @method FormuleTestIntervenant[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
  * @method FormuleTestIntervenant newEntity()
  *
@@ -28,6 +29,7 @@ use UnicaenApp\Util;
 class TestService extends AbstractEntityService
 {
     use FormuleServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
 
     /**
@@ -376,6 +378,116 @@ class TestService extends AbstractEntityService
 
 
 
+    public function toJson(FormuleTestIntervenant $formuleTestIntervenant): array
+    {
+        $intervenantHydrator = new GenericHydrator($this->getEntityManager());
+        $intervenantHydrator->spec($formuleTestIntervenant);
+        $intervenantHydrator->setExtractType($intervenantHydrator::EXTRACT_TYPE_JSON);
+
+        $volumeHoraireHydrator = new GenericHydrator($this->getEntityManager());
+        $volumeHoraireHydrator->spec(FormuleTestVolumeHoraire::class);
+        $volumeHoraireHydrator->setExtractType($volumeHoraireHydrator::EXTRACT_TYPE_JSON);
+
+        $iData = $intervenantHydrator->extract($formuleTestIntervenant);
+        $iData['heuresServiceFi'] = $formuleTestIntervenant->getHeuresServiceFi();
+        $iData['heuresServiceFa'] = $formuleTestIntervenant->getHeuresServiceFa();
+        $iData['heuresServiceFc'] = $formuleTestIntervenant->getHeuresServiceFc();
+        $iData['heuresServiceReferentiel'] = $formuleTestIntervenant->getHeuresServiceReferentiel();
+        $iData['heuresComplFi'] = $formuleTestIntervenant->getHeuresComplFi();
+        $iData['heuresComplFa'] = $formuleTestIntervenant->getHeuresComplFa();
+        $iData['heuresComplFc'] = $formuleTestIntervenant->getHeuresComplFc();
+        $iData['heuresComplReferentiel'] = $formuleTestIntervenant->getHeuresComplReferentiel();
+        $iData['heuresPrimes'] = $formuleTestIntervenant->getHeuresPrimes();
+        $iData['heuresService'] = $formuleTestIntervenant->getHeuresServiceFi() + $formuleTestIntervenant->getHeuresServiceFa() + $formuleTestIntervenant->getHeuresServiceFc() + $formuleTestIntervenant->getHeuresServiceReferentiel();
+        $iData['heuresCompl'] = $formuleTestIntervenant->getHeuresComplFi() + $formuleTestIntervenant->getHeuresComplFa() + $formuleTestIntervenant->getHeuresComplFc() + $formuleTestIntervenant->getHeuresComplReferentiel();
+
+        $json = [
+            'intervenant'     => $iData,
+            'volumesHoraires' => [],
+        ];
+
+        foreach ($formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire) {
+            $json['volumesHoraires'][] = $volumeHoraireHydrator->extract($volumeHoraire);
+        }
+
+        return $json;
+    }
+
+
+
+    public function fromJson(FormuleTestIntervenant $formuleTestIntervenant, array $intervenantData, array $volumesHorairesData): void
+    {
+        $intervenantHydrator = new GenericHydrator($this->getEntityManager());
+        $intervenantHydrator->spec($formuleTestIntervenant);
+        $intervenantHydrator->hydrate($intervenantData, $formuleTestIntervenant);
+
+        $volumeHoraireHydrator = new GenericHydrator($this->getEntityManager());
+        $volumeHoraireHydrator->spec(FormuleTestVolumeHoraire::class);
+
+        $vhDiff = [];
+        // on liste les volumes horaires existants déjà en BDD et on supprime les autres sans ID
+        foreach( $formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire){
+            if (!$volumeHoraire->getId()) {
+                // les volumes horaires pas encore enregistrés sont détruits : ils seront recréés ensuite à partir des données JSON
+                $formuleTestIntervenant->removeVolumeHoraire($volumeHoraire);
+            }else{
+                $vhDiff[$volumeHoraire->getId()] = ['vh' => $volumeHoraire, 'toDelete' => true];
+            }
+        }
+
+        // On ajoute ou on modifie les volumes horaires en fonction des données transmises
+        foreach( $volumesHorairesData as $vh){
+            $vh = (array)$vh;
+            unset($vh['tauxServiceDu']);
+            unset($vh['tauxServiceCompl']);
+
+            $vhOk = ($vh['structureCode'] ?? null) !== null && ($vh['heures'] ?? null) !== null;
+
+            if ($vhOk) {
+                $vhId = $vh['id'] ?? -1;
+                if (array_key_exists($vhId, $vhDiff)) {
+                    $vhDiff[$vhId]['toDelete'] = false;
+                    $volumeHoraireHydrator->hydrate($vh, $vhDiff[$vhId]['vh']);
+                } else {
+                    $volumeHoraire = new FormuleTestVolumeHoraire();
+                    $volumeHoraireHydrator->hydrate($vh, $volumeHoraire);
+                    $formuleTestIntervenant->addVolumeHoraire($volumeHoraire);
+                }
+            }
+        }
+
+        // On supprime les anciens volumes horaires qui auront été supprimés
+        foreach($vhDiff as $vhd){
+            if ($vhd['toDelete']){
+                $formuleTestIntervenant->removeVolumeHoraire($vhd['vh']);
+            }
+        }
+
+    }
+
+
+
+    public function get($id, $autoClear = false): FormuleTestIntervenant
+    {
+        if (0 == $id){
+            $formuleTestIntervenant = new FormuleTestIntervenant();
+            $formuleTestIntervenant->setAnnee($this->getServiceContext()->getAnnee());
+            $formuleTestIntervenant->setFormule($this->getEntityManager()->find(Formule::class,$this->getServiceParametres()->get('formule')));
+
+            return $formuleTestIntervenant;
+        }
+
+        $formuleTestIntervenant = parent::get($id, $autoClear);
+
+        if (!$formuleTestIntervenant){
+            throw new \Exception('l\'ID demandé est invalide');
+        }
+
+        return $formuleTestIntervenant;
+    }
+
+
+
     /**
      * Sauvegarde une entité
      *
@@ -388,7 +500,7 @@ class TestService extends AbstractEntityService
     {
         parent::save($entity);
 
-        foreach ($entity->getVolumeHoraireTest() as $vhe) {
+        foreach ($entity->getVolumesHoraires() as $vhe) {
             $this->getEntityManager()->persist($vhe);
             $this->getEntityManager()->flush($vhe);
         }

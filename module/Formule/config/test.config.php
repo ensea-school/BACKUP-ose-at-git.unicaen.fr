@@ -29,22 +29,22 @@ return [
                     'action'      => 'saisir',
                     'privileges'  => [Privileges::FORMULE_TESTS],
                 ],
-                'test-data'            => [
-                    'route'      => '/test-data[/:formuleTestIntervenant]',
+                'saisir-data'            => [
+                    'route'      => '/saisir-data[/:formuleTestIntervenant]',
                     'constraints' => [
                         'formuleTestIntervenant' => '[0-9]*',
                     ],
                     'controller' => Controller\TestController::class,
-                    'action'     => 'testData',
+                    'action'     => 'saisirData',
                     'privileges' => [Privileges::FORMULE_TESTS],
                 ],
-                'enregistrement'  => [
-                    'route'       => '/enregistrement[/:formuleTestIntervenant]',
+                'enregistrer'  => [
+                    'route'       => '/enregistrer[/:formuleTestIntervenant]',
                     'constraints' => [
                         'formuleTestIntervenant' => '[0-9]*',
                     ],
                     'controller'  => Controller\TestController::class,
-                    'action'      => 'enregistrement',
+                    'action'      => 'enregistrer',
                     'privileges'  => [Privileges::FORMULE_TESTS],
                 ],
                 'import'          => [

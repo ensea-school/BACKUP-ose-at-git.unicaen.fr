@@ -85,7 +85,7 @@
 
 
             <!-- DEBUT actions -->
-            <button class="enregistrer btn btn-primary">Enregistrer et recalculer les HETD</button>
+            <b-button variant="primary" @click="enregistrer">Enregistrer et recalculer les HETD</b-button>
             <button class="exporter btn btn-secondary">Télécharger</button>
             <input type="file" id="importbtn" class="importer">
             <!-- FIN actions -->
@@ -126,51 +126,51 @@
                     <tr>
                         <th>En service</th>
                         <td class="saisie">
-                            <u-input-float v-model="intervenant.tauxCmServiceDu" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxCmServiceDu" fraction="true" class="dinput"/>
                         </td>
                         <td>1</td>
                         <td class="saisie">
-                            <u-input-float v-model="intervenant.tauxTpServiceDu" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxTpServiceDu" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre1Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre1ServiceDu" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre1ServiceDu" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre2Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre2ServiceDu" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre2ServiceDu" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre3Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre3ServiceDu" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre3ServiceDu" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre4Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre4ServiceDu" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre4ServiceDu" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre5Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre5ServiceDu" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre5ServiceDu" fraction="true" class="dinput"/>
                         </td>
                     </tr>
                     <tr>
                         <th>Au-delà du service</th>
                         <td class="saisie">
-                            <u-input-float v-model="intervenant.tauxCmServiceCompl" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxCmServiceCompl" fraction="true" class="dinput"/>
                         </td>
                         <td>1</td>
                         <td class="saisie">
-                            <u-input-float v-model="intervenant.tauxTpServiceCompl" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxTpServiceCompl" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre1Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre1ServiceCompl" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre1ServiceCompl" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre2Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre2ServiceCompl" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre2ServiceCompl" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre3Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre3ServiceCompl" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre3ServiceCompl" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre4Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre4ServiceCompl" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre4ServiceCompl" fraction="true" class="dinput"/>
                         </td>
                         <td class="saisie" v-show="tauxAutre5Visibility">
-                            <u-input-float v-model="intervenant.tauxAutre5ServiceCompl" class="dinput"/>
+                            <u-input-float v-model="intervenant.tauxAutre5ServiceCompl" fraction="true" class="dinput"/>
                         </td>
                     </tr>
                 </table>
@@ -310,25 +310,25 @@
                 <th v-show="resMode=='attendu'">Fi</th>
                 <th v-show="resMode=='attendu'">Fa</th>
                 <th v-show="resMode=='attendu'">Fc</th>
-                <th v-show="resMode=='attendu'">Réfé-rentiel</th>
+                <th v-show="resMode=='attendu'">Référentiel</th>
                 <th v-show="resMode=='attendu'">Fi</th>
                 <th v-show="resMode=='attendu'">Fa</th>
                 <th v-show="resMode=='attendu'">Fc</th>
-                <th v-show="resMode=='attendu'">Réfé-rentiel</th>
+                <th v-show="resMode=='attendu'">Référentiel</th>
 
                 <th v-show="resMode=='hetd'">Fi</th>
                 <th v-show="resMode=='hetd'">Fa</th>
                 <th v-show="resMode=='hetd'">Fc</th>
-                <th v-show="resMode=='hetd'">Réfé-rentiel</th>
+                <th v-show="resMode=='hetd'">Référentiel</th>
                 <th v-show="resMode=='hetd'">Fi</th>
                 <th v-show="resMode=='hetd'">Fa</th>
                 <th v-show="resMode=='hetd'">Fc</th>
-                <th v-show="resMode=='hetd'">Réfé-rentiel</th>
+                <th v-show="resMode=='hetd'">Référentiel</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(vh, l) in volumesHoraires" :key="l">
-                <th>{{ l }}</th>
+                <th>{{ l+1 }}</th>
                 <td><select v-model="vh.structureCode" :data-variable="l" class="dinput"
                             @change="selectStructure">
                     <option v-for="(v,k) in structures" :value="k" :key="k">{{ v }}</option>
@@ -386,7 +386,7 @@
                                                             v-show="vh.structureCode"/></td>
 
                 <td>
-                    <u-input-float v-model="vh.heures" v-show="vh.structureCode" class="dinput"/>
+                    <u-input-float v-model="vh.heures" v-show="!['', null].includes(vh.typeInterventionCode)" class="dinput" @change="calculer"/>
                 </td>
 
                 <td class="spacer"><!-- espace --></td>
@@ -569,42 +569,6 @@ export default {
                 this.formule = this.formules[id];
             }
         },
-        /*volumesHoraires: {
-            handler(newItems)
-            {
-                let max = 0;
-                for (const vhi in this.volumesHoraires) {
-                    if (this.volumesHoraires[vhi].tauxFi !== 1 - this.volumesHoraires[vhi].tauxFa - this.volumesHoraires[vhi].tauxFc) {
-                        this.volumesHoraires[vhi].tauxFi = 1 - this.volumesHoraires[vhi].tauxFa - this.volumesHoraires[vhi].tauxFc;
-                    }
-                    if (this.volumesHoraires[vhi].structureCode === null || this.volumesHoraires[vhi].structureCode === '') {
-                        if (this.volumesHoraires[vhi].heures !== null) {
-                            this.volumesHoraires[vhi].heures = null;
-                        }
-                        if (this.volumesHoraires[vhi].typeInterventionCode !== null) {
-                            this.volumesHoraires[vhi].typeInterventionCode = null;
-                        }
-                    }
-
-                    if (vhi > max) {
-                        max = vhi;
-                    }
-                }
-                if (this.volumesHoraires[max].structureCode) {
-                    this.volumesHoraires[parseInt(max) + 1] = {
-                        structureCode: null,
-                        typeInterventionCode: null,
-                        tauxFi: 1,
-                        tauxFa: 0,
-                        tauxFc: 0,
-                        ponderationServiceDu: 1,
-                        ponderationServiceCompl: 1,
-                        heures: null,
-                    };
-                }
-                console.log(newItems);
-            }
-        },*/
     },
     computed: {
         filteredTypesIntervention()
@@ -629,36 +593,69 @@ export default {
         charger()
         {
             unicaenVue.axios.get(
-                unicaenVue.url("formule-test/test-data/:id", {id: this.id})
+                unicaenVue.url("formule-test/saisir-data/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0})
             ).then(response => {
-                if (!response.data.intervenant.tauxAutre1Code) {
-                    response.data.intervenant.tauxAutre1ServiceDu = undefined;
-                    response.data.intervenant.tauxAutre1ServiceCompl = undefined;
-                }
-                if (!response.data.intervenant.tauxAutre2Code) {
-                    response.data.intervenant.tauxAutre2ServiceDu = undefined;
-                    response.data.intervenant.tauxAutre2ServiceCompl = undefined;
-                }
-                if (!response.data.intervenant.tauxAutre3Code) {
-                    response.data.intervenant.tauxAutre3ServiceDu = undefined;
-                    response.data.intervenant.tauxAutre3ServiceCompl = undefined;
-                }
-                if (!response.data.intervenant.tauxAutre4Code) {
-                    response.data.intervenant.tauxAutre4ServiceDu = undefined;
-                    response.data.intervenant.tauxAutre4ServiceCompl = undefined;
-                }
-                if (!response.data.intervenant.tauxAutre5Code) {
-                    response.data.intervenant.tauxAutre5ServiceDu = undefined;
-                    response.data.intervenant.tauxAutre5ServiceCompl = undefined;
-                }
-                this.intervenant = response.data.intervenant;
+                this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
                 this.volumesHoraires = response.data.volumesHoraires;
-                if (this.volumesHoraires[this.lastVolumeHoraireIndex()] && this.volumesHoraires[this.lastVolumeHoraireIndex()].structureCode){
-                    // Si la dernièr volume horaire a une structure non nulle, alors on ajoute un nouveau volume horaire vide
-                    this.addVolumeHoraire();
-                }
+                this.addVolumeHoraire();
                 this.updateStructures();
             });
+        },
+        enregistrer()
+        {
+            unicaenVue.axios.post(
+                unicaenVue.url("formule-test/enregistrer/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0 }),
+                {
+                    intervenant: this.intervenant,
+                    volumesHoraires: this.volumesHoraires,
+                }
+            ).then(response => {
+                this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
+                this.volumesHoraires = response.data.volumesHoraires;
+                this.addVolumeHoraire();
+                this.updateStructures();
+            });
+        },
+        calculer()
+        {
+            unicaenVue.axios.post(
+                unicaenVue.url("formule-test/enregistrer/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0 }),
+                {
+                    intervenant: this.intervenant,
+                    volumesHoraires: this.volumesHoraires,
+                    simpleCalcul: true
+                }
+            ).then(response => {
+                this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
+                this.volumesHoraires = response.data.volumesHoraires;
+                this.addVolumeHoraire();
+                this.updateStructures();
+            });
+        },
+        dropTauxNonUtilises(data)
+        {
+            if (!data.tauxAutre1Code) {
+                data.tauxAutre1ServiceDu = undefined;
+                data.tauxAutre1ServiceCompl = undefined;
+            }
+            if (!data.tauxAutre2Code) {
+                data.tauxAutre2ServiceDu = undefined;
+                data.tauxAutre2ServiceCompl = undefined;
+            }
+            if (!data.tauxAutre3Code) {
+                data.tauxAutre3ServiceDu = undefined;
+                data.tauxAutre3ServiceCompl = undefined;
+            }
+            if (!data.tauxAutre4Code) {
+                data.tauxAutre4ServiceDu = undefined;
+                data.tauxAutre4ServiceCompl = undefined;
+            }
+            if (!data.tauxAutre5Code) {
+                data.tauxAutre5ServiceDu = undefined;
+                data.tauxAutre5ServiceCompl = undefined;
+            }
+
+            return data;
         },
         updateStructures()
         {
@@ -703,11 +700,15 @@ export default {
         },
         lastVolumeHoraireIndex()
         {
-            return parseInt(Object.keys(this.volumesHoraires).pop());
+            if (this.volumesHoraires.length == 0){
+                return -1;
+            }else {
+                return parseInt(Object.keys(this.volumesHoraires).pop());
+            }
         },
         addVolumeHoraire()
         {
-            this.volumesHoraires[this.lastVolumeHoraireIndex()+1] = {
+            this.volumesHoraires.push({
                 structureCode: null,
                 typeInterventionCode: null,
                 tauxFi: 1,
@@ -715,8 +716,9 @@ export default {
                 tauxFc: 0,
                 ponderationServiceDu: 1,
                 ponderationServiceCompl: 1,
+                serviceStatutaire: true,
                 heures: null,
-            };
+            });
         },
         addStructure(element)
         {

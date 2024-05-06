@@ -5,17 +5,14 @@ namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Annee;
-use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Doctrine\ORM\Query;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
-use Formule\Entity\Db\FormuleTestVolumeHoraire;
 use Formule\Model\FormuleCalcul;
+use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Service\TestServiceAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenant;
-use Laminas\View\Model\JsonModel;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenVue\Util;
@@ -23,7 +20,7 @@ use UnicaenVue\View\Model\AxiosModel;
 use UnicaenVue\View\Model\VueModel;
 
 /**
- * Description of FormuleController
+ * Description of TestController
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
@@ -32,6 +29,7 @@ class TestController extends AbstractController
     use TestServiceAwareTrait;
     use ContextServiceAwareTrait;
     use ParametresServiceAwareTrait;
+    use FormulatorServiceAwareTrait;
 
 
     public function indexAction()
@@ -111,43 +109,33 @@ class TestController extends AbstractController
 
 
 
-    public function testDataAction()
+    public function saisirDataAction()
     {
-        /* @var $formuleTestIntervenant FormuleTestIntervenant */
-        $formuleTestIntervenant = $this->getEvent()->getParam('formuleTestIntervenant');
+        $formuleTestIntervenantId = (int)$this->params()->fromRoute('formuleTestIntervenant');
+        $formuleTestIntervenant = $this->getServiceTest()->get($formuleTestIntervenantId);
+        $data = $this->getServiceTest()->toJson($formuleTestIntervenant);
 
-        $intervenantHydrator = new GenericHydrator($this->em());
-        $intervenantHydrator->spec($formuleTestIntervenant);
-        $intervenantHydrator->setExtractType($intervenantHydrator::EXTRACT_TYPE_JSON);
+        return new AxiosModel($data);
+    }
 
-        $volumeHoraireHydrator = new GenericHydrator($this->em());
-        $volumeHoraireHydrator->spec(FormuleTestVolumeHoraire::class);
-        $volumeHoraireHydrator->setExtractType($volumeHoraireHydrator::EXTRACT_TYPE_JSON);
 
-        $iData = $intervenantHydrator->extract($formuleTestIntervenant);
-        $iData['serviceDu'] = $formuleTestIntervenant->getServiceDu();
-        $iData['heuresServiceFi'] = $formuleTestIntervenant->getHeuresServiceFi();
-        $iData['heuresServiceFa'] = $formuleTestIntervenant->getHeuresServiceFa();
-        $iData['heuresServiceFc'] = $formuleTestIntervenant->getHeuresServiceFc();
-        $iData['heuresServiceReferentiel'] = $formuleTestIntervenant->getHeuresServiceReferentiel();
-        $iData['heuresComplFi'] = $formuleTestIntervenant->getHeuresComplFi();
-        $iData['heuresComplFa'] = $formuleTestIntervenant->getHeuresComplFa();
-        $iData['heuresComplFc'] = $formuleTestIntervenant->getHeuresComplFc();
-        $iData['heuresComplReferentiel'] = $formuleTestIntervenant->getHeuresComplReferentiel();
-        $iData['heuresPrimes'] = $formuleTestIntervenant->getHeuresPrimes();
-        $iData['heuresService'] = $formuleTestIntervenant->getHeuresServiceFi() + $formuleTestIntervenant->getHeuresServiceFa() + $formuleTestIntervenant->getHeuresServiceFc() + $formuleTestIntervenant->getHeuresServiceReferentiel();
-        $iData['heuresCompl'] = $formuleTestIntervenant->getHeuresComplFi() + $formuleTestIntervenant->getHeuresComplFa() + $formuleTestIntervenant->getHeuresComplFc() + $formuleTestIntervenant->getHeuresComplReferentiel();
 
-        $data = [
-            'intervenant'     => $iData,
-            'volumesHoraires' => [],
-        ];
+    public function enregistrerAction()
+    {
+        $formuleTestIntervenantId = (int)$this->params()->fromRoute('formuleTestIntervenant');
+        $formuleTestIntervenant = $this->getServiceTest()->get($formuleTestIntervenantId);
 
-        $i = 1;
-        foreach ($formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire) {
-            $data['volumesHoraires'][$i] = $volumeHoraireHydrator->extract($volumeHoraire);
-            $i++;
+        $intervenantData = (array)$this->axios()->fromPost('intervenant');
+        $volumesHorairesData = (array)$this->axios()->fromPOst('volumesHoraires');
+        $simpleCalcul = $this->axios()->fromPost('simpleCalcul', false);
+
+        $this->getServiceTest()->fromJson($formuleTestIntervenant, $intervenantData, $volumesHorairesData);
+
+        $this->getServiceFormulator()->calculer($formuleTestIntervenant, $formuleTestIntervenant->getFormule());
+        if (!$simpleCalcul) {
+            $this->getServiceTest()->save($formuleTestIntervenant);
         }
+        $data = $this->getServiceTest()->toJson($formuleTestIntervenant);
 
         return new AxiosModel($data);
     }
@@ -167,64 +155,6 @@ class TestController extends AbstractController
         }
 
         return new AxiosModel();
-    }
-
-
-
-    public function enregistrementAction()
-    {
-        /* @var $formuleTestIntervenant FormuleTestIntervenant */
-        $formuleTestIntervenant = $this->getEvent()->getParam('formuleTestIntervenant');
-        if (!$formuleTestIntervenant) {
-            $formuleTestIntervenant = new FormuleTestIntervenant();
-        }
-
-        $result = ['errors' => [], 'data' => []];
-        $data = json_decode($this->params()->fromPost('data'), true);
-        $formuleTestIntervenant->fromArray($data);
-
-        $passed = true;
-        if (!$formuleTestIntervenant->getLibelle()) {
-            $result['errors'][] = 'Libellé manquant';
-            $passed = false;
-        }
-        if (!$formuleTestIntervenant->getFormule()) {
-            $result['errors'][] = 'La formule à utiliser n\'est pas précisée';
-            $passed = false;
-        }
-        if (!$formuleTestIntervenant->getAnnee()) {
-            $result['errors'][] = 'L\'année doit être renseignée';
-            $passed = false;
-        }
-        if (!$formuleTestIntervenant->getTypeIntervenant()) {
-            $result['errors'][] = 'Le type d\'intervenant (permanent, vacataire) doit être renseigné';
-            $passed = false;
-        }
-        if ($formuleTestIntervenant->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT
-            && !$formuleTestIntervenant->getStructureCode()
-        ) {
-            $result['errors'][] = 'La structure doit être renseignée';
-            $passed = false;
-        }
-        if (!$formuleTestIntervenant->getTypeVolumeHoraire()) {
-            $result['errors'][] = 'Le type de volume horaire (prévu ou réalisé) doit être renseigné';
-            $passed = false;
-        }
-        if (!$formuleTestIntervenant->getEtatVolumeHoraire()) {
-            $result['errors'][] = 'L\'état de volume horaire (saisi, validé, etc) doit être renseigné';
-            $passed = false;
-        }
-        if ($passed) {
-            $this->getServiceTest()->save($formuleTestIntervenant);
-            try {
-                $this->getServiceTest()->calculer($formuleTestIntervenant);
-            } catch (\Exception $e) {
-                $result['errors'][] = $this->translate($e);
-            }
-        }
-        $result['data'] = $formuleTestIntervenant->toArray();
-
-        return new JsonModel($result);
     }
 
 

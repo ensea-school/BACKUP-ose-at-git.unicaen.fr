@@ -31,6 +31,7 @@
         </tr>
         </tbody>
     </u-table-ajax>
+    <b-button variant="primary" :href="addUrl()">Ajout d'un nouveau test</b-button>
 </template>
 
 <script>
@@ -44,6 +45,10 @@ export default {
         };
     },
     methods: {
+        addUrl()
+        {
+            return unicaenVue.url('formule-test/saisir');
+        },
         editUrl(id)
         {
             return unicaenVue.url('formule-test/saisir/:id', {id: id});

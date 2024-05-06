@@ -85,14 +85,26 @@
 
 
             <!-- DEBUT actions -->
-            <div class="mb-2">
-                <b-button variant="primary" @click="enregistrer">Enregistrer et recalculer les HETD</b-button>
-            </div>
-            <div>
-                <button class="exporter btn btn-secondary" @click="exporter">Télécharger</button>
-                &nbsp;
-                <span class="btn btn-secondary">Téléverser</span>
-                <input type="file" id="importbtn" class="importer" @change="importer">
+            <div class="actions">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <b-button variant="primary" @click="enregistrer">Enregistrer les données</b-button>
+                    </div>
+                    <div class="col-md-6">
+                        <b-button variant="secondary" @click="calculer">Calculer les HETD</b-button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="exporter btn btn-secondary" @click="exporter">Télécharger les données</button>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="importbtn">
+                            <span class="btn btn-secondary">Téléverser un jeu de données</span>
+                            <input type="file" id="importbtn" class="importer" @change="importer">
+                        </label>
+                    </div>
+                </div>
             </div>
 
             <!-- FIN actions -->
@@ -268,6 +280,37 @@
                         <u-heures :valeur="intervenant.heuresPrimes ?? NaN"/>
                     </td>
                 </tr>
+                <tr>
+                    <th rowspan="4">Heures non payables</th>
+                    <th>FI</th>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresNonPayableFi ?? NaN"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>FA</th>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresNonPayableFa ?? NaN"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>FC</th>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresNonPayableFc ?? NaN"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Référentiel</th>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresNonPayableReferentiel ?? NaN"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2">Total heures non payables</th>
+                    <td>
+                        <u-heures :valeur="intervenant.heuresNonPayable ?? NaN"/>
+                    </td>
+                </tr>
             </table>
             <!-- FIN résultats par intervenant -->
 
@@ -282,7 +325,7 @@
                 <th rowspan="3"></th>
                 <th :colspan="9+vhParamCount" class="vh-donnees">Données</th>
                 <th rowspan="3" class="spacer">&nbsp;</th>
-                <th colspan="9">
+                <th colspan="13">
                     <select v-model="resMode" class="form-select res-mode">
                         <option value="attendu">Résultats attendus (en HETD)</option>
                         <option value="hetd" selected="selected">Résultats calculés (en HETD)</option>
@@ -302,10 +345,12 @@
                 <th colspan="4" v-show="resMode=='attendu'">Service</th>
                 <th colspan="4" v-show="resMode=='attendu'">Heures compl.</th>
                 <th rowspan="2" v-show="resMode=='attendu'">Primes</th>
+                <th colspan="4" v-show="resMode=='attendu'">Heures non payables</th>
 
                 <th colspan="4" v-show="resMode=='hetd'">Service</th>
                 <th colspan="4" v-show="resMode=='hetd'">Heures compl.</th>
                 <th rowspan="2" v-show="resMode=='hetd'">Primes</th>
+                <th colspan="4" v-show="resMode=='hetd'">Heures non payables</th>
 
                 <th rowspan="2" v-show="resMode=='debug'">Informations de débogage</th>
             </tr>
@@ -327,7 +372,15 @@
                 <th v-show="resMode=='attendu'">Fa</th>
                 <th v-show="resMode=='attendu'">Fc</th>
                 <th v-show="resMode=='attendu'">Référentiel</th>
+                <th v-show="resMode=='attendu'">Fi</th>
+                <th v-show="resMode=='attendu'">Fa</th>
+                <th v-show="resMode=='attendu'">Fc</th>
+                <th v-show="resMode=='attendu'">Référentiel</th>
 
+                <th v-show="resMode=='hetd'">Fi</th>
+                <th v-show="resMode=='hetd'">Fa</th>
+                <th v-show="resMode=='hetd'">Fc</th>
+                <th v-show="resMode=='hetd'">Référentiel</th>
                 <th v-show="resMode=='hetd'">Fi</th>
                 <th v-show="resMode=='hetd'">Fa</th>
                 <th v-show="resMode=='hetd'">Fc</th>
@@ -433,6 +486,18 @@
                 <td v-show="resMode=='attendu'">
                     <u-input-float v-model="vh.heuresAttenduesPrimes" maximum-digits="2" class="dinput"/>
                 </td>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesNonPayableFi" maximum-digits="2" class="dinput"/>
+                </td>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesNonPayableFa" maximum-digits="2" class="dinput"/>
+                </td>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesNonPayableFc" maximum-digits="2" class="dinput"/>
+                </td>
+                <td v-show="resMode=='attendu'">
+                    <u-input-float v-model="vh.heuresAttenduesNonPayableReferentiel" maximum-digits="2" class="dinput"/>
+                </td>
 
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresServiceFi" maximum-digits="2" tabindex="-1" readonly
@@ -468,6 +533,22 @@
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresPrimes" maximum-digits="2" tabindex="-1" readonly class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresNonPayableFi" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresNonPayableFa" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresNonPayableFc" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
+                </td>
+                <td v-show="resMode=='hetd'">
+                    <u-input-float v-model="vh.heuresNonPayableReferentiel" maximum-digits="2" tabindex="-1" readonly
+                                   class="doutput"/>
                 </td>
 
                 <td v-show="resMode=='debug'" class="debug-td">
@@ -900,6 +981,14 @@ export default {
 
 .importer {
     display: none;
+}
+
+.actions .btn {
+    width: 100%;
+}
+
+.actions label {
+    display: block;
 }
 
 </style>

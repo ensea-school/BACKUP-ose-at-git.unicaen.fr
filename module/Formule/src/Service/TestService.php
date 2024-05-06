@@ -400,6 +400,11 @@ class TestService extends AbstractEntityService
         $iData['heuresPrimes'] = $formuleTestIntervenant->getHeuresPrimes();
         $iData['heuresService'] = $formuleTestIntervenant->getHeuresServiceFi() + $formuleTestIntervenant->getHeuresServiceFa() + $formuleTestIntervenant->getHeuresServiceFc() + $formuleTestIntervenant->getHeuresServiceReferentiel();
         $iData['heuresCompl'] = $formuleTestIntervenant->getHeuresComplFi() + $formuleTestIntervenant->getHeuresComplFa() + $formuleTestIntervenant->getHeuresComplFc() + $formuleTestIntervenant->getHeuresComplReferentiel();
+        $iData['heuresNonPayableFi'] = $formuleTestIntervenant->getHeuresNonPayableFi();
+        $iData['heuresNonPayableFa'] = $formuleTestIntervenant->getHeuresNonPayableFa();
+        $iData['heuresNonPayableFc'] = $formuleTestIntervenant->getHeuresNonPayableFc();
+        $iData['heuresNonPayableReferentiel'] = $formuleTestIntervenant->getHeuresNonPayableReferentiel();
+        $iData['heuresNonPayable'] = $formuleTestIntervenant->getHeuresNonPayableFi() + $formuleTestIntervenant->getHeuresNonPayableFa() + $formuleTestIntervenant->getHeuresNonPayableFc() + $formuleTestIntervenant->getHeuresNonPayableReferentiel();
 
         $json = [
             'intervenant'     => $iData,

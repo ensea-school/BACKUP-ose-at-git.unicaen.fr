@@ -17,16 +17,24 @@ $config = [
             ],
         ],
         'driver'        => [
-            'orm_default_driver' => [
+            'orm_default_driver'   => [
                 'class' => \Doctrine\ORM\Mapping\Driver\XmlDriver::class,
                 'paths' => [
                     __DIR__ . '/../src/Entity/Db/Mapping',
                 ],
             ],
-            'orm_default'        => [
+            'orm_signature_driver' => [
+                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
+                'paths' => [
+                    __DIR__ . '/../../../vendor/unicaen/signature/src/Entity/Db',
+                ],
+            ],
+
+            'orm_default' => [
                 'class'   => \Doctrine\ORM\Mapping\Driver\DriverChain::class,
                 'drivers' => [
-                    'Application\Entity\Db' => 'orm_default_driver',
+                    'Application\Entity\Db'      => 'orm_default_driver',
+                    'UnicaenSignature\Entity\Db' => 'orm_signature_driver',
                 ],
             ],
         ],

@@ -4,6 +4,7 @@ namespace Signature\Controller;
 
 use Application\Controller\AbstractController;
 use UnicaenSignature\Service\SignatureService;
+use UnicaenSignature\Service\SignatureServiceAwareTrait;
 
 
 /**
@@ -14,9 +15,7 @@ use UnicaenSignature\Service\SignatureService;
 class SignatureController extends AbstractController
 {
 
-    protected SignatureService|null $serviceSignature = null;
-
-
+    use SignatureServiceAwareTrait;
 
     public function indexAction()
     {
@@ -27,19 +26,16 @@ class SignatureController extends AbstractController
 
     public function signatureContratAction()
     {
-        var_dump($this->serviceSignature->getSignatures());
+
+        //$service = $this->serviceSignature->getSignatures();
+        /**
+         * @var SignatureService $service
+         */
+        $service = $this->getSignatureService()->getSignatures();
+        var_dump($service);
         die;
 
         return $this->redirect()->toUrl($this->url()->fromRoute('signatures', [], [], true));
-    }
-
-
-
-    public function setServiceSignature(SignatureService $serviceSignature)
-    {
-        $this->serviceSignature = $serviceSignature;
-
-        return $this;
     }
 
 }

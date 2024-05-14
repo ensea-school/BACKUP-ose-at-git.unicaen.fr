@@ -23,12 +23,9 @@ class SignatureControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): SignatureController
     {
-        $controller       = new SignatureController();
-        $serviceSignature = new SignatureService();
-        $controller->setServiceSignature($serviceSignature);
-
-        /* Injectez vos dépendances ICI */
-
+        $controller = new SignatureController();
+        $controller->setSignatureService($container->get(SignatureService::class));
+        
         return $controller;
     }
 }

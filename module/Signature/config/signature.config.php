@@ -2,14 +2,13 @@
 
 namespace Signature;
 
-use Application\Provider\Privilege\Privileges;
-use Mission\Controller\OffreEmploiController;
-use Mission\Controller\OffreEmploiControllerFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
+use Signature\Controller\SignatureController;
 use Signature\Controller\SignatureControllerFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
-use UnicaenSignature\Controller\SignatureController;
 
 return [
+    
+
     'routes'      => [
         'signatures' => [
             'route'         => '/signature',
@@ -41,4 +40,6 @@ return [
     'controllers' => [
         SignatureController::class => SignatureControllerFactory::class,
     ],
+
+
 ];

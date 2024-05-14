@@ -27,7 +27,7 @@ class TraducteurService
 
     private array $expr;
 
-    private $transfoActions = [
+    private array $transfoActions = [
         'suppressionIsError',
         'formatageNoms',
         'traductionVariables',
@@ -737,16 +737,27 @@ class TraducteurService
     private function traductionFunctionMid(array &$expr, int $i): string
     {
         $term = $expr[$i];
-        $php = 'COALESCE(SUBSTR(';
+        $php = 'substr(';
 
-        $plExprs = [];
+        $phpExprs = [];
         foreach ($term['exprs'] as $e => $fExpr) {
             $fExpr[] = null;
-            $plExprs[$e] = $this->traductionExpr($fExpr);
+            $phpExprs[$e] = $this->traductionExpr($fExpr);
         }
-        $php .= implode(', ', $plExprs);
 
-        $php .= '),\' \')';
+        // pour éviter un message sur chaine null
+        $phpExprs[0] .= " ?? ''";
+
+        // en PHP les indexs débutent à 0, pas 1
+        if ((string)(int)$phpExprs[1] === $phpExprs[1]){
+            $phpExprs[1] = (string)((int)$phpExprs[1]-1);
+        }else{
+            $phpExprs[1] .= '-1';
+        }
+
+        $php .= implode(', ', $phpExprs);
+
+        $php .= ')';
 
         return $php;
     }
@@ -760,7 +771,7 @@ class TraducteurService
         $string = $this->traductionExpr($term['exprs'][0]);
         $length = $this->traductionExpr($term['exprs'][1]);
 
-        $php = "SUBSTR($string, 1, $length)";
+        $php = "substr($string, 0, $length)";
 
         return $php;
     }

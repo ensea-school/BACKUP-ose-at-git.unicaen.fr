@@ -554,7 +554,7 @@
                 <td v-show="resMode=='debug'" class="debug-td">
                     <div v-if="debug.vh && debug.vh[l]">
                     <span v-for="(val,cell) in debug.vh[l]" class="debug-cell">
-                        {{ cell }} <span class="debug-val">{{ val }}</span>
+                        {{ cell }} <span class="debug-val">{{ Math.round(val*100)/100 }}</span>
                     </span>&nbsp;
                     </div>
                 </td>
@@ -567,7 +567,7 @@
         <div v-if="resMode=='debug' && debug.global">
             <h4>Débogage : calculs globaux</h4>
             <span v-for="(val,cell) in debug.global" class="debug-cell">
-                {{ cell }} <span class="debug-val">{{ val }}</span>
+                {{ cell }} <span class="debug-val">{{ Math.round(val*100)/100 }}</span>
             </span>&nbsp;
         </div>
         <!-- FIN Débogage général -->
@@ -956,6 +956,10 @@ export default {
     text-align: right;
 }
 
+
+.debug-td {
+    min-width: 42em !important;
+}
 
 .debug-cell {
     background-color: #ccc;

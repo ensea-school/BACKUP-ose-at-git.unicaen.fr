@@ -350,8 +350,27 @@ class FormuleTableur
     private function parserFormuleCell(Calc\Cell $cell): void
     {
         $deps = $cell->getDeps();
+        $depsFound = [];
+
         foreach ($deps as $dep) {
-            $dep = str_replace('$', '', $dep);
+            if (is_string($dep)) { // on est sur une cellule
+                $depsFound[] = str_replace('$', '', $dep);;
+            } elseif (is_array($dep)) { // on est sur un range
+                $allRow = $dep['rowEnd'] >= 500 && $dep['rowBegin'] <= $this->mainLine;
+                if ($allRow) { // Si c'est toute la colonne , on ne prend en compte que la ligne principale, pas les autres
+                    $dep['rowBegin'] = $this->mainLine;
+                    $dep['rowEnd'] = $this->mainLine;
+                }
+                for ($col = $dep['colBegin']; $col <= $dep['colEnd']; $col++) {
+                    for ($row = $dep['rowBegin']; $row <= $dep['rowEnd']; $row++) {
+                        $depName = Calc::coordsToCellName($col, $row);
+                        $depsFound[$depName] = $depName;
+                    }
+                }
+            }
+        }
+
+        foreach ($depsFound as $dep) {
             if (!array_key_exists($dep, $this->formuleCells)) {
                 $vFound = false;
                 foreach ($this->variables as $variable) {
@@ -436,9 +455,9 @@ class FormuleTableur
             $formule->$method($value);
         }
 
-        foreach( $this->variables as $name => $variable){
-            if ($variable['result'] == true){
-                $method = 'set'.ucfirst(substr($name, 3)).'Col';
+        foreach ($this->variables as $name => $variable) {
+            if ($variable['result'] == true) {
+                $method = 'set' . ucfirst(substr($name, 3)) . 'Col';
                 $colPos = Calc::numberToLetter($variable['cell']->getCol());
                 $formule->$method($colPos);
             }
@@ -502,10 +521,10 @@ class FormuleTableur
     public function variableFromName(string $name): ?string
     {
         $ivh = '';
-        if (str_starts_with($name, 'i_')){
+        if (str_starts_with($name, 'i_')) {
             $ivh = 'i.';
             $name = substr($name, 2);
-        }elseif(str_starts_with($name, 'vh_')){
+        } elseif (str_starts_with($name, 'vh_')) {
             $ivh = 'vh.';
             $name = substr($name, 3);
         }
@@ -513,10 +532,10 @@ class FormuleTableur
         foreach ($this->variables as $vn => $v) {
             if (str_starts_with($vn, $ivh)) {
                 $names = $v['name'];
-                if (!is_array($names)){
+                if (!is_array($names)) {
                     $names = [$names];
                 }
-                if (in_array($name, $names)){
+                if (in_array($name, $names)) {
                     return $vn;
                 }
             }

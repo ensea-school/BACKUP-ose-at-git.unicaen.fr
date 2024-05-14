@@ -8,15 +8,14 @@
  * @var $viewFile   string
  */
 
-$intervenantId = 778603;
 
-/** @var  $st \UnicaenTbl\Service\TableauBordService */
-$st = $container->get(\UnicaenTbl\Service\TableauBordService::class);
+/** @var \Formule\Service\FormulatorService $formulator */
+$formulator = $container->get(\Formule\Service\FormulatorService::class);
+$filename = "/app/data/formules/FORMULE_PARIS8.ods";
 
+$tableur = $formulator->charger($filename);
+//echo \Unicaen\OpenDocument\Calc\Display::sheet($tableur->sheet());
+$cell = $tableur->sheet()->getCell('BS15');
+// var_dump($cell);
 
-$params = [
-    'INTERVENANT_ID' => $intervenantId,
-    'TYPE_VOLUME_HORAIRE_ID' => 1,
-];
-
-$st->calculer('formule', $params);
+var_dump($cell->getDeps());

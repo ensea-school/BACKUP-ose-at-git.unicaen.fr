@@ -34,9 +34,12 @@ class TraducteurService
         'detectionVariables',
         'transfoTestsBool',
         'transfoStructureAffectation',
+        'transfoIfPlus',
+        'transfoSimplify',
     ];
 
     private string $transfoAction;
+
 
 
     public function setDebug(bool $debug): TraducteurService
@@ -83,10 +86,12 @@ class TraducteurService
 
     protected function transformer(): void
     {
-        foreach( $this->transfoActions as $transfoAction ) {
+        foreach ($this->transfoActions as $transfoAction) {
             $this->transfoAction = $transfoAction;
             foreach ($this->expr as $i => $expr) {
-                $this->transfoParse($this->expr, $i);
+                if (array_key_exists($i, $this->expr)) {
+                    $this->transfoParse($this->expr, $i);
+                }
             }
         }
     }
@@ -100,7 +105,7 @@ class TraducteurService
 
         if ($isExpr) {
             $sIndex = 0;
-            while ($sIndex < count($expr[$index])) {
+            while ($sIndex < count($expr[$index] ?? [])) {
                 $this->transfoParse($expr[$index], $sIndex);
                 $sIndex++;
             }
@@ -128,9 +133,9 @@ class TraducteurService
     protected function convertir(): string
     {
         $php = "// $this->name" . $this->tableurExpr . "\n";
-        if ($this->name == $this->cell->getName()){
+        if ($this->name == $this->cell->getName()) {
             $php .= "protected function c_$this->name(): float\n";
-        }else{
+        } else {
             $php .= "protected function c_$this->name(int \$l): float\n";
         }
         $php .= "{\n";
@@ -305,15 +310,65 @@ class TraducteurService
             $transfo = true;
         }
 
-        if ($transfo){
+        if ($transfo) {
             $op = $expr[$i + 1]['name'];
             if ('=' == $op) {
                 unset($expr[$i]);
-            }else{
+            } else {
                 $expr[$i] = ['type' => 'php', 'code' => '!'];
             }
-            $expr[$i+1] = ['type' => 'variable', 'name' => 'vh.structureAffectation'];
+            $expr[$i + 1] = ['type' => 'variable', 'name' => 'vh.structureAffectation'];
             unset($expr[$i + 2]);
+        }
+    }
+
+
+
+    private function transfoIfPlus(array &$expr, int $i): void
+    {
+        $transfo = false;
+
+        if ($expr[$i]['type'] == 'function' && $expr[$i]['name'] == 'IF') {
+            $ifi = $i;
+            if (isset($expr[$i + 1])) {
+                $transfo = true;
+            }
+        }
+
+        if ($transfo) {
+            while (array_key_exists(++$i, $expr)) {
+                $expr[$ifi]['exprs'][1][] = $expr[$i];
+                if (isset($expr[$ifi]['exprs'][2])) {
+                    $expr[$ifi]['exprs'][2][] = $expr[$i];
+                }
+                unset($expr[$i]);
+            }
+        }
+    }
+
+
+
+    private function transfoSimplify(array &$expr, int $i): void
+    {
+        /*  on simplifie les 0*machin, 1*machin, machin*0, machin*1 */
+        if ($i > 0 && $expr[$i]['type'] == 'op' && $expr[$i]['name'] == '*') {
+            if ($expr[$i - 1]['type'] == 'number') {
+                if ($expr[$i - 1]['value'] == 0) {
+                    unset($expr[$i]);
+                    unset($expr[$i + 1]);
+                } elseif ($expr[$i - 1]['value'] == 1) {
+                    unset($expr[$i-1]);
+                    unset($expr[$i]);
+                }
+            }elseif($expr[$i + 1]['type'] == 'number'){
+                if ($expr[$i + 1]['value'] == 0) {
+                    unset($expr[$i - 1]);
+                    unset($expr[$i]);
+                } elseif ($expr[$i + 1]['value'] == 1) {
+                    unset($expr[$i]);
+                    unset($expr[$i + 1]);
+                }
+            }
         }
     }
 
@@ -363,7 +418,7 @@ class TraducteurService
             $php = 'return ' . $php;
         }
 
-        if (!str_ends_with($php, ';')) {
+        if (!str_ends_with($php, ';') && !str_ends_with($php, '}')) {
             $php .= ';';
         }
 
@@ -465,15 +520,15 @@ class TraducteurService
         $accesseurs = ['get', 'has', 'is'];
 
         if (str_starts_with($name, 'i.')) {
-            foreach( $accesseurs as $accesseur ) {
-                $method = $accesseur.ucfirst(substr($name, 2));
+            foreach ($accesseurs as $accesseur) {
+                $method = $accesseur . ucfirst(substr($name, 2));
                 if (method_exists(FormuleIntervenant::class, $method)) {
                     $variable = '$this->intervenant()->' . $method . '()';
                 }
             }
         } elseif (str_starts_with($name, 'vh.')) {
-            foreach( $accesseurs as $accesseur ) {
-                $method = $accesseur.ucfirst(substr($name, 3));
+            foreach ($accesseurs as $accesseur) {
+                $method = $accesseur . ucfirst(substr($name, 3));
                 if (method_exists(FormuleVolumeHoraire::class, $method)) {
                     $variable = '$this->volumeHoraire($l)->' . $method . '()';
                 }
@@ -749,9 +804,9 @@ class TraducteurService
         $phpExprs[0] .= " ?? ''";
 
         // en PHP les indexs débutent à 0, pas 1
-        if ((string)(int)$phpExprs[1] === $phpExprs[1]){
-            $phpExprs[1] = (string)((int)$phpExprs[1]-1);
-        }else{
+        if ((string)(int)$phpExprs[1] === $phpExprs[1]) {
+            $phpExprs[1] = (string)((int)$phpExprs[1] - 1);
+        } else {
             $phpExprs[1] .= '-1';
         }
 

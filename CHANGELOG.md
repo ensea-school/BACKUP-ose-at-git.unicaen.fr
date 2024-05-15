@@ -9,6 +9,10 @@
 
 # OSE 23.5 (à venir)
 
+## Corrections de bugs
+
+* Les taux majorés personnalisés par mission sont bien affichés dans les contrats de travail
+
 ## Améliorations
 
 * Classement des intervenants par ordre alphabétique dans la page de demande de mise en paiement par lot (#56558)

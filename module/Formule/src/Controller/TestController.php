@@ -143,6 +143,7 @@ class TestController extends AbstractController
             return new AxiosModel($data);
         }catch(\Exception $e){
             $this->flashMessenger()->addErrorMessage($e->getMessage());
+            return new AxiosModel();
         }
     }
 

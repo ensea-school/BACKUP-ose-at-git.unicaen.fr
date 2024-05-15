@@ -14,8 +14,8 @@ use Application\Provider\Privilege\Privileges;
 
 
 /**
- * @param \Lieu\Entity\Db\Structure    $structure
- * @param \Application\Entity\NiveauEtape     $niveau
+ * @param \Lieu\Entity\Db\Structure       $structure
+ * @param \Application\Entity\NiveauEtape $niveau
  * @param \OffreFormation\Entity\Db\Etape $etape
  */
 function makeQuery($structure = null, $niveau = null, $etape = null)
@@ -76,10 +76,10 @@ if ($structure) {
 }
 $this->headTitle()->append("Offre de formation");
 
-$canExport = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
-$canViewEtape = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
+$canExport      = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
+$canViewEtape   = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
 $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
-$canEditEtape = $this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION);
+$canEditEtape   = $this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION);
 $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_SYNCHRONISATION));
 ?>
 <style>
@@ -124,6 +124,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                 $selectStructure->init();
                 $selectStructure
                     ->setValue($structure ? $structure->getId() : null)
+                    ->setContextFilter(false)
                     ->setAttributes(['class' => 'struct selectpicker']);
                 echo $this->formSelect($selectStructure);
                 ?>
@@ -248,7 +249,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         echo $this->tag('a', $attrs)->html('<i class="fas fa-plus"></i> Nouvel élément pédagogique');
                     }
                     if ($canExport) {
-                        $params = [
+                        $params      = [
                             'structure' => $structure ? $structure->getId() : null,
                             'niveau'    => $niveau ? $niveau->getId() : null,
                             'etape'     => $etape ? $etape->getId() : null,

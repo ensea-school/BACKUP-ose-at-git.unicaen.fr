@@ -33,6 +33,7 @@ use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 use UnicaenVue\View\Model\VueModel;
 
 /**

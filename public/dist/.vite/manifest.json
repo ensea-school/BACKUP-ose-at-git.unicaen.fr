@@ -1,15 +1,15 @@
 {
-  "_vendor-DvJaRLK9.js": {
-    "file": "assets/vendor-DvJaRLK9.js",
+  "_vendor-DwXir0a0.js": {
+    "file": "assets/vendor-DwXir0a0.js",
     "name": "vendor"
   },
   "main.js": {
-    "file": "assets/main-ClDW645W.js",
+    "file": "assets/main-Ck_LZbNG.js",
     "name": "main",
     "src": "main.js",
     "isEntry": true,
     "imports": [
-      "_vendor-DvJaRLK9.js"
+      "_vendor-DwXir0a0.js"
     ],
     "css": [
       "assets/main-D6blDA8c.css"

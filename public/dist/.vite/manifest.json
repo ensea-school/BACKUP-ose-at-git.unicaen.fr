@@ -1,15 +1,15 @@
 {
-  "_vendor-BpVnjg7q.js": {
-    "file": "assets/vendor-BpVnjg7q.js",
+  "_vendor-DvJaRLK9.js": {
+    "file": "assets/vendor-DvJaRLK9.js",
     "name": "vendor"
   },
   "main.js": {
-    "file": "assets/main-Dm5kce0d.js",
+    "file": "assets/main-ClDW645W.js",
     "name": "main",
     "src": "main.js",
     "isEntry": true,
     "imports": [
-      "_vendor-BpVnjg7q.js"
+      "_vendor-DvJaRLK9.js"
     ],
     "css": [
       "assets/main-D6blDA8c.css"

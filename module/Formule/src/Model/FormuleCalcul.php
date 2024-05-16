@@ -1027,6 +1027,14 @@ END FORMULE_" . $this->getName() . ";";
         $begin = Calc::cellNameToCoords($range['begin']);
         $end = Calc::cellNameToCoords($range['end']);
 
+        if ($begin['row'] == 0){
+            $begin['row'] = $this->mainLine;
+        }
+
+        if ($end['row'] == 0){
+            $end['row'] = 500;
+        }
+
         if ($begin['col'] === $end['col'] && $begin['row'] <= $this->mainLine && $end['row'] >= 500) {
             $col = Calc::numberToLetter($begin['col']);
 

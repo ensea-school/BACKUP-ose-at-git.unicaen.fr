@@ -7,6 +7,19 @@
 # OSE 24 (à venir)
 
 
+# OSE 23.5 (à venir)
+
+## Corrections de bugs
+
+* Les taux majorés personnalisés par mission sont bien affichés dans les contrats de travail
+* Pouvoir sélectionner l'ensemble des structures dans le filtre structure de la page offre de formation (#56680)
+* Modification de la formule de calcul de Paris 1
+
+## Améliorations
+
+* Classement des intervenants par ordre alphabétique dans la page de demande de mise en paiement par lot (#56558)
+
+
 # OSE 23.5 (19/04/2024)
 
 ## Corrections de bugs

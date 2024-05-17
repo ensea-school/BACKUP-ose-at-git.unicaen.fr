@@ -1,13 +1,13 @@
 # Version stable
 
-[OSE 23.4](#ose-234-26032024)
+[OSE 23.5](#ose-235-19042024)
 
 
 
 # OSE 24 (à venir)
 
 
-# OSE 23.5 (à venir)
+# OSE 23.6 (à venir)
 
 ## Corrections de bugs
 

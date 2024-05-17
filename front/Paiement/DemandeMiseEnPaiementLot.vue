@@ -276,6 +276,9 @@
                         @click="processDemandeMiseEnPaiement">
                     Enregistrer les demandes de paiement
                 </button>
+                <a v-if="this.canMiseEnPaiement" id="btn-mep" :href="this.urlMiseEnPaiement" class="ms-2 btn btn-secondary">
+                    Aller au mise en paiement
+                </a>
 
             </div>
         </form>
@@ -292,7 +295,8 @@ import UnicaenVue from "unicaen-vue/js/Client/unicaenVue";
 export default {
     name: "DemandeMiseEnPaiementLot.vue",
     props: {
-        structures: {required: true},
+        structures: {type: Array, required: true},
+        canMiseEnPaiement: {type: Boolean, required: true},
     },
     data()
     {
@@ -300,17 +304,20 @@ export default {
             selectedStructure: null,
             urlRechercheDemandeMiseEnPaiement: unicaenVue.url('paiement/demande-mise-en-paiement-lot'),
             urlProcessDemandeMiseEnPaiement: unicaenVue.url('paiement/process-demande-mise-en-paiement-lot'),
+            urlMiseEnPaiement: unicaenVue.url('paiement/etat-demande-paiement'),
             permanents: [],
             vacataires: [],
             etudiants: [],
             autres: [],
             intervenants: [],
-            dotation: null,
+            dotation: false,
             liquidation: null,
             totalConsommationPaieEtat: 0,
             totalConsommationRessourcePropre: 0,
             totalConsommation: 0,
             alertDotation: false,
+
+
         }
     },
     computed:
@@ -511,8 +518,10 @@ export default {
             this.etudiants = [];
             this.autres = [];
             this.intervenants = [];
+            console.log(datas);
 
-            datas.forEach((intervenant, index) => {
+
+            for (const [index, intervenant] of Object.entries(datas)) {
                 switch (intervenant.datasIntervenant.typeIntervenant) {
                     case 'Vacataire':
                         this.vacataires.push(intervenant);
@@ -530,11 +539,7 @@ export default {
                         this.autres.push(intervenant);
                         this.intervenants.push(intervenant);
                 }
-
-
-
-            });
-
+            }
 
         },
 

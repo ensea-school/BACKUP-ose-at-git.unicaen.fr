@@ -35,6 +35,7 @@ use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenApp\Util;
 use UnicaenVue\View\Model\AxiosModel;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
+use UnicaenVue\View\Model\VueModel;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -135,7 +136,7 @@ class PaiementController extends AbstractController
         }
         // pour empêcher le ré-enregistrement avec un rafraichissement (F5)
         $postChangeIndex = (int)$this->params()->fromPost('change-index');
-        $changeIndex = $this->getChangeIndex();
+        $changeIndex     = $this->getChangeIndex();
 
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         if (!$intervenant) {
@@ -154,12 +155,12 @@ class PaiementController extends AbstractController
         $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
 
         /* On récupère du workflow les raisons de non édition éventuelles (selon sa structure le cas échéant) */
-        $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
-        $etapes = $workflowEtape->getEtapes();
+        $workflowEtape  = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
+        $etapes         = $workflowEtape->getEtapes();
         $whyNotEditable = [];
         foreach ($etapes as $we) {
             if (!$role->getStructure() || !$we->getStructure() || $we->getStructure()->inStructure($role->getStructure())) {
-                $sid = $we->getStructure() ? $we->getStructure()->getId() : 0;
+                $sid  = $we->getStructure() ? $we->getStructure()->getId() : 0;
                 $deps = $we->getEtapeDeps();
                 foreach ($deps as $dep) {
                     if (!isset($whyNotEditable[$sid])) {
@@ -173,11 +174,11 @@ class PaiementController extends AbstractController
             }
         }
 
-        $dateDerniereModif = null;
+        $dateDerniereModif   = null;
         $dernierModificateur = null;
 
         $typesRessources = $this->getServiceTypeRessource()->getList();
-        $structures = [];
+        $structures      = [];
 
         foreach ($servicesAPayer as $sap) {
             if (null == $role->getStructure() || $sap->getStructure()->inStructure($role->getStructure())) {
@@ -189,7 +190,7 @@ class PaiementController extends AbstractController
                 $dateModification = $mep->getHistoModification();
 
                 if ($dateDerniereModif == null || $dateDerniereModif < $dateModification) {
-                    $dateDerniereModif = $dateModification;
+                    $dateDerniereModif   = $dateModification;
                     $dernierModificateur = $mep->getHistoModificateur();
                 }
             }
@@ -199,15 +200,15 @@ class PaiementController extends AbstractController
             'structures'      => $structures,
             'typesRessources' => $typesRessources,
         ];
-        $dot = $this->getServiceDotation()->getTableauBord($structures);
-        $liq = $this->getServiceMiseEnPaiement()->getTblLiquidation($structures);
+        $dot    = $this->getServiceDotation()->getTableauBord($structures);
+        $liq    = $this->getServiceMiseEnPaiement()->getTblLiquidation($structures);
         foreach ($structures as $structure) {
             $sid = $structure->getId();
             foreach ($typesRessources as $typeRessource) {
                 $trid = $typeRessource->getId();
 
                 $dotation = isset($dot[$sid][$trid]) ? $dot[$sid][$trid] : 0;
-                $usage = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
+                $usage    = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
 
                 $budget[$sid][$trid] = compact('dotation', 'usage');
             }
@@ -220,19 +221,23 @@ class PaiementController extends AbstractController
 
     function demandeMiseEnPaiementLotAction()
     {
-        $title = 'Demande de mise en paiement par lot';
-        $intervenants = [];
-        $structures = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
+        $structures        = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
+        $canMiseEnPaiement = $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT));
         if ($this->getRequest()->isPost()) {
             //On récupere les données post notamment la structure recherchée
-            $idStructure = $this->getRequest()->getPost('structure');
-            $structure = $this->em()->find(Structure::class, $idStructure);
+            $idStructure  = $this->getRequest()->getPost('structure');
+            $structure    = $this->em()->find(Structure::class, $idStructure);
             $intervenants = $this->getServiceServiceAPayer()->getListByStructure($structure);
 
             return new AxiosModel($intervenants);
         }
 
-        return compact('title', 'structures', 'intervenants');
+        $vm = new VueModel();
+        $vm->setTemplate('paiement/demande-mise-en-paiement-lot');
+        $vm->setVariables(['canMiseEnPaiement' => $canMiseEnPaiement, 'structures' => $structures]);
+
+
+        return $vm;
     }
 
 
@@ -276,7 +281,7 @@ class PaiementController extends AbstractController
         WHERE
           p.intervenant = :intervenant";
 
-        $query = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $query     = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
         $paiements = $query->getResult();
 
         return compact('intervenant', 'paiements');
@@ -292,7 +297,7 @@ class PaiementController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
-        $mep = $this->params()->fromPost('mep', []);
+        $mep       = $this->params()->fromPost('mep', []);
         $paiements = [];
         /* @var $paiements MiseEnPaiement[] */
 
@@ -327,7 +332,7 @@ class PaiementController extends AbstractController
               " . ($structure ? 'AND COALESCE(str.ids,istr.ids) LIKE :structure' : '') . "
         ";
 
-        $res = $this->em()->createQuery($dql)->setParameters($parameters);
+        $res       = $this->em()->createQuery($dql)->setParameters($parameters);
         $paiements = array_merge($paiements, $res->getResult());
 
         $dql = "
@@ -349,7 +354,7 @@ class PaiementController extends AbstractController
               " . ($structure ? 'AND str.ids LIKE :structure' : '') . "
         ";
 
-        $res = $this->em()->createQuery($dql)->setParameters($parameters);
+        $res       = $this->em()->createQuery($dql)->setParameters($parameters);
         $paiements = array_merge($paiements, $res->getResult());
 
         $dql = "
@@ -365,7 +370,7 @@ class PaiementController extends AbstractController
               " . ($structure ? 'AND str.ids LIKE :structure' : '') . "
         ";
 
-        $res = $this->em()->createQuery($dql)->setParameters($parameters);
+        $res       = $this->em()->createQuery($dql)->setParameters($parameters);
         $paiements = array_merge($paiements, $res->getResult());
 
         foreach ($paiements as $index => $paiement) {
@@ -473,11 +478,11 @@ class PaiementController extends AbstractController
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
         $periode = $this->getServicePeriode()->getRepo()->findOneBy(['code' => $periode]);
-        $type = $this->params()->fromRoute('type');
-        $type = $this->getServiceTypeIntervenant()->getRepo()->findOneBy(['code' => $type]);
+        $type    = $this->params()->fromRoute('type');
+        $type    = $this->getServiceTypeIntervenant()->getRepo()->findOneBy(['code' => $type]);
 
         $annee = $this->getServiceContext()->getAnnee();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role  = $this->getServiceContext()->getSelectedIdentityRole();
 
         if (empty($type)) {
             $types = $this->getServiceTypeIntervenant()->getList();
@@ -498,7 +503,7 @@ class PaiementController extends AbstractController
             $filters = $recherche->getFilters();
 
             $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_extraction_paie');
-            $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
+            $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
             $csvModel->setFilename(str_replace(' ', '_', 'ose-export-paie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($recherche->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
 
             return $csvModel;
@@ -511,12 +516,12 @@ class PaiementController extends AbstractController
     {
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
-        $annee = $this->getServiceContext()->getAnnee();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $annee   = $this->getServiceContext()->getAnnee();
+        $role    = $this->getServiceContext()->getSelectedIdentityRole();
         if (empty($periode)) {
             $periodes = $this->getServicePeriode()->getPaiement();
         } else {
-            $periode = $this->getServicePeriode()->getByCode($periode);
+            $periode   = $this->getServicePeriode()->getByCode($periode);
             $recherche = new MiseEnPaiementRecherche;
             $recherche->setAnnee($annee);
             $recherche->setStructure($role->getStructure());
@@ -524,7 +529,7 @@ class PaiementController extends AbstractController
             $filters = $recherche->getFilters();
 
             $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'winpaie-indemnites']);
-            $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
+            $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
             $csvModel->setFilename(str_replace(' ', '_', 'ose-export-indemnite-' . strtolower($periode->getLibelleAnnuel($annee)) . '.csv'));
 
             return $csvModel;
@@ -576,19 +581,19 @@ class PaiementController extends AbstractController
     public function miseEnPaiementAction()
     {
         $this->initFilters();
-        $title = 'Mise en paiement';
-        $structure = $this->getEvent()->getParam('structure');
+        $title        = 'Mise en paiement';
+        $structure    = $this->getEvent()->getParam('structure');
         $intervenants = $this->params('intervenants');
 
-        $form = $this->getFormPaiementMiseEnPaiement();
-        $errors = [];
+        $form    = $this->getFormPaiementMiseEnPaiement();
+        $errors  = [];
         $request = $this->getRequest();
         if ($request->isPost() && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT))) {
             $form->setData($request->getPost());
             $form->isValid();
 
             $periodeId = $form->get('periode')->getValue();
-            $periode = $this->getServicePeriode()->get($periodeId);
+            $periode   = $this->getServicePeriode()->get($periodeId);
             /* @var $periode \Application\Entity\Db\Periode */
 
             $dateMiseEnPaiementValue = $this->params()->fromPost('date-mise-en-paiement');
@@ -625,7 +630,7 @@ class PaiementController extends AbstractController
     {
 
         //Contexte année et structure
-        $annee = $this->getServiceContext()->getAnnee();
+        $annee     = $this->getServiceContext()->getAnnee();
         $structure = $this->getServiceContext()->getStructure();
 
         $filters['ANNEE_ID'] = $annee->getId();
@@ -634,7 +639,7 @@ class PaiementController extends AbstractController
         }
         //On récupére l'état de sortie pour l'export des agréments
         $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'ecarts-heures-complementaire']);
-        $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
+        $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
         $csvModel->setFilename('ecarts-heures-complementaires-' . $annee->getId() . '.csv');
 
         return $csvModel;
@@ -648,9 +653,9 @@ class PaiementController extends AbstractController
         $title = 'Import des numéros de prise en charge';
 
         if ($this->getRequest()->isPost()) {
-            $files = $this->getRequest()->getFiles()->toArray();
-            $datas = $this->getRequest()->getPost();
-            $importFile = $files['importFile'];
+            $files                      = $this->getRequest()->getFiles()->toArray();
+            $datas                      = $this->getRequest()->getPost();
+            $importFile                 = $files['importFile'];
             $serviceNumeroPriseEnCharge = $this->getServiceNumeroPriseEnCharge();
 
             return $serviceNumeroPriseEnCharge->treatImportFile($importFile, $datas['modeleImport']);
@@ -670,7 +675,7 @@ class PaiementController extends AbstractController
         }
 
         $tblPaiement = $this->getServiceTableauBord()->getTableauBord('paiement');
-        $debugger = new PaiementDebugger($tblPaiement->getProcess());
+        $debugger    = new PaiementDebugger($tblPaiement->getProcess());
         $debugger->run($intervenant);
 
         return compact('intervenant', 'debugger');

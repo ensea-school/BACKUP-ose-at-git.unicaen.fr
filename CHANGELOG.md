@@ -14,6 +14,7 @@
 * Les taux majorés personnalisés par mission sont bien affichés dans les contrats de travail
 * Pouvoir sélectionner l'ensemble des structures dans le filtre structure de la page offre de formation (#56680)
 * Modification de la formule de calcul de Paris 1
+* L'assertion des clôtures ne fonctionnait pas correctement : la saisie était interdite systématiquement dans certains cas
 
 ## Améliorations
 

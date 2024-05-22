@@ -22,6 +22,7 @@
 * Les plafonds des intervenants sont mis à jour automatiquement suite à la saisie de modifications de service dû (#56421)
 * En cas de saisie manuelle de nouveau volume horaire d'enseignement (nombre d'heures * nombre de groupes par élément pédagogique), la saisie de service devient possible sans attendre
 * Pour les états de paiements, il est de nouveau possible de faire des extractions tous types d'intervenants confondus (#54966)
+* Optimisation de la recherche dans l'offre de formation depuis le formulaire de saisie de service (#56847)
 
 # OSE 23.5 (19/04/2024)
 

@@ -20,6 +20,7 @@
 
 * Classement des intervenants par ordre alphabétique dans la page de demande de mise en paiement par lot (#56558)
 * Les plafonds des intervenants sont mis à jour automatiquement suite à la saisie de modifications de service dû (#56421)
+* En cas de saisie manuelle de nouveau volume horaire d'enseignement (nombre d'heures * nombre de groupes par élément pédagogique), la saisie de service devient possible sans attendre
 
 # OSE 23.5 (19/04/2024)
 

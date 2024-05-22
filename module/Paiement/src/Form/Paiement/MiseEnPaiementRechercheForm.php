@@ -172,7 +172,9 @@ class MiseEnPaiementRechercheForm extends AbstractForm
             return;
         } else {
             $params['typeIntervenant'] = $this->get('typeIntervenant')->getValue();
-            $filters[] = 'AND tp.type_intervenant_id = :typeIntervenant';
+            if (99999 != $params['typeIntervenant']) {
+                $filters[] = 'AND tp.type_intervenant_id = :typeIntervenant';
+            }
         }
 
         if ($this->hasStructureFilter()) {
@@ -224,16 +226,20 @@ class MiseEnPaiementRechercheForm extends AbstractForm
     protected function populateTypeIntervenants(array $params, array $filters)
     {
         $sql = "
-          SELECT DISTINCT
-            ti.id, 
-            ti.libelle 
-          FROM 
-            tbl_paiement tp
-            JOIN type_intervenant ti ON ti.id = tp.type_intervenant_id
-          WHERE
-            " . implode("\n", $filters) . "
-          ORDER BY
-            ti.id
+          WITH p AS (
+              SELECT DISTINCT
+                ti.id, 
+                ti.libelle 
+              FROM 
+                tbl_paiement tp
+                JOIN type_intervenant ti ON ti.id = tp.type_intervenant_id
+              WHERE
+                " . implode("\n", $filters) . "
+              ORDER BY
+                ti.id
+          )
+          SELECT 99999 id, '(Tous)' libelle FROM dual
+          UNION ALL SELECT * FROM p
         ";
         $this->setValueOptionsSql('typeIntervenant', $sql, $params);
     }

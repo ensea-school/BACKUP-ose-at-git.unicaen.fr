@@ -19,7 +19,7 @@
 ## Améliorations
 
 * Classement des intervenants par ordre alphabétique dans la page de demande de mise en paiement par lot (#56558)
-
+* Les plafonds des intervenants sont mis à jour automatiquement suite à la saisie de modifications de service dû (#56421)
 
 # OSE 23.5 (19/04/2024)
 

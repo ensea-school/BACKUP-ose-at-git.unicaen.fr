@@ -4,6 +4,7 @@ namespace Service\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
+use Plafond\Processus\PlafondProcessusAwareTrait;
 use Service\Entity\Db\ModificationServiceDu;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -23,6 +24,7 @@ class ModificationServiceDuController extends AbstractController
     use ModificationServiceDuServiceAwareTrait;
     use MotifModificationServiceDuServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use PlafondProcessusAwareTrait;
 
 
     public function saisirAction()
@@ -96,6 +98,8 @@ class ModificationServiceDuController extends AbstractController
                         $this->em()->flush($modificationServiceDu);
                     }
                     $this->updateTableauxBord($intervenant);
+                    // simple recalcul des plafonds de périmètre intervenant : pas de nécessitéc de contrôle de blocage ici
+                    $this->getProcessusPlafond()->getServicePlafond()->calculer('intervenant', 'INTERVENANT_ID', $intervenant->getId());
                     $this->flashMessenger()->addSuccessMessage(sprintf("Modifications de service dû de $intervenant enregistrées avec succès."));
                     $this->redirect()->toRoute(null, [], [], true);
                 } catch (Exception $exc) {

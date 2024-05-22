@@ -63,13 +63,6 @@ class ElementPedagogiqueService extends AbstractEntityService
     {
         $annee = $this->getServiceContext()->getAnnee();
 
-        if ($annee) {
-            $af = ' ep.annee_id = ' . $annee->getId() . ' AND';
-        } else {
-            $af = '';
-        }
-
-
         if (!isset($filters["limit"])) {
             $filters["limit"] = 100;
         }
@@ -88,6 +81,8 @@ class ElementPedagogiqueService extends AbstractEntityService
         } else {
             $whereTerm = '1=1';
         }
+
+        $params['annee'] = $this->getServiceContext()->getAnnee()->getId();
 
         $whereContext = [];
         if (isset($filters['structure']) && $filters['structure'] instanceof \Lieu\Entity\Db\Structure) {
@@ -132,7 +127,7 @@ select * from (
     CASE WHEN tiep.element_pedagogique_id is NULL THEN 0 ELSE 1 END has_type_intervention
   from
     chemin_pedagogique cp
-    JOIN element_pedagogique ep ON$af cp.element_pedagogique_id = ep.id  AND ep.histo_destruction IS NULL$orEp
+    JOIN element_pedagogique ep ON ep.annee_id = :annee AND cp.element_pedagogique_id = ep.id  AND (ep.histo_destruction IS NULL$orEp)
     JOIN etape e ON cp.etape_id = e.id
     JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID
     JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID
@@ -146,7 +141,7 @@ select * from (
   order by
     $order
 )
-where rang = 1
+where rang = 1 AND rownum <= :limit
 ";
 
         $params["limit"] = $filters["limit"];

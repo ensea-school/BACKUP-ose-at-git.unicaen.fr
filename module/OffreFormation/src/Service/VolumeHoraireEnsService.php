@@ -7,6 +7,7 @@ use Application\Service\Traits\SourceServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Entity\Db\VolumeHoraireEns;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use RuntimeException;
 
 
@@ -21,6 +22,7 @@ use RuntimeException;
 class VolumeHoraireEnsService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
 
 
 
@@ -101,8 +103,16 @@ class VolumeHoraireEnsService extends AbstractEntityService
                 $volumeHoraireEns->setSource($this->getServiceSource()->getOse());
                 $this->save($volumeHoraireEns);
             }
+            $this->syncTypeInterventionEp($volumeHoraireEns);
         }
 
         return $this;
+    }
+
+
+
+    protected function syncTypeInterventionEp(VolumeHoraireEns $volumeHoraireEns)
+    {
+        $this->getServiceElementPedagogique()->synchronisation($volumeHoraireEns->getElementPedagogique());
     }
 }

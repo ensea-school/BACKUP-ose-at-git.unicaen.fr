@@ -11,11 +11,19 @@
 
 /** @var \Formule\Service\FormulatorService $formulator */
 $formulator = $container->get(\Formule\Service\FormulatorService::class);
-$filename = "/app/data/formules/FORMULE_PARIS8.ods";
+$filename = "/app/data/formules/FORMULE_UBO.ods";
 
 $tableur = $formulator->charger($filename);
 //echo \Unicaen\OpenDocument\Calc\Display::sheet($tableur->sheet());
-$cell = $tableur->sheet()->getCell('BS15');
-// var_dump($cell);
 
-var_dump($cell->getDeps());
+//$d = $tableur->tableur()->getAliases();
+
+
+$cell = $tableur->sheet()->getCell('AF20');
+$d = $cell->getDeps();
+
+
+
+var_dump($d);
+
+

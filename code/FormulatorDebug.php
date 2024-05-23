@@ -47,6 +47,14 @@ $traducteur->setDebug(true);
 
 $filename = $dir . '/' . $params['formule'] . '.ods';
 $tableur = $formulator->charger($filename);
+
+echo "<h1>Informations sur la feuille de calcul</h1>";
+
+echo "Version : ".$tableur->version()."<br />";
+echo "Ligne principale : ".$tableur->mainLine()."<br />";
+
+//var_dump($tableur->formuleCells());
+
 $mls = (string)$tableur->mainLine();
 
 $cells = $tableur->formuleCells();

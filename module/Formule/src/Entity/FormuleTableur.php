@@ -93,6 +93,13 @@ class FormuleTableur
 
 
 
+    public function tableur(): Calc
+    {
+        return $this->tableur;
+    }
+
+
+
     public function sheet(): Sheet
     {
         if (!isset($this->sheet)) {
@@ -352,10 +359,17 @@ class FormuleTableur
         $deps = $cell->getDeps();
         $depsFound = [];
 
+        foreach( $deps as $i => $dep ){
+            if(is_array($dep) && 'variable' == $dep['type']){
+                // on remplace les variables par leur cible
+                $deps[$i] = $this->tableur->getAliasTarget($dep['name']);
+            }
+        }
+
         foreach ($deps as $dep) {
             if (is_string($dep)) { // on est sur une cellule
-                $depsFound[] = str_replace('$', '', $dep);;
-            } elseif (is_array($dep)) { // on est sur un range
+                $depsFound[] = str_replace('$', '', $dep);
+            } elseif (is_array($dep) && 'range' == $dep['type']) { // on est sur un range
                 $allRow = $dep['rowEnd'] >= 500 && $dep['rowBegin'] <= $this->mainLine;
                 if ($allRow) { // Si c'est toute la colonne , on ne prend en compte que la ligne principale, pas les autres
                     $dep['rowBegin'] = $this->mainLine;
@@ -367,6 +381,15 @@ class FormuleTableur
                         $depsFound[$depName] = $depName;
                     }
                 }
+            } elseif( is_array($dep) && 'cell' == $dep['type']){
+                if (isset($dep['sheet'])){
+                    if ($sheet = $this->tableur->getSheet($dep['sheet'])){
+                        if ($sheet->getIndex() == $this->sheet->getIndex()){ // la cellule doit se trouver dans la même feuille
+                            $depsFound[] = $dep['name'];
+                        }
+                    }
+                }
+
             }
         }
 

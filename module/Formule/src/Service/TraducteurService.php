@@ -69,7 +69,7 @@ class TraducteurService
             throw new \Exception('La cellule ' . $this->cell->getName() . ' est vide. Or elle est utilisée dans une ou plusieurs expressions');
         }
 
-        $this->transformer();
+        $this->transformer($this->expr);
         $php = $this->convertir();
 
         if ($this->debug) {
@@ -84,13 +84,13 @@ class TraducteurService
 
 
 
-    protected function transformer(): void
+    protected function transformer(array &$expr): void
     {
         foreach ($this->transfoActions as $transfoAction) {
             $this->transfoAction = $transfoAction;
-            foreach ($this->expr as $i => $expr) {
-                if (array_key_exists($i, $this->expr)) {
-                    $this->transfoParse($this->expr, $i);
+            foreach ($expr as $i => $sexpr) {
+                if (array_key_exists($i, $expr)) {
+                    $this->transfoParse($expr, $i);
                 }
             }
         }
@@ -357,10 +357,10 @@ class TraducteurService
                     unset($expr[$i]);
                     unset($expr[$i + 1]);
                 } elseif ($expr[$i - 1]['value'] == 1) {
-                    unset($expr[$i-1]);
+                    unset($expr[$i - 1]);
                     unset($expr[$i]);
                 }
-            }elseif($expr[$i + 1]['type'] == 'number'){
+            } elseif ($expr[$i + 1]['type'] == 'number') {
                 if ($expr[$i + 1]['value'] == 0) {
                     unset($expr[$i - 1]);
                     unset($expr[$i]);
@@ -414,7 +414,7 @@ class TraducteurService
 
     private function returnPhp(string $php): string
     {
-        if (!(str_starts_with($php, 'if') || str_starts_with($php, 'return') || str_contains($php, 'sumIfRow'))) {
+        if (!str_contains($php, 'return ')) {
             $php = 'return ' . $php;
         }
 
@@ -536,7 +536,8 @@ class TraducteurService
         } elseif ($name == 'i_service_du') {
             $variable = '$this->intervenant()->getServiceDu()';
         } else {
-            $variable = '[ERREUR POUR LA VARIABLE ' . $name . ']';
+            $targetExpr = [$this->tableur->tableur()->getAliasTarget($name)];
+            $variable = $this->traductionExpr($targetExpr);
         }
 
         return $variable;
@@ -730,7 +731,6 @@ class TraducteurService
     {
         $term = $expr[$i];
 
-//SUMIF([.AD21:.AD$500];[.AD20];[.M21:.$M500])
         $plage = $term['exprs'][0][0];
         $critere = $term['exprs'][1];
         if (isset($term['exprs'][2][0])) {
@@ -739,6 +739,10 @@ class TraducteurService
             $plageSomme = $plage;
         }
 
+        if ($critere[0]['type'] == 'string' && str_starts_with($critere[0]['content'], '=')) {
+            $critere[0]['content'] = substr($critere[0]['content'], 1);
+            array_unshift($critere, ['type' => 'op', 'name' => '=']);
+        }
         if ($critere[0]['type'] != 'op') { // ajout du =, valeur par défaut
             $cc = $critere;
             $critere = [['type' => 'op', 'name' => '=']];
@@ -747,11 +751,8 @@ class TraducteurService
             }
         }
 
-//        var_dump($plage);
-//        var_dump($critere);
-//        var_dump($plageSomme);
 
-        $php = "val := 0;\n";
+        $php = "\$val = 0;\n";
         for ($c = 0; $c <= ($plage['colEnd'] - $plage['colBegin']); $c++) {
             $col = Calc::numberToLetter($plage['colBegin'] + $c);
             $colDest = Calc::numberToLetter($plageSomme['colBegin'] + $c);
@@ -760,7 +761,7 @@ class TraducteurService
             if ($rowBegin === 0) {
                 $rowBegin = 'l';
             } else {
-                $rowBegin = 'l + ' . $rowBegin;
+                $rowBegin = '1 + ' . $rowBegin;
             }
 
             if ($plage['rowEnd'] >= 500) {
@@ -769,17 +770,24 @@ class TraducteurService
                 $rowEnd = (string)($plage['rowEnd'] - $this->tableur->mainLine());
             }
 
-            $php .= "FOR sumIfRow IN $rowBegin .. $rowEnd LOOP\n";
-            $php .= "  IF cell('" . $col . "',sumIfRow)" . $this->traductionExpr($critere) . " THEN\n";
-            $php .= "    val := val + cell('" . $colDest . "',sumIfRow);\n";
-            $php .= "  END IF;\n";
-            $php .= "END LOOP;\n";
+            $iftest = $critere;
+            array_unshift($iftest, ['type' => 'cell', 'name' => $col.$this->tableur->mainLine()]);
+
+            $this->transformer($iftest);
+            $iftest = $this->traductionExpr($iftest);
+
+            $php .= '$volumesHoraires = $this->intervenant->getVolumesHoraires();'."\n";
+            $php .= 'foreach ($volumesHoraires as $l => $volumesHoraire) {'."\n";
+            $php .= "  if ($iftest){\n";
+            $php .= "    \$val += \$this->c('$colDest',\$l);\n";
+            $php .= "  }\n";
+            $php .= "}\n";
         }
 
         if (isset($term['valExpr'])) {
-            $php .= 'RETURN ' . $this->traductionExpr($term['valExpr']);
+            $php .= 'return ' . $this->traductionExpr($term['valExpr']);
         } else {
-            $php .= 'RETURN val;';
+            $php .= 'return $val;';
         }
 
 //        echo '<pre>' . htmlentities($php) . '</pre>';

@@ -312,7 +312,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
           WHERE
             " . implode("\n", $filters) . "
           ORDER BY
-            p.ordre
+            p.ordre DESC
         ";
         $periodes = [];
         $periodesBdd = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);

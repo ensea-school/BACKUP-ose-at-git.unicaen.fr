@@ -104,7 +104,9 @@ class FormulatorService
 
         if (!file_exists($filename)) {
             if (!file_exists($dir)) {
-                mkdir($dir, 0777);
+                $oldumask = umask(0);
+                mkdir($dir, 0777); // or even 01777 so you get the sticky bit set
+                umask($oldumask);
             }
             file_put_contents($filename, $formule->getPhpClass());
         }

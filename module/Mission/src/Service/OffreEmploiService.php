@@ -80,7 +80,7 @@ class OffreEmploiService extends AbstractEntityService
         ], $parameters);
 
         $dql .= " ORDER BY
-          oe . dateDebut
+          oe . dateDebut DESC
         ";
 
         $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
@@ -178,7 +178,7 @@ class OffreEmploiService extends AbstractEntityService
         ], $parameters);
 
         $dql .= " ORDER BY
-          oe . dateDebut
+          oe . dateDebut DESC
         ";
 
 

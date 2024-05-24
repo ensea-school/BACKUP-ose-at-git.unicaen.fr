@@ -11,7 +11,7 @@
 
 /** @var \Formule\Service\FormulatorService $formulator */
 $formulator = $container->get(\Formule\Service\FormulatorService::class);
-$filename = "/app/data/formules/FORMULE_UBO.ods";
+$filename = "/app/data/formules/FORMULE_MONTPELLIER.ods";
 
 $tableur = $formulator->charger($filename);
 //echo \Unicaen\OpenDocument\Calc\Display::sheet($tableur->sheet());
@@ -19,7 +19,7 @@ $tableur = $formulator->charger($filename);
 //$d = $tableur->tableur()->getAliases();
 
 
-$cell = $tableur->sheet()->getCell('AF20');
+$cell = $tableur->sheet()->getCell('AN25');
 $d = $cell->getDeps();
 
 

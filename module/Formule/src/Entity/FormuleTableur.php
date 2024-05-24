@@ -363,6 +363,15 @@ class FormuleTableur
             if(is_array($dep) && 'variable' == $dep['type']){
                 // on remplace les variables par leur cible
                 $deps[$i] = $this->tableur->getAliasTarget($dep['name']);
+
+                if (isset($deps[$i]['sheet']) && $deps[$i]['sheet'] && $deps[$i]['sheet'] != $this->sheet()->getName()){
+                    throw new \Exception('Erreur dans l\'expression de ' . $cell->getName() . ' : l\'expression fait référence à des cellules présentes dans d\'autres onglets de la feuille de calcul');
+                }
+            }
+            if(is_array($dep) && 'range' == $dep['type']){
+                if (isset($deps[$i]['sheet']) && $deps[$i]['sheet'] && $deps[$i]['sheet'] != $this->sheet()->getName()){
+                    throw new \Exception('Erreur dans l\'expression de ' . $cell->getName() . ' : l\'expression fait référence à une plage de cellules présente dans d\'autres onglets de la feuille de calcul');
+                }
             }
         }
 

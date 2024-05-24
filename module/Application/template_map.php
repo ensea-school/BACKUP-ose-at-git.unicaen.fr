@@ -6,8 +6,6 @@
 return [
     'error/exception'                                => __DIR__ . '/view/error/exception.phtml',
     'error/index'                                    => __DIR__ . '/view/error/index.phtml',
-    'application/formule/test'                       => __DIR__ . '/view/application/formule/test.phtml',
-    'application/formule/test-saisir'                => __DIR__ . '/view/application/formule/test-saisir.phtml',
     'application/workflow/suppression-dep'           => __DIR__ . '/view/application/workflow/suppression-dep.phtml',
     'application/workflow/calculer-tout'             => __DIR__ . '/view/application/workflow/calculer-tout.phtml',
     'application/workflow/dependances'               => __DIR__ . '/view/application/workflow/dependances.phtml',
@@ -33,8 +31,6 @@ return [
     'application/droits/affectation-suppression'     => __DIR__ . '/view/application/droits/affectation-suppression.phtml',
     'application/droits/index'                       => __DIR__ . '/view/application/droits/index.phtml',
     'application/droits/roles'                       => __DIR__ . '/view/application/droits/roles.phtml',
-    'application/domaine-fonctionnel/saisie'         => __DIR__ . '/view/application/domaine-fonctionnel/saisie.phtml',
-    'application/domaine-fonctionnel/index'          => __DIR__ . '/view/application/domaine-fonctionnel/index.phtml',
     'application/chargens/formation'                 => __DIR__ . '/view/application/chargens/formation.phtml',
     'application/chargens/differentiel'              => __DIR__ . '/view/application/chargens/differentiel.phtml',
     'application/chargens/menu'                      => __DIR__ . '/view/application/chargens/menu.phtml',

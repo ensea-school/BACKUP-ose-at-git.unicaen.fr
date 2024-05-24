@@ -26,6 +26,8 @@ return [
     'paiement/modulateur/index'                            => __DIR__ . '/view/paiement/modulateur/index.phtml',
     'paiement/type-ressource/saisie'                       => __DIR__ . '/view/paiement/type-ressource/saisie.phtml',
     'paiement/type-ressource/index'                        => __DIR__ . '/view/paiement/type-ressource/index.phtml',
+    'paiement/domaine-fonctionnel/saisie'                  => __DIR__ . '/view/paiement/domaine-fonctionnel/saisie.phtml',
+    'paiement/domaine-fonctionnel/index'                   => __DIR__ . '/view/paiement/domaine-fonctionnel/index.phtml',
     'paiement/paiement/etat-paiement-tableau'              => __DIR__ . '/view/paiement/paiement/etat-paiement-tableau.phtml',
     'paiement/paiement/import-numero-pec'                  => __DIR__ . '/view/paiement/paiement/import-numero-pec.phtml',
     'paiement/paiement/extraction-paie'                    => __DIR__ . '/view/paiement/paiement/extraction-paie.phtml',

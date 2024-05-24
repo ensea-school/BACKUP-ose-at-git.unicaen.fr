@@ -9,6 +9,7 @@ return [
     'Contrat\Controller\ContratControllerFactory'       => __DIR__ . '/src/Controller/ContratControllerFactory.php',
     'Contrat\Entity\Db\Contrat'                         => __DIR__ . '/src/Entity/Db/Contrat.php',
     'Contrat\Entity\Db\ContratServiceListe'             => __DIR__ . '/src/Entity/Db/ContratServiceListe.php',
+    'Contrat\Entity\Db\TblContrat'                      => __DIR__ . '/src/Entity/Db/TblContrat.php',
     'Contrat\Entity\Db\TypeContrat'                     => __DIR__ . '/src/Entity/Db/TypeContrat.php',
     'Contrat\Form\ContratRetourForm'                    => __DIR__ . '/src/Form/ContratRetourForm.php',
     'Contrat\Form\ContratRetourFormFactory'             => __DIR__ . '/src/Form/ContratRetourFormFactory.php',

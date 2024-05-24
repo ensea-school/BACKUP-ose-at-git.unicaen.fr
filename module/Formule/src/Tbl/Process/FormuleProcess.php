@@ -16,7 +16,7 @@ use UnicaenTbl\TableauBord;
  */
 class FormuleProcess implements ProcessInterface
 {
-    use FormulatorServiceAwareTrait
+    use FormulatorServiceAwareTrait;
 
     protected ServiceDataManager $serviceDataManager;
 

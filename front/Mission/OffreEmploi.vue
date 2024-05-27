@@ -88,9 +88,7 @@
             <br/>
 
         </p>
-        <p>
-            {{ this.descriptionHtml }}
-        </p>
+        <p v-html="this.descriptionHtml"></p>
         <p v-if="this.decretText" class="alert alert-info">
             <input id="decret" v-model="decret" name="decret" type="checkbox">&nbsp;
             <span v-html="this.decretText"></span>
@@ -142,8 +140,8 @@
 
         <div class="mt-5">
             <a :href="offreEmploiUrl" class="btn btn-secondary">Retour aux offres</a>&nbsp;
-            <a v-if="this.canPostuler" :href="postulerUrl" class="btn btn-primary"
-               :class="!decret?'disabled':''"
+            <a v-if="this.canPostuler" :class="!decret?'disabled':''" :href="postulerUrl"
+               class="btn btn-primary"
                data-bs-original-title="Vous devez être connecté pour postuler"
                data-bs-placement="top"
                data-bs-toggle="tooltip">Postuler</a>&nbsp;
@@ -227,7 +225,7 @@ export default {
             return false;
         },
         shortDesc: function () {
-            if (!this.offre.description){
+            if (!this.offre.description) {
                 return '';
             }
             let shorDesc = this.offre.description.substr(0, 200);
@@ -237,7 +235,7 @@ export default {
             return shorDesc;
         },
         descriptionHtml: function () {
-            if (!this.offre.description){
+            if (!this.offre.description) {
                 return '';
             }
             return this.offre.description.replace(/(?:\r\n|\r|\n)/g, '<br />');

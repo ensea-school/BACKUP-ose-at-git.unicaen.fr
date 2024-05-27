@@ -282,9 +282,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
 
 
 
-      -- AK=IF([.AJ20]<[.AH20];([.AH20]-[.AJ20])/[.$AE20];0)
+      -- AK=IF(OR([.AJ20]<[.AH20];[.AH20]<0);([.AH20]-[.AJ20])/[.$AE20];0)
       WHEN 'AK' THEN
-        IF cell('AJ',l) < cell('AH',l) THEN
+        IF cell('AJ',l) < cell('AH',l) OR cell('AH',l) < 0 THEN
           RETURN (cell('AH',l) - cell('AJ',l)) / cell('AE',l);
         ELSE
           RETURN 0;
@@ -346,9 +346,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
 
 
 
-      -- AQ=IF([.AP20]<[.AN20];([.AN20]-[.AP20])/[.$AE20];0)
+      -- AQ=IF(OR([.AP20]<[.AN20];[.AN20]<0);([.AN20]-[.AP20])/[.$AE20];0)
       WHEN 'AQ' THEN
-        IF cell('AP',l) < cell('AN',l) THEN
+        IF cell('AP',l) < cell('AN',l) OR cell('AN',l) < 0 THEN
           RETURN (cell('AN',l) - cell('AP',l)) / cell('AE',l);
         ELSE
           RETURN 0;

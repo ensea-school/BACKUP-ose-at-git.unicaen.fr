@@ -1366,6 +1366,8 @@ return [
         'TYPE_PAIE_PRIME',
         'DOSSIER_EMPLOYEUR_FACULTATIF',
         'MISSION_DECRET',
+        'MISSION_INDEMNITEES',
+        'PJ_ACTIVE',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -2562,7 +2564,6 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_MODIFICATION',
     ],
-
 ];
 
 //@formatter:on

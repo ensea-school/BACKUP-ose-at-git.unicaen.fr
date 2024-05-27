@@ -13,4 +13,3 @@ GROUP BY
 i.id,
 i.structure_id
 HAVING SUM(m.prime_id) IS NULL
-

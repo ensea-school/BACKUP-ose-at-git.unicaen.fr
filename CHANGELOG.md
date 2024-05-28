@@ -16,6 +16,7 @@
 * Modification de la formule de calcul de Paris 1
 * L'assertion des clôtures ne fonctionnait pas correctement : la saisie était interdite systématiquement dans certains cas
 * Modification de la formule de calcul de Paris Dauphine (#50652)
+* 
 
 ## Améliorations
 
@@ -25,6 +26,8 @@
 * Pour les états de paiements, il est de nouveau possible de faire des extractions tous types d'intervenants confondus (#54966)
 * Optimisation de la recherche dans l'offre de formation depuis le formulaire de saisie de service (#56847)
 * Tri des périodes de paiement et des offres d'emploi du plus récent au plus ancien
+* Au niveau de la fonction "Demande de mise en paiement par lot" Ajout d'un raccourci (bouton) permettant d'aller directement aux mises en paiement (#56718)
+* Meilleur affichage html du descriptif des offres d'emploi (Ose mission)
 
 # OSE 23.5 (19/04/2024)
 

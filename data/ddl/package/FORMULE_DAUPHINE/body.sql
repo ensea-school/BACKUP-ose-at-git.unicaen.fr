@@ -302,12 +302,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
 
 
 
-      -- AN=IF(AND([.$D20]="Non";[.$I20]<>"Référentiel";[.$A20]<>"DEP";AND(MID([.$O20];6;1)<>"P";OR(MID([.$O20];2;1)<>"A";MID([.$O20];2;1)<>"M")));[.$N20]*([.$G20]+[.$F20]+[.$H20])*[.$AE20];0)
+      -- AN=IF(OR([.$D20]="Oui";[.$I20]="Référentiel";[.$A20]="DEP");0;IF(AND(MID([.$O20];6;1)="P";(OR(MID([.$O20];2;1)="M";MID([.$O20];2;1)="A")));0;[.$N20]*([.$G20]+[.$F20]+[.$H20])*[.$AE20]))
       WHEN 'AN' THEN
-        IF NOT vh.structure_is_exterieur AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code <> 'DEP' AND (COALESCE(SUBSTR(vh.param_1, 6, 1),' ') <> 'P' AND (COALESCE(SUBSTR(vh.param_1, 2, 1),' ') <> 'A' OR COALESCE(SUBSTR(vh.param_1, 2, 1),' ') <> 'M')) THEN
-          RETURN vh.heures * (vh.taux_fa + vh.taux_fi + vh.taux_fc) * cell('AE',l);
-        ELSE
+        IF vh.structure_is_exterieur OR vh.volume_horaire_ref_id IS NOT NULL OR vh.structure_code = 'DEP' THEN
           RETURN 0;
+        ELSE
+          IF COALESCE(SUBSTR(vh.param_1, 6, 1),' ') = 'P' AND (COALESCE(SUBSTR(vh.param_1, 2, 1),' ') = 'M' OR COALESCE(SUBSTR(vh.param_1, 2, 1),' ') = 'A') THEN
+            RETURN 0;
+          ELSE
+            RETURN vh.heures * (vh.taux_fa + vh.taux_fi + vh.taux_fc) * cell('AE',l);
+          END IF;
         END IF;
 
 

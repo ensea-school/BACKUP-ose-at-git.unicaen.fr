@@ -403,7 +403,11 @@ END FORMULE_" . $this->getName() . ";";
             $this->currentCellName = $name;
 
             $expr = $cell->getFormuleExpr();
-            $this->exprInit($expr);
+            if (is_array($expr)){
+                $this->exprInit($expr);
+            }else{
+                throw new \Exception('Erreur sur la traduction de '.$name.' : cellule vide');
+            }
 
             $mls = (string)$this->mainLine;
             if (str_ends_with($name, $mls)) {

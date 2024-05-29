@@ -88,8 +88,6 @@ class ServiceAPayerService extends AbstractService
              */
             if (empty($value->getMiseEnPaiement())) {
                 $intervenant   = $value->getIntervenant();
-                $serviceAPayer = $value->getServiceAPayer();
-                $structure     = $intervenant->getStructure();
                 $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant, $value->getStructure());
                 //Si l'étape de demande de mise en paiement n'est pas atteignable alors on ne le propose pas
                 if (!$workflowEtape || !$workflowEtape->isAtteignable()) {
@@ -107,22 +105,23 @@ class ServiceAPayerService extends AbstractService
                         'typeIntervenant' => $intervenant->getStatut()->getTypeIntervenant()->getLibelle(),
                     ];
                 }
-
-                $dmep[$intervenant->getId()]['heures'][] = [
-                    'heuresAPayer'       => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
-                    //'missionId'          => ($value->getMission()) ? $value->getMission()->getId : '',
-                    'missionId'          => ($value->getMission()) ? $value->getMission()->getId() : '',
-                    'serviceId'          => ($value->getFormuleResultatService()) ? $value->getFormuleResultatService()->getService()->getId() : '',
-                    'serviceRefId'       => ($value->getFormuleResultatServiceReferentiel()) ? $value->getFormuleResultatServiceReferentiel()->getServiceReferentiel()->getId() : '',
-                    'centreCout'         => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',
-                                             'code'                 => ($value->getCentreCout()) ? $value->getCentreCout()->getCode() : '',
-                                             'typeRessourceCode'    => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getCode() : '',
-                                             'typeRessourceLibelle' => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getLibelle() : '',
-                    ],
-                    'domaineFonctionnel' => ['libelle' => ($value->getDomaineFonctionel()) ? $value->getDomaineFonctionel()->getLibelle() : '',
-                                             'code'    => ($value->getDomaineFonctionel()) ? $value->getDomaineFonctionel()->getSourceCode() : '',
-                    ],
-                ];
+                //On prend uniquement les heures ou hetd qui ne sont pas du référentiel
+                if (!$value->getFormuleResultatServiceReferentiel()) {
+                    $dmep[$intervenant->getId()]['heures'][] = [
+                        'heuresAPayer'       => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
+                        'missionId'          => ($value->getMission()) ? $value->getMission()->getId() : '',
+                        'serviceId'          => ($value->getFormuleResultatService()) ? $value->getFormuleResultatService()->getService()->getId() : '',
+                        'serviceRefId'       => ($value->getFormuleResultatServiceReferentiel()) ? $value->getFormuleResultatServiceReferentiel()->getServiceReferentiel()->getId() : '',
+                        'centreCout'         => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',
+                                                 'code'                 => ($value->getCentreCout()) ? $value->getCentreCout()->getCode() : '',
+                                                 'typeRessourceCode'    => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getCode() : '',
+                                                 'typeRessourceLibelle' => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getLibelle() : '',
+                        ],
+                        'domaineFonctionnel' => ['libelle' => ($value->getDomaineFonctionel()) ? $value->getDomaineFonctionel()->getLibelle() : '',
+                                                 'code'    => ($value->getDomaineFonctionel()) ? $value->getDomaineFonctionel()->getSourceCode() : '',
+                        ],
+                    ];
+                }
             }
         }
 

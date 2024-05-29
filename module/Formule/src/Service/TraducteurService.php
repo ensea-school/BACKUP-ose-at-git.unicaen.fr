@@ -834,7 +834,7 @@ class TraducteurService
         $string = $this->traductionExpr($term['exprs'][0]);
         $length = $this->traductionExpr($term['exprs'][1]);
 
-        $php = "substr($string, 0, $length)";
+        $php = "substr($string ?? '', 0, $length)";
 
         return $php;
     }

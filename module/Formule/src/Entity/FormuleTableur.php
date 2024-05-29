@@ -155,7 +155,7 @@ class FormuleTableur
         $this->trouverProprietes();
 
         // contrôle de conformité des propriétés
-        if ((!$this->proprietes['code']['cell']->getValue()) || (!$this->proprietes['libelle']['cell']->getValue())) {
+        if ((!$this->proprietes['code']['cell']?->getValue()) || (!$this->proprietes['libelle']['cell']?->getValue())) {
             throw new \Exception('Les propriétés de la formule de calcul ne sont pas correctement renseignées');
         }
 

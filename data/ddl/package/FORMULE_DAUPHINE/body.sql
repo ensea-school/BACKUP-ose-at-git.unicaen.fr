@@ -414,12 +414,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
 
 
 
-      -- AW=IF([.$AU$17]>0;0;(([.$AT20]/[.$AE20])*[.$AF20])-[.$AV20])
+      -- AW=IF([.$AU$17]>0;0;((([.$AT20]-[.AV20])/[.$AE20])*[.$AF20]))
       WHEN 'AW' THEN
         IF cell('AU17') > 0 THEN
           RETURN 0;
         ELSE
-          RETURN ((cell('AT',l) / cell('AE',l)) * cell('AF',l)) - cell('AV',l);
+          RETURN (((cell('AT',l) - cell('AV',l)) / cell('AE',l)) * cell('AF',l));
         END IF;
 
 

@@ -10,7 +10,7 @@ $fichiers = scandir($dir);
 
 $cacheDir = $formulator->cacheDir();
 
-if (file_exists($cacheDir)) {
+if (file_exists($cacheDir) && !$formuleName) {
     $c->exec([
         "cd " . getcwd(),
         "rm -Rf $cacheDir",

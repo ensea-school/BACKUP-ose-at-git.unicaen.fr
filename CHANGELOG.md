@@ -16,7 +16,7 @@
 * Modification de la formule de calcul de Paris 1
 * L'assertion des clôtures ne fonctionnait pas correctement : la saisie était interdite systématiquement dans certains cas
 * Modification de la formule de calcul de Paris Dauphine (#50652)
-* Les HETD référentiel ne sont plus prises en compte dans le total HETD des heures à payer via "Demande de mise en paiement en lot" faute de pouvoir pour le moment paramètrer un centre de coût par défaut pour les fonctions référentiels (#56717)
+* Pour la fonctionnalité "Demande de mise en paiement en lot" les HETD référentiel ne sont plus prises en compte dans le total HETD des heures à payer faute de pouvoir pour le moment paramètrer un centre de coût par défaut pour les fonctions référentiels (#56717)
 
 ## Améliorations
 

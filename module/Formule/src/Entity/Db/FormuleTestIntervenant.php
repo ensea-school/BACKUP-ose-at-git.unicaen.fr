@@ -107,6 +107,51 @@ class FormuleTestIntervenant extends FormuleIntervenant
 
 
 
+    public function setTaux(string $typeInterventionCode, float $serviceDu, float $serviceCompl): FormuleTestIntervenant
+    {
+        if (self::TAUX_CM == $typeInterventionCode) {
+            $this->setTauxCmServiceDu($serviceDu);
+            $this->setTauxCmServiceCompl($serviceCompl);
+        }elseif(self::TAUX_TP == $typeInterventionCode) {
+            $this->setTauxTpServiceDu($serviceDu);
+            $this->setTauxTpServiceCompl($serviceCompl);
+        }elseif(self::TAUX_TD == $typeInterventionCode) {
+            if ($serviceDu !== 1.0){
+                throw new \Exception('Le taux HETD du TD en service doit être à 1');
+            }
+            if ($serviceCompl !== 1.0){
+                throw new \Exception('Le taux HETD du TD en complémentaire doit être à 1');
+            }
+            /* Pas de SET pour le TD, car HETD = TD donc toujours 1*/
+        }else{
+            /* Si on trouve le taux, on le met à jour et on s'en va */
+            for( $i = 1; $i <= 5; $i++ ){
+                if ($this->getTauxAutreCode($i) == $typeInterventionCode){
+                    $this->setTauxAutreServiceDu($i, $serviceDu);
+                    $this->setTauxAutreServiceCompl($i, $serviceCompl);
+                    return $this;
+                }
+            }
+
+            /* pas trouvé, alors on l'ajoute et on s'en va */
+            for( $i = 1; $i <= 5; $i++ ){
+                if (!$this->getTauxAutreCode($i)){
+                    $this->setTauxAutreCode($i, $typeInterventionCode);
+                    $this->setTauxAutreServiceDu($i, $serviceDu);
+                    $this->setTauxAutreServiceCompl($i, $serviceCompl);
+                    return $this;
+                }
+            }
+
+            /* Si le taux n'a pas pu être affecté */
+            throw new \Exception('Le type d\'intervention '.$typeInterventionCode.' ne peut pas être pris en charge : il y a trop de types personnalisés');
+        }
+
+        return $this;
+    }
+
+
+
     public function getTauxAutreServiceDu(int $index): float
     {
         return $this->{"tauxAutre" . $index . "ServiceDu"};

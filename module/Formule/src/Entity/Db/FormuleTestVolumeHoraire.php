@@ -50,6 +50,28 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
+    public function populateAttendues(): void
+    {
+        $this->setHeuresAttenduesServiceFi($this->getHeuresServiceFi());
+        $this->setHeuresAttenduesServiceFa($this->getHeuresServiceFa());
+        $this->setHeuresAttenduesServiceFc($this->getHeuresServiceFc());
+        $this->setHeuresAttenduesServiceReferentiel($this->getHeuresServiceReferentiel());
+
+        $this->setHeuresAttenduesComplFi($this->getHeuresComplFi());
+        $this->setHeuresAttenduesComplFa($this->getHeuresComplFa());
+        $this->setHeuresAttenduesComplFc($this->getHeuresComplFc());
+        $this->setHeuresAttenduesComplReferentiel($this->getHeuresComplReferentiel());
+
+        $this->setHeuresAttenduesNonPayableFi($this->getHeuresNonPayableFi());
+        $this->setHeuresAttenduesNonPayableFa($this->getHeuresNonPayableFa());
+        $this->setHeuresAttenduesNonPayableFc($this->getHeuresNonPayableFc());
+        $this->setHeuresAttenduesNonPayableReferentiel($this->getHeuresNonPayableReferentiel());
+
+        $this->setHeuresAttenduesPrimes($this->getHeuresPrimes());
+    }
+
+
+
     public function getVolumeHoraire(): VolumeHoraire|int|null
     {
         return $this->referentiel ? null : 1;
@@ -191,7 +213,7 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
         /** @var FormuleTestIntervenant $testIntervenant */
         $testIntervenant = $this->getFormuleIntervenant();
 
-        return $testIntervenant->getTauxTpServiceCompl($this->getTypeInterventionCode());
+        return $testIntervenant->getTauxServiceCompl($this->getTypeInterventionCode());
     }
 
 

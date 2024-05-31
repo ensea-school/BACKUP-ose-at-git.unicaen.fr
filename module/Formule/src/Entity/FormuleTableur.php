@@ -169,6 +169,13 @@ class FormuleTableur
 
 
 
+    public function getCellFloatVal(string $cellName): float
+    {
+        return (float)$this->sheet->getCell($cellName)->getValue();
+    }
+
+
+
     protected function trouverVersion(): void
     {
         if ('parametres_generaux' == $this->getColLib('A', $this->mainLine - 2)) {

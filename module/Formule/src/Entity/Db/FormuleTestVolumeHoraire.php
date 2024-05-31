@@ -152,7 +152,9 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
     public function setTypeInterventionCode(?string $typeInterventionCode): FormuleTestVolumeHoraire
     {
-        if (!empty($typeInterventionCode)) {
+        if ($typeInterventionCode == 'Référentiel'){
+            $this->referentiel = true;
+        }elseif (!empty($typeInterventionCode)) {
             $this->referentiel = false;
         }
         parent::setTypeInterventionCode($typeInterventionCode);
@@ -170,7 +172,9 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
     public function setStructureUniv(bool $structureUniv): FormuleVolumeHoraire
     {
-        $this->structureCode = FormuleTestIntervenant::STRUCTURE_UNIV;
+        if ($structureUniv) {
+            $this->structureCode = FormuleTestIntervenant::STRUCTURE_UNIV;
+        }
         return $this;
     }
 
@@ -185,7 +189,9 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
     public function setStructureExterieur(bool $structureExterieur): FormuleVolumeHoraire
     {
-        $this->structureCode = FormuleTestIntervenant::STRUCTURE_EXTERIEUR;
+        if ($structureExterieur) {
+            $this->structureCode = FormuleTestIntervenant::STRUCTURE_EXTERIEUR;
+        }
         return $this;
     }
 

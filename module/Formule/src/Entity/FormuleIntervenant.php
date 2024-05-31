@@ -271,6 +271,13 @@ class FormuleIntervenant implements FormuleHeuresInterface
 
 
 
+    public function getServiceDu(): float
+    {
+        return $this->getHeuresServiceStatutaire() + $this->getHeuresServiceModifie();
+    }
+
+
+
     /***********************************/
     /* Accésseurs générés par PhpStorm */
     /***********************************/
@@ -481,21 +488,6 @@ class FormuleIntervenant implements FormuleHeuresInterface
     public function setParam5(?string $param5): FormuleIntervenant
     {
         $this->param5 = $param5;
-        return $this;
-    }
-
-
-
-    public function getServiceDu(): float
-    {
-        return $this->serviceDu;
-    }
-
-
-
-    public function setServiceDu(float $serviceDu): FormuleIntervenant
-    {
-        $this->serviceDu = $serviceDu;
         return $this;
     }
 

@@ -5,9 +5,10 @@ namespace Formule\Service;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Formule\Entity\Db\Formule;
+use Formule\Entity\Db\FormuleTestIntervenant;
+use Formule\Entity\Db\FormuleTestVolumeHoraire;
 use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleTableur;
-use Formule\Entity\FormuleVolumeHoraire;
 use Formule\Model\AbstractFormuleCalcul;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -50,19 +51,98 @@ class FormulatorService
 
         $this->makeWithCacheFile($formule, false);
 
-        try {
-            $test = $this->createFormuleTest();
-            $this->calculer($test, $formule);
-        } catch (\Error $e) {
-            throw new \Exception($e->getMessage());
-            $test = null;
-        }
-
-        if ($test && !$this->formuleTestOK($test)){
-            throw new \Exception('La formule ne calcule pas correctement les résultats : il y a une perte d\'heures lors de la convertion en HETD');
-        }
+        $test = $tableur->formuleIntervenant();
+        $trace = $this->calculer($test, $formule);
+        $this->checkFormuleResErreurs($test, $tableur, $trace);
 
         return $formule;
+    }
+
+
+
+    private function checkFormuleResErreurs(FormuleTestIntervenant $fi, FormuleTableur $tableur, array $trace): void
+    {
+        $ths = [
+            'ServiceFi'             => 'les heures de service en FI',
+            'ServiceFa'             => 'les heures de service en FA',
+            'ServiceFc'             => 'les heures de service en FC',
+            'ServiceReferentiel'    => 'les heures de service référentiel',
+            'ComplFi'               => 'les heures complémentaires en FI',
+            'ComplFa'               => 'les heures complémentaires en FA',
+            'ComplFc'               => 'les heures complémentaires en FC',
+            'ComplReferentiel'      => 'les heures complémentaires de référentiel',
+            'NonPayableFi'          => 'les heures non payables en Fi',
+            'NonPayableFa'          => 'les heures non payables en Fa',
+            'NonPayableFc'          => 'les heures non payables en Fc',
+            'NonPayableReferentiel' => 'les heures non payables de référentiel',
+            'Primes'                => 'les heures relatives aux primes',
+        ];
+
+        /** @var FormuleTestVolumeHoraire[] $vhs */
+        $vhs = $fi->getVolumesHoraires();
+        foreach ($vhs as $i => $vh) {
+            foreach ($ths as $th => $merr) {
+                $methodHeures = 'getHeures' . $th;
+                $methodAttendu = 'getHeuresAttendues' . $th;
+                $attendu = $vh->$methodAttendu();
+                $calcule = $vh->$methodHeures();
+
+                if ($calcule !== $attendu) {
+                    $msg = 'Diff OSE/Tableur ligne ' . ($tableur->mainLine() + $i) . ' : erreur sur ' . $merr . ' : ' . $calcule . ' calculées pour ' . $attendu . ' attendues';
+
+                    $input = [
+                        'structureCode'           => $vh->getStructureCode(),
+                        'structureIsAffectation'  => $vh->isStructureAffectation(),
+                        'structureIsUniv'         => $vh->isStructureUniv(),
+                        'structureIsExterieur'    => $vh->isStructureExterieur(),
+                        'serviceStatutaire'       => $vh->isServiceStatutaire(),
+                        'tauxFi'                  => $vh->getTauxFi(),
+                        'tauxFa'                  => $vh->getTauxFa(),
+                        'tauxFc'                  => $vh->getTauxFc(),
+                        'typeInterventionCode'    => $vh->getTypeInterventionCode(),
+                        'tauxServiceDu'           => $vh->getTauxServiceDu(),
+                        'tauxServiceCompl'        => $vh->getTauxServiceCompl(),
+                        'ponderationServiceDu'    => $vh->getPonderationServiceDu(),
+                        'ponderationServiceCompl' => $vh->getPonderationServiceCompl(),
+                        'heures'                  => $vh->getHeures(),
+                        'param1'                  => $vh->getParam1(),
+                        'param2'                  => $vh->getParam2(),
+                        'param3'                  => $vh->getParam3(),
+                        'param4'                  => $vh->getParam4(),
+                        'param5'                  => $vh->getParam5(),
+                    ];
+                    foreach ($input as $p => $v) {
+                        if (is_bool($v)) {
+                            $v = $v ? 'true' : 'false';
+                        }
+                        $msg .= "\n$p = $v";
+                    }
+
+                    if (isset($trace['vh'][$i])) {
+                        $msg .= "\n\nValeurs en ligne calculées :";
+                        foreach ($trace['vh'][$i] as $cell => $val) {
+                            $tableurVal = $tableur->getCellFloatVal($cell . (string)$tableur->mainLine() + $i);
+                            $msg .= "\n$cell = $val";
+                            if ($val !== $tableurVal) {
+                                $msg .= ' calculé (' . $tableurVal . ' dans le tableur)';
+                            }
+                        }
+
+                        if (isset($trace['global'])) {
+                            $msg .= "\n\nValeurs globales :";
+                            foreach ($trace['global'] as $cell => $val) {
+                                $tableurVal = $tableur->getCellFloatVal($cell);
+                                $msg .= "\n$cell = $val";
+                                if ($val !== $tableurVal) {
+                                    $msg .= ' calculé (' . $tableurVal . ' dans le tableur)';
+                                }
+                            }
+                        }
+                    }
+                    throw new \Exception($msg);
+                }
+            }
+        }
     }
 
 
@@ -109,70 +189,6 @@ class FormulatorService
         $php = str_replace("/* TRAITEMENT */\n\n", $php, $template);
 
         return $php;
-    }
-
-
-
-    private function createFormuleTest(): FormuleIntervenant
-    {
-        $test = new FormuleIntervenant();
-        $test->setAnnee($this->getServiceContext()->getAnnee());
-        $test->setTypeIntervenant($this->getServiceTypeIntervenant()->getPermanent());
-        $test->setStructureCode('UFR1');
-        $test->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
-        $test->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-        $test->getServiceDu(192);
-
-        $vh1 = new FormuleVolumeHoraire();
-        $vh1->setService(1);
-        $vh1->setVolumeHoraire(1);
-        $vh1->setStructureCode('UFR1');
-        $vh1->setTauxFi(1);
-        $vh1->setTauxFa(0);
-        $vh1->setTauxFc(0);
-        $vh1->setTauxServiceDu(1.5);
-        $vh1->setTauxServiceCompl(1.5);
-        $vh1->setTypeInterventionCode('CM');
-        $vh1->setHeures(80);
-        $test->addVolumeHoraire($vh1);
-
-        $vh2 = new FormuleVolumeHoraire();
-        $vh2->setService(2);
-        $vh2->setVolumeHoraire(2);
-        $vh2->setStructureCode('UFR2');
-        $vh1->setTauxFi(1);
-        $vh1->setTauxFa(0);
-        $vh1->setTauxFc(0);
-        $vh2->setTypeInterventionCode('TD');
-        $vh2->setHeures(70);
-        $test->addVolumeHoraire($vh2);
-
-        $vh3 = new FormuleVolumeHoraire();
-        $vh3->setServiceReferentiel(3);
-        $vh3->setVolumeHoraireReferentiel(3);
-        $vh3->setStructureCode('UFR1');
-        $vh3->setHeures(60);
-        $test->addVolumeHoraire($vh3);
-
-        return $test;
-    }
-
-
-
-    private function formuleTestOK(FormuleIntervenant $test): bool
-    {
-        $total = 0;
-        foreach( $test->getVolumesHoraires() as $vh){
-            $total += $vh->getHeuresServiceFi() + $vh->getHeuresComplFi() + $vh->getHeuresNonPayableFi();
-            $total += $vh->getHeuresServiceFa() + $vh->getHeuresComplFa() + $vh->getHeuresNonPayableFa();
-            $total += $vh->getHeuresServiceFc() + $vh->getHeuresComplFc() + $vh->getHeuresNonPayableFc();
-            $total += $vh->getHeuresServiceReferentiel() + $vh->getHeuresComplReferentiel() + $vh->getHeuresNonPayableReferentiel();
-            $total += $vh->getHeuresPrimes();
-        }
-
-        $attendu = 80*1.5 + 70 + 60;
-
-        return $total == $attendu;
     }
 
 

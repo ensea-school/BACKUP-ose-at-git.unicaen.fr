@@ -6,7 +6,7 @@ use Formule\Entity\Db\Formule;
 use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleVolumeHoraire;
 use Unicaen\OpenDocument\Calc;
-use Unicaen\OpenDocument\Calc\Sheet;
+
 
 class AbstractFormuleCalcul
 {
@@ -28,7 +28,10 @@ class AbstractFormuleCalcul
 
     protected Formule $formule;
     protected FormuleIntervenant $intervenant;
-    protected array $debug = [];
+
+    /** @var FormuleVolumeHoraire[] */
+    protected array $volumesHoraires = [];
+    protected array $cache = [];
 
     protected int $ligne = 0;
 
@@ -44,7 +47,7 @@ class AbstractFormuleCalcul
     protected function min(string $col): float
     {
         $result = null;
-        foreach ($this->intervenant->getVolumesHoraires() as $l => $vh) {
+        foreach ($this->volumesHoraires as $l => $vh) {
             $cr = $this->c($col, $l);
             if ($result === null || $cr < $result) {
                 $result = $cr;
@@ -59,7 +62,7 @@ class AbstractFormuleCalcul
     protected function max(string $col): float
     {
         $result = null;
-        foreach ($this->intervenant->getVolumesHoraires() as $l => $vh) {
+        foreach ($this->volumesHoraires as $l => $vh) {
             $cr = $this->c($col, $l);
             if ($result === null || $cr > $result) {
                 $result = $cr;
@@ -74,7 +77,7 @@ class AbstractFormuleCalcul
     protected function somme(string $col): float
     {
         $result = 0;
-        foreach ($this->intervenant->getVolumesHoraires() as $l => $vh) {
+        foreach ($this->volumesHoraires as $l => $vh) {
             $cr = $this->c($col, $l);
             $result += $cr;
         }
@@ -86,24 +89,24 @@ class AbstractFormuleCalcul
 
     protected function c(string $name, int $l)
     {
-        $cname = 'c_' . $name;
-        $resultat = $this->$cname($l);
-        $this->debug['vh'][$l][$name] = $resultat;
-        //$this->debug['global'][$name] = $resultat;
+        if (!isset($this->cache['vh'][$l][$name])) {
+            $cname = 'c_' . $name;
+            $this->cache['vh'][$l][$name] = $this->$cname($l);
+        }
 
-        return $resultat;
+        return $this->cache['vh'][$l][$name];
     }
 
 
 
     protected function cg(string $name)
     {
-        $cname = 'c_' . $name;
-        $resultat = $this->$cname();
+        if (!isset($this->cache['global'][$name])) {
+            $cname = 'c_' . $name;
+            $this->cache['global'][$name] = $this->$cname();
+        }
 
-        $this->debug['global'][$name] = $resultat;
-
-        return $resultat;
+        return $this->cache['global'][$name];
     }
 
 
@@ -117,7 +120,7 @@ class AbstractFormuleCalcul
 
     protected function volumeHoraire(int $l): FormuleVolumeHoraire
     {
-        return $this->intervenant->getVolumesHoraires()->get($l);
+        return $this->volumesHoraires[$l];
     }
 
 
@@ -125,20 +128,18 @@ class AbstractFormuleCalcul
     public function calculer(FormuleIntervenant $intervenant, Formule $formule): array
     {
         $this->intervenant = $intervenant;
+        $this->volumesHoraires = $intervenant->getVolumesHoraires()->toArray();
         $this->formule = $formule;
-        $this->debug = [
+        $this->cache = [
             'vh'     => [],
             'global' => [],
         ];
 
-        $volumesHoraires = $this->intervenant->getVolumesHoraires();
-
-        foreach ($volumesHoraires as $l => $volumesHoraire) {
+        foreach ($this->volumesHoraires as $l => $volumesHoraire) {
             foreach (self::RESCOLS as $resCol) {
                 $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
                 if ($cellColPos) {
-                    $val = $this->{'c_' . $cellColPos}($l);
-                    $this->debug['vh'][$l][$cellColPos] = $val;
+                    $val = $this->c($cellColPos, $l);
                 } else {
                     $val = 0.0;
                 }
@@ -146,23 +147,23 @@ class AbstractFormuleCalcul
             }
         }
 
-        foreach( $this->debug['vh'] as $vhi => $vhd){
-            uksort($this->debug['vh'][$vhi], function($a, $b){
+        foreach ($this->cache['vh'] as $vhi => $vhd) {
+            uksort($this->cache['vh'][$vhi], function ($a, $b) {
                 return (int)(Calc::letterToNumber($a) - Calc::letterToNumber($b));
             });
         }
 
-        uksort($this->debug['global'], function($a, $b){
+        uksort($this->cache['global'], function ($a, $b) {
             $aCoords = Calc::cellNameToCoords($a);
             $bCoords = Calc::cellNameToCoords($b);
 
-            if ($aCoords['col'] == $bCoords['col']){
+            if ($aCoords['col'] == $bCoords['col']) {
                 return $aCoords['row'] - $bCoords['row'];
-            }else{
+            } else {
                 return $aCoords['col'] - $bCoords['col'];
             }
         });
 
-        return $this->debug;
+        return $this->cache;
     }
 }

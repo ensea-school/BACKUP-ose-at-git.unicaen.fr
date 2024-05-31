@@ -68,6 +68,13 @@ class FormuleVolumeHoraire implements FormuleHeuresInterface
 
 
 
+    public function setStructureAffectation(bool $structureAffectation)
+    {
+        /* Ne rien faire */
+    }
+
+
+
     public function getTotal(): float
     {
         return $this->getHeuresServiceFi()

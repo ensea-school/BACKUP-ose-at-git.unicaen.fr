@@ -776,8 +776,7 @@ class TraducteurService
             $this->transformer($iftest);
             $iftest = $this->traductionExpr($iftest);
 
-            $php .= '$volumesHoraires = $this->intervenant->getVolumesHoraires();'."\n";
-            $php .= 'foreach ($volumesHoraires as $l => $volumesHoraire) {'."\n";
+            $php .= 'foreach ($this->volumesHoraires as $l => $volumesHoraire) {'."\n";
             $php .= "  if ($iftest){\n";
             $php .= "    \$val += \$this->c('$colDest',\$l);\n";
             $php .= "  }\n";

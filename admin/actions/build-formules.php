@@ -21,7 +21,7 @@ if (file_exists($cacheDir) && !$formuleName) {
 $c->begin('Construction de toutes les formules de calcul');
 
 foreach ($fichiers as $fichier) {
-    if ('.' != $fichier && '..' != $fichier && (strtolower($fichier) == strtolower($formuleName).'.ods' || empty($formuleName))) {
+    if (!str_starts_with($fichier, '.') && (strtolower($fichier) == strtolower($formuleName).'.ods' || empty($formuleName))) {
         $c->println('Construction de ' . $fichier . ' ...');
         try {
             $filename = $dir . '/' . $fichier;

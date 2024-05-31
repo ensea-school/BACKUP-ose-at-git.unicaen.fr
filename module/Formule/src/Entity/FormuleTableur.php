@@ -5,6 +5,8 @@ namespace Formule\Entity;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Formule\Entity\Db\Formule;
+use Formule\Entity\Db\FormuleTestIntervenant;
+use Formule\Entity\Db\FormuleTestVolumeHoraire;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -38,6 +40,7 @@ class FormuleTableur
         'i.param5'                     => ['name' => ['p5', 'param_5'],                'type' => 'string', 'vmin' => 1, 'result' => false],
 
         'vh.structureCode'               => ['name' => 'structure_code',               'type' => 'string', 'vmin' => 1, 'result' => false],
+        'vh.structureAffectation'        => ['name' => 'structure_is_affectation',     'type' => 'bool',   'vmin' => 1, 'result' => false],
         'vh.structureUniv'               => ['name' => 'structure_is_univ',            'type' => 'bool',   'vmin' => 1, 'result' => false],
         'vh.structureExterieur'          => ['name' => 'structure_is_exterieure',      'type' => 'bool',   'vmin' => 2, 'result' => false],
         'vh.serviceStatutaire'           => ['name' => 'service_statutaire',           'type' => 'bool',   'vmin' => 1, 'result' => false],
@@ -584,11 +587,11 @@ class FormuleTableur
 
 
 
-    public function formuleIntervenant(): FormuleIntervenant
+    public function formuleIntervenant(): FormuleTestIntervenant
     {
         $em = $this->getServiceContext()->getEntityManager();
 
-        $fi = new FormuleIntervenant();
+        $fi = new FormuleTestIntervenant();
         $fi->setAnnee($this->getServiceContext()->getAnnee());
 
         $typeVolumeHoraire = $this->variableValue('i.typeVolumeHoraire');
@@ -612,7 +615,7 @@ class FormuleTableur
 
         $row = $this->mainLine;
         while ($this->variableValue('vh.structureCode', $row) && $this->variableValue('vh.typeInterventionCode', $row)) {
-            $vh = new FormuleVolumeHoraire();
+            $vh = new FormuleTestVolumeHoraire();
             $fi->addVolumeHoraire($vh);
             $referentiel = Util::reduce($this->variableValue('vh.typeInterventionCode', $row)) == 'referentiel';
             if ($referentiel) {
@@ -621,13 +624,23 @@ class FormuleTableur
             } else {
                 $vh->setVolumeHoraire($row);
                 $vh->setService($row);
+
+                $tauxCode = $this->variableValue('vh.typeInterventionCode', $row);
+                $tauxServiceDu = $this->variableValue('vh.tauxServiceDu', $row);
+                $tauxServiceCompl = $this->variableValue('vh.tauxServiceCompl', $row);
+
+                $fi->setTaux($tauxCode, $tauxServiceDu, $tauxServiceCompl);
             }
             foreach ($this->variables as $vn => $v) {
                 if (str_starts_with($vn, 'vh.')) {
-                    $method = 'set' . ucfirst(substr($vn, 3));
-                    $vh->$method($this->variableValue($vn, $row));
+                    if (!in_array($vn,['vh.tauxServiceDu','vh.tauxServiceCompl'])){
+                        $method = 'set' . ucfirst(substr($vn, 3));
+                        $vh->$method($this->variableValue($vn, $row));
+                    }
                 }
             }
+
+            $vh->populateAttendues();
 
             $row++;
         }

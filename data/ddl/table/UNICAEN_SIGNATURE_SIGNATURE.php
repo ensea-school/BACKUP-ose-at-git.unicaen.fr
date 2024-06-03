@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 16,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'DATECREATED'             => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'DOCUMENT_PATH'           => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'ID'                      => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'LETTERFILE_PROCESS'      => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'LETTERFILE_URL'          => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'NOTIFICATIONDESCRIPTION' => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 17,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'NOTIFICATIONSRECIPIENTS' => [

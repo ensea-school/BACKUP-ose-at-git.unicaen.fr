@@ -7,3 +7,15 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
+
+
+/** @var \Doctrine\ORM\EntityManager $em */
+$em = $container->get('doctrine.entitymanager.orm_default');
+
+
+$sr = $em->getRepository(UnicaenSignature\Entity\Db\Signature::class);
+
+
+$data = $sr->findAll();
+
+var_dump($data);

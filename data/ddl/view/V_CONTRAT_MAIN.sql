@@ -1,6 +1,6 @@
 CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
-  SELECT contrat_id, SUM(heures) "serviceTotal" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
+  SELECT contrat_id, SUM(heures) "serviceTotal", SUM("hetd") "hetdContrat" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
 ),
 
 
@@ -59,6 +59,7 @@ SELECT ct.annee_id,
        'Exemplaire à retourner' || ct."exemplaire2"                                                                         "exemplaire2",
        ct."totalDiviseParDix",
        ct."serviceTotal",
+       ct."hetdContrat",
        ct."serviceTotalPaye",
        ct."legendeAutresHeures",
        ct."enteteAutresHeures",
@@ -139,7 +140,9 @@ FROM (  SELECT c.*,
                                                                      s.adresse_pays_id
                                                                  ), chr(13), ' - ')
                  ELSE '' END                                                                                                                                "exemplaire2",
-             REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')                                                                 "serviceTotal",
+            REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')                                                                 "serviceTotal",
+            REPLACE(ltrim(to_char(COALESCE(hs."hetdContrat", 0), '999999.00')), '.', ',')                                                                 "hetdContrat",
+
             CASE
                 WHEN COALESCE(hs."serviceTotal"/10, 0) < 1
                 THEN CONCAT('0', REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ','))

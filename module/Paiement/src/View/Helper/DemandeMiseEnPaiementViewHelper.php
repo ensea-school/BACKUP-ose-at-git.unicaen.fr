@@ -269,11 +269,13 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
             }
         } elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel) {
             $cartridgeItems[] = 'Référentiel';
-            
+
             $cartridgeItems[] = $this->getView()->fonctionReferentiel($serviceAPayer->getServiceReferentiel()->getFonctionReferentiel())->renderLink();
         } elseif ($serviceAPayer instanceof Mission) {
             $cartridgeItems[] = $serviceAPayer->getTypeMission()->getLibelle();
-            $cartridgeItems[] = $serviceAPayer->getLibelleMission();
+            if (!empty($serviceAPayer->getLibelleMission())) {
+                $cartridgeItems[] = $serviceAPayer->getLibelleMission();
+            }
         }
 
 

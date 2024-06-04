@@ -33,7 +33,7 @@ return [
                             'controller'    => Controller\AdministrationController::class,
                             'action'        => 'televerser-tableur',
                             'privileges'    => [Privileges::FORMULE_ADMINISTRATION_EDITION],
-                        ]
+                        ],
                     ],
                 ],
             ],

@@ -175,14 +175,13 @@ class TestController extends AbstractController
         $file = $_FILES['fichier']['tmp_name'];
         $filename = $_FILES['fichier']['name'];
 
-        $formuleId = $this->params()->fromPost('formule');
-        $formule = $this->em()->find(Formule::class, $formuleId);
+        $tableur = $this->getServiceFormulator()->charger($file);
+        $test = $tableur->formuleIntervenant();
+        $test->setLibelle($filename);
 
-        $fc = new FormuleCalcul($file);
+        $this->getServiceTest()->save($test);
 
-        $fti = $this->getServiceTest()->creerDepuisTableur($fc, $formule, $filename);
-
-        $url = $this->url()->fromRoute('formule-test/saisir', ['formuleTestIntervenant' => $fti->getId()]);
+        $url = $this->url()->fromRoute('formule-test/saisir', ['formuleTestIntervenant' => $test->getId()]);
 
         return $this->redirect()->toUrl($url);
     }

@@ -32,6 +32,25 @@
         </tbody>
     </u-table-ajax>
     <b-button variant="primary" :href="addUrl()">Ajout d'un nouveau test</b-button>
+
+    <br/>
+    <br/>
+    <div class="card bg-warning">
+        <div class="card-header">
+            <h3>Import d'un nouveau test à partir d'un tableur</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" :action="this.importUrl()">
+                <div class="form-group mb-3">
+                    <label for="formule-name">Feuille de calcul (format Excel ou Calc)</label>
+                    <input class="form-control" id="formule-fichier" type="file" name="fichier"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Import d'un test à partir d'un tableur</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -56,6 +75,10 @@ export default {
         deleteUrl(id)
         {
             return unicaenVue.url('formule-test/supprimer/:id', {id: id});
+        },
+        importUrl()
+        {
+            return unicaenVue.url('formule-test/import');
         },
         supprimerTest(event)
         {

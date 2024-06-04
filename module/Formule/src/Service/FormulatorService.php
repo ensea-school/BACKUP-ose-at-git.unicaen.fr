@@ -87,7 +87,7 @@ class FormulatorService
                 $attendu = $vh->$methodAttendu();
                 $calcule = $vh->$methodHeures();
 
-                if ($calcule !== $attendu) {
+                if ($this->diffFloat($calcule,$attendu)) {
                     $msg = 'Diff OSE/Tableur ligne ' . ($tableur->mainLine() + $i) . ' : erreur sur ' . $merr . ' : ' . $calcule . ' calculées pour ' . $attendu . ' attendues';
 
                     $input = [
@@ -123,7 +123,7 @@ class FormulatorService
                         foreach ($trace['vh'][$i] as $cell => $val) {
                             $tableurVal = $tableur->getCellFloatVal($cell . (string)$tableur->mainLine() + $i);
                             $msg .= "\n$cell = $val";
-                            if ($val !== $tableurVal) {
+                            if ($this->diffFloat($val,$tableurVal)) {
                                 $msg .= ' calculé (' . $tableurVal . ' dans le tableur)';
                             }
                         }
@@ -133,7 +133,7 @@ class FormulatorService
                             foreach ($trace['global'] as $cell => $val) {
                                 $tableurVal = $tableur->getCellFloatVal($cell);
                                 $msg .= "\n$cell = $val";
-                                if ($val !== $tableurVal) {
+                                if ($this->diffFloat($val,$tableurVal)) {
                                     $msg .= ' calculé (' . $tableurVal . ' dans le tableur)';
                                 }
                             }
@@ -143,6 +143,16 @@ class FormulatorService
                 }
             }
         }
+    }
+
+
+
+    private function diffFloat(float $f1, float $f2)
+    {
+        $if1 = (int)round($f1 * 100);
+        $if2 = (int)round($f2 * 100);
+
+        return $if1 !== $if2;
     }
 
 
@@ -187,6 +197,7 @@ class FormulatorService
         $template = file_get_contents(getcwd() . '/module/Formule/src/Model/FormuleCalculTemplate.php');
         $template = str_replace('FormuleCalculTemplate', $this->formuleClassName($tableur->formule()), $template);
         $php = str_replace("/* TRAITEMENT */\n\n", $php, $template);
+        $php = str_replace('20/* MAIN_LINE*/', $tableur->mainLine(), $php);
 
         return $php;
     }
@@ -208,14 +219,12 @@ class FormulatorService
         $dir = $this->cacheDir();
         $filename = $dir . $formule->getCode() . '.php';
 
-        if (!file_exists($filename)) {
-            if (!file_exists($dir)) {
-                $oldumask = umask(0);
-                mkdir($dir, 0777); // or even 01777 so you get the sticky bit set
-                umask($oldumask);
-            }
-            file_put_contents($filename, $formule->getPhpClass());
+        if (!file_exists($dir)) {
+            $oldumask = umask(0);
+            mkdir($dir, 0777); // or even 01777 so you get the sticky bit set
+            umask($oldumask);
         }
+        file_put_contents($filename, $formule->getPhpClass());
 
         if ($instanciate) {
             $classname = $this->formuleClassName($formule);

@@ -601,6 +601,8 @@ class FormuleTableur
         $fi = new FormuleTestIntervenant();
         $fi->setAnnee($this->getServiceContext()->getAnnee());
 
+        $fi->setFormule($this->formule());
+
         $typeVolumeHoraire = $this->variableValue('i.typeVolumeHoraire');
         $fi->setTypeVolumeHoraire($em->getRepository(TypeVolumeHoraire::class)->findOneBy(['code' => $typeVolumeHoraire]));
 

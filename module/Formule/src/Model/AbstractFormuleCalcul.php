@@ -33,6 +33,8 @@ class AbstractFormuleCalcul
     protected array $volumesHoraires = [];
     protected array $cache = [];
 
+    protected int $mainLine = 20;
+
     protected int $ligne = 0;
 
 
@@ -89,6 +91,10 @@ class AbstractFormuleCalcul
 
     protected function c(string $name, int $l)
     {
+        if ($l < 0){
+            return $this->cg($name.(string)($this->mainLine + $l));
+        }
+
         if (!isset($this->cache['vh'][$l][$name])) {
             $cname = 'c_' . $name;
             $this->cache['vh'][$l][$name] = $this->$cname($l);

@@ -21,6 +21,8 @@ class TraducteurService
 
     private string $name;
 
+    private bool $absCell = false;
+
     private string $tableurExpr;
 
     private bool $debug = false;
@@ -34,6 +36,7 @@ class TraducteurService
         'detectionVariables',
         'transfoTestsBool',
         'transfoStructureAffectation',
+        'transfoStructureUniv',
         'transfoIfPlus',
         'transfoSimplify',
     ];
@@ -69,6 +72,7 @@ class TraducteurService
             throw new \Exception('La cellule ' . $this->cell->getName() . ' est vide. Or elle est utilisée dans une ou plusieurs expressions');
         }
 
+        $this->absCell = $cell->getRow() < $this->tableur->mainLine();
         $this->transformer($this->expr);
         $php = $this->convertir();
 
@@ -135,12 +139,14 @@ class TraducteurService
         $php = "// $this->name" . $this->tableurExpr . "\n";
         if ($this->name == $this->cell->getName()) {
             $php .= "protected function c_$this->name(): float\n";
+            $this->absCell = true;
         } else {
             $php .= "protected function c_$this->name(int \$l): float\n";
+            $this->absCell = false;
         }
         $php .= "{\n";
         $php .= $this->indent($this->returnPhp($this->traductionExpr($this->expr)));
-        $php .= "}\n";
+        $php .= "}";
 
         return $php;
     }
@@ -187,15 +193,24 @@ class TraducteurService
     {
         if (!isset($expr[$i]['name'])) return;
 
-        // On supprime les dollars inutiles
-        if (str_contains($expr[$i]['name'], '$')) {
-            $expr[$i]['name'] = str_replace('$', '', $expr[$i]['name']);
-        }
-
         // On supprime le numéro de ligne si on est sur la ligne principale
         $ml = (string)$this->tableur->mainLine();
         if (str_ends_with($expr[$i]['name'], $ml)) {
             $expr[$i]['name'] = substr($expr[$i]['name'], 0, -strlen($ml));
+        }
+
+        if (!$this->absCell) {
+            /* Ce mécanisme ne fonctionne que si on est dans les lignes de VH, avec références relatives à la ligne du dessous ou du dessus */
+            $mlMoins = (string)($this->tableur->mainLine() - 1);
+            if (str_ends_with($expr[$i]['name'], $mlMoins) && !str_ends_with($expr[$i]['name'], '$' . $mlMoins)) {
+                $expr[$i]['name'] = substr($expr[$i]['name'], 0, -strlen($mlMoins));
+                $expr[$i]['rel'] = -1;
+            }
+        }
+
+        // On supprime les dollars inutiles
+        if (str_contains($expr[$i]['name'], '$')) {
+            $expr[$i]['name'] = str_replace('$', '', $expr[$i]['name']);
         }
     }
 
@@ -324,18 +339,76 @@ class TraducteurService
 
 
 
-    private function transfoIfPlus(array &$expr, int $i): void
+    private function transfoStructureUniv(array &$expr, int $i): void
     {
+        //    "vh.structure_code = cell('K10')"            => 'vh.structure_is_univ',
+        //    "vh.structure_code <> cell('K10')"           => 'NOT vh.structure_is_univ',
+
         $transfo = false;
 
-        if ($expr[$i]['type'] == 'function' && $expr[$i]['name'] == 'IF') {
-            $ifi = $i;
-            if (isset($expr[$i + 1])) {
-                $transfo = true;
-            }
+        if ($expr[$i]['type'] == 'variable'
+            && $expr[$i]['name'] == 'vh.structureCode'
+            && isset($expr[$i + 2])
+            && $expr[$i + 1]['type'] == 'op' && ($expr[$i + 1]['name'] == '=' || $expr[$i + 1]['name'] == '<>')
+            && $expr[$i + 2]['type'] == 'cell' && $expr[$i + 2]['name'] == 'K10'
+        ) {
+            $transfo = true;
         }
 
         if ($transfo) {
+            if ($expr[$i + 1]['name'] == '=') {
+                $expr[$i]['name'] = 'vh.structureUniv';
+                unset($expr[$i + 1]);
+                unset($expr[$i + 2]);
+            } else {
+                $expr[$i + 1] = $expr[$i];
+                $expr[$i + 1]['name'] = 'vh.structureUniv';
+                $expr[$i] = ['type' => 'php', 'code' => '!'];
+                unset($expr[$i + 2]);
+            }
+        }
+    }
+
+
+
+    private function transfoIfPlus(array &$expr, int $i): void
+    {
+        $transfoBefore = false;
+        $transfoAfter = false;
+
+        if ($expr[$i]['type'] == 'function' && $expr[$i]['name'] == 'IF') {
+            $ifi = $i;
+            if (isset($expr[$i - 1])) {
+                $transfoBefore = true;
+            }
+            if (isset($expr[$i + 1])) {
+                $transfoAfter = true;
+            }
+        }
+
+        if ($transfoBefore) {
+            $movedExpr = [];
+            for ($j = 0; $j < $i; $j++) {
+                $movedExpr[] = $expr[$j];
+                unset($expr[$j]);
+            }
+
+            $ifOkExpr = $movedExpr;
+            foreach ($expr[$ifi]['exprs'][1] as $oke) {
+                $ifOkExpr[] = $oke;
+            }
+            $expr[$ifi]['exprs'][1] = $ifOkExpr;
+
+            if (isset($expr[$ifi]['exprs'][2])) {
+                $ifNokExpr = $movedExpr;
+                foreach ($expr[$ifi]['exprs'][2] as $oke) {
+                    $ifNokExpr[] = $oke;
+                }
+                $expr[$ifi]['exprs'][2] = $ifNokExpr;
+            }
+        }
+
+        if ($transfoAfter) {
             while (array_key_exists(++$i, $expr)) {
                 $expr[$ifi]['exprs'][1][] = $expr[$i];
                 if (isset($expr[$ifi]['exprs'][2])) {
@@ -399,10 +472,10 @@ class TraducteurService
                 }
                 if (array_key_exists($term['type'], $methods)) {
                     $php .= $this->{$methods[$term['type']]}($expr, $i);
-                } elseif ($term['type'] === 'plsql') {
+                } elseif ($term['type'] === 'php') {
                     $php .= $term['code'];
                 } else {
-                    $php .= '[PB TRADUCTION]';
+                    $php .= '[PB TRADUCTION PHP]';
                 }
             }
         }
@@ -488,7 +561,7 @@ class TraducteurService
         // normalement, on ne passe jamais par ici : les RANGE ne sont utilisés qu'avec traductionFunctionRange
         $term = $expr[$i];
 
-        return '[PB TRADUCTION]';
+        return '[PB TRADUCTION RANGE]';
     }
 
 
@@ -503,7 +576,15 @@ class TraducteurService
         $col = Calc::numberToLetter($col);
 
         if ($row == 0) {
-            return "\$this->c('$col',\$l)";
+            $rel = isset($term['rel']) ? $term['rel'] : 0;
+            if ($rel > 0) {
+                $rel = '+' . (string)$rel;
+            } elseif ($rel < 0) {
+                $rel = (string)$rel;
+            } else {
+                $rel = '';
+            }
+            return "\$this->c('$col',\$l$rel)";
         } elseif ($row < $ml) {
             return "\$this->cg('$col$row')";
         } else {
@@ -538,6 +619,10 @@ class TraducteurService
         } else {
             $targetExpr = [$this->tableur->tableur()->getAliasTarget($name)];
             $variable = $this->traductionExpr($targetExpr);
+        }
+
+        if ($name == 'i.typeIntervenant') {
+            $variable .= '->getCode()';
         }
 
         return $variable;
@@ -613,7 +698,7 @@ class TraducteurService
             return "\$this->$name('$col')";
         }
 
-        return '[PB TRADUCTION]';
+        return '[PB TRADUCTION FUNCTION]';
     }
 
 
@@ -771,12 +856,12 @@ class TraducteurService
             }
 
             $iftest = $critere;
-            array_unshift($iftest, ['type' => 'cell', 'name' => $col.$this->tableur->mainLine()]);
+            array_unshift($iftest, ['type' => 'cell', 'name' => $col . $this->tableur->mainLine()]);
 
             $this->transformer($iftest);
             $iftest = $this->traductionExpr($iftest);
 
-            $php .= 'foreach ($this->volumesHoraires as $l => $volumesHoraire) {'."\n";
+            $php .= 'foreach ($this->volumesHoraires as $l => $volumesHoraire) {' . "\n";
             $php .= "  if ($iftest){\n";
             $php .= "    \$val += \$this->c('$colDest',\$l);\n";
             $php .= "  }\n";

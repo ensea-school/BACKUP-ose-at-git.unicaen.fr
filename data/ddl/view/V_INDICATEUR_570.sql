@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_INDICATEUR_570 AS
 SELECT
   w.intervenant_id,
   i.annee_id,
-  i.structure_id,
+  w.structure_id,
   s.libelle_court "Composantes concernées"
 FROM
   tbl_workflow w

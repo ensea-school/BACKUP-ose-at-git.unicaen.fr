@@ -1,24 +1,34 @@
 # Version stable
 
-[OSE 23.4](#ose-234-26032024)
+[OSE 23.5](#ose-235-19042024)
 
 
 
 # OSE 24 (à venir)
 
 
-# OSE 23.5 (à venir)
+# OSE 23.6 (à venir)
 
 ## Corrections de bugs
 
 * Les taux majorés personnalisés par mission sont bien affichés dans les contrats de travail
 * Pouvoir sélectionner l'ensemble des structures dans le filtre structure de la page offre de formation (#56680)
 * Modification de la formule de calcul de Paris 1
+* L'assertion des clôtures ne fonctionnait pas correctement : la saisie était interdite systématiquement dans certains cas
+* Modification de la formule de calcul de Paris Dauphine (#50652)
+* Pour la fonctionnalité "Demande de mise en paiement en lot" les HETD référentiel ne sont plus prises en compte dans le total HETD des heures à payer faute de pouvoir pour le moment paramètrer un centre de coût par défaut pour les fonctions référentiels (#56717)
+* Affichage du type de mission et du libellé de la mission dans la page de demandes de mise en paiement (#56869)
 
 ## Améliorations
 
 * Classement des intervenants par ordre alphabétique dans la page de demande de mise en paiement par lot (#56558)
-
+* Les plafonds des intervenants sont mis à jour automatiquement suite à la saisie de modifications de service dû (#56421)
+* En cas de saisie manuelle de nouveau volume horaire d'enseignement (nombre d'heures * nombre de groupes par élément pédagogique), la saisie de service devient possible sans attendre
+* Pour les états de paiements, il est de nouveau possible de faire des extractions tous types d'intervenants confondus (#54966)
+* Optimisation de la recherche dans l'offre de formation depuis le formulaire de saisie de service (#56847)
+* Tri des périodes de paiement et des offres d'emploi du plus récent au plus ancien
+* Au niveau de la fonction "Demande de mise en paiement par lot" Ajout d'un raccourci (bouton) permettant d'aller directement aux mises en paiement (#56718)
+* Meilleur affichage html du descriptif des offres d'emploi (Ose mission)
 
 # OSE 23.5 (19/04/2024)
 

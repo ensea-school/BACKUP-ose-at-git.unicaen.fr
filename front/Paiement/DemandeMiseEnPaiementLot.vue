@@ -34,7 +34,9 @@
     </div>
 
     <div class="alert alert-info" role="alert">
-        Seules les HETD avec des centres de coûts pré-paramètrés peuvent bénéficier d'une demande de mise en paiement automatisées. Pour les autres, il faudra
+        Seules les HETD <strong>(hors référentiel)</strong> avec des centres de coûts pré-paramètrés peuvent bénéficier d'une demande de mise en paiement
+        automatisées. Pour les
+        autres, il faudra
         passer sur chaque fiches intervenant pour faire les demandes en sélectionnant le centre de coût manuellement.
     </div>
 

@@ -172,10 +172,3 @@ FROM mission_prime mp
     GROUP BY
 		mp.id
 ORDER BY matricule DESC,date_debut DESC
-
-
-
-
-
-
-

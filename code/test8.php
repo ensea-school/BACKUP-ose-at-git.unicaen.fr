@@ -13,23 +13,13 @@
 $em = $container->get('doctrine.entitymanager.orm_default');
 
 
-$sr = $em->getRepository(UnicaenSignature\Entity\Db\Signature::class);
+$flow = new \UnicaenSignature\Entity\Db\SignatureFlow();
+$flow->setLabel("Signature contrat");
+$flow->setDescription("Signature electronique contrat");
 
-/**
- * @var $service \UnicaenSignature\Service\SignatureService
- */
+/*$em->persist($flow);
+$em->flush();*/
 
-$service = $container->get(\UnicaenSignature\Service\SignatureService::class);
-
-$recipientDatas = [
-    'firstname' => 'Le Courtes',
-    'lastname'  => 'Antony',
-    'email'     => 'anthony.lecourtes@gmail.com',
-    'phone'     => '023241525255',
-];
-$signature      = $service->createSignature('', \UnicaenSignature\Utils\SignatureConstants::SIGN_VISUAL, $recipientDatas);
-
-
-var_dump($signature);
+var_dump($flow);
 
 

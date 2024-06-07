@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'UNICAEN_SIGNATURE_SIGNATUREFLOW_ID_SEQ',
+    'sequence'    => 'SIGNATURE_SIGNATUREFLOW_ID_SEQ',
     'columns'     => [
         'DESCRIPTION' => [
             'name'        => 'DESCRIPTION',
@@ -29,7 +29,7 @@ return [
             'scale'       => 0,
             'precision'   => NULL,
             'nullable'    => FALSE,
-            'default'     => NULL,
+            'default'     => '"SIGNATURE_SIGNATUREFLOW_ID_SEQ"."NEXTVAL"',
             'position'    => 1,
             'commentaire' => NULL,
         ],

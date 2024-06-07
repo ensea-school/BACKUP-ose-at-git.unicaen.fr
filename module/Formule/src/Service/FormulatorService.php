@@ -190,7 +190,7 @@ class FormulatorService
             if (!$first) {
                 $php .= "\n\n\n";
             }
-            $php .= $this->getServiceTraducteur()->indent($this->getServiceTraducteur()->traduire($tableur, $cell), 2);
+            $php .= $this->getServiceTraducteur()->indent($this->getServiceTraducteur()->traduire($tableur, $cell), 1);
             $first = false;
         }
 

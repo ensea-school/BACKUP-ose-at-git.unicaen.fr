@@ -38,6 +38,8 @@ class TraducteurService
         'transfoStructureAffectation',
         'transfoStructureUniv',
         'transfoIfPlus',
+        'transfoSumIfCritere',
+        'transfoAbsRange',
         'transfoSimplify',
     ];
 
@@ -160,7 +162,7 @@ class TraducteurService
         $result = '';
         foreach ($lines as $line) {
             for ($i = 0; $i < $levels; $i++) {
-                $result .= "  ";
+                $result .= "    ";
             }
             $result .= $line . "\n";
         }
@@ -238,7 +240,7 @@ class TraducteurService
 
         if ($expr[$i]['type'] != 'cell') return;
 
-        $variable = $this->tableur->variableFromCol($expr[$i]['name']);
+        $variable = $this->tableur->variableFromCell($expr[$i]['name']);
 
         if ($variable) {
             $expr[$i]['type'] = 'variable';
@@ -416,6 +418,91 @@ class TraducteurService
                 }
                 unset($expr[$i]);
             }
+        }
+    }
+
+
+
+    private function transfoSumIfCritere(array &$expr, int $i): void
+    {
+        $term = $expr[$i];
+
+        $transfo = false;
+
+        if ($term['type'] == 'function' && $term['name'] == 'SUMIF' && isset($term['exprs'][1])){
+            $transfo = true;
+            $critere = $term['exprs'][1];
+        }
+
+        if ($transfo){
+
+            $ops = ['=','<>','>', '<'];
+            foreach( $ops as $op ) {
+                if ($critere[0]['type'] == 'string' && str_starts_with($critere[0]['content'], $op)) {
+                    $critere[0]['content'] = substr($critere[0]['content'], strlen($op));
+                    if ('' === $critere[0]['content']){
+                        unset($critere[0]);
+                        if ($critere[1]['type'] == 'op' && $critere[1]['name'] == '&'){
+                            unset($critere[1]);
+                        }
+                    }
+                    array_unshift($critere, ['type' => 'op', 'name' => $op]);
+
+
+                }
+            }
+
+            if ($critere[0]['type'] != 'op') { // ajout du =, valeur par défaut
+                $cc = $critere;
+                $critere = [['type' => 'op', 'name' => '=']];
+                foreach ($cc as $c) {
+                    $critere[] = $c;
+                }
+            }
+
+            $expr[$i]['exprs'][1] = $critere;
+        }
+    }
+
+
+
+    private function transfoAbsRange(array &$expr, int $i): void
+    {
+        $term = $expr[$i];
+
+        $transfo = false;
+
+        if ($term['type'] == 'function' && $term['name'] == 'SUM' && isset($term['exprs'][0][0])) {
+            $range = $term['exprs'][0][0];
+            if (isset($range['type']) && $range['type'] == 'range' && isset($range['rowEnd'])) {
+                if ($range['rowEnd'] < $this->tableur->mainLine()) {
+                    $transfo = true;
+                }
+            }
+        }
+
+        if ($transfo) {
+
+            $terms = [];
+            for ($c = $range['colBegin']; $c <= $range['colEnd']; $c++) {
+                for ($r = $range['rowBegin']; $r <= $range['rowEnd']; $r++) {
+                    if (!empty($terms)) {
+                        $terms[] = [
+                            'type' => 'op',
+                            'name' => '+',
+                        ];
+                    }
+                    $terms[] = [
+                        'type' => 'cell',
+                        'name' => Calc::coordsToCellName($c, $r),
+                    ];
+                }
+            }
+
+            $expr[$i] = [
+                'type' => 'expr',
+                'expr' => $terms,
+            ];
         }
     }
 
@@ -698,7 +785,7 @@ class TraducteurService
             return "\$this->$name('$col')";
         }
 
-        return '[PB TRADUCTION FUNCTION]';
+        return '[PB TRADUCTION FUNCTION RANGE]';
     }
 
 
@@ -822,18 +909,6 @@ class TraducteurService
             $plageSomme = $term['exprs'][2][0];
         } else {
             $plageSomme = $plage;
-        }
-
-        if ($critere[0]['type'] == 'string' && str_starts_with($critere[0]['content'], '=')) {
-            $critere[0]['content'] = substr($critere[0]['content'], 1);
-            array_unshift($critere, ['type' => 'op', 'name' => '=']);
-        }
-        if ($critere[0]['type'] != 'op') { // ajout du =, valeur par défaut
-            $cc = $critere;
-            $critere = [['type' => 'op', 'name' => '=']];
-            foreach ($cc as $c) {
-                $critere[] = $c;
-            }
         }
 
 

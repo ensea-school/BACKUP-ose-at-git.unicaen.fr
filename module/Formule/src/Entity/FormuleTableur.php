@@ -541,16 +541,22 @@ class FormuleTableur
 
 
 
-    public function variableFromCol(string|int $col): ?string
+    public function variableFromCell(string $cell): ?string
     {
-        if (is_string($col)) {
-            $col = Calc::letterToNumber($col);
-        }
+        $coords = Calc::cellNameToCoords($cell);
+        $col = $coords['col'];
+        $row = $coords['row'] ?: $this->mainLine();
         foreach ($this->variables as $vn => $v) {
-            if (str_starts_with($vn, 'vh.')) {
+            if ($row == $this->mainLine() && str_starts_with($vn, 'vh.')) {
                 /** @var Calc\Cell $cell */
                 $cell = $v['cell'];
                 if ($cell->getCol() == $col) {
+                    return $vn;
+                }
+            }elseif(str_starts_with($vn, 'i.')){
+                /** @var Calc\Cell $cell */
+                $cell = $v['cell'];
+                if ($cell->getCol() == $col && $cell->getRow() == $row) {
                     return $vn;
                 }
             }

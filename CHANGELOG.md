@@ -18,6 +18,8 @@
 * Modification de la formule de calcul de Paris Dauphine (#50652)
 * Pour la fonctionnalité "Demande de mise en paiement en lot" les HETD référentiel ne sont plus prises en compte dans le total HETD des heures à payer faute de pouvoir pour le moment paramètrer un centre de coût par défaut pour les fonctions référentiels (#56717)
 * Affichage du type de mission et du libellé de la mission dans la page de demandes de mise en paiement (#56869)
+* Correction indicateur 570 pour permettre de voir les intervenants avec des validations référentiels en attente en dehors de leur composante d'affectation (#56951)
+* Correction indicateur 280 pour enlever les étudiants dont les candidatures ont été refusé
 
 ## Améliorations
 

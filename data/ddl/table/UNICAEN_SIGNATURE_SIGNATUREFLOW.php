@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'SIGNATURE_SIGNATUREFLOW_ID_SEQ',
+    'sequence'    => 'UNICAEN_SIGNATURE_SIGNATUREFLOW_ID_SEQ',
     'columns'     => [
         'DESCRIPTION' => [
             'name'        => 'DESCRIPTION',

@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'SIGNATURE_FLOWSTEP_ID_SEQ',
+    'sequence'    => 'UNICAEN_SIGNATURE_SIGNATUREFLOWSTEP_ID_SEQ',
     'columns'     => [
         'ALL_RECIPIENTS_SIGN'      => [
             'name'        => 'ALL_RECIPIENTS_SIGN',

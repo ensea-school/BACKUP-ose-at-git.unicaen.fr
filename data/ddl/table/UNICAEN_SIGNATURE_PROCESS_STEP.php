@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'SIGNATURE_PROCESS_STEP_ID_SEQ',
+    'sequence'    => 'UNICAEN_SIGNATURE_PROCESS_STEP_ID_SEQ',
     'columns'     => [
         'ID'                   => [
             'name'        => 'ID',

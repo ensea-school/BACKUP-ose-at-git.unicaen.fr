@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'SIGNATURE_RECIPIENT_ID_SEQ',
+    'sequence'    => 'UNICAEN_SIGNATURE_RECIPIENT_ID_SEQ',
     'columns'     => [
         'COMMENT'       => [
             'name'        => 'COMMENT',

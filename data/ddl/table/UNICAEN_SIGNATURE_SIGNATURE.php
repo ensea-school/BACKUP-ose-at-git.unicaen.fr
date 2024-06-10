@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'SIGNATURE_SIGNATURE_ID_SEQ',
+    'sequence'    => 'UNICAEN_SIGNATURE_SIGNATURE_ID_SEQ',
     'columns'     => [
         'ALLSIGNTOCOMPLETE'       => [
             'name'        => 'ALLSIGNTOCOMPLETE',

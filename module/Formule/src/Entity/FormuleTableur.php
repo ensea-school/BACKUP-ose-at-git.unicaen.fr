@@ -132,6 +132,13 @@ class FormuleTableur
 
 
 
+    public function variables(): array
+    {
+        return $this->variables;
+    }
+
+
+
     public function lire(): void
     {
         if ($this->lu) return;
@@ -369,17 +376,17 @@ class FormuleTableur
         $deps = $cell->getDeps();
         $depsFound = [];
 
-        foreach( $deps as $i => $dep ){
-            if(is_array($dep) && 'variable' == $dep['type']){
+        foreach ($deps as $i => $dep) {
+            if (is_array($dep) && 'variable' == $dep['type']) {
                 // on remplace les variables par leur cible
                 $deps[$i] = $this->tableur->getAliasTarget($dep['name']);
 
-                if (isset($deps[$i]['sheet']) && $deps[$i]['sheet'] && $deps[$i]['sheet'] != $this->sheet()->getName()){
+                if (isset($deps[$i]['sheet']) && $deps[$i]['sheet'] && $deps[$i]['sheet'] != $this->sheet()->getName()) {
                     throw new \Exception('Erreur dans l\'expression de ' . $cell->getName() . ' : l\'expression fait référence à des cellules présentes dans d\'autres onglets de la feuille de calcul');
                 }
             }
-            if(is_array($dep) && 'range' == $dep['type']){
-                if (isset($deps[$i]['sheet']) && $deps[$i]['sheet'] && $deps[$i]['sheet'] != $this->sheet()->getName()){
+            if (is_array($dep) && 'range' == $dep['type']) {
+                if (isset($deps[$i]['sheet']) && $deps[$i]['sheet'] && $deps[$i]['sheet'] != $this->sheet()->getName()) {
                     throw new \Exception('Erreur dans l\'expression de ' . $cell->getName() . ' : l\'expression fait référence à une plage de cellules présente dans d\'autres onglets de la feuille de calcul');
                 }
             }
@@ -387,7 +394,8 @@ class FormuleTableur
 
         foreach ($deps as $dep) {
             if (is_string($dep)) { // on est sur une cellule
-                $depsFound[] = str_replace('$', '', $dep);
+                $d = str_replace('$', '', $dep);
+                $depsFound[$d] = $d;
             } elseif (is_array($dep) && 'range' == $dep['type']) { // on est sur un range
                 $allRow = $dep['rowEnd'] >= 500 && $dep['rowBegin'] <= $this->mainLine;
                 if ($allRow) { // Si c'est toute la colonne , on ne prend en compte que la ligne principale, pas les autres
@@ -396,15 +404,19 @@ class FormuleTableur
                 }
                 for ($col = $dep['colBegin']; $col <= $dep['colEnd']; $col++) {
                     for ($row = $dep['rowBegin']; $row <= $dep['rowEnd']; $row++) {
-                        $depName = Calc::coordsToCellName($col, $row);
-                        $depsFound[$depName] = $depName;
+                        if ($row == 0) {
+                            $depName = Calc::numberToLetter($col);
+                        } else {
+                            $depName = Calc::coordsToCellName($col, $row);
+                        }
+                        $depsFound[$depName] = ['row' => $row, 'col' => $col];
                     }
                 }
-            } elseif( is_array($dep) && 'cell' == $dep['type']){
-                if (isset($dep['sheet'])){
-                    if ($sheet = $this->tableur->getSheet($dep['sheet'])){
-                        if ($sheet->getIndex() == $this->sheet->getIndex()){ // la cellule doit se trouver dans la même feuille
-                            $depsFound[] = $dep['name'];
+            } elseif (is_array($dep) && 'cell' == $dep['type']) {
+                if (isset($dep['sheet'])) {
+                    if ($sheet = $this->tableur->getSheet($dep['sheet'])) {
+                        if ($sheet->getIndex() == $this->sheet->getIndex()) { // la cellule doit se trouver dans la même feuille
+                            $depsFound[$dep['name']] = $dep['name'];
                         }
                     }
                 }
@@ -412,7 +424,7 @@ class FormuleTableur
             }
         }
 
-        foreach ($depsFound as $dep) {
+        foreach ($depsFound as $dep => $depInfo) {
             if (!array_key_exists($dep, $this->formuleCells)) {
                 $vFound = false;
                 foreach ($this->variables as $variable) {
@@ -429,7 +441,11 @@ class FormuleTableur
                             $this->formuleCells[$dep] = ['cell' => $depCell, 'parsed' => false];
                         }
                     } else {
-                        throw new \Exception('Erreur dans l\'expression de ' . $cell->getName() . ' : la cellule ' . $dep . ' est vide');
+                        if (is_array($depInfo) && $depInfo['row'] == 0) {
+                            // Rien : on a affaire à un range infini sur une colonne
+                        } else {
+                            throw new \Exception('Erreur dans l\'expression de ' . $cell->getName() . ' : la cellule ' . $dep . ' est vide');
+                        }
                     }
                 }
             }
@@ -553,7 +569,7 @@ class FormuleTableur
                 if ($cell->getCol() == $col) {
                     return $vn;
                 }
-            }elseif(str_starts_with($vn, 'i.')){
+            } elseif (str_starts_with($vn, 'i.')) {
                 /** @var Calc\Cell $cell */
                 $cell = $v['cell'];
                 if ($cell->getCol() == $col && $cell->getRow() == $row) {
@@ -648,9 +664,15 @@ class FormuleTableur
             }
             foreach ($this->variables as $vn => $v) {
                 if (str_starts_with($vn, 'vh.')) {
-                    if (!in_array($vn,['vh.tauxServiceDu','vh.tauxServiceCompl'])){
-                        $method = 'set' . ucfirst(substr($vn, 3));
-                        $vh->$method($this->variableValue($vn, $row));
+                    switch ($vn) {
+                        case 'vh.tauxServiceDu':
+                        case 'vh.tauxServiceCompl':
+                            // on ne fait rien : c'est géré au niveau intervenant
+                            break;
+                        default:
+                            // sinon on parse et on applique
+                            $method = 'set' . ucfirst(substr($vn, 3));
+                            $vh->$method($this->variableValue($vn, $row));
                     }
                 }
             }

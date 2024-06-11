@@ -38,7 +38,7 @@ class TraducteurService
         'transfoStructureAffectation',
         'transfoStructureUniv',
         'transfoIfPlus',
-        'transfoSumIfCritere',
+        'transfoSumIf',
         'transfoAbsRange',
         'transfoSimplify',
     ];
@@ -423,26 +423,66 @@ class TraducteurService
 
 
 
-    private function transfoSumIfCritere(array &$expr, int $i): void
+    private function transfoSumIf(array &$expr, int $i): void
     {
         $term = $expr[$i];
 
-        $transfo = false;
+        $transfoCritere = false;
+        $transfoBefore = false;
+        $transfoAfter = false;
 
-        if ($term['type'] == 'function' && $term['name'] == 'SUMIF' && isset($term['exprs'][1])){
-            $transfo = true;
-            $critere = $term['exprs'][1];
+        $ifi = $i;
+
+        if ($term['type'] == 'function' && $term['name'] == 'SUMIF') {
+            if (isset($term['exprs'][1])) {
+                $transfoCritere = true;
+                $critere = $term['exprs'][1];
+            }
+
+            if (isset($expr[$i - 1])) {
+                $transfoBefore = true;
+            }
+            if (isset($expr[$i + 1])) {
+                $transfoAfter = true;
+            }
+
+            $expr[$i]['returnExpr'] = [
+                [
+                    'type' => 'php',
+                    'code' => '$val'
+                ],
+            ];
         }
 
-        if ($transfo){
 
-            $ops = ['=','<>','>', '<'];
-            foreach( $ops as $op ) {
+        if ($transfoBefore) {
+            $movedExpr = [];
+            for ($j = 0; $j < $i; $j++) {
+                $movedExpr[] = $expr[$j];
+                unset($expr[$j]);
+            }
+            foreach ($expr[$i]['returnExpr'] as $oke) {
+                $movedExpr[] = $oke;
+            }
+            $expr[$i]['returnExpr'] = $movedExpr;
+        }
+
+        if ($transfoAfter) {
+            while (array_key_exists(++$i, $expr)) {
+                $expr[$ifi]['returnExpr'][] = $expr[$i];
+                unset($expr[$i]);
+            }
+        }
+
+        if ($transfoCritere) {
+
+            $ops = ['=', '<>', '>', '<'];
+            foreach ($ops as $op) {
                 if ($critere[0]['type'] == 'string' && str_starts_with($critere[0]['content'], $op)) {
                     $critere[0]['content'] = substr($critere[0]['content'], strlen($op));
-                    if ('' === $critere[0]['content']){
+                    if ('' === $critere[0]['content']) {
                         unset($critere[0]);
-                        if ($critere[1]['type'] == 'op' && $critere[1]['name'] == '&'){
+                        if ($critere[1]['type'] == 'op' && $critere[1]['name'] == '&') {
                             unset($critere[1]);
                         }
                     }
@@ -475,7 +515,7 @@ class TraducteurService
         if ($term['type'] == 'function' && $term['name'] == 'SUM' && isset($term['exprs'][0][0])) {
             $range = $term['exprs'][0][0];
             if (isset($range['type']) && $range['type'] == 'range' && isset($range['rowEnd'])) {
-                if ($range['rowEnd'] < $this->tableur->mainLine()) {
+                if ($range['rowEnd'] > 0 && $range['rowEnd'] < $this->tableur->mainLine()) {
                     $transfo = true;
                 }
             }
@@ -561,6 +601,8 @@ class TraducteurService
                     $php .= $this->{$methods[$term['type']]}($expr, $i);
                 } elseif ($term['type'] === 'php') {
                     $php .= $term['code'];
+                } elseif ($term['type'] === 'space'){
+                    // ne rien faire
                 } else {
                     $php .= '[PB TRADUCTION PHP]';
                 }
@@ -779,6 +821,11 @@ class TraducteurService
         $begin = Calc::cellNameToCoords($range['begin']);
         $end = Calc::cellNameToCoords($range['end']);
 
+        if ($begin['row'] == 0 && $end['row'] == 0){ // range infini
+            $begin['row'] = $this->tableur->mainLine();
+            $end['row'] = 99999999999;
+        }
+
         if ($begin['col'] === $end['col'] && $begin['row'] <= $this->tableur->mainLine() && $end['row'] >= 500) {
             $col = Calc::numberToLetter($begin['col']);
 
@@ -943,11 +990,7 @@ class TraducteurService
             $php .= "}\n";
         }
 
-        if (isset($term['valExpr'])) {
-            $php .= 'return ' . $this->traductionExpr($term['valExpr']);
-        } else {
-            $php .= 'return $val;';
-        }
+        $php .= 'return ' . $this->traductionExpr($term['returnExpr']);
 
 //        echo '<pre>' . htmlentities($php) . '</pre>';
 

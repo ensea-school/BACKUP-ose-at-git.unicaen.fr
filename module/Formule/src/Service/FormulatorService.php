@@ -30,6 +30,9 @@ class FormulatorService
 
     private array $formulesCalculCache = [];
 
+    private ?string $lastTestError = null;
+
+
 
 
     public function cacheDir(): string
@@ -51,17 +54,41 @@ class FormulatorService
 
         $this->makeWithCacheFile($formule, false);
 
-        $test = $tableur->formuleIntervenant();
-        $trace = $this->calculer($test, $formule);
-        $this->checkFormuleResErreurs($test, $tableur, $trace);
+        $this->test($tableur);
+        if ($error = $this->getLastTestError()){
+            throw new \Exception($error);
+        }
 
         return $formule;
     }
 
 
 
-    private function checkFormuleResErreurs(FormuleTestIntervenant $fi, FormuleTableur $tableur, array $trace): void
+    public function test(string|FormuleTableur $tableur): FormuleTestIntervenant
     {
+        if (is_string($tableur)) {
+            $tableur = $this->charger($tableur);
+        }
+
+        $test = $tableur->formuleIntervenant();
+        $this->calculer($test, $tableur->formule());
+        $this->lastTestError = $this->checkFormuleResErreurs($test, $tableur);
+
+        return $test;
+    }
+
+
+
+    public function getLastTestError(): ?string
+    {
+        return $this->lastTestError;
+    }
+
+
+
+    private function checkFormuleResErreurs(FormuleTestIntervenant $fi, FormuleTableur $tableur): ?string
+    {
+        $msg = null;
         $ths = [
             'ServiceFi'             => 'les heures de service en FI',
             'ServiceFa'             => 'les heures de service en FA',
@@ -78,6 +105,8 @@ class FormulatorService
             'Primes'                => 'les heures relatives aux primes',
         ];
 
+        $trace = $fi->getDebugTrace();
+
         /** @var FormuleTestVolumeHoraire[] $vhs */
         $vhs = $fi->getVolumesHoraires();
         foreach ($vhs as $i => $vh) {
@@ -87,7 +116,7 @@ class FormulatorService
                 $attendu = $vh->$methodAttendu();
                 $calcule = $vh->$methodHeures();
 
-                if ($this->diffFloat($calcule,$attendu)) {
+                if ($this->diffFloat($calcule, $attendu)) {
                     $msg = 'Diff OSE/Tableur ligne ' . ($tableur->mainLine() + $i) . ' : erreur sur ' . $merr . ' : ' . $calcule . ' calculées pour ' . $attendu . ' attendues';
 
                     $input = [
@@ -123,7 +152,7 @@ class FormulatorService
                         foreach ($trace['vh'][$i] as $cell => $val) {
                             $tableurVal = $tableur->getCellFloatVal($cell . (string)$tableur->mainLine() + $i);
                             $msg .= "\n$cell = $val";
-                            if ($this->diffFloat($val,$tableurVal)) {
+                            if ($this->diffFloat($val, $tableurVal)) {
                                 $msg .= ' calculé (' . $tableurVal . ' dans le tableur)';
                             }
                         }
@@ -133,16 +162,16 @@ class FormulatorService
                             foreach ($trace['global'] as $cell => $val) {
                                 $tableurVal = $tableur->getCellFloatVal($cell);
                                 $msg .= "\n$cell = $val";
-                                if ($this->diffFloat($val,$tableurVal)) {
+                                if ($this->diffFloat($val, $tableurVal)) {
                                     $msg .= ' calculé (' . $tableurVal . ' dans le tableur)';
                                 }
                             }
                         }
                     }
-                    throw new \Exception($msg);
                 }
             }
         }
+        return $msg;
     }
 
 
@@ -224,7 +253,11 @@ class FormulatorService
             mkdir($dir, 0777); // or even 01777 so you get the sticky bit set
             umask($oldumask);
         }
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
         file_put_contents($filename, $formule->getPhpClass());
+        chmod($filename, 0666);
 
         if ($instanciate) {
             $classname = $this->formuleClassName($formule);
@@ -237,10 +270,9 @@ class FormulatorService
 
 
 
-    public function calculer(FormuleIntervenant $intervenant, Formule $formule): array
+    public function calculer(FormuleIntervenant $intervenant, Formule $formule): void
     {
         $fc = $this->getFormuleCalcul($formule);
-        return $fc->calculer($intervenant, $formule);
+        $fc->calculer($intervenant, $formule);
     }
-
 }

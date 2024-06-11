@@ -35,6 +35,7 @@ class FormuleTestIntervenant extends FormuleIntervenant
     protected ?string $tauxAutre5Code = null;
     protected float $tauxAutre5ServiceDu = 1.0;
     protected float $tauxAutre5ServiceCompl = 1.0;
+    protected array $debugTrace = [];
 
 
 
@@ -553,6 +554,21 @@ class FormuleTestIntervenant extends FormuleIntervenant
     public function setTauxAutre5ServiceCompl(float $tauxAutre5ServiceCompl): FormuleTestIntervenant
     {
         $this->tauxAutre5ServiceCompl = $tauxAutre5ServiceCompl;
+        return $this;
+    }
+
+
+
+    public function getDebugTrace(): array
+    {
+        return $this->debugTrace;
+    }
+
+
+
+    public function setDebugTrace(array $debugTrace): FormuleTestIntervenant
+    {
+        $this->debugTrace = $debugTrace;
         return $this;
     }
 }

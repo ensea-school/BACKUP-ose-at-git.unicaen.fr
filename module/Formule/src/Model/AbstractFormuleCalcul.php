@@ -3,6 +3,7 @@
 namespace Formule\Model;
 
 use Formule\Entity\Db\Formule;
+use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleVolumeHoraire;
 use Unicaen\OpenDocument\Calc;
@@ -131,7 +132,7 @@ class AbstractFormuleCalcul
 
 
 
-    public function calculer(FormuleIntervenant $intervenant, Formule $formule): array
+    public function calculer(FormuleIntervenant $intervenant, Formule $formule): void
     {
         $this->intervenant = $intervenant;
         $this->volumesHoraires = $intervenant->getVolumesHoraires()->toArray();
@@ -170,6 +171,8 @@ class AbstractFormuleCalcul
             }
         });
 
-        return $this->cache;
+        if ($this->intervenant instanceof FormuleTestIntervenant){
+            $this->intervenant->setDebugTrace($this->cache);
+        }
     }
 }

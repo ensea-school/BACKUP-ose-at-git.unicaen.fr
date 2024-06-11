@@ -29,7 +29,7 @@ $params = \UnicaenCode\Util::codeGenerator()->generer([
     ],
     'cellule' => [
         'type'  => 'text',
-        'label' => 'Cellule à traduire (si non renseigné tout sera traduit)',
+        'label' => 'Cellule à traduire',
     ],
 ]);
 
@@ -48,12 +48,11 @@ $traducteur->setDebug(true);
 $filename = $dir . '/' . $params['formule'] . '.ods';
 $tableur = $formulator->charger($filename);
 
-echo "<h1>Informations sur la feuille de calcul</h1>";
 
-echo "Version : ".$tableur->version()."<br />";
-echo "Ligne principale : ".$tableur->mainLine()."<br />";
+ob_start();
+echo "Version : " . $tableur->version() . "<br />";
+echo "Ligne principale : " . $tableur->mainLine() . "<br />";
 
-//var_dump($tableur->formuleCells());
 
 $mls = (string)$tableur->mainLine();
 
@@ -64,7 +63,7 @@ foreach ($cells as $cell) {
     if (str_ends_with($name, $mls)) {
         $name = substr($name, 0, -strlen($mls));
     }
-    if (!$params['cellule'] || $params['cellule'] == $name) {
+    if ($params['cellule'] == $name) {
         $traducteur->traduire($tableur, $cell);
     }
     $cellules[] = $name;
@@ -72,8 +71,142 @@ foreach ($cells as $cell) {
 
 echo '<form method="post">';
 echo '<input type="hidden" name="formule" value="' . $params['formule'] . '" />';
-echo '<h3>Liste des cellules de la feuille :</h3>';
 foreach ($cellules as $cname) {
     echo '<button type="submit" class="btn btn-secondary" style="margin:2px" name="cellule" value="' . $cname . '">' . $cname . '</button>';
 }
 echo '</form>';
+$infos = ob_get_clean();
+$test = $formulator->test($tableur);
+if ($error = $formulator->getLastTestError()) {
+    $calc = '<pre class="alert alert-danger">';
+    $calc .= '<h2>Erreur lors du test de cohérence tableur/calcul interne</h2>';
+    $calc .= $error;
+    $calc .= '</pre>';
+} else {
+    $calc = '<div class="alert alert-success">Calcul conforme aux chiffres du tableur</div>';
+}
+
+ob_start();
+
+$cache = $test->getDebugTrace();
+if (isset($cache['vh'])) {
+
+    $cols = [];
+    foreach ($cache['vh'] as $l => $vh) {
+        foreach ($vh as $col => $val) {
+            $col = \Unicaen\OpenDocument\Calc::letterToNumber($col);
+            if (!in_array($col, $cols)) {
+                $cols[] = $col;
+            }
+        }
+    }
+}
+
+
+$variablesCells = [];
+foreach( $tableur->variables() as $name => $variable ){
+    if (isset($variable['cell'])){
+        /** @var \Unicaen\OpenDocument\Calc\Cell $cell */
+        $cell = $variable['cell'];
+        if ($cell->getRow() == $tableur->mainLine()){
+            $variablesCells[$cell->getCol()] = str_replace('vh.heures','',$name);
+        }
+
+    }
+}
+
+
+echo '<table class="table table-bordered table-xs">';
+echo '<tr>';
+echo '<th></th>';
+foreach ($cols as $col) {
+    echo '<th>' . ($variablesCells[$col] ?? '') . '</th>';
+}
+echo '</tr>';
+echo '<tr>';
+echo '<th></th>';
+foreach ($cols as $col) {
+    $col = \Unicaen\OpenDocument\Calc::numberToLetter($col);
+
+    echo '<th>' . $col . '</th>';
+}
+echo '</tr>';
+foreach ($cache['vh'] as $l => $vh) {
+    echo '<tr>';
+    echo '<th>' . $l + $tableur->mainLine() . '</th>';
+    foreach ($cols as $col) {
+        $col = \Unicaen\OpenDocument\Calc::numberToLetter($col);
+        if (isset($vh[$col])) {
+            $val = $vh[$col];
+            $tabVal = $tableur->getCellFloatVal($col . ($l + $tableur->mainLine()));
+            if ((int)round($tabVal * 100) != (int)round($val * 100)) {
+                $val = '<span style="color:red" title="' . (string)round($tabVal, 2) . ' sur le tableur">' . (string)round($val, 2) . '</span>';
+            } else {
+                $val = (string)round($val, 2);
+            }
+        } else {
+            $val = '';
+        }
+        echo '<td>' . $val . '</td>';
+    }
+    echo '</tr>';
+}
+echo '</table>';
+
+
+if (isset($cache['global'])) {
+    foreach ($cache['global'] as $cell => $val) {
+        $tabVal = $tableur->getCellFloatVal($cell);
+        if ((int)round($tabVal * 100) != (int)round($val * 100)) {
+            $val = '<span style="color:red" title="' . (string)round($tabVal, 2) . ' sur le tableur">' . (string)round($val, 2) . '</span>';
+        } else {
+            $val = (string)round($val, 2);
+        }
+
+        echo '<span class="debug-cell">';
+        echo $cell . '<span class="debug-val">' . $val . '</span>';
+        echo '</span>';
+    }
+}
+echo '<br />';
+echo '<br />';
+echo '<a href="'.$this->url('formule/administration/telecharger-tableur', ['formule' =>$tableur->formule()->getId()]).'">Télécharger le tableur</a>';
+
+$sheet = ob_get_clean();
+
+
+?>
+<h2>Traduction</h2>
+<?= $infos; ?>
+
+<h2>Résultats</h2>
+<?= $sheet ?>
+
+<h2>Rapport</h2>
+<?= $calc; ?>
+
+<style>
+
+    .debug-cell {
+        background-color: #ccc;
+        color: black;
+        margin: 2px;
+        padding: 3px;
+        border-radius: 5px;
+        font-size: 8pt;
+        white-space: nowrap;
+        float: left;
+    }
+
+    .debug-val {
+        background-color: white;
+        padding: 3px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        color: black;
+        font-size: 8pt;
+    }
+
+</style>

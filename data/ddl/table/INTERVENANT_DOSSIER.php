@@ -477,7 +477,19 @@ return [
             'position'    => 30,
             'commentaire' => NULL,
         ],
-        'STATUT_ID'                => [
+        'SITUATION_MATRIMONIALE_ID' => [
+            'name'        => 'SITUATION_MATRIMONIALE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 38,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 43,
+            'commentaire' => NULL,
+        ],
+        'STATUT_ID'                 => [
             'name'        => 'STATUT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

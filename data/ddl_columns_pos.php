@@ -857,6 +857,7 @@ return [
         'IRRECEVABLE',
         'NUMERO_PEC',
         'SYNC_PEC',
+        'SITUATION_MATRIMONIALE_ID',
     ],
     'INTERVENANT_DOSSIER'            => [
         'ID',
@@ -901,6 +902,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'SITUATION_MATRIMONIALE_ID',
     ],
     'INTERVENANT_PAR_DEFAUT'         => [
         'ID',
@@ -2568,6 +2570,18 @@ return [
         'ID',
         'LIBELLE',
         'CODE',
+    ],
+    'SAVE_PARAMETRE'                 => [
+        'ID',
+        'NOM',
+        'HISTO_CREATION',
+        'HISTO_CREATEUR_ID',
+        'HISTO_MODIFICATION',
+        'HISTO_MODIFICATEUR_ID',
+        'HISTO_DESTRUCTION',
+        'HISTO_DESTRUCTEUR_ID',
+        'VALEUR',
+        'DESCRIPTION',
     ],
 ];
 

@@ -4,7 +4,9 @@ namespace Dossier\Form;
 
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Intervenant\Entity\Db\SituationMatrimoniale;
 use Intervenant\Service\CiviliteServiceAwareTrait;
+use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Lieu\Service\DepartementServiceAwareTrait;
 use Lieu\Service\PaysServiceAwareTrait;
@@ -20,6 +22,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
     use PaysServiceAwareTrait;
     use DepartementServiceAwareTrait;
     use CiviliteServiceAwareTrait;
+    use SituationMatrimonialeServiceAwareTrait;
 
 
     /**
@@ -99,6 +102,25 @@ class DossierIdentiteFieldset extends AbstractFieldset
             ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceCivilite()->getList()));
 
 
+        /**
+         * Situation matrimoniale
+         */
+        $this->add([
+            'name'       => 'situation_matrimoniale',
+            'options'    => [
+                'label'         => 'Situation matrimoniale',
+                'label_options' => ['disable_html_escape' => true],
+            ],
+            'attributes' => [
+                'class' => 'dossierElement',
+            ],
+            'type'       => 'Select',
+        ]);
+
+        $this->get('situation_matrimoniale')
+            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceSituationMatrimoniale()->getList()));
+
+
         return $this;
     }
 
@@ -108,17 +130,20 @@ class DossierIdentiteFieldset extends AbstractFieldset
     {
 
         $spec = [
-            'nomUsuel'        => [
+            'nomUsuel'               => [
                 'required' => false,
                 'readonly' => true,
             ],
-            'nomPatronymique' => [
+            'nomPatronymique'        => [
                 'required' => false,
             ],
-            'prenom'          => [
+            'prenom'                 => [
                 'required' => false,
             ],
-            'civilite'        => [
+            'civilite'               => [
+                'required' => false,
+            ],
+            'situation_matrimoniale' => [
                 'required' => false,
             ],
 

@@ -5,6 +5,8 @@ namespace Dossier\Entity\Db;
 use Application\Entity\Db\Intervenant;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Intervenant\Entity\Db\CiviliteAwareTrait;
+use Intervenant\Entity\Db\SituationMatrimoniale;
+use Intervenant\Entity\Db\SituationMatrimonialeAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\AdresseInterface;
@@ -26,6 +28,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     use HistoriqueAwareTrait;
     use EntityManagerAwareTrait;
     use ChampsAutresTrait;
+    use SituationMatrimonialeAwareTrait;
 
     /**
      * @var int|null
@@ -116,6 +119,10 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
      * @var string|null
      */
     protected $BIC;
+
+    /**
+     * @var SituationMatrimoniale
+     */
 
     /**
      * @var bool

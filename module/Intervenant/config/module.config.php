@@ -184,14 +184,15 @@ return [
     ],
 
     'services' => [
-        Service\TypeIntervenantService::class => Service\TypeIntervenantServiceFactory::class,
-        Service\StatutService::class          => Service\StatutServiceFactory::class,
-        Service\NoteService::class            => Service\NoteServiceFactory::class,
-        Service\TypeNoteService::class        => Service\TypeNoteServiceFactory::class,
-        Assertion\NoteAssertion::class        => \UnicaenPrivilege\Assertion\AssertionFactory::class,
-        Service\MailService::class            => Service\MailServiceFactory::class,
-        Service\CiviliteService::class        => Service\CiviliteServiceFactory::class,
-        Assertion\StatutAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Service\TypeIntervenantService::class       => Service\TypeIntervenantServiceFactory::class,
+        Service\StatutService::class                => Service\StatutServiceFactory::class,
+        Service\NoteService::class                  => Service\NoteServiceFactory::class,
+        Service\TypeNoteService::class              => Service\TypeNoteServiceFactory::class,
+        Assertion\NoteAssertion::class              => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Service\MailService::class                  => Service\MailServiceFactory::class,
+        Service\CiviliteService::class              => Service\CiviliteServiceFactory::class,
+        Service\SituationMatrimonialeService::class => Service\SituationMatrimonialeServiceFactory::class,
+        Assertion\StatutAssertion::class            => \UnicaenPrivilege\Assertion\AssertionFactory::class,
     ],
 
 

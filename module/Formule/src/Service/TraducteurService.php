@@ -753,6 +753,9 @@ class TraducteurService
         if ($name == 'i.typeIntervenant') {
             $variable .= '->getCode()';
         }
+        if ($name == 'i.typeVolumeHoraire') {
+            $variable .= '->getCode()';
+        }
 
         return $variable;
     }
@@ -968,28 +971,21 @@ class TraducteurService
             $col = Calc::numberToLetter($plage['colBegin'] + $c);
             $colDest = Calc::numberToLetter($plageSomme['colBegin'] + $c);
 
-            $rowBegin = $plage['rowBegin'] - $this->tableur->mainLine();
-            if ($rowBegin === 0) {
-                $rowBegin = 'l';
-            } else {
-                $rowBegin = '1 + ' . $rowBegin;
-            }
-
-            if ($plage['rowEnd'] >= 500) {
-                $rowEnd = 'ose_formule.volumes_horaires.length';
-            } else {
-                $rowEnd = (string)($plage['rowEnd'] - $this->tableur->mainLine());
-            }
-
             $iftest = $critere;
             array_unshift($iftest, ['type' => 'cell', 'name' => $col . $this->tableur->mainLine()]);
 
             $this->transformer($iftest);
             $iftest = $this->traductionExpr($iftest);
 
+            $sumExpr = [[
+                'type' => 'cell',
+                'name' => $colDest,
+            ]];
+            $this->transformer($sumExpr);
+
             $php .= 'foreach ($this->volumesHoraires as $l => $volumesHoraire) {' . "\n";
             $php .= "  if ($iftest){\n";
-            $php .= "    \$val += \$this->c('$colDest',\$l);\n";
+            $php .= "    \$val += ".$this->traductionExpr($sumExpr).";\n";
             $php .= "  }\n";
             $php .= "}\n";
         }

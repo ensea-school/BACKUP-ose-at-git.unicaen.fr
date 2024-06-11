@@ -2564,6 +2564,11 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_MODIFICATION',
     ],
+    'SITUATION_MATRIMONIALE'         => [
+        'ID',
+        'LIBELLE',
+        'CODE',
+    ],
 ];
 
 //@formatter:on

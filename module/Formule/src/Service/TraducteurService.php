@@ -864,7 +864,7 @@ class TraducteurService
     private function traductionFunctionIfs(array &$expr, int $i): string
     {
         $term = $expr[$i];
-        $php = 'CASE' . "\n";
+        $php = '';
 
         $exprs = $term['exprs'];
 
@@ -873,11 +873,15 @@ class TraducteurService
             $test = $exprs[$index];
             $val = $exprs[$index + 1];
 
-            $php .= '  WHEN ' . $this->traductionExpr($test) . ' THEN ' . $this->traductionExpr($val) . "\n";
+            if ($php != ''){
+                $php .= 'else';
+            }
+
+            $php .= 'if (' . $this->traductionExpr($test) . "){\n";
+            $php .= $this->indent($this->returnPhp($this->traductionExpr($val)));
+            $php .= '}';
             $index += 2;
         }
-
-        $php .= 'END;';
 
         return $php;
     }

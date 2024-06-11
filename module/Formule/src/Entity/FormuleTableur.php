@@ -32,6 +32,7 @@ class FormuleTableur
         'i.typeVolumeHoraire'          => ['name' => 'type_volume_horaire_code',       'type' => 'string', 'vmin' => 1, 'result' => false],
         'i.heuresServiceStatutaire'    => ['name' => ['heures_service_statutaire','heures_decharge'],      'type' => 'float',  'vmin' => 1, 'result' => false],
         'i.heuresServiceModifie'       => ['name' => 'heures_service_modifie',         'type' => 'float',  'vmin' => 1, 'result' => false],
+        'i.serviceDu'                  => ['name' => 'i_service_du',                   'type' => 'float',  'vmin' => 1, 'result' => false],
         'i.depassementServiceDuSansHC' => ['name' => 'depassement_service_du_sans_hc', 'type' => 'bool',   'vmin' => 1, 'result' => false],
         'i.param1'                     => ['name' => ['p1', 'param_1'],                'type' => 'string', 'vmin' => 1, 'result' => false],
         'i.param2'                     => ['name' => ['p2', 'param_2'],                'type' => 'string', 'vmin' => 1, 'result' => false],
@@ -152,6 +153,7 @@ class FormuleTableur
 
         $this->trouverIntervenantData();
         $this->trouverVolumeHoraireData();
+        $this->trouverVariablesDepuisAlias();
 
         // contrôle de conformité
         foreach ($this->variables as $v => $vp) {
@@ -296,6 +298,25 @@ class FormuleTableur
                 if (!isset($this->variables['vh.param' . $param]['cell'])) {
                     $paramCell = $this->sheet()->getCellByCoords($refCell->getCol() + $param, $refCell->getRow());
                     $this->variables['vh.param' . $param]['cell'] = $paramCell;
+                }
+            }
+        }
+    }
+
+
+
+    public function trouverVariablesDepuisAlias()
+    {
+        $aliases = $this->tableur->getAliases();
+
+        /* Pour celles qui n'ont pas été trouvées, on cherche dans les alias */
+        foreach( $this->variables as $vname => $variable){
+            if (!isset($variable['cell'])){
+                $names = (array)$variable['name'];
+                foreach( $names as $name ){
+                    if (isset($aliases[$name]) && $aliases[$name]['sheet'] == 'Calculs'){
+                        $this->variables[$vname]['cell'] = $this->sheet()->getCell($aliases[$name]['name']);
+                    }
                 }
             }
         }

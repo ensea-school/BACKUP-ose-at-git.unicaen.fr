@@ -31,6 +31,7 @@
 * Tri des périodes de paiement et des offres d'emploi du plus récent au plus ancien
 * Au niveau de la fonction "Demande de mise en paiement par lot" Ajout d'un raccourci (bouton) permettant d'aller directement aux mises en paiement (#56718)
 * Meilleur affichage html du descriptif des offres d'emploi (Ose mission)
+* Fiabilisation de la saisie d'un siret/siren lors l'ajout d'un employeur via l'administration (#55462)
 
 # OSE 23.5 (19/04/2024)
 

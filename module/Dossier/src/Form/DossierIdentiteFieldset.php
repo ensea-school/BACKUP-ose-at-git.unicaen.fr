@@ -106,7 +106,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
          * Situation matrimoniale
          */
         $this->add([
-            'name'       => 'situation_matrimoniale',
+            'name'       => 'situationMatrimoniale',
             'options'    => [
                 'label'         => 'Situation matrimoniale',
                 'label_options' => ['disable_html_escape' => true],
@@ -117,7 +117,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
-        $this->get('situation_matrimoniale')
+        $this->get('situationMatrimoniale')
             ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceSituationMatrimoniale()->getList()));
 
 
@@ -130,20 +130,20 @@ class DossierIdentiteFieldset extends AbstractFieldset
     {
 
         $spec = [
-            'nomUsuel'               => [
+            'nomUsuel'              => [
                 'required' => false,
                 'readonly' => true,
             ],
-            'nomPatronymique'        => [
+            'nomPatronymique'       => [
                 'required' => false,
             ],
-            'prenom'                 => [
+            'prenom'                => [
                 'required' => false,
             ],
-            'civilite'               => [
+            'civilite'              => [
                 'required' => false,
             ],
-            'situation_matrimoniale' => [
+            'situationMatrimoniale' => [
                 'required' => false,
             ],
 

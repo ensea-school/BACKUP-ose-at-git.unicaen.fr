@@ -81,11 +81,11 @@ $dossierIdentite = $form->get('DossierIdentite');
                 </div>
             </div>
             <div class="form-group">
-                <?= $this->formLabel($dossierIdentite->get('situation_matrimoniale')); ?>
+                <?= $this->formLabel($dossierIdentite->get('situationMatrimoniale')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getCivilite())) {
-                        echo $intervenantDossier->getCivilite()->getLibelleCourt();
+                    if (!empty($intervenantDossier->getSituationMatrimoniale())) {
+                        echo $intervenantDossier->getSituationMatrimoniale()->getLibelle();
                     }
                     ?>
                 </div>

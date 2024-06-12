@@ -47,7 +47,7 @@ class IntervenantDossierForm extends AbstractForm
 
 
 
-    public function initForm ()
+    public function initForm()
     {
 
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($this->intervenant);
@@ -66,7 +66,11 @@ class IntervenantDossierForm extends AbstractForm
         ]);
         $this->dossierStatutFieldset->init();
 
-        $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
+        $options = [
+            'dossierIntervenant' => $dossierIntervenant,
+        ];
+
+        $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite', $options);
         $this->dossierIdentiteFieldset->init();
 
         $this->dossierIdentiteComplementaireFieldset = new DossierIdentiteComplementaireFieldset('DossierIdentiteComplementaire');
@@ -75,9 +79,6 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
         $this->dossierAdresseFieldset->init();
 
-        $options                      = [
-            'dossierIntervenant' => $dossierIntervenant,
-        ];
         $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact', $options);
         $this->dossierContactFiedlset->init();
 
@@ -137,7 +138,7 @@ class IntervenantDossierForm extends AbstractForm
 
 
 
-    public function setIntervenant (Intervenant $intervenant): self
+    public function setIntervenant(Intervenant $intervenant): self
     {
         $this->intervenant = $intervenant;
 
@@ -152,7 +153,7 @@ class IntervenantDossierForm extends AbstractForm
      *
      * @return array
      */
-    public function getInputFilterSpecification (): array
+    public function getInputFilterSpecification(): array
     {
         return [];
     }

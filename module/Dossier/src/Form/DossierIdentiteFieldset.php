@@ -4,7 +4,9 @@ namespace Dossier\Form;
 
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Dossier\Entity\Db\IntervenantDossier;
 use Intervenant\Entity\Db\SituationMatrimoniale;
+use Intervenant\Entity\Db\Statut;
 use Intervenant\Service\CiviliteServiceAwareTrait;
 use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
@@ -119,6 +121,19 @@ class DossierIdentiteFieldset extends AbstractFieldset
 
         $this->get('situationMatrimoniale')
             ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceSituationMatrimoniale()->getList()));
+
+        //Gestion des labels selon les règles du statut intervenant sur les données contact
+        $dossierIntervenant       = $this->getOption('dossierIntervenant');
+        $statutDossierIntervenant = $dossierIntervenant->getStatut();
+
+        /**
+         * @var $statutDossierIntervenant Statut
+         * @var $dossierIntervenant       IntervenantDossier
+         */
+
+        if ($statutDossierIntervenant->getDossierSituationMatrimoniale()) {
+            $this->get('situationMatrimoniale')->setLabel('Situation matrimoniale <span class="text-danger">*</span>');
+        }
 
 
         return $this;

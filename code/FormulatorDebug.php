@@ -89,87 +89,90 @@ if ($error = $formulator->getLastTestError()) {
 ob_start();
 
 $cache = $test->getDebugTrace();
-if (isset($cache['vh'])) {
-
-    $cols = [];
-    foreach ($cache['vh'] as $l => $vh) {
-        foreach ($vh as $col => $val) {
-            $col = \Unicaen\OpenDocument\Calc::letterToNumber($col);
-            if (!in_array($col, $cols)) {
-                $cols[] = $col;
+if (!empty($cache)) {
+    if (isset($cache['vh'])) {
+        $cols = [];
+        foreach ($cache['vh'] as $l => $vh) {
+            foreach ($vh as $col => $val) {
+                $col = \Unicaen\OpenDocument\Calc::letterToNumber($col);
+                if (!in_array($col, $cols)) {
+                    $cols[] = $col;
+                }
             }
         }
     }
-}
 
 
-$variablesCells = [];
-foreach( $tableur->variables() as $name => $variable ){
-    if (isset($variable['cell'])){
-        /** @var \Unicaen\OpenDocument\Calc\Cell $cell */
-        $cell = $variable['cell'];
-        if ($cell->getRow() == $tableur->mainLine()){
-            $variablesCells[$cell->getCol()] = str_replace('vh.heures','',$name);
+    $variablesCells = [];
+    foreach ($tableur->variables() as $name => $variable) {
+        if (isset($variable['cell'])) {
+            /** @var \Unicaen\OpenDocument\Calc\Cell $cell */
+            $cell = $variable['cell'];
+            if ($cell->getRow() == $tableur->mainLine()) {
+                $variablesCells[$cell->getCol()] = str_replace('vh.heures', '', $name);
+            }
+
         }
-
     }
-}
 
 
-echo '<table class="table table-bordered table-xs">';
-echo '<tr>';
-echo '<th></th>';
-foreach ($cols as $col) {
-    echo '<th>' . ($variablesCells[$col] ?? '') . '</th>';
-}
-echo '</tr>';
-echo '<tr>';
-echo '<th></th>';
-foreach ($cols as $col) {
-    $col = \Unicaen\OpenDocument\Calc::numberToLetter($col);
-
-    echo '<th>' . $col . '</th>';
-}
-echo '</tr>';
-foreach ($cache['vh'] as $l => $vh) {
+    echo '<table class="table table-bordered table-xs">';
     echo '<tr>';
-    echo '<th>' . $l + $tableur->mainLine() . '</th>';
+    echo '<th></th>';
+    foreach ($cols as $col) {
+        echo '<th>' . ($variablesCells[$col] ?? '') . '</th>';
+    }
+    echo '</tr>';
+    echo '<tr>';
+    echo '<th></th>';
     foreach ($cols as $col) {
         $col = \Unicaen\OpenDocument\Calc::numberToLetter($col);
-        if (isset($vh[$col])) {
-            $val = $vh[$col];
-            $tabVal = $tableur->getCellFloatVal($col . ($l + $tableur->mainLine()));
+
+        echo '<th>' . $col . '</th>';
+    }
+    echo '</tr>';
+    foreach ($cache['vh'] as $l => $vh) {
+        echo '<tr>';
+        echo '<th>' . $l + $tableur->mainLine() . '</th>';
+        foreach ($cols as $col) {
+            $col = \Unicaen\OpenDocument\Calc::numberToLetter($col);
+            if (isset($vh[$col])) {
+                $val = $vh[$col];
+                $tabVal = $tableur->getCellFloatVal($col . ($l + $tableur->mainLine()));
+                if ((int)round($tabVal * 100) != (int)round($val * 100)) {
+                    $val = '<span style="color:red" title="' . (string)round($tabVal, 2) . ' sur le tableur">' . (string)round($val, 2) . '</span>';
+                } else {
+                    $val = (string)round($val, 2);
+                }
+            } else {
+                $val = '';
+            }
+            echo '<td>' . $val . '</td>';
+        }
+        echo '</tr>';
+    }
+    echo '</table>';
+
+
+    if (isset($cache['global'])) {
+        foreach ($cache['global'] as $cell => $val) {
+            $tabVal = $tableur->getCellFloatVal($cell);
             if ((int)round($tabVal * 100) != (int)round($val * 100)) {
                 $val = '<span style="color:red" title="' . (string)round($tabVal, 2) . ' sur le tableur">' . (string)round($val, 2) . '</span>';
             } else {
                 $val = (string)round($val, 2);
             }
-        } else {
-            $val = '';
+
+            echo '<span class="debug-cell">';
+            echo $cell . '<span class="debug-val">' . $val . '</span>';
+            echo '</span>';
         }
-        echo '<td>' . $val . '</td>';
     }
-    echo '</tr>';
+    echo '<br />';
+    echo '<br />';
+}else{
+    $calc .= '<div class="alert alert-danger">Le calcul de la formule n\'a pas pu être déclanché</div>';
 }
-echo '</table>';
-
-
-if (isset($cache['global'])) {
-    foreach ($cache['global'] as $cell => $val) {
-        $tabVal = $tableur->getCellFloatVal($cell);
-        if ((int)round($tabVal * 100) != (int)round($val * 100)) {
-            $val = '<span style="color:red" title="' . (string)round($tabVal, 2) . ' sur le tableur">' . (string)round($val, 2) . '</span>';
-        } else {
-            $val = (string)round($val, 2);
-        }
-
-        echo '<span class="debug-cell">';
-        echo $cell . '<span class="debug-val">' . $val . '</span>';
-        echo '</span>';
-    }
-}
-echo '<br />';
-echo '<br />';
 echo '<a href="'.$this->url('formule/administration/telecharger-tableur', ['formule' =>$tableur->formule()->getId()]).'">Télécharger le tableur</a>';
 
 $sheet = ob_get_clean();

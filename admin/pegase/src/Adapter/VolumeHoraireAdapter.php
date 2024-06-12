@@ -25,20 +25,21 @@ class VolumeHoraireAdapter implements DataAdapterInterface
             $heures = $volumeHoraire->getVolumeHoraire();
             $heures = $heures / 3600.0;
             if (isset($arborescence[$volumeHoraire->getElementId()])) {
-                $elementsPedagogiques = $odf->SearchingElementPedagogique($volumeHoraire->getElementId(), $arborescence);
-                foreach ($elementsPedagogiques as $elementPedagogique) {
-                    $volumeHoraireNew = new VolumeHoraire();
-                    $volumeHoraireNew->setVolumeHoraire($heures);
-                    $volumeHoraireNew->setTypeIntervention($volumeHoraire->getTypeIntervention());
-                    $volumeHoraireNew->setElementId($elementPedagogique);
-                    $volumeHoraireNew->setNombreGroupe($volumeHoraire->getNombreGroupe());
-                    $element = $elementsPedagogiquesOdf[$elementPedagogique];
-                    $volumeHoraireNew->setAnneeDebut($element->getAnneeDebut());
-                    $volumeHoraireNew->setAnneeFin($element->getAnneeFin());
-                    $volumeHoraireNew->setSourceCode($volumeHoraireNew->getElementId() . '_' . $volumeHoraireNew->getTypeIntervention());
-                    $odf->addVolumeHoraire($volumeHoraireNew);
-                    $volumeHoraires[$volumeHoraireNew->getSourceCode()] = $volumeHoraireNew;
-                }
+//On ne fait plus ruisseler les heures sur les EC, on retire juste le volume horaire de la liste
+                //                $elementsPedagogiques = $odf->SearchingElementPedagogique($volumeHoraire->getElementId(), $arborescence);
+//                foreach ($elementsPedagogiques as $elementPedagogique) {
+//                    $volumeHoraireNew = new VolumeHoraire();
+//                    $volumeHoraireNew->setVolumeHoraire($heures);
+//                    $volumeHoraireNew->setTypeIntervention($volumeHoraire->getTypeIntervention());
+//                    $volumeHoraireNew->setElementId($elementPedagogique);
+//                    $volumeHoraireNew->setNombreGroupe($volumeHoraire->getNombreGroupe());
+//                    $element = $elementsPedagogiquesOdf[$elementPedagogique];
+//                    $volumeHoraireNew->setAnneeDebut($element->getAnneeDebut());
+//                    $volumeHoraireNew->setAnneeFin($element->getAnneeFin());
+//                    $volumeHoraireNew->setSourceCode($volumeHoraireNew->getElementId() . '_' . $volumeHoraireNew->getTypeIntervention());
+//                    $odf->addVolumeHoraire($volumeHoraireNew);
+//                    $volumeHoraires[$volumeHoraireNew->getSourceCode()] = $volumeHoraireNew;
+//                }
                 $odf->unsetVolumeHoraire($volumeHoraire);
 
             } else {

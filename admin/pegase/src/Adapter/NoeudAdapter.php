@@ -5,6 +5,7 @@ namespace Adapter;
 
 use Entity\NoeudOld;
 use Entity\Odf;
+use Unicaen\BddAdmin\Bdd;
 
 class NoeudAdapter implements DataAdapterInterface
 {
@@ -13,7 +14,7 @@ class NoeudAdapter implements DataAdapterInterface
      *
      * @return void
      */
-    public function run(Odf $odf): void
+    public function run(Odf $odf, Bdd $pegase = null): void
     {
         foreach ($odf->getObjetsFormation() as $objetFormation) {
             $noeud = new NoeudOld($odf);

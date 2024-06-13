@@ -5,6 +5,7 @@ namespace Adapter;
 
 use Entity\NoeudOld;
 use Entity\Odf;
+use Unicaen\BddAdmin\Bdd;
 
 class LienAdapter implements DataAdapterInterface
 {
@@ -13,7 +14,7 @@ class LienAdapter implements DataAdapterInterface
      *
      * @return void
      */
-    public function run(Odf $odf): void
+    public function run(Odf $odf, Bdd $pegase = null): void
     {
         foreach ($odf->getMaquettes() as $maquette) {
 

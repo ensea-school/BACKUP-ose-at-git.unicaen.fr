@@ -4,10 +4,11 @@
 namespace Adapter;
 
 use Entity\Odf;
+use Unicaen\BddAdmin\Bdd;
 
 class TypeFormationAdapter implements DataAdapterInterface
 {
-    public function run(Odf $odf): void
+    public function run(Odf $odf, Bdd $pegase = null): void
     {
         $console = \OseAdmin::instance()->console();
         $console->println('Traitement des types de formation récupérés');

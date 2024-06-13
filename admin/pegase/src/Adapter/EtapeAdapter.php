@@ -5,13 +5,14 @@ namespace Adapter;
 
 use Entity\Odf;
 use Exception;
+use Unicaen\BddAdmin\Bdd;
 
 class EtapeAdapter implements DataAdapterInterface
 {
     /**
      * @throws Exception
      */
-    public function run(Odf $odf): void
+    public function run(Odf $odf, Bdd $pegase = null): void
     {
         $console = \OseAdmin::instance()->console();
         $console->println('Traitement des étapes récupérées');
@@ -26,6 +27,22 @@ class EtapeAdapter implements DataAdapterInterface
                 continue;
             }
 
+            if($etape->getTypeFormationId() == null) {
+                $sql = 'SELECT om_enfant.id as id_objet, COALESCE(om_parent_n2.code_type_diplome, om_parent.code_type_diplome) as code_type_diplome
+                FROM schema_odf.enfant e
+                LEFT JOIN schema_odf.enfant e_n2 ON e.id_objet_maquette_parent = e_n2.id_objet_maquette
+                LEFT JOIN schema_odf.objet_maquette om_parent_n2 ON e_n2.id_objet_maquette_parent = om_parent_n2.id
+
+                JOIN schema_odf.objet_maquette om_enfant ON e.id_objet_maquette = om_enfant.id
+                JOIN schema_odf.objet_maquette om_parent ON om_parent.id = e.id_objet_maquette_parent
+                WHERE e.id_objet_maquette = :id_objet';
+                $param['id_objet'] = $etape->getSourceCode();
+                $res =  $pegase->select($sql, $param, ['fetch' => Bdd::FETCH_EACH]);
+                while ($parent = $res->next()) {
+                    $etape->setTypeFormationId($parent['code_type_diplome']);
+                    break;
+                }
+            }
 
             $code      = $etape->getCode();
             $increment = 0;

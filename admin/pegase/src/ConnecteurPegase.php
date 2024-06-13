@@ -149,7 +149,7 @@ class ConnecteurPegase
         $versionDre = $this->getDreVersion();
         foreach ($adapters as $adapter) {
             if ($adapter->versionMin() <= $versionDre && $adapter->versionMax() >= $versionDre) {
-                $adapter->run($this->odf);
+                $adapter->run($this->odf, $this->pegase);
             }
         }
     }

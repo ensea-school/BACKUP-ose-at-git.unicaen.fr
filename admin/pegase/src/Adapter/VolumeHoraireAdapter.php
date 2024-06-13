@@ -6,13 +6,14 @@ namespace Adapter;
 use Entity\Odf;
 use Entity\VolumeHoraire;
 use Exception;
+use Unicaen\BddAdmin\Bdd;
 
 class VolumeHoraireAdapter implements DataAdapterInterface
 {
     /**
      * @throws Exception
      */
-    public function run(Odf $odf): void
+    public function run(Odf $odf, Bdd $pegase = null): void
     {
         $console = \OseAdmin::instance()->console();
         $console->println('Traitement des volumes horaires récupérées');

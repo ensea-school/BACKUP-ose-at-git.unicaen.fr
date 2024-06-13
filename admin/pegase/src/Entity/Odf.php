@@ -227,6 +227,9 @@ class Odf
             $res['anneeFin'] = null;
         }
 
+        if($res['anneeDebut'] && $res['anneeFin'] == null){
+            $res['anneeFin'] = $res['anneeDebut'];
+        }
         return $res;
     }
 

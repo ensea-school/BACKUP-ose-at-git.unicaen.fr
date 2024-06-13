@@ -7,6 +7,7 @@ use Entity\ElementPedagogique;
 use Entity\Odf;
 use Exception;
 use Entity\CheminPedagogique;
+use Unicaen\BddAdmin\Bdd;
 use function PHPUnit\Framework\isEmpty;
 
 class ObjetFormationAdapter implements DataAdapterInterface
@@ -14,7 +15,7 @@ class ObjetFormationAdapter implements DataAdapterInterface
     /**
      * @throws Exception
      */
-    public function run(Odf $odf): void
+    public function run(Odf $odf, Bdd $pegase = null): void
     {
         $console = \OseAdmin::instance()->console();
         $console->println('Traitement des objet de formation récupérés');
@@ -64,17 +65,17 @@ class ObjetFormationAdapter implements DataAdapterInterface
                         }
                     }
                     $elementToAdd->setCode($code);
-                    if ($etape->getStructureId() == $elementToAdd->getStructureId() || $etape->getStructureId() == null) {
+                    if ($elementToAdd->getEtapeId() == null) {
                         $elementToAdd->setEtapeId($etape->getSourceCode());
-                    } else {
-                        $ecco = $elementToAdd->getCode() . '----' . $etape->getCode() . '-----' . $etape->getStructureId();
                     }
+
                     for ($i = $periodesAnnee['anneeDebut']; $i <= $periodesAnnee['anneeFin']; $i++) {
                         $codePresent[$i][$code] = $code;
                     }
 
 
                     $elementsPedagogiquesToAdd[$elementToAdd->getSourceCode()] = $elementToAdd;
+
                 } else {
                     $elemTest = $elementsPedagogiquesToAdd[$elementPedagogique->getSourceCode()];
 

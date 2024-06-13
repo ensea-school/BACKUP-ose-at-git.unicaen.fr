@@ -4,10 +4,11 @@
 namespace Adapter;
 
 use Entity\Odf;
+use Unicaen\BddAdmin\Bdd;
 
 interface DataAdapterInterface
 {
-    public function run(Odf $odf): void;
+    public function run(Odf $odf, Bdd $pegase = null): void;
 
 
 

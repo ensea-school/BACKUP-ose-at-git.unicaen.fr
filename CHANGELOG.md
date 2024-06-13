@@ -20,6 +20,7 @@
 * Affichage du type de mission et du libellé de la mission dans la page de demandes de mise en paiement (#56869)
 * Correction indicateur 570 pour permettre de voir les intervenants avec des validations référentiels en attente en dehors de leur composante d'affectation (#56951)
 * Correction indicateur 280 pour enlever les étudiants dont les candidatures ont été refusé
+* Correction de la formule de calcul de Paris8 (#48203)
 
 ## Améliorations
 
@@ -32,6 +33,10 @@
 * Au niveau de la fonction "Demande de mise en paiement par lot" Ajout d'un raccourci (bouton) permettant d'aller directement aux mises en paiement (#56718)
 * Meilleur affichage html du descriptif des offres d'emploi (Ose mission)
 * Fiabilisation de la saisie d'un siret/siren lors l'ajout d'un employeur via l'administration (#55462)
+
+
+
+
 
 # OSE 23.5 (19/04/2024)
 

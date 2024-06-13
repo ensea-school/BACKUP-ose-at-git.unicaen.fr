@@ -1,13 +1,17 @@
 # Version stable
 
-[OSE 23.5](#ose-235-19042024)
+[OSE 23.6](#ose-236-13062024)
 
 
 
 # OSE 24 (à venir)
 
 
-# OSE 23.6 (à venir)
+# OSE 23.6 (13/06/2024)
+
+## Nouveautés
+
+* Préversion du connecteur en import Pégase [documentation temporaire ici](https://git.unicaen.fr/open-source/OSE/-/blob/b23/admin/pegase/doc_temporaire/Documentation.txt?ref_type=heads)
 
 ## Corrections de bugs
 

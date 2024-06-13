@@ -21,6 +21,7 @@
 * Correction indicateur 570 pour permettre de voir les intervenants avec des validations référentiels en attente en dehors de leur composante d'affectation (#56951)
 * Correction indicateur 280 pour enlever les étudiants dont les candidatures ont été refusé
 * Correction de la formule de calcul de Paris8 (#48203)
+* En cas d'erreur d'enregistrement, s'il y a contrôle de plafond, les messages d'erreur seront de nouveau explicites (#57207)
 
 ## Améliorations
 

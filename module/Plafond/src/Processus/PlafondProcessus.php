@@ -3,6 +3,7 @@
 namespace Plafond\Processus;
 
 use Application\Processus\AbstractProcessus;
+use Doctrine\DBAL\ConnectionException;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Service\PlafondServiceAwareTrait;
@@ -64,8 +65,12 @@ class PlafondProcessus extends AbstractProcessus
         }
 
         if ($passed) {
-            $this->getEntityManager()->commit();
-            $this->getServicePlafond()->calculerDepuisEntite($entity); // on met à jour les TBLs
+            try {
+                $this->getEntityManager()->commit();
+                $this->getServicePlafond()->calculerDepuisEntite($entity); // on met à jour les TBLs
+            }catch(ConnectionException $e){
+                $this->getEntityManager()->rollback();
+            }
         } else {
             $this->getEntityManager()->rollback();
         }

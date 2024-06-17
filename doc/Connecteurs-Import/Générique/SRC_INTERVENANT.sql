@@ -15,6 +15,7 @@ CASE
   CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN intervenant_grade_id ELSE grade_id END         grade_id,
   discipline_id,
   civilite_id,
+  situation_matrimoniale_id,
   nom_usuel,
   prenom,
   date_naissance,
@@ -224,6 +225,7 @@ FROM (
       i.grade_id                                                                             intervenant_grade_id,
       d.id                                                                                   discipline_id,
       c.id                                                                                   civilite_id,
+      sm.id                                                                                  situation_matrimoniale_id,
       s.nom_usuel                                                                            nom_usuel,
       s.prenom                                                                               prenom,
       s.date_naissance                                                                       date_naissance,
@@ -301,6 +303,7 @@ FROM (
       LEFT JOIN grade                   g ON g.source_code      = s.z_grade_id
       LEFT JOIN discipline              d ON d.source_code      = s.z_discipline_id
       LEFT JOIN civilite                c ON c.libelle_court    = s.z_civilite_id
+      LEFT JOIN situation_matrimoniale sm ON sm.libelle_court   = s.z_situation_matriomoniale_id
       LEFT JOIN pays               pnaiss ON pnaiss.source_code = s.z_pays_naissance_id
       LEFT JOIN departement           dep ON dep.source_code    = s.z_departement_naissance_id
       LEFT JOIN pays                 pnat ON pnat.source_code   = s.z_pays_nationalite_id

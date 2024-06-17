@@ -1751,6 +1751,7 @@ return [
         'REGLE_FC',
         'TYPE_INTERVENTION_MAQUETTE_ID',
         'VISIBLE_EXTERIEUR',
+        'SOURCE_CODE',
     ],
     'TYPE_INTERVENTION_EP'           => [
         'ID',

@@ -2,7 +2,7 @@
 
 namespace Lieu\Form;
 
-use Application\Entity\Db\DomaineFonctionnel;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Application\Form\AbstractForm;
 use Laminas\Form\FormInterface;
 use Lieu\Entity\Db\AdresseNumeroCompl;

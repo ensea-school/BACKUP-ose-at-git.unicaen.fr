@@ -8,6 +8,7 @@ FROM
 WHERE
   tc.candidature_id IS NOT NULL
   AND tc.validation_id IS NULL
+  AND tc.refusee = 0
   AND w.etape_code = 'CANDIDATURE_SAISIE'
   AND w.atteignable = 1
 GROUP BY

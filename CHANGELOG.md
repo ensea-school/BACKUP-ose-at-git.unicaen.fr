@@ -1,13 +1,17 @@
 # Version stable
 
-[OSE 23.5](#ose-235-19042024)
+[OSE 23.6](#ose-236-13062024)
 
 
 
 # OSE 24 (à venir)
 
 
-# OSE 23.6 (à venir)
+# OSE 23.6 (13/06/2024)
+
+## Nouveautés
+
+* Préversion du connecteur en import Pégase [documentation temporaire ici](https://git.unicaen.fr/open-source/OSE/-/blob/b23/admin/pegase/doc_temporaire/Documentation.txt?ref_type=heads)
 
 ## Corrections de bugs
 
@@ -18,6 +22,10 @@
 * Modification de la formule de calcul de Paris Dauphine (#50652)
 * Pour la fonctionnalité "Demande de mise en paiement en lot" les HETD référentiel ne sont plus prises en compte dans le total HETD des heures à payer faute de pouvoir pour le moment paramètrer un centre de coût par défaut pour les fonctions référentiels (#56717)
 * Affichage du type de mission et du libellé de la mission dans la page de demandes de mise en paiement (#56869)
+* Correction indicateur 570 pour permettre de voir les intervenants avec des validations référentiels en attente en dehors de leur composante d'affectation (#56951)
+* Correction indicateur 280 pour enlever les étudiants dont les candidatures ont été refusé
+* Correction de la formule de calcul de Paris8 (#48203)
+* En cas d'erreur d'enregistrement, s'il y a contrôle de plafond, les messages d'erreur seront de nouveau explicites (#57207)
 
 ## Améliorations
 
@@ -29,6 +37,11 @@
 * Tri des périodes de paiement et des offres d'emploi du plus récent au plus ancien
 * Au niveau de la fonction "Demande de mise en paiement par lot" Ajout d'un raccourci (bouton) permettant d'aller directement aux mises en paiement (#56718)
 * Meilleur affichage html du descriptif des offres d'emploi (Ose mission)
+* Fiabilisation de la saisie d'un siret/siren lors l'ajout d'un employeur via l'administration (#55462)
+
+
+
+
 
 # OSE 23.5 (19/04/2024)
 

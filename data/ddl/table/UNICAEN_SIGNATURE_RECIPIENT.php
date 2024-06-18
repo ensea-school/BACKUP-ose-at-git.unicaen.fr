@@ -9,20 +9,8 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'UNICAEN_SIGNATURE_RECIPIENT_ID_SEQ',
     'columns'     => [
-        'COMMENT'       => [
-            'name'        => 'COMMENT',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 4000,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 10,
-            'commentaire' => NULL,
-        ],
-        'DATE_FINISHED' => [
-            'name'        => 'DATE_FINISHED',
+        'DATEFINISHED' => [
+            'name'        => 'DATEFINISHED',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
             'length'      => 0,
@@ -33,8 +21,8 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'DATE_UPDATE'   => [
-            'name'        => 'DATE_UPDATE',
+        'DATEUPDATE'   => [
+            'name'        => 'DATEUPDATE',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
             'length'      => 0,
@@ -45,7 +33,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'EMAIL'         => [
+        'EMAIL'        => [
             'name'        => 'EMAIL',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -57,7 +45,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'FIRSTNAME'     => [
+        'FIRSTNAME'    => [
             'name'        => 'FIRSTNAME',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -69,20 +57,32 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'ID'            => [
+        'ID'           => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => 0,
+            'scale'       => '0',
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'KEY_ACCESS'    => [
-            'name'        => 'KEY_ACCESS',
+        'INFORMATIONS' => [
+            'name'        => 'INFORMATIONS',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
+        'KEYACCESS'    => [
+            'name'        => 'KEYACCESS',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
             'length'      => 4000,
@@ -93,7 +93,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'LASTNAME'      => [
+        'LASTNAME'     => [
             'name'        => 'LASTNAME',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -105,7 +105,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'PHONE'         => [
+        'PHONE'        => [
             'name'        => 'PHONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -117,7 +117,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'SIGNATURE_ID'  => [
+        'SIGNATURE_ID' => [
             'name'        => 'SIGNATURE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -129,7 +129,7 @@ return [
             'position'    => 11,
             'commentaire' => NULL,
         ],
-        'STATUS'        => [
+        'STATUS'       => [
             'name'        => 'STATUS',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

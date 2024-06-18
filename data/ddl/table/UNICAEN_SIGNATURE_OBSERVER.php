@@ -38,14 +38,13 @@ return [
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => 0,
+            'scale'       => '0',
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 1,
             'commentaire' => NULL,
         ],
-
         'LASTNAME'     => [
             'name'        => 'LASTNAME',
             'type'        => 'string',

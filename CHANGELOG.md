@@ -6,6 +6,10 @@
 
 # OSE 24 (à venir)
 
+# OSE 23.7 (à venir)
+
+* Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant mais prendre aussi en compte les missions de vacataires (#57424)
+
 
 # OSE 23.6 (13/06/2024)
 

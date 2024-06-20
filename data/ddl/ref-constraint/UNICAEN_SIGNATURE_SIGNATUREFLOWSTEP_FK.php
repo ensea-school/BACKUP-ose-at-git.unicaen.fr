@@ -9,7 +9,7 @@ return [
     'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [
-        'SIGNATURE_FLOW_ID' => 'ID',
+        'SIGNATUREFLOW_ID' => 'ID',
     ],
 ];
 

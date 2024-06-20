@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'UNICAEN_SIGNATURE_SIGNATUREFLOW_ID_SEQ',
+    'sequence'    => NULL,
     'columns'     => [
         'DESCRIPTION' => [
             'name'        => 'DESCRIPTION',
@@ -19,6 +19,18 @@ return [
             'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 3,
+            'commentaire' => NULL,
+        ],
+        'ENABLED'     => [
+            'name'        => 'ENABLED',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 38,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'ID'          => [

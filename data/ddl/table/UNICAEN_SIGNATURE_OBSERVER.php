@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'UNICAEN_SIGNATURE_OBSERVER_ID_SEQ',
+    'sequence'    => NULL,
     'columns'     => [
         'EMAIL'        => [
             'name'        => 'EMAIL',

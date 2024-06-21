@@ -86,7 +86,7 @@ return [
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => '0',
+            'scale'       => NULL,
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',

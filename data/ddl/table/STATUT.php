@@ -894,7 +894,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 95,
+            'position'    => 87,
             'commentaire' => NULL,
         ],
         'ORDRE'                          => [

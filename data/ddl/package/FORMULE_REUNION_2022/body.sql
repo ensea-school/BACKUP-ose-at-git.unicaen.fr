@@ -52,13 +52,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION_2022 AS
       END IF;
     END IF;
 
-    feuille(c).cells(l).enCalcul := TRUE;
+    feuille(c).cells(l).enCalcul := true;
     val := calcCell( c, l );
     IF ose_formule.debug_actif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := FALSE;
+    feuille(c).cells(l).enCalcul := false;
 
     RETURN val;
   END;
@@ -1226,7 +1226,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION_2022 AS
       ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'X',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'Y',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'Z',l);
-      ose_formule.volumes_horaires.items(l).heures_primes            := mainCell('Heures compl. FC Maj.', 'AA',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'AA',l);
       ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'AB',l);
     END LOOP;
   END;

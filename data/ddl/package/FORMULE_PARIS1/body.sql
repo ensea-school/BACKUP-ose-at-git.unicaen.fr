@@ -52,13 +52,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
       END IF;
     END IF;
 
-    feuille(c).cells(l).enCalcul := TRUE;
+    feuille(c).cells(l).enCalcul := true;
     val := calcCell( c, l );
     IF ose_formule.debug_actif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := FALSE;
+    feuille(c).cells(l).enCalcul := false;
 
     RETURN val;
   END;
@@ -250,7 +250,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- AJ15=SUM([.AI$1:.AI$1048576])
+      -- AJ15=SUM([.AI:.AI])
       WHEN 'AJ15' THEN
         RETURN calcFnc('somme','AI');
 
@@ -314,7 +314,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- AP15=SUM([.AO$1:.AO$1048576])
+      -- AP15=SUM([.AO:.AO])
       WHEN 'AP15' THEN
         RETURN calcFnc('somme','AO');
 
@@ -378,7 +378,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- AV15=SUM([.AU$1:.AU$1048576])
+      -- AV15=SUM([.AU:.AU])
       WHEN 'AV15' THEN
         RETURN calcFnc('somme','AU');
 
@@ -442,7 +442,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- BB15=SUM([.BA$1:.BA$1048576])
+      -- BB15=SUM([.BA:.BA])
       WHEN 'BB15' THEN
         RETURN calcFnc('somme','BA');
 
@@ -506,7 +506,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- BH15=SUM([.BG$1:.BG$1048576])
+      -- BH15=SUM([.BG:.BG])
       WHEN 'BH15' THEN
         RETURN calcFnc('somme','BG');
 
@@ -570,7 +570,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- BN15=SUM([.BM$1:.BM$1048576])
+      -- BN15=SUM([.BM:.BM])
       WHEN 'BN15' THEN
         RETURN calcFnc('somme','BM');
 
@@ -638,7 +638,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- BT15=SUM([.BS$1:.BS$1048576])
+      -- BT15=SUM([.BS:.BS])
       WHEN 'BT15' THEN
         RETURN calcFnc('somme','BS');
 
@@ -706,7 +706,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- BZ15=SUM([.BY$1:.BY$1048576])
+      -- BZ15=SUM([.BY:.BY])
       WHEN 'BZ15' THEN
         RETURN calcFnc('somme','BY');
 
@@ -770,7 +770,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- CF15=SUM([.CE$1:.CE$1048576])
+      -- CF15=SUM([.CE:.CE])
       WHEN 'CF15' THEN
         RETURN calcFnc('somme','CE');
 
@@ -824,9 +824,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- CK=IF(AND([.$E20]="Oui";[.$I20]="Référentiel";OR(LEFT([.$P20];4) = "A2 :";LEFT([.$P20];4)="A3 :");LEFT([.$P20];18)<>"A3 : Apprentissage");[.$N20]*[.$AF20];0)
+      -- CK=IF(AND([.$E20]="Oui";[.$I20]="Référentiel";OR(LEFT([.$P20];4) = "A2 :";LEFT([.$P20];4)="A3 :");LEFT([.$P20];8)<>"A3 : APP");[.$N20]*[.$AF20];0)
       WHEN 'CK' THEN
-        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND (SUBSTR(vh.param_2, 1, 4)  =  'A2 :' OR SUBSTR(vh.param_2, 1, 4) = 'A3 :') AND SUBSTR(vh.param_2, 1, 18) <> 'A3 : Apprentissage' THEN
+        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND (SUBSTR(vh.param_2, 1, 4)  =  'A2 :' OR SUBSTR(vh.param_2, 1, 4) = 'A3 :') AND SUBSTR(vh.param_2, 1, 8) <> 'A3 : APP' THEN
           RETURN vh.heures * cell('AF',l);
         ELSE
           RETURN 0;
@@ -834,7 +834,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- CL15=SUM([.CK$1:.CK$1048576])
+      -- CL15=SUM([.CK:.CK])
       WHEN 'CL15' THEN
         RETURN calcFnc('somme','CK');
 
@@ -888,9 +888,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- CQ=IF(AND([.$E20]="Oui";[.$I20]="Référentiel";LEFT([.$P20];18)="A3 : Apprentissage");[.$N20]*[.$AF20];0)
+      -- CQ=IF(AND([.$E20]="Oui";[.$I20]="Référentiel";LEFT([.$P20];8)="A3 : APP");[.$N20]*[.$AF20];0)
       WHEN 'CQ' THEN
-        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND SUBSTR(vh.param_2, 1, 18) = 'A3 : Apprentissage' THEN
+        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND SUBSTR(vh.param_2, 1, 8) = 'A3 : APP' THEN
           RETURN vh.heures * cell('AF',l);
         ELSE
           RETURN 0;
@@ -898,7 +898,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- CR15=SUM([.CQ$1:.CQ$1048576])
+      -- CR15=SUM([.CQ:.CQ])
       WHEN 'CR15' THEN
         RETURN calcFnc('somme','CQ');
 
@@ -988,7 +988,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
       ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'Y',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'Z',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'AA',l);
-      ose_formule.volumes_horaires.items(l).heures_primes            := mainCell('Heures compl. FC Maj.', 'AB',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'AB',l);
       ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'AC',l);
     END LOOP;
   END;

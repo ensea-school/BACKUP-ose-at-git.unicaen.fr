@@ -52,13 +52,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
       END IF;
     END IF;
 
-    feuille(c).cells(l).enCalcul := TRUE;
+    feuille(c).cells(l).enCalcul := true;
     val := calcCell( c, l );
     IF ose_formule.debug_actif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := FALSE;
+    feuille(c).cells(l).enCalcul := false;
 
     RETURN val;
   END;
@@ -238,7 +238,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- AH15=SUM([.AG$1:.AG$1048576])
+      -- AH15=SUM([.AG:.AG])
       WHEN 'AH15' THEN
         RETURN calcFnc('somme','AG');
 
@@ -302,7 +302,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- AN15=SUM([.AM$1:.AM$1048576])
+      -- AN15=SUM([.AM:.AM])
       WHEN 'AN15' THEN
         RETURN calcFnc('somme','AM');
 
@@ -366,7 +366,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- AT15=SUM([.AS$1:.AS$1048576])
+      -- AT15=SUM([.AS:.AS])
       WHEN 'AT15' THEN
         RETURN calcFnc('somme','AS');
 
@@ -430,7 +430,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- AZ15=SUM([.AY$1:.AY$1048576])
+      -- AZ15=SUM([.AY:.AY])
       WHEN 'AZ15' THEN
         RETURN calcFnc('somme','AY');
 
@@ -494,7 +494,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- BF15=SUM([.BE$1:.BE$1048576])
+      -- BF15=SUM([.BE:.BE])
       WHEN 'BF15' THEN
         RETURN calcFnc('somme','BE');
 
@@ -558,7 +558,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- BL15=SUM([.BK$1:.BK$1048576])
+      -- BL15=SUM([.BK:.BK])
       WHEN 'BL15' THEN
         RETURN calcFnc('somme','BK');
 
@@ -612,9 +612,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- BQ=IF(AND([.$D20]="Oui";[.$H20]<>"Référentiel");[.$M20]*[.$AE20];0)
+      -- BQ=IF([.$D20]="Oui";[.$M20]*[.$AE20];0)
       WHEN 'BQ' THEN
-        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL THEN
+        IF vh.service_statutaire THEN
           RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;
@@ -638,13 +638,17 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- BS=IF([.$BS$15]<i_service_du;0;IF(OR(MID([.$A20];1;25)="20595";MID([.$A20];1;25)="40");[.$M20]*[.$AE20];0))
+      -- BS=IF([.$BS$15]<=i_service_du;0;IF(OR(MID([.$A20];1;25)="20595";MID([.$A20];1;25)="40");IF(i_depassement_service_du_sans_hc="Non";[.$M20]*[.$AE20];0);0))
       WHEN 'BS' THEN
-        IF cell('BS15') < i.service_du THEN
+        IF cell('BS15') <= i.service_du THEN
           RETURN 0;
         ELSE
           IF COALESCE(SUBSTR(vh.structure_code, 1, 25),' ') = '20595' OR COALESCE(SUBSTR(vh.structure_code, 1, 25),' ') = '40' THEN
-            RETURN vh.heures * cell('AE',l);
+            IF NOT i.depassement_service_du_sans_hc THEN
+              RETURN vh.heures * cell('AE',l);
+            ELSE
+              RETURN 0;
+            END IF;
           ELSE
             RETURN 0;
           END IF;
@@ -685,7 +689,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
       ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'X',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'Y',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'Z',l);
-      ose_formule.volumes_horaires.items(l).heures_primes            := mainCell('Heures compl. FC Maj.', 'AA',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'AA',l);
       ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'AB',l);
     END LOOP;
   END;

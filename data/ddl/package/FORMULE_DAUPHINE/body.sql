@@ -52,13 +52,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
       END IF;
     END IF;
 
-    feuille(c).cells(l).enCalcul := TRUE;
+    feuille(c).cells(l).enCalcul := true;
     val := calcCell( c, l );
     IF ose_formule.debug_actif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := FALSE;
+    feuille(c).cells(l).enCalcul := false;
 
     RETURN val;
   END;
@@ -282,9 +282,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
 
 
 
-      -- AK=IF([.AJ20]<[.AH20];([.AH20]-[.AJ20])/[.$AE20];0)
+      -- AK=IF(OR([.AJ20]<[.AH20];[.AH20]<0);([.AH20]-[.AJ20])/[.$AE20];0)
       WHEN 'AK' THEN
-        IF cell('AJ',l) < cell('AH',l) THEN
+        IF cell('AJ',l) < cell('AH',l) OR cell('AH',l) < 0 THEN
           RETURN (cell('AH',l) - cell('AJ',l)) / cell('AE',l);
         ELSE
           RETURN 0;
@@ -302,12 +302,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
 
 
 
-      -- AN=IF(AND([.$D20]="Non";[.$I20]<>"Référentiel";[.$A20]<>"DEP";AND(MID([.$O20];6;1)<>"P";OR(MID([.$O20];2;1)<>"A";MID([.$O20];2;1)<>"M")));[.$N20]*([.$G20]+[.$F20]+[.$H20])*[.$AE20];0)
+      -- AN=IF(OR([.$D20]="Oui";[.$I20]="Référentiel";[.$A20]="DEP");0;IF(AND(MID([.$O20];6;1)="P";(OR(MID([.$O20];2;1)="M";MID([.$O20];2;1)="A")));0;[.$N20]*([.$G20]+[.$F20]+[.$H20])*[.$AE20]))
       WHEN 'AN' THEN
-        IF NOT vh.structure_is_exterieur AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code <> 'DEP' AND (COALESCE(SUBSTR(vh.param_1, 6, 1),' ') <> 'P' AND (COALESCE(SUBSTR(vh.param_1, 2, 1),' ') <> 'A' OR COALESCE(SUBSTR(vh.param_1, 2, 1),' ') <> 'M')) THEN
-          RETURN vh.heures * (vh.taux_fa + vh.taux_fi + vh.taux_fc) * cell('AE',l);
-        ELSE
+        IF vh.structure_is_exterieur OR vh.volume_horaire_ref_id IS NOT NULL OR vh.structure_code = 'DEP' THEN
           RETURN 0;
+        ELSE
+          IF COALESCE(SUBSTR(vh.param_1, 6, 1),' ') = 'P' AND (COALESCE(SUBSTR(vh.param_1, 2, 1),' ') = 'M' OR COALESCE(SUBSTR(vh.param_1, 2, 1),' ') = 'A') THEN
+            RETURN 0;
+          ELSE
+            RETURN vh.heures * (vh.taux_fa + vh.taux_fi + vh.taux_fc) * cell('AE',l);
+          END IF;
         END IF;
 
 
@@ -346,9 +350,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
 
 
 
-      -- AQ=IF([.AP20]<[.AN20];([.AN20]-[.AP20])/[.$AE20];0)
+      -- AQ=IF(OR([.AP20]<[.AN20];[.AN20]<0);([.AN20]-[.AP20])/[.$AE20];0)
       WHEN 'AQ' THEN
-        IF cell('AP',l) < cell('AN',l) THEN
+        IF cell('AP',l) < cell('AN',l) OR cell('AN',l) < 0 THEN
           RETURN (cell('AN',l) - cell('AP',l)) / cell('AE',l);
         ELSE
           RETURN 0;
@@ -410,12 +414,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
 
 
 
-      -- AW=IF([.$AU$17]>0;0;(([.$AT20]/[.$AE20])*[.$AF20])-[.$AV20])
+      -- AW=IF([.$AU$17]>0;0;((([.$AT20]-[.AV20])/[.$AE20])*[.$AF20]))
       WHEN 'AW' THEN
         IF cell('AU17') > 0 THEN
           RETURN 0;
         ELSE
-          RETURN ((cell('AT',l) / cell('AE',l)) * cell('AF',l)) - cell('AV',l);
+          RETURN (((cell('AT',l) - cell('AV',l)) / cell('AE',l)) * cell('AF',l));
         END IF;
 
 
@@ -604,7 +608,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_DAUPHINE AS
       ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'Y',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'Z',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'AA',l);
-      ose_formule.volumes_horaires.items(l).heures_primes            := mainCell('Heures compl. FC Maj.', 'AB',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'AB',l);
       ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'AC',l);
     END LOOP;
   END;

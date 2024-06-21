@@ -111,7 +111,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UNICAEN_2016" AS
         ose_test.echo('heures_compl_fi           = ' || vh.heures_compl_fi);
         ose_test.echo('heures_compl_fa           = ' || vh.heures_compl_fa);
         ose_test.echo('heures_compl_fc           = ' || vh.heures_compl_fc);
-        ose_test.echo('heures_compl_fc_majorees  = ' || vh.heures_compl_fc_majorees);
+        ose_test.echo('heures_primes             = ' || vh.heures_primes);
         ose_test.echo('heures_compl_referentiel  = ' || vh.heures_compl_referentiel);
         ose_test.echo('-- FIN DE DEBUG DE VOLUME HORAIRE --');
         ose_test.echo('');
@@ -884,7 +884,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UNICAEN_2016" AS
         ose_formule.volumes_horaires.items(i).heures_compl_fi          := gv(131) + gv(132);
         ose_formule.volumes_horaires.items(i).heures_compl_fa          := gv(141) + gv(142);
         ose_formule.volumes_horaires.items(i).heures_compl_fc          := gv(151) + gv(152) + gv(153) + gv(154);
-        ose_formule.volumes_horaires.items(i).heures_compl_fc_majorees :=                     gv(163) + gv(164);
+        ose_formule.volumes_horaires.items(i).heures_primes            :=                     gv(163) + gv(164);
       ELSIF ose_formule.volumes_horaires.items(i).service_referentiel_id IS NOT NULL THEN
         ose_formule.volumes_horaires.items(i).service_referentiel      := gv( 55) + gv( 56) + gv( 57);
         ose_formule.volumes_horaires.items(i).heures_compl_referentiel := gv(115) + gv(116) + gv(117);
@@ -957,7 +957,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UNICAEN_2016" AS
         ose_formule.volumes_horaires.items(i).heures_compl_fi          := gv(131) + gv(132);
         ose_formule.volumes_horaires.items(i).heures_compl_fa          := gv(141) + gv(142);
         ose_formule.volumes_horaires.items(i).heures_compl_fc          := gv(153) + gv(154);
-        ose_formule.volumes_horaires.items(i).heures_compl_fc_majorees := gv(163) + gv(164);
+        ose_formule.volumes_horaires.items(i).heures_primes            := gv(163) + gv(164);
       ELSIF ose_formule.volumes_horaires.items(i).service_referentiel_id IS NOT NULL THEN
         ose_formule.volumes_horaires.items(i).service_referentiel      := gv( 55) + gv( 56) + gv( 57);
         ose_formule.volumes_horaires.items(i).heures_compl_referentiel := gv(115) + gv(116) + gv(117);

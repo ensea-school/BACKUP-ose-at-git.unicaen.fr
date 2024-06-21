@@ -1,10 +1,53 @@
 # Version stable
 
-[OSE 23.4](#ose-234-26032024)
+[OSE 23.6](#ose-236-13062024)
 
 
 
 # OSE 24 (à venir)
+
+# OSE 23.7 (à venir)
+
+## Améliorations
+
+* Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant mais prendre aussi en compte les missions de vacataires (#57424)
+* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'une renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions. 
+
+
+# OSE 23.6 (13/06/2024)
+
+## Nouveautés
+
+* Préversion du connecteur en import Pégase [documentation temporaire ici](https://git.unicaen.fr/open-source/OSE/-/blob/b23/admin/pegase/doc_temporaire/Documentation.txt?ref_type=heads)
+
+## Corrections de bugs
+
+* Les taux majorés personnalisés par mission sont bien affichés dans les contrats de travail
+* Pouvoir sélectionner l'ensemble des structures dans le filtre structure de la page offre de formation (#56680)
+* Modification de la formule de calcul de Paris 1
+* L'assertion des clôtures ne fonctionnait pas correctement : la saisie était interdite systématiquement dans certains cas
+* Modification de la formule de calcul de Paris Dauphine (#50652)
+* Pour la fonctionnalité "Demande de mise en paiement en lot" les HETD référentiel ne sont plus prises en compte dans le total HETD des heures à payer faute de pouvoir pour le moment paramètrer un centre de coût par défaut pour les fonctions référentiels (#56717)
+* Affichage du type de mission et du libellé de la mission dans la page de demandes de mise en paiement (#56869)
+* Correction indicateur 570 pour permettre de voir les intervenants avec des validations référentiels en attente en dehors de leur composante d'affectation (#56951)
+* Correction indicateur 280 pour enlever les étudiants dont les candidatures ont été refusé
+* Correction de la formule de calcul de Paris8 (#48203)
+* En cas d'erreur d'enregistrement, s'il y a contrôle de plafond, les messages d'erreur seront de nouveau explicites (#57207)
+
+## Améliorations
+
+* Classement des intervenants par ordre alphabétique dans la page de demande de mise en paiement par lot (#56558)
+* Les plafonds des intervenants sont mis à jour automatiquement suite à la saisie de modifications de service dû (#56421)
+* En cas de saisie manuelle de nouveau volume horaire d'enseignement (nombre d'heures * nombre de groupes par élément pédagogique), la saisie de service devient possible sans attendre
+* Pour les états de paiements, il est de nouveau possible de faire des extractions tous types d'intervenants confondus (#54966)
+* Optimisation de la recherche dans l'offre de formation depuis le formulaire de saisie de service (#56847)
+* Tri des périodes de paiement et des offres d'emploi du plus récent au plus ancien
+* Au niveau de la fonction "Demande de mise en paiement par lot" Ajout d'un raccourci (bouton) permettant d'aller directement aux mises en paiement (#56718)
+* Meilleur affichage html du descriptif des offres d'emploi (Ose mission)
+* Fiabilisation de la saisie d'un siret/siren lors l'ajout d'un employeur via l'administration (#55462)
+
+
+
 
 
 # OSE 23.5 (19/04/2024)

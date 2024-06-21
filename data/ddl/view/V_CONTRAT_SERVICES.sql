@@ -17,22 +17,24 @@ WITH services AS (
             SUM(CASE WHEN ti.code = 'TP' THEN vh.heures ELSE 0 END)                     heures_tp,
             SUM(CASE WHEN ti.code NOT IN ('CM','TD','TP') THEN vh.heures ELSE 0 END)    heures_autres,
             SUM(vh.heures)                                                              heures_totales,
-            'ENS'                                                                       "typeServiceCode"
+            SUM(frv.total)                                                              hetd,
+            'ENS'                                                                       "typeServiceCode",
+            p.libelle_long                                                              "periode"
         FROM
             volume_horaire vh
             JOIN service s ON s.id = vh.service_id
             JOIN type_intervention ti ON ti.id = vh.type_intervention_id
             JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
             JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id
-            LEFT JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
-            LEFT JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
+            JOIN etat_volume_horaire evh ON evh.code = 'valide'
+            JOIN formule_resultat fr ON fr.intervenant_id = s.intervenant_id AND fr.etat_volume_horaire_id = evh.id
+            JOIN formule_resultat_vh frv ON vh.id = frv.volume_horaire_id AND frv.formule_resultat_id = fr.id
             JOIN STRUCTURE str ON ep.structure_id = str.id
             LEFT JOIN contrat c ON c.id = vh.contrat_id
+            LEFT JOIN periode p on vh.periode_id = p.id
         WHERE
             vh.histo_destruction IS NULL
             AND tvh.code = 'PREVU'
-            AND (v.id IS NOT NULL OR vh.auto_validation = 1)
-            AND (vvh.validation_id IS NOT NULL OR vh.auto_validation = 1)
         GROUP BY
             s.intervenant_id,
             c.id,
@@ -40,7 +42,8 @@ WITH services AS (
             ep.code,
             ep.libelle,
             str.id,
-            ep.id
+            ep.id,
+            p.libelle_long
 
 
     UNION ALL
@@ -62,20 +65,22 @@ WITH services AS (
             0                       heures_tp,
             SUM(vhr.heures)         heures_autres,
             SUM(vhr.heures)         heures_totales,
-            'REF'                   "typeServiceCode"
-        FROM
+            SUM(frvr.total)         hetd,
+            'REF'                  "typeServiceCode",
+            NULL                   "periode"
+            FROM
             volume_horaire_ref vhr
             JOIN service_referentiel sr ON sr.id = vhr.service_referentiel_id
             JOIN fonction_referentiel fr ON fr.id = sr.fonction_id
             JOIN type_volume_horaire tvh ON tvh.id = vhr.type_volume_horaire_id
-            LEFT JOIN validation_vol_horaire_ref vvhr ON vvhr.volume_horaire_ref_id = vhr.id
-            JOIN validation v ON v.id = vvhr.validation_id AND v.histo_destruction IS NULL
+            JOIN etat_volume_horaire evh ON evh.code = 'valide'
+            JOIN formule_resultat fr ON fr.intervenant_id = sr.intervenant_id AND fr.etat_volume_horaire_id = evh.id
+            LEFT JOIN formule_resultat_vh_ref frvr ON vhr.id = frvr.volume_horaire_ref_id AND frvr.formule_resultat_id = fr.id
             LEFT JOIN contrat c ON c.id = vhr.contrat_id
             LEFT JOIN STRUCTURE str ON sr.structure_id = str.id
         WHERE
             vhr.histo_destruction IS NULL
             AND tvh.code = 'PREVU'
-            AND (v.id IS NOT NULL OR vhr.auto_validation = 1)
         GROUP BY
             sr.intervenant_id,
             c.id,
@@ -84,8 +89,6 @@ WITH services AS (
             fr.libelle_long,
             str.id,
             fr.id
-
-
 
     UNION ALL
 
@@ -106,7 +109,9 @@ WITH services AS (
             0                       heures_tp,
             SUM(vhm.heures)         heures_autres,
             SUM(vhm.heures)         heures_totales,
-            'MIS'                   "typeServiceCode"
+            SUM(vhm.heures)         hetd,
+            'MIS'                   "typeServiceCode",
+            NULL                    "periode"
  FROM
             volume_horaire_mission vhm
             JOIN mission m ON m.id = vhm.mission_id
@@ -161,7 +166,9 @@ WITH services AS (
             res."tp",
             res."autres",
             res."serviceHeures",
-            res."typeService"
+            res."hetd",
+            res."typeService",
+            res."periode"
         FROM
         (
             SELECT
@@ -182,7 +189,9 @@ WITH services AS (
                 CASE WHEN SUM(s.heures_autres) = 0 THEN to_char(0) ELSE REPLACE(ltrim(to_char(SUM(s.heures_autres), '999999.00')),'.',',') END   "autres",
                 SUM(heures_totales)                                                                                                              heures,
                 SUM(heures_totales)                                                                                                              "serviceHeures",
-                s."typeServiceCode"                                                                                                              "typeService"
+                SUM(hetd)                                                                                                                        "hetd",
+                s."typeServiceCode"                                                                                                              "typeService",
+                s."periode"                                                                                                                      "periode"
             FROM
                 services s
                 JOIN TYPE_SERVICE ts ON ts.code = s."typeServiceCode"
@@ -198,5 +207,6 @@ WITH services AS (
                 element_pedagogique_id,
                 fonction_referentiel_id,
                 type_mission_id,
-                mission_id
+                mission_id,
+                s."periode"
         ) res

@@ -222,16 +222,17 @@ class ServiceAssertion extends AbstractAssertion
     public function assertCloture(Role $role, Intervenant $intervenant)
     {
         if ($intervenant->getStatut()->getCloture()) {
-            $softPassCloture = $role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES);
             $hardPassCloture = $role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES_AVEC_MEP);
+            if ($hardPassCloture) return true; // on a toujours le droit
 
-            if ($hardPassCloture) return true; // on n'a toujours le droit
+            $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
+            if (!($cloture && $cloture->getId())) return true; // S'il n'y a pas de clôture alors OK
 
-            if ($softPassCloture) { // si on peut éditer toujours alors pas la peine de tester...
-                return !$intervenant->hasMiseEnPaiement(); // on n'a le droit s'il n'y a pas de MEP
-            } else {
-                $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
-                if ($cloture && $cloture->getId()) return false; // pas de saisie si c'est clôturé
+            $softPassCloture = $role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES);
+            if ($softPassCloture){
+                return !$intervenant->hasMiseEnPaiement(); // S'il n'y a pas de DMEP alors OK ça passe
+            }else{
+                return false; // c'est cloturé => lecture seule
             }
         }
 

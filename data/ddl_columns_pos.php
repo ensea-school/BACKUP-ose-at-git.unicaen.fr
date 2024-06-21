@@ -1403,6 +1403,8 @@ return [
         'TYPE_PAIE_PRIME',
         'DOSSIER_EMPLOYEUR_FACULTATIF',
         'MISSION_DECRET',
+        'MISSION_INDEMNITEES',
+        'PJ_ACTIVE',
     ],
     'STRUCTURE'                       => [
         'ID',
@@ -1783,6 +1785,7 @@ return [
         'REGLE_FC',
         'TYPE_INTERVENTION_MAQUETTE_ID',
         'VISIBLE_EXTERIEUR',
+        'SOURCE_CODE',
     ],
     'TYPE_INTERVENTION_EP'            => [
         'ID',

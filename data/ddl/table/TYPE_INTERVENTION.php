@@ -177,6 +177,18 @@ return [
             'position'    => 16,
             'commentaire' => NULL,
         ],
+        'SOURCE_CODE'                   => [
+            'name'        => 'SOURCE_CODE',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 100,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 20,
+            'commentaire' => NULL,
+        ],
         'TAUX_HETD_COMPLEMENTAIRE'      => [
             'name'        => 'TAUX_HETD_COMPLEMENTAIRE',
             'type'        => 'float',

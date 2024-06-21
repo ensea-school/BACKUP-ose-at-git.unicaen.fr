@@ -14,7 +14,7 @@ $c->println("\n" . 'Mise à jour des définitions de la base de données. Merci 
 
 // Récupération du schéma de référence
 $ref = new Ddl();
-$ref->loadFromDir(getcwd() . '/data/ddl');
+$ref->loadFromDir($bdd->getOption($bdd::OPTION_DDL_DIR));
 
 
 // Construction de la config de DDL pour filtrer

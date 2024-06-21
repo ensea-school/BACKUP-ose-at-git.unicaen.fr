@@ -311,6 +311,8 @@ class OseAdmin
             try {
                 $this->bdd->setOption('source-id', $this->getSourceOseId());
                 $this->bdd->setOption('histo-user-id', $this->getOseAppliId());
+                $this->bdd->setOption(Bdd::OPTION_DDL_DIR, getcwd() . '/data/ddl');
+                $this->bdd->setOption(Bdd::OPTION_COLUMNS_POSITIONS_FILE, getcwd() . '/data/ddl_columns_pos.php');
             } catch (\Exception $e) {
 
             }

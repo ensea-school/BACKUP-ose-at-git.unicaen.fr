@@ -37,21 +37,21 @@ class ExportRhController extends AbstractController
 
 
 
-    public function __construct (ExportRhService $exportRhService)
+    public function __construct(ExportRhService $exportRhService)
     {
         $this->exportRhService = $exportRhService;
     }
 
 
 
-    public function indexAction ()
+    public function indexAction()
     {
         return [];
     }
 
 
 
-    public function chercherIntervenantRhAction (): array
+    public function chercherIntervenantRhAction(): array
     {
         $connecteurRh = $this->getServiceExportRh();
 
@@ -80,7 +80,7 @@ class ExportRhController extends AbstractController
 
 
 
-    public function priseEnChargeAction ()
+    public function priseEnChargeAction()
     {
         try {
             if ($this->getRequest()->isPost()) {
@@ -118,7 +118,7 @@ class ExportRhController extends AbstractController
 
 
 
-    public function exporterAction ()
+    public function exporterAction()
     {
 
         /* Initialisation */
@@ -180,11 +180,15 @@ class ExportRhController extends AbstractController
             //On a trouvé un intervenant dans le SI RH
             if (!empty($intervenantRh)) {
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
-                $affectationEnCours = current($this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant));
-                $contratEnCours     = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
+                $listeAffectations = $this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant);
+                //On prend la dernière affectation connue dans SIHAM
+                $affectationEnCours = end($listeAffectations);
+                $listeContrats      = $this->exportRhService->getContratEnCoursIntervenantRh($intervenant);
+                //On prend le dernier contrat connu dans SIHAM
+                $contratEnCours = end($listeContrats);
 
                 $renouvellement = true;
-                if (!empty($affectationEnCours)) {
+                if (!empty($listeAffectations)) {
                     $renouvellement = false;
                 }
             } else {
@@ -224,7 +228,7 @@ class ExportRhController extends AbstractController
 
 
 
-    public function renouvellementAction ()
+    public function renouvellementAction()
     {
         try {
 
@@ -269,7 +273,7 @@ class ExportRhController extends AbstractController
 
 
 
-    public function synchroniserAction ()
+    public function synchroniserAction()
     {
         try {
             if ($this->getRequest()->isPost()) {

@@ -765,6 +765,18 @@ return [
             'position'    => 89,
             'commentaire' => NULL,
         ],
+        'MISSION_INDEMNITEES'            => [
+            'name'        => 'MISSION_INDEMNITEES',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 102,
+            'commentaire' => NULL,
+        ],
         'MISSION_REALISE_EDITION'        => [
             'name'        => 'MISSION_REALISE_EDITION',
             'type'        => 'bool',
@@ -882,19 +894,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 87,
-            'commentaire' => NULL,
-        ],
-        'MISSION_INDEMNITEES'          => [
-            'name'        => 'MISSION_INDEMNITEES',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '1',
-            'position'    => 102,
+            'position'    => 95,
             'commentaire' => NULL,
         ],
         'ORDRE'                          => [
@@ -933,7 +933,7 @@ return [
             'position'    => 64,
             'commentaire' => NULL,
         ],
-        'PJ_ACTIVE'          => [
+        'PJ_ACTIVE'                      => [
             'name'        => 'PJ_ACTIVE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',

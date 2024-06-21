@@ -112,7 +112,6 @@ FROM (
 			JOIN annee a ON a.id = i.annee_id
 			JOIN statut si ON si.id = i.statut_id
 			JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-			LEFT JOIN validation v ON v.id = mep.validation_id AND v.histo_destruction IS NULL
 			LEFT JOIN domaine_fonctionnel df ON df.id = mis.domaine_fonctionnel_id
 			LEFT JOIN periode p ON p.id = mis.periode_paiement_id
 			WHERE mis.periode_paiement_id IS NOT NULL

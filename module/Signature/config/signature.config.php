@@ -3,6 +3,8 @@
 namespace Signature;
 
 use PieceJointe\Controller\PieceJointeController;
+use Signature\Controller\CircuitController;
+use Signature\Controller\CircuitControllerFactory;
 use Signature\Controller\SignatureController;
 use Signature\Controller\SignatureControllerFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
@@ -27,6 +29,16 @@ return [
                     'controller' => SignatureController::class,
                     'action'     => 'signature-simple',
                 ],
+                'circuits'         => [
+                    'route'         => '/circuits',
+                    'controller'    => CircuitController::class,
+                    'action'        => 'circuits',
+                    'may_terminate' => true,
+                    'child_routes'  => [
+                        
+                    ],
+                ],
+
 
             ],
         ],
@@ -43,7 +55,7 @@ return [
                             'route'      => 'signature/configuration',
                             'withtarget' => true,
                             'order'      => 20,
-                            'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
+                            //'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
                         ],
                         'signature-simple'        => [
                             'label'      => "Faire signer un document",
@@ -51,7 +63,17 @@ return [
                             'route'      => 'signature/signature-simple',
                             'withtarget' => true,
                             'order'      => 20,
-                            'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
+                            //'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
+
+                        ],
+                        'gestion-circuit'         => [
+                            'label'      => "Gestion des circuits de signature",
+                            'title'      => "Gestion des circuits de signature",
+                            'route'      => 'signature/circuits',
+                            'withtarget' => true,
+                            'order'      => 20,
+                            //'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
+
                         ],
                     ],
                 ],
@@ -66,11 +88,22 @@ return [
             'roles'      => ['guest'],
 
         ],
+        [
+            'controller' => CircuitController::class,
+            'action'     => ['index', 'circuits'],
+            'roles'      => ['guest'],
+
+        ],
     ],
 
     /* Déclaration du contrôleur */
     'controllers' => [
         SignatureController::class => SignatureControllerFactory::class,
+        CircuitController::class   => CircuitControllerFactory::class,
+    ],
+
+    'services' => [
+        Service\CircuitService::class => Service\CircuitServiceFactory::class,
     ],
 
 

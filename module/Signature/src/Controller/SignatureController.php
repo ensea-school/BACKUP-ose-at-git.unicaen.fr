@@ -56,6 +56,14 @@ class SignatureController extends AbstractController
 
 
 
+    public function circuitsAction()
+    {
+
+
+    }
+
+
+
     public function signatureSimpleAction()
     {
         $letterfileKey = 'esup';

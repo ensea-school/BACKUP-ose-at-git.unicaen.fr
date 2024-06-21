@@ -8,7 +8,10 @@
 
 # OSE 23.7 (à venir)
 
+## Améliorations
+
 * Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant mais prendre aussi en compte les missions de vacataires (#57424)
+* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'une renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions. 
 
 
 # OSE 23.6 (13/06/2024)

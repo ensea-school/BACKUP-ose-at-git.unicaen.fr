@@ -352,6 +352,13 @@ ORDER BY
     element_libelle, fonction_referentiel_libelle',
     ],
     [
+        'CODE'           => 'export-missions',
+        'LIBELLE'        => 'Export CSV des missions',
+        'PDF_TRAITEMENT' => null,
+        'CSV_TRAITEMENT' => '/data/Etats de sortie/export_mission_csv.php',
+        'REQUETE'        => 'select * FROM v_export_mission',
+    ],
+    [
         'CODE'           => 'imputation-budgetaire',
         'LIBELLE'        => 'Export des imputations budgétaires',
         'PDF_TRAITEMENT' => null,

@@ -160,12 +160,25 @@ class EtatSortieService extends AbstractEntityService
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getCsvTraitement();
             // Isolation de traitement pour éviter tout débordement...
             $traitement = function () use ($csv, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
-                eval($__PHP__CODE__TRAITEMENT__);
+                $dir = getcwd();
+
+                if (\OseAdmin::instance()->env()->inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')){
+                    $filename = getcwd().'/code/'.substr($__PHP__CODE__TRAITEMENT__,strlen('UnicaenCode:')).'.php';
+                    if (file_exists($filename)){
+                        require $filename;
+                    }else{
+                        die('Fichier "'.$filename.'" introuvable');
+                    }
+                }else{
+                    eval($__PHP__CODE__TRAITEMENT__);
+                }
 
                 return $data;
             };
             $data = $traitement();
         }
+
+
 
         if (!$csv->getFilename()) {
             $csv->setFilename($etatSortie->getLibelle() . '.csv');

@@ -57,15 +57,12 @@ class IntervenantDossierHydrator implements HydratorInterface
 
         /* Extract fieldset dossier identite */
         $data['DossierIdentite'] = [
-            'nomUsuel'              => $object->getNomUsuel(),
-            'nomPatronymique'       => $object->getNomPatronymique(),
-            'prenom'                => $object->getPrenom(),
-            'civilite'              => ($object->getCivilite()) ? $object->getCivilite()->getId() : '',
-            'situationMatrimoniale' => ($object->getSituationMatrimoniale()) ? $object->getSituationMatrimoniale()->getId() : '',
-            'dateNaissance'         => $object->getDateNaissance(),
-            'paysNaissance'         => ($object->getPaysNaissance()) ? $object->getPaysNaissance()->getId() : '',
-            'departementNaissance'  => ($object->getDepartementNaissance()) ? $object->getDepartementNaissance()->getId() : '',
-            'villeNaissance'        => $object->getCommuneNaissance(),
+            'nomUsuel'                  => $object->getNomUsuel(),
+            'nomPatronymique'           => $object->getNomPatronymique(),
+            'prenom'                    => $object->getPrenom(),
+            'civilite'                  => ($object->getCivilite()) ? $object->getCivilite()->getId() : '',
+            'situationMatrimoniale'     => ($object->getSituationMatrimoniale()) ? $object->getSituationMatrimoniale()->getId() : '',
+            'dateSituationMatrimoniale' => $object->getDateSituationMatrimoniale(),
         ];
 
         $data['DossierIdentiteComplementaire'] = [
@@ -166,6 +163,10 @@ class IntervenantDossierHydrator implements HydratorInterface
             $situationMatrimoniale = (!empty($data['DossierIdentite']['situationMatrimoniale'])) ?
                 $this->getServiceSituationMatrimoniale()->get($data['DossierIdentite']['situationMatrimoniale']) : null;
             $object->setSituationMatrimoniale($situationMatrimoniale);
+            //Date de la situation matrimoniale
+            $dateSituationMatrimoniale = (!empty($data['DossierIdentite']['dateSituationMatrimoniale'])) ?
+                \DateTime::createFromFormat('d/m/Y', $data['DossierIdentite']['dateSituationMatrimoniale']) : null;
+            $object->setDateSituationMatrimoniale($dateSituationMatrimoniale);
         }
         //hydratation de l'identité complémentaire
         if (isset($data['DossierIdentiteComplementaire'])) {

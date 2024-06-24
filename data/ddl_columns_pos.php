@@ -858,6 +858,7 @@ return [
         'NUMERO_PEC',
         'SYNC_PEC',
         'SITUATION_MATRIMONIALE_ID',
+        'SITUATION_MATRIMONIALE_DATE',
     ],
     'INTERVENANT_DOSSIER'            => [
         'ID',
@@ -903,6 +904,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'SITUATION_MATRIMONIALE_ID',
+        'SITUATION_MATRIMONIALE_DATE',
     ],
     'INTERVENANT_PAR_DEFAUT'         => [
         'ID',

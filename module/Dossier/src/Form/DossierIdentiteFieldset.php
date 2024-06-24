@@ -2,14 +2,15 @@
 
 namespace Dossier\Form;
 
+use Application\Constants;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Dossier\Entity\Db\IntervenantDossier;
-use Intervenant\Entity\Db\SituationMatrimoniale;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Service\CiviliteServiceAwareTrait;
 use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
+use Laminas\Validator\Date as DateValidator;
 use Lieu\Service\DepartementServiceAwareTrait;
 use Lieu\Service\PaysServiceAwareTrait;
 
@@ -136,6 +137,27 @@ class DossierIdentiteFieldset extends AbstractFieldset
         }
 
 
+        $this->add([
+            'name'       => 'dateSituationMatrimoniale',
+            'options'    => [
+                'label'         => 'depuis le : ',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
+            ],
+            'attributes' => [
+                'placeholder' => "jj/mm/aaaa",
+                'class'       => 'dossierElement',
+
+            ],
+            'type'       => 'UnicaenApp\Form\Element\Date',
+        ]);
+
+        if ($statutDossierIntervenant->getDossierSituationMatrimoniale()) {
+            $this->get('dateSituationMatrimoniale')->setLabel('depuis le : <span class="text-danger">*</span>');
+        }
+
+
         return $this;
     }
 
@@ -145,21 +167,28 @@ class DossierIdentiteFieldset extends AbstractFieldset
     {
 
         $spec = [
-            'nomUsuel'              => [
+            'nomUsuel'                  => [
                 'required' => false,
                 'readonly' => true,
             ],
-            'nomPatronymique'       => [
+            'nomPatronymique'           => [
                 'required' => false,
             ],
-            'prenom'                => [
+            'prenom'                    => [
                 'required' => false,
             ],
-            'civilite'              => [
+            'civilite'                  => [
                 'required' => false,
             ],
-            'situationMatrimoniale' => [
+            'situationMatrimoniale'     => [
                 'required' => false,
+            ],
+            'dateSituationMatrimoniale' => [
+                'required'    => false,
+                'allow_empty' => true,
+                'validators'  => [
+                    new DateValidator(['format' => Constants::DATE_FORMAT]),
+                ],
             ],
 
         ];

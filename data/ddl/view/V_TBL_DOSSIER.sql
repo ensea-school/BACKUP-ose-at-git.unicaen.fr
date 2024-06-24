@@ -15,7 +15,7 @@ SELECT
       AND d.nom_usuel IS NOT NULL
       AND d.prenom IS NOT NULL
       AND (CASE WHEN si.dossier_situation_matrimoniale = 1 THEN
-      			CASE WHEN d.situation_matrimoniale_id IS NOT NULL THEN 1 ELSE 0 END
+      			CASE WHEN d.situation_matrimoniale_id IS NOT NULL AND d.situation_matrimoniale_date IS NOT NULL THEN 1 ELSE 0 END
       	   ELSE 1 END) = 1
     ) THEN 1 ELSE 0 END completude_identite,
    /*Complétude identité complémentaire*/

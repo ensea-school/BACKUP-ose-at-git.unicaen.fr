@@ -32,6 +32,7 @@
         <many-to-one field="situationMatrimoniale" target-entity="Intervenant\Entity\Db\SituationMatrimoniale">
             <join-column name="SITUATION_MATRIMONIALE_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <field name="dateSituationMatrimoniale" type="datetime" column="SITUATION_MATRIMONIALE_DATE" nullable="true"/>
         <field name="nomUsuel" type="string" column="NOM_USUEL" length="60" nullable="false"/>
         <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
         <field name="dateNaissance" type="datetime" column="DATE_NAISSANCE" nullable="false"/>

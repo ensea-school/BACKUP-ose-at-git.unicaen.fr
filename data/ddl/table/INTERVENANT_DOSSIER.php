@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'INTERVENANT_DOSSIER_ID_SEQ',
     'columns'     => [
-        'ADRESSE_CODE_POSTAL'      => [
+        'ADRESSE_CODE_POSTAL'         => [
             'name'        => 'ADRESSE_CODE_POSTAL',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -21,7 +21,7 @@ return [
             'position'    => 23,
             'commentaire' => NULL,
         ],
-        'ADRESSE_COMMUNE'          => [
+        'ADRESSE_COMMUNE'             => [
             'name'        => 'ADRESSE_COMMUNE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -33,7 +33,7 @@ return [
             'position'    => 24,
             'commentaire' => NULL,
         ],
-        'ADRESSE_LIEU_DIT'         => [
+        'ADRESSE_LIEU_DIT'            => [
             'name'        => 'ADRESSE_LIEU_DIT',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -45,7 +45,7 @@ return [
             'position'    => 22,
             'commentaire' => NULL,
         ],
-        'ADRESSE_NUMERO'           => [
+        'ADRESSE_NUMERO'              => [
             'name'        => 'ADRESSE_NUMERO',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -57,7 +57,7 @@ return [
             'position'    => 18,
             'commentaire' => NULL,
         ],
-        'ADRESSE_NUMERO_COMPL_ID'  => [
+        'ADRESSE_NUMERO_COMPL_ID'     => [
             'name'        => 'ADRESSE_NUMERO_COMPL_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +69,7 @@ return [
             'position'    => 19,
             'commentaire' => NULL,
         ],
-        'ADRESSE_PAYS_ID'          => [
+        'ADRESSE_PAYS_ID'             => [
             'name'        => 'ADRESSE_PAYS_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -81,7 +81,7 @@ return [
             'position'    => 25,
             'commentaire' => NULL,
         ],
-        'ADRESSE_PRECISIONS'       => [
+        'ADRESSE_PRECISIONS'          => [
             'name'        => 'ADRESSE_PRECISIONS',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -93,7 +93,7 @@ return [
             'position'    => 17,
             'commentaire' => NULL,
         ],
-        'ADRESSE_VOIE'             => [
+        'ADRESSE_VOIE'                => [
             'name'        => 'ADRESSE_VOIE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -105,7 +105,7 @@ return [
             'position'    => 21,
             'commentaire' => NULL,
         ],
-        'ADRESSE_VOIRIE_ID'        => [
+        'ADRESSE_VOIRIE_ID'           => [
             'name'        => 'ADRESSE_VOIRIE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -117,7 +117,7 @@ return [
             'position'    => 20,
             'commentaire' => NULL,
         ],
-        'AUTRE_1'                  => [
+        'AUTRE_1'                     => [
             'name'        => 'AUTRE_1',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -129,7 +129,7 @@ return [
             'position'    => 31,
             'commentaire' => NULL,
         ],
-        'AUTRE_2'                  => [
+        'AUTRE_2'                     => [
             'name'        => 'AUTRE_2',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -141,7 +141,7 @@ return [
             'position'    => 32,
             'commentaire' => NULL,
         ],
-        'AUTRE_3'                  => [
+        'AUTRE_3'                     => [
             'name'        => 'AUTRE_3',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -153,7 +153,7 @@ return [
             'position'    => 33,
             'commentaire' => NULL,
         ],
-        'AUTRE_4'                  => [
+        'AUTRE_4'                     => [
             'name'        => 'AUTRE_4',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -165,7 +165,7 @@ return [
             'position'    => 34,
             'commentaire' => NULL,
         ],
-        'AUTRE_5'                  => [
+        'AUTRE_5'                     => [
             'name'        => 'AUTRE_5',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -177,7 +177,7 @@ return [
             'position'    => 35,
             'commentaire' => NULL,
         ],
-        'BIC'                      => [
+        'BIC'                         => [
             'name'        => 'BIC',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -189,7 +189,7 @@ return [
             'position'    => 29,
             'commentaire' => NULL,
         ],
-        'CIVILITE_ID'              => [
+        'CIVILITE_ID'                 => [
             'name'        => 'CIVILITE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -201,7 +201,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'COMMUNE_NAISSANCE'        => [
+        'COMMUNE_NAISSANCE'           => [
             'name'        => 'COMMUNE_NAISSANCE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -213,7 +213,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'DATE_NAISSANCE'           => [
+        'DATE_NAISSANCE'              => [
             'name'        => 'DATE_NAISSANCE',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -225,7 +225,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'DEPARTEMENT_NAISSANCE_ID' => [
+        'DEPARTEMENT_NAISSANCE_ID'    => [
             'name'        => 'DEPARTEMENT_NAISSANCE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -237,7 +237,7 @@ return [
             'position'    => 11,
             'commentaire' => NULL,
         ],
-        'EMAIL_PERSO'              => [
+        'EMAIL_PERSO'                 => [
             'name'        => 'EMAIL_PERSO',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -249,7 +249,7 @@ return [
             'position'    => 16,
             'commentaire' => NULL,
         ],
-        'EMAIL_PRO'                => [
+        'EMAIL_PRO'                   => [
             'name'        => 'EMAIL_PRO',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -261,7 +261,7 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
-        'EMPLOYEUR_ID'             => [
+        'EMPLOYEUR_ID'                => [
             'name'        => 'EMPLOYEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -273,7 +273,7 @@ return [
             'position'    => 36,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATEUR_ID'        => [
+        'HISTO_CREATEUR_ID'           => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -285,7 +285,7 @@ return [
             'position'    => 38,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATION'           => [
+        'HISTO_CREATION'              => [
             'name'        => 'HISTO_CREATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -297,7 +297,7 @@ return [
             'position'    => 37,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTEUR_ID'     => [
+        'HISTO_DESTRUCTEUR_ID'        => [
             'name'        => 'HISTO_DESTRUCTEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -309,7 +309,7 @@ return [
             'position'    => 42,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTION'        => [
+        'HISTO_DESTRUCTION'           => [
             'name'        => 'HISTO_DESTRUCTION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -321,7 +321,7 @@ return [
             'position'    => 41,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATEUR_ID'    => [
+        'HISTO_MODIFICATEUR_ID'       => [
             'name'        => 'HISTO_MODIFICATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -333,7 +333,7 @@ return [
             'position'    => 40,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATION'       => [
+        'HISTO_MODIFICATION'          => [
             'name'        => 'HISTO_MODIFICATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -345,7 +345,7 @@ return [
             'position'    => 39,
             'commentaire' => NULL,
         ],
-        'IBAN'                     => [
+        'IBAN'                        => [
             'name'        => 'IBAN',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -357,7 +357,7 @@ return [
             'position'    => 28,
             'commentaire' => NULL,
         ],
-        'ID'                       => [
+        'ID'                          => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -369,7 +369,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'           => [
+        'INTERVENANT_ID'              => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -381,7 +381,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'NOM_PATRONYMIQUE'         => [
+        'NOM_PATRONYMIQUE'            => [
             'name'        => 'NOM_PATRONYMIQUE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -393,7 +393,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'NOM_USUEL'                => [
+        'NOM_USUEL'                   => [
             'name'        => 'NOM_USUEL',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -405,7 +405,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'NUMERO_INSEE'             => [
+        'NUMERO_INSEE'                => [
             'name'        => 'NUMERO_INSEE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -417,7 +417,7 @@ return [
             'position'    => 26,
             'commentaire' => NULL,
         ],
-        'NUMERO_INSEE_PROVISOIRE'  => [
+        'NUMERO_INSEE_PROVISOIRE'     => [
             'name'        => 'NUMERO_INSEE_PROVISOIRE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -429,7 +429,7 @@ return [
             'position'    => 27,
             'commentaire' => NULL,
         ],
-        'PAYS_NAISSANCE_ID'        => [
+        'PAYS_NAISSANCE_ID'           => [
             'name'        => 'PAYS_NAISSANCE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -441,7 +441,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'PAYS_NATIONALITE_ID'      => [
+        'PAYS_NATIONALITE_ID'         => [
             'name'        => 'PAYS_NATIONALITE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -453,7 +453,7 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
-        'PRENOM'                   => [
+        'PRENOM'                      => [
             'name'        => 'PRENOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -465,7 +465,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'RIB_HORS_SEPA'            => [
+        'RIB_HORS_SEPA'               => [
             'name'        => 'RIB_HORS_SEPA',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -477,7 +477,19 @@ return [
             'position'    => 30,
             'commentaire' => NULL,
         ],
-        'SITUATION_MATRIMONIALE_ID' => [
+        'SITUATION_MATRIMONIALE_DATE' => [
+            'name'        => 'SITUATION_MATRIMONIALE_DATE',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 44,
+            'commentaire' => NULL,
+        ],
+        'SITUATION_MATRIMONIALE_ID'   => [
             'name'        => 'SITUATION_MATRIMONIALE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -489,7 +501,7 @@ return [
             'position'    => 43,
             'commentaire' => NULL,
         ],
-        'STATUT_ID'                 => [
+        'STATUT_ID'                   => [
             'name'        => 'STATUT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -501,7 +513,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'TEL_PERSO'                => [
+        'TEL_PERSO'                   => [
             'name'        => 'TEL_PERSO',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -513,7 +525,7 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
-        'TEL_PRO'                  => [
+        'TEL_PRO'                     => [
             'name'        => 'TEL_PRO',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',

@@ -8,7 +8,9 @@ namespace Intervenant\Entity\Db;
  */
 trait SituationMatrimonialeAwareTrait
 {
-    protected ?SituationMatrimoniale $situationMatrimoniale = null;
+    protected ?SituationMatrimoniale $situationMatrimoniale     = null;
+
+    protected ?\DateTime             $dateSituationMatrimoniale = null;
 
 
 
@@ -17,7 +19,7 @@ trait SituationMatrimonialeAwareTrait
      *
      * @return self
      */
-    public function setSituationMatrimoniale(?SituationMatrimoniale $situationMatrimoniale)
+    public function setSituationMatrimoniale(?SituationMatrimoniale $situationMatrimoniale): self
     {
         $this->situationMatrimoniale = $situationMatrimoniale;
 
@@ -30,4 +32,21 @@ trait SituationMatrimonialeAwareTrait
     {
         return $this->situationMatrimoniale;
     }
+
+
+
+    public function getDateSituationMatrimoniale(): ?\DateTime
+    {
+        return $this->dateSituationMatrimoniale;
+    }
+
+
+
+    public function setDateSituationMatrimoniale(?\DateTime $dateSituationMatrimoniale): self
+    {
+        $this->dateSituationMatrimoniale = $dateSituationMatrimoniale;
+
+        return $this;
+    }
+
 }

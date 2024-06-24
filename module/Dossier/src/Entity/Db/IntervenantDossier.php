@@ -121,10 +121,6 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     protected $BIC;
 
     /**
-     * @var SituationMatrimoniale
-     */
-
-    /**
      * @var bool
      */
     protected $ribHorsSepa = false;

@@ -5,6 +5,7 @@ namespace ExportRh\Entity;
 use Application\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Civilite;
 use Intervenant\Entity\Db\Grade;
+use Intervenant\Entity\Db\SituationMatrimoniale;
 use Intervenant\Entity\Db\Statut;
 use Lieu\Entity\Db\AdresseNumeroCompl;
 use Lieu\Entity\Db\Departement;
@@ -15,101 +16,105 @@ use OffreFormation\Entity\Db\Discipline;
 
 class IntervenantRh
 {
-    public ?string             $code;
+    public ?string                $code;
 
-    public ?string             $codeRh;
+    public ?string                $codeRh;
 
-    public ?string             $utilisateurCode;
+    public ?string                $utilisateurCode;
 
-    public ?Structure          $structure;
+    public ?Structure             $structure;
 
-    public Statut              $statut;
+    public Statut                 $statut;
 
-    public ?Grade              $grade;
+    public ?Grade                 $grade;
 
-    public ?Discipline         $discipline;
+    public ?Discipline            $discipline;
 
-    public ?Civilite           $civilite;
+    public ?Civilite              $civilite;
 
-    public string              $nomUsuel;
+    public ?SituationMatrimoniale $situationMatrimoniale     = null;
 
-    public string              $prenom;
+    public ?\DateTime             $dateSituationMatrimoniale = null;
 
-    public \DateTime           $dateNaissance;
+    public string                 $nomUsuel;
 
-    public ?string             $nomPatronymique;
+    public string                 $prenom;
 
-    public ?string             $communeNaissance;
+    public \DateTime              $dateNaissance;
 
-    public ?Pays               $paysNaissance;
+    public ?string                $nomPatronymique;
 
-    public ?Departement        $departementNaissance;
+    public ?string                $communeNaissance;
 
-    public ?Pays               $paysNationalite;
+    public ?Pays                  $paysNaissance;
 
-    public ?string             $telPro;
+    public ?Departement           $departementNaissance;
 
-    public ?string             $telProDateDebut;
+    public ?Pays                  $paysNationalite;
 
-    public ?string             $telPerso;
+    public ?string                $telPro;
 
-    public ?string             $telPersoDateDebut;
+    public ?string                $telProDateDebut;
 
-    public ?string             $emailPro;
+    public ?string                $telPerso;
 
-    public ?string             $emailProDateDebut;
+    public ?string                $telPersoDateDebut;
 
-    public ?string             $emailPerso;
+    public ?string                $emailPro;
 
-    public ?string             $emailPersoDateDebut;
+    public ?string                $emailProDateDebut;
 
-    public ?string             $adresseDateDebut;
+    public ?string                $emailPerso;
 
-    public ?string             $adressePrecisions;
+    public ?string                $emailPersoDateDebut;
 
-    public ?string             $adresseNumero;
+    public ?string                $adresseDateDebut;
 
-    public ?AdresseNumeroCompl $adresseNumeroCompl;
+    public ?string                $adressePrecisions;
 
-    public ?Voirie             $adresseVoirie;
+    public ?string                $adresseNumero;
 
-    public ?string             $adresseVoie;
+    public ?AdresseNumeroCompl    $adresseNumeroCompl;
 
-    public ?string             $adresseLieuDit;
+    public ?Voirie                $adresseVoirie;
 
-    public ?string             $adresseCodePostal;
+    public ?string                $adresseVoie;
 
-    public ?string             $adresseCommune;
+    public ?string                $adresseLieuDit;
 
-    public ?Pays               $adressePays;
+    public ?string                $adresseCodePostal;
 
-    public ?string             $numeroInsee;
+    public ?string                $adresseCommune;
 
-    public bool                $numeroInseeProvisoire = false;
+    public ?Pays                  $adressePays;
 
-    public ?string             $IBAN;
+    public ?string                $numeroInsee;
 
-    public ?string             $BIC;
+    public bool                   $numeroInseeProvisoire     = false;
 
-    public bool                $ribHorsSepa           = false;
+    public ?string                $IBAN;
 
-    public ?string             $autre1;
+    public ?string                $BIC;
 
-    public ?string             $autre2;
+    public bool                   $ribHorsSepa               = false;
 
-    public ?string             $autre3;
+    public ?string                $autre1;
 
-    public ?string             $autre4;
+    public ?string                $autre2;
 
-    public ?string             $autre5;
+    public ?string                $autre3;
 
-    public ?\DateTime          $validiteDebut;
+    public ?string                $autre4;
 
-    public ?\DateTime          $validiteFin;
+    public ?string                $autre5;
 
-    public ?string             $sourceCode;
+    public ?\DateTime             $validiteDebut;
 
-    public ?Intervenant        $intervenant;
+    public ?\DateTime             $validiteFin;
+
+    public ?string                $sourceCode;
+
+    public ?Intervenant           $intervenant;
 
 
 
@@ -335,6 +340,54 @@ class IntervenantRh
     public function setCivilite(?Civilite $civilite): IntervenantRH
     {
         $this->civilite = $civilite;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return SituationMatrimoniale|null
+     */
+    public function getSituationMatrimoniale(): ?SituationMatrimoniale
+    {
+        return $this->situationMatrimoniale;
+    }
+
+
+
+    /**
+     * @param SituationMatrimoniale|null $situationMatrimoniale
+     *
+     * @return IntervenantRH
+     */
+    public function setSituationMatrimoniale(?SituationMatrimoniale $situationMatrimoniale): IntervenantRH
+    {
+        $this->situationMatrimoniale = $situationMatrimoniale;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDateSituationMatrimoniale(): ?\DateTime
+    {
+        return $this->dateSituationMatrimoniale;
+    }
+
+
+
+    /**
+     * @param \DateTime|null $dateSituationMatrimoniale
+     *
+     * @return IntervenantRH
+     */
+    public function setDateSituationMatrimoniale(?\DateTime $dateSituationMatrimoniale): IntervenantRH
+    {
+        $this->dateSituationMatrimoniale = $dateSituationMatrimoniale;
 
         return $this;
     }

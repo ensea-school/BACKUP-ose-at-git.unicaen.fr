@@ -57,4 +57,15 @@ class SituationMatrimonialeService extends AbstractEntityService
 
         return $qb;
     }
+
+
+
+    public function getSituationMatrimonialeByCode(string $code): ?SituationMatrimoniale
+    {
+        if (!empty($code)) {
+            return $this->getEntityManager()->getRepository($this->getEntityClass())->findOneBy(['code' => $code]);
+        }
+
+        return null;
+    }
 }

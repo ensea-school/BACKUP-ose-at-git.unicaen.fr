@@ -9,6 +9,7 @@ use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
+use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Form\Fieldset;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
@@ -25,6 +26,7 @@ class SihamConnecteur implements ConnecteurRhInterface
     use AdresseNumeroComplServiceAwareTrait;
     use VoirieServiceAwareTrait;
     use ContratServiceAwareTrait;
+    use SituationMatrimonialeServiceAwareTrait;
 
     public Siham $siham;
 
@@ -273,11 +275,16 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ];
 
             /*SITUATION FAMILIALE*/
-            $situationFamiliale[] =
-                ['dateEffetSituFam' => $dateEffet,
-                 'situFam'          => 'CEL',
-                 'temoinValidite'   => 1,
-                ];
+            $situationFamiliale = [];
+            if ($dossierIntervenant->getSituationMatrimoniale()) {
+                $dateEffetSituationFamilliale = ($dossierIntervenant->getDateSituationMatrimoniale()) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : '';
+                $codeSituationFamilliale      = ($dossierIntervenant->getSituationMatrimoniale()) ? $dossierIntervenant->getSituationMatrimoniale()->getCode() : '';
+                $situationFamiliale[]         =
+                    ['dateEffetSituFam' => $dateEffetSituationFamilliale,
+                     'situFam'          => $codeSituationFamilliale,
+                     'temoinValidite'   => 1,
+                    ];
+            }
 
             /*COORDONNEES POSTALES*/
             $numeroVoie = (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() : '';
@@ -370,6 +377,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $valueDepartement = substr($departementCode, 1, 2);
                 }
             }
+
 
             $params = [
                 'categorieEntree'           => 'ACTIVE',
@@ -753,6 +761,7 @@ class SihamConnecteur implements ConnecteurRhInterface
         }
 
         if (!empty($agent)) {
+
             $intervenantRh = new IntervenantRH();
             $intervenantRh->setNomUsuel($agent->getNomUsuel());
             $intervenantRh->setPrenom($agent->getPrenom());
@@ -777,6 +786,12 @@ class SihamConnecteur implements ConnecteurRhInterface
             $intervenantRh->setAdresseCodePostal($agent->getCodePostalAdresse());
             $intervenantRh->setAdresseCommune($agent->getBureauDistributeurAdresse());
             $intervenantRh->setAdresseDateDebut($agent->getDateDebutAdresse());
+            $codeSituationMatrimoniale = $agent->getCodeSituationFamVigueur();
+            if ($codeSituationMatrimoniale) {
+                $situationMatrimoniale = $this->getServiceSituationMatrimoniale()->getSituationMatrimonialeByCode($agent->getCodeSituationFamVigueur());
+                $intervenantRh->setSituationMatrimoniale($situationMatrimoniale);
+            }
+
 
             return $intervenantRh;
         }

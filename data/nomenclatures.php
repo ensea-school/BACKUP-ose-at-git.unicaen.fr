@@ -408,7 +408,7 @@ return [
             "CODE"    => "CCB",
         ],
         [
-            "LIBELLE" => "Marie(e)",
+            "LIBELLE" => "Marié(e)",
             "CODE"    => "MAR",
         ],
         [

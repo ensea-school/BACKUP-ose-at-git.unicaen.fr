@@ -69,6 +69,17 @@ class GeneriqueFieldset extends AbstractFieldset
                 'value' => 1,
             ],
         ]);
+        //Situation Matrimoniale
+        $this->add([
+            'name'       => 'situationMatrimoniale',
+            'type'       => 'Checkbox',
+            'options'    => [
+                'label' => "Situation matrimoniale",
+            ],
+            'attributes' => [
+                'value' => 1,
+            ],
+        ]);
 
         //Adresse principale
         $this->add([
@@ -169,6 +180,7 @@ class GeneriqueFieldset extends AbstractFieldset
 
         return $this;
     }
+
 
 
     public function getInputFilterSpecification()

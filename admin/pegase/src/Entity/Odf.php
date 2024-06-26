@@ -161,6 +161,9 @@ class Odf
 
 
 
+    /**
+     * @return array|VolumeHoraire[]
+     */
     public function getVolumesHoraires(): array
     {
         return $this->volumesHoraires;

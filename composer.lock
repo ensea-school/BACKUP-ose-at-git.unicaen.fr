@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "05800d0d55612c52dadc58041a891a2d",
+    "content-hash": "bb3f090b6a3bb280c98ed870aba8a633",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -2385,16 +2385,16 @@
         },
         {
             "name": "laminas/laminas-eventmanager",
-            "version": "3.13.0",
+            "version": "3.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-eventmanager.git",
-                "reference": "ce5ba8bde378fca5cb0cd514f01823637215b2f3"
+                "reference": "933d1b5cf03fa4cf3016cebfd0555fa2ba3f2024"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-eventmanager/zipball/ce5ba8bde378fca5cb0cd514f01823637215b2f3",
-                "reference": "ce5ba8bde378fca5cb0cd514f01823637215b2f3",
+                "url": "https://api.github.com/repos/laminas/laminas-eventmanager/zipball/933d1b5cf03fa4cf3016cebfd0555fa2ba3f2024",
+                "reference": "933d1b5cf03fa4cf3016cebfd0555fa2ba3f2024",
                 "shasum": ""
             },
             "require": {
@@ -2449,7 +2449,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-01-03T17:43:50+00:00"
+            "time": "2024-06-24T14:01:06+00:00"
         },
         {
             "name": "laminas/laminas-file",
@@ -4749,16 +4749,16 @@
         },
         {
             "name": "laminas/laminas-validator",
-            "version": "2.59.0",
+            "version": "2.60.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "1ea93397469ddf2d5989706b8d85ab1806b6c5e9"
+                "reference": "66ab091fc08a8b1e2851eec62dda4bafa977fe9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/1ea93397469ddf2d5989706b8d85ab1806b6c5e9",
-                "reference": "1ea93397469ddf2d5989706b8d85ab1806b6c5e9",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/66ab091fc08a8b1e2851eec62dda4bafa977fe9c",
+                "reference": "66ab091fc08a8b1e2851eec62dda4bafa977fe9c",
                 "shasum": ""
             },
             "require": {
@@ -4829,7 +4829,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-06-19T14:26:44+00:00"
+            "time": "2024-06-25T20:11:22+00:00"
         },
         {
             "name": "laminas/laminas-view",
@@ -7124,11 +7124,11 @@
         },
         {
             "name": "unicaen/siham",
-            "version": "dev-master",
+            "version": "6.1.5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "12fa713c4308f992b737b7b138fec3e9673efa1a"
+                "reference": "cac79e9260cc7d354e78f6209d5b9822469e8133"
             },
             "require": {
                 "laminas/laminas-mail": "^2.10",
@@ -7153,7 +7153,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2024-06-24T12:15:22+00:00"
+            "time": "2024-06-25T12:31:38+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -10262,9 +10262,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "unicaen/siham": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -501,54 +501,55 @@
 
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresServiceFi" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesServiceFi != null && Math.round(vh.heuresAttenduesServiceFi*100) != Math.round(vh.heuresServiceFi*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresServiceFa" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesServiceFa != null && Math.round(vh.heuresAttenduesServiceFa*100) != Math.round(vh.heuresServiceFa*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresServiceFc" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesServiceFc != null && Math.round(vh.heuresAttenduesServiceFc*100) != Math.round(vh.heuresServiceFc*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresServiceReferentiel" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesServiceReferentiel != null && Math.round(vh.heuresAttenduesServiceReferentiel*100) != Math.round(vh.heuresServiceReferentiel*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresComplFi" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesComplFi != null && Math.round(vh.heuresAttenduesComplFi*100) != Math.round(vh.heuresComplFi*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresComplFa" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesComplFa != null && Math.round(vh.heuresAttenduesComplFa*100) != Math.round(vh.heuresComplFa*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresComplFc" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesComplFc != null && Math.round(vh.heuresAttenduesComplFc*100) != Math.round(vh.heuresComplFc*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresComplReferentiel" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesComplReferentiel != null && Math.round(vh.heuresAttenduesComplReferentiel*100) != Math.round(vh.heuresComplReferentiel*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
-                    <u-input-float v-model="vh.heuresPrimes" maximum-digits="2" tabindex="-1" readonly class="doutput"/>
+                    <u-input-float v-model="vh.heuresPrimes" maximum-digits="2" tabindex="-1" readonly
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesPrimes != null && Math.round(vh.heuresAttenduesPrimes*100) != Math.round(vh.heuresPrimes*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresNonPayableFi" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesNonPayableFi != null && Math.round(vh.heuresAttenduesNonPayableFi*100) != Math.round(vh.heuresNonPayableFi*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresNonPayableFa" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesNonPayableFa != null && Math.round(vh.heuresAttenduesNonPayableFa*100) != Math.round(vh.heuresNonPayableFa*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresNonPayableFc" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesNonPayableFc != null && Math.round(vh.heuresAttenduesNonPayableFc*100) != Math.round(vh.heuresNonPayableFc*100)}"/>
                 </td>
                 <td v-show="resMode=='hetd'">
                     <u-input-float v-model="vh.heuresNonPayableReferentiel" maximum-digits="2" tabindex="-1" readonly
-                                   class="doutput"/>
+                                   :class="{doutput: true, 'bg-danger': vh.heuresAttenduesNonPayableReferentiel != null && Math.round(vh.heuresAttenduesNonPayableReferentiel*100) != Math.round(vh.heuresNonPayableReferentiel*100)}"/>
                 </td>
 
                 <td v-show="resMode=='debug'" class="debug-td">
@@ -713,7 +714,11 @@ export default {
             ).then(response => {
                 this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
                 this.volumesHoraires = response.data.volumesHoraires;
-                this.debug = response.data.debug;
+                if (response.data.debug) {
+                    this.debug = response.data.debug;
+                }else{
+                    this.debug = {};
+                }
                 this.addVolumeHoraire();
                 this.updateStructures();
             });
@@ -730,7 +735,11 @@ export default {
             ).then(response => {
                 this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
                 this.volumesHoraires = response.data.volumesHoraires;
-                this.debug = response.data.debug;
+                if (response.data.debug) {
+                    this.debug = response.data.debug;
+                }else{
+                    this.debug = {};
+                }
                 this.addVolumeHoraire();
                 this.updateStructures();
             });

@@ -57,35 +57,15 @@ class TestService extends AbstractEntityService
 
 
 
-    /**
-     * @param FormuleTestIntervenant $formuleTestIntervenant
-     *
-     * @return TestService
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function calculer(FormuleTestIntervenant $formuleTestIntervenant): TestService
+    public function calculerAttendu(FormuleTestIntervenant $formuleTestIntervenant): TestService
     {
         $sql = "BEGIN ose_formule.test(" . ((int)$formuleTestIntervenant->getId()) . "); END;";
         $this->getEntityManager()->getConnection()->executeStatement($sql);
 
         $this->getEntityManager()->refresh($formuleTestIntervenant);
-        foreach ($formuleTestIntervenant->getVolumeHoraireTest() as $vhe) {
+        foreach ($formuleTestIntervenant->getVolumesHoraires() as $vhe) {
             $this->getEntityManager()->refresh($vhe);
         }
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return TestService
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function calculerTout(): TestService
-    {
-        $sql = "BEGIN ose_formule.test_tout; END;";
-        $this->getEntityManager()->getConnection()->executeStatement($sql);
 
         return $this;
     }

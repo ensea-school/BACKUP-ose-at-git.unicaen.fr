@@ -126,7 +126,7 @@ class TestController extends AbstractController
         $formuleTestIntervenant = $this->getServiceTest()->get($formuleTestIntervenantId);
 
         $intervenantData = (array)$this->axios()->fromPost('intervenant');
-        $volumesHorairesData = (array)$this->axios()->fromPOst('volumesHoraires');
+        $volumesHorairesData = (array)$this->axios()->fromPost('volumesHoraires');
         $simpleCalcul = $this->axios()->fromPost('simpleCalcul', false);
 
         $this->getServiceTest()->fromJson($formuleTestIntervenant, $intervenantData, $volumesHorairesData);
@@ -136,6 +136,7 @@ class TestController extends AbstractController
 
             if (!$simpleCalcul) {
                 $this->getServiceTest()->save($formuleTestIntervenant);
+                $this->getServiceTest()->calculerAttendu($formuleTestIntervenant);
             }
             $data = $this->getServiceTest()->toJson($formuleTestIntervenant);
             $data['debug'] = $debug;

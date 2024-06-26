@@ -13,7 +13,7 @@
 * Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant mais prendre aussi en compte les missions de vacataires (#57424)
 * Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'une renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions. 
 * Dans les demandes de mise en paiement par lot, on filtre maintenant les intervenants trop payés pour une composante donnée (#56770)
-
+* Demande de mise en paiement par lot, classement des intervenants par ordre alphabétique par nom (#56558)
 
 # OSE 23.6 (13/06/2024)
 

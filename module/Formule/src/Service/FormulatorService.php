@@ -276,8 +276,14 @@ class FormulatorService
 
 
 
-    public function calculer(FormuleIntervenant $intervenant, Formule $formule): void
+    public function calculer(FormuleIntervenant $intervenant, ?Formule $formule = null): void
     {
+        if (empty($formule) && $intervenant instanceof FormuleTestIntervenant){
+            $formule = $intervenant->getFormule();
+        }
+        if (empty($formule)){
+            throw new \Exception('La formule de calcul n\'est pas spécifiée');
+        }
         $fc = $this->getFormuleCalcul($formule);
         $fc->calculer($intervenant, $formule);
     }

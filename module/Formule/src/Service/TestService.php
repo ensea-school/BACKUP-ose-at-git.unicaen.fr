@@ -211,7 +211,11 @@ class TestService extends AbstractEntityService
         ];
 
         foreach ($formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire) {
-            $json['volumesHoraires'][] = $volumeHoraireHydrator->extract($volumeHoraire);
+            $vhArray = $volumeHoraireHydrator->extract($volumeHoraire);
+            if ($vhArray['referentiel']){
+                $vhArray['typeInterventionCode'] = 'Référentiel';
+            }
+            $json['volumesHoraires'][] = $vhArray;
         }
 
         return $json;

@@ -28,14 +28,15 @@ $dataIntervenants = false; // OK
 $dataVolumesHoraires = false; // OK
 $dataStructures = false; // OK
 
-$calculTout = true;
+$calculTout = false;
 $peuplerAttendus = false;
-$transfertDansNouvelleInfra = false;
+$transfertIntervenantsDansNouvelleInfra = false;
+$transfertVolumesHorairesDansNouvelleInfra = true;
 
 
 $bdd = OseAdmin::instance()->getBdd();
 $ti = $bdd->getTable('FORMULE_TEST_INTERVENANT');
-$tvh =  $bdd->getTable('FORMULE_TEST_VOLUME_HORAIRE');
+$tvh = $bdd->getTable('FORMULE_TEST_VOLUME_HORAIRE');
 
 
 if ($creationTests) {
@@ -89,7 +90,7 @@ if ($creationTests) {
     }
 }
 
-if ($duplicationDonnees){
+if ($duplicationDonnees) {
     // on prend les tests et on les duplique pour toutes les formules, niv. intervenant & VH
     $iSql = "
     INSERT INTO formule_test_intervenant (
@@ -170,12 +171,6 @@ if ($duplicationDonnees){
 }
 
 
-
-
-
-
-
-
 if ($dataIntervenants) {
     $sql = "
     
@@ -203,7 +198,7 @@ if ($dataIntervenants) {
     
     ";
 
-    echo 'Mise en place des paramètres adaptés au niveau des intervenants'."\n";
+    echo 'Mise en place des paramètres adaptés au niveau des intervenants' . "\n";
     $q = $bdd->selectEach($sql);
     while ($d = $q->next()) {
         $id = $d['ID'];
@@ -213,7 +208,7 @@ if ($dataIntervenants) {
     }
 }
 
-if ($dataVolumesHoraires){
+if ($dataVolumesHoraires) {
     $sqls = [
         'Avignon' => "
         SELECT
@@ -352,9 +347,9 @@ if ($dataVolumesHoraires){
         ",
     ];
 
-    echo 'Mise en place des paramètres adaptés au niveau des volumes horaires'."\n";
-    foreach ($sqls as $formule => $sql ) {
-        echo $formule."\n";
+    echo 'Mise en place des paramètres adaptés au niveau des volumes horaires' . "\n";
+    foreach ($sqls as $formule => $sql) {
+        echo $formule . "\n";
         $q = $bdd->selectEach($sql);
         while ($d = $q->next()) {
             $id = $d['ID'];
@@ -366,7 +361,7 @@ if ($dataVolumesHoraires){
 
 }
 
-if ($dataStructures){
+if ($dataStructures) {
 
     $sqli = "
     SELECT
@@ -386,7 +381,7 @@ if ($dataStructures){
       JOIN formule_test_intervenant ft ON ft.formule_id = f.id AND ft.structure_code = cc.os_code
     ";
 
-    echo 'Adaptation des codes structures pour les intervenants'."\n";
+    echo 'Adaptation des codes structures pour les intervenants' . "\n";
     $q = $bdd->selectEach($sqli);
     while ($d = $q->next()) {
         $id = $d['ID'];
@@ -414,7 +409,7 @@ if ($dataStructures){
       JOIN formule_test_volume_horaire ftv ON ftv.intervenant_test_id = ft.id AND ftv.structure_code = cc.os_code
     ";
 
-    echo 'Adaptation des codes structures pour les volumes horaires'."\n";
+    echo 'Adaptation des codes structures pour les volumes horaires' . "\n";
     $q = $bdd->selectEach($sqlVh);
     while ($d = $q->next()) {
         $id = $d['ID'];
@@ -423,7 +418,6 @@ if ($dataStructures){
         echo '.';
     }
 }
-
 
 
 // on calcule tout!
@@ -453,30 +447,20 @@ if ($calculTout) {
 
     echo "Calcul de tous les tests\n";
     $sql = "SELECT count(*) c FROM formule_test_intervenant WHERE id >= $min";
-    $count = (int)$bdd->selectOne($sql, [],  'C');
+    $count = (int)$bdd->selectOne($sql, [], 'C');
     $i = 0;
     $sql = "SELECT id FROM formule_test_intervenant WHERE id >= $min ORDER BY id";
     $q = $bdd->select($sql);
-    $bdd->beginTransaction();
-    foreach( $q as $fti ){
+    foreach ($q as $fti) {
         $i++;
         try {
-            if ($i % 100 == 0){
-                $bdd->commitTransaction();
-                echo "Transaction commit\n";
-                $bdd->beginTransaction();
-            }
             $calcSql = "BEGIN ose_formule.test(" . $fti['ID'] . "); END;";
-            //$bdd->beginTransaction();
             $bdd->exec($calcSql);
-            //$bdd->commitTransaction();
-            echo 'Calcul test id = '.$fti['ID']." - $i / $count\n";
-        }catch(\Exception $e){
-            echo 'ERREUR ERREUR ERREUR ERREUR id = '.$fti['ID']." - $i / $count ".$e->getMessage()."\n";
+            echo 'Calcul test id = ' . $fti['ID'] . " - $i / $count\n";
+        } catch (\Exception $e) {
+            echo 'ERREUR ERREUR ERREUR ERREUR id = ' . $fti['ID'] . " - $i / $count " . $e->getMessage() . "\n";
         }
     }
-    $bdd->commitTransaction();
-    $serviceFormuleTest->calculerTout();
 }
 
 if ($peuplerAttendus) {
@@ -499,8 +483,7 @@ if ($peuplerAttendus) {
     }
 }
 
-if ($transfertDansNouvelleInfra) {
-
+if ($transfertIntervenantsDansNouvelleInfra) {
     $bddDevConfig = OseAdmin::instance()->config()->get('bdds')['local-dev'];
     $bddDev = new \Unicaen\BddAdmin\Bdd($bddDevConfig);
     $bddDev->setLogger(OseAdmin::instance()->console());
@@ -533,75 +516,138 @@ if ($transfertDansNouvelleInfra) {
       JOIN formule f ON f.id = fti.FORMULE_ID
     ";
 
-    $volumesHorairesSql = "
-    SELECT
-      ID,
-      INTERVENANT_TEST_ID FORMULE_INTERVENANT_TEST_ID,
-      REFERENTIEL,
-      SERVICE_STATUTAIRE,
-      TAUX_FI,
-      TAUX_FA,
-      TAUX_FC,
-      TYPE_INTERVENTION_CODE,
-      PONDERATION_SERVICE_DU,
-      PONDERATION_SERVICE_COMPL,
-      PARAM_1,
-      PARAM_2,
-      PARAM_3,
-      PARAM_4,
-      PARAM_5,
-      HEURES,
-      A_SERVICE_FI HEURES_ATTENDUES_SERVICE_FI,
-      A_SERVICE_FA HEURES_ATTENDUES_SERVICE_FA,
-      A_SERVICE_FC HEURES_ATTENDUES_SERVICE_FC,
-      A_SERVICE_REFERENTIEL HEURES_ATTENDUES_SERVICE_REFERENTIEL,
-      A_HEURES_COMPL_FI HEURES_ATTENDUES_COMPL_FI,
-      A_HEURES_COMPL_FA HEURES_ATTENDUES_COMPL_FA,
-      A_HEURES_COMPL_FC HEURES_ATTENDUES_COMPL_FC,
-      A_HEURES_COMPL_FC_MAJOREES HEURES_ATTENDUES_PRIMES,
-      A_HEURES_COMPL_REFERENTIEL HEURES_ATTENDUES_COMPL_REFERENTIEL,
-      C_SERVICE_FI HEURES_SERVICE_FI,
-      C_SERVICE_FA HEURES_SERVICE_FA,
-      C_SERVICE_FC HEURES_SERVICE_FC,
-      C_SERVICE_REFERENTIEL HEURES_SERVICE_REFERENTIEL,
-      C_HEURES_COMPL_FI HEURES_COMPL_FI,
-      C_HEURES_COMPL_FA HEURES_COMPL_FA,
-      C_HEURES_COMPL_FC HEURES_COMPL_FC,
-      C_HEURES_COMPL_FC_MAJOREES HEURES_PRIMES,
-      C_HEURES_COMPL_REFERENTIEL HEURES_COMPL_REFERENTIEL,
-      STRUCTURE_CODE STRUCTURE_CODE
-    FROM
-      formule_test_volume_horaire    
-    ";
-
 
     if ($supprExistant) {
+        echo "Vidage des tables FORMULE_TEST_VOLUME_HORAIRE & FORMULE_TEST_INTERVENANT\n";
         $bddDev->getTable('FORMULE_TEST_VOLUME_HORAIRE')->truncate();
         $bddDev->getTable('FORMULE_TEST_INTERVENANT')->truncate();
     }
 
     $formules = $bddDev->getTable('FORMULE')->select(null, ['key' => 'CODE']);
 
+    $iTable = $bddDev->getTable('FORMULE_TEST_INTERVENANT');
+
+    $count = (int)$bdd->selectOne('SELECT count(*) C from FORMULE_TEST_INTERVENANT', [], 'C');
+    $i = 0;
     $r = $em->getConnection()->executeQuery($intervenantsSql);
+    $bddDev->beginTransaction();
     while ($d = $r->fetchAssociative()) {
         $d['FORMULE_ID'] = (int)$formules[$d['FORMULE_CODE']]['ID'];
         unset($d['FORMULE_CODE']);
-        $bddDev->getTable('FORMULE_TEST_INTERVENANT')->insert($d);
+        $iTable->insert($d);
+        $i++;
+        echo "Transfert des intervenants $i / $count\n";
+    }
+    $bddDev->commitTransaction();
+}
+
+
+if ($transfertVolumesHorairesDansNouvelleInfra) {
+    $bddDevConfig = OseAdmin::instance()->config()->get('bdds')['local-dev'];
+    $bddDev = new \Unicaen\BddAdmin\Bdd($bddDevConfig);
+    $bddDev->setLogger(OseAdmin::instance()->console());
+
+    $volumesHorairesSql = "
+    SELECT
+      v.ID,
+      v.INTERVENANT_TEST_ID FORMULE_INTERVENANT_TEST_ID,
+      v.REFERENTIEL,
+      v.SERVICE_STATUTAIRE,
+      v.TAUX_FI,
+      v.TAUX_FA,
+      v.TAUX_FC,
+      v.TYPE_INTERVENTION_CODE,
+      v.PONDERATION_SERVICE_DU,
+      v.PONDERATION_SERVICE_COMPL,
+      v.PARAM_1,
+      v.PARAM_2,
+      v.PARAM_3,
+      v.PARAM_4,
+      v.PARAM_5,
+      v.HEURES,
+      COALESCE(v.C_SERVICE_FI,0) HEURES_ATTENDUES_SERVICE_FI,
+      COALESCE(v.C_SERVICE_FA,0) HEURES_ATTENDUES_SERVICE_FA,
+      COALESCE(v.C_SERVICE_FC,0) HEURES_ATTENDUES_SERVICE_FC,
+      COALESCE(v.C_SERVICE_REFERENTIEL,0) HEURES_ATTENDUES_SERVICE_REFERENTIEL,
+      COALESCE(v.C_HEURES_COMPL_FI,0) HEURES_ATTENDUES_COMPL_FI,
+      COALESCE(v.C_HEURES_COMPL_FA,0) HEURES_ATTENDUES_COMPL_FA,
+      COALESCE(v.C_HEURES_COMPL_FC,0) HEURES_ATTENDUES_COMPL_FC,
+      COALESCE(v.C_HEURES_COMPL_FC_MAJOREES,0) HEURES_ATTENDUES_PRIMES,
+      COALESCE(v.C_HEURES_COMPL_REFERENTIEL,0) HEURES_ATTENDUES_COMPL_REFERENTIEL,
+      COALESCE(v.C_SERVICE_FI,0) HEURES_SERVICE_FI,
+      COALESCE(v.C_SERVICE_FA,0) HEURES_SERVICE_FA,
+      COALESCE(v.C_SERVICE_FC,0) HEURES_SERVICE_FC,
+      COALESCE(v.C_SERVICE_REFERENTIEL,0) HEURES_SERVICE_REFERENTIEL,
+      COALESCE(v.C_HEURES_COMPL_FI,0) HEURES_COMPL_FI,
+      COALESCE(v.C_HEURES_COMPL_FA,0) HEURES_COMPL_FA,
+      COALESCE(v.C_HEURES_COMPL_FC,0) HEURES_COMPL_FC,
+      COALESCE(v.C_HEURES_COMPL_FC_MAJOREES,0) HEURES_PRIMES,
+      COALESCE(v.C_HEURES_COMPL_REFERENTIEL,0) HEURES_COMPL_REFERENTIEL,
+      v.STRUCTURE_CODE STRUCTURE_CODE
+    FROM
+      formule_test_volume_horaire v
+      JOIN formule_test_intervenant i ON i.id = v.intervenant_test_id
+    WHERE
+      i.annee_id = :annee AND i.formule_id = :formuleId
+    ";
+
+    $sqlPrepa = "
+    select 
+      i.annee_id, 
+      f.id formule_id,
+      f.package_name formule,
+      count(*) c
+    from 
+      formule_test_intervenant i
+      JOIN formule f ON f.id = i.formule_id
+    group by 
+      annee_id,
+      f.id,
+      f.package_name
+    ORDER BY
+      annee_id, f.package_name
+    ";
+
+
+    if ($supprExistant) {
+        echo "Vidage de la table FORMULE_TEST_VOLUME_HORAIRE\n";
+        $bddDev->getTable('FORMULE_TEST_VOLUME_HORAIRE')->truncate();
     }
 
-    $r = $em->getConnection()->executeQuery($volumesHorairesSql);
-    while ($d = $r->fetchAssociative()) {
-        $d['HEURES_ATTENDUES_NON_PAYABLE_FI'] = 0;
-        $d['HEURES_ATTENDUES_NON_PAYABLE_FA'] = 0;
-        $d['HEURES_ATTENDUES_NON_PAYABLE_FC'] = 0;
-        $d['HEURES_ATTENDUES_NON_PAYABLE_REFERENTIEL'] = 0;
-        $d['HEURES_NON_PAYABLE_FI'] = 0;
-        $d['HEURES_NON_PAYABLE_FA'] = 0;
-        $d['HEURES_NON_PAYABLE_FC'] = 0;
-        $d['HEURES_NON_PAYABLE_REFERENTIEL'] = 0;
-        $d['NON_PAYABLE'] = 0;
+    $zones = $bdd->select($sqlPrepa);
+    $vhTable = $bddDev->getTable('FORMULE_TEST_VOLUME_HORAIRE');
 
-        $bddDev->getTable('FORMULE_TEST_VOLUME_HORAIRE')->insert($d);
+    foreach ($zones as $zone) {
+        $annee = (int)$zone['ANNEE_ID'];
+        $formule = $zone['FORMULE'];
+        $formuleId = $zone['FORMULE_ID'];
+        $count = $zone['C'];
+        echo "Transfert des volumes horaires, $annee, $formule\n";
+        $i = 0;
+        $vhs = $bdd->select($volumesHorairesSql, ['annee' => $annee, 'formuleId' => $formuleId]);
+        $bddDev->beginTransaction();
+        foreach ($vhs as $d) {
+            $i++;
+            $d['HEURES_ATTENDUES_NON_PAYABLE_FI'] = 0;
+            $d['HEURES_ATTENDUES_NON_PAYABLE_FA'] = 0;
+            $d['HEURES_ATTENDUES_NON_PAYABLE_FC'] = 0;
+            $d['HEURES_ATTENDUES_NON_PAYABLE_REFERENTIEL'] = 0;
+            $d['HEURES_NON_PAYABLE_FI'] = 0;
+            $d['HEURES_NON_PAYABLE_FA'] = 0;
+            $d['HEURES_NON_PAYABLE_FC'] = 0;
+            $d['HEURES_NON_PAYABLE_REFERENTIEL'] = 0;
+            $d['NON_PAYABLE'] = 0;
+            try {
+                $vhTable->insert($d);
+                OseAdmin::instance()->console()->msg("Injection des volumes horaires $i / $count", true);
+            }catch(\Exception $e){
+                echo "Erreur ERREUR ERREUR $i / $count\n";
+                echo $e->getMessage();
+                die();
+            }
+
+
+        }
+        $bddDev->commitTransaction();
     }
-
 }

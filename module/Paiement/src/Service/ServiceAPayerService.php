@@ -72,7 +72,7 @@ class ServiceAPayerService extends AbstractService
         WHERE
             tp. structure = :structure
         AND tp.annee = :annee
-        ORDER BY i.prenom ASC
+        ORDER BY i.nomUsuel ASC
         ";
 
 

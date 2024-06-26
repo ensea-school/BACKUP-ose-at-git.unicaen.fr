@@ -20,8 +20,8 @@
         "unicaen/open-document"                       : "6.0.7",
         "unicaen/siham"                               : "6.1.4",
         "unicaen/mail"                                : "6.1.5",
-        "unicaen/vue"                                 : "6.2.3",
-        "unicaen/bddadmin"                            : "0.9.3",
+        "unicaen/vue"                                 : "6.2.4",
+        "unicaen/bddadmin"                            : "0.9.4",
         "laminas/laminas-cache-storage-adapter-memory": "2.3.0",
         "laminas/laminas-text"                        : "2.11",
         "unicaen/console"                             : "6.1.0"

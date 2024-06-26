@@ -2,12 +2,13 @@
 
 namespace ExportRh\Connecteur\Siham;
 
-use Application\Entity\Db\Intervenant;
+use Contrat\Service\ContratServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Form\Fieldset;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
@@ -66,7 +67,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererAffectationEnCoursIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?array
+    public function recupererAffectationEnCoursIntervenantRh(Intervenant $intervenant): ?array
     {
         $typeAffectation         = (isset($this->siham->getConfig()['type-affectation'])) ? $this->siham->getConfig()['type-affectation'] : ['FUN'];
         $affectations            = [];
@@ -109,7 +110,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererDonneesAdministrativesIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?array
+    public function recupererDonneesAdministrativesIntervenantRh(Intervenant $intervenant): ?array
     {
         try {
             $codeRh = '';
@@ -143,7 +144,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function trouverCodeRhByInsee(\Intervenant\Entity\Db\Intervenant $intervenant): ?string
+    public function trouverCodeRhByInsee(Intervenant $intervenant): ?string
     {
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         $numeroInsee        = (!empty($intervenant->getNumeroInsee())) ? $intervenant->getNumeroInsee() : $intervenantDossier->getNumeroInsee();
@@ -192,7 +193,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function prendreEnChargeIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
+    public function prendreEnChargeIntervenantRh(Intervenant $intervenant, $datas): ?string
     {
         try {
             /* Récupération du dossier de l'intervenant */
@@ -480,7 +481,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function renouvellerIntervenantRH(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
+    public function renouvellerIntervenantRH(Intervenant $intervenant, $datas): ?string
     {
         try {
             /* Récupération du dossier de l'intervenant */
@@ -605,7 +606,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function synchroniserDonneesPersonnellesIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): bool
+    public function synchroniserDonneesPersonnellesIntervenantRh(Intervenant $intervenant, $datas): bool
     {
         try {
 
@@ -719,7 +720,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?IntervenantRh
+    public function recupererIntervenantRh(Intervenant $intervenant): ?IntervenantRh
     {
         $agent  = null;
         $codeRh = $this->trouverCodeRhByInsee($intervenant);

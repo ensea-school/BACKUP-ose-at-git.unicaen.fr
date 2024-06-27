@@ -92,6 +92,9 @@ class OseAdmin
             define('REQUEST_MICROTIME', microtime(true));
         }
 
+        // Haute précision float nécessaire pour les calculs d'heures comp avec les formules
+        ini_set('precision', 15);
+
         /* Définition de la config globale, éventuellement à partir du fichier de config général */
         if ($this->config()->get('global', 'affichageErreurs')) {
             error_reporting(E_ALL);

@@ -94,7 +94,7 @@
                         <b-button variant="secondary" @click="calculer">Calculer les HETD</b-button>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-4">
                     <div class="col-md-6">
                         <button class="exporter btn btn-secondary" @click="exporter">Télécharger les données</button>
                     </div>
@@ -103,6 +103,12 @@
                             <span class="btn btn-secondary">Téléverser un jeu de données</span>
                             <input type="file" id="importbtn" class="importer" @change="importer">
                         </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="exporter btn btn-secondary" @click="exporterCsv">Télécharger les données en CSV
+                        </button>
                     </div>
                 </div>
             </div>
@@ -555,7 +561,7 @@
                 <td v-show="resMode=='debug'" class="debug-td">
                     <div v-if="debug.vh && debug.vh[l]">
                     <span v-for="(val,cell) in debug.vh[l]" class="debug-cell">
-                        {{ cell }} <span class="debug-val">{{ Math.round(val*100)/100 }}</span>
+                        {{ cell }} <span class="debug-val">{{ Math.round(val * 100) / 100 }}</span>
                     </span>&nbsp;
                     </div>
                 </td>
@@ -568,7 +574,7 @@
         <div v-if="resMode=='debug' && debug.global">
             <h4>Débogage : calculs globaux</h4>
             <span v-for="(val,cell) in debug.global" class="debug-cell">
-                {{ cell }} <span class="debug-val">{{ Math.round(val*100)/100 }}</span>
+                {{ cell }} <span class="debug-val">{{ Math.round(val * 100) / 100 }}</span>
             </span>&nbsp;
         </div>
         <!-- FIN Débogage général -->
@@ -716,7 +722,7 @@ export default {
                 this.volumesHoraires = response.data.volumesHoraires;
                 if (response.data.debug) {
                     this.debug = response.data.debug;
-                }else{
+                } else {
                     this.debug = {};
                 }
                 this.addVolumeHoraire();
@@ -737,7 +743,7 @@ export default {
                 this.volumesHoraires = response.data.volumesHoraires;
                 if (response.data.debug) {
                     this.debug = response.data.debug;
-                }else{
+                } else {
                     this.debug = {};
                 }
                 this.addVolumeHoraire();
@@ -749,12 +755,66 @@ export default {
                 intervenant: this.intervenant,
                 volumesHoraires: this.volumesHoraires,
             };
-            const filename = content.libelle;
+            const filename = this.intervenant.libelle;
 
             var a = document.createElement('a');
             var blob = new Blob([JSON.stringify(content)], {'type': 'text/json'});
             a.href = window.URL.createObjectURL(blob);
             a.download = 'Test de formule ' + filename + '.json';
+            a.click();
+        },
+
+
+        exporterCsv: function () {
+            let content = "Structure;Compte dans le service statutaire;" +
+                "Heures non payables;Type d’intervention;Taux FI;Taux FA;Taux FC;" +
+                "Modulation service dû;Modulation service compl.;" +
+                "Param 1;Param 2;Param 3;Param 4;Param 5;Heures;" +
+                "Service FI;Service FA;Service FC;Service Référentiel;" +
+                "HC FI;HC FA;HC FC;HC Référentiel;Primes;" +
+                "Non payable FI;Non payable FA;Non payable FC;Non payable Référentiel\n";
+
+            const array = [1, 2, 3, 4, 5];
+
+            for (const l in this.volumesHoraires) {
+                const vh = this.volumesHoraires[l];
+                content += (vh.structureCode ? vh.structureCode : '') + ";"
+                    + (vh.serviceStatutaire ? 'Oui' : 'Non') + ";"
+                    + (vh.nonPayable ? 'Oui' : 'Non') + ";"
+                    + (vh.referentiel ? 'Référentiel' : (vh.typeInterventionCode ? vh.typeInterventionCode : '')) + ";"
+                    + (vh.tauxFi ? vh.tauxFi : '') + ";"
+                    + (vh.tauxFa ? vh.tauxFa : '') + ";"
+                    + (vh.tauxFc ? vh.tauxFc : '') + ";"
+                    + (vh.ponderationServiceDu ? vh.ponderationServiceDu : '') + ";"
+                    + (vh.ponderationServiceCompl ? vh.ponderationServiceCompl : '') + ";"
+                    + (vh.param1 ? vh.param1 : '') + ";"
+                    + (vh.param2 ? vh.param2 : '') + ";"
+                    + (vh.param3 ? vh.param3 : '') + ";"
+                    + (vh.param4 ? vh.param4 : '') + ";"
+                    + (vh.param5 ? vh.param5 : '') + ";"
+                    + (vh.heures ? vh.heures : '') + ";"
+                    + (vh.heuresServiceFi ? vh.heuresServiceFi : '') + ";"
+                    + (vh.heuresServiceFa ? vh.heuresServiceFa : '') + ";"
+                    + (vh.heuresServiceFc ? vh.heuresServiceFc : '') + ";"
+                    + (vh.heuresServiceReferentiel ? vh.heuresServiceReferentiel : '') + ";"
+                    + (vh.heuresComplFi ? vh.heuresComplFi : '') + ";"
+                    + (vh.heuresComplFa ? vh.heuresComplFa : '') + ";"
+                    + (vh.heuresComplFc ? vh.heuresComplFc : '') + ";"
+                    + (vh.heuresComplReferentiel ? vh.heuresComplReferentiel : '') + ";"
+                    + (vh.heuresPrimes ? vh.heuresPrimes : '') + ";"
+                    + (vh.heuresNonPayableFi ? vh.heuresNonPayableFi : '') + ";"
+                    + (vh.heuresNonPayableFa ? vh.heuresNonPayableFa : '') + ";"
+                    + (vh.heuresNonPayableFc ? vh.heuresNonPayableFc : '') + ";"
+                    + (vh.heuresNonPayableReferentiel ? vh.heuresNonPayableReferentiel : '') + ";"
+                    + "\n";
+            }
+
+            const filename = this.intervenant.libelle;
+
+            var a = document.createElement('a');
+            var blob = new Blob([content], {'type': 'text/csv'});
+            a.href = window.URL.createObjectURL(blob);
+            a.download = 'Test de formule ' + filename + '.csv';
             a.click();
         },
 

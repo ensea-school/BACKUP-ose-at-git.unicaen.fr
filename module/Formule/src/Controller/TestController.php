@@ -132,7 +132,8 @@ class TestController extends AbstractController
         $this->getServiceTest()->fromJson($formuleTestIntervenant, $intervenantData, $volumesHorairesData);
 
         try {
-            $debug = $this->getServiceFormulator()->calculer($formuleTestIntervenant, $formuleTestIntervenant->getFormule());
+            $this->getServiceFormulator()->calculer($formuleTestIntervenant, $formuleTestIntervenant->getFormule());
+            $debug = $formuleTestIntervenant->getDebugTrace();
 
             if (!$simpleCalcul) {
                 $this->getServiceTest()->save($formuleTestIntervenant);

@@ -16,15 +16,12 @@ class VolumeHoraireAdapter implements DataAdapterInterface
     public function run(Odf $odf, Bdd $pegase = null): void
     {
         $console = \OseAdmin::instance()->console();
-        $console->println('Traitement des volumes horaires récupérées');
+        $console->println('Traitement des volumes horaires récupérés');
 
-        $volumeHoraires       = $odf->getVolumesHoraires();
+        $volumeHoraires = $odf->getVolumesHoraires();
         $elementsPedagogiquesOdf = $odf->getElementsPedagogiques();
-        $arborescence         = $odf->getEnfants();
+        $arborescence = $odf->getEnfants();
         foreach ($volumeHoraires as $volumeHoraire) {
-            /** @var VolumeHoraire $volumeHoraire */
-            $heures = $volumeHoraire->getVolumeHoraire();
-            $heures = $heures / 3600.0;
             if (isset($arborescence[$volumeHoraire->getElementId()])) {
 //On ne fait plus ruisseler les heures sur les EC, on retire juste le volume horaire de la liste
                 //                $elementsPedagogiques = $odf->SearchingElementPedagogique($volumeHoraire->getElementId(), $arborescence);
@@ -42,21 +39,25 @@ class VolumeHoraireAdapter implements DataAdapterInterface
 //                    $volumeHoraires[$volumeHoraireNew->getSourceCode()] = $volumeHoraireNew;
 //                }
                 $odf->unsetVolumeHoraire($volumeHoraire);
-
             } else {
-                $element = $elementsPedagogiquesOdf[$volumeHoraire->getElementId()];
-                $volumeHoraire->setAnneeDebut($element->getAnneeDebut());
-                $volumeHoraire->setAnneeFin($element->getAnneeFin());
+                /* On transforme les secondes en heures */
+                $heures = $volumeHoraire->getVolumeHoraire();
+                $heures = $heures / 3600.0;
                 $volumeHoraire->setVolumeHoraire($heures);
+
+                if (array_key_exists($volumeHoraire->getElementId(), $elementsPedagogiquesOdf)){
+                    $element = $elementsPedagogiquesOdf[$volumeHoraire->getElementId()];
+                    $volumeHoraire->setAnneeDebut($element->getAnneeDebut());
+                    $volumeHoraire->setAnneeFin($element->getAnneeFin());
+                }
             }
         }
-        $console->println('Fin du traitement des étapes récupérées');
+        $console->println('Fin du traitement des volumes horaires récupérés');
     }
 
 
 
-    public
-    function versionMin(): float
+    public function versionMin(): float
     {
         // TODO: Implement versionMin() method.
         return 24.0;
@@ -64,8 +65,7 @@ class VolumeHoraireAdapter implements DataAdapterInterface
 
 
 
-    public
-    function versionMax(): float
+    public function versionMax(): float
     {
         // TODO: Implement versionMax() method.
         return 99.0;

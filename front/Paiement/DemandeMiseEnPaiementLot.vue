@@ -111,7 +111,9 @@
                                            type="checkbox"
                                            @change="refreshTotalConsommation()"></td>
                                 <td><a :href="urlIntervenant(intervenant)"
-                                       target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
+                                       target="_blank">{{
+                                        intervenant.datasIntervenant.nom_usuel.toUpperCase() + ' ' + intervenant.datasIntervenant.prenom
+                                    }}</a></td>
                                 <td><span
                                     :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
                                     style="text-decoration:underline dotted;cursor: help;">
@@ -160,7 +162,9 @@
                                            @change="refreshTotalConsommation()">
                                 </td>
                                 <td><a :href="urlIntervenant(intervenant)"
-                                       target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
+                                       target="_blank">{{
+                                        intervenant.datasIntervenant.nom_usuel.toUpperCase() + ' ' + intervenant.datasIntervenant.prenom
+                                    }}</a></td>
                                 <td><span
                                     :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
                                     style="text-decoration:underline dotted;cursor: help;">{{
@@ -208,7 +212,9 @@
                                            checked="checked" class="checkbox-etudiant" type="checkbox"
                                            @change="refreshTotalConsommation()"></td>
                                 <td><a :href="urlIntervenant(intervenant)"
-                                       target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
+                                       target="_blank">{{
+                                        intervenant.datasIntervenant.nom_usuel.toUpperCase() + ' ' + intervenant.datasIntervenant.prenom
+                                    }}</a></td>
                                 <td><span
                                     :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
                                     style="text-decoration:underline dotted;cursor: help;">
@@ -256,7 +262,9 @@
                                            type="checkbox"
                                            @change="refreshTotalConsommation()"></td>
                                 <td><a :href="urlIntervenant(intervenant)"
-                                       target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
+                                       target="_blank">{{
+                                        intervenant.datasIntervenant.nom_usuel.toUpperCase() + ' ' + intervenant.datasIntervenant.prenom
+                                    }}</a></td>
                                 <td><span
                                     :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
                                     style="text-decoration:underline dotted;cursor: help;">

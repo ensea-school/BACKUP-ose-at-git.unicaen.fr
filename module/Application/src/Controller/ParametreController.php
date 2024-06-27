@@ -10,6 +10,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Lieu\Service\EtablissementServiceAwareTrait;
+use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
 
 
 /**
@@ -23,6 +24,7 @@ class ParametreController extends AbstractController
     use ParametresServiceAwareTrait;
     use EtablissementServiceAwareTrait;
     use AnneeServiceAwareTrait;
+    use SignatureConfigurationServiceAwareTrait;
 
 
     public function anneesAction()
@@ -93,6 +95,12 @@ class ParametreController extends AbstractController
                     }
 
                     $sp->set($parametre, $value);
+                }
+            }
+
+            if ($parametre == 'signature_electronique_parapheur') {
+                if ($value == "none") {
+                    $sp->set($parametre, null);
                 }
             }
 

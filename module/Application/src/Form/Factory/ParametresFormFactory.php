@@ -1,17 +1,18 @@
 <?php
 
-namespace Intervenant\Form;
+namespace Application\Form\Factory;
 
+use Application\Form\ParametresForm;
 use Psr\Container\ContainerInterface;
 use UnicaenSignature\Service\SignatureConfigurationService;
 
 
 /**
- * Description of StatutSaisieFormFactory
+ * Description of EtatSortieFormFactory
  *
- * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
+ * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class StatutSaisieFormFactory
+class ParametresFormFactory
 {
 
     /**
@@ -19,11 +20,11 @@ class StatutSaisieFormFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return StatutSaisieForm
+     * @return ParametresForm
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): StatutSaisieForm
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $form = new StatutSaisieForm();
+        $form = new ParametresForm();
         $form->setSignatureConfigurationService($container->get(SignatureConfigurationService::class));
 
         return $form;

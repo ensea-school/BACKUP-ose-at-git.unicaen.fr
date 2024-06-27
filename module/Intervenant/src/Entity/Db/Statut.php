@@ -2,6 +2,7 @@
 
 namespace Intervenant\Entity\Db;
 
+use Application\Entity\Db\Role;
 use Dossier\Entity\Db\DossierAutre;
 use Application\Entity\Db\EtatSortie;
 use Application\Interfaces\ParametreEntityInterface;
@@ -137,6 +138,12 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     private bool        $contratDepot                       = true;
 
     private bool        $contratGeneration                  = false;
+
+    private bool        $contratSignatureActivation         = false;
+
+    private ?string     $contratSignatureType               = null;
+
+    private ?Role       $contratSignatureRole               = null;
 
     private bool        $servicePrevu                       = true;
 
@@ -1102,6 +1109,54 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setContratGeneration(bool $contratGeneration): Statut
     {
         $this->contratGeneration = $contratGeneration;
+
+        return $this;
+    }
+
+
+
+    public function isContratSignatureActivation(): bool
+    {
+        return $this->contratSignatureActivation;
+    }
+
+
+
+    public function setContratSignatureActivation(bool $contratSignatureActivation): Statut
+    {
+        $this->contratSignatureActivation = $contratSignatureActivation;
+
+        return $this;
+    }
+
+
+
+    public function getContratSignatureType(): ?string
+    {
+        return $this->contratSignatureType;
+    }
+
+
+
+    public function setContratSignatureType(?string $contratSignatureType): Statut
+    {
+        $this->contratSignatureType = $contratSignatureType;
+
+        return $this;
+    }
+
+
+
+    public function getContratSignatureRole(): ?Role
+    {
+        return $this->contratSignatureRole;
+    }
+
+
+
+    public function setContratSignatureRole(?Role $contratSignatureRole): Statut
+    {
+        $this->contratSignatureRole = $contratSignatureRole;
 
         return $this;
     }

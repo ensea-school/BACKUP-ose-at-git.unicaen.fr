@@ -300,7 +300,28 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                                 <a target="_blank" href="<?= $this->url('etat-sortie'); ?>">Page d'administration des
                                     états de sortie</a>
                             <?php endif; ?>
+                            
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">Signature électronique du contrat de travail</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?php if (!$signatureActivated): ?>
+                            <div class="alert alert-secondary mt-2" role="alert">
+                                Vous n'avez pas de parapheur électronique d'activé sur OSE.
+                            </div>
+                        <?php else: ?>
+                            <?= $this->formControlGroup($form->get('contratSignatureActivation')); ?>
+                            <?= $this->formControlGroup($form->get('contratSignatureType')); ?>
+                            <?= $this->formControlGroup($form->get('contratSignatureRole')); ?>
+                        <?php endif; ?>
+
                     </div>
                 </div>
             </div>

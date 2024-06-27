@@ -1368,6 +1368,9 @@ return [
         'MISSION_DECRET',
         'MISSION_INDEMNITEES',
         'PJ_ACTIVE',
+        'CONTRAT_SIGNATURE_ACTIVATION',
+        'CONTRAT_SIGNATURE_TYPE',
+        'CONTRAT_SIGNATURE_ROLE',
     ],
     'STRUCTURE'                           => [
         'ID',

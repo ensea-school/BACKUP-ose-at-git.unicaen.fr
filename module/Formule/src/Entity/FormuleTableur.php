@@ -397,6 +397,21 @@ class FormuleTableur
         $deps = $cell->getDeps();
         $depsFound = [];
 
+        // Si on est sur une suite, on ajoute la ligne principale pour la colonne
+        // si elle n'est pas déjà dans les dépendances
+        if ($cell->getRow() == $this->mainLine()) {
+            foreach ($deps as $i => $dep) {
+                $depCellPos = Calc::cellNameToCoords($dep);
+                if ($depCellPos['row'] == $this->mainLine()-1 && !$depCellPos['absRow']){
+                    $newDep = Calc::coordsToCellName($depCellPos['col'], $this->mainLine());
+                    if (!in_array($newDep,$deps)){
+                        $deps[] = $newDep;
+                    }
+                }
+            }
+        }
+
+        // Traitement des variables et remplacement pas les cellules nommées
         foreach ($deps as $i => $dep) {
             if (is_array($dep) && 'variable' == $dep['type']) {
                 // on remplace les variables par leur cible

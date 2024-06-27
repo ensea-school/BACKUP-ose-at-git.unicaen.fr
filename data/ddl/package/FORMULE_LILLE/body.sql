@@ -530,7 +530,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LILLE AS
 
     -- BQ=SI(ET($D20="Oui";$N20<>"Oui";$H20="Référentiel";$A20=i_structure_code;GAUCHE($O20;3)<>"RP_");$M20*$AD20;0)
     WHEN c = 'BQ' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation AND vh.param_2 NOT LIKE 'RP_%' THEN
+      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation AND COALESCE(vh.param_2,' ') NOT LIKE 'RP_%' THEN
         RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
@@ -576,7 +576,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LILLE AS
 
     -- BW=SI(ET($D20="Oui";$N20<>"Oui";$H20="Référentiel";$A20<>i_structure_code;GAUCHE($O20;3)<>"RP_");$M20*$AD20;0)
     WHEN c = 'BW' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND vh.param_2 NOT LIKE 'RP_%' THEN
+      IF vh.service_statutaire AND COALESCE(vh.param_1, 'Non') <> 'Oui' AND vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND COALESCE(vh.param_2,' ') NOT LIKE 'RP_%' THEN
         RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
@@ -622,7 +622,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LILLE AS
 
     -- CC=SI(ET($D20="Oui";$N20<>"Oui";$H20="Référentiel";$A20=i_structure_code;GAUCHE($O20;3)="RP_");$M20*$AD20;0)
     WHEN c = 'CC' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation AND vh.param_2 LIKE 'RP_%' THEN
+      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation AND COALESCE(vh.param_2,' ') LIKE 'RP_%' THEN
         RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
@@ -668,7 +668,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LILLE AS
 
     -- CI=SI(ET($D20="Oui";$N20<>"Oui";$H20="Référentiel";$A20<>i_structure_code;GAUCHE($O20;3)="RP_");$M20*$AD20;0)
     WHEN c = 'CI' AND v >= 1 THEN
-      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND vh.param_2 LIKE 'RP_%' THEN
+      IF vh.service_statutaire AND vh.structure_code IS NOT NULL AND vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND COALESCE(vh.param_2,' ') LIKE 'RP_%' THEN
         RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;

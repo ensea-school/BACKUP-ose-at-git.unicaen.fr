@@ -310,11 +310,11 @@ class FormuleTableur
         $aliases = $this->tableur->getAliases();
 
         /* Pour celles qui n'ont pas été trouvées, on cherche dans les alias */
-        foreach( $this->variables as $vname => $variable){
-            if (!isset($variable['cell'])){
+        foreach ($this->variables as $vname => $variable) {
+            if (!isset($variable['cell'])) {
                 $names = (array)$variable['name'];
-                foreach( $names as $name ){
-                    if (isset($aliases[$name]) && $aliases[$name]['sheet'] == 'Calculs'){
+                foreach ($names as $name) {
+                    if (isset($aliases[$name]) && $aliases[$name]['sheet'] == 'Calculs') {
                         $this->variables[$vname]['cell'] = $this->sheet()->getCell($aliases[$name]['name']);
                     }
                 }
@@ -401,11 +401,13 @@ class FormuleTableur
         // si elle n'est pas déjà dans les dépendances
         if ($cell->getRow() == $this->mainLine()) {
             foreach ($deps as $i => $dep) {
-                $depCellPos = Calc::cellNameToCoords($dep);
-                if ($depCellPos['row'] == $this->mainLine()-1 && !$depCellPos['absRow']){
-                    $newDep = Calc::coordsToCellName($depCellPos['col'], $this->mainLine());
-                    if (!in_array($newDep,$deps)){
-                        $deps[] = $newDep;
+                if (is_string($dep)) {
+                    $depCellPos = Calc::cellNameToCoords($dep);
+                    if ($depCellPos['row'] == $this->mainLine() - 1 && !$depCellPos['absRow']) {
+                        $newDep = Calc::coordsToCellName($depCellPos['col'], $this->mainLine());
+                        if (!in_array($newDep, $deps)) {
+                            $deps[] = $newDep;
+                        }
                     }
                 }
             }

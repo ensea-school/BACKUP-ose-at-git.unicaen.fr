@@ -1,0 +1,207 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+use Contrat\Assertion\ContratAssertion;
+
+/**
+ * @var $this                       \Application\View\Renderer\PhpRenderer
+ * @var $contrat                    \Contrat\Entity\Db\Contrat
+ * @var $services                   array
+ * @var $avenant_param              int
+ * @var $contratSignatureActivation boolean
+ */
+
+$validation     = $contrat->getValidation();
+$retourSigne    = $contrat->getDateRetourSigne();
+$dateEnvoiEmail = $contrat->getDateEnvoiEmail();
+$uploader       = $this->uploader();
+
+$urlExport = $this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)
+    ? $this->url('contrat/exporter', ['contrat' => $contrat->getId()]) // oui car on peut le voir!!
+    : null;
+
+$urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
+    ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
+    : null;
+
+$urlEmail = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOI_EMAIL)
+    ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()], ['modal' => 1]) . '?modal=1'
+    : null;
+
+$urlSignatureElectronique = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE);
+$urlSignatureElectronique = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
+    ? $this->url('contrat/envoyer-signature-electronique', ['contrat' => $contrat->getId()])
+    : null;
+
+
+$urlValidation = $this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)
+    ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
+    : null;
+
+$urlDevalidation = $this->isAllowed($contrat, Privileges::CONTRAT_DEVALIDATION)
+    ? $this->url('contrat/devalider', ['contrat' => $contrat->getId()])
+    : null;
+
+$urlSaisieRetour = $this->isAllowed($contrat, Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE)
+    ? $this->url('contrat/saisir-retour', ['contrat' => $contrat->getId()])
+    : null;
+
+$urlAjouter = $this->isAllowed($contrat, ContratAssertion::PRIV_AJOUTER_FICHIER)
+    ? $this->url('contrat/deposer-fichier', ['contrat' => $contrat->getId()], [], true)
+    : null;
+
+$urlSuppression = $this->isAllowed($contrat, Privileges::CONTRAT_SUPPRESSION)
+    ? $this->url('contrat/supprimer', ['contrat' => $contrat->getId()])
+    : null;
+
+$disableEmail = (empty($emailIntervenant)) ? true : false;
+
+if ($urlAjouter) {
+    $uploader->setUrl($urlAjouter);
+}
+
+$card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default');
+
+?>
+
+<div class="contrat card bg-<?= $card ?>" id="contrat-<?= $contrat->getId() ?>">
+    <div class="card-header card-header-h3">
+        <?php if ($urlExport && $urlEmail && !$contratSignatureActivation): ?>
+            <span class="float-end">
+                <?php if ($disableEmail): ?>
+                    <a class="disabled btn btn-seconrary" href="<?= $urlEmail ?>"
+                       title="L'intervenant du contrat n'a pas renseigné son email.">
+                <?php endif; ?>
+                        <?php if (!$disableEmail): ?>
+                    <a data-event="envoi-mail-contrat" class="ajax-modal btn btn-secondary"
+                       title="Envoyer le contrat par mail"
+
+                       href="<?= $urlEmail ?>">
+                <?php endif; ?>
+                <i class="fas fa-paper-plane-top"></i> Envoyer par mail
+            </a>
+            </span>
+        <?php endif; ?>
+        <!-- Lien de téléchargement du fichier -->
+        <?php if ($urlExport): ?>
+
+            <span class="float-end">
+            <a class="btn btn-secondary" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
+                <i class="fas fa-upload"></i> Exporter en PDF
+            </a>
+            </span>
+        <?php endif; ?>
+        <?php if ($contratSignatureActivation && !empty($urlSignatureElectronique)): ?>
+            <span class="float-end">
+            <a class="btn btn-secondary" href="" title="Envoyer pour signature électronique">
+                <i class="fas fa-signature"></i> Envoyer pour signature électronique
+            </a>
+            </span>
+        <?php endif; ?>
+
+        <h3><?= $contrat->toString() ?>
+            <?php if ($avenant_param >= 0): ?>- <?= $contrat->getStructure() ?><?php endif; ?></h3>
+    </div>
+
+    <div class="card-body">
+        <!-- Informations -->
+        <ul style="list-style-type: none">
+            <li><i class="fas fa-thumbs-up"></i> Créé
+                le <?= $contrat->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
+                par <?= $this->utilisateur($contrat->getHistoCreateur()) ?></li>
+            <?php if ($validation): ?>
+                <li><i class="fas fa-thumbs-up"></i> Validé
+                    le <?= $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
+                    par <?= $this->utilisateur($validation->getHistoCreateur()) ?></li>
+            <?php endif; ?>
+            <?php if ($dateEnvoiEmail): ?>
+                <li><i class="fas fa-thumbs-up"></i> Envoyé par email
+                    le <?= $dateEnvoiEmail->format(\Application\Constants::DATE_FORMAT) ?>
+                </li>
+            <?php endif; ?>
+            <?php if ($retourSigne): ?>
+                <li><i class="fas fa-thumbs-up"></i> Retourné signé
+                    le <?= $retourSigne->format(Application\Constants::DATE_FORMAT) ?></li>
+            <?php endif ?>
+            <?php if ($avenant_param < 0): ?>
+                <li><i class="fas fa-thumbs-up"></i> Modifiable par la structure
+                    <?= $contrat->getStructure() ?></li>
+            <?php endif; ?>
+        </ul>
+        <div>
+            Signature du contrat electronique
+        </div>
+
+        <!-- Liste des enseignements concernés -->
+        <div>
+            <hr/>
+            <a title="Cliquez pour afficher/masquer les enseignements concernés"
+               href="#details-enseignements-contrat-<?= $contrat->getId() ?>"
+               role="button"
+               aria-expanded="false"
+               aria-controls="details-enseignements-contrat-<?= $contrat->getId() ?>"
+               data-bs-toggle="collapse"
+            >Enseignements concernés
+                <small>(cliquez pour afficher/cacher)</small>
+            </a>
+            <div class="collapse" id="details-enseignements-contrat-<?= $contrat->getId() ?>">
+                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $contrat, 'services' => $services, 'structure' => $contrat->getStructure(), 'mission' => null, 'contractualiser' => true]); ?>
+            </div>
+        </div>
+    </div>
+
+    <?php if ($urlValidation || $urlSaisieRetour || $urlDevalidation || $urlSuppression): ?>
+        <div class="card-footer">
+            <!-- Actions -->
+            <?php if ($urlValidation): ?>
+                <a
+                        href="<?= $urlValidation ?>"
+                        class="btn btn-primary pop-ajax"
+                        title="Valider le contrat"
+                        data-content="Confirmez-vous cette validation ?"
+                        data-confirm="true"
+                        data-confirm-button="Je confirme"
+                        data-cancel-button="Non"
+                        data-submit-reload="true"
+                >
+                    <i class="fas fa-thumbs-up"></i> Valider
+                </a>
+            <?php endif; ?>
+
+            <?php if ($urlSaisieRetour): ?>
+                <a href="<?= $urlSaisieRetour ?>" class="btn btn-primary pop-ajax" data-submit-reload="true">
+                    <i class="fas fa-calendar-days"></i>
+                    <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?> la date de retour signé
+                </a>
+            <?php endif; ?>
+
+            <?php if ($urlDevalidation): ?>
+                <a
+                        href="<?= $urlDevalidation ?>"
+                        class="btn btn-danger pop-ajax"
+                        data-submit-reload="true"
+                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
+                        data-confirm="true"
+                        data-confirm-button="Oui"
+                        data-cancel-button="Non"
+                >
+                    <i class="fas fa-thumbs-down"></i> Dévalider
+                </a>
+            <?php endif; ?>
+
+            <?php if ($urlSuppression): ?>
+                <a
+                        href="<?= $urlSuppression ?>"
+                        class="btn btn-danger pop-ajax"
+                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression <?= lcfirst($contrat->toString(true, true)) ?> ?</p>"
+                        data-confirm="true"
+                        data-confirm-button="Oui"
+                        data-cancel-button="Non"
+                        data-submit-reload="true"
+                >
+                    <i class="fas fa-trash-can"></i> Supprimer
+                </a>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+</div>

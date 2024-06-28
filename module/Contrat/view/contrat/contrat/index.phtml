@@ -13,6 +13,7 @@ use Service\Entity\Db\TypeService;
  * @var $hasContrat                     boolean
  * @var $services
  * @var $missionNotContrat              bool[]
+ * @var $contratSignatureActivation     boolean
  */
 
 $structList = [];
@@ -103,12 +104,14 @@ $this->messenger() ?>
                                         <?php if ($contratDirect): ?>
                                             <a class="btn btn-primary"
                                                href="<?= $this->url('contrat/creer-mission', ['intervenant' => $intervenant->getId(), 'mission' => $servicesNC->getMission()->getId()]); ?>">
-                                                <i class="fas fa-file"></i> Créer un <?= !isset($missionNotContrat[$servicesNC->getMission()->getId()]) ? 'avenant' : 'contrat' ?>
+                                                <i class="fas fa-file"></i> Créer
+                                                un <?= !isset($missionNotContrat[$servicesNC->getMission()->getId()]) ? 'avenant' : 'contrat' ?>
                                             </a>
                                         <?php else: ?>
                                             <a class="btn btn-primary"
                                                href="<?= $this->url('contrat/creer-mission', ['intervenant' => $intervenant->getId(), 'mission' => $servicesNC->getMission()->getId()]); ?>">
-                                                <i class="fas fa-file"></i> Créer un projet <?= !isset($missionNotContrat[$servicesNC->getMission()->getId()]) ? 'd\'avenant' : 'de contrat' ?>
+                                                <i class="fas fa-file"></i> Créer un
+                                                projet <?= !isset($missionNotContrat[$servicesNC->getMission()->getId()]) ? 'd\'avenant' : 'de contrat' ?>
                                             </a>
                                         <?php endif; ?>
                                     <?php endif;
@@ -148,8 +151,11 @@ $this->messenger() ?>
     <div class="well">
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>
-            <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param]);
-            ?>
+            <?php if ($contratSignatureActivation): ?>
+                <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param, 'contratSignatureActivation' => $contratSignatureActivation]); ?>
+            <?php else: ?>
+                <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param, 'contratSignatureActivation' => $contratSignatureActivation]); ?>
+            <?php endif; ?>
 
         <?php endforeach; ?>
     </div>

@@ -18,6 +18,9 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 
 
+
+
+
 /**
  * Description of ContratAssertion
  *
@@ -90,6 +93,11 @@ class ContratAssertion extends AbstractAssertion
 
                     case Privileges::CONTRAT_DEPOT_RETOUR_SIGNE:
                         return $this->assertDepotRetourSigne($entity);
+
+                    case Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE:
+                        $var = "";
+
+                        return $this->assertEnvoyerSignatureElectronique($entity);
 
                     case Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE:
                         return $this->assertSaisieDateRetour($entity);
@@ -183,7 +191,7 @@ class ContratAssertion extends AbstractAssertion
     {
         if (!$contrat->estUnAvenant()) {
             $contratService = $this->getServiceContrat();
-            $devalid = !$contratService->hasAvenant($contrat);
+            $devalid        = !$contratService->hasAvenant($contrat);
 //            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut dévalider un contrat que si aucun avenant n'existe
         } else {
             $devalid = true;
@@ -238,6 +246,18 @@ class ContratAssertion extends AbstractAssertion
         return $this->asserts([
             $this->assertRole($contrat),
             !$contrat->estUnProjet(),
+        ]);
+    }
+
+
+
+    protected function assertEnvoyerSignatureElectronique(Contrat $contrat)
+    {
+        $var = '';
+
+        return $this->asserts([
+            $this->assertRole($contrat),
+
         ]);
     }
 

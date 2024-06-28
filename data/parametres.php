@@ -221,7 +221,7 @@ Cordialement,
     ],
     "signature_electronique_parapheur"          => [
         "VALEUR"      => "",
-        "DESCRIPTION" => "Choix du type de signature électronique pour l'application",
+        "DESCRIPTION" => "Choix du parpaheur électronique pour l'application",
     ],
     /* Export RH*/
     "export_rh_franchissement"                  => [

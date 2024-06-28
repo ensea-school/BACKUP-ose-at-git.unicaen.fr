@@ -135,9 +135,9 @@ class ContratController extends AbstractController
             $services['contractualises'][$contrat->getId()] = [];
         }
 
-        $sContratListe   = $this->getServiceContratServiceListe();
-        $needToSeeResult = $sContratListe->getListeServiceContratIntervenant($intervenant);
-        $missionNotContrat=[];
+        $sContratListe     = $this->getServiceContratServiceListe();
+        $needToSeeResult   = $sContratListe->getListeServiceContratIntervenant($intervenant);
+        $missionNotContrat = [];
 
         /** @var ContratServiceListe $serviceTest */
         foreach ($needToSeeResult as $serviceTest) {
@@ -150,13 +150,13 @@ class ContratController extends AbstractController
                 if (!isset($services['non-contractualises'][$serviceTest->getStructure()->getId()])) {
                     $services['non-contractualises'][$serviceTest->getStructure()->getId()] = [];
                     foreach (TypeService::CODES as $code) {
-                        $services['non-contractualises'][$serviceTest->getStructure()->getId()][$code]     = [];
+                        $services['non-contractualises'][$serviceTest->getStructure()->getId()][$code] = [];
                     }
                 }
                 $services ['non-contractualises'][$serviceTest->getStructure()->getId()][$serviceTest->getTypeService()->getCode()][$serviceTest->getId()] = $serviceTest;
-                if($serviceTest->getTypeService()->getCode() == TypeService::CODE_MISSION){
+                if ($serviceTest->getTypeService()->getCode() == TypeService::CODE_MISSION) {
                     $mission = $this->getServiceContrat()->getContratInitialMission($serviceTest->getMission());
-                    if($mission == null){
+                    if ($mission == null) {
                         $missionNotContrat[$serviceTest->getMission()->getId()] = true;
                     }
                 }
@@ -170,11 +170,16 @@ class ContratController extends AbstractController
         $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
 
 
-        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
-        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+        $contratDirectResult        = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect              = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+        $contratSignatureActivation = false;
+        if (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))
+            && $intervenant->getStatut()->isContratSignatureActivation()) {
+            $contratSignatureActivation = true;
+        }
 
 
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect', 'missionNotContrat');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect', 'missionNotContrat', 'contratSignatureActivation');
     }
 
 
@@ -227,13 +232,15 @@ class ContratController extends AbstractController
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
     }
 
+
+
     public function creerMissionAction()
     {
         $this->initFilters();
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-        $mission = $this->getEvent()->getParam('mission');
+        $mission   = $this->getEvent()->getParam('mission');
         $structure = $mission->getStructure();
         /* @var $structure Structure */
 
@@ -273,6 +280,8 @@ class ContratController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
     }
+
+
 
     /**
      * Suppression d'un projet de contrat/avenant par la composante d'intervention.
@@ -421,7 +430,7 @@ class ContratController extends AbstractController
         $contratDateSansFichier       = ($contratDateSansFichierResult == Parametre::CONTRAT_DATE);
 
         if ($contrat->getDateRetourSigne() != null || $contrat->getFichier()->count() > 0 || $contratDateSansFichier) {
-            $form->bindRequestSave($contrat, $this->getRequest(), function () use ($contrat, $contratToString) {
+            $form->bindRequestSave($contrat, $this->getRequest(), function() use ($contrat, $contratToString){
 
                 $this->getServiceContrat()->save($contrat);
                 $this->updateTableauxBord($contrat->getIntervenant());
@@ -622,6 +631,23 @@ class ContratController extends AbstractController
         $this->updateTableauxBord($contrat->getIntervenant());
 
         return $this->redirect()->toRoute('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true);
+    }
+
+
+
+    public function envoyerSignatureElectronique()
+    {
+        /*
+         * 1 - On vérifie que l'on a bien le privilège pour envoyer dans le parapheur le contrat pour signature
+         * 2 - On génére le PDF et on le stock dans contrat_fichier pour avoir le fichier physique sur le serveur
+         * 3 - On récupére les informations des personnes signataires (intervenant, role devant signer le contrat pour ce statut)
+         * 4 - On créer la signature electronique en envoyant le document dans le parapheur configuré
+         * 5 - Un process doit vérfier régulièrement l'état d'avancement du contrat dans le parapheur
+         * 6 - Si signature complète, on met à jour la date de retour signé sur le contrat pour pouvoir avancer dans le workflow
+         * 7 - On récupère le document signé et on remplace le fichier dans contrat_fichier
+         *
+         * 2 -
+         * */
     }
 
 

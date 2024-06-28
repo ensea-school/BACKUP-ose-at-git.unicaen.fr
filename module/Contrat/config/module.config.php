@@ -241,6 +241,7 @@ return [
                 Privileges::CONTRAT_PROJET_GENERATION,
                 Privileges::CONTRAT_CONTRAT_GENERATION,
                 Privileges::CONTRAT_ENVOI_EMAIL,
+                Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE,
                 ContratAssertion::PRIV_LISTER_FICHIERS,
                 ContratAssertion::PRIV_AJOUTER_FICHIER,
                 ContratAssertion::PRIV_SUPPRIMER_FICHIER,

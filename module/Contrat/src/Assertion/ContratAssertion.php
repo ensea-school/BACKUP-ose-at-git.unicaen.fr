@@ -95,8 +95,6 @@ class ContratAssertion extends AbstractAssertion
                         return $this->assertDepotRetourSigne($entity);
 
                     case Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE:
-                        $var = "";
-
                         return $this->assertEnvoyerSignatureElectronique($entity);
 
                     case Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE:

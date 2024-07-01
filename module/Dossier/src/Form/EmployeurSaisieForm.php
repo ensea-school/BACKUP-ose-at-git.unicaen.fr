@@ -4,6 +4,7 @@ namespace Dossier\Form;
 
 use Dossier\Entity\Db\Employeur;
 use Application\Form\AbstractForm;
+use Dossier\Hydrator\EmployeurHydrator;
 use Laminas\Form\FormInterface;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
@@ -15,6 +16,7 @@ class EmployeurSaisieForm extends AbstractForm
     {
         $ignore = ["identifiantAssociation", "sourceCode", "source", "critereRecherche"];
         $this->spec(Employeur::class, $ignore);
+        $this->setHydrator(new EmployeurHydrator());
         $this->build();
         $this->get('raisonSociale')->setLabel('Raison sociale');
         $this->get('nomCommercial')->setLabel('Nom commercial');

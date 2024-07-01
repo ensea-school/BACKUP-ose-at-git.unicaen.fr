@@ -10,6 +10,7 @@ use Dossier\Form\Traits\EmployeurSaisieFormAwareTrait;
 use Dossier\Service\Traits\EmployeurServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenVue\View\Model\VueModel;
 
 /**
  * Description of EmployeurController
@@ -22,7 +23,7 @@ class EmployeurController extends AbstractController
     use EmployeurServiceAwareTrait;
     use EmployeurSaisieFormAwareTrait;
 
-    public function indexAction ()
+    public function indexAction()
     {
         $canEdit    = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_EDITION));
         $critere    = $this->params()->fromPost('critere');
@@ -34,7 +35,26 @@ class EmployeurController extends AbstractController
 
 
 
-    public function saisieAction ()
+    public function employeurAction()
+    {
+        $vm = new VueModel();
+        $vm->setTemplate('employeur/liste-employeur');
+
+        return $vm;
+    }
+
+
+
+    public function dataEmployeurAction()
+    {
+        $post = $this->axios()->fromPost();
+
+        return $this->getServiceEmployeur()->getDataEmployeur($post);
+    }
+
+
+
+    public function saisieAction()
     {
         $employeur = $this->getEvent()->getParam('employeur');
 
@@ -48,7 +68,7 @@ class EmployeurController extends AbstractController
         $form = $this->getFormEmployeurSaisie();
 
 
-        $form->bindRequestSave($employeur, $this->getRequest(), function () use ($employeur, $form) {
+        $form->bindRequestSave($employeur, $this->getRequest(), function () use ($employeur, $form){
             /**
              * @var Employeur $employeur
              */
@@ -68,7 +88,7 @@ class EmployeurController extends AbstractController
 
 
 
-    public function supprimerAction ()
+    public function supprimerAction()
     {
         $employeur = $this->getEvent()->getParam('employeur');
         $this->getServiceEmployeur()->delete($employeur, true);
@@ -78,13 +98,9 @@ class EmployeurController extends AbstractController
 
 
 
-    public function rechercheAction ()
+    public function rechercheAction()
     {
 
-
-        /*$this->em()->getFilters()->enable('historique')->init([
-            Employeur::class,
-        ]);*/
         $term = $this->params()->fromQuery('term');
 
 
@@ -95,7 +111,7 @@ class EmployeurController extends AbstractController
 
 
 
-    public function rechercheJsonAction ()
+    public function rechercheJsonAction()
     {
         $critere = $this->params()->fromPost('critere');
 

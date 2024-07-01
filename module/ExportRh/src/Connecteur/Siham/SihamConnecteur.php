@@ -2,16 +2,17 @@
 
 namespace ExportRh\Connecteur\Siham;
 
+use Contrat\Service\ContratServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Form\Fieldset;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
 use Lieu\Service\VoirieServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 use UnicaenSiham\Exception\SihamException;
 use UnicaenSiham\Service\Siham;
@@ -23,19 +24,20 @@ class SihamConnecteur implements ConnecteurRhInterface
     use ExportRhServiceAwareTrait;
     use AdresseNumeroComplServiceAwareTrait;
     use VoirieServiceAwareTrait;
+    use ContratServiceAwareTrait;
 
     public Siham $siham;
 
 
 
-    public function __construct (Siham $siham)
+    public function __construct(Siham $siham)
     {
         $this->siham = $siham;
     }
 
 
 
-    public function rechercherIntervenantRh ($nomUsuel = '', $prenom = '', $insee = ''): array
+    public function rechercherIntervenantRh($nomUsuel = '', $prenom = '', $insee = ''): array
     {
         $params = [
             'nomUsuel'    => $nomUsuel,
@@ -65,11 +67,13 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererAffectationEnCoursIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant): ?array
+    public function recupererAffectationEnCoursIntervenantRh(Intervenant $intervenant): ?array
     {
-        $typeAffectation        = (isset($this->siham->getConfig()['type-affectation'])) ? $this->siham->getConfig()['type-affectation'] : ['FUN'];
-        $affectations           = [];
-        $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+        $typeAffectation         = (isset($this->siham->getConfig()['type-affectation'])) ? $this->siham->getConfig()['type-affectation'] : ['FUN'];
+        $affectations            = [];
+        $donneesAdministratives  = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+        $anneeUniversitaireDebut = $intervenant->getAnnee()->getDateDebut();
+        $anneeUniversitaireFin   = $intervenant->getAnnee()->getDateFin();
 
         if (!empty($donneesAdministratives['listeAffectations']) || !empty($donneesAdministratives->listeAffectations)) {
             $listeAffectations = $donneesAdministratives['listeAffectations'];
@@ -79,7 +83,9 @@ class SihamConnecteur implements ConnecteurRhInterface
                         $dateDebutAffectation = new \DateTime($affectation->dateDebutAffectation);
                         $dateFinAffectation   = new \DateTime($affectation->dateFinAffectation);
                         $currentDate          = new \DateTime();
-                        if ($currentDate > $dateDebutAffectation and $currentDate < $dateFinAffectation) {
+                        /*Si il y a dejà eu une affectation dans l'année universitaire en cours on la remonte afin que OSE ne propose
+                        plus le renouvellement de l'intervenant. Pour un second renouvellement en cours d'année il faudra le faire manuellement*/
+                        if ($anneeUniversitaireFin > $dateDebutAffectation and $anneeUniversitaireDebut < $dateFinAffectation) {
                             $affectations[] = $affectation;
                         }
                     }
@@ -90,7 +96,9 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $dateDebutAffectation = new \DateTime($listeAffectations->dateDebutAffectation);
                     $dateFinAffectation   = new \DateTime($listeAffectations->dateFinAffectation);
                     $currentDate          = new \DateTime();
-                    if ($currentDate > $dateDebutAffectation and $currentDate < $dateFinAffectation) {
+                    /*Si il y a dejà eu une affectation dans l'année universitaire en cours on la remonte afin que OSE ne propose
+                        plus le renouvellement de l'intervenant. Pour un second renouvellement en cours d'année il faudra le faire manuellement*/
+                    if ($anneeUniversitaireFin > $dateDebutAffectation and $anneeUniversitaireDebut < $dateFinAffectation) {
                         $affectations[] = $listeAffectations;
                     }
                 }
@@ -102,7 +110,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererDonneesAdministrativesIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant): ?array
+    public function recupererDonneesAdministrativesIntervenantRh(Intervenant $intervenant): ?array
     {
         try {
             $codeRh = '';
@@ -136,7 +144,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function trouverCodeRhByInsee (\Intervenant\Entity\Db\Intervenant $intervenant): ?string
+    public function trouverCodeRhByInsee(Intervenant $intervenant): ?string
     {
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         $numeroInsee        = (!empty($intervenant->getNumeroInsee())) ? $intervenant->getNumeroInsee() : $intervenantDossier->getNumeroInsee();
@@ -158,10 +166,12 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererContratEnCoursIntervenantRh (Intervenant $intervenant): ?array
+    public function recupererContratEnCoursIntervenantRh(Intervenant $intervenant): ?array
     {
-        $contrats               = [];
-        $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+        $contrats                = [];
+        $donneesAdministratives  = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+        $anneeUniversitaireDebut = $intervenant->getAnnee()->getDateDebut();
+        $anneeUniversitaireFin   = $intervenant->getAnnee()->getDateFin();
 
         if (!empty($donneesAdministratives['listeContrats']) || !empty($donneesAdministratives->listeContrats)) {
             $listeContrats = (isset($donneesAdministratives['listeContrats']) && is_array($donneesAdministratives['listeContrats'])) ? $donneesAdministratives['listeContrats'] : [$donneesAdministratives['listeContrats']];
@@ -171,7 +181,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $dateDebutContrat = new \DateTime($contrat->dateDebutContrat);
                 $dateFinContrat   = new \DateTime($contrat->dateFinReelleContrat);
                 $currentDate      = new \DateTime();
-                if ($currentDate > $dateDebutContrat and $currentDate < $dateFinContrat) {
+
+                if ($anneeUniversitaireFin > $dateDebutContrat and $anneeUniversitaireDebut < $dateFinContrat) {
                     $contrats[] = $contrat;
                 }
             }
@@ -182,7 +193,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function prendreEnChargeIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
+    public function prendreEnChargeIntervenantRh(Intervenant $intervenant, $datas): ?string
     {
         try {
             /* Récupération du dossier de l'intervenant */
@@ -191,9 +202,18 @@ class SihamConnecteur implements ConnecteurRhInterface
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
 
-            $anneeUniversitaire = $intervenant->getAnnee();
-            $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
-            $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            /*Recherche de la date d'effet à passer selon enseignement ou mission, si mission on prend la première mission de l'année universitaire
+            sinon on prend les dates de début et de fin de l'année universitaire*/
+            $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
+            if (!empty($firstMission)) {
+                $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
+                $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
+            } else {
+                $anneeUniversitaire = $intervenant->getAnnee();
+                $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
+                $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            }
+
 
             /*CARRIERE*/
             $carriere = [
@@ -215,14 +235,15 @@ class SihamConnecteur implements ConnecteurRhInterface
             //On récupére le nombre d'heures du contrat et le taux horaire appliqué
             $infos  = $this->getInfosContrat($intervenant);
             $config = $this->siham->getConfig();
-            if (array_key_exists('contrat', $this->siham->getConfig())) {
+            if ($this->siham->getConfig()['contrat']) {
                 //On récupere le gradeTG pour le contrat
                 $codeStatut = $datas['connecteurForm']['statut'];
-                $gradeTG    = $this->recupererGradeTG($codeStatut);
                 if ($this->siham->getConfig()['contrat']['active']) {
+                    $gradeTG   = $this->recupererGradeTG($codeStatut);
                     $contrat[] =
                         ['dateDebutContrat'  => $dateEffet,
                          'dateFinContrat'    => $dateFin,
+                         'categorieContrat'  => isset($this->siham->getConfig()['contrat']['parameters']['categorieContrat']) ? $this->siham->getConfig()['contrat']['parameters']['categorieContrat'] : '',
                          'natureContrat'     => $this->siham->getConfig()['contrat']['parameters']['natureContrat'],
                          'typeContrat'       => $this->siham->getConfig()['contrat']['parameters']['typeContrat'],
                          'typeLienJuridique' => $this->siham->getConfig()['contrat']['parameters']['typeLienJuridique'],
@@ -380,7 +401,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             ];
 
             //Si la creation du contrat via les WS est activé
-            if (array_key_exists('contrat', $this->siham->getConfig())) {
+            if ($this->siham->getConfig()['contrat']) {
 
                 if ($this->siham->getConfig()['contrat']['active']) {
                     $params['listeContrats'] = $contrat;
@@ -399,7 +420,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function getInfosContrat (Intervenant $intervenant): array
+    public function getInfosContrat(Intervenant $intervenant): array
     {
         $infos = [
             'totalHeure' => '',
@@ -419,7 +440,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererGradeTG (string $codeStatut): ?string
+    public function recupererGradeTG(string $codeStatut): ?string
     {
         $gradeTG = '';
 
@@ -432,8 +453,11 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public static function cleanDatas ($str, $strict = false, $encoding = 'UTF-8')
+    public static function cleanDatas($str, $strict = false, $encoding = 'UTF-8')
     {
+        if (empty($str)) {
+            return $str;
+        }
         $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ()…,<> /?€%!":’\'+.';
         $to   = 'AAAAAACDEEEEIIIIOOOOOOUUUUYNaaaaaacdeeeeiiiioooooouuuuyn                  ';
 
@@ -457,7 +481,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function renouvellerIntervenantRH (\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
+    public function renouvellerIntervenantRH(Intervenant $intervenant, $datas): ?string
     {
         try {
             /* Récupération du dossier de l'intervenant */
@@ -499,13 +523,11 @@ class SihamConnecteur implements ConnecteurRhInterface
             $config  = $this->siham->getConfig();
             $contrat = [];
 
-            if (array_key_exists('contrat', $this->siham->getConfig())) {
+            if ($this->siham->getConfig()['contrat']) {
                 //On récupere le gradeTG pour le contrat
-
                 $codeStatut = $datas['connecteurForm']['statut'];
-                $gradeTG    = $this->recupererGradeTG($codeStatut);
-
                 if ($this->siham->getConfig()['contrat']['active']) {
+                    $gradeTG   = $this->recupererGradeTG($codeStatut);
                     $contrat[] =
                         ['dateDebutContrat'  => $dateEffet,
                          'dateFinContrat'    => $dateFin,
@@ -514,6 +536,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                          'typeLienJuridique' => $this->siham->getConfig()['contrat']['parameters']['typeLienJuridique'],
                          'modeRemuneration'  => $this->siham->getConfig()['contrat']['parameters']['modeRemuneration'],
                          'modeDeGestion'     => $this->siham->getConfig()['contrat']['parameters']['modeDeGestion'],
+                         'categorieContrat'  => isset($this->siham->getConfig()['contrat']['parameters']['categorieContrat']) ? $this->siham->getConfig()['contrat']['parameters']['categorieContrat'] : '',
                          'gradeTG'           => $gradeTG,
                          'tauxHoraires'      => $infos['taux'],
                          'nbHeuresContrat'   => $infos['totalHeure'],
@@ -563,7 +586,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
             //Si la creation du contrat via les WS est activé
-            if (array_key_exists('contrat', $this->siham->getConfig())) {
+            if ($this->siham->getConfig()['contrat']) {
                 if ($this->siham->getConfig()['contrat']['active']) {
                     $params['listeContrats'] = $contrat;
                 }
@@ -583,7 +606,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function synchroniserDonneesPersonnellesIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant, $datas): bool
+    public function synchroniserDonneesPersonnellesIntervenantRh(Intervenant $intervenant, $datas): bool
     {
         try {
 
@@ -697,7 +720,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererIntervenantRh (\Intervenant\Entity\Db\Intervenant $intervenant): ?IntervenantRh
+    public function recupererIntervenantRh(Intervenant $intervenant): ?IntervenantRh
     {
         $agent  = null;
         $codeRh = $this->trouverCodeRhByInsee($intervenant);
@@ -755,7 +778,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function cloreDossier (Intervenant $intervenant): ?bool
+    public function cloreDossier(Intervenant $intervenant): ?bool
     {
 
         try {
@@ -786,7 +809,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererListeUO (): ?array
+    public function recupererListeUO(): ?array
     {
         /*On récupére les UO avec le type paramétré*/
         $uo     = [];
@@ -811,49 +834,49 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererListePositions (): ?array
+    public function recupererListePositions(): ?array
     {
         return $this->siham->recupererListePositions();
     }
 
 
 
-    public function recupererListeEmplois (): ?array
+    public function recupererListeEmplois(): ?array
     {
         return $this->siham->recupererListeEmplois();
     }
 
 
 
-    public function recupererListeStatuts (): ?array
+    public function recupererListeStatuts(): ?array
     {
         return $this->siham->recupererListeStatuts();
     }
 
 
 
-    public function recupererListeModalites (): ?array
+    public function recupererListeModalites(): ?array
     {
         return $this->siham->recupererListeModalites();
     }
 
 
 
-    public function recupererListeContrats (): ?array
+    public function recupererListeContrats(): ?array
     {
         return $this->siham->recupererListeContrats();
     }
 
 
 
-    public function getConnecteurName (): string
+    public function getConnecteurName(): string
     {
         return 'siham';
     }
 
 
 
-    public function recupererFieldsetConnecteur (): Fieldset
+    public function recupererFieldsetConnecteur(): Fieldset
     {
         $fieldset = new SihamFieldset('connecteurForm', []);
 

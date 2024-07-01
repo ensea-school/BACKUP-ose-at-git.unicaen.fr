@@ -20,7 +20,7 @@ class StatutSaisieForm extends AbstractForm
     use ParametresServiceAwareTrait;
     use DossierAutreServiceAwareTrait;
 
-    public function init ()
+    public function init()
     {
         $labels = [
             'libelle'                       => 'Libellé',
@@ -64,6 +64,7 @@ class StatutSaisieForm extends AbstractForm
             'mission'                       => 'Visualisation/Modification de mission',
             'missionRealise'                => 'Suivi de mission',
             'offreEmploiPostuler'           => 'Postuler à une offre d\'emploi',
+            'missionIndemnitees'            => 'Gestion des indémnitées de fin de contrat',
             'modeEnseignementPrevisionnel'  => 'Mode de saisie pour les enseignements prévisionnels',
             'modeEnseignementRealise'       => 'Mode de saisie pour les enseignements réalisés',
             'modeCalcul'                    => 'Mode de calcul de la paie (ex : A, B etc...)',
@@ -78,6 +79,7 @@ class StatutSaisieForm extends AbstractForm
 
         $dveElements = [
             'dossier',
+            'pieceJustificative',
             'servicePrevu',
             'serviceRealise',
             'referentielPrevu',
@@ -89,8 +91,6 @@ class StatutSaisieForm extends AbstractForm
         $ignored = [
             'id',
             'ordre',
-            'pieceJustificativeVisualisation',
-            'pieceJustificativeEdition',
             'conseilRestreintVisualisation',
             'conseilAcademiqueVisualisation',
             'contratVisualisation',
@@ -99,6 +99,7 @@ class StatutSaisieForm extends AbstractForm
             'modificationServiceDuVisualisation',
             'missionRealiseEdition',
             'offreEmploiPostuler',
+            'missionIndemnitees',
             'modeEnseignementPrevisionnel',
             'modeEnseignementRealise',
 
@@ -148,10 +149,10 @@ class StatutSaisieForm extends AbstractForm
                 ],
             ],
             'hydrator' => [
-                'getter' => function (Statut $statut, string $name) {
+                'getter' => function (Statut $statut, string $name){
                     return $statut->getModeEnseignementPrevisionnel();
                 },
-                'setter' => function (Statut $statut, $value, string $name) {
+                'setter' => function (Statut $statut, $value, string $name){
                     $statut->setModeEnseignementPrevisionnel($value);
                 },
             ],
@@ -169,10 +170,10 @@ class StatutSaisieForm extends AbstractForm
                 ],
             ],
             'hydrator' => [
-                'getter' => function (Statut $statut, string $name) {
+                'getter' => function (Statut $statut, string $name){
                     return $statut->getModeEnseignementRealise();
                 },
-                'setter' => function (Statut $statut, $value, string $name) {
+                'setter' => function (Statut $statut, $value, string $name){
                     $statut->setModeEnseignementRealise($value);
                 },
             ],
@@ -187,12 +188,12 @@ class StatutSaisieForm extends AbstractForm
                 'pattern' => '[0-9]+([,.][0-9]+)?',
             ],
             'hydrator'   => [
-                'getter' => function (Statut $statut, string $name) {
+                'getter' => function (Statut $statut, string $name){
                     $taux = $statut->getTauxChargesPatronales();
 
                     return $taux * 100;
                 },
-                'setter' => function (Statut $statut, $value, string $name) {
+                'setter' => function (Statut $statut, $value, string $name){
                     $taux = $value / 100;
                     $statut->setTauxChargesPatronales($taux);
                 },
@@ -206,12 +207,12 @@ class StatutSaisieForm extends AbstractForm
                 'pattern' => '[0-9]+([,.][0-9]+)?',
             ],
             'hydrator'   => [
-                'getter' => function (Statut $statut, string $name) {
+                'getter' => function (Statut $statut, string $name){
                     $taux = $statut->getTauxChargesTTC();
 
                     return $taux * 100;
                 },
-                'setter' => function (Statut $statut, $value, string $name) {
+                'setter' => function (Statut $statut, $value, string $name){
                     $taux = $value / 100;
                     $statut->setTauxChargesTTC($taux);
                 },
@@ -228,12 +229,12 @@ class StatutSaisieForm extends AbstractForm
                 ],
             ],
             'hydrator' => [
-                'getter' => function (Statut $statut, string $name) {
+                'getter' => function (Statut $statut, string $name){
                     $real = $statut->getMissionRealiseEdition() ? 'edition' : 'visualisation';
 
                     return $real;
                 },
-                'setter' => function (Statut $statut, $value, string $name) {
+                'setter' => function (Statut $statut, $value, string $name){
                     $statut->setMissionRealiseEdition($value === 'edition');
                 },
             ],
@@ -270,7 +271,7 @@ class StatutSaisieForm extends AbstractForm
                     'value_options' => $valueOptions,
                 ],
                 'hydrator' => [
-                    'getter' => function (Statut $statut, string $name) {
+                    'getter' => function (Statut $statut, string $name){
                         $getter = 'get' . ucfirst($name);
 
                         $access = $statut->{$getter}();
@@ -287,7 +288,7 @@ class StatutSaisieForm extends AbstractForm
                             return 'desactive';
                         }
                     },
-                    'setter' => function (Statut $statut, $value, string $name) {
+                    'setter' => function (Statut $statut, $value, string $name){
                         $access = false;
                         $visu   = false;
                         $edit   = false;
@@ -311,43 +312,7 @@ class StatutSaisieForm extends AbstractForm
         }
 
         $this->spec([
-            'pieceJustificative' => [
-                'type'     => 'Select',
-                'name'     => 'pieceJustificative',
-                'options'  => [
-                    'value_options' => [
-                        'active'        => 'Activé mais non visible par l\'intervenant',
-                        'visualisation' => 'Activé et visible par l\'intervenant',
-                        'edition'       => 'Activé et modifiable par l\'intervenant',
-                    ],
-                ],
-                'hydrator' => [
-                    'getter' => function (Statut $statut, string $name) {
-                        $visu = $statut->getPieceJustificativeVisualisation();
-                        $edit = $statut->getPieceJustificativeEdition();
-                        if ($edit && $visu) {
-                            return 'edition';
-                        } elseif ($visu) {
-                            return 'visualisation';
-                        } else {
-                            return 'active';
-                        }
-                    },
-                    'setter' => function (Statut $statut, $value, string $name) {
-                        $visu = false;
-                        $edit = false;
-                        switch ($value) {
-                            case 'edition':
-                                $edit = true;
-                            case 'visualisation':
-                                $visu = true;
-                        }
-                        $statut->setPieceJustificativeVisualisation($visu);
-                        $statut->setPieceJustificativeEdition($edit);
-                    },
-                ],
-            ],
-            'conseilRestreint'   => [
+            'conseilRestreint'  => [
                 'type'     => 'Select',
                 'name'     => 'conseilRestreint',
                 'options'  => [
@@ -358,7 +323,7 @@ class StatutSaisieForm extends AbstractForm
                     ],
                 ],
                 'hydrator' => [
-                    'getter' => function (Statut $statut, string $name) {
+                    'getter' => function (Statut $statut, string $name){
                         $access = $statut->getConseilRestreint();
                         $visu   = $statut->getConseilRestreintVisualisation();
 
@@ -370,7 +335,7 @@ class StatutSaisieForm extends AbstractForm
                             return 'desactive';
                         }
                     },
-                    'setter' => function (Statut $statut, $value, string $name) {
+                    'setter' => function (Statut $statut, $value, string $name){
                         $access = false;
                         $visu   = false;
                         switch ($value) {
@@ -384,7 +349,7 @@ class StatutSaisieForm extends AbstractForm
                     },
                 ],
             ],
-            'conseilAcademique'  => [
+            'conseilAcademique' => [
                 'type'     => 'Select',
                 'name'     => 'conseilAcademique',
                 'options'  => [
@@ -395,7 +360,7 @@ class StatutSaisieForm extends AbstractForm
                     ],
                 ],
                 'hydrator' => [
-                    'getter' => function (Statut $statut, string $name) {
+                    'getter' => function (Statut $statut, string $name){
                         $access = $statut->getConseilAcademique();
                         $visu   = $statut->getConseilAcademiqueVisualisation();
 
@@ -407,7 +372,7 @@ class StatutSaisieForm extends AbstractForm
                             return 'desactive';
                         }
                     },
-                    'setter' => function (Statut $statut, $value, string $name) {
+                    'setter' => function (Statut $statut, $value, string $name){
                         $access = false;
                         $visu   = false;
                         switch ($value) {
@@ -421,7 +386,7 @@ class StatutSaisieForm extends AbstractForm
                     },
                 ],
             ],
-            'contrat'            => [
+            'contrat'           => [
                 'type'     => 'Select',
                 'name'     => 'contrat',
                 'options'  => [
@@ -434,7 +399,7 @@ class StatutSaisieForm extends AbstractForm
                     ],
                 ],
                 'hydrator' => [
-                    'getter' => function (Statut $statut, string $name) {
+                    'getter' => function (Statut $statut, string $name){
                         $access     = $statut->getContrat();
                         $visu       = $statut->getContratVisualisation();
                         $depot      = $statut->getContratDepot();
@@ -452,7 +417,7 @@ class StatutSaisieForm extends AbstractForm
                             return 'desactive';
                         }
                     },
-                    'setter' => function (Statut $statut, $value, string $name) {
+                    'setter' => function (Statut $statut, $value, string $name){
                         $access     = false;
                         $visu       = false;
                         $depot      = false;
@@ -475,17 +440,17 @@ class StatutSaisieForm extends AbstractForm
                 ],
             ],
             //TODO : Créer un validateur pour le rendre false que quand contrat desactivé
-            'contratEtatSortie'  => [
+            'contratEtatSortie' => [
                 'input' => [
                     'required' => false,
                 ],
             ],
-            'avenantEtatSortie'  => [
+            'avenantEtatSortie' => [
                 'input' => [
                     'required' => false,
                 ],
             ],
-            'tauxRemu'           => [
+            'tauxRemu'          => [
                 'input' => [
                     'required' => false,
                 ],
@@ -502,7 +467,7 @@ class StatutSaisieForm extends AbstractForm
                     ],
                 ],
                 'hydrator' => [
-                    'getter' => function (Statut $statut, string $name) {
+                    'getter' => function (Statut $statut, string $name){
                         $access = $statut->getModificationServiceDu();
                         $visu   = $statut->getModificationServiceDuVisualisation();
 
@@ -514,7 +479,7 @@ class StatutSaisieForm extends AbstractForm
                             return 'desactive';
                         }
                     },
-                    'setter' => function (Statut $statut, $value, string $name) {
+                    'setter' => function (Statut $statut, $value, string $name){
                         $access = false;
                         $visu   = false;
                         switch ($value) {
@@ -543,7 +508,7 @@ class StatutSaisieForm extends AbstractForm
                     ],
                 ],
                 'hydrator' => [
-                    'getter' => function (Statut $statut, string $name) {
+                    'getter' => function (Statut $statut, string $name){
                         $postuler = $statut->getOffreEmploiPostuler();
 
                         if ($postuler) {
@@ -552,7 +517,7 @@ class StatutSaisieForm extends AbstractForm
                             return 'desactive';
                         }
                     },
-                    'setter' => function (Statut $statut, $value, string $name) {
+                    'setter' => function (Statut $statut, $value, string $name){
                         $postuler = false;
                         switch ($value) {
                             case 'edition':
@@ -563,6 +528,39 @@ class StatutSaisieForm extends AbstractForm
                             break;
                         }
                         $statut->setOffreEmploiPostuler($postuler);
+                    },
+                ],
+            ],
+            'missionIndemnitees'    => [
+                'type'     => 'Select',
+                'name'     => 'missionIndemnitees',
+                'options'  => [
+                    'value_options' => [
+                        'desactive' => 'Désactivé',
+                        'edition'   => 'Activé pour l\'intervenant',
+                    ],
+                ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name){
+                        $indemnitees = $statut->getMissionIndemnitees();
+
+                        if ($indemnitees) {
+                            return 'edition';
+                        } else {
+                            return 'desactive';
+                        }
+                    },
+                    'setter' => function (Statut $statut, $value, string $name){
+                        $indemnitees = false;
+                        switch ($value) {
+                            case 'edition':
+                                $indemnitees = true;
+                            break;
+                            case 'desactive':
+                                $indemnitees = false;
+                            break;
+                        }
+                        $statut->setMissionIndemnitees($indemnitees);
                     },
                 ],
             ],

@@ -26,18 +26,10 @@ SELECT
 	fonds,
 	poste_reservation_credit,
 	--On impact le potentiel écart de pourcentage détecté pour s'assurer que la somme des pourcentages fasse 100%
- 	to_char((CASE
-                WHEN pourc_ecart >= 0 THEN
-                    CASE
-                        WHEN rank() OVER (PARTITION BY periode_id, intervenant_id   ORDER BY operation,centre_cout, pourcentage) = 1
-                        THEN pourcentage + pourc_ecart
-                        ELSE pourcentage END
-                ELSE
-                    CASE
-                        WHEN rank() OVER (PARTITION BY periode_id, intervenant_id   ORDER BY operation, centre_cout, pourcentage) = 1
-                        THEN pourcentage - pourc_ecart
-                        ELSE pourcentage END
-       END))	pourcentage,
+    CASE
+        WHEN rank() OVER (PARTITION BY periode_id, intervenant_id,code_indemnite   ORDER BY operation,centre_cout, pourcentage) = 1
+        THEN pourcentage + pourc_ecart
+        ELSE pourcentage END                                                                                        pourcentage,
      nombres_heures,
      flmodi,
      numord,
@@ -50,9 +42,9 @@ SELECT
 FROM(
 SELECT
 	imputation2.*,
-	SUM(pourcentage) OVER ( PARTITION BY periode_id, intervenant_id)   somme,
+	SUM(pourcentage) OVER ( PARTITION BY periode_id, intervenant_id,code_indemnite)   somme,
 	--On regarde si la somme des pourcentages est égale à 100% sinon on calcule l'écart qu'il faudra redistribuer ou retirer
-	100 - SUM(pourcentage) OVER ( PARTITION BY periode_id, intervenant_id)  pourc_ecart
+	100 - SUM(pourcentage) OVER ( PARTITION BY periode_id, intervenant_id,code_indemnite)  pourc_ecart
 FROM (
 	SELECT 'P'                                                                                										type,
 		   NULL																				  										uo,
@@ -66,7 +58,7 @@ FROM (
 	       NULL                                                                               										fonds,
 	       NULL                                                                               										poste_reservation_credit,
 	       CASE WHEN montant_hetd > 0
-	       	    THEN ROUND(montant_hetd / SUM(montant_hetd) OVER( PARTITION BY periode_id,intervenant_id),2)*100
+	       	    THEN ROUND(montant_hetd / SUM(montant_hetd) OVER( PARTITION BY periode_id,intervenant_id,code_indemnite)*100,2)
 	       	    ELSE 0  END																											pourcentage,
 	       CASE WHEN hetd >= 100 THEN FLOOR(hetd) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0)
 	       ELSE (lpad(FLOOR(hetd), 2, '0')) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0) END         						nombres_heures,
@@ -89,9 +81,9 @@ FROM (
 		       MAX(TRIM(to_char(last_day(add_months(a.date_debut, p.ecart_mois)),'dd/mm/yyyy')))             date_fin,
 		       CASE
 		          WHEN MAX(th.code) = 'fc_majorees'  THEN '1542'
-		          WHEN MAX(mis.mission_id) IS NOT NULL THEN '0125'
+		          WHEN MAX(mis.mission_id) IS NOT NULL THEN '="0125"'
 		          ELSE
-		             CASE WHEN MAX(ti.code) = 'P' THEN '="0204"' ELSE '="2251"' END
+		             CASE WHEN MAX(ti.code) = 'P' THEN '="0204"' ELSE '2251' END
 		          END                                                                                        code_indemnite,
 		       MAX(CASE WHEN cc.parent_id IS NULL THEN cc.source_code ELSE cc2.source_code END)              centre_cout_code,
 			   MAX(CASE WHEN cc.parent_id IS NULL THEN cc.id ELSE cc2.id END)                                centre_cout_id,
@@ -127,6 +119,12 @@ FROM (
 			GROUP BY
 				i.id,
 			   	p.id,
+			   	CASE
+		          WHEN th.code = 'fc_majorees'  THEN '1542'
+		          WHEN mis.mission_id IS NOT NULL THEN '="0125"'
+		          ELSE
+		             CASE WHEN ti.code = 'P' THEN '="0204"' ELSE '2251' END
+		          END,
 				CASE WHEN cc.parent_id IS NULL THEN cc.id ELSE cc2.id END,
 			   	CASE WHEN cc.parent_id IS NOT NULL THEN cc.id ELSE NULL END
 			 ORDER BY i.id, p.id) imputation) imputation2) imputation3
@@ -146,7 +144,7 @@ SELECT
 	null 																					      destination,
 	null 																						  fonds,
 	null 																					      poste_reservation_credit,
-	'100'																						  pourcentage,
+	100																						  pourcentage,
 	null 																						  nombres_heures,
     null 																						  flmodi,
     null 																						  numord,

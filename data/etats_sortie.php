@@ -38,14 +38,14 @@ return [
         "visible": false
     },
     "TYPE": {
-        "libelle": "type"
+        "visible": false
     },
     "MATRICULE": {
         "libelle": "Matricule"
     },
      "CODE_INDEMNITE_RETENU": {
         "libelle": "Code indemnité/retenue"
-    }
+    },
      "DU_MOIS": {
         "libelle": "Du mois (AAAA-MM)"
     },
@@ -350,6 +350,13 @@ ORDER BY
     service_structure_ens_libelle, 
     etape_libelle, etablissement_libelle,
     element_libelle, fonction_referentiel_libelle',
+    ],
+    [
+        'CODE'           => 'export-missions',
+        'LIBELLE'        => 'Export CSV des missions',
+        'PDF_TRAITEMENT' => null,
+        'CSV_TRAITEMENT' => '/data/Etats de sortie/export_mission_csv.php',
+        'REQUETE'        => 'select * FROM v_export_mission',
     ],
     [
         'CODE'           => 'imputation-budgetaire',

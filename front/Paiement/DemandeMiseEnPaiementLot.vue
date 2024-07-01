@@ -34,7 +34,9 @@
     </div>
 
     <div class="alert alert-info" role="alert">
-        Seules les HETD avec des centres de coûts pré-paramètrés peuvent bénéficier d'une demande de mise en paiement automatisées. Pour les autres, il faudra
+        Seules les HETD <strong>(hors référentiel)</strong> avec des centres de coûts pré-paramètrés peuvent bénéficier d'une demande de mise en paiement
+        automatisées. Pour les
+        autres, il faudra
         passer sur chaque fiches intervenant pour faire les demandes en sélectionnant le centre de coût manuellement.
     </div>
 
@@ -91,8 +93,8 @@
                                 <th scope="col"><input id="allPermanents" checked="checked" class="checkbox-permanent" name="allPermanents" type="checkbox"
                                                        @click="toggleCheckbox"></th>
                                 <th scope="col">Intervenant</th>
-                                <th scope="col">HETD avec centre coût</th>
-                                <th scope="col">HETD sans centre coût</th>
+                                <th>HETD payables</th>
+                                <th>HETD non payables</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -115,7 +117,7 @@
                                     style="text-decoration:underline dotted;cursor: help;">
                                     {{ totalPayable(intervenant.heures) }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
-                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
+                                          title="Manque un centre de coût et/ou un domaine fonctionnel">{{ totalNonPayable(intervenant.heures) }} h</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -139,8 +141,8 @@
                                 <th><input id="allVacataire" checked="checked" class="checkbox-vacataire" name="allVacataire" type="checkbox"
                                            @click="toggleCheckbox"></th>
                                 <th>Intervenant</th>
-                                <th>HETD avec centre coût</th>
-                                <th>HETD sans centre coût</th>
+                                <th>HETD payables</th>
+                                <th>HETD non payables</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -165,7 +167,7 @@
                                         totalPayable(intervenant.heures)
                                     }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
-                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
+                                          title="Manque un centre de coût et/ou un domaine fonctionnel">{{ totalNonPayable(intervenant.heures) }} h</span></td>
 
                             </tr>
                             </tbody>
@@ -190,8 +192,8 @@
                                 <th><input id="allEtudiants" checked="checked" class="checkbox-etudiant" name="allEtudiants" type="checkbox"
                                            @click="toggleCheckbox"></th>
                                 <th>Intervenant</th>
-                                <th>HETD avec centre coût</th>
-                                <th>HETD sans centre coût</th>
+                                <th>HETD payables</th>
+                                <th>HETD non payables</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -212,7 +214,7 @@
                                     style="text-decoration:underline dotted;cursor: help;">
                                     {{ totalPayable(intervenant.heures) }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
-                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
+                                          title="Manque un centre de coût et/ou un domaine fonctionnel">{{ totalNonPayable(intervenant.heures) }} h</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -236,8 +238,8 @@
                                 <th><input id="allAutres" checked="checked" class="checkbox-autre" name="allAutres" type="checkbox" @click="toggleCheckbox">
                                 </th>
                                 <th>Intervenant</th>
-                                <th>HETD avec centre coût</th>
-                                <th>HETD sans centre coût</th>
+                                <th>HETD payables</th>
+                                <th>HETD non payables</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -260,7 +262,7 @@
                                     style="text-decoration:underline dotted;cursor: help;">
                                     {{ totalPayable(intervenant.heures) }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
-                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
+                                          title="Manque un centre de coût et/ou un domaine fonctionnel">{{ totalNonPayable(intervenant.heures) }} h</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -276,6 +278,9 @@
                         @click="processDemandeMiseEnPaiement">
                     Enregistrer les demandes de paiement
                 </button>
+                <a v-if="this.canMiseEnPaiement" id="btn-mep" :href="this.urlMiseEnPaiement" class="ms-2 btn btn-secondary">
+                    Aller au mise en paiement
+                </a>
 
             </div>
         </form>
@@ -292,7 +297,8 @@ import UnicaenVue from "unicaen-vue/js/Client/unicaenVue";
 export default {
     name: "DemandeMiseEnPaiementLot.vue",
     props: {
-        structures: {required: true},
+        structures: {type: Array, required: true},
+        canMiseEnPaiement: {type: Boolean, required: true},
     },
     data()
     {
@@ -300,17 +306,20 @@ export default {
             selectedStructure: null,
             urlRechercheDemandeMiseEnPaiement: unicaenVue.url('paiement/demande-mise-en-paiement-lot'),
             urlProcessDemandeMiseEnPaiement: unicaenVue.url('paiement/process-demande-mise-en-paiement-lot'),
+            urlMiseEnPaiement: unicaenVue.url('paiement/etat-demande-paiement'),
             permanents: [],
             vacataires: [],
             etudiants: [],
             autres: [],
             intervenants: [],
-            dotation: null,
+            dotation: false,
             liquidation: null,
             totalConsommationPaieEtat: 0,
             totalConsommationRessourcePropre: 0,
             totalConsommation: 0,
             alertDotation: false,
+
+
         }
     },
     computed:
@@ -386,7 +395,7 @@ export default {
         {
             let form = document.getElementById('formProcessDemandeMiseEnPaiement');
             let formData = new FormData(form);
-            if ((this.dotation.paieEtat >= this.totalConsommationPaieEtat && this.dotation.ressourcePropre > this.totalConsommationRessourcePropre) || !this.haveDotation) {
+            if ((this.dotation.paieEtat >= this.totalConsommationPaieEtat && this.dotation.ressourcePropre >= this.totalConsommationRessourcePropre) || !this.haveDotation) {
                 //On desactive le bouton de soumission
                 let btnPdmep = document.getElementById('btn-pdmep')
                 let btnPdmepInProgress = document.getElementById('btn-pdmep-inprogress')
@@ -448,7 +457,15 @@ export default {
             let total = 0;
             heures.forEach((item, index) => {
                 if (item.centreCout.code != '') {
-                    total += item.heuresAPayer;
+                    if (item.missionId != '' || item.serviceRefId != '') {
+                        if (item.domaineFonctionnel.code != '') {
+                            total += item.heuresAPayer;
+
+                        }
+                    } else {
+                        total += item.heuresAPayer;
+                    }
+
                 }
             })
             return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
@@ -460,7 +477,15 @@ export default {
             heures.forEach((item, index) => {
                 if (item.centreCout.code == '') {
                     total += item.heuresAPayer;
+                } else {
+                    if (item.missionId != '' || item.serviceRefId != '') {
+                        if (item.domaineFonctionnel.code == '') {
+                            total += item.heuresAPayer;
+
+                        }
+                    }
                 }
+
             })
             return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
         },
@@ -495,8 +520,10 @@ export default {
             this.etudiants = [];
             this.autres = [];
             this.intervenants = [];
+            console.log(datas);
 
-            datas.forEach((intervenant, index) => {
+
+            for (const [index, intervenant] of Object.entries(datas)) {
                 switch (intervenant.datasIntervenant.typeIntervenant) {
                     case 'Vacataire':
                         this.vacataires.push(intervenant);
@@ -514,11 +541,7 @@ export default {
                         this.autres.push(intervenant);
                         this.intervenants.push(intervenant);
                 }
-
-
-
-            });
-
+            }
 
         },
 

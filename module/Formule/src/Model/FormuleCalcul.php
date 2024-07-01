@@ -403,7 +403,11 @@ END FORMULE_" . $this->getName() . ";";
             $this->currentCellName = $name;
 
             $expr = $cell->getFormuleExpr();
-            $this->exprInit($expr);
+            if (is_array($expr)){
+                $this->exprInit($expr);
+            }else{
+                throw new \Exception('Erreur sur la traduction de '.$name.' : cellule vide');
+            }
 
             $mls = (string)$this->mainLine;
             if (str_ends_with($name, $mls)) {
@@ -1026,6 +1030,14 @@ END FORMULE_" . $this->getName() . ";";
 
         $begin = Calc::cellNameToCoords($range['begin']);
         $end = Calc::cellNameToCoords($range['end']);
+
+        if ($begin['row'] == 0){
+            $begin['row'] = $this->mainLine;
+        }
+
+        if ($end['row'] == 0){
+            $end['row'] = 500;
+        }
 
         if ($begin['col'] === $end['col'] && $begin['row'] <= $this->mainLine && $end['row'] >= 500) {
             $col = Calc::numberToLetter($begin['col']);

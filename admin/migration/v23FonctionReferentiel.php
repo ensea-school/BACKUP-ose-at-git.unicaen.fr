@@ -173,9 +173,11 @@ class v23FonctionReferentiel extends AbstractMigration
 
         while ($fonctionRef = $fonctionsRef->next()) {
             $newFonction = $this->calculNouvelleFonctionId($bdd, $fonctionRef);
+            $param = ['nf' => $newFonction, 'fr_id' => $fonctionRef['ID']];
+
             $bdd->exec('UPDATE fonction_referentiel fr
-                            SET fr.parent_id =' . $newFonction . '
-                            WHERE fr.id =' . $fonctionRef['ID']);
+                            SET fr.parent_id = :nf
+                            WHERE fr.id = :fr_id',$param);
             $lignefonctionTraite++;
             if ($lignefonctionTraite % 1000 == 0) {
                 $c->msg($lignefonctionTraite . ' fonctions traités');
@@ -199,15 +201,16 @@ class v23FonctionReferentiel extends AbstractMigration
     {
         $sql = 'SELECT fr.id 
                 FROM FONCTION_REFERENTIEL fr
-                WHERE fr.code = \'' . $itemRef['CODE'] . '\'
-                AND fr.annee_id = ' . $itemRef['ANNEE_ID'];
+                WHERE fr.code = :code
+                AND fr.annee_id = :annee';
+        $param = ['code' => $itemRef['CODE'], 'annee' => $itemRef['ANNEE_ID']];
 
         if ($itemRef['HISTO_DESTRUCTION']) {
             $sql .= ' AND fr.histo_destruction = to_timestamp(\'' . $itemRef['HISTO_DESTRUCTION'] . '\', \'yyyy-mm-dd hh24:mi:ss\')';
         } else {
             $sql .= ' AND fr.histo_destruction IS NULL';
         }
-        $res = $bdd->select($sql);
+        $res = $bdd->select($sql,$param);
 
         return $res[0]['ID'];
     }
@@ -274,9 +277,10 @@ class v23FonctionReferentiel extends AbstractMigration
         while ($plafondRef = $plafondsRef->next()) {
 
             $newFonction = $this->calculNouvelleFonctionId($bdd, $plafondRef);
+            $param = [ 'plafond' => $plafondRef['ID']];
             $bdd->exec('UPDATE plafond_referentiel pr
                             SET pr.fonction_referentiel_id =' . $newFonction . '
-                            WHERE pr.id =' . $plafondRef['ID']);
+                            WHERE pr.id = :plafond',$param);
 
             $ligneplafondTraite++;
             if ($ligneplafondTraite % 1000 == 0) {

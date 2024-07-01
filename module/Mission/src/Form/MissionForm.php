@@ -4,6 +4,7 @@ namespace Mission\Form;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Laminas\Validator\Between;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\TypeMission;
@@ -46,7 +47,7 @@ class MissionForm extends AbstractForm
         $this->spec([
             'description'     => ['type' => 'Textarea'],
             'etudiantsSuivis' => ['type' => 'Textarea'],
-            'structure' => ['type' => \Lieu\Form\Element\Structure::class],
+            'structure'       => ['type' => \Lieu\Form\Element\Structure::class],
             'tauxRemuMajore'  => ['input' => ['required' => false]],
             'heuresFormation' => ['input' => ['required' => false]],
         ]);
@@ -59,6 +60,7 @@ class MissionForm extends AbstractForm
         $this->setValueOptions('tauxRemu', $trDql);
         $this->setValueOptions('tauxRemuMajore', $trDql);
         $this->get('tauxRemuMajore')->setEmptyOption('- Aucune majoration -');
+
 
         $this->setLabels([
             'structure'       => 'Composante en charge du suivi de mission',
@@ -75,6 +77,52 @@ class MissionForm extends AbstractForm
         ]);
 
         $this->addSubmit();
+    }
+
+
+
+    public function getInputFilterSpecification()
+    {
+        $annee     = $this->getServiceContext()->getAnnee();
+        $dateDebut = $annee->getDateDebut()->format('Y-m-d');
+        $dateFin   = $annee->getDateFin()->format('Y-m-d');
+
+        return [
+            'dateDebut'      => [
+                'validators' => [
+                    [
+                        'name'    => Between::class,
+                        'options' => [
+                            'min'       => $annee->getDateDebut()->format('Y-m-d'),
+                            'max'       => $annee->getDateFin()->format('Y-m-d'),
+                            'inclusive' => true,
+                            'messages'  => [
+                                Between::NOT_BETWEEN => 'La date de début de la mission doit être comprise entre ' . $annee->getDateDebut()->format('d/m/Y') . ' et le ' . $annee->getDateFin()->format('d/m/Y') . ' (Année universitaire)',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'dateFin'        => [
+                'validators' => [
+                    [
+                        'name'    => Between::class,
+                        'options' => [
+                            'min'       => $annee->getDateDebut()->format('Y-m-d'),
+                            'max'       => $annee->getDateFin()->format('Y-m-d'),
+                            'inclusive' => true,
+                            'messages'  => [
+                                Between::NOT_BETWEEN => 'La date de début de la mission doit être comprise entre ' . $annee->getDateDebut()->format('d/m/Y') . ' et le ' . $annee->getDateFin()->format('d/m/Y') . ' (Année universitaire)',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'tauxRemuMajore' => [
+                'required' => false,
+            ],
+
+        ];
     }
 
 

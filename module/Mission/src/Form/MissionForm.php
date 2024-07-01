@@ -112,7 +112,7 @@ class MissionForm extends AbstractForm
                             'max'       => $annee->getDateFin()->format('Y-m-d'),
                             'inclusive' => true,
                             'messages'  => [
-                                Between::NOT_BETWEEN => 'La date de début de la mission doit être comprise entre ' . $annee->getDateDebut()->format('d/m/Y') . ' et le ' . $annee->getDateFin()->format('d/m/Y') . ' (Année universitaire)',
+                                Between::NOT_BETWEEN => 'La date de fin de la mission doit être comprise entre ' . $annee->getDateDebut()->format('d/m/Y') . ' et le ' . $annee->getDateFin()->format('d/m/Y') . ' (Année universitaire)',
                             ],
                         ],
                     ],

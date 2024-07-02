@@ -638,9 +638,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- BS=IF([.$BS$15]<=i_service_du;0;IF(OR(MID([.$A20];1;25)="20595";MID([.$A20];1;25)="40");IF(i_depassement_service_du_sans_hc="Non";[.$M20]*[.$AE20];0);0))
+      -- BS=IF([.$BS$15]<i_service_du;0;IF(OR(MID([.$A20];1;25)="20595";MID([.$A20];1;25)="40");IF(i_depassement_service_du_sans_hc="Non";[.$M20]*[.$AE20];0);0))
       WHEN 'BS' THEN
-        IF cell('BS15') <= i.service_du THEN
+        IF cell('BS15') < i.service_du THEN
           RETURN 0;
         ELSE
           IF COALESCE(SUBSTR(vh.structure_code, 1, 25),' ') = '20595' OR COALESCE(SUBSTR(vh.structure_code, 1, 25),' ') = '40' THEN

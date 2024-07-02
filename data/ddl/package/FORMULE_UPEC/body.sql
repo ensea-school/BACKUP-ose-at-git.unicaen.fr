@@ -215,9 +215,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
       -- AE11=SUMIF([.$I$20:.$I$500];"CM";[.$N$20:.$N$500])
       WHEN 'AE11' THEN
         val := 0;
-        FOR sumIfRow IN l .. ose_formule.volumes_horaires.length LOOP
-          IF cell('I',sumIfRow) = 'CM' THEN
-            val := val + cell('N',sumIfRow);
+        FOR sumIfRow IN 1 .. ose_formule.volumes_horaires.length LOOP
+          IF ose_formule.volumes_horaires.items(sumIfRow).type_intervention_code = 'CM' THEN
+            val := val + ose_formule.volumes_horaires.items(sumIfRow).heures;
           END IF;
         END LOOP;
         RETURN val;
@@ -227,9 +227,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
       -- AE12=SUMIF([.$I$20:.$I$500];"TD";[.$N$20:.$N$500])
       WHEN 'AE12' THEN
         val := 0;
-        FOR sumIfRow IN l .. ose_formule.volumes_horaires.length LOOP
-          IF cell('I',sumIfRow) = 'TD' THEN
-            val := val + cell('N',sumIfRow);
+        FOR sumIfRow IN 1 .. ose_formule.volumes_horaires.length LOOP
+          IF ose_formule.volumes_horaires.items(sumIfRow).type_intervention_code = 'TD' THEN
+            val := val + ose_formule.volumes_horaires.items(sumIfRow).heures;
           END IF;
         END LOOP;
         RETURN val;
@@ -239,9 +239,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
       -- AE13=SUMIF([.$I$20:.$I$500];"TP";[.$N$20:.$N$500])
       WHEN 'AE13' THEN
         val := 0;
-        FOR sumIfRow IN l .. ose_formule.volumes_horaires.length LOOP
-          IF cell('I',sumIfRow) = 'TP' THEN
-            val := val + cell('N',sumIfRow);
+        FOR sumIfRow IN 1 .. ose_formule.volumes_horaires.length LOOP
+          IF ose_formule.volumes_horaires.items(sumIfRow).type_intervention_code = 'TP' THEN
+            val := val + ose_formule.volumes_horaires.items(sumIfRow).heures;
           END IF;
         END LOOP;
         RETURN val;

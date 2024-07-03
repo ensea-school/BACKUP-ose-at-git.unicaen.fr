@@ -90,13 +90,6 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             </a>
             </span>
         <?php endif; ?>
-        <?php if ($contratSignatureActivation && !empty($urlSignatureElectronique)): ?>
-            <span class="float-end">
-            <a class="btn btn-secondary" href="<?= $urlSignatureElectronique ?>" title="Envoyer pour signature électronique">
-                <i class="fas fa-signature"></i> Envoyer pour signature électronique
-            </a>
-            </span>
-        <?php endif; ?>
 
         <h3><?= $contrat->toString() ?>
             <?php if ($avenant_param >= 0): ?>- <?= $contrat->getStructure() ?><?php endif; ?></h3>

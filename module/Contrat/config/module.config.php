@@ -80,6 +80,14 @@ return [
                     'action'      => 'envoyer-mail',
                     'controller'  => ContratController::class,
                 ],
+                'envoyer-signature-electronique' => [
+                    'route'       => '/:contrat/envoyer-signature-electronique',
+                    'constraints' => [
+                        'contrat' => '[0-9]*',
+                    ],
+                    'action'      => 'envoyer-signature-electronique',
+                    'controller'  => ContratController::class,
+                ],
                 'deposer-fichier'                => [
                     'route'       => '/:contrat/deposer-fichier',
                     'constraints' => [
@@ -113,15 +121,7 @@ return [
                     'action'      => 'supprimer-fichier',
                     'controller'  => ContratController::class,
                 ],
-                'envoyer-signature-electronique' => [
-                    'route'       => '/:contrat/envoyer-signature-electronique',
-                    'constraints' => [
-                        'contrat' => '[0-9]*',
-                        'fichier' => '[0-9]*',
-                    ],
-                    'action'      => 'envoyer-signature-electronique',
-                    'controller'  => ContratController::class,
-                ],
+
             ],
         ],
         'intervenant' => [

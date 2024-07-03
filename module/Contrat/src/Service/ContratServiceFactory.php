@@ -4,6 +4,8 @@ namespace Contrat\Service;
 
 use Psr\Container\ContainerInterface;
 
+use UnicaenSignature\Service\SignatureService;
+
 
 /**
  * Description of ContratServiceFactory
@@ -22,9 +24,10 @@ class ContratServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): ContratService
     {
-        $service = new ContratService;
-
+        $service = new ContratService();
         /* Injectez vos dépendances ICI */
+        $service->setSignatureService($container->get(SignatureService::class));
+
 
         return $service;
     }

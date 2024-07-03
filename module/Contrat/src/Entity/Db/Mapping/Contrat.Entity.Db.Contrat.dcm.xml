@@ -76,5 +76,10 @@
                 <join-column name="MISSION_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <many-to-one field="signature" target-entity="UnicaenSignature\Entity\Db\Signature">
+            <join-columns>
+                <join-column name="SIGNATURE_ID"/>
+            </join-columns>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

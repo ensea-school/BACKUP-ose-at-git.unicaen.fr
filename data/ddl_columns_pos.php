@@ -225,6 +225,7 @@ return [
         'MISSION_ID',
         'DEBUT_VALIDITE',
         'FIN_VALIDITE',
+        'SIGNATURE_ID',
     ],
     'CONTRAT_FICHIER'                     => [
         'CONTRAT_ID',
@@ -2633,6 +2634,8 @@ return [
         'ALLSIGNTOCOMPLETE',
         'NOTIFICATIONDESCRIPTION',
         'NOTIFICATIONSRECIPIENTS',
+        'CONTEXT_SHORT',
+        'CONTEXT_LONG',
     ],
     'UNICAEN_SIGNATURE_SIGNATUREFLOW'     => [
         'ID',

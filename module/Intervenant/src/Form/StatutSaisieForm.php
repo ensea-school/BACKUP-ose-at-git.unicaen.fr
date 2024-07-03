@@ -12,6 +12,7 @@ use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Util;
+use UnicaenSignature\Entity\Data\LevelInfo;
 use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
 
 /**
@@ -161,12 +162,18 @@ class StatutSaisieForm extends AbstractForm
             ],
         ]]);
 
-        $letterFiles                 = $this->getSignatureConfigurationService()->getLetterFiles();
+
+        $levelLetterFiles = $this->getSignatureConfigurationService()->getLevels();
+
         $listeSignatureTypes['none'] = 'aucun';
         if (!empty($paramLetterFile)) {
-            if (array_key_exists($paramLetterFile, $letterFiles)) {
-                foreach ($letterFiles[$paramLetterFile]['levels'] as $key => $value) {
-                    $listeSignatureTypes[$key] = $value;
+
+            /**
+             * @var LevelInfo $value
+             */
+            foreach ($levelLetterFiles as $key => $value) {
+                if ($value->isUsed()) {
+                    $listeSignatureTypes[$value->getKey()] = $value->getLabel();
                 }
             }
         }

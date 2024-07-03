@@ -6,6 +6,7 @@ use Application\Entity\Db\Fichier;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
@@ -15,6 +16,9 @@ use Intervenant\Entity\Db\Intervenant;
 use Mission\Entity\Db\Mission;
 use RuntimeException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use UnicaenSignature\Entity\Db\Signature;
+use UnicaenSignature\Entity\Db\SignatureRecipient;
+use UnicaenSignature\Service\SignatureServiceAwareTrait;
 
 
 /**
@@ -30,6 +34,8 @@ class ContratService extends AbstractEntityService
     use EtatVolumeHoraireServiceAwareTrait;
     use FichierServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
+    use ParametresServiceAwareTrait;
+    use SignatureServiceAwareTrait;
 
 
     /**
@@ -157,6 +163,65 @@ class ContratService extends AbstractEntityService
 
 
 
+    public function saveContratFichier(Contrat $contrat)
+    {
+        $contratFilePath = $this->generer($contrat, false, true);
+        $files           = [];
+        $files[]         = [
+            'tmp_name' => $contratFilePath,
+            'type'     => mime_content_type($contratFilePath),
+            'size'     => filesize($contratFilePath),
+            'name'     => basename($contratFilePath),
+        ];
+        $this->creerFichiers($files, $contrat);
+
+        return true;
+    }
+
+
+
+    public function envoyerContratSignatureElectronique(Contrat $contrat)
+    {
+        //1- On génére le contrat et on le stock temporairement
+        $contratFilePath = $this->generer($contrat, false, true);
+        $filename        = basename($contratFilePath);
+        //2- On récupére le parapheur
+        $letterFileParam = $this->getServiceParametres()->get('signature_electronique_parapheur');
+        $letterFile      = $this->getSignatureService()->getLetterfileService()->getLetterFileStrategy($letterFileParam);
+        $letterFileLevel = $contrat->getIntervenant()->getStatut()->getContratSignatureType();
+
+
+        $signature = new Signature();
+        $signature->setLetterfileKey($letterFile->getName());
+        $signature->setType($letterFileLevel)
+            ->setLabel('Test')
+            ->setDateCreated(new \DateTime())
+            ->setAllSignToComplete(true)
+            ->setDescription('Signature test')
+            ->setDocumentPath($filename);
+
+        //On traite les destinataires
+        $destinataires  = [];
+        $data['emails'] = 'anthony.lecourtes@gmail.com';
+        $postedEmails   = explode(',', $data['emails']);
+        foreach ($postedEmails as $email) {
+            $sr = new SignatureRecipient();
+            $sr->setSignature($signature);
+            $sr->setStatus(Signature::STATUS_SIGNATURE_DRAFT);
+            $sr->setEmail($email);
+            $sr->setPhone('0679434732');
+            $destinataires[] = $sr;
+        }
+        $signature->setRecipients($destinataires);
+        $this->getSignatureService()->saveNewSignature($signature, true);
+        $contrat->setSignature($signature);
+        $this->save($contrat);
+
+        return $contrat;
+    }
+
+
+
     /**
      * Création des Fichiers déposés pour un contrat.
      *
@@ -242,7 +307,7 @@ class ContratService extends AbstractEntityService
 
 
 
-    public function generer(Contrat $contrat, $download = true)
+    public function generer(Contrat $contrat, $download = true, $save = false)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
@@ -269,12 +334,14 @@ class ContratService extends AbstractEntityService
         if ($contrat->estUnProjet()) {
             $document->getStylist()->addFiligrane('PROJET');
         }
-        /*$config = \OseAdmin::instance()->config()->get('signature');;
 
-        $document->saveToFile($config['tmp_dir_contrat'] . $fileName);
 
-        exit;*/
+        if ($save) {
+            $config = \OseAdmin::instance()->config()->get('unicaen-signature');
+            $document->saveToFile($config['documents_path'] . $fileName);
 
+            return $config['documents_path'] . $fileName;
+        }
         if ($download) {
             $document->download($fileName);
 

@@ -189,6 +189,18 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
+        'SIGNATURE_ID'          => [
+            'name'        => 'SIGNATURE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 20,
+            'commentaire' => NULL,
+        ],
         'STRUCTURE_ID'          => [
             'name'        => 'STRUCTURE_ID',
             'type'        => 'int',

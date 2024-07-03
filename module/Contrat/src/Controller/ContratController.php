@@ -32,6 +32,7 @@ use LogicException;
 use Service\Entity\Db\TypeService;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Unicaen\OpenDocument\Document;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -635,7 +636,7 @@ class ContratController extends AbstractController
 
 
 
-    public function envoyerSignatureElectronique()
+    public function envoyerSignatureElectroniqueAction()
     {
         /*
          * 1 - On vérifie que l'on a bien le privilège pour envoyer dans le parapheur le contrat pour signature
@@ -648,6 +649,16 @@ class ContratController extends AbstractController
          *
          * 2 -
          * */
+
+        /**
+         * @var Document $document
+         */
+        $contrat = $this->getEvent()->getParam('contrat');
+
+        $this->getServiceContrat()->envoyerContratSignatureElectronique($contrat);
+
+
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
     }
 
 

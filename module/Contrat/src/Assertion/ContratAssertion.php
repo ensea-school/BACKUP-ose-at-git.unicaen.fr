@@ -251,11 +251,12 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertEnvoyerSignatureElectronique(Contrat $contrat)
     {
-        $var = '';
+
 
         return $this->asserts([
             $this->assertRole($contrat),
-
+            !$contrat->estUnProjet(),
+            $contrat->getValidation(),
         ]);
     }
 
@@ -266,6 +267,7 @@ class ContratAssertion extends AbstractAssertion
         return $this->asserts([
             $this->assertRole($contrat),
             !$contrat->estUnProjet(),
+            !$contrat->getIntervenant()->getStatut()->isContratSignatureActivation(),
         ]);
     }
 

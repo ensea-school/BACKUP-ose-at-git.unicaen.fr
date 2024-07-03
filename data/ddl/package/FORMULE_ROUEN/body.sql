@@ -736,15 +736,18 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
     RETURN '
     SELECT
       fvh.*,
-      NULL param_1,
+      COALESCE(tfr.code,fr.code) param_1,
       NULL param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5
     FROM
       V_FORMULE_VOLUME_HORAIRE fvh
+      LEFT JOIN service_referentiel sr ON sr.id = fvh.service_referentiel_id
+      LEFT JOIN fonction_referentiel fr ON fr.id = sr.fonction_id
+      LEFT JOIN fonction_referentiel tfr ON tfr.id = tfr.parent_id
     ORDER BY
-      ordre
+      Ordre
     ';
   END;
 

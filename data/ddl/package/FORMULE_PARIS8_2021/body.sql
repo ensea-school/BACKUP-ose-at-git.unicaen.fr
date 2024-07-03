@@ -365,7 +365,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8_2021 AS
       IF vh.volume_horaire_ref_id IS NOT NULL THEN
         RETURN 0;
       ELSE
-        IF UPPER(SUBSTR(vh.param_1, 1, 4)) = 'PRIO' THEN
+        IF UPPER(SUBSTR(COALESCE(vh.param_1,' '), 1, 4)) = 'PRIO' THEN
           RETURN vh.heures * cell('AD', l);
         ELSE
           RETURN 0;
@@ -458,7 +458,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8_2021 AS
 
     -- AS=SI(ET($H20<>"Référentiel";$A20=i_structure_code;STXT($N20;1;4)<>"PRIO");$M20*$AD20;0)
     WHEN c = 'AS' AND v >= 1 THEN
-      IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND UPPER(SUBSTR(vh.param_1, 1, 4)) <> 'PRIO' THEN
+      IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND UPPER(SUBSTR(COALESCE(vh.param_1,' '), 1, 4)) <> 'PRIO' THEN
         RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;
@@ -550,7 +550,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8_2021 AS
 
     -- BE=SI(ET($H20<>"Référentiel";$A20<>i_structure_code;STXT($N20;1;4)<>"PRIO");$M20*$AD20;0)
     WHEN c = 'BE' AND v >= 1 THEN
-      IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND UPPER(SUBSTR(vh.param_1, 1, 4)) <> 'PRIO' THEN
+      IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND UPPER(SUBSTR(COALESCE(vh.param_1,' '), 1, 4)) <> 'PRIO' THEN
         RETURN vh.heures * cell('AD',l);
       ELSE
         RETURN 0;

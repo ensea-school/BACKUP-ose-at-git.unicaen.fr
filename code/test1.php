@@ -54,7 +54,7 @@ function calculTests()
       JOIN formule f ON f.id = i.formule_id
     WHERE
       1=1
-      AND f.code = 'FORMULE_ROUEN_2022'
+      AND f.code = 'FORMULE_POITIERS_2021'
     ORDER BY
       i.id
     ";
@@ -150,7 +150,6 @@ Problèmes :
 
 FORMULE_MONTPELLIER
 FORMULE_NANTERRE        pb ancienne feuille mal traduite
-FORMULE_POITIERS_2021
 FORMULE_UBO             pb très ancienne feuille
 FORMULE_UNICAEN
 FORMULE_UNICAEN_2016    pb très ancienne feuille
@@ -184,11 +183,12 @@ FORMULE_INSA_LYON
 FORMULE_PARIS
 FORMULE_PARIS8
 FORMULE_POITIERS
+FORMULE_POITIERS_2021
 FORMULE_RENNES1
 FORMULE_RENNES2
 FORMULE_REUNION
-FORMULE_ROUEN
-FORMULE_ROUEN_2022
+FORMULE_ROUEN      (package modifié pour tenir compte des spécificités du référentiel en param_1)
+FORMULE_ROUEN_2022 (package modifié pour régler les pb div/0)
 FORMULE_SACLAY
 FORMULE_ST_ETIENNE
 FORMULE_UNISTRA

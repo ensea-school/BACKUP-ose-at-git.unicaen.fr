@@ -774,6 +774,7 @@ class TraducteurService
             'MID'               => 'traductionFunctionMid',
             'COM.MICROSOFT.IFS' => 'traductionFunctionIfs',
             'LEFT'              => 'traductionFunctionLeft',
+            'NOT'               => 'traductionFunctionNot',
         ];
 
         if (array_key_exists($term['name'], $functions)) {
@@ -1037,6 +1038,19 @@ class TraducteurService
         $length = $this->traductionExpr($term['exprs'][1]);
 
         $php = "substr($string ?? '', 0, $length)";
+
+        return $php;
+    }
+
+
+
+    private function traductionFunctionNot(array &$expr, int $i): string
+    {
+        $term = $expr[$i];
+
+        $expr = $this->traductionExpr($term['exprs'][0]);
+
+        $php = "!(".$expr.')';
 
         return $php;
     }

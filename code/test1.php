@@ -54,7 +54,7 @@ function calculTests()
       JOIN formule f ON f.id = i.formule_id
     WHERE
       1=1
-      AND f.code = 'FORMULE_UNICAEN'
+      AND f.code = 'FORMULE_UBO'
     ORDER BY
       i.id
     ";

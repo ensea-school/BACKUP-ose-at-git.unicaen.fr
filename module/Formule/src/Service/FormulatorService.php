@@ -75,7 +75,7 @@ class FormulatorService
             $this->calculer($test, $tableur->formule());
             $this->lastTestError = $this->checkFormuleResErreurs($test, $tableur);
         }catch(\Throwable $e){
-            $this->lastTestError = $e->getMessage();
+            $this->lastTestError = $e->getMessage().' ligne '.$e->getLine();
             $test = new FormuleTestIntervenant();
         }
 

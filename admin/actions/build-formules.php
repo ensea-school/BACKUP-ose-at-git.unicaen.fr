@@ -27,7 +27,7 @@ foreach ($fichiers as $fichier) {
             $filename = $dir . '/' . $fichier;
             $formulator->update($filename);
         } catch (\Exception $e) {
-            $c->println($e->getMessage(), $c::COLOR_RED);
+            $c->println($e->getMessage()."\n".$e->getFile().' ligne '.$e->getLine(), $c::COLOR_RED);
         }
     }
 }

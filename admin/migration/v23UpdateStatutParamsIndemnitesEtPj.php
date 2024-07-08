@@ -47,6 +47,7 @@ class v23UpdateStatutParamsIndemnitesEtPj extends AbstractMigration
         $primes   = $bdd->select($sqlPrime);
         //Si pas de prime de fin de mission alors on désactive sur l'ensemble des statuts
         if (empty($primes)) {
+            //On désactive les indémintés de fin de mission sur les statuts sur lesquels il n'y a eu aucun prime de fin de mission de crée
             $sqlUpdateMission = "UPDATE statut SET MISSION_INDEMNITEES = 0 WHERE id NOT IN (
                                     SELECT s.id FROM mission_prime mp 
                                     JOIN intervenant i ON i.id = mp.intervenant_id 

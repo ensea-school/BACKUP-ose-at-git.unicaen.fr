@@ -81,7 +81,7 @@ class ContratController extends AbstractController
      *
      * @return array
      */
-    public function indexAction()
+    public function indexActionOld()
     {
         $this->initFilters();
 
@@ -177,7 +177,130 @@ class ContratController extends AbstractController
         return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect', 'missionNotContrat');
     }
 
+    public function indexAction()
+    {
+        $this->initFilters();
 
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        if (!$intervenant) {
+            throw new LogicException('Intervenant non précisé ou inexistant');
+        }
+        $structure = $role->getStructure();
+
+        $title = "Contrat/avenants <small>{$intervenant}</small>";
+
+
+        $avenantParam = $this->getServiceParametres()->get('avenant');
+        $contratEnsParam = $this->getServiceParametres()->get('contrat_ens');
+        $contratMisParam = $this->getServiceParametres()->get('contrat_mis');
+
+
+//        const AVENANT_AUTORISE  = 'avenant_autorise';
+//        const AVENANT_DESACTIVE = 'avenant_desactive';
+//
+//        const CONTRAT_DATE   = 'contrat_date';
+//        const CONTRAT_DIRECT = 'contrat_direct';
+//
+//        const CONTRAT_ENS_COMPOSANTE = 'contrat_ens_composante';
+//        const CONTRAT_ENS_GLOBALE    = 'contrat_ens_globale';
+//
+//
+//
+//        const CONTRAT_MIS_COMPOSANTE = 'contrat_mis_composante';
+//        const CONTRAT_MIS_GLOBALE = 'contrat_mis_globale';
+//        const CONTRAT_MIS_MISSION = 'contrat_mis_mission';
+
+        switch ($avenantResult) {
+            case Parametre::AVENANT_AUTORISE :
+                $avenant_param = 1;
+            break;
+            case Parametre::AVENANT_STRUCT :
+                $avenant_param = 0;
+            break;
+            default :
+                $avenant_param = -1;
+        }
+
+        $sContrat     = $this->getServiceContrat();
+        $qbTest       = $sContrat->finderByIntervenant($intervenant);
+        $contratsTest = $sContrat->getList($qbTest);
+        if (empty($contratsTest)) {
+            $hasContrat = false;
+        } else {
+            $hasContrat = true;
+        }
+
+
+        $sContrat = $this->getServiceContrat();
+        $qb       = $sContrat->finderByIntervenant($intervenant);
+        if ($structure && $avenant_param >= 0) {
+            $qb->andWhere();
+            $sContrat->finderByStructure($structure, $qb);
+        }
+
+        $contrats = $sContrat->getList($qb);
+
+        $services = [
+            'contractualises'     => [],
+            'non-contractualises' => [],
+        ];
+
+        foreach ($contrats as $contrat) {
+            $services['contractualises'][$contrat->getId()] = [];
+        }
+
+        $sContratListe     = $this->getServiceContratServiceListe();
+        $needToSeeResult   = $sContratListe->getListeServiceContratIntervenant($intervenant);
+        $missionNotContrat = [];
+
+        /** @var ContratServiceListe $serviceTest */
+        foreach ($needToSeeResult as $serviceTest) {
+            if ($serviceTest->getContrat() != null) {
+                if (!isset($services['contractualises'][$serviceTest->getContrat()->getId()][$serviceTest->getTypeService()->getCode()])) {
+                    $services['contractualises'][$serviceTest->getContrat()->getId()][$serviceTest->getTypeService()->getCode()] = [];
+                }
+                $services ['contractualises'][$serviceTest->getContrat()->getId()][$serviceTest->getTypeService()->getCode()][] = $serviceTest;
+            } else {
+                if (!isset($services['non-contractualises'][$serviceTest->getStructure()->getId()])) {
+                    $services['non-contractualises'][$serviceTest->getStructure()->getId()] = [];
+                    foreach (TypeService::CODES as $code) {
+                        $services['non-contractualises'][$serviceTest->getStructure()->getId()][$code] = [];
+                    }
+                }
+                $services ['non-contractualises'][$serviceTest->getStructure()->getId()][$serviceTest->getTypeService()->getCode()][$serviceTest->getId()] = $serviceTest;
+                if ($serviceTest->getTypeService()->getCode() == TypeService::CODE_MISSION) {
+                    $mission = $this->getServiceContrat()->getContratInitialMission($serviceTest->getMission());
+                    if ($mission == null) {
+                        $missionNotContrat[$serviceTest->getMission()->getId()] = true;
+                    }
+                }
+            }
+        }
+
+
+        //Récupération email intervenant (Perso puis unicaen)
+        $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
+        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
+
+
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+
+
+        return compact(
+            'title',
+            'intervenant',
+            'contrats',
+            'services',
+            'emailIntervenant',
+            'hasContrat',
+            'avenant_param',
+            'contratDirect',
+            'missionNotContrat');
+
+    }
 
     public function creerAction()
     {

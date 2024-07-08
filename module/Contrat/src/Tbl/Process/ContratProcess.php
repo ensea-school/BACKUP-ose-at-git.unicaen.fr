@@ -90,7 +90,7 @@ class ContratProcess implements ProcessInterface
             } else {
                 //Calcul de la valeur et date du taux
                 $tauxRemuId       = $service['TAUX_REMU_ID'];
-                $tauxRemuMajoreId = isset($service['TAUX_REMU_MAJORE_ID'])?:null;
+                $tauxRemuMajoreId = isset($service['TAUX_REMU_MAJORE_ID']) ?: null;
                 if ($service['CONTRAT_ID'] != null) {
                     $date                        = $service['DATE_DEBUT'] > $service['DATE_CREATION'] ? $service['DATE_DEBUT'] : $service['DATE_CREATION'];
                     $tauxRemuValeur              = $this->getServiceTauxRemu()->tauxValeur($tauxRemuId, $date);
@@ -101,7 +101,7 @@ class ContratProcess implements ProcessInterface
                         $tauxRemuMajoreValeur               = $this->getServiceTauxRemu()->tauxValeur($tauxRemuMajoreId, $date);
                         $service['TAUX_REMU_MAJORE_VALEUR'] = $tauxRemuMajoreValeur;
                         $service['TAUX_REMU_MAJORE_DATE']   = $date;
-                    }else{
+                    } else {
                         $service['TAUX_REMU_MAJORE_VALEUR'] = null;
                         $service['TAUX_REMU_MAJORE_DATE']   = null;
                     }
@@ -185,7 +185,7 @@ class ContratProcess implements ProcessInterface
                 "EDITE"                   => $service["EDITE"],
                 "SIGNE"                   => $service["SIGNE"],
                 "ACTIF"                   => $service["ACTIF"],
-                "AUTRE"                   => $service["AUTRE"],
+                "AUTRES"                  => $service["AUTRES"],
                 "AUTRE_LIBELLE"           => $service["AUTRE_LIBELLE"],
                 "CM"                      => $service["CM"],
                 "CONTRAT_ID"              => $service["CONTRAT_ID"],

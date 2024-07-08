@@ -39,6 +39,7 @@ class v23UpdateStatutParamsIndemnitesEtPj extends AbstractMigration
         $sqlUpdatePjActive = "UPDATE statut SET PJ_ACTIVE  = 0 WHERE id NOT IN (
                                     SELECT s.id FROM type_piece_jointe_statut tpjs
                                     JOIN statut s ON s.id = tpjs.statut_id 
+                                    AND tpjs.histo_destruction is NULL
                                     GROUP BY s.id)";
         $bdd->exec($sqlUpdatePjActive);
         //On désactive les indemnités de fin de contrat sur le statut si on a aucun entrée dans la table prime

@@ -16,6 +16,10 @@
 * Demande de mise en paiement par lot, classement des intervenants par ordre alphabétique par nom (#56558)
 * Bloquer la saisie des dates de début et de fin d'une mission aux bornes de l'année universitaire du contexte de saisie de la mission.
 
+## Corrections de bugs
+
+* Correction d'un problème de suppression d'une mission avec plusieurs volumes horaires prévisionnels
+
 # OSE 23.6 (13/06/2024)
 
 ## Nouveautés

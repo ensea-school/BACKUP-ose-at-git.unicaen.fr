@@ -1,16 +1,13 @@
 <?php
 
 
-namespace migration;
-
-use AbstractMigration;
-
+use Unicaen\BddAdmin\Bdd;
 class v23FonctionReferentielCorrectionHisto extends AbstractMigration
 {
 
     public function description(): string
     {
-        return "Migration OSE 22 vers OSE 23";
+        return "Correction des histo_modification des fonctions referentielles";
     }
 
 
@@ -21,7 +18,7 @@ class v23FonctionReferentielCorrectionHisto extends AbstractMigration
 
         $res = $bdd->select('select count(*) c from fonction_referentiel WHERE histo_modification IS NULL');
 
-        return $res[0] == 0 ? true : false;
+        return $res[0] == 0;
     }
 
 

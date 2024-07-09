@@ -43,7 +43,7 @@ class MissionService extends AbstractEntityService
      * @return string
      * @throws \RuntimeException
      */
-    public function getEntityClass (): string
+    public function getEntityClass(): string
     {
         return Mission::class;
     }
@@ -55,14 +55,14 @@ class MissionService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias (): string
+    public function getAlias(): string
     {
         return 'm';
     }
 
 
 
-    public function data (array $parameters): AxiosModel
+    public function data(array $parameters): AxiosModel
     {
         $dql = "
         SELECT 
@@ -130,7 +130,7 @@ class MissionService extends AbstractEntityService
         ];
 
         $triggers = [
-            '/'                      => function (Mission $original, array $extracted) {
+            '/'                      => function(Mission $original, array $extracted){
                 $extracted['canSaisie']    = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
                 $extracted['canAddHeures'] = $this->getAuthorize()->isAllowed($original, SaisieAssertion::CAN_ADD_HEURES);
                 $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
@@ -139,7 +139,7 @@ class MissionService extends AbstractEntityService
 
                 return $extracted;
             },
-            '/volumesHorairesPrevus' => function ($original, $extracted) {
+            '/volumesHorairesPrevus' => function($original, $extracted){
                 //$extracted['canSaisie'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
                 $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
                 $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
@@ -154,7 +154,7 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function deleteVolumeHoraire (VolumeHoraireMission $volumeHoraireMission): self
+    public function deleteVolumeHoraire(VolumeHoraireMission $volumeHoraireMission): self
     {
         $volumeHoraireMission->historiser();
         $this->saveVolumeHoraire($volumeHoraireMission);
@@ -164,13 +164,16 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function saveVolumeHoraire (VolumeHoraireMission $vhm): self
+    public function saveVolumeHoraire(VolumeHoraireMission $vhm): self
     {
         if (!$vhm->getTypeVolumeHoraire()) {
             $vhm->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
         }
         if (!$vhm->getSource()) {
             $vhm->setSource($this->getServiceSource()->getOse());
+        }
+        if (!$vhm->getSourceCode()) {
+            $vhm->setSourceCode(uniqid());
         }
 
         if ($vhm->getTypeVolumeHoraire()->isRealise() && $vhm->estNonHistorise()) {
@@ -197,7 +200,7 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function deletePrimeMissions (Prime $prime)
+    public function deletePrimeMissions(Prime $prime)
     {
         $missions = $prime->getMissions();
         foreach ($missions as $mission) {
@@ -215,7 +218,7 @@ class MissionService extends AbstractEntityService
      *
      * @return Mission
      */
-    public function save ($entity): Mission
+    public function save($entity): Mission
     {
         foreach ($entity->getVolumesHorairesPrevus() as $vh) {
             $this->saveVolumeHoraire($vh);
@@ -228,7 +231,7 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function createMissionFromCandidature (Candidature $candidature): ?Mission
+    public function createMissionFromCandidature(Candidature $candidature): ?Mission
     {
         $mission = $this->newEntity();
         $mission->setEntityManager($this->getEntityManager());

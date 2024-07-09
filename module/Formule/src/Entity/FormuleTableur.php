@@ -180,7 +180,12 @@ class FormuleTableur
 
     public function getCellFloatVal(string $cellName): float
     {
-        return (float)$this->sheet->getCell($cellName)->getValue();
+        $cell = $this->sheet->getCell($cellName);
+        if (!$cell){
+            throw new \Exception("Cellule $cellName non trouvée");
+        }
+
+        return (float)$cell->getValue();
     }
 
 

@@ -44,8 +44,6 @@ class v23UpdateStatutParamsIndemnitesEtPj extends AbstractMigration
         $bdd->exec($sqlUpdatePjActive);
         //On désactive les indemnités de fin de contrat sur le statut si on a aucun entrée dans la table prime
         $c->println("Désactivation des indémnités de fin de mission sur les statuts où aucun intervenant n'a encore eu d'indémnités de fin de mission");
-        $sqlPrime = "SELECT id FROM prime";
-        $primes   = $bdd->select($sqlPrime);
         //Si pas de prime de fin de mission alors on désactive sur l'ensemble des statuts
         if (empty($primes)) {
             //On désactive les indémintés de fin de mission sur les statuts sur lesquels il n'y a eu aucun prime de fin de mission de crée

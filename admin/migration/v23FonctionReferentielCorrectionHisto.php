@@ -16,9 +16,9 @@ class v23FonctionReferentielCorrectionHisto extends AbstractMigration
     {
         $bdd = $this->manager->getBdd();
 
-        $res = $bdd->select('select count(*) c from fonction_referentiel WHERE histo_modification IS NULL');
+        $res = $bdd->select('select count(*) C from fonction_referentiel WHERE histo_modification IS NULL');
 
-        return $res[0] == 0;
+        return $res[0]['C'] == 0;
     }
 
 

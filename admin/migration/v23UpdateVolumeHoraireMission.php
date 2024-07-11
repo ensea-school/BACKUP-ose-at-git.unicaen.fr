@@ -19,7 +19,7 @@ class v23UpdateVolumeHoraireMission extends AbstractMigration
         $c   = $this->manager->getOseAdmin()->console();
         $bdd = $this->manager->getBdd();
         //Si j'ai des source_code null dans la table volume_horaire_missions
-        if ($this->manager->has('table', 'VOLUME_HORAIRE_MISSIONS')) {
+        if ($this->manager->has('table', 'VOLUME_HORAIRE_MISSION')) {
             $result = $bdd->select("SELECT id FROM volume_horaire_mission where source_code IS NULL");
             if (!empty($result)) {
                 return true;

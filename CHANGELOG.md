@@ -1,17 +1,17 @@
 # Version stable
 
-[OSE 23.6](#ose-236-13062024)
+[OSE 23.7](#ose-237-11072024)
 
 
 
 # OSE 24 (à venir)
 
-# OSE 23.7 (à venir)
+# OSE 23.7 (11/07/2024)
 
 ## Améliorations
 
-* Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant mais prendre aussi en compte les missions de vacataires (#57424)
-* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'une renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions. 
+* Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant, mais prendre aussi en compte les missions de vacataires (#57424)
+* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'un renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions. 
 * Dans les demandes de mise en paiement par lot, on filtre maintenant les intervenants trop payés pour une composante donnée (#56770)
 * Demande de mise en paiement par lot, classement des intervenants par ordre alphabétique par nom (#56558)
 * Bloquer la saisie des dates de début et de fin d'une mission aux bornes de l'année universitaire du contexte de saisie de la mission.

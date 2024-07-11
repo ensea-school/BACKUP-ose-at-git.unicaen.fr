@@ -18,7 +18,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 27,
+            'position'    => 28,
             'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
         ],
         'ANNEE_ID'                  => [
@@ -33,8 +33,8 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'AUTRES'                    => [
-            'name'        => 'AUTRES',
+        'AUTRE'                     => [
+            'name'        => 'AUTRE',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
             'length'      => 0,
@@ -42,7 +42,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 35,
+            'position'    => 36,
             'commentaire' => NULL,
         ],
         'AUTRE_LIBELLE'             => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'CM'                        => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'CONTRAT_ID'                => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 36,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'CONTRAT_PARENT_ID'         => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'DATE_CREATION'             => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 22,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'DATE_DEBUT'                => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 20,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'DATE_FIN'                  => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 21,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'EDITE'                     => [
@@ -150,7 +150,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HEURES'                    => [
@@ -162,7 +162,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'ID'                        => [
@@ -174,7 +174,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '"TBL_CONTRAT_ID_SEQ"."NEXTVAL"',
-            'position'    => 18,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'            => [
@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'NBVH'                      => [
@@ -210,7 +210,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 28,
+            'position'    => 29,
             'commentaire' => 'Nombre de volumes horaires contractualisables',
         ],
         'SERVICE_ID'                => [
@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'SERVICE_REFERENTIEL_ID'    => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'SIGNE'                     => [
@@ -258,7 +258,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'TAUX_CONGES_PAYES'         => [
@@ -270,7 +270,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'TAUX_REMU_DATE'            => [
@@ -282,7 +282,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 23,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'TAUX_REMU_ID'              => [
@@ -294,7 +294,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'TAUX_REMU_MAJORE_DATE'     => [
@@ -306,7 +306,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 26,
+            'position'    => 27,
             'commentaire' => NULL,
         ],
         'TAUX_REMU_MAJORE_ID'       => [
@@ -318,7 +318,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 24,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'TAUX_REMU_MAJORE_VALEUR'   => [
@@ -330,7 +330,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 25,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'TAUX_REMU_VALEUR'          => [
@@ -342,7 +342,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'TD'                        => [
@@ -354,7 +354,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'TP'                        => [
@@ -366,7 +366,7 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'TYPE_CONTRAT_ID'           => [
@@ -388,7 +388,7 @@ return [
             'length'      => 0,
             'scale'       => NULL,
             'precision'   => NULL,
-            'nullable'    => FALSE,
+            'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 31,
             'commentaire' => NULL,
@@ -400,9 +400,9 @@ return [
             'length'      => 120,
             'scale'       => NULL,
             'precision'   => NULL,
-            'nullable'    => FALSE,
+            'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 29,
+            'position'    => 32,
             'commentaire' => NULL,
         ],
         'VOLUME_HORAIRE_ID'         => [
@@ -426,7 +426,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 32,
+            'position'    => 34,
             'commentaire' => NULL,
         ],
         'VOLUME_HORAIRE_REF_ID'     => [
@@ -438,7 +438,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 34,
+            'position'    => 35,
             'commentaire' => NULL,
         ],
     ],

@@ -65,6 +65,7 @@ class ContratProcess implements ProcessInterface
         $this->traitement();
         $this->exporter();
         $this->enregistrement($tableauBord, $params);
+        $this->clear();
     }
 
 
@@ -82,12 +83,13 @@ class ContratProcess implements ProcessInterface
 
     protected function traitement()
     {
-        foreach ($this->services as $service) {
-            $uuid = $service['UUID'];
-            if ($this->tauxRemuUuid[$uuid] == false) {
-                $service['TAUX_REMU_ID']        = null;
-                $service['TAUX_REMU_MAJORE_ID'] = null;
-            } else {
+        foreach ($this->services as $id => $service) {
+            $uuid                               = $service['UUID'];
+            $service['TAUX_REMU_VALEUR']        = null;
+            $service['TAUX_REMU_DATE']          = null;
+            $service['TAUX_REMU_MAJORE_VALEUR'] = null;
+            $service['TAUX_REMU_MAJORE_DATE']   = null;
+            if ($this->tauxRemuUuid[$uuid]) {
                 //Calcul de la valeur et date du taux
                 $tauxRemuId       = $service['TAUX_REMU_ID'];
                 $tauxRemuMajoreId = isset($service['TAUX_REMU_MAJORE_ID']) ?: null;
@@ -101,12 +103,10 @@ class ContratProcess implements ProcessInterface
                         $tauxRemuMajoreValeur               = $this->getServiceTauxRemu()->tauxValeur($tauxRemuMajoreId, $date);
                         $service['TAUX_REMU_MAJORE_VALEUR'] = $tauxRemuMajoreValeur;
                         $service['TAUX_REMU_MAJORE_DATE']   = $date;
-                    } else {
-                        $service['TAUX_REMU_MAJORE_VALEUR'] = null;
-                        $service['TAUX_REMU_MAJORE_DATE']   = null;
                     }
                 }
             }
+            $this->services[$id] = $service;
         }
     }
 
@@ -120,7 +120,7 @@ class ContratProcess implements ProcessInterface
         $table = \OseAdmin::instance()->getBdd()->getTable('TBL_CONTRAT');
 
         // on force la DDL pour éviter de faire des requêtes en plus
-        $table->setDdl(['columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
+        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
         // on merge dans la table
         $table->merge($this->tblData, $key, ['where' => $params]);
         // on vide pour limiter la conso de RAM
@@ -143,7 +143,7 @@ class ContratProcess implements ProcessInterface
 
         while ($serviceContrat = $servicesContrat->fetchAssociative()) {
             $uuid      = $serviceContrat['UUID'];
-            $avenant   = $serviceContrat['AVENANT'];
+            $avenant   = $serviceContrat['TYPE_CONTRAT_ID'];
             $taux_remu = $serviceContrat['TAUX_REMU_ID'];
             if ($this->regleA == Parametre::AVENANT_DESACTIVE && $avenant == 2) {
                 $serviceContrat['ACTIF'] = 0;
@@ -172,10 +172,6 @@ class ContratProcess implements ProcessInterface
 
     private function exporter()
     {
-        if (empty($sap->lignesAPayer)) {
-            return;
-        }
-
         foreach ($this->services as $service) {
 
             $ldata           = [
@@ -188,6 +184,8 @@ class ContratProcess implements ProcessInterface
                 "AUTRES"                  => $service["AUTRES"],
                 "AUTRE_LIBELLE"           => $service["AUTRE_LIBELLE"],
                 "CM"                      => $service["CM"],
+                "TD"                      => $service["TD"],
+                "TP"                      => $service["TP"],
                 "CONTRAT_ID"              => $service["CONTRAT_ID"],
                 "CONTRAT_PARENT_ID"       => $service["CONTRAT_PARENT_ID"],
                 "DATE_CREATION"           => $service["DATE_CREATION"],
@@ -210,5 +208,13 @@ class ContratProcess implements ProcessInterface
             ];
             $this->tblData[] = $ldata;
         }
+    }
+
+
+
+    private function clear()
+    {
+        unset($this->services);
+        unset($this->tblData);
     }
 }

@@ -8,6 +8,10 @@
 
 # OSE 23.7 (11/07/2024)
 
+## Nouveautés
+
+* Gestion de la situation matrimoniale dans les données personnelles, avec export vers Siham de la donnée collectée. (#56868)
+
 ## Améliorations
 
 * Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant, mais prendre aussi en compte les missions de vacataires (#57424)

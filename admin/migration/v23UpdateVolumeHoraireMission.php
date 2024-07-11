@@ -37,7 +37,7 @@ class v23UpdateVolumeHoraireMission extends AbstractMigration
         $bdd = $this->manager->getBdd();
 
         //On met à jour le source code avec la valeur de l'id de la ligne qui lui doit être unique
-        $c->println("Update source code avec une valeur unique");
+        $c->println("Update source code avec une valeur unique par ligne de volume horaire");
         $sqlUpdateSourceCode = "UPDATE volume_horaire_mission SET source_code  = id WHERE source_code IS NULL";
         $bdd->exec($sqlUpdateSourceCode);
     }

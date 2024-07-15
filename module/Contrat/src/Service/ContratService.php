@@ -19,6 +19,8 @@ use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Entity\Db\SignatureRecipient;
 use UnicaenSignature\Service\SignatureServiceAwareTrait;
+use UnicaenVue\Util;
+use UnicaenVue\View\Model\AxiosModel;
 
 
 /**
@@ -202,7 +204,7 @@ class ContratService extends AbstractEntityService
 
         //On traite les destinataires
         $destinataires  = [];
-        $data['emails'] = 'anthony.lecourtes@gmail.com';
+        $data['emails'] = 'antony.lecourtes@unicaen.fr';
         $postedEmails   = explode(',', $data['emails']);
         foreach ($postedEmails as $email) {
             $sr = new SignatureRecipient();
@@ -401,5 +403,45 @@ class ContratService extends AbstractEntityService
         }
 
         return null;
+    }
+
+
+
+    public function getDataSignatureContrat(array $post): AxiosModel
+    {
+        $anneeContexte = $this->getServiceContext()->getAnnee()->getId();
+
+        $sql = "
+              SELECT 
+                    uss.id            id_signature,
+                    c.id              id_contrat,
+                    i.id              id_intervenant,
+                    i.nom_usuel       nom,
+                    i.prenom          prenom,
+                    s.libelle_long    libelle_structure,
+                    uss.datecreated   date_creation_signature_electronique,
+                    uss.status        statut_signature_electronique
+                    FROM contrat c
+                    JOIN unicaen_signature_signature uss ON c.signature_id = uss.id 
+                    JOIN intervenant i ON c.intervenant_id = i.id 
+                    LEFT JOIN STRUCTURE s ON s.id = c.structure_id 
+                    WHERE 
+                    i.annee_id = " . $anneeContexte . "
+                    AND lower(i.nom_usuel) like :search
+                ";
+
+        $em = $this->getEntityManager();
+
+        $res  = Util::tableAjaxData($em, $post, $sql);
+        $data = $res->getData();
+        //On parcours le résultat pour transformer le statut de la signature en libellé
+        foreach ($data['data'] as $key => $values) {
+            $values['STATUT_SIGNATURE_ELECTRONIQUE'] = Signature::getStatusLabel($values['STATUT_SIGNATURE_ELECTRONIQUE']);
+            $data['data'][$key]                      = $values;
+        }
+
+        $res->setData($data);
+
+        return $res;
     }
 }

@@ -187,6 +187,10 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertDevalidation(Contrat $contrat)
     {
+        //Si j'ai un signature electronique sur le contrat je ne peux plus le dévalider
+        if ($contrat->getSignature()) {
+            return false;
+        }
         if (!$contrat->estUnAvenant()) {
             $contratService = $this->getServiceContrat();
             $devalid        = !$contratService->hasAvenant($contrat);

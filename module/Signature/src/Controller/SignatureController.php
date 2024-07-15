@@ -3,11 +3,13 @@
 namespace Signature\Controller;
 
 use Application\Controller\AbstractController;
+use Contrat\Service\ContratServiceAwareTrait;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Entity\Db\SignatureRecipient;
 use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
 use UnicaenSignature\Service\SignatureService;
 use UnicaenSignature\Service\SignatureServiceAwareTrait;
+use UnicaenVue\View\Model\VueModel;
 
 
 /**
@@ -20,27 +22,11 @@ class SignatureController extends AbstractController
 
     use SignatureServiceAwareTrait;
     use SignatureConfigurationServiceAwareTrait;
+    use ContratServiceAwareTrait;
 
     public function indexAction()
     {
         return [];
-    }
-
-
-
-    public function signatureContratAction()
-    {
-
-        //$service = $this->serviceSignature->getSignatures();
-        /**
-         * @var SignatureService $service
-         */
-        $serviceSignature = $this->getSignatureService()->getSignatures();
-        $signature        = $serviceSignature->
-        var_dump($service);
-        die;
-
-        return $this->redirect()->toUrl($this->url()->fromRoute('signatures', [], [], true));
     }
 
 
@@ -56,45 +42,53 @@ class SignatureController extends AbstractController
 
 
 
-    public function circuitsAction()
+    public function listeContratAction()
     {
+        $vm = new VueModel();
+        $vm->setTemplate('signature/liste-contrat');
 
-
+        return $vm;
     }
 
 
 
-    public function signatureSimpleAction()
+    public function getDataContratAction()
     {
-        $letterfileKey = 'esup';
-        $letterFile    = $this->getSignatureService()->getLetterfileService()->getLetterFileStrategy($letterfileKey);
-        $typeSignature = $this->getSignatureService()->getMarksSelectFrom(array_keys($letterFile->getLevels()));
+        $post = $this->axios()->fromPost();
 
-        $documentPath = 'contrat_U01_Bridenne_61774.pdf';
-        $signature    = new Signature();
-        $signature->setLetterfileKey($letterFile->getName());
-        $signature->setType('sign_visual')
-            ->setLabel('Test')
-            ->setAllSignToComplete(true)
-            ->setDescription('Signature test')
-            ->setDocumentPath($documentPath);
-
-        //On traite les destinataires
-        $destinataires  = [];
-        $data['emails'] = 'anthony.lecourtes@gmail.com';
-        $postedEmails   = explode(',', $data['emails']);
-        foreach ($postedEmails as $email) {
-            $sr = new SignatureRecipient();
-            $sr->setSignature($signature);
-            $sr->setStatus(Signature::STATUS_SIGNATURE_DRAFT);
-            $sr->setEmail($email);
-            $sr->setPhone('0679434732');
-            $destinataires[] = $sr;
-        }
-        $signature->setRecipients($destinataires);
+        return $this->getServiceContrat()->getDataSignatureContrat($post);
+    }
 
 
-        $this->getSignatureService()->saveNewSignature($signature, true);
+
+    public function updateSignatureAction()
+    {
+        /**
+         * @var Signature $signature
+         */
+        $signature = $this->getEvent()->getParam('signature');
+        $this->getSignatureService()->updateStatusSignature($signature);
+
+        return false;
+    }
+
+
+
+    public function getDocumentAction()
+    {
+
+        $signature = $this->getEvent()->getParam('signature');
+        $document  = $this->getSignatureService()->getDocumentSignedSignature($signature);
+
+
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="test.pdf"');
+        header('Content-Transfer-Encoding: binary');
+        header('Pragma: no-cache');
+        header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        echo $document;
+        die;
     }
 
 }

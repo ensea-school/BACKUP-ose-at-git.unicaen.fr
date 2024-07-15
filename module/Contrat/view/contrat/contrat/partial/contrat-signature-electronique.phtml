@@ -119,7 +119,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <li><i class="fas fa-thumbs-up"></i> Modifiable par la structure
                     <?= $contrat->getStructure() ?></li>
             <?php endif; ?>
-            <?php if (!$contrat->getSignature() && $contrat->getIntervenant()->getStatut()->isContratSignatureActivation()): ?>
+            <?php if (!$contrat->getSignature() && $contrat->getIntervenant()->getStatut()->isContratSignatureActivation() && $contrat->getValidation()): ?>
                 <li><i class="fas fa-hourglass-start"></i> En attente d'envoie pour signature électronique</li>
             <?php endif; ?>
             <?php if ($contrat->getSignature()): ?>
@@ -149,7 +149,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
         </div>
     </div>
 
-    <?php if ($urlValidation || $urlSaisieRetour || $urlDevalidation || $urlSuppression): ?>
+    <?php if ($urlValidation || $urlSaisieRetour || $urlDevalidation || $urlSuppression || $urlSignatureElectronique): ?>
         <div class="card-footer">
             <!-- Actions -->
             <?php if ($urlValidation): ?>
@@ -167,10 +167,17 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 </a>
             <?php endif; ?>
 
-            <?php if ($contratSignatureActivation && !empty($urlSignatureElectronique)): ?>
+            <?php if (!$contrat->getSignature() && $contratSignatureActivation && !empty($urlSignatureElectronique)): ?>
                 <a href="<?= $urlSignatureElectronique ?>" class="btn btn-primary">
                     <i class="fas fa-signature"></i>
                     Envoyer pour signature électronique
+                </a>
+
+            <?php endif; ?>
+            <?php if ($contratSignatureActivation && $contrat->getSignature()): ?>
+                <a href="<?= $urlSignatureElectronique ?>" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                    Supprimer la signature électronique
                 </a>
 
             <?php endif; ?>

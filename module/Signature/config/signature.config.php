@@ -24,19 +24,28 @@ return [
                     'controller' => SignatureController::class,
                     'action'     => 'configuration',
                 ],
-                'signature-simple' => [
-                    'route'      => '/signature-simple',
+                'liste-contrat'    => [
+                    'route'      => '/liste-contrat',
                     'controller' => SignatureController::class,
-                    'action'     => 'signature-simple',
+                    'action'     => 'liste-contrat',
                 ],
-                'circuits'         => [
-                    'route'         => '/circuits',
-                    'controller'    => CircuitController::class,
-                    'action'        => 'circuits',
+                'get-data-contrat' => [
+                    'route'         => '/data-contrat',
+                    'controller'    => SignatureController::class,
+                    'action'        => 'get-data-contrat',
                     'may_terminate' => true,
-                    'child_routes'  => [
-                        
-                    ],
+                ],
+                'get-document'     => [
+                    'route'         => '/:signature/get-document',
+                    'controller'    => SignatureController::class,
+                    'action'        => 'get-document',
+                    'may_terminate' => true,
+                ],
+                'update-signature' => [
+                    'route'         => '/:signature/update-signature',
+                    'controller'    => SignatureController::class,
+                    'action'        => 'update-signature',
+                    'may_terminate' => true,
                 ],
 
 
@@ -57,24 +66,15 @@ return [
                             'order'      => 20,
                             //'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
                         ],
-                        'signature-simple'        => [
-                            'label'      => "Faire signer un document",
-                            'title'      => "Permet d'envoyer un document à signer dans Esup",
-                            'route'      => 'signature/signature-simple',
+                        'signature-contrat-liste' => [
+                            'label'      => "Liste des signatures de contrat",
+                            'title'      => "Liste les signatures électroniques de contrat",
+                            'route'      => 'signature/liste-contrat',
                             'withtarget' => true,
-                            'order'      => 20,
+                            'order'      => 30,
                             //'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
-
                         ],
-                        'gestion-circuit'         => [
-                            'label'      => "Gestion des circuits de signature",
-                            'title'      => "Gestion des circuits de signature",
-                            'route'      => 'signature/circuits',
-                            'withtarget' => true,
-                            'order'      => 20,
-                            //'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
 
-                        ],
                     ],
                 ],
             ],
@@ -84,26 +84,21 @@ return [
     'guards'      => [
         [
             'controller' => SignatureController::class,
-            'action'     => ['index', 'configuration', 'signature-simple'],
+            'action'     => ['index', 'configuration', 'liste-contrat', 'get-data-contrat', 'get-document', 'update-signature'],
             'roles'      => ['guest'],
 
         ],
-        [
-            'controller' => CircuitController::class,
-            'action'     => ['index', 'circuits'],
-            'roles'      => ['guest'],
 
-        ],
     ],
 
     /* Déclaration du contrôleur */
     'controllers' => [
         SignatureController::class => SignatureControllerFactory::class,
-        CircuitController::class   => CircuitControllerFactory::class,
+
     ],
 
     'services' => [
-        Service\CircuitService::class => Service\CircuitServiceFactory::class,
+
     ],
 
 

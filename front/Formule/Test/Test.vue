@@ -75,10 +75,30 @@
                     </select></td>
                 </tr>
 
-                <tr v-for="i in [1,2,3,4,5]" :key="i" :class="'i-param i-param-'+i"
-                    v-show="formule['iParam'+i+'Libelle']">
-                    <th class="i-param">{{ formule['iParam' + i + 'Libelle'] }}</th>
+                <tr class="i-param i-param-1"
+                    v-show="formule['iParam1Libelle']">
+                    <th class="i-param">{{ formule['iParam1Libelle'] }}</th>
                     <td class="saisie"><input v-model="intervenant.param1" class="dinput"/></td>
+                </tr>
+                <tr class="i-param i-param-2"
+                    v-show="formule['iParam2Libelle']">
+                    <th class="i-param">{{ formule['iParam2Libelle'] }}</th>
+                    <td class="saisie"><input v-model="intervenant.param2" class="dinput"/></td>
+                </tr>
+                <tr class="i-param i-param-3"
+                    v-show="formule['iParam3Libelle']">
+                    <th class="i-param">{{ formule['iParam3Libelle'] }}</th>
+                    <td class="saisie"><input v-model="intervenant.param3" class="dinput"/></td>
+                </tr>
+                <tr class="i-param i-param-4"
+                    v-show="formule['iParam4Libelle']">
+                    <th class="i-param">{{ formule['iParam4Libelle'] }}</th>
+                    <td class="saisie"><input v-model="intervenant.param4" class="dinput"/></td>
+                </tr>
+                <tr class="i-param i-param-5"
+                    v-show="formule['iParam5Libelle']">
+                    <th class="i-param">{{ formule['iParam5Libelle'] }}</th>
+                    <td class="saisie"><input v-model="intervenant.param5" class="dinput"/></td>
                 </tr>
             </table>
             <!-- FIN données intervenant -->

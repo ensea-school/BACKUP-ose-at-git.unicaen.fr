@@ -2,12 +2,12 @@
 
 namespace Mission\Form;
 
+
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Laminas\Validator\Between;
-use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\TypeMission;
+use Mission\Validator\DateMissionValidator;
 use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Util;
 
@@ -50,6 +50,28 @@ class MissionForm extends AbstractForm
             'structure'       => ['type' => \Lieu\Form\Element\Structure::class],
             'tauxRemuMajore'  => ['input' => ['required' => false]],
             'heuresFormation' => ['input' => ['required' => false]],
+            'dateDebut'       => [
+                'options'    => [
+                    'label_attributes' => [
+                        'class' => 'form-label',
+                    ],
+                ],
+                'attributes' => [
+                    'class' => 'form-control',
+
+                ],
+            ],
+            'dateFin'         => [
+                'options'    => [
+                    'label_attributes' => [
+                        'class' => 'form-label',
+                    ],
+                ],
+                'attributes' => [
+                    'class' => 'form-control',
+
+                ],
+            ],
         ]);
         $this->build();
 
@@ -83,40 +105,24 @@ class MissionForm extends AbstractForm
 
     public function getInputFilterSpecification()
     {
+
+        $dateDebut = new \DateTime($this->get('dateDebut')->getValue());
+        $dateFin   = new \DateTime($this->get('dateFin')->getValue());
         $annee     = $this->getServiceContext()->getAnnee();
-        $dateDebut = $annee->getDateDebut()->format('Y-m-d');
-        $dateFin   = $annee->getDateFin()->format('Y-m-d');
 
         return [
             'dateDebut'      => [
+                'required'   => true,
                 'validators' => [
-                    [
-                        'name'    => Between::class,
-                        'options' => [
-                            'min'       => $annee->getDateDebut()->format('Y-m-d'),
-                            'max'       => $annee->getDateFin()->format('Y-m-d'),
-                            'inclusive' => true,
-                            'messages'  => [
-                                Between::NOT_BETWEEN => 'La date de début de la mission doit être comprise entre ' . $annee->getDateDebut()->format('d/m/Y') . ' et le ' . $annee->getDateFin()->format('d/m/Y') . ' (Année universitaire)',
-                            ],
-                        ],
-                    ],
+                    new DateMissionValidator(['annee'        => $annee,
+                                              'dateDebut'    => $dateDebut,
+                                              'dateFin'      => $dateFin,
+                                              'dateVerifiee' => $dateDebut,
+                    ]),
                 ],
             ],
             'dateFin'        => [
-                'validators' => [
-                    [
-                        'name'    => Between::class,
-                        'options' => [
-                            'min'       => $annee->getDateDebut()->format('Y-m-d'),
-                            'max'       => $annee->getDateFin()->format('Y-m-d'),
-                            'inclusive' => true,
-                            'messages'  => [
-                                Between::NOT_BETWEEN => 'La date de fin de la mission doit être comprise entre ' . $annee->getDateDebut()->format('d/m/Y') . ' et le ' . $annee->getDateFin()->format('d/m/Y') . ' (Année universitaire)',
-                            ],
-                        ],
-                    ],
-                ],
+                'required' => true,
             ],
             'tauxRemuMajore' => [
                 'required' => false,

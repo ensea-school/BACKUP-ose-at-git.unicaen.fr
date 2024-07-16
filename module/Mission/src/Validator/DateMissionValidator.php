@@ -48,7 +48,8 @@ class DateMissionValidator extends AbstractValidator
         $dateMediane = clone $this->dateDebut;
         $dateMediane->add($interval);
 
-        //On vérifie que la date médiane de la mission est bien dans l'année universitaire en cours
+        //On vérifie que la date médiane de la mission est bien dans l'année universitaire en cours sinon
+        //cela signifie que la mission n'est pas majoritairement réalisée sur l'année universitaire choisit
         if ($dateMediane >= $this->annee->getDateDebut() && $dateMediane <= $this->annee->getDateFin()) {
             return true;
         }

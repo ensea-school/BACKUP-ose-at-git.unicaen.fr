@@ -22,6 +22,7 @@ class FormuleTableur
     private Sheet $sheet;
 
     private int $mainLine = 20;
+    private int $lastLine = 500;
     private int $version = 0;
     private bool $lu = false;
 
@@ -129,6 +130,13 @@ class FormuleTableur
     public function mainLine(): int
     {
         return $this->mainLine;
+    }
+
+
+
+    public function lastLine(): int
+    {
+        return $this->lastLine;
     }
 
 
@@ -401,6 +409,11 @@ class FormuleTableur
     {
         $deps = $cell->getDeps();
         $depsFound = [];
+
+        if ($cell->getRow() == $this->lastLine()){
+            // on est sur la dernière ligne : ce n'est pas des formules à traduire, mais la ligne est transformée en fonction "derniere"
+            return;
+        }
 
         // Si on est sur une suite, on ajoute la ligne principale pour la colonne
         // si elle n'est pas déjà dans les dépendances

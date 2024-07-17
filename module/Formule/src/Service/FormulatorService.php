@@ -222,10 +222,14 @@ class FormulatorService
 
         $first = true;
         foreach ($cells as $cell) {
-            if (!$first) {
-                $php .= "\n\n\n";
+            $traduction = $this->getServiceTraducteur()->traduire($tableur, $cell);
+
+            if ($traduction) {
+                if (!$first) {
+                    $php .= "\n\n\n";
+                }
+                $php .= $this->getServiceTraducteur()->indent($traduction, 1);
             }
-            $php .= $this->getServiceTraducteur()->indent($this->getServiceTraducteur()->traduire($tableur, $cell), 1);
             $first = false;
         }
 

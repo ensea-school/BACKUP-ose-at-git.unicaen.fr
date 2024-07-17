@@ -90,6 +90,25 @@ class AbstractFormuleCalcul
 
 
 
+    /**
+     * Retourne la dernière valeur de la liste pour la colonne donnée
+     *
+     * @param string $col
+     * @return float
+     */
+    protected function derniere(string $col): float
+    {
+        $result = 0;
+        foreach ($this->volumesHoraires as $l => $vh) {
+            $cr = $this->c($col, $l);
+            $result = $cr;
+        }
+
+        return $result;
+    }
+
+
+
     protected function c(string $name, int $l)
     {
         if ($l < 0){

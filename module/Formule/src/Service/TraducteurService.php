@@ -60,6 +60,11 @@ class TraducteurService
         $this->tableur = $tableur;
         $this->cell = $cell;
 
+        if ($cell->getRow() == $this->tableur->lastLine()){
+             // la dernière ligne n'a pas à être traduite : c'est la fonction "derniere"
+            return '';
+        }
+
         $mls = (string)$this->tableur->mainLine();
         $this->name = $this->cell->getName();
         if (str_ends_with($this->name, $mls)) {
@@ -716,6 +721,8 @@ class TraducteurService
             return "\$this->c('$col',\$l$rel)";
         } elseif ($row < $ml) {
             return "\$this->cg('$col$row')";
+        } elseif($row == $this->tableur->lastLine()) {
+            return "\$this->derniere('$col')";
         } else {
             $rowDiff = $row - $ml;
             return "\$this->c('$col',\$l+$rowDiff)";

@@ -8,6 +8,42 @@
  * @var $viewFile   string
  */
 
+/*
+ *
+
+à intégrer pour debug :
+
+CREATE TABLE TRACES
+(
+  ID NUMBER NOT NULL,
+  TRACE CLOB NOT NULL,
+  CONSTRAINT TRACES_PK PRIMARY KEY (ID)
+)
+
+
+    ose_formule.debug_actif := true;
+
+    -- transmission des résultats aux volumes horaires et volumes horaires référentiel
+    FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+      ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'u',l);
+      ose_formule.volumes_horaires.items(l).service_fa               := mainCell('Service FA', 'v',l);
+      ose_formule.volumes_horaires.items(l).service_fc               := mainCell('Service FC', 'w',l);
+      ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell('Service référentiel', 'x',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'y',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'z',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'aa',l);
+      ose_formule.volumes_horaires.items(l).heures_primes            := mainCell('Heures compl. FC Maj.', 'ab',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'ac',l);
+    END LOOP;
+
+    if ose_formule.debug_actif then
+      DELETE from traces WHERE id = ose_formule.intervenant.id;
+      INSERT INTO traces(id,trace) VALUES(ose_formule.intervenant.id,ose_formule.intervenant.debug_info);
+    end if;
+
+ *
+ */
+
 use Unicaen\OpenDocument\Calc;
 
 $r = new Reverse();

@@ -262,6 +262,8 @@ SELECT DISTINCT
             THEN NULL
         WHEN (i.z_type = 'vacataire' AND i.validite_fin < compte.date_fin AND i.validite_fin IS NOT NULL)
             THEN compte.date_fin
+        WHEN (i.z_type = 'etudiant' AND i.validite_fin < compte.date_fin AND i.validite_fin IS NOT NULL)
+            THEN compte.date_fin
         ELSE i.validite_fin
         END AS DATE)                                                                         validite_fin,
     CAST(i.fin_affectation_siham AS DATE)                                                           affectation_fin

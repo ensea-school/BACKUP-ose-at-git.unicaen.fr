@@ -4,15 +4,19 @@ namespace Contrat\Service;
 
 use Application\Entity\Db\Fichier;
 use Application\Service\AbstractEntityService;
+use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Doctrine\ORM\QueryBuilder;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Statut;
 use Mission\Entity\Db\Mission;
 use RuntimeException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -38,7 +42,9 @@ class ContratService extends AbstractEntityService
     use EtatSortieServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use SignatureServiceAwareTrait;
-
+    use RoleServiceAwareTrait;
+    use AffectationServiceAwareTrait;
+    use UtilisateurServiceAwareTrait;
 
     /**
      * Retourne la classe des entités
@@ -192,17 +198,31 @@ class ContratService extends AbstractEntityService
         $letterFile      = $this->getSignatureService()->getLetterfileService()->getLetterFileStrategy($letterFileParam);
         $letterFileLevel = $contrat->getIntervenant()->getStatut()->getContratSignatureType();
 
+        /**
+         * @var Contrat $contrat
+         */
 
-        $signature = new Signature();
+        $libelleContrat = ($contrat->estUnAvenant()) ? 'Signature de l\'avenant N°' . $contrat->getId() : 'Signature du Contrat N°' . $contrat->getId();
+        $signature      = new Signature();
         $signature->setLetterfileKey($letterFile->getName());
         $signature->setType($letterFileLevel)
             ->setLabel('Test')
             ->setDateCreated(new \DateTime())
-            ->setAllSignToComplete(true)
-            ->setDescription('Signature test')
+            ->setAllSignToComplete(false)
+            ->setDescription($libelleContrat)
             ->setDocumentPath($filename);
 
         //On traite les destinataires
+        //TODO : on doit récupérer le statut de l'intervenant pour savoir quel rôle va devoir signer les contrats electroniquement
+        //TODO : Rajouter un paramètre au niveau du statut pour savoir si tous les utilisateurs affectés au rôle en question doivent signer le contrat
+        /**
+         * @var Statut $statut
+         */
+        $statut         = $contrat->getIntervenant()->getStatut();
+        $roleSignataire = $statut->getContratSignatureRole();
+
+
+        //Et envoyer au email utilisateur
         $destinataires  = [];
         $data['emails'] = 'antony.lecourtes@unicaen.fr';
         $postedEmails   = explode(',', $data['emails']);
@@ -218,6 +238,27 @@ class ContratService extends AbstractEntityService
         $this->getSignatureService()->saveNewSignature($signature, true);
         $contrat->setSignature($signature);
         $this->save($contrat);
+
+        return $contrat;
+    }
+
+
+
+    public function supprimerSignatureElectronique(Contrat $contrat): Contrat
+    {
+        $signature = $contrat->getSignature();
+
+        if ($signature instanceof Signature && !$signature->isFinished()) {
+            try {
+                //On supprimer la signature du parapheur
+                $this->getSignatureService()->deleteSignature($signature);
+                //On met à jour le contrat
+                $contrat->setSignature(null);
+                $this->save($contrat);
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        }
 
         return $contrat;
     }

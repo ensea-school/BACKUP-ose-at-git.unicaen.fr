@@ -651,11 +651,36 @@ class ContratController extends AbstractController
          * */
 
         /**
-         * @var Document $document
+         * @var Contrat $contrat
          */
         $contrat = $this->getEvent()->getParam('contrat');
+        try {
+            $this->getServiceContrat()->envoyerContratSignatureElectronique($contrat);
+            $contratLibelle = "Contrat N°" . $contrat->getId();
+            $this->flashMessenger()->addSuccessMessage($contratLibelle . " envoyé avec succés pour signature électronique");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
 
-        $this->getServiceContrat()->envoyerContratSignatureElectronique($contrat);
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
+    }
+
+
+
+    public function supprimerSignatureElectroniqueAction()
+    {
+        //TODO : vérifier qu'on a bien le droit de supprimer cette signature, pour ce contrat
+        $contrat = $this->getEvent()->getParam('contrat');
+        try {
+            if ($this->getServiceContrat()->supprimerSignatureElectronique($contrat)) {
+                $libelleContrat = "Contrat N°" . $contrat->getId();
+                $this->flashMessenger()->addSuccessMessage("Signature électronique supprimée avec succés pour le " . $libelleContrat);
+            } else {
+                $this->flashMessenger()->addErrorMessage("Impossible de supprimer la signature électronique pour le " . $libelleContrat);
+            }
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
 
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);

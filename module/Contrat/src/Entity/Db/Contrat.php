@@ -563,11 +563,28 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function setSignature(Signature $signature): self
+    public function setSignature(?Signature $signature): self
     {
         $this->signature = $signature;
 
         return $this;
+    }
+
+
+
+    public function getStatutSignature(): string
+    {
+        if ($this->signature) {
+            if ($this->signature->getStatus() == Signature::STATUS_SIGNATURE_WAIT) {
+                return ($this->estUnAvenant()) ? 'Avenant en attente du ou des signataires' : 'Contrat en attente du ou des signataires';
+            } elseif ($this->signature->getStatus() == Signature::STATUS_SIGNATURE_SIGNED) {
+                return ($this->estUnAvenant()) ? 'Avenant signé électroniquement le xx/xx/xxx' : 'Contrat signé électroniquement le xx/xx/xxx';
+            } else {
+                return "Statut de la signature électronique non disponible";
+            }
+        }
+
+        return 'Aucune signature électronique en cours';
     }
 
 }

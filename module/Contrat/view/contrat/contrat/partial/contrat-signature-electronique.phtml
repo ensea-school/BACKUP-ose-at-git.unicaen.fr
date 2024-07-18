@@ -32,6 +32,10 @@ $urlSignatureElectronique = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOY
     ? $this->url('contrat/envoyer-signature-electronique', ['contrat' => $contrat->getId()])
     : null;
 
+$urlSupprimerSignatureElectronique = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
+    ? $this->url('contrat/supprimer-signature-electronique', ['contrat' => $contrat->getId()])
+    : null;
+
 
 $urlValidation = $this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)
     ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
@@ -120,14 +124,18 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                     <?= $contrat->getStructure() ?></li>
             <?php endif; ?>
             <?php if (!$contrat->getSignature() && $contrat->getIntervenant()->getStatut()->isContratSignatureActivation() && $contrat->getValidation()): ?>
-                <li><i class="fas fa-hourglass-start"></i> En attente d'envoie pour signature électronique</li>
+                <li><i class="fas fa-hourglass-start"></i> En attente d'envoi pour signature électronique</li>
             <?php endif; ?>
             <?php if ($contrat->getSignature()): ?>
                 <li><i class="fas fa-signature"></i> Envoyé pour signature
                     électronique le <?= $contrat->getSignature()->getDateCreated()->format(Application\Constants::DATE_FORMAT) ?>
-                    (statut : <?= \UnicaenSignature\Entity\Db\Signature::getStatusLabel($contrat->getSignature()->getStatus()) ?>)
+
+                </li>
+                <li><i class="fas fa-signature"></i>
+                    <?= $contrat->getStatutSignature() ?>
                 </li>
             <?php endif; ?>
+
 
         </ul>
 
@@ -174,8 +182,8 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 </a>
 
             <?php endif; ?>
-            <?php if ($contratSignatureActivation && $contrat->getSignature()): ?>
-                <a href="<?= $urlSignatureElectronique ?>" class="btn btn-danger">
+            <?php if ($urlSupprimerSignatureElectronique && $contrat->getSignature()): ?>
+                <a href="<?= $urlSupprimerSignatureElectronique ?>" class="btn btn-danger">
                     <i class="fas fa-trash"></i>
                     Supprimer la signature électronique
                 </a>

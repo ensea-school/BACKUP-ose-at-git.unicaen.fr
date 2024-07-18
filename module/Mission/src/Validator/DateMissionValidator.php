@@ -20,8 +20,6 @@ class DateMissionValidator extends AbstractValidator
 
     protected DateTime $dateFin;
 
-    protected DateTime $dateVerifiee;
-
     protected Annee    $annee;
 
 
@@ -30,10 +28,9 @@ class DateMissionValidator extends AbstractValidator
     {
         parent::__construct($options);
 
-        $this->dateDebut    = $options['dateDebut'];
-        $this->dateFin      = $options['dateFin'];
-        $this->annee        = $options['annee'];
-        $this->dateVerifiee = $options['dateVerifiee'];
+        $this->dateDebut = $options['dateDebut'];
+        $this->dateFin   = $options['dateFin'];
+        $this->annee     = $options['annee'];
     }
 
 

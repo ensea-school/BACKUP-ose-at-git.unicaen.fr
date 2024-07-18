@@ -34,7 +34,7 @@ function calculAttendus()
 }
 
 
-function calculTests()
+function calculTests(string $formuleName)
 {
     $c = OseAdmin::instance()->console();
 
@@ -53,8 +53,7 @@ function calculTests()
       formule_test_intervenant i
       JOIN formule f ON f.id = i.formule_id
     WHERE
-      1=1
-      AND f.code = 'FORMULE_UBO'
+      f.code = '$formuleName'
     ORDER BY
       i.id
     ";
@@ -74,6 +73,7 @@ function calculTests()
         $test = $testService->get($testId);
         try {
             $formulator->calculer($test);
+
             if (isDiffAC($test)){
                 $testService->calculerAttendu($test);
                 $formulator->calculer($test);
@@ -85,6 +85,7 @@ function calculTests()
                 $testService->save($test);
             }else{
                 $c->msg($calculText, true);
+                //$testService->save($test);
             }
 
         }catch(\Throwable $e){
@@ -92,7 +93,7 @@ function calculTests()
             $c->println($e->getMessage(), $c::COLOR_RED);
         }
     }
-    $c->msg('Test terminé!!                                                                             ');
+    $c->msg('Test terminé pour '.$formuleName.'!!                                                                             ');
 }
 
 
@@ -127,7 +128,7 @@ function isDiffAC(\Formule\Entity\Db\FormuleTestIntervenant $test): ?string
                 return "Différence de $diff heures trouvée";
             }
             if ($diff != 0){
-                return "Différence arrondi";
+                //return "Différence arrondi";
             }
         }
     }
@@ -135,8 +136,11 @@ function isDiffAC(\Formule\Entity\Db\FormuleTestIntervenant $test): ?string
 }
 
 try {
+$params = \UnicaenCode\Util::$controller->getRequest()->getParams();
 
-    calculTests();
+    $formuleName = $params[2] ?? null;
+
+    calculTests($formuleName);
 
 }catch(\Throwable $e){
     OseAdmin::instance()->console()->printDie($e->getMessage());
@@ -146,16 +150,7 @@ try {
 
 3707 tests / formule
 
-Problèmes :
-
-FORMULE_MONTPELLIER
-FORMULE_UBO             pb très ancienne feuille
-
-FORMULE_UNICAEN_2020    pb très ancienne feuille
-FORMULE_UPEC_2022       pb ancienne feuille
-
-
-Erreurs arrondis :
+Erreurs arrondis : 112 au total
 
 FORMULE_ARTOIS : 151553, 186917, 202765, 207805, 232137
 FORMULE_ASSAS : 148319, 186931, 193203
@@ -163,42 +158,42 @@ FORMULE_AVIGNON : 151230, 204374
 FORMULE_COTE_AZUR : 149896, 159108,159780, 160536, 161936, 172408, 173024, 173668, 177700, 178820, 179660, 180052, 180192, 184756, 184952,
             184980, 185736, 186912, 196096, 201388, 206652, 206708, 207744, 208808, 215892, 220764, 226728, 229808, 232412, 240280
 FORMULE_GUYANE : 151559, 199299, 202771
-FORMULE_LILLE : 148307, 151555, 186919, 199295, 202767, 232139 (package modifié en BQ, BW, CC, CI : param_2 NULL mal géré)
-FORMULE_LYON2 : 153562, 199286
-FORMULE_PARIS1 : 148317, 151565, 186929, 193201, 199305, 202777, 232149
-FORMULE_PARIS8_2021 : 184256, 186916, 206264, 211752, 226956, 229952 (package corrigé en AG, AS, BE: pb si code enseignement NULL)
-FORMULE_PICARDIE : 151564, 202776
-FORMULE_REUNION_2022 : 148308, 170512, 186920, 193192, 199296, 205932, 231468
-FORMULE_SORBONNE_NOUVELLE : 170513, 199297
-FORMULE_ULHN : 240274
-FORMULE_ULHN_2021 : 149890, 159102, 160530, 161930, 172402, 173018, 173662, 178814, 179654, 180046, 180186, 184750, 184946, 184974, 185730,
+t FORMULE_LILLE : 148307, 151555, 186919, 199295, 202767, 232139 (package modifié en BQ, BW, CC, CI : param_2 NULL mal géré)
+t FORMULE_LYON2 : 153562, 199286
+t FORMULE_MONTPELLIER : 160529
+t FORMULE_PARIS1 : 148317, 151565, 186929, 193201, 199305, 202777, 232149
+t FORMULE_PARIS8_2021 : 184256, 186916, 206264, 211752, 226956, 229952 (package corrigé en AG, AS, BE: pb si code enseignement NULL)
+t FORMULE_PICARDIE : 151564, 202776
+t FORMULE_REUNION_2022 : 148308, 170512, 186920, 193192, 199296, 205932, 231468
+t FORMULE_SORBONNE_NOUVELLE : 170513, 199297
+t FORMULE_UBO : 153560
+t FORMULE_ULHN : 240274
+t FORMULE_ULHN_2021 : 149890, 159102, 160530, 161930, 172402, 173018, 173662, 178814, 179654, 180046, 180186, 184750, 184946, 184974, 185730,
             186906, 196090, 201382, 206646, 206702, 207738, 208802, 215886, 226722, 229802, 232406
-FORMULE_UNICAEN : 139630, 139694, 139754, 140091
-
+t FORMULE_UNICAEN : 139630, 139694, 139754, 140091
+t FORMULE_UNICAEN_2020 : 138872, 139209 (Jean-Michel Cador 2018 & 2019)
+t FORMULE_UPEC_2022 : 153574, 199298
 
 Parfait :
 
-FORMULE_DAUPHINE
-FORMULE_INSA_LYON
-FORMULE_NANTERRE
-FORMULE_PARIS
-FORMULE_PARIS8
-FORMULE_POITIERS
-FORMULE_POITIERS_2021
-FORMULE_RENNES1
-FORMULE_RENNES2
-FORMULE_REUNION
-FORMULE_ROUEN      (package modifié pour tenir compte des spécificités du référentiel en param_1)
-FORMULE_ROUEN_2022 (package modifié pour régler les pb div/0)
-FORMULE_SACLAY
-FORMULE_ST_ETIENNE
-FORMULE_UNISTRA
-FORMULE_UPEC (package corrigé en AE11, AE12, AE13 : pb somme.si)
-FORMULE_UVSQ
-
-
-
-
+t FORMULE_DAUPHINE
+t FORMULE_INSA_LYON
+t FORMULE_NANTERRE
+t FORMULE_PARIS
+t FORMULE_PARIS8
+t FORMULE_POITIERS
+t FORMULE_POITIERS_2021
+t FORMULE_RENNES1
+t FORMULE_RENNES2
+t FORMULE_REUNION
+t FORMULE_ROUEN      (package modifié pour tenir compte des spécificités du référentiel en param_1)
+t FORMULE_ROUEN_2022 (package modifié pour régler les pb div/0)
+t FORMULE_SACLAY
+t FORMULE_ST_ETIENNE
+t FORMULE_UNICAEN_2015
+t FORMULE_UNISTRA
+t FORMULE_UPEC (package corrigé en AE11, AE12, AE13 : pb somme.si)
+t FORMULE_UVSQ
 
 */
 

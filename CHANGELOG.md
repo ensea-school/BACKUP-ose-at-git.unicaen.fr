@@ -12,6 +12,13 @@
 
 * Modification de la règle de saisie pour les dates de début et de fin de mission afin de laisser un peu de marge pour les cas des missions à cheval sur deux années universitaires : la mission devra être saisie sur l'année universitaire où elle doit être majoritairement réalisée.
 
+## Corrections de bugs
+
+* Plus de message d'erreur lorsqu'on affiche la page de validation des référentiels avec aucun service validé (#57826)
+
+
+
+
 # OSE 23.7 (11/07/2024)
 
 ## Nouveautés

@@ -27,6 +27,7 @@ class FormulatorService
     use TypeIntervenantServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
+    use FormuleServiceAwareTrait;
 
     private array $formulesCalculCache = [];
 
@@ -49,8 +50,7 @@ class FormulatorService
         $tableur = $this->charger($filename);
         $formule = $tableur->formule();
         $formule->setPhpClass($this->traduire($tableur));
-        $em->persist($formule);
-        $em->flush($formule);
+        $this->getServiceFormule()->save($formule);
 
         $this->makeWithCacheFile($formule, false);
 

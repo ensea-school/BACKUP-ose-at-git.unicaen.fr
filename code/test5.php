@@ -9,21 +9,20 @@
  */
 
 
+/** @var \Intervenant\Service\IntervenantService $fi */
+$fi = $container->get(\Intervenant\Service\IntervenantService::class);
+
+/** @var \Formule\Service\FormuleService $fs */
+$fs = $container->get(\Formule\Service\FormuleService::class);
+
 /** @var \Formule\Service\FormulatorService $formulator */
 $formulator = $container->get(\Formule\Service\FormulatorService::class);
-$filename = "/app/data/formules/FORMULE_MONTPELLIER.ods";
 
-$tableur = $formulator->charger($filename);
-//echo \Unicaen\OpenDocument\Calc\Display::sheet($tableur->sheet());
-
-//$d = $tableur->tableur()->getAliases();
+$typeVolumeHoraire = $container->get(\Service\Service\TypeVolumeHoraireService::class)->getRealise();
+$etatVolumeHoraire = $container->get(\Service\Service\EtatVolumeHoraireService::class)->getValide();
 
 
-$cell = $tableur->sheet()->getCell('AN25');
-$d = $cell->getDeps();
+$intervenant = $fi->get(784094);
 
 
-
-var_dump($d);
-
-
+$fs->calculer($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);

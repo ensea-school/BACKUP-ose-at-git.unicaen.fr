@@ -3,7 +3,7 @@
 namespace Formule\Service;
 
 use Psr\Container\ContainerInterface;
-
+use UnicaenTbl\Service\BddService;
 
 
 /**
@@ -25,7 +25,7 @@ class FormuleServiceFactory
     {
         $service = new FormuleService;
 
-        /* Injectez vos dépendances ICI */
+        $service->setServiceBdd($container->get(BddService::class));
 
         return $service;
     }

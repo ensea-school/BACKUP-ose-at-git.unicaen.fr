@@ -123,7 +123,7 @@ WHERE
   /*@STATUT_ID=i.statut_id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@TYPE_VOLUME_HORAIRE_ID=vhr.type_volume_horaire_id*/
-  /*@ETAT_VOLUME_HORAIRE_ID<=evh.etat_volume_horaire_id*/
+  /*@ETAT_VOLUME_HORAIRE_ID<=evh.id*/
 
 ORDER BY
   horaire_fin, horaire_debut, volume_horaire_id, volume_horaire_ref_id

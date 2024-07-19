@@ -3,8 +3,11 @@
 namespace Formule\Service;
 
 
+use Application\Entity\Db\Annee;
 use Application\Service\AbstractService;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Doctrine\ORM\EntityRepository;
+use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleResultatIntervenant;
 use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\FormuleIntervenant;
@@ -12,6 +15,7 @@ use Formule\Entity\FormuleVolumeHoraire;
 use Intervenant\Entity\Db\Intervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
+use UnicaenTbl\Service\BddServiceAwareTrait;
 
 /**
  * Description of FormuleService
@@ -20,21 +24,144 @@ use Service\Entity\Db\TypeVolumeHoraire;
  */
 class FormuleService extends AbstractService
 {
-    public function getService(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): FormuleIntervenant
+    use ParametresServiceAwareTrait;
+    use FormulatorServiceAwareTrait;
+    use BddServiceAwareTrait;
+
+    /** @var array|Formule[] */
+    private array $formules = [];
+
+
+
+    private function getRepo(): EntityRepository
     {
-        $sql = "
-        SELECT
-          *
-        FROM
-          v_formule_intervenant
-        WHERE
-          intervenant_id = :intervenant
-        ";
+        return $this->getEntityManager()->getRepository(Formule::class);
+    }
+
+
+
+    private function actuCache(): void
+    {
+        if (empty($this->formules)) {
+            $qb = $this->getRepo()->createQueryBuilder('f', 'f.id');
+            $this->formules = $qb->getQuery()->getResult();
+        }
+    }
+
+
+
+    public function save(Formule $formule): self
+    {
+        $em = $this->getEntityManager();
+        $em->persist($formule);
+        $em->flush($formule);
+        $this->formules[$formule->getId()] = $formule;
+
+        return $this;
+    }
+
+
+
+    public function get(int $id, ?Annee $annee = null): Formule
+    {
+        $this->actuCache();
+
+        if (!array_key_exists($id, $this->formules)) {
+            throw new \Exception("ID $id de formule erroné : formule introuvable");
+        }
+
+        $formule = $this->formules[$id];
+
+        if ($annee) {
+            $formule = $this->findDelegated($formule, $annee);
+        }
+
+        return $formule;
+    }
+
+
+
+    public function getByCode(string $code): Formule
+    {
+        $this->actuCache();
+
+        foreach ($this->formules as $formule) {
+            if ($formule->getCode() == $code) {
+                return $formule;
+            }
+        }
+
+        throw new \Exception('Code de formule "' . $code . '" incorrect : formule introuvable');
+    }
+
+
+
+    public function getCurrent(?Annee $annee = null): Formule
+    {
+        $currentFormuleId = (int)$this->getServiceParametres()->get('formule');
+
+        return $this->get($currentFormuleId, $annee);
+    }
+
+
+
+    private function findDelegated(Formule $formule, Annee $annee): Formule
+    {
+        //si la formule doit déléguer le calcul à une ancienne version, on la trouve et on la retourne
+        if ($formule->getDelegationAnnee()) {
+            if ($annee->getId() < $formule->getDelegationAnnee()) {
+                $formule = $this->getByCode($formule->getDelegationFormule());
+                $formule = $this->findDelegated($formule, $annee);
+            }
+        }
+
+        return $formule;
+    }
+
+
+
+    private function makeSqlIntervenant(Formule $formule, Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): string
+    {
+        $sb = $this->getServiceBdd();
 
         $params = [
-            'intervenant' => $intervenant->getId(),
+            'INTERVENANT_ID' => $intervenant->getId()
         ];
-        $res = $this->getEntityManager()->getConnection()->fetchAssociative($sql, $params);
+        $vIntervenant = $sb->injectKey($sb->getViewDefinition('V_FORMULE_INTERVENANT'), $params);
+
+        $sql = $formule->getSqlIntervenant();
+        $sql = str_replace('V_FORMULE_INTERVENANT', '(' . $vIntervenant . ')', $sql);
+
+        return $sql;
+    }
+
+
+
+    private function makeSqlVolumeHoraire(Formule $formule, Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): string
+    {
+        $sb = $this->getServiceBdd();
+
+        $params = [
+            'INTERVENANT_ID'         => $intervenant->getId(),
+            'TYPE_VOLUME_HORAIRE_ID' => $typeVolumeHoraire->getId(),
+            'ETAT_VOLUME_HORAIRE_ID' => $etatVolumeHoraire->getId(),
+        ];
+        $vVolumeHoraire = $sb->injectKey($sb->getViewDefinition('V_FORMULE_VOLUME_HORAIRE'), $params);
+
+        $sql = $formule->getSqlVolumeHoraire();
+        $sql = str_replace('V_FORMULE_VOLUME_HORAIRE', '(' . $vVolumeHoraire . ')', $sql);
+
+        return $sql;
+    }
+
+
+
+    public function getService(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): FormuleIntervenant
+    {
+        $formule = $this->getCurrent($intervenant->getAnnee());
+
+        $sql = $this->makeSqlIntervenant($formule, $intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+        $res = $this->getEntityManager()->getConnection()->fetchAssociative($sql);
 
         $formuleIntervenant = new FormuleIntervenant();
         $formuleIntervenant->setId($intervenant->getId());
@@ -48,25 +175,11 @@ class FormuleService extends AbstractService
         $formuleIntervenant->setDepassementServiceDuSansHC($res['DEPASSEMENT_SERVICE_DU_SANS_HC'] === '1');
 
 
-        $sql = "
-        SELECT
-          *
-        FROM
-          v_formule_volume_horaire
-        WHERE
-          intervenant_id = :intervenant
-          AND type_volume_horaire_id = :typeVolumeHoraire
-          AND etat_volume_horaire_id >= :etatVolumeHoraire
-        ";
+        $sql = $this->makeSqlVolumeHoraire($formule, $intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
 
-        $params = [
-            'intervenant' => $intervenant->getId(),
-            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
-            'etatVolumeHoraire' => $etatVolumeHoraire->getId(),
-        ];
-        $ress = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
+        $ress = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
-        foreach ($ress as $res){
+        foreach ($ress as $res) {
             $fvh = new FormuleVolumeHoraire();
             $fvh->setFormuleIntervenant($formuleIntervenant);
             $formuleIntervenant->addVolumeHoraire($fvh);
@@ -99,6 +212,23 @@ class FormuleService extends AbstractService
 
 
 
+    public function calculer(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): FormuleIntervenant
+    {
+        $fi = $this->getService($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+        $formule = $this->getCurrent($intervenant->getAnnee());
+        $this->getServiceFormulator()->calculer($fi, $formule);
+
+        $resultat = $this->getResultat($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+
+        /* On reverse le calcul dans le résultat */
+
+        /* On sauvegarde le résultat */
+
+        return $fi;
+    }
+
+
+
     public function getResultat(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): FormuleIntervenant
     {
         /** @var EntityRepository $repo */
@@ -108,7 +238,7 @@ class FormuleService extends AbstractService
         SELECT
           fri, frvh
         FROM
-          ".FormuleResultatIntervenant::class." fri
+          " . FormuleResultatIntervenant::class . " fri
           JOIN fri.volumesHoraires frvh
         WHERE
           fri.intervenant = :intervenant
@@ -116,13 +246,16 @@ class FormuleService extends AbstractService
           AND fri.etatVolumeHoraire = :etatVolumeHoraire
         ";
 
-        $params =[
-            'intervenant' => $intervenant,
+        $params = [
+            'intervenant'       => $intervenant,
             'typeVolumeHoraire' => $typeVolumeHoraire,
             'etatVolumeHoraire' => $etatVolumeHoraire,
         ];
 
-        $formuleResultatIntervenant = $this->getEntityManager()->createQuery($dql)->setParameters($params)->getResult()[0];
+        $formuleResultatIntervenant = $this->getEntityManager()->createQuery($dql)->setParameters($params)->getResult();
+        if (empty($formuleResultatIntervenant)){
+            $formuleResultatIntervenant = new FormuleIntervenant(); // à compléter
+        }
 
         return $formuleResultatIntervenant;
     }
@@ -138,13 +271,13 @@ class FormuleService extends AbstractService
         SELECT
           fti, ftvh
         FROM
-          ".FormuleTestIntervenant::class." fti
+          " . FormuleTestIntervenant::class . " fti
           JOIN fti.volumesHoraires ftvh
         WHERE
           fti.id = :intervenant
         ";
 
-        $params =[
+        $params = [
             'intervenant' => $intervenant,
         ];
 

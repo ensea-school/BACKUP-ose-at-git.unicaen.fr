@@ -528,7 +528,7 @@ class FormuleTableur
             if ($p['cell']) {
                 /** @var Calc\Cell $cell */
                 $cell = $p['cell'];
-                $fProps[$pn] = $cell->getValue();
+                $fProps[$pn] = $cell->getContent();
             }
         }
 

@@ -2,14 +2,11 @@
 
 namespace Paiement\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractService;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
-use Mission\Entity\Db\Mission;
-use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\TblPaiement;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -34,7 +31,7 @@ class ServiceAPayerService extends AbstractService
      *
      * @return ServiceAPayerInterface[]
      */
-    public function getListByIntervenant (Intervenant $intervenant)
+    public function getListByIntervenant(Intervenant $intervenant)
     {
         $dql = "
         SELECT
@@ -61,7 +58,7 @@ class ServiceAPayerService extends AbstractService
 
 
 
-    public function getListByStructure (Structure $structure)
+    public function getListByStructure(Structure $structure)
     {
         $dql = "
         SELECT

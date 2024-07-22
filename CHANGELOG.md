@@ -1,11 +1,41 @@
 # Version stable
 
-[OSE 23.6](#ose-236-13062024)
+[OSE 23.7](#ose-237-11072024)
 
 
 
 # OSE 24 (à venir)
 
+# OSE 23.8 (à venir)
+
+## Améliorations
+
+* Modification de la règle de saisie pour les dates de début et de fin de mission afin de laisser un peu de marge pour les cas des missions à cheval sur deux années universitaires : la mission devra être saisie sur l'année universitaire où elle doit être majoritairement réalisée.
+
+## Corrections de bugs
+
+* Plus de message d'erreur lorsqu'on affiche la page de validation des référentiels avec aucun service validé (#57826)
+
+
+
+
+# OSE 23.7 (11/07/2024)
+
+## Nouveautés
+
+* Gestion de la situation matrimoniale dans les données personnelles, avec export vers Siham de la donnée collectée. (#56868)
+
+## Améliorations
+
+* Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant, mais prendre aussi en compte les missions de vacataires (#57424)
+* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'un renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions. 
+* Dans les demandes de mise en paiement par lot, on filtre maintenant les intervenants trop payés pour une composante donnée (#56770)
+* Demande de mise en paiement par lot, classement des intervenants par ordre alphabétique par nom (#56558)
+* Bloquer la saisie des dates de début et de fin d'une mission aux bornes de l'année universitaire du contexte de saisie de la mission.
+
+## Corrections de bugs
+
+* Correction d'un problème de suppression d'une mission avec plusieurs volumes horaires prévisionnels
 
 # OSE 23.6 (13/06/2024)
 

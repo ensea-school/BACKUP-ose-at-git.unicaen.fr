@@ -420,6 +420,32 @@ class ContratService extends AbstractEntityService
 
 
 
+    public function getFirstContratMission(Intervenant $intervenant): ?Mission
+    {
+        $dql = " SELECT c,m
+            FROM " . Contrat::class . " c
+            JOIN c.intervenant i
+            JOIN c.mission m
+            WHERE c.intervenant = :intervenant
+                AND c.dateRetourSigne IS NOT NULL
+                AND c.histoDestruction IS NULL
+            ORDER BY m.dateDebut ASC
+        ";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('intervenant', $intervenant);
+
+        $contrat = $query->setMaxResults(1)->getOneOrNullResult();
+
+        if ($contrat) {
+            return $contrat->getMission();
+        }
+
+        return null;
+    }
+
+
+
     public function getContratInitialMission(?Mission $mission)
     {
         $dql = '

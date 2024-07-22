@@ -13,6 +13,7 @@ spl_autoload_register(function ($class) {
     $dirs = [
         getcwd().'/admin/src/' => null,
         getcwd().'/admin/actul/src/' => null,
+        getcwd().'/admin/pegase/src/' => null,
     ];
     foreach ($dirs as $dir => $ns) {
         if (!$ns || str_starts_with($class, $ns)) {

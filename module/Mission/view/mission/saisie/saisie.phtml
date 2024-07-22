@@ -7,6 +7,8 @@
  */
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNamespace('error');
+
+
 if ($form->isValide()) {
     echo $this->messenger()->renderMessage("Cette mission est déjà validée. Il n'est possible de ne modifier que son nombre d'heures et sa date de fin.", 'info');
 }
@@ -21,10 +23,12 @@ echo $this->formControlGroup($form->get('typeMission'));
 echo $this->formControlGroup($form->get('libelleMission'));
 echo '<div class="row">';
 echo '<div class="col-md-6">';
-echo $this->formControlGroup($form->get('dateDebut'));
+echo $this->formLabel($form->get('dateDebut'));
+echo $this->formElement($form->get('dateDebut'));
 echo '</div>';
 echo '<div class="col-md-6">';
-echo $this->formControlGroup($form->get('dateFin'));
+echo $this->formLabel($form->get('dateFin'));
+echo $this->formElement($form->get('dateFin'));
 echo '</div>';
 echo '</div>';
 

@@ -66,6 +66,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $dossierEmailPerso                  = false;
 
+    private bool        $dossierSituationMatrimoniale       = false;
+
     private bool        $dossierEmployeurFacultatif         = false;
 
     private bool        $dossierAdresse                     = true;
@@ -526,6 +528,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setDossierEmailPerso(bool $dossierEmailPerso): Statut
     {
         $this->dossierEmailPerso = $dossierEmailPerso;
+
+        return $this;
+    }
+
+
+
+    public function getDossierSituationMatrimoniale(): bool
+    {
+        return $this->dossierSituationMatrimoniale;
+    }
+
+
+
+    public function setDossierSituationMatrimoniale(bool $dossierSituationMatrimoniale): Statut
+    {
+        $this->dossierSituationMatrimoniale = $dossierSituationMatrimoniale;
 
         return $this;
     }

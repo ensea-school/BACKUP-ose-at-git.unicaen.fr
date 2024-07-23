@@ -2,8 +2,13 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Role;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Entity\Db\Affectation;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Lieu\Entity\Db\Structure;
+use Lieu\Service\StructureServiceAwareTrait;
 
 /**
  * Description of AffectationService
@@ -17,6 +22,7 @@ use Application\Entity\Db\Affectation;
 class AffectationService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
+    use StructureServiceAwareTrait;
 
 
     /**
@@ -63,6 +69,41 @@ class AffectationService extends AbstractEntityService
         }
 
         return parent::save($entity);
+    }
+
+
+
+    /**
+     * Hack pour gérer le finder de structure différent des autres compte tenu de la hiérarchisation des structures
+     */
+
+    public function finderByRole(Role $role, ?QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        if ($role) {
+            $qb->join("$alias.role", 'r');
+            $qb->andWhere("$alias.role = :role");
+            $qb->setParameter('role', $role);
+        }
+
+        return $qb;
+    }
+
+
+
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $structureService = $this->getServiceStructure();
+        $structureAlias   = $structureService->getAlias();
+
+        $this->join($structureService, $qb, 'structure');
+
+        $qb->andWhere("$structureAlias = :structure")->setParameter('structure', $structure);
+
+        return $qb;
     }
 
 }

@@ -29,6 +29,7 @@ use Laminas\Http\Response;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use LogicException;
+use PHPUnit\Exception;
 use Service\Entity\Db\TypeService;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -670,10 +671,10 @@ class ContratController extends AbstractController
     public function supprimerSignatureElectroniqueAction()
     {
         //TODO : vérifier qu'on a bien le droit de supprimer cette signature, pour ce contrat
-        $contrat = $this->getEvent()->getParam('contrat');
+        $contrat        = $this->getEvent()->getParam('contrat');
+        $libelleContrat = "Contrat N°" . $contrat->getId();
         try {
             if ($this->getServiceContrat()->supprimerSignatureElectronique($contrat)) {
-                $libelleContrat = "Contrat N°" . $contrat->getId();
                 $this->flashMessenger()->addSuccessMessage("Signature électronique supprimée avec succés pour le " . $libelleContrat);
             } else {
                 $this->flashMessenger()->addErrorMessage("Impossible de supprimer la signature électronique pour le " . $libelleContrat);
@@ -682,6 +683,23 @@ class ContratController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
+
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
+    }
+
+
+
+    public function rafraichirSignatureElectroniqueAction()
+    {
+        $contrat   = $this->getEvent()->getParam('contrat');
+        $signature = $contrat->getSignature();
+        if ($signature) {
+            try {
+                $this->getServiceContrat()->updateSignatureElectronique($contrat);
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
+        }
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
     }

@@ -7,18 +7,35 @@ use Signature\Controller\CircuitController;
 use Signature\Controller\CircuitControllerFactory;
 use Signature\Controller\SignatureController;
 use Signature\Controller\SignatureControllerFactory;
+use Signature\Controller\SignatureFlowController;
+use Signature\Controller\SignatureFlowControllerFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
 
 
     'routes' => [
-        'signature' => [
+        'signature-flow' => [
+            'route'         => '/signature-flow',
+            'controller'    => SignatureFlowController::class,
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'saisir' => [
+                    'route'      => '/saisir/[:signatureFlow]',
+                    'controller' => SignatureFlowController::class,
+                    'action'     => 'saisir',
+                ],
+
+            ],
+        ],
+        'signature'      => [
             'route'         => '/signature',
             'controller'    => SignatureController::class,
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
+
                 'configuration'    => [
                     'route'      => '/configuration',
                     'controller' => SignatureController::class,
@@ -58,6 +75,13 @@ return [
             'pages' => [
                 'signature' => [
                     'pages' => [
+                        'signature-flow'          => [
+                            'label'      => "Liste des circuits de signatures",
+                            'title'      => "Liste des circuits de signatures",
+                            'route'      => 'signature-flow',
+                            'withtarget' => true,
+                            'order'      => 10,
+                        ],
                         'signature-configuration' => [
                             'label'      => "Liste des parapheurs",
                             'title'      => "Permet de visualiser la liste et la configuration des différents parapheurs.",
@@ -88,13 +112,25 @@ return [
             'roles'      => ['guest'],
 
         ],
+        [
+            'controller' => SignatureFlowController::class,
+            'action'     => ['index', 'saisir'],
+            'roles'      => ['guest'],
+
+        ],
+
 
     ],
 
     /* Déclaration du contrôleur */
     'controllers' => [
-        SignatureController::class => SignatureControllerFactory::class,
+        SignatureController::class     => SignatureControllerFactory::class,
+        SignatureFlowController::class => SignatureFlowControllerFactory::class,
 
+    ],
+
+    'forms' => [
+        Form\SignatureFlowForm::class => Form\SignatureFlowFormFactory::class,
     ],
 
     'services' => [

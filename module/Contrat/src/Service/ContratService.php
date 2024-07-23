@@ -2,6 +2,7 @@
 
 namespace Contrat\Service;
 
+use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Fichier;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
@@ -208,7 +209,7 @@ class ContratService extends AbstractEntityService
         $signature->setType($letterFileLevel)
             ->setLabel('Test')
             ->setDateCreated(new \DateTime())
-            ->setAllSignToComplete(false)
+            ->setAllSignToComplete(true)
             ->setDescription($libelleContrat)
             ->setDocumentPath($filename);
 
@@ -218,25 +219,53 @@ class ContratService extends AbstractEntityService
         /**
          * @var Statut $statut
          */
-        $statut         = $contrat->getIntervenant()->getStatut();
-        $roleSignataire = $statut->getContratSignatureRole();
+        $listeSignatairesEtablissement = [];
+        $statut                        = $contrat->getIntervenant()->getStatut();
+        $roleSignataire                = $statut->getContratSignatureRole();
+        //Si on est dans un périmètre composante, on prendra uniquement les utilisateurs ayant un rôle sur la dite composante
+        $qb = $this->getServiceAffectation()->finderByRole($roleSignataire);
+        if ($roleSignataire->getPerimetre()->getCode() == 'composante') {
+            $structure = $contrat->getStructure();
+            $qb        = $this->getServiceAffectation()->finderByStructure($contrat->getStructure(), $qb);
+        }
+        $affectations = $qb->getQuery()->getResult();
+        $i            = 1;
+        foreach ($affectations as $a) {
+            $listeSignatairesEtablissement[] = [
+                'role'             => $a->getRole()->getLibelle(),
+                'nom'              => $a->getUtilisateur()->getDisplayName(),
+                'email'            => 'anthony.lecourtes+' . $i . '@gmail.com',//$a->getUtilisateur()->getEmail(),
+                'structureCode'    => $a->getStructure()->getCode(),
+                'structureLibelle' => $a->getStructure()->getLibelle(),
 
+            ];
+            break;
+            $i++;
+        }
+        //On ajouter les signataires établissement
 
-        //Et envoyer au email utilisateur
-        $destinataires  = [];
-        $data['emails'] = 'antony.lecourtes@unicaen.fr';
-        $postedEmails   = explode(',', $data['emails']);
-        foreach ($postedEmails as $email) {
+        foreach ($listeSignatairesEtablissement as $signataire) {
             $sr = new SignatureRecipient();
             $sr->setSignature($signature);
             $sr->setStatus(Signature::STATUS_SIGNATURE_DRAFT);
-            $sr->setEmail($email);
-            $sr->setPhone('0679434732');
+            $sr->setEmail($signataire['email']);
+            //$sr->setPhone('0679434732');
             $destinataires[] = $sr;
         }
+        //On rajoute le signataire intervenant
+        $intervenant      = $contrat->getIntervenant();
+        $emailIntervenant = ($intervenant->getEmailPerso() ?: $intervenant->getEmailPro());
+        $sr               = new SignatureRecipient();
+        $sr->setSignature($signature);
+        $sr->setStatus(Signature::STATUS_SIGNATURE_DRAFT);
+        $sr->setEmail('antony.lecourtes@unicaen.fr');
+        $destinataires[] = $sr;
+        //$sr->setEmail($emailIntervenant);
+
         $signature->setRecipients($destinataires);
         $this->getSignatureService()->saveNewSignature($signature, true);
         $contrat->setSignature($signature);
+
         $this->save($contrat);
 
         return $contrat;
@@ -258,6 +287,29 @@ class ContratService extends AbstractEntityService
             } catch (\Exception $e) {
                 throw $e;
             }
+        }
+
+        return $contrat;
+    }
+
+
+
+    /**
+     * Met à jour la signature electronique d'un contrat
+     *
+     * @param Contrat $contrat
+     *
+     * @return Contrat
+     * @throws \UnicaenSignature\Exception\SignatureException
+     */
+
+    public function updateSignatureElectronique(Contrat $contrat): Contrat
+    {
+        $signature = $contrat->getSignature();
+        if ($signature instanceof Signature) {
+            //On met à jour le statut de la signature
+            $this->getSignatureService()->updateStatusSignature($signature);
+            //On regarde si la signature est totalement signé
         }
 
         return $contrat;

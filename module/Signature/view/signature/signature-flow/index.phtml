@@ -1,0 +1,74 @@
+<h1>Liste des circuits de signature</h1>
+<div class="container">
+    <div class="col-md-12">
+        <section class="row">
+            <article class="signature-flow">
+                <h3 class="card-title">Nom du circuit : <strong>Signature des contrats<strong></h3>
+                <section class="steps">
+                    <article class="step">
+                        <h4 style="font-size:18px;">
+                            Etape 1 - <strong>Signature de l'intervenant</strong>
+                            <span> ( <i class="fas fa-user-group"></i> Tous les destinataires doivent signer) </span>
+                        </h4>
+                        <i class="fas fa-box-archive"></i> Parapheur : <strong class="valued">OSCAR visa</strong> -
+                        <i class="fas fa-pen-nib"></i> Niveau de validation : <strong class="valued">Visa caché</strong> -
+                        <i class="fas fa-BELL"></i></i>Notifications : <strong class="valued">OUI</strong> -
+
+                    </article>
+                    <article class="step">
+                        <h4 style="font-size:18px;">
+                            Etape 2 - <strong>Signature de l'établissement</strong>
+                            <span> ( <i class="fas fa-user-group"></i> Le premier signe pour les autres) </span>
+                        </h4>
+                        <i class="fas fa-box-archive"></i> Parapheur : <strong class="valued">OSCAR visa</strong> -
+                        <i class="fas fa-pen-nib"></i> Niveau de validation : <strong class="valued">Visa caché</strong> -
+                        <i class="fas fa-BELL"></i></i>Notifications : <strong class="valued">OUI</strong> -
+
+                    </article>
+                </section>
+                <a class="btn btn-primary" data-event="type-edition"
+                   href="<?= $this->url("signature-flow/saisir", ['signatureFlow' => '1']) ?>"
+                   title="Ajouter un nouveau circuit">
+                    <i class="fas fa-handshake"></i> Modifier le circuit
+                </a>
+            </article>
+        </section>
+
+        <a class="btn btn-primary" data-event="type-edition"
+           href="<?= $this->url("signature-flow/saisir", []) ?>"
+           title="Ajouter un nouveau circuit">
+            <i class="fas fa-handshake"></i> Ajouter un nouveau circuit
+        </a>
+
+    </div>
+</div>
+<style>
+    .signature-flow {
+        border: solid #cbd9e1 thin;
+        border-left: solid #a3c2d3 4px;
+        background: white;
+        padding: .5em 1em;
+        margin: 1em 0;
+    }
+
+    .steps {
+        margin: 1em 0;
+        padding: .2em 1em;
+        border: solid #dde2e5 thin;
+    }
+
+    .step {
+        padding: .5em 1em;
+        border: solid #dde2e5 thin;
+        border-left: solid #dde2e5 4px;
+        margin: 1em 0;
+    }
+
+    .valued {
+        display: inline-block;
+        background: #edf1f6;
+        padding: 0 .5em;
+        margin: 0 .3em;
+        border-radius: 4px;
+    }
+</style>

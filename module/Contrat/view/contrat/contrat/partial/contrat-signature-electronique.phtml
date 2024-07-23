@@ -36,6 +36,9 @@ $urlSupprimerSignatureElectronique = $this->isAllowed($contrat, Privileges::CONT
     ? $this->url('contrat/supprimer-signature-electronique', ['contrat' => $contrat->getId()])
     : null;
 
+$urlRafraichirSignatureElectronique = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
+    ? $this->url('contrat/rafraichir-signature-electronique', ['contrat' => $contrat->getId()])
+    : null;
 
 $urlValidation = $this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)
     ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
@@ -182,6 +185,15 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 </a>
 
             <?php endif; ?>
+
+            <?php if ($urlRafraichirSignatureElectronique && $contrat->getSignature()): ?>
+                <a href="<?= $urlRafraichirSignatureElectronique ?>" class="btn btn-primary">
+                    <i class="fas fa-arrows-rotate"></i>
+                    Rafraîchir la signature électronique
+                </a>
+
+            <?php endif; ?>
+            
             <?php if ($urlSupprimerSignatureElectronique && $contrat->getSignature()): ?>
                 <a href="<?= $urlSupprimerSignatureElectronique ?>" class="btn btn-danger">
                     <i class="fas fa-trash"></i>
@@ -189,6 +201,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 </a>
 
             <?php endif; ?>
+
 
             <?php if ($urlSaisieRetour): ?>
                 <a href="<?= $urlSaisieRetour ?>" class="btn btn-primary pop-ajax" data-submit-reload="true">

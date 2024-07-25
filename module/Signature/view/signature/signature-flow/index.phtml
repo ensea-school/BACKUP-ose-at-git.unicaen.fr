@@ -1,41 +1,68 @@
 <h1>Liste des circuits de signature</h1>
 <div class="container">
     <div class="col-md-12">
-        <section class="row">
-            <article class="signature-flow">
-                <h3 class="card-title">Nom du circuit : <strong>Signature des contrats<strong></h3>
-                <section class="steps">
-                    <article class="step">
-                        <h4 style="font-size:18px;">
-                            Etape 1 - <strong>Signature de l'intervenant</strong>
-                            <span> ( <i class="fas fa-user-group"></i> Tous les destinataires doivent signer) </span>
-                        </h4>
-                        <i class="fas fa-box-archive"></i> Parapheur : <strong class="valued">OSCAR visa</strong> -
-                        <i class="fas fa-pen-nib"></i> Niveau de validation : <strong class="valued">Visa caché</strong> -
-                        <i class="fas fa-BELL"></i></i>Notifications : <strong class="valued">OUI</strong> -
+        <?php foreach ($listeSignatureFlow as $flow): ?>
+            <section class="row">
+                <article class="signature-flow">
+                    <h3 class="card-title">
+                        <a class="btn btn-danger" data-event="type-edition"
+                           href="<?= $this->url("signature-flow/supprimer-circuit", ['signatureFlow' => $flow['id']]) ?>"
+                           title="Supprimer un circuit">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        <a class="btn btn-primary ajax-modal" data-event="type-edition"
+                           href="<?= $this->url("signature-flow/saisir-circuit", ['signatureFlow' => $flow['id']]) ?>"
+                           title="Modifier le circuit de signature">
+                            <i class="fas fa-pen-to-square"></i>
+                        </a> Nom du circuit : <strong><?= $flow['label'] ?><strong></h3>
+                    <?php if (!empty($flow['steps'])): ?>
+                        <?php foreach ($flow['steps'] as $step): ?>
+                            <section class="steps">
+                                <article class="step">
+                                    <h4 style="font-size:18px;">
+                                        Etape 1 - <strong>Signature de l'intervenant</strong>
+                                        <span> ( <i class="fas fa-user-group"></i> Tous les destinataires doivent signer) </span>
+                                    </h4>
+                                    <i class="fas fa-box-archive"></i> Parapheur : <strong class="valued">OSCAR visa</strong> -
+                                    <i class="fas fa-pen-nib"></i> Niveau de validation : <strong class="valued">Visa caché</strong> -
+                                    <i class="fas fa-BELL"></i></i>Notifications : <strong class="valued">OUI</strong> -
 
-                    </article>
-                    <article class="step">
-                        <h4 style="font-size:18px;">
-                            Etape 2 - <strong>Signature de l'établissement</strong>
-                            <span> ( <i class="fas fa-user-group"></i> Le premier signe pour les autres) </span>
-                        </h4>
-                        <i class="fas fa-box-archive"></i> Parapheur : <strong class="valued">OSCAR visa</strong> -
-                        <i class="fas fa-pen-nib"></i> Niveau de validation : <strong class="valued">Visa caché</strong> -
-                        <i class="fas fa-BELL"></i></i>Notifications : <strong class="valued">OUI</strong> -
+                                </article>
+                                <article class="step">
+                                    <h4 style="font-size:18px;">
+                                        Etape 2 - <strong>Signature de l'établissement</strong>
+                                        <span> ( <i class="fas fa-user-group"></i> Le premier signe pour les autres) </span>
+                                    </h4>
+                                    <i class="fas fa-box-archive"></i> Parapheur : <strong class="valued">OSCAR visa</strong> -
+                                    <i class="fas fa-pen-nib"></i> Niveau de validation : <strong class="valued">Visa caché</strong> -
+                                    <i class="fas fa-BELL"></i></i>Notifications : <strong class="valued">OUI</strong> -
 
-                    </article>
-                </section>
-                <a class="btn btn-primary" data-event="type-edition"
-                   href="<?= $this->url("signature-flow/saisir", ['signatureFlow' => '1']) ?>"
-                   title="Ajouter un nouveau circuit">
-                    <i class="fas fa-handshake"></i> Modifier le circuit
-                </a>
-            </article>
-        </section>
+                                </article>
+                                <a class="btn btn-primary ajax-modal" data-event="type-edition"
+                                   href="<?= $this->url("signature-flow/saisir-circuit", ['signatureFlow' => '1']) ?>"
+                                   title="Ajouter une étape au circuit">
+                                    <i class="fas fa-add"></i> Ajouter une étape
+                                </a>
+                            </section>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <section class="steps">
+                            <article>Aucune étape dans le circuit</article>
 
-        <a class="btn btn-primary" data-event="type-edition"
-           href="<?= $this->url("signature-flow/saisir", []) ?>"
+                        </section>
+                        <a class="btn btn-primary ajax-modal" data-event="type-edition"
+                           href="<?= $this->url("signature-flow/saisir-circuit", ['signatureFlow' => '1']) ?>"
+                           title="Ajouter une étape au circuit">
+                            <i class="fas fa-add"></i> Ajouter une étape
+                        </a>
+                    <?php endif; ?>
+
+                </article>
+            </section>
+        <?php endforeach; ?>
+
+        <a class="btn btn-primary ajax-modal" data-event="type-edition"
+           href="<?= $this->url("signature-flow/saisir-circuit", []) ?>"
            title="Ajouter un nouveau circuit">
             <i class="fas fa-handshake"></i> Ajouter un nouveau circuit
         </a>

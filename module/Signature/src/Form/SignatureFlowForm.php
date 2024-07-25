@@ -8,6 +8,7 @@ use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\TypeMission;
 use Paiement\Entity\Db\TauxRemu;
+use Signature\Hydrator\SignatureFlowHydrator;
 use UnicaenApp\Util;
 use UnicaenSignature\Entity\Db\SignatureFlow;
 
@@ -25,15 +26,14 @@ class SignatureFlowForm extends AbstractForm
 
 
         $this->setAttribute('id', uniqid('fm'));
+        $this->setHydrator(new SignatureFlowHydrator());
 
         $this->spec(SignatureFlow::class);
-        /*        $this->spec([
-                    'description'     => ['type' => 'Textarea'],
-                    'etudiantsSuivis' => ['type' => 'Textarea'],
-                    'structure'       => ['type' => \Lieu\Form\Element\Structure::class],
-                    'tauxRemuMajore'  => ['input' => ['required' => false]],
-                    'heuresFormation' => ['input' => ['required' => false]],
-                ]);*/
+        $this->spec([
+            'description' => ['type' => 'Textarea'],
+            'enabled'     => ['type' => 'Checkbox'],
+
+        ]);
         $this->build();
 
         /* $this->setValueOptions('typeMission', Util::collectionAsOptions($typesMissions));

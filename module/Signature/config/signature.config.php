@@ -9,6 +9,8 @@ use Signature\Controller\SignatureController;
 use Signature\Controller\SignatureControllerFactory;
 use Signature\Controller\SignatureFlowController;
 use Signature\Controller\SignatureFlowControllerFactory;
+use Signature\Service\SignatureFlowService;
+use Signature\Service\SignatureFlowServiceFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
@@ -21,10 +23,15 @@ return [
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
-                'saisir' => [
-                    'route'      => '/saisir/[:signatureFlow]',
+                'saisir-circuit'    => [
+                    'route'      => '/saisir-circuit/[:signatureFlow]',
                     'controller' => SignatureFlowController::class,
-                    'action'     => 'saisir',
+                    'action'     => 'saisir-circuit',
+                ],
+                'supprimer-circuit' => [
+                    'route'      => '/supprimer-circuit/:signatureFlow',
+                    'controller' => SignatureFlowController::class,
+                    'action'     => 'supprimer-circuit',
                 ],
 
             ],
@@ -114,7 +121,7 @@ return [
         ],
         [
             'controller' => SignatureFlowController::class,
-            'action'     => ['index', 'saisir'],
+            'action'     => ['index', 'saisir-circuit', 'supprimer-circuit'],
             'roles'      => ['guest'],
 
         ],
@@ -134,7 +141,7 @@ return [
     ],
 
     'services' => [
-
+        SignatureFlowService::class => SignatureFlowServiceFactory::class,
     ],
 
 

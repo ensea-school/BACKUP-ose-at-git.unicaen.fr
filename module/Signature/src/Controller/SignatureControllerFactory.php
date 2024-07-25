@@ -27,6 +27,7 @@ class SignatureControllerFactory
         $controller = new SignatureController();
         $controller->setSignatureService($container->get(SignatureService::class));
         $controller->setSignatureConfigurationService($container->get(SignatureConfigurationService::class));
+        
 
         return $controller;
     }

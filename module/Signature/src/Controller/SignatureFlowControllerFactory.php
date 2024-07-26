@@ -5,6 +5,7 @@ namespace Signature\Controller;
 
 use Psr\Container\ContainerInterface;
 use Signature\Service\SignatureFlowService;
+use Signature\Service\SignatureFlowStepService;
 use UnicaenSignature\Service\ProcessService;
 use UnicaenSignature\Service\SignatureConfigurationService;
 use UnicaenSignature\Service\SignatureService;
@@ -31,6 +32,7 @@ class SignatureFlowControllerFactory
         $controller->setSignatureConfigurationService($container->get(SignatureConfigurationService::class));
         $controller->setProcessService($container->get(ProcessService::class));
         $controller->setServiceSignatureFlow($container->get(SignatureFlowService::class));
+        $controller->setserviceSignatureFlowStep($container->get(SignatureFlowStepService::class));
 
         return $controller;
     }

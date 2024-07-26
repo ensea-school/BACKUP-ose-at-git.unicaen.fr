@@ -11,6 +11,8 @@ use Signature\Controller\SignatureFlowController;
 use Signature\Controller\SignatureFlowControllerFactory;
 use Signature\Service\SignatureFlowService;
 use Signature\Service\SignatureFlowServiceFactory;
+use Signature\Service\SignatureFlowStepService;
+use Signature\Service\SignatureFlowStepServiceFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
@@ -32,6 +34,11 @@ return [
                     'route'      => '/supprimer-circuit/:signatureFlow',
                     'controller' => SignatureFlowController::class,
                     'action'     => 'supprimer-circuit',
+                ],
+                'saisir-etape'      => [
+                    'route'      => '/saisir-etape/flow/:signatureFlow/etape/[:signatureFlowStep]',
+                    'controller' => SignatureFlowController::class,
+                    'action'     => 'saisir-etape',
                 ],
 
             ],
@@ -121,7 +128,7 @@ return [
         ],
         [
             'controller' => SignatureFlowController::class,
-            'action'     => ['index', 'saisir-circuit', 'supprimer-circuit'],
+            'action'     => ['index', 'saisir-circuit', 'supprimer-circuit', 'saisir-etape'],
             'roles'      => ['guest'],
 
         ],
@@ -137,11 +144,13 @@ return [
     ],
 
     'forms' => [
-        Form\SignatureFlowForm::class => Form\SignatureFlowFormFactory::class,
+        Form\SignatureFlowForm::class     => Form\SignatureFlowFormFactory::class,
+        Form\SignatureFlowStepForm::class => Form\SignatureFlowStepFormFactory::class,
     ],
 
     'services' => [
-        SignatureFlowService::class => SignatureFlowServiceFactory::class,
+        SignatureFlowService::class     => SignatureFlowServiceFactory::class,
+        SignatureFlowStepService::class => SignatureFlowStepServiceFactory::class,
     ],
 
 

@@ -1,0 +1,11 @@
+<?php
+echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNamespace('error');
+
+echo $this->form()->openTag($form);
+echo $this->formControlGroup($form->get('label'));
+echo $this->formControlGroup($form->get('letterfileName'));
+echo $this->formControlGroup($form->get('level'));
+echo $this->formControlGroup($form->get('order'));
+echo $this->formControlGroup($form->get('allRecipientsSign'));
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag($form);

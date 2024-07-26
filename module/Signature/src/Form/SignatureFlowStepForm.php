@@ -3,16 +3,15 @@
 namespace Signature\Form;
 
 use Application\Form\AbstractForm;
-
-use Signature\Hydrator\SignatureFlowHydrator;
-use UnicaenSignature\Entity\Db\SignatureFlow;
+use Signature\Hydrator\SignatureFlowStepHydrator;
+use UnicaenSignature\Entity\Db\SignatureFlowStep;
 
 
 /**
- * Description of SignatureFlowForm
+ * Description of SignatureFlowStepForm
  *
  */
-class SignatureFlowForm extends AbstractForm
+class SignatureFlowStepForm extends AbstractForm
 {
 
     public function init()
@@ -20,14 +19,10 @@ class SignatureFlowForm extends AbstractForm
 
 
         $this->setAttribute('id', uniqid('fm'));
-        $this->setHydrator(new SignatureFlowHydrator());
+        $this->setHydrator(new SignatureFlowStepHydrator());
+        $ignored = ['signatureFlow', 'recipientsMethod', 'notificationsRecipients', 'editableRecipients', 'options', 'observers_options', 'observersMethod'];
+        $this->spec(SignatureFlowStep::class, $ignored);
 
-        $this->spec(SignatureFlow::class);
-        $this->spec([
-            'description' => ['type' => 'Textarea'],
-            'enabled'     => ['type' => 'Checkbox'],
-
-        ]);
         $this->build();
 
         /* $this->setValueOptions('typeMission', Util::collectionAsOptions($typesMissions));

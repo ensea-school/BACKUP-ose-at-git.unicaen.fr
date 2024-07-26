@@ -5,10 +5,13 @@ namespace Signature\Controller;
 use Application\Controller\AbstractController;
 use Contrat\Service\ContratServiceAwareTrait;
 use Signature\Form\SignatureFlowFormAwareTrait;
+use Signature\Form\SignatureFlowStepFormAwareTrait;
 use Signature\Service\SignatureFlowServiceAwareTrait;
+use Signature\Service\SignatureFlowStepServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Entity\Db\SignatureFlow;
+use UnicaenSignature\Entity\Db\SignatureFlowStep;
 use UnicaenSignature\Entity\Db\SignatureRecipient;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
 use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
@@ -29,7 +32,9 @@ class SignatureFlowController extends AbstractController
     use SignatureConfigurationServiceAwareTrait;
     use ProcessServiceAwareTrait;
     use SignatureFlowFormAwareTrait;
+    use SignatureFlowStepFormAwareTrait;
     use SignatureFlowServiceAwareTrait;
+    use SignatureFlowStepServiceAwareTrait;
     use EntityManagerAwareTrait;
 
 
@@ -68,6 +73,30 @@ class SignatureFlowController extends AbstractController
         }
 
         return $this->redirect()->toRoute('signature-flow');
+    }
+
+
+
+    public function saisirEtapeAction()
+    {
+        $signatureFlow     = $this->getEvent()->getParam('signatureFlow');
+        $signatureFlowStep = $this->getEvent()->getParam('signatureFlowStep');
+        if (!$signatureFlow instanceof SignatureFlow) {
+            throw new \Exception("Le circuit de signature n'est pas renseigné");
+        }
+        if (empty($signatureFlowStep)) {
+            $signatureFlowStep = new SignatureFlowStep();
+            $signatureFlowStep->setSignatureFlow($signatureFlow);
+            $signatureFlowStep->setLetterfileName('');
+            $signatureFlowStep->setLevel('');
+        }
+        $form = $this->getformSignatureFlowStep();
+
+        $form->bindRequestSave($signatureFlowStep, $this->getRequest(), function($signatureFlowStep){
+            $this->getserviceSignatureFlowStep()->save($signatureFlowStep);
+        });
+
+        return compact('form');
     }
 
 }

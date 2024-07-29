@@ -87,7 +87,7 @@ class SignatureFlowController extends AbstractController
         if (empty($signatureFlowStep)) {
             $signatureFlowStep = new SignatureFlowStep();
             $signatureFlowStep->setSignatureFlow($signatureFlow);
-            $signatureFlowStep->setLetterfileName('');
+            $signatureFlowStep->setLetterfileName('esup');
             $signatureFlowStep->setLevel('');
         }
         $form = $this->getformSignatureFlowStep();
@@ -97,6 +97,23 @@ class SignatureFlowController extends AbstractController
         });
 
         return compact('form');
+    }
+
+
+
+    public function supprimerEtapeAction()
+    {
+        $signatureFlow     = $this->getEvent()->getParam('signatureFlow');
+        $signatureFlowStep = $this->getEvent()->getParam('signatureFlowStep');
+        if ($signatureFlowStep instanceof SignatureFlowStep &&
+            $signatureFlow instanceof SignatureFlow) {
+            //Si l'étape appartient bien au circuit de signature
+            if ($signatureFlowStep->getSignatureFlow()->getId() == $signatureFlow->getId()) {
+                $this->getserviceSignatureFlowStep()->delete($signatureFlowStep);
+            }
+        }
+
+        return $this->redirect()->toRoute('signature-flow');
     }
 
 }

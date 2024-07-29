@@ -40,6 +40,11 @@ return [
                     'controller' => SignatureFlowController::class,
                     'action'     => 'saisir-etape',
                 ],
+                'supprimer-etape'   => [
+                    'route'      => '/supprimer-etape/:signatureFlow/:signatureFlowStep',
+                    'controller' => SignatureFlowController::class,
+                    'action'     => 'supprimer-etape',
+                ],
 
             ],
         ],
@@ -128,7 +133,7 @@ return [
         ],
         [
             'controller' => SignatureFlowController::class,
-            'action'     => ['index', 'saisir-circuit', 'supprimer-circuit', 'saisir-etape'],
+            'action'     => ['index', 'saisir-circuit', 'supprimer-circuit', 'saisir-etape', 'supprimer-etape'],
             'roles'      => ['guest'],
 
         ],

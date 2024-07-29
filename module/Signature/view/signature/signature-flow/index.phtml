@@ -19,6 +19,18 @@
                         <section class="steps">
                             <?php foreach ($flow['steps'] as $key => $step): ?>
                                 <article class="step">
+                                    <a class="btn btn-primary ajax-modal float-end"
+                                       href="<?= $this->url("signature-flow/saisir-etape", ['signatureFlow' => $flow['id'], 'signatureFlowStep' => $step['id']]) ?>
+                                        "
+                                       title="Modifier l'étape du circuit">
+                                        <i class="fas fa-pen-to-square"></i>
+                                    </a>
+                                    <a class="btn btn-danger float-end me-lg-2"
+                                       href="<?= $this->url("signature-flow/supprimer-etape", ['signatureFlow' => $flow['id'], 'signatureFlowStep' => $step['id']]) ?>"
+                                       title="Supprimer une étape">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+
                                     <h4 style="font-size:18px;">
                                         Etape <?= $key + 1 ?> - <strong><?= $step['label'] ?></strong>
                                         <span> ( <i class="fas fa-user-group"></i> Tous les destinataires doivent signer) </span>

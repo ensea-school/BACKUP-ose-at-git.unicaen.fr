@@ -47,7 +47,7 @@ class SignatureFlowHydrator implements HydratorInterface
             'description' => $object->getDescription(),
             'enabled'     => $object->isEnabled(),
         ];
-
+        
         return $data;
     }
 }

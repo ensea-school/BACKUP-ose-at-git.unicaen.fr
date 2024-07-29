@@ -30,7 +30,16 @@ class SignatureFlowStepHydrator implements HydratorInterface
         $object->setLevel($data['level']);
         $object->setAllRecipientsSign($data['allRecipientsSign']);
         $object->setOrder($data['order']);
-
+        //Hydrator spécifique pour les options recipient
+        $recipientMethod = $data['recipientMethod'];
+        $role            = $data['roles'];
+        if ($recipientMethod == 'by_role') {
+            $options = [$recipientMethod => $role];
+        } else {
+            $options = [$recipientMethod => ''];
+        }
+        $object->setOptions($options);
+        $object->setRecipientsMethod($recipientMethod);
 
         return $object;
     }
@@ -53,6 +62,14 @@ class SignatureFlowStepHydrator implements HydratorInterface
             'allRecipientsSign' => $object->isAllRecipientsSign(),
             'order'             => $object->getOrder(),
         ];
+        //On travaille sur l'extract du type de signataire
+        $options = $object->getOptions();
+        if (array_key_exists('by_role', $options)) {
+            $data['recipientMethod'] = 'by_role';
+            $data['roles']           = $options['by_role'];
+        } else {
+            $data['recipientMethod'] = 'by_intervenant';
+        }
 
         return $data;
     }

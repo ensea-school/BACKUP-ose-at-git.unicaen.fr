@@ -3,8 +3,11 @@
 namespace Signature\Form;
 
 use Application\Form\AbstractForm;
+use Application\Service\Traits\RoleServiceAwareTrait;
 use Signature\Hydrator\SignatureFlowStepHydrator;
+use UnicaenApp\Util;
 use UnicaenSignature\Entity\Db\SignatureFlowStep;
+use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
 
 
 /**
@@ -13,6 +16,7 @@ use UnicaenSignature\Entity\Db\SignatureFlowStep;
  */
 class SignatureFlowStepForm extends AbstractForm
 {
+    use RoleServiceAwareTrait;
 
     public function init()
     {
@@ -22,6 +26,34 @@ class SignatureFlowStepForm extends AbstractForm
         $this->setHydrator(new SignatureFlowStepHydrator());
         $ignored = ['signatureFlow', 'recipientsMethod', 'notificationsRecipients', 'editableRecipients', 'options', 'observers_options', 'observersMethod'];
         $this->spec(SignatureFlowStep::class, $ignored);
+        $this->add([
+            'name'       => 'recipientMethod',
+            'options'    => [
+                'label'         => 'Type de signataire',
+                'label_options' => ['disable_html_escape' => true],
+            ],
+            'attributes' => [
+                'id' => 'recipient-method',
+            ],
+            'type'       => 'Select',
+        ]);
+        $this->get('recipientMethod')->setValueOptions(['by_intervenant' => 'Intervenant',
+                                                        'by_role'        => 'Rôles',]);
+
+        $this->add([
+            'name'       => 'roles',
+            'options'    => [
+                'label'            => 'Type de signataire',
+                'label_options'    => ['disable_html_escape' => true],
+                'label_attributes' => ['class' => 'liste-roles'],
+            ],
+            'attributes' => [
+                'class' => 'liste-roles',
+            ],
+            'type'       => 'Select',
+        ]);
+        $this->get('roles')->setValueOptions(Util::collectionAsOptions($this->getServiceRole()->getList()));
+
 
         $this->build();
 
@@ -48,6 +80,17 @@ class SignatureFlowStepForm extends AbstractForm
          ]);*/
 
         $this->addSubmit();
+    }
+
+
+
+    public function getInputFilterSpecification()
+    {
+        return [
+            'roles' => [
+                'required' => false,
+            ],
+        ];
     }
 
 }

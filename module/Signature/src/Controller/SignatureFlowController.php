@@ -40,9 +40,10 @@ class SignatureFlowController extends AbstractController
 
     public function indexAction()
     {
-        $listeSignatureFlow = $this->getProcessService()->getSignatureFlows();
+        $listeSignatureFlow    = $this->getProcessService()->getSignatureFlows();
+        $letterFileLevelsInfos = $this->getSignatureConfigurationService()->getLetterFiles();
 
-        return compact('listeSignatureFlow');
+        return compact('listeSignatureFlow', 'letterFileLevelsInfos');
     }
 
 
@@ -72,7 +73,7 @@ class SignatureFlowController extends AbstractController
             $this->getServiceSignatureFlow()->delete($signatureFlow);
         }
 
-        return $this->redirect()->toRoute('signature-flow');
+        return true;
     }
 
 
@@ -113,7 +114,7 @@ class SignatureFlowController extends AbstractController
             }
         }
 
-        return $this->redirect()->toRoute('signature-flow');
+        return true;
     }
 
 }

@@ -1,3 +1,12 @@
+<?php
+
+/**
+ * @var Array $letterFileLevelsInfos
+ */
+
+?>
+
+
 <h1>Liste des circuits de signature</h1>
 <div class="container">
     <div class="col-md-12">
@@ -5,12 +14,17 @@
             <section class="row">
                 <article class="signature-flow">
                     <h3 class="card-title">
-                        <a class="btn btn-danger" data-event="type-edition"
+                        <a class="btn btn-danger pop-ajax"
                            href="<?= $this->url("signature-flow/supprimer-circuit", ['signatureFlow' => $flow['id']]) ?>"
-                           title="Supprimer un circuit">
+                           title="Supprimer un circuit"
+                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression de circuit ?</p>"
+                           data-confirm="true"
+                           data-confirm-button="Oui"
+                           data-cancel-button="Non"
+                           data-submit-reload="true">
                             <i class="fas fa-trash"></i>
                         </a>
-                        <a class="btn btn-primary ajax-modal" data-event="type-edition"
+                        <a class="btn btn-primary mod-ajax" data-event="type-edition" data-submit-reload="true"
                            href="<?= $this->url("signature-flow/saisir-circuit", ['signatureFlow' => $flow['id']]) ?>"
                            title="Modifier le circuit de signature">
                             <i class="fas fa-pen-to-square"></i>
@@ -19,15 +33,20 @@
                         <section class="steps">
                             <?php foreach ($flow['steps'] as $key => $step): ?>
                                 <article class="step">
-                                    <a class="btn btn-primary ajax-modal float-end"
+                                    <a class="btn btn-primary mod-ajax float-end" data-submit-reload="true"
                                        href="<?= $this->url("signature-flow/saisir-etape", ['signatureFlow' => $flow['id'], 'signatureFlowStep' => $step['id']]) ?>
                                         "
                                        title="Modifier l'étape du circuit">
                                         <i class="fas fa-pen-to-square"></i>
                                     </a>
-                                    <a class="btn btn-danger float-end me-lg-2"
+                                    <a class="btn btn-danger pop-ajax float-end me-lg-2"
                                        href="<?= $this->url("signature-flow/supprimer-etape", ['signatureFlow' => $flow['id'], 'signatureFlowStep' => $step['id']]) ?>"
-                                       title="Supprimer une étape">
+                                       title="Supprimer une étape"
+                                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression d'étape ?</p>"
+                                       data-confirm="true"
+                                       data-confirm-button="Oui"
+                                       data-cancel-button="Non"
+                                       data-submit-reload="true">
                                         <i class="fas fa-trash"></i>
                                     </a>
 
@@ -36,11 +55,18 @@
                                         <span> ( <i class="fas fa-user-group"></i> Tous les destinataires doivent signer) </span>
                                     </h4>
                                     <i class="fas fa-box-archive"></i> Parapheur : <strong class="valued"><?= $step['letterfile'] ?></strong> -
-                                    <i class="fas fa-pen-nib"></i> Niveau de validation : <strong class="valued"><?= $step['level'] ?></strong> -
-                                    <!-- <i class="fas fa-BELL"></i></i>Notifications : <strong class="valued">OUI</strong> -->
+                                    <i class="fas fa-pen-nib"></i> Niveau : <strong class="valued">
+                                        <?php
+                                        if (array_key_exists($step['letterfile'], $letterFileLevelsInfos)) {
+                                            echo $letterFileLevelsInfos[$step['letterfile']]['levels_infos'][$step['level']]['label'];
+                                        } else {
+                                            echo 'inconnue';
+                                        }
+                                        ?></strong>
+                                    <i class="fas fa-BELL"></i></i>Signataire(s) : <strong class="valued">A définir</strong>
                                 </article>
                             <?php endforeach; ?>
-                            <a class="btn btn-primary ajax-modal" data-event="type-edition"
+                            <a class="btn btn-primary mod-ajax" data-submit-reload="true"
                                href="<?= $this->url("signature-flow/saisir-etape", ['signatureFlow' => $flow['id']]) ?>"
                                title="Ajouter une étape au circuit">
                                 <i class="fas fa-add"></i> Ajouter une étape
@@ -53,7 +79,7 @@
                             <article>Aucune étape dans le circuit</article>
 
                         </section>
-                        <a class="btn btn-primary ajax-modal" data-event="type-edition"
+                        <a class="btn btn-primary mod-ajax" data-submit-reload="true"
                            href="<?= $this->url("signature-flow/saisir-etape", ['signatureFlow' => $flow['id']]) ?>"
                            title="Ajouter une étape au circuit">
                             <i class="fas fa-add"></i> Ajouter une étape
@@ -64,7 +90,7 @@
             </section>
         <?php endforeach; ?>
 
-        <a class="btn btn-primary ajax-modal" data-event="type-edition"
+        <a class="btn btn-primary mod-ajax" data-event="type-edition"
            href="<?= $this->url("signature-flow/saisir-circuit", []) ?>"
            title="Ajouter un nouveau circuit">
             <i class="fas fa-handshake"></i> Ajouter un nouveau circuit

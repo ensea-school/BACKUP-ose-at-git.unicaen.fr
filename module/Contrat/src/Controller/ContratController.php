@@ -655,13 +655,15 @@ class ContratController extends AbstractController
          * @var Contrat $contrat
          */
         $contrat = $this->getEvent()->getParam('contrat');
-        try {
+        $this->getServiceContrat()->creerProcessContratSignatureElectronique($contrat);
+
+        /*try {
             $this->getServiceContrat()->envoyerContratSignatureElectronique($contrat);
             $contratLibelle = "Contrat N°" . $contrat->getId();
             $this->flashMessenger()->addSuccessMessage($contratLibelle . " envoyé avec succés pour signature électronique");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
-        }
+        }*/
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
     }

@@ -23,6 +23,7 @@ use RuntimeException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Entity\Db\SignatureRecipient;
+use UnicaenSignature\Service\ProcessServiceAwareTrait;
 use UnicaenSignature\Service\SignatureServiceAwareTrait;
 use UnicaenVue\Util;
 use UnicaenVue\View\Model\AxiosModel;
@@ -46,6 +47,7 @@ class ContratService extends AbstractEntityService
     use RoleServiceAwareTrait;
     use AffectationServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
+    use ProcessServiceAwareTrait;
 
     /**
      * Retourne la classe des entités
@@ -185,6 +187,26 @@ class ContratService extends AbstractEntityService
         $this->creerFichiers($files, $contrat);
 
         return true;
+    }
+
+
+
+    public function creerProcessContratSignatureElectronique(Contrat $contrat)
+    {
+        //$contratFilePath = $this->generer($contrat, false, true);
+        //$filename        = basename($contratFilePath);
+        $signatureFlow      = $this->getSignatureService()->getSignatureFlowById(4);
+        $signatureFlowDatas = $this->getSignatureService()->createSignatureFlowDatasById(
+            "",
+            $signatureFlow->getId(),
+            []
+        );
+
+        dump($signatureFlowDatas);
+        die;
+        $process = $this->getProcessService()->createUnconfiguredProcess($filename, 4);
+        var_dump($process);
+        die;
     }
 
 

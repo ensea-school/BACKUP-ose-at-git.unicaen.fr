@@ -3,12 +3,14 @@
 namespace Signature\Hydrator;
 
 
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 use UnicaenSignature\Entity\Db\SignatureFlow;
 use UnicaenSignature\Entity\Db\SignatureFlowStep;
 
 class SignatureFlowStepHydrator implements HydratorInterface
 {
+    use ParametresServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.
@@ -20,13 +22,14 @@ class SignatureFlowStepHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
+        $paramLetterFile = $this->getServiceParametres()->get("signature_electronique_parapheur");
 
         /**
          * @var SignatureFlowStep $object
          */
 
         $object->setLabel($data['label']);
-        $object->setLetterfileName($data['letterfileName']);
+        $object->setLetterfileName($paramLetterFile);
         $object->setLevel($data['level']);
         $object->setAllRecipientsSign($data['allRecipientsSign']);
         $object->setOrder($data['order']);
@@ -40,6 +43,7 @@ class SignatureFlowStepHydrator implements HydratorInterface
         }
         $object->setOptions($options);
         $object->setRecipientsMethod($recipientMethod);
+        $object->setLevel($data['level']);
 
         return $object;
     }

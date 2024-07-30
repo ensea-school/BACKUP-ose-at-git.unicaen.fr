@@ -23,7 +23,7 @@ class SignatureFlowStepFormFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): SignatureFlowStepForm
     {
         $form = new SignatureFlowStepForm();
-        
+        $form->setSignatureConfigurationService($container->get(SignatureConfigurationService::class));
 
         /* Injectez vos dépendances ICI */
 

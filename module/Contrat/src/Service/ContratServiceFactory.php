@@ -4,6 +4,7 @@ namespace Contrat\Service;
 
 use Psr\Container\ContainerInterface;
 
+use UnicaenSignature\Service\ProcessService;
 use UnicaenSignature\Service\SignatureService;
 
 
@@ -27,6 +28,7 @@ class ContratServiceFactory
         $service = new ContratService();
         /* Injectez vos dépendances ICI */
         $service->setSignatureService($container->get(SignatureService::class));
+        $service->setProcessService($container->get(ProcessService::class));
 
 
         return $service;

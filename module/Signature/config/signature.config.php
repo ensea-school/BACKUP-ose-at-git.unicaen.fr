@@ -95,8 +95,8 @@ return [
                 'signature' => [
                     'pages' => [
                         'signature-flow'          => [
-                            'label'      => "Liste des circuits de signatures",
-                            'title'      => "Liste des circuits de signatures",
+                            'label'      => "Gestion des circuits de signatures",
+                            'title'      => "Gestion des circuits de signatures",
                             'route'      => 'signature-flow',
                             'withtarget' => true,
                             'order'      => 10,

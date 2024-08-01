@@ -18,7 +18,7 @@ return [
             'precision'   => 1,
             'nullable'    => TRUE,
             'default'     => '1',
-            'position'    => 9,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'EDITABLERECIPIENTS'      => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 11,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'ID'                      => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'LETTERFILENAME'          => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'NOTIFICATIONSRECIPIENTS' => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 1,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 10,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'OBSERVERSMETHOD'         => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'OPTIONS'                 => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'ORDERING'                => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'RECIPIENTSMETHOD'        => [
@@ -138,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'SIGNATUREFLOW_ID'        => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'SIGNLEVEL'               => [
@@ -162,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
     ],

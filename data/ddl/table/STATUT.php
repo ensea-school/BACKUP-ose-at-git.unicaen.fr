@@ -258,7 +258,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 104,
+            'position'    => 105,
             'commentaire' => NULL,
         ],
         'CONTRAT_SIGNATURE_ROLE'         => [
@@ -270,7 +270,7 @@ return [
             'precision'   => 38,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 106,
+            'position'    => 107,
             'commentaire' => NULL,
         ],
         'CONTRAT_SIGNATURE_TYPE'         => [
@@ -282,7 +282,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 105,
+            'position'    => 106,
             'commentaire' => NULL,
         ],
         'CONTRAT_VISUALISATION'          => [
@@ -942,7 +942,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 87,
+            'position'    => 88,
             'commentaire' => NULL,
         ],
         'ORDRE'                          => [

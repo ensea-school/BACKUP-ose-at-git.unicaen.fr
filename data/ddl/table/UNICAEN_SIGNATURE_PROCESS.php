@@ -9,8 +9,8 @@ return [
     'commentaire' => NULL,
     'sequence'    => NULL,
     'columns'     => [
-        'CURRENT_STEP'      => [
-            'name'        => 'CURRENT_STEP',
+        'CURRENTSTEP'      => [
+            'name'        => 'CURRENTSTEP',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -18,11 +18,11 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
-        'DATE_CREATED'      => [
-            'name'        => 'DATE_CREATED',
+        'DATECREATED'      => [
+            'name'        => 'DATECREATED',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
             'length'      => 0,
@@ -30,10 +30,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => 'SYSDATE',
-            'position'    => 2,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
-        'DOCUMENT_NAME'     => [
+        'DOCUMENT_NAME'    => [
             'name'        => 'DOCUMENT_NAME',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -42,10 +42,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
-        'ID'                => [
+        'ID'               => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -57,8 +57,8 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'LAST_UPDATE'       => [
-            'name'        => 'LAST_UPDATE',
+        'LASTUPDATE'       => [
+            'name'        => 'LASTUPDATE',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
             'length'      => 0,
@@ -66,11 +66,11 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => 'SYSDATE',
-            'position'    => 3,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
-        'SIGNATURE_FLOW_ID' => [
-            'name'        => 'SIGNATURE_FLOW_ID',
+        'SIGNATUREFLOW_ID' => [
+            'name'        => 'SIGNATUREFLOW_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -78,10 +78,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
-        'STATUS'            => [
+        'STATUS'           => [
             'name'        => 'STATUS',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
     ],

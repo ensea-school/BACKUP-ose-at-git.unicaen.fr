@@ -387,12 +387,12 @@
                                                     <td v-if="value.heuresDemandees != 0 " style="width:20%;">
                                                         <abbr v-if="value.datePaiement"
                                                               :title="'Payé en ' + value.periodeLibelle + ' le ' + formatDate(value.datePaiement) ">
-                                                            <span class="number number-positif">{{ Number(value.heuresPayees) }} hetd(s)</span>
+                                                            <span class="number number-positif">{{ Number(value.heuresPayees) }} heure(s)</span>
                                                         </abbr>
 
                                                         <abbr v-if="!value.datePaiement"
                                                               :title="'Demandé le ' + formatDate(value.dateDemande) ">
-                                                            <span class="number number-positif">{{ Number(value.heuresDemandees) }} hetd(s)</span>
+                                                            <span class="number number-positif">{{ Number(value.heuresDemandees) }} heure(s)</span>
                                                         </abbr>
                                                     </td>
                                                     <td v-if="value.heuresDemandees == 0 " style="width:20%;">
@@ -413,7 +413,7 @@
                                                                 style="width: 40px;"
                                                                 type="number"
                                                             />
-                                                            <span class="input-group-text" style="font-size:12px;">hetd(s)</span>
+                                                            <span class="input-group-text" style="font-size:12px;">heure(s)</span>
                                                         </div>
                                                     </td>
                                                     <td v-if="value.heuresDemandees == 0 ">
@@ -499,7 +499,7 @@
                                     <tfoot>
                                     <tr class="table-light">
                                         <th scope="row">Total</th>
-                                        <td>{{ totalHeure(mission.heures) }} hetd(s)</td>
+                                        <td>{{ totalHeure(mission.heures) }} heure(s)</td>
                                     </tr>
                                     </tfoot>
                                 </table>

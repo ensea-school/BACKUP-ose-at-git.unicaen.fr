@@ -14,7 +14,6 @@ SELECT DISTINCT
   LEFT JOIN contrat c ON c.mission_id = vhm.mission_id
 WHERE
   w.atteignable = 1
-  AND w.type_intervenant_code = 'S'
   AND w.etape_code = 'CONTRAT'
   AND w.objectif > w.realisation
   AND i.histo_destruction IS NULL

@@ -32,6 +32,7 @@
         <field name="dossierContact" type="boolean" column="DOSSIER_CONTACT" nullable="false"/>
         <field name="dossierTelPerso" type="boolean" column="DOSSIER_TEL_PERSO" nullable="false"/>
         <field name="dossierEmailPerso" type="boolean" column="DOSSIER_EMAIL_PERSO" nullable="false"/>
+        <field name="dossierSituationMatrimoniale" type="boolean" column="DOSSIER_SITUATION_MATRIMONIALE" nullable="false"/>
         <field name="dossierEmployeurFacultatif" type="boolean" column="DOSSIER_EMPLOYEUR_FACULTATIF" nullable="false"/>
         <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>
         <field name="dossierBanque" type="boolean" column="DOSSIER_BANQUE" nullable="false"/>
@@ -54,6 +55,7 @@
         <field name="dossierAutre5Visualisation" type="boolean" column="DOSSIER_AUTRE_5_VISUALISATION" nullable="false"/>
         <field name="dossierAutre5Edition" type="boolean" column="DOSSIER_AUTRE_5_EDITION" nullable="false"/>
 
+        <field name="pieceJustificative" type="boolean" column="PJ_ACTIVE" nullable="false"/>
         <field name="pieceJustificativeVisualisation" type="boolean" column="PJ_VISUALISATION" nullable="false"/>
         <field name="pieceJustificativeEdition" type="boolean" column="PJ_EDITION" nullable="false"/>
 
@@ -96,6 +98,7 @@
         <field name="missionRealiseEdition" type="boolean" column="MISSION_REALISE_EDITION" nullable="false"/>
         <field name="missionDecret" type="string" column="MISSION_DECRET" nullable="true"/>
         <field name="offreEmploiPostuler" type="boolean" column="OFFRE_EMPLOI_POSTULER" nullable="false"/>
+        <field name="missionIndemnitees" type="boolean" column="MISSION_INDEMNITEES" nullable="false"/>
 
 
         <field name="cloture" type="boolean" column="CLOTURE" nullable="false"/>

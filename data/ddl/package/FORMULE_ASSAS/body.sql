@@ -196,16 +196,28 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ASSAS AS
 
 
 
-      -- AB=0
+      -- AB=IF([.$I20]="Référentiel";IF([.$X20]=0;[.$BJ20];0);0)
       WHEN 'AB' THEN
-        RETURN 0;
+        IF vh.volume_horaire_ref_id IS NOT NULL THEN
+          IF vh.service_referentiel = 0 THEN
+            RETURN cell('BJ',l);
+          ELSE
+            RETURN 0;
+          END IF;
+        ELSE
+          RETURN 0;
+        END IF;
 
 
 
-      -- AC=IF([.$I20]="Référentiel";[.$BJ20];0)
+      -- AC=IF([.$I20]="Référentiel";IF([.$X20]<>0;[.$BJ20];0);0)
       WHEN 'AC' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('BJ',l);
+          IF vh.service_referentiel <> 0 THEN
+            RETURN cell('BJ',l);
+          ELSE
+            RETURN 0;
+          END IF;
         ELSE
           RETURN 0;
         END IF;

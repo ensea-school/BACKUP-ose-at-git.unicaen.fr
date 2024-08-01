@@ -38,7 +38,7 @@ class ContratService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass ()
+    public function getEntityClass()
     {
         return Contrat::class;
     }
@@ -50,7 +50,7 @@ class ContratService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias ()
+    public function getAlias()
     {
         return 'c';
     }
@@ -65,7 +65,7 @@ class ContratService extends AbstractEntityService
      *
      * @return self
      */
-    public function delete ($entity, $softDelete = true)
+    public function delete($entity, $softDelete = true)
     {
         if (!$softDelete) {
             $id = (int)$entity->getId();
@@ -88,7 +88,7 @@ class ContratService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy (QueryBuilder $qb = null, $alias = null)
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -108,7 +108,7 @@ class ContratService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByValidation ($validation, QueryBuilder $qb = null, $alias = null)
+    public function finderByValidation($validation, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -133,7 +133,7 @@ class ContratService extends AbstractEntityService
      *
      * @return int
      */
-    public function getNextNumeroAvenant (Intervenant $intervenant)
+    public function getNextNumeroAvenant(Intervenant $intervenant)
     {
         $sql = "
         SELECT 
@@ -167,7 +167,7 @@ class ContratService extends AbstractEntityService
      *
      * @return Fichier[]
      */
-    public function creerFichiers ($files, Contrat $contrat, $deleteFiles = true)
+    public function creerFichiers($files, Contrat $contrat, $deleteFiles = true)
     {
         if (!$files) {
             throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");
@@ -204,7 +204,7 @@ class ContratService extends AbstractEntityService
 
 
 
-    public function creerDeclaration ($files, Contrat $contrat, $deleteFiles = true)
+    public function creerDeclaration($files, Contrat $contrat, $deleteFiles = true)
     {
 
         if (!$files) {
@@ -242,7 +242,7 @@ class ContratService extends AbstractEntityService
 
 
 
-    public function generer (Contrat $contrat, $download = true)
+    public function generer(Contrat $contrat, $download = true)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
@@ -281,7 +281,7 @@ class ContratService extends AbstractEntityService
 
 
 
-    public function hasAvenant (Contrat $contrat)
+    public function hasAvenant(Contrat $contrat)
     {
         $dql = '
         SELECT
@@ -305,7 +305,33 @@ class ContratService extends AbstractEntityService
 
 
 
-    public function getContratInitialMission (?Mission $mission)
+    public function getFirstContratMission(Intervenant $intervenant): ?Mission
+    {
+        $dql = " SELECT c,m
+            FROM " . Contrat::class . " c
+            JOIN c.intervenant i
+            JOIN c.mission m
+            WHERE c.intervenant = :intervenant
+                AND c.dateRetourSigne IS NOT NULL
+                AND c.histoDestruction IS NULL
+            ORDER BY m.dateDebut ASC
+        ";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('intervenant', $intervenant);
+
+        $contrat = $query->setMaxResults(1)->getOneOrNullResult();
+
+        if ($contrat) {
+            return $contrat->getMission();
+        }
+
+        return null;
+    }
+
+
+
+    public function getContratInitialMission(?Mission $mission)
     {
         $dql = '
         SELECT

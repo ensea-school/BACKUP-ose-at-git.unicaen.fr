@@ -9,7 +9,6 @@ FROM
   JOIN mission m ON tm.mission_id = m.id
 WHERE
   w.etape_code = 'MISSION_VALIDATION'
-  AND w.type_intervenant_code = 'S'
   AND w.atteignable = 1
   AND w.objectif > w.realisation
 GROUP BY

@@ -269,8 +269,15 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
             }
         } elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel) {
             $cartridgeItems[] = 'Référentiel';
+
             $cartridgeItems[] = $this->getView()->fonctionReferentiel($serviceAPayer->getServiceReferentiel()->getFonctionReferentiel())->renderLink();
+        } elseif ($serviceAPayer instanceof Mission) {
+            $cartridgeItems[] = $serviceAPayer->getTypeMission()->getLibelle();
+            if (!empty($serviceAPayer->getLibelleMission())) {
+                $cartridgeItems[] = $serviceAPayer->getLibelleMission();
+            }
         }
+
 
         return $this->getView()->cartridge($cartridgeItems, [
             'theme'      => 'gray',
@@ -431,7 +438,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
             $params['default-centre-cout'] = $ccLast;
         }
 
-        $misesEnPaiement = $serviceAPayer->getMiseEnPaiement()->filter(function (MiseEnPaiement $miseEnPaiement) use ($typeHeures) {
+        $misesEnPaiement = $serviceAPayer->getMiseEnPaiement()->filter(function (MiseEnPaiement $miseEnPaiement) use ($typeHeures){
             $mepth = $miseEnPaiement->getTypeHeures();
             if ($typeHeures->getCode() === TypeHeures::ENSEIGNEMENT) {
                 return in_array($mepth->getCode(), [TypeHeures::FI, TypeHeures::FA, TypeHeures::FC, TypeHeures::FC_MAJOREES, TypeHeures::ENSEIGNEMENT]);
@@ -482,7 +489,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         if (abs($params['heures-non-dmep']) < 0.009) $params['heures-non-dmep'] = 0.0;
 
         // tri du buffer et mise en paramètres
-        usort($mepBuffer, function ($a, $b) {
+        usort($mepBuffer, function ($a, $b){
             return $a['periode']->getOrdre() - $b['periode']->getOrdre();
         });
         foreach ($mepBuffer as $mb) {

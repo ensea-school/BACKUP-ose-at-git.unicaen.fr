@@ -6,21 +6,26 @@ return [
             'ID'      => 2,
             'CODE'    => 'B',
             'LIBELLE' => 'BIS',
+            'CODE_RH' => 'B',
+
         ],
         [
             'ID'      => 3,
             'CODE'    => 'T',
             'LIBELLE' => 'TER',
+            'CODE_RH' => 'T',
         ],
         [
             'ID'      => 4,
             'CODE'    => 'Q',
             'LIBELLE' => 'QUATER',
+            'CODE_RH' => 'Q',
         ],
         [
             'ID'      => 5,
             'CODE'    => 'C',
             'LIBELLE' => 'QUINQUIES',
+            'CODE_RH' => 'C',
         ],
     ],
 
@@ -387,6 +392,42 @@ return [
             "LIBELLE" => "Initial",
             "TYPE"    => 1,
         ],
+    ],
+
+    "SITUATION_MATRIMONIALE" => [
+        [
+            "LIBELLE" => "Célibataire",
+            "CODE"    => "CEL",
+        ],
+        [
+            "LIBELLE" => "Divorcé(e)",
+            "CODE"    => "DIV",
+        ],
+        [
+            "LIBELLE" => "En concubinage",
+            "CODE"    => "CCB",
+        ],
+        [
+            "LIBELLE" => "Marié(e)",
+            "CODE"    => "MAR",
+        ],
+        [
+            "LIBELLE" => "Pacsé(e)",
+            "CODE"    => "PAC",
+        ],
+        [
+            "LIBELLE" => "Séparé(e) de corps",
+            "CODE"    => "SEC",
+        ],
+        [
+            "LIBELLE" => "Séparé(e) de fait",
+            "CODE"    => "SEP",
+        ],
+        [
+            "LIBELLE" => "Veuf(ve)",
+            "CODE"    => "VEU",
+        ],
+
     ],
 
     'SOURCE' => [

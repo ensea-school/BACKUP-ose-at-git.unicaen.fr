@@ -2,7 +2,7 @@
 
 namespace Lieu\Form;
 
-
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Application\Form\AbstractForm;
 use Laminas\Form\FormInterface;
 use Lieu\Entity\Db\AdresseNumeroCompl;
@@ -12,7 +12,6 @@ use Lieu\Entity\Db\StructureAwareTrait;
 use Lieu\Entity\Db\Voirie;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
-use Paiement\Entity\Db\DomaineFonctionnel;
 use Paiement\Service\CentreCoutServiceAwareTrait;
 use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;

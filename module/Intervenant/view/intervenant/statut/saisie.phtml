@@ -149,6 +149,11 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                                 <?= $this->formControlGroup($form->get('dossierEmployeurFacultatif')); ?>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?= $this->formControlGroup($form->get('dossierSituationMatrimoniale')); ?>
+                            </div>
+                        </div>
                     </fieldset>
                     <fieldset>
                         <legend>Autres informations demandées :</legend>
@@ -237,6 +242,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('mission')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('missionIndemnitees')); ?>
                     </div>
 
                 </div>

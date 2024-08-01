@@ -4,6 +4,8 @@ namespace Dossier\Entity\Db;
 
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Intervenant\Entity\Db\CiviliteAwareTrait;
+use Intervenant\Entity\Db\SituationMatrimoniale;
+use Intervenant\Entity\Db\SituationMatrimonialeAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -26,6 +28,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     use HistoriqueAwareTrait;
     use EntityManagerAwareTrait;
     use ChampsAutresTrait;
+    use SituationMatrimonialeAwareTrait;
 
     /**
      * @var int|null

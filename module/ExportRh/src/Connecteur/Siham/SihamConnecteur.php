@@ -2,16 +2,18 @@
 
 namespace ExportRh\Connecteur\Siham;
 
+use Contrat\Service\ContratServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Form\Fieldset;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
 use Lieu\Service\VoirieServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 use UnicaenSiham\Exception\SihamException;
 use UnicaenSiham\Service\Siham;
@@ -23,6 +25,8 @@ class SihamConnecteur implements ConnecteurRhInterface
     use ExportRhServiceAwareTrait;
     use AdresseNumeroComplServiceAwareTrait;
     use VoirieServiceAwareTrait;
+    use ContratServiceAwareTrait;
+    use SituationMatrimonialeServiceAwareTrait;
 
     public Siham $siham;
 
@@ -65,11 +69,13 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererAffectationEnCoursIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?array
+    public function recupererAffectationEnCoursIntervenantRh(Intervenant $intervenant): ?array
     {
-        $typeAffectation        = (isset($this->siham->getConfig()['type-affectation'])) ? $this->siham->getConfig()['type-affectation'] : ['FUN'];
-        $affectations           = [];
-        $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+        $typeAffectation         = (isset($this->siham->getConfig()['type-affectation'])) ? $this->siham->getConfig()['type-affectation'] : ['FUN'];
+        $affectations            = [];
+        $donneesAdministratives  = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+        $anneeUniversitaireDebut = $intervenant->getAnnee()->getDateDebut();
+        $anneeUniversitaireFin   = $intervenant->getAnnee()->getDateFin();
 
         if (!empty($donneesAdministratives['listeAffectations']) || !empty($donneesAdministratives->listeAffectations)) {
             $listeAffectations = $donneesAdministratives['listeAffectations'];
@@ -79,7 +85,9 @@ class SihamConnecteur implements ConnecteurRhInterface
                         $dateDebutAffectation = new \DateTime($affectation->dateDebutAffectation);
                         $dateFinAffectation   = new \DateTime($affectation->dateFinAffectation);
                         $currentDate          = new \DateTime();
-                        if ($currentDate > $dateDebutAffectation and $currentDate < $dateFinAffectation) {
+                        /*Si il y a dejà eu une affectation dans l'année universitaire en cours on la remonte afin que OSE ne propose
+                        plus le renouvellement de l'intervenant. Pour un second renouvellement en cours d'année il faudra le faire manuellement*/
+                        if ($anneeUniversitaireFin > $dateDebutAffectation and $anneeUniversitaireDebut < $dateFinAffectation) {
                             $affectations[] = $affectation;
                         }
                     }
@@ -90,7 +98,9 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $dateDebutAffectation = new \DateTime($listeAffectations->dateDebutAffectation);
                     $dateFinAffectation   = new \DateTime($listeAffectations->dateFinAffectation);
                     $currentDate          = new \DateTime();
-                    if ($currentDate > $dateDebutAffectation and $currentDate < $dateFinAffectation) {
+                    /*Si il y a dejà eu une affectation dans l'année universitaire en cours on la remonte afin que OSE ne propose
+                        plus le renouvellement de l'intervenant. Pour un second renouvellement en cours d'année il faudra le faire manuellement*/
+                    if ($anneeUniversitaireFin > $dateDebutAffectation and $anneeUniversitaireDebut < $dateFinAffectation) {
                         $affectations[] = $listeAffectations;
                     }
                 }
@@ -102,7 +112,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererDonneesAdministrativesIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?array
+    public function recupererDonneesAdministrativesIntervenantRh(Intervenant $intervenant): ?array
     {
         try {
             $codeRh = '';
@@ -136,7 +146,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function trouverCodeRhByInsee(\Intervenant\Entity\Db\Intervenant $intervenant): ?string
+    public function trouverCodeRhByInsee(Intervenant $intervenant): ?string
     {
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         $numeroInsee        = (!empty($intervenant->getNumeroInsee())) ? $intervenant->getNumeroInsee() : $intervenantDossier->getNumeroInsee();
@@ -160,8 +170,10 @@ class SihamConnecteur implements ConnecteurRhInterface
 
     public function recupererContratEnCoursIntervenantRh(Intervenant $intervenant): ?array
     {
-        $contrats               = [];
-        $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+        $contrats                = [];
+        $donneesAdministratives  = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
+        $anneeUniversitaireDebut = $intervenant->getAnnee()->getDateDebut();
+        $anneeUniversitaireFin   = $intervenant->getAnnee()->getDateFin();
 
         if (!empty($donneesAdministratives['listeContrats']) || !empty($donneesAdministratives->listeContrats)) {
             $listeContrats = (isset($donneesAdministratives['listeContrats']) && is_array($donneesAdministratives['listeContrats'])) ? $donneesAdministratives['listeContrats'] : [$donneesAdministratives['listeContrats']];
@@ -171,7 +183,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $dateDebutContrat = new \DateTime($contrat->dateDebutContrat);
                 $dateFinContrat   = new \DateTime($contrat->dateFinReelleContrat);
                 $currentDate      = new \DateTime();
-                if ($currentDate > $dateDebutContrat and $currentDate < $dateFinContrat) {
+
+                if ($anneeUniversitaireFin > $dateDebutContrat and $anneeUniversitaireDebut < $dateFinContrat) {
                     $contrats[] = $contrat;
                 }
             }
@@ -182,7 +195,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function prendreEnChargeIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
+    public function prendreEnChargeIntervenantRh(Intervenant $intervenant, $datas): ?string
     {
         try {
             /* Récupération du dossier de l'intervenant */
@@ -191,9 +204,18 @@ class SihamConnecteur implements ConnecteurRhInterface
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
 
-            $anneeUniversitaire = $intervenant->getAnnee();
-            $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
-            $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            /*Recherche de la date d'effet à passer selon enseignement ou mission, si mission on prend la première mission de l'année universitaire
+            sinon on prend les dates de début et de fin de l'année universitaire*/
+            $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
+            if (!empty($firstMission)) {
+                $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
+                $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
+            } else {
+                $anneeUniversitaire = $intervenant->getAnnee();
+                $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
+                $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            }
+
 
             /*CARRIERE*/
             $carriere = [
@@ -253,11 +275,16 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ];
 
             /*SITUATION FAMILIALE*/
-            $situationFamiliale[] =
-                ['dateEffetSituFam' => $dateEffet,
-                 'situFam'          => 'CEL',
-                 'temoinValidite'   => 1,
-                ];
+            $situationFamiliale = [];
+            if ($dossierIntervenant->getSituationMatrimoniale()) {
+                $dateEffetSituationFamilliale = ($dossierIntervenant->getDateSituationMatrimoniale()) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : '';
+                $codeSituationFamilliale      = ($dossierIntervenant->getSituationMatrimoniale()) ? $dossierIntervenant->getSituationMatrimoniale()->getCode() : '';
+                $situationFamiliale[]         =
+                    ['dateEffetSituFam' => $dateEffetSituationFamilliale,
+                     'situFam'          => $codeSituationFamilliale,
+                     'temoinValidite'   => 1,
+                    ];
+            }
 
             /*COORDONNEES POSTALES*/
             $numeroVoie = (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() : '';
@@ -350,6 +377,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $valueDepartement = substr($departementCode, 1, 2);
                 }
             }
+
 
             $params = [
                 'categorieEntree'           => 'ACTIVE',
@@ -461,7 +489,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function renouvellerIntervenantRH(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): ?string
+    public function renouvellerIntervenantRH(Intervenant $intervenant, $datas): ?string
     {
         try {
             /* Récupération du dossier de l'intervenant */
@@ -469,10 +497,18 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $anneeUniversitaire = $intervenant->getAnnee();
 
-            $dateEffet = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
-            $dateFin   = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            /*Recherche de la date d'effet à passer selon enseignement ou mission, si mission on prend la première mission de l'année universitaire
+            sinon on prend les dates de début et de fin de l'année universitaire*/
+            $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
+            if (!empty($firstMission)) {
+                $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
+                $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
+            } else {
+                $anneeUniversitaire = $intervenant->getAnnee();
+                $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
+                $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            }
 
             /*Formatage du matricule*/
 
@@ -586,7 +622,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function synchroniserDonneesPersonnellesIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): bool
+    public function synchroniserDonneesPersonnellesIntervenantRh(Intervenant $intervenant, $datas): bool
     {
         try {
 
@@ -700,7 +736,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function recupererIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?IntervenantRh
+    public function recupererIntervenantRh(Intervenant $intervenant): ?IntervenantRh
     {
         $agent  = null;
         $codeRh = $this->trouverCodeRhByInsee($intervenant);
@@ -749,6 +785,12 @@ class SihamConnecteur implements ConnecteurRhInterface
             $intervenantRh->setAdresseCodePostal($agent->getCodePostalAdresse());
             $intervenantRh->setAdresseCommune($agent->getBureauDistributeurAdresse());
             $intervenantRh->setAdresseDateDebut($agent->getDateDebutAdresse());
+            $codeSituationMatrimoniale = $agent->getCodeSituationFamVigueur();
+            if ($codeSituationMatrimoniale) {
+                $situationMatrimoniale = $this->getServiceSituationMatrimoniale()->getSituationMatrimonialeByCode($agent->getCodeSituationFamVigueur());
+                $intervenantRh->setSituationMatrimoniale($situationMatrimoniale);
+            }
+
 
             return $intervenantRh;
         }

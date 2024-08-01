@@ -5,6 +5,7 @@ namespace Paiement\Controller;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Role;
 use Application\Entity\Db\Validation;
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
@@ -16,6 +17,7 @@ use Enseignement\Entity\Db\VolumeHoraire;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
+use Laminas\Json\Json;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
@@ -27,6 +29,7 @@ use Paiement\Service\CentreCoutServiceAwareTrait;
 use Paiement\Service\DotationServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\NumeroPriseEnChargeServiceAwareTrait;
+use Paiement\Service\ServiceAPayerServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
 use Paiement\Tbl\Process\PaiementDebugger;
 use Referentiel\Entity\Db\ServiceReferentiel;
@@ -46,6 +49,7 @@ class PaiementController extends AbstractController
     use UtilisateurServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
+    use ServiceAPayerServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use MiseEnPaiementFormAwareTrait;
     use MiseEnPaiementRechercheFormAwareTrait;
@@ -227,17 +231,26 @@ class PaiementController extends AbstractController
     {
         $title        = 'Demande de mise en paiement par lot';
         $intervenants = [];
-        $structures   = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
+        $structures        = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
+        $canMiseEnPaiement = $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT));
         if ($this->getRequest()->isPost()) {
             //On récupere les données post notamment la structure recherchée
             $idStructure  = $this->getRequest()->getPost('structure');
             $structure    = $this->em()->find(Structure::class, $idStructure);
             $intervenants = $this->getServiceMiseEnPaiement()->getListByStructure($structure);
+            $idStructure  = $this->getRequest()->getPost('structure');
+            $structure    = $this->em()->find(Structure::class, $idStructure);
+            $intervenants = $this->getServiceServiceAPayer()->getListByStructure($structure);
 
             return new AxiosModel($intervenants);
         }
 
-        return compact('title', 'structures', 'intervenants');
+        $vm = new VueModel();
+        $vm->setTemplate('paiement/demande-mise-en-paiement-lot');
+        $vm->setVariables(['canMiseEnPaiement' => $canMiseEnPaiement, 'structures' => $structures]);
+
+
+        return $vm;
     }
 
 

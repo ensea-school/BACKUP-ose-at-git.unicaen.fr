@@ -80,6 +80,32 @@ $dossierIdentite = $form->get('DossierIdentite');
                     ?>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?= $this->formLabel($dossierIdentite->get('situationMatrimoniale')); ?>
+                        <div class="input-group cold-md-6 readonly">
+                            <?php
+                            if (!empty($intervenantDossier->getSituationMatrimoniale())) {
+                                echo ($viewIdentite) ? $intervenantDossier->getSituationMatrimoniale()->getLibelle() : '********';
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?= $this->formLabel($dossierIdentite->get('dateSituationMatrimoniale')); ?>
+                        <div class="input-group cold-md-6 readonly">
+                            <?php
+                            if (!empty($dossierIdentite->get('dateSituationMatrimoniale')->getValue())) {
+                                echo ($viewIdentite) ? $dossierIdentite->get('dateSituationMatrimoniale')->getValue() : '**/**/****';
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

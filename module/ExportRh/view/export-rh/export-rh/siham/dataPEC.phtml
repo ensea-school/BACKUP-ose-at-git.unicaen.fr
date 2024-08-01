@@ -123,6 +123,13 @@
                 </td>
                 <td><?= $intervenantDossier->getBIC() ?></td>
             </tr>
+            <tr>
+                <td>
+                    <?= $this->formCheckbox($generiqueFieldset->get('situationMatrimoniale')); ?>
+                    <?= $this->formLabel($generiqueFieldset->get('situationMatrimoniale')) ?> :
+                </td>
+                <td><?= ($intervenantDossier->getSituationMatrimoniale()) ? $intervenantDossier->getSituationMatrimoniale()->getLibelle() : 'Non renseigné' ?></td>
+            </tr>
             </tbody>
         </table>
 

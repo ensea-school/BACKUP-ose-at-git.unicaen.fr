@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 90,
+            'position'    => 91,
             'commentaire' => NULL,
         ],
         'CLOTURE'                        => [
@@ -42,7 +42,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 61,
+            'position'    => 62,
             'commentaire' => NULL,
         ],
         'CODE'                           => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 67,
+            'position'    => 68,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_2'                => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 68,
+            'position'    => 69,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_3'                => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 69,
+            'position'    => 70,
             'commentaire' => NULL,
         ],
         'CODES_CORRESP_4'                => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 70,
+            'position'    => 71,
             'commentaire' => NULL,
         ],
         'CODE_INDEMNITE'                 => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 96,
+            'position'    => 97,
             'commentaire' => NULL,
         ],
         'CODE_INDEMNITE_PRIME'           => [
@@ -126,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 97,
+            'position'    => 98,
             'commentaire' => NULL,
         ],
         'CONSEIL_ACA'                    => [
@@ -138,7 +138,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 45,
+            'position'    => 46,
             'commentaire' => NULL,
         ],
         'CONSEIL_ACA_DUREE_VIE'          => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '5',
-            'position'    => 47,
+            'position'    => 48,
             'commentaire' => NULL,
         ],
         'CONSEIL_ACA_VISUALISATION'      => [
@@ -162,7 +162,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 46,
+            'position'    => 47,
             'commentaire' => NULL,
         ],
         'CONSEIL_RESTREINT'              => [
@@ -174,7 +174,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 42,
+            'position'    => 43,
             'commentaire' => NULL,
         ],
         'CONSEIL_RESTREINT_DUREE_VIE'    => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 44,
+            'position'    => 45,
             'commentaire' => NULL,
         ],
         'CONSEIL_RESTREINT_VISU'         => [
@@ -198,7 +198,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 43,
+            'position'    => 44,
             'commentaire' => NULL,
         ],
         'CONTRAT'                        => [
@@ -210,7 +210,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 48,
+            'position'    => 49,
             'commentaire' => NULL,
         ],
         'CONTRAT_DEPOT'                  => [
@@ -222,7 +222,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 50,
+            'position'    => 51,
             'commentaire' => NULL,
         ],
         'CONTRAT_ETAT_SORTIE_ID'         => [
@@ -234,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 80,
+            'position'    => 81,
             'commentaire' => NULL,
         ],
         'CONTRAT_GENERATION'             => [
@@ -246,7 +246,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 82,
+            'position'    => 83,
             'commentaire' => NULL,
         ],
         'CONTRAT_SIGNATURE_ACTIVATION'   => [
@@ -294,7 +294,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 49,
+            'position'    => 50,
             'commentaire' => NULL,
         ],
         'DEPASSEMENT_SERVICE_DU_SANS_HC' => [
@@ -342,7 +342,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 23,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_1_EDITION'        => [
@@ -354,7 +354,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 25,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_1_VISUALISATION'  => [
@@ -366,7 +366,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 24,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_2'                => [
@@ -378,7 +378,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 26,
+            'position'    => 27,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_2_EDITION'        => [
@@ -390,7 +390,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 28,
+            'position'    => 29,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_2_VISUALISATION'  => [
@@ -402,7 +402,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 27,
+            'position'    => 28,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_3'                => [
@@ -414,7 +414,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 29,
+            'position'    => 30,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_3_EDITION'        => [
@@ -426,7 +426,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 31,
+            'position'    => 32,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_3_VISUALISATION'  => [
@@ -438,7 +438,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 30,
+            'position'    => 31,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_4'                => [
@@ -450,7 +450,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 32,
+            'position'    => 33,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_4_EDITION'        => [
@@ -462,7 +462,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 34,
+            'position'    => 35,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_4_VISUALISATION'  => [
@@ -474,7 +474,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 33,
+            'position'    => 34,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_5'                => [
@@ -486,7 +486,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 35,
+            'position'    => 36,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_5_EDITION'        => [
@@ -498,7 +498,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 37,
+            'position'    => 38,
             'commentaire' => NULL,
         ],
         'DOSSIER_AUTRE_5_VISUALISATION'  => [
@@ -510,7 +510,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 36,
+            'position'    => 37,
             'commentaire' => NULL,
         ],
         'DOSSIER_BANQUE'                 => [
@@ -582,7 +582,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 100,
+            'position'    => 101,
             'commentaire' => NULL,
         ],
         'DOSSIER_IDENTITE_COMP'          => [
@@ -621,6 +621,18 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
+        'DOSSIER_SITUATION_MATRIMONIALE' => [
+            'name'        => 'DOSSIER_SITUATION_MATRIMONIALE',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 38,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 23,
+            'commentaire' => NULL,
+        ],
         'DOSSIER_STATUT'                 => [
             'name'        => 'DOSSIER_STATUT',
             'type'        => 'bool',
@@ -630,7 +642,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 86,
+            'position'    => 87,
             'commentaire' => NULL,
         ],
         'DOSSIER_TEL_PERSO'              => [
@@ -666,7 +678,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 66,
+            'position'    => 67,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'              => [
@@ -678,7 +690,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 72,
+            'position'    => 73,
             'commentaire' => NULL,
         ],
         'HISTO_CREATION'                 => [
@@ -690,7 +702,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 71,
+            'position'    => 72,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTEUR_ID'           => [
@@ -702,7 +714,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 76,
+            'position'    => 77,
             'commentaire' => NULL,
         ],
         'HISTO_DESTRUCTION'              => [
@@ -714,7 +726,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 75,
+            'position'    => 76,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATEUR_ID'          => [
@@ -726,7 +738,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 74,
+            'position'    => 75,
             'commentaire' => NULL,
         ],
         'HISTO_MODIFICATION'             => [
@@ -738,7 +750,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => 'SYSDATE',
-            'position'    => 73,
+            'position'    => 74,
             'commentaire' => NULL,
         ],
         'ID'                             => [
@@ -774,7 +786,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 83,
+            'position'    => 84,
             'commentaire' => NULL,
         ],
         'MISSION_DECRET'                 => [
@@ -786,7 +798,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 101,
+            'position'    => 102,
             'commentaire' => NULL,
         ],
         'MISSION_EDITION'                => [
@@ -798,7 +810,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 89,
+            'position'    => 90,
             'commentaire' => NULL,
         ],
         'MISSION_INDEMNITEES'            => [
@@ -809,8 +821,8 @@ return [
             'scale'       => '0',
             'precision'   => 1,
             'nullable'    => FALSE,
-            'default'     => '1',
-            'position'    => 102,
+            'default'     => '0',
+            'position'    => 103,
             'commentaire' => NULL,
         ],
         'MISSION_REALISE_EDITION'        => [
@@ -822,7 +834,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 84,
+            'position'    => 85,
             'commentaire' => NULL,
         ],
         'MISSION_VISUALISATION'          => [
@@ -834,7 +846,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 88,
+            'position'    => 89,
             'commentaire' => NULL,
         ],
         'MODE_CALCUL'                    => [
@@ -846,7 +858,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 94,
+            'position'    => 95,
             'commentaire' => NULL,
         ],
         'MODE_CALCUL_PRIME'              => [
@@ -858,7 +870,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 95,
+            'position'    => 96,
             'commentaire' => NULL,
         ],
         'MODE_ENSEIGNEMENT_PREVISIONNEL' => [
@@ -870,7 +882,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '\'semestriel\'',
-            'position'    => 91,
+            'position'    => 92,
             'commentaire' => NULL,
         ],
         'MODE_ENSEIGNEMENT_REALISE'      => [
@@ -882,7 +894,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '\'semestriel\'',
-            'position'    => 92,
+            'position'    => 93,
             'commentaire' => NULL,
         ],
         'MODIF_SERVICE_DU'               => [
@@ -894,7 +906,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 62,
+            'position'    => 63,
             'commentaire' => NULL,
         ],
         'MODIF_SERVICE_DU_VISUALISATION' => [
@@ -906,7 +918,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 63,
+            'position'    => 64,
             'commentaire' => NULL,
         ],
         'MOTIF_NON_PAIEMENT'             => [
@@ -918,7 +930,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 65,
+            'position'    => 66,
             'commentaire' => NULL,
         ],
         'OFFRE_EMPLOI_POSTULER'          => [
@@ -954,7 +966,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 93,
+            'position'    => 94,
             'commentaire' => NULL,
         ],
         'PAIEMENT_VISUALISATION'         => [
@@ -966,7 +978,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 64,
+            'position'    => 65,
             'commentaire' => NULL,
         ],
         'PJ_ACTIVE'                      => [
@@ -978,7 +990,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 103,
+            'position'    => 104,
             'commentaire' => NULL,
         ],
         'PJ_ARCHIVAGE'                   => [
@@ -990,7 +1002,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 41,
+            'position'    => 42,
             'commentaire' => NULL,
         ],
         'PJ_EDITION'                     => [
@@ -1002,7 +1014,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 40,
+            'position'    => 41,
             'commentaire' => NULL,
         ],
         'PJ_TELECHARGEMENT'              => [
@@ -1014,7 +1026,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 39,
+            'position'    => 40,
             'commentaire' => NULL,
         ],
         'PJ_VISUALISATION'               => [
@@ -1026,7 +1038,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 38,
+            'position'    => 39,
             'commentaire' => NULL,
         ],
         'PRIORITAIRE_INDICATEURS'        => [
@@ -1050,7 +1062,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 58,
+            'position'    => 59,
             'commentaire' => NULL,
         ],
         'REFERENTIEL_PREVU_EDITION'      => [
@@ -1062,7 +1074,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 60,
+            'position'    => 61,
             'commentaire' => NULL,
         ],
         'REFERENTIEL_PREVU_VISU'         => [
@@ -1074,7 +1086,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 59,
+            'position'    => 60,
             'commentaire' => NULL,
         ],
         'REFERENTIEL_REALISE'            => [
@@ -1086,7 +1098,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 77,
+            'position'    => 78,
             'commentaire' => NULL,
         ],
         'REFERENTIEL_REALISE_EDITION'    => [
@@ -1098,7 +1110,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 78,
+            'position'    => 79,
             'commentaire' => NULL,
         ],
         'REFERENTIEL_REALISE_VISU'       => [
@@ -1110,7 +1122,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 79,
+            'position'    => 80,
             'commentaire' => NULL,
         ],
         'SERVICE_EXTERIEUR'              => [
@@ -1122,7 +1134,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 57,
+            'position'    => 58,
             'commentaire' => NULL,
         ],
         'SERVICE_PREVU'                  => [
@@ -1134,7 +1146,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 51,
+            'position'    => 52,
             'commentaire' => NULL,
         ],
         'SERVICE_PREVU_EDITION'          => [
@@ -1146,7 +1158,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 53,
+            'position'    => 54,
             'commentaire' => NULL,
         ],
         'SERVICE_PREVU_VISU'             => [
@@ -1158,7 +1170,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 52,
+            'position'    => 53,
             'commentaire' => NULL,
         ],
         'SERVICE_REALISE'                => [
@@ -1170,7 +1182,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 54,
+            'position'    => 55,
             'commentaire' => NULL,
         ],
         'SERVICE_REALISE_EDITION'        => [
@@ -1182,7 +1194,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 56,
+            'position'    => 57,
             'commentaire' => NULL,
         ],
         'SERVICE_REALISE_VISU'           => [
@@ -1194,7 +1206,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 55,
+            'position'    => 56,
             'commentaire' => NULL,
         ],
         'SERVICE_STATUTAIRE'             => [
@@ -1230,7 +1242,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 81,
+            'position'    => 82,
             'commentaire' => NULL,
         ],
         'TAUX_REMU_ID'                   => [
@@ -1242,7 +1254,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 85,
+            'position'    => 86,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'            => [
@@ -1266,7 +1278,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 98,
+            'position'    => 99,
             'commentaire' => NULL,
         ],
         'TYPE_PAIE_PRIME'                => [
@@ -1278,7 +1290,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 99,
+            'position'    => 100,
             'commentaire' => NULL,
         ],
     ],

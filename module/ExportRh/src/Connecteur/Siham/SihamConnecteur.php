@@ -9,6 +9,7 @@ use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Form\Fieldset;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
@@ -25,6 +26,7 @@ class SihamConnecteur implements ConnecteurRhInterface
     use AdresseNumeroComplServiceAwareTrait;
     use VoirieServiceAwareTrait;
     use ContratServiceAwareTrait;
+    use SituationMatrimonialeServiceAwareTrait;
 
     public Siham $siham;
 
@@ -273,11 +275,16 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ];
 
             /*SITUATION FAMILIALE*/
-            $situationFamiliale[] =
-                ['dateEffetSituFam' => $dateEffet,
-                 'situFam'          => 'CEL',
-                 'temoinValidite'   => 1,
-                ];
+            $situationFamiliale = [];
+            if ($dossierIntervenant->getSituationMatrimoniale()) {
+                $dateEffetSituationFamilliale = ($dossierIntervenant->getDateSituationMatrimoniale()) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : '';
+                $codeSituationFamilliale      = ($dossierIntervenant->getSituationMatrimoniale()) ? $dossierIntervenant->getSituationMatrimoniale()->getCode() : '';
+                $situationFamiliale[]         =
+                    ['dateEffetSituFam' => $dateEffetSituationFamilliale,
+                     'situFam'          => $codeSituationFamilliale,
+                     'temoinValidite'   => 1,
+                    ];
+            }
 
             /*COORDONNEES POSTALES*/
             $numeroVoie = (!empty($dossierIntervenant->getAdresseNumero())) ? $dossierIntervenant->getAdresseNumero() : '';
@@ -370,6 +377,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $valueDepartement = substr($departementCode, 1, 2);
                 }
             }
+
 
             $params = [
                 'categorieEntree'           => 'ACTIVE',
@@ -489,10 +497,18 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $anneeUniversitaire = $intervenant->getAnnee();
 
-            $dateEffet = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
-            $dateFin   = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            /*Recherche de la date d'effet à passer selon enseignement ou mission, si mission on prend la première mission de l'année universitaire
+            sinon on prend les dates de début et de fin de l'année universitaire*/
+            $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
+            if (!empty($firstMission)) {
+                $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
+                $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
+            } else {
+                $anneeUniversitaire = $intervenant->getAnnee();
+                $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
+                $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            }
 
             /*Formatage du matricule*/
 
@@ -769,6 +785,12 @@ class SihamConnecteur implements ConnecteurRhInterface
             $intervenantRh->setAdresseCodePostal($agent->getCodePostalAdresse());
             $intervenantRh->setAdresseCommune($agent->getBureauDistributeurAdresse());
             $intervenantRh->setAdresseDateDebut($agent->getDateDebutAdresse());
+            $codeSituationMatrimoniale = $agent->getCodeSituationFamVigueur();
+            if ($codeSituationMatrimoniale) {
+                $situationMatrimoniale = $this->getServiceSituationMatrimoniale()->getSituationMatrimonialeByCode($agent->getCodeSituationFamVigueur());
+                $intervenantRh->setSituationMatrimoniale($situationMatrimoniale);
+            }
+
 
             return $intervenantRh;
         }

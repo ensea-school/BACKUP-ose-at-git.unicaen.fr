@@ -23,7 +23,7 @@ return [
             'MV_LIEN',
         ],
         'excludes' => [
-            //'MV_EXT_SERVICE',
+            'MV_EXT_SERVICE',
         ],
     ],
     'view'              => [

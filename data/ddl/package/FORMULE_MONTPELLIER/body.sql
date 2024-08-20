@@ -391,7 +391,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
     -- s138 =SOMME(S136:S137)
     WHEN c = 's138' AND v >= 1 THEN
-      RETURN cell('s136') + cell('s138');
+      RETURN cell('s136') + cell('s137');
 
 
 

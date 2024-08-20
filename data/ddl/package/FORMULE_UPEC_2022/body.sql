@@ -192,7 +192,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC_2022 AS
 
 
 
-    -- =SI(I9=0;2/3;SI(I8="Oui";1                                                                       ;SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))))
+    -- =SI(I9=0;2/3;SI(I8="Oui";1;SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))))
     -- I8= TP vaut TD
     -- I9 = i.heures_service_statutaire
     -- I15 = i.service_du

@@ -116,7 +116,7 @@ class TestService extends AbstractEntityService
         $nbAutres = 0;
         foreach ($vhdata as $vhd) {
             if ($vhd['TYPE_INTERVENTION_CODE']) {
-                if (!array_key_exists($vhd['TYPE_INTERVENTION_CODE'], $typesIntervention) && count($typesIntervention) == 8){
+                if (!array_key_exists($vhd['TYPE_INTERVENTION_CODE'], $typesIntervention) && count($typesIntervention) == 8) {
                     throw new \Exception('Il est impossible de transférer cette fiche : il y a plus de 5 types d\'intervention spécifiques, différents de CM/TD/TP');
                 }
 
@@ -212,7 +212,7 @@ class TestService extends AbstractEntityService
 
         foreach ($formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire) {
             $vhArray = $volumeHoraireHydrator->extract($volumeHoraire);
-            if ($vhArray['referentiel']){
+            if ($vhArray['referentiel']) {
                 $vhArray['typeInterventionCode'] = 'Référentiel';
             }
             $json['volumesHoraires'][] = $vhArray;
@@ -234,17 +234,17 @@ class TestService extends AbstractEntityService
 
         $vhDiff = [];
         // on liste les volumes horaires existants déjà en BDD et on supprime les autres sans ID
-        foreach( $formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire){
+        foreach ($formuleTestIntervenant->getVolumesHoraires() as $volumeHoraire) {
             if (!$volumeHoraire->getId()) {
                 // les volumes horaires pas encore enregistrés sont détruits : ils seront recréés ensuite à partir des données JSON
                 $formuleTestIntervenant->removeVolumeHoraire($volumeHoraire);
-            }else{
+            } else {
                 $vhDiff[$volumeHoraire->getId()] = ['vh' => $volumeHoraire, 'toDelete' => true];
             }
         }
 
         // On ajoute ou on modifie les volumes horaires en fonction des données transmises
-        foreach( $volumesHorairesData as $vh){
+        foreach ($volumesHorairesData as $vh) {
             $vh = (array)$vh;
             unset($vh['tauxServiceDu']);
             unset($vh['tauxServiceCompl']);
@@ -265,8 +265,8 @@ class TestService extends AbstractEntityService
         }
 
         // On supprime les anciens volumes horaires qui auront été supprimés
-        foreach($vhDiff as $vhd){
-            if ($vhd['toDelete']){
+        foreach ($vhDiff as $vhd) {
+            if ($vhd['toDelete']) {
                 $formuleTestIntervenant->removeVolumeHoraire($vhd['vh']);
             }
         }
@@ -277,17 +277,27 @@ class TestService extends AbstractEntityService
 
     public function get($id, $autoClear = false): FormuleTestIntervenant
     {
-        if (0 == $id){
+        if (0 == $id) {
             $formuleTestIntervenant = new FormuleTestIntervenant();
             $formuleTestIntervenant->setAnnee($this->getServiceContext()->getAnnee());
-            $formuleTestIntervenant->setFormule($this->getEntityManager()->find(Formule::class,$this->getServiceParametres()->get('formule')));
+            $formuleTestIntervenant->setFormule($this->getEntityManager()->find(Formule::class, $this->getServiceParametres()->get('formule')));
 
             return $formuleTestIntervenant;
         }
 
-        $formuleTestIntervenant = parent::get($id, $autoClear);
+        $dql = "
+        SELECT
+          fti, ftvh
+        FROM
+          " . FormuleTestIntervenant::class . " fti
+          JOIN fti.volumesHoraires ftvh
+        WHERE
+          fti.id = :intervenant
+        ";
 
-        if (!$formuleTestIntervenant){
+        $formuleTestIntervenant = $this->getEntityManager()->createQuery($dql)->setParameters(compact('id'))->getResult()[0];
+
+        if (!$formuleTestIntervenant) {
             throw new \Exception('l\'ID demandé est invalide');
         }
 

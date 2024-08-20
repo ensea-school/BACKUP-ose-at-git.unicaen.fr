@@ -32,6 +32,7 @@ FROM
        JOIN parametre                  p ON p.nom = 'structure_univ'
        JOIN service                    s ON s.id = vh.service_id
        JOIN intervenant                i ON i.id = s.intervenant_id AND i.histo_destruction IS NULL
+       JOIN statut                    si ON si.id = i.statut_id
        JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
        JOIN v_volume_horaire_etat    vhe ON vhe.volume_horaire_id = vh.id
        JOIN type_volume_horaire      tvh ON tvh.id = vh.type_volume_horaire_id
@@ -51,6 +52,9 @@ FROM
       LEFT JOIN element_modulateur    em ON em.element_id = ep.id
                                         AND em.histo_destruction IS NULL
       LEFT JOIN modulateur             m ON m.id = em.modulateur_id
+    WHERE
+      1=1
+      /*@ANNEE_ID=ep.annee_id*/
     GROUP BY
       ep.id,
       ep.structure_id,
@@ -69,7 +73,8 @@ WHERE
   AND vh.heures <> 0
   AND vh.motif_non_paiement_id IS NULL
   /*@INTERVENANT_ID=i.id*/
-  /*@STATUT_ID=i.statut_id*/
+  /*@STATUT_ID=si.id*/
+  /*@TYPE_INTERVENANT_ID=si.type_intervenant_id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@TYPE_VOLUME_HORAIRE_ID=vh.type_volume_horaire_id*/
   /*@ETAT_VOLUME_HORAIRE_ID<=vhe.etat_volume_horaire_id*/
@@ -109,6 +114,7 @@ FROM
        JOIN parametre                     p ON p.nom = 'structure_univ'
        JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
        JOIN intervenant                   i ON i.id = sr.intervenant_id AND i.histo_destruction IS NULL
+       JOIN statut                       si ON si.id = i.statut_id
        JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
        JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
        JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
@@ -120,7 +126,8 @@ WHERE
   AND vhr.heures <> 0
   AND sr.motif_non_paiement_id IS NULL
   /*@INTERVENANT_ID=i.id*/
-  /*@STATUT_ID=i.statut_id*/
+  /*@STATUT_ID=si.id*/
+  /*@TYPE_INTERVENANT_ID=si.type_intervenant_id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@TYPE_VOLUME_HORAIRE_ID=vhr.type_volume_horaire_id*/
   /*@ETAT_VOLUME_HORAIRE_ID<=evh.id*/

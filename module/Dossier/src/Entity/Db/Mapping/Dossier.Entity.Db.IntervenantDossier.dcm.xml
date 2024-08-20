@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Dossier\Entity\Db\IntervenantDossier" table="INTERVENANT_DOSSIER">
         <id name="id" type="integer" column="ID">
@@ -15,6 +15,10 @@
         <many-to-one field="civilite" target-entity="Intervenant\Entity\Db\Civilite">
             <join-column name="CIVILITE_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <many-to-one field="situationMatrimoniale" target-entity="Intervenant\Entity\Db\SituationMatrimoniale">
+            <join-column name="SITUATION_MATRIMONIALE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="dateSituationMatrimoniale" type="datetime" column="SITUATION_MATRIMONIALE_DATE" nullable="true"/>
         <field name="nomUsuel" type="string" column="NOM_USUEL" length="60" nullable="false"/>
         <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
         <field name="dateNaissance" type="datetime" column="DATE_NAISSANCE" nullable="false"/>

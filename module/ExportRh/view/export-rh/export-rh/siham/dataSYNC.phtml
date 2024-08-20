@@ -78,6 +78,7 @@
                 <td class="active"><?= (!empty($intervenantRh)) ? $intervenantRh->getEmailPerso() : '' ?></td>
             </tr>
 
+
             <tr>
                 <td>
                     <input name="generiqueFieldset[iban]" type="checkbox" checked="checked">
@@ -109,8 +110,33 @@
                     <?= (!empty($intervenantRh)) ? $intervenantRh->getBIC() : '' ?>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <input name="generiqueFieldset[situationMatrimoniale]" type="checkbox" checked="checked" disabled>
+                    <?= $this->formLabel($generiqueFieldset->get('situationMatrimoniale')) ?> :
+                </td>
+                <td>
+                    <?= ($intervenantDossier->getSituationMatrimoniale()) ? $intervenantDossier->getSituationMatrimoniale()->getLibelle() : 'Non renseigné'; ?>
+                    <?php if ($intervenantRh->getSituationMatrimoniale() != $intervenantDossier->getSituationMatrimoniale() && !empty($intervenantDossier->getSituationMatrimoniale())): ?>
+                        <i class="fas fa-triangle-exclamation" style="color:#a40000;"></i>
+                    <?php endif; ?>
+                </td>
+                <?php if (!empty($intervenantRh)): ?>
+                    <td class="active"><?= ($intervenantRh->getSituationMatrimoniale()) ? $intervenantRh->getSituationMatrimoniale()->getLibelle() : 'Non renseigné' ?></td>
+                <?php else: ?>
+                    <td class="active">Non renseigné</td>
+                <?php endif; ?>
+            </tr>
             </tbody>
         </table>
+        <p>
+            <?php if ($intervenantRh->getSituationMatrimoniale() != $intervenantDossier->getSituationMatrimoniale() && !empty($intervenantDossier->getSituationMatrimoniale())): ?>
+                <i class="fas fa-triangle-exclamation" style="color:#a40000;"></i> <i
+                        style="font-style: italic;color:#555753">&nbsp;Attention, la situation matrimoniale de l'agent a changé, le synchronisation des données
+                    personnelles SIHAM
+                    ne met pas à jour cette information, pensez à le faire manuellement dans SIHAM.</i>
+            <?php endif; ?>
+        </p>
 
     </div>
 </div>

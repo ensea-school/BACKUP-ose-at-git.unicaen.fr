@@ -19,6 +19,10 @@ return [
         'actions' => ['install', 'update'],
         'key'     => ['LIBELLE_COURT'],
     ],
+    'SITUATION_MATRIMONIALE'     => [
+        'actions' => ['install', 'update'],
+        'key'     => ['CODE'],
+    ],
     'PLAFOND_ETAT'               => [
         'actions' => ['install', 'update'],
         'key'     => 'ID',

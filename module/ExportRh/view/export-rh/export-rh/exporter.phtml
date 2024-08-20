@@ -84,8 +84,9 @@ if ($priseEnCharge) {
             ?>
             <!-- BLOC AFFECTATION -->
             <?php if (!empty($affectationEnCours)): ?>
+
                 <div class="card bg-default">
-                    <div class="card-header">Affectation <?= $nameConnecteur ?> en cours</div>
+                    <div class="card-header">Dernière affectation connue dans <?= $nameConnecteur ?> </div>
                     <div class="card-body">
                         <table class="table">
                             <thead>
@@ -110,12 +111,21 @@ if ($priseEnCharge) {
                                 </td>
                             </tr>
                             <tr>
+                                <td>Date fin</td>
+                                <td>
+                                    <?php
+                                    $date = new DateTime($affectationEnCours->dateFinAffectation);
+                                    echo $date->format('d-m-Y');
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Type de rattachement</td>
                                 <td><?= $affectationEnCours->libLongTypeRattachement ?></td>
                             </tr>
                             <?php if (!empty($intervenant->getExportDate())): ?>
                                 <tr>
-                                    <td>Exporter vers <?= $nameConnecteur ?> le</td>
+                                    <td>Exporté vers <?= $nameConnecteur ?> le</td>
                                     <td><?= $intervenant->getExportDate()->format('d-m-Y') ?></td>
                                 </tr>
                             <?php endif ?>
@@ -123,9 +133,10 @@ if ($priseEnCharge) {
                         </table>
                     </div>
                 </div>
+
             <?php else: ?>
                 <div class="card bg-default">
-                    <div class="card-header">Affectation <?= $nameConnecteur ?> en cours</div>
+                    <div class="card-header">Affectation <?= $nameConnecteur ?></div>
                     <div class="card-body" style="text-align:center;">
                         Aucune affectation en cours dans SIHAM
                     </div>
@@ -133,7 +144,7 @@ if ($priseEnCharge) {
             <?php endif; ?>
             <?php if (!empty($contratEnCours)): ?>
                 <div class="card bg-default">
-                    <div class="card-header">Contrat <?= $nameConnecteur ?> en cours</div>
+                    <div class="card-header">Dernier contrat connu dans <?= $nameConnecteur ?></div>
                     <div class="card-body">
                         <table class="table">
                             <thead>

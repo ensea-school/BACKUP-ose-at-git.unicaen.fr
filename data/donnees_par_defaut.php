@@ -71191,6 +71191,41 @@ return [
             "LIBELLE_LONG" => "Surnombre",
         ],
     ],
+    "SITUATION_MATRIMONIALE" => [
+        [
+            "LIBELLE" => "Célibataire",
+            "CODE" => "CEL",
+        ],
+                [
+            "LIBELLE" => "Divorcé(e)",
+            "CODE" => "DIV",
+        ],
+                [
+            "LIBELLE" => "En concubinage",
+            "CODE" => "CCB",
+        ],
+                [
+            "LIBELLE" => "Marie(e)",
+            "CODE" => "MAR",
+        ],
+                [
+            "LIBELLE" => "Pacsé(e)",
+            "CODE" => "PAC",
+        ],
+                [
+            "LIBELLE" => "Séparé(e) de corps",
+            "CODE" => "SEC",
+        ],
+                [
+            "LIBELLE" => "Séparé(e) de fait",
+            "CODE" => "SEP",
+        ],
+                [
+            "LIBELLE" => "Veuf(ve)",
+            "CODE" => "VEU",
+        ],
+
+    ],
     "STATUT" => [
         [
             "CLOTURE" => TRUE,

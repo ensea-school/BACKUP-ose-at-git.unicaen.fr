@@ -2,11 +2,12 @@
 
 namespace Mission\Form;
 
+
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\TypeMission;
+use Mission\Validator\DateMissionValidator;
 use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Util;
 
@@ -46,9 +47,31 @@ class MissionForm extends AbstractForm
         $this->spec([
             'description'     => ['type' => 'Textarea'],
             'etudiantsSuivis' => ['type' => 'Textarea'],
-            'structure' => ['type' => \Lieu\Form\Element\Structure::class],
+            'structure'       => ['type' => \Lieu\Form\Element\Structure::class],
             'tauxRemuMajore'  => ['input' => ['required' => false]],
             'heuresFormation' => ['input' => ['required' => false]],
+            'dateDebut'       => [
+                'options'    => [
+                    'label_attributes' => [
+                        'class' => 'form-label',
+                    ],
+                ],
+                'attributes' => [
+                    'class' => 'form-control',
+
+                ],
+            ],
+            'dateFin'         => [
+                'options'    => [
+                    'label_attributes' => [
+                        'class' => 'form-label',
+                    ],
+                ],
+                'attributes' => [
+                    'class' => 'form-control',
+
+                ],
+            ],
         ]);
         $this->build();
 
@@ -59,6 +82,7 @@ class MissionForm extends AbstractForm
         $this->setValueOptions('tauxRemu', $trDql);
         $this->setValueOptions('tauxRemuMajore', $trDql);
         $this->get('tauxRemuMajore')->setEmptyOption('- Aucune majoration -');
+
 
         $this->setLabels([
             'structure'       => 'Composante en charge du suivi de mission',
@@ -75,6 +99,36 @@ class MissionForm extends AbstractForm
         ]);
 
         $this->addSubmit();
+    }
+
+
+
+    public function getInputFilterSpecification()
+    {
+
+        $dateDebut = new \DateTime($this->get('dateDebut')->getValue());
+        $dateFin   = new \DateTime($this->get('dateFin')->getValue());
+        $annee     = $this->getServiceContext()->getAnnee();
+
+        return [
+            'dateDebut'      => [
+                'required'   => true,
+                'validators' => [
+                    new DateMissionValidator(['annee'        => $annee,
+                                              'dateDebut'    => $dateDebut,
+                                              'dateFin'      => $dateFin,
+                                              'dateVerifiee' => $dateDebut,
+                    ]),
+                ],
+            ],
+            'dateFin'        => [
+                'required' => true,
+            ],
+            'tauxRemuMajore' => [
+                'required' => false,
+            ],
+
+        ];
     }
 
 

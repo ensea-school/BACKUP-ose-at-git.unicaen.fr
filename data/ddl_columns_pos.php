@@ -894,6 +894,8 @@ return [
         'IRRECEVABLE',
         'NUMERO_PEC',
         'SYNC_PEC',
+        'SITUATION_MATRIMONIALE_DATE',
+        'SITUATION_MATRIMONIALE_ID',
     ],
     'INTERVENANT_DOSSIER'              => [
         'ID',
@@ -938,6 +940,8 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'SITUATION_MATRIMONIALE_DATE',
+        'SITUATION_MATRIMONIALE_ID',
     ],
     'INTERVENANT_PAR_DEFAUT'           => [
         'ID',
@@ -1405,6 +1409,7 @@ return [
         'MISSION_DECRET',
         'MISSION_INDEMNITEES',
         'PJ_ACTIVE',
+        'DOSSIER_SITUATION_MATRIMONIALE',
     ],
     'STRUCTURE'                        => [
         'ID',

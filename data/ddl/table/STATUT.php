@@ -590,11 +590,11 @@ return [
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => '0',
+            'scale'       => NULL,
             'precision'   => 38,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 23,
+            'position'    => 104,
             'commentaire' => NULL,
         ],
         'DOSSIER_STATUT'                 => [

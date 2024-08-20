@@ -4,6 +4,7 @@ namespace Formule\Tbl\Process;
 
 use Formule\Tbl\Process\Sub\ServiceDataManager;
 use Psr\Container\ContainerInterface;
+use UnicaenTbl\Service\BddService;
 
 
 /**
@@ -23,9 +24,8 @@ class FormuleProcessFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): FormuleProcess
     {
-        $serviceDataManager = $container->get(ServiceDataManager::class);
-
-        $service = new FormuleProcess($serviceDataManager);
+        $service = new FormuleProcess();
+        $service->setServiceBdd($container->get(BddService::class));
 
         return $service;
     }

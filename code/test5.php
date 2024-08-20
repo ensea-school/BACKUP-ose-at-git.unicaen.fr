@@ -8,21 +8,17 @@
  * @var $viewFile   string
  */
 
-
-/** @var \Intervenant\Service\IntervenantService $fi */
-$fi = $container->get(\Intervenant\Service\IntervenantService::class);
-
 /** @var \Formule\Service\FormuleService $fs */
 $fs = $container->get(\Formule\Service\FormuleService::class);
 
-/** @var \Formule\Service\FormulatorService $formulator */
-$formulator = $container->get(\Formule\Service\FormulatorService::class);
+$sTbl = $fs->getServiceTableauBord();
 
-$typeVolumeHoraire = $container->get(\Service\Service\TypeVolumeHoraireService::class)->getRealise();
-$etatVolumeHoraire = $container->get(\Service\Service\EtatVolumeHoraireService::class)->getValide();
+$params = [
+    'INTERVENANT_ID' => 784094,
+    //'STATUT_ID' => 744,
+    'ANNEE_ID' => 2023,
+];
 
-
-$intervenant = $fi->get(784094);
-
-
-$fs->calculer($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+\UnicaenApp\Util::topChrono();
+$sTbl->calculer('formule', $params);
+\UnicaenApp\Util::topChrono();

@@ -111,8 +111,8 @@ class AbstractFormuleCalcul
 
     protected function c(string $name, int $l)
     {
-        if ($l < 0){
-            return $this->cg($name.(string)($this->mainLine + $l));
+        if ($l < 0) {
+            return $this->cg($name . (string)($this->mainLine + $l));
         }
 
         if (!isset($this->cache['vh'][$l][$name])) {
@@ -173,24 +173,24 @@ class AbstractFormuleCalcul
             }
         }
 
-        foreach ($this->cache['vh'] as $vhi => $vhd) {
-            uksort($this->cache['vh'][$vhi], function ($a, $b) {
-                return (int)(Calc::letterToNumber($a) - Calc::letterToNumber($b));
-            });
-        }
-
-        uksort($this->cache['global'], function ($a, $b) {
-            $aCoords = Calc::cellNameToCoords($a);
-            $bCoords = Calc::cellNameToCoords($b);
-
-            if ($aCoords['col'] == $bCoords['col']) {
-                return $aCoords['row'] - $bCoords['row'];
-            } else {
-                return $aCoords['col'] - $bCoords['col'];
+        if ($this->intervenant instanceof FormuleTestIntervenant) {
+            foreach ($this->cache['vh'] as $vhi => $vhd) {
+                uksort($this->cache['vh'][$vhi], function ($a, $b) {
+                    return (int)(Calc::letterToNumber($a) - Calc::letterToNumber($b));
+                });
             }
-        });
 
-        if ($this->intervenant instanceof FormuleTestIntervenant){
+            uksort($this->cache['global'], function ($a, $b) {
+                $aCoords = Calc::cellNameToCoords($a);
+                $bCoords = Calc::cellNameToCoords($b);
+
+                if ($aCoords['col'] == $bCoords['col']) {
+                    return $aCoords['row'] - $bCoords['row'];
+                } else {
+                    return $aCoords['col'] - $bCoords['col'];
+                }
+            });
+
             $this->intervenant->setDebugTrace($this->cache);
         }
     }

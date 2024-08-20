@@ -4,6 +4,7 @@ namespace Formule\Service;
 
 use Psr\Container\ContainerInterface;
 use UnicaenTbl\Service\BddService;
+use UnicaenTbl\Service\TableauBordService;
 
 
 /**
@@ -25,7 +26,7 @@ class FormuleServiceFactory
     {
         $service = new FormuleService;
 
-        $service->setServiceBdd($container->get(BddService::class));
+        $service->setServiceTableauBord($container->get(TableauBordService::class));
 
         return $service;
     }

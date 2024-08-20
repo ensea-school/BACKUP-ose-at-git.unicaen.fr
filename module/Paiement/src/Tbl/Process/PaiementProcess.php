@@ -51,7 +51,7 @@ class PaiementProcess implements ProcessInterface
 
 
 
-    protected function init()
+    protected function init(): void
     {
         $parametres = $this->getServiceParametres();
 
@@ -73,7 +73,7 @@ class PaiementProcess implements ProcessInterface
 
 
 
-    public function run(TableauBord $tableauBord, array $params = [])
+    public function run(TableauBord $tableauBord, array $params = []): void
     {
         $this->init();
         $this->loadAPayer($params);

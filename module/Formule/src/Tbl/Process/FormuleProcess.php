@@ -11,8 +11,10 @@ use Formule\Entity\FormuleVolumeHoraire;
 use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Service\FormuleServiceAwareTrait;
 use Formule\Tbl\Process\Sub\ServiceDataManager;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
+use Unicaen\BddAdmin\Table;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -29,40 +31,61 @@ class FormuleProcess implements ProcessInterface
     use BddServiceAwareTrait;
     use ContextServiceAwareTrait;
 
-    protected Annee $annee;
-
-    protected array $entityCache = [];
+    protected Formule $formule;
 
     /**
      * @var array|FormuleIntervenant[]
      */
     protected array $data = [];
 
-    protected array $resultatsIntervenants = [];
+    protected ?Table $resultatIntervenantTable = null;
 
-    protected array $resultatsVolumesHoraires = [];
+    protected ?Table $resultatVolumeHoraireTable = null;
 
 
 
-    public function __construct()
+    protected function init(array &$params): void
     {
+        /* Initialisation de l'année et de la formule à utiliser */
+        if (array_key_exists('ANNEE_ID', $params)) {
+            $annee = $this->getServiceBdd()->entityGet(Annee::class, $params['ANNEE_ID']);
+        } else {
+            /* Si l'année n'est pas précisée, alors on ne calcule que sur l'année en cours pour éviter des problèmes de mémoire */
+            $annee = $this->getServiceContext()->getAnnee();
+            $params['ANNEE_ID'] = $annee->getId();
+        }
 
+        $this->formule = $this->getServiceFormule()->getCurrent($annee);
+
+        if (!$this->resultatIntervenantTable || !$this->resultatVolumeHoraireTable) {
+            /* Initialisation des objets tables */
+            $bddAdmin = \OseAdmin::instance()->getBdd();
+
+            $this->resultatIntervenantTable = $bddAdmin->getTable('FORMULE_RESULTAT_INTERVENANT');
+            $this->resultatVolumeHoraireTable = $bddAdmin->getTable('FORMULE_RESULTAT_VOLUME_HORAIRE');
+
+            // on force les DDL à partir des positions de colonnes pour éviter de faire des requêtes en plus
+            $colPosFile = $bddAdmin->getOption($bddAdmin::OPTION_COLUMNS_POSITIONS_FILE);
+            if (file_exists($colPosFile)) {
+                $positions = require $colPosFile;
+                if (!is_array($positions)) {
+                    throw new \exception('Fichiers des positionnements de colonnes non trouvé');
+                }
+            }
+
+            $this->resultatIntervenantTable->setDdl(require $bddAdmin->getOption($bddAdmin::OPTION_DDL_DIR).'/table/FORMULE_RESULTAT_INTERVENANT.php');
+            $this->resultatVolumeHoraireTable->setDdl(require $bddAdmin->getOption($bddAdmin::OPTION_DDL_DIR).'/table/FORMULE_RESULTAT_VOLUME_HORAIRE.php');
+        }
     }
 
 
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
-        if (array_key_exists('ANNEE_ID', $params)) {
-            $this->annee = $this->getServiceBdd()->entityGet(Annee::class, $params['ANNEE_ID']);
-        } else {
-            /* Si l'année n'est pas précisée, alors on ne calcule que sur l'année en cours pour éviter des problèmes de mémoire */
-            $this->annee = $this->getServiceContext()->getAnnee();
-            $params['ANNEE_ID'] = $this->annee->getId();
-        }
-
+        $this->init($params);
         $this->load($params);
         $this->calculer();
+        $this->save($params);
     }
 
 
@@ -97,9 +120,11 @@ class FormuleProcess implements ProcessInterface
 
     protected function hydrateIntervenant(array $data, FormuleIntervenant $intervenant): void
     {
-        $intervenant->setId((int)$data['INTERVENANT_ID']);
-        $intervenant->setAnnee($this->annee);
+        $sbdd = $this->getServiceBdd();
 
+        $intervenant->setId((int)$data['INTERVENANT_ID']);
+        $intervenant->setAnnee($sbdd->entityGet(Annee::class, $data['ANNEE_ID']));
+        $intervenant->setTypeIntervenant($sbdd->entityGet(TypeIntervenant::class, $data['TYPE_INTERVENANT_ID']));
         $intervenant->setStructureCode($data['STRUCTURE_CODE']);
         $intervenant->setHeuresServiceStatutaire((float)$data['HEURES_SERVICE_STATUTAIRE']);
         $intervenant->setHeuresServiceModifie((float)$data['HEURES_SERVICE_MODIFIE']);
@@ -139,12 +164,10 @@ class FormuleProcess implements ProcessInterface
         $sb = $this->getServiceBdd();
         $conn = $sb->getEntityManager()->getConnection();
 
-        $formule = $this->getServiceFormule()->getCurrent($this->annee);
-
         $this->data = [];
         $fIntervenants = [];
 
-        $vVolumeHoraire = $this->makeSqlVolumeHoraire($formule, $params);
+        $vVolumeHoraire = $this->makeSqlVolumeHoraire($this->formule, $params);
         $query = $conn->executeQuery($vVolumeHoraire);
         while ($vhData = $query->fetchAssociative()) {
             $intervenantId = (int)$vhData['INTERVENANT_ID'];
@@ -173,7 +196,7 @@ class FormuleProcess implements ProcessInterface
             }
         }
 
-        $vIntervenant = $this->makeSqlIntervenant($formule, $params);
+        $vIntervenant = $this->makeSqlIntervenant($this->formule, $params);
         $query = $conn->executeQuery($vIntervenant);
         while ($iData = $query->fetchAssociative()) {
             $intervenantId = (int)$iData['INTERVENANT_ID'];
@@ -191,10 +214,147 @@ class FormuleProcess implements ProcessInterface
 
     protected function calculer(): void
     {
-        $formule = $this->getServiceFormule()->getCurrent($this->annee);
-        foreach ($this->data as $key => $formuleIntervenant) {
-            $this->getServiceFormulator()->calculer($formuleIntervenant, $formule);
-
+        $formulator = $this->getServiceFormulator();
+        foreach ($this->data as $formuleIntervenant) {
+            $formulator->calculer($formuleIntervenant, $this->formule);
         }
+    }
+
+
+
+    protected function extractIntervenant(FormuleIntervenant $intervenant): array
+    {
+        return [
+            'INTERVENANT_ID'                 => $intervenant->getId(),
+            'ANNEE_ID'                       => $intervenant->getAnnee()->getId(),
+            'TYPE_VOLUME_HORAIRE_ID'         => $intervenant->getTypeVolumeHoraire()->getId(),
+            'ETAT_VOLUME_HORAIRE_ID'         => $intervenant->getEtatVolumeHoraire()->getId(),
+            'TYPE_INTERVENANT_ID'            => $intervenant->getTypeIntervenant()->getId(),
+            'STRUCTURE_CODE'                 => $intervenant->getStructureCode(),
+            'HEURES_SERVICE_STATUTAIRE'      => $intervenant->getHeuresServiceStatutaire(),
+            'HEURES_SERVICE_MODIFIE'         => $intervenant->getHeuresServiceModifie(),
+            'DEPASSEMENT_SERVICE_DU_SANS_HC' => $intervenant->isDepassementServiceDuSansHC(),
+            'PARAM_1'                        => $intervenant->getParam1(),
+            'PARAM_2'                        => $intervenant->getParam2(),
+            'PARAM_3'                        => $intervenant->getParam3(),
+            'PARAM_4'                        => $intervenant->getParam4(),
+            'PARAM_5'                        => $intervenant->getParam5(),
+            'SERVICE_DU'                     => $intervenant->getServiceDu(),
+            'HEURES_SERVICE_FI'              => 0,
+            'HEURES_SERVICE_FA'              => 0,
+            'HEURES_SERVICE_FC'              => 0,
+            'HEURES_SERVICE_REFERENTIEL'     => 0,
+            'HEURES_NON_PAYABLE_FI'          => 0,
+            'HEURES_NON_PAYABLE_FA'          => 0,
+            'HEURES_NON_PAYABLE_FC'          => 0,
+            'HEURES_NON_PAYABLE_REFERENTIEL' => 0,
+            'HEURES_COMPL_FI'                => 0,
+            'HEURES_COMPL_FA'                => 0,
+            'HEURES_COMPL_FC'                => 0,
+            'HEURES_COMPL_REFERENTIEL'       => 0,
+            'HEURES_PRIMES'                  => 0,
+            'TOTAL'                          => 0,
+            'SOLDE'                          => 0,
+            'SOUS_SERVICE'                   => 0,
+        ];
+    }
+
+
+
+    protected function extractVolumeHoraire(FormuleVolumeHoraire $volumeHoraire): array
+    {
+        return [
+            'FORMULE_RESULTAT_INTERVENANT_ID' => null,
+            'VOLUME_HORAIRE_ID'               => $volumeHoraire->getVolumeHoraire(),
+            'VOLUME_HORAIRE_REF_ID'           => $volumeHoraire->getVolumeHoraireReferentiel(),
+            'SERVICE_ID'                      => $volumeHoraire->getService(),
+            'SERVICE_REFERENTIEL_ID'          => $volumeHoraire->getServiceReferentiel(),
+            'STRUCTURE_CODE'                  => $volumeHoraire->getStructureCode(),
+            'TYPE_INTERVENTION_CODE'          => $volumeHoraire->getTypeInterventionCode(),
+            'STRUCTURE_UNIV'                  => $volumeHoraire->isStructureUniv(),
+            'SERVICE_STATUTAIRE'              => $volumeHoraire->isServiceStatutaire(),
+            'NON_PAYABLE'                     => $volumeHoraire->isNonPayable(),
+            'TAUX_FI'                         => $volumeHoraire->getTauxFi(),
+            'TAUX_FA'                         => $volumeHoraire->getTauxFa(),
+            'TAUX_FC'                         => $volumeHoraire->getTauxFc(),
+            'TAUX_SERVICE_DU'                 => $volumeHoraire->getTauxServiceDu(),
+            'TAUX_SERVICE_COMPL'              => $volumeHoraire->getTauxServiceCompl(),
+            'PONDERATION_SERVICE_DU'          => $volumeHoraire->getPonderationServiceDu(),
+            'PONDERATION_SERVICE_COMPL'       => $volumeHoraire->getPonderationServiceCompl(),
+            'HEURES'                          => $volumeHoraire->getHeures(),
+            'PARAM_1'                         => $volumeHoraire->getParam1(),
+            'PARAM_2'                         => $volumeHoraire->getParam2(),
+            'PARAM_3'                         => $volumeHoraire->getParam3(),
+            'PARAM_4'                         => $volumeHoraire->getParam4(),
+            'PARAM_5'                         => $volumeHoraire->getParam5(),
+            'HEURES_SERVICE_FI'               => $volumeHoraire->getHeuresServiceFi(),
+            'HEURES_SERVICE_FA'               => $volumeHoraire->getHeuresServiceFa(),
+            'HEURES_SERVICE_FC'               => $volumeHoraire->getHeuresServiceFc(),
+            'HEURES_SERVICE_REFERENTIEL'      => $volumeHoraire->getHeuresServiceReferentiel(),
+            'HEURES_NON_PAYABLE_FI'           => $volumeHoraire->getHeuresNonPayableFi(),
+            'HEURES_NON_PAYABLE_FA'           => $volumeHoraire->getHeuresNonPayableFa(),
+            'HEURES_NON_PAYABLE_FC'           => $volumeHoraire->getHeuresNonPayableFc(),
+            'HEURES_NON_PAYABLE_REFERENTIEL'  => $volumeHoraire->getHeuresNonPayableReferentiel(),
+            'HEURES_COMPL_FI'                 => $volumeHoraire->getHeuresComplFi(),
+            'HEURES_COMPL_FA'                 => $volumeHoraire->getHeuresComplFa(),
+            'HEURES_COMPL_FC'                 => $volumeHoraire->getHeuresComplFc(),
+            'HEURES_COMPL_REFERENTIEL'        => $volumeHoraire->getHeuresComplReferentiel(),
+            'HEURES_PRIMES'                   => $volumeHoraire->getHeuresPrimes(),
+            'TOTAL'                           => $volumeHoraire->getTotal(),
+        ];
+    }
+
+
+
+    protected function save(array $params): void
+    {
+        $totalCols = [
+            'HEURES_SERVICE_FI',
+            'HEURES_SERVICE_FA',
+            'HEURES_SERVICE_FC',
+            'HEURES_SERVICE_REFERENTIEL',
+            'HEURES_NON_PAYABLE_FI',
+            'HEURES_NON_PAYABLE_FA',
+            'HEURES_NON_PAYABLE_FC',
+            'HEURES_NON_PAYABLE_REFERENTIEL',
+            'HEURES_COMPL_FI',
+            'HEURES_COMPL_FA',
+            'HEURES_COMPL_FC',
+            'HEURES_COMPL_REFERENTIEL',
+            'HEURES_PRIMES',
+            'TOTAL',
+        ];
+
+        $rIntervenants = [];
+        $rVolumesHoraires = [];
+
+        foreach ($this->data as $fIntervenant) {
+            $rIntervenant = $this->extractIntervenant($fIntervenant);
+            $volumesHoraires = $fIntervenant->getVolumesHoraires();
+            foreach ($volumesHoraires as $volumesHoraire) {
+                $rVolumesHoraire = $this->extractVolumeHoraire($volumesHoraire);
+                /* On fait les totaux ici */
+                foreach ($totalCols as $col) {
+                    $rIntervenant[$col] += $rVolumesHoraire[$col];
+                }
+                $rVolumesHoraires[] = $rVolumesHoraire;
+            }
+
+            /* Petits calculs de solde et de sous-service ici */
+            $rIntervenant['SOLDE'] = $rIntervenant['TOTAL'] - $rIntervenant['SERVICE_DU'];
+            if ($rIntervenant['SOLDE'] >= 0.0) {
+                $rIntervenant['SOUS_SERVICE'] = 0.0;
+            } else {
+                $rIntervenant['SOUS_SERVICE'] = $rIntervenant['SOLDE'] * -1;
+            }
+
+            $rIntervenants[] = $rIntervenant;
+        }
+        $this->data = []; // libération de mémoire
+
+        $res = $this->resultatIntervenantTable->merge($rIntervenants, ['INTERVENANT_ID', 'TYPE_VOLUME_HORAIRE_ID', 'ETAT_VOLUME_HORAIRE_ID'], ['where' => $params, 'return-insert-data' => true]);
+        unset($rIntervenants);
+
+        //var_dump($rVolumesHoraires);
     }
 }

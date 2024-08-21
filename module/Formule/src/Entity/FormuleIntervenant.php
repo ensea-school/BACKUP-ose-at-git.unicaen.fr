@@ -252,25 +252,6 @@ class FormuleIntervenant implements FormuleHeuresInterface
 
 
 
-    public function getSolde(): float
-    {
-        return $this->getTotal() - $this->serviceDu;
-    }
-
-
-
-    public function getSousService(): float
-    {
-        $solde = $this->getSolde();
-        if ($solde >= 0.0) {
-            return 0.0;
-        } else {
-            return $solde * -1;
-        }
-    }
-
-
-
     public function getServiceDu(): float
     {
         return $this->getHeuresServiceStatutaire() + $this->getHeuresServiceModifie();

@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => FALSE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'FORMULE_RESULTAT_VOLUME_HORAIRE_ID_SEQ',
     'columns'     => [
         'FORMULE_RESULTAT_INTERVENANT_ID' => [
             'name'        => 'FORMULE_RESULTAT_INTERVENANT_ID',

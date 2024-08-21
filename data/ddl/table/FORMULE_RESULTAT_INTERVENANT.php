@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => FALSE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'FORMULE_RESULTAT_INTERVENANT_ID_SEQ',
     'columns'     => [
         'ANNEE_ID'                       => [
             'name'        => 'ANNEE_ID',

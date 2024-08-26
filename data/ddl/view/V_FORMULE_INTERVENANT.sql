@@ -12,11 +12,11 @@ SELECT
   THEN 1 ELSE 0 END                                                    depassement_service_du_sans_hc
 FROM
             intervenant                  i
+       JOIN statut                      si ON si.id = i.statut_id
+       JOIN type_intervenant            ti ON ti.id = si.type_intervenant_id
   LEFT JOIN structure                    s ON s.id = i.structure_id
   LEFT JOIN modification_service_du    msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
   LEFT JOIN motif_modification_service mms ON mms.id = msd.motif_id
-       JOIN statut                      si ON si.id = i.statut_id
-       JOIN type_intervenant            ti ON ti.id = si.type_intervenant_id
 WHERE
   1=1
   /*@INTERVENANT_ID=i.id*/

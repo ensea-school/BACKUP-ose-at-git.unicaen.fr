@@ -169,6 +169,7 @@ class AbstractFormuleCalcul
                 } else {
                     $val = 0.0;
                 }
+                $val = round($val, 2);
                 $volumesHoraire->{'set' . $resCol}($val);
             }
         }

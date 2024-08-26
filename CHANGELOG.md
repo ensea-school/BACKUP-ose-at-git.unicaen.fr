@@ -6,6 +6,8 @@
 
 # OSE 24 (à venir)
 
+* Optimisation des calculs de validation de volumes horaires
+
 # OSE 23.8 (à venir)
 
 ## Améliorations

@@ -6,8 +6,8 @@ namespace Formule\Tbl\Process;
 use Application\Entity\Db\Annee;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Formule\Entity\Db\Formule;
-use Formule\Entity\FormuleIntervenant;
-use Formule\Entity\FormuleVolumeHoraire;
+use Formule\Entity\FormuleServiceIntervenant;
+use Formule\Entity\FormuleServiceVolumeHoraire;
 use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Service\FormuleServiceAwareTrait;
 use Formule\Tbl\Process\Sub\ServiceDataManager;
@@ -34,7 +34,7 @@ class FormuleProcess implements ProcessInterface
     protected Formule $formule;
 
     /**
-     * @var array|FormuleIntervenant[]
+     * @var array|FormuleServiceIntervenant[]
      */
     protected array $data = [];
 
@@ -73,8 +73,8 @@ class FormuleProcess implements ProcessInterface
                 }
             }
 
-            $this->resultatIntervenantTable->setDdl(require $bddAdmin->getOption($bddAdmin::OPTION_DDL_DIR).'/table/FORMULE_RESULTAT_INTERVENANT.php');
-            $this->resultatVolumeHoraireTable->setDdl(require $bddAdmin->getOption($bddAdmin::OPTION_DDL_DIR).'/table/FORMULE_RESULTAT_VOLUME_HORAIRE.php');
+            $this->resultatIntervenantTable->setDdl(require $bddAdmin->getOption($bddAdmin::OPTION_DDL_DIR) . '/table/FORMULE_RESULTAT_INTERVENANT.php');
+            $this->resultatVolumeHoraireTable->setDdl(require $bddAdmin->getOption($bddAdmin::OPTION_DDL_DIR) . '/table/FORMULE_RESULTAT_VOLUME_HORAIRE.php');
         }
     }
 
@@ -118,11 +118,11 @@ class FormuleProcess implements ProcessInterface
 
 
 
-    protected function hydrateIntervenant(array $data, FormuleIntervenant $intervenant): void
+    protected function hydrateIntervenant(array $data, FormuleServiceIntervenant $intervenant): void
     {
         $sbdd = $this->getServiceBdd();
 
-        $intervenant->setId((int)$data['INTERVENANT_ID']);
+        $intervenant->setIntervenantId((int)$data['INTERVENANT_ID']);
         $intervenant->setAnnee($sbdd->entityGet(Annee::class, $data['ANNEE_ID']));
         $intervenant->setTypeIntervenant($sbdd->entityGet(TypeIntervenant::class, $data['TYPE_INTERVENANT_ID']));
         $intervenant->setStructureCode($data['STRUCTURE_CODE']);
@@ -133,8 +133,9 @@ class FormuleProcess implements ProcessInterface
 
 
 
-    protected function hydrateVolumeHoraire(array $data, FormuleVolumeHoraire $volumeHoraire): void
+    protected function hydrateVolumeHoraire(array $data, FormuleServiceVolumeHoraire $volumeHoraire): void
     {
+        $volumeHoraire->setFormuleResultatIntervenantId((int)$data['FORMULE_RESULTAT_INTERVENANT_ID'] ?: null);
         $volumeHoraire->setVolumeHoraire((int)$data['VOLUME_HORAIRE_ID'] ?: null);
         $volumeHoraire->setVolumeHoraireReferentiel((int)$data['VOLUME_HORAIRE_REF_ID'] ?: null);
         $volumeHoraire->setService((int)$data['SERVICE_ID'] ?: null);
@@ -172,28 +173,28 @@ class FormuleProcess implements ProcessInterface
         while ($vhData = $query->fetchAssociative()) {
             $intervenantId = (int)$vhData['INTERVENANT_ID'];
             $typeVolumeHoraireId = (int)$vhData['TYPE_VOLUME_HORAIRE_ID'];
-            $etatVolumeHoraireIdMax = (int)$vhData['ETAT_VOLUME_HORAIRE_ID'];
+            $etatVolumeHoraireId = (int)$vhData['ETAT_VOLUME_HORAIRE_ID'];
 
-            for ($etatVolumeHoraireId = 1; $etatVolumeHoraireId <= $etatVolumeHoraireIdMax; $etatVolumeHoraireId++) {
-                $intervenantKey = $intervenantId . '-' . $typeVolumeHoraireId . '-' . $etatVolumeHoraireId;
+            $intervenantKey = $this->resultatIntervenantTable->makeKey($vhData, ['INTERVENANT_ID', 'TYPE_VOLUME_HORAIRE_ID', 'ETAT_VOLUME_HORAIRE_ID']);
 
-                if (!array_key_exists($intervenantKey, $this->data)) {
-                    $fIntervenant = new FormuleIntervenant();
-                    $fIntervenant->setTypeVolumeHoraire($sb->entityGet(TypeVolumeHoraire::class, $typeVolumeHoraireId));
-                    $fIntervenant->setEtatVolumeHoraire($sb->entityGet(EtatVolumeHoraire::class, $etatVolumeHoraireId));
-                    $this->data[$intervenantKey] = $fIntervenant;
-                    if (!array_key_exists($intervenantId, $fIntervenants)) {
-                        $fIntervenants[$intervenantId] = [];
-                    }
-                    $fIntervenants[$intervenantId][] = $fIntervenant;
-                } else {
-                    $fIntervenant = $this->data[$intervenantKey];
+            if (!array_key_exists($intervenantKey, $this->data)) {
+                $fIntervenant = new FormuleServiceIntervenant();
+                $fIntervenant->setId((int)$vhData['FORMULE_RESULTAT_INTERVENANT_ID'] ?: null);
+                $fIntervenant->setTypeVolumeHoraire($sb->entityGet(TypeVolumeHoraire::class, $typeVolumeHoraireId));
+                $fIntervenant->setEtatVolumeHoraire($sb->entityGet(EtatVolumeHoraire::class, $etatVolumeHoraireId));
+                $this->data[$intervenantKey] = $fIntervenant;
+                if (!array_key_exists($intervenantId, $fIntervenants)) {
+                    $fIntervenants[$intervenantId] = [];
                 }
-
-                $volumeHoraire = new FormuleVolumeHoraire();
-                $this->hydrateVolumeHoraire($vhData, $volumeHoraire);
-                $fIntervenant->addVolumeHoraire($volumeHoraire);
+                $fIntervenants[$intervenantId][] = $fIntervenant;
+            } else {
+                $fIntervenant = $this->data[$intervenantKey];
             }
+
+            $volumeHoraire = new FormuleServiceVolumeHoraire();
+            $this->hydrateVolumeHoraire($vhData, $volumeHoraire);
+            $fIntervenant->addVolumeHoraire($volumeHoraire);
+
         }
 
         $vIntervenant = $this->makeSqlIntervenant($this->formule, $params);
@@ -222,10 +223,10 @@ class FormuleProcess implements ProcessInterface
 
 
 
-    protected function extractIntervenant(FormuleIntervenant $intervenant): array
+    protected function extractIntervenant(FormuleServiceIntervenant $intervenant): array
     {
         return [
-            'INTERVENANT_ID'                 => $intervenant->getId(),
+            'INTERVENANT_ID'                 => $intervenant->getIntervenantId(),
             'ANNEE_ID'                       => $intervenant->getAnnee()->getId(),
             'TYPE_VOLUME_HORAIRE_ID'         => $intervenant->getTypeVolumeHoraire()->getId(),
             'ETAT_VOLUME_HORAIRE_ID'         => $intervenant->getEtatVolumeHoraire()->getId(),
@@ -261,10 +262,10 @@ class FormuleProcess implements ProcessInterface
 
 
 
-    protected function extractVolumeHoraire(FormuleVolumeHoraire $volumeHoraire): array
+    protected function extractVolumeHoraire(FormuleServiceVolumeHoraire $volumeHoraire): array
     {
         return [
-            'FORMULE_RESULTAT_INTERVENANT_ID' => null,
+            'FORMULE_RESULTAT_INTERVENANT_ID' => $volumeHoraire->getFormuleResultatIntervenantId(),
             'VOLUME_HORAIRE_ID'               => $volumeHoraire->getVolumeHoraire(),
             'VOLUME_HORAIRE_REF_ID'           => $volumeHoraire->getVolumeHoraireReferentiel(),
             'SERVICE_ID'                      => $volumeHoraire->getService(),
@@ -327,17 +328,25 @@ class FormuleProcess implements ProcessInterface
 
         $rIntervenants = [];
         $rVolumesHoraires = [];
+        $keyColumns = ['INTERVENANT_ID', 'TYPE_VOLUME_HORAIRE_ID', 'ETAT_VOLUME_HORAIRE_ID'];
 
         foreach ($this->data as $fIntervenant) {
             $rIntervenant = $this->extractIntervenant($fIntervenant);
             $volumesHoraires = $fIntervenant->getVolumesHoraires();
             foreach ($volumesHoraires as $volumesHoraire) {
                 $rVolumesHoraire = $this->extractVolumeHoraire($volumesHoraire);
+                /* Si l'ID n'est pas encore déterminé, on crée une valeur clé qui permettra de le retrouver ensuite */
+                if (empty($rVolumesHoraire['FORMULE_RESULTAT_INTERVENANT_ID'])) {
+                    $rVolumesHoraire['z_FORMULE_RESULTAT_INTERVENANT_ID'] = $this->resultatIntervenantTable->makeKey($rIntervenant, $keyColumns);
+                }
                 /* On fait les totaux ici */
                 foreach ($totalCols as $col) {
                     $rIntervenant[$col] += $rVolumesHoraire[$col];
                 }
                 $rVolumesHoraires[] = $rVolumesHoraire;
+            }
+            foreach ($totalCols as $col) { // arrondi à cause de PHP
+                $rIntervenant[$col] = round($rIntervenant[$col], 2);
             }
 
             /* Petits calculs de solde et de sous-service ici */
@@ -352,9 +361,53 @@ class FormuleProcess implements ProcessInterface
         }
         $this->data = []; // libération de mémoire
 
-        $res = $this->resultatIntervenantTable->merge($rIntervenants, ['INTERVENANT_ID', 'TYPE_VOLUME_HORAIRE_ID', 'ETAT_VOLUME_HORAIRE_ID'], ['where' => $params, 'return-insert-data' => true]);
+        $fIntervenantSelect = "
+        SELECT
+          t.*, i.statut_id
+        FROM
+          formule_resultat_intervenant t
+          JOIN intervenant i ON i.id = t.intervenant_id
+        ";
+        $options = [
+            'custom-select'      => $fIntervenantSelect,
+            'where'              => $params,
+            'return-insert-data' => true,
+        ];
+        $res = $this->resultatIntervenantTable->merge($rIntervenants, $keyColumns, $options);
+        // Fin du travail au niveau des données intervenants
         unset($rIntervenants);
 
-        //var_dump($rVolumesHoraires);
+        // Si des ID de résultats d'intervenants ont été ajoutés, on les injecte dans les volumes horaires avant leur insertion en BDD sur la base des clés fournies plus tôt
+        $insertedIntervenants = $res['insert-data'];
+        if (!empty($insertedIntervenants)) {
+            foreach ($rVolumesHoraires as $rvhi => $rVolumesHoraire) {
+                if (isset($rVolumesHoraire['z_FORMULE_RESULTAT_INTERVENANT_ID'])) {
+                    $key = $rVolumesHoraire['z_FORMULE_RESULTAT_INTERVENANT_ID'];
+                    if (empty($rVolumesHoraire['FORMULE_RESULTAT_INTERVENANT_ID']) && isset($insertedIntervenants[$key])) {
+                        $rVolumesHoraires[$rvhi]['FORMULE_RESULTAT_INTERVENANT_ID'] = $insertedIntervenants[$key]['ID'];
+                    }
+                }
+            }
+            // Données plus nécessaires : on libère la mémoire
+            unset($insertedIntervenants);
+        }
+
+
+        /* Requête personnalisée nécessaire pour remonter les données à confronter aux paramètres, nécessaire au filtrage */
+        $fVolumeHoraireSelect = "
+        SELECT
+          t.*, i.statut_id, fri.intervenant_id, fri.type_intervenant_id, fri.type_volume_horaire_id, fri.etat_volume_horaire_id, i.annee_id
+        FROM
+          formule_resultat_volume_horaire t
+          JOIN formule_resultat_intervenant fri ON fri.id = t.FORMULE_RESULTAT_INTERVENANT_ID
+          JOIN intervenant i ON i.id = fri.intervenant_id
+        ";
+        $options = [
+            'custom-select'      => $fVolumeHoraireSelect,
+            'where'              => $params,
+            'return-insert-data' => false,
+        ];
+        $keyColumns = ['FORMULE_RESULTAT_INTERVENANT_ID','VOLUME_HORAIRE_ID','VOLUME_HORAIRE_REF_ID'];
+        $res = $this->resultatVolumeHoraireTable->merge($rVolumesHoraires, $keyColumns, $options);
     }
 }

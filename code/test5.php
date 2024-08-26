@@ -14,9 +14,9 @@ $fs = $container->get(\Formule\Service\FormuleService::class);
 $sTbl = $fs->getServiceTableauBord();
 
 $params = [
-    'INTERVENANT_ID' => 784094,
+    //'INTERVENANT_ID' => 784094,
     //'STATUT_ID' => 744,
-    'ANNEE_ID' => 2023,
+    'ANNEE_ID'  => 2023,
 ];
 
 \UnicaenApp\Util::topChrono();

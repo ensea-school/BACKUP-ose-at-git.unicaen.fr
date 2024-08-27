@@ -122,7 +122,8 @@ class ContratProcess implements ProcessInterface
         // on force la DDL pour éviter de faire des requêtes en plus
         $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
         // on merge dans la table
-        $table->merge($this->tblData, $key, ['where' => $params]);
+
+        $table->merge($this->tblData, $key);
         // on vide pour limiter la conso de RAM
         $this->tblData = [];
     }
@@ -175,39 +176,45 @@ class ContratProcess implements ProcessInterface
         foreach ($this->services as $service) {
 
             $ldata           = [
-                "INTERVENANT_ID"          => $service["INTERVENANT_ID"],
-                "ANNEE_ID"                => $service["ANNEE_ID"],
-                "STRUCTURE_ID"            => $service["STRUCTURE_ID"],
-                "EDITE"                   => $service["EDITE"],
-                "SIGNE"                   => $service["SIGNE"],
-                "ACTIF"                   => $service["ACTIF"],
-                "AUTRES"                  => $service["AUTRES"],
-                "AUTRE_LIBELLE"           => $service["AUTRE_LIBELLE"],
-                "CM"                      => $service["CM"],
-                "TD"                      => $service["TD"],
-                "TP"                      => $service["TP"],
-                "CONTRAT_ID"              => $service["CONTRAT_ID"],
-                "CONTRAT_PARENT_ID"       => $service["CONTRAT_PARENT_ID"],
-                "DATE_CREATION"           => $service["DATE_CREATION"],
-                "DATE_DEBUT"              => $service["DATE_DEBUT"],
-                "DATE_FIN"                => $service["DATE_FIN"],
-                "HETD"                    => $service["HETD"],
-                "HEURES"                  => $service["HEURES"],
-                "MISSION_ID"              => $service["MISSION_ID"],
-                "SERVICE_ID"              => $service["SERVICE_ID"],
-                "SERVICE_REFERENTIEL_ID"  => $service["SERVICE_REFERENTIEL_ID"],
-                "TAUX_CONGES_PAYES"       => $service["TAUX_CONGES_PAYES"],
-                "TAUX_REMU_DATE"          => $service["TAUX_REMU_DATE"],
-                "TAUX_REMU_ID"            => $service["TAUX_REMU_ID"],
-                "TAUX_REMU_MAJORE_DATE"   => $service["TAUX_REMU_MAJORE_DATE"],
-                "TAUX_REMU_MAJORE_ID"     => $service["TAUX_REMU_MAJORE_ID"],
-                "TAUX_REMU_MAJORE_VALEUR" => $service["TAUX_REMU_MAJORE_VALEUR"],
-                "TAUX_REMU_VALEUR"        => $service["TAUX_REMU_VALEUR"],
+                "INTERVENANT_ID"            => $service["INTERVENANT_ID"],
+                "ANNEE_ID"                  => $service["ANNEE_ID"],
+                "STRUCTURE_ID"              => $service["STRUCTURE_ID"],
+                "EDITE"                     => $service["EDITE"],
+                "SIGNE"                     => $service["SIGNE"],
+                "ACTIF"                     => $service["ACTIF"],
+                "AUTRES"                    => $service["AUTRES"],
+                "AUTRE_LIBELLE"             => $service["AUTRE_LIBELLE"],
+                "CM"                        => $service["CM"],
+                "TD"                        => $service["TD"],
+                "TP"                        => $service["TP"],
+                "CONTRAT_ID"                => $service["CONTRAT_ID"],
+                "CONTRAT_PARENT_ID"         => $service["CONTRAT_PARENT_ID"],
+                "DATE_CREATION"             => $service["DATE_CREATION"],
+                "DATE_DEBUT"                => $service["DATE_DEBUT"],
+                "DATE_FIN"                  => $service["DATE_FIN"],
+                "HETD"                      => $service["HETD"],
+                "HEURES"                    => $service["HEURES"],
+                "MISSION_ID"                => $service["MISSION_ID"],
+                "SERVICE_ID"                => $service["SERVICE_ID"],
+                "SERVICE_REFERENTIEL_ID"    => $service["SERVICE_REFERENTIEL_ID"],
+                "TAUX_CONGES_PAYES"         => $service["TAUX_CONGES_PAYES"],
+                "TAUX_REMU_DATE"            => $service["TAUX_REMU_DATE"],
+                "TAUX_REMU_ID"              => $service["TAUX_REMU_ID"],
+                "TAUX_REMU_MAJORE_DATE"     => $service["TAUX_REMU_MAJORE_DATE"],
+                "TAUX_REMU_MAJORE_ID"       => $service["TAUX_REMU_MAJORE_ID"],
+                "TAUX_REMU_MAJORE_VALEUR"   => $service["TAUX_REMU_MAJORE_VALEUR"],
+                "TAUX_REMU_VALEUR"          => $service["TAUX_REMU_VALEUR"],
+                "VOLUME_HORAIRE_ID"         => $service["VOLUME_HORAIRE_ID"],
+                "VOLUME_HORAIRE_REF_ID"     => $service["VOLUME_HORAIRE_REF_ID"],
+                "VOLUME_HORAIRE_MISSION_ID" => $service["VOLUME_HORAIRE_MISSION_ID"],
                 //A retirer apres refonte calcul workflow
-                "NBVH"                    => 0,
+                "NBVH"                      => 0,
             ];
             $this->tblData[] = $ldata;
         }
+        
+        
+
     }
 
 
@@ -216,5 +223,6 @@ class ContratProcess implements ProcessInterface
     {
         unset($this->services);
         unset($this->tblData);
+        unset($this->tauxRemuUuid);
     }
 }

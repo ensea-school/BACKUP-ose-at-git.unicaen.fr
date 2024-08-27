@@ -266,6 +266,9 @@ return [
                     'INTERVENANT_ID',
                     'STRUCTURE_ID',
                     'CONTRAT_ID',
+                    "VOLUME_HORAIRE_MISSION_ID",
+                    "VOLUME_HORAIRE_ID",
+                    "VOLUME_HORAIRE_REF_ID",
                 ],
                 'key_values_if_null' => [
                     'STRUCTURE_ID' => 0,

@@ -17,7 +17,7 @@ class WorkflowServiceFactory
             $container->get(TableauBordService::class)
         );
 
-        if (!Console::isConsole()) {
+        if ($container->has('BjyAuthorize\Service\Authorize')) {
             $service->setServiceAuthorize(
                 $container->get('BjyAuthorize\Service\Authorize')
             );

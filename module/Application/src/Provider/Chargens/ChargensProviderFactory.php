@@ -22,7 +22,7 @@ class ChargensProviderFactory
         $chargensProvider = new ChargensProvider();
         $chargensProvider->setEntityManager($em);
 
-        if (!Console::isConsole()) {
+        if ($container->has('BjyAuthorize\Service\Authorize')) {
             $serviceAuthorize = $container->get('BjyAuthorize\Service\Authorize');
             $chargensProvider->setServiceAuthorize($serviceAuthorize);
         }

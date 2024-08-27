@@ -23,7 +23,9 @@ class RechercheFormFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $fieldset = new RechercheForm();
-        $fieldset->setServiceAuthorize($container->get('BjyAuthorize\Service\Authorize'));
+        if ($container->has('BjyAuthorize\Service\Authorize')) {
+            $fieldset->setServiceAuthorize($container->get('BjyAuthorize\Service\Authorize'));
+        }
 
         return $fieldset;
     }

@@ -257,8 +257,6 @@ Données liées aux paiements et demandes de mises en paiement
 | ANNEE_ID                   | ==> ANNEE.ID                                                                          |
 | INTERVENANT_ID             | ==> INTERVENANT.ID                                                                    |
 | STRUCTURE_ID               | ==> STRUCTURE.ID                                                                      |
-| FORMULE_RES_SERVICE_ID     | ==> FORMULE_RESULTAT_SERVICE.ID                                                       |
-| FORMULE_RES_SERVICE_REF_ID | ==> FORMULE_RESULTAT_SERVICE_REF.ID                                                   |
 | SERVICE_ID                 | ==> SERVICE.ID                                                                        |
 | SERVICE_REFERENTIEL_ID     | ==> SERVICE_REFERENTIEL.ID                                                            |
 | MISSION_ID                 | ==> MISSION.ID                                                                        |

@@ -168,7 +168,6 @@ namespace Application\View\Renderer;
  * @method \OffreFormation\View\Helper\EtapeViewHelper etape(?\OffreFormation\Entity\Db\Etape $etape = null)
  * @method \OffreFormation\View\Helper\FieldsetElementPedagogiqueRecherche fieldsetElementPedagogiqueRecherche(?\OffreFormation\Form\ElementPedagogiqueRechercheFieldset $fieldset = null)
  * @method \OffreFormation\View\Helper\TypeInterventionAdminViewHelper typeInterventionAdmin(\OffreFormation\Entity\Db\TypeIntervention $typeIntervention)
- * @method \Paiement\View\Helper\DemandeMiseEnPaiementViewHelper demandeMiseEnPaiement(array $servicesAPayer, $changeIndex = null)
  * @method \Paiement\View\Helper\TypeHeuresViewHelper typeHeures(?\OffreFormation\Entity\Db\TypeHeures $typeHeures = null)
  * @method \Plafond\View\Helper\PlafondConfigElementViewHelper plafondConfig(?Plafond\Interfaces\PlafondConfigInterface $plafondConfig = null)
  * @method \Plafond\View\Helper\PlafondsViewHelper plafonds(Plafond\Interfaces\PlafondDataInterface $entity, \Service\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire)

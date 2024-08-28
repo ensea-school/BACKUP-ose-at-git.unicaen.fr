@@ -13,11 +13,11 @@
         <field name="heuresDemandeesAC" type="float" column="HEURES_DEMANDEES_AC" precision="126" scale="0" nullable="false"/>
         <field name="heuresPayeesAA" type="float" column="HEURES_PAYEES_AA" precision="126" scale="0" nullable="false"/>
         <field name="heuresPayeesAC" type="float" column="HEURES_PAYEES_AC" precision="126" scale="0" nullable="false"/>
-        <many-to-one field="formuleResultatService" target-entity="Formule\Entity\Db\FormuleResultatService">
-            <join-column name="FORMULE_RES_SERVICE_ID" referenced-column-name="ID"/>
+        <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
+            <join-column name="SERVICE_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="formuleResultatServiceReferentiel" target-entity="Formule\Entity\Db\FormuleResultatServiceReferentiel">
-            <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>
+        <many-to-one field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel">
+            <join-column name="SERVICE_REFERENTIEL_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
             <join-column name="MISSION_ID" referenced-column-name="ID"/>

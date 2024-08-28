@@ -301,18 +301,6 @@ class Periode implements HistoriqueAwareInterface
 
 
     /**
-     * Get miseEnPaiementIntervenantStructure
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMiseEnPaiementIntervenantStructure()
-    {
-        return $this->miseEnPaiementIntervenantStructure;
-    }
-
-
-
-    /**
      *
      * @return string
      */

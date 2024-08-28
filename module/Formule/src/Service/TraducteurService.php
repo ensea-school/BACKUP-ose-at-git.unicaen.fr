@@ -109,7 +109,7 @@ class TraducteurService
 
 
 
-    private function transfoParse(array &$expr, int $index): void
+    protected function transfoParse(array &$expr, int $index): void
     {
         // si ce n'est pas une expression, alors on passe
         $isExpr = !isset($expr[$index]['type']);
@@ -160,7 +160,7 @@ class TraducteurService
 
 
 
-    public function indent(string $php, int $levels = 1): string
+    protected function indent(string $php, int $levels = 1): string
     {
 
         $lines = explode("\n", $php);
@@ -177,7 +177,7 @@ class TraducteurService
 
 
 
-    private function suppressionIsError(array &$expr, int $i): void
+    protected function suppressionIsError(array &$expr, int $i): void
     {
         // on supprime les ISERROR dans les tests
         if (isset($expr[$i]['name']) && $expr[$i]['name'] === 'IF') {
@@ -196,7 +196,7 @@ class TraducteurService
 
 
 
-    private function formatageNoms(array &$expr, int $i): void
+    protected function formatageNoms(array &$expr, int $i): void
     {
         if (!isset($expr[$i]['name'])) return;
 
@@ -223,7 +223,7 @@ class TraducteurService
 
 
 
-    private function traductionVariables(array &$expr, int $i): void
+    protected function traductionVariables(array &$expr, int $i): void
     {
         if (!isset($expr[$i]['type']) || !isset($expr[$i]['name'])) return;
 
@@ -239,7 +239,7 @@ class TraducteurService
 
 
 
-    private function detectionVariables(array &$expr, int $i): void
+    protected function detectionVariables(array &$expr, int $i): void
     {
         if (!isset($expr[$i]['type']) || !isset($expr[$i]['name'])) return;
 
@@ -256,7 +256,7 @@ class TraducteurService
 
 
 
-    private function transfoTestsBool(array &$expr, int $i): void
+    protected function transfoTestsBool(array &$expr, int $i): void
     {
         if ($expr[$i]['type'] == 'variable'
             && $expr[$i]['name'] == 'vh.typeInterventionCode'
@@ -310,7 +310,7 @@ class TraducteurService
 
 
 
-    private function transfoStructureAffectation(array &$expr, int $i): void
+    protected function transfoStructureAffectation(array &$expr, int $i): void
     {
         $transfo = false;
 
@@ -346,7 +346,7 @@ class TraducteurService
 
 
 
-    private function transfoStructureUniv(array &$expr, int $i): void
+    protected function transfoStructureUniv(array &$expr, int $i): void
     {
         //    "vh.structure_code = cell('K10')"            => 'vh.structure_is_univ',
         //    "vh.structure_code <> cell('K10')"           => 'NOT vh.structure_is_univ',
@@ -378,7 +378,7 @@ class TraducteurService
 
 
 
-    private function transfoIfPlus(array &$expr, int $i): void
+    protected function transfoIfPlus(array &$expr, int $i): void
     {
         $transfoBefore = false;
         $transfoAfter = false;
@@ -428,7 +428,7 @@ class TraducteurService
 
 
 
-    private function transfoSumIf(array &$expr, int $i): void
+    protected function transfoSumIf(array &$expr, int $i): void
     {
         $term = $expr[$i];
 
@@ -511,7 +511,7 @@ class TraducteurService
 
 
 
-    private function transfoAbsRange(array &$expr, int $i): void
+    protected function transfoAbsRange(array &$expr, int $i): void
     {
         $term = $expr[$i];
 
@@ -553,7 +553,7 @@ class TraducteurService
 
 
 
-    private function transfoSimplify(array &$expr, int $i): void
+    protected function transfoSimplify(array &$expr, int $i): void
     {
         /*  on simplifie les 0*machin, 1*machin, machin*0, machin*1 */
         if ($i > 0 && $expr[$i]['type'] == 'op' && $expr[$i]['name'] == '*') {
@@ -579,7 +579,7 @@ class TraducteurService
 
 
 
-    private function traductionExpr(array &$expr, bool $autoReturn = true): string
+    protected function traductionExpr(array &$expr, bool $autoReturn = true): string
     {
         $methods = [
             'expr'     => 'traductionSousExpr',
@@ -619,7 +619,7 @@ class TraducteurService
 
 
 
-    private function returnPhp(string $php): string
+    protected function returnPhp(string $php): string
     {
         if (!str_contains($php, 'return ')) {
             $php = 'return ' . $php;
@@ -634,7 +634,7 @@ class TraducteurService
 
 
 
-    private function traductionSousExpr(array &$expr, int $i): string
+    protected function traductionSousExpr(array &$expr, int $i): string
     {
         $term = $expr[$i];
 
@@ -643,7 +643,7 @@ class TraducteurService
 
 
 
-    private function traductionString(array &$expr, int $i): string
+    protected function traductionString(array &$expr, int $i): string
     {
         $term = $expr[$i];
 
@@ -652,7 +652,7 @@ class TraducteurService
 
 
 
-    private function traductionPhp(array &$expr, int $i): string
+    protected function traductionPhp(array &$expr, int $i): string
     {
         $term = $expr[$i];
 
@@ -661,7 +661,7 @@ class TraducteurService
 
 
 
-    private function traductionNumber(array &$expr, int $i): string
+    protected function traductionNumber(array &$expr, int $i): string
     {
         $term = $expr[$i];
 
@@ -670,7 +670,7 @@ class TraducteurService
 
 
 
-    private function traductionOperator(array &$expr, int $i): string
+    protected function traductionOperator(array &$expr, int $i): string
     {
         $term = $expr[$i];
 
@@ -690,7 +690,7 @@ class TraducteurService
 
 
 
-    private function traductionRange(array &$expr, int $i): string
+    protected function traductionRange(array &$expr, int $i): string
     {
         // normalement, on ne passe jamais par ici : les RANGE ne sont utilisés qu'avec traductionFunctionRange
         $term = $expr[$i];
@@ -700,7 +700,7 @@ class TraducteurService
 
 
 
-    public function traductionCell(array &$expr, int $i): string
+    protected function traductionCell(array &$expr, int $i): string
     {
         $term = $expr[$i];
         ['col' => $col, 'row' => $row] = Calc::cellNameToCoords($term['name']);
@@ -731,7 +731,7 @@ class TraducteurService
 
 
 
-    private function traductionVariable(array &$expr, int $i): string
+    protected function traductionVariable(array &$expr, int $i): string
     {
         $name = $expr[$i]['name'];
         $accesseurs = ['get', 'has', 'is'];
@@ -769,7 +769,7 @@ class TraducteurService
 
 
 
-    private function traductionFunction(array &$expr, int $i): string
+    protected function traductionFunction(array &$expr, int $i): string
     {
         $term = $expr[$i];
         $functions = [
@@ -817,7 +817,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionRange(array &$expr, int $i): string
+    protected function traductionFunctionRange(array &$expr, int $i): string
     {
         $functions = [
             'MAX' => 'max',
@@ -848,7 +848,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionIf(array &$expr, int $i): string
+    protected function traductionFunctionIf(array &$expr, int $i): string
     {
         $term = $expr[$i];
         $cond = $term['exprs'][0];
@@ -872,7 +872,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionIfs(array &$expr, int $i): string
+    protected function traductionFunctionIfs(array &$expr, int $i): string
     {
         $term = $expr[$i];
         $php = '';
@@ -899,7 +899,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionAnd(array &$expr, int $i): string
+    protected function traductionFunctionAnd(array &$expr, int $i): string
     {
         $term = $expr[$i];
         $php = '';
@@ -922,7 +922,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionOr(array &$expr, int $i): string
+    protected function traductionFunctionOr(array &$expr, int $i): string
     {
         $term = $expr[$i];
         $php = '';
@@ -945,7 +945,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionIsBlank(array &$expr, int $i): string
+    protected function traductionFunctionIsBlank(array &$expr, int $i): string
     {
         $term = $expr[$i];
         $test = $term['exprs'][0];
@@ -961,7 +961,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionSumIf(array &$expr, int $i): string
+    protected function traductionFunctionSumIf(array &$expr, int $i): string
     {
         $term = $expr[$i];
 
@@ -1007,7 +1007,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionMid(array &$expr, int $i): string
+    protected function traductionFunctionMid(array &$expr, int $i): string
     {
         $term = $expr[$i];
         $php = 'substr(';
@@ -1037,7 +1037,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionLeft(array &$expr, int $i): string
+    protected function traductionFunctionLeft(array &$expr, int $i): string
     {
         $term = $expr[$i];
 
@@ -1051,7 +1051,7 @@ class TraducteurService
 
 
 
-    private function traductionFunctionNot(array &$expr, int $i): string
+    protected function traductionFunctionNot(array &$expr, int $i): string
     {
         $term = $expr[$i];
 

@@ -4,132 +4,123 @@ namespace Paiement\Entity\Db;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Periode;
-use Formule\Entity\Db\FormuleResultatService;
-use Formule\Entity\Db\FormuleResultatServiceReferentiel;
+use Enseignement\Entity\Db\Service;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;
+use Referentiel\Entity\Db\ServiceReferentiel;
 
 
 class TblPaiement
 {
-    private int                                $id;
+    private int $id;
 
-    private Annee                              $annee;
+    private Annee $annee;
 
-    private TypeIntervenant                    $typeIntervenant;
+    private TypeIntervenant $typeIntervenant;
 
-    private Intervenant                        $intervenant;
+    private Intervenant $intervenant;
 
-    private Structure                          $structure;
+    private Structure $structure;
 
-    private ?FormuleResultatService            $formuleResultatService            = null;
+    private ?Service $service = null;
 
-    private ?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null;
+    private ?ServiceReferentiel $serviceReferentiel = null;
 
-    private ?Mission                           $mission                           = null;
+    private ?Mission $mission = null;
 
-    private ?TypeHeures                        $typeHeures;
+    private ?TypeHeures $typeHeures;
 
-    private ?Periode                           $periodePaiement                   = null;
+    private ?Periode $periodePaiement = null;
 
-    private ?MiseEnPaiement                    $miseEnPaiement                    = null;
+    private ?MiseEnPaiement $miseEnPaiement = null;
 
-    private ?CentreCout                        $centreCout                        = null;
+    private ?CentreCout $centreCout = null;
 
-    private ?DomaineFonctionnel                $domaineFonctionnel                = null;
+    private ?DomaineFonctionnel $domaineFonctionnel = null;
 
-    private float                              $heuresAPayerAA                    = 0.0;
+    private float $heuresAPayerAA = 0.0;
 
-    private float                              $heuresAPayerAC                    = 0.0;
+    private float $heuresAPayerAC = 0.0;
 
-    private float                              $heuresDemandeesAA                 = 0.0;
+    private float $heuresDemandeesAA = 0.0;
 
-    private float                              $heuresDemandeesAC                 = 0.0;
+    private float $heuresDemandeesAC = 0.0;
 
-    private float                              $heuresPayeesAA                    = 0.0;
+    private float $heuresPayeesAA = 0.0;
 
-    private float                              $heuresPayeesAC                    = 0.0;
+    private float $heuresPayeesAC = 0.0;
 
 
 
-    public function getId (): int
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    public function getFormuleResultatService (): ?FormuleResultatService
+    public function getServiceReferentiel(): ?ServiceReferentiel
     {
-        return $this->formuleResultatService;
+        return $this->serviceReferentiel;
     }
 
 
 
-    public function getFormuleResultatServiceReferentiel (): ?FormuleResultatServiceReferentiel
+    public function getService(): ?Service
     {
-        return $this->formuleResultatServiceReferentiel;
+        return $this->service;
     }
 
 
 
-    public function getMission (): ?Mission
+
+
+    public function getMission(): ?Mission
     {
         return $this->mission;
     }
 
 
 
-    public function getServiceAPayer (): ?ServiceAPayerInterface
-    {
-        if ($this->formuleResultatService) return $this->formuleResultatService;
-        if ($this->formuleResultatServiceReferentiel) return $this->formuleResultatServiceReferentiel;
-        if ($this->mission) return $this->mission;
-
-        return null;
-    }
-
-
-
-    public function getStructure (): Structure
+    public function getStructure(): Structure
     {
         return $this->structure;
     }
 
 
 
-    public function getTypeHeures (): ?TypeHeures
+    public function getTypeHeures(): ?TypeHeures
     {
         return $this->typeHeures;
     }
 
 
 
-    public function getPeriodePaiement (): ?Periode
+    public function getPeriodePaiement(): ?Periode
     {
         return $this->periodePaiement;
     }
 
 
 
-    public function getMiseEnPaiement (): ?MiseEnPaiement
+    public function getMiseEnPaiement(): ?MiseEnPaiement
     {
         return $this->miseEnPaiement;
     }
 
 
 
-    public function getCentreCout (): ?CentreCout
+    public function getCentreCout(): ?CentreCout
     {
         return $this->centreCout;
     }
 
 
 
-    public function getDomaineFonctionel (): ?DomaineFonctionnel
+    public function getDomaineFonctionnel(): ?DomaineFonctionnel
     {
         return $this->domaineFonctionnel;
     }
@@ -142,77 +133,78 @@ class TblPaiement
     }
 
 
-    public function getIntervenant (): Intervenant
+
+    public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
     }
 
 
 
-    public function getAnnee (): Annee
+    public function getAnnee(): Annee
     {
         return $this->annee;
     }
 
 
 
-    public function getHeuresAPayerAA (): float
+    public function getHeuresAPayerAA(): float
     {
         return $this->heuresAPayerAA;
     }
 
 
 
-    public function getHeuresAPayerAC (): float
+    public function getHeuresAPayerAC(): float
     {
         return $this->heuresAPayerAC;
     }
 
 
 
-    public function getHeuresAPayer (): float
+    public function getHeuresAPayer(): float
     {
         return round($this->heuresAPayerAA + $this->getHeuresAPayerAC(), 2);
     }
 
 
 
-    public function getHeuresDemandeesAA (): float
+    public function getHeuresDemandeesAA(): float
     {
         return $this->heuresDemandeesAA;
     }
 
 
 
-    public function getHeuresDemandeesAC (): float
+    public function getHeuresDemandeesAC(): float
     {
         return $this->heuresDemandeesAC;
     }
 
 
 
-    public function getHeuresDemandees (): float
+    public function getHeuresDemandees(): float
     {
         return round($this->heuresDemandeesAA + $this->heuresDemandeesAC, 2);
     }
 
 
 
-    public function getHeuresPayeesAA (): float
+    public function getHeuresPayeesAA(): float
     {
         return $this->heuresPayeesAA;
     }
 
 
 
-    public function getHeuresPayeesAC (): float
+    public function getHeuresPayeesAC(): float
     {
         return $this->heuresPayeesAC;
     }
 
 
 
-    public function getHeuresPayees (): float
+    public function getHeuresPayees(): float
     {
         return round($this->heuresPayeesAA + $this->heuresPayeesAC, 2);
     }

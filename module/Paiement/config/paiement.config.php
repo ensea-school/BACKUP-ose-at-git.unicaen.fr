@@ -355,7 +355,6 @@ return [
     ],
 
     'view_helpers' => [
-        'demandeMiseEnPaiement' => View\Helper\DemandeMiseEnPaiementViewHelperFactory::class,
         'typeHeures'            => View\Helper\TypeHeuresViewHelperFactory::class,
     ],
 

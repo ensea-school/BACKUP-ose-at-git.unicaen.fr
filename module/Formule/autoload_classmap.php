@@ -13,8 +13,6 @@ return [
     'Formule\Controller\TestControllerFactory'            => __DIR__ . '/src/Controller/TestControllerFactory.php',
     'Formule\Entity\Db\Formule'                           => __DIR__ . '/src/Entity/Db/Formule.php',
     'Formule\Entity\Db\FormuleResultatIntervenant'        => __DIR__ . '/src/Entity/Db/FormuleResultatIntervenant.php',
-    'Formule\Entity\Db\FormuleResultatService'            => __DIR__ . '/src/Entity/Db/FormuleResultatService.php',
-    'Formule\Entity\Db\FormuleResultatServiceReferentiel' => __DIR__ . '/src/Entity/Db/FormuleResultatServiceReferentiel.php',
     'Formule\Entity\Db\FormuleResultatVolumeHoraire'      => __DIR__ . '/src/Entity/Db/FormuleResultatVolumeHoraire.php',
     'Formule\Entity\Db\FormuleTestIntervenant'            => __DIR__ . '/src/Entity/Db/FormuleTestIntervenant.php',
     'Formule\Entity\Db\FormuleTestVolumeHoraire'          => __DIR__ . '/src/Entity/Db/FormuleTestVolumeHoraire.php',

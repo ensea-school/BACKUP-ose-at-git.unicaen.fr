@@ -4,7 +4,11 @@ return [
     'explicit'          => true,
     'table'             => [
         'includes' => [
-
+            'FORMULE_RESULTAT_VH',
+            'FORMULE_RESULTAT_VH_REF',
+            'FORMULE_RESULTAT_SERVICE',
+            'FORMULE_RESULTAT_SERVICE_REF',
+            'FORMULE_RESULTAT',
         ],
     ],
     'materialized-view' => [
@@ -26,6 +30,8 @@ return [
             'V_INDIC_TOUS_SERVICES_VALIDES',
             'V_TOTAL_DEMANDE_MEP_STRUCTURE',
             'V_VALIDATION_MISE_EN_PAIEMENT',
+            'V_FR_SERVICE_CENTRE_COUT',
+            'V_FR_SERVICE_REF_CENTRE_COUT',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],

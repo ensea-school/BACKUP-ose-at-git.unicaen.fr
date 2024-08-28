@@ -10,10 +10,8 @@ class ServiceAPayer
     public ?int $intervenant = null;
     public ?int $structure = null;
     public ?int $service = null;
-    public ?int $referentiel = null;
     public ?int $mission = null;
-    public ?int $formuleResService = null;
-    public ?int $formuleResServiceRef = null;
+    public ?int $serviceReferentiel = null;
     public ?int $typeHeures = null;
     public ?int $defDomaineFonctionnel = null;
     public ?int $defCentreCout = null;
@@ -35,11 +33,9 @@ class ServiceAPayer
         $this->typeIntervenant = (int)@$data['TYPE_INTERVENANT_ID'] ?: null;
         $this->intervenant = (int)@$data['INTERVENANT_ID'] ?: null;
         $this->structure = (int)@$data['STRUCTURE_ID'] ?: null;
-        $this->service = (int)@$data['SERVICE_ID'] ?: null;
-        $this->referentiel = (int)@$data['SERVICE_REFERENTIEL_ID'] ?: null;
         $this->mission = (int)@$data['MISSION_ID'] ?: null;
-        $this->formuleResService = (int)@$data['FORMULE_RES_SERVICE_ID'] ?: null;
-        $this->formuleResServiceRef = (int)@$data['FORMULE_RES_SERVICE_REF_ID'] ?: null;
+        $this->service = (int)@$data['SERVICE_ID'] ?: null;
+        $this->serviceReferentiel = (int)@$data['SERVICE_REFERENTIEL_ID'] ?: null;
         $this->typeHeures = (int)@$data['TYPE_HEURES_ID'] ?: null;
         $this->defDomaineFonctionnel = (int)@$data['DEF_DOMAINE_FONCTIONNEL_ID'] ?: null;
         $this->defCentreCout = (int)@$data['DEF_CENTRE_COUT_ID'] ?: null;

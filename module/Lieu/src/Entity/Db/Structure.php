@@ -318,18 +318,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
     /**
-     * Get miseEnPaiementIntervenantStructure
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMiseEnPaiementIntervenantStructure ()
-    {
-        return $this->miseEnPaiementIntervenantStructure;
-    }
-
-
-
-    /**
      * Get tblPaiement
      *
      * @return \Doctrine\Common\Collections\Collection

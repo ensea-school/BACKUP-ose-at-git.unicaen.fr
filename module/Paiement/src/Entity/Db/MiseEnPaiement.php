@@ -3,13 +3,14 @@
 namespace Paiement\Entity\Db;
 
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\Collection;
+use Enseignement\Entity\Db\Service;
 use Formule\Entity\Db\FormuleResultatService;
 use Formule\Entity\Db\FormuleResultatServiceReferentiel;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -36,9 +37,9 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
     private ?DomaineFonctionnel $domaineFonctionnel = null;
 
-    private ?FormuleResultatService $formuleResultatService = null;
+    private ?Service $service = null;
 
-    private ?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null;
+    private ?ServiceReferentiel $serviceReferentiel = null;
 
     private ?Mission $mission = null;
 
@@ -156,18 +157,17 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function setFormuleResultatService(?FormuleResultatService $formuleResultatService = null): self
+    public function getService(): ?Service
     {
-        $this->formuleResultatService = $formuleResultatService;
-
-        return $this;
+        return $this->service;
     }
 
 
 
-    public function getFormuleResultatService(): ?FormuleResultatService
+    public function setService(?Service $service): MiseEnPaiement
     {
-        return $this->formuleResultatService;
+        $this->service = $service;
+        return $this;
     }
 
 
@@ -208,18 +208,17 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function setFormuleResultatServiceReferentiel(?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null): self
+    public function getServiceReferentiel(): ?ServiceReferentiel
     {
-        $this->formuleResultatServiceReferentiel = $formuleResultatServiceReferentiel;
-
-        return $this;
+        return $this->serviceReferentiel;
     }
 
 
 
-    public function getFormuleResultatServiceReferentiel(): ?FormuleResultatServiceReferentiel
+    public function setServiceReferentiel(?ServiceReferentiel $serviceReferentiel): MiseEnPaiement
     {
-        return $this->formuleResultatServiceReferentiel;
+        $this->serviceReferentiel = $serviceReferentiel;
+        return $this;
     }
 
 
@@ -235,16 +234,6 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
     {
         $this->mission = $mission;
         return $this;
-    }
-
-
-
-    /**
-     * @return Collection|MiseEnPaiementIntervenantStructure[]
-     */
-    public function getMiseEnPaiementIntervenantStructure(): Collection
-    {
-        return $this->miseEnPaiementIntervenantStructure;
     }
 
 

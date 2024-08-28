@@ -27,7 +27,7 @@ class LigneAPayer
         $this->id = (int)$data['A_PAYER_ID'];
         $this->tauxRemu = (int)$data['TAUX_REMU_ID'];
         $this->periode = $data['PERIODE_ENS_ID'] ? (int)$data['PERIODE_ENS_ID'] : null;
-        $this->heuresAA = (int)round((float)$data['LAP_HEURES'] * 100);
+        $this->heuresAA = (int)round((float)$data['HEURES'] * 100);
         $this->volumeHoraireId = $data['VOLUME_HORAIRE_ID'] ? (int)$data['VOLUME_HORAIRE_ID'] : null;
     }
 

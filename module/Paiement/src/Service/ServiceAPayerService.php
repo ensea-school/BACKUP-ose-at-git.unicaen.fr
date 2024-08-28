@@ -124,8 +124,8 @@ class ServiceAPayerService extends AbstractService
                                                  'typeRessourceCode'    => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getCode() : '',
                                                  'typeRessourceLibelle' => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getLibelle() : '',
                         ],
-                        'domaineFonctionnel' => ['libelle' => ($value->getDomaineFonctionel()) ? $value->getDomaineFonctionel()->getLibelle() : '',
-                                                 'code'    => ($value->getDomaineFonctionel()) ? $value->getDomaineFonctionel()->getSourceCode() : '',
+                        'domaineFonctionnel' => ['libelle' => ($value->getDomaineFonctionnel()) ? $value->getDomaineFonctionnel()->getLibelle() : '',
+                                                 'code'    => ($value->getDomaineFonctionnel()) ? $value->getDomaineFonctionnel()->getSourceCode() : '',
                         ],
                     ];
                 }

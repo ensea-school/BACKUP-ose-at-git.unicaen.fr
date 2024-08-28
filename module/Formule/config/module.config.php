@@ -71,17 +71,5 @@ return [
         Service\FormuleService::class             => Service\FormuleServiceFactory::class,
         Service\FormuleResultatService::class     => Service\FormuleResultatServiceFactory::class,
         Tbl\Process\FormuleProcess::class         => Tbl\Process\FormuleProcessFactory::class,
-        Tbl\Process\Sub\ServiceDataManager::class => Tbl\Process\Sub\ServiceDataManagerFactory::class,
-        Service\CalculateurService::class         => Service\CalculateurServiceFactory::class,
-    ],
-
-
-    'view_helpers' => [
-        'formuleTotauxHetd' => View\Helper\TotauxHetdViewHelperFactory::class,
-    ],
-
-
-    'forms' => [
-        Form\HeuresCompForm::class => Form\HeuresCompFormFactory::class,
     ],
 ];

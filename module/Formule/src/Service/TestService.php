@@ -292,7 +292,7 @@ class TestService extends AbstractEntityService
           " . FormuleTestIntervenant::class . " fti
           JOIN fti.volumesHoraires ftvh
         WHERE
-          fti.id = :intervenant
+          fti.id = :id
         ";
 
         $formuleTestIntervenant = $this->getEntityManager()->createQuery($dql)->setParameters(compact('id'))->getResult()[0];

@@ -45,7 +45,6 @@ return [
     'Paiement\Entity\Db\TypeModulateur'                                    => __DIR__ . '/src/Entity/Db/TypeModulateur.php',
     'Paiement\Entity\Db\TypeModulateurStructure'                           => __DIR__ . '/src/Entity/Db/TypeModulateurStructure.php',
     'Paiement\Entity\Db\TypeRessource'                                     => __DIR__ . '/src/Entity/Db/TypeRessource.php',
-    'Paiement\Entity\MiseEnPaiementListe'                                  => __DIR__ . '/src/Entity/MiseEnPaiementListe.php',
     'Paiement\Entity\MiseEnPaiementRecherche'                              => __DIR__ . '/src/Entity/MiseEnPaiementRecherche.php',
     'Paiement\Form\Budget\DotationSaisieForm'                              => __DIR__ . '/src/Form/Budget/DotationSaisieForm.php',
     'Paiement\Form\Budget\DotationSaisieFormFactory'                       => __DIR__ . '/src/Form/Budget/DotationSaisieFormFactory.php',
@@ -122,8 +121,6 @@ return [
     'Paiement\Tbl\Process\Sub\Rapprocheur'                                 => __DIR__ . '/src/Tbl/Process/Sub/Rapprocheur.php',
     'Paiement\Tbl\Process\Sub\Repartiteur'                                 => __DIR__ . '/src/Tbl/Process/Sub/Repartiteur.php',
     'Paiement\Tbl\Process\Sub\ServiceAPayer'                               => __DIR__ . '/src/Tbl/Process/Sub/ServiceAPayer.php',
-    'Paiement\View\Helper\DemandeMiseEnPaiementViewHelper'                 => __DIR__ . '/src/View/Helper/DemandeMiseEnPaiementViewHelper.php',
-    'Paiement\View\Helper\DemandeMiseEnPaiementViewHelperFactory'          => __DIR__ . '/src/View/Helper/DemandeMiseEnPaiementViewHelperFactory.php',
     'Paiement\View\Helper\TypeHeuresViewHelper'                            => __DIR__ . '/src/View/Helper/TypeHeuresViewHelper.php',
     'Paiement\View\Helper\TypeHeuresViewHelperFactory'                     => __DIR__ . '/src/View/Helper/TypeHeuresViewHelperFactory.php',
 ];

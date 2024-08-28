@@ -289,18 +289,17 @@ ORDER BY
         'SERVICE.MISE_EN_PAIEMENT' => "
 SELECT
   CASE WHEN mep.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
-  frs.service_id                  parent_id,
+  mep.service_id                  parent_id,
   mep.id                          id,
   'Mises en paiement'             categorie,
   mep.heures || 'h ' || th.libelle_court || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END label,
   'fas fa-euro-sign' icon
 FROM
   mise_en_paiement mep
-  JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
   JOIN type_heures th ON th.id = mep.type_heures_id
   LEFT JOIN periode p ON p.id = mep.periode_paiement_id
 WHERE
-  frs.service_id IN (:id)
+  mep.service_id IN (:id)
 ORDER BY
   mep.id
         ",
@@ -327,17 +326,16 @@ ORDER BY
         'SERVICE_REFERENTIEL.MISE_EN_PAIEMENT' => "
 SELECT
   CASE WHEN mep.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
-  frs.service_referentiel_id      parent_id,
+  mep.service_referentiel_id      parent_id,
   mep.id                          id,
   'Mises en paiement'             categorie,
   mep.heures || 'h ' || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END label,
   'fas fa-euro-sign' icon
 FROM
   mise_en_paiement mep
-  JOIN formule_resultat_service_ref frs ON frs.id = mep.formule_res_service_ref_id
   LEFT JOIN periode p ON p.id = mep.periode_paiement_id
 WHERE
-  frs.service_referentiel_id IN (:id)
+  mep.service_referentiel_id IN (:id)
 ORDER BY
   mep.id
         ",
@@ -511,12 +509,8 @@ WHERE
         '.VOLUME_HORAIRE'              => [],
         '.VOLUME_HORAIRE_REF'          => [],
         '.VOLUME_HORAIRE_MISSION'      => [],
-        '.SERVICE'                     => ['queries' => [
-            'DELETE FROM formule_resultat_service WHERE service_id = :ID',
-        ]],
-        '.SERVICE_REFERENTIEL'         => ['queries' => [
-            'DELETE FROM formule_resultat_service_ref WHERE service_referentiel_id = :ID',
-        ]],
+        '.SERVICE'                     => [],
+        '.SERVICE_REFERENTIEL'         => [],
         '.MISSION'                     => ['queries' => [
             'DELETE FROM mission_etudiant WHERE mission_id = :ID',
         ]],

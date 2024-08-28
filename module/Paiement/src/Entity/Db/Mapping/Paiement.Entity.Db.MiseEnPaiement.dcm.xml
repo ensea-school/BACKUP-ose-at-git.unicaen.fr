@@ -31,14 +31,14 @@
     <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
         <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="formuleResultatService" target-entity="Formule\Entity\Db\FormuleResultatService">
-        <join-column name="FORMULE_RES_SERVICE_ID" referenced-column-name="ID"/>
+    <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
+        <join-column name="SERVICE_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="formuleResultatServiceReferentiel" target-entity="Formule\Entity\Db\FormuleResultatServiceReferentiel">
-        <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>
+    <many-to-one field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel">
+        <join-column name="SERVICE_REFERENTIEL_ID" referenced-column-name="ID"/>
     </many-to-one>
     <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Paiement\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="miseEnPaiement" />
   </entity>

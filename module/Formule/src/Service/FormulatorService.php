@@ -29,10 +29,8 @@ class FormulatorService
     use EtatVolumeHoraireServiceAwareTrait;
     use FormuleServiceAwareTrait;
 
-    private array $formulesCalculCache = [];
-
-    private ?string $lastTestError = null;
-
+    private array   $formulesCalculCache = [];
+    private ?string $lastTestError       = null;
 
 
 
@@ -43,10 +41,23 @@ class FormulatorService
 
 
 
-    public function update(string $filename): Formule
+    public function charger(string $filename): FormuleTableur
     {
-        $em = $this->getServiceContext()->getEntityManager();
+        $document = new Document();
+        $document->loadFromFile($filename);
+        $calc = $document->getCalc();
 
+        $tableur = new FormuleTableur($calc);
+        $tableur->setServiceContext($this->getServiceContext());
+        $tableur->lire();
+
+        return $tableur;
+    }
+
+
+
+    public function implanter(string $filename): Formule
+    {
         $tableur = $this->charger($filename);
         $formule = $tableur->formule();
         $formule->setPhpClass($this->traduire($tableur));
@@ -55,11 +66,25 @@ class FormulatorService
         $this->makeWithCacheFile($formule, false);
 
         $this->test($tableur);
-        if ($error = $this->getLastTestError()){
+        if ($error = $this->getLastTestError()) {
             throw new \Exception($error);
         }
 
         return $formule;
+    }
+
+
+
+    public function calculer(FormuleIntervenant $intervenant, ?Formule $formule = null): void
+    {
+        if (empty($formule) && $intervenant instanceof FormuleTestIntervenant) {
+            $formule = $intervenant->getFormule();
+        }
+        if (empty($formule)) {
+            throw new \Exception('La formule de calcul n\'est pas spécifiée');
+        }
+        $fc = $this->getFormuleCalcul($formule);
+        $fc->calculer($intervenant, $formule);
     }
 
 
@@ -74,9 +99,9 @@ class FormulatorService
         try {
             $this->calculer($test, $tableur->formule());
             $this->lastTestError = $this->checkFormuleResErreurs($test, $tableur);
-        }catch(\Throwable $e){
-            $this->lastTestError = $e->getMessage().' ligne '.$e->getLine();
-            $test = new FormuleTestIntervenant();
+        } catch (\Throwable $e) {
+            $this->lastTestError = $e->getMessage() . ' ligne ' . $e->getLine();
+            $test                = new FormuleTestIntervenant();
         }
 
 
@@ -117,10 +142,10 @@ class FormulatorService
         $vhs = $fi->getVolumesHoraires();
         foreach ($vhs as $i => $vh) {
             foreach ($ths as $th => $merr) {
-                $methodHeures = 'getHeures' . $th;
+                $methodHeures  = 'getHeures' . $th;
                 $methodAttendu = 'getHeuresAttendues' . $th;
-                $attendu = $vh->$methodAttendu();
-                $calcule = $vh->$methodHeures();
+                $attendu       = $vh->$methodAttendu();
+                $calcule       = $vh->$methodHeures();
 
                 if ($this->diffFloat($calcule, $attendu)) {
                     $msg = 'Diff OSE/Tableur ligne ' . ($tableur->mainLine() + $i) . ' : erreur sur ' . $merr . ' : ' . $calcule . ' calculées pour ' . $attendu . ' attendues';
@@ -157,7 +182,7 @@ class FormulatorService
                         $msg .= "\n\nValeurs en ligne calculées :";
                         foreach ($trace['vh'][$i] as $cell => $val) {
                             $tableurVal = $tableur->getCellFloatVal($cell . (string)$tableur->mainLine() + $i);
-                            $msg .= "\n$cell = $val";
+                            $msg        .= "\n$cell = $val";
                             if ($this->diffFloat($val, $tableurVal)) {
                                 $msg .= ' calculé (' . $tableurVal . ' dans le tableur)';
                             }
@@ -167,7 +192,7 @@ class FormulatorService
                             $msg .= "\n\nValeurs globales :";
                             foreach ($trace['global'] as $cell => $val) {
                                 $tableurVal = $tableur->getCellFloatVal($cell);
-                                $msg .= "\n$cell = $val";
+                                $msg        .= "\n$cell = $val";
                                 if ($this->diffFloat($val, $tableurVal)) {
                                     $msg .= ' calculé (' . $tableurVal . ' dans le tableur)';
                                 }
@@ -188,21 +213,6 @@ class FormulatorService
         $if2 = (int)round($f2 * 100);
 
         return $if1 !== $if2;
-    }
-
-
-
-    public function charger(string $filename): FormuleTableur
-    {
-        $document = new Document();
-        $document->loadFromFile($filename);
-        $calc = $document->getCalc();
-
-        $tableur = new FormuleTableur($calc);
-        $tableur->setServiceContext($this->getServiceContext());
-        $tableur->lire();
-
-        return $tableur;
     }
 
 
@@ -235,8 +245,8 @@ class FormulatorService
 
         $template = file_get_contents(getcwd() . '/module/Formule/src/Model/FormuleCalculTemplate.php');
         $template = str_replace('FormuleCalculTemplate', $this->formuleClassName($tableur->formule()), $template);
-        $php = str_replace("/* TRAITEMENT */\n\n", $php, $template);
-        $php = str_replace('20/* MAIN_LINE*/', $tableur->mainLine(), $php);
+        $php      = str_replace("/* TRAITEMENT */\n\n", $php, $template);
+        $php      = str_replace('20/* MAIN_LINE*/', $tableur->mainLine(), $php);
 
         return $php;
     }
@@ -255,7 +265,7 @@ class FormulatorService
 
     private function makeWithCacheFile(Formule $formule, $instanciate = true): ?AbstractFormuleCalcul
     {
-        $dir = $this->cacheDir();
+        $dir      = $this->cacheDir();
         $filename = $dir . $formule->getCode() . '.php';
 
         if (!file_exists($dir)) {
@@ -278,17 +288,4 @@ class FormulatorService
         }
     }
 
-
-
-    public function calculer(FormuleIntervenant $intervenant, ?Formule $formule = null): void
-    {
-        if (empty($formule) && $intervenant instanceof FormuleTestIntervenant){
-            $formule = $intervenant->getFormule();
-        }
-        if (empty($formule)){
-            throw new \Exception('La formule de calcul n\'est pas spécifiée');
-        }
-        $fc = $this->getFormuleCalcul($formule);
-        $fc->calculer($intervenant, $formule);
-    }
 }

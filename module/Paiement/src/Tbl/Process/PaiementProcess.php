@@ -5,7 +5,6 @@ namespace Paiement\Tbl\Process;
 
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
-use Paiement\Tbl\Process\Sub\Arrondisseur;
 use Paiement\Tbl\Process\Sub\Consolidateur;
 use Paiement\Tbl\Process\Sub\Exporteur;
 use Paiement\Tbl\Process\Sub\LigneAPayer;
@@ -35,7 +34,6 @@ class PaiementProcess implements ProcessInterface
     protected Repartiteur $repartiteur;
     protected Rapprocheur $rapprocheur;
     protected Consolidateur $consolidateur;
-    protected Arrondisseur $arrondisseur;
     protected Exporteur $exporteur;
 
 
@@ -45,7 +43,6 @@ class PaiementProcess implements ProcessInterface
         $this->repartiteur = new repartiteur();
         $this->rapprocheur = new Rapprocheur();
         $this->consolidateur = new Consolidateur();
-        $this->arrondisseur = new Arrondisseur();
         $this->exporteur = new Exporteur();
     }
 
@@ -133,7 +130,6 @@ class PaiementProcess implements ProcessInterface
     protected function traitement(bool $export=true, bool $consolidation=true)
     {
         foreach ($this->services as $sid => $serviceAPayer) {
-            $this->arrondisseur->arrondir($serviceAPayer);
             $this->repartiteur->repartir($serviceAPayer);
             $this->rapprocheur->rapprocher($serviceAPayer);
             if ($consolidation) {

@@ -8,6 +8,7 @@ use Application\Service\RuntimeException;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\Intervenant;
+use Paiement\Entity\Db\TblPaiement;
 
 
 /**
@@ -77,7 +78,10 @@ class TblPaiementService extends AbstractEntityService
 
 
 
-    public function getDemandesMisesEnPaiementByIntervenant (Intervenant $intervenant)
+    /**
+     * @return array|TblPaiement[]
+     */
+    public function getDemandesMisesEnPaiementByIntervenant (Intervenant $intervenant): array
     {
         $qb = $this->finderByHeuresAPayer();
         $qb = $this->finderByIntervenant($intervenant, $qb);

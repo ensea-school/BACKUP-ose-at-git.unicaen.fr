@@ -13,8 +13,6 @@ use Lieu\Entity\Db\StructureAwareTrait;
 use OffreFormation\Entity\Db\TypeHeures;
 use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\DomaineFonctionnel;
-use Paiement\Entity\Db\ServiceAPayerInterface;
-use Paiement\Entity\Db\ServiceAPayerTrait;
 use Paiement\Entity\Db\TauxRemu;
 use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -23,47 +21,35 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
-class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface, PlafondDataInterface, ServiceAPayerInterface
+class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface, PlafondDataInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
     use StructureAwareTrait;
     use EntityManagerAwareTrait;
-    use ServiceAPayerTrait;
 
+    protected ?int         $id              = null;
     protected ?TypeMission $typeMission     = null;
-
     protected ?TauxRemu    $tauxRemu        = null;
-
     protected ?TauxRemu    $tauxRemuMajore  = null;
-
     protected ?\DateTime   $dateDebut       = null;
-
     protected ?\DateTime   $dateFin         = null;
-
     protected ?float       $heuresFormation = null;
-
     protected ?string      $description     = null;
-
     protected ?string      $libelleMission  = null;
-
     protected ?string      $etudiantsSuivis = null;
-
     protected bool         $autoValidation  = false;
-
     private Collection     $etudiants;
-
     private Collection     $validations;
-
     private Collection     $volumesHoraires;
-
+    private Collection     $miseEnPaiement;
+    private Collection     $centreCout;
     private ?Prime         $prime           = null;
-
     private bool           $primeActive     = true;
 
 
 
-    public function __construct ()
+    public function __construct()
     {
         $this->etudiants       = new ArrayCollection();
         $this->validations     = new ArrayCollection();
@@ -74,21 +60,36 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function __toString (): string
+    public function __toString(): string
     {
         return $this->getLibelleCourt() ?? '';
     }
 
 
 
-    public function getLibelleCourt (): string
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+
+
+    public function setId(?int $id): Mission
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+
+
+    public function getLibelleCourt(): string
     {
         return $this->getTypeMission()->getLibelle() . ' (' . $this->getStructure()->getLibelleCourt() . ')';
     }
 
 
 
-    public function getLibelle (): string
+    public function getLibelle(): string
     {
         return $this->getTypeMission()->getLibelle()
             . ' / ' . $this->getLibelleMission()
@@ -99,14 +100,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getTypeMission (): ?TypeMission
+    public function getTypeMission(): ?TypeMission
     {
         return $this->typeMission;
     }
 
 
 
-    public function setTypeMission (?TypeMission $typeMission): self
+    public function setTypeMission(?TypeMission $typeMission): self
     {
         $this->typeMission = $typeMission;
 
@@ -115,14 +116,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getLibelleMission (): ?string
+    public function getLibelleMission(): ?string
     {
         return $this->libelleMission;
     }
 
 
 
-    public function setLibelleMission (?string $libelleMission): self
+    public function setLibelleMission(?string $libelleMission): self
     {
         $this->libelleMission = $libelleMission;
 
@@ -131,14 +132,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getDateDebut (): ?\DateTime
+    public function getDateDebut(): ?\DateTime
     {
         return $this->dateDebut;
     }
 
 
 
-    public function setDateDebut (?\DateTime $dateDebut): self
+    public function setDateDebut(?\DateTime $dateDebut): self
     {
         $this->dateDebut = $dateDebut;
 
@@ -147,14 +148,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getDateFin (): ?\DateTime
+    public function getDateFin(): ?\DateTime
     {
         return $this->dateFin;
     }
 
 
 
-    public function setDateFin (?\DateTime $dateFin): self
+    public function setDateFin(?\DateTime $dateFin): self
     {
         $this->dateFin = $dateFin;
 
@@ -163,21 +164,21 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getResourceId ()
+    public function getResourceId()
     {
         return 'Mission';
     }
 
 
 
-    public function getTauxRemu (): ?TauxRemu
+    public function getTauxRemu(): ?TauxRemu
     {
         return $this->tauxRemu;
     }
 
 
 
-    public function setTauxRemu (?TauxRemu $tauxRemu): self
+    public function setTauxRemu(?TauxRemu $tauxRemu): self
     {
         $this->tauxRemu = $tauxRemu;
 
@@ -186,14 +187,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getTauxRemuMajore (): ?TauxRemu
+    public function getTauxRemuMajore(): ?TauxRemu
     {
         return $this->tauxRemuMajore;
     }
 
 
 
-    public function setTauxRemuMajore (?TauxRemu $tauxRemuMajore): self
+    public function setTauxRemuMajore(?TauxRemu $tauxRemuMajore): self
     {
         $this->tauxRemuMajore = $tauxRemuMajore;
 
@@ -202,14 +203,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getHeuresFormation (): ?float
+    public function getHeuresFormation(): ?float
     {
         return $this->heuresFormation;
     }
 
 
 
-    public function setHeuresFormation (?float $heuresFormation): self
+    public function setHeuresFormation(?float $heuresFormation): self
     {
         $this->heuresFormation = $heuresFormation;
 
@@ -218,14 +219,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getDescription (): ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
 
 
-    public function setDescription (?string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -234,14 +235,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getEtudiantsSuivis (): ?string
+    public function getEtudiantsSuivis(): ?string
     {
         return $this->etudiantsSuivis;
     }
 
 
 
-    public function setEtudiantsSuivis (?string $etudiantsSuivis): self
+    public function setEtudiantsSuivis(?string $etudiantsSuivis): self
     {
         $this->etudiantsSuivis = $etudiantsSuivis;
 
@@ -250,7 +251,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getHeuresValidees (): float
+    public function getHeuresValidees(): float
     {
         $heures = 0;
 
@@ -270,7 +271,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function isValide (): bool
+    public function isValide(): bool
     {
         if ($this->isAutoValidation()) return true;
 
@@ -285,14 +286,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function isAutoValidation (): bool
+    public function isAutoValidation(): bool
     {
         return $this->autoValidation;
     }
 
 
 
-    public function setAutoValidation (bool $autoValidation): self
+    public function setAutoValidation(bool $autoValidation): self
     {
         $this->autoValidation = $autoValidation;
 
@@ -304,14 +305,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
     /**
      * @return Collection|Validation[]
      */
-    public function getValidations (): Collection
+    public function getValidations(): Collection
     {
         return $this->validations;
     }
 
 
 
-    public function getHeures (): ?float
+    public function getHeures(): ?float
     {
         $heures = null;
 
@@ -331,9 +332,9 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function setHeures (float $heures): self
+    public function setHeures(float $heures): self
     {
-        $oldHeures = $this->getHeures() ? : 0;
+        $oldHeures = $this->getHeures() ?: 0;
         $newHeures = $heures - $oldHeures;
 
         $prevu = $this->getEntityManager()
@@ -353,7 +354,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function addVolumeHoraire (VolumeHoraireMission $volumeHoraireMission): self
+    public function addVolumeHoraire(VolumeHoraireMission $volumeHoraireMission): self
     {
         $this->volumesHoraires[] = $volumeHoraireMission;
 
@@ -365,14 +366,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
     /**
      * @return Collection|Intervenant[]
      */
-    public function getEtudiants (): Collection
+    public function getEtudiants(): Collection
     {
         return $this->etudiants;
     }
 
 
 
-    public function addEtudiant (Intervenant $intervenant): self
+    public function addEtudiant(Intervenant $intervenant): self
     {
         $this->etudiants[] = $intervenant;
 
@@ -381,7 +382,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function removeEtudiant (Intervenant $intervenant): self
+    public function removeEtudiant(Intervenant $intervenant): self
     {
         $this->etudiants->removeElement($intervenant);
 
@@ -390,7 +391,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function addValidation (Validation $validation): self
+    public function addValidation(Validation $validation): self
     {
         $this->validations[] = $validation;
         foreach ($this->getVolumesHorairesPrevus() as $vh) {
@@ -407,7 +408,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
     /**
      * @return Collection|VolumeHoraireMission[]
      */
-    public function getVolumesHorairesPrevus (): Collection
+    public function getVolumesHorairesPrevus(): Collection
     {
         return $this->volumesHoraires->filter(function (VolumeHoraireMission $vhm) {
             return $vhm->getTypeVolumeHoraire()->isPrevu();
@@ -416,7 +417,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function removeValidation (Validation $validation): self
+    public function removeValidation(Validation $validation): self
     {
         $this->validations->removeElement($validation);
         foreach ($this->getVolumesHorairesPrevus() as $vh) {
@@ -428,7 +429,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getValidation (): ?Validation
+    public function getValidation(): ?Validation
     {
         if ($this->isAutoValidation()) {
             return new Validation();
@@ -445,7 +446,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function removeVolumeHoraire (VolumeHoraireMission $volumeHoraireMission): self
+    public function removeVolumeHoraire(VolumeHoraireMission $volumeHoraireMission): self
     {
         $this->volumesHoraires->removeElement($volumeHoraireMission);
 
@@ -454,7 +455,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function hasContrat (): bool
+    public function hasContrat(): bool
     {
         /** @var VolumeHoraireMission[] $vhs */
         $vhs = $this->getVolumesHorairesPrevus();
@@ -470,21 +471,21 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function canSaisie (): bool
+    public function canSaisie(): bool
     {
         return true;
     }
 
 
 
-    public function canAddHeures (): bool
+    public function canAddHeures(): bool
     {
         return true;
     }
 
 
 
-    public function canValider (): bool
+    public function canValider(): bool
     {
         return
             !$this->isValide()
@@ -494,21 +495,21 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function canDevalider (): bool
+    public function canDevalider(): bool
     {
         return $this->isValide() && !$this->hasSuivi();
     }
 
 
 
-    public function hasSuivi (): bool
+    public function hasSuivi(): bool
     {
         return $this->heuresRealisees() > 0;
     }
 
 
 
-    public function heuresRealisees (?bool $validees = null): float
+    public function heuresRealisees(?bool $validees = null): float
     {
         $vhs = $this->getVolumesHorairesRealises();
 
@@ -534,7 +535,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
     /**
      * @return Collection|VolumeHoraireMission[]
      */
-    public function getVolumesHorairesRealises (): Collection
+    public function getVolumesHorairesRealises(): Collection
     {
         return $this->volumesHoraires->filter(function (VolumeHoraireMission $vhm) {
             return $vhm->getTypeVolumeHoraire()->isRealise();
@@ -543,14 +544,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function canSupprimer (): bool
+    public function canSupprimer(): bool
     {
         return !$this->isValide();
     }
 
 
 
-    public function canAddSuivi (\DateTime $date): bool
+    public function canAddSuivi(\DateTime $date): bool
     {
         $dateOk = $this->getDateDebut() <= $date && $this->getDateFin() >= $date;
 
@@ -559,91 +560,91 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getHeuresComplFi (): float
+    public function getHeuresComplFi(): float
     {
         return 0;
     }
 
 
 
-    public function getHeuresComplFc (): float
+    public function getHeuresComplFc(): float
     {
         return 0;
     }
 
 
 
-    public function getHeuresPrimes (): float
+    public function getHeuresPrimes(): float
     {
         return 0;
     }
 
 
 
-    public function getHeuresComplFa (): float
+    public function getHeuresComplFa(): float
     {
         return 0;
     }
 
 
 
-    public function getHeuresComplReferentiel (): float
+    public function getHeuresComplReferentiel(): float
     {
         return 0;
     }
 
 
 
-    public function getHeuresCompl (TypeHeures $typeHeures): float
+    public function getHeuresCompl(TypeHeures $typeHeures): float
     {
         return $this->heuresRealisees(true);
     }
 
 
 
-    public function getHeuresMission (): float
+    public function getHeuresMission(): float
     {
         return $this->heuresRealisees(true);
     }
 
 
 
-    public function getDefaultCentreCout (TypeHeures $typeHeures): ?CentreCout
+    public function getDefaultCentreCout(TypeHeures $typeHeures): ?CentreCout
     {
         return null;
     }
 
 
 
-    public function getDefaultDomaineFonctionnel (): ?DomaineFonctionnel
+    public function getDefaultDomaineFonctionnel(): ?DomaineFonctionnel
     {
         return null;
     }
 
 
 
-    public function isDomaineFonctionnelModifiable (): bool
+    public function isDomaineFonctionnelModifiable(): bool
     {
         return true;
     }
 
 
 
-    public function isPayable (): bool
+    public function isPayable(): bool
     {
         return $this->isValide();
     }
 
 
 
-    public function getPrime (): ?Prime
+    public function getPrime(): ?Prime
     {
         return $this->prime;
     }
 
 
 
-    public function setPrime (?Prime $prime): self
+    public function setPrime(?Prime $prime): self
     {
         $this->prime = $prime;
 
@@ -652,14 +653,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function isPrimeActive (): bool
+    public function isPrimeActive(): bool
     {
         return $this->primeActive;
     }
 
 
 
-    public function setPrimeActive (bool $primeActive): self
+    public function setPrimeActive(bool $primeActive): self
     {
         $this->primeActive = $primeActive;
 

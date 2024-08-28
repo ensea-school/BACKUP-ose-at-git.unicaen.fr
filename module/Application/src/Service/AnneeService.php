@@ -53,33 +53,21 @@ class AnneeService extends AbstractEntityService
      *
      * @return Annee
      */
-    public function getNmoins(Annee $annee, $x)
+    public function getNmoins(Annee $annee, int $x): Annee
     {
-        return $this->get($annee->getId() - (int)$x);
+        return $this->get($annee->getId() - $x);
     }
 
 
 
-    /**
-     *
-     * @param Annee $annee
-     *
-     * @return Annee
-     */
-    public function getPrecedente(Annee $annee)
+    public function getPrecedente(Annee $annee): Annee
     {
         return $this->get($annee->getId() - 1);
     }
 
 
 
-    /**
-     *
-     * @param Annee $annee
-     *
-     * @return Annee
-     */
-    public function getSuivante(Annee $annee)
+    public function getSuivante(Annee $annee): Annee
     {
         return $this->get($annee->getId() + 1);
     }
@@ -97,9 +85,23 @@ class AnneeService extends AbstractEntityService
 
 
     /**
+     * @return array|Annee[]
+     */
+    public function getActives(): array
+    {
+        $dql = "SELECT a FROM ".Annee::class." a WHERE a.active = 1 ORDER BY a.id";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+
+        return $query->getResult();
+    }
+
+
+
+    /**
      * Retourne la liste des ID des années sélectionnables
      */
-    public function getChoixAnnees()
+    public function getChoixAnnees(): array
     {
         $session = $this->getSessionContainer();
         $role    = $this->getServiceContext()->getSelectedIdentityRole();
@@ -139,8 +141,6 @@ class AnneeService extends AbstractEntityService
      *
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
-     *
-     * @return QueryBuilder
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {

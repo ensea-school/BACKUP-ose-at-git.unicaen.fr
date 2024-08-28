@@ -25,7 +25,7 @@ foreach ($fichiers as $fichier) {
         $c->println('Construction de ' . $fichier . ' ...');
         try {
             $filename = $dir . '/' . $fichier;
-            $formulator->update($filename);
+            $formulator->implanter($filename);
         } catch (\Exception $e) {
             $c->println($e->getMessage()."\n".$e->getFile().' ligne '.$e->getLine(), $c::COLOR_RED);
         }

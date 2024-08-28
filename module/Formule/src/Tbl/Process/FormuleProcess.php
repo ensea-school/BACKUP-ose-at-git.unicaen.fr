@@ -4,6 +4,7 @@ namespace Formule\Tbl\Process;
 
 
 use Application\Entity\Db\Annee;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\FormuleServiceIntervenant;
@@ -30,6 +31,7 @@ class FormuleProcess implements ProcessInterface
     use FormulatorServiceAwareTrait;
     use BddServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use AnneeServiceAwareTrait;
 
     protected Formule $formule;
 
@@ -82,10 +84,17 @@ class FormuleProcess implements ProcessInterface
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
-        $this->init($params);
-        $this->load($params);
-        $this->calculer();
-        $this->save($params);
+        if (empty($params)){
+            $annees = $this->getServiceAnnee()->getActives();
+            foreach( $annees as $annee ){
+                $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
+            }
+        }else {
+            $this->init($params);
+            $this->load($params);
+            $this->calculer();
+            $this->save($params);
+        }
     }
 
 

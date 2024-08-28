@@ -1500,18 +1500,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
     /**
-     * Get miseEnPaiementIntervenantStructure
-     *
-     * @return Collection
-     */
-    public function getMiseEnPaiementIntervenantStructure ()
-    {
-        return $this->miseEnPaiementIntervenantStructure;
-    }
-
-
-
-    /**
      * Add modificationServiceDu
      *
      * @param ModificationServiceDu $modificationServiceDu

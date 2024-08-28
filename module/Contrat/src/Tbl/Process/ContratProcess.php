@@ -159,6 +159,7 @@ class ContratProcess implements ProcessInterface
                 $this->tauxRemuUuid[$uuid] = false;
             }
         }
+        unset($servicesContrat);
     }
 
 

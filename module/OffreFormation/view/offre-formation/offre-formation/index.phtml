@@ -120,8 +120,8 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
             <div class="card-body">
                 <?php
                 $selectStructure = new \Lieu\Form\Element\Structure('structure');
-                $selectStructure->setEnseignement(true);
                 $selectStructure->init();
+                $selectStructure->setEnseignement(true);
                 $selectStructure
                     ->setValue($structure ? $structure->getId() : null)
                     ->setContextFilter(false)

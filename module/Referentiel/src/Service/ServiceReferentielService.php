@@ -70,8 +70,8 @@ class ServiceReferentielService extends AbstractEntityService
      * Permet de retourner des valeurs par défaut ou de les forcer en cas de besoin
      * Format de sortie : array( $qb, $alias ).
      *
-     * @param QueryBuilder|null $qb Générateur de requêtes
-     * @param string|null $alias Alias d'entité
+     * @param QueryBuilder|null $qb    Générateur de requêtes
+     * @param string|null       $alias Alias d'entité
      *
      * @return array
      */
@@ -118,8 +118,8 @@ class ServiceReferentielService extends AbstractEntityService
     /**
      *
      * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param QueryBuilder $qb
-     * @param string $alias
+     * @param QueryBuilder      $qb
+     * @param string            $alias
      *
      * @return QueryBuilder
      */
@@ -139,10 +139,10 @@ class ServiceReferentielService extends AbstractEntityService
     /**
      * Retourne un service unique selon ses critères précis
      *
-     * @param Intervenant $intervenant
+     * @param Intervenant         $intervenant
      * @param FonctionReferentiel $fonction
-     * @param Structure $structure
-     * @param string $commentaires
+     * @param Structure           $structure
+     * @param string              $commentaires
      *
      * @return null|ServiceReferentiel
      */
@@ -156,12 +156,12 @@ class ServiceReferentielService extends AbstractEntityService
     )
     {
         $result = $this->getRepo()->findBy([
-            'intervenant'         => $intervenant,
-            'fonctionReferentiel' => $fonction,
-            'structure'           => $structure,
-            'tag'                 => $tag,
-            'motifNonPaiement'    => $motifNonPaiement,
-        ]);
+                                               'intervenant'         => $intervenant,
+                                               'fonctionReferentiel' => $fonction,
+                                               'structure'           => $structure,
+                                               'tag'                 => $tag,
+                                               'motifNonPaiement'    => $motifNonPaiement,
+                                           ]);
 
         /* Retourne le premier NON historisé */
         foreach ($result as $sr) {
@@ -185,7 +185,7 @@ class ServiceReferentielService extends AbstractEntityService
     /**
      *
      * @param QueryBuilder|null $qb
-     * @param string|null $alias
+     * @param string|null       $alias
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
@@ -204,7 +204,7 @@ class ServiceReferentielService extends AbstractEntityService
     /**
      *
      * @param ServiceReferentiel[] $servicesReferentiels
-     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param TypeVolumeHoraire    $typeVolumeHoraire
      */
     public function setTypeVolumeHoraire($servicesReferentiels, TypeVolumeHoraire $typeVolumeHoraire)
     {
@@ -223,7 +223,7 @@ class ServiceReferentielService extends AbstractEntityService
     public function newEntity()
     {
         $entity = parent::newEntity();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role   = $this->getServiceContext()->getSelectedIdentityRole();
         if ($intervenant = $role->getIntervenant()) {
             $entity->setIntervenant($intervenant);
         }
@@ -302,7 +302,7 @@ class ServiceReferentielService extends AbstractEntityService
      * Supprime (historise par défaut) le service spécifié.
      *
      * @param ServiceReferentiel $entity Entité à détruire
-     * @param bool $softDelete
+     * @param bool               $softDelete
      *
      * @return self
      */
@@ -310,7 +310,7 @@ class ServiceReferentielService extends AbstractEntityService
     {
         if ($softDelete) {
             $vhListe = $entity->getVolumeHoraireReferentielListe();
-            $listes = $vhListe->getSousListes([$vhListe::FILTRE_HORAIRE_DEBUT, $vhListe::FILTRE_HORAIRE_FIN]);
+            $listes  = $vhListe->getSousListes([$vhListe::FILTRE_HORAIRE_DEBUT, $vhListe::FILTRE_HORAIRE_FIN]);
             foreach ($listes as $liste) {
                 $liste->setHeures(0);
             }
@@ -356,7 +356,11 @@ class ServiceReferentielService extends AbstractEntityService
             if (!$service) {
                 $service = $this->newEntity();
                 $service->setIntervenant($intervenant);
-                $service->setFonctionReferentiel($o['fonction']);
+
+                $annee = $this->getServiceContext()->getAnnee()->getId();
+                $fonctionAnneeCourante = $this->getServiceFonctionReferentiel()->getFonctionByCodeAndAnnee($o['fonction']->getCode(), $annee);
+                $service->setFonctionReferentiel($fonctionAnneeCourante);
+
                 $service->setStructure($o['structure']);
                 $service->setCommentaires($o['commentaires']);
                 $service->setTypeVolumeHoraire($o['type-volume-horaire']);
@@ -373,7 +377,6 @@ class ServiceReferentielService extends AbstractEntityService
             $service->addVolumeHoraireReferentiel($volumeHoraire);
 
             $service->setHistoDestructeur(null); // restauration du service si besoin!!
-            $service->setHistoDestruction(null);
             $this->save($service);
         }
     }
@@ -382,7 +385,7 @@ class ServiceReferentielService extends AbstractEntityService
 
     public function getPrevusFromPrevusData(Intervenant $intervenant)
     {
-        $tvhPrevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $tvhSource = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
         $evhValide = $this->getServiceEtatVolumeHoraire()->getSaisi();
 
@@ -399,8 +402,8 @@ class ServiceReferentielService extends AbstractEntityService
 
         $this->finderByHistorique($qb);
         $this->finderByIntervenant($intervenantPrec, $qb);
-        $this->getServiceFonctionReferentiel()->finderByHistorique($qb); // pour éviter que des fonctions devenues historiques ne soient reconduites
-        $this->getServiceStructure()->finderByHistorique($qb); // idem pour les structures anciennes!!
+        $this->getServiceFonctionReferentiel()->finderByHistorique($qb);// pour éviter que des fonctions devenues historiques ne soient reconduites
+        $this->getServiceStructure()->finderByHistorique($qb);           // idem pour les structures anciennes!!
         $sVolumeHoraireReferentiel->finderByHistorique($qb);
         $sVolumeHoraireReferentiel->finderByTypeVolumeHoraire($tvhSource, $qb);
         $sVolumeHoraireReferentiel->finderByEtatVolumeHoraire($evhValide, $qb);

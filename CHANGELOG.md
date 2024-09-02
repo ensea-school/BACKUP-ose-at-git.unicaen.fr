@@ -14,6 +14,7 @@
 
 * Modification de la règle de saisie pour les dates de début et de fin de mission afin de laisser un peu de marge pour les cas des missions à cheval sur deux années universitaires : la mission devra être saisie sur l'année universitaire où elle doit être majoritairement réalisée.
 * Ajout d'un message sur la page candidature de la feuille de route pour les missions étudiantes, afin d'inciter ceux ci à compléter leurs données personnelles dans le cadre de l'étude de leur candiature (#57927)
+* L'indicateur 120 (saisi des données personnelles qui diffèrent de celles importées) prend maintenant en compte le changement ou modification du numéro INSEE (#57995)
 
 ## Corrections de bugs
 

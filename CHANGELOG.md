@@ -17,8 +17,9 @@
 ## Corrections de bugs
 
 * Plus de message d'erreur lorsqu'on affiche la page de validation des référentiels avec aucun service validé (#57826)
-
-
+* Seul les structures porteuses d'enseignements sont affichées dans l'onglet offre de formation (#57896)
+* Correction du report du service référentiel impacté par l'annualisation des fonctions (#57947)
+* Modification du connecteur pégase : Utilisation de "structure_porteuse" si elle existe au lieu de "code_structure" provenant de pégase pour la structure d'un élément
 
 
 # OSE 23.7 (11/07/2024)
@@ -30,7 +31,7 @@
 ## Améliorations
 
 * Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant, mais prendre aussi en compte les missions de vacataires (#57424)
-* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'un renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions. 
+* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'un renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions.
 * Dans les demandes de mise en paiement par lot, on filtre maintenant les intervenants trop payés pour une composante donnée (#56770)
 * Demande de mise en paiement par lot, classement des intervenants par ordre alphabétique par nom (#56558)
 * Bloquer la saisie des dates de début et de fin d'une mission aux bornes de l'année universitaire du contexte de saisie de la mission.
@@ -101,7 +102,7 @@
 * Correction sur le privilege d'administration des tags (#55439)
 * Empêcher de postuler à une offre d'emploi tant qu'elle n'est pas validée
 * Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
-* Impossible de choisir un centre de coût par défaut pour une structure 
+* Impossible de choisir un centre de coût par défaut pour une structure
 * Problème de mise en paiement en masse avec les enveloppes budgétaires en ressources propres à 0 (#55672)
 * Correction des mises en paiement lors du passage de 'Distinction Fi,Fa,Fc' en 'Tous enseignements confondus', le regroupement n'était pas visuellement correcte (#54144)
 * Corrections des formules de calcul de Rouen (#55241)
@@ -137,7 +138,7 @@
 * La prise en compte du caractère éligible selon le type d'heures est rétablie sur les extractions de paye
 * Modification workflow pour permettre la saisie de mission par plusieurs composantes sur un même étudiant (#54487)
 * Dysfonctionnement recherche LDAP quand le code utilisateur de l'intervenant fait moins de 8 caractères (#54717)
-* La modification de formule de ROUEN demandée pour la 23.1 s'applique désormais uniquement à partir de 2023/2024 (#55241) 
+* La modification de formule de ROUEN demandée pour la 23.1 s'applique désormais uniquement à partir de 2023/2024 (#55241)
 * Dysfonctionnement sur la création d'une nouvelle fonction référentiel via l'administration (#55404)
 
 
@@ -204,7 +205,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 Veillez bien à retester tous vos états de sortie si vous les avez personnalisés au niveau des requêtes SQL.
 Ceux qui sont filtrables par structure, comme les états de paiements, nécessitent une nouvelle colonne STRUCTURE_IDS qui remonte l'information présente dans la colonne `STRUCTURE.IDS`.
 
-Attention : la version 23.0 ontroduit deux régressions corrigées en 23.1. Il est donc déconseillé d'installer cette version et de privilégier la 23.1 (ou ultérieure) pour votre montée en version.
+Attention : la version 23.0 introduit deux régressions corrigées en 23.1. Il est donc déconseillé d'installer cette version et de privilégier la 23.1 (ou ultérieure) pour votre montée en version.
 
 
 
@@ -281,7 +282,7 @@ Attention : la version 23.0 ontroduit deux régressions corrigées en 23.1. Il e
 * En mode calendaire, si pas de période d'enseignement définie sur l'élément pédagogique alors le choix du semestre est libre pour la saisie d'heures (#53422)
 * La visualisation des heures mises en paiement est de nouveau opérationnelle (#53386)
 * Correction de l'indicateur 530 renvoie maintenant correctement vers les fiches des intervenants
-  
+
 
 
 # OSE 22 (12/10/2023)
@@ -289,10 +290,10 @@ Attention : la version 23.0 ontroduit deux régressions corrigées en 23.1. Il e
 ## Nouveautés
 
 * Nouveau mode de calcul des heures à payer
-  * Paiements : Gestion fine des changements de valeurs de taux horaires en cours d'année
-  * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées (#45564)
-  * Possibilité de personnaliser le ratio AA/AC pour le référentiel (#47972)
-  * Mises en paiement possibles pour les missions (emplois étudiants) (#51156)
+    * Paiements : Gestion fine des changements de valeurs de taux horaires en cours d'année
+    * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées (#45564)
+    * Possibilité de personnaliser le ratio AA/AC pour le référentiel (#47972)
+    * Mises en paiement possibles pour les missions (emplois étudiants) (#51156)
 * Gestion des indemnités de fin de contrat pour les missions étudiantes (#47519)
 * Extraction du fichier de paie des indemnités de fin de contrat pour les missions étudiantes
 * Nouveau mode de calcul des tableaux de bord de calcul intermédiaires. commande ose build-tableaux-bord supprimée et non remplacée (#51555)
@@ -320,7 +321,7 @@ Attention : la version 23.0 ontroduit deux régressions corrigées en 23.1. Il e
 ## Notes de mise à jour
 
 * Oracle est maintenant requis en version 19 au MINIMUM
-* Attention : la table TBL_PAIEMENT a évolué, si vous avez des vues ou des extractions basées sur cette table, vous devrez donc les faire évoluer en conséquence. Doc disponible [ici](doc/export-pilotage.md) : 
+* Attention : la table TBL_PAIEMENT a évolué, si vous avez des vues ou des extractions basées sur cette table, vous devrez donc les faire évoluer en conséquence. Doc disponible [ici](doc/export-pilotage.md) :
 
 
 

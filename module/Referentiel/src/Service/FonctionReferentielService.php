@@ -67,4 +67,25 @@ class FonctionReferentielService extends AbstractEntityService
         return $qb;
     }
 
+
+
+    /**
+     * @param string $code
+     * @param string $annee
+     *
+     * @return FonctionReferentiel
+     */
+    public function getFonctionByCodeAndAnnee(string $code, ?string $annee)
+    {
+        if($annee == null){
+            $annee = $this->getServiceContext()->getAnnee();
+        }
+        $result = $this->getRepo()
+            ->findOneBy(['code' => $code, 'annee' => $annee, 'histoDestruction' => null]);
+
+        return $result;
+
+    }
+
+
 }

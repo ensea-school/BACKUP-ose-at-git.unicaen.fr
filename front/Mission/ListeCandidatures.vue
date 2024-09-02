@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="alert alert-primary" role="alert">
+            Afin que vos candidatures soient étudiées, veuillez compléter <a
+            :href="this.urlDonneesPersonnelles">vos
+            données personnelles</a> et fournir les pièces justificatives qui vous seront demandées.
+        </div>
         <table class="table table-bordered ">
             <thead>
             <tr>
@@ -23,8 +28,10 @@
                     <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée par {{
                             candidature.validation.histoCreateur.displayName
                         }}</span>
-                    <span v-if="!candidature.validation && candidature.motif !== null" class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
-                    <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
+                    <span v-if="!candidature.validation && candidature.motif !== null"
+                          class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
+                    <span v-if="!candidature.validation && candidature.motif === null"
+                          class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                 </td>
                 <td>
                     <u-date v-if="candidature.dateCommission" :value="candidature.dateCommission"/>
@@ -81,7 +88,7 @@ export default {
 
         return {
             candidatures: [],
-            urlListeOffre: unicaenVue.url('offre-emploi')
+            urlListeOffre: unicaenVue.url('offre-emploi'),
         }
 
     },
@@ -90,6 +97,12 @@ export default {
         this.reload();
 
     },
+    computed:
+        {
+            urlDonneesPersonnelles: function () {
+                return unicaenVue.url("intervenant/:intervenant/dossier", {intervenant: this.intervenant});
+            }
+        },
     methods: {
         reload()
         {

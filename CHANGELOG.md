@@ -1,8 +1,173 @@
 # Version stable
 
-[OSE 22.4](#ose-224-01122023)
+[OSE 23.7](#ose-237-11072024)
 
-# OSE 23 (à venir)
+
+
+# OSE 24 (à venir)
+
+* Optimisation des calculs de validation de volumes horaires
+
+# OSE 23.8 (à venir)
+
+## Améliorations
+
+* Modification de la règle de saisie pour les dates de début et de fin de mission afin de laisser un peu de marge pour les cas des missions à cheval sur deux années universitaires : la mission devra être saisie sur l'année universitaire où elle doit être majoritairement réalisée.
+
+## Corrections de bugs
+
+* Plus de message d'erreur lorsqu'on affiche la page de validation des référentiels avec aucun service validé (#57826)
+* Seul les structures porteuses d'enseignements sont affichées dans l'onglet offre de formation (#57896)
+* Correction du report du service référentiel impacté par l'annualisation des fonctions (#57947)
+* Modification du connecteur pégase : Utilisation de "structure_porteuse" si elle existe au lieu de "code_structure" provenant de pégase pour la structure d'un élément
+
+
+# OSE 23.7 (11/07/2024)
+
+## Nouveautés
+
+* Gestion de la situation matrimoniale dans les données personnelles, avec export vers Siham de la donnée collectée. (#56868)
+
+## Améliorations
+
+* Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant, mais prendre aussi en compte les missions de vacataires (#57424)
+* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'un renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions.
+* Dans les demandes de mise en paiement par lot, on filtre maintenant les intervenants trop payés pour une composante donnée (#56770)
+* Demande de mise en paiement par lot, classement des intervenants par ordre alphabétique par nom (#56558)
+* Bloquer la saisie des dates de début et de fin d'une mission aux bornes de l'année universitaire du contexte de saisie de la mission.
+
+## Corrections de bugs
+
+* Correction d'un problème de suppression d'une mission avec plusieurs volumes horaires prévisionnels
+
+# OSE 23.6 (13/06/2024)
+
+## Nouveautés
+
+* Préversion du connecteur en import Pégase [documentation temporaire ici](https://git.unicaen.fr/open-source/OSE/-/blob/b23/admin/pegase/doc_temporaire/Documentation.txt?ref_type=heads)
+
+## Corrections de bugs
+
+* Les taux majorés personnalisés par mission sont bien affichés dans les contrats de travail
+* Pouvoir sélectionner l'ensemble des structures dans le filtre structure de la page offre de formation (#56680)
+* Modification de la formule de calcul de Paris 1
+* L'assertion des clôtures ne fonctionnait pas correctement : la saisie était interdite systématiquement dans certains cas
+* Modification de la formule de calcul de Paris Dauphine (#50652)
+* Pour la fonctionnalité "Demande de mise en paiement en lot" les HETD référentiel ne sont plus prises en compte dans le total HETD des heures à payer faute de pouvoir pour le moment paramètrer un centre de coût par défaut pour les fonctions référentiels (#56717)
+* Affichage du type de mission et du libellé de la mission dans la page de demandes de mise en paiement (#56869)
+* Correction indicateur 570 pour permettre de voir les intervenants avec des validations référentiels en attente en dehors de leur composante d'affectation (#56951)
+* Correction indicateur 280 pour enlever les étudiants dont les candidatures ont été refusé
+* Correction de la formule de calcul de Paris8 (#48203)
+* En cas d'erreur d'enregistrement, s'il y a contrôle de plafond, les messages d'erreur seront de nouveau explicites (#57207)
+
+## Améliorations
+
+* Classement des intervenants par ordre alphabétique dans la page de demande de mise en paiement par lot (#56558)
+* Les plafonds des intervenants sont mis à jour automatiquement suite à la saisie de modifications de service dû (#56421)
+* En cas de saisie manuelle de nouveau volume horaire d'enseignement (nombre d'heures * nombre de groupes par élément pédagogique), la saisie de service devient possible sans attendre
+* Pour les états de paiements, il est de nouveau possible de faire des extractions tous types d'intervenants confondus (#54966)
+* Optimisation de la recherche dans l'offre de formation depuis le formulaire de saisie de service (#56847)
+* Tri des périodes de paiement et des offres d'emploi du plus récent au plus ancien
+* Au niveau de la fonction "Demande de mise en paiement par lot" Ajout d'un raccourci (bouton) permettant d'aller directement aux mises en paiement (#56718)
+* Meilleur affichage html du descriptif des offres d'emploi (Ose mission)
+* Fiabilisation de la saisie d'un siret/siren lors l'ajout d'un employeur via l'administration (#55462)
+
+
+
+
+
+# OSE 23.5 (19/04/2024)
+
+## Corrections de bugs
+
+* Procédure d'installation à nouveau fonctionnelle
+* Correctif apporté à la formule d'ASSAS (#55357)
+* Renforcement du typage des données en entrée pour le chargement en masse des numéros de prise en charge (#56241)
+* Contrôle de la présence obligatoire d'un domaine fonctionnel pour la mise en paiement par lot pour les heures de missions et de services référentiel
+* Missions : Le gestionnaire peut maintenant sélectionner une sous-structure (#55566)
+* Rouen : corrections dans la formule de calcul des HC (#55241)
+* La Réunion : corrections dans la formule de calcul des HC (#55792)
+
+## Améliorations
+
+* Pour l'export des imputations budgétaires Siham, l'export proratise maintenant par code indémnité puis centre de coût
+* Possibilité de désactiver par statut d'intervenant les étapes "Indémnités de fin de contrat" (Mission étudiante) et "Pièces justificatives (#51245 et #56269)
+
+
+# OSE 23.4 (26/03/2024)
+
+## Corrections de bugs
+
+* Les modifications de service dû ne sont enregistrées que s'il y a un changement effectif de donnée (#55446)
+* Correction sur le privilege d'administration des tags (#55439)
+* Empêcher de postuler à une offre d'emploi tant qu'elle n'est pas validée
+* Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
+* Impossible de choisir un centre de coût par défaut pour une structure
+* Problème de mise en paiement en masse avec les enveloppes budgétaires en ressources propres à 0 (#55672)
+* Correction des mises en paiement lors du passage de 'Distinction Fi,Fa,Fc' en 'Tous enseignements confondus', le regroupement n'était pas visuellement correcte (#54144)
+* Corrections des formules de calcul de Rouen (#55241)
+* Correction d'un problème d'erreur php lors de la migration des fonctions référentielles
+* Prise en compte de l'auto-validation des heures prévisionnelles pour le contrat
+* Afficher le bon libellé de la composante d'affectation fonctionnelle dans l'onglet Export RH (Siham)
+
+## Améliorations
+
+* Dans la partie administration/structure, La liste des centres de coût par défaut possible pour une structure est maintenant filtrée pour choisir uniquement des centres de coût rattachés à cette structure.
+* Adaptation de l'export paie Siham préliquidation pour les missions étudiantes (congés payés)
+* Prise en charge de l'extension du numéro de voie (Bis, Ter etc...) dans l'export RH lors d'une PEC ou REN
+* Possiblité de paramètrer par défaut la catégorie de contrat via l'export RH Siham
+
+
+
+# OSE 23.3 (23/02/2024)
+
+## Corrections de bugs
+
+* Correction sur l'export des imputations budgétaires siham
+
+# OSE 23.2 (23/02/2024)
+
+## Nouveautés
+
+* Formule de calcul de Paris Deauphine (#50652)
+* Possibilité de paramétrer un domaine fonctionnel par défaut pour une strucutre (#54962)
+
+## Corrections de bugs
+
+* Modification de la formule de calcul de l'UPEC (#54445)
+* La prise en compte du caractère éligible selon le type d'heures est rétablie sur les extractions de paye
+* Modification workflow pour permettre la saisie de mission par plusieurs composantes sur un même étudiant (#54487)
+* Dysfonctionnement recherche LDAP quand le code utilisateur de l'intervenant fait moins de 8 caractères (#54717)
+* La modification de formule de ROUEN demandée pour la 23.1 s'applique désormais uniquement à partir de 2023/2024 (#55241)
+* Dysfonctionnement sur la création d'une nouvelle fonction référentiel via l'administration (#55404)
+
+
+
+# OSE 23.1 (02/02/2024)
+
+## Nouveautés
+
+* Formule de calcul de Panthéon ASSAS (#51544)
+
+## Corrections de bugs
+
+* Correction sur la bonne prise en compte de la durée de validité d'un agrément par rapport à l'année d'obtention de l'agrément (#54499)
+* La version 23.0 introduisait un problème au niveau de la gestion des tags du dépôt GIT qui bloquait toute mise à jour
+* Correction d'un script de migration érroné introduit en version 23.0
+* Les heures mises en paiement puis dévalidées ou supprimées peuvent à nouveau être visualisées correctement (#54340)
+* Arrondi des calculs d'heures de modifications de service dû (#50570)
+* Formule de Rouen : résolution de problème de division par zéro (#53987)
+
+## Améliorations
+
+* Modification d'affichage de la date de fin de validité d'un agrément (#54400)
+* Ajout de la date d'expiration d'un agrément dans l'export CSV des agréments (#54400)
+* La formule de Côte d'Azur gère le service dû avec un taux à 0 pour les types d'intervention (#54508)
+
+
+
+
+# OSE 23 (26/01/2024)
 
 ## Nouveautés
 
@@ -10,8 +175,8 @@
 * Possibilité d'importer et/ou gérer les numéros de prise en charge des intervenants pour la paie (#15131)
 * Possibilité de faire des demandes de mise en paiement par lot (#12584)
 * Possibilité de paramétrer l'export OSE/SIHAM pour créer le contrat directement dans SIHAM
-* Annualisation des fonctions référentielles 
-* 
+* Annualisation des fonctions référentielles
+
 ## Améliorations
 
 * Une colonne "Structure" a été ajoutée à l'export de l'offre de formation
@@ -26,6 +191,7 @@
 * Prise en compte des dates bornées d'une année universitaire dans le contrôle de saisie de service en mode calendaire (#53947)
 * Modification de la formule de calcul de Paris 8
 * Modification de la formule de calcul de Picardie
+* Correction de la formule de calcul de Rouen
 * Correction sur les incohérences du nombre d'heures sur l'export des imputations budgétaires SIHAM (#53098)
 * Affichage inversé FI FA dans l'administration des types d'activité des centres de coûts (#54059)
 * Correction des dates de saisies d'heures lors d'un changement de mois #54005
@@ -39,6 +205,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 Veillez bien à retester tous vos états de sortie si vous les avez personnalisés au niveau des requêtes SQL.
 Ceux qui sont filtrables par structure, comme les états de paiements, nécessitent une nouvelle colonne STRUCTURE_IDS qui remonte l'information présente dans la colonne `STRUCTURE.IDS`.
 
+Attention : la version 23.0 introduit deux régressions corrigées en 23.1. Il est donc déconseillé d'installer cette version et de privilégier la 23.1 (ou ultérieure) pour votre montée en version.
 
 
 
@@ -115,7 +282,7 @@ Ceux qui sont filtrables par structure, comme les états de paiements, nécessit
 * En mode calendaire, si pas de période d'enseignement définie sur l'élément pédagogique alors le choix du semestre est libre pour la saisie d'heures (#53422)
 * La visualisation des heures mises en paiement est de nouveau opérationnelle (#53386)
 * Correction de l'indicateur 530 renvoie maintenant correctement vers les fiches des intervenants
-  
+
 
 
 # OSE 22 (12/10/2023)
@@ -123,10 +290,10 @@ Ceux qui sont filtrables par structure, comme les états de paiements, nécessit
 ## Nouveautés
 
 * Nouveau mode de calcul des heures à payer
-  * Paiements : Gestion fine des changements de valeurs de taux horaires en cours d'année
-  * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées (#45564)
-  * Possibilité de personnaliser le ratio AA/AC pour le référentiel (#47972)
-  * Mises en paiement possibles pour les missions (emplois étudiants) (#51156)
+    * Paiements : Gestion fine des changements de valeurs de taux horaires en cours d'année
+    * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées (#45564)
+    * Possibilité de personnaliser le ratio AA/AC pour le référentiel (#47972)
+    * Mises en paiement possibles pour les missions (emplois étudiants) (#51156)
 * Gestion des indemnités de fin de contrat pour les missions étudiantes (#47519)
 * Extraction du fichier de paie des indemnités de fin de contrat pour les missions étudiantes
 * Nouveau mode de calcul des tableaux de bord de calcul intermédiaires. commande ose build-tableaux-bord supprimée et non remplacée (#51555)
@@ -154,7 +321,7 @@ Ceux qui sont filtrables par structure, comme les états de paiements, nécessit
 ## Notes de mise à jour
 
 * Oracle est maintenant requis en version 19 au MINIMUM
-* Attention : la table TBL_PAIEMENT a évolué, si vous avez des vues ou des extractions basées sur cette table, vous devrez donc les faire évoluer en conséquence. Doc disponible [ici](doc/export-pilotage.md) : 
+* Attention : la table TBL_PAIEMENT a évolué, si vous avez des vues ou des extractions basées sur cette table, vous devrez donc les faire évoluer en conséquence. Doc disponible [ici](doc/export-pilotage.md) :
 
 
 

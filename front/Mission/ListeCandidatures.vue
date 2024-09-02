@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="alert alert-primary" role="alert">
+        <div v-if="this.renseignerDonneesPersonnelles" class="alert alert-primary" role="alert">
             Afin que vos candidatures soient étudiées, veuillez compléter <a
             :href="this.urlDonneesPersonnelles">vos
             données personnelles</a> et fournir les pièces justificatives qui vous seront demandées.
@@ -81,6 +81,7 @@ export default {
     props: {
         intervenant: {required: true},
         canValiderCandidature: {type: Boolean, required: false},
+        renseignerDonneesPersonnelles: {type: Boolean, required: false},
 
     },
     data()

@@ -18,7 +18,8 @@ class ObjetFormationReader implements ReaderInterface
                     om.id,
                     e.id_objet_maquette_parent,
                     om.libelle_long,
-                    om.code_structure,       
+                    om.code_structure,     
+                    om.structures_porteuse,  
                     om.code,       
                     om.temoin_tele_enseignement,      
                     esp.annee_universitaire as annee_universitaire,
@@ -37,7 +38,12 @@ class ObjetFormationReader implements ReaderInterface
             if (!isset($objetsFormation[$element['id']])) {
                 $objetFormation = new ObjetFormation();
                 $objetFormation->setLibelle($element['libelle_long']);
-                $objetFormation->setStructureId($element['code_structure']);
+                if ($element['structures_porteuse'] != null) {
+                    $objetFormation->setStructureId($element['structures_porteuse']);
+                }else{
+                    $objetFormation->setStructureId($element['code_structure']);
+                }
+
                 $objetFormation->setAnneeUniversitaire($element['annee_universitaire']);
                 $objetFormation->setDateDebut($element['date_debut_validite']);
                 $objetFormation->setDateFin($element['date_fin_validite']);

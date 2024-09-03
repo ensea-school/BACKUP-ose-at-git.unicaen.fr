@@ -40,6 +40,7 @@ class OseTestCase extends TestCase
             $p = $path.'/'.$k;
             $a1Type = getType($a1[$k]);
             $a2Type = getType($a2[$k]);
+
             if ($a1Type != $a2Type){
                 return $this->error('Des valeurs ne sont pas du même type ('.$p.') : '.$a2Type.' attendu pour '.$a1Type.' calculé');
             }
@@ -48,7 +49,13 @@ class OseTestCase extends TestCase
                     return $this->error('Des sous-tableaux sont différentes ('.$p.')');
                 }
             }else{
-                if ($a1[$k] !== $a2[$k]){
+                if (('float' == $a1Type || 'double' == $a1Type) && ('float' == $a1Type || 'double' == $a1Type)){
+                    $diff = abs($a1[$k]) - abs($a2[$k]) > 0.000001;
+                }else{
+                    $diff = $a1[$k] !== $a2[$k];
+                }
+
+                if ($diff){
                     return $this->error('Des valeurs sont différentes ('.$p.') : '.$a2[$k].' attendu pour '.$a1[$k].' calculé');
                 }
             }

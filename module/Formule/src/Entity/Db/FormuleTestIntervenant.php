@@ -201,33 +201,6 @@ class FormuleTestIntervenant extends FormuleIntervenant
 
 
     /**
-     * @return array
-     */
-    public function toArray(): array
-    {
-        $hydrator = new FormuleTestIntervenantHydrator();
-
-        return $hydrator->extract($this);
-    }
-
-
-
-    /**
-     * @param array $data
-     *
-     * @return FormuleTestIntervenant
-     */
-    public function fromArray(array $data): FormuleTestIntervenant
-    {
-        $hydrator = new FormuleTestIntervenantHydrator();
-        $hydrator->hydrate($data, $this);
-
-        return $this;
-    }
-
-
-
-    /**
      * Retourne la représentation littérale de cet objet.
      *
      * @return string

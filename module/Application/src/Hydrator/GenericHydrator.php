@@ -19,7 +19,7 @@ class GenericHydrator implements HydratorInterface
     const EXTRACT_TYPE_JSON = 1;
     const EXTRACT_TYPE_ORIGINAL = 2;
 
-    protected $spec = [];
+    protected array $spec = [];
 
     protected $noGenericParse = [];
 
@@ -29,17 +29,17 @@ class GenericHydrator implements HydratorInterface
 
 
 
-    public function __construct(EntityManager $entityManager, string|object|array $spec = null)
+    public function __construct(EntityManager $entityManager, string|object|array $spec = [])
     {
         $this->setEntityManager($entityManager);
-        if (null !== $spec) {
-            $this->spec = $spec;
+        if (!empty($spec)) {
+            ArrayUtils::merge($this->spec, $spec);
         }
     }
 
 
 
-    public function spec(string|object|array $spec, array $ignore = [])
+    public function spec(string|object|array $spec, array $ignore = []): void
     {
         $spec = Util::spec($spec, $ignore);
         $this->spec = ArrayUtils::merge($this->spec, $spec);
@@ -47,7 +47,7 @@ class GenericHydrator implements HydratorInterface
 
 
 
-    public function specDump()
+    public function specDump(): void
     {
         Util::specDump($this->spec);
     }

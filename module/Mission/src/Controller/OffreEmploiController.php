@@ -4,11 +4,12 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\WfEtape;
+use Application\Entity\WorkflowEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Doctrine\ORM\Query;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
@@ -17,7 +18,6 @@ use Mission\Form\OffreEmploiFormAwareTrait;
 use Mission\Service\CandidatureServiceAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use Mission\Service\OffreEmploiServiceAwareTrait;
-use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
 
 
@@ -37,7 +37,7 @@ class  OffreEmploiController extends AbstractController
     use WorkflowServiceAwareTrait;
 
 
-    public function indexAction ()
+    public function indexAction()
     {
 
         return [];
@@ -45,7 +45,7 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    public function saisirAction ()
+    public function saisirAction()
     {
 
         $offreEmploi = $this->getEvent()->getParam('offreEmploi');
@@ -70,7 +70,7 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    public function supprimerAction ()
+    public function supprimerAction()
     {
         /** @var Mission $mission */
         $offre = $this->getEvent()->getParam('offreEmploi');
@@ -88,7 +88,7 @@ class  OffreEmploiController extends AbstractController
      *
      * @return AxiosModel
      */
-    public function listeAction ()
+    public function listeAction()
     {
         $params          = [];
         $role            = $this->getServiceContext()->getSelectedIdentityRole();
@@ -111,7 +111,7 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    public function validerAction ()
+    public function validerAction()
     {
         /** @var OffreEmploi $offre */
         $offre = $this->getEvent()->getParam('offreEmploi');
@@ -134,7 +134,7 @@ class  OffreEmploiController extends AbstractController
      *
      * @return AxiosModel
      */
-    public function getAction (?OffreEmploi $offreEmploi = null)
+    public function getAction(?OffreEmploi $offreEmploi = null)
     {
         if (!$offreEmploi) {
             /** @var OffreEmploi $offreEmploi */
@@ -153,7 +153,7 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    public function devaliderAction ()
+    public function devaliderAction()
     {
         /** @var OffreEmploi $offre */
         $offre      = $this->getEvent()->getParam('offreEmploi');
@@ -173,7 +173,7 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    public function accepterCandidatureAction ()
+    public function accepterCandidatureAction()
     {
         /** @var Candidature $candidature */
         $candidature = $this->getEvent()->getParam('candidature');
@@ -213,7 +213,7 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    public function refuserCandidatureAction ()
+    public function refuserCandidatureAction()
     {
         /** @var Candidature $candidature */
         $candidature = $this->getEvent()->getParam('candidature');
@@ -245,7 +245,7 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    public function postulerAction ()
+    public function postulerAction()
     {
         /**
          * @var OffreEmploi $offreEmploi
@@ -266,17 +266,17 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    private function updateTableauxBord (Intervenant $intervenant)
+    private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'candidature',
-            'mission',
-        ], $intervenant);
+                                                              'candidature',
+                                                              'mission',
+                                                          ], $intervenant);
     }
 
 
 
-    public function detailAction (?OffreEmploi $offreEmploi = null)
+    public function detailAction(?OffreEmploi $offreEmploi = null)
     {
 
         if (!$offreEmploi) {
@@ -293,22 +293,29 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    public function candidatureAction ()
+    public function candidatureAction()
     {
-        $intervenant           = $this->getEvent()->getParam('intervenant');
-        $canValiderCandidature = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
+        /**
+         * @var Intervenant   $intervenant
+         * @var WorkflowEtape $etapeDonneesPersos
+         */
+        $intervenant                   = $this->getEvent()->getParam('intervenant');
+        $canValiderCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
+        $etapeDonneesPersos            = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
+        $renseignerDonneesPersonnelles = ($etapeDonneesPersos->getFranchie() == 1) ? false : true;
+
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');
         }
 
 
-        return compact('intervenant', 'canValiderCandidature');
+        return compact('intervenant', 'canValiderCandidature', 'renseignerDonneesPersonnelles');
     }
 
 
 
-    public function getCandidaturesAction ()
+    public function getCandidaturesAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {

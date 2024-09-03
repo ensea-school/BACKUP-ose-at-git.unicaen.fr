@@ -8,8 +8,9 @@ $canValiderCandidature = $this->isAllowed($intervenant, Privileges::MISSION_CAND
 
 echo $this->vue('mission/liste-candidatures', [
 
-    'intervenant'           => $intervenant->getId(),
-    'canValiderCandidature' => $canValiderCandidature,
+    'intervenant'                   => $intervenant->getId(),
+    'canValiderCandidature'         => $canValiderCandidature,
+    'renseignerDonneesPersonnelles' => $renseignerDonneesPersonnelles,
 ]);
 
 $nextEtape = \Application\Entity\Db\WfEtape::CANDIDATURE_VALIDATION;

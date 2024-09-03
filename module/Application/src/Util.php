@@ -5,7 +5,6 @@ namespace Application;
 
 use Application\Interfaces\ParametreEntityInterface;
 use Doctrine\ORM\EntityManager;
-use Laminas\Stdlib\ArrayUtils;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenPrivilege\Guard\PrivilegeController;
 

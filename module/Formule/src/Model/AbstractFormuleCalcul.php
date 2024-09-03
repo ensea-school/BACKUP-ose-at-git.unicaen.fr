@@ -27,12 +27,12 @@ class AbstractFormuleCalcul
         'HeuresNonPayableReferentiel',
     ];
 
-    protected Formule $formule;
+    protected Formule            $formule;
     protected FormuleIntervenant $intervenant;
 
     /** @var FormuleVolumeHoraire[] */
     protected array $volumesHoraires = [];
-    protected array $cache = [];
+    protected array $cache           = [];
 
     protected int $mainLine = 20;
 
@@ -81,7 +81,7 @@ class AbstractFormuleCalcul
     {
         $result = 0;
         foreach ($this->volumesHoraires as $l => $vh) {
-            $cr = $this->c($col, $l);
+            $cr     = $this->c($col, $l);
             $result += $cr;
         }
 
@@ -100,7 +100,7 @@ class AbstractFormuleCalcul
     {
         $result = 0;
         foreach ($this->volumesHoraires as $l => $vh) {
-            $cr = $this->c($col, $l);
+            $cr     = $this->c($col, $l);
             $result = $cr;
         }
 
@@ -116,7 +116,7 @@ class AbstractFormuleCalcul
         }
 
         if (!isset($this->cache['vh'][$l][$name])) {
-            $cname = 'c_' . $name;
+            $cname                        = 'c_' . $name;
             $this->cache['vh'][$l][$name] = $this->$cname($l);
         }
 
@@ -128,7 +128,7 @@ class AbstractFormuleCalcul
     protected function cg(string $name)
     {
         if (!isset($this->cache['global'][$name])) {
-            $cname = 'c_' . $name;
+            $cname                        = 'c_' . $name;
             $this->cache['global'][$name] = $this->$cname();
         }
 
@@ -153,15 +153,15 @@ class AbstractFormuleCalcul
 
     public function calculer(FormuleIntervenant $intervenant, Formule $formule): void
     {
-        $this->intervenant = $intervenant;
+        $this->intervenant     = $intervenant;
         $this->volumesHoraires = $intervenant->getVolumesHoraires()->toArray();
-        $this->formule = $formule;
-        $this->cache = [
+        $this->formule         = $formule;
+        $this->cache           = [
             'vh'     => [],
             'global' => [],
         ];
 
-        foreach ($this->volumesHoraires as $l => $volumesHoraire) {
+        foreach ($this->volumesHoraires as $l => $volumeHoraire) {
             foreach (self::RESCOLS as $resCol) {
                 $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
                 if ($cellColPos) {
@@ -169,8 +169,7 @@ class AbstractFormuleCalcul
                 } else {
                     $val = 0.0;
                 }
-                $val = round($val, 2);
-                $volumesHoraire->{'set' . $resCol}($val);
+                $volumeHoraire->{'set' . $resCol}($val);
             }
         }
 

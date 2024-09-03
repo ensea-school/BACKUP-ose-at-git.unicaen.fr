@@ -277,10 +277,15 @@ class TestService extends AbstractEntityService
 
     public function get($id, $autoClear = false): FormuleTestIntervenant
     {
+        $em = $this->getEntityManager();
+
         if (0 == $id) {
             $formuleTestIntervenant = new FormuleTestIntervenant();
             $formuleTestIntervenant->setAnnee($this->getServiceContext()->getAnnee());
-            $formuleTestIntervenant->setFormule($this->getEntityManager()->find(Formule::class, $this->getServiceParametres()->get('formule')));
+            $formuleTestIntervenant->setFormule($em->find(Formule::class, $this->getServiceParametres()->get('formule')));
+            $formuleTestIntervenant->setTypeIntervenant($em->getRepository(TypeIntervenant::class)->findOneBy(['code' => TypeIntervenant::CODE_PERMANENT]));
+            $formuleTestIntervenant->setTypeVolumeHoraire($em->getRepository(TypeVolumeHoraire::class)->findOneBy(['code' => TypeVolumeHoraire::CODE_REALISE]));
+            $formuleTestIntervenant->setEtatVolumeHoraire($em->getRepository(EtatVolumeHoraire::class)->findOneBy(['code' => EtatVolumeHoraire::CODE_VALIDE]));
 
             return $formuleTestIntervenant;
         }
@@ -290,12 +295,17 @@ class TestService extends AbstractEntityService
           fti, ftvh
         FROM
           " . FormuleTestIntervenant::class . " fti
-          JOIN fti.volumesHoraires ftvh
+          LEFT JOIN fti.volumesHoraires ftvh
         WHERE
           fti.id = :id
         ";
 
-        $formuleTestIntervenant = $this->getEntityManager()->createQuery($dql)->setParameters(compact('id'))->getResult()[0];
+        $formuleTestIntervenant = $em->createQuery($dql)->setParameters(compact('id'))->getResult();
+        if (isset($formuleTestIntervenant[0])) {
+            $formuleTestIntervenant = $formuleTestIntervenant[0];
+        }else{
+            $formuleTestIntervenant = null;
+        }
 
         if (!$formuleTestIntervenant) {
             throw new \Exception('l\'ID demandé est invalide');

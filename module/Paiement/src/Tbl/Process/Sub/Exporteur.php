@@ -24,7 +24,7 @@ class Exporteur
             $ldata = [
                 'ANNEE_ID'                   => $sap->annee,
                 'SERVICE_ID'                 => $sap->service,
-                'SERVICE_REFERENTIEL_ID'     => $sap->referentiel,
+                'SERVICE_REFERENTIEL_ID'     => $sap->serviceReferentiel,
                 'MISSION_ID'                 => $sap->mission,
                 'TYPE_INTERVENANT_ID'        => $sap->typeIntervenant,
                 'INTERVENANT_ID'             => $sap->intervenant,
@@ -64,7 +64,7 @@ class Exporteur
             $ldata = [
                 'ANNEE_ID'                   => $sap->annee,
                 'SERVICE_ID'                 => $sap->service,
-                'SERVICE_REFERENTIEL_ID'     => $sap->referentiel,
+                'SERVICE_REFERENTIEL_ID'     => $sap->serviceReferentiel,
                 'MISSION_ID'                 => $sap->mission,
                 'TYPE_INTERVENANT_ID'        => $sap->typeIntervenant,
                 'INTERVENANT_ID'             => $sap->intervenant,
@@ -92,7 +92,7 @@ class Exporteur
             $ldata = [
                 'ANNEE_ID'                   => $sap->annee,
                 'SERVICE_ID'                 => $sap->service,
-                'SERVICE_REFERENTIEL_ID'     => $sap->referentiel,
+                'SERVICE_REFERENTIEL_ID'     => $sap->serviceReferentiel,
                 'MISSION_ID'                 => $sap->mission,
                 'TYPE_INTERVENANT_ID'        => $sap->typeIntervenant,
                 'INTERVENANT_ID'             => $sap->intervenant,

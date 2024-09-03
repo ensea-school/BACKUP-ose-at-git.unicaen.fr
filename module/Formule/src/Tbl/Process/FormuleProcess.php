@@ -417,6 +417,6 @@ class FormuleProcess implements ProcessInterface
             'return-insert-data' => false,
         ];
         $keyColumns = ['FORMULE_RESULTAT_INTERVENANT_ID','VOLUME_HORAIRE_ID','VOLUME_HORAIRE_REF_ID'];
-        $res = $this->resultatVolumeHoraireTable->merge($rVolumesHoraires, $keyColumns, $options);
+        $this->resultatVolumeHoraireTable->merge($rVolumesHoraires, $keyColumns, $options);
     }
 }

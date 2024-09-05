@@ -13,6 +13,7 @@
 ## Améliorations
 
 * Modification de la règle de saisie pour les dates de début et de fin de mission afin de laisser un peu de marge pour les cas des missions à cheval sur deux années universitaires : la mission devra être saisie sur l'année universitaire où elle doit être majoritairement réalisée.
+* Optimisation de calcul des états des volumes horaires (impact sur les formules, les extractions des services, etc)
 * Ajout d'un message sur la page candidature de la feuille de route pour les missions étudiantes, afin d'inciter ceux ci à compléter leurs données personnelles dans le cadre de l'étude de leur candiature (#57927)
 * L'indicateur 120 (saisi des données personnelles qui diffèrent de celles importées) prend maintenant en compte le changement ou modification du numéro INSEE (#57995)
 * La date d'effet de la situation matrimoniale des données personnelles devient non obligatoire dans le cas d'un célibataire.
@@ -20,10 +21,10 @@
 ## Corrections de bugs
 
 * Plus de message d'erreur lorsqu'on affiche la page de validation des référentiels avec aucun service validé (#57826)
-* Seul les structures porteuses d'enseignements sont affichées dans l'onglet offre de formation (#57896)
+* Seules les structures porteuses d'enseignements sont affichées dans l'onglet offre de formation (#57896)
 * Correction du report du service référentiel impacté par l'annualisation des fonctions (#57947)
 * Modification du connecteur pégase : Utilisation de "structure_porteuse" si elle existe au lieu de "code_structure" provenant de pégase pour la structure d'un élément
-
+* Correction de l'état de problèmes de calcul sur l'export CSV des missions
 
 # OSE 23.7 (11/07/2024)
 
@@ -34,7 +35,7 @@
 ## Améliorations
 
 * Modification des indicateurs relatifs aux missions, pour ne plus filtrer uniquement sur le type intervenant étudiant, mais prendre aussi en compte les missions de vacataires (#57424)
-* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'un renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions. 
+* Refactoring pour plus de cohérence sur le choix de la date d'effet et de fin d'un renouvellement ou d'une prise en charge Siham dans le cadre notamment des missions.
 * Dans les demandes de mise en paiement par lot, on filtre maintenant les intervenants trop payés pour une composante donnée (#56770)
 * Demande de mise en paiement par lot, classement des intervenants par ordre alphabétique par nom (#56558)
 * Bloquer la saisie des dates de début et de fin d'une mission aux bornes de l'année universitaire du contexte de saisie de la mission.

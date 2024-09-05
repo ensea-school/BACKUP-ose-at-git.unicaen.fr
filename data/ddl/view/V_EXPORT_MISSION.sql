@@ -84,17 +84,17 @@ FROM (
          CASE WHEN vhm.auto_validation = 1 OR max(v.id) over (partition by vhm.id) IS NOT NULL THEN 1 ELSE 0 END valide,
          vhm.auto_validation,
          max(v.id) over (partition by vhm.id) validation_id,
-         row_number() OVER (PARTITION BY vhm.id ORDER BY vhm.id) r
+         row_number() OVER (PARTITION BY vhm.id, evh.id ORDER BY vhm.id) r
        FROM
-         mission                        m
-           JOIN type_volume_horaire          tvh ON tvh.code = 'PREVU'
-           JOIN type_volume_horaire         tvhr ON tvhr.code = 'REALISE'
-           JOIN etat_volume_horaire          evh ON 1=1
-           JOIN intervenant                    i ON i.id = m.intervenant_id
-           JOIN annee                          a ON a.id = i.annee_id
-           JOIN structure                    str ON str.id = m.structure_id
-           JOIN type_mission                  tm ON tm.id = m.type_mission_id
-           JOIN tbl_mission                 tblm ON tblm.mission_id = m.id
+                     mission                        m
+                JOIN type_volume_horaire          tvh ON tvh.code = 'PREVU'
+                JOIN type_volume_horaire         tvhr ON tvhr.code = 'REALISE'
+                JOIN etat_volume_horaire          evh ON 1=1
+                JOIN intervenant                    i ON i.id = m.intervenant_id
+                JOIN annee                          a ON a.id = i.annee_id
+                JOIN structure                    str ON str.id = m.structure_id
+                JOIN type_mission                  tm ON tm.id = m.type_mission_id
+                JOIN tbl_mission                 tblm ON tblm.mission_id = m.id
            LEFT JOIN structure                   istr ON istr.id = i.structure_id
            LEFT JOIN volume_horaire_mission       vhm ON vhm.mission_id = m.id AND vhm.type_volume_horaire_id = tvhr.id AND vhm.histo_destruction IS NULL
            LEFT JOIN intervenant_dossier            d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL

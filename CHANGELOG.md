@@ -13,6 +13,7 @@
 ## Améliorations
 
 * Modification de la règle de saisie pour les dates de début et de fin de mission afin de laisser un peu de marge pour les cas des missions à cheval sur deux années universitaires : la mission devra être saisie sur l'année universitaire où elle doit être majoritairement réalisée.
+* Optimisation de calcul des états des volumes horaires (impact sur les formules, les extractions des services, etc)
 
 ## Corrections de bugs
 

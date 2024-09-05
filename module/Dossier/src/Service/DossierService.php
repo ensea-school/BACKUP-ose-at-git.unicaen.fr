@@ -246,6 +246,7 @@ class DossierService extends AbstractEntityService
 
         $newDatas                     = [];
         $oldDatas                     = [];
+        $newDatas['INSEE']            = ($intervenantDossier->getNumeroInsee()) ? trim(strtolower($intervenantDossier->getNumeroInsee())) : '(aucun)';
         $newDatas['NOM_PATRONYMIQUE'] = ($intervenantDossier->getNomPatronymique()) ? trim(strtolower($intervenantDossier->getNomPatronymique())) : '(aucun)';
         $newDatas['NOM_USUEL']        = ($intervenantDossier->getNomUsuel()) ? trim(strtolower($intervenantDossier->getNomUsuel())) : '(aucun)';
         $newDatas['CIVILITE']         = ($intervenantDossier->getCivilite()) ? trim(strtolower($intervenantDossier->getCivilite()->getLibelleCourt())) : '(aucun)';
@@ -262,6 +263,7 @@ class DossierService extends AbstractEntityService
         $intervenantDossierAdresse = preg_replace('/\s\s+/', ' ', $intervenantDossierAdresse);
         $newDatas['ADRESSE']       = (!empty($intervenantDossierAdresse)) ? $intervenantDossierAdresse : '(aucun)';
 
+        $oldDatas['INSEE']            = ($intervenant->getNumeroInsee()) ? trim(strtolower($intervenant->getNumeroInsee())) : '(aucun)';
         $oldDatas['NOM_PATRONYMIQUE'] = ($intervenant->getNomPatronymique()) ? trim(strtolower($intervenant->getNomPatronymique())) : '(aucun)';
         $oldDatas['NOM_USUEL']        = ($intervenant->getNomUsuel()) ? trim(strtolower($intervenant->getNomUsuel())) : '(aucun)';
         $oldDatas['CIVILITE']         = ($intervenant->getCivilite()) ? trim(strtolower($intervenant->getCivilite()->getLibelleCourt())) : '(aucun)';

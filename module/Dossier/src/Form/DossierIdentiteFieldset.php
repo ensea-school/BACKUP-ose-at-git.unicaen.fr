@@ -117,6 +117,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
                        ],
                        'attributes' => [
                            'class' => 'dossierElement',
+                           'id'    => 'situationMatrimoniale',
                        ],
                        'type'       => 'Select',
                    ]);

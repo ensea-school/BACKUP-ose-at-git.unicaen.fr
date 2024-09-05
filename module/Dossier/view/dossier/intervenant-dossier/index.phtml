@@ -275,12 +275,8 @@ $fieldsets = $form->getFieldsets();
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            yearRange: "-100:+0"
-        });
-
-        $(function () {
-
-
+            yearRange: "-100:+0",
+            dateFormat: 'dd/mm/yy'
         });
 
 
@@ -289,12 +285,15 @@ $fieldsets = $form->getFieldsets();
             var messageDataModificated = "Vous souhaitez changer de statut, mais vos données personnelles ont été modifié, si vous n'enregistrez pas au préalable, elles seront perdues. Souhaitez vous continuer ?"
 
             manageDepartementNaissance();
+            manageSituationMatrimoniale();
 
 
             function manageDepartementNaissance()
             {
                 var selectPays = $("select[name='DossierIdentiteComplementaire[paysNaissance]']");
                 var selectDept = $("select[name='DossierIdentiteComplementaire[departementNaissance]']");
+
+
                 var emptyDept = $("option[value='']", selectDept);
 
                 selectPays.change(function () {
@@ -314,6 +313,29 @@ $fieldsets = $form->getFieldsets();
 
                 selectPays.change();
             }
+
+            function manageSituationMatrimoniale()
+            {
+                var selectSituationMatrimoniale = $("select[name='DossierIdentite[situationMatrimoniale]']");
+                var dateSituationMatrimoniale = $("input[name='DossierIdentite[dateSituationMatrimoniale]']").parent('div').parent('div');
+                console.log(dateSituationMatrimoniale);
+
+                var situation = $("option:selected", selectSituationMatrimoniale).html();
+
+                if (situation == 'Célibataire') {
+                    dateSituationMatrimoniale.hide();
+                }
+
+                selectSituationMatrimoniale.change(function () {
+                    var situation = $("option:selected", selectSituationMatrimoniale).html();
+                    if (situation == 'Célibataire') {
+                        dateSituationMatrimoniale.hide();
+                    } else {
+                        dateSituationMatrimoniale.show();
+                    }
+                });
+            }
+
 
             $("select[name='DossierStatut[statut]']").change(function () {
                 if (dataModificated) {

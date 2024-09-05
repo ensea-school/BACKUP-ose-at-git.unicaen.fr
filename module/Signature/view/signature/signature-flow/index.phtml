@@ -52,9 +52,12 @@
 
                                     <h4 style="font-size:18px;">
                                         Etape <?= $key + 1 ?> - <strong><?= $step['label'] ?></strong>
-                                        <span> ( <i class="fas fa-user-group"></i> Tous les destinataires doivent signer) </span>
+                                        <?php if ($step['allRecipientsSign']): ?>
+                                            <span> ( <i class="fas fa-user-group"></i> Tous les destinataires doivent signer) </span>
+                                        <?php endif; ?>
                                     </h4>
-                                    <i class="fas fa-box-archive"></i> Parapheur : <strong class="valued"><?= $step['letterfile'] ?></strong> -
+                                    <i class="fas fa-box-archive"></i> Parapheur : <strong
+                                            class="valued"><?= $step['letterfile'] ?></strong> -
                                     <i class="fas fa-pen-nib"></i> Niveau : <strong class="valued">
                                         <?php
                                         if (array_key_exists($step['letterfile'], $letterFileLevelsInfos)) {
@@ -63,7 +66,8 @@
                                             echo 'inconnue';
                                         }
                                         ?></strong>
-                                    <i class="fas fa-BELL"></i></i>Signataire(s) : <strong class="valued">A définir</strong>
+                                    <i class="fas fa-BELL"></i></i>Signataire(s) : <strong class="valued">A
+                                        définir</strong>
                                 </article>
                             <?php endforeach; ?>
                             <a class="btn btn-primary mod-ajax" data-submit-reload="true"

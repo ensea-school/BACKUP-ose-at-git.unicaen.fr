@@ -21,6 +21,8 @@ class RoleService extends AbstractEntityService
         return \Application\Entity\Db\Role::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -31,15 +33,18 @@ class RoleService extends AbstractEntityService
         return 'r';
     }
 
+
+
     /**
      *
      * @param QueryBuilder|null $qb
-     * @param string|null $alias
+     * @param string|null       $alias
      */
-    public function orderBy( QueryBuilder $qb=null, $alias=null )
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");
         return $qb;
     }
+
 }

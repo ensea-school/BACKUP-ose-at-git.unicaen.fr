@@ -4,6 +4,8 @@ namespace Contrat\Service;
 
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Fichier;
+use Application\Entity\Db\Role;
+use Application\Entity\Db\Utilisateur;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
@@ -48,6 +50,7 @@ class ContratService extends AbstractEntityService
     use AffectationServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
     use ProcessServiceAwareTrait;
+    use RoleServiceAwareTrait;
 
     /**
      * Retourne la classe des entités
@@ -191,22 +194,160 @@ class ContratService extends AbstractEntityService
 
 
 
+    public function generer(Contrat $contrat, $download = true, $save = false)
+    {
+        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
+                            $contrat->getIntervenant()->getNomUsuel(),
+                            $contrat->getIntervenant()->getCode());
+
+        if ($contrat->estUnAvenant()) {
+            $modele = $contrat->getIntervenant()->getStatut()->getAvenantEtatSortie();
+            if (!$modele) {
+                $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
+            }
+        } else {
+            $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
+        }
+
+        if (!$modele) {
+            throw new \Exception('Aucun modèle ne correspond à ce contrat');
+        }
+
+        $filtres = ['CONTRAT_ID' => $contrat->getId()];
+
+        $document = $this->getServiceEtatSortie()->genererPdf($modele, $filtres);
+
+        if ($contrat->estUnProjet()) {
+            $document->getStylist()->addFiligrane('PROJET');
+        }
+
+
+        if ($save) {
+            $config = \OseAdmin::instance()->config()->get('unicaen-signature');
+            $document->saveToFile($config['documents_path'] . $fileName);
+
+            return $config['documents_path'] . $fileName;
+        }
+        if ($download) {
+            $document->download($fileName);
+
+            return null;
+        } else {
+            return $document;
+        }
+    }
+
+
+
+    /**
+     * Création des Fichiers déposés pour un contrat.
+     *
+     * @param array   $files             Ex: ['tmp_name' => '/tmp/k65sd4d', 'name' => 'Image.png', 'type' => 'image/png',
+     *                                   'size' => 321215]
+     * @param Contrat $contrat
+     * @param boolean $deleteFiles       Supprimer les fichiers temporaires après création du Fichier
+     *
+     * @return Fichier[]
+     */
+    public function creerFichiers($files, Contrat $contrat, $deleteFiles = true)
+    {
+        if (!$files) {
+            throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");
+        }
+        $instances = [];
+
+        foreach ($files as $file) {
+            $path          = $file['tmp_name'];
+            $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
+            $typeFichier   = $file['type'];
+            $tailleFichier = $file['size'];
+
+            $fichier = (new Fichier())
+                ->setTypeMime($typeFichier)
+                ->setNom($nomFichier)
+                ->setTaille($tailleFichier)
+                ->setContenu(file_get_contents($path))
+                ->setValidation(null);
+
+            $contrat->addFichier($fichier);
+
+            $this->getServiceFichier()->save($fichier);
+            $instances[] = $fichier;
+
+            if ($deleteFiles) {
+                unlink($path);
+            }
+        }
+
+        $this->getEntityManager()->flush();
+
+        return $instances;
+    }
+
+
+
     public function creerProcessContratSignatureElectronique(Contrat $contrat)
     {
-        //$contratFilePath = $this->generer($contrat, false, true);
-        //$filename        = basename($contratFilePath);
+        $contratFilePath = $this->generer($contrat, false, true);
+        $filename        = basename($contratFilePath);
+
         $signatureFlow      = $this->getSignatureService()->getSignatureFlowById(4);
         $signatureFlowDatas = $this->getSignatureService()->createSignatureFlowDatasById(
             "",
             $signatureFlow->getId(),
             []
-        );
+        )['signatureflow'];
 
-        dump($signatureFlowDatas);
-        die;
+        //On doit aller chercher les recipients
+        foreach ($signatureFlowDatas['steps'] as $key => $step) {
+            //Si l'étape de process concerne un rôle de l'application on va chercher les utilisateurs de ce role.
+            if ($step['recipient_method'] == 'by_role' && empty($step['recipients'])) {
+                $role = '';
+                if (array_key_exists('by_role', $step['options'])) {
+                    $role = $this->getServiceRole()->get($step['options']['by_role']);
+                }
+                //On a trouvé le rôle pour la signature établissement
+                if ($role instanceof Role) {
+                    $utilisateurs = $this->getServiceUtilisateur()->getUtilisateursByRole($role);
+
+                    $recipients = [];
+                    /**
+                     * @var Utilisateur $utilisateur
+                     */
+                    foreach ($utilisateurs as $utilisateur) {
+                        $recipients[] = [
+                            'firstname' => $utilisateur['DISPLAY_NAME'],
+                            'lastname'  => '',
+                            'email'     => $utilisateur['EMAIL'],
+                        ];
+                    }
+                }
+                $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
+            }
+            //Si l'étape de process concerne l'intervenant du contrat on va chercher l'email de l'intervenant.
+            if ($step['recipient_method'] == 'by_intervenant' && empty($step['recipients'])) {
+                $intervenant = $contrat->getIntervenant();
+                $nom         = $intervenant->getNomUsuel();
+                $prenom      = $intervenant->getPrenom();
+                $mail        = $intervenant->getEmailPerso();
+
+                $recipients[]                                    =
+                    [
+                        'firstname' => $prenom,
+                        'lastname'  => $nom,
+                        'email'     => $mail,
+                    ];
+                $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
+            }
+        }
+
         $process = $this->getProcessService()->createUnconfiguredProcess($filename, 4);
-        var_dump($process);
-        die;
+        $this->getProcessService()->configureProcess($process, $signatureFlowDatas);
+        $this->getProcessService()->trigger($process, true);
+
+        return true;
+
     }
 
 
@@ -339,53 +480,6 @@ class ContratService extends AbstractEntityService
 
 
 
-    /**
-     * Création des Fichiers déposés pour un contrat.
-     *
-     * @param array   $files             Ex: ['tmp_name' => '/tmp/k65sd4d', 'name' => 'Image.png', 'type' => 'image/png',
-     *                                   'size' => 321215]
-     * @param Contrat $contrat
-     * @param boolean $deleteFiles       Supprimer les fichiers temporaires après création du Fichier
-     *
-     * @return Fichier[]
-     */
-    public function creerFichiers($files, Contrat $contrat, $deleteFiles = true)
-    {
-        if (!$files) {
-            throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");
-        }
-        $instances = [];
-
-        foreach ($files as $file) {
-            $path          = $file['tmp_name'];
-            $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
-            $typeFichier   = $file['type'];
-            $tailleFichier = $file['size'];
-
-            $fichier = (new Fichier())
-                ->setTypeMime($typeFichier)
-                ->setNom($nomFichier)
-                ->setTaille($tailleFichier)
-                ->setContenu(file_get_contents($path))
-                ->setValidation(null);
-
-            $contrat->addFichier($fichier);
-
-            $this->getServiceFichier()->save($fichier);
-            $instances[] = $fichier;
-
-            if ($deleteFiles) {
-                unlink($path);
-            }
-        }
-
-        $this->getEntityManager()->flush();
-
-        return $instances;
-    }
-
-
-
     public function creerDeclaration($files, Contrat $contrat, $deleteFiles = true)
     {
 
@@ -420,52 +514,6 @@ class ContratService extends AbstractEntityService
         $this->getEntityManager()->flush();
 
         return $instances;
-    }
-
-
-
-    public function generer(Contrat $contrat, $download = true, $save = false)
-    {
-        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
-            $contrat->getIntervenant()->getNomUsuel(),
-            $contrat->getIntervenant()->getCode());
-
-        if ($contrat->estUnAvenant()) {
-            $modele = $contrat->getIntervenant()->getStatut()->getAvenantEtatSortie();
-            if (!$modele) {
-                $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
-            }
-        } else {
-            $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
-        }
-
-        if (!$modele) {
-            throw new \Exception('Aucun modèle ne correspond à ce contrat');
-        }
-
-        $filtres = ['CONTRAT_ID' => $contrat->getId()];
-
-        $document = $this->getServiceEtatSortie()->genererPdf($modele, $filtres);
-
-        if ($contrat->estUnProjet()) {
-            $document->getStylist()->addFiligrane('PROJET');
-        }
-
-
-        if ($save) {
-            $config = \OseAdmin::instance()->config()->get('unicaen-signature');
-            $document->saveToFile($config['documents_path'] . $fileName);
-
-            return $config['documents_path'] . $fileName;
-        }
-        if ($download) {
-            $document->download($fileName);
-
-            return null;
-        } else {
-            return $document;
-        }
     }
 
 

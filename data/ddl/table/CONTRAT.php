@@ -189,8 +189,8 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
-        'SIGNATURE_ID'          => [
-            'name'        => 'SIGNATURE_ID',
+        'PROCESS_SIGNATURE_ID'  => [
+            'name'        => 'PROCESS_SIGNATURE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

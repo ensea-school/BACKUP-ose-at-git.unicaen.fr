@@ -141,6 +141,18 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
+        'URLDOCUMENT'  => [
+            'name'        => 'URLDOCUMENT',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 400,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 12,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

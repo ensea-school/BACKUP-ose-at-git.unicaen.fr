@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
+use Application\Entity\Db\Role;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -71,6 +72,24 @@ class UtilisateurService extends AbstractEntityService
     public function getByUsername($username)
     {
         return $this->getConnecteurLdap()->getUtilisateur($username);
+    }
+
+
+
+    public function getUtilisateursByRole(Role $role)
+    {
+
+        $sql = '
+            SELECT * FROM affectation a
+            JOIN UTILISATEUR u ON a.UTILISATEUR_ID = u.ID 
+            WHERE a.HISTO_DESTRUCTION IS NULL
+            AND a.role_id = 60
+        ';
+
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
+
+        return $res;
+
     }
 
 

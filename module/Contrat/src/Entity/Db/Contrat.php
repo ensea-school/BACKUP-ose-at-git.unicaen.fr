@@ -7,6 +7,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\Signature;
 
 /**
@@ -87,9 +88,9 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $mission;
 
     /**
-     * @var ?Signature
+     * @var ?Process
      */
-    private $signature;
+    private $processSignature;
 
 
 
@@ -556,24 +557,25 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function getSignature(): ?Signature
+    public function getProcessSignature(): ?Process
     {
-        return $this->signature;
+        return $this->processSignature;
     }
 
 
 
-    public function setSignature(?Signature $signature): self
+    public function setProcessSignature(?Process $processSignature): self
     {
-        $this->signature = $signature;
+        $this->processSignature = $processSignature;
 
         return $this;
     }
 
 
 
-    public function getStatutSignature(): string
+    public function getStatutProcessSignature(): string
     {
+        return 'Todo Signature electronique';
         if ($this->signature) {
             if ($this->signature->getStatus() == Signature::STATUS_SIGNATURE_WAIT) {
                 return ($this->estUnAvenant()) ? 'Avenant en attente du ou des signataires' : 'Contrat en attente du ou des signataires';

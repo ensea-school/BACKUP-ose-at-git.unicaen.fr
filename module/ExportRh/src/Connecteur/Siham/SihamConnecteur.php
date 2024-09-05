@@ -277,7 +277,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             /*SITUATION FAMILIALE*/
             $situationFamiliale = [];
             if ($dossierIntervenant->getSituationMatrimoniale()) {
-                $dateEffetSituationFamilliale = ($dossierIntervenant->getDateSituationMatrimoniale()) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : '';
+                $dateEffetSituationFamilliale = ($dossierIntervenant->getDateSituationMatrimoniale()) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : $dateEffet;
                 $codeSituationFamilliale      = ($dossierIntervenant->getSituationMatrimoniale()) ? $dossierIntervenant->getSituationMatrimoniale()->getCode() : '';
                 $situationFamiliale[]         =
                     ['dateEffetSituFam' => $dateEffetSituationFamilliale,
@@ -843,8 +843,8 @@ class SihamConnecteur implements ConnecteurRhInterface
             $params = [
                 'codeAdministration' => '',
                 'listeUO'            => [[
-                                             'typeUO' => $code,
-                                         ]],
+                    'typeUO' => $code,
+                ]],
             ];
 
             $uo = array_merge($uo, $this->siham->recupererListeUO($params));

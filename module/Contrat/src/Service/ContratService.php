@@ -23,6 +23,7 @@ use Intervenant\Entity\Db\Statut;
 use Mission\Entity\Db\Mission;
 use RuntimeException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Entity\Db\SignatureRecipient;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
@@ -225,9 +226,10 @@ class ContratService extends AbstractEntityService
 
         if ($save) {
             $config = \OseAdmin::instance()->config()->get('unicaen-signature');
-            $document->saveToFile($config['documents_path'] . $fileName);
+            $document->saveToFile($config['documents_path'] . '/' . $fileName);
+            //   exec('chmod 777 ' . $config['documents_path'] . $fileName);
 
-            return $config['documents_path'] . $fileName;
+            return $config['documents_path'] . '/' . $fileName;
         }
         if ($download) {
             $document->download($fileName);
@@ -344,6 +346,7 @@ class ContratService extends AbstractEntityService
 
         $process = $this->getProcessService()->createUnconfiguredProcess($filename, 4);
         $this->getProcessService()->configureProcess($process, $signatureFlowDatas);
+        $contrat->setProcessSignature($process);
         $this->getProcessService()->trigger($process, true);
 
         return true;
@@ -466,16 +469,19 @@ class ContratService extends AbstractEntityService
      * @throws \UnicaenSignature\Exception\SignatureException
      */
 
-    public function updateSignatureElectronique(Contrat $contrat): Contrat
+    public function rafraichirProcessSignatureElectronique(Contrat $contrat): bool
     {
-        $signature = $contrat->getSignature();
-        if ($signature instanceof Signature) {
-            //On met à jour le statut de la signature
-            $this->getSignatureService()->updateStatusSignature($signature);
-            //On regarde si la signature est totalement signé
+        if ($contrat instanceof Contrat) {
+            $process = $contrat->getProcessSignature();
+            //Si j'ai bien un process de signature en cours pour ce contrat
+            if ($process instanceof Process) {
+                $this->processService->trigger($process);
+                return true;
+            }
         }
 
-        return $contrat;
+        return false;
+
     }
 
 

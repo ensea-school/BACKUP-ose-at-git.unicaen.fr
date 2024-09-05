@@ -18,9 +18,6 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 
 
-
-
-
 /**
  * Description of ContratAssertion
  *
@@ -66,7 +63,7 @@ class ContratAssertion extends AbstractAssertion
                     case self::PRIV_EXPORT:
                         return $this->assertGeneration($entity);
                 }
-            break;
+                break;
         }
 
         // pareil si le rôle ne possède pas le privilège adéquat
@@ -106,128 +103,10 @@ class ContratAssertion extends AbstractAssertion
                     case Privileges::CONTRAT_SUPPRESSION:
                         return $this->assertSuppression($entity);
                 }
-            break;
+                break;
         }
 
         return true;
-    }
-
-
-
-    /**
-     * @param string $controller
-     * @param string $action
-     * @param string $privilege
-     *
-     * @return boolean
-     */
-    protected function assertController($controller, $action = null, $privilege = null)
-    {
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-        if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $intervenant);
-            $wfOk          = $workflowEtape && $workflowEtape->isAtteignable();
-            if (!$wfOk) return false;
-        }
-
-        return true;
-    }
-
-
-
-    protected function assertListerFichiers(Contrat $contrat)
-    {
-        return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::CONTRAT_VISUALISATION),
-            $this->assertVisualisation($contrat),
-            !$contrat->estUnProjet(),
-        ]);
-    }
-
-
-
-    protected function assertModifierFichier(Contrat $contrat)
-    {
-        return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::CONTRAT_DEPOT_RETOUR_SIGNE),
-            empty($contrat->getDateRetourSigne()),
-            $this->assertDepotRetourSigne($contrat),
-        ]);
-    }
-
-
-
-    protected function assertVisualisation(Contrat $contrat)
-    {
-        return $this->assertRole($contrat);
-    }
-
-
-
-    protected function assertCreation(Contrat $contrat)
-    {
-        return $this->asserts([
-            $this->assertRole($contrat),
-            $this->assertWorkflow($contrat),
-        ]);
-    }
-
-
-
-    protected function assertValidation(Contrat $contrat)
-    {
-        return $this->asserts([
-            $this->assertRole($contrat),
-            !$contrat->getValidation(),
-        ]);
-    }
-
-
-
-    protected function assertDevalidation(Contrat $contrat)
-    {
-        //Si j'ai un signature electronique sur le contrat je ne peux plus le dévalider
-        if ($contrat->getSignature()) {
-            return false;
-        }
-        if (!$contrat->estUnAvenant()) {
-            $contratService = $this->getServiceContrat();
-            $devalid        = !$contratService->hasAvenant($contrat);
-//            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut dévalider un contrat que si aucun avenant n'existe
-        } else {
-            $devalid = true;
-        }
-
-        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
-        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
-
-        return $this->asserts([
-            $this->assertRole($contrat),
-            $contrat->getValidation() && !$contratDirect,
-            !$contrat->getDateRetourSigne(),
-            $devalid,
-        ]);
-    }
-
-
-
-    protected function assertSuppression(Contrat $contrat)
-    {
-        if (!$contrat->estUnAvenant()) {
-            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut supprimer un contrat que si aucun avenant n'existe
-        } else {
-            $devalid = true;
-        }
-
-        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
-        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
-
-        return $this->asserts([
-            $this->assertRole($contrat),
-            !$contrat->getValidation() || ($contratDirect && $devalid),
-            !$contrat->getDateRetourSigne(),
-        ]);
     }
 
 
@@ -243,36 +122,20 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertDepotRetourSigne(Contrat $contrat)
+    protected function assertListerFichiers(Contrat $contrat)
     {
         return $this->asserts([
-            $this->assertRole($contrat),
-            !$contrat->estUnProjet(),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::CONTRAT_VISUALISATION),
+                                  $this->assertVisualisation($contrat),
+                                  !$contrat->estUnProjet(),
+                              ]);
     }
 
 
 
-    protected function assertEnvoyerSignatureElectronique(Contrat $contrat)
+    protected function assertVisualisation(Contrat $contrat)
     {
-
-
-        return $this->asserts([
-            $this->assertRole($contrat),
-            !$contrat->estUnProjet(),
-            $contrat->getValidation(),
-        ]);
-    }
-
-
-
-    protected function assertSaisieDateRetour(Contrat $contrat)
-    {
-        return $this->asserts([
-            $this->assertRole($contrat),
-            !$contrat->estUnProjet(),
-            !$contrat->getIntervenant()->getStatut()->isContratSignatureActivation(),
-        ]);
+        return $this->assertRole($contrat);
     }
 
 
@@ -306,6 +169,37 @@ class ContratAssertion extends AbstractAssertion
 
 
 
+    protected function assertModifierFichier(Contrat $contrat)
+    {
+        return $this->asserts([
+                                  $this->getRole()->hasPrivilege(Privileges::CONTRAT_DEPOT_RETOUR_SIGNE),
+                                  empty($contrat->getDateRetourSigne()),
+                                  $this->assertDepotRetourSigne($contrat),
+                              ]);
+    }
+
+
+
+    protected function assertDepotRetourSigne(Contrat $contrat)
+    {
+        return $this->asserts([
+                                  $this->assertRole($contrat),
+                                  !$contrat->estUnProjet(),
+                              ]);
+    }
+
+
+
+    protected function assertCreation(Contrat $contrat)
+    {
+        return $this->asserts([
+                                  $this->assertRole($contrat),
+                                  $this->assertWorkflow($contrat),
+                              ]);
+    }
+
+
+
     protected function assertWorkflow(Contrat $contrat)
     {
         $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $contrat->getIntervenant(), $contrat->getStructure());
@@ -313,5 +207,108 @@ class ContratAssertion extends AbstractAssertion
         return $this->asserts(
             $workflowEtape && $workflowEtape->isAtteignable()
         );
+    }
+
+
+
+    protected function assertValidation(Contrat $contrat)
+    {
+        return $this->asserts([
+                                  $this->assertRole($contrat),
+                                  !$contrat->getValidation(),
+                              ]);
+    }
+
+
+
+    protected function assertEnvoyerSignatureElectronique(Contrat $contrat)
+    {
+
+
+        return $this->asserts([
+                                  $this->assertRole($contrat),
+                                  !$contrat->estUnProjet(),
+                                  $contrat->getValidation(),
+                              ]);
+    }
+
+
+
+    protected function assertSaisieDateRetour(Contrat $contrat)
+    {
+        return $this->asserts([
+                                  $this->assertRole($contrat),
+                                  !$contrat->estUnProjet(),
+                                  !$contrat->getIntervenant()->getStatut()->isContratSignatureActivation(),
+                              ]);
+    }
+
+
+
+    protected function assertDevalidation(Contrat $contrat)
+    {
+        //Si j'ai un signature electronique sur le contrat je ne peux plus le dévalider
+        if ($contrat->getProcessSignature()) {
+            return false;
+        }
+        if (!$contrat->estUnAvenant()) {
+            $contratService = $this->getServiceContrat();
+            $devalid        = !$contratService->hasAvenant($contrat);
+//            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut dévalider un contrat que si aucun avenant n'existe
+        } else {
+            $devalid = true;
+        }
+
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+
+        return $this->asserts([
+                                  $this->assertRole($contrat),
+                                  $contrat->getValidation() && !$contratDirect,
+                                  !$contrat->getDateRetourSigne(),
+                                  $devalid,
+                              ]);
+    }
+
+
+
+    protected function assertSuppression(Contrat $contrat)
+    {
+        if (!$contrat->estUnAvenant()) {
+            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut supprimer un contrat que si aucun avenant n'existe
+        } else {
+            $devalid = true;
+        }
+
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+
+        return $this->asserts([
+                                  $this->assertRole($contrat),
+                                  !$contrat->getValidation() || ($contratDirect && $devalid),
+                                  !$contrat->getDateRetourSigne(),
+                              ]);
+    }
+
+
+
+    /**
+     * @param string $controller
+     * @param string $action
+     * @param string $privilege
+     *
+     * @return boolean
+     */
+    protected function assertController($controller, $action = null, $privilege = null)
+    {
+        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+
+        if ($intervenant) {
+            $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $intervenant);
+            $wfOk          = $workflowEtape && $workflowEtape->isAtteignable();
+            if (!$wfOk) return false;
+        }
+
+        return true;
     }
 }

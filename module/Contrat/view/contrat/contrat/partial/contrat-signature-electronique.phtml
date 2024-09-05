@@ -28,16 +28,16 @@ $urlEmail = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOI_EMAIL)
     ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()], ['modal' => 1]) . '?modal=1'
     : null;
 
-$urlSignatureElectronique = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
-    ? $this->url('contrat/envoyer-signature-electronique', ['contrat' => $contrat->getId()])
+$urlCreerProcessSignature = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
+    ? $this->url('contrat/creer-process-signature', ['contrat' => $contrat->getId()])
     : null;
 
-$urlSupprimerSignatureElectronique = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
-    ? $this->url('contrat/supprimer-signature-electronique', ['contrat' => $contrat->getId()])
+$urlSupprimerProcessSignature = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
+    ? $this->url('contrat/supprimer-process-signature', ['contrat' => $contrat->getId()])
     : null;
 
-$urlRafraichirSignatureElectronique = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
-    ? $this->url('contrat/rafraichir-signature-electronique', ['contrat' => $contrat->getId()])
+$urlRafraichirProcessSignature = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
+    ? $this->url('contrat/rafraichir-process-signature', ['contrat' => $contrat->getId()])
     : null;
 
 $urlValidation = $this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)
@@ -126,17 +126,17 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <li><i class="fas fa-thumbs-up"></i> Modifiable par la structure
                     <?= $contrat->getStructure() ?></li>
             <?php endif; ?>
-            <?php if (!$contrat->getSignature() && $contrat->getIntervenant()->getStatut()->isContratSignatureActivation() && $contrat->getValidation()): ?>
+            <?php if (!$contrat->getProcessSignature() && $contrat->getIntervenant()->getStatut()->isContratSignatureActivation() && $contrat->getValidation()): ?>
                 <li><i class="fas fa-hourglass-start"></i> En attente d'envoi pour signature électronique</li>
             <?php endif; ?>
-            <?php if ($contrat->getSignature()): ?>
-                <li><i class="fas fa-signature"></i> Envoyé pour signature
-                    électronique le <?= $contrat->getSignature()->getDateCreated()->format(Application\Constants::DATE_FORMAT) ?>
+            <?php if ($contrat->getProcessSignature()): ?>
+                <!--     <li><i class="fas fa-signature"></i> Envoyé pour signature
+                    électronique le //$contrat->getSignature()->getDateCreated()->format(Application\Constants::DATE_FORMAT)
 
                 </li>
                 <li><i class="fas fa-signature"></i>
-                    <?= $contrat->getStatutSignature() ?>
-                </li>
+                    //$contrat->getStatutSignature()
+                </li>-->
             <?php endif; ?>
 
 
@@ -160,7 +160,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
         </div>
     </div>
 
-    <?php if ($urlValidation || $urlSaisieRetour || $urlDevalidation || $urlSuppression || $urlSignatureElectronique): ?>
+    <?php if ($urlValidation || $urlSaisieRetour || $urlDevalidation || $urlSuppression || $urlCreerProcessSignature): ?>
         <div class="card-footer">
             <!-- Actions -->
             <?php if ($urlValidation): ?>
@@ -178,24 +178,24 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 </a>
             <?php endif; ?>
 
-            <?php if (!$contrat->getSignature() && $contratSignatureActivation && !empty($urlSignatureElectronique)): ?>
-                <a href="<?= $urlSignatureElectronique ?>" class="btn btn-primary">
+            <?php if (!$contrat->getProcessSignature() && $contratSignatureActivation && !empty($urlCreerProcessSignature)): ?>
+                <a href="<?= $urlCreerProcessSignature ?>" class="btn btn-primary">
                     <i class="fas fa-signature"></i>
                     Envoyer pour signature électronique
                 </a>
 
             <?php endif; ?>
 
-            <?php if ($urlRafraichirSignatureElectronique && $contrat->getSignature()): ?>
-                <a href="<?= $urlRafraichirSignatureElectronique ?>" class="btn btn-primary">
+            <?php if ($urlRafraichirProcessSignature && $contrat->getProcessSignature()): ?>
+                <a href="<?= $urlRafraichirProcessSignature ?>" class="btn btn-primary">
                     <i class="fas fa-arrows-rotate"></i>
                     Rafraîchir la signature électronique
                 </a>
 
             <?php endif; ?>
-            
-            <?php if ($urlSupprimerSignatureElectronique && $contrat->getSignature()): ?>
-                <a href="<?= $urlSupprimerSignatureElectronique ?>" class="btn btn-danger">
+
+            <?php if ($urlSupprimerProcessSignature && $contrat->getProcessSignature()): ?>
+                <a href="<?= $urlSupprimerProcessSignature ?>" class="btn btn-danger">
                     <i class="fas fa-trash"></i>
                     Supprimer la signature électronique
                 </a>

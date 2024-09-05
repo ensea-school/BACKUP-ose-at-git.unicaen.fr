@@ -61,24 +61,6 @@ class ContratController extends AbstractController
 
 
     /**
-     * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
-     * éventuelles
-     * (services sur des enseignements fermés, etc.)
-     */
-    protected function initFilters()
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            Contrat::class,
-            Service::class,
-            VolumeHoraire::class,
-            Validation::class,
-        ]);
-    }
-
-
-
-    /**
      * Point d'entrée sur les contrats/avenants.
      *
      * @return array
@@ -101,10 +83,10 @@ class ContratController extends AbstractController
         switch ($avenantResult) {
             case Parametre::AVENANT_AUTORISE :
                 $avenant_param = 1;
-            break;
+                break;
             case Parametre::AVENANT_STRUCT :
                 $avenant_param = 0;
-            break;
+                break;
             default :
                 $avenant_param = -1;
         }
@@ -186,6 +168,24 @@ class ContratController extends AbstractController
 
 
 
+    /**
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
+     * éventuelles
+     * (services sur des enseignements fermés, etc.)
+     */
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+                                                                  Contrat::class,
+                                                                  Service::class,
+                                                                  VolumeHoraire::class,
+                                                                  Validation::class,
+                                                              ]);
+    }
+
+
+
     public function creerAction()
     {
         $this->initFilters();
@@ -232,6 +232,17 @@ class ContratController extends AbstractController
         }
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
+    }
+
+
+
+    private function updateTableauxBord(Intervenant $intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+                                                              'formule',
+                                                              'contrat',
+                                                              'mission',
+                                                          ], $intervenant);
     }
 
 
@@ -432,7 +443,7 @@ class ContratController extends AbstractController
         $contratDateSansFichier       = ($contratDateSansFichierResult == Parametre::CONTRAT_DATE);
 
         if ($contrat->getDateRetourSigne() != null || $contrat->getFichier()->count() > 0 || $contratDateSansFichier) {
-            $form->bindRequestSave($contrat, $this->getRequest(), function() use ($contrat, $contratToString){
+            $form->bindRequestSave($contrat, $this->getRequest(), function () use ($contrat, $contratToString) {
 
                 $this->getServiceContrat()->save($contrat);
                 $this->updateTableauxBord($contrat->getIntervenant());
@@ -637,7 +648,7 @@ class ContratController extends AbstractController
 
 
 
-    public function envoyerSignatureElectroniqueAction()
+    public function creerProcessSignatureAction()
     {
         /*
          * 1 - On vérifie que l'on a bien le privilège pour envoyer dans le parapheur le contrat pour signature
@@ -657,20 +668,12 @@ class ContratController extends AbstractController
         $contrat = $this->getEvent()->getParam('contrat');
         $this->getServiceContrat()->creerProcessContratSignatureElectronique($contrat);
 
-        /*try {
-            $this->getServiceContrat()->envoyerContratSignatureElectronique($contrat);
-            $contratLibelle = "Contrat N°" . $contrat->getId();
-            $this->flashMessenger()->addSuccessMessage($contratLibelle . " envoyé avec succés pour signature électronique");
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($e->getMessage());
-        }*/
-
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
     }
 
 
 
-    public function supprimerSignatureElectroniqueAction()
+    public function supprimerProcessSignatureAction()
     {
         //TODO : vérifier qu'on a bien le droit de supprimer cette signature, pour ce contrat
         $contrat        = $this->getEvent()->getParam('contrat');
@@ -691,29 +694,16 @@ class ContratController extends AbstractController
 
 
 
-    public function rafraichirSignatureElectroniqueAction()
+    public function rafraichirProcessSignatureAction()
     {
-        $contrat   = $this->getEvent()->getParam('contrat');
-        $signature = $contrat->getSignature();
-        if ($signature) {
-            try {
-                $this->getServiceContrat()->updateSignatureElectronique($contrat);
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
-            }
+        $contrat = $this->getEvent()->getParam('contrat');
+        try {
+            $this->getServiceContrat()->rafraichirProcessSignatureElectronique($contrat);
+            $this->flashMessenger()->addSuccessMessage('Process signature mis à jour');
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
-    }
-
-
-
-    private function updateTableauxBord(Intervenant $intervenant)
-    {
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule',
-            'contrat',
-            'mission',
-        ], $intervenant);
     }
 }

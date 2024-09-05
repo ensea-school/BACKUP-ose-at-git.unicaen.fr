@@ -60,8 +60,6 @@ class StatutSaisieForm extends AbstractForm
             'contrat'                       => '',
             'contratEtatSortie'             => 'État de sortie à utiliser pour générer le contrat',
             'contratSignatureActivation'    => 'Activer la signature électornique pour ce statut',
-            'contratSignatureType'          => 'Niveau de signature demandée',
-            'contratSignatureRole'          => 'Role pouvant signer le contrat électroniquement',
             'avenantEtatSortie'             => 'État de sortie à utiliser pour générer d\'éventuels avenants aux contrats',
             'serviceExterieur'              => 'L\'intervenant pourra assurer des services dans d\'autres établissements',
             'cloture'                       => 'Le service réalisé devra être clôturé avant d\'accéder aux demandes de mise en paiement',
@@ -178,21 +176,6 @@ class StatutSaisieForm extends AbstractForm
                 }
             }
         }
-        $this->spec(['contratSignatureType' => [
-            'type'    => 'Select',
-            'name'    => 'contratSignatureType',
-            'options' => [
-                'value_options' => $listeSignatureTypes,
-            ],
-        ]]);
-
-        $this->spec(['contratSignatureRole' => [
-            'type'    => 'Select',
-            'name'    => 'contratSignatureRole',
-            'options' => [
-                'value_options' => Util::collectionAsOptions($this->getServiceRole()->getList()),
-            ],
-        ]]);
 
 
         $this->spec(['modeEnseignementPrevisionnel' => [
@@ -205,10 +188,10 @@ class StatutSaisieForm extends AbstractForm
                 ],
             ],
             'hydrator' => [
-                'getter' => function(Statut $statut, string $name){
+                'getter' => function (Statut $statut, string $name) {
                     return $statut->getModeEnseignementPrevisionnel();
                 },
-                'setter' => function(Statut $statut, $value, string $name){
+                'setter' => function (Statut $statut, $value, string $name) {
                     $statut->setModeEnseignementPrevisionnel($value);
                 },
             ],
@@ -226,10 +209,10 @@ class StatutSaisieForm extends AbstractForm
                 ],
             ],
             'hydrator' => [
-                'getter' => function(Statut $statut, string $name){
+                'getter' => function (Statut $statut, string $name) {
                     return $statut->getModeEnseignementRealise();
                 },
-                'setter' => function(Statut $statut, $value, string $name){
+                'setter' => function (Statut $statut, $value, string $name) {
                     $statut->setModeEnseignementRealise($value);
                 },
             ],
@@ -244,12 +227,12 @@ class StatutSaisieForm extends AbstractForm
                 'pattern' => '[0-9]+([,.][0-9]+)?',
             ],
             'hydrator'   => [
-                'getter' => function(Statut $statut, string $name){
+                'getter' => function (Statut $statut, string $name) {
                     $taux = $statut->getTauxChargesPatronales();
 
                     return $taux * 100;
                 },
-                'setter' => function(Statut $statut, $value, string $name){
+                'setter' => function (Statut $statut, $value, string $name) {
                     $taux = $value / 100;
                     $statut->setTauxChargesPatronales($taux);
                 },
@@ -263,12 +246,12 @@ class StatutSaisieForm extends AbstractForm
                 'pattern' => '[0-9]+([,.][0-9]+)?',
             ],
             'hydrator'   => [
-                'getter' => function(Statut $statut, string $name){
+                'getter' => function (Statut $statut, string $name) {
                     $taux = $statut->getTauxChargesTTC();
 
                     return $taux * 100;
                 },
-                'setter' => function(Statut $statut, $value, string $name){
+                'setter' => function (Statut $statut, $value, string $name) {
                     $taux = $value / 100;
                     $statut->setTauxChargesTTC($taux);
                 },
@@ -285,12 +268,12 @@ class StatutSaisieForm extends AbstractForm
                 ],
             ],
             'hydrator' => [
-                'getter' => function(Statut $statut, string $name){
+                'getter' => function (Statut $statut, string $name) {
                     $real = $statut->getMissionRealiseEdition() ? 'edition' : 'visualisation';
 
                     return $real;
                 },
-                'setter' => function(Statut $statut, $value, string $name){
+                'setter' => function (Statut $statut, $value, string $name) {
                     $statut->setMissionRealiseEdition($value === 'edition');
                 },
             ],
@@ -327,7 +310,7 @@ class StatutSaisieForm extends AbstractForm
                     'value_options' => $valueOptions,
                 ],
                 'hydrator' => [
-                    'getter' => function(Statut $statut, string $name){
+                    'getter' => function (Statut $statut, string $name) {
                         $getter = 'get' . ucfirst($name);
 
                         $access = $statut->{$getter}();
@@ -344,7 +327,7 @@ class StatutSaisieForm extends AbstractForm
                             return 'desactive';
                         }
                     },
-                    'setter' => function(Statut $statut, $value, string $name){
+                    'setter' => function (Statut $statut, $value, string $name) {
                         $access = false;
                         $visu   = false;
                         $edit   = false;
@@ -368,259 +351,259 @@ class StatutSaisieForm extends AbstractForm
         }
 
         $this->spec([
-            'conseilRestreint'  => [
-                'type'     => 'Select',
-                'name'     => 'conseilRestreint',
-                'options'  => [
-                    'value_options' => [
-                        'desactive'     => 'Désactivé',
-                        'active'        => 'Activé mais non visible par l\'intervenant',
-                        'visualisation' => 'Activé et visible par l\'intervenant',
-                    ],
-                ],
-                'hydrator' => [
-                    'getter' => function(Statut $statut, string $name){
-                        $access = $statut->getConseilRestreint();
-                        $visu   = $statut->getConseilRestreintVisualisation();
+                        'conseilRestreint'  => [
+                            'type'     => 'Select',
+                            'name'     => 'conseilRestreint',
+                            'options'  => [
+                                'value_options' => [
+                                    'desactive'     => 'Désactivé',
+                                    'active'        => 'Activé mais non visible par l\'intervenant',
+                                    'visualisation' => 'Activé et visible par l\'intervenant',
+                                ],
+                            ],
+                            'hydrator' => [
+                                'getter' => function (Statut $statut, string $name) {
+                                    $access = $statut->getConseilRestreint();
+                                    $visu   = $statut->getConseilRestreintVisualisation();
 
-                        if ($visu && $access) {
-                            return 'visualisation';
-                        } elseif ($access) {
-                            return 'active';
-                        } else {
-                            return 'desactive';
-                        }
-                    },
-                    'setter' => function(Statut $statut, $value, string $name){
-                        $access = false;
-                        $visu   = false;
-                        switch ($value) {
-                            case 'visualisation':
-                                $visu = true;
-                            case 'active':
-                                $access = true;
-                        }
-                        $statut->setConseilRestreint($access);
-                        $statut->setConseilRestreintVisualisation($visu);
-                    },
-                ],
-            ],
-            'conseilAcademique' => [
-                'type'     => 'Select',
-                'name'     => 'conseilAcademique',
-                'options'  => [
-                    'value_options' => [
-                        'desactive'     => 'Désactivé',
-                        'active'        => 'Activé mais non visible par l\'intervenant',
-                        'visualisation' => 'Activé et visible par l\'intervenant',
-                    ],
-                ],
-                'hydrator' => [
-                    'getter' => function(Statut $statut, string $name){
-                        $access = $statut->getConseilAcademique();
-                        $visu   = $statut->getConseilAcademiqueVisualisation();
+                                    if ($visu && $access) {
+                                        return 'visualisation';
+                                    } elseif ($access) {
+                                        return 'active';
+                                    } else {
+                                        return 'desactive';
+                                    }
+                                },
+                                'setter' => function (Statut $statut, $value, string $name) {
+                                    $access = false;
+                                    $visu   = false;
+                                    switch ($value) {
+                                        case 'visualisation':
+                                            $visu = true;
+                                        case 'active':
+                                            $access = true;
+                                    }
+                                    $statut->setConseilRestreint($access);
+                                    $statut->setConseilRestreintVisualisation($visu);
+                                },
+                            ],
+                        ],
+                        'conseilAcademique' => [
+                            'type'     => 'Select',
+                            'name'     => 'conseilAcademique',
+                            'options'  => [
+                                'value_options' => [
+                                    'desactive'     => 'Désactivé',
+                                    'active'        => 'Activé mais non visible par l\'intervenant',
+                                    'visualisation' => 'Activé et visible par l\'intervenant',
+                                ],
+                            ],
+                            'hydrator' => [
+                                'getter' => function (Statut $statut, string $name) {
+                                    $access = $statut->getConseilAcademique();
+                                    $visu   = $statut->getConseilAcademiqueVisualisation();
 
-                        if ($visu && $access) {
-                            return 'visualisation';
-                        } elseif ($access) {
-                            return 'active';
-                        } else {
-                            return 'desactive';
-                        }
-                    },
-                    'setter' => function(Statut $statut, $value, string $name){
-                        $access = false;
-                        $visu   = false;
-                        switch ($value) {
-                            case 'visualisation':
-                                $visu = true;
-                            case 'active':
-                                $access = true;
-                        }
-                        $statut->setConseilAcademique($access);
-                        $statut->setConseilAcademiqueVisualisation($visu);
-                    },
-                ],
-            ],
-            'contrat'           => [
-                'type'     => 'Select',
-                'name'     => 'contrat',
-                'options'  => [
-                    'value_options' => [
-                        'desactive'     => 'Désactivé',
-                        'active'        => 'Activé mais non visible par l\'intervenant',
-                        'visualisation' => 'Activé et visible par l\'intervenant',
-                        'depot'         => 'Activé et contrat téléversable par l\'intervenant',
-                        'generation'    => 'Activé et contrat téléchargeable et téléversable par l\'intervenant',
-                    ],
-                ],
-                'hydrator' => [
-                    'getter' => function(Statut $statut, string $name){
-                        $access     = $statut->getContrat();
-                        $visu       = $statut->getContratVisualisation();
-                        $depot      = $statut->getContratDepot();
-                        $generation = $statut->getContratGeneration();
+                                    if ($visu && $access) {
+                                        return 'visualisation';
+                                    } elseif ($access) {
+                                        return 'active';
+                                    } else {
+                                        return 'desactive';
+                                    }
+                                },
+                                'setter' => function (Statut $statut, $value, string $name) {
+                                    $access = false;
+                                    $visu   = false;
+                                    switch ($value) {
+                                        case 'visualisation':
+                                            $visu = true;
+                                        case 'active':
+                                            $access = true;
+                                    }
+                                    $statut->setConseilAcademique($access);
+                                    $statut->setConseilAcademiqueVisualisation($visu);
+                                },
+                            ],
+                        ],
+                        'contrat'           => [
+                            'type'     => 'Select',
+                            'name'     => 'contrat',
+                            'options'  => [
+                                'value_options' => [
+                                    'desactive'     => 'Désactivé',
+                                    'active'        => 'Activé mais non visible par l\'intervenant',
+                                    'visualisation' => 'Activé et visible par l\'intervenant',
+                                    'depot'         => 'Activé et contrat téléversable par l\'intervenant',
+                                    'generation'    => 'Activé et contrat téléchargeable et téléversable par l\'intervenant',
+                                ],
+                            ],
+                            'hydrator' => [
+                                'getter' => function (Statut $statut, string $name) {
+                                    $access     = $statut->getContrat();
+                                    $visu       = $statut->getContratVisualisation();
+                                    $depot      = $statut->getContratDepot();
+                                    $generation = $statut->getContratGeneration();
 
-                        if ($generation && $depot && $visu && $access) {
-                            return 'generation';
-                        } elseif ($depot && $visu && $access) {
-                            return 'depot';
-                        } elseif ($visu && $access) {
-                            return 'visualisation';
-                        } elseif ($access) {
-                            return 'active';
-                        } else {
-                            return 'desactive';
-                        }
-                    },
-                    'setter' => function(Statut $statut, $value, string $name){
-                        $access     = false;
-                        $visu       = false;
-                        $depot      = false;
-                        $generation = false;
-                        switch ($value) {
-                            case 'generation':
-                                $generation = true;
-                            case 'depot':
-                                $depot = true;
-                            case 'visualisation':
-                                $visu = true;
-                            case 'active':
-                                $access = true;
-                        }
-                        $statut->setContrat($access);
-                        $statut->setContratVisualisation($visu);
-                        $statut->setContratDepot($depot);
-                        $statut->setContratGeneration($generation);
-                    },
-                ],
-            ],
-            //TODO : Créer un validateur pour le rendre false que quand contrat desactivé
-            'contratEtatSortie' => [
-                'input' => [
-                    'required' => false,
-                ],
-            ],
-            'avenantEtatSortie' => [
-                'input' => [
-                    'required' => false,
-                ],
-            ],
-            'tauxRemu'          => [
-                'input' => [
-                    'required' => false,
-                ],
-            ],
+                                    if ($generation && $depot && $visu && $access) {
+                                        return 'generation';
+                                    } elseif ($depot && $visu && $access) {
+                                        return 'depot';
+                                    } elseif ($visu && $access) {
+                                        return 'visualisation';
+                                    } elseif ($access) {
+                                        return 'active';
+                                    } else {
+                                        return 'desactive';
+                                    }
+                                },
+                                'setter' => function (Statut $statut, $value, string $name) {
+                                    $access     = false;
+                                    $visu       = false;
+                                    $depot      = false;
+                                    $generation = false;
+                                    switch ($value) {
+                                        case 'generation':
+                                            $generation = true;
+                                        case 'depot':
+                                            $depot = true;
+                                        case 'visualisation':
+                                            $visu = true;
+                                        case 'active':
+                                            $access = true;
+                                    }
+                                    $statut->setContrat($access);
+                                    $statut->setContratVisualisation($visu);
+                                    $statut->setContratDepot($depot);
+                                    $statut->setContratGeneration($generation);
+                                },
+                            ],
+                        ],
+                        //TODO : Créer un validateur pour le rendre false que quand contrat desactivé
+                        'contratEtatSortie' => [
+                            'input' => [
+                                'required' => false,
+                            ],
+                        ],
+                        'avenantEtatSortie' => [
+                            'input' => [
+                                'required' => false,
+                            ],
+                        ],
+                        'tauxRemu'          => [
+                            'input' => [
+                                'required' => false,
+                            ],
+                        ],
 
-            'modificationServiceDu' => [
-                'type'     => 'Select',
-                'name'     => 'modificationServiceDu',
-                'options'  => [
-                    'value_options' => [
-                        'desactive'     => 'Désactivé',
-                        'active'        => 'Activé mais non visible par l\'intervenant',
-                        'visualisation' => 'Activé et visible par l\'intervenant',
-                    ],
-                ],
-                'hydrator' => [
-                    'getter' => function(Statut $statut, string $name){
-                        $access = $statut->getModificationServiceDu();
-                        $visu   = $statut->getModificationServiceDuVisualisation();
+                        'modificationServiceDu' => [
+                            'type'     => 'Select',
+                            'name'     => 'modificationServiceDu',
+                            'options'  => [
+                                'value_options' => [
+                                    'desactive'     => 'Désactivé',
+                                    'active'        => 'Activé mais non visible par l\'intervenant',
+                                    'visualisation' => 'Activé et visible par l\'intervenant',
+                                ],
+                            ],
+                            'hydrator' => [
+                                'getter' => function (Statut $statut, string $name) {
+                                    $access = $statut->getModificationServiceDu();
+                                    $visu   = $statut->getModificationServiceDuVisualisation();
 
-                        if ($visu && $access) {
-                            return 'visualisation';
-                        } elseif ($access) {
-                            return 'active';
-                        } else {
-                            return 'desactive';
-                        }
-                    },
-                    'setter' => function(Statut $statut, $value, string $name){
-                        $access = false;
-                        $visu   = false;
-                        switch ($value) {
-                            case 'visualisation':
-                                $visu = true;
-                            case 'active':
-                                $access = true;
-                        }
-                        $statut->setModificationServiceDu($access);
-                        $statut->setModificationServiceDuVisualisation($visu);
-                    },
-                ],
-            ],
-            'tauxRemu'              => [
-                'input' => [
-                    'required' => false,
-                ],
-            ],
-            'offreEmploiPostuler'   => [
-                'type'     => 'Select',
-                'name'     => 'offreEmploiPostuler',
-                'options'  => [
-                    'value_options' => [
-                        'desactive' => 'Désactivé',
-                        'edition'   => 'Activé pour l\'intervenant',
-                    ],
-                ],
-                'hydrator' => [
-                    'getter' => function(Statut $statut, string $name){
-                        $postuler = $statut->getOffreEmploiPostuler();
+                                    if ($visu && $access) {
+                                        return 'visualisation';
+                                    } elseif ($access) {
+                                        return 'active';
+                                    } else {
+                                        return 'desactive';
+                                    }
+                                },
+                                'setter' => function (Statut $statut, $value, string $name) {
+                                    $access = false;
+                                    $visu   = false;
+                                    switch ($value) {
+                                        case 'visualisation':
+                                            $visu = true;
+                                        case 'active':
+                                            $access = true;
+                                    }
+                                    $statut->setModificationServiceDu($access);
+                                    $statut->setModificationServiceDuVisualisation($visu);
+                                },
+                            ],
+                        ],
+                        'tauxRemu'              => [
+                            'input' => [
+                                'required' => false,
+                            ],
+                        ],
+                        'offreEmploiPostuler'   => [
+                            'type'     => 'Select',
+                            'name'     => 'offreEmploiPostuler',
+                            'options'  => [
+                                'value_options' => [
+                                    'desactive' => 'Désactivé',
+                                    'edition'   => 'Activé pour l\'intervenant',
+                                ],
+                            ],
+                            'hydrator' => [
+                                'getter' => function (Statut $statut, string $name) {
+                                    $postuler = $statut->getOffreEmploiPostuler();
 
-                        if ($postuler) {
-                            return 'edition';
-                        } else {
-                            return 'desactive';
-                        }
-                    },
-                    'setter' => function(Statut $statut, $value, string $name){
-                        $postuler = false;
-                        switch ($value) {
-                            case 'edition':
-                                $postuler = true;
-                            break;
-                            case 'desactive':
-                                $postuler = false;
-                            break;
-                        }
-                        $statut->setOffreEmploiPostuler($postuler);
-                    },
-                ],
-            ],
-            'missionIndemnitees'    => [
-                'type'     => 'Select',
-                'name'     => 'missionIndemnitees',
-                'options'  => [
-                    'value_options' => [
-                        'desactive' => 'Désactivé',
-                        'edition'   => 'Activé pour l\'intervenant',
-                    ],
-                ],
-                'hydrator' => [
-                    'getter' => function(Statut $statut, string $name){
-                        $indemnitees = $statut->getMissionIndemnitees();
+                                    if ($postuler) {
+                                        return 'edition';
+                                    } else {
+                                        return 'desactive';
+                                    }
+                                },
+                                'setter' => function (Statut $statut, $value, string $name) {
+                                    $postuler = false;
+                                    switch ($value) {
+                                        case 'edition':
+                                            $postuler = true;
+                                            break;
+                                        case 'desactive':
+                                            $postuler = false;
+                                            break;
+                                    }
+                                    $statut->setOffreEmploiPostuler($postuler);
+                                },
+                            ],
+                        ],
+                        'missionIndemnitees'    => [
+                            'type'     => 'Select',
+                            'name'     => 'missionIndemnitees',
+                            'options'  => [
+                                'value_options' => [
+                                    'desactive' => 'Désactivé',
+                                    'edition'   => 'Activé pour l\'intervenant',
+                                ],
+                            ],
+                            'hydrator' => [
+                                'getter' => function (Statut $statut, string $name) {
+                                    $indemnitees = $statut->getMissionIndemnitees();
 
-                        if ($indemnitees) {
-                            return 'edition';
-                        } else {
-                            return 'desactive';
-                        }
-                    },
-                    'setter' => function(Statut $statut, $value, string $name){
-                        $indemnitees = false;
-                        switch ($value) {
-                            case 'edition':
-                                $indemnitees = true;
-                            break;
-                            case 'desactive':
-                                $indemnitees = false;
-                            break;
-                        }
-                        $statut->setMissionIndemnitees($indemnitees);
-                    },
-                ],
-            ],
-        ]);
+                                    if ($indemnitees) {
+                                        return 'edition';
+                                    } else {
+                                        return 'desactive';
+                                    }
+                                },
+                                'setter' => function (Statut $statut, $value, string $name) {
+                                    $indemnitees = false;
+                                    switch ($value) {
+                                        case 'edition':
+                                            $indemnitees = true;
+                                            break;
+                                        case 'desactive':
+                                            $indemnitees = false;
+                                            break;
+                                    }
+                                    $statut->setMissionIndemnitees($indemnitees);
+                                },
+                            ],
+                        ],
+                    ]);
 
         $this->build();
         $this->setAttribute('class', 'statut');

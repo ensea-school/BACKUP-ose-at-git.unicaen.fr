@@ -15,7 +15,7 @@ return [
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
-                'creer'                             => [
+                'creer'                        => [
                     'route'       => '/:intervenant/creer/:structure',
                     'constraints' => [
                         'structure' => '[0-9]*',
@@ -23,7 +23,7 @@ return [
                     'action'      => 'creer',
                     'controller'  => ContratController::class,
                 ],
-                'creer-mission'                     => [
+                'creer-mission'                => [
                     'route'       => '/:intervenant/creer-mission/:mission',
                     'constraints' => [
                         'mission' => '[0-9]*',
@@ -31,7 +31,7 @@ return [
                     'action'      => 'creer-mission',
                     'controller'  => ContratController::class,
                 ],
-                'supprimer'                         => [
+                'supprimer'                    => [
                     'route'       => '/:contrat/supprimer',
                     'constraints' => [
                         'contrat' => '[0-9]*',
@@ -39,7 +39,7 @@ return [
                     'action'      => 'supprimer',
                     'controller'  => ContratController::class,
                 ],
-                'valider'                           => [
+                'valider'                      => [
 
                     'route'       => '/:contrat/valider',
                     'constraints' => [
@@ -48,7 +48,7 @@ return [
                     'action'      => 'valider',
                     'controller'  => ContratController::class,
                 ],
-                'devalider'                         => [
+                'devalider'                    => [
                     'route'       => '/:contrat/devalider',
                     'constraints' => [
                         'contrat' => '[0-9]*',
@@ -56,7 +56,7 @@ return [
                     'action'      => 'devalider',
                     'controller'  => ContratController::class,
                 ],
-                'saisir-retour'                     => [
+                'saisir-retour'                => [
                     'route'       => '/:contrat/saisir-retour',
                     'constraints' => [
                         'contrat' => '[0-9]*',
@@ -64,7 +64,7 @@ return [
                     'action'      => 'saisir-retour',
                     'controller'  => ContratController::class,
                 ],
-                'exporter'                          => [
+                'exporter'                     => [
                     'route'       => '/:contrat/exporter',
                     'constraints' => [
                         'contrat' => '[0-9]*',
@@ -72,7 +72,7 @@ return [
                     'action'      => 'exporter',
                     'controller'  => ContratController::class,
                 ],
-                'envoyer-mail'                      => [
+                'envoyer-mail'                 => [
                     'route'       => '/:contrat/mail',
                     'constraints' => [
                         'contrat' => '[0-9]*',
@@ -80,31 +80,31 @@ return [
                     'action'      => 'envoyer-mail',
                     'controller'  => ContratController::class,
                 ],
-                'envoyer-signature-electronique'    => [
-                    'route'       => '/:contrat/envoyer-signature-electronique',
+                'creer-process-signature'      => [
+                    'route'       => '/:contrat/creer-process-signature',
                     'constraints' => [
                         'contrat' => '[0-9]*',
                     ],
-                    'action'      => 'envoyer-signature-electronique',
+                    'action'      => 'creer-process-signature',
                     'controller'  => ContratController::class,
                 ],
-                'supprimer-signature-electronique'  => [
-                    'route'       => '/:contrat/supprimer-signature-electronique',
+                'supprimer-process-signature'  => [
+                    'route'       => '/:contrat/supprimer-process-signature',
                     'constraints' => [
                         'contrat' => '[0-9]*',
                     ],
-                    'action'      => 'supprimer-signature-electronique',
+                    'action'      => 'supprimer-process-signature',
                     'controller'  => ContratController::class,
                 ],
-                'rafraichir-signature-electronique' => [
-                    'route'       => '/:contrat/rafraichir-signature-electronique',
+                'rafraichir-process-signature' => [
+                    'route'       => '/:contrat/rafraichir-process-signature',
                     'constraints' => [
                         'contrat' => '[0-9]*',
                     ],
-                    'action'      => 'rafraichir-signature-electronique',
+                    'action'      => 'rafraichir-process-signature',
                     'controller'  => ContratController::class,
                 ],
-                'deposer-fichier'                   => [
+                'deposer-fichier'              => [
                     'route'       => '/:contrat/deposer-fichier',
                     'constraints' => [
                         'contrat' => '[0-9]*',
@@ -112,7 +112,7 @@ return [
                     'action'      => 'deposer-fichier',
                     'controller'  => ContratController::class,
                 ],
-                'lister-fichier'                    => [
+                'lister-fichier'               => [
                     'route'       => '/:contrat/lister-fichier',
                     'constraints' => [
                         'contrat' => '[0-9]*',
@@ -120,7 +120,7 @@ return [
                     'action'      => 'lister-fichier',
                     'controller'  => ContratController::class,
                 ],
-                'telecharger-fichier'               => [
+                'telecharger-fichier'          => [
                     'route'       => '/:contrat/telecharger-fichier[/:fichier/:nomFichier]',
                     'constraints' => [
                         'contrat' => '[0-9]*',
@@ -128,7 +128,7 @@ return [
                     'action'      => 'telecharger-fichier',
                     'controller'  => ContratController::class,
                 ],
-                'supprimer-fichier'                 => [
+                'supprimer-fichier'            => [
                     'route'       => '/:contrat/supprimer-fichier[/:fichier]',
                     'constraints' => [
                         'contrat' => '[0-9]*',
@@ -217,7 +217,7 @@ return [
         ],
         [
             'controller' => ContratController::class,
-            'action'     => ['envoyer-signature-electronique', 'supprimer-signature-electronique', 'rafraichir-signature-electronique'],
+            'action'     => ['creer-process-signature', 'supprimer-process-signature', 'rafraichir-process-signature'],
             'privileges' => Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE,
             'assertion'  => Assertion\ContratAssertion::class,
         ],

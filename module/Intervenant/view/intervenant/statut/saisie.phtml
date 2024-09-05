@@ -305,7 +305,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                                 <a target="_blank" href="<?= $this->url('etat-sortie'); ?>">Page d'administration des
                                     états de sortie</a>
                             <?php endif; ?>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -323,8 +323,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                             </div>
                         <?php else: ?>
                             <?= $this->formControlGroup($form->get('contratSignatureActivation')); ?>
-                            <?= $this->formControlGroup($form->get('contratSignatureType')); ?>
-                            <?= $this->formControlGroup($form->get('contratSignatureRole')); ?>
+
                         <?php endif; ?>
 
                     </div>

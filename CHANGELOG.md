@@ -17,10 +17,10 @@
 ## Corrections de bugs
 
 * Plus de message d'erreur lorsqu'on affiche la page de validation des référentiels avec aucun service validé (#57826)
-* Seul les structures porteuses d'enseignements sont affichées dans l'onglet offre de formation (#57896)
+* Seules les structures porteuses d'enseignements sont affichées dans l'onglet offre de formation (#57896)
 * Correction du report du service référentiel impacté par l'annualisation des fonctions (#57947)
 * Modification du connecteur pégase : Utilisation de "structure_porteuse" si elle existe au lieu de "code_structure" provenant de pégase pour la structure d'un élément
-
+* Correction de l'état de problèmes de calcul sur l'export CSV des missions
 
 # OSE 23.7 (11/07/2024)
 

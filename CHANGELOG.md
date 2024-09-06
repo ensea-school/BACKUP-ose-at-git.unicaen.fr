@@ -1,14 +1,16 @@
 # Version stable
 
-[OSE 23.7](#ose-237-11072024)
+[OSE 23.8](#ose-238-06092024)
 
 
 
 # OSE 24 (à venir)
 
-* Optimisation des calculs de validation de volumes horaires
+* Nouvelle infrastructure de gestion des formules de calcul
+* Nouvelle page de demandes de mise en paiement
 
-# OSE 23.8 (à venir)
+
+# OSE 23.8 (06/09/2024)
 
 ## Améliorations
 

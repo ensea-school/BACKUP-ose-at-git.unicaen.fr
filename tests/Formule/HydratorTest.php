@@ -4,12 +4,10 @@ namespace tests\Formule;
 
 use Doctrine\ORM\EntityManager;
 use Formule\Entity\FormuleIntervenant;
-use Formule\Entity\FormuleVolumeHoraire;
 use Formule\Hydrator\FormuleIntervenantHydrator;
-use Formule\Model\Arrondisseur\Ligne;
 use tests\OseTestCase;
 
-final class HydtatorTest extends OseTestCase
+final class HydratorTest extends OseTestCase
 {
 
     public function testLigne()

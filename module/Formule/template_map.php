@@ -4,6 +4,4 @@
  * Commande : php public/index.php UnicaenCode  module='Formule'
  */
 return [
-    'formule/affichage/voir-heures-comp'    => __DIR__ . '/view/formule/affichage/voir-heures-comp.phtml',
-    'formule/affichage/formule-totaux-hetd' => __DIR__ . '/view/formule/affichage/formule-totaux-hetd.phtml',
 ];

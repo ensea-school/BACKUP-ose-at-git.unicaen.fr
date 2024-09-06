@@ -9,7 +9,7 @@ use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 
-class FormuleIntervenant implements FormuleHeuresInterface
+class FormuleIntervenant
 {
     // Identifiants
     protected ?int $id = null;

@@ -8,8 +8,9 @@ use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\Db\FormuleTestVolumeHoraire;
 use Formule\Entity\FormuleIntervenant;
-use Formule\Entity\FormuleTableur;
 use Formule\Model\AbstractFormuleCalcul;
+use Formule\Model\Arrondisseur\Arrondisseur;
+use Formule\Model\FormuleTableur;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -29,8 +30,16 @@ class FormulatorService
     use EtatVolumeHoraireServiceAwareTrait;
     use FormuleServiceAwareTrait;
 
-    private array   $formulesCalculCache = [];
-    private ?string $lastTestError       = null;
+    private array        $formulesCalculCache = [];
+    private ?string      $lastTestError       = null;
+    private Arrondisseur $arrondisseur;
+
+
+
+    public function __construct()
+    {
+        $this->arrondisseur = new Arrondisseur();
+    }
 
 
 
@@ -85,6 +94,7 @@ class FormulatorService
         }
         $fc = $this->getFormuleCalcul($formule);
         $fc->calculer($intervenant, $formule);
+        $this->arrondisseur->arrondir($intervenant);
     }
 
 

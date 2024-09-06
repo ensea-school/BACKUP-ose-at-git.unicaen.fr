@@ -7,7 +7,7 @@ use Enseignement\Entity\Db\VolumeHoraire;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 
-class FormuleVolumeHoraire implements FormuleHeuresInterface
+class FormuleVolumeHoraire
 {
     // Identifiants
     protected ?int $id = null;

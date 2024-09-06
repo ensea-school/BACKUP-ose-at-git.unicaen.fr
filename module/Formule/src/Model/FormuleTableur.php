@@ -1,6 +1,6 @@
 <?php
 
-namespace Formule\Entity;
+namespace Formule\Model;
 
 
 use Application\Service\Traits\ContextServiceAwareTrait;

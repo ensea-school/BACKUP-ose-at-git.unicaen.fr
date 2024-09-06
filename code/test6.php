@@ -8,28 +8,31 @@
  * @var $viewFile   string
  */
 
+/** @var \Formule\Service\TestService $sft */
+$sft = $container->get(\Formule\Service\TestService::class);
 
-$expr = "of:=IF([.E25]=\"Non\";0;IF([.J25]=\"TP\";1;HLOOKUP([.J25];[$'Saisie & résultats'.S$2:.V$3];2;0)))";
+/** @var \Formule\Service\FormulatorService $formulator */
+$formulator = $container->get(\Formule\Service\FormulatorService::class);
 
-$expr = "of:=[$'Saisie & résultats'.S$2:.V$3]";
+$bdd = OseAdmin::instance()->getBdd();
 
+$minId = 226071;
 
-$exprs = [
-    "of:=[$'Saisie & résultats'.S$2:.V$3]",
-    "of:=[\$Test.S$2:.V$3]",
-    "of:=[.S$2:.V$3]",
-    "of:=[$'Saisie & résultats'.S$2]",
-    "of:=[\$Test.S$2]",
-    "of:=[.S$2]",
-];
+$max = (int)$bdd->selectOne("SELECT count(*) CC FROM formule_test_intervenant fi WHERE fi.id > $minId", [], 'CC');
 
-foreach( $exprs as $expr) {
-    $formule = new \Unicaen\OpenDocument\Calc\Formule($expr);
-    echo \Unicaen\OpenDocument\Calc\Display::formule($formule);
+$sql = "SELECT ID FROM formule_test_intervenant fi WHERE fi.id > $minId ORDER BY ID";
+
+$num = 0;
+$parser = $bdd->selectEach($sql);
+while($data = $parser->next()){
+    $num++;
+    $id = (int)$data['ID'];
+
+    $fti = $sft->get($id);
+
+    $formulator->calculer($fti);
+
+    $sft->save($fti);
+    $sft->getEntityManager()->clear();
+    echo "Calcul effectué pour ".$id." - $num / $max\n";
 }
-
-/*
-$expr = "of:=SUMIF([.A$25:.A$505];i_structure_code;[.AO$25:.AO$50])";
-$formule = new \Unicaen\OpenDocument\Calc\Formule($expr);
-echo \Unicaen\OpenDocument\Calc\Display::formule($formule);
-*/

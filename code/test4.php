@@ -70,7 +70,7 @@ class Reverse
     public $packageLineBegin = 156;
     public $packageLineEnd = 476;
 
-    public \Formule\Entity\FormuleTableur $tableur;
+    public \Formule\Model\FormuleTableur $tableur;
 
     public array $result = [];
 
@@ -153,7 +153,7 @@ class Reverse
     {
         $tableur = new \Unicaen\OpenDocument\Document();
         $tableur->loadFromFile('/app/data/formules/' . $this->formule . '.ods');
-        $this->tableur = new \Formule\Entity\FormuleTableur($tableur->getCalc());
+        $this->tableur = new \Formule\Model\FormuleTableur($tableur->getCalc());
         //  $this->tableur->lire();
     }
 

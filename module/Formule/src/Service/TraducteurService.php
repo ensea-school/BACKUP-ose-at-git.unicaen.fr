@@ -4,8 +4,8 @@ namespace Formule\Service;
 
 
 use Formule\Entity\FormuleIntervenant;
-use Formule\Entity\FormuleTableur;
 use Formule\Entity\FormuleVolumeHoraire;
+use Formule\Model\FormuleTableur;
 use Unicaen\OpenDocument\Calc;
 
 /**

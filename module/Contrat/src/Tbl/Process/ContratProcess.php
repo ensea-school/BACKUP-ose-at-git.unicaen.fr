@@ -4,6 +4,7 @@ namespace Contrat\Tbl\Process;
 
 
 use Application\Entity\Db\Parametre;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use ServiceAContractualiser;
@@ -16,7 +17,7 @@ class ContratProcess implements ProcessInterface
     use BddServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
-
+    use AnneeServiceAwareTrait;
     private string  $codeEns      = 'ENS';
 
     private string  $codeMis      = 'MIS';
@@ -45,12 +46,15 @@ class ContratProcess implements ProcessInterface
 
 
 
-    protected function init()
+    protected function init(array $params = [])
     {
         $parametres = $this->getServiceParametres();
 
-        $regleA       = $parametres->get('avenant');
-        $this->regleA = $regleA;
+
+
+        $this->regleA       = $parametres->get('avenant');
+        $this->regleCM       = $parametres->get('avenant');
+        $this->regleCE       = $parametres->get('avenant');
 
         $this->services = [];
         $this->tblData  = [];
@@ -60,12 +64,20 @@ class ContratProcess implements ProcessInterface
 
     public function run(TableauBord $tableauBord, array $params = [])
     {
-        $this->init();
-        $this->loadAContractualiser($params);
-        $this->traitement();
-        $this->exporter();
-        $this->enregistrement($tableauBord, $params);
-        $this->clear();
+
+        if (empty($params)){
+            $annees = $this->getServiceAnnee()->getActives();
+            foreach( $annees as $annee ){
+                $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
+            }
+        }else {
+            $this->init($params);
+            $this->loadAContractualiser($params);
+            $this->traitement();
+            $this->exporter();
+            $this->enregistrement($tableauBord, $params);
+            $this->clear();
+        }
     }
 
 
@@ -123,7 +135,12 @@ class ContratProcess implements ProcessInterface
         $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
         // on merge dans la table
 
-        $table->merge($this->tblData, $key);
+        $options = [
+            'where'              => $params,
+            'return-insert-data' => false,
+        ];
+
+        $table->merge($this->tblData, $key, $options);
         // on vide pour limiter la conso de RAM
         $this->tblData = [];
     }

@@ -26,7 +26,7 @@ final class ConsolidateurTest extends OseTestCase
 
         $this->consolidateur->consolider($sapObject);
         $calc = $sapObject->toArray();
-        $this->assertArrayEquals($calc, $await);
+        $this->assertArrayEquals($await, $calc);
     }
 
 

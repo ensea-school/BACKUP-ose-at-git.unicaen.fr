@@ -29,7 +29,7 @@ final class RapprocheurTest extends OseTestCase
         $calc = $sapObject->toArray();
 //        var_dump($regle);
 //        arrayDump($calc);
-        $res = $this->assertArrayEquals($calc, $await);
+        $res = $this->assertArrayEquals($await, $calc);
     }
 
 

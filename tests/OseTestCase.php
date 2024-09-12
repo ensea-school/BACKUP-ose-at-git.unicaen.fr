@@ -45,7 +45,7 @@ class OseTestCase extends TestCase
                 return $this->error('Des valeurs ne sont pas du même type ('.$p.') : '.$a2Type.' attendu pour '.$a1Type.' calculé');
             }
             if (is_array($actual[$k])){
-                if (!$this->assertArrayEquals($actual[$k], $expected[$k], $strict, $p)){
+                if (!$this->assertArrayEquals($expected[$k], $actual[$k], $strict, $p)){
                     return $this->error('Des sous-tableaux sont différentes ('.$p.')');
                 }
             }else{

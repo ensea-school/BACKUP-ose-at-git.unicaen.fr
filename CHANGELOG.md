@@ -15,7 +15,8 @@
 
 * Prise en compte du bon nombre d'heures de la mission lors de l'export RH dans SIHAM
 * Bloquer la possiblité de saisir un date antérieure à la date de début dans le cadre d'une mission
-
+* Correction du connecteur Pégase pour pouvoir utiliser les formations comme étape
+* 
 # OSE 23.8 (06/09/2024)
 
 ## Améliorations

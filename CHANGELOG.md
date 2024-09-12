@@ -9,6 +9,12 @@
 * Nouvelle infrastructure de gestion des formules de calcul
 * Nouvelle page de demandes de mise en paiement
 
+# OSE 23.9 (à venir)
+
+## Corrections de bugs
+
+* Prise en compte du bon nombre d'heures de la mission lors de l'export RH dans SIHAM
+* Bloquer la possiblité de saisir un date antérieure à la date de début dans le cadre d'une mission
 
 # OSE 23.8 (06/09/2024)
 

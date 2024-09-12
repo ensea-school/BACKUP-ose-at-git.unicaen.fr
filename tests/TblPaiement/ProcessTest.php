@@ -98,7 +98,7 @@ final class ProcessTest extends OseTestCase
     {
         $calc = $this->pp->testData($data);
 
-        $this->assertArrayEquals($calc, $await);
+        $this->assertArrayEquals($await, $calc);
     }
 
 

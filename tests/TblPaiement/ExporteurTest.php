@@ -27,7 +27,7 @@ final class ExporteurTest extends OseTestCase
         $calc = [];
         $this->exporteur->exporter($sapObject, $calc);
 
-        $this->assertArrayEquals($calc, $await);
+        $this->assertArrayEquals($await, $calc);
     }
 
 

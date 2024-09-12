@@ -246,8 +246,8 @@ class ContratService extends AbstractEntityService
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
-            $contrat->getIntervenant()->getNomUsuel(),
-            $contrat->getIntervenant()->getCode());
+                            $contrat->getIntervenant()->getNomUsuel(),
+                            $contrat->getIntervenant()->getCode());
 
         if ($contrat->estUnAvenant()) {
             $modele = $contrat->getIntervenant()->getStatut()->getAvenantEtatSortie();
@@ -312,7 +312,7 @@ class ContratService extends AbstractEntityService
             JOIN c.intervenant i
             JOIN c.mission m
             WHERE c.intervenant = :intervenant
-                AND c.dateRetourSigne IS NOT NULL
+                --AND c.dateRetourSigne IS NOT NULL
                 AND c.histoDestruction IS NULL
             ORDER BY m.dateDebut ASC
         ";

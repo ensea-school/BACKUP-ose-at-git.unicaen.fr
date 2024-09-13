@@ -207,6 +207,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             /*Recherche de la date d'effet à passer selon enseignement ou mission, si mission on prend la première mission de l'année universitaire
             sinon on prend les dates de début et de fin de l'année universitaire*/
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
+
             if (!empty($firstMission)) {
                 $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
                 $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
@@ -215,7 +216,6 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
                 $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
             }
-
 
             /*CARRIERE*/
             $carriere = [
@@ -277,7 +277,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             /*SITUATION FAMILIALE*/
             $situationFamiliale = [];
             if ($dossierIntervenant->getSituationMatrimoniale()) {
-                $dateEffetSituationFamilliale = ($dossierIntervenant->getDateSituationMatrimoniale()) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : '';
+                $dateEffetSituationFamilliale = ($dossierIntervenant->getDateSituationMatrimoniale()) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : $dateEffet;
                 $codeSituationFamilliale      = ($dossierIntervenant->getSituationMatrimoniale()) ? $dossierIntervenant->getSituationMatrimoniale()->getCode() : '';
                 $situationFamiliale[]         =
                     ['dateEffetSituFam' => $dateEffetSituationFamilliale,
@@ -322,7 +322,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $coordonneesBancaires[] = $coordonnees;
             }
 
-            $coordonneesTelMail[] = '';
+            $coordonneesTelMail = [];
             if ($datas['generiqueFieldset']['telPro'] && !empty($dossierIntervenant->getTelPro())) {
                 $coordonneesTelMail[] = [
                     'dateDebutTel' => $dateEffet,
@@ -338,11 +338,14 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ];
             }
             if ($datas['generiqueFieldset']['emailPro'] && !empty($dossierIntervenant->getEmailPro())) {
-                $coordonneesTelMail[] = [
-                    'dateDebutTel' => $dateEffet,
-                    'numero'       => $dossierIntervenant->getEmailPro(),
-                    'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO,
-                ];
+                //Hook temporaire en attendant correction webservice, on ne passe pas l'email pro si elle contient 'etu.unicaen' dans le nom de domaine
+                if (!preg_match('/@etu\.unicaen/', $dossierIntervenant->getEmailPro())) {
+                    $coordonneesTelMail[] = [
+                        'dateDebutTel' => $dateEffet,
+                        'numero'       => $dossierIntervenant->getEmailPro(),
+                        'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO,
+                    ];
+                }
             }
             if ($datas['generiqueFieldset']['emailPerso'] && !empty($dossierIntervenant->getEmailPerso())) {
                 $coordonneesTelMail[] = [
@@ -408,6 +411,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'UO'                        => $datas['connecteurForm']['affectation'],
             ];
 
+
             //Si la creation du contrat via les WS est activé
             if ($this->siham->getConfig()['contrat']) {
 
@@ -415,8 +419,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $params['listeContrats'] = $contrat;
                 }
             }
-
-
+        
             $matricule = $this->siham->priseEnChargeAgent($params);
 
             return $matricule;
@@ -435,11 +438,11 @@ class SihamConnecteur implements ConnecteurRhInterface
             'taux'       => '',
         ];
 
-        $sql = 'SELECT "totalHETD","tauxHoraireValeur" FROM V_CONTRAT_MAIN WHERE intervenant_id = :intervenant';
+        $sql = 'SELECT "hetdContrat","tauxHoraireValeur" FROM V_CONTRAT_MAIN WHERE intervenant_id = :intervenant';
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $intervenant->getId()]);
 
         if (!empty($res)) {
-            $infos['totalHeure'] = str_replace(',', '.', $res[0]['totalHETD']);
+            $infos['totalHeure'] = str_replace(',', '.', $res[0]['hetdContrat']);
             $infos['taux']       = str_replace(',', '.', $res[0]['tauxHoraireValeur']);
         }
 
@@ -842,8 +845,8 @@ class SihamConnecteur implements ConnecteurRhInterface
             $params = [
                 'codeAdministration' => '',
                 'listeUO'            => [[
-                                             'typeUO' => $code,
-                                         ]],
+                    'typeUO' => $code,
+                ]],
             ];
 
             $uo = array_merge($uo, $this->siham->recupererListeUO($params));

@@ -15,6 +15,7 @@ SELECT
   c.type_contrat_id                                                               type_contrat_id,
 
   ts.id                                                                           type_service_id,
+  ts.code                                                                         type_service_code,
   NULL                                                                            mission_id,
   vh.service_id                                                                   service_id,
   NULL                                                                            service_referentiel_id,
@@ -86,6 +87,7 @@ SELECT
   c.type_contrat_id                                                               type_contrat_id,
 
   ts.id                                                                           type_service_id,
+  ts.code                                                                         type_service_code,
   NULL                                                                            mission_id,
   NULL                                                                            service_id,
   vhr.service_referentiel_id                                                      service_referentiel_id,
@@ -157,6 +159,7 @@ SELECT
   c.type_contrat_id                                                               type_contrat_id,
 
   ts.id                                                                           type_service_id,
+  ts.code                                                                         type_service_code,
   m.id                                                                            mission_id,
   NULL                                                                            service_id,
   NULL                                                                            service_referentiel_id,

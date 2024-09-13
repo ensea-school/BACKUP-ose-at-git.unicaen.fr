@@ -18,15 +18,17 @@ class ContratProcess implements ProcessInterface
     use ParametresServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
     use AnneeServiceAwareTrait;
-    private string  $codeEns      = 'ENS';
 
-    private string  $codeMis      = 'MIS';
+    private string $codeEns = 'ENS';
 
-    private array   $tauxRemuUuid = [];
+    private string $codeMis = 'MIS';
 
-    protected array $services     = [];
+    private array $tauxRemuUuid       = [];
+    private array $intervenantContrat = [];
 
-    protected array $tblData      = [];
+    protected array $services = [];
+
+    protected array $tblData = [];
 
     //Regle sur les contrats enseignement "contrat_ens" des parametres generaux
     private string $regleCE;
@@ -51,10 +53,7 @@ class ContratProcess implements ProcessInterface
         $parametres = $this->getServiceParametres();
 
 
-
-        $this->regleA       = $parametres->get('avenant');
-        $this->regleCM       = $parametres->get('avenant');
-        $this->regleCE       = $parametres->get('avenant');
+        $this->regleA = $parametres->get('avenant');
 
         $this->services = [];
         $this->tblData  = [];
@@ -65,12 +64,12 @@ class ContratProcess implements ProcessInterface
     public function run(TableauBord $tableauBord, array $params = [])
     {
 
-        if (empty($params)){
+        if (empty($params)) {
             $annees = $this->getServiceAnnee()->getActives();
-            foreach( $annees as $annee ){
+            foreach ($annees as $annee) {
                 $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
             }
-        }else {
+        } else {
             $this->init($params);
             $this->loadAContractualiser($params);
             $this->traitement();
@@ -118,6 +117,23 @@ class ContratProcess implements ProcessInterface
                     }
                 }
             }
+            if ($service["TYPE_CONTRAT_ID"] == null) {
+                $Valeur = $service["TYPE_SERVICE_CODE"] == 'MIS' ? $service["MISSION_ID"] : 0;
+
+                $contratPresent = isset($this->intervenantContrat[$service["INTERVENANT_ID"]][$Valeur]) && $this->intervenantContrat[$service["INTERVENANT_ID"]][$Valeur];
+                if ($this->regleA == Parametre::AVENANT_DESACTIVE && $contratPresent) {
+                    $serviceContrat['ACTIF'] = 0;
+                }
+
+
+                if ($contratPresent) {
+                    $service["TYPE_CONTRAT_ID"] = 2;
+                } else {
+                    $service["TYPE_CONTRAT_ID"] = 1;
+
+                }
+            }
+
             $this->services[$id] = $service;
         }
     }
@@ -160,11 +176,13 @@ class ContratProcess implements ProcessInterface
         $taux_remu_temp  = 0;
 
         while ($serviceContrat = $servicesContrat->fetchAssociative()) {
-            $uuid      = $serviceContrat['UUID'];
-            $avenant   = $serviceContrat['TYPE_CONTRAT_ID'];
-            $taux_remu = $serviceContrat['TAUX_REMU_ID'];
-            if ($this->regleA == Parametre::AVENANT_DESACTIVE && $avenant == 2) {
-                $serviceContrat['ACTIF'] = 0;
+            $uuid        = $serviceContrat['UUID'];
+            $taux_remu   = $serviceContrat['TAUX_REMU_ID'];
+            $typeContrat = $serviceContrat['TYPE_CONTRAT_ID'];
+            if ($typeContrat != null && $serviceContrat['TYPE_SERVICE_CODE'] != 'MIS') {
+                $this->intervenantContrat[$serviceContrat["INTERVENANT_ID"]][0] = true;
+            } else if ($typeContrat != null && $serviceContrat['TYPE_SERVICE_CODE'] == 'MIS') {
+                $this->intervenantContrat[$serviceContrat["INTERVENANT_ID"]][$serviceContrat["MISSION_ID"]] = true;
             }
 
             $this->services[]          = $serviceContrat;
@@ -207,6 +225,7 @@ class ContratProcess implements ProcessInterface
                 "TP"                        => $service["TP"],
                 "CONTRAT_ID"                => $service["CONTRAT_ID"],
                 "CONTRAT_PARENT_ID"         => $service["CONTRAT_PARENT_ID"],
+                "TYPE_CONTRAT_ID"           => $service["TYPE_CONTRAT_ID"],
                 "DATE_CREATION"             => $service["DATE_CREATION"],
                 "DATE_DEBUT"                => $service["DATE_DEBUT"],
                 "DATE_FIN"                  => $service["DATE_FIN"],
@@ -225,13 +244,14 @@ class ContratProcess implements ProcessInterface
                 "VOLUME_HORAIRE_ID"         => $service["VOLUME_HORAIRE_ID"],
                 "VOLUME_HORAIRE_REF_ID"     => $service["VOLUME_HORAIRE_REF_ID"],
                 "VOLUME_HORAIRE_MISSION_ID" => $service["VOLUME_HORAIRE_MISSION_ID"],
+                "UUID"                      => $service["UUID"],
+                "TYPE_SERVICE_ID"           => $service["TYPE_SERVICE_ID"],
                 //A retirer apres refonte calcul workflow
                 "NBVH"                      => 0,
             ];
             $this->tblData[] = $ldata;
         }
-        
-        
+
 
     }
 

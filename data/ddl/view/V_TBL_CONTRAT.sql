@@ -42,7 +42,8 @@ SELECT
   COALESCE(ep.taux_remu_id, si.taux_remu_id, CAST(ptr.valeur AS INT))             taux_remu_id,
   COALESCE(ep.taux_remu_id, si.taux_remu_id, CAST(ptr.valeur AS INT))             taux_remu_majore_id,
 
-  0.0                                                                             taux_conges_payes
+  0.0                                                                             taux_conges_payes,
+  0.0                                                                             process_id
 FROM
             volume_horaire          vh
        JOIN type_service            ts ON ts.code = 'ENS'
@@ -114,7 +115,8 @@ SELECT
   COALESCE(si.taux_remu_id, CAST(ptr.valeur AS INT))                              taux_remu_id,
   COALESCE(si.taux_remu_id, CAST(ptr.valeur AS INT))                              taux_remu_majore_id,
 
-  0.0                                                                             taux_conges_payes
+  0.0                                                                             taux_conges_payes,
+  0.0                                                                             process_id
 FROM
             volume_horaire_ref          vhr
        JOIN type_service                ts ON ts.code = 'REF'
@@ -186,7 +188,8 @@ SELECT
   COALESCE(si.taux_remu_id, CAST(ptr.valeur AS INT))                              taux_remu_id,
   COALESCE(si.taux_remu_id, CAST(ptr.valeur AS INT))                              taux_remu_majore_id,
 
-  CAST(tcp.valeur AS FLOAT)                                                       taux_conges_payes
+  CAST(tcp.valeur AS FLOAT)                                                       taux_conges_payes,
+  0.0                                                                             process_id
 FROM
             volume_horaire_mission          vhm
        JOIN type_service                    ts ON ts.code = 'MIS'

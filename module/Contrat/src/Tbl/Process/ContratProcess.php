@@ -7,7 +7,6 @@ use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
-use ServiceAContractualiser;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -30,12 +29,6 @@ class ContratProcess implements ProcessInterface
 
     protected array $tblData = [];
 
-    //Regle sur les contrats enseignement "contrat_ens" des parametres generaux
-    private string $regleCE;
-
-    //Regle sur les contrats mission "contrat_mis" des parametres generaux
-    private string $regleCM;
-
     //Regle sur les avenants "avenant" des parametres generaux
     private string $regleA;
 
@@ -48,7 +41,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    protected function init(array $params = [])
+    public function init(array $params = [])
     {
         $parametres = $this->getServiceParametres();
 
@@ -92,10 +85,12 @@ class ContratProcess implements ProcessInterface
 
 
 
-    protected function traitement()
+    public function traitement()
     {
         foreach ($this->services as $id => $service) {
-            $uuid                               = $service['UUID'];
+            $uuid = $service['UUID'];
+
+            // Calcul du taux a afficher dans le contrat selon les services se retrouvant dans un même contrat
             $service['TAUX_REMU_VALEUR']        = null;
             $service['TAUX_REMU_DATE']          = null;
             $service['TAUX_REMU_MAJORE_VALEUR'] = null;
@@ -103,7 +98,7 @@ class ContratProcess implements ProcessInterface
             if ($this->tauxRemuUuid[$uuid]) {
                 //Calcul de la valeur et date du taux
                 $tauxRemuId       = $service['TAUX_REMU_ID'];
-                $tauxRemuMajoreId = isset($service['TAUX_REMU_MAJORE_ID']) ?: null;
+                $tauxRemuMajoreId = isset($service['TAUX_REMU_MAJORE_ID']) ? $service['TAUX_REMU_MAJORE_ID'] : null;
                 if ($service['CONTRAT_ID'] != null) {
                     $date                        = $service['DATE_DEBUT'] > $service['DATE_CREATION'] ? $service['DATE_DEBUT'] : $service['DATE_CREATION'];
                     $tauxRemuValeur              = $this->getServiceTauxRemu()->tauxValeur($tauxRemuId, $date);
@@ -117,10 +112,11 @@ class ContratProcess implements ProcessInterface
                     }
                 }
             }
-            if ($service["TYPE_CONTRAT_ID"] == null) {
-                $Valeur = $service["TYPE_SERVICE_CODE"] == 'MIS' ? $service["MISSION_ID"] : 0;
 
-                $contratPresent = isset($this->intervenantContrat[$service["INTERVENANT_ID"]][$Valeur]) && $this->intervenantContrat[$service["INTERVENANT_ID"]][$Valeur];
+            //Calcul pour savoir si le contrat devra être un avenant ou un contrat
+            if ($service["TYPE_CONTRAT_ID"] == null) {
+
+                $contratPresent = isset($this->intervenantContrat[$service["UUID"]]) && $this->intervenantContrat[$service["UUID"]];
                 if ($this->regleA == Parametre::AVENANT_DESACTIVE && $contratPresent) {
                     $serviceContrat['ACTIF'] = 0;
                 }
@@ -136,6 +132,13 @@ class ContratProcess implements ProcessInterface
 
             $this->services[$id] = $service;
         }
+    }
+
+
+
+    public function getServices(): array
+    {
+        return $this->services;
     }
 
 
@@ -170,31 +173,19 @@ class ContratProcess implements ProcessInterface
         $sql = 'SELECT * FROM ('
             . $this->getServiceBdd()->injectKey($this->heuresAContractualiserSql(), $params)
             . ') t '
-            . $this->getServiceBdd()->makeWhere($params);
+            . $this->getServiceBdd()->makeWhere($params)
+            . ' ORDER BY intervenant_id, contrat_id ASC';
 
         $servicesContrat = $conn->executeQuery($sql);
         $taux_remu_temp  = 0;
-
+        $listeContrat    = [];
         while ($serviceContrat = $servicesContrat->fetchAssociative()) {
-            $uuid        = $serviceContrat['UUID'];
-            $taux_remu   = $serviceContrat['TAUX_REMU_ID'];
-            $typeContrat = $serviceContrat['TYPE_CONTRAT_ID'];
-            if ($typeContrat != null && $serviceContrat['TYPE_SERVICE_CODE'] != 'MIS') {
-                $this->intervenantContrat[$serviceContrat["INTERVENANT_ID"]][0] = true;
-            } else if ($typeContrat != null && $serviceContrat['TYPE_SERVICE_CODE'] == 'MIS') {
-                $this->intervenantContrat[$serviceContrat["INTERVENANT_ID"]][$serviceContrat["MISSION_ID"]] = true;
-            }
-
-            $this->services[]          = $serviceContrat;
-            $this->tauxRemuUuid[$uuid] = false;
-            if (!$this->tauxRemuUuid[$uuid]) {
-                $taux_remu_temp            = $taux_remu;
-                $this->tauxRemuUuid[$uuid] = true;
-            } elseif ($taux_remu_temp != $taux_remu && $this->tauxRemuUuid[$uuid]) {
-                $this->tauxRemuUuid[$uuid] = false;
-            }
+            $res            = $this->traitementQuery($serviceContrat, $listeContrat, $taux_remu_temp);
+            $listeContrat   = $res[0];
+            $taux_remu_temp = $res[1];
         }
         unset($servicesContrat);
+        unset($listeContrat);
     }
 
 
@@ -246,6 +237,7 @@ class ContratProcess implements ProcessInterface
                 "VOLUME_HORAIRE_MISSION_ID" => $service["VOLUME_HORAIRE_MISSION_ID"],
                 "UUID"                      => $service["UUID"],
                 "TYPE_SERVICE_ID"           => $service["TYPE_SERVICE_ID"],
+                "PROCESS_ID"                => $service["PROCESS_ID"],
                 //A retirer apres refonte calcul workflow
                 "NBVH"                      => 0,
             ];
@@ -262,5 +254,76 @@ class ContratProcess implements ProcessInterface
         unset($this->services);
         unset($this->tblData);
         unset($this->tauxRemuUuid);
+    }
+
+
+
+    /**
+     * @param array $serviceContrat
+     * @param array $listeContrat
+     * @param mixed $taux_remu_temp
+     * @return array
+     */
+    public function traitementQuery(array $serviceContrat, array $listeContrat, mixed $taux_remu_temp): array
+    {
+        $uuid        = $serviceContrat['UUID'];
+        $taux_remu   = $serviceContrat['TAUX_REMU_ID'];
+        $typeContrat = $serviceContrat['TYPE_CONTRAT_ID'];
+        if ($typeContrat != null && $serviceContrat['TYPE_SERVICE_CODE'] != 'MIS') {
+            $listeContrat[$serviceContrat["INTERVENANT_ID"]][0] = true;
+        } else if ($typeContrat != null && $serviceContrat['TYPE_SERVICE_CODE'] == 'MIS') {
+            $listeContrat[$serviceContrat["INTERVENANT_ID"]][$serviceContrat["MISSION_ID"]] = true;
+        }
+
+        if ($typeContrat == null && (($serviceContrat['TYPE_SERVICE_CODE'] != 'MIS'
+                    && isset($listeContrat[$serviceContrat["INTERVENANT_ID"]])
+                    && isset($listeContrat[$serviceContrat["INTERVENANT_ID"]][0])
+                    && $listeContrat[$serviceContrat["INTERVENANT_ID"]][0])
+                ||
+                ($serviceContrat['TYPE_SERVICE_CODE'] == 'MIS'
+                    && isset($listeContrat[$serviceContrat["INTERVENANT_ID"]])
+                    && isset($listeContrat[$serviceContrat["INTERVENANT_ID"]][$serviceContrat["MISSION_ID"]])
+                    && $listeContrat[$serviceContrat["INTERVENANT_ID"]][$serviceContrat["MISSION_ID"]]))) {
+
+            $this->intervenantContrat[$uuid] = true;
+        }
+
+        $this->services[] = $serviceContrat;
+        if (!isset($this->tauxRemuUuid[$uuid])) {
+            $this->tauxRemuUuid[$uuid] = true;
+            $taux_remu_temp            = null;
+        }
+        if ($taux_remu_temp == null) {
+            $taux_remu_temp = $taux_remu;
+        } elseif ($taux_remu_temp != $taux_remu && $this->tauxRemuUuid[$uuid]) {
+            $this->tauxRemuUuid[$uuid] = false;
+        }
+
+
+        return [$listeContrat, $taux_remu_temp];
+    }
+
+
+
+    public function getTauxRemuUuid(): array
+    {
+        return $this->tauxRemuUuid;
+    }
+
+
+
+    public function getIntervenantContrat(): array
+    {
+        return $this->intervenantContrat;
+    }
+
+
+
+    public function clearAfterTest()
+    {
+        $this->intervenantContrat = [];
+        $this->tauxRemuUuid       = [];
+        $this->services           = [];
+        $this->tblData            = [];
     }
 }

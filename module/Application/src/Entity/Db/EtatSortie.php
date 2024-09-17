@@ -3,7 +3,9 @@
 namespace Application\Entity\Db;
 
 
+use Intervenant\Entity\Db\Statut;
 use Laminas\Json\Json;
+use UnicaenSignature\Entity\Db\SignatureFlow;
 
 /**
  * EtatSortie
@@ -210,6 +212,10 @@ class EtatSortie
      */
     protected $bloc10Requete;
 
+    protected bool $signatureActivation = false;
+
+    protected ?SignatureFlow $signatureCircuit = null;
+
 
 
     /**
@@ -230,54 +236,6 @@ class EtatSortie
     public function setId($id): EtatSortie
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-
-
-    /**
-     * @param string $code
-     *
-     * @return EtatSortie
-     */
-    public function setCode($code): EtatSortie
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
-
-
-    /**
-     * @param string $libelle
-     *
-     * @return EtatSortie
-     */
-    public function setLibelle($libelle): EtatSortie
-    {
-        $this->libelle = $libelle;
 
         return $this;
     }
@@ -319,20 +277,6 @@ class EtatSortie
 
 
     /**
-     * @return array
-     */
-    public function getCsvParamsArray(): array
-    {
-        if ($this->csvParams) {
-            return Json::decode($this->csvParams, Json::TYPE_ARRAY);
-        } else {
-            return [];
-        }
-    }
-
-
-
-    /**
      * @param string $csvParams
      *
      * @return EtatSortie
@@ -342,6 +286,20 @@ class EtatSortie
         $this->csvParams = $csvParams;
 
         return $this;
+    }
+
+
+
+    /**
+     * @return array
+     */
+    public function getCsvParamsArray(): array
+    {
+        if ($this->csvParams) {
+            return Json::decode($this->csvParams, Json::TYPE_ARRAY);
+        } else {
+            return [];
+        }
     }
 
 
@@ -450,6 +408,44 @@ class EtatSortie
 
 
     /**
+     * @param string $fichier
+     *
+     * @return EtatSortie
+     */
+    public function setFichier($fichier): EtatSortie
+    {
+        $this->fichier = $fichier;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return EtatSortie
+     */
+    public function setCode($code): EtatSortie
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return bool
      */
     public function hasFichier(): bool
@@ -463,20 +459,6 @@ class EtatSortie
 
             return file_exists($fichierGenerique);
         }
-    }
-
-
-
-    /**
-     * @param string $fichier
-     *
-     * @return EtatSortie
-     */
-    public function setFichier($fichier): EtatSortie
-    {
-        $this->fichier = $fichier;
-
-        return $this;
     }
 
 
@@ -566,4 +548,61 @@ class EtatSortie
     {
         return $this->getLibelle();
     }
+
+
+
+    /**
+     * @return string
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+
+
+    /**
+     * @param string $libelle
+     *
+     * @return EtatSortie
+     */
+    public function setLibelle($libelle): EtatSortie
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+
+
+    public function isSignatureActivation(): bool
+    {
+        return $this->signatureActivation;
+    }
+
+
+
+    public function setSignatureActivation(bool $signatureActivation): EtatSortie
+    {
+        $this->signatureActivation = $signatureActivation;
+
+        return $this;
+    }
+
+
+
+    public function getSignatureCircuit(): ?SignatureFlow
+    {
+        return $this->signatureCircuit;
+    }
+
+
+
+    public function setSignatureCircuit(?SignatureFlow $signatureCircuit): EtatSortie
+    {
+        $this->signatureCircuit = $signatureCircuit;
+
+        return $this;
+    }
+
 }

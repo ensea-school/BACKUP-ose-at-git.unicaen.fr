@@ -36,6 +36,9 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Unicaen\OpenDocument\Document;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenSignature\Entity\Db\Process;
+use UnicaenSignature\Entity\Db\ProcessStep;
+use UnicaenSignature\Entity\Db\Signature;
 
 /**
  * Description of ContratController
@@ -161,9 +164,30 @@ class ContratController extends AbstractController
             && $intervenant->getStatut()->isContratSignatureActivation()) {
             $contratSignatureActivation = true;
         }
+        /**
+         * @var Contrat     $contrat
+         * @var Process     $process
+         * @var ProcessStep $step
+         */
+        $infosSignature = [];
+        foreach ($contrats as $contrat) {
+            $this->em()->refresh($contrat);
+            $process = $contrat->getProcessSignature();
+            if ($process) {
+
+                if ($process->getSteps()) {
+                    foreach ($process->getSteps() as $step) {
+                        if ($step->getStatus() != Signature::STATUS_SIGNATURE_DRAFT) {
+                            $infosSignature[] = $step->toArray();
+                        }
+                    }
+
+                }
+            }
+        }
 
 
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect', 'missionNotContrat', 'contratSignatureActivation');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect', 'missionNotContrat', 'contratSignatureActivation', 'infosSignature');
     }
 
 

@@ -2,7 +2,7 @@
 
 namespace Intervenant\Entity\Db;
 
-use Application\Entity\Db\Role;
+
 use Dossier\Entity\Db\DossierAutre;
 use Application\Entity\Db\EtatSortie;
 use Application\Interfaces\ParametreEntityInterface;
@@ -16,6 +16,8 @@ use Plafond\Interfaces\PlafondPerimetreInterface;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenSignature\Entity\Db\SignatureFlow;
+
 
 /**
  * Description of Statut
@@ -142,6 +144,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     private bool $contratGeneration = false;
 
     private bool $contratSignatureActivation = false;
+
+    private ?SignatureFlow $contratSignatureCircuit = null;
 
     private bool $servicePrevu = true;
 
@@ -1139,6 +1143,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setContratSignatureActivation(bool $contratSignatureActivation): Statut
     {
         $this->contratSignatureActivation = $contratSignatureActivation;
+
+        return $this;
+    }
+
+
+
+    public function getContratSignatureCircuit(): ?SignatureFlow
+    {
+        return $this->contratSignatureCircuit;
+    }
+
+
+
+    public function setContratSignatureCircuit(?SignatureFlow $contratSignatureCircuit): Statut
+    {
+        $this->contratSignatureCircuit = $contratSignatureCircuit;
 
         return $this;
     }

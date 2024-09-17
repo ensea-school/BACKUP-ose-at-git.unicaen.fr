@@ -3,6 +3,7 @@
 namespace Intervenant\Form;
 
 use Psr\Container\ContainerInterface;
+use Signature\Service\SignatureFlowService;
 use UnicaenSignature\Service\SignatureConfigurationService;
 
 
@@ -25,6 +26,7 @@ class StatutSaisieFormFactory
     {
         $form = new StatutSaisieForm();
         $form->setSignatureConfigurationService($container->get(SignatureConfigurationService::class));
+        $form->setServiceSignatureFlow($container->get(SignatureFlowService::class));
 
         return $form;
     }

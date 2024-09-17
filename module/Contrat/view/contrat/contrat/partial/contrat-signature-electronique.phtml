@@ -9,6 +9,7 @@ use Contrat\Assertion\ContratAssertion;
  * @var $services                   array
  * @var $avenant_param              int
  * @var $contratSignatureActivation boolean
+ * @var $infosSignature             array
  */
 
 $validation     = $contrat->getValidation();
@@ -129,15 +130,9 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php if (!$contrat->getProcessSignature() && $contrat->getIntervenant()->getStatut()->isContratSignatureActivation() && $contrat->getValidation()): ?>
                 <li><i class="fas fa-hourglass-start"></i> En attente d'envoi pour signature électronique</li>
             <?php endif; ?>
-            <?php if ($contrat->getProcessSignature()): ?>
-                <!--     <li><i class="fas fa-signature"></i> Envoyé pour signature
-                    électronique le //$contrat->getSignature()->getDateCreated()->format(Application\Constants::DATE_FORMAT)
-
-                </li>
-                <li><i class="fas fa-signature"></i>
-                    //$contrat->getStatutSignature()
-                </li>-->
-            <?php endif; ?>
+            <?php foreach ($infosSignature as $info): ?>
+                <li><i class="fas fa-signature"></i> <?= $info['label'] . ' (' . $info['status_text'] . ')' ?></li>
+            <?php endforeach; ?>
 
 
         </ul>

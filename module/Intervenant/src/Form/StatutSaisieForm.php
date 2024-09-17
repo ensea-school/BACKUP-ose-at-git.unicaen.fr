@@ -11,6 +11,7 @@ use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
+use Signature\Service\SignatureFlowServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenSignature\Entity\Data\LevelInfo;
 use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
@@ -25,6 +26,7 @@ class StatutSaisieForm extends AbstractForm
     use DossierAutreServiceAwareTrait;
     use SignatureConfigurationServiceAwareTrait;
     use RoleServiceAwareTrait;
+    use SignatureFlowServiceAwareTrait;
 
     public function init()
     {
@@ -60,6 +62,7 @@ class StatutSaisieForm extends AbstractForm
             'contrat'                       => '',
             'contratEtatSortie'             => 'État de sortie à utiliser pour générer le contrat',
             'contratSignatureActivation'    => 'Activer la signature électornique pour ce statut',
+            'contratSignatureCircuit'       => 'Circuit de signature du contrat',
             'avenantEtatSortie'             => 'État de sortie à utiliser pour générer d\'éventuels avenants aux contrats',
             'serviceExterieur'              => 'L\'intervenant pourra assurer des services dans d\'autres établissements',
             'cloture'                       => 'Le service réalisé devra être clôturé avant d\'accéder aux demandes de mise en paiement',
@@ -158,6 +161,15 @@ class StatutSaisieForm extends AbstractForm
                     1 => 'Activé',
                     0 => 'Désactivé',
                 ],
+            ],
+        ]]);
+
+        $this->spec(['contratSignatureCircuit' => [
+            'type'    => 'Select',
+            'name'    => 'contratSignatureCircuit',
+            'options' => [
+                'value_options' => Util::collectionAsOptions($this->getServiceSignatureFlow()->getList()),
+
             ],
         ]]);
 

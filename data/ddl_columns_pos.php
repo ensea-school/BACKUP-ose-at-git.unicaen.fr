@@ -504,6 +504,8 @@ return [
         'BLOC10_NOM',
         'BLOC10_ZONE',
         'BLOC10_REQUETE',
+        'SIGNATURE_ACTIVATION',
+        'SIGNATURE_CIRCUIT_ID',
     ],
     'ETAT_VOLUME_HORAIRE'                 => [
         'ID',
@@ -1375,6 +1377,7 @@ return [
         'MISSION_INDEMNITEES',
         'PJ_ACTIVE',
         'CONTRAT_SIGNATURE_ACTIVATION',
+        'CONTRAT_SIGNATURE_CIRCUIT_ID',
     ],
     'STRUCTURE'                           => [
         'ID',

@@ -3,6 +3,8 @@
 namespace Signature\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\Role;
+use Application\Service\Traits\RoleServiceAwareTrait;
 use Contrat\Service\ContratServiceAwareTrait;
 use Signature\Form\SignatureFlowFormAwareTrait;
 use Signature\Form\SignatureFlowStepFormAwareTrait;
@@ -36,13 +38,19 @@ class SignatureFlowController extends AbstractController
     use SignatureFlowServiceAwareTrait;
     use SignatureFlowStepServiceAwareTrait;
     use EntityManagerAwareTrait;
+    use RoleServiceAwareTrait;
 
 
     public function indexAction()
     {
-        $listeSignatureFlow    = $this->getProcessService()->getSignatureFlows();
-        $letterFileLevelsInfos = $this->getSignatureConfigurationService()->getLetterFiles();
+        $listeSignatureFlow = $this->getProcessService()->getSignatureFlows();
+        //Enrichissement des étapes du circuit pour l'affichage
+        if ($listeSignatureFlow) {
+            $listeSignatureFlow = $this->getServiceSignatureFlow()->formatDatasFlow($listeSignatureFlow);
+        }
 
+        $letterFileLevelsInfos = $this->getSignatureConfigurationService()->getLetterFiles();
+        
         return compact('listeSignatureFlow', 'letterFileLevelsInfos');
     }
 
@@ -57,7 +65,7 @@ class SignatureFlowController extends AbstractController
 
         $form = $this->getFormSignatureFLow();
 
-        $form->bindRequestSave($signatureFlow, $this->getRequest(), function($signatureFlow){
+        $form->bindRequestSave($signatureFlow, $this->getRequest(), function ($signatureFlow) {
             $this->getServiceSignatureFlow()->save($signatureFlow);
         });
 
@@ -93,7 +101,7 @@ class SignatureFlowController extends AbstractController
         }
         $form = $this->getformSignatureFlowStep();
 
-        $form->bindRequestSave($signatureFlowStep, $this->getRequest(), function($signatureFlowStep){
+        $form->bindRequestSave($signatureFlowStep, $this->getRequest(), function ($signatureFlowStep) {
             $this->getserviceSignatureFlowStep()->save($signatureFlowStep);
         });
 

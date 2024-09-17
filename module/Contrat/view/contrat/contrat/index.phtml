@@ -92,12 +92,14 @@ $this->messenger() ?>
                                         if ($contratDirect):?>
                                             <a class="btn btn-primary"
                                                href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId(), 'mission' => null]); ?>">
-                                                <i class="fas fa-file"></i> Créer un <?= $hasContrat ? 'avenant' : 'contrat' ?>
+                                                <i class="fas fa-file"></i> Créer
+                                                un <?= $hasContrat ? 'avenant' : 'contrat' ?>
                                             </a>
                                         <?php else: ?>
                                             <a class="btn btn-primary"
                                                href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId(), 'mission' => null]); ?>">
-                                                <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                                                <i class="fas fa-file"></i> Créer un
+                                                projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
                                             </a>
                                         <?php endif;
                                     else: ?>
@@ -128,7 +130,8 @@ $this->messenger() ?>
                                     <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
                                               href="#details-enseignements-structure-<?= $structure->getId() ?>"
                                               role="button"
-                                              aria-expanded="true" aria-controls="details-enseignements-structure-<?= $structure->getId() ?>"
+                                              aria-expanded="true"
+                                              aria-controls="details-enseignements-structure-<?= $structure->getId() ?>"
                                               data-bs-toggle="collapse"
                                         >Afficher/masquer</a></small>
                                 </p>
@@ -152,7 +155,7 @@ $this->messenger() ?>
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>
             <?php if ($contratSignatureActivation): ?>
-                <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param, 'contratSignatureActivation' => $contratSignatureActivation]); ?>
+                <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param, 'contratSignatureActivation' => $contratSignatureActivation, 'infosSignature' => $infosSignature]); ?>
             <?php else: ?>
                 <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param, 'contratSignatureActivation' => $contratSignatureActivation]); ?>
             <?php endif; ?>
@@ -167,8 +170,7 @@ $this->messenger() ?>
 <?= $this->feuilleDeRoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
 
 <script>
-    $("body").on("envoi-mail-contrat", function (event, data)
-    {
+    $("body").on("envoi-mail-contrat", function (event, data) {
         console.log('event envoyé et affiché');
         event.div.modal('hide'); // ferme la fenêtre modale
         window.location.reload();

@@ -261,6 +261,18 @@ return [
             'position'    => 105,
             'commentaire' => NULL,
         ],
+        'CONTRAT_SIGNATURE_CIRCUIT_ID'   => [
+            'name'        => 'CONTRAT_SIGNATURE_CIRCUIT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 38,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 106,
+            'commentaire' => NULL,
+        ],
         'CONTRAT_VISUALISATION'          => [
             'name'        => 'CONTRAT_VISUALISATION',
             'type'        => 'bool',

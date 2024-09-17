@@ -23,6 +23,7 @@ use Intervenant\Entity\Db\Statut;
 use Mission\Entity\Db\Mission;
 use RuntimeException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Unicaen\OpenDocument\Document;
 use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Entity\Db\SignatureRecipient;
@@ -226,9 +227,13 @@ class ContratService extends AbstractEntityService
 
         if ($save) {
             $config = \OseAdmin::instance()->config()->get('unicaen-signature');
-            $document->saveToFile($config['documents_path'] . '/' . $fileName);
-            //   exec('chmod 777 ' . $config['documents_path'] . $fileName);
-
+            //On récupere le contenu du contrat
+            $content = $document->saveToData();
+            file_put_contents($config['documents_path'] . '/' . $fileName, $content);
+            /*            $var = exec('chmod 777 ' . $config['documents_path'] . '/copy.pdf');
+                        dump($var);
+                        die;
+            */
             return $config['documents_path'] . '/' . $fileName;
         }
         if ($download) {
@@ -291,7 +296,24 @@ class ContratService extends AbstractEntityService
 
     public function creerProcessContratSignatureElectronique(Contrat $contrat)
     {
-        $contratFilePath = $this->generer($contrat, false, true);
+        //On récupere le contenu du contrat
+        $document = $this->generer($contrat, false, false);
+        //Création du nom du contrat
+        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
+                            $contrat->getIntervenant()->getNomUsuel(),
+                            $contrat->getIntervenant()->getCode());
+
+        $config = \OseAdmin::instance()->config()->get('unicaen-signature');
+
+        /**
+         * @var Document $document
+         */
+
+
+        $content = $document->saveToData();
+        file_put_contents($config['documents_path'] . '/' . $fileName, $content);
+        $contratFilePath = $config['documents_path'] . '/' . $fileName;
         $filename        = basename($contratFilePath);
 
         $signatureFlow      = $this->getSignatureService()->getSignatureFlowById(4);
@@ -325,6 +347,14 @@ class ContratService extends AbstractEntityService
                         ];
                     }
                 }
+                //HOOK pour ne forcer l'envoie dans esup avec mon email
+                $recipients   = [];
+                $recipients[] = [
+                    'firstname' => 'Antony',
+                    'lastname'  => 'Le Courtes',
+                    'email'     => 'antony.lecourtes@unicaen.fr',
+                ];
+
                 $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
             }
             //Si l'étape de process concerne l'intervenant du contrat on va chercher l'email de l'intervenant.
@@ -334,15 +364,23 @@ class ContratService extends AbstractEntityService
                 $prenom      = $intervenant->getPrenom();
                 $mail        = $intervenant->getEmailPerso();
 
-                $recipients[]                                    =
+                $recipients[] =
                     [
                         'firstname' => $prenom,
                         'lastname'  => $nom,
                         'email'     => $mail,
                     ];
+                //HOOK pour ne forcer l'envoie dans esup avec mon email
+                $recipients                                      = [];
+                $recipients[]                                    = [
+                    'firstname' => 'Antony',
+                    'lastname'  => 'Le Courtes',
+                    'email'     => 'antony.lecourtes@unicaen.fr',
+                ];
                 $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
             }
         }
+       
 
         $process = $this->getProcessService()->createUnconfiguredProcess($filename, 4);
         $this->getProcessService()->configureProcess($process, $signatureFlowDatas);

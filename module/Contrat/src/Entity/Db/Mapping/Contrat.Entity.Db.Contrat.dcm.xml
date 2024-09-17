@@ -76,7 +76,7 @@
                 <join-column name="MISSION_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="processSignature" target-entity="UnicaenSignature\Entity\Db\Process">
+        <many-to-one field="processSignature" target-entity="UnicaenSignature\Entity\Db\Process" fetch="EAGER">
             <join-columns>
                 <join-column name="PROCESS_SIGNATURE_ID"/>
             </join-columns>

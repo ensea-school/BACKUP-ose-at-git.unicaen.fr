@@ -22,13 +22,22 @@ class SignatureFlowForm extends AbstractForm
         $this->setAttribute('id', uniqid('fm'));
         $this->setHydrator(new SignatureFlowHydrator());
 
-        $this->spec(SignatureFlow::class);
-        $this->spec([
-            'description' => ['type' => 'Textarea'],
-            'enabled'     => ['type' => 'Checkbox'],
 
-        ]);
+        $this->spec(SignatureFlow::class);
+
+        $this->spec([
+                        'description' => ['type' => 'Textarea'],
+                        'enabled'     => ['type' => 'Checkbox'],
+
+                    ]);
+
         $this->build();
+
+        $this->setLabels([
+                             'enabled'     => 'Activé',
+                             'label'       => 'Nom du circuit',
+                             'description' => 'Description',
+                         ]);
 
         /* $this->setValueOptions('typeMission', Util::collectionAsOptions($typesMissions));
          $this->get('typeMission')->setAttribute('data-tm', json_encode($tmData));

@@ -28,7 +28,11 @@
                            href="<?= $this->url("signature-flow/saisir-circuit", ['signatureFlow' => $flow['id']]) ?>"
                            title="Modifier le circuit de signature">
                             <i class="fas fa-pen-to-square"></i>
-                        </a> Nom du circuit : <strong><?= $flow['label'] ?><strong></h3>
+                        </a> Nom du circuit : <strong><?= $flow['label'] ?></strong>
+                        <?php if (!$flow['enabled']): ?>
+                            (Desactivé)
+                        <?php endif; ?>
+                    </h3>
                     <?php if (!empty($flow['steps'])): ?>
                         <section class="steps">
                             <?php foreach ($flow['steps'] as $key => $step): ?>
@@ -66,8 +70,9 @@
                                             echo 'inconnue';
                                         }
                                         ?></strong>
-                                    <i class="fas fa-BELL"></i></i>Signataire(s) : <strong class="valued">A
-                                        définir</strong>
+                                    <i class="fas fa-BELL"></i></i>Signataire(s) : <strong class="valued">
+                                        <?= $step['typeSignataire'] ?>
+                                    </strong>
                                 </article>
                             <?php endforeach; ?>
                             <a class="btn btn-primary mod-ajax" data-submit-reload="true"

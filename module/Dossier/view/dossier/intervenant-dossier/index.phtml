@@ -93,7 +93,7 @@ $fieldsets = $form->getFieldsets();
                 <?php if ($tblDossier->getCompletude() && $intervenantDossierValidation): ?>
                     Vos données personnelles sont maintenant <span style="font-size:1em;" class="badge bg-success">Complètes</span> et
                     <span
-                        style="font-size:1em;" class="badge bg-success">Validées</span>
+                            style="font-size:1em;" class="badge bg-success">Validées</span>
                 <?php elseif ($tblDossier->getCompletude() && !$intervenantDossierValidation): ?>
                     Vos données personnelles sont maintenant <span style="font-size:1em;"
                                                                    class="badge bg-success">complètes</span> et en attente de validation par nos services
@@ -122,7 +122,7 @@ $fieldsets = $form->getFieldsets();
         <div class="row">
             <?php
             if ($canEdit) {
-                echo $this->partial('dossier/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier',));
+                echo $this->partial('dossier/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
             } else {
                 echo $this->partial('dossier/intervenant-dossier/partial/formStatutView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
             }
@@ -270,10 +270,13 @@ $fieldsets = $form->getFieldsets();
 
 
     <script type="text/javascript">
-
-        $(function () {
-
-
+        //Permettre la sélection des 100 dernières années
+        $("#dateSituationMatrimoniale").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            yearRange: "-100:+0",
+            dateFormat: 'dd/mm/yy'
         });
 
 
@@ -282,12 +285,15 @@ $fieldsets = $form->getFieldsets();
             var messageDataModificated = "Vous souhaitez changer de statut, mais vos données personnelles ont été modifié, si vous n'enregistrez pas au préalable, elles seront perdues. Souhaitez vous continuer ?"
 
             manageDepartementNaissance();
+            manageSituationMatrimoniale();
 
 
             function manageDepartementNaissance()
             {
                 var selectPays = $("select[name='DossierIdentiteComplementaire[paysNaissance]']");
                 var selectDept = $("select[name='DossierIdentiteComplementaire[departementNaissance]']");
+
+
                 var emptyDept = $("option[value='']", selectDept);
 
                 selectPays.change(function () {
@@ -308,6 +314,29 @@ $fieldsets = $form->getFieldsets();
                 selectPays.change();
             }
 
+            function manageSituationMatrimoniale()
+            {
+                var selectSituationMatrimoniale = $("select[name='DossierIdentite[situationMatrimoniale]']");
+                var dateSituationMatrimoniale = $("input[name='DossierIdentite[dateSituationMatrimoniale]']").parent('div').parent('div');
+                console.log(dateSituationMatrimoniale);
+
+                var situation = $("option:selected", selectSituationMatrimoniale).html();
+
+                if (situation == 'Célibataire') {
+                    dateSituationMatrimoniale.hide();
+                }
+
+                selectSituationMatrimoniale.change(function () {
+                    var situation = $("option:selected", selectSituationMatrimoniale).html();
+                    if (situation == 'Célibataire') {
+                        dateSituationMatrimoniale.hide();
+                    } else {
+                        dateSituationMatrimoniale.show();
+                    }
+                });
+            }
+
+
             $("select[name='DossierStatut[statut]']").change(function () {
                 if (dataModificated) {
                     if (!confirm(messageDataModificated)) {
@@ -315,12 +344,12 @@ $fieldsets = $form->getFieldsets();
                         e.stopImmediatePropagation();
                     } else {
                         var action = $("form[id='dossier']").attr('action');
-                        $("form[id='dossier']").attr('action', action+'/change-statut-dossier');
+                        $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
                         $("form[id='dossier']").submit();
                     }
                 } else {
                     var action = $("form[id='dossier']").attr('action');
-                    $("form[id='dossier']").attr('action', action+'/change-statut-dossier');
+                    $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
                     $("form[id='dossier']").submit();
                 }
             });

@@ -24,7 +24,8 @@ class ObjetFormationReader implements ReaderInterface
                     om.temoin_tele_enseignement,      
                     esp.annee_universitaire as annee_universitaire,
                     esp.date_debut_validite as date_debut_validite,
-                    esp.date_fin_validite as date_fin_validite
+                    esp.date_fin_validite as date_fin_validite,
+                    om.type_objet_maquette
                 FROM schema_odf.objet_maquette om
                 JOIN schema_odf.enfant e ON e.id_objet_maquette = om.id
                 LEFT JOIN schema_odf.espace esp on esp.id = om.id_espace';

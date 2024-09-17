@@ -380,7 +380,7 @@ class ContratService extends AbstractEntityService
                 $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
             }
         }
-       
+
 
         $process = $this->getProcessService()->createUnconfiguredProcess($filename, 4);
         $this->getProcessService()->configureProcess($process, $signatureFlowDatas);
@@ -593,7 +593,7 @@ class ContratService extends AbstractEntityService
             JOIN c.intervenant i
             JOIN c.mission m
             WHERE c.intervenant = :intervenant
-                AND c.dateRetourSigne IS NOT NULL
+                --AND c.dateRetourSigne IS NOT NULL
                 AND c.histoDestruction IS NULL
             ORDER BY m.dateDebut ASC
         ";

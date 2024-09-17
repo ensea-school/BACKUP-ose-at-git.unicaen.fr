@@ -8,14 +8,14 @@ class OseTestCase extends TestCase
 {
     private array $calc;
 
-    public function assertArrayEquals(array $a1, array $a2, bool $strict = false, string $path=''): bool
+    public function assertArrayEquals(array $expected, array $actual, bool $strict = false, string $path=''): bool
     {
         if ('' === $path){
-            $this->calc = $a1;
+            $this->calc = $actual;
         }
 
-        $k1 = array_keys($a1);
-        $k2 = array_keys($a2);
+        $k1 = array_keys($actual);
+        $k2 = array_keys($expected);
 
         $diff = array_diff($k1, $k2);
         $hasInt = false;
@@ -35,21 +35,28 @@ class OseTestCase extends TestCase
         }
 
         foreach( $k1 as $k ){
-            if (!isset($a2[$k])) continue;
+            if (!isset($expected[$k])) continue;
 
             $p = $path.'/'.$k;
-            $a1Type = getType($a1[$k]);
-            $a2Type = getType($a2[$k]);
+            $a1Type = getType($actual[$k]);
+            $a2Type = getType($expected[$k]);
+
             if ($a1Type != $a2Type){
                 return $this->error('Des valeurs ne sont pas du même type ('.$p.') : '.$a2Type.' attendu pour '.$a1Type.' calculé');
             }
-            if (is_array($a1[$k])){
-                if (!$this->assertArrayEquals($a1[$k], $a2[$k], $strict, $p)){
+            if (is_array($actual[$k])){
+                if (!$this->assertArrayEquals($expected[$k], $actual[$k], $strict, $p)){
                     return $this->error('Des sous-tableaux sont différentes ('.$p.')');
                 }
             }else{
-                if ($a1[$k] !== $a2[$k]){
-                    return $this->error('Des valeurs sont différentes ('.$p.') : '.$a2[$k].' attendu pour '.$a1[$k].' calculé');
+                if (('float' == $a1Type || 'double' == $a1Type) && ('float' == $a1Type || 'double' == $a1Type)){
+                    $diff = abs($actual[$k] - $expected[$k]) > 0.000001;
+                }else{
+                    $diff = $actual[$k] !== $expected[$k];
+                }
+
+                if ($diff){
+                    return $this->error('Des valeurs sont différentes ('.$p.') : '.$expected[$k].' attendu pour '.$actual[$k].' calculé');
                 }
             }
         }

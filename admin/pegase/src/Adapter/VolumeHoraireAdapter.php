@@ -45,7 +45,7 @@ class VolumeHoraireAdapter implements DataAdapterInterface
                 $heures = $heures / 3600.0;
                 $volumeHoraire->setVolumeHoraire($heures);
 
-                if (array_key_exists($volumeHoraire->getElementId(), $elementsPedagogiquesOdf)){
+                if (array_key_exists($volumeHoraire->getElementId(), $elementsPedagogiquesOdf) && $elementsPedagogiquesOdf[$volumeHoraire->getElementId()] != null){
                     $element = $elementsPedagogiquesOdf[$volumeHoraire->getElementId()];
                     $volumeHoraire->setAnneeDebut($element->getAnneeDebut());
                     $volumeHoraire->setAnneeFin($element->getAnneeFin());

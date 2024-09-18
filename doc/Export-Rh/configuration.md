@@ -106,6 +106,13 @@ return [
         //Permet de renseigner le code typeUO à remonter dans la liste des structures  sélectionnable dans l'export RH
         //Vous pouvez mettre plusieurs code séparés par des virgules
         'code-type-structure-affectation' => 'CODEA,CODEB,....',
+        
+         //Parametrage de la cloture d'un dossier
+        'cloture'                         => [
+            'categorie-situation' => 'MC140',
+            'motif-situation'     => 'MC601',
+        ],
+
 
         
         //Permet de filtrer les valeurs affichées dans le formulaire de prise en charge SIHAM par code répertoire

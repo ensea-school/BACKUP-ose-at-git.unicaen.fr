@@ -16,7 +16,11 @@
 * Prise en compte du bon nombre d'heures de la mission lors de l'export RH dans SIHAM
 * Bloquer la possiblité de saisir un date antérieure à la date de début dans le cadre d'une mission
 * Correction du connecteur Pégase pour pouvoir utiliser les formations comme étape
-*
+
+## Améliorations
+
+* Pour l'export RH vers SIHAM, possiblité de renseigner via le fichier de configuration le code categorie de situation et le code motif de situation pour la clôture du dossier dans SIHAM lors d'une prise en charge ou un renouvellement (#58351)
+
 # OSE 23.8 (06/09/2024)
 
 ## Améliorations

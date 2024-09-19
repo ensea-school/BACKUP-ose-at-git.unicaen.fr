@@ -15,8 +15,17 @@ class EtapeReader implements ReaderInterface
         $console->println('Récupération des étapes en cours');
 
         $config = OseAdmin::instance()->config()->get('pegase');
-        $etapes = $config['etapes'];
-        $param  = [];
+        if (isset($config['etapes'])) {
+            $etapes = $config['etapes'];
+        } else {
+            $etapes = null;
+        }
+        if (isset($config['type_objet_maquette'])) {
+            $typeObjetMaquettes = $config['type_objet_maquette'];
+        } else {
+            $typeObjetMaquettes = null;
+        }
+        $param = [];
 
         $sql = 'select
                     e.id,
@@ -34,7 +43,8 @@ class EtapeReader implements ReaderInterface
                     esp.date_debut_validite as date_debut_validite,
                     esp.date_fin_validite as date_fin_validite,
                     om.code as code,
-                    cf.code_bcn
+                    cf.code_bcn,
+                    om.type_objet_maquette
                 FROM schema_odf.objet_maquette om
                 LEFT JOIN schema_odf.objet_maquette om_formation on om.id_formation_porteuse = om_formation.id 
                 JOIN schema_odf.espace esp on esp.id = om.id_espace
@@ -42,7 +52,39 @@ class EtapeReader implements ReaderInterface
                 left JOIN schema_ref.type_diplome td ON om.code_type_diplome = td.code
                 left JOIN schema_ref.cursus_formation cf ON td.id_cursus_formation = cf.id';
 
-        if ($etapes == null or $etapes == '') {
+        $etapeOuTypeObjetMaquette = 0;
+        if (isset($etapes) && $etapes != null && $etapes != '') {
+            $i = 0;
+            foreach ($etapes as $etape) {
+                $nameCode = 'codeType' . $i;
+                if ($i != 0) {
+                    $sql .= ' OR';
+                } else {
+                    $sql .= ' WHERE';
+                }
+                $sql              .= ' om.code_type_objet_formation = :' . $nameCode;
+                $param[$nameCode] = $etape;
+                $i++;
+            }
+            $etapeOuTypeObjetMaquette++;
+        }
+        if (isset($typeObjetMaquettes) && $typeObjetMaquettes != null && $typeObjetMaquettes != '') {
+            $i = 0;
+            foreach ($typeObjetMaquettes as $typeObjetMaquette) {
+                $nameCode = 'codeType' . $i;
+                if ($i != 0 || $etapeOuTypeObjetMaquette != 0) {
+                    $sql .= ' OR';
+                } else {
+                    $sql .= ' WHERE';
+                }
+                $sql              .= ' om.type_objet_maquette = :' . $nameCode;
+                $param[$nameCode] = $typeObjetMaquette;
+                $i++;
+            }
+            $etapeOuTypeObjetMaquette++;
+        }
+
+        if ($etapeOuTypeObjetMaquette == 0) {
             $sql2    = 'select e.id_objet_maquette FROM schema_odf.enfant e GROUP BY e.id_objet_maquette';
             $resList = $pegase->select($sql2);
 
@@ -60,22 +102,10 @@ class EtapeReader implements ReaderInterface
             }
 
             $sql .= ');';
-        } else {
-            $i = 0;
-            foreach ($etapes as $etape) {
-                $nameCode = 'codeType' . $i;
-                if ($i != 0) {
-                    $sql .= ' OR';
-                } else {
-                    $sql .= ' WHERE';
-                }
-                $sql              .= ' om.code_type_objet_formation = :' . $nameCode;
-                $param[$nameCode] = $etape;
-                $i++;
-            }
         }
 
-        $res =  $pegase->select($sql, $param, ['fetch' => Bdd::FETCH_EACH]);
+
+        $res        = $pegase->select($sql, $param, ['fetch' => Bdd::FETCH_EACH]);
         $listEtapes = [];
         while ($etape = $res->next()) {
             $newEtape = new Etape();
@@ -100,7 +130,8 @@ class EtapeReader implements ReaderInterface
 
 
 
-    public function versionMin(): float
+    public
+    function versionMin(): float
     {
         // TODO: Implement versionMin() method.
         return 24.0;
@@ -108,7 +139,8 @@ class EtapeReader implements ReaderInterface
 
 
 
-    public function versionMax(): float
+    public
+    function versionMax(): float
     {
         // TODO: Implement versionMax() method.
         return 24.0;

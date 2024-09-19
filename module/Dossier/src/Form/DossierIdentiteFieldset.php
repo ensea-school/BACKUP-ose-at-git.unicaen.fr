@@ -13,6 +13,7 @@ use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Validator\Date as DateValidator;
 use Lieu\Service\DepartementServiceAwareTrait;
 use Lieu\Service\PaysServiceAwareTrait;
+use UnicaenApp\Form\Element\Date;
 
 /**
  * Description of DossierFieldset
@@ -38,68 +39,68 @@ class DossierIdentiteFieldset extends AbstractFieldset
          * Id
          */
         $this->add([
-            'name' => 'id',
-            'type' => 'Hidden',
-        ]);
+                       'name' => 'id',
+                       'type' => 'Hidden',
+                   ]);
 
         /**
          * Nom usuel
          */
         $this->add([
-            'name'       => 'nomUsuel',
-            'options'    => [
-                'label'         => 'Nom usuel <span class="text-danger">*</span>',
-                'label_options' => ['disable_html_escape' => true],
-            ],
-            'attributes' => [
-                'class' => 'dossierElement',
-            ],
-            'type'       => 'Text',
-        ]);
+                       'name'       => 'nomUsuel',
+                       'options'    => [
+                           'label'         => 'Nom usuel <span class="text-danger">*</span>',
+                           'label_options' => ['disable_html_escape' => true],
+                       ],
+                       'attributes' => [
+                           'class' => 'dossierElement',
+                       ],
+                       'type'       => 'Text',
+                   ]);
 
         /**
          * Nom patro
          */
         $this->add([
-            'name'       => 'nomPatronymique',
-            'options'    => [
-                'label'         => 'Nom de naissance',
-                'label_options' => ['disable_html_escape' => true],
-            ],
-            'attributes' => [
-                'class' => 'dossierElement',
-            ],
-            'type'       => 'Text',
-        ]);
+                       'name'       => 'nomPatronymique',
+                       'options'    => [
+                           'label'         => 'Nom de naissance',
+                           'label_options' => ['disable_html_escape' => true],
+                       ],
+                       'attributes' => [
+                           'class' => 'dossierElement',
+                       ],
+                       'type'       => 'Text',
+                   ]);
 
         /**
          * Prénom
          */
         $this->add([
-            'name'       => 'prenom',
-            'options'    => [
-                'label'         => 'Prénom <span class="text-danger">*</span>',
-                'label_options' => ['disable_html_escape' => true],],
-            'attributes' => [
-                'class' => 'dossierElement',
-            ],
-            'type'       => 'Text',
-        ]);
+                       'name'       => 'prenom',
+                       'options'    => [
+                           'label'         => 'Prénom <span class="text-danger">*</span>',
+                           'label_options' => ['disable_html_escape' => true],],
+                       'attributes' => [
+                           'class' => 'dossierElement',
+                       ],
+                       'type'       => 'Text',
+                   ]);
 
         /**
          * Civilité
          */
         $this->add([
-            'name'       => 'civilite',
-            'options'    => [
-                'label'         => 'Civilité <span class="text-danger">*</span>',
-                'label_options' => ['disable_html_escape' => true],
-            ],
-            'attributes' => [
-                'class' => 'dossierElement',
-            ],
-            'type'       => 'Select',
-        ]);
+                       'name'       => 'civilite',
+                       'options'    => [
+                           'label'         => 'Civilité <span class="text-danger">*</span>',
+                           'label_options' => ['disable_html_escape' => true],
+                       ],
+                       'attributes' => [
+                           'class' => 'dossierElement',
+                       ],
+                       'type'       => 'Select',
+                   ]);
 
         $this->get('civilite')
             ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceCivilite()->getList()));
@@ -109,16 +110,17 @@ class DossierIdentiteFieldset extends AbstractFieldset
          * Situation matrimoniale
          */
         $this->add([
-            'name'       => 'situationMatrimoniale',
-            'options'    => [
-                'label'         => 'Situation matrimoniale',
-                'label_options' => ['disable_html_escape' => true],
-            ],
-            'attributes' => [
-                'class' => 'dossierElement',
-            ],
-            'type'       => 'Select',
-        ]);
+                       'name'       => 'situationMatrimoniale',
+                       'options'    => [
+                           'label'         => 'Situation matrimoniale',
+                           'label_options' => ['disable_html_escape' => true],
+                       ],
+                       'attributes' => [
+                           'class' => 'dossierElement',
+                           'id'    => 'situationMatrimoniale',
+                       ],
+                       'type'       => 'Select',
+                   ]);
 
         $this->get('situationMatrimoniale')
             ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceSituationMatrimoniale()->getList()));
@@ -138,20 +140,25 @@ class DossierIdentiteFieldset extends AbstractFieldset
 
 
         $this->add([
-            'name'       => 'dateSituationMatrimoniale',
-            'options'    => [
-                'label'         => 'depuis le : ',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
-                'class'       => 'dossierElement',
+                       'name'       => 'dateSituationMatrimoniale',
+                       'options'    => [
+                           'label'         => 'depuis le : ',
+                           'label_options' => [
+                               'disable_html_escape' => true,
+                           ],
+                       ],
+                       'attributes' => [
+                           'placeholder' => "jj/mm/aaaa",
+                           'class'       => 'dossierElement',
+                           'id'          => 'dateSituationMatrimoniale',
 
-            ],
-            'type'       => 'UnicaenApp\Form\Element\Date',
-        ]);
+                       ],
+                       'type'       => 'UnicaenApp\Form\Element\Date',
+                   ]);
+        /**
+         * @var Date $date
+         */
+
 
         if ($statutDossierIntervenant->getDossierSituationMatrimoniale()) {
             $this->get('dateSituationMatrimoniale')->setLabel('depuis le : <span class="text-danger">*</span>');

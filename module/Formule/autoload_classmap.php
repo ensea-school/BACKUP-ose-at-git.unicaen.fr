@@ -17,7 +17,6 @@ return [
     'Formule\Entity\Db\FormuleTestIntervenant'        => __DIR__ . '/src/Entity/Db/FormuleTestIntervenant.php',
     'Formule\Entity\Db\FormuleTestVolumeHoraire'      => __DIR__ . '/src/Entity/Db/FormuleTestVolumeHoraire.php',
     'Formule\Entity\FormuleIntervenant'               => __DIR__ . '/src/Entity/FormuleIntervenant.php',
-    'Formule\Model\FormuleTableur'                => __DIR__ . '/src/Entity/FormuleTableur.php',
     'Formule\Entity\FormuleVolumeHoraire'             => __DIR__ . '/src/Entity/FormuleVolumeHoraire.php',
     'Formule\Form\HeuresCompForm'                     => __DIR__ . '/src/Form/HeuresCompForm.php',
     'Formule\Form\HeuresCompFormFactory'              => __DIR__ . '/src/Form/HeuresCompFormFactory.php',

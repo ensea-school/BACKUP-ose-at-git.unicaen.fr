@@ -202,7 +202,7 @@ final class HydratorTest extends OseTestCase
 
         $resData = $hydrator->extract($fi);
 
-        $this->assertArrayEquals($oriData, $resData);
+        $this->assertArrayEquals($resData, $oriData);
     }
 
 

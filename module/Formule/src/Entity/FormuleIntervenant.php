@@ -5,6 +5,7 @@ namespace Formule\Entity;
 use Application\Entity\Db\Annee;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Formule\Model\Arrondisseur\Ligne;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -33,6 +34,8 @@ class FormuleIntervenant
 
     // Résultats
     protected float $serviceDu = 0.0;
+
+    protected ?Ligne $arrondisseurTrace = null;
 
     /**
      * Volumes horaires
@@ -469,6 +472,21 @@ class FormuleIntervenant
     public function setParam5(?string $param5): FormuleIntervenant
     {
         $this->param5 = $param5;
+        return $this;
+    }
+
+
+
+    public function getArrondisseurTrace(): ?Ligne
+    {
+        return $this->arrondisseurTrace;
+    }
+
+
+
+    public function setArrondisseurTrace(?Ligne $arrondisseurTrace): FormuleIntervenant
+    {
+        $this->arrondisseurTrace = $arrondisseurTrace;
         return $this;
     }
 

@@ -37,6 +37,7 @@ class FormuleIntervenantHydrator extends GenericHydrator
         /** @var FormuleIntervenant $object */
 
         $data                    = parent::extract($object);
+        unset($data['arrondisseurTrace']);
         $data['volumesHoraires'] = [];
 
         foreach( $object->getVolumesHoraires() as $volumeHoraire ){

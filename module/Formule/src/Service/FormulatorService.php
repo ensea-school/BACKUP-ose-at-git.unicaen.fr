@@ -114,7 +114,6 @@ class FormulatorService
             $test                = new FormuleTestIntervenant();
         }
 
-
         return $test;
     }
 

@@ -160,7 +160,7 @@ class TraducteurService
 
 
 
-    protected function indent(string $php, int $levels = 1): string
+    public function indent(string $php, int $levels = 1): string
     {
 
         $lines = explode("\n", $php);

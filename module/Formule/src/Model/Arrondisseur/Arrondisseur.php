@@ -10,84 +10,190 @@ use Referentiel\Entity\Db\ServiceReferentiel;
 
 class Arrondisseur
 {
+
+    /** @var array|Calcul[] */
+    protected $calculs = [];
+
+
+
     public function arrondir(FormuleIntervenant $fi): void
     {
         $data = $this->makeData($fi);
 
-        $this->traitementHorizontal($data);
-        $this->traitementVertical($data);
+        $this->preparerCalculs($data);
 
-        $this->aff($data);
+        foreach ($this->calculs as $ci => $calcul) {
+            $this->traitement($calcul);
+        }
+
+        // On passe le résultat de l'arrondisseur pour débug éventuel
+        $fi->setArrondisseurTrace($data);
+
+        // Et on applique ensuite les résultats arrondis
+
     }
 
 
 
-    public function traitementHorizontal(Ligne $data)
+    protected function preparerCalculs(Ligne $data): void
     {
-        // totaux traités en horizontal
-        $total    = $data->getValeur(Ligne::TOTAL);
-        $tValeurs = [];
+        // Total toutes catégories
+        $c = $this->addCalcul($data->getValeur(Ligne::TOTAL));
         foreach (Ligne::CATEGORIES as $categorie) {
-            $tValeurs[] = $data->getValeur($categorie);
+            $c->addValeur($data->getValeur($categorie));
         }
-        $this->repartirDiff($total, $tValeurs);
+        $c->addValeur($data->getValeur(Ligne::CAT_TYPE_PRIME));
 
+
+        // Sous-total par catégorie
         foreach (Ligne::CATEGORIES as $categorie) {
-            $total    = $data->getValeur($categorie);
-            $tValeurs = [];
-            foreach (Ligne::TYPES as $type) {
-                $tValeurs[] = $data->getValeur($categorie . $type);
+            $c = $this->addCalcul($data->getValeur($categorie));
+            $c->addValeur($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            $c->addValeur($data->getValeur($categorie . Ligne::TYPE_REFERENTIEL));
+
+            // Sous-sous-total par enseignement FI/FA/FC
+            $c = $this->addCalcul($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            foreach (Ligne::TYPES_ENSEIGNEMENT as $type) {
+                $c->addValeur($data->getValeur($categorie . $type));
             }
-            $this->repartirDiff($total, $tValeurs);
         }
-    }
 
 
+        // Ensuite, on fait ruisseler par ligne de service, puis par ligne de volume horaire
+        $valeurs  = $data->getValeurs();
+        $services = $data->getSubs();
+        foreach ($valeurs as $v) {
+            $cs = $this->addCalcul($v);
+            foreach ($services as $service) {
+                $sv = $service->getValeur($v->getName());
+                $cs->addValeur($sv);
 
-    public function traitementVertical(Ligne $ligne): void
-    {
-        // Traitement vertical vers les services
-        $subs = $ligne->getSubs();
-        foreach (Ligne::CATEGORIES as $categorie) {
-            foreach (Ligne::TYPES as $type) {
-                $total = $ligne->getValeur($categorie.$type);
-                $tValeurs = [];
-                foreach ($subs as $sub) {
-                    $tValeurs[] = $sub->getValeur($categorie.$type);
+                $cvh = $this->addCalcul($sv);
+                $vhs = $service->getSubs();
+                foreach ($vhs as $vh) {
+                    $cvh->addValeur($vh->getValeur($v->getName()));
                 }
-                $this->repartirDiff($total, $tValeurs);
             }
         }
     }
 
 
 
-    public function traiterTotal(Ligne $data): void
+    protected function addCalcul(Valeur $total): Calcul
     {
-        // $data->
+        $calcul          = new Calcul($total);
+        $this->calculs[] = $calcul;
 
-        $totalTarget = round($data->getTotal(), 2);
-        //$totalSommeArrondis = round()
+        return $calcul;
     }
 
 
 
     /**
-     * @param Valeur         $somme
+     * @param Valeur         $total
      * @param array|Valeur[] $valeurs
      * @return void
      */
-    protected function repartirDiff(Valeur $somme, array $valeurs): void
+    protected function traitement(Calcul $calcul): void
     {
-        if ($somme->getValue() == 0.0) {
-            return; // rien à répartir : on est à 0
+        // Calcul de la somme des arrondis des valeurs
+        $sommeArrondis = 0;
+        $valeurs       = $calcul->getValeurs();
+        foreach ($valeurs as $vk => $valeur) {
+            $sommeArrondis += $valeur->getValueFinale();
+            if (0 == $valeur->getDiff()) {
+                // les valeurs non approximatives n'ont pas à être modifiées
+                unset($valeurs[$vk]);
+            }
         }
 
-        $target = round($somme->getValue(), 2);
-        $calc   = round($somme->getSommeArrondis(), 2);
-        if ($target == $calc) {
-            return; // rien à faire
+        // Calcul de l'arrondi de la somme
+        $arrondiSomme = round($calcul->getTotal()->getValueFinale(), 2);
+
+        // Calcul du différentiel entre la somme des arrondis et l'arrondi de la somme
+        // Le diff est un int représentant le nombre de centièmes d'écart
+        $diff = (int)(round($arrondiSomme - $sommeArrondis, 2) * 100);
+
+        // Si pas de diff, alors pas besoin de correction
+        if (0 == $diff) {
+            return; // rien à modifier : la somme est un chiffre rond
         }
+
+        $moins = $diff < 0;
+        // Tant que le diff demeure, on boucle pour le résorber
+        while ($diff != 0) {
+            if ($moins) {
+                $diff++;
+            } else {
+                $diff--;
+            }
+
+            if ($moins) {
+                // On cherche une valeur pour faire une troncature
+                $this->repartirStepMoins($valeurs);
+            } else {
+                // On cherche une valeur pour forcer un arrondi à l'excès
+                $this->repartirStepPlus($valeurs);
+            }
+
+        }
+    }
+
+
+
+    /**
+     * @param array|Valeur[] $valeurs
+     * @return void
+     */
+    private function repartirStepPlus(array $valeurs): void
+    {
+        $maxDiff    = -1000;
+        $valToModif = null;
+
+        foreach ($valeurs as $valeur) {
+            $vDiff = $valeur->getDiff();
+            // le vDiff doit être <50, sinon l'arrondi par excès est déjà celui par défaut
+            // la valeur ne doit pas déjà être arrondie
+            if ($valeur->getArrondi() == 0 && $vDiff > $maxDiff && $vDiff < 50) {
+                $maxDiff    = $vDiff;
+                $valToModif = $valeur;
+            }
+        }
+
+        if (!$valToModif) {
+            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir en excès');
+        }
+
+        $valToModif->addArrondi(1);
+
+    }
+
+
+
+    /**
+     * @param array|Valeur[] $valeurs
+     * @return void
+     */
+    private function repartirStepMoins(array $valeurs): void
+    {
+        $minDiff    = 1000;
+        $valToModif = null;
+
+        foreach ($valeurs as $valeur) {
+            $vDiff = $valeur->getDiff();
+            // le vDiff doit être >=50, sinon l'arrondi par troncature est déjà celui par défaut
+            // la valeur ne doit pas déjà être arrondie
+            if ($valeur->getArrondi() == 0 && $vDiff < $minDiff && $vDiff >= 50) {
+                $minDiff    = $vDiff;
+                $valToModif = $valeur;
+            }
+        }
+
+        if (!$valToModif) {
+            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir par troncature');
+        }
+
+        $valToModif->addArrondi(-1);
     }
 
 
@@ -134,71 +240,9 @@ class Arrondisseur
 
 
 
-    private function aff(Ligne $ligne)
+    private function test(Ligne $ligne)
     {
-        echo '<table class="table table-bordered table-xs">';
-        echo '<tr>';
-        echo '<th></th><th>Total</th>';
-        foreach (Ligne::CATEGORIES as $categorie) {
-            echo '<th>' . $categorie . '</th>';
-            foreach (Ligne::TYPES as $type) {
-                echo '<th>' . $categorie . $type . '</th>';
-            }
-        }
-        echo '</tr>';
 
-        $this->affLigne($ligne);
-        echo '<tr><td colspan="13">&nbsp;</td></tr>';
-
-
-        foreach ($ligne->getSubs() as $sk => $sl) {
-            $this->affLigne($sl, $sk);
-            foreach ($sl->getSubs() as $vk => $vl) {
-                $this->affLigne($vl, $vk);
-            }
-            echo '<tr><td colspan="13">&nbsp;</td></tr>';
-        }
-
-
-        echo '</table>';
     }
 
-
-
-    protected function affLigne(Ligne $ligne, ?string $name = null): void
-    {
-        echo '<tr>';
-        echo '<th>' . $name . '</th>';
-        echo '<td>';
-        $this->affValeur($ligne->getValeur(Ligne::TOTAL));
-        echo '</td>';
-        foreach (Ligne::CATEGORIES as $categorie) {
-            echo '<td>';
-            $this->affValeur($ligne->getValeur($categorie));
-            echo '</td>';
-            foreach (Ligne::TYPES as $type) {
-                echo '<td>';
-                $this->affValeur($ligne->getValeur($categorie . $type));
-                echo '</td>';
-            }
-        }
-        echo '</tr>';
-    }
-
-
-
-    protected function affValeur(Valeur $valeur): void
-    {
-        echo $valeur->getValueFinale() . ' ';
-
-        if ($valeur->getValue() !== $valeur->getValueFinale()) {
-            echo '<span style="color:gray">' . round($valeur->getValue(), 4) . '</span> ';
-        }
-        if ($valeur->getSommeArrondis() !== round($valeur->getValue(), 2)) {
-            echo '<span style="color:red">' . round($valeur->getSommeArrondis(), 4) . '</span> ';
-        }
-        if (0.0 !== $valeur->getDiff()) {
-            echo '<span style="color:green">' . $valeur->getDiff() . '</span> ';
-        }
-    }
 }

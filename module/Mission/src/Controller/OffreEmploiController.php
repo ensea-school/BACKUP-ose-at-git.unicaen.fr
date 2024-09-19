@@ -301,16 +301,16 @@ class  OffreEmploiController extends AbstractController
          */
         $intervenant                   = $this->getEvent()->getParam('intervenant');
         $canValiderCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
+        $canRefuserCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_REFUSER);
         $etapeDonneesPersos            = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
         $renseignerDonneesPersonnelles = ($etapeDonneesPersos->getFranchie() == 1) ? false : true;
-
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');
         }
 
 
-        return compact('intervenant', 'canValiderCandidature', 'renseignerDonneesPersonnelles');
+        return compact('intervenant', 'canValiderCandidature', 'canRefuserCandidature', 'renseignerDonneesPersonnelles');
     }
 
 

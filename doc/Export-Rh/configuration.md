@@ -144,22 +144,33 @@ return [
             'IMP'                => 'Vacataire académique sur convention',
 
         ],
-        
-        //Permet de rajouter manuellement des structures dans la liste de choix et d'en exclure
-         'unites-organisationelles' => [
-            'includes' => [
-                'U550000000' => 'U55 Carrée international',
+
+        'type-affectation'         => [
+            'FUN',
+        ],
+        //Gestion des commposantes
+        'unites-organisationelles' => [
+            //Composantes qu'on ajoute à la liste de base fournie par SIHAM pour la prise en charge
+            'includes'    => [
+                'U550000000' => 'U55 Carré international',
                 'U610000000' => 'U61 SUAPS',
                 'U450000000' => 'U45 SUFCA',
             ],
-            'excludes' => [
+            //Composantes exclus
+            'excludes'    => [
                 'U960000000',
                 'U970000000',
                 'U980000000',
-                'U990000000',
-                'U560000000',
                 'U250000000',
                 'U230000000',
+            ],
+            'regex'       => [
+                'search'  => '000000',
+                'replace' => '',
+            ],
+            'mapping-ose' => [
+                'code-ose' => 'code-siham',
+                'U01'      => 'U010000000',
             ],
         ],
         

@@ -127,7 +127,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <li><i class="fas fa-thumbs-up"></i> Modifiable par la structure
                     <?= $contrat->getStructure() ?></li>
             <?php endif; ?>
-            <?php if (!$contrat->getProcessSignature() && $contrat->getIntervenant()->getStatut()->isContratSignatureActivation() && $contrat->getValidation()): ?>
+            <?php if (!$contrat->getProcessSignature() && $contratSignatureActivation && $contrat->getValidation()): ?>
                 <li><i class="fas fa-hourglass-start"></i> En attente d'envoi pour signature électronique</li>
             <?php endif; ?>
             <?php foreach ($infosSignature as $info): ?>

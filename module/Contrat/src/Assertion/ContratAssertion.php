@@ -239,7 +239,7 @@ class ContratAssertion extends AbstractAssertion
         return $this->asserts([
                                   $this->assertRole($contrat),
                                   !$contrat->estUnProjet(),
-                                  !$contrat->getIntervenant()->getStatut()->isContratSignatureActivation(),
+                                  !$contrat->getIntervenant()->getStatut()->getContratEtatSortie()->isSignatureActivation(),
                               ]);
     }
 

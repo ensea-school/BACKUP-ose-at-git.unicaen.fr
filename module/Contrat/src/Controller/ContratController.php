@@ -161,7 +161,7 @@ class ContratController extends AbstractController
         $contratDirect              = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
         $contratSignatureActivation = false;
         if (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))
-            && $intervenant->getStatut()->isContratSignatureActivation()) {
+            && $intervenant->getStatut()->getContratEtatSortie()->isSignatureActivation()) {
             $contratSignatureActivation = true;
         }
         /**

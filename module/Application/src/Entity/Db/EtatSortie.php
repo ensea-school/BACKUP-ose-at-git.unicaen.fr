@@ -10,6 +10,7 @@ use UnicaenSignature\Entity\Db\SignatureFlow;
 /**
  * EtatSortie
  */
+#[\AllowDynamicProperties]
 class EtatSortie
 {
     /**
@@ -55,7 +56,7 @@ class EtatSortie
     /**
      * @var string
      */
-    protected $fichier;
+    protected $fichier = null;
 
     /**
      * @var string

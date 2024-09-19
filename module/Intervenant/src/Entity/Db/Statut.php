@@ -16,7 +16,6 @@ use Plafond\Interfaces\PlafondPerimetreInterface;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenSignature\Entity\Db\SignatureFlow;
 
 
 /**
@@ -142,10 +141,6 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     private bool $contratDepot = true;
 
     private bool $contratGeneration = false;
-
-    private bool $contratSignatureActivation = false;
-
-    private ?SignatureFlow $contratSignatureCircuit = null;
 
     private bool $servicePrevu = true;
 
@@ -1127,38 +1122,6 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setContratGeneration(bool $contratGeneration): Statut
     {
         $this->contratGeneration = $contratGeneration;
-
-        return $this;
-    }
-
-
-
-    public function isContratSignatureActivation(): bool
-    {
-        return $this->contratSignatureActivation;
-    }
-
-
-
-    public function setContratSignatureActivation(bool $contratSignatureActivation): Statut
-    {
-        $this->contratSignatureActivation = $contratSignatureActivation;
-
-        return $this;
-    }
-
-
-
-    public function getContratSignatureCircuit(): ?SignatureFlow
-    {
-        return $this->contratSignatureCircuit;
-    }
-
-
-
-    public function setContratSignatureCircuit(?SignatureFlow $contratSignatureCircuit): Statut
-    {
-        $this->contratSignatureCircuit = $contratSignatureCircuit;
 
         return $this;
     }

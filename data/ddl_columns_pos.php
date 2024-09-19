@@ -1376,8 +1376,6 @@ return [
         'MISSION_DECRET',
         'MISSION_INDEMNITEES',
         'PJ_ACTIVE',
-        'CONTRAT_SIGNATURE_ACTIVATION',
-        'CONTRAT_SIGNATURE_CIRCUIT_ID',
     ],
     'STRUCTURE'                           => [
         'ID',

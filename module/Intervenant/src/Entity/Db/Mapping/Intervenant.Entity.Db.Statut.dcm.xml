@@ -80,10 +80,6 @@
         <field name="contratVisualisation" type="boolean" column="CONTRAT_VISUALISATION" nullable="false"/>
         <field name="contratDepot" type="boolean" column="CONTRAT_DEPOT" nullable="false"/>
         <field name="contratGeneration" type="boolean" column="CONTRAT_GENERATION" nullable="false"/>
-        <field name="contratSignatureActivation" type="boolean" column="CONTRAT_SIGNATURE_ACTIVATION" nullable="false"/>
-        <many-to-one field="contratSignatureCircuit" target-entity="UnicaenSignature\Entity\Db\SignatureFlow">
-            <join-column name="CONTRAT_SIGNATURE_CIRCUIT_ID" referenced-column-name="id"/>
-        </many-to-one>
         <many-to-one field="contratEtatSortie" target-entity="Application\Entity\Db\EtatSortie">
             <join-column name="CONTRAT_ETAT_SORTIE_ID" referenced-column-name="ID"/>
         </many-to-one>

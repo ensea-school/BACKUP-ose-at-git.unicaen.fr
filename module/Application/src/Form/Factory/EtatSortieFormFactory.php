@@ -4,6 +4,8 @@ namespace Application\Form\Factory;
 
 use Psr\Container\ContainerInterface;
 use Application\Form\EtatSortieForm;
+use Signature\Service\SignatureFlowService;
+use UnicaenSignature\Service\SignatureConfigurationService;
 
 
 /**
@@ -24,6 +26,8 @@ class EtatSortieFormFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $form = new EtatSortieForm;
+        $form->setSignatureConfigurationService($container->get(SignatureConfigurationService::class));
+        $form->setServiceSignatureFlow($container->get(SignatureFlowService::class));
 
         return $form;
     }

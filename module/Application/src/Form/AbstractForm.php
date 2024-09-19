@@ -4,6 +4,7 @@ namespace Application\Form;
 
 use Application\Service\AbstractEntityService;
 use Application\Traits\FormFieldsetTrait;
+use BjyAuthorize\Service\Authorize;
 use Laminas\Form\Element\Csrf;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
@@ -16,16 +17,23 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
     use FormFieldsetTrait;
 
 
+    public function getAuthorize(): Authorize
+    {
+        return \OseAdmin::instance()->container()->get(Authorize::class);
+    }
+
+
+
     public function addSubmit(string $value = 'Enregistrer'): self
     {
         $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => $value,
-                'class' => 'btn btn-primary btn-save',
-            ],
-        ]);
+                       'name'       => 'submit',
+                       'type'       => 'Submit',
+                       'attributes' => [
+                           'value' => $value,
+                           'class' => 'btn btn-primary btn-save',
+                       ],
+                   ]);
 
         return $this;
     }
@@ -67,9 +75,9 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
 
             // Protection : Pour les éléments en lecture seule, on utilise les données extraites de l'entité et non celles en entrée
             $roData = [];
-            foreach( $this->getElements() as $element){
-                if (true === $element->getAttribute('readonly') || true === $element->getAttribute('disabled')){
-                    if (empty($roData)){
+            foreach ($this->getElements() as $element) {
+                if (true === $element->getAttribute('readonly') || true === $element->getAttribute('disabled')) {
+                    if (empty($roData)) {
                         $roData = $this->extract();
                     }
                     $elementName = $element->getName();

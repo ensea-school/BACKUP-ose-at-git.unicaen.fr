@@ -170,6 +170,7 @@ return [
             'offre-emploi-valider'       => 'Valider des offres d\'emploi',
             'offre-emploi-postuler'      => 'Postuler à une offre d\'emploi',
             'candidature-valider'        => 'Valider une candidature',
+            'candidature-refuser'        => 'Refuser une candidature',
             'candidature-visualisation'  => 'Visualiser les candidatures d\'une offre',
             'prime-visualisation'        => 'Visualiser les primes de fin de mission',
             'prime-gestion'              => 'Gérer les primes de fin de mission',

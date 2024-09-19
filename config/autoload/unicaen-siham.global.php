@@ -22,6 +22,8 @@ return [
 
         'contrat' => $config->get('export-rh', 'contrat'),
 
+        'cloture' => $config->get('export-rh', 'cloture'),
+
         'filters' => $config->get('export-rh', 'filters'),
 
         'exclude-statut-ose' => $config->get('export-rh', 'exclude-statut-ose'),

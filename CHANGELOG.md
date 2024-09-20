@@ -23,6 +23,8 @@
 
 * Pour l'export RH vers SIHAM, possiblité de renseigner via le fichier de configuration le code categorie de situation et le code motif de situation pour la clôture du dossier dans SIHAM lors d'une prise en charge ou un renouvellement (#58351)
 * Nouveau privilège spécifique pour refuser une candidature étudiante, se cumule avec le privilège valider une candidature étudiante.
+* Saisie de suivi de missions : la saisie d'horaires se chevauchant est désormais interdite (#57926)
+
 
 # OSE 23.8 (06/09/2024)
 

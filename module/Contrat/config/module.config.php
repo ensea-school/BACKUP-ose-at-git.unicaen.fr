@@ -5,6 +5,8 @@ namespace Contrat;
 use Application\Provider\Privilege\Privileges;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Controller\ContratController;
+use Contrat\Service\TblContratService;
+use Contrat\Service\TblContratServiceFactory;
 use Contrat\Tbl\Process\ContratProcess;
 use Contrat\Tbl\Process\ContratProcessFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
@@ -248,6 +250,7 @@ return [
         Processus\ContratProcessus::class         => Processus\ContratProcessusFactory::class,
         Service\ContratServiceListeService::class => Service\ContratServiceListeServiceFactory::class,
         ContratProcess::class                     => ContratProcessFactory::class,
+        TblContratService::class                  => TblContratServiceFactory::class,
 
     ],
     'view_helpers' => [

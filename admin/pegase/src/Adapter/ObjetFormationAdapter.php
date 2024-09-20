@@ -106,8 +106,6 @@ class ObjetFormationAdapter implements DataAdapterInterface
 
 
 
-//0d63e468-890c-4863-b55c-275b40ba99b4
-
     public function versionMin(): float
     {
         // TODO: Implement versionMin() method.

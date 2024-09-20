@@ -334,6 +334,7 @@ final class TraitementTest extends OseTestCase
             ],
         ];
 
+        $this->pp->init();
 
         $taux_remu_temp = 0;
         $listeContrat   = [];
@@ -591,6 +592,7 @@ final class TraitementTest extends OseTestCase
             ],
         ];
 
+        $this->pp->init();
 
         $taux_remu_temp = 0;
         $listeContrat   = [];
@@ -848,6 +850,263 @@ final class TraitementTest extends OseTestCase
             ],
         ];
 
+        $this->pp->init();
+
+        $taux_remu_temp = 0;
+        $listeContrat   = [];
+        foreach ($data as $casTest) {
+            $res            = $this->pp->traitementQuery($casTest, $listeContrat, $taux_remu_temp);
+            $listeContrat   = $res[0];
+            $taux_remu_temp = $res[1];
+        }
+
+        $this->pp->traitement();
+        $res = $this->pp->getServices();
+        $this->pp->clearAfterTest();
+        $this->assertArrayEquals($await, $res);
+    }
+
+    /*
+ * Mission contractualisé avec deux autre volume horaire mission, un est sur la meme structure/mission l'autre non mais les deux sont dans le meme contrat donc doivent etre des avenants
+ */
+    public function testMissionAvecContratEtAvenantDesactive()
+    {
+
+        $this->useParametres([
+                                 ['avenant', Parametre::AVENANT_DESACTIVE],
+                             ]);
+
+
+        $data = [
+            [
+                'ID'                        => NULL,
+                'ANNEE_ID'                  => 2022,
+                'INTERVENANT_ID'            => 715890,
+                'ACTIF'                     => 1,
+                'UUID'                      => 'er_715890_30373',
+                'STRUCTURE_ID'              => 594,
+                'CONTRAT_ID'                => 30373,
+                'CONTRAT_PARENT_ID'         => NULL,
+                'TYPE_CONTRAT_ID'           => 1,
+                'TYPE_SERVICE_ID'           => 1,
+                'TYPE_SERVICE_CODE'         => 'MIS',
+                'MISSION_ID'                => 1,
+                'SERVICE_ID'                => NULL,
+                'SERVICE_REFERENTIEL_ID'    => NULL,
+                'VOLUME_HORAIRE_MISSION_ID' => NULL,
+                'VOLUME_HORAIRE_ID'         => 576325,
+                'VOLUME_HORAIRE_REF_ID'     => NULL,
+                'EDITE'                     => 1,
+                'SIGNE'                     => 1,
+                'DATE_DEBUT'                => '2022-12-18',
+                'DATE_FIN'                  => NULL,
+                'DATE_CREATION'             => '2022-12-16',
+                'CM'                        => 0,
+                'TD'                        => 0,
+                'TP'                        => 0,
+                'AUTRES'                    => 10,
+                'HEURES'                    => 10,
+                'HETD'                      => 10,
+                'AUTRE_LIBELLE'             => NULL,
+                'TAUX_REMU_ID'              => 1,
+                'TAUX_REMU_MAJORE_ID'       => 2,
+                'TAUX_CONGES_PAYES'         => 10,
+                'PROCESS_ID'                => 0,
+            ],
+            [
+                'ID'                        => NULL,
+                'ANNEE_ID'                  => 2022,
+                'INTERVENANT_ID'            => 715890,
+                'ACTIF'                     => 1,
+                'UUID'                      => 'er_715890_',
+                'STRUCTURE_ID'              => 594,
+                'CONTRAT_ID'                => NULL,
+                'CONTRAT_PARENT_ID'         => NULL,
+                'TYPE_CONTRAT_ID'           => NULL,
+                'TYPE_SERVICE_ID'           => 1,
+                'TYPE_SERVICE_CODE'         => 'MIS',
+                'MISSION_ID'                => 1,
+                'SERVICE_ID'                => NULL,
+                'SERVICE_REFERENTIEL_ID'    => NULL,
+                'VOLUME_HORAIRE_MISSION_ID' => NULL,
+                'VOLUME_HORAIRE_ID'         => 576326,
+                'VOLUME_HORAIRE_REF_ID'     => NULL,
+                'EDITE'                     => 0,
+                'SIGNE'                     => 0,
+                'DATE_DEBUT'                => '2022-12-20',
+                'DATE_FIN'                  => NULL,
+                'DATE_CREATION'             => NULL,
+                'CM'                        => 0,
+                'TD'                        => 0,
+                'TP'                        => 0,
+                'AUTRES'                    => 10,
+                'HEURES'                    => 10,
+                'HETD'                      => 10,
+                'AUTRE_LIBELLE'             => NULL,
+                'TAUX_REMU_ID'              => 1,
+                'TAUX_REMU_MAJORE_ID'       => 2,
+                'TAUX_CONGES_PAYES'         => 10,
+                'PROCESS_ID'                => 0,
+            ],
+            [
+                'ID'                        => NULL,
+                'ANNEE_ID'                  => 2022,
+                'INTERVENANT_ID'            => 715890,
+                'ACTIF'                     => 1,
+                'UUID'                      => 'er_715890_',
+                'STRUCTURE_ID'              => 593,
+                'CONTRAT_ID'                => NULL,
+                'CONTRAT_PARENT_ID'         => NULL,
+                'TYPE_CONTRAT_ID'           => NULL,
+                'TYPE_SERVICE_ID'           => 1,
+                'TYPE_SERVICE_CODE'         => 'MIS',
+                'MISSION_ID'                => 2,
+                'SERVICE_ID'                => NULL,
+                'SERVICE_REFERENTIEL_ID'    => NULL,
+                'VOLUME_HORAIRE_MISSION_ID' => NULL,
+                'VOLUME_HORAIRE_ID'         => 576327,
+                'VOLUME_HORAIRE_REF_ID'     => NULL,
+                'EDITE'                     => 0,
+                'SIGNE'                     => 0,
+                'DATE_DEBUT'                => '2022-12-22',
+                'DATE_FIN'                  => NULL,
+                'DATE_CREATION'             => NULL,
+                'CM'                        => 0,
+                'TD'                        => 0,
+                'TP'                        => 0,
+                'AUTRES'                    => 10,
+                'HEURES'                    => 10,
+                'HETD'                      => 10,
+                'AUTRE_LIBELLE'             => NULL,
+                'TAUX_REMU_ID'              => 1,
+                'TAUX_REMU_MAJORE_ID'       => 2,
+                'TAUX_CONGES_PAYES'         => 10,
+                'PROCESS_ID'                => 0,
+            ],
+        ];
+
+
+        $await = [
+            [
+                'ID'                        => NULL,
+                'ANNEE_ID'                  => 2022,
+                'INTERVENANT_ID'            => 715890,
+                'ACTIF'                     => 1,
+                'UUID'                      => 'er_715890_30373',
+                'STRUCTURE_ID'              => 594,
+                'CONTRAT_ID'                => 30373,
+                'CONTRAT_PARENT_ID'         => NULL,
+                'TYPE_CONTRAT_ID'           => 1,
+                'TYPE_SERVICE_ID'           => 1,
+                'TYPE_SERVICE_CODE'         => 'MIS',
+                'MISSION_ID'                => 1,
+                'SERVICE_ID'                => NULL,
+                'SERVICE_REFERENTIEL_ID'    => NULL,
+                'VOLUME_HORAIRE_MISSION_ID' => NULL,
+                'VOLUME_HORAIRE_ID'         => 576325,
+                'VOLUME_HORAIRE_REF_ID'     => NULL,
+                'EDITE'                     => 1,
+                'SIGNE'                     => 1,
+                'DATE_DEBUT'                => NULL,
+                'DATE_FIN'                  => NULL,
+                'DATE_CREATION'             => '2022-12-16',
+                'CM'                        => 0,
+                'TD'                        => 0,
+                'TP'                        => 0,
+                'AUTRES'                    => 10,
+                'HEURES'                    => 10,
+                'HETD'                      => 10,
+                'AUTRE_LIBELLE'             => NULL,
+                'TAUX_REMU_ID'              => 1,
+                'TAUX_REMU_VALEUR'          => 42.86,
+                'TAUX_REMU_DATE'            => '2022-12-18',
+                'TAUX_REMU_MAJORE_ID'       => 2,
+                'TAUX_REMU_MAJORE_DATE'     => '2022-12-18',
+                'TAUX_REMU_MAJORE_VALEUR'   => 11.07,
+                'TAUX_CONGES_PAYES'         => 10,
+                'PROCESS_ID'                => 0,
+            ],
+            [
+                'ID'                        => NULL,
+                'ANNEE_ID'                  => 2022,
+                'INTERVENANT_ID'            => 715890,
+                'ACTIF'                     => 0,
+                'UUID'                      => 'er_715890_',
+                'STRUCTURE_ID'              => 594,
+                'CONTRAT_ID'                => NULL,
+                'CONTRAT_PARENT_ID'         => NULL,
+                'TYPE_CONTRAT_ID'           => 2,
+                'TYPE_SERVICE_ID'           => 1,
+                'TYPE_SERVICE_CODE'         => 'MIS',
+                'MISSION_ID'                => 1,
+                'SERVICE_ID'                => NULL,
+                'SERVICE_REFERENTIEL_ID'    => NULL,
+                'VOLUME_HORAIRE_MISSION_ID' => NULL,
+                'VOLUME_HORAIRE_ID'         => 576326,
+                'VOLUME_HORAIRE_REF_ID'     => NULL,
+                'EDITE'                     => 0,
+                'SIGNE'                     => 0,
+                'DATE_DEBUT'                => '2022-12-20',
+                'DATE_FIN'                  => NULL,
+                'DATE_CREATION'             => NULL,
+                'CM'                        => 0,
+                'TD'                        => 0,
+                'TP'                        => 0,
+                'AUTRES'                    => 10,
+                'HEURES'                    => 10,
+                'HETD'                      => 10,
+                'AUTRE_LIBELLE'             => NULL,
+                'TAUX_REMU_ID'              => 1,
+                'TAUX_REMU_VALEUR'          => NULL,
+                'TAUX_REMU_DATE'            => NULL,
+                'TAUX_REMU_MAJORE_ID'       => 2,
+                'TAUX_REMU_MAJORE_DATE'     => NULL,
+                'TAUX_REMU_MAJORE_VALEUR'   => NULL,
+                'TAUX_CONGES_PAYES'         => 10,
+                'PROCESS_ID'                => 0,
+            ],
+            [
+                'ID'                        => NULL,
+                'ANNEE_ID'                  => 2022,
+                'INTERVENANT_ID'            => 715890,
+                'ACTIF'                     => 0,
+                'UUID'                      => 'er_715890_',
+                'STRUCTURE_ID'              => 593,
+                'CONTRAT_ID'                => NULL,
+                'CONTRAT_PARENT_ID'         => NULL,
+                'TYPE_CONTRAT_ID'           => 2,
+                'TYPE_SERVICE_ID'           => 1,
+                'TYPE_SERVICE_CODE'         => 'MIS',
+                'MISSION_ID'                => 2,
+                'SERVICE_ID'                => NULL,
+                'SERVICE_REFERENTIEL_ID'    => NULL,
+                'VOLUME_HORAIRE_MISSION_ID' => NULL,
+                'VOLUME_HORAIRE_ID'         => 576327,
+                'VOLUME_HORAIRE_REF_ID'     => NULL,
+                'EDITE'                     => 0,
+                'SIGNE'                     => 0,
+                'DATE_DEBUT'                => '2022-12-22',
+                'DATE_FIN'                  => NULL,
+                'DATE_CREATION'             => NULL,
+                'CM'                        => 0,
+                'TD'                        => 0,
+                'TP'                        => 0,
+                'AUTRES'                    => 10,
+                'HEURES'                    => 10,
+                'HETD'                      => 10,
+                'AUTRE_LIBELLE'             => NULL,
+                'TAUX_REMU_ID'              => 1,
+                'TAUX_REMU_VALEUR'          => NULL,
+                'TAUX_REMU_DATE'            => NULL,
+                'TAUX_REMU_MAJORE_ID'       => 2,
+                'TAUX_REMU_MAJORE_DATE'     => NULL,
+                'TAUX_REMU_MAJORE_VALEUR'   => NULL,
+                'TAUX_CONGES_PAYES'         => 10,
+                'PROCESS_ID'                => 0,
+            ],
+        ];
+
+        $this->pp->init();
 
         $taux_remu_temp = 0;
         $listeContrat   = [];

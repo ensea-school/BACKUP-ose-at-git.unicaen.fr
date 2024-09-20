@@ -308,7 +308,7 @@ class ContratService extends AbstractEntityService
     public function getFirstContratMission(Intervenant $intervenant): ?Mission
     {
         $dql = " SELECT c,m
-            FROM " . Contrat::class . " c
+            FROM " . Contrat::class . " 
             JOIN c.intervenant i
             JOIN c.mission m
             WHERE c.intervenant = :intervenant

@@ -117,13 +117,14 @@ class ContratProcess implements ProcessInterface
             if ($service["TYPE_CONTRAT_ID"] == null) {
 
                 $contratPresent = isset($this->intervenantContrat[$service["UUID"]]) && $this->intervenantContrat[$service["UUID"]];
-                if ($this->regleA == Parametre::AVENANT_DESACTIVE && $contratPresent) {
-                    $serviceContrat['ACTIF'] = 0;
-                }
+
 
 
                 if ($contratPresent) {
                     $service["TYPE_CONTRAT_ID"] = 2;
+                    if ($this->regleA == Parametre::AVENANT_DESACTIVE ) {
+                        $service['ACTIF'] = 0;
+                    }
                 } else {
                     $service["TYPE_CONTRAT_ID"] = 1;
 
@@ -321,6 +322,7 @@ class ContratProcess implements ProcessInterface
 
     public function clearAfterTest()
     {
+        $this->regleA = '';
         $this->intervenantContrat = [];
         $this->tauxRemuUuid       = [];
         $this->services           = [];

@@ -8,14 +8,16 @@
 
 * Nouvelle infrastructure de gestion des formules de calcul
 * Nouvelle page de demandes de mise en paiement
+* Signature électronique
 
 # OSE 23.9 (à venir)
 
 ## Corrections de bugs
 
 * Prise en compte du bon nombre d'heures de la mission lors de l'export RH dans SIHAM
-* Bloquer la possiblité de saisir un date antérieure à la date de début dans le cadre d'une mission
-* Correction du connecteur Pégase pour pouvoir utiliser les formations comme étape
+* Bloquer la possiblité de saisir une date antérieure à la date de début dans le cadre d'une mission
+* Correction du connecteur Pégase pour pouvoir utiliser les formations comme étapes
+* Le filtrage par élément pédagogique de la page des services refonctionne (#58031)
 
 ## Améliorations
 

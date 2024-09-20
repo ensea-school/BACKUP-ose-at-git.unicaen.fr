@@ -101,7 +101,7 @@ return [
                 Privileges::MISSION_VALIDATION_REALISE,
                 Privileges::MISSION_DEVALIDATION_REALISE
             ],
-            'resources' => 'VolumeHoraireMission',
+            'resources' => ['VolumeHoraireMission', 'Mission'],
             'assertion' => Assertion\SuiviAssertion::class,
         ],
     ],

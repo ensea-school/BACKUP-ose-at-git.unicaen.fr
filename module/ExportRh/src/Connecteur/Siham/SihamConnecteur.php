@@ -208,6 +208,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             sinon on prend les dates de début et de fin de l'année universitaire*/
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
 
+
             if (!empty($firstMission)) {
                 $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
                 $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
@@ -339,13 +340,13 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
             if ($datas['generiqueFieldset']['emailPro'] && !empty($dossierIntervenant->getEmailPro())) {
                 //Hook temporaire en attendant correction webservice, on ne passe pas l'email pro si elle contient 'etu.unicaen' dans le nom de domaine
-                if (!preg_match('/@etu\.unicaen/', $dossierIntervenant->getEmailPro())) {
-                    $coordonneesTelMail[] = [
-                        'dateDebutTel' => $dateEffet,
-                        'numero'       => $dossierIntervenant->getEmailPro(),
-                        'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO,
-                    ];
-                }
+                // if (!preg_match('/@etu\.unicaen/', $dossierIntervenant->getEmailPro())) {
+                $coordonneesTelMail[] = [
+                    'dateDebutTel' => $dateEffet,
+                    'numero'       => $dossierIntervenant->getEmailPro(),
+                    'typeNumero'   => Siham::SIHAM_CODE_TYPOLOGIE_EMAIL_PRO,
+                ];
+                //}
             }
             if ($datas['generiqueFieldset']['emailPerso'] && !empty($dossierIntervenant->getEmailPerso())) {
                 $coordonneesTelMail[] = [
@@ -419,7 +420,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                     $params['listeContrats'] = $contrat;
                 }
             }
-        
+
+
             $matricule = $this->siham->priseEnChargeAgent($params);
 
             return $matricule;
@@ -806,6 +808,7 @@ class SihamConnecteur implements ConnecteurRhInterface
     public function cloreDossier(Intervenant $intervenant): ?bool
     {
 
+
         try {
             $anneeUniversitaire = $intervenant->getAnnee();
             $dateSortie         = $anneeUniversitaire->getDateFin()->format('Y-m-d');
@@ -816,15 +819,28 @@ class SihamConnecteur implements ConnecteurRhInterface
             if (!empty($intervenant->getCodeRh()) && empty($matricule)) {
                 $matricule = $intervenant->getCodeRh();
             }
+            //Valeur par défaut
+            $categorieSituation = 'MC140';
+            $motifSituation     = 'MC601';
+            //On regarde si des valeurs ont été spécifié dans la configuration siham
+            if (isset($this->siham->getConfig()['cloture'])) {
+                if (isset($this->siham->getConfig()['cloture']['categorie-situation'])) {
+                    $categorieSituation = $this->siham->getConfig()['cloture']['categorie-situation'];
+                }
+                if (isset($this->siham->getConfig()['cloture']['motif-situation'])) {
+                    $motifSituation = $this->siham->getConfig()['cloture']['motif-situation'];
+                }
 
+            }
             $paramsWS = [
-                'categorieSituation' => 'MC140',
+                'categorieSituation' => $categorieSituation,
                 'dateSortie'         => $dateSortie,
                 'matricule'          => $matricule,
-                'motifSituation'     => 'MC141',
+                'motifSituation'     => $motifSituation,
                 'temoinValidite'     => 1,
 
             ];
+
 
             return $this->siham->cloreDossier($paramsWS);
         } catch (SihamException $e) {

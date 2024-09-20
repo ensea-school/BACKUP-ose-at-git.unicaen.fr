@@ -249,7 +249,7 @@ FROM (
       padr.id                                                                                adresse_pays_id,
       s.numero_insee                                                                         numero_insee,
       COALESCE(s.numero_insee_provisoire,i.numero_insee_provisoire,0)                        numero_insee_provisoire,
-      CASE WHEN i.sync_pec = 0 THEN i.numero_pec ELSE s.numero_pec END                       nunmero_pec,
+      CASE WHEN i.sync_pec = 0 THEN i.numero_pec ELSE s.numero_pec END                       numero_pec,
       s.iban                                                                                 s_iban,
       s.bic                                                                                  s_bic,
       s.rib_hors_sepa                                                                        s_rib_hors_sepa,

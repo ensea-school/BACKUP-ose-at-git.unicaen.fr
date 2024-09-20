@@ -303,7 +303,7 @@ FROM (
       LEFT JOIN grade                   g ON g.source_code      = s.z_grade_id
       LEFT JOIN discipline              d ON d.source_code      = s.z_discipline_id
       LEFT JOIN civilite                c ON c.libelle_court    = s.z_civilite_id
-      LEFT JOIN situation_matrimoniale sm ON sm.libelle_court   = s.z_situation_matriomoniale_id
+      LEFT JOIN situation_matrimoniale sm ON sm.code            = s.z_situation_matriomoniale_id
       LEFT JOIN pays               pnaiss ON pnaiss.source_code = s.z_pays_naissance_id
       LEFT JOIN departement           dep ON dep.source_code    = s.z_departement_naissance_id
       LEFT JOIN pays                 pnat ON pnat.source_code   = s.z_pays_nationalite_id

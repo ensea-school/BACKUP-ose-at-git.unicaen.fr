@@ -11,6 +11,13 @@
 * Signature électronique
 
 
+# OSE 23.10 (à venir)
+
+## Corrections de bugs
+
+* Correction d'un problème intervenu en 23.9 : impossibilité de valider du suivi de mission.
+
+
 
 # OSE 23.9 (23/09/2024)
 

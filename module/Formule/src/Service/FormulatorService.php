@@ -84,7 +84,7 @@ class FormulatorService
 
 
 
-    public function calculer(FormuleIntervenant $intervenant, ?Formule $formule = null): void
+    public function calculer(FormuleIntervenant $intervenant, ?Formule $formule = null, bool $arrondir = true): void
     {
         if (empty($formule) && $intervenant instanceof FormuleTestIntervenant) {
             $formule = $intervenant->getFormule();
@@ -94,7 +94,9 @@ class FormulatorService
         }
         $fc = $this->getFormuleCalcul($formule);
         $fc->calculer($intervenant, $formule);
-        $this->arrondisseur->arrondir($intervenant);
+        if ($arrondir) {
+            $this->arrondisseur->arrondir($intervenant);
+        }
     }
 
 
@@ -107,7 +109,7 @@ class FormulatorService
 
         $test = $tableur->formuleIntervenant();
         try {
-            $this->calculer($test, $tableur->formule());
+            $this->calculer($test, $tableur->formule(), false);
             $this->lastTestError = $this->checkFormuleResErreurs($test, $tableur);
         } catch (\Throwable $e) {
             $this->lastTestError = $e->getMessage() . ' ligne ' . $e->getLine();

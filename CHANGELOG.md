@@ -35,7 +35,7 @@
 * Saisie de suivi de missions : la saisie d'horaires se chevauchant est désormais interdite (#57926)
 * Modification de la formule de calcul de Lyon 2 (#57423)
 
-## Notes de mise à jour
+## Note de mise à jour
 
 Pour les utilisateurs des missions sous ose et notamment des candidatures, le privilèges "Accepter une candidature" a été scindé en deux avec un nouveau privilège "Refuser une candidature", pensez donc à ajouter ce nouveau privilège à vos utilisateurs pour qu'ils continuent de refuser des candidatures.
 

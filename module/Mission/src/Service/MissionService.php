@@ -179,6 +179,7 @@ class MissionService extends AbstractEntityService
           AND m.intervenant_id = :intervenant
           AND vhm.horaire_debut IS NOT NULL
           AND vhm.horaire_fin IS NOT NULL
+          AND vhm.id <> :id
           AND NOT(
             :horaireDebut >= to_char(vhm.horaire_fin, 'YYYY-mm-dd HH24:MI') OR :horaireFin <= to_char(vhm.horaire_debut, 'YYYY-mm-dd HH24:MI')
           )";
@@ -187,6 +188,7 @@ class MissionService extends AbstractEntityService
             'intervenant'       => $vhm->getMission()->getIntervenant()->getId(),
             'horaireDebut'      => $vhm->getHoraireDebut()->format('Y-m-d H:i'),
             'horaireFin'        => $vhm->getHoraireFin()->format('Y-m-d H:i'),
+            'id'                => $vhm->getId() ?? 0,
         ];
         $r      = $this->entityManager->getConnection()->fetchAssociative($sql, $params);
 

@@ -67,4 +67,8 @@ return [
             'tmp-dir' => $config->get('etats-sortie', 'tmp-dir', getcwd() . '/cache/'),
         ],
     ],
+    'view_manager' => [
+        'display_not_found_reason' => $config->get('global','affichageErreurs'), // display 404 reason in template
+        'display_exceptions'       => $config->get('global','affichageErreurs'),
+        ],
 ];

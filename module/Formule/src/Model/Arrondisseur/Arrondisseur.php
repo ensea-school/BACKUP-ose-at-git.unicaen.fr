@@ -20,59 +20,118 @@ class Arrondisseur
     {
         $data = $this->makeData($fi);
 
-        $this->preparerCalculs($data);
+        $this->preparerCalculs2($data);
 
         foreach ($this->calculs as $ci => $calcul) {
             $this->traitement($calcul);
+            unset($this->calculs[$ci]);
         }
 
         // On passe le résultat de l'arrondisseur pour débug éventuel
         $fi->setArrondisseurTrace($data);
 
         // Et on applique ensuite les résultats arrondis
+        $this->transfertResultats($data);
+    }
 
+
+
+    protected function preparerCalculs2(Ligne $data): void
+    {
+        $this->preparationHorizontale($data);
+
+        // Ensuite, on fait ruisseler par ligne de service, puis par ligne de volume horaire
+        $services = $data->getSubs();
+        foreach ($services as $service) {
+            $vhs = $service->getSubs();
+            $this->preparationHorizontale($service);
+            foreach ($vhs as $vh) {
+                $this->preparationHorizontale($vh);
+            }
+            $this->preparationVerticale($service, false);
+        }
+
+        $this->preparationVerticale($data, true);
+
+        // Ensuite, on fait ruisseler par ligne de service, puis par ligne de volume horaire
+        $services = $data->getSubs();
+        foreach ($services as $service) {
+            $vhs = $service->getSubs();
+            $this->preparationHorizontale($service);
+            foreach ($vhs as $vh) {
+                $this->preparationHorizontale($vh);
+            }
+            $this->preparationVerticale($service, false);
+        }
+
+    }
+
+
+
+    protected function preparationService(Ligne $data): void
+    {
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $c = $this->addCalcul($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            foreach (Ligne::TYPES_ENSEIGNEMENT as $type) {
+                $c->addValeur($data->getValeur($categorie . $type));
+            }
+        }
     }
 
 
 
     protected function preparerCalculs(Ligne $data): void
     {
-        // Total toutes catégories
-        $c = $this->addCalcul($data->getValeur(Ligne::TOTAL));
-        foreach (Ligne::CATEGORIES as $categorie) {
-            $c->addValeur($data->getValeur($categorie));
-        }
-        $c->addValeur($data->getValeur(Ligne::CAT_TYPE_PRIME));
+        $this->preparationHorizontale($data);
 
-
-        // Sous-total par catégorie
-        foreach (Ligne::CATEGORIES as $categorie) {
-            $c = $this->addCalcul($data->getValeur($categorie));
-            $c->addValeur($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
-            $c->addValeur($data->getValeur($categorie . Ligne::TYPE_REFERENTIEL));
-
-            // Sous-sous-total par enseignement FI/FA/FC
-            $c = $this->addCalcul($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
-            foreach (Ligne::TYPES_ENSEIGNEMENT as $type) {
-                $c->addValeur($data->getValeur($categorie . $type));
+        // Ensuite, on fait ruisseler par ligne de service, puis par ligne de volume horaire
+        $services = $data->getSubs();
+        foreach ($services as $service) {
+            $vhs = $service->getSubs();
+            foreach ($vhs as $vh) {
+                $this->preparationHorizontale($vh);
             }
         }
 
+        $this->preparationVerticale($data);
+    }
+
+
+
+    protected function preparationHorizontale(Ligne $data): void
+    {
+        // Sous-total par catégorie
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $cc = $this->addCalcul($data->getValeur($categorie));
+            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_REFERENTIEL));
+
+            // Sous-sous-total par enseignement FI/FA/FC
+            $ceth = $this->addCalcul($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            foreach (Ligne::TYPES_ENSEIGNEMENT as $type) {
+                $ceth->addValeur($data->getValeur($categorie . $type));
+            }
+        }
+    }
+
+
+
+    protected function preparationVerticale(Ligne $data, bool $recursive = true): void
+    {
+        $subs = $data->getSubs();
+
+        if (empty($subs)) {
+            return;
+        }
 
         // Ensuite, on fait ruisseler par ligne de service, puis par ligne de volume horaire
-        $valeurs  = $data->getValeurs();
-        $services = $data->getSubs();
+        $valeurs = $data->getValeurs();
         foreach ($valeurs as $v) {
-            $cs = $this->addCalcul($v);
-            foreach ($services as $service) {
-                $sv = $service->getValeur($v->getName());
-                $cs->addValeur($sv);
-
-                $cvh = $this->addCalcul($sv);
-                $vhs = $service->getSubs();
-                foreach ($vhs as $vh) {
-                    $cvh->addValeur($vh->getValeur($v->getName()));
-                }
+            $c = $this->addCalcul($v);
+            foreach ($subs as $sub) {
+                $v = $sub->getValeur($v->getName());
+                $c->addValeur($v);
+                if ($recursive) $this->preparationVerticale($sub, $recursive);
             }
         }
     }
@@ -152,9 +211,7 @@ class Arrondisseur
 
         foreach ($valeurs as $valeur) {
             $vDiff = $valeur->getDiff();
-            // le vDiff doit être <50, sinon l'arrondi par excès est déjà celui par défaut
-            // la valeur ne doit pas déjà être arrondie
-            if ($valeur->getArrondi() == 0 && $vDiff > $maxDiff && $vDiff < 50) {
+            if ($vDiff > $maxDiff) {
                 $maxDiff    = $vDiff;
                 $valToModif = $valeur;
             }
@@ -181,9 +238,7 @@ class Arrondisseur
 
         foreach ($valeurs as $valeur) {
             $vDiff = $valeur->getDiff();
-            // le vDiff doit être >=50, sinon l'arrondi par troncature est déjà celui par défaut
-            // la valeur ne doit pas déjà être arrondie
-            if ($valeur->getArrondi() == 0 && $vDiff < $minDiff && $vDiff >= 50) {
+            if ($vDiff < $minDiff) {
                 $minDiff    = $vDiff;
                 $valToModif = $valeur;
             }
@@ -219,6 +274,33 @@ class Arrondisseur
 
 
 
+    private function transfertResultats(Ligne $data): void
+    {
+        $subs = $data->getSubs();
+
+        if (!empty($subs)) {
+            foreach ($subs as $sub) {
+                $this->transfertResultats($sub);
+            }
+            return;
+        }
+
+        $volumeHoraire = $data->getVolumeHoraire();
+        if (!$volumeHoraire) {
+            throw new \Exception('Aucun volume horaire attaché');
+        }
+
+        foreach (Ligne::CATEGORIES as $categorie) {
+            foreach (Ligne::TYPES as $type) {
+                $value = $data->getValeur($categorie . $type)->getValueFinale();
+                $volumeHoraire->{'set' . $categorie . $type}($value);
+            }
+        }
+        $volumeHoraire->setHeuresPrimes($data->getValeur(Ligne::CAT_TYPE_PRIME)->getValueFinale());
+    }
+
+
+
     private function makeServiceKey(FormuleVolumeHoraire $volumeHoraire): string
     {
         $service = $volumeHoraire->getService();
@@ -236,13 +318,6 @@ class Arrondisseur
         }
 
         return uniqid('u');
-    }
-
-
-
-    private function test(Ligne $ligne)
-    {
-
     }
 
 }

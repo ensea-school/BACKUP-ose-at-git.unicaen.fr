@@ -9,6 +9,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\FormuleServiceIntervenant;
 use Formule\Entity\FormuleServiceVolumeHoraire;
+use Formule\Model\Arrondisseur\Testeur;
 use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Service\FormuleServiceAwareTrait;
 use Formule\Tbl\Process\Sub\ServiceDataManager;
@@ -16,6 +17,7 @@ use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Unicaen\BddAdmin\Table;
+use UnicaenApp\Util;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -44,16 +46,27 @@ class FormuleProcess implements ProcessInterface
 
     protected ?Table $resultatVolumeHoraireTable = null;
 
+    protected Testeur $arrondisseurTesteur;
+
+
+
+    public function __construct()
+    {
+        $this->arrondisseurTesteur = new Testeur();
+    }
+
 
 
     protected function init(array &$params): void
     {
+        $this->data = [];
+
         /* Initialisation de l'année et de la formule à utiliser */
         if (array_key_exists('ANNEE_ID', $params)) {
             $annee = $this->getServiceBdd()->entityGet(Annee::class, $params['ANNEE_ID']);
         } else {
             /* Si l'année n'est pas précisée, alors on ne calcule que sur l'année en cours pour éviter des problèmes de mémoire */
-            $annee = $this->getServiceContext()->getAnnee();
+            $annee              = $this->getServiceContext()->getAnnee();
             $params['ANNEE_ID'] = $annee->getId();
         }
 
@@ -63,7 +76,7 @@ class FormuleProcess implements ProcessInterface
             /* Initialisation des objets tables */
             $bddAdmin = \OseAdmin::instance()->getBdd();
 
-            $this->resultatIntervenantTable = $bddAdmin->getTable('FORMULE_RESULTAT_INTERVENANT');
+            $this->resultatIntervenantTable   = $bddAdmin->getTable('FORMULE_RESULTAT_INTERVENANT');
             $this->resultatVolumeHoraireTable = $bddAdmin->getTable('FORMULE_RESULTAT_VOLUME_HORAIRE');
 
             // on force les DDL à partir des positions de colonnes pour éviter de faire des requêtes en plus
@@ -84,17 +97,36 @@ class FormuleProcess implements ProcessInterface
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
-        if (empty($params)){
+        if (empty($params)) {
             $annees = $this->getServiceAnnee()->getActives();
-            foreach( $annees as $annee ){
+            foreach ($annees as $annee) {
                 $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
             }
-        }else {
+        } else {
             $this->init($params);
             $this->load($params);
             $this->calculer();
             $this->save($params);
         }
+    }
+
+
+
+    public function getFormuleServiceIntervenant(int $intervenantId, int $typeVolumehoraireId, int $etatVolumeHoraireId): FormuleServiceIntervenant
+    {
+        $params = [
+            'INTERVENANT_ID'         => $intervenantId,
+            'TYPE_VOLUME_HORAIRE_ID' => $typeVolumehoraireId,
+            'ETAT_VOLUME_HORAIRE_ID' => $etatVolumeHoraireId,
+        ];
+
+        $this->init($params);
+        $this->load($params);
+
+        unset($params['ANNEE_ID']);
+        $intervenantKey = $this->resultatIntervenantTable->makeKey($params, array_keys($params));
+
+        return $this->data[$intervenantKey];
     }
 
 
@@ -171,16 +203,16 @@ class FormuleProcess implements ProcessInterface
 
     private function load(array $params): void
     {
-        $sb = $this->getServiceBdd();
+        $sb   = $this->getServiceBdd();
         $conn = $sb->getEntityManager()->getConnection();
 
-        $this->data = [];
+        $this->data    = [];
         $fIntervenants = [];
 
         $vVolumeHoraire = $this->makeSqlVolumeHoraire($this->formule, $params);
-        $query = $conn->executeQuery($vVolumeHoraire);
+        $query          = $conn->executeQuery($vVolumeHoraire);
         while ($vhData = $query->fetchAssociative()) {
-            $intervenantId = (int)$vhData['INTERVENANT_ID'];
+            $intervenantId       = (int)$vhData['INTERVENANT_ID'];
             $typeVolumeHoraireId = (int)$vhData['TYPE_VOLUME_HORAIRE_ID'];
             $etatVolumeHoraireId = (int)$vhData['ETAT_VOLUME_HORAIRE_ID'];
 
@@ -207,7 +239,7 @@ class FormuleProcess implements ProcessInterface
         }
 
         $vIntervenant = $this->makeSqlIntervenant($this->formule, $params);
-        $query = $conn->executeQuery($vIntervenant);
+        $query        = $conn->executeQuery($vIntervenant);
         while ($iData = $query->fetchAssociative()) {
             $intervenantId = (int)$iData['INTERVENANT_ID'];
             if (array_key_exists($intervenantId, $fIntervenants)) {
@@ -225,8 +257,13 @@ class FormuleProcess implements ProcessInterface
     protected function calculer(): void
     {
         $formulator = $this->getServiceFormulator();
-        foreach ($this->data as $formuleIntervenant) {
-            $formulator->calculer($formuleIntervenant, $this->formule);
+        foreach ($this->data as $formuleIntervenant) {echo '.';
+            $formulator->calculer($formuleIntervenant, $this->formule, true);
+            $trace = $formuleIntervenant->getArrondisseurTrace();
+            if ($trace) {
+                $formuleIntervenant->setArrondisseurErreurs($this->arrondisseurTesteur->tester($trace));
+                $formuleIntervenant->setArrondisseurTrace(null);
+            }
         }
     }
 
@@ -266,6 +303,7 @@ class FormuleProcess implements ProcessInterface
             'TOTAL'                          => 0,
             'SOLDE'                          => 0,
             'SOUS_SERVICE'                   => 0,
+            'ARRONDISSEUR_ERREURS'           => $intervenant->getArrondisseurErreurs(),
         ];
     }
 
@@ -335,12 +373,12 @@ class FormuleProcess implements ProcessInterface
             'TOTAL',
         ];
 
-        $rIntervenants = [];
+        $rIntervenants    = [];
         $rVolumesHoraires = [];
-        $keyColumns = ['INTERVENANT_ID', 'TYPE_VOLUME_HORAIRE_ID', 'ETAT_VOLUME_HORAIRE_ID'];
+        $keyColumns       = ['INTERVENANT_ID', 'TYPE_VOLUME_HORAIRE_ID', 'ETAT_VOLUME_HORAIRE_ID'];
 
         foreach ($this->data as $fIntervenant) {
-            $rIntervenant = $this->extractIntervenant($fIntervenant);
+            $rIntervenant    = $this->extractIntervenant($fIntervenant);
             $volumesHoraires = $fIntervenant->getVolumesHoraires();
             foreach ($volumesHoraires as $volumesHoraire) {
                 $rVolumesHoraire = $this->extractVolumeHoraire($volumesHoraire);
@@ -377,12 +415,12 @@ class FormuleProcess implements ProcessInterface
           formule_resultat_intervenant t
           JOIN intervenant i ON i.id = t.intervenant_id
         ";
-        $options = [
+        $options            = [
             'custom-select'      => $fIntervenantSelect,
             'where'              => $params,
             'return-insert-data' => true,
         ];
-        $res = $this->resultatIntervenantTable->merge($rIntervenants, $keyColumns, $options);
+        $res                = $this->resultatIntervenantTable->merge($rIntervenants, $keyColumns, $options);
         // Fin du travail au niveau des données intervenants
         unset($rIntervenants);
 
@@ -411,12 +449,12 @@ class FormuleProcess implements ProcessInterface
           JOIN formule_resultat_intervenant fri ON fri.id = t.FORMULE_RESULTAT_INTERVENANT_ID
           JOIN intervenant i ON i.id = fri.intervenant_id
         ";
-        $options = [
+        $options              = [
             'custom-select'      => $fVolumeHoraireSelect,
             'where'              => $params,
             'return-insert-data' => false,
         ];
-        $keyColumns = ['FORMULE_RESULTAT_INTERVENANT_ID','VOLUME_HORAIRE_ID','VOLUME_HORAIRE_REF_ID'];
+        $keyColumns           = ['FORMULE_RESULTAT_INTERVENANT_ID', 'VOLUME_HORAIRE_ID', 'VOLUME_HORAIRE_REF_ID'];
         $this->resultatVolumeHoraireTable->merge($rVolumesHoraires, $keyColumns, $options);
     }
 }

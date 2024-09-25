@@ -17,8 +17,8 @@ class Afficheur
 
     public function afficher(Ligne $ligne)
     {
-        $this->testeur->tester($ligne);
-
+        $errors = $this->testeur->tester($ligne);
+        echo $errors . ' Erreurs';
         $main = $ligne;
         echo '<table class="table table-bordered table-xs">';
         echo '<tr>';
@@ -33,6 +33,9 @@ class Afficheur
                 if ($main->getValeur($categorie . $type)->getValue() == 0) continue;
                 echo '<th>' . $categorie . $type . '</th>';
             }
+        }
+        if ($main->getValeur(Ligne::CAT_TYPE_PRIME)->getValue() != 0) {
+            echo '<th>' . Ligne::CAT_TYPE_PRIME . '</th>';
         }
         echo '</tr>';
 
@@ -72,6 +75,9 @@ class Afficheur
                 if ($main->getValeur($categorie . $type)->getValue() == 0) continue;
                 $this->affValeur($ligne->getValeur($categorie . $type));
             }
+        }
+        if ($main->getValeur(Ligne::CAT_TYPE_PRIME)->getValue() != 0) {
+            $this->affValeur($ligne->getValeur(Ligne::CAT_TYPE_PRIME));
         }
         echo '</tr>';
     }

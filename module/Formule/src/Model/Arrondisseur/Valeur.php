@@ -99,6 +99,7 @@ class Valeur
     public function addArrondi(int $arrondi): Valeur
     {
         $this->arrondi += $arrondi;
+        $this->diff -= $arrondi * 100;
 
         return $this;
     }

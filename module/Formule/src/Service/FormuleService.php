@@ -10,6 +10,8 @@ use Doctrine\ORM\EntityRepository;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleResultatIntervenant;
 use Formule\Entity\FormuleIntervenant;
+use Formule\Entity\FormuleServiceIntervenant;
+use Formule\Tbl\Process\FormuleProcess;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Service\Entity\Db\EtatVolumeHoraire;
@@ -122,10 +124,10 @@ class FormuleService extends AbstractService
 
 
 
-    public function calculer(FormuleIntervenant $formuleIntervenant): void
+    public function calculer(FormuleIntervenant $formuleIntervenant, bool $arrondir=true): void
     {
         $formule = $this->getCurrent($formuleIntervenant->getAnnee());
-        $this->getServiceFormulator()->calculer($formuleIntervenant, $formule);
+        $this->getServiceFormulator()->calculer($formuleIntervenant, $formule, $arrondir);
     }
 
 
@@ -148,6 +150,28 @@ class FormuleService extends AbstractService
             'ANNEE_ID'  => $statut->getAnnee()->getId(),
         ];
         $this->getServiceTableauBord()->calculer('formule', $params);
+    }
+
+
+
+    public function getFormuleServiceIntervenant(int|Intervenant $intervenant, int|TypeVolumeHoraire $typeVolumeHoraire, int|EtatVolumeHoraire $etatVolumeHoraire): FormuleServiceIntervenant
+    {
+        if ($intervenant instanceof Intervenant){
+            $intervenant = $intervenant->getId();
+        }
+
+        if ($typeVolumeHoraire instanceof TypeVolumeHoraire){
+            $typeVolumeHoraire = $typeVolumeHoraire->getId();
+        }
+
+        if ($etatVolumeHoraire instanceof EtatVolumeHoraire){
+            $etatVolumeHoraire = $etatVolumeHoraire->getId();
+        }
+
+        /** @var FormuleProcess $process */
+        $process = $this->getServiceTableauBord()->getTableauBord('formule')->getProcess();
+
+        return $process->getFormuleServiceIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
     }
 
 

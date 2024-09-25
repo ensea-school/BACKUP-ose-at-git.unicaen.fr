@@ -11,28 +11,46 @@
 /** @var \Formule\Service\FormuleService $fs */
 $fs = $container->get(\Formule\Service\FormuleService::class);
 
-$sTbl = $fs->getServiceTableauBord();
-
-$params = [
-    'INTERVENANT_ID' => 275335,
-    'TYPE_VOLUME_HORAIRE_ID' => 1,
-    'ETAT_VOLUME_HORAIRE_ID' => 1,
-    //'STATUT_ID' => 744,
-    //'ANNEE_ID'  => 2023,
-];
-
-//$sTbl->calculer('formule', $params);
-
-
-
-
 /** @var \Formule\Service\TestService $ts */
 $ts = $container->get(\Formule\Service\TestService::class);
 
 
-$fti = $ts->get(174360);
+/* Lancement du TBL */
+$sTbl = $fs->getServiceTableauBord();
+$params = [
+    'INTERVENANT_ID' => 899413,
+    'TYPE_VOLUME_HORAIRE_ID' => 1,
+    'ETAT_VOLUME_HORAIRE_ID' => 1,
+    //'STATUT_ID' => 744,
+    'ANNEE_ID'  => 2023,
+];
+$sTbl->calculer('formule', $params);
+/* FIN */
 
-$ts->getServiceFormule()->calculer($fti);
 
-$aff = new \Formule\Model\Arrondisseur\Afficheur();
-$aff->afficher($fti->getArrondisseurTrace());
+
+/* récup depuis les services *
+//$intervenantId = 784094;
+$intervenantId = 899413;
+
+$typeVolumeHoraireId = 1;
+$etatVolumeHoraireId = 1;
+$fi = $fs->getFormuleServiceIntervenant($intervenantId, $typeVolumeHoraireId, $etatVolumeHoraireId);
+/* FIN */
+
+
+
+/* récup depuis les tests de formule *
+$intervenantTestId = 174360;
+$fi = $ts->get($intervenantTestId);
+/* FIN */
+
+
+
+/* Calcul & affichage des résultats d'arrondissage */
+if (isset($fi)) {
+    $ts->getServiceFormule()->calculer($fi);
+    $aff = new \Formule\Model\Arrondisseur\Afficheur();
+    $aff->afficher($fi->getArrondisseurTrace());
+}
+/* FIN */

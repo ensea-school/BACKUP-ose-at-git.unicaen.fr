@@ -3,6 +3,7 @@
 namespace Mission\Service;
 
 use Application\Acl\Role;
+use Application\Constants;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
@@ -80,9 +81,9 @@ class MissionService extends AbstractEntityService
         WHERE 
           m.histoDestruction IS NULL 
           " . dqlAndWhere([
-                'intervenant' => 'm.intervenant',
-                'mission'     => 'm',
-            ], $parameters) . "
+                                                                            'intervenant' => 'm.intervenant',
+                                                                            'mission'     => 'm',
+                                                                        ], $parameters) . "
         ORDER BY
           m.dateDebut,
           vh.histoCreation
@@ -130,7 +131,7 @@ class MissionService extends AbstractEntityService
         ];
 
         $triggers = [
-            '/'                      => function(Mission $original, array $extracted){
+            '/'                      => function (Mission $original, array $extracted) {
                 $extracted['canSaisie']    = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
                 $extracted['canAddHeures'] = $this->getAuthorize()->isAllowed($original, SaisieAssertion::CAN_ADD_HEURES);
                 $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
@@ -139,7 +140,7 @@ class MissionService extends AbstractEntityService
 
                 return $extracted;
             },
-            '/volumesHorairesPrevus' => function($original, $extracted){
+            '/volumesHorairesPrevus' => function ($original, $extracted) {
                 //$extracted['canSaisie'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
                 $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
                 $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
@@ -160,6 +161,38 @@ class MissionService extends AbstractEntityService
         $this->saveVolumeHoraire($volumeHoraireMission);
 
         return $this;
+    }
+
+
+
+    public function controleChevauchementOk(VolumeHoraireMission $vhm): bool
+    {
+        $sql    = "
+        SELECT
+          vhm.id
+        FROM
+          volume_horaire_mission vhm
+          JOIN mission m ON m.id = vhm.mission_id
+        WHERE
+          vhm.histo_destruction IS NULL
+          AND vhm.type_volume_horaire_id = :typeVolumeHoraire
+          AND m.intervenant_id = :intervenant
+          AND vhm.horaire_debut IS NOT NULL
+          AND vhm.horaire_fin IS NOT NULL
+          AND vhm.id <> :id
+          AND NOT(
+            :horaireDebut >= to_char(vhm.horaire_fin, 'YYYY-mm-dd HH24:MI') OR :horaireFin <= to_char(vhm.horaire_debut, 'YYYY-mm-dd HH24:MI')
+          )";
+        $params = [
+            'typeVolumeHoraire' => $vhm->getTypeVolumeHoraire()->getId(),
+            'intervenant'       => $vhm->getMission()->getIntervenant()->getId(),
+            'horaireDebut'      => $vhm->getHoraireDebut()->format('Y-m-d H:i'),
+            'horaireFin'        => $vhm->getHoraireFin()->format('Y-m-d H:i'),
+            'id'                => $vhm->getId() ?? 0,
+        ];
+        $r      = $this->entityManager->getConnection()->fetchAssociative($sql, $params);
+
+        return $r === false;
     }
 
 
@@ -189,6 +222,10 @@ class MissionService extends AbstractEntityService
             $now->modify('+10 minutes'); // tolérance de 10 minutes
             if ($vhm->getHoraireFin() > $now) {
                 throw new \Exception('Vous ne pouvez saisir de suivi avant qu\'il ne soit terminé');
+            }
+
+            if (!$this->controleChevauchementOk($vhm)) {
+                throw new \Exception('Impossible d\'ajouter ce suivi : il y a chevauchement avec d\'autres heures renseignées');
             }
         }
 

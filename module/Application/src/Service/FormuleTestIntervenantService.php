@@ -287,35 +287,39 @@ class FormuleTestIntervenantService extends AbstractEntityService
 
         /* On applique les taux au test de formule */
         foreach ($typesIntervention as $tic => $tit) {
-            switch ($tit[2]) {
-                case 'CM':
-                    $fti->setTauxCmServiceDu($tit[0]);
-                    $fti->setTauxCmServiceCompl($tit[1]);
-                    break;
-                case 'TP':
-                    $fti->setTauxTpServiceDu($tit[0]);
-                    $fti->setTauxTpServiceCompl($tit[1]);
-                    break;
-                case 'AUTRE1':
-                    $fti->setTauxAutre1ServiceDu($tit[0]);
-                    $fti->setTauxAutre1ServiceCompl($tit[1]);
-                    break;
-                case 'AUTRE2':
-                    $fti->setTauxAutre2ServiceDu($tit[0]);
-                    $fti->setTauxAutre2ServiceCompl($tit[1]);
-                    break;
-                case 'AUTRE3':
-                    $fti->setTauxAutre3ServiceDu($tit[0]);
-                    $fti->setTauxAutre3ServiceCompl($tit[1]);
-                    break;
-                case 'AUTRE4':
-                    $fti->setTauxAutre4ServiceDu($tit[0]);
-                    $fti->setTauxAutre4ServiceCompl($tit[1]);
-                    break;
-                case 'AUTRE5':
-                    $fti->setTauxAutre5ServiceDu($tit[0]);
-                    $fti->setTauxAutre5ServiceCompl($tit[1]);
-                    break;
+            if (isset($tit[2])) {
+                switch ($tit[2]) {
+                    case 'CM':
+                        $fti->setTauxCmServiceDu($tit[0]);
+                        $fti->setTauxCmServiceCompl($tit[1]);
+                        break;
+                    case 'TP':
+                        $fti->setTauxTpServiceDu($tit[0]);
+                        $fti->setTauxTpServiceCompl($tit[1]);
+                        break;
+                    case 'AUTRE1':
+                        $fti->setTauxAutre1ServiceDu($tit[0]);
+                        $fti->setTauxAutre1ServiceCompl($tit[1]);
+                        break;
+                    case 'AUTRE2':
+                        $fti->setTauxAutre2ServiceDu($tit[0]);
+                        $fti->setTauxAutre2ServiceCompl($tit[1]);
+                        break;
+                    case 'AUTRE3':
+                        $fti->setTauxAutre3ServiceDu($tit[0]);
+                        $fti->setTauxAutre3ServiceCompl($tit[1]);
+                        break;
+                    case 'AUTRE4':
+                        $fti->setTauxAutre4ServiceDu($tit[0]);
+                        $fti->setTauxAutre4ServiceCompl($tit[1]);
+                        break;
+                    case 'AUTRE5':
+                        $fti->setTauxAutre5ServiceDu($tit[0]);
+                        $fti->setTauxAutre5ServiceCompl($tit[1]);
+                        break;
+                    case 'Référentiel':
+                        break;
+                }
             }
         }
 

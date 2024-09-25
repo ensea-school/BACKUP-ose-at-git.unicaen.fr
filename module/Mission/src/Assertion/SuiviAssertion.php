@@ -90,6 +90,10 @@ class SuiviAssertion extends AbstractAssertion
         // pareil si le rôle ne possède pas le privilège adéquat
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
+        if (!$this->assertWorkflow($entity)){
+            return false;
+        }
+
         switch (true) {
             case $entity instanceof VolumeHoraireMission:
                 switch ($privilege) {

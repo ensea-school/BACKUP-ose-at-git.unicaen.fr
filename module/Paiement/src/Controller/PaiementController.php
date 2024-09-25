@@ -60,65 +60,9 @@ class PaiementController extends AbstractController
     use TableauBordServiceAwareTrait;
     use NumeroPriseEnChargeServiceAwareTrait;
 
-    /**
-     * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
-     * éventuelles
-     * (services sur des enseignements fermés, etc.)
-     */
-    protected function initFilters()
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            MiseEnPaiement::class,
-            VolumeHoraire::class,
-            ServiceReferentiel::class,
-            VolumeHoraireReferentiel::class,
-            Validation::class,
-            TypeRessource::class,
-        ]);
-    }
-
-
-
     public function indexAction()
     {
         return [];
-    }
-
-
-
-    /**
-     * @return int
-     */
-    protected function getChangeIndex()
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cgtIndex)) $session->cgtIndex = 0;
-        $result = $session->cgtIndex;
-        $session->cgtIndex++;
-
-        return $result;
-    }
-
-
-
-    protected function isChangeIndexSaved($changeIndex)
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cht)) $session->cht = [];
-
-        return isset($session->cht[$changeIndex]) && $session->cht[$changeIndex];
-    }
-
-
-
-    protected function setChangeIndexSaved($changeIndex)
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cht)) $session->cht = [];
-        $session->cht[$changeIndex] = true;
-
-        return $this;
     }
 
 
@@ -215,6 +159,74 @@ class PaiementController extends AbstractController
         }
 
         return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget', 'whyNotEditable');
+    }
+
+
+
+    /**
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
+     * éventuelles
+     * (services sur des enseignements fermés, etc.)
+     */
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+                                                                  MiseEnPaiement::class,
+                                                                  VolumeHoraire::class,
+                                                                  ServiceReferentiel::class,
+                                                                  VolumeHoraireReferentiel::class,
+                                                                  Validation::class,
+                                                                  TypeRessource::class,
+                                                              ]);
+    }
+
+
+
+    /**
+     * @return int
+     */
+    protected function getChangeIndex()
+    {
+        $session = $this->getSessionContainer();
+        if (!isset($session->cgtIndex)) $session->cgtIndex = 0;
+        $result = $session->cgtIndex;
+        $session->cgtIndex++;
+
+        return $result;
+    }
+
+
+
+    protected function isChangeIndexSaved($changeIndex)
+    {
+        $session = $this->getSessionContainer();
+        if (!isset($session->cht)) $session->cht = [];
+
+        return isset($session->cht[$changeIndex]) && $session->cht[$changeIndex];
+    }
+
+
+
+    /**
+     * @param Intervenant $intervenant
+     */
+    private function updateTableauxBord($intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+                                                              'paiement',
+                                                          ], $intervenant);
+    }
+
+
+
+    protected function setChangeIndexSaved($changeIndex)
+    {
+        $session = $this->getSessionContainer();
+        if (!isset($session->cht)) $session->cht = [];
+        $session->cht[$changeIndex] = true;
+
+        return $this;
     }
 
 
@@ -528,7 +540,7 @@ class PaiementController extends AbstractController
             $recherche->setPeriode($periode);
             $filters = $recherche->getFilters();
 
-            $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'winpaie-indemnites']);
+            $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'siham-indemnites']);
             $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
             $csvModel->setFilename(str_replace(' ', '_', 'ose-export-indemnite-' . strtolower($periode->getLibelleAnnuel($annee)) . '.csv'));
 
@@ -679,17 +691,5 @@ class PaiementController extends AbstractController
         $debugger->run($intervenant);
 
         return compact('intervenant', 'debugger');
-    }
-
-
-
-    /**
-     * @param Intervenant $intervenant
-     */
-    private function updateTableauxBord($intervenant)
-    {
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'paiement',
-        ], $intervenant);
     }
 }

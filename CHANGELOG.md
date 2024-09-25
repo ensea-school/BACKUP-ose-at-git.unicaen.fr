@@ -16,6 +16,7 @@
 ## Corrections de bugs
 
 * Correction d'un problème intervenu en 23.9 : impossibilité de valider du suivi de mission.
+* Correction sur le calcul du montant des indémnités des missions
 
 
 

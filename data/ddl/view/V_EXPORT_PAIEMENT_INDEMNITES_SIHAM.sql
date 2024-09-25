@@ -19,7 +19,7 @@ SELECT
 	str.ids 															structure_ids,
 	t.periode_id 														periode_id,
 	t.periode_code 														periode_code,
-	s.type_paie_prime 													type_paie,
+	s.type_paie_prime 													type,
 	i.code_rh 															matricule,
 	s.code_indemnite_prime 												code_indemnite_retenu,
 	TO_CHAR(TRUNC(ADD_MONTHS(t.date_fin, 1) , 'MONTH'), 'YYYY-MM') 		du_mois,

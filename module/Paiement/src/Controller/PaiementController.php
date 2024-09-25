@@ -540,7 +540,8 @@ class PaiementController extends AbstractController
             $recherche->setPeriode($periode);
             $filters = $recherche->getFilters();
 
-            $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'siham-indemnites']);
+
+            $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_extraction_indemnites');
             $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
             $csvModel->setFilename(str_replace(' ', '_', 'ose-export-indemnite-' . strtolower($periode->getLibelleAnnuel($annee)) . '.csv'));
 

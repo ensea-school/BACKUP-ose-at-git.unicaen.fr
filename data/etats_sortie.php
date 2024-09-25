@@ -262,6 +262,89 @@ return [
 }',
     ],
     [
+        'CODE'           => 'siham-indemnites',
+        'LIBELLE'        => 'Extraction Siham indemnités de fin de contrat',
+        'PDF_TRAITEMENT' => null,
+        'AUTO_BREAK'     => false,
+        'REQUETE'        => 'SELECT * FROM v_export_paiement_indemnites_siham',
+        'CSV_PARAMS'     => '{
+     "ANNEE_ID": {
+        "visible": false
+    },
+     "TYPE_INTERVENANT": {
+        "visible": false
+    },
+     "PERIODE_CODE": {
+        "visible": false
+    },
+    "PRIME_ID": {
+        "visible": false
+    },
+    "STRUCTURE_IDS": {
+        "visible": false
+    },
+    "TYPE_INTERVENANT_ID": {
+        "visible": false
+    },
+    "STRUCTURE_ID": {
+        "visible": false
+    },
+    "PERIODE_ID": {
+        "visible": false
+    },
+    "INTERVENANT_ID": {
+        "visible": false
+    },
+    "TYPE": {
+        "libelle": "type"
+    },
+    "MATRICULE": {
+        "libelle": "Matricule"
+    },
+     "CODE_INDEMNITE_RETENU": {
+        "libelle": "Code indemnité/retenue"
+    },
+     "DU_MOIS": {
+        "libelle": "Du mois (AAAA-MM)"
+    },
+     "ANNEE_DE_PAYE": {
+        "libelle": "Année de paye (AA)"
+    },
+     "MOIS_DE_PAYE": {
+        "libelle": "Mois de paye (MM)"
+    },
+    "NUMERO_DE_REMISE": {
+        "libelle": "Numéro de remise"
+    },
+    "TG_SPECIFIQUE": {
+        "libelle": "TG spécifique"
+    },
+    "DOSSIER_DE_PAYE": {
+        "libelle": "Dossier de paye"
+    },
+    "DATE_PECUNIAIRE": {
+        "libelle": "Date pécuniaire"
+    },
+    "NOMBRE_D_UNITES": {
+        "libelle": "Nombre d’unités",
+        "type": "float"
+    },
+    "MONTANT": {
+        "libelle": "Montant",
+        "type": "float"
+    },
+    "LIBELLE": {
+        "libelle": "Libellé"
+    },
+    "MODE_DE_CALCUL": {
+        "libelle": "Mode de calcul"
+    },
+    "CODE_ORIGINE": {
+        "libelle": "Code origine"
+    }
+}',
+    ],
+    [
         'CODE'           => 'export-agrement',
         'LIBELLE'        => 'Export Agrément',
         'PDF_TRAITEMENT' => null,

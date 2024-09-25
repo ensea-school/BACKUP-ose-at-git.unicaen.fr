@@ -13,6 +13,11 @@
 
 # OSE 23.10 (à venir)
 
+## Nouveautés
+
+* Nouveau paramètrage générale pour sélectionner l'état de sortir à utiliser pour l'extraction des indémnités de fin de mission.
+
+
 ## Corrections de bugs
 
 * Correction d'un problème intervenu en 23.9 : impossibilité de valider du suivi de mission.

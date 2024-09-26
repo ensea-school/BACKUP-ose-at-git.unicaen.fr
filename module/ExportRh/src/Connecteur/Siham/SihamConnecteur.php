@@ -822,7 +822,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
             //Valeur par défaut
             $categorieSituation = 'MC140';
-            $motifSituation     = 'MC601';
+            $motifSituation     = 'MC141';
             //On regarde si des valeurs ont été spécifié dans la configuration siham
             if (isset($this->siham->getConfig()['cloture'])) {
                 if (isset($this->siham->getConfig()['cloture']['categorie-situation'])) {

@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+$oa = require dirname(__DIR__) . '/admin/src/start.php';
+
+$c = $oa->console();
+
+$script = $c->getArg(1) ?: null;
+
+if ($script == 'help'){
+    $c->println("Précisez un nom de script situé dans le répertoire code");
+
+    return;
+}
+
+$c->exec('clear');
+$c->exec('php '.dirname(__DIR__)."/public/index.php UnicaenCode $script");

@@ -33,6 +33,7 @@ RUN ln -sf /dev/stderr /var/log/apache2/error.log
 # Lien pour l'exécutable interne de OSE
 RUN ln -sf /app/bin/ose /usr/local/bin/ose
 RUN ln -sf /app/bin/ose-test /usr/local/bin/ose-test
+RUN ln -sf /app/bin/ose-code /usr/local/bin/ose-code
 
 # Config PHP.
 ADD docker/${APPLICATION_ENV}/php.conf ${PHP_CONF_DIR}/fpm/conf.d/app.ini

@@ -257,19 +257,23 @@ class PaiementController extends AbstractController
     function processDemandeMiseEnPaiementLotAction()
     {
 
+
         if ($this->getRequest()->isPost()) {
-            $datasIntervenant = $this->getRequest()->getPost('intervenant');
-            if (empty($datasIntervenant)) {
+            //On récupére la structure pour laquelle on fait les demandes de mise en paiement par lot
+            $selectedStructure = $this->getRequest()->getPost('selectedStructure');
+            $structure         = $this->getServiceStructure()->get($selectedStructure);
+            $datasIntervenant  = $this->getRequest()->getPost('intervenant');
+            if (empty($datasIntervenant) || empty($structure)) {
                 return false;
             }
             $intervenantIds = array_keys($datasIntervenant);
             foreach ($intervenantIds as $id) {
                 $intervenant = $this->getServiceIntervenant()->get($id);
                 if ($intervenant) {
-                    $this->getServiceMiseEnPaiement()->demandesMisesEnPaiementIntervenant($intervenant);
+                    $this->getServiceMiseEnPaiement()->demandesMisesEnPaiementIntervenant($intervenant, $structure);
                 }
             }
-            $this->flashMessenger()->addSuccessMessage("Les demandes de mise en paiement ont bien été effectuée");
+            $this->flashMessenger()->addSuccessMessage("Les demandes de mise en paiement ont bien été effectuée pour la structure " . $structure->getLibelleLong());
 
             return $this->redirect()->toRoute('paiement/demande-mise-en-paiement-lot');
         }

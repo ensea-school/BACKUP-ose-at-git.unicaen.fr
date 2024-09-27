@@ -47,7 +47,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass ()
+    public function getEntityClass()
     {
         return MiseEnPaiement::class;
     }
@@ -59,39 +59,14 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias ()
+    public function getAlias()
     {
         return 'mep';
     }
 
 
 
-    /**
-     * Retourne les mises en paiement prêtes à payer (c'est-à-dire validées et non déjà payées
-     *
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByEtat ($etat, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        switch ($etat) {
-            case MiseEnPaiement::A_METTRE_EN_PAIEMENT:
-                $qb->andWhere("$alias.dateMiseEnPaiement IS NULL");
-            break;
-            case MiseEnPaiement::MIS_EN_PAIEMENT:
-                $qb->andWhere("$alias.dateMiseEnPaiement IS NOT NULL");
-            break;
-        }
-
-        return $qb;
-    }
-
-
-
-    public function finderByTypeIntervenant (TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -108,34 +83,6 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function finderByStructure (?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
-    {
-        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
-
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
-        $serviceMIS->finderByStructure($structure, $qb);
-
-        return $qb;
-    }
-
-
-
-    public function finderByIntervenants ($intervenants, QueryBuilder $qb = null, $alias = null)
-    {
-        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
-
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
-        $serviceMIS->finderByIntervenant($intervenants, $qb);
-
-        return $qb;
-    }
-
-
-
     /**
      * Retourne les données du TBL des mises en paiement en fonction des critères de recherche transmis
      *
@@ -143,7 +90,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return array
      */
-    public function getEtatPaiement (MiseEnPaiementRecherche $recherche, array $options = [])
+    public function getEtatPaiement(MiseEnPaiementRecherche $recherche, array $options = [])
     {
         // initialisation
         $defaultOptions = [
@@ -272,7 +219,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return array
      */
-    public function getEtatPaiementCsv (MiseEnPaiementRecherche $recherche)
+    public function getEtatPaiementCsv(MiseEnPaiementRecherche $recherche)
     {
         // initialisation
         $annee = $this->getServiceContext()->getAnnee();
@@ -349,7 +296,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return array
      */
-    public function getTableauBord (?Structure $structure)
+    public function getTableauBord(?Structure $structure)
     {
         $annee = $this->getServiceContext()->getAnnee();
         $data  = [];
@@ -439,7 +386,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * @return array
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function getTblLiquidation ($structure = null)
+    public function getTblLiquidation($structure = null)
     {
         if (empty($structure)) return $this->getTblLiquidationMS();
         if (is_array($structure)) return $this->getTblLiquidationMS($structure);
@@ -487,7 +434,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * @return array|int[]
      * @throws \Doctrine\DBAL\Exception
      */
-    private function getTblLiquidationMS (array $structures = [])
+    private function getTblLiquidationMS(array $structures = [])
     {
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -540,10 +487,10 @@ class MiseEnPaiementService extends AbstractEntityService
      */
 
 
-    public function demandesMisesEnPaiementIntervenant (?Intervenant $intervenant): void
+    public function demandesMisesEnPaiementIntervenant(?Intervenant $intervenant, ?Structure $structure): void
     {
         if ($intervenant instanceof Intervenant) {
-            $heuresADemander = $this->getServiceTblPaiement()->getDemandesMisesEnPaiementByIntervenant($intervenant);
+            $heuresADemander = $this->getServiceTblPaiement()->getDemandesMisesEnPaiementByIntervenant($intervenant, $structure);
             //On fait les demandes de mise en paiement des heures à payer avec un centre de cout pré-paramétré
             foreach ($heuresADemander as $heures) {
                 /**
@@ -567,84 +514,15 @@ class MiseEnPaiementService extends AbstractEntityService
                 unset($data);
                 //On recalcule le tableau de bord paiement de l'intervenant conserné
                 $this->getServiceWorkflow()->calculerTableauxBord([
-                    'paiement',
-                ], $intervenant);
+                                                                      'paiement',
+                                                                  ], $intervenant);
             }
         }
     }
 
 
 
-    /**
-     * Sauvegarde tous les changements intervenus dans un ensemble de mises en paiement
-     *
-     * @param array $changements
-     */
-    public function saveChangements ($changements)
-    {
-        foreach ($changements as $miseEnPaiementId => $data) {
-            if (0 === strpos($miseEnPaiementId, 'new')) { // insert
-                $miseEnPaiement = $this->newEntity();
-                /* @var $miseEnPaiement MiseEnPaiement */
-                $this->hydrateFromChangements($miseEnPaiement, $data);
-                $this->save($miseEnPaiement);
-            } else {
-                $miseEnPaiement = $this->get($miseEnPaiementId);
-                if (null == $data || 'removed' == $data) { // delete
-                    $this->delete($miseEnPaiement);
-                } else { // update
-                    $this->hydrateFromChangements($miseEnPaiement, $data);
-                    $this->save($miseEnPaiement);
-                }
-            }
-        }
-    }
-
-
-
-    /**
-     *
-     * @param Structure                            $structure
-     * @param \Application\Entity\Db\Intervenant[] $intervenants
-     * @param Periode                              $periodePaiement
-     * @param \DateTime                            $dateMiseEnPaiement
-     */
-    public function mettreEnPaiement (Structure $structure, $intervenants, Periode $periodePaiement, \DateTime $dateMiseEnPaiement)
-    {
-        [$qb, $alias] = $this->initQuery();
-        $this->finderByEtat(MiseEnPaiement::A_METTRE_EN_PAIEMENT, $qb);
-        $this->finderByStructure($structure, $qb);
-        $this->finderByIntervenants($intervenants, $qb);
-        $mepList = $this->getList($qb);
-        foreach ($mepList as $mep) {
-            /* @var $mep MiseEnPaiement */
-            $mep->setPeriodePaiement($periodePaiement);
-            $mep->setDateMiseEnPaiement($dateMiseEnPaiement);
-            $this->save($mep);
-        }
-    }
-
-
-
-    /**
-     * @param ServiceAPayerInterface $sap
-     *
-     * @return $this
-     */
-    public function deleteHistorises (ServiceAPayerInterface $sap)
-    {
-        $sap->getMiseEnPaiement()->map(function (MiseEnPaiement $mep) {
-            if (!$mep->estNonHistorise()) {
-                $this->delete($mep, false);
-            }
-        });
-
-        return $this;
-    }
-
-
-
-    private function hydrateFromChangements (MiseEnPaiement $object, $data)
+    private function hydrateFromChangements(MiseEnPaiement $object, $data)
     {
         if (isset($data['heures'])) {
             $object->setHeures((float)$data['heures']);
@@ -673,6 +551,128 @@ class MiseEnPaiementService extends AbstractEntityService
         if (isset($data['type-heures-id'])) {
             $object->setTypeHeures($this->getServiceTypeHeures()->get((int)$data['type-heures-id']));
         }
+    }
+
+
+
+    /**
+     * Sauvegarde tous les changements intervenus dans un ensemble de mises en paiement
+     *
+     * @param array $changements
+     */
+    public function saveChangements($changements)
+    {
+        foreach ($changements as $miseEnPaiementId => $data) {
+            if (0 === strpos($miseEnPaiementId, 'new')) { // insert
+                $miseEnPaiement = $this->newEntity();
+                /* @var $miseEnPaiement MiseEnPaiement */
+                $this->hydrateFromChangements($miseEnPaiement, $data);
+                $this->save($miseEnPaiement);
+            } else {
+                $miseEnPaiement = $this->get($miseEnPaiementId);
+                if (null == $data || 'removed' == $data) { // delete
+                    $this->delete($miseEnPaiement);
+                } else { // update
+                    $this->hydrateFromChangements($miseEnPaiement, $data);
+                    $this->save($miseEnPaiement);
+                }
+            }
+        }
+    }
+
+
+
+    /**
+     *
+     * @param Structure                            $structure
+     * @param \Application\Entity\Db\Intervenant[] $intervenants
+     * @param Periode                              $periodePaiement
+     * @param \DateTime                            $dateMiseEnPaiement
+     */
+    public function mettreEnPaiement(Structure $structure, $intervenants, Periode $periodePaiement, \DateTime $dateMiseEnPaiement)
+    {
+        [$qb, $alias] = $this->initQuery();
+        $this->finderByEtat(MiseEnPaiement::A_METTRE_EN_PAIEMENT, $qb);
+        $this->finderByStructure($structure, $qb);
+        $this->finderByIntervenants($intervenants, $qb);
+        $mepList = $this->getList($qb);
+        foreach ($mepList as $mep) {
+            /* @var $mep MiseEnPaiement */
+            $mep->setPeriodePaiement($periodePaiement);
+            $mep->setDateMiseEnPaiement($dateMiseEnPaiement);
+            $this->save($mep);
+        }
+    }
+
+
+
+    /**
+     * Retourne les mises en paiement prêtes à payer (c'est-à-dire validées et non déjà payées
+     *
+     * @param QueryBuilder|null $queryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function finderByEtat($etat, QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        switch ($etat) {
+            case MiseEnPaiement::A_METTRE_EN_PAIEMENT:
+                $qb->andWhere("$alias.dateMiseEnPaiement IS NULL");
+                break;
+            case MiseEnPaiement::MIS_EN_PAIEMENT:
+                $qb->andWhere("$alias.dateMiseEnPaiement IS NOT NULL");
+                break;
+        }
+
+        return $qb;
+    }
+
+
+
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
+    {
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
+
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
+        $serviceMIS->finderByStructure($structure, $qb);
+
+        return $qb;
+    }
+
+
+
+    public function finderByIntervenants($intervenants, QueryBuilder $qb = null, $alias = null)
+    {
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
+
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
+        $serviceMIS->finderByIntervenant($intervenants, $qb);
+
+        return $qb;
+    }
+
+
+
+    /**
+     * @param ServiceAPayerInterface $sap
+     *
+     * @return $this
+     */
+    public function deleteHistorises(ServiceAPayerInterface $sap)
+    {
+        $sap->getMiseEnPaiement()->map(function (MiseEnPaiement $mep) {
+            if (!$mep->estNonHistorise()) {
+                $this->delete($mep, false);
+            }
+        });
+
+        return $this;
     }
 
 }

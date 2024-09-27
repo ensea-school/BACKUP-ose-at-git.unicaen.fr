@@ -5,11 +5,8 @@ namespace Paiement\Service;
 
 use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
-use Application\Service\RuntimeException;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Paiement\Entity\Db\CentreCout;
 
 
 /**
@@ -29,7 +26,7 @@ class TblPaiementService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass ()
+    public function getEntityClass()
     {
         return \Paiement\Entity\Db\TblPaiement::class;
     }
@@ -41,14 +38,29 @@ class TblPaiementService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias ()
+    public function getAlias()
     {
         return 'tbl_p';
     }
 
 
 
-    public function finderByHeuresAPayer (QueryBuilder $qb = null, $alias = null): QueryBuilder
+    public function getDemandesMisesEnPaiementByIntervenant(Intervenant $intervenant, ?Structure $structure = null)
+    {
+        $qb = $this->finderByHeuresAPayer();
+        $qb = $this->finderByIntervenant($intervenant, $qb);
+        //On filtre les paiements par structure si besoin
+        if ($structure) {
+            $qb = $this->finderByStructure($structure, $qb);
+        }
+        $qb = $this->filteredByCentreCoutNotNull($qb);
+
+        return $this->getList($qb);
+    }
+
+
+
+    public function finderByHeuresAPayer(QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->where("$alias.heuresAPayerAA > $alias.heuresDemandeesAA OR  $alias.heuresAPayerAC > $alias.heuresDemandeesAC");
@@ -58,7 +70,7 @@ class TblPaiementService extends AbstractEntityService
 
 
 
-    public function finderByIntervenant (Intervenant $intervenant, QueryBuilder $qb = null, $alias = null): QueryBuilder
+    public function finderByIntervenant(Intervenant $intervenant, QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -69,22 +81,21 @@ class TblPaiementService extends AbstractEntityService
 
 
 
-    public function filteredByCentreCoutNotNull (QueryBuilder $qb, $alias = null): QueryBuilder
+    /*public function finderByStructure(Structure $structure, QueryBuilder $qb = null, $alias = null): QueryBuilder
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $qb->andWhere("$alias.structure = :structure")->setParameter('structure', $structure->getId());
+
+        return $qb;
+    }*/
+
+
+    public function filteredByCentreCoutNotNull(QueryBuilder $qb, $alias = null): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.centreCout IS NOT NULL");
 
         return $qb;
-    }
-
-
-
-    public function getDemandesMisesEnPaiementByIntervenant (Intervenant $intervenant)
-    {
-        $qb = $this->finderByHeuresAPayer();
-        $qb = $this->finderByIntervenant($intervenant, $qb);
-        $qb = $this->filteredByCentreCoutNotNull($qb);
-
-        return $this->getList($qb);
     }
 }

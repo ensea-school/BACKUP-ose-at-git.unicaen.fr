@@ -94,9 +94,7 @@ class FormulatorService
         }
         $fc = $this->getFormuleCalcul($formule);
         $fc->calculer($intervenant, $formule);
-        if ($arrondir) {
-            $this->arrondisseur->arrondir($intervenant);
-        }
+        $this->arrondisseur->arrondir($intervenant, $arrondir);
     }
 
 

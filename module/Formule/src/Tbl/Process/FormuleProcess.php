@@ -12,12 +12,10 @@ use Formule\Entity\FormuleServiceVolumeHoraire;
 use Formule\Model\Arrondisseur\Testeur;
 use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Service\FormuleServiceAwareTrait;
-use Formule\Tbl\Process\Sub\ServiceDataManager;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Unicaen\BddAdmin\Table;
-use UnicaenApp\Util;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -169,7 +167,8 @@ class FormuleProcess implements ProcessInterface
         $intervenant->setStructureCode($data['STRUCTURE_CODE']);
         $intervenant->setHeuresServiceStatutaire((float)$data['HEURES_SERVICE_STATUTAIRE']);
         $intervenant->setHeuresServiceModifie((float)$data['HEURES_SERVICE_MODIFIE']);
-        $intervenant->setDepassementServiceDuSansHC($data['DEPASSEMENT_SERVICE_DU_SANS_HC'] === '1');
+        $intervenant->setDepassementServiceDuSansHC($data['DEPASSEMENT_SERVICE_DU_SANS_HC'] == '1');
+        $intervenant->setArrondisseur($data['ARRONDISSEUR'] == '1');
     }
 
 
@@ -257,13 +256,9 @@ class FormuleProcess implements ProcessInterface
     protected function calculer(): void
     {
         $formulator = $this->getServiceFormulator();
-        foreach ($this->data as $formuleIntervenant) {echo '.';
+        foreach ($this->data as $formuleIntervenant) {
             $formulator->calculer($formuleIntervenant, $this->formule, true);
             $trace = $formuleIntervenant->getArrondisseurTrace();
-            if ($trace) {
-                $formuleIntervenant->setArrondisseurErreurs($this->arrondisseurTesteur->tester($trace));
-                $formuleIntervenant->setArrondisseurTrace(null);
-            }
         }
     }
 
@@ -303,7 +298,6 @@ class FormuleProcess implements ProcessInterface
             'TOTAL'                          => 0,
             'SOLDE'                          => 0,
             'SOUS_SERVICE'                   => 0,
-            'ARRONDISSEUR_ERREURS'           => $intervenant->getArrondisseurErreurs(),
         ];
     }
 

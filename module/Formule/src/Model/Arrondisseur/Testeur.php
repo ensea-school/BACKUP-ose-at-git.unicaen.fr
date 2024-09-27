@@ -6,74 +6,104 @@ class Testeur
 {
     public function tester(Ligne $data): int
     {
-        $vks    = array_keys($data->getValeurs());
-        foreach( $vks as $vki => $vk ){
-            if ($vk == Ligne::TOTAL){
-                unset($vks[$vki]); // pas de total
-            }
-        }
         $errors = 0;
 
         $services = $data->getSubs();
         foreach ($services as $service) {
+            $this->calcSommesLigne($service);
             $vhs = $service->getSubs();
             foreach ($vhs as $vh) {
-                $this->calcControles($vh);
+                $this->calcSommesLigne($vh);
+                $this->controleColonnes($vh);
+                $errors += $this->countErrorsLigne($vh);
+            }
+            $errors += $this->countErrorsLigne($service);
+        }
 
-                foreach ($vks as $vk) {
-                    if (!$vh->getValeur($vk)->isControleOk()) $errors++;
-                }
-            }
-            foreach ($vks as $vk) {
-                if (!$service->getValeur($vk)->isControleOk()) $errors++;
-            }
-        }
-        foreach ($vks as $vk) {
-            if (!$data->getValeur($vk)->isControleOk()) $errors++;
-        }
+        $errors += $this->countErrorsLigne($data);
 
         return $errors;
     }
 
 
 
-    protected function calcControles(Ligne $volumeHoraire): void
+    protected function countErrorsLigne(Ligne $data): int
     {
-        $total = 0;
-        foreach (Ligne::CATEGORIES as $categorie) {
-            $cv = 0;
-            foreach (Ligne::TYPES_ENSEIGNEMENT as $type) {
-                $cv += $volumeHoraire->getValeur($categorie . $type)->getValueFinale();
-            }
-            $volumeHoraire->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT)->setValue(round($cv, 2));
-
-            $cv += $volumeHoraire->getValeur($categorie . Ligne::TYPE_REFERENTIEL)->getValueFinale();
-            $volumeHoraire->getValeur($categorie)->setValue(round($cv, 2));
-
-            $total += $cv;
+        $errors = 0;
+        foreach ($data->getValeurs() as $valeur) {
+            if (!$valeur->isControleOk()) $errors++;
         }
-
-        $total += $volumeHoraire->getValeur(Ligne::CAT_TYPE_PRIME)->getValueFinale();
-        $volumeHoraire->getValeur(Ligne::TOTAL)->setValue($total);
-
-        $this->calculSommesControles($volumeHoraire);
+        return $errors;
     }
 
 
 
-    protected function calculSommesControles(Ligne $volumeHoraire): void
+    protected function controleColonnes(Ligne $ligne): void
     {
-        if (!$volumeHoraire->getSup()) {
-            return;
+        foreach( $ligne->getValeurs() as $valeur ){
+            $value = $valeur->getValueFinale();
+
+            $sValeur = $ligne->getSup()->getValeur($valeur->getName());
+            $sValeur->setControle(round($sValeur->getControle() + $value,2));
+
+            $tValeur = $sValeur->getLigne()->getSup()->getValeur($valeur->getName());
+            $tValeur->setControle(round($tValeur->getControle() + $value,2));
+        }
+    }
+
+
+
+    protected function controleSommesLigne(Ligne $ligne): void
+    {
+        $sommeTotale = $ligne->getValeur(Ligne::CAT_TYPE_PRIME)->getValueFinale();
+
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $somme =
+                $ligne->getValeur($categorie . Ligne::TYPE_FI)->getValueFinale()
+                + $ligne->getValeur($categorie . Ligne::TYPE_FA)->getValueFinale()
+                + $ligne->getValeur($categorie . Ligne::TYPE_FC)->getValueFinale();
+
+            $somme = round($somme, 2);
+
+            $ligne->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT)->setControle($somme);
+
+            $somme += $ligne->getValeur($categorie . Ligne::TYPE_REFERENTIEL)->getValueFinale();
+            $somme = round($somme, 2);
+
+            $ligne->getValeur($categorie)->setControle($somme);
+
+            $sommeTotale += $somme;
         }
 
-        $valeurs = $volumeHoraire->getValeurs();
-        foreach ($valeurs as $vk => $valeur) {
-            $valeurSup = $volumeHoraire->getSup()->getValeur($vk);
-            $valeurSup->setControle(round($valeurSup->getControle() + $valeur->getValueFinale(), 2));
+        $sommeTotale = round($sommeTotale, 2);
+        $ligne->getValeur(Ligne::TOTAL)->setControle($sommeTotale);
+    }
 
-            $valeurSupSup = $volumeHoraire->getSup()->getSup()->getValeur($vk);
-            $valeurSupSup->setControle(round($valeurSupSup->getControle() + $valeur->getValueFinale(), 2));
+
+
+    protected function calcSommesLigne(Ligne $ligne): void
+    {
+        $sommeTotale = $ligne->getValeur(Ligne::CAT_TYPE_PRIME)->getValueFinale();
+
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $somme =
+                $ligne->getValeur($categorie . Ligne::TYPE_FI)->getValueFinale()
+                + $ligne->getValeur($categorie . Ligne::TYPE_FA)->getValueFinale()
+                + $ligne->getValeur($categorie . Ligne::TYPE_FC)->getValueFinale();
+
+            $somme = round($somme, 2);
+
+            $ligne->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT)->setValue($somme);
+
+            $somme += $ligne->getValeur($categorie . Ligne::TYPE_REFERENTIEL)->getValueFinale();
+            $somme = round($somme, 2);
+
+            $ligne->getValeur($categorie)->setValue($somme);
+
+            $sommeTotale += $somme;
         }
+
+        $sommeTotale = round($sommeTotale, 2);
+        $ligne->getValeur(Ligne::TOTAL)->setValue($sommeTotale);
     }
 }

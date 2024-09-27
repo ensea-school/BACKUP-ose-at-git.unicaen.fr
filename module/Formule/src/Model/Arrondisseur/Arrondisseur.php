@@ -16,16 +16,23 @@ class Arrondisseur
 
 
 
-    public function arrondir(FormuleIntervenant $fi): void
+    public function arrondir(FormuleIntervenant $fi, bool $arrondir = true): void
     {
+        $this->calculs = [];
+
         $data = $this->makeData($fi);
 
-        $this->preparerCalculs2($data);
+        if ($arrondir) {
+            $this->preparerCalculs($data);
+        } else {
+            $this->preparerCalculsMinimaux($data);
+        }
 
         foreach ($this->calculs as $ci => $calcul) {
             $this->traitement($calcul);
             unset($this->calculs[$ci]);
         }
+
 
         // On passe le résultat de l'arrondisseur pour débug éventuel
         $fi->setArrondisseurTrace($data);
@@ -36,64 +43,20 @@ class Arrondisseur
 
 
 
-    protected function preparerCalculs2(Ligne $data): void
-    {
-        $this->preparationHorizontale($data);
-
-        // Ensuite, on fait ruisseler par ligne de service, puis par ligne de volume horaire
-        $services = $data->getSubs();
-        foreach ($services as $service) {
-            $vhs = $service->getSubs();
-            $this->preparationHorizontale($service);
-            foreach ($vhs as $vh) {
-                $this->preparationHorizontale($vh);
-            }
-            $this->preparationVerticale($service, false);
-        }
-
-        $this->preparationVerticale($data, true);
-
-        // Ensuite, on fait ruisseler par ligne de service, puis par ligne de volume horaire
-        $services = $data->getSubs();
-        foreach ($services as $service) {
-            $vhs = $service->getSubs();
-            $this->preparationHorizontale($service);
-            foreach ($vhs as $vh) {
-                $this->preparationHorizontale($vh);
-            }
-            $this->preparationVerticale($service, false);
-        }
-
-    }
-
-
-
-    protected function preparationService(Ligne $data): void
-    {
-        foreach (Ligne::CATEGORIES as $categorie) {
-            $c = $this->addCalcul($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
-            foreach (Ligne::TYPES_ENSEIGNEMENT as $type) {
-                $c->addValeur($data->getValeur($categorie . $type));
-            }
-        }
-    }
-
-
-
     protected function preparerCalculs(Ligne $data): void
     {
         $this->preparationHorizontale($data);
+        $this->preparationVerticale($data);
+    }
 
-        // Ensuite, on fait ruisseler par ligne de service, puis par ligne de volume horaire
+
+
+    protected function preparerCalculsMinimaux(Ligne $data): void
+    {
         $services = $data->getSubs();
         foreach ($services as $service) {
-            $vhs = $service->getSubs();
-            foreach ($vhs as $vh) {
-                $this->preparationHorizontale($vh);
-            }
+            $this->preparationVerticale($service);
         }
-
-        $this->preparationVerticale($data);
     }
 
 
@@ -112,26 +75,43 @@ class Arrondisseur
                 $ceth->addValeur($data->getValeur($categorie . $type));
             }
         }
+
+        /* le total général est recalculé */
+        $totalGeneral = $data->getValeur(Ligne::CAT_TYPE_PRIME)->getValueFinale();
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $totalGeneral += $data->getValeur($categorie)->getValueFinale();
+        }
+        $data->getValeur(Ligne::TOTAL)->setValue(round($totalGeneral, 2));
     }
 
 
 
-    protected function preparationVerticale(Ligne $data, bool $recursive = true): void
+    protected function preparationVerticale(Ligne $data): void
     {
         $subs = $data->getSubs();
 
+        // on fait ruisseler par sous-ligne s'il y en a
         if (empty($subs)) {
             return;
         }
 
-        // Ensuite, on fait ruisseler par ligne de service, puis par ligne de volume horaire
-        $valeurs = $data->getValeurs();
-        foreach ($valeurs as $v) {
+        $vns = [
+            Ligne::CAT_TYPE_PRIME,
+        ];
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $vns[] = $categorie . Ligne::TYPE_FI;
+            $vns[] = $categorie . Ligne::TYPE_FA;
+            $vns[] = $categorie . Ligne::TYPE_FC;
+            $vns[] = $categorie . Ligne::TYPE_REFERENTIEL;
+        }
+
+        foreach ($vns as $vn) {
+            $v = $data->getValeur($vn);
             $c = $this->addCalcul($v);
             foreach ($subs as $sub) {
-                $v = $sub->getValeur($v->getName());
-                $c->addValeur($v);
-                if ($recursive) $this->preparationVerticale($sub, $recursive);
+                $sv = $sub->getValeur($v->getName());
+                $c->addValeur($sv);
+                $this->preparationVerticale($sub);
             }
         }
     }
@@ -148,11 +128,6 @@ class Arrondisseur
 
 
 
-    /**
-     * @param Valeur         $total
-     * @param array|Valeur[] $valeurs
-     * @return void
-     */
     protected function traitement(Calcul $calcul): void
     {
         // Calcul de la somme des arrondis des valeurs

@@ -149,6 +149,7 @@ class FormuleResultatService extends AbstractEntityService
             $data['HEURES_SERVICE_STATUTAIRE']      = $id['HEURES_SERVICE_STATUTAIRE'];
             $data['HEURES_SERVICE_MODIFIE']         = $id['HEURES_SERVICE_MODIFIE'];
             $data['DEPASSEMENT_SERVICE_DU_SANS_HC'] = $id['DEPASSEMENT_SERVICE_DU_SANS_HC'] == '1';
+            $data['ARRONDISSEUR']                   = $id['ARRONDISSEUR'] == '1';
             $data['SERVICE_DU']                     = $data['HEURES_SERVICE_STATUTAIRE'] + $id['HEURES_SERVICE_MODIFIE'];
         }
 

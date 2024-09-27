@@ -34,8 +34,8 @@ class FormuleIntervenant
 
     // Résultats
     protected float $serviceDu = 0.0;
-    protected int $arrondisseurErreurs = 0;
 
+    protected bool $arrondisseur = true;
     protected ?Ligne $arrondisseurTrace = null;
 
     /**
@@ -493,16 +493,16 @@ class FormuleIntervenant
 
 
 
-    public function getArrondisseurErreurs(): int
+    public function isArrondisseur(): bool
     {
-        return $this->arrondisseurErreurs;
+        return $this->arrondisseur;
     }
 
 
 
-    public function setArrondisseurErreurs(int $arrondisseurErreurs): FormuleIntervenant
+    public function setArrondisseur(bool $arrondisseur): FormuleIntervenant
     {
-        $this->arrondisseurErreurs = $arrondisseurErreurs;
+        $this->arrondisseur = $arrondisseur;
         return $this;
     }
 

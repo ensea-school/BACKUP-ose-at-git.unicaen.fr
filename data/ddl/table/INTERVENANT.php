@@ -357,6 +357,18 @@ return [
             'position'    => 59,
             'commentaire' => 'Date du dernier export vers le SIRH',
         ],
+        'FORMULE_CALCUL_ARRONDISSEUR' => [
+            'name'        => 'FORMULE_CALCUL_ARRONDISSEUR',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 65,
+            'commentaire' => '1 = arrondisseur en mode complet, 0 en mode minimal (juste sur les volumes horaires/services',
+        ],
         'GRADE_ID'                    => [
             'name'        => 'GRADE_ID',
             'type'        => 'int',

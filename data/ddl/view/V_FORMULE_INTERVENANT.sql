@@ -9,7 +9,8 @@ SELECT
   CASE WHEN
     si.depassement_service_du_sans_hc = 1
     OR COALESCE( SUM( msd.heures * mms.multiplicateur * mms.decharge ), 0 ) <> 0
-  THEN 1 ELSE 0 END                                                    depassement_service_du_sans_hc
+  THEN 1 ELSE 0 END                                                    depassement_service_du_sans_hc,
+  i.formule_calcul_arrondisseur                                        arrondisseur
 FROM
             intervenant                  i
        JOIN statut                      si ON si.id = i.statut_id
@@ -25,4 +26,4 @@ WHERE
   /*@ANNEE_ID=i.annee_id*/
   /*@MOTIF_MODIFICATION_SERVICE_ID=mms.id*/
 GROUP BY
-  i.id, i.annee_id, i.structure_id, ti.id, ti.code, s.code, si.service_statutaire, si.depassement_service_du_sans_hc
+  i.id, i.annee_id, i.structure_id, ti.id, ti.code, s.code, si.service_statutaire, si.depassement_service_du_sans_hc, i.formule_calcul_arrondisseur

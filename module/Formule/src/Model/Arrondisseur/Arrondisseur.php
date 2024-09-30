@@ -3,6 +3,7 @@
 namespace Formule\Model\Arrondisseur;
 
 use Enseignement\Entity\Db\Service;
+use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleVolumeHoraire;
 use Referentiel\Entity\Db\ServiceReferentiel;
@@ -24,7 +25,7 @@ class Arrondisseur
 
         if ($arrondir) {
             $this->preparerCalculs($data);
-        } else {
+        } elseif(!$fi instanceof FormuleTestIntervenant) {
             $this->preparerCalculsMinimaux($data);
         }
 

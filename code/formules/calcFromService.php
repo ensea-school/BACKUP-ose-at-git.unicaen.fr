@@ -1,2 +1,0 @@
-<?php
-echo 'ça passe!';

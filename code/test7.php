@@ -7,5 +7,3 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
-
-echo str_repeat('.', 3);

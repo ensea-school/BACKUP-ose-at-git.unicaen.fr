@@ -909,6 +909,13 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     v t_v_tbl_workflow;
     u BOOLEAN;
   BEGIN
+    IF param IS NULL THEN
+      FOR a IN (SELECT DISTINCT annee_id FROM tbl_workflow) LOOP
+          CALCULER_TBL('ANNEE_ID', a.annee_id);
+        END LOOP;
+      RETURN;
+    END IF;
+
     INITIALISATION;
     OPEN c FOR 'SELECT * FROM tbl_workflow WHERE ' || unicaen_tbl.MAKE_WHERE(param, VALUE);
     LOOP

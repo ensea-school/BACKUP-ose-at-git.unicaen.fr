@@ -172,6 +172,7 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT           = 'mise-en-paiement-visualisation-intervenant';
     const MISSION_AUTOVALIDATION                               = 'mission-autovalidation';
     const MISSION_AUTOVALIDATION_REALISE                       = 'mission-autovalidation-realise';
+    const MISSION_CANDIDATURE_REFUSER                          = 'mission-candidature-refuser';
     const MISSION_CANDIDATURE_VALIDER                          = 'mission-candidature-valider';
     const MISSION_CANDIDATURE_VISUALISATION                    = 'mission-candidature-visualisation';
     const MISSION_DEVALIDATION                                 = 'mission-devalidation';

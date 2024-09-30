@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div v-if="this.renseignerDonneesPersonnelles" class="alert alert-primary" role="alert">
+            Afin que vos candidatures soient étudiées, veuillez compléter <a
+            :href="this.urlDonneesPersonnelles">vos
+            données personnelles</a> et fournir les pièces justificatives qui vous seront demandées.
+        </div>
         <table class="table table-bordered ">
             <thead>
             <tr>
@@ -7,7 +12,7 @@
                 <th>Composante</th>
                 <th>Etat</th>
                 <th>Date commission</th>
-                <th v-if="canValiderCandidature">Action</th>
+                <th v-if="canValiderCandidature || canRefuserCandidature">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -23,15 +28,18 @@
                     <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée par {{
                             candidature.validation.histoCreateur.displayName
                         }}</span>
-                    <span v-if="!candidature.validation && candidature.motif !== null" class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
-                    <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
+                    <span v-if="!candidature.validation && candidature.motif !== null"
+                          class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
+                    <span v-if="!candidature.validation && candidature.motif === null"
+                          class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                 </td>
                 <td>
                     <u-date v-if="candidature.dateCommission" :value="candidature.dateCommission"/>
                 </td>
 
-                <td v-if="this.canValiderCandidature" style="text-align:center;">
-                    <a v-if="!candidature.validation" :href="urlAccepterCandidature(candidature)"
+                <td v-if="this.canValiderCandidature || this.canRefuserCandidature" style="text-align:center;">
+                    <a v-if="!candidature.validation && this.canValiderCandidature"
+                       :href="urlAccepterCandidature(candidature)"
                        class="btn btn-success"
                        data-content="Êtes vous sûr de vouloir accepter cette candidature ?"
                        data-title="Accepter la candidature"
@@ -40,7 +48,7 @@
                        @click.prevent="validerCandidature">
                         <i class="fa-solid fa-check"></i>
                     </a>&nbsp;
-                    <a :href="urlRefuserCandidature(candidature)"
+                    <a v-if="this.canRefuserCandidature" :href="urlRefuserCandidature(candidature)"
                        class="btn btn-danger"
                        data-content="Êtes vous sûr de vouloir refuser cette candidature ?"
                        data-title="Refuser la candidature"
@@ -74,6 +82,8 @@ export default {
     props: {
         intervenant: {required: true},
         canValiderCandidature: {type: Boolean, required: false},
+        canRefuserCandidature: {type: Boolean, required: false},
+        renseignerDonneesPersonnelles: {type: Boolean, required: false},
 
     },
     data()
@@ -81,7 +91,7 @@ export default {
 
         return {
             candidatures: [],
-            urlListeOffre: unicaenVue.url('offre-emploi')
+            urlListeOffre: unicaenVue.url('offre-emploi'),
         }
 
     },
@@ -90,6 +100,12 @@ export default {
         this.reload();
 
     },
+    computed:
+        {
+            urlDonneesPersonnelles: function () {
+                return unicaenVue.url("intervenant/:intervenant/dossier", {intervenant: this.intervenant});
+            }
+        },
     methods: {
         reload()
         {

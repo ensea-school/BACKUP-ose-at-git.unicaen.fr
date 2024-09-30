@@ -18,12 +18,14 @@ class ObjetFormationReader implements ReaderInterface
                     om.id,
                     e.id_objet_maquette_parent,
                     om.libelle_long,
-                    om.code_structure,       
+                    om.code_structure,     
+                    om.structures_porteuse,  
                     om.code,       
                     om.temoin_tele_enseignement,      
                     esp.annee_universitaire as annee_universitaire,
                     esp.date_debut_validite as date_debut_validite,
-                    esp.date_fin_validite as date_fin_validite
+                    esp.date_fin_validite as date_fin_validite,
+                    om.type_objet_maquette
                 FROM schema_odf.objet_maquette om
                 JOIN schema_odf.enfant e ON e.id_objet_maquette = om.id
                 LEFT JOIN schema_odf.espace esp on esp.id = om.id_espace';
@@ -37,7 +39,12 @@ class ObjetFormationReader implements ReaderInterface
             if (!isset($objetsFormation[$element['id']])) {
                 $objetFormation = new ObjetFormation();
                 $objetFormation->setLibelle($element['libelle_long']);
-                $objetFormation->setStructureId($element['code_structure']);
+                if ($element['structures_porteuse'] != null) {
+                    $objetFormation->setStructureId($element['structures_porteuse']);
+                }else{
+                    $objetFormation->setStructureId($element['code_structure']);
+                }
+
                 $objetFormation->setAnneeUniversitaire($element['annee_universitaire']);
                 $objetFormation->setDateDebut($element['date_debut_validite']);
                 $objetFormation->setDateFin($element['date_fin_validite']);

@@ -27,7 +27,7 @@ final class ArrondisseurTest extends OseTestCase
         $this->arrondisseur->arrondir($sapObject);
         $calc = $sapObject->toArray();
 
-        $this->assertArrayEquals($calc, $await);
+        $this->assertArrayEquals($await, $calc );
     }
 
 

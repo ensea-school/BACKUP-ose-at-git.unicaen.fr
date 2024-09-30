@@ -99,7 +99,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function getProperties(): array
     {
-        if (null === $this->properties) {
+        if (empty($this->properties)) {
             $m = $this->getReflectionClass()->getMethods(\ReflectionMethod::IS_PUBLIC);
             $p = $this->getReflectionClass()->getProperties(\ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PROTECTED);
 

@@ -60,26 +60,6 @@ class PaiementController extends AbstractController
     use CentreCoutServiceAwareTrait;
     use ParametresServiceAwareTrait;
 
-    /**
-     * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
-     * éventuelles
-     * (services sur des enseignements fermés, etc.)
-     */
-    protected function initFilters()
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            MiseEnPaiement::class,
-            VolumeHoraire::class,
-            ServiceReferentiel::class,
-            VolumeHoraireReferentiel::class,
-            Validation::class,
-            TypeRessource::class,
-        ]);
-    }
-
-
-
     public function indexAction()
     {
         return [];
@@ -100,6 +80,26 @@ class PaiementController extends AbstractController
 
 
         return compact('intervenant');
+    }
+
+
+
+    /**
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
+     * éventuelles
+     * (services sur des enseignements fermés, etc.)
+     */
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+                                                                  MiseEnPaiement::class,
+                                                                  VolumeHoraire::class,
+                                                                  ServiceReferentiel::class,
+                                                                  VolumeHoraireReferentiel::class,
+                                                                  Validation::class,
+                                                                  TypeRessource::class,
+                                                              ]);
     }
 
 
@@ -131,6 +131,18 @@ class PaiementController extends AbstractController
 
 
 
+    /**
+     * @param Intervenant $intervenant
+     */
+    private function updateTableauxBord($intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+                                                              'paiement',
+                                                          ], $intervenant);
+    }
+
+
+
     public function ajouterDemandesMiseEnPaiementAction()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -156,6 +168,7 @@ class PaiementController extends AbstractController
                     if ($e->getCode() == 3) {
                         $this->flashMessenger()->addErrorMessage($e->getMessage());
                     } else {
+                        $this->flashMessenger()->addErrorMessage($e->getMessage());
                         $error++;
                     }
                     continue;
@@ -179,9 +192,9 @@ class PaiementController extends AbstractController
             //Erreur de demande de mise en paiement pour mauvais paramètrage de centre de cout ou de domaine fonctionnel
             if ($error > 0) {
                 if ($error > 1) {
-                    $this->flashMessenger()->addErrorMessage("Attention, $error demandes de mise en paiement n'ont pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demandes de mise en paiement n'ont pas pu être traité pour cette composante.");
                 } else {
-                    $this->flashMessenger()->addErrorMessage("Attention, $error demande de mise en paiement n'a pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demande de mise en paiement n'a pas pu être traité pour cette composante.");
                 }
             }
             //Erreur de mise en paiement pour raison de dépassement de budget
@@ -687,17 +700,5 @@ class PaiementController extends AbstractController
         $debugger->run($intervenant);
 
         return compact('intervenant', 'debugger');
-    }
-
-
-
-    /**
-     * @param Intervenant $intervenant
-     */
-    private function updateTableauxBord($intervenant)
-    {
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'paiement',
-        ], $intervenant);
     }
 }

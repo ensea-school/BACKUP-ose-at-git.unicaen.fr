@@ -104,7 +104,6 @@ return [
         'contrat'                         => [
             'active'     => true,
             'parameters' => [
-                'categorieContrat'  => '0',
                 'natureContrat'     => 'CO',
                 'typeContrat'       => 'TC01',
                 'typeLienJuridique' => 'TL01',

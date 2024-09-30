@@ -79,31 +79,6 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    /**
-     * Retourne les mises en paiement prêtes à payer (c'est-à-dire validées et non déjà payées
-     *
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByEtat($etat, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        switch ($etat) {
-            case MiseEnPaiement::A_METTRE_EN_PAIEMENT:
-                $qb->andWhere("$alias.dateMiseEnPaiement IS NULL");
-            break;
-            case MiseEnPaiement::MIS_EN_PAIEMENT:
-                $qb->andWhere("$alias.dateMiseEnPaiement IS NOT NULL");
-            break;
-        }
-
-        return $qb;
-    }
-
-
-
     public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
@@ -115,34 +90,6 @@ class MiseEnPaiementService extends AbstractEntityService
             $serviceMIS->join($this->getServiceIntervenant(), $qb, 'intervenant', false);
             $this->getServiceIntervenant()->finderByType($typeIntervenant, $qb);
         }
-
-        return $qb;
-    }
-
-
-
-    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
-    {
-        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
-
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
-        $serviceMIS->finderByStructure($structure, $qb);
-
-        return $qb;
-    }
-
-
-
-    public function finderByIntervenants($intervenants, QueryBuilder $qb = null, $alias = null)
-    {
-        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
-
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
-        $serviceMIS->finderByIntervenant($intervenants, $qb);
 
         return $qb;
     }
@@ -355,234 +302,6 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    /**
-     * Retourne les données du TBL des services en fonction des critères de recherche transmis
-     *
-     * @param Recherche $recherche
-     *
-     * @return array
-     */
-    public function getTableauBord(?Structure $structure)
-    {
-        $annee = $this->getServiceContext()->getAnnee();
-        $data  = [];
-
-        $params = [
-            'annee' => $annee->getId(),
-        ];
-        $sql    = 'SELECT * FROM v_export_dmep WHERE annee_id = :annee';
-
-        if ($structure) {
-            $params['structure'] = $structure->idsFilter();
-            $sql                 .= ' AND structure_ids LIKE :structure';
-        }
-
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
-
-        // récupération des données
-        while ($d = $stmt->fetch()) {
-
-            $ds = [
-                'annee-libelle' => (string)$annee,
-
-                'intervenant-code'               => $d['INTERVENANT_CODE'],
-                'intervenant-code-rh'            => $d['CODE_RH'],
-                'intervenant-nom'                => $d['INTERVENANT_NOM'],
-                'intervenant-date-naissance'     => new \DateTime($d['INTERVENANT_DATE_NAISSANCE']),
-                'intervenant-statut-libelle'     => $d['INTERVENANT_STATUT_LIBELLE'],
-                'intervenant-type-code'          => $d['INTERVENANT_TYPE_CODE'],
-                'intervenant-type-libelle'       => $d['INTERVENANT_TYPE_LIBELLE'],
-                'intervenant-grade-code'         => $d['INTERVENANT_GRADE_CODE'],
-                'intervenant-grade-libelle'      => $d['INTERVENANT_GRADE_LIBELLE'],
-                'intervenant-discipline-code'    => $d['INTERVENANT_DISCIPLINE_CODE'],
-                'intervenant-discipline-libelle' => $d['INTERVENANT_DISCIPLINE_LIBELLE'],
-                'service-structure-aff-libelle'  => $d['SERVICE_STRUCTURE_AFF_LIBELLE'],
-
-                'service-structure-ens-libelle' => $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
-                'groupe-type-formation-libelle' => $d['GROUPE_TYPE_FORMATION_LIBELLE'],
-                'type-formation-libelle'        => $d['TYPE_FORMATION_LIBELLE'],
-                'etape-niveau'                  => empty($d['ETAPE_NIVEAU']) ? null : (int)$d['ETAPE_NIVEAU'],
-                'etape-code'                    => $d['ETAPE_CODE'],
-                'etape-etablissement-libelle'   => $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
-                'element-code'                  => $d['ELEMENT_CODE'],
-                'element-fonction-libelle'      => $d['ELEMENT_LIBELLE'] ? $d['ELEMENT_LIBELLE'] : $d['FONCTION_REFERENTIEL_LIBELLE'],
-                'element-discipline-code'       => $d['ELEMENT_DISCIPLINE_CODE'],
-                'element-discipline-libelle'    => $d['ELEMENT_DISCIPLINE_LIBELLE'],
-                'element-taux-fi'               => (float)$d['ELEMENT_TAUX_FI'],
-                'element-taux-fc'               => (float)$d['ELEMENT_TAUX_FC'],
-                'element-taux-fa'               => (float)$d['ELEMENT_TAUX_FA'],
-                'commentaires'                  => $d['COMMENTAIRES'],
-                'element-source-libelle'        => $d['ELEMENT_SOURCE_LIBELLE'],
-
-                'type-ressource-libelle'      => $d['TYPE_RESSOURCE_LIBELLE'],
-                'centre-couts-code'           => $d['CENTRE_COUTS_CODE'],
-                'centre-couts-libelle'        => $d['CENTRE_COUTS_LIBELLE'],
-                'domaine-fonctionnel-code'    => $d['DOMAINE_FONCTIONNEL_CODE'],
-                'domaine-fonctionnel-libelle' => $d['DOMAINE_FONCTIONNEL_LIBELLE'],
-                'etat'                        => $d['ETAT'],
-                'periode-libelle'             => $d['PERIODE_LIBELLE'],
-                'date-mise-en-paiement'       => $d['DATE_MISE_EN_PAIEMENT'] ? new \DateTime($d['DATE_MISE_EN_PAIEMENT']) : null,
-                'heures-fi'                   => (float)$d['HEURES_FI'],
-                'heures-fa'                   => (float)$d['HEURES_FA'],
-                'heures-fc'                   => (float)$d['HEURES_FC'],
-                'heures-fc-majorees'          => (float)$d['HEURES_FC_MAJOREES'],
-                'heures-referentiel'          => (float)$d['HEURES_REFERENTIEL'],
-            ];
-
-            $data[] = $ds;
-        }
-
-        return $data;
-    }
-
-
-
-    /**
-     * Retourne le tableau de bord des liquidations.
-     * Il retourne le nb d'heures demandées en paiement par type de ressource pour une structure donnée
-     * et pour l'année courante
-     *
-     * Format de retour : [Structure.id][TypeRessource.id] = (float)Heures
-     *                 ou [TypeRessource.id] = (float)Heures
-     *
-     * Si la structure n'est pas spécifiée alors on retourne le tableau pour chaque structure.
-     *
-     * @param Structure|null $structure
-     *
-     * @return array
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function getTblLiquidation($structure = null)
-    {
-        if (empty($structure)) return $this->getTblLiquidationMS();
-        if (is_array($structure)) return $this->getTblLiquidationMS($structure);
-
-        if (!$structure instanceof Structure) {
-            throw new RuntimeException('La structure fournie n\'est pas uns entité');
-        }
-
-        $annee = $this->getServiceContext()->getAnnee();
-
-        $res = ['total' => 0];
-
-        $sql = "
-        SELECT
-          tdl.type_ressource_id,
-          tdl.heures
-        FROM
-          v_tbl_dmep_liquidation tdl
-          JOIN structure str ON str.id = tdl.structure_id
-        WHERE
-          tdl.annee_id = :annee
-          AND str.ids LIKE :structure";
-
-        $params = [
-            'annee'     => $annee->getId(),
-            'structure' => $structure->idsFilter(),
-        ];
-        $stmt   = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
-        while ($d = $stmt->fetch()) {
-            $typeRessourceId = (int)$d['TYPE_RESSOURCE_ID'];
-            $heures          = (float)$d['HEURES'];
-
-            $res[$typeRessourceId] = $heures;
-            $res['total']          += $heures;
-        }
-
-        return $res;
-    }
-
-
-
-    /**
-     * @param array|Structure[] $structures
-     *
-     * @return array|int[]
-     * @throws \Doctrine\DBAL\Exception
-     */
-    private function getTblLiquidationMS(array $structures = [])
-    {
-        $annee = $this->getServiceContext()->getAnnee();
-
-        $res = ['total' => 0];
-
-        $sql = "
-        SELECT
-          structure_id,
-          type_ressource_id,
-          heures
-        FROM
-          V_TBL_DMEP_LIQUIDATION
-        WHERE
-          annee_id = :annee
-        ";
-
-        $strFilters = [];
-        foreach ($structures as $structure) {
-            $strFilters[] = 'structure_ids LIKE \'' . $structure->idsFilter() . "'";
-        }
-        if (!empty($strFilters)) {
-            $sql .= 'AND (' . implode(' OR ', $strFilters) . ')';
-        }
-
-        $params = [
-            'annee' => $annee->getId(),
-        ];
-
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
-        while ($d = $stmt->fetchAssociative()) {
-            $structureId     = (int)$d['STRUCTURE_ID'];
-            $typeRessourceId = (int)$d['TYPE_RESSOURCE_ID'];
-            $heures          = (float)$d['HEURES'];
-
-            $res[$structureId][$typeRessourceId] = $heures;
-            if (!isset($res[$structureId]['total'])) $res[$structureId]['total'] = 0;
-            $res[$structureId]['total'] += $heures;
-            $res['total']               += $heures;
-        }
-
-        return $res;
-    }
-
-
-
-    public function getBudgetPaiement(Structure $structure): array
-    {
-        $budget = [
-            'dotation'    => [
-                'paieEtat'        => 0,
-                'ressourcePropre' => 0,
-                'total'           => 0,
-            ],
-            'liquidation' => [
-                'paieEtat'        => 0,
-                'ressourcePropre' => 0,
-                'total'           => 0,
-            ],
-
-        ];
-        if ($structure instanceof Structure) {
-            $dotation    = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
-            $liquidation = $this->getTblLiquidation($structure);
-            foreach ($dotation as $key => $value) {
-                if ($key == $structure->getId()) {
-                    $budget['dotation']['paieEtat']        = (key_exists(1, $value)) ? $value['1'] : 0;
-                    $budget['dotation']['ressourcePropre'] = (key_exists(2, $value)) ? $value['2'] : 0;
-                    $budget['dotation']['total']           = $value['total'];
-                    break;
-                }
-            }
-            //liquidation
-            $budget['liquidation']['paieEtat']        = (key_exists('1', $liquidation)) ? $liquidation['1'] : 0;
-            $budget['liquidation']['ressourcePropre'] = (key_exists('2', $liquidation)) ? $liquidation['2'] : 0;
-            $budget['liquidation']['total']           = $liquidation['total'];
-        }
-
-        return $budget;
-    }
-
-
-
     public function demandesMisesEnPaiementIntervenant(?Intervenant $intervenant): void
     {
         if ($intervenant instanceof Intervenant) {
@@ -610,9 +329,44 @@ class MiseEnPaiementService extends AbstractEntityService
                 unset($data);
                 //On recalcule le tableau de bord paiement de l'intervenant conserné
                 $this->getServiceWorkflow()->calculerTableauxBord([
-                    'paiement',
-                ], $intervenant);
+                                                                      'paiement',
+                                                                  ], $intervenant);
             }
+        }
+    }
+
+
+
+    private function hydrateFromChangements(MiseEnPaiement $object, $data)
+    {
+        if (isset($data['heures'])) {
+            $object->setHeures((float)$data['heures']);
+        }
+
+        if (isset($data['centre-cout-id'])) {
+            $object->setCentreCout($this->getServiceCentreCout()->get((int)$data['centre-cout-id']));
+        }
+
+        if (isset($data['domaine-fonctionnel-id'])) {
+            $object->setDomaineFonctionnel($this->getServiceDomaineFonctionnel()->get((int)$data['domaine-fonctionnel-id']));
+        }
+
+        if (isset($data['formule-resultat-service-id'])) {
+            $entity = $this->getEntityManager()->find(FormuleResultatService::class, (int)$data['formule-resultat-service-id']);
+            $object->setFormuleResultatService($entity);
+        }
+
+        if (isset($data['formule-resultat-service-referentiel-id'])) {
+            $entity = $this->getEntityManager()->find(FormuleResultatServiceReferentiel::class, (int)$data['formule-resultat-service-referentiel-id']);
+            $object->setFormuleResultatServiceReferentiel($entity);
+        }
+
+        if (isset($data['mission-id'])) {
+            $object->setMission($this->getServiceMission()->get((int)$data['mission-id']));
+        }
+
+        if (isset($data['type-heures-id'])) {
+            $object->setTypeHeures($this->getServiceTypeHeures()->get((int)$data['type-heures-id']));
         }
     }
 
@@ -621,13 +375,13 @@ class MiseEnPaiementService extends AbstractEntityService
     public function ajouterDemandeMiseEnPaiement(Intervenant $intervenant, array $datas): bool|MiseEnPaiement
     {
 
-        $data['heures']                                  = (array_key_exists('heures', $datas)) ? $datas['heures'] : '';
-        $data['type-heures-id']                          = (array_key_exists('typeHeuresId', $datas)) ? $datas['typeHeuresId'] : '';
-        $data['centre-cout-id']                          = (array_key_exists('centreCoutId', $datas)) ? $datas['centreCoutId'] : '';
-        $data['formule-resultat-service-id']             = (array_key_exists('formuleResServiceId', $datas)) ? $datas['formuleResServiceId'] : '';
-        $data['formule-resultat-service-referentiel-id'] = (array_key_exists('formuleResServiceRefId', $datas)) ? $datas['formuleResServiceRefId'] : '';
-        $data['domaine-fonctionnel-id']                  = (array_key_exists('domaineFonctionnelId', $datas)) ? $datas['domaineFonctionnelId'] : '';
-        $data['mission-id']                              = (array_key_exists('missionId', $datas)) ? $datas['missionId'] : '';
+        $data['heures']                 = (array_key_exists('heures', $datas)) ? $datas['heures'] : '';
+        $data['type-heures-id']         = (array_key_exists('typeHeuresId', $datas)) ? $datas['typeHeuresId'] : '';
+        $data['centre-cout-id']         = (array_key_exists('centreCoutId', $datas)) ? $datas['centreCoutId'] : '';
+        $data['service-id']             = (array_key_exists('serviceId', $datas)) ? $datas['serviceId'] : '';
+        $data['service-referentiel-id'] = (array_key_exists('serviceReferentielId', $datas)) ? $datas['serviceReferentielId'] : '';
+        $data['domaine-fonctionnel-id'] = (array_key_exists('domaineFonctionnelId', $datas)) ? $datas['domaineFonctionnelId'] : '';
+        $data['mission-id']             = (array_key_exists('missionId', $datas)) ? $datas['missionId'] : '';
 
 
         /* @var $miseEnPaiement MiseEnPaiement */
@@ -1087,6 +841,234 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
+    public function getBudgetPaiement(Structure $structure): array
+    {
+        $budget = [
+            'dotation'    => [
+                'paieEtat'        => 0,
+                'ressourcePropre' => 0,
+                'total'           => 0,
+            ],
+            'liquidation' => [
+                'paieEtat'        => 0,
+                'ressourcePropre' => 0,
+                'total'           => 0,
+            ],
+
+        ];
+        if ($structure instanceof Structure) {
+            $dotation    = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
+            $liquidation = $this->getTblLiquidation($structure);
+            foreach ($dotation as $key => $value) {
+                if ($key == $structure->getId()) {
+                    $budget['dotation']['paieEtat']        = (key_exists(1, $value)) ? $value['1'] : 0;
+                    $budget['dotation']['ressourcePropre'] = (key_exists(2, $value)) ? $value['2'] : 0;
+                    $budget['dotation']['total']           = $value['total'];
+                    break;
+                }
+            }
+            //liquidation
+            $budget['liquidation']['paieEtat']        = (key_exists('1', $liquidation)) ? $liquidation['1'] : 0;
+            $budget['liquidation']['ressourcePropre'] = (key_exists('2', $liquidation)) ? $liquidation['2'] : 0;
+            $budget['liquidation']['total']           = $liquidation['total'];
+        }
+
+        return $budget;
+    }
+
+
+
+    /**
+     * Retourne les données du TBL des services en fonction des critères de recherche transmis
+     *
+     * @param Recherche $recherche
+     *
+     * @return array
+     */
+    public function getTableauBord(?Structure $structure)
+    {
+        $annee = $this->getServiceContext()->getAnnee();
+        $data  = [];
+
+        $params = [
+            'annee' => $annee->getId(),
+        ];
+        $sql    = 'SELECT * FROM v_export_dmep WHERE annee_id = :annee';
+
+        if ($structure) {
+            $params['structure'] = $structure->idsFilter();
+            $sql                 .= ' AND structure_ids LIKE :structure';
+        }
+
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
+
+        // récupération des données
+        while ($d = $stmt->fetch()) {
+
+            $ds = [
+                'annee-libelle' => (string)$annee,
+
+                'intervenant-code'               => $d['INTERVENANT_CODE'],
+                'intervenant-code-rh'            => $d['CODE_RH'],
+                'intervenant-nom'                => $d['INTERVENANT_NOM'],
+                'intervenant-date-naissance'     => new \DateTime($d['INTERVENANT_DATE_NAISSANCE']),
+                'intervenant-statut-libelle'     => $d['INTERVENANT_STATUT_LIBELLE'],
+                'intervenant-type-code'          => $d['INTERVENANT_TYPE_CODE'],
+                'intervenant-type-libelle'       => $d['INTERVENANT_TYPE_LIBELLE'],
+                'intervenant-grade-code'         => $d['INTERVENANT_GRADE_CODE'],
+                'intervenant-grade-libelle'      => $d['INTERVENANT_GRADE_LIBELLE'],
+                'intervenant-discipline-code'    => $d['INTERVENANT_DISCIPLINE_CODE'],
+                'intervenant-discipline-libelle' => $d['INTERVENANT_DISCIPLINE_LIBELLE'],
+                'service-structure-aff-libelle'  => $d['SERVICE_STRUCTURE_AFF_LIBELLE'],
+
+                'service-structure-ens-libelle' => $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
+                'groupe-type-formation-libelle' => $d['GROUPE_TYPE_FORMATION_LIBELLE'],
+                'type-formation-libelle'        => $d['TYPE_FORMATION_LIBELLE'],
+                'etape-niveau'                  => empty($d['ETAPE_NIVEAU']) ? null : (int)$d['ETAPE_NIVEAU'],
+                'etape-code'                    => $d['ETAPE_CODE'],
+                'etape-etablissement-libelle'   => $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
+                'element-code'                  => $d['ELEMENT_CODE'],
+                'element-fonction-libelle'      => $d['ELEMENT_LIBELLE'] ? $d['ELEMENT_LIBELLE'] : $d['FONCTION_REFERENTIEL_LIBELLE'],
+                'element-discipline-code'       => $d['ELEMENT_DISCIPLINE_CODE'],
+                'element-discipline-libelle'    => $d['ELEMENT_DISCIPLINE_LIBELLE'],
+                'element-taux-fi'               => (float)$d['ELEMENT_TAUX_FI'],
+                'element-taux-fc'               => (float)$d['ELEMENT_TAUX_FC'],
+                'element-taux-fa'               => (float)$d['ELEMENT_TAUX_FA'],
+                'commentaires'                  => $d['COMMENTAIRES'],
+                'element-source-libelle'        => $d['ELEMENT_SOURCE_LIBELLE'],
+
+                'type-ressource-libelle'      => $d['TYPE_RESSOURCE_LIBELLE'],
+                'centre-couts-code'           => $d['CENTRE_COUTS_CODE'],
+                'centre-couts-libelle'        => $d['CENTRE_COUTS_LIBELLE'],
+                'domaine-fonctionnel-code'    => $d['DOMAINE_FONCTIONNEL_CODE'],
+                'domaine-fonctionnel-libelle' => $d['DOMAINE_FONCTIONNEL_LIBELLE'],
+                'etat'                        => $d['ETAT'],
+                'periode-libelle'             => $d['PERIODE_LIBELLE'],
+                'date-mise-en-paiement'       => $d['DATE_MISE_EN_PAIEMENT'] ? new \DateTime($d['DATE_MISE_EN_PAIEMENT']) : null,
+                'heures-fi'                   => (float)$d['HEURES_FI'],
+                'heures-fa'                   => (float)$d['HEURES_FA'],
+                'heures-fc'                   => (float)$d['HEURES_FC'],
+                'heures-fc-majorees'          => (float)$d['HEURES_FC_MAJOREES'],
+                'heures-referentiel'          => (float)$d['HEURES_REFERENTIEL'],
+            ];
+
+            $data[] = $ds;
+        }
+
+        return $data;
+    }
+
+
+
+    /**
+     * Retourne le tableau de bord des liquidations.
+     * Il retourne le nb d'heures demandées en paiement par type de ressource pour une structure donnée
+     * et pour l'année courante
+     *
+     * Format de retour : [Structure.id][TypeRessource.id] = (float)Heures
+     *                 ou [TypeRessource.id] = (float)Heures
+     *
+     * Si la structure n'est pas spécifiée alors on retourne le tableau pour chaque structure.
+     *
+     * @param Structure|null $structure
+     *
+     * @return array
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function getTblLiquidation($structure = null)
+    {
+        if (empty($structure)) return $this->getTblLiquidationMS();
+        if (is_array($structure)) return $this->getTblLiquidationMS($structure);
+
+        if (!$structure instanceof Structure) {
+            throw new RuntimeException('La structure fournie n\'est pas uns entité');
+        }
+
+        $annee = $this->getServiceContext()->getAnnee();
+
+        $res = ['total' => 0];
+
+        $sql = "
+        SELECT
+          tdl.type_ressource_id,
+          tdl.heures
+        FROM
+          v_tbl_dmep_liquidation tdl
+          JOIN structure str ON str.id = tdl.structure_id
+        WHERE
+          tdl.annee_id = :annee
+          AND str.ids LIKE :structure";
+
+        $params = [
+            'annee'     => $annee->getId(),
+            'structure' => $structure->idsFilter(),
+        ];
+        $stmt   = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
+        while ($d = $stmt->fetch()) {
+            $typeRessourceId = (int)$d['TYPE_RESSOURCE_ID'];
+            $heures          = (float)$d['HEURES'];
+
+            $res[$typeRessourceId] = $heures;
+            $res['total']          += $heures;
+        }
+
+        return $res;
+    }
+
+
+
+    /**
+     * @param array|Structure[] $structures
+     *
+     * @return array|int[]
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private function getTblLiquidationMS(array $structures = [])
+    {
+        $annee = $this->getServiceContext()->getAnnee();
+
+        $res = ['total' => 0];
+
+        $sql = "
+        SELECT
+          structure_id,
+          type_ressource_id,
+          heures
+        FROM
+          V_TBL_DMEP_LIQUIDATION
+        WHERE
+          annee_id = :annee
+        ";
+
+        $strFilters = [];
+        foreach ($structures as $structure) {
+            $strFilters[] = 'structure_ids LIKE \'' . $structure->idsFilter() . "'";
+        }
+        if (!empty($strFilters)) {
+            $sql .= 'AND (' . implode(' OR ', $strFilters) . ')';
+        }
+
+        $params = [
+            'annee' => $annee->getId(),
+        ];
+
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
+        while ($d = $stmt->fetchAssociative()) {
+            $structureId     = (int)$d['STRUCTURE_ID'];
+            $typeRessourceId = (int)$d['TYPE_RESSOURCE_ID'];
+            $heures          = (float)$d['HEURES'];
+
+            $res[$structureId][$typeRessourceId] = $heures;
+            if (!isset($res[$structureId]['total'])) $res[$structureId]['total'] = 0;
+            $res[$structureId]['total'] += $heures;
+            $res['total']               += $heures;
+        }
+
+        return $res;
+    }
+
+
+
     public function verifierBudgetDemandeMiseEnPaiement(array $demandes): array
     {
         $demandesApprouvees                      = [];
@@ -1321,37 +1303,55 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    private function hydrateFromChangements(MiseEnPaiement $object, $data)
+    /**
+     * Retourne les mises en paiement prêtes à payer (c'est-à-dire validées et non déjà payées
+     *
+     * @param QueryBuilder|null $queryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function finderByEtat($etat, QueryBuilder $qb = null, $alias = null)
     {
-        if (isset($data['heures'])) {
-            $object->setHeures((float)$data['heures']);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        switch ($etat) {
+            case MiseEnPaiement::A_METTRE_EN_PAIEMENT:
+                $qb->andWhere("$alias.dateMiseEnPaiement IS NULL");
+                break;
+            case MiseEnPaiement::MIS_EN_PAIEMENT:
+                $qb->andWhere("$alias.dateMiseEnPaiement IS NOT NULL");
+                break;
         }
 
-        if (isset($data['centre-cout-id'])) {
-            $object->setCentreCout($this->getServiceCentreCout()->get((int)$data['centre-cout-id']));
-        }
+        return $qb;
+    }
 
-        if (isset($data['domaine-fonctionnel-id'])) {
-            $object->setDomaineFonctionnel($this->getServiceDomaineFonctionnel()->get((int)$data['domaine-fonctionnel-id']));
-        }
 
-        if (isset($data['formule-resultat-service-id'])) {
-            $entity = $this->getEntityManager()->find(FormuleResultatService::class, (int)$data['formule-resultat-service-id']);
-            $object->setFormuleResultatService($entity);
-        }
 
-        if (isset($data['formule-resultat-service-referentiel-id'])) {
-            $entity = $this->getEntityManager()->find(FormuleResultatServiceReferentiel::class, (int)$data['formule-resultat-service-referentiel-id']);
-            $object->setFormuleResultatServiceReferentiel($entity);
-        }
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
+    {
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
-        if (isset($data['mission-id'])) {
-            $object->setMission($this->getServiceMission()->get((int)$data['mission-id']));
-        }
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
-        if (isset($data['type-heures-id'])) {
-            $object->setTypeHeures($this->getServiceTypeHeures()->get((int)$data['type-heures-id']));
-        }
+        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
+        $serviceMIS->finderByStructure($structure, $qb);
+
+        return $qb;
+    }
+
+
+
+    public function finderByIntervenants($intervenants, QueryBuilder $qb = null, $alias = null)
+    {
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
+
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
+        $serviceMIS->finderByIntervenant($intervenants, $qb);
+
+        return $qb;
     }
 
 }

@@ -1,7 +1,8 @@
 <template>
     <div :id="'demande-mise-en-paiement-' + datas.code" class="accordion-item">
         <h2 :id="'dmep-heading-' + datas.code" class="accordion-header ">
-            <button :aria-controls="'dmep-collapse-' + datas.code" :data-bs-target="'#dmep-collapse-' + datas.code" aria-expanded="true"
+            <button :aria-controls="'dmep-collapse-' + datas.code" :data-bs-target="'#dmep-collapse-' + datas.code"
+                    aria-expanded="true"
                     class="accordion-button bg-light"
                     data-bs-toggle="collapse"
                     type="button">
@@ -10,7 +11,8 @@
 
         </h2>
 
-        <div :id="'dmep-collapse-' + datas.code" :aria-labelledby="'dmep-heading-' + datas.code" class="accordion-collapse collapse show">
+        <div :id="'dmep-collapse-' + datas.code" :aria-labelledby="'dmep-heading-' + datas.code"
+             class="accordion-collapse collapse show">
             <div class="accordion-body">
                 <div v-if="this.dotationPaieEtat + dotationRessourcesPropres > 0">
                     <!--Budget-->
@@ -29,9 +31,11 @@
                             <tr>
 
                                 <td style="width:50%;">
-                                    <div v-if="this.dotationPaieEtat > 0" class="text-center progress position-relative bg-secondary"
+                                    <div v-if="this.dotationPaieEtat > 0"
+                                         class="text-center progress position-relative bg-secondary"
                                          style="height: 30px;">
-                                        <span class="position-absolute top-50 start-50 translate-middle" style="color:white;">{{
+                                        <span class="position-absolute top-50 start-50 translate-middle"
+                                              style="color:white;">{{
                                                 this.consommationPaieEtat + ' sur ' + this.dotationPaieEtat
                                             }} HETD</span>
                                         <div :aria-valuemax="this.dotationPaieEtat"
@@ -48,8 +52,10 @@
                                     </div>
                                 </td>
                                 <td style="width:50%;">
-                                    <div v-if="this.dotationRessourcesPropres > 0" class="progress position-relative bg-secondary" style="height: 30px;">
-                                        <span class="position-absolute top-50 start-50 translate-middle" style="color:white;">{{
+                                    <div v-if="this.dotationRessourcesPropres > 0"
+                                         class="progress position-relative bg-secondary" style="height: 30px;">
+                                        <span class="position-absolute top-50 start-50 translate-middle"
+                                              style="color:white;">{{
                                                 this.consommationRessourcesPropres + ' sur ' + this.dotationRessourcesPropres
                                             }} HETD</span>
                                         <div :aria-valuemax="this.dotationRessourcesPropres"
@@ -93,7 +99,9 @@
                                                     <table class="table table-sm ">
                                                         <thead>
                                                         <th scope="col" style="width:20%;font-size:12px;">Heures</th>
-                                                        <th scope="col" style="width:40%;font-size:12px;">Centre de cout</th>
+                                                        <th scope="col" style="width:40%;font-size:12px;">Centre de
+                                                            cout
+                                                        </th>
                                                         <th scope="col" style="width:25%;font-size:12px;">Etat</th>
                                                         <th style="width:15%;font-size:12px;"></th>
                                                         </thead>
@@ -102,12 +110,16 @@
                                                             <td v-if="value.heuresDemandees != 0 " style="width:20%;">
                                                                 <abbr v-if="value.datePaiement"
                                                                       :title="'Payé en ' + value.periodeLibelle + ' le ' + formatDate(value.datePaiement) ">
-                                                                    <span class="number number-positif">{{ Number(value.heuresPayees) }} hetd(s)</span>
+                                                                    <span class="number number-positif">{{
+                                                                            Number(value.heuresPayees)
+                                                                        }} hetd(s)</span>
                                                                 </abbr>
 
                                                                 <abbr v-if="!value.datePaiement"
                                                                       :title="'Demandé le ' + formatDate(value.dateDemande) ">
-                                                                    <span class="number number-positif">{{ Number(value.heuresDemandees) }} hetd(s)</span>
+                                                                    <span class="number number-positif">{{
+                                                                            Number(value.heuresDemandees)
+                                                                        }} hetd(s)</span>
                                                                 </abbr>
 
 
@@ -117,8 +129,6 @@
                                                                     <input
                                                                         :id="'heures-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
                                                                         :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
-                                                                        :data-formule-res-service-id="value.formuleResServiceId"
-                                                                        :data-formule-res-service-ref-id="value.formuleResServiceRefId"
                                                                         :data-mission-id="value.missionId"
                                                                         :data-service-id="value.serviceId"
                                                                         :data-service-referentiel-id="value.serviceReferentielId"
@@ -129,15 +139,17 @@
                                                                         min="0"
                                                                         type="number"
                                                                     />
-                                                                    <span class="input-group-text" style="font-size:12px;">hetd(s)</span>
+                                                                    <span class="input-group-text"
+                                                                          style="font-size:12px;">hetd(s)</span>
                                                                 </div>
                                                             </td>
                                                             <!--<td>{{ value.centreCout.libelle }}</td>-->
                                                             <td v-if="value.heuresDemandees == 0 ">
-                                                                <select :id="'centreCout-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
-                                                                        class="selectpicker"
-                                                                        data-live-search="true"
-                                                                        name="centreCout">
+                                                                <select
+                                                                    :id="'centreCout-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
+                                                                    class="selectpicker"
+                                                                    data-live-search="true"
+                                                                    name="centreCout">
                                                                     <option value="">{{
                                                                             notValueCentreCoutValue(datas.centreCoutPaiement, value.typeHeureCode)
                                                                         }}
@@ -153,7 +165,9 @@
                                                                             :data-ressources-propres="item.ressourcesPropres"
                                                                             :selected="item.centreCoutId==value.centreCout.centreCoutId"
                                                                             :value="item.centreCoutId">
-                                                                            {{ item.centreCoutCode + ' - ' + item.centreCoutLibelle }}
+                                                                            {{
+                                                                                item.centreCoutCode + ' - ' + item.centreCoutLibelle
+                                                                            }}
                                                                         </option>
 
                                                                     </optgroup>
@@ -171,19 +185,25 @@
                                                                     v-if="value.heuresPayees == 0 && value.heuresDemandees > 0">
                                                                     <button :id="'remove-' + value.mepId"
                                                                             class="btn btn-danger"
-                                                                            type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
-                                                                        <u-icon id="action" name="trash" style="color:white;"/>
-                                                                        <u-icon id="waiting" name="spin" rotate="right" style="color:white;display:none;"/>
+                                                                            type="button"
+                                                                            @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
+                                                                        <u-icon id="action" name="trash"
+                                                                                style="color:white;"/>
+                                                                        <u-icon id="waiting" name="spin" rotate="right"
+                                                                                style="color:white;display:none;"/>
                                                                     </button>
                                                                 </span>
                                                                 <span
                                                                     v-if="value.heuresDemandees == 0">
-                                                                    <button :id="'add-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
-                                                                            class="btn btn-primary"
-                                                                            type="button"
-                                                                            @click="this.ajouterDemandeMiseEnPaiement(codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure)">
+                                                                    <button
+                                                                        :id="'add-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
+                                                                        class="btn btn-primary"
+                                                                        type="button"
+                                                                        @click="this.ajouterDemandeMiseEnPaiement(codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure)">
                                                                             <u-icon id="action" name="plus"/>
-                                                                            <u-icon id="waiting" name="spin" rotate="right" style="display:none;"/>
+                                                                            <u-icon id="waiting" name="spin"
+                                                                                    rotate="right"
+                                                                                    style="display:none;"/>
 
                                                                     </button>
                                                                 </span>
@@ -227,7 +247,8 @@
                                                 <thead>
                                                 <th scope="col" style="width:10%;font-size:12px;">Heures</th>
                                                 <th scope="col" style="width:25%;font-size:12px;">Centre de cout</th>
-                                                <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel
+                                                </th>
                                                 <th scope="col" style="width:20%;font-size:12px;">Etat</th>
                                                 <th style="width:15%;font-size:12px;"></th>
                                                 </thead>
@@ -236,12 +257,16 @@
                                                     <td v-if="value.heuresDemandees != 0 " style="width:20%;">
                                                         <abbr v-if="value.datePaiement"
                                                               :title="'Payé en ' + value.periodeLibelle + ' le ' + formatDate(value.datePaiement) ">
-                                                            <span class="number number-positif">{{ Number(value.heuresPayees) }} hetd(s)</span>
+                                                            <span class="number number-positif">{{
+                                                                    Number(value.heuresPayees)
+                                                                }} hetd(s)</span>
                                                         </abbr>
 
                                                         <abbr v-if="!value.datePaiement"
                                                               :title="'Demandé le ' + formatDate(value.dateDemande) ">
-                                                            <span class="number number-positif">{{ Number(value.heuresDemandees) }} hetd(s)</span>
+                                                            <span class="number number-positif">{{
+                                                                    Number(value.heuresDemandees)
+                                                                }} hetd(s)</span>
                                                         </abbr>
 
 
@@ -251,8 +276,6 @@
                                                             <input
                                                                 :id="'heures-' + codeFonction"
                                                                 :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
-                                                                :data-formule-res-service-id="value.formuleResServiceId"
-                                                                :data-formule-res-service-ref-id="value.formuleResServiceRefId"
                                                                 :data-mission-id="value.missionId"
                                                                 :data-service-id="value.serviceId"
                                                                 :data-service-referentiel-id="value.serviceReferentielId"
@@ -286,7 +309,9 @@
                                                                         :data-ressources-propres="item.ressourcesPropres"
                                                                         :selected="item.centreCoutId == value.centreCout.centreCoutId"
                                                                         :value="item.centreCoutId">
-                                                                    {{ item.centreCoutCode + ' - ' + item.centreCoutLibelle }}
+                                                                    {{
+                                                                        item.centreCoutCode + ' - ' + item.centreCoutLibelle
+                                                                    }}
                                                                 </option>
 
                                                             </optgroup>
@@ -320,9 +345,12 @@
                                                                     v-if="value.heuresPayees == 0 && value.heuresDemandees > 0">
                                                                     <button :id="'remove-' + value.mepId"
                                                                             class="btn btn-danger"
-                                                                            type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
-                                                                        <u-icon id="action" name="trash" style="color:white;"/>
-                                                                        <u-icon id="waiting" name="spin" rotate="right" style="color:white;display:none;"/>
+                                                                            type="button"
+                                                                            @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
+                                                                        <u-icon id="action" name="trash"
+                                                                                style="color:white;"/>
+                                                                        <u-icon id="waiting" name="spin" rotate="right"
+                                                                                style="color:white;display:none;"/>
                                                                     </button>
                                                                 </span>
                                                         <span
@@ -332,7 +360,9 @@
                                                                             type="button"
                                                                             @click="this.ajouterDemandeMiseEnPaiement(codeFonction)">
                                                                             <u-icon id="action" name="plus"/>
-                                                                            <u-icon id="waiting" name="spin" rotate="right" style="display:none;"/>
+                                                                            <u-icon id="waiting" name="spin"
+                                                                                    rotate="right"
+                                                                                    style="display:none;"/>
 
                                                                     </button>
                                                         </span>
@@ -377,7 +407,8 @@
                                                 <thead>
                                                 <th scope="col" style="width:10%;font-size:12px;">Heures</th>
                                                 <th scope="col" style="width:25%;font-size:12px;">Centre de cout</th>
-                                                <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel
+                                                </th>
                                                 <th scope="col" style="width:20%;font-size:12px;">Etat</th>
                                                 <th style="width:15%;font-size:12px;"></th>
                                                 </thead>
@@ -387,12 +418,16 @@
                                                     <td v-if="value.heuresDemandees != 0 " style="width:20%;">
                                                         <abbr v-if="value.datePaiement"
                                                               :title="'Payé en ' + value.periodeLibelle + ' le ' + formatDate(value.datePaiement) ">
-                                                            <span class="number number-positif">{{ Number(value.heuresPayees) }} heure(s)</span>
+                                                            <span class="number number-positif">{{
+                                                                    Number(value.heuresPayees)
+                                                                }} heure(s)</span>
                                                         </abbr>
 
                                                         <abbr v-if="!value.datePaiement"
                                                               :title="'Demandé le ' + formatDate(value.dateDemande) ">
-                                                            <span class="number number-positif">{{ Number(value.heuresDemandees) }} heure(s)</span>
+                                                            <span class="number number-positif">{{
+                                                                    Number(value.heuresDemandees)
+                                                                }} heure(s)</span>
                                                         </abbr>
                                                     </td>
                                                     <td v-if="value.heuresDemandees == 0 " style="width:20%;">
@@ -400,8 +435,6 @@
                                                             <input
                                                                 :id="'heures-' + mission.missionId"
                                                                 :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
-                                                                :data-formule-res-service-id="value.formuleResServiceId"
-                                                                :data-formule-res-service-ref-id="value.formuleResServiceRefId"
                                                                 :data-mission-id="value.missionId"
                                                                 :data-service-id="value.serviceId"
                                                                 :data-service-referentiel-id="value.serviceReferentielId"
@@ -417,7 +450,8 @@
                                                         </div>
                                                     </td>
                                                     <td v-if="value.heuresDemandees == 0 ">
-                                                        <select :id="'centreCout-' + mission.missionId" class="selectpicker"
+                                                        <select :id="'centreCout-' + mission.missionId"
+                                                                class="selectpicker"
                                                                 data-live-search="true"
                                                                 name="centreCout"
                                                                 @change="enabledPaiement(mission.missionId,'mission')">
@@ -436,7 +470,9 @@
                                                                         :selected="item.centreCoutId == value.centreCout.centreCoutId"
                                                                         :value="item.centreCoutId"
                                                                 >
-                                                                    {{ item.centreCoutCode + ' - ' + item.centreCoutLibelle }}
+                                                                    {{
+                                                                        item.centreCoutCode + ' - ' + item.centreCoutLibelle
+                                                                    }}
                                                                 </option>
 
                                                             </optgroup>
@@ -471,9 +507,12 @@
                                                                     v-if="value.heuresPayees == 0 && value.heuresDemandees > 0">
                                                                     <button :id="'remove-' + value.mepId"
                                                                             class="btn btn-danger"
-                                                                            type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
-                                                                        <u-icon id="action" name="trash" style="color:white;"/>
-                                                                        <u-icon id="waiting" name="spin" rotate="right" style="color:white;display:none;"/>
+                                                                            type="button"
+                                                                            @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
+                                                                        <u-icon id="action" name="trash"
+                                                                                style="color:white;"/>
+                                                                        <u-icon id="waiting" name="spin" rotate="right"
+                                                                                style="color:white;display:none;"/>
                                                                     </button>
                                                                 </span>
                                                         <span
@@ -483,7 +522,9 @@
                                                                             type="button"
                                                                             @click="this.ajouterDemandeMiseEnPaiement(mission.missionId)">
                                                                             <u-icon id="action" name="plus"/>
-                                                                            <u-icon id="waiting" name="spin" rotate="right" style="display:none;"/>
+                                                                            <u-icon id="waiting" name="spin"
+                                                                                    rotate="right"
+                                                                                    style="display:none;"/>
                                                                     </button>
                                                                 </span>
 
@@ -612,19 +653,20 @@ export default {
         {
             //On récupere le bouton d'ajout
             this.btnState('remove-' + id, 'disabled');
-            unicaenVue.axios.get(unicaenVue.url('paiement/:intervenant/supprimer-demande/:dmep', {intervenant: this.intervenant, dmep: id}))
-                .then(response => {
-                    this.$emit('refresh');
-                    setTimeout(() => {
-                        this.btnState('remove-' + id, 'enabled');
-                    }, 4500);
-                })
-                .catch(error => {
-                    this.$emit('refresh');
-                    setTimeout(() => {
-                        this.btnState('remove-' + id, 'enabled');
-                    }, 2500);
-                })
+            unicaenVue.axios.get(unicaenVue.url('paiement/:intervenant/supprimer-demande/:dmep', {
+                intervenant: this.intervenant,
+                dmep: id
+            })).then(response => {
+                this.$emit('refresh');
+                setTimeout(() => {
+                    this.btnState('remove-' + id, 'enabled');
+                }, 4500);
+            }).catch(error => {
+                this.$emit('refresh');
+                setTimeout(() => {
+                    this.btnState('remove-' + id, 'enabled');
+                }, 2500);
+            })
         },
         disabledPaiement(value)
         {
@@ -667,8 +709,6 @@ export default {
             let heureADemanderMax = Number(inputHeure.getAttribute('max'));
             let domaineFonctionnelId = (inputDomaineFonctionnel) ? inputDomaineFonctionnel.value : '';
             let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
-            let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
-            let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
             let serviceId = (inputHeure.hasAttribute('data-service-id') ? inputHeure.getAttribute('data-service-id') : '');
             let serviceReferentielId = (inputHeure.hasAttribute('data-service-referentiel-id') ? inputHeure.getAttribute('data-service-referentiel-id') : '');
             let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
@@ -713,8 +753,6 @@ export default {
                 heures: heureADemander,
                 centreCoutId: centreCoutId,
                 typeHeuresId: typeHeureId,
-                formuleResServiceId: formuleResServiceId,
-                formuleResServiceRefId: formuleResServiceRefId,
                 serviceId: serviceId,
                 serviceReferentielId: serviceReferentielId,
                 domaineFonctionnelId: domaineFonctionnelId,
@@ -725,22 +763,18 @@ export default {
 
             //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
 
-            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas)
-                .then(response => {
-                    this.$emit('refresh');
-                    setTimeout(() => {
-                        this.btnState('add-' + id, 'enabled');
-                    }, 4000);
+            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas).then(response => {
+                this.$emit('refresh');
+                setTimeout(() => {
+                    this.btnState('add-' + id, 'enabled');
+                }, 4000);
 
-                })
-                .catch(error => {
-                    console.error(error);
-                    setTimeout(() => {
-                        this.btnState('add-' + id, 'enabled');
-                    }, 2500);
-                })
-
-
+            }).catch(error => {
+                console.error(error);
+                setTimeout(() => {
+                    this.btnState('add-' + id, 'enabled');
+                }, 2500);
+            })
 
 
         },
@@ -766,8 +800,6 @@ export default {
                     } else {
                         let centreCoutId = selectCentreCout.value;
                         let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
-                        let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
-                        let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
                         let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
                         let serviceId = (inputHeure.hasAttribute('data-service-id') ? inputHeure.getAttribute('data-service-id') : '');
                         let serviceReferentielId = (inputHeure.hasAttribute('data-service-referentiel-id') ? inputHeure.getAttribute('data-service-referentiel-id') : '');
@@ -776,8 +808,6 @@ export default {
                             heures: heureADemander,
                             centreCoutId: centreCoutId,
                             typeHeuresId: typeHeureId,
-                            formuleResServiceId: formuleResServiceId,
-                            formuleResServiceRefId: formuleResServiceRefId,
                             serviceId: serviceId,
                             serviceReferentielId: serviceReferentielId,
                             domaineFonctionnelId: domaineFonctionnelId,
@@ -791,20 +821,18 @@ export default {
 
             }
 
-            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas)
-                .then(response => {
-                    this.$emit('refresh');
-                    setTimeout(() => {
-                        this.btnState('add-all-' + codeStructure, 'enabled');
-                    }, 2500);
+            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas).then(response => {
+                this.$emit('refresh');
+                setTimeout(() => {
+                    this.btnState('add-all-' + codeStructure, 'enabled');
+                }, 2500);
 
-                })
-                .catch(error => {
-                    this.$emit('refresh');
-                    setTimeout(() => {
-                        this.btnState('add-all-' + codeStructure, 'enabled');
-                    }, 2500);
-                })
+            }).catch(error => {
+                this.$emit('refresh');
+                setTimeout(() => {
+                    this.btnState('add-all-' + codeStructure, 'enabled');
+                }, 2500);
+            })
         },
         filtrerCentresCouts(centresCouts, typeHeures)
         {
@@ -886,11 +914,7 @@ export default {
         }
 
 
-
-
     },
-
-
 
 
 }

@@ -153,11 +153,11 @@ $this->messenger() ?>
     <?php endif; ?>
     <div class="well">
         <h2>Contrats et avenants</h2>
-        <?php foreach ($contrats as $contrat): ?>
-            <?php if ($contratSignatureActivation): ?>
-                <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param, 'contratSignatureActivation' => $contratSignatureActivation, 'infosSignature' => $infosSignature]); ?>
+        <?php foreach ($contrats as $key => $contrat): ?>
+            <?php if ($contratSignatureActivation && empty($contrat->getDateRetourSigne())): ?>
+                <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param, 'contratSignatureActivation' => $contratSignatureActivation, 'infosSignature' => $infosSignature[$key]]); ?>
             <?php else: ?>
-                <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param, 'contratSignatureActivation' => $contratSignatureActivation]); ?>
+                <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param]); ?>
             <?php endif; ?>
 
         <?php endforeach; ?>

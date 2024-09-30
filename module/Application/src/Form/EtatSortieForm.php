@@ -202,17 +202,7 @@ class EtatSortieForm extends AbstractForm
                        ],
                    ]);
 
-        //1- On récupére le parapheur activé sur OSE
-        $this->spec(['contratSignatureActivation' => [
-            'type'    => 'Select',
-            'name'    => 'contratSignatureActivation',
-            'options' => [
-                'value_options' => [
-                    1 => 'Activé',
-                    0 => 'Désactivé',
-                ],
-            ],
-        ]]);
+
     }
 
 
@@ -226,6 +216,12 @@ class EtatSortieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         $filters = [
+            "signatureActivation" => [
+                'required' => false,
+            ],
+            "signatureCircuit"    => [
+                'required' => false,
+            ],
         ];
 
         for ($i = 1; $i <= 10; $i++) {

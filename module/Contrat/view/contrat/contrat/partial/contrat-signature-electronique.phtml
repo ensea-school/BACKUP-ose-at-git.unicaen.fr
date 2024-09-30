@@ -131,7 +131,13 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <li><i class="fas fa-hourglass-start"></i> En attente d'envoi pour signature électronique</li>
             <?php endif; ?>
             <?php foreach ($infosSignature as $info): ?>
-                <li><i class="fas fa-signature"></i> <?= $info['label'] . ' (' . $info['status_text'] . ')' ?></li>
+                <li>
+                    <?php if ($info['urlDocumentSigned']): ?>
+                        <i class="fas fa-signature"></i> <?= $info['label'] . ' :  (<a href="' . $info['urlDocumentSigned'] . '" target="_blank">' . $info['labelInfos'] . '</a>)' ?>
+                    <?php else: ?>
+                        <i class="fas fa-signature"></i> <?= $info['label'] . ' :  (' . $info['labelInfos'] . ')' ?>
+                    <?php endif; ?>
+                </li>
             <?php endforeach; ?>
 
 
@@ -198,14 +204,14 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php endif; ?>
 
 
-            <?php if ($urlSaisieRetour): ?>
+            <?php if ($urlSaisieRetour && !$contratSignatureActivation): ?>
                 <a href="<?= $urlSaisieRetour ?>" class="btn btn-primary pop-ajax" data-submit-reload="true">
                     <i class="fas fa-calendar-days"></i>
                     <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?> la date de retour signé
                 </a>
             <?php endif; ?>
 
-            <?php if ($urlDevalidation): ?>
+            <?php if ($urlDevalidation && !$contrat->getProcessSignature()): ?>
                 <a
                         href="<?= $urlDevalidation ?>"
                         class="btn btn-danger pop-ajax"

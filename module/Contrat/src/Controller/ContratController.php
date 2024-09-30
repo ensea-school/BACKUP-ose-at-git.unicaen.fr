@@ -26,6 +26,7 @@ use Enseignement\Service\ServiceServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Http\Response;
+use Laminas\Validator\Date;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use LogicException;
@@ -39,6 +40,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\ProcessStep;
 use UnicaenSignature\Entity\Db\Signature;
+use UnicaenSignature\Service\ProcessServiceAwareTrait;
 
 /**
  * Description of ContratController
@@ -61,6 +63,7 @@ class ContratController extends AbstractController
     use EnvoiMailContratFormAwareTrait;
     use NoteServiceAwareTrait;
     use ContratServiceListeServiceAwareTrait;
+    use ProcessServiceAwareTrait;
 
 
     /**
@@ -163,27 +166,22 @@ class ContratController extends AbstractController
         if (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))
             && $intervenant->getStatut()->getContratEtatSortie()->isSignatureActivation()) {
             $contratSignatureActivation = true;
-        }
-        /**
-         * @var Contrat     $contrat
-         * @var Process     $process
-         * @var ProcessStep $step
-         */
-        $infosSignature = [];
-        foreach ($contrats as $contrat) {
-            $this->em()->refresh($contrat);
-            $process = $contrat->getProcessSignature();
-            if ($process) {
-
-                if ($process->getSteps()) {
-                    foreach ($process->getSteps() as $step) {
-                        if ($step->getStatus() != Signature::STATUS_SIGNATURE_DRAFT) {
-                            $infosSignature[] = $step->toArray();
-                        }
-                    }
-
+            /**
+             * @var Contrat     $contrat
+             * @var Process     $process
+             * @var ProcessStep $step
+             */
+            //On récupère les informations du process
+            $infosSignature = [];
+            foreach ($contrats as $keyContrat => $contrat) {
+                $infosSignature[$keyContrat] = [];
+                $this->em()->refresh($contrat);
+                $process = $contrat->getProcessSignature();
+                if (!empty($process)) {
+                    $infosSignature[$keyContrat] = $this->getProcessService()->getInfosProcess($process);
                 }
             }
+
         }
 
 
@@ -723,7 +721,7 @@ class ContratController extends AbstractController
         $contrat = $this->getEvent()->getParam('contrat');
         try {
             $this->getServiceContrat()->rafraichirProcessSignatureElectronique($contrat);
-            $this->flashMessenger()->addSuccessMessage('Process signature mis à jour');
+            $this->flashMessenger()->addSuccessMessage('Signature électronique mise à jour');
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }

@@ -1,43 +1,5 @@
 CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
-  mois_extraction_paie VARCHAR2(50) := '01';
-  annee_extraction_paie VARCHAR2(50) := '22';
-
-
-
-  PROCEDURE set_mois_extraction_paie(mois_extraction_paie VARCHAR2) IS
-  BEGIN
-    ose_paiement.mois_extraction_paie := mois_extraction_paie;
-  END;
-
-
-
-  PROCEDURE set_annee_extraction_paie(annee_extraction_paie VARCHAR2) IS
-  BEGIN
-    ose_paiement.annee_extraction_paie := annee_extraction_paie;
-  END;
-
-
-
-  FUNCTION get_annee_extraction_paie RETURN VARCHAR2 IS
-  BEGIN
-    RETURN ose_paiement.annee_extraction_paie;
-  END;
-
-
-
-  FUNCTION get_mois_extraction_paie RETURN VARCHAR2 IS
-  BEGIN
-    RETURN ose_paiement.mois_extraction_paie;
-  END;
-
-
-
-  FUNCTION get_format_mois_du RETURN VARCHAR2 IS
-  BEGIN
-    RETURN '20' || ose_paiement.annee_extraction_paie || '-' || ose_paiement.mois_extraction_paie;
-  END;
-
   FUNCTION get_taux_horaire (id_in IN NUMBER, date_val IN DATE) RETURN FLOAT IS
     valeur FLOAT;
     valeur_parent FLOAT;

@@ -2,9 +2,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
   OSE_UTILISATEUR_ID NUMERIC;
   OSE_SOURCE_ID NUMERIC;
 
-  CPA_S1_ID NUMERIC;
-
-
 
 
   FUNCTION DATE_TO_PERIODE_CODE( date DATE, annee_id NUMERIC ) RETURN VARCHAR2 IS
@@ -180,15 +177,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     RETURN RTRIM(utl_raw.cast_to_varchar2((nlssort(str, 'nls_sort=binary_ai'))),CHR(0));
   END;
 
-  FUNCTION GET_VIEW_QUERY( view_name VARCHAR2 ) RETURN CLOB IS
-    vlong long;
-  BEGIN
-    SELECT text into vlong
-    FROM   ALL_VIEWS
-    WHERE  view_name = GET_VIEW_QUERY.view_name;
 
-    RETURN to_clob(vlong);
-  END;
 
   PROCEDURE CALCUL_TAUX( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, r_fi OUT FLOAT, r_fc OUT FLOAT, r_fa OUT FLOAT, arrondi NUMERIC DEFAULT 4 ) IS
     nt FLOAT;
@@ -264,11 +253,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
   BEGIN
     CALCUL_TAUX( eff_fi, eff_fc, eff_fa, fi, fc, fa, ri, rc, ra, arrondi );
     RETURN ra;
-  END;
-
-  PROCEDURE SYNC_LOG( msg VARCHAR2 ) IS
-  BEGIN
-    INSERT INTO SYNC_LOG( id, date_sync, message ) VALUES ( sync_log_id_seq.nextval, systimestamp, msg );
   END;
 
 

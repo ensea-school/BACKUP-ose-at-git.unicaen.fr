@@ -38,7 +38,8 @@ return [
     ],
     'package'           => [
         'includes' => [
-
+            'OSE_EVENT',
+            'OSE_HISTO',
         ],
     ],
     'trigger'           => [

@@ -142,13 +142,6 @@ class EtatSortieService extends AbstractEntityService
             $periode = (array_key_exists('periode', $options)) ? $options['periode'] : null;
             $periodeCode = (array_key_exists('periode', $options)) ? $periode->getCode() : null;
             $filtresAnnee = (array_key_exists('ANNEE_ID', $filtres)) ? $filtres['ANNEE_ID'] : null;
-            if ($filtresAnnee) {
-                $this->setAnneePaie($filtresAnnee, $periodeCode);
-            }
-            if ($periode) {
-                $this->setMoisPaie($periodeCode);
-
-            }
         }
 
         $entityManager = $this->getEntityManager();
@@ -414,61 +407,6 @@ class EtatSortieService extends AbstractEntityService
     public function setConfig(array $config): EtatSortieService
     {
         $this->config = $config;
-
-        return $this;
-    }
-
-
-    public function setAnneePaie(string $annee, string $periode)
-    {
-        $connection = $this->getEntityManager()->getConnection();
-        $anneeFormatted = $annee - 2000;
-        //on ajouter +1 à l'année courante si on est sur une période après le mois de décembre
-        if (!in_array($periode, ['P01', 'P02', 'P03', 'P04'])) {
-            $anneeFormatted++;
-        }
-
-
-        $query = "begin
-         ose_paiement.set_annee_extraction_paie('$anneeFormatted');
-         END;";
-
-        $connection->executeQuery($query);
-
-        return $this;
-    }
-
-
-    public function setMoisPaie($periode)
-    {
-        $connection = $this->getEntityManager()->getConnection();
-
-        $mappingPeriode = [
-            'P01' => '09',
-            'P02' => '10',
-            'P03' => '11',
-            'P04' => '12',
-            'P05' => '01',
-            'P06' => '02',
-            'P07' => '03',
-            'P08' => '04',
-            'P09' => '05',
-            'P10' => '06',
-            'P11' => '07',
-            'P12' => '08',
-            'P13' => '09',
-            'P14' => '10',
-            'P15' => '11',
-            'P16' => '12',
-        ];
-
-        $mois = (array_key_exists($periode, $mappingPeriode)) ? $mappingPeriode[$periode] : '09';
-
-        $query = "begin
-         ose_paiement.set_mois_extraction_paie('$mois');
-         END;";
-
-        $connection->executeQuery($query);
 
         return $this;
     }

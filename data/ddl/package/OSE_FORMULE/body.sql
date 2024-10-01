@@ -40,47 +40,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
 
 
-  FUNCTION GET_VIEW_INTERVENANT RETURN CLOB IS
-  BEGIN
-    IF view_intervenant IS NULL THEN
-      view_intervenant := ose_divers.GET_VIEW_QUERY('V_FORMULE_INTERVENANT');
-    END IF;
-
-    RETURN view_intervenant;
-  END;
-
-
-  FUNCTION GET_VIEW_VOLUME_HORAIRE RETURN CLOB IS
-  BEGIN
-    IF view_volume_horaire IS NULL THEN
-      view_volume_horaire := ose_divers.GET_VIEW_QUERY('V_FORMULE_VOLUME_HORAIRE');
-    END IF;
-
-    RETURN view_volume_horaire;
-  END;
-
-
-  FUNCTION MAKE_INTERVENANT_QUERY RETURN CLOB IS
-    query CLOB;
-  BEGIN
-    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.code || '.intervenant_query FROM DUAL' INTO query;
-    --query := REPLACE( query, 'V_FORMULE_INTERVENANT', '(' || GET_VIEW_INTERVENANT || ')');
-
-    RETURN query;
-  END;
-
-
-  FUNCTION MAKE_VOLUME_HORAIRE_QUERY RETURN CLOB IS
-    query CLOB;
-  BEGIN
-    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.code || '.volume_horaire_query FROM DUAL' INTO query;
-    --query := REPLACE( query, 'V_FORMULE_VOLUME_HORAIRE', '(' || GET_VIEW_VOLUME_HORAIRE || ')');
-
-    RETURN query;
-  END;
-
-
-
   PROCEDURE LOAD_INTERVENANT_FROM_TEST IS
     dsdushc NUMERIC DEFAULT 0;
   BEGIN

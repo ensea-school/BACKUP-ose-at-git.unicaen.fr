@@ -13,5 +13,21 @@ if ($script == 'help'){
     return;
 }
 
-$c->exec('clear');
-$c->exec('php '.dirname(__DIR__)."/public/index.php UnicaenCode $script");
+
+// Obtenir les arguments sans manipuler les quotes
+$args = array_slice($argv, 1);
+
+// On va forcer manuellement l'ajout des quotes autour des arguments ayant des signes comme '='
+foreach ($args as &$arg) {
+    if (strpos($arg, '=') !== false && strpos($arg, "'") === false) {
+        $arg = preg_replace('/^([^=]+)=(.+)$/', '$1=\'$2\'', $arg);
+    }
+}
+
+// Reconstruire la commande avec les arguments correctement formatés
+$args = implode(' ', $args);
+
+
+$command = 'clear;php '.dirname(__DIR__)."/public/index.php UnicaenCode $args";
+
+passthru($command);

@@ -5,6 +5,7 @@ $settings = [
     'template-dirs'        => [getcwd() . '/code/template'],
     'generator-dirs'       => [getcwd() . '/code/generator'],
     'generator-output-dir' => '/app/cache/UnicaenCode',
+    'generator-cmd'        => 'ose-code',
     'author'               => 'Laurent Lécluse <laurent.lecluse at unicaen.fr>',
     'triggers'             => [
         [

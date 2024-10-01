@@ -17,4 +17,4 @@ if ($filter){
     $filter = '--filter '.$filter;
 }
 $c->exec('clear');
-$c->exec(dirname(__DIR__)."/vendor/bin/phpunit tests $filter --color=always");
+passthru(dirname(__DIR__)."/vendor/bin/phpunit tests $filter --color=always");

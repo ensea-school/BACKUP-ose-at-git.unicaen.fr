@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'ACT_ETAPE'                        => [
+    'ACT_ETAPE'                       => [
         'LIBELLE',
         'Z_TYPE_FORMATION_ID',
         'NIVEAU',
@@ -19,14 +19,14 @@ return [
         'FC',
         'EFFECTIF',
     ],
-    'ACT_LIEN'                         => [
+    'ACT_LIEN'                        => [
         'Z_NOEUD_SUP_ID',
         'Z_NOEUD_INF_ID',
         'CHOIX_MINIMUM',
         'CHOIX_MAXIMUM',
         'Z_SOURCE_ID',
     ],
-    'ACT_NOEUD'                        => [
+    'ACT_NOEUD'                       => [
         'CODE',
         'LIBELLE',
         'ANNEE_ID',
@@ -41,19 +41,19 @@ return [
         'TYPE_NOEUD',
         'ORDRE',
     ],
-    'ACT_VHENS_GROUPES'                => [
+    'ACT_VHENS_GROUPES'               => [
         'Z_TYPE_INTERVENTION_ID',
         'Z_SOURCE_ID',
         'Z_ELEMENT_PEDAGOGIQUE_ID',
         'GROUPES',
     ],
-    'ACT_VHENS_HEURES'                 => [
+    'ACT_VHENS_HEURES'                => [
         'Z_TYPE_INTERVENTION_ID',
         'HEURES',
         'Z_SOURCE_ID',
         'Z_ELEMENT_PEDAGOGIQUE_ID',
     ],
-    'ADRESSE_NUMERO_COMPL'             => [
+    'ADRESSE_NUMERO_COMPL'            => [
         'ID',
         'CODE',
         'CODE_RH',
@@ -2544,7 +2544,7 @@ return [
         'DATE_JOUR',
         'LIBELLE',
     ],
-    'TBL_PRIME'                        => [
+    'TBL_PRIME'                       => [
         'ID',
         'CONTRAT_ID',
         'MISSION_ID',
@@ -2566,7 +2566,7 @@ return [
         'VALIDATION',
         'REFUS',
     ],
-    'MISSION_PRIME'                    => [
+    'MISSION_PRIME'                   => [
         'ID',
         'DATE_REFUS',
         'INTERVENANT_ID',
@@ -2579,7 +2579,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_MODIFICATION',
     ],
-    'FORMULE_RESULTAT_INTERVENANT'     => [
+    'FORMULE_RESULTAT_INTERVENANT'    => [
         'ID',
         'INTERVENANT_ID',
         'ANNEE_ID',
@@ -2613,7 +2613,7 @@ return [
         'SOLDE',
         'SOUS_SERVICE',
     ],
-    'FORMULE_RESULTAT_VOLUME_HORAIRE'  => [
+    'FORMULE_RESULTAT_VOLUME_HORAIRE' => [
         'ID',
         'FORMULE_RESULTAT_INTERVENANT_ID',
         'VOLUME_HORAIRE_ID',
@@ -2652,6 +2652,11 @@ return [
         'HEURES_COMPL_REFERENTIEL',
         'HEURES_PRIMES',
         'TOTAL',
+    ],
+    'SITUATION_MATRIMONIALE'          => [
+        'ID',
+        'CODE',
+        'LIBELLE',
     ],
 ];
 

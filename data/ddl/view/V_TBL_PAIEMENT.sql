@@ -121,7 +121,7 @@ FROM
 WHERE
   mep.histo_destruction IS NULL
   AND frvh.id IS NULL
-  /*@INTERVENANT_ID=fr.intervenant_id*/
+  /*@INTERVENANT_ID=i.id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@SERVICE_ID=s.id*/
 
@@ -233,7 +233,7 @@ FROM
 WHERE
   mep.histo_destruction IS NULL
   AND frvh.id IS NULL
-  /*@INTERVENANT_ID=fr.intervenant_id*/
+  /*@INTERVENANT_ID=i.id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@SERVICE_ID=s.id*/
 

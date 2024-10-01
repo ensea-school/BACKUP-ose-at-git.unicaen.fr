@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'MISE_EN_PAIEMENT_ID_SEQ',
     'columns'     => [
-        'CENTRE_COUT_ID'             => [
+        'CENTRE_COUT_ID'         => [
             'name'        => 'CENTRE_COUT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'DATE_MISE_EN_PAIEMENT'      => [
+        'DATE_MISE_EN_PAIEMENT'  => [
             'name'        => 'DATE_MISE_EN_PAIEMENT',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -33,7 +33,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'DOMAINE_FONCTIONNEL_ID'     => [
+        'DOMAINE_FONCTIONNEL_ID' => [
             'name'        => 'DOMAINE_FONCTIONNEL_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -42,10 +42,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
-        'HEURES'                     => [
+        'HEURES'                 => [
             'name'        => 'HEURES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -54,10 +54,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 13,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATEUR_ID'          => [
+        'HISTO_CREATEUR_ID'      => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +69,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATION'             => [
+        'HISTO_CREATION'         => [
             'name'        => 'HISTO_CREATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -81,7 +81,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTEUR_ID'       => [
+        'HISTO_DESTRUCTEUR_ID'   => [
             'name'        => 'HISTO_DESTRUCTEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -93,7 +93,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTION'          => [
+        'HISTO_DESTRUCTION'      => [
             'name'        => 'HISTO_DESTRUCTION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -105,7 +105,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATEUR_ID'      => [
+        'HISTO_MODIFICATEUR_ID'  => [
             'name'        => 'HISTO_MODIFICATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -117,7 +117,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATION'         => [
+        'HISTO_MODIFICATION'     => [
             'name'        => 'HISTO_MODIFICATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -129,7 +129,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'ID'                         => [
+        'ID'                     => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -141,7 +141,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'MISSION_ID'                 => [
+        'MISSION_ID'             => [
             'name'        => 'MISSION_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -150,10 +150,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
-        'PERIODE_PAIEMENT_ID'        => [
+        'PERIODE_PAIEMENT_ID'    => [
             'name'        => 'PERIODE_PAIEMENT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -165,7 +165,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'SERVICE_ID'                 => [
+        'SERVICE_ID'             => [
             'name'        => 'SERVICE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -174,10 +174,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
-        'SERVICE_REFERENTIEL_ID'     => [
+        'SERVICE_REFERENTIEL_ID' => [
             'name'        => 'SERVICE_REFERENTIEL_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -186,10 +186,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
-        'TYPE_HEURES_ID'             => [
+        'TYPE_HEURES_ID'         => [
             'name'        => 'TYPE_HEURES_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -198,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
     ],

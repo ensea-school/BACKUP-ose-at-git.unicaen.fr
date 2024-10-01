@@ -9,7 +9,7 @@ return [
     'commentaire' => 'Données liées aux paiements et demandes de mises en paiement',
     'sequence'    => 'TBL_PAIEMENT_ID_SEQ',
     'columns'     => [
-        'ANNEE_ID'                   => [
+        'ANNEE_ID'               => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'CENTRE_COUT_ID'             => [
+        'CENTRE_COUT_ID'         => [
             'name'        => 'CENTRE_COUT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -30,10 +30,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
-        'DOMAINE_FONCTIONNEL_ID'     => [
+        'DOMAINE_FONCTIONNEL_ID' => [
             'name'        => 'DOMAINE_FONCTIONNEL_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -42,10 +42,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
-        'HEURES_A_PAYER_AA'          => [
+        'HEURES_A_PAYER_AA'      => [
             'name'        => 'HEURES_A_PAYER_AA',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -54,11 +54,11 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 19,
+            'position'    => 17,
             'commentaire' => 'HETD à payer en
  AA',
         ],
-        'HEURES_A_PAYER_AC'          => [
+        'HEURES_A_PAYER_AC'      => [
             'name'        => 'HEURES_A_PAYER_AC',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -67,10 +67,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 20,
+            'position'    => 18,
             'commentaire' => 'HETD à payer en AC',
         ],
-        'HEURES_DEMANDEES_AA'        => [
+        'HEURES_DEMANDEES_AA'    => [
             'name'        => 'HEURES_DEMANDEES_AA',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -79,10 +79,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 21,
+            'position'    => 19,
             'commentaire' => 'HETD demandées en AA',
         ],
-        'HEURES_DEMANDEES_AC'        => [
+        'HEURES_DEMANDEES_AC'    => [
             'name'        => 'HEURES_DEMANDEES_AC',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -91,11 +91,11 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 22,
+            'position'    => 20,
             'commentaire' => 'HETD demandées en AC
 ',
         ],
-        'HEURES_PAYEES_AA'           => [
+        'HEURES_PAYEES_AA'       => [
             'name'        => 'HEURES_PAYEES_AA',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -104,10 +104,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 23,
+            'position'    => 21,
             'commentaire' => 'HETD payées en AA',
         ],
-        'HEURES_PAYEES_AC'           => [
+        'HEURES_PAYEES_AC'       => [
             'name'        => 'HEURES_PAYEES_AC',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -116,10 +116,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 24,
+            'position'    => 22,
             'commentaire' => 'HETD payées en AC',
         ],
-        'ID'                         => [
+        'ID'                     => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -131,7 +131,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'             => [
+        'INTERVENANT_ID'         => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -140,10 +140,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
-        'MISE_EN_PAIEMENT_ID'        => [
+        'MISE_EN_PAIEMENT_ID'    => [
             'name'        => 'MISE_EN_PAIEMENT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -152,10 +152,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
-        'MISSION_ID'                 => [
+        'MISSION_ID'             => [
             'name'        => 'MISSION_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -167,7 +167,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'PERIODE_ENS_ID'             => [
+        'PERIODE_ENS_ID'         => [
             'name'        => 'PERIODE_ENS_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -176,10 +176,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 12,
             'commentaire' => 'Période d\'enseignement',
         ],
-        'PERIODE_PAIEMENT_ID'        => [
+        'PERIODE_PAIEMENT_ID'    => [
             'name'        => 'PERIODE_PAIEMENT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -188,10 +188,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
-        'SERVICE_ID'                 => [
+        'SERVICE_ID'             => [
             'name'        => 'SERVICE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -203,7 +203,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'SERVICE_REFERENTIEL_ID'     => [
+        'SERVICE_REFERENTIEL_ID' => [
             'name'        => 'SERVICE_REFERENTIEL_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -215,7 +215,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'STRUCTURE_ID'               => [
+        'STRUCTURE_ID'           => [
             'name'        => 'STRUCTURE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -224,10 +224,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
-        'TAUX_CONGES_PAYES'          => [
+        'TAUX_CONGES_PAYES'      => [
             'name'        => 'TAUX_CONGES_PAYES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -236,10 +236,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 12,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
-        'TAUX_HORAIRE'               => [
+        'TAUX_HORAIRE'           => [
             'name'        => 'TAUX_HORAIRE',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -248,10 +248,10 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 13,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
-        'TAUX_REMU_ID'               => [
+        'TAUX_REMU_ID'           => [
             'name'        => 'TAUX_REMU_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -260,10 +260,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
-        'TYPE_HEURES_ID'             => [
+        'TYPE_HEURES_ID'         => [
             'name'        => 'TYPE_HEURES_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -272,10 +272,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
-        'TYPE_INTERVENANT_ID'        => [
+        'TYPE_INTERVENANT_ID'    => [
             'name'        => 'TYPE_INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -284,7 +284,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 25,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
     ],

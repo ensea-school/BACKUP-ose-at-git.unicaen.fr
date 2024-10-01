@@ -43,7 +43,15 @@ return [
     ],
     'trigger'           => [
         'includes' => [
-
+            'MISE_EN_PAIEMENT_DEL_CK',
+            'F_ELEMENT_MODULATEUR',
+            'F_ELEMENT_MODULATEUR_S',
+            'F_ELEMENT_PEDAGOGIQUE',
+            'F_ELEMENT_PEDAGOGIQUE_S',
+            'F_INTERVENANT',
+            'F_INTERVENANT_S',
+            'F_MOTIF_MODIFICATION_SERVICE',
+            'F_MOTIF_MODIFICATION_SERVICE_S',
         ],
     ],
     'sequence'          => [

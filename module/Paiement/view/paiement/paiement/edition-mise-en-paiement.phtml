@@ -25,8 +25,8 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
         </thead>
         <tbody>
         <?php foreach ($paiements as $paiement):
-            if ($paiement->getS()) {
-                $service = $paiement->getFormuleResultatService()->getService();
+            if ($paiement->getService()) {
+                $service = $paiement->getService();
                 $serviceReferentiel = null;
                 $mission = null;
                 if ($service->getElementPedagogique()) {
@@ -34,9 +34,9 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
                 } else {
                     $composante = $intervenant->getStructure();
                 }
-            } elseif ($paiement->getFormuleResultatServiceReferentiel()) {
+            } elseif ($paiement->getServiceReferentiel()) {
                 $service = null;
-                $serviceReferentiel = $paiement->getFormuleResultatServiceReferentiel()->getServiceReferentiel();
+                $serviceReferentiel = $paiement->getServiceReferentiel();
                 $mission = null;
                 $composante = $serviceReferentiel->getStructure();
             } elseif ($paiement->getMission()) {

@@ -69,7 +69,6 @@ return [
     'services' => [
         Assertion\FormuleAssertion::class         => AssertionFactory::class,
         Service\FormuleService::class             => Service\FormuleServiceFactory::class,
-        Service\FormuleResultatService::class     => Service\FormuleResultatServiceFactory::class,
         Tbl\Process\FormuleProcess::class         => Tbl\Process\FormuleProcessFactory::class,
     ],
 ];

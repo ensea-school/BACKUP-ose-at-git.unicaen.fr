@@ -17,17 +17,15 @@ $total = [
 ];
 
 foreach ($paiements as $paiement) {
-    $sap = $paiement->getServiceAPayer();
-
-    if ($sap instanceof \Formule\Entity\Db\FormuleResultatService) {
+    if ($paiement->getService()) {
         $sapType = 'service';
-        $sid = $sapType . '-' . $sap->getService()->getId();
-    } elseif ($sap instanceof \Formule\Entity\Db\FormuleResultatServiceReferentiel) {
+        $sid = $sapType . '-' . $paiement->getService()->getId();
+    } elseif ($paiement->getServiceReferentiel()) {
         $sapType = 'referentiel';
-        $sid = $sapType . '-' . $sap->getServiceReferentiel()->getId();
-    } elseif ($sap instanceof \Mission\Entity\Db\Mission) {
+        $sid = $sapType . '-' . $paiement->getServiceReferentiel()->getId();
+    } elseif ($paiement->getMission()) {
         $sapType = 'mission';
-        $sid = $sapType . '-' . $sap->getId();
+        $sid = $sapType . '-' . $paiement->getMission()->getId();
     }
 
 
@@ -39,7 +37,7 @@ foreach ($paiements as $paiement) {
         ];
 
         if ('service' == $sapType) {
-            $service = $sap->getService();
+            $service = $paiement->getService();
             if ($service->getElementPedagogique()) {
                 $d['structure'] = (string)$this->structure($service->getElementPedagogique()->getStructure())->renderLink();
                 $d['service'] = [
@@ -54,16 +52,14 @@ foreach ($paiements as $paiement) {
                 ];
             }
         } elseif ('referentiel' == $sapType) {
-            /* @var $sap \Formule\Entity\Db\FormuleResultatServiceReferentiel */
-            $serviceReferentiel = $sap->getServiceReferentiel();
+            $serviceReferentiel = $paiement->getServiceReferentiel();
             $d['structure'] = (string)$this->structure($serviceReferentiel->getStructure())->renderLink();
             $d['service'] = [
                 'Fonction' => (string)$this->fonctionReferentiel($serviceReferentiel->getFonctionReferentiel())->renderLink(),
                 ''         => $serviceReferentiel->getCommentaires(),
             ];
         } elseif ('mission' == $sapType) {
-            /* @var $mission \Mission\Entity\Db\Mission */
-            $mission = $sap;
+            $mission = $paiement->getMission();
             $d['structure'] = (string)$this->structure($mission->getStructure())->renderLink();
             $d['service'] = [
                 'Type de mission' => (string)$mission->getTypeMission()->getLibelle(),

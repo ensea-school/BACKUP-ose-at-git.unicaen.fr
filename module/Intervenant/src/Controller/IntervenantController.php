@@ -12,7 +12,6 @@ use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
-use Formule\Form\HeuresCompFormAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Form\EditionFormAwareTrait;
 use Intervenant\Processus\IntervenantProcessusAwareTrait;
@@ -42,7 +41,6 @@ class  IntervenantController extends AbstractController
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use HeuresCompFormAwareTrait;
     use SessionContainerTrait;
     use EditionFormAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;

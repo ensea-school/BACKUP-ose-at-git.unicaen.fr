@@ -99,7 +99,7 @@ class ServiceAPayerService extends AbstractService
                     continue;
                 }
                 //On ne prend pas le référentiel dans les demandes de mise en paiement en lot
-                if (!$value->getFormuleResultatServiceReferentiel()) {
+                if (!$value->getServiceReferentiel()) {
                     if (!array_key_exists($intervenant->getId(), $dmep)) {
 
                         $dmep[$intervenant->getId()]['datasIntervenant'] = [
@@ -117,8 +117,8 @@ class ServiceAPayerService extends AbstractService
                     $dmep[$intervenant->getId()]['heures'][] = [
                         'heuresAPayer'       => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
                         'missionId'          => ($value->getMission()) ? $value->getMission()->getId() : '',
-                        'serviceId'          => ($value->getFormuleResultatService()) ? $value->getFormuleResultatService()->getService()->getId() : '',
-                        'serviceRefId'       => ($value->getFormuleResultatServiceReferentiel()) ? $value->getFormuleResultatServiceReferentiel()->getServiceReferentiel()->getId() : '',
+                        'serviceId'          => ($value->getService()) ? $value->getService()->getId() : '',
+                        'serviceRefId'       => ($value->getServiceReferentiel()) ? $value->getServiceReferentiel()->getId() : '',
                         'centreCout'         => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',
                                                  'code'                 => ($value->getCentreCout()) ? $value->getCentreCout()->getCode() : '',
                                                  'typeRessourceCode'    => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getCode() : '',

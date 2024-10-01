@@ -188,7 +188,7 @@ class PaiementDebugger
                     $s['libelle'] = $sEntity->getEtablissement() . ' ==> ' . $sEntity->getDescription();
                 }
             }
-            if ($service->referentiel) {
+            if ($service->serviceReferentiel) {
                 $s['type'] = 'Référentiel';
                 $s['libelle'] = (string)$this->getEntity(ServiceReferentiel::class, $service->referentiel)->getFonctionReferentiel();
             }
@@ -236,8 +236,6 @@ class PaiementDebugger
                     }
                 }elseif($service->referentiel){
                     $l['volumeHoraireId'] = $this->getReferentielVhs($service->formuleResServiceRef);
-
-
                 }
                 $l['tauxRemu'] = (string)$this->getEntity(TauxRemu::class, $l['tauxRemu']);
                 $l['tauxValeur'] = $this->fts($l['tauxValeur']);
@@ -357,12 +355,11 @@ class PaiementDebugger
           vhr.heures,
           'Dernière modification par ' || u.display_name || ' le ' || to_char(vhr.histo_modification,'dd/mm/YYYY') histo
         FROM
-          formule_resultat_service_ref frsr 
-          JOIN formule_resultat_vh_ref frvhr ON frvhr.formule_resultat_id = frsr.formule_resultat_id
-          JOIN volume_horaire_ref vhr ON vhr.id = frvhr.volume_horaire_ref_id
+          formule_resultat_volume_horaire frvh
+          JOIN volume_horaire_ref vhr ON vhr.id = frvh.volume_horaire_ref_id
           JOIN utilisateur u ON u.id = vhr.histo_modificateur_id
         WHERE
-          frsr.id = :frsr
+          frvh.id = :frsr
         ORDER BY
           frvhr.id
         ";

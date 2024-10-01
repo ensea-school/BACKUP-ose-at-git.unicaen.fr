@@ -5,7 +5,6 @@
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="dateMiseEnPaiement" type="datetime" column="DATE_MISE_EN_PAIEMENT" nullable="true"/>
-    <field name="dateValidation" type="datetime" column="DATE_VALIDATION" nullable="true"/>
     <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>

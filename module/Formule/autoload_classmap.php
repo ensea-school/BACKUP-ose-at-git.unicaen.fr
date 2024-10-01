@@ -25,8 +25,6 @@ return [
     'Formule\Module'                                  => __DIR__ . '/Module.php',
     'Formule\Service\FormulatorService'               => __DIR__ . '/src/Service/FormulatorService.php',
     'Formule\Service\FormulatorServiceFactory'        => __DIR__ . '/src/Service/FormulatorServiceFactory.php',
-    'Formule\Service\FormuleResultatService'          => __DIR__ . '/src/Service/FormuleResultatService.php',
-    'Formule\Service\FormuleResultatServiceFactory'   => __DIR__ . '/src/Service/FormuleResultatServiceFactory.php',
     'Formule\Service\FormuleService'                      => __DIR__ . '/src/Service/FormuleService.php',
     'Formule\Service\FormuleServiceFactory'               => __DIR__ . '/src/Service/FormuleServiceFactory.php',
     'Formule\Service\TestService'                         => __DIR__ . '/src/Service/TestService.php',

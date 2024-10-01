@@ -158,6 +158,7 @@ return [
     'services' => [
         Service\TypeRessourceService::class => Service\TypeRessourceServiceFactory::class,
         Service\DotationService::class      => Service\DotationServiceFactory::class,
+        Service\BudgetService::class        => Service\BudgetServiceFactory::class,
         Assertion\BudgetAssertion::class    => \UnicaenPrivilege\Assertion\AssertionFactory::class,
     ],
 

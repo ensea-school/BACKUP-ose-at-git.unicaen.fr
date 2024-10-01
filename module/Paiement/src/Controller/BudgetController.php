@@ -6,7 +6,6 @@ use Application\Controller\AbstractController;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Formule\Service\FormuleResultatServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use Lieu\Form\Element\Structure as StructureElement;
@@ -14,6 +13,7 @@ use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;
 use Paiement\Form\Budget\DotationSaisieFormAwareTrait;
+use Paiement\Service\BudgetServiceAwareTrait;
 use Paiement\Service\DotationServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
@@ -30,11 +30,11 @@ class BudgetController extends AbstractController
     use ContextServiceAwareTrait;
     use TypeRessourceServiceAwareTrait;
     use DotationServiceAwareTrait;
-    use FormuleResultatServiceAwareTrait;
     use DotationSaisieFormAwareTrait;
     use AnneeServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use SourceServiceAwareTrait;
+    use BudgetServiceAwareTrait;
 
 
     public function indexAction ()
@@ -58,7 +58,7 @@ class BudgetController extends AbstractController
         $annee = $this->getServiceContext()->getAnnee();
 
         $tbl = $this->getServiceDotation()->getTableauBord();
-        $prv = $this->getServiceFormuleResultat()->getTotalPrevisionnelValide();
+        $prv = $this->getServiceBudget()->getTotalPrevisionnelValide();
         $liq = $this->getServiceMiseEnPaiement()->getTblLiquidation();
 
         $typesRessources = $this->getServiceTypeRessource()->getList();
@@ -193,7 +193,7 @@ class BudgetController extends AbstractController
         $liquidation = [];
         if ($structure) {
             $dotations          = $this->getServiceDotation()->getDotations($structure);
-            $previsionnelValide = $this->getServiceFormuleResultat()->getTotalPrevisionnelValide($structure);
+            $previsionnelValide = $this->getServiceBudget()->getTotalPrevisionnelValide($structure);
             $ld                 = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
             foreach ($dotations['typesRessources'] as $dtrId => $dtr) {
                 $typeRessource = $dtr['entity'];

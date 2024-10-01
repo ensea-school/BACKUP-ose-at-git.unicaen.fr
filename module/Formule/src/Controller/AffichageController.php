@@ -3,8 +3,6 @@
 namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
-use Formule\Form\HeuresCompFormAwareTrait;
-use Formule\Service\FormuleResultatServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use LogicException;
 use Service\Entity\Db\EtatVolumeHoraire;
@@ -14,8 +12,6 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 class  AffichageController extends AbstractController
 {
-    use HeuresCompFormAwareTrait;
-    use FormuleResultatServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
 
@@ -29,7 +25,6 @@ class  AffichageController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
-        $form = $this->getFormIntervenantHeuresComp();
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
         if (!$typeVolumeHoraire instanceof TypeVolumeHoraire) {
@@ -49,16 +44,11 @@ class  AffichageController extends AbstractController
             throw new LogicException('Etat de volume horaire erroné');
         }
 
-        $form->setData([
-            'type-volume-horaire' => $typeVolumeHoraire->getId(),
-            'etat-volume-horaire' => $etatVolumeHoraire->getId(),
-        ]);
-
-        $data = $this->getServiceFormuleResultat()->getData(
+        /*$data = $this->getServiceFormuleResultat()->getData(
             $intervenant,
             $typeVolumeHoraire,
             $etatVolumeHoraire
-        );
+        );*/
 
         return compact('form', 'intervenant', 'data');
     }

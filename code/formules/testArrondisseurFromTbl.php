@@ -17,7 +17,7 @@ $params = [
     //'INTERVENANT_ID' => 899413,
     'TYPE_VOLUME_HORAIRE_ID' => 1,
     'ETAT_VOLUME_HORAIRE_ID' => 1,
-    //'STATUT_ID' => 744,
-    'ANNEE_ID'  => 2022,
+    'STATUT_ID' => 744,
+    'ANNEE_ID'  => 2023,
 ];
 $sTbl->calculer('formule', $params);

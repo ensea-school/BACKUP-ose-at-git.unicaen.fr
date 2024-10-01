@@ -7,16 +7,14 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits;
 use Doctrine\ORM\QueryBuilder;
 use Enseignement\Entity\Db\Service;
-use Formule\Entity\Db\FormuleResultatService;
-use Formule\Entity\Db\FormuleResultatServiceReferentiel;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Mission\Service\MissionServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\ServiceAPayerInterface;
-use Paiement\Entity\Db\TblPaiement;
 use Paiement\Entity\MiseEnPaiementRecherche;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use RuntimeException;
@@ -28,7 +26,7 @@ use RuntimeException;
  */
 class MiseEnPaiementService extends AbstractEntityService
 {
-    use \Intervenant\Service\IntervenantServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;

@@ -60,8 +60,6 @@ class TypeIndicateur
 
 
     /**
-     * Get formuleResultatService
-     *
      * @return Collection|Indicateur[]
      */
     public function getIndicateur(): Collection

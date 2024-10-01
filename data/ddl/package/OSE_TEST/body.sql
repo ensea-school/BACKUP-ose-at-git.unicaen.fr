@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_TEST" AS
 
   PROCEDURE ECHO( MSG CLOB ) IS
   BEGIN
-    dbms_output.put_line(MSG);
+      dbms_output.put_line(MSG);
   END;
 
 END OSE_TEST;

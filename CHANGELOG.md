@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 23.8](#ose-238-06092024)
+[OSE 23.8](#ose-239-23092024)
 
 
 
@@ -8,18 +8,43 @@
 
 * Nouvelle infrastructure de gestion des formules de calcul
 * Nouvelle page de demandes de mise en paiement
+* Signature électronique
 
-# OSE 23.9 (à venir)
+
+# OSE 23.10 (à venir)
+
+## Nouveautés
+
+* Nouveau paramètrage générale pour sélectionner l'état de sortir à utiliser pour l'extraction des indémnités de fin de mission.
+
+
+## Corrections de bugs
+
+* Correction d'un problème intervenu en 23.9 : impossibilité de valider du suivi de mission.
+* Correction sur le calcul du montant des indémnités des missions
+* L'utilisation de la fonctionnalité de demande de mise en paiement en lot mettait toutes les heures de l'intervenant sélectionné en demandes de mise en paiement sans tenir compte de la composante sélectionnée. (#58607)
+
+
+
+# OSE 23.9 (23/09/2024)
 
 ## Corrections de bugs
 
 * Prise en compte du bon nombre d'heures de la mission lors de l'export RH dans SIHAM
-* Bloquer la possiblité de saisir un date antérieure à la date de début dans le cadre d'une mission
-* Correction du connecteur Pégase pour pouvoir utiliser les formations comme étape
+* Bloquer la possiblité de saisir une date antérieure à la date de début dans le cadre d'une mission
+* Correction du connecteur Pégase pour pouvoir utiliser les formations comme étapes
+* Le filtrage par élément pédagogique de la page des services refonctionne (#58031)
 
 ## Améliorations
 
 * Pour l'export RH vers SIHAM, possiblité de renseigner via le fichier de configuration le code categorie de situation et le code motif de situation pour la clôture du dossier dans SIHAM lors d'une prise en charge ou un renouvellement (#58351)
+* Nouveau privilège spécifique pour refuser une candidature étudiante, se cumule avec le privilège valider une candidature étudiante.
+* Saisie de suivi de missions : la saisie d'horaires se chevauchant est désormais interdite (#57926)
+* Modification de la formule de calcul de Lyon 2 (#57423)
+
+## Note de mise à jour
+
+Pour les utilisateurs des missions sous ose et notamment des candidatures, le privilèges "Accepter une candidature" a été scindé en deux avec un nouveau privilège "Refuser une candidature", pensez donc à ajouter ce nouveau privilège à vos utilisateurs pour qu'ils continuent de refuser des candidatures.
 
 # OSE 23.8 (06/09/2024)
 
@@ -39,6 +64,8 @@
 * Modification du connecteur pégase : Utilisation de "structure_porteuse" si elle existe au lieu de "code_structure" provenant de pégase pour la structure d'un élément
 * Correction de l'état de problèmes de calcul sur l'export CSV des missions
 
+
+
 # OSE 23.7 (11/07/2024)
 
 ## Nouveautés
@@ -56,6 +83,8 @@
 ## Corrections de bugs
 
 * Correction d'un problème de suppression d'une mission avec plusieurs volumes horaires prévisionnels
+
+
 
 # OSE 23.6 (13/06/2024)
 
@@ -109,6 +138,7 @@
 
 * Pour l'export des imputations budgétaires Siham, l'export proratise maintenant par code indémnité puis centre de coût
 * Possibilité de désactiver par statut d'intervenant les étapes "Indémnités de fin de contrat" (Mission étudiante) et "Pièces justificatives (#51245 et #56269)
+
 
 
 # OSE 23.4 (26/03/2024)

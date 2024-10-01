@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
+CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2_2023 AS
   decalageLigne NUMERIC DEFAULT 19;
 
   /* Stockage des valeurs intermédiaires */
@@ -126,12 +126,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
 
 
 
-      -- U=IF([.$I20]="Référentiel";0;([.$AR20]+[.$AY20]+[.$BF20]+[.$BM20]+[.$BT20])*[.F20])
+      -- U=IF([.$I20]="Référentiel";0;([.$AK20]+[.$AR20]+[.$AY20]+[.$BF20]+[.$BT20])*[.F20])
       WHEN 'U' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AR',l) + cell('AY',l) + cell('BF',l) + cell('BM',l) + cell('BT',l)) * vh.taux_fi;
+          RETURN (cell('AK',l) + cell('AR',l) + cell('AY',l) + cell('BF',l) + cell('BT',l)) * vh.taux_fi;
         END IF;
 
 
@@ -141,57 +141,57 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AR',l) + cell('AY',l) + cell('BF',l) + cell('BM',l) + cell('BT',l)) * vh.taux_fa;
+          RETURN (cell('AK',l) + cell('AR',l) + cell('AY',l) + cell('BF',l) + cell('BT',l)) * vh.taux_fa;
         END IF;
 
 
 
-      -- W=IF([.$I20]="Référentiel";0;([.$AR20]+[.$AY20]+[.$BF20]+[.$BM20]+[.$BT20])*[.H20])
+      -- W=IF([.$I20]="Référentiel";0;([.$AK20]+[.$AR20]+[.$AY20]+[.$BF20]+[.$BT20])*[.H20])
       WHEN 'W' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AR',l) + cell('AY',l) + cell('BF',l) + cell('BM',l) + cell('BT',l)) * vh.taux_fc;
+          RETURN (cell('AK',l) + cell('AR',l) + cell('AY',l) + cell('BF',l) + cell('BT',l)) * vh.taux_fc;
         END IF;
 
 
 
-      -- X=IF([.$I20]="Référentiel";[.$AK20];0)
+      -- X=IF([.$I20]="Référentiel";[.$BM20];0)
       WHEN 'X' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AK',l);
+          RETURN cell('BM',l);
         ELSE
           RETURN 0;
         END IF;
 
 
 
-      -- Y=IF([.$I20]="Référentiel";0;([.$AT20]+[.$BA20]+[.$BH20]+[.$BO20]+[.$BV20])*[.F20])
+      -- Y=IF([.$I20]="Référentiel";0;([.$AM20]+[.$AT20]+[.$BA20]+[.$BH20]+[.$BV20])*[.F20])
       WHEN 'Y' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AT',l) + cell('BA',l) + cell('BH',l) + cell('BO',l) + cell('BV',l)) * vh.taux_fi;
+          RETURN (cell('AM',l) + cell('AT',l) + cell('BA',l) + cell('BH',l) + cell('BV',l)) * vh.taux_fi;
         END IF;
 
 
 
-      -- Z=IF([.$I20]="Référentiel";0;([.$AT20]+[.$BA20]+[.$BH20]+[.$BO20]+[.$BV20])*[.G20])
+      -- Z=IF([.$I20]="Référentiel";0;([.$AM20]+[.$AT20]+[.$BA20]+[.$BH20]+[.$BV20])*[.G20])
       WHEN 'Z' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AT',l) + cell('BA',l) + cell('BH',l) + cell('BO',l) + cell('BV',l)) * vh.taux_fa;
+          RETURN (cell('AM',l) + cell('AT',l) + cell('BA',l) + cell('BH',l) + cell('BV',l)) * vh.taux_fa;
         END IF;
 
 
 
-      -- AA=IF([.$I20]="Référentiel";0;([.$AT20]+[.$BA20]+[.$BH20]+[.$BO20]+[.$BV20])*[.H20])
+      -- AA=IF([.$I20]="Référentiel";0;([.$AM20]+[.$AT20]+[.$BA20]+[.$BH20]+[.$BV20])*[.H20])
       WHEN 'AA' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AT',l) + cell('BA',l) + cell('BH',l) + cell('BO',l) + cell('BV',l)) * vh.taux_fc;
+          RETURN (cell('AM',l) + cell('AT',l) + cell('BA',l) + cell('BH',l) + cell('BV',l)) * vh.taux_fc;
         END IF;
 
 
@@ -202,10 +202,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
 
 
 
-      -- AC=IF([.$I20]="Référentiel";[.$AM20];0)
+      -- AC=IF([.$I20]="Référentiel";[.$BO20];0)
       WHEN 'AC' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AM',l);
+          RETURN cell('BO',l);
         ELSE
           RETURN 0;
         END IF;
@@ -224,9 +224,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
 
 
 
-      -- AH=IF([.$I20]="Référentiel";[.$N20];0)
+      -- AH=IF(AND([.$A20]<>"D4DAC10000";[.$B20]="Oui";[.$D20]<>"Oui";[.$H20]<>1;[.$I20]<>"Référentiel");[.$N20];0)
       WHEN 'AH' THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        IF vh.structure_code <> 'D4DAC10000' AND vh.structure_is_affectation AND NOT vh.structure_is_exterieur AND vh.taux_fc <> 1 AND vh.volume_horaire_ref_id IS NULL THEN
           RETURN vh.heures;
         ELSE
           RETURN 0;
@@ -298,9 +298,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
 
 
 
-      -- AO=IF(AND([.$A20]<>"D4DAC10000";[.$B20]="Oui";[.$D20]<>"Oui";[.$H20]<>1;[.$I20]<>"Référentiel");[.$N20];0)
+      -- AO=IF(AND([.$A20]<>"D4DAC10000";[.$B20]<>"Oui";[.$D20]<>"Oui";[.$H20]<>1;[.$I20]<>"Référentiel");[.$N20];0)
       WHEN 'AO' THEN
-        IF vh.structure_code <> 'D4DAC10000' AND vh.structure_is_affectation AND NOT vh.structure_is_exterieur AND vh.taux_fc <> 1 AND vh.volume_horaire_ref_id IS NULL THEN
+        IF vh.structure_code <> 'D4DAC10000' AND NOT vh.structure_is_affectation AND NOT vh.structure_is_exterieur AND vh.taux_fc <> 1 AND vh.volume_horaire_ref_id IS NULL THEN
           RETURN vh.heures;
         ELSE
           RETURN 0;
@@ -372,9 +372,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
 
 
 
-      -- AV=IF(AND([.$A20]<>"D4DAC10000";[.$B20]<>"Oui";[.$D20]<>"Oui";[.$H20]<>1;[.$I20]<>"Référentiel");[.$N20];0)
+      -- AV=IF(AND([.$A20]<>"D4DAC10000";[.$D20]<>"Oui";[.$H20]=1;[.$I20]<>"Référentiel");[.$N20];0)
       WHEN 'AV' THEN
-        IF vh.structure_code <> 'D4DAC10000' AND NOT vh.structure_is_affectation AND NOT vh.structure_is_exterieur AND vh.taux_fc <> 1 AND vh.volume_horaire_ref_id IS NULL THEN
+        IF vh.structure_code <> 'D4DAC10000' AND NOT vh.structure_is_exterieur AND vh.taux_fc = 1 AND vh.volume_horaire_ref_id IS NULL THEN
           RETURN vh.heures;
         ELSE
           RETURN 0;
@@ -446,9 +446,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
 
 
 
-      -- BC=IF(AND([.$A20]<>"D4DAC10000";[.$D20]<>"Oui";[.$H20]=1;[.$I20]<>"Référentiel");[.$N20];0)
+      -- BC=IF(AND([.$A20]="D4DAC10000";[.$I20]<>"Référentiel");[.$N20];0)
       WHEN 'BC' THEN
-        IF vh.structure_code <> 'D4DAC10000' AND NOT vh.structure_is_exterieur AND vh.taux_fc = 1 AND vh.volume_horaire_ref_id IS NULL THEN
+        IF vh.structure_code = 'D4DAC10000' AND vh.volume_horaire_ref_id IS NULL THEN
           RETURN vh.heures;
         ELSE
           RETURN 0;
@@ -520,9 +520,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
 
 
 
-      -- BJ=IF(AND([.$A20]="D4DAC10000";[.$I20]<>"Référentiel");[.$N20];0)
+      -- BJ=IF([.$I20]="Référentiel";[.$N20];0)
       WHEN 'BJ' THEN
-        IF vh.structure_code = 'D4DAC10000' AND vh.volume_horaire_ref_id IS NULL THEN
+        IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN vh.heures;
         ELSE
           RETURN 0;
@@ -696,7 +696,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
       ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'Y',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'Z',l);
       ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'AA',l);
-      ose_formule.volumes_horaires.items(l).heures_primes            := mainCell('Heures compl. FC Maj.', 'AB',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'AB',l);
       ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'AC',l);
     END LOOP;
   END;
@@ -737,4 +737,4 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
     ';
   END;
 
-END FORMULE_LYON2;
+END FORMULE_LYON2_2023;

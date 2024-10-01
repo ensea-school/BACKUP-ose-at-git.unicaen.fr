@@ -3,11 +3,12 @@
 namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\Role;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -15,7 +16,6 @@ use Enseignement\Entity\Db\VolumeHoraire;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
-use Laminas\Json\Json;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
@@ -23,10 +23,10 @@ use Paiement\Entity\Db\TypeRessource;
 use Paiement\Entity\MiseEnPaiementRecherche;
 use Paiement\Form\Paiement\MiseEnPaiementFormAwareTrait;
 use Paiement\Form\Paiement\MiseEnPaiementRechercheFormAwareTrait;
+use Paiement\Service\CentreCoutServiceAwareTrait;
 use Paiement\Service\DotationServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\NumeroPriseEnChargeServiceAwareTrait;
-use Paiement\Service\ServiceAPayerServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
 use Paiement\Tbl\Process\PaiementDebugger;
 use Referentiel\Entity\Db\ServiceReferentiel;
@@ -47,7 +47,6 @@ class PaiementController extends AbstractController
     use UtilisateurServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
-    use ServiceAPayerServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use MiseEnPaiementFormAwareTrait;
     use MiseEnPaiementRechercheFormAwareTrait;
@@ -58,6 +57,32 @@ class PaiementController extends AbstractController
     use EtatSortieServiceAwareTrait;
     use TableauBordServiceAwareTrait;
     use NumeroPriseEnChargeServiceAwareTrait;
+    use CentreCoutServiceAwareTrait;
+    use ParametresServiceAwareTrait;
+
+    public function indexAction()
+    {
+        return [];
+    }
+
+
+
+    public function demandeMiseEnPaiementAction()
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
+        if ($role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
+        }
+
+
+        return compact('intervenant');
+    }
+
+
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -68,165 +93,162 @@ class PaiementController extends AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            MiseEnPaiement::class,
-            VolumeHoraire::class,
-            ServiceReferentiel::class,
-            VolumeHoraireReferentiel::class,
-            Validation::class,
-            TypeRessource::class,
-        ]);
+                                                                  MiseEnPaiement::class,
+                                                                  VolumeHoraire::class,
+                                                                  ServiceReferentiel::class,
+                                                                  VolumeHoraireReferentiel::class,
+                                                                  Validation::class,
+                                                                  TypeRessource::class,
+                                                              ]);
     }
 
 
 
-    public function indexAction()
+    public function supprimerDemandeMiseEnPaiementAction()
     {
-        return [];
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $idDmep      = $this->params()->fromRoute('mise-en-paiement');
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        //Un intervenant ne peut pas supprimer des demandes de mise en paiement
+        if ($role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            return false;
+        }
+        //on supprimer la demande de mise en paiement
+        try {
+            $this->getServiceMiseEnPaiement()->supprimerDemandeMiseEnPaiement($idDmep);
+            $this->flashMessenger()->addSuccessMessage("Demande de mise en paiement supprimer.");
+            $this->updateTableauxBord($intervenant);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 
 
 
     /**
-     * @return int
+     * @param Intervenant $intervenant
      */
-    protected function getChangeIndex()
+    private function updateTableauxBord($intervenant)
     {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cgtIndex)) $session->cgtIndex = 0;
-        $result = $session->cgtIndex;
-        $session->cgtIndex++;
-
-        return $result;
+        $this->getServiceWorkflow()->calculerTableauxBord([
+                                                              'paiement',
+                                                          ], $intervenant);
     }
 
 
 
-    protected function isChangeIndexSaved($changeIndex)
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cht)) $session->cht = [];
-
-        return isset($session->cht[$changeIndex]) && $session->cht[$changeIndex];
-    }
-
-
-
-    protected function setChangeIndexSaved($changeIndex)
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cht)) $session->cht = [];
-        $session->cht[$changeIndex] = true;
-
-        return $this;
-    }
-
-
-
-    public function demandeMiseEnPaiementAction()
+    public function ajouterDemandesMiseEnPaiementAction()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
-
-        //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
-        if ($role->getIntervenant()) {
+        if ($role instanceof Role && $role->getIntervenant()) {
             //On redirige vers la visualisation des mises en paiement
-            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
+            return false;
         }
-        // pour empêcher le ré-enregistrement avec un rafraichissement (F5)
-        $postChangeIndex = (int)$this->params()->fromPost('change-index');
-        $changeIndex     = $this->getChangeIndex();
+        if ($this->getRequest()->isPost() && !$role->getIntervenant()) {
+            $post = file_get_contents('php://input') ?? $_POST;
 
-        /* @var $intervenant \Intervenant\Entity\Db\Intervenant */
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-
-        $saved = false;
-        if ($this->getRequest()->isPost() && !$this->isChangeIndexSaved($postChangeIndex)) {
-            $changements = $this->params()->fromPost('changements', '{}');
-            $changements = Json::decode($changements, Json::TYPE_ARRAY);
-            $this->getServiceMiseEnPaiement()->saveChangements($changements);
-            $this->updateTableauxBord($intervenant);
-            $this->setChangeIndexSaved($postChangeIndex);
-            $saved = true;
-        }
-        $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
-
-        /* On récupère du workflow les raisons de non édition éventuelles (selon sa structure le cas échéant) */
-        $workflowEtape  = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
-        $etapes         = $workflowEtape->getEtapes();
-        $whyNotEditable = [];
-        foreach ($etapes as $we) {
-            if (!$role->getStructure() || !$we->getStructure() || $we->getStructure()->inStructure($role->getStructure())) {
-                $sid  = $we->getStructure() ? $we->getStructure()->getId() : 0;
-                $deps = $we->getEtapeDeps();
-                foreach ($deps as $dep) {
-                    if (!isset($whyNotEditable[$sid])) {
-                        $whyNotEditable[$sid] = [
-                            'structure' => (string)$we->getStructure(),
-                            'raisons'   => [],
-                        ];
+            $demandes                         = json_decode($post, true);
+            $demandesApprouveesBudgetairement = $this->getServiceMiseEnPaiement()->verifierBudgetDemandeMiseEnPaiement($demandes);
+            $error                            = 0;
+            $errorBudget                      = count($demandes) - count($demandesApprouveesBudgetairement);
+            $success                          = 0;
+            foreach ($demandesApprouveesBudgetairement as $demande) {
+                try {
+                    $this->getServiceMiseEnPaiement()->verifierValiditeDemandeMiseEnPaiement($intervenant, $demande);
+                    $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $demande);
+                } catch (\Exception $e) {
+                    if ($e->getCode() == 3) {
+                        $this->flashMessenger()->addErrorMessage($e->getMessage());
+                    } else {
+                        $this->flashMessenger()->addErrorMessage($e->getMessage());
+                        $error++;
                     }
-                    $whyNotEditable[$sid]['raisons'][] = $dep->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
+                    continue;
+                }
+                $success++;
+            }
+            //Mise à jour des tableaux de bord nécessaires
+            $this->updateTableauxBord($intervenant);
+            //Traitement des messages de succes ou d'erreur (Toast)
+            if ($success == 0) {
+                $this->flashMessenger()->addInfoMessage('Aucun demande de mise en paiement a effectué pour cette composante');
+            }
+            //Demandes de mise en paiement effectuées
+            if ($success > 0) {
+                if ($success > 1) {
+                    $this->flashMessenger()->addSuccessMessage($success . " demandes de mise en paiement ont été effectué pour cette composante.");
+                } else {
+                    $this->flashMessenger()->addSuccessMessage($success . " demande de mise en paiement a été effectué pour cette composante.");
                 }
             }
-        }
-
-        $dateDerniereModif   = null;
-        $dernierModificateur = null;
-
-        $typesRessources = $this->getServiceTypeRessource()->getList();
-        $structures      = [];
-
-        foreach ($servicesAPayer as $sap) {
-            if (null == $role->getStructure() || $sap->getStructure()->inStructure($role->getStructure())) {
-                $structures[$sap->getStructure()->getId()] = $sap->getStructure();
-            }
-            $mepListe = $sap->getMiseEnPaiement();
-            foreach ($mepListe as $mep) {
-                /* @var $mep MiseEnPaiement */
-                $dateModification = $mep->getHistoModification();
-
-                if ($dateDerniereModif == null || $dateDerniereModif < $dateModification) {
-                    $dateDerniereModif   = $dateModification;
-                    $dernierModificateur = $mep->getHistoModificateur();
+            //Erreur de demande de mise en paiement pour mauvais paramètrage de centre de cout ou de domaine fonctionnel
+            if ($error > 0) {
+                if ($error > 1) {
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demandes de mise en paiement n'ont pas pu être traité pour cette composante.");
+                } else {
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demande de mise en paiement n'a pas pu être traité pour cette composante.");
                 }
             }
-        }
-
-        $budget = [
-            'structures'      => $structures,
-            'typesRessources' => $typesRessources,
-        ];
-        $dot    = $this->getServiceDotation()->getTableauBord($structures);
-        $liq    = $this->getServiceMiseEnPaiement()->getTblLiquidation($structures);
-        foreach ($structures as $structure) {
-            $sid = $structure->getId();
-            foreach ($typesRessources as $typeRessource) {
-                $trid = $typeRessource->getId();
-
-                $dotation = isset($dot[$sid][$trid]) ? $dot[$sid][$trid] : 0;
-                $usage    = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
-
-                $budget[$sid][$trid] = compact('dotation', 'usage');
+            //Erreur de mise en paiement pour raison de dépassement de budget
+            if ($errorBudget > 0) {
+                if ($errorBudget > 1) {
+                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demandes de mise en paiement n'ont pas pu être traité pour cette composante car votre budget ne permet plus d'en faire la demande.");
+                } else {
+                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demande de mise en paiement n'a pas pu être traité pour cette composante car votre budget ne permet plus d'en faire la demande.");
+                }
             }
+
+            return true;
         }
 
-        return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget', 'whyNotEditable');
+        return false;
+    }
+
+
+
+    public function getDemandesMiseEnPaiementAction()
+    {
+        $structure = null;
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        //Un intervenant ne peut pas récuperer les datas de demande de mise en paiement
+        if ($role->getIntervenant() && $role instanceof \Application\Acl\Role) {
+            return new AxiosModel([]);
+        }
+        //$this->updateTableauxBord($intervenant);
+        if ($role->getPerimetre()->isComposante()) {
+            $structure = $role->getStructure();
+        }
+
+        $servicesAPayer = $this->getServiceMiseEnPaiement()->getDemandeMiseEnPaiementResume($intervenant, $structure);
+
+
+        return new AxiosModel($servicesAPayer);
     }
 
 
 
     function demandeMiseEnPaiementLotAction()
     {
+        $title             = 'Demande de mise en paiement par lot';
+        $intervenants      = [];
         $structures        = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
         $canMiseEnPaiement = $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT));
         if ($this->getRequest()->isPost()) {
             //On récupere les données post notamment la structure recherchée
             $idStructure  = $this->getRequest()->getPost('structure');
             $structure    = $this->em()->find(Structure::class, $idStructure);
-            $intervenants = $this->getServiceServiceAPayer()->getListByStructure($structure);
+            $intervenants = $this->getServiceMiseEnPaiement()->getListByStructure($structure);
+
 
             return new AxiosModel($intervenants);
         }
@@ -502,7 +524,7 @@ class PaiementController extends AbstractController
             $filters = $recherche->getFilters();
 
             $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_extraction_paie');
-            $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
+            $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
             $csvModel->setFilename(str_replace(' ', '_', 'ose-export-paie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($recherche->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
 
             return $csvModel;
@@ -678,17 +700,5 @@ class PaiementController extends AbstractController
         $debugger->run($intervenant);
 
         return compact('intervenant', 'debugger');
-    }
-
-
-
-    /**
-     * @param Intervenant $intervenant
-     */
-    private function updateTableauxBord($intervenant)
-    {
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'paiement',
-        ], $intervenant);
     }
 }

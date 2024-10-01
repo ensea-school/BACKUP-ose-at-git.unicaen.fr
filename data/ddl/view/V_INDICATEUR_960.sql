@@ -6,10 +6,10 @@ SELECT
 FROM
     tbl_workflow w
     LEFT JOIN mission m ON m.intervenant_id = w.intervenant_id
-    LEFT JOIN mise_en_paiement mep ON mep.mission_id = m.id
+    LEFT JOIN tbl_paiement tp ON tp.mission_id = m.id
+    LEFT JOIN mise_en_paiement mep ON mep.id = tp.mise_en_paiement_id
 WHERE
-  mep.histo_destruction IS NULL
-  AND mep.periode_paiement_id IS NULL
+  tp.periode_paiement_id IS NULL
   AND w.etape_code = 'SAISIE_MEP'
   AND w.type_intervenant_code = 'S'
   AND w.atteignable = 1

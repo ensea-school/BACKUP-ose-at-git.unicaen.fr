@@ -53,6 +53,8 @@ class TblPaiement
 
     private float $heuresPayeesAC = 0.0;
 
+    private ?Periode                           $periodeEnseignement               = null;
+
 
 
     public function getId(): int
@@ -207,5 +209,12 @@ class TblPaiement
     public function getHeuresPayees(): float
     {
         return round($this->heuresPayeesAA + $this->heuresPayeesAC, 2);
+    }
+
+
+
+    public function getPeriodeEnseignement (): ?Periode
+    {
+        return $this->periodeEnseignement;
     }
 }

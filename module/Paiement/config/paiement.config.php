@@ -88,6 +88,19 @@ return [
                     'privileges'  => Privileges::MISE_EN_PAIEMENT_DEMANDE,
 
                 ],
+                'ajouter-demande-mise-en-paiement'     => [
+                    'route'      => '/:intervenant/ajouter-demandes',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'ajouterDemandesMiseEnPaiement',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
+
+                ],
+                'supprimer-demande-mise-en-paiement'   => [
+                    'route'      => '/:intervenant/supprimer-demande/:mise-en-paiement',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'supprimerDemandeMiseEnPaiement',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
+                ],
                 'process-demande-mise-en-paiement-lot' => [
                     'route'      => '/process-demande-mise-en-paiement-lot',
                     'controller' => Controller\PaiementController::class,
@@ -116,21 +129,35 @@ return [
                     'route'         => '/:intervenant/mise-en-paiement',
                     'controller'    => Controller\PaiementController::class,
                     'child_routes'  => [
-                        'visualisation' => [
+                        'visualisation'                 => [
                             'route'      => '/visualisation',
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'visualisationMiseEnPaiement',
+                            'privileges' => [
+                                Privileges::MISE_EN_PAIEMENT_DEMANDE,
+                                Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT,
+                            ],
+                            'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
                         ],
-                        'demande'       => [
+                        'demande'                       => [
                             'route'      => '/demande',
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'demandeMiseEnPaiement',
                         ],
-                        'edition'       => [
+                        'edition'                       => [
                             'route'      => '/edition',
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'editionMiseEnPaiement',
                         ],
+                        'get-demandes-mise-en-paiement' => [
+                            'route'      => '/get-demandes-mise-en-paiement[/:structure]',
+                            'controller' => Controller\PaiementController::class,
+                            'action'     => 'getDemandesMiseEnpaiement',
+                            'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
+
+                        ],
+
+
                     ],
                 ],
             ],
@@ -140,7 +167,7 @@ return [
     'navigation' => [
         'intervenant' => [
             'pages' => [
-                'demande-mise-en-paiement'       => [
+                'demande-mise-en-paiement' => [
                     'label'               => "Demande de mise en paiement",
                     'title'               => "Demande de mise en paiement",
                     'route'               => 'intervenant/mise-en-paiement/demande',
@@ -153,6 +180,8 @@ return [
                     'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 16,
                 ],
+
+
                 'visualisation-mise-en-paiement' => [
                     'label'               => "Visualisation des mises en paiement",
                     'title'               => "Visualisation des mises en paiement",
@@ -279,7 +308,7 @@ return [
     'guards' => [
         [
             'controller' => Controller\PaiementController::class,
-            'action'     => ['demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
+            'action'     => ['ajouterDemandeMiseEnPaiement', 'supprimerDemandeMiseEnPaiement', 'get-demandes-mise-en-paiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
             'privileges' => [
                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
             ],
@@ -288,11 +317,7 @@ return [
         [
             'controller' => Controller\PaiementController::class,
             'action'     => ['visualisationMiseEnPaiement'],
-            'privileges' => [
-                Privileges::MISE_EN_PAIEMENT_DEMANDE,
-                Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT,
-            ],
-            'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
+
         ],
         [
             'controller' => Controller\PaiementController::class,
@@ -344,7 +369,6 @@ return [
     ],
 
     'services' => [
-        Service\ServiceAPayerService::class                      => Service\ServiceAPayerServiceFactory::class,
         Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementServiceFactory::class,
         Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureServiceFactory::class,
         Service\TblPaiementService::class                        => Service\TblPaiementServiceFactory::class,

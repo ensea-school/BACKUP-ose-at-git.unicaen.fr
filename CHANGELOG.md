@@ -23,7 +23,7 @@
 * Correction d'un problème intervenu en 23.9 : impossibilité de valider du suivi de mission.
 * Correction sur le calcul du montant des indémnités des missions
 * L'utilisation de la fonctionnalité de demande de mise en paiement en lot mettait toutes les heures de l'intervenant sélectionné en demandes de mise en paiement sans tenir compte de la composante sélectionnée. (#58607)
-
+* Ajout d'une variable de contrat nommé "numeroAvenant" pour numéroter les éditions d'avenant (#58658)
 
 
 # OSE 23.9 (23/09/2024)

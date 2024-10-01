@@ -90,7 +90,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @return \DateTime
      */
-    public function getDebutValidite (): \DateTime
+    public function getDebutValidite (): ?\DateTime
     {
         return $this->debutValidite;
     }
@@ -100,7 +100,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @param \DateTime $debutValidite
      */
-    public function setDebutValidite (\DateTime $debutValidite): void
+    public function setDebutValidite (?\DateTime $debutValidite): void
     {
         $this->debutValidite = $debutValidite;
     }
@@ -110,7 +110,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @return \DateTime
      */
-    public function getFinValidite (): \DateTime
+    public function getFinValidite (): ?\DateTime
     {
         return $this->finValidite;
     }
@@ -120,7 +120,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @param \DateTime $finValidite
      */
-    public function setFinValidite (\DateTime $finValidite): void
+    public function setFinValidite (?\DateTime $finValidite): void
     {
         $this->finValidite = $finValidite;
     }

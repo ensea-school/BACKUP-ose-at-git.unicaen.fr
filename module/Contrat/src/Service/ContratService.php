@@ -30,7 +30,7 @@ class ContratService extends AbstractEntityService
     use EtatVolumeHoraireServiceAwareTrait;
     use FichierServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
-
+    use TblContratServiceAwareTrait;
 
     /**
      * Retourne la classe des entités

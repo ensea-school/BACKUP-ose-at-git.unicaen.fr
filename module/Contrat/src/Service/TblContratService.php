@@ -5,8 +5,7 @@ namespace Contrat\Service;
 
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
-use Application\Service\Traits\AnneeServiceAwareTrait;
-use Doctrine\ORM\QueryBuilder;
+use Contrat\Entity\Db\TblContrat;
 use Intervenant\Entity\Db\Intervenant;
 
 
@@ -17,9 +16,6 @@ use Intervenant\Entity\Db\Intervenant;
 class TblContratService extends AbstractEntityService
 {
 
-    use AnneeServiceAwareTrait;
-
-
     /**
      * retourne la classe des entités
      *
@@ -28,7 +24,7 @@ class TblContratService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Paiement\Entity\Db\TblPaiement::class;
+        return \Contrat\Entity\Db\TblContrat::class;
     }
 
 
@@ -40,18 +36,49 @@ class TblContratService extends AbstractEntityService
      */
     public function getAlias()
     {
-        return 'tbl_p';
+        return 'tbl_c';
     }
 
 
 
-    public function finderByIntervenant(Intervenant $intervenant, QueryBuilder $qb = null, $alias = null): QueryBuilder
+    public function getContratVolumeHoraireByIntervenant(Intervenant $intervenant, $structure = null)
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $em = $this->getEntityManager();
 
-        $qb->andWhere("$alias.intervenant = :intervenant")->setParameter('intervenant', $intervenant->getId());
+        $dql = "SELECT tblc FROM " . TblContrat::class . " tblc
+        WHERE tblc.intervenant = :intervenant
+        AND tblc.actif = 1";
 
-        return $qb;
+        if ($structure != null) {
+            $dql .= " AND tblc.structure = :structure OR tblc.structure IS NULL";
+        }
+
+        $query = $em->createQuery($dql)
+            ->setParameter('intervenant', $intervenant);
+        if ($structure != null) {
+            $query->setParameter('structure', $structure);
+        }
+        return $query->getResult();
     }
 
+
+
+    public function getVolumeTotalCreationContratByUuid(string $uuid): ?array
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(tblc.hetd) AS hetdTotal, tblc.uuid, tblc.intervenant, s.id AS structureId, tblc.dateDebut, tblc.dateFin, cp.id AS contratParentId, tc.id AS typeContratId
+        FROM " . TblContrat::class . " tblc
+        LEFT JOIN tblc.structure s
+        LEFT JOIN tblc.contratParent cp
+        JOIN tblc.typeContrat tc
+        WHERE tblc.uuid = :uuid
+        AND tblc.actif = 1
+        GROUP BY tblc.uuid, tblc.intervenant, s.id, tblc.dateDebut, tblc.dateFin, cp.id, tc.id";
+
+        $query = $em->createQuery($dql)
+            ->setParameter('uuid', $uuid);
+
+        return $query->getOneOrNullResult();
+    }
 }

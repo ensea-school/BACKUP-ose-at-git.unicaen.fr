@@ -29,8 +29,10 @@ class ContratProcess implements ProcessInterface
 
     protected array $tblData = [];
 
-    //Regle sur les avenants "avenant" des parametres generaux
+    //Regle sur les avenants des parametres generaux
     private string $regleA;
+    private string $regleEns;
+    private string $regleMis;
 
 
 
@@ -46,7 +48,9 @@ class ContratProcess implements ProcessInterface
         $parametres = $this->getServiceParametres();
 
 
-        $this->regleA = $parametres->get('avenant');
+        $this->regleA   = $parametres->get('avenant');
+        $this->regleEns = $parametres->get('contrat_ens');
+        $this->regleMis = $parametres->get('contrat_mis');
 
         $this->services = [];
         $this->tblData  = [];
@@ -116,18 +120,53 @@ class ContratProcess implements ProcessInterface
             //Calcul pour savoir si le contrat devra être un avenant ou un contrat
             if ($service["TYPE_CONTRAT_ID"] == null) {
 
-                $contratPresent = isset($this->intervenantContrat[$service["UUID"]]) && $this->intervenantContrat[$service["UUID"]];
-
-
-
-                if ($contratPresent) {
-                    $service["TYPE_CONTRAT_ID"] = 2;
-                    if ($this->regleA == Parametre::AVENANT_DESACTIVE ) {
-                        $service['ACTIF'] = 0;
+                $contratPresent = false;
+                if ($service['TYPE_SERVICE_CODE'] != 'MIS') {
+                    if ($this->regleMis == Parametre::CONTRAT_ENS_COMPOSANTE) {
+                        if (isset($this->intervenantContrat[$service['STRUCTURE_ID']])) {
+                            $service["TYPE_CONTRAT_ID"] = 2;
+                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['STRUCTURE_ID']];
+                        }
                     }
-                } else {
-                    $service["TYPE_CONTRAT_ID"] = 1;
+                    if ($this->regleMis == Parametre::CONTRAT_ENS_GLOBALE) {
+                        if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
+                            $service["TYPE_CONTRAT_ID"] = 2;
+                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['INTERVENANT_ID']];
 
+                        }
+                    }
+                }
+                if ($service['TYPE_SERVICE_CODE'] == 'MIS') {
+                    if ($this->regleMis == Parametre::CONTRAT_MIS_COMPOSANTE) {
+                        if (isset($this->intervenantContrat[$service['STRUCTURE_ID']])) {
+                            $service["TYPE_CONTRAT_ID"] = 2;
+                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['STRUCTURE_ID']];
+
+                        }
+                    }
+                    if ($this->regleMis == Parametre::CONTRAT_MIS_MISSION) {
+                        if (isset($this->intervenantContrat[$service['MISSION_ID']])) {
+                            $service["TYPE_CONTRAT_ID"] = 2;
+                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['MISSION_ID']];
+
+                        }
+
+                    }
+                    if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBALE) {
+                        if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
+                            $service["TYPE_CONTRAT_ID"] = 2;
+                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['INTERVENANT_ID']];
+
+                        }
+                    }
+
+                }
+
+                if ($service["TYPE_CONTRAT_ID"] == null) {
+                    $service["TYPE_CONTRAT_ID"] = 1;
+                }
+                if ($service["TYPE_CONTRAT_ID"] == 2 && $this->regleA == Parametre::AVENANT_DESACTIVE) {
+                    $service['ACTIF'] = 0;
                 }
             }
 
@@ -191,8 +230,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    protected
-    function heuresAContractualiserSql(): string
+    protected function heuresAContractualiserSql(): string
     {
         return $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT');
     }
@@ -240,7 +278,7 @@ class ContratProcess implements ProcessInterface
                 "TYPE_SERVICE_ID"           => $service["TYPE_SERVICE_ID"],
                 "PROCESS_ID"                => $service["PROCESS_ID"],
                 //A retirer apres refonte calcul workflow
-                "NBVH"                      => 0,
+                "NBVH"                      => 1,
             ];
             $this->tblData[] = $ldata;
         }
@@ -276,17 +314,28 @@ class ContratProcess implements ProcessInterface
             $listeContrat[$serviceContrat["INTERVENANT_ID"]][$serviceContrat["MISSION_ID"]] = true;
         }
 
-        if ($typeContrat == null && (($serviceContrat['TYPE_SERVICE_CODE'] != 'MIS'
-                    && isset($listeContrat[$serviceContrat["INTERVENANT_ID"]])
-                    && isset($listeContrat[$serviceContrat["INTERVENANT_ID"]][0])
-                    && $listeContrat[$serviceContrat["INTERVENANT_ID"]][0])
-                ||
-                ($serviceContrat['TYPE_SERVICE_CODE'] == 'MIS'
-                    && isset($listeContrat[$serviceContrat["INTERVENANT_ID"]])
-                    && isset($listeContrat[$serviceContrat["INTERVENANT_ID"]][$serviceContrat["MISSION_ID"]])
-                    && $listeContrat[$serviceContrat["INTERVENANT_ID"]][$serviceContrat["MISSION_ID"]]))) {
+        if ($serviceContrat['CONTRAT_ID'] != null) {
+            if ($serviceContrat['TYPE_SERVICE_CODE'] != 'MIS') {
+                if ($this->regleMis == Parametre::CONTRAT_ENS_COMPOSANTE) {
+                    $this->intervenantContrat[$serviceContrat['STRUCTURE_ID']] = $serviceContrat['CONTRAT_ID'];
+                }
+                if ($this->regleMis == Parametre::CONTRAT_ENS_GLOBALE) {
+                    $this->intervenantContrat[$serviceContrat['INTERVENANT_ID']] = $serviceContrat['CONTRAT_ID'];
+                }
 
-            $this->intervenantContrat[$uuid] = true;
+            }
+            if ($serviceContrat['TYPE_SERVICE_CODE'] == 'MIS') {
+                if ($this->regleMis == Parametre::CONTRAT_MIS_COMPOSANTE) {
+                    $this->intervenantContrat[$serviceContrat['STRUCTURE_ID']] = $serviceContrat['CONTRAT_ID'];
+                }
+                if ($this->regleMis == Parametre::CONTRAT_MIS_MISSION) {
+                    $this->intervenantContrat[$serviceContrat['MISSION_ID']] = $serviceContrat['CONTRAT_ID'];
+                }
+                if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBALE) {
+                    $this->intervenantContrat[$serviceContrat['INTERVENANT_ID']] = $serviceContrat['CONTRAT_ID'];
+                }
+
+            }
         }
 
         $this->services[] = $serviceContrat;
@@ -322,7 +371,7 @@ class ContratProcess implements ProcessInterface
 
     public function clearAfterTest()
     {
-        $this->regleA = '';
+        $this->regleA             = '';
         $this->intervenantContrat = [];
         $this->tauxRemuUuid       = [];
         $this->services           = [];

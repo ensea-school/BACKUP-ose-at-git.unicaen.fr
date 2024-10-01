@@ -4,11 +4,15 @@ SELECT
   i.annee_id                                                                      annee_id,
   i.id                                                                            intervenant_id,
   1                                                                               actif,
-  CASE pce.valeur
-    WHEN 'contrat_ens_composante' THEN 'er_' || i.id || '_' || str.id
-    ELSE 'er_' || i.id
+  CASE
+  WHEN c.id IS NOT NULL
+  THEN 'contrat_' || i.id || '_' || c.id
+  ELSE
+      CASE pce.valeur
+        WHEN 'contrat_ens_composante' THEN 'er_' || i.id || '_' || str.id
+        ELSE 'er_' || i.id
+      END
   END                                                                             uuid,
-
   str.id                                                                          structure_id,
   c.id                                                                            contrat_id,
   c.contrat_id                                                                    contrat_parent_id,
@@ -77,9 +81,14 @@ SELECT
   i.annee_id                                                                      annee_id,
   i.id                                                                            intervenant_id,
   1                                                                               actif,
-  CASE pce.valeur
-    WHEN 'contrat_ens_composante' THEN 'er_'  || i.id || '_' || str.id
-    ELSE 'er_' || i.id
+  CASE
+  WHEN c.id IS NOT NULL
+  THEN 'contrat_' || i.id || '_' || c.id
+  ELSE
+      CASE pce.valeur
+        WHEN 'contrat_ens_composante' THEN 'er_'  || i.id || '_' || str.id
+        ELSE 'er_' || i.id
+      END
   END                                                                             uuid,
 
   str.id                                                                          structure_id,
@@ -149,10 +158,15 @@ SELECT
   i.annee_id                                                                      annee_id,
   i.id                                                                            intervenant_id,
   1                                                                               actif,
-  CASE pce.valeur
-               WHEN 'contrat_mis_mission'       THEN 'm_' || i.id || '_' || m.id
-               WHEN 'contrat_mis_composante'    THEN 'm_' || i.id || '_' || str.id
-               WHEN 'contrat_mis_globale'       THEN 'm_' || i.id
+    CASE
+  WHEN c.id IS NOT NULL
+  THEN 'contrat_' || i.id || '_' || c.id
+  ELSE
+      CASE pce.valeur
+                   WHEN 'contrat_mis_mission'       THEN 'm_' || i.id || '_' || m.id
+                   WHEN 'contrat_mis_composante'    THEN 'm_' || i.id || '_' || str.id
+                   WHEN 'contrat_mis_globale'       THEN 'm_' || i.id
+      END
   END                                                                             uuid,
 
   str.id                                                                          structure_id,

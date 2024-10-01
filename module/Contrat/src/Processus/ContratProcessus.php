@@ -24,6 +24,7 @@ use Laminas\Mime\Message;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
 use Lieu\Entity\Db\Structure;
+use Lieu\Service\StructureServiceAwareTrait;
 use LogicException;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
@@ -50,7 +51,7 @@ class ContratProcessus extends AbstractProcessus
     use VolumeHoraireServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use HistoriqueListenerAwareTrait;
-
+    use StructureServiceAwareTrait;
 
     /**
      * @param Intervenant    $intervenant
@@ -198,10 +199,10 @@ class ContratProcessus extends AbstractProcessus
           AND str = :structure
         ";
         $res = $this->getEntityManager()->createQuery($dql)->setParameters([
-            "date"        => $contrat->getHistoModification(),
-            "intervenant" => $contrat->getIntervenant(),
-            "structure"   => $contrat->getStructure(),
-        ])->getResult();
+                                                                               "date"        => $contrat->getHistoModification(),
+                                                                               "intervenant" => $contrat->getIntervenant(),
+                                                                               "structure"   => $contrat->getStructure(),
+                                                                           ])->getResult();
 
         $services = [];
         foreach ($res as $service) {
@@ -224,20 +225,28 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Contrat
      */
-    public function creer(Intervenant $intervenant, Structure $structure = null, Mission $mission = null): Contrat
+    public function creer(Intervenant $intervenant, $volumeHoraire): Contrat
     {
         $contrat = $this->getServiceContrat()->newEntity();
         /* @var $contrat Contrat */
 
         $contrat->setIntervenant($intervenant);
+
+        $structure = $this->getServiceStructure()->get($volumeHoraire['structureId']);
         $contrat->setStructure($structure);
-        $contrat->setTotalHetd($this->getIntervenantTotalHetd($intervenant));
-        if($mission != null){
-            $contrat->setMission($mission);
-            $contrat->setDebutValidite($mission->getDateDebut());
-            $contrat->setFinValidite($mission->getDateFin());
+        //Revoir la fonction de calcul de total HETD
+        $contrat->setTotalHetd($volumeHoraire['hetdTotal']);
+        $contrat->setDebutValidite($volumeHoraire['dateDebut']);
+        $contrat->setFinValidite($volumeHoraire['dateFin']);
+        if ($volumeHoraire['contratParentId'] == NULL) {
+            $contrat->setNumeroAvenant(0);
+        } else {
+            $this->getServiceContrat()->get($volumeHoraire['contratParentId']);
+
+            $contrat->setContrat($volumeHoraire['contratParent']);
+            $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant()));
         }
-        $this->qualification($contrat, $mission); // init contrat/avenant
+
 
         return $contrat;
     }
@@ -253,7 +262,7 @@ class ContratProcessus extends AbstractProcessus
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function enregistrer(Contrat $contrat, Mission $mission = null): self
+    public function enregistrer(Contrat $contrat, string $uuid): self
     {
         if ($contrat->getId()) {
             throw new LogicException('Le contrat existe déjà. Il ne peut pas être recréé');
@@ -262,7 +271,6 @@ class ContratProcessus extends AbstractProcessus
         // on sauvegarde le contrat
         $this->getServiceContrat()->save($contrat);
 
-        if ($mission == null) {
             // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
             $services = $this->getServices($contrat->getIntervenant(), null, $contrat->getStructure(), false);
             $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
@@ -284,7 +292,6 @@ class ContratProcessus extends AbstractProcessus
                     $this->getEntityManager()->persist($vhr);
                 }
             }
-        } else {
 
             // on récupère les heures lié a la mission et on les places dans le contrat
             $servicesMissions = $this->getServicesMission($contrat->getIntervenant(), null, $mission, false);
@@ -296,7 +303,6 @@ class ContratProcessus extends AbstractProcessus
                     $this->getEntityManager()->persist($vhm);
                 }
             }
-        }
 
 
         $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
@@ -409,13 +415,13 @@ class ContratProcessus extends AbstractProcessus
     {
         if (!$contrat->getTypeContrat()) return true; // pas de type alors oui, on qualifie!!
 
-        if($contrat->getMission() == null){
+        if ($contrat->getMission() == null) {
             $contratInitial = $contrat->getIntervenant()->getContratInitial();
-        }else{
+        } else {
             $contratInitial = $this->getServiceContrat()->getContratInitialMission($contrat->getMission());
         }
 
-        if($contratInitial && (!$contratInitial->getValidation()) || $contratInitial === $contrat){
+        if ($contratInitial && (!$contratInitial->getValidation()) || $contratInitial === $contrat) {
             $contratInitial = null; //projet ou lui-même seulement donc on oublie
         }
         return $contrat->estUnAvenant() === !$contratInitial;
@@ -440,17 +446,17 @@ class ContratProcessus extends AbstractProcessus
             if (($contratInitial && !$contratInitial->getValidation()) || $contrat === $contratInitial) {
                 $contratInitial = null; //projet ou lui-même seulement donc on oublie
             }
-        }else{
+        } else {
             $contratInitial = $this->getServiceContrat()->getContratInitialMission($mission);
-            if($contratInitial && (!$contratInitial->getValidation()) || $contratInitial === $contrat){
+            if ($contratInitial && (!$contratInitial->getValidation()) || $contratInitial === $contrat) {
                 $contratInitial = null; //projet ou lui-même seulement donc on oublie
             }
         }
 
         if ($contratInitial) {
-            if($mission == null){
+            if ($mission == null) {
                 $this->qualificationEnAvenant($contrat);
-            }else{
+            } else {
                 $this->qualificationEnAvenant($contrat, $mission);
             }
         } else {
@@ -486,10 +492,10 @@ class ContratProcessus extends AbstractProcessus
 
     protected function qualificationEnAvenant(Contrat $contrat, Mission $mission = null): self
     {
-        if($mission == null){
+        if ($mission == null) {
             $contratInitial = $contrat->getIntervenant()->getContratInitial();
 
-        }else{
+        } else {
             $contratInitial = $this->getServiceContrat()->getContratInitialMission($mission);
             $contrat->setMission($mission);
         }
@@ -505,7 +511,7 @@ class ContratProcessus extends AbstractProcessus
 
     protected function qualificationEnContrat(Contrat $contrat, Mission $mission = null): self
     {
-        if($mission != null){
+        if ($mission != null) {
             $contrat->setMission($mission);
         }
         $contrat->setContrat();
@@ -540,9 +546,9 @@ class ContratProcessus extends AbstractProcessus
     public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null): MailMessage
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-            $contrat->getStructure()?->getCode(),
-            $contrat->getIntervenant()->getNomUsuel(),
-            $contrat->getIntervenant()->getCode());
+                            $contrat->getStructure()?->getCode(),
+                            $contrat->getIntervenant()->getNomUsuel(),
+                            $contrat->getIntervenant()->getCode());
 
         $document = $this->getServiceContrat()->generer($contrat, false);
         $content  = $document->saveToData();
@@ -647,11 +653,6 @@ class ContratProcessus extends AbstractProcessus
 
         return $services;
     }
-
-
-
-
-
 
 
 }

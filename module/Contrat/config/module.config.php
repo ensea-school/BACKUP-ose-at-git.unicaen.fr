@@ -20,10 +20,7 @@ return [
             'may_terminate' => true,
             'child_routes'  => [
                 'creer'               => [
-                    'route'       => '/:intervenant/creer/:structure',
-                    'constraints' => [
-                        'structure' => '[0-9]*',
-                    ],
+                    'route'       => '/:intervenant/creer/:uuid',
                     'action'      => 'creer',
                     'controller'  => ContratController::class,
                 ],

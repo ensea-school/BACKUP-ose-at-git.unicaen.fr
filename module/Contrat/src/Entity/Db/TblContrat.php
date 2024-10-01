@@ -2,44 +2,57 @@
 
 namespace Contrat\Entity\Db;
 
+use Application\Entity\Db\Annee;
+use Enseignement\Entity\Db\Service;
+use Enseignement\Entity\Db\VolumeHoraire;
+use Lieu\Entity\Db\Structure;
+use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\VolumeHoraireMission;
+use Paiement\Entity\Db\TauxRemu;
+use Referentiel\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
+use Service\Entity\Db\TypeService;
+
 class TblContrat
 {
-    private int $id;
-    private int $actif;
-    private ?string $uuid = null;
-    private int $annee;
-    private int $intervenant;
-    private ?int $structure = null;
-    private ?float $contrat = null;
-    private ?float $contratParent = null;
-    private ?int $typeContrat = null;
-    private float $edite;
-    private float $signe;
-    private ?\DateTime $dateDebut = null;
-    private ?\DateTime $dateFin = null;
-    private ?\DateTime $dateCreation = null;
-    private ?int $mission = null;
-    private ?int $service = null;
-    private ?int $serviceReferentiel = null;
-    private ?int $typeService = null;
-    private ?float $cm = null;
-    private ?float $td = null;
-    private ?float $tp = null;
-    private ?float $autres = null;
-    private ?string $autreLibelle = null;
-    private ?float $heures = null;
-    private ?float $hetd = null;
-    private ?int $tauxRemu = null;
-    private ?float $tauxRemuValeur = null;
-    private ?\DateTime $tauxRemuDate = null;
-    private ?int $tauxRemuMajore = null;
-    private ?float $tauxRemuMajoreValeur = null;
-    private ?\DateTime $tauxRemuMajoreDate = null;
-    private ?float $tauxCongesPayes = null;
-    private ?int $volumeHoraire = null;
-    private ?int $volumeHoraireMission = null;
-    private ?int $volumeHoraireRef = null;
-    private float $nbvh;
+    private int                       $id;
+    private int                       $actif;
+    private ?string                   $uuid                 = null;
+    private Annee                     $annee;
+    private int                       $intervenant;
+    private ?Structure                $structure            = null;
+    private ?Contrat                  $contrat              = null;
+    private ?Contrat                  $contratParent        = null;
+    private ?TypeContrat              $typeContrat          = null;
+    private float                     $edite;
+    private float                     $signe;
+    private ?\DateTime                $dateDebut            = null;
+    private ?\DateTime                $dateFin              = null;
+    private ?\DateTime                $dateCreation         = null;
+    private ?Mission                  $mission              = null;
+    private ?Service                  $service              = null;
+    private ?ServiceReferentiel       $serviceReferentiel   = null;
+    private ?TypeService              $typeService          = null;
+    private ?float                    $cm                   = null;
+    private ?float                    $td                   = null;
+    private ?float                    $tp                   = null;
+    private ?float                    $autres               = null;
+    private ?string                   $autreLibelle         = null;
+    private ?float                    $heures               = null;
+    private ?float                    $hetd                 = null;
+    private ?TauxRemu                 $tauxRemu             = null;
+    private ?float                    $tauxRemuValeur       = null;
+    private ?\DateTime                $tauxRemuDate         = null;
+    private ?TauxRemu                 $tauxRemuMajore       = null;
+    private ?float                    $tauxRemuMajoreValeur = null;
+    private ?\DateTime                $tauxRemuMajoreDate   = null;
+    private ?float                    $tauxCongesPayes      = null;
+    private ?VolumeHoraire            $volumeHoraire        = null;
+    private ?VolumeHoraireMission     $volumeHoraireMission = null;
+    private ?VolumeHoraireReferentiel $volumeHoraireRef     = null;
+    private float                     $nbvh;
+
+
 
     // Getters and Setters
     public function getId(): int
@@ -47,25 +60,35 @@ class TblContrat
         return $this->id;
     }
 
+
+
     public function setId(int $id): void
     {
         $this->id = $id;
     }
+
+
 
     public function getActif(): int
     {
         return $this->actif;
     }
 
+
+
     public function setActif(int $actif): void
     {
         $this->actif = $actif;
     }
 
+
+
     public function getUuid(): ?string
     {
         return $this->uuid;
     }
+
+
 
     public function setUuid(?string $uuid): void
     {
@@ -74,14 +97,14 @@ class TblContrat
 
 
 
-    public function getAnnee(): int
+    public function getAnnee(): Annee
     {
         return $this->annee;
     }
 
 
 
-    public function setAnnee(int $annee): void
+    public function setAnnee(Annee $annee): void
     {
         $this->annee = $annee;
     }
@@ -102,56 +125,56 @@ class TblContrat
 
 
 
-    public function getStructure(): ?int
+    public function getStructure(): ?Structure
     {
         return $this->structure;
     }
 
 
 
-    public function setStructure(?int $structure): void
+    public function setStructure(?Structure $structure): void
     {
         $this->structure = $structure;
     }
 
 
 
-    public function getContrat(): ?float
+    public function getContrat(): ?Contrat
     {
         return $this->contrat;
     }
 
 
 
-    public function setContrat(?float $contrat): void
+    public function setContrat(?Contrat $contrat): void
     {
         $this->contrat = $contrat;
     }
 
 
 
-    public function getContratParent(): ?float
+    public function getContratParent(): ?Contrat
     {
         return $this->contratParent;
     }
 
 
 
-    public function setContratParent(?float $contratParent): void
+    public function setContratParent(?Contrat $contratParent): void
     {
         $this->contratParent = $contratParent;
     }
 
 
 
-    public function getTypeContrat(): ?int
+    public function getTypeContrat(): ?TypeContrat
     {
         return $this->typeContrat;
     }
 
 
 
-    public function setTypeContrat(?int $typeContrat): void
+    public function setTypeContrat(?TypeContrat $typeContrat): void
     {
         $this->typeContrat = $typeContrat;
     }
@@ -228,49 +251,49 @@ class TblContrat
 
 
 
-    public function getMission(): ?int
+    public function getMission(): ?Mission
     {
         return $this->mission;
     }
 
 
 
-    public function setMission(?int $mission): void
+    public function setMission(?Mission $mission): void
     {
         $this->mission = $mission;
     }
 
 
 
-    public function getService(): ?int
+    public function getService(): ?Service
     {
         return $this->service;
     }
 
 
 
-    public function setService(?int $service): void
+    public function setService(?Service $service): void
     {
         $this->service = $service;
     }
 
 
 
-    public function getServiceReferentiel(): ?int
+    public function getServiceReferentiel(): ?ServiceReferentiel
     {
         return $this->serviceReferentiel;
     }
 
 
 
-    public function setServiceReferentiel(?int $serviceReferentiel): void
+    public function setServiceReferentiel(?ServiceReferentiel $serviceReferentiel): void
     {
         $this->serviceReferentiel = $serviceReferentiel;
     }
 
 
 
-    public function getTypeService(): ?int
+    public function getTypeService(): ?TypeService
     {
         return $this->typeService;
     }
@@ -382,14 +405,14 @@ class TblContrat
 
 
 
-    public function getTauxRemu(): ?int
+    public function getTauxRemu(): ?TauxRemu
     {
         return $this->tauxRemu;
     }
 
 
 
-    public function setTauxRemu(?int $tauxRemu): void
+    public function setTauxRemu(?TauxRemu $tauxRemu): void
     {
         $this->tauxRemu = $tauxRemu;
     }
@@ -424,14 +447,14 @@ class TblContrat
 
 
 
-    public function getTauxRemuMajore(): ?int
+    public function getTauxRemuMajore(): ?TauxRemu
     {
         return $this->tauxRemuMajore;
     }
 
 
 
-    public function setTauxRemuMajore(?int $tauxRemuMajore): void
+    public function setTauxRemuMajore(?TauxRemu $tauxRemuMajore): void
     {
         $this->tauxRemuMajore = $tauxRemuMajore;
     }
@@ -480,35 +503,35 @@ class TblContrat
 
 
 
-    public function getVolumeHoraire(): ?int
+    public function getVolumeHoraire(): ?VolumeHoraire
     {
         return $this->volumeHoraire;
     }
 
 
 
-    public function setVolumeHoraire(?int $volumeHoraire): void
+    public function setVolumeHoraire(?VolumeHoraireMission $volumeHoraire): void
     {
         $this->volumeHoraire = $volumeHoraire;
     }
 
 
 
-    public function getVolumeHoraireMission(): ?int
+    public function getVolumeHoraireMission(): ?VolumeHoraireMission
     {
         return $this->volumeHoraireMission;
     }
 
 
 
-    public function setVolumeHoraireMission(?int $volumeHoraireMission): void
+    public function setVolumeHoraireMission(?VolumeHoraireReferentiel $volumeHoraireMission): void
     {
         $this->volumeHoraireMission = $volumeHoraireMission;
     }
 
 
 
-    public function getVolumeHoraireRef(): ?int
+    public function getVolumeHoraireRef(): ?VolumeHoraireReferentiel
     {
         return $this->volumeHoraireRef;
     }

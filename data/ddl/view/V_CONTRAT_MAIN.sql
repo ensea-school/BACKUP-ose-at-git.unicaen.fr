@@ -180,7 +180,7 @@ FROM (  SELECT c.*,
             LEFT JOIN validation            v ON v.id = c.validation_id AND v.histo_destruction IS NULL
             JOIN type_volume_horaire        tvh ON tvh.code = 'PREVU'
             JOIN etat_volume_horaire        evh ON evh.code = 'valide'
-            LEFT JOIN formule_resultat      fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
+            LEFT JOIN formule_resultat_intervenant fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
             JOIN parametre                  ptr ON ptr.nom = 'taux-remu'
             LEFT JOIN                       hs ON hs.contrat_id = c.id
             LEFT JOIN                       la ON la.contrat_id = c.id

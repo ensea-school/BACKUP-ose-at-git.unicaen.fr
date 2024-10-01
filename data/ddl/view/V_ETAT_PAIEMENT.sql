@@ -201,8 +201,7 @@ FROM
         domaine_fonctionnel_libelle,
         taux_remu,
         taux_horaire,
-        taux_conges_payes,
-        is_fc_majoree
+        taux_conges_payes
       ) dep2
     ) dep3
   ) dep4

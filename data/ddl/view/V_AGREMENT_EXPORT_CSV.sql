@@ -51,7 +51,7 @@ SELECT a.libelle                                                 annee,
                                                                  hetd_fa,
        COALESCE(heures_s.service_fc, fr.heures_service_fc)
            + COALESCE(heures_s.heures_compl_fc, fr.heures_compl_fc)
-           + COALESCE(heures_s.heuresprimes, fr.heures_primes)
+           + COALESCE(heures_s.heures_primes, fr.heures_primes)
                                                                  hetd_fc,
        COALESCE(heures_s.total, fr.total)                        hetd_total,
 

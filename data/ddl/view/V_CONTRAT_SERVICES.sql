@@ -17,7 +17,7 @@ WITH services AS (
             SUM(CASE WHEN ti.code = 'TP' THEN vh.heures ELSE 0 END)                     heures_tp,
             SUM(CASE WHEN ti.code NOT IN ('CM','TD','TP') THEN vh.heures ELSE 0 END)    heures_autres,
             SUM(vh.heures)                                                              heures_totales,
-            SUM(frv.total)                                                              hetd,
+            SUM(frvh.total)                                                             hetd,
             'ENS'                                                                       "typeServiceCode",
             p.libelle_long                                                              "periode"
         FROM
@@ -27,8 +27,8 @@ WITH services AS (
             JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
             JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id
             JOIN etat_volume_horaire evh ON evh.code = 'valide'
-            JOIN formule_resultat fr ON fr.intervenant_id = s.intervenant_id AND fr.etat_volume_horaire_id = evh.id
-            JOIN formule_resultat_vh frv ON vh.id = frv.volume_horaire_id AND frv.formule_resultat_id = fr.id
+            JOIN formule_resultat_intervenant fr ON fr.intervenant_id = s.intervenant_id AND fr.etat_volume_horaire_id = evh.id
+            JOIN formule_resultat_volume_horaire frvh ON frvh.volume_horaire_id = vh.id AND frvh.formule_resultat_intervenant_id = fr.id
             JOIN STRUCTURE str ON ep.structure_id = str.id
             LEFT JOIN contrat c ON c.id = vh.contrat_id
             LEFT JOIN periode p on vh.periode_id = p.id
@@ -65,7 +65,7 @@ WITH services AS (
             0                       heures_tp,
             SUM(vhr.heures)         heures_autres,
             SUM(vhr.heures)         heures_totales,
-            SUM(frvr.total)         hetd,
+            SUM(frvh.total)         hetd,
             'REF'                  "typeServiceCode",
             NULL                   "periode"
             FROM
@@ -74,8 +74,8 @@ WITH services AS (
             JOIN fonction_referentiel fr ON fr.id = sr.fonction_id
             JOIN type_volume_horaire tvh ON tvh.id = vhr.type_volume_horaire_id
             JOIN etat_volume_horaire evh ON evh.code = 'valide'
-            JOIN formule_resultat fr ON fr.intervenant_id = sr.intervenant_id AND fr.etat_volume_horaire_id = evh.id
-            LEFT JOIN formule_resultat_vh_ref frvr ON vhr.id = frvr.volume_horaire_ref_id AND frvr.formule_resultat_id = fr.id
+            JOIN formule_resultat_intervenant fr ON fr.intervenant_id = sr.intervenant_id AND fr.etat_volume_horaire_id = evh.id
+            LEFT JOIN formule_resultat_volume_horaire frvh ON frvh.volume_horaire_ref_id = vhr.id AND frvh.formule_resultat_intervenant_id = fr.id
             LEFT JOIN contrat c ON c.id = vhr.contrat_id
             LEFT JOIN STRUCTURE str ON sr.structure_id = str.id
         WHERE

@@ -4,53 +4,55 @@ namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
 use Intervenant\Entity\Db\Intervenant;
-use LogicException;
-use Service\Entity\Db\EtatVolumeHoraire;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 class  AffichageController extends AbstractController
 {
-    use TypeVolumeHoraireServiceAwareTrait;
-    use EtatVolumeHoraireServiceAwareTrait;
 
-
-    public function voirHeuresCompAction()
+    public function detailsAction()
     {
-        $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
+        $sql = "
+        SELECT
+          tvh.id type_volume_horaire_id,
+          tvh.libelle type_volume_horaire_libelle,
+          evh.id etat_volume_horaire_id,
+          evh.libelle etat_volume_horaire_libelle
+        FROM
+          formule_resultat_intervenant fri
+          JOIN type_volume_horaire tvh ON tvh.id = fri.type_volume_horaire_id
+          JOIN etat_volume_horaire evh ON evh.id = fri.etat_volume_horaire_id
+        WHERE
+          intervenant_id = :intervenant
+        ORDER BY
+          tvh.ordre, evh.ordre            
+        ";
 
-        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
-        if (!$typeVolumeHoraire instanceof TypeVolumeHoraire) {
-            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraire);
-        }
-        /* @var $typeVolumeHoraire TypeVolumeHoraire */
-        if (!isset($typeVolumeHoraire)) {
-            throw new LogicException('Type de volume horaire erroné');
+        $data = [];
+
+        $res = $this->em()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $intervenant->getId()]);
+
+        foreach ($res as $r) {
+            $tvhId = (int)$r['TYPE_VOLUME_HORAIRE_ID'];
+            $tvhLib = $r['TYPE_VOLUME_HORAIRE_LIBELLE'];
+            $evhId = (int)$r['ETAT_VOLUME_HORAIRE_ID'];
+            $evhLib = $r['ETAT_VOLUME_HORAIRE_LIBELLE'];
+
+            if (!isset($data[$tvhId])) {
+                $data[$tvhId] = [
+                    'libelle' => $tvhLib,
+                    'etats'   => [],
+                ];
+            }
+            $data[$tvhId]['etats'][$evhId] = $evhLib;
         }
 
-        $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
-        if (!$etatVolumeHoraire instanceof EtatVolumeHoraire) {
-            $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->get($etatVolumeHoraire);
-        }
-        /* @var $etatVolumeHoraire EtatVolumeHoraire */
-        if (!isset($etatVolumeHoraire)) {
-            throw new LogicException('Etat de volume horaire erroné');
-        }
-
-        /*$data = $this->getServiceFormuleResultat()->getData(
-            $intervenant,
-            $typeVolumeHoraire,
-            $etatVolumeHoraire
-        );*/
-
-        return compact('form', 'intervenant', 'data');
+        return compact('intervenant', 'data');
     }
 
 
@@ -61,7 +63,7 @@ class  AffichageController extends AbstractController
         /* @var $intervenant Intervenant */
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat = $intervenant->getFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+        $formuleResultat   = $intervenant->getFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return compact('formuleResultat');
     }

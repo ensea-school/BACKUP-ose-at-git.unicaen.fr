@@ -14,10 +14,10 @@ return [
 
         'intervenant' => [
             'child_routes' => [
-                'voir-heures-comp'    => [
-                    'route'      => '/voir-heures-comp/:intervenant',
+                'details'    => [
+                    'route'      => '/:intervenant/formule/details',
                     'controller' => Controller\AffichageController::class,
-                    'action'     => 'voir-heures-comp',
+                    'action'     => 'details',
                     'privileges' => [Privileges::INTERVENANT_CALCUL_HETD],
                     'assertion'  => Assertion\FormuleAssertion::class,
                 ],
@@ -44,16 +44,16 @@ return [
     'navigation' => [
         'intervenant' => [
             'pages' => [
-                'voir-heures-comp' => [
+                'details' => [
                     'label'        => "Calcul HETD",
                     'title'        => "Calcul des heures équivalent TD {id}",
-                    'route'        => 'intervenant/voir-heures-comp',
+                    'route'        => 'intervenant/details',
                     'paramsInject' => [
                         'intervenant',
                     ],
-                    'action'       => 'voir-heures-comp',
+                    'action'       => 'details',
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(Controller\AffichageController::class, 'voir-heures-comp'),
+                    'resource'     => PrivilegeController::getResourceId(Controller\AffichageController::class, 'details'),
                     'order'        => 3,
                 ],
             ],

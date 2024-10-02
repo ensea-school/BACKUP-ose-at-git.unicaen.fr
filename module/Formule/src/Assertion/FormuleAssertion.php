@@ -29,7 +29,7 @@ class FormuleAssertion extends AbstractAssertion
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         switch ($action) {
-            case 'voir-heures-comp':
+            case 'details':
                 return $this->assertVisuHC($intervenant);
         }
 

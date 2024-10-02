@@ -4,7 +4,6 @@ namespace Paiement\Service;
 
 
 use Application\Service\AbstractEntityService;
-use Application\Service\RuntimeException;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\Intervenant;
@@ -22,25 +21,14 @@ class TblPaiementService extends AbstractEntityService
     use AnneeServiceAwareTrait;
 
 
-    /**
-     * retourne la classe des entités
-     *
-     * @return string
-     * @throws RuntimeException
-     */
-    public function getEntityClass ()
+    public function getEntityClass (): string
     {
-        return \Paiement\Entity\Db\TblPaiement::class;
+        return TblPaiement::class;
     }
 
 
 
-    /**
-     * Retourne l'alias d'entité courante
-     *
-     * @return string
-     */
-    public function getAlias ()
+    public function getAlias (): string
     {
         return 'tbl_p';
     }

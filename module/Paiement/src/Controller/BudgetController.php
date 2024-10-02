@@ -5,7 +5,6 @@ namespace Paiement\Controller;
 use Application\Controller\AbstractController;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\SourceServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use Lieu\Form\Element\Structure as StructureElement;
@@ -15,7 +14,6 @@ use Paiement\Entity\Db\TypeRessource;
 use Paiement\Form\Budget\DotationSaisieFormAwareTrait;
 use Paiement\Service\BudgetServiceAwareTrait;
 use Paiement\Service\DotationServiceAwareTrait;
-use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenVue\View\Model\AxiosModel;
@@ -32,8 +30,6 @@ class BudgetController extends AbstractController
     use DotationServiceAwareTrait;
     use DotationSaisieFormAwareTrait;
     use AnneeServiceAwareTrait;
-    use MiseEnPaiementServiceAwareTrait;
-    use SourceServiceAwareTrait;
     use BudgetServiceAwareTrait;
 
 
@@ -59,7 +55,7 @@ class BudgetController extends AbstractController
 
         $tbl = $this->getServiceDotation()->getTableauBord();
         $prv = $this->getServiceBudget()->getTotalPrevisionnelValide();
-        $liq = $this->getServiceMiseEnPaiement()->getTblLiquidation();
+        $liq = $this->getServiceBudget()->getTblLiquidation();
 
         $typesRessources = $this->getServiceTypeRessource()->getList();
         /* @var $typesRessources TypeRessource[] */
@@ -102,7 +98,7 @@ class BudgetController extends AbstractController
         $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
 
         $tbl = $this->getServiceDotation()->getTableauBord();
-        $liq = $this->getServiceMiseEnPaiement()->getTblLiquidation();
+        $liq = $this->getServiceBudget()->getTblLiquidation();
 
         $typesRessources = $this->getServiceTypeRessource()->getList();
         /* @var $typesRessources TypeRessource[] */
@@ -152,7 +148,7 @@ class BudgetController extends AbstractController
         $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
         if ($structure instanceof Structure) {
             $dotation    = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
-            $liquidation = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
+            $liquidation = $this->getServiceBudget()->getTblLiquidation($structure);
             foreach ($dotation as $key => $value) {
                 if ($key == $structure->getId()) {
                     $budget['dotation']['paieEtat']        = (key_exists(1, $value)) ? $value['1'] : 0;
@@ -194,7 +190,7 @@ class BudgetController extends AbstractController
         if ($structure) {
             $dotations          = $this->getServiceDotation()->getDotations($structure);
             $previsionnelValide = $this->getServiceBudget()->getTotalPrevisionnelValide($structure);
-            $ld                 = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
+            $ld                 = $this->getServiceBudget()->getTblLiquidation($structure);
             foreach ($dotations['typesRessources'] as $dtrId => $dtr) {
                 $typeRessource = $dtr['entity'];
                 /* @var $typeRessource TypeRessource */
@@ -299,7 +295,7 @@ class BudgetController extends AbstractController
             $structure = $role->getStructure();
         }
 
-        $data = $this->getServiceMiseEnPaiement()->getTableauBord($structure);
+        $data = $this->getServiceBudget()->getTableauBord($structure);
 
         $csvModel = new CsvModel();
         $csvModel->setHeader([

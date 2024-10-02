@@ -4,13 +4,8 @@ namespace Paiement\Assertion;
 
 use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\CentreCoutStructure;
-use Referentiel\Service\ServiceReferentielServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 /**
@@ -20,11 +15,6 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
  */
 class CentreCoutAssertion extends AbstractAssertion
 {
-    use TypeValidationServiceAwareTrait;
-    use ValidationServiceAwareTrait;
-    use ServiceReferentielServiceAwareTrait;
-    use TypeVolumeHoraireServiceAwareTrait;
-    use WorkflowServiceAwareTrait;
 
 
     /**

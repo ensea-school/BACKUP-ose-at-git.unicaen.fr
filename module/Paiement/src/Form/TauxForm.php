@@ -7,11 +7,9 @@ use Application\Form\AbstractForm;
 use Laminas\Hydrator\HydratorInterface;
 use Paiement\Entity\Db\TauxRemu;
 use Paiement\Service\TauxRemuServiceAwareTrait;
-use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 class TauxForm extends AbstractForm
 {
-    use SchemaServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
 
     public function init()

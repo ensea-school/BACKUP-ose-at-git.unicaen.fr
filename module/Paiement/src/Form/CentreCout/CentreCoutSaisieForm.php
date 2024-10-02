@@ -3,7 +3,6 @@
 namespace Paiement\Form\CentreCout;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\SourceServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Paiement\Hydrator\CentreCoutHydrator;
 use Paiement\Service\CcActiviteServiceAwareTrait;
@@ -20,7 +19,6 @@ class CentreCoutSaisieForm extends AbstractForm
     use CcActiviteServiceAwareTrait;
     use TypeRessourceServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
-    use SourceServiceAwareTrait;
 
 
 

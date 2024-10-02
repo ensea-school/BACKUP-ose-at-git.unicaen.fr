@@ -5,16 +5,12 @@ namespace Paiement\Assertion;
 use Application\Acl\Role;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\ServiceAPayerInterface;
-use Referentiel\Service\ServiceReferentielServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 /**
@@ -24,10 +20,6 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
  */
 class PaiementAssertion extends AbstractAssertion
 {
-    use TypeValidationServiceAwareTrait;
-    use ValidationServiceAwareTrait;
-    use ServiceReferentielServiceAwareTrait;
-    use TypeVolumeHoraireServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
     /* ---- Routage général ---- */

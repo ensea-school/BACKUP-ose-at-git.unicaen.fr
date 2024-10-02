@@ -18,7 +18,6 @@ use Application\Service\Traits\SeuilChargeServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
-use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use UnicaenApp\Util;
@@ -35,7 +34,6 @@ class ChargensController extends AbstractController
 {
     use ChargensProviderAwareTrait;
     use ContextServiceAwareTrait;
-    use StructureServiceAwareTrait;
     use EtapeServiceAwareTrait;
     use ScenarioServiceAwareTrait;
     use FiltreFormAwareTrait;

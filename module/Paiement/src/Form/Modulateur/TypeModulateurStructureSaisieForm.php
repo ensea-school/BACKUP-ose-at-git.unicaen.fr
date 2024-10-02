@@ -4,13 +4,11 @@ namespace Paiement\Form\Modulateur;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Service\TypeModulateurServiceAwareTrait;
-use Paiement\Service\TypeModulateurStructureServiceAwareTrait;
 use UnicaenApp\Util;
 
 
@@ -21,10 +19,8 @@ use UnicaenApp\Util;
  */
 class TypeModulateurStructureSaisieForm extends AbstractForm
 {
-    use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
     use AnneeServiceAwareTrait;
-    use TypeModulateurServiceAwareTrait;
 
 
     public function init()
@@ -119,7 +115,6 @@ class TypeModulateurStructureSaisieForm extends AbstractForm
 
 class TypeModulateurStructureHydrator implements HydratorInterface
 {
-    use TypeModulateurStructureServiceAwareTrait;
     use StructureServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use TypeModulateurServiceAwareTrait;

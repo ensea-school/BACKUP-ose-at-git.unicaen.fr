@@ -14,7 +14,6 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Enseignement\Service\ServiceServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\Form\Element\Checkbox;
@@ -31,7 +30,6 @@ class AgrementController extends AbstractController
     use TblAgrementServiceAwareTrait;
     use AgrementServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use ServiceServiceAwareTrait;
     use ContextServiceAwareTrait;
     use SaisieAwareTrait;
     use StructureServiceAwareTrait;

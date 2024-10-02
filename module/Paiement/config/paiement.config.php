@@ -78,36 +78,6 @@ return [
                     'action'     => 'importNumeroPec',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE,
                 ],
-                'demande-mise-en-paiement-lot'         => [
-                    'route'       => '/demande-mise-en-paiement-lot[/:structure]',
-                    'controller'  => Controller\PaiementController::class,
-                    'action'      => 'demandeMiseEnPaiementLot',
-                    'constraints' => [
-                        'structure' => '[0-9]*',
-                    ],
-                    'privileges'  => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-
-                ],
-                'ajouter-demande-mise-en-paiement'     => [
-                    'route'      => '/:intervenant/ajouter-demandes',
-                    'controller' => Controller\PaiementController::class,
-                    'action'     => 'ajouterDemandesMiseEnPaiement',
-                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-
-                ],
-                'supprimer-demande-mise-en-paiement'   => [
-                    'route'      => '/:intervenant/supprimer-demande/:mise-en-paiement',
-                    'controller' => Controller\PaiementController::class,
-                    'action'     => 'supprimerDemandeMiseEnPaiement',
-                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-                ],
-                'process-demande-mise-en-paiement-lot' => [
-                    'route'      => '/process-demande-mise-en-paiement-lot',
-                    'controller' => Controller\PaiementController::class,
-                    'action'     => 'processDemandeMiseEnPaiementLot',
-                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-                    'assertion'  => PaiementAssertion::class,
-                ],
                 'pilotage'                             => [
                     'route'      => '/pilotage',
                     'controller' => Controller\PaiementController::class,
@@ -139,25 +109,11 @@ return [
                             ],
                             'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
                         ],
-                        'demande'                       => [
-                            'route'      => '/demande',
-                            'controller' => Controller\PaiementController::class,
-                            'action'     => 'demandeMiseEnPaiement',
-                        ],
                         'edition'                       => [
                             'route'      => '/edition',
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'editionMiseEnPaiement',
                         ],
-                        'get-demandes-mise-en-paiement' => [
-                            'route'      => '/get-demandes-mise-en-paiement[/:structure]',
-                            'controller' => Controller\PaiementController::class,
-                            'action'     => 'getDemandesMiseEnpaiement',
-                            'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-
-                        ],
-
-
                     ],
                 ],
             ],
@@ -167,21 +123,6 @@ return [
     'navigation' => [
         'intervenant' => [
             'pages' => [
-                'demande-mise-en-paiement' => [
-                    'label'               => "Demande de mise en paiement",
-                    'title'               => "Demande de mise en paiement",
-                    'route'               => 'intervenant/mise-en-paiement/demande',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'withtarget'          => true,
-                    'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
-                    'resource'            => PrivilegeController::getResourceId(Controller\PaiementController::class, 'demandeMiseEnPaiement'),
-                    'visible'             => Assertion\PaiementAssertion::class,
-                    'order'               => 16,
-                ],
-
-
                 'visualisation-mise-en-paiement' => [
                     'label'               => "Visualisation des mises en paiement",
                     'title'               => "Visualisation des mises en paiement",
@@ -275,12 +216,6 @@ return [
                             'route'    => 'paiement/import-numero-pec',
                             'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
-                        'demande-mise-en-paiement-lot' => [
-                            'label' => "Demande de mise en paiement par lot",
-                            'title' => "Permet de demander l'ensemble des mises en paiement pour une structure",
-                            'route' => 'paiement/demande-mise-en-paiement-lot',
-
-                        ],
                     ],
                 ],
                 'pilotage' => [
@@ -306,14 +241,6 @@ return [
     ],
 
     'guards' => [
-        [
-            'controller' => Controller\PaiementController::class,
-            'action'     => ['ajouterDemandeMiseEnPaiement', 'supprimerDemandeMiseEnPaiement', 'get-demandes-mise-en-paiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
-            'privileges' => [
-                Privileges::MISE_EN_PAIEMENT_DEMANDE,
-            ],
-            'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
-        ],
         [
             'controller' => Controller\PaiementController::class,
             'action'     => ['visualisationMiseEnPaiement'],
@@ -357,14 +284,6 @@ return [
             'controller' => Controller\PaiementController::class,
             'action'     => ['extractionPaiePrime'],
             'privileges' => [Privileges::MISSION_PRIME_GESTION],
-        ],
-    ],
-
-    'rules' => [
-        [
-            'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-            'resources'  => 'MiseEnPaiement',
-            'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
         ],
     ],
 

@@ -118,7 +118,7 @@ class CentreCoutService extends AbstractEntityService
             CASE WHEN tr.fa = 1 AND cca.fa = 1 THEN 1 ELSE 0 END fa,
             CASE WHEN tr.fc = 1 AND cca.fc = 1 THEN 1 ELSE 0 END fc,
             CASE WHEN tr.referentiel = 1 AND cca.referentiel = 1 THEN 1 ELSE 0 END referentiel,
-            CASE WHEN tr.fc_majorees = 1 AND cca.fc_majorees = 1 THEN 1 ELSE 0 END fc_majorees,
+            CASE WHEN tr.primes = 1 AND cca.primes = 1 THEN 1 ELSE 0 END primes,
             CASE WHEN tr.mission = 1 AND cca.mission = 1 THEN 1 ELSE 0 END mission,
             1                                                           enseignement,
             CASE WHEN tr.code = 'ressources-propres' THEN 1 ELSE 0 END  ressources_propres,

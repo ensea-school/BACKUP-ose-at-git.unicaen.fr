@@ -4,7 +4,6 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
@@ -29,7 +28,6 @@ class SuiviController extends AbstractController
 {
     use MissionServiceAwareTrait;
     use MissionFormAwareTrait;
-    use ContextServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use MissionSuiviFormAwareTrait;

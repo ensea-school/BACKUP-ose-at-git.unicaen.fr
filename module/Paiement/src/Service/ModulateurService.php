@@ -3,7 +3,7 @@
 namespace Paiement\Service;
 
 use Application\Service\AbstractEntityService;
-use Application\Service\RuntimeException;
+use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;

@@ -3,15 +3,12 @@
 namespace Paiement\Entity\Db;
 
 use Application\Entity\Db\Annee;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use UnicaenApp\Util;
 
 class TauxRemu implements HistoriqueAwareInterface, ResourceInterface
 {
@@ -19,8 +16,6 @@ class TauxRemu implements HistoriqueAwareInterface, ResourceInterface
     const CODE_DEFAUT = 'TLD';
 
     use HistoriqueAwareTrait;
-    use TauxRemuServiceAwareTrait;
-    use ContextServiceAwareTrait;
 
     protected ?int       $id       = null;
 
@@ -110,75 +105,6 @@ class TauxRemu implements HistoriqueAwareInterface, ResourceInterface
         return !$this->sousTauxRemu->isEmpty();
     }
 
-
-
-    /**
-     * @return array|null
-     */
-    public function getTauxRemuValeursIndex(): ?array
-    {
-        $tauxRemuindex = $this->getTauxRemu();
-        if (!$tauxRemuindex) {
-            return [];
-        }
-        $indexResult  = [];
-        $valeur       = [];
-        $annee        = $this->getServiceContext()->getAnnee();
-        $valeursIndex = $tauxRemuindex->getValeurAnnee($annee);
-        $valeurs      = $this->getValeurAnnee($annee);
-        $sizeIndex    = sizeof($valeursIndex);
-        $sizeTaux     = sizeof($valeurs);
-        $i            = 0;
-        $j            = 0;
-
-
-        while ($sizeIndex != 0 && $sizeTaux != 0 && ($i < $sizeIndex || $j < $sizeTaux)) {
-            if ($valeursIndex[$i]->getDateEffet() == $valeurs[$j]->getDateEffet()) {
-                $valeur['valeur'] = $valeursIndex[$i]->getValeur() * $valeurs[$j]->getValeur();
-                $valeur['date']   = $valeursIndex[$i]->getDateEffet();
-            } else {
-                if ($valeursIndex[$i]->getDateEffet() > $valeurs[$j]->getDateEffet()) {
-                    $valeur['date'] = $valeursIndex[$i]->getDateEffet();
-                } else {
-                    $valeur['date'] = $valeurs[$j]->getDateEffet();
-                }
-                $valeur['valeur'] = $valeursIndex[$i]->getValeur() * $valeurs[$j]->getValeur();
-            }
-            if (!array_key_exists($valeur['date']->format(Util::DATE_FORMAT), $indexResult)) {
-                $indexResult[$valeur['date']->format(Util::DATE_FORMAT)] = $valeur;
-            }
-            //rechercher le plus proche
-            if ($i + 1 < $sizeIndex && $j + 1 < $sizeTaux) {
-                if ($valeursIndex[$i]->getDateEffet() == $valeurs[$j]->getDateEffet()) {
-                    if ($valeursIndex[$i + 1]->getDateEffet() > $valeurs[$j + 1]->getDateEffet()) {
-                        $i++;
-                    } else {
-                        $j++;
-                    }
-                } else {
-                    if ($valeursIndex[$i]->getDateEffet() > $valeurs[$j]->getDateEffet()) {
-                        $i++;
-                    } else {
-                        $j++;
-                    }
-                }
-            } else {
-                if ($i + 1 < $sizeIndex) {
-                    $i++;
-                } else {
-                    if ($j + 1 < $sizeTaux) {
-                        $j++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-            $valeur = [];
-        }
-
-
-        return $indexResult;
-    }
 
 
 

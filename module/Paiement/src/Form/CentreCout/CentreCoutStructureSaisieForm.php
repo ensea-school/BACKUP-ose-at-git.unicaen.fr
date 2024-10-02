@@ -3,13 +3,11 @@
 namespace Paiement\Form\CentreCout;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\SourceServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Service\CentreCoutServiceAwareTrait;
-use Paiement\Service\CentreCoutStructureServiceAwareTrait;
 
 /**
  * Description of CentreCoutStructureSaisieForm
@@ -19,7 +17,6 @@ use Paiement\Service\CentreCoutStructureServiceAwareTrait;
 class CentreCoutStructureSaisieForm extends AbstractForm
 {
     use StructureServiceAwareTrait;
-    use CentreCoutStructureServiceAwareTrait;
 
 
     public function init()
@@ -84,7 +81,6 @@ class CentreCoutStructureSaisieForm extends AbstractForm
 class CentreCoutStructureHydrator implements HydratorInterface
 {
     use StructureServiceAwareTrait;
-    use SourceServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
 
 

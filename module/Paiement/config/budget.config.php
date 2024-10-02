@@ -147,7 +147,7 @@ return [
                 Privileges::BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT,
             ],
             'resources'  => ['Dotation', 'Structure', 'TypeRessource'],
-            'assertion'  => \Paiement\Assertion\BudgetAssertion::class,
+            'assertion'  => Assertion\BudgetAssertion::class,
         ],
     ],
 

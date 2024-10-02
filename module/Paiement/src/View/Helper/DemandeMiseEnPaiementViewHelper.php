@@ -441,7 +441,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         $misesEnPaiement = $serviceAPayer->getMiseEnPaiement()->filter(function (MiseEnPaiement $miseEnPaiement) use ($typeHeures){
             $mepth = $miseEnPaiement->getTypeHeures();
             if ($typeHeures->getCode() === TypeHeures::ENSEIGNEMENT) {
-                return in_array($mepth->getCode(), [TypeHeures::FI, TypeHeures::FA, TypeHeures::FC, TypeHeures::FC_MAJOREES, TypeHeures::ENSEIGNEMENT]);
+                return in_array($mepth->getCode(), [TypeHeures::FI, TypeHeures::FA, TypeHeures::FC, TypeHeures::PRIMES, TypeHeures::ENSEIGNEMENT]);
             } else {
                 return $mepth->getCode() === $typeHeures->getCode();
             }

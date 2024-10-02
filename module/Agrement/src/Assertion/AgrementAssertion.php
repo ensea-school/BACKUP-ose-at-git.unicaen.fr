@@ -5,8 +5,6 @@ namespace Agrement\Assertion;
 use Agrement\Entity\Db\Agrement;
 use Agrement\Entity\Db\TblAgrement;
 use Agrement\Entity\Db\TypeAgrement;
-use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
-use Agrement\Service\Traits\TypeAgrementServiceAwareTrait;
 use Application\Acl\Role;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
@@ -24,8 +22,6 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
  */
 class AgrementAssertion extends AbstractAssertion
 {
-    use TypeAgrementServiceAwareTrait;
-    use TblAgrementServiceAwareTrait;
 
 
     /* ---- Routage général ---- */

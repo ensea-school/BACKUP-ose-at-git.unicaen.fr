@@ -5,11 +5,9 @@ namespace Paiement\Form;
 use Application\Form\AbstractForm;
 use Laminas\Form\FormInterface;
 use Paiement\Entity\Db\TauxRemuValeur;
-use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 class TauxValeurForm extends AbstractForm
 {
-    use SchemaServiceAwareTrait;
 
     public function init ()
     {

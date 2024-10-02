@@ -4,7 +4,6 @@ namespace Paiement\Service;
 
 
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\AnneeServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\Intervenant;
 use Paiement\Entity\Db\TblPaiement;
@@ -18,7 +17,6 @@ use Paiement\Entity\Db\TblPaiement;
 class TblPaiementService extends AbstractEntityService
 {
 
-    use AnneeServiceAwareTrait;
 
 
     public function getEntityClass (): string

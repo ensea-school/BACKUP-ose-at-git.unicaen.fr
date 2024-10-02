@@ -7,7 +7,6 @@ use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
-use Paiement\Service\TypeModulateurServiceAwareTrait;
 
 /**
  * Description of modulateurSaisieForm
@@ -129,7 +128,6 @@ class ModulateurSaisieForm extends AbstractForm
 
 class ModulateurHydrator implements HydratorInterface
 {
-    use TypeModulateurServiceAwareTrait;
 
 
     /**
@@ -156,7 +154,7 @@ class ModulateurHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Paiement\Entity\Db\modulateur $object
+     * @param \Paiement\Entity\Db\Modulateur $object
      *
      * @return array
      */

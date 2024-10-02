@@ -187,7 +187,7 @@ class ReconductionProcessus extends AbstractProcessus
 
 
     /**
-     * Reconduit les centres de coutq des élements pédagogiques d'une sélection d'étapes
+     * Reconduit les centres de coûts des élements pédagogiques d'une sélection d'étapes
      *
      * @param array $etapes
      *

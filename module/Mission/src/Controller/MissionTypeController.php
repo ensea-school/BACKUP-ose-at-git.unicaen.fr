@@ -135,7 +135,7 @@ class MissionTypeController extends AbstractController
             $form->get('structure')->setValue($structure->getId());
 
             if(empty($structure->getCentreCout()->toArray())){
-                $form->get('centreCouts')->setEmptyOption( 'Aucun centre de couts disponible');
+                $form->get('centreCouts')->setEmptyOption( 'Aucun centre de coûts disponible');
                 $form->remove('submit');
             }else{
                 $form->setValueOptions('centreCouts', $structure->getCentreCout()->toArray());

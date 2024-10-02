@@ -150,7 +150,7 @@ class CentreCoutController extends AbstractController
         $centreCoutActivite = $this->getEvent()->getParam('ccActivite');
         $form               = $this->getFormCentreCoutCentreCoutActiviteSaisie();
         if (empty($centreCoutActivite)) {
-            $title              = 'Création d\'une nouvelle activité de centre de cout';
+            $title              = 'Création d\'une nouvelle activité de centre de coûts';
             $centreCoutActivite = $this->getServiceCcActivite()->newEntity();
         } else {
             $title = 'Édition d\'un type d\'activité de centre de coût';

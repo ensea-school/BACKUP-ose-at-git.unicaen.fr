@@ -29,7 +29,7 @@ class MissionCentreCoutsTypeForm extends AbstractForm
                 'required' => true,
             ],
             'options' => [
-                'empty_option' => 'Sélectionner un centre de couts',
+                'empty_option' => 'Sélectionner un centre de coûts',
             ],
             'attributes' => [
                 'class'            => 'input-sm selectpicker',

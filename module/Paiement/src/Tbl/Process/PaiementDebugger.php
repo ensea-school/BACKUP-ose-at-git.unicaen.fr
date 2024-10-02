@@ -201,7 +201,7 @@ class PaiementDebugger
             $s['parametres']['Type d\'heures'] = (string)$this->getEntity(TypeHeures::class, $service->typeHeures);
 
             if ($service->defCentreCout) {
-                $s['parametres']['Centre de couts par défaut'] = (string)$this->getEntity(CentreCout::class, $service->defCentreCout);
+                $s['parametres']['Centre de coûts par défaut'] = (string)$this->getEntity(CentreCout::class, $service->defCentreCout);
             }
 
             if ($service->defDomaineFonctionnel) {

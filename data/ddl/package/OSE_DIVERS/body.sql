@@ -104,7 +104,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
       UPDATE structure SET enseignement = 1 WHERE id = str.id;
     END LOOP;
 
-    -- On retire les CC par défaut qui ne sont plus valables (historisé) ou si la structure n'est pas raccorchée au centre de cout
+    -- On retire les CC par défaut qui ne sont plus valables (historisé) ou si la structure n'est pas raccorchée au centre de coûts
     FOR str IN (
       SELECT
         str.id
@@ -119,7 +119,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
         UPDATE structure SET centre_cout_id = NULL WHERE id = str.id;
     END LOOP;
 
-    -- mise à jour du centre de couts par défaut si la structure n'a qu'un seul CC possible
+    -- mise à jour du centre de coûts par défaut si la structure n'a qu'un seul CC possible
     FOR ccstr IN (
       SELECT
         ccs.structure_id                              structure_id,

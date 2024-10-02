@@ -23,7 +23,7 @@
                         <table class="table table-bordered caption-top">
                             <thead class="table-light">
                             <tr>
-                                <th class="fw-bold" scope="col">Paie etat</th>
+                                <th class="fw-bold" scope="col">Paie état</th>
                                 <th class="fw-bold" scope="col">Ressources propres</th>
                             </tr>
                             </thead>
@@ -99,10 +99,8 @@
                                                     <table class="table table-sm ">
                                                         <thead>
                                                         <th scope="col" style="width:20%;font-size:12px;">Heures</th>
-                                                        <th scope="col" style="width:40%;font-size:12px;">Centre de
-                                                            cout
-                                                        </th>
-                                                        <th scope="col" style="width:25%;font-size:12px;">Etat</th>
+                                                        <th scope="col" style="width:40%;font-size:12px;">Centre de coûts</th>
+                                                        <th scope="col" style="width:25%;font-size:12px;">État</th>
                                                         <th style="width:15%;font-size:12px;"></th>
                                                         </thead>
                                                         <tbody>
@@ -246,10 +244,10 @@
                                             <table class="table table-sm ">
                                                 <thead>
                                                 <th scope="col" style="width:10%;font-size:12px;">Heures</th>
-                                                <th scope="col" style="width:25%;font-size:12px;">Centre de cout</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Centre de coûts</th>
                                                 <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel
                                                 </th>
-                                                <th scope="col" style="width:20%;font-size:12px;">Etat</th>
+                                                <th scope="col" style="width:20%;font-size:12px;">État</th>
                                                 <th style="width:15%;font-size:12px;"></th>
                                                 </thead>
                                                 <tbody>
@@ -406,10 +404,10 @@
                                             <table class="table table-sm ">
                                                 <thead>
                                                 <th scope="col" style="width:10%;font-size:12px;">Heures</th>
-                                                <th scope="col" style="width:25%;font-size:12px;">Centre de cout</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Centre de coûts</th>
                                                 <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel
                                                 </th>
-                                                <th scope="col" style="width:20%;font-size:12px;">Etat</th>
+                                                <th scope="col" style="width:20%;font-size:12px;">État</th>
                                                 <th style="width:15%;font-size:12px;"></th>
                                                 </thead>
                                                 <tbody>

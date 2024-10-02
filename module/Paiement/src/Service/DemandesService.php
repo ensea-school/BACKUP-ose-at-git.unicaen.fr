@@ -668,7 +668,7 @@ class DemandesService extends AbstractService
         }
         //On  vérifie qu'il y a bien un centre de cout
         if (empty($data['centreCoutId'])) {
-            throw new \Exception('Vous devez renseigner un centre de cout pour demander ce paiement', self::EXCEPTION_DMEP_CENTRE_COUT);
+            throw new \Exception('Vous devez renseigner un centre de coûts pour demander ce paiement', self::EXCEPTION_DMEP_CENTRE_COUT);
         }
         //On vérifie qu'il y a bien un domaine fonctionnel dans le cadre du référentiel et des missions
         if (!empty($data['missionId']) || !empty($data['formuleResServiceRefId'])) {

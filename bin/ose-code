@@ -31,3 +31,4 @@ $args = implode(' ', $args);
 $command = 'clear;php '.dirname(__DIR__)."/public/index.php UnicaenCode $args";
 
 passthru($command);
+echo "\n";

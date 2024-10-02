@@ -1,6 +1,6 @@
 {
-  "_vendor-2e5f87a4.js": {
-    "file": "assets/vendor-2e5f87a4.js"
+  "_vendor-1014b989.js": {
+    "file": "assets/vendor-1014b989.js"
   },
   "main.css": {
     "file": "assets/main-8b28e4d2.css",
@@ -10,9 +10,9 @@
     "css": [
       "assets/main-8b28e4d2.css"
     ],
-    "file": "assets/main-bf341ee0.js",
+    "file": "assets/main-d54fade3.js",
     "imports": [
-      "_vendor-2e5f87a4.js"
+      "_vendor-1014b989.js"
     ],
     "isEntry": true,
     "src": "main.js"

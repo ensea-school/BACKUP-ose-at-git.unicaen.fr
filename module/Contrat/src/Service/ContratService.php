@@ -17,6 +17,7 @@ use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Doctrine\ORM\QueryBuilder;
+
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
@@ -25,6 +26,7 @@ use RuntimeException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Unicaen\OpenDocument\Document;
 use UnicaenSignature\Entity\Db\Process;
+use UnicaenSignature\Entity\Db\ProcessStep;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Entity\Db\SignatureRecipient;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
@@ -513,7 +515,23 @@ class ContratService extends AbstractEntityService
             $process = $contrat->getProcessSignature();
             //Si j'ai bien un process de signature en cours pour ce contrat
             if ($process instanceof Process) {
-                $this->processService->trigger($process);
+                //Si le process est terminée alors on enregistre la date de retour signée
+                if ($process->isFinished()) {
+                    /**
+                     * @var $currentStep ProcessStep
+                     */
+                    $currentStep = $process->getCurrentStep();
+
+
+                    $dateDeRetourSigne = $process->getLastUpdate();
+                    $contrat->setDateRetourSigne($dateDeRetourSigne);
+                    $this->save($contrat);
+                    //TODO : On stock le document signé dans OSE dans fichier
+
+
+                } else {
+                    $this->processService->trigger($process);
+                }
                 return true;
             }
         }

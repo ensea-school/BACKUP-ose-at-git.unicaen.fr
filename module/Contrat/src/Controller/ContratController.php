@@ -718,9 +718,16 @@ class ContratController extends AbstractController
 
     public function rafraichirProcessSignatureAction()
     {
+        /**
+         * @var Contrat $contrat
+         */
+
         $contrat = $this->getEvent()->getParam('contrat');
         try {
+
             $this->getServiceContrat()->rafraichirProcessSignatureElectronique($contrat);
+            //On vérifier l'état d'avancement du processus si il est terminé on gere la date de retour signé
+            
             $this->flashMessenger()->addSuccessMessage('Signature électronique mise à jour');
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());

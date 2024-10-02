@@ -2,12 +2,9 @@
 
 namespace Contrat\Form;
 
-use Application\Filter\DateTimeFromString;
 use Application\Form\AbstractForm;
 use Contrat\Entity\Db\ContratAwareTrait;
 use Laminas\Form\Element\Csrf;
-use Laminas\Hydrator\HydratorInterface;
-use Service\Entity\Db\CampagneSaisie;
 
 /**
  * Formulaire de saisie de la date de retour du contrat/avenant signé.
@@ -66,42 +63,5 @@ class ContratRetourForm extends AbstractForm
                 'required' => false,
             ],
         ];
-    }
-}
-
-
-
-
-
-class ContratRetourFormHydrator implements HydratorInterface
-{
-
-    /**
-     * @param array          $data
-     * @param CampagneSaisie $object
-     *
-     * @return CampagneSaisie
-     */
-    public function hydrate(array $data, $object)
-    {
-        $object->setDateRetourSigne(DateTimeFromString::run($data['dateRetourSigne'] ?? null));
-
-        return $object;
-    }
-
-
-
-    /**
-     * @param CampagneSaisie $object
-     *
-     * @return array
-     */
-    public function extract($object): array
-    {
-        $data = [
-            'dateRetourSigne' => $object->getDateRetourSigne(),
-        ];
-
-        return $data;
     }
 }

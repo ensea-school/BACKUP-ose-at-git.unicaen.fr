@@ -11,7 +11,7 @@ use Laminas\Hydrator\HydratorInterface;
  *
  * @author ZVENIGOROSKY Alexandre <alexandre.zvenigorosky at unicaen.fr>
  */
-class typeModulateurSaisieForm extends AbstractForm
+class TypeModulateurSaisieForm extends AbstractForm
 {
 
     public function init()

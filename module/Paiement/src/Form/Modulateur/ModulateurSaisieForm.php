@@ -14,7 +14,7 @@ use Paiement\Service\TypeModulateurServiceAwareTrait;
  *
  * @author ZVENIGOROSKY Alexandre <alexandre.zvenigorosky at unicaen.fr>
  */
-class modulateurSaisieForm extends AbstractForm
+class ModulateurSaisieForm extends AbstractForm
 {
 
     public function init()

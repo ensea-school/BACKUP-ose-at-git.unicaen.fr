@@ -181,7 +181,7 @@ return [
             'name'        => 'LIBELLE_COURT',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 15,
+            'length'      => 40,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,

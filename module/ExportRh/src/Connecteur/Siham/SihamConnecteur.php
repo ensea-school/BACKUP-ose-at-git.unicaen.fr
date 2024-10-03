@@ -303,7 +303,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'bureauDistributeur' => $commune,
                 'bisTer'             => $bisTer,
                 'natureVoie'         => $natureVoie,
-                'nomVoie'            => self::cleanDatas(substr($nomVoie, 0, 32)),
+                'nomVoie'            => self::cleanDatas(substr($nomVoie, 0, 28)),
                 'numAdresse'         => $numeroVoie,
                 'complementAdresse'  => self::cleanDatas(substr($complement, 0, 37)),
                 'commune'            => $commune,
@@ -685,7 +685,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $bisTer     = (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl()->getCodeRh() : '';
                 $nomVoie    = (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() : ' ';
                 $nomVoie    = Util::stripAccents($nomVoie);
-                $nomVoie    = substr($nomVoie, 0, 32);
+                $nomVoie    = substr($nomVoie, 0, 28);
                 $complement = (!empty($dossierIntervenant->getAdresseLieuDit())) ? $dossierIntervenant->getAdresseLieuDit() . ' ' : ' ';
                 $complement .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : ' ';
                 $complement = Util::stripAccents($complement);
@@ -699,7 +699,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     'bisTer'             => $bisTer,
                     'noVoie'             => $numeroVoie,
                     'natureVoie'         => $natureVoie,
-                    'nomVoie'            => self::cleanDatas(substr($nomVoie, 0, 32)),
+                    'nomVoie'            => self::cleanDatas(substr($nomVoie, 0, 28)),
                     'complementAdresse'  => self::cleanDatas(substr($complement, 0, 37)),
                     'ville'              => $commune,
                     'codePostal'         => $codePostal,

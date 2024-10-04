@@ -119,10 +119,6 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                     le <?= $dateEnvoiEmail->format(\Application\Constants::DATE_FORMAT) ?>
                 </li>
             <?php endif; ?>
-            <?php if ($retourSigne): ?>
-                <li><i class="fas fa-thumbs-up"></i> Retourné signé
-                    le <?= $retourSigne->format(Application\Constants::DATE_FORMAT) ?></li>
-            <?php endif ?>
             <?php if ($avenant_param < 0): ?>
                 <li><i class="fas fa-thumbs-up"></i> Modifiable par la structure
                     <?= $contrat->getStructure() ?></li>
@@ -132,13 +128,16 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php endif; ?>
             <?php foreach ($infosSignature as $info): ?>
                 <li>
-                    <?php if ($info['urlDocumentSigned']): ?>
+                    <?php if (isset($info['urlDocumentSigned'])): ?>
                         <i class="fas fa-signature"></i> <?= $info['label'] . ' :  (<a href="' . $info['urlDocumentSigned'] . '" target="_blank">' . $info['labelInfos'] . '</a>)' ?>
                     <?php else: ?>
                         <i class="fas fa-signature"></i> <?= $info['label'] . ' :  (' . $info['labelInfos'] . ')' ?>
                     <?php endif; ?>
                 </li>
             <?php endforeach; ?>
+            <?php if ($contrat->getDateRetourSigne()): ?>
+                <i class="fas fa-signature"></i> Signature électronique terminée le <?= $contrat->getDateRetourSigne()->format('d/m/Y à H:i'); ?>
+            <?php endif; ?>
 
 
         </ul>
@@ -180,14 +179,15 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php endif; ?>
 
             <?php if (!$contrat->getProcessSignature() && $contratSignatureActivation && !empty($urlCreerProcessSignature)): ?>
-                <a href="<?= $urlCreerProcessSignature ?>" class="btn btn-primary">
+                <a href="<?= $urlCreerProcessSignature ?>" class="btn btn-primary"
+                   title="Envoyer dans circuit '<?= $libelleCircuitSignature; ?>'">
                     <i class="fas fa-signature"></i>
                     Envoyer pour signature électronique
                 </a>
 
             <?php endif; ?>
 
-            <?php if ($urlRafraichirProcessSignature && $contrat->getProcessSignature()): ?>
+            <?php if ($urlRafraichirProcessSignature && $contrat->getProcessSignature() && empty($retourSigne)): ?>
                 <a href="<?= $urlRafraichirProcessSignature ?>" class="btn btn-primary">
                     <i class="fas fa-arrows-rotate"></i>
                     Rafraîchir la signature électronique

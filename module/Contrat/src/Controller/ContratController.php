@@ -163,16 +163,19 @@ class ContratController extends AbstractController
         $contratDirectResult        = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect              = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
         $contratSignatureActivation = false;
+        $infosSignature             = [];
+        $libelleCircuitSignature    = null;
         if (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))
             && $intervenant->getStatut()->getContratEtatSortie()->isSignatureActivation()) {
             $contratSignatureActivation = true;
+            $libelleCircuitSignature    = $intervenant->getStatut()->getContratEtatSortie()->getSignatureCircuit()->getLabel();
+
             /**
              * @var Contrat     $contrat
              * @var Process     $process
              * @var ProcessStep $step
              */
             //On récupère les informations du process
-            $infosSignature = [];
             foreach ($contrats as $keyContrat => $contrat) {
                 $infosSignature[$keyContrat] = [];
                 $this->em()->refresh($contrat);
@@ -185,7 +188,7 @@ class ContratController extends AbstractController
         }
 
 
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect', 'missionNotContrat', 'contratSignatureActivation', 'infosSignature');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect', 'missionNotContrat', 'contratSignatureActivation', 'infosSignature', 'libelleCircuitSignature');
     }
 
 
@@ -688,7 +691,11 @@ class ContratController extends AbstractController
          * @var Contrat $contrat
          */
         $contrat = $this->getEvent()->getParam('contrat');
-        $this->getServiceContrat()->creerProcessContratSignatureElectronique($contrat);
+        try {
+            $this->getServiceContrat()->creerProcessContratSignatureElectronique($contrat);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
     }
@@ -709,7 +716,12 @@ class ContratController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
-
+        //Mise à jour des tableaux de bord nécessaires
+        /**
+         * @var Contrat $contrat
+         */
+        $intervenant = $contrat->getIntervenant();
+        $this->updateTableauxBord($intervenant);
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
     }
@@ -722,11 +734,13 @@ class ContratController extends AbstractController
          * @var Contrat $contrat
          */
 
-        $contrat = $this->getEvent()->getParam('contrat');
+        $contrat     = $this->getEvent()->getParam('contrat');
+        $intervenant = $contrat->getIntervenant();
         try {
 
             $this->getServiceContrat()->rafraichirProcessSignatureElectronique($contrat);
-            //On vérifie l'état d'avancement du processus si il est terminé on gère la date de retour signé
+            $this->updateTableauxBord($intervenant);
+
 
             $this->flashMessenger()->addSuccessMessage('Signature électronique mise à jour');
         } catch (\Exception $e) {

@@ -3,6 +3,11 @@
 use Unicaen\BddAdmin\Bdd;
 use Unicaen\BddAdmin\DataUpdater;
 use Psr\Container\ContainerInterface;
+use Laminas\Cli\ApplicationFactory;
+use Laminas\Cli\ApplicationProvisioner;
+use Laminas\Cli\ContainerResolver;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class OseAdmin
 {
@@ -138,9 +143,40 @@ class OseAdmin
                 require_once $filename;
             }
         } else {
-            $this->console()->println('Action "' . $action . '" inconnue.', $this->console()::COLOR_RED);
-            $c = $this->console();
-            require_once getcwd() . '/admin/actions/help.php';
+            // lancement d'une commande Symphony
+            $app                      = (new ApplicationFactory())();
+            $definition               = $app->getDefinition();
+            $output                   = new ConsoleOutput();
+            $containerNotFoundMessage = '';
+            $input                    = new ArgvInput();
+
+            try {
+                $input->bind($definition);
+            } catch (\Symfony\Component\Console\Exception\RuntimeException $exception) {
+                // Ignore validation issues as we did not yet have the commands definition
+                // As we only need the `--container` option, we are good to go until it is passed *before* the first command argument
+                // Symfony parses the `argv` in its direct order and raises an error when more arguments or options are passed
+                // than described by the default definition.
+            }
+
+            try {
+                $container = (new ContainerResolver(getcwd()))->resolve($input);
+                $app       = (new ApplicationProvisioner())($app, $container);
+            } catch (RuntimeException|InvalidArgumentException $exception) {
+                // Usage information provided by the `ContainerResolver` should be passed to the CLI output
+                $containerNotFoundMessage = sprintf('<error>%s</error>', $exception->getMessage());
+            }
+
+            // By running the app even if its not provisioned allows symfony/console to report problems
+            // and/or display available options (like `--container`)
+            $exitCode = $app->run(null, $output);
+
+            if ($containerNotFoundMessage) {
+                $output->writeln($containerNotFoundMessage);
+                $exitCode = 255;
+            }
+
+            exit($exitCode);
         }
     }
 

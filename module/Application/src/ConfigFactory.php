@@ -122,6 +122,10 @@ class ConfigFactory
             ];
         }
 
+        if (isset($config['laminas-cli'])) {
+            $finalConfig['laminas-cli'] = $config['laminas-cli'];
+        }
+
         return $finalConfig;
     }
 

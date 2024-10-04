@@ -231,7 +231,7 @@ class MigrationManager
 
 
 
-    public function migration(string $context = 'pre', string $action = null): void
+    public function migration(string $context = 'before', string $action = null): void
     {
         if (empty($this->old)) {
             $this->old = $this->getBdd()->getDdl($this->filters);

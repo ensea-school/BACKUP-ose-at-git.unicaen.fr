@@ -70,13 +70,13 @@ return [
         Assertion\FormuleAssertion::class => AssertionFactory::class,
         Service\FormuleService::class     => Service\FormuleServiceFactory::class,
         Tbl\Process\FormuleProcess::class => Tbl\Process\FormuleProcessFactory::class,
-        //Command\CalculCommand::class  => Command\CalculCommandFactory::class,
+        Command\BuildCommand::class  => Command\BuildCommandFactory::class,
     ],
 
 
     'laminas-cli' => [
         'commands' => [
-            //'formule:calcul' => Command\CalculCommand::class,
+            'build-formules' => Command\BuildCommand::class,
         ],
     ],
 ];

@@ -25,7 +25,8 @@
         "laminas/laminas-cache-storage-adapter-memory": "2.3.0",
         "laminas/laminas-text"                        : "2.11",
         "unicaen/console"                             : "6.1.0",
-        "laminas/laminas-cli"                         : "1.10.0"
+        "laminas/laminas-cli"                         : "1.10.0",
+        "symfony/process"                             : "7.1.5"
     },
     "require-dev"      : {
         "squizlabs/php_codesniffer"         : "*",

@@ -128,14 +128,19 @@ return [
         'LIBELLE'            => 'Université Paris Panthéon-Assas',
         'PACKAGE_NAME'       => 'FORMULE_ASSAS',
         'VH_PARAM_1_LIBELLE' => 'Diplomes nationaux',
-        'VH_PARAM_2_LIBELLE' => '0',
-        'VH_PARAM_3_LIBELLE' => '0',
-        'VH_PARAM_4_LIBELLE' => '0',
-        'VH_PARAM_5_LIBELLE' => '0',
     ],
     30 => [
         'LIBELLE'            => 'Université Paris Dauphine-PSL',
         'PACKAGE_NAME'       => 'FORMULE_DAUPHINE',
         'VH_PARAM_1_LIBELLE' => 'Code enseignement',
+    ],
+    31 => [
+        'LIBELLE'            => 'Université Jean Moulin Lyon 3',
+        'PACKAGE_NAME'       => 'FORMULE_LYON3',
+        'VH_PARAM_1_LIBELLE' => 'Diplômes nationaux',
+    ],
+    32 => [
+        'LIBELLE'      => 'Université Lumière Lyon 2 <= 2023/2024',
+        'PACKAGE_NAME' => 'FORMULE_LYON2_2023',
     ],
 ];

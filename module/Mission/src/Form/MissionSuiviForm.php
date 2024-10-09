@@ -3,6 +3,7 @@
 namespace Mission\Form;
 
 use Application\Form\AbstractForm;
+use Application\Provider\Privilege\Privileges;
 use Doctrine\Common\Collections\ArrayCollection;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
@@ -157,6 +158,9 @@ class MissionSuiviForm extends AbstractForm
 
         foreach ($missions as $i => $mission) {
             if (!$mission->canAddSuivi($this->date)) {
+                unset($missions[$i]);
+            }
+            if (!$this->getAuthorize()->isAllowed($mission, Privileges::MISSION_EDITION_REALISE)){
                 unset($missions[$i]);
             }
         }

@@ -12,7 +12,7 @@
                 <th>Composante</th>
                 <th>Etat</th>
                 <th>Date commission</th>
-                <th v-if="canValiderCandidature">Action</th>
+                <th v-if="canValiderCandidature || canRefuserCandidature">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -37,8 +37,9 @@
                     <u-date v-if="candidature.dateCommission" :value="candidature.dateCommission"/>
                 </td>
 
-                <td v-if="this.canValiderCandidature" style="text-align:center;">
-                    <a v-if="!candidature.validation" :href="urlAccepterCandidature(candidature)"
+                <td v-if="this.canValiderCandidature || this.canRefuserCandidature" style="text-align:center;">
+                    <a v-if="!candidature.validation && this.canValiderCandidature"
+                       :href="urlAccepterCandidature(candidature)"
                        class="btn btn-success"
                        data-content="Êtes vous sûr de vouloir accepter cette candidature ?"
                        data-title="Accepter la candidature"
@@ -47,7 +48,7 @@
                        @click.prevent="validerCandidature">
                         <i class="fa-solid fa-check"></i>
                     </a>&nbsp;
-                    <a :href="urlRefuserCandidature(candidature)"
+                    <a v-if="this.canRefuserCandidature" :href="urlRefuserCandidature(candidature)"
                        class="btn btn-danger"
                        data-content="Êtes vous sûr de vouloir refuser cette candidature ?"
                        data-title="Refuser la candidature"
@@ -81,6 +82,7 @@ export default {
     props: {
         intervenant: {required: true},
         canValiderCandidature: {type: Boolean, required: false},
+        canRefuserCandidature: {type: Boolean, required: false},
         renseignerDonneesPersonnelles: {type: Boolean, required: false},
 
     },

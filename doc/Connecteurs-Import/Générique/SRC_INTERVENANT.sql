@@ -249,7 +249,7 @@ FROM (
       padr.id                                                                                adresse_pays_id,
       s.numero_insee                                                                         numero_insee,
       COALESCE(s.numero_insee_provisoire,i.numero_insee_provisoire,0)                        numero_insee_provisoire,
-      CASE WHEN i.sync_pec = 0 THEN i.numero_pec ELSE s.numero_pec END                       nunmero_pec,
+      CASE WHEN i.sync_pec = 0 THEN i.numero_pec ELSE s.numero_pec END                       numero_pec,
       s.iban                                                                                 s_iban,
       s.bic                                                                                  s_bic,
       s.rib_hors_sepa                                                                        s_rib_hors_sepa,
@@ -303,7 +303,7 @@ FROM (
       LEFT JOIN grade                   g ON g.source_code      = s.z_grade_id
       LEFT JOIN discipline              d ON d.source_code      = s.z_discipline_id
       LEFT JOIN civilite                c ON c.libelle_court    = s.z_civilite_id
-      LEFT JOIN situation_matrimoniale sm ON sm.libelle_court   = s.z_situation_matriomoniale_id
+      LEFT JOIN situation_matrimoniale sm ON sm.code            = s.z_situation_matriomoniale_id
       LEFT JOIN pays               pnaiss ON pnaiss.source_code = s.z_pays_naissance_id
       LEFT JOIN departement           dep ON dep.source_code    = s.z_departement_naissance_id
       LEFT JOIN pays                 pnat ON pnat.source_code   = s.z_pays_nationalite_id

@@ -12,6 +12,12 @@
 
 
 
+# OSE 23.11 (à venir)
+
+## Corrections de bugs
+
+* Dysfonctionnenent des demandes de mises en paiement par lot suite au filtrage par structure (#58788)
+
 # OSE 23.10 (03/10/2024)
 
 ## Nouveautés

@@ -180,121 +180,6 @@ class ContratService extends AbstractEntityService
 
 
 
-    public function saveContratFichier(Contrat $contrat)
-    {
-        $contratFilePath = $this->generer($contrat, false, true);
-        $files           = [];
-        $files[]         = [
-            'tmp_name' => $contratFilePath,
-            'type'     => mime_content_type($contratFilePath),
-            'size'     => filesize($contratFilePath),
-            'name'     => basename($contratFilePath),
-        ];
-        $this->creerFichiers($files, $contrat);
-
-        return true;
-    }
-
-
-
-    public function generer(Contrat $contrat, $download = true, $save = false)
-    {
-        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
-                            $contrat->getIntervenant()->getNomUsuel(),
-                            $contrat->getIntervenant()->getCode());
-
-        if ($contrat->estUnAvenant()) {
-            $modele = $contrat->getIntervenant()->getStatut()->getAvenantEtatSortie();
-            if (!$modele) {
-                $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
-            }
-        } else {
-            $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
-        }
-
-        if (!$modele) {
-            throw new \Exception('Aucun modèle ne correspond à ce contrat');
-        }
-
-        $filtres = ['CONTRAT_ID' => $contrat->getId()];
-
-        $document = $this->getServiceEtatSortie()->genererPdf($modele, $filtres);
-
-        if ($contrat->estUnProjet()) {
-            $document->getStylist()->addFiligrane('PROJET');
-        }
-
-
-        if ($save) {
-            $config = \OseAdmin::instance()->config()->get('unicaen-signature');
-            //On récupere le contenu du contrat
-            $content = $document->saveToData();
-            file_put_contents($config['documents_path'] . '/' . $fileName, $content);
-            /*            $var = exec('chmod 777 ' . $config['documents_path'] . '/copy.pdf');
-                        dump($var);
-                        die;
-            */
-            return $config['documents_path'] . '/' . $fileName;
-        }
-        if ($download) {
-            $document->download($fileName);
-
-            return null;
-        } else {
-            return $document;
-        }
-    }
-
-
-
-    /**
-     * Création des Fichiers déposés pour un contrat.
-     *
-     * @param array   $files             Ex: ['tmp_name' => '/tmp/k65sd4d', 'name' => 'Image.png', 'type' => 'image/png',
-     *                                   'size' => 321215]
-     * @param Contrat $contrat
-     * @param boolean $deleteFiles       Supprimer les fichiers temporaires après création du Fichier
-     *
-     * @return Fichier[]
-     */
-    public function creerFichiers($files, Contrat $contrat, $deleteFiles = true)
-    {
-        if (!$files) {
-            throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");
-        }
-        $instances = [];
-
-        foreach ($files as $file) {
-            $path          = $file['tmp_name'];
-            $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
-            $typeFichier   = $file['type'];
-            $tailleFichier = $file['size'];
-
-            $fichier = (new Fichier())
-                ->setTypeMime($typeFichier)
-                ->setNom($nomFichier)
-                ->setTaille($tailleFichier)
-                ->setContenu(file_get_contents($path))
-                ->setValidation(null);
-
-            $contrat->addFichier($fichier);
-
-            $this->getServiceFichier()->save($fichier);
-            $instances[] = $fichier;
-
-            if ($deleteFiles) {
-                unlink($path);
-            }
-        }
-
-        $this->getEntityManager()->flush();
-
-        return $instances;
-    }
-
-
-
     public function creerProcessContratSignatureElectronique(Contrat $contrat)
     {
         //On récupere le contenu du contrat
@@ -310,6 +195,8 @@ class ContratService extends AbstractEntityService
         file_put_contents($config['documents_path'] . '/' . $fileName, $content);
         $contratFilePath = $config['documents_path'] . '/' . $fileName;
         $filename        = basename($contratFilePath);
+
+
         //Récupération du circuit de signature si la signature est activé pour l'état de sortie de ce contrat
         $intervenant       = $contrat->getIntervenant();
         $etatSortieContrat = $intervenant->getStatut()->getContratEtatSortie();
@@ -389,6 +276,13 @@ class ContratService extends AbstractEntityService
                     $contrat->setProcessSignature($process);
                     //Déclenchement de la première étape de signature du circuit
                     $this->getProcessService()->trigger($process, true);
+                    //Sauvegarde du contrat initial avec entity fichier
+                    $file['tmp_name'] = $contratFilePath;
+                    $file['type']     = 'application/pdf';
+                    $file['size']     = filesize($contratFilePath);
+                    $file['name']     = $filename;
+                    $files[]          = $file;
+                    $this->creerFichiers($files, $contrat, true);
                 } else {
                     throw new \Exception("Aucun circuit de signature paramètré pour cet état de sortie");
                 }
@@ -401,6 +295,104 @@ class ContratService extends AbstractEntityService
 
         return true;
 
+    }
+
+
+
+    public function generer(Contrat $contrat, $download = true, $save = false)
+    {
+        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
+                            $contrat->getIntervenant()->getNomUsuel(),
+                            $contrat->getIntervenant()->getCode());
+
+        if ($contrat->estUnAvenant()) {
+            $modele = $contrat->getIntervenant()->getStatut()->getAvenantEtatSortie();
+            if (!$modele) {
+                $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
+            }
+        } else {
+            $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
+        }
+
+        if (!$modele) {
+            throw new \Exception('Aucun modèle ne correspond à ce contrat');
+        }
+
+        $filtres = ['CONTRAT_ID' => $contrat->getId()];
+
+        $document = $this->getServiceEtatSortie()->genererPdf($modele, $filtres);
+
+        if ($contrat->estUnProjet()) {
+            $document->getStylist()->addFiligrane('PROJET');
+        }
+
+
+        if ($save) {
+            $config = \OseAdmin::instance()->config()->get('unicaen-signature');
+            //On récupere le contenu du contrat pour le stocker temporairement afin de pouvoir l'envoyer dans le parapheur
+            $content = $document->saveToData();
+            file_put_contents($config['documents_path'] . '/' . $fileName, $content);
+            /*            $var = exec('chmod 777 ' . $config['documents_path'] . '/copy.pdf');
+                        dump($var);
+                        die;
+            */
+            return $config['documents_path'] . '/' . $fileName;
+        }
+        if ($download) {
+            $document->download($fileName);
+
+            return null;
+        } else {
+            return $document;
+        }
+    }
+
+
+
+    /**
+     * Création des Fichiers déposés pour un contrat.
+     *
+     * @param array   $files             Ex: ['tmp_name' => '/tmp/k65sd4d', 'name' => 'Image.png', 'type' => 'image/png',
+     *                                   'size' => 321215]
+     * @param Contrat $contrat
+     * @param boolean $deleteFiles       Supprimer les fichiers temporaires après création du Fichier
+     *
+     * @return Fichier[]
+     */
+    public function creerFichiers($files, Contrat $contrat, $deleteFiles = true)
+    {
+        if (!$files) {
+            throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");
+        }
+        $instances = [];
+
+        foreach ($files as $file) {
+            $path          = $file['tmp_name'];
+            $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
+            $typeFichier   = $file['type'];
+            $tailleFichier = $file['size'];
+
+            $fichier = (new Fichier())
+                ->setTypeMime($typeFichier)
+                ->setNom($nomFichier)
+                ->setTaille($tailleFichier)
+                ->setContenu(file_get_contents($path))
+                ->setValidation(null);
+
+            $contrat->addFichier($fichier);
+
+            $this->getServiceFichier()->save($fichier);
+            $instances[] = $fichier;
+
+            if ($deleteFiles) {
+                unlink($path);
+            }
+        }
+
+        $this->getEntityManager()->flush();
+
+        return $instances;
     }
 
 
@@ -522,28 +514,81 @@ class ContratService extends AbstractEntityService
     {
         if ($contrat instanceof Contrat) {
             $process = $contrat->getProcessSignature();
-            //Si j'ai bien un process de signature en cours pour ce contrat
-            if ($process instanceof Process) {
-                //On lance la prochaine étape du processus
-                try {
-                    $this->processService->trigger($process);
-                    //On regarde si le processus de signature est terminée
-                    if ($process->isFinished()) {
-                        //Si le process est terminée alors on enregistre la date de retour signée
-                        $dateDeRetourSigne = $process->getLastUpdate();
-                        $contrat->setDateRetourSigne($dateDeRetourSigne);
+            //On va chercher le document dans l'état actuel.
+            $fichiers = $contrat->getFichier();
+            if (!empty($fichier)) {
+                $fichierContrat = $fichiers[0];
+                $config         = \OseAdmin::instance()->config()->get('unicaen-signature');
+                /*On redépose le contrat dans l'état actuel dans un repértoire temporaire pour qu'il
+                puisse être envoyé dans Esup*/
+                $content         = $this->getServiceFichier()->getFichierContenu($fichierContrat);
+                $contratFilePath = $config['documents_path'] . '/' . $fichierContrat->getNom();
+                file_put_contents($config['documents_path'] . '/' . $fichierContrat->getNom(), $content);
+                //Si j'ai bien un process de signature en cours pour ce contrat
+                if ($process instanceof Process) {
+                    //On lance la prochaine étape du processus
+                    try {
+                        $this->processService->trigger($process);
+                        //On supprimer le fichier contrat actuellement en base pour le mettre à jour
+                        $contrat->removeFichier($fichierContrat);
                         $this->save($contrat);
+                        //On supprime physiquement le fichier si le stockage est sur filer
+                        $path = $this->getServiceFichier()->getFichierFilename($fichierContrat);
+                        unlink($path);
+                        //On récupérer le nouveau contrat pour le sauvegarder comme fichier actuel
+                        $file['tmp_name'] = $contratFilePath;
+                        $file['type']     = 'application/pdf';
+                        $file['size']     = filesize($contratFilePath);
+                        $file['name']     = $process->getDocumentName();
+                        $files[]          = $file;
+                        $this->creerFichiers($files, $contrat, true);
+                        //On regarde si le processus de signature est terminée
+                        if ($process->isFinished()) {
+                            //Si le process est terminée alors on enregistre la date de retour signée
+                            $dateDeRetourSigne = $process->getLastUpdate();
+                            $contrat->setDateRetourSigne($dateDeRetourSigne);
+                            $this->save($contrat);
 
-                        //TODO : On stock le document signé dans OSE dans fichier
-                        return true;
+
+                            //TODO : On stock le document signé dans OSE dans fichier
+                            return true;
+                        }
+                    } catch (\Exception $e) {
+                        throw $e;
                     }
-                } catch (\Exception $e) {
-                    throw $e;
-                }
 
+                }
             }
+
         }
         return false;
+    }
+
+
+
+    public function updateFichierContrat($contrat)
+    {
+        $fichiers = $contrat->getFichier();
+        if (!empty($fichiers)) {
+            $fichierContrat = $fichiers[0];
+            //On supprime le fichier de la collection
+            $contrat->removeFichier($fichierContrat);
+            $this->save($contrat);
+            //On supprimer le fichier physiquement sur le serveur
+            /**
+             * @var Fichier $fichierContrat
+             */
+            $path = $this->getServiceFichier()->getFichierFilename($fichierContrat);
+            unlink($path);
+
+            $file['tmp_name'] = $contratFilePath;
+            $file['type']     = 'application/pdf';
+            $file['size']     = filesize($contratFilePath);
+            $file['name']     = $process->getDocumentName();
+            $files[]          = $file;
+            $this->creerFichiers($files, $contrat, true);
+        }
+
     }
 
 

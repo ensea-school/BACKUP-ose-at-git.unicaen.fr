@@ -139,16 +139,16 @@ class ContratController extends AbstractController
             throw new LogicException('L\'intervenant n\'est pas précisé');
         }
 
-        $volumeHoraires = $this->getServiceTblContrat()->getVolumeTotalCreationContratByUuid($uuid);
-        $contrat = $this->getProcessusContrat()->creer($intervenant, $volumeHoraires);
-//
-//
+        $volumeHorairesTotal = $this->getServiceTblContrat()->getVolumeTotalCreationContratByUuid($uuid);
+        $contrat             = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal);
+
+
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
             $this->flashMessenger()->addSuccessMessage("La création de contrat/avenant pour $intervenant n'est pas possible.");
         } else {
-            try {
+//            try {
 
-                $this->getProcessusContrat()->enregistrer($contrat, $uuid);
+            $this->getProcessusContrat()->enregistrer($contrat, $uuid);
 //                if ($contratDirect) {
 //                    $this->getProcessusContrat()->valider($contrat);
 //                }

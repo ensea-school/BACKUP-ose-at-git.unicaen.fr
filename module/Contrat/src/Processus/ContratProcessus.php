@@ -61,54 +61,19 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Service[]
      */
-    public function getServices(Intervenant $intervenant, Contrat $contrat = null, Structure $structure = null, bool $detach = true): array
+    public function getVolumeHoraireService(string $uuid): array
     {
         $services = [];
-
-        $fContrat    = "vh.contrat = :contrat";
-        $fNonContrat = "vh.contrat IS NULL "
-            . "AND tvh.code = '" . TypeVolumeHoraire::CODE_PREVU . "' "
-            . "AND evh.code = '" . EtatVolumeHoraire::CODE_VALIDE . "' ";
-
-        if ($structure) {
-            $fStructure = "AND str = :structure";
-        } else {
-            $fStructure = '';
-        }
-
-        $dql   = "
-        SELECT
-          s, ep, vh, str, i, evh, tvh
-        FROM
-          Enseignement\Entity\Db\Service s
-          JOIN s.volumeHoraire      vh
-          JOIN s.elementPedagogique ep
-          JOIN ep.structure         str
-          JOIN s.intervenant        i
-          JOIN vh.etatVolumeHoraire evh
-          JOIN vh.typeVolumeHoraire tvh
-        WHERE
-          i = :intervenant
-          AND s.histoDestruction IS NULL
-          AND vh.histoDestruction IS NULL
-          AND vh.motifNonPaiement IS NULL
-          AND " . ($contrat ? $fContrat : $fNonContrat) . "
-          $fStructure
-        ";
-        $query = $this->getEntityManager()->createQuery($dql);
-        $query->setParameter('intervenant', $intervenant);
-        if ($contrat) {
-            $query->setParameter('contrat', $contrat);
-        }
-        if ($structure) {
-            $query->setParameter('structure', $structure);
-        }
+        $query    = $this->getEntityManager()->createQuery(
+            'SELECT vh
+                 FROM Contrat\Entity\Db\TblContrat c
+                 JOIN c.volumeHoraire vh
+                 WHERE c.uuid = :uuid'
+        );
+        $query->setParameter('uuid', $uuid);
 
         foreach ($query->execute() as $service) {
-            /* @var $service Service */
-            if ($detach) {
-                $this->getEntityManager()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
-            }
+            /** @var $service Service */
             $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
             $services[$service->getId()] = $service;
         }
@@ -271,38 +236,36 @@ class ContratProcessus extends AbstractProcessus
         // on sauvegarde le contrat
         $this->getServiceContrat()->save($contrat);
 
-            // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
-            $services = $this->getServices($contrat->getIntervenant(), null, $contrat->getStructure(), false);
-            $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-            foreach ($services as $service) {
-                foreach ($service->getVolumeHoraire() as $vh) {
-                    /* @var $vh VolumeHoraire */
-                    $vh->setContrat($contrat);
-                    $this->getEntityManager()->persist($vh);
-                }
-            }
+        // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
+        $volumesHoraires = $this->getVolumeHoraireService($uuid);
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
+        foreach ($volumesHoraires as $vh) {
+            /* @var $vh VolumeHoraire */
+            $vh->setContrat($contrat);
+            $this->getEntityManager()->persist($vh);
+        }
 
-            // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
-            $servicesRef = $this->getServicesRef($contrat->getIntervenant(), null, $contrat->getStructure(), false);
-            $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-            foreach ($servicesRef as $serviceRef) {
-                foreach ($serviceRef->getVolumeHoraireReferentiel() as $vhr) {
-                    /* @var $vhr VolumeHoraireReferentiel */
-                    $vhr->setContrat($contrat);
-                    $this->getEntityManager()->persist($vhr);
-                }
+        // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
+        $servicesRef = $this->getServicesRef($contrat->getIntervenant(), $uuid);
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
+        foreach ($servicesRef as $serviceRef) {
+            foreach ($serviceRef->getVolumeHoraireReferentiel() as $vhr) {
+                /* @var $vhr VolumeHoraireReferentiel */
+                $vhr->setContrat($contrat);
+                $this->getEntityManager()->persist($vhr);
             }
+        }
 
-            // on récupère les heures lié a la mission et on les places dans le contrat
-            $servicesMissions = $this->getServicesMission($contrat->getIntervenant(), null, $mission, false);
-            $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-            foreach ($servicesMissions as $servicesMission) {
-                foreach ($servicesMission->getVolumesHorairesPrevus() as $vhm) {
-                    /* @var $vhm VolumeHoraireMission */
-                    $vhm->setContrat($contrat);
-                    $this->getEntityManager()->persist($vhm);
-                }
+        // on récupère les heures lié a la mission et on les places dans le contrat
+        $servicesMissions = $this->getServicesMission($contrat->getIntervenant(), $uuid);
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
+        foreach ($servicesMissions as $servicesMission) {
+            foreach ($servicesMission->getVolumesHorairesPrevus() as $vhm) {
+                /* @var $vhm VolumeHoraireMission */
+                $vhm->setContrat($contrat);
+                $this->getEntityManager()->persist($vhm);
             }
+        }
 
 
         $this->getORMEventListenersHistoriqueListener()->setEnabled(true);

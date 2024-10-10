@@ -25,6 +25,11 @@ $urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
     ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
     : null;
 
+$fichiers                    = $contrat->getFichier();
+$urlTelechargerContratSigned = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
+    ? (count($fichiers)) ? $this->url('contrat/telecharger-fichier', ['contrat' => $contrat->getId(), 'fichier' => $fichiers[0]->getId(), 'nomFichier' => $fichiers[0]->getNom()]) : null
+    : null;
+
 $urlEmail = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOI_EMAIL)
     ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()], ['modal' => 1]) . '?modal=1'
     : null;
@@ -126,15 +131,18 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php if (!$contrat->getProcessSignature() && $contratSignatureActivation && $contrat->getValidation()): ?>
                 <li><i class="fas fa-hourglass-start"></i> En attente d'envoi pour signature électronique</li>
             <?php endif; ?>
-            <?php foreach ($infosSignature as $info): ?>
-                <li>
-                    <?php if (isset($info['urlDocumentSigned'])): ?>
-                        <i class="fas fa-signature"></i> <?= $info['label'] . ' :  (<a href="' . $info['urlDocumentSigned'] . '" target="_blank">' . $info['labelInfos'] . '</a>)' ?>
-                    <?php else: ?>
-                        <i class="fas fa-signature"></i> <?= $info['label'] . ' :  (' . $info['labelInfos'] . ')' ?>
-                    <?php endif; ?>
-                </li>
-            <?php endforeach; ?>
+
+            <?php if (array_key_exists($contrat->getId(), $infosSignature)): ?>
+                <?php foreach ($infosSignature[$contrat->getId()]['processSignature'] as $info): ?>
+                    <li>
+                        <?php if (isset($info['urlDocumentSigned'])): ?>
+                            <i class="fas fa-signature"></i> <?= $info['label'] . ' :  (<a href="' . $info['urlDocumentSigned'] . '" target="_blank">' . $info['labelInfos'] . '</a>)' ?>
+                        <?php else: ?>
+                            <i class="fas fa-signature"></i> <?= $info['label'] . ' :  (' . $info['labelInfos'] . ')' ?>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
             <?php if ($contrat->getDateRetourSigne()): ?>
                 <i class="fas fa-signature"></i> Signature électronique terminée le <?= $contrat->getDateRetourSigne()->format('d/m/Y à H:i'); ?>
             <?php endif; ?>
@@ -182,7 +190,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <a href="<?= $urlCreerProcessSignature ?>" class="btn btn-primary"
                    title="Envoyer dans circuit '<?= $libelleCircuitSignature; ?>'">
                     <i class="fas fa-signature"></i>
-                    Envoyer pour signature électronique
+                    Envoyer pour signature
                 </a>
 
             <?php endif; ?>
@@ -190,7 +198,19 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php if ($urlRafraichirProcessSignature && $contrat->getProcessSignature() && empty($retourSigne)): ?>
                 <a href="<?= $urlRafraichirProcessSignature ?>" class="btn btn-primary">
                     <i class="fas fa-arrows-rotate"></i>
-                    Rafraîchir la signature électronique
+                    Rafraîchir la signature
+                </a>
+
+            <?php endif; ?>
+            <?php if ($contrat->getProcessSignature() && ($urlTelechargerContratSigned || $urlCreerProcessSignature)): ?>
+                <!--https://ose.unicaen.fr/contrat/37471/telecharger-fichier/156945/GAUDET_Yann-Yves_Contrat.pdf-->
+                <a href="<?= $urlTelechargerContratSigned ?>" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-eye"></i>
+                    <?php if ($contrat->getDateRetourSigne()): ?>
+                        Voir le contrat signé
+                    <?php else: ?>
+                        Voir le contrat
+                    <?php endif; ?>
                 </a>
 
             <?php endif; ?>
@@ -198,7 +218,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php if ($urlSupprimerProcessSignature && $contrat->getProcessSignature()): ?>
                 <a href="<?= $urlSupprimerProcessSignature ?>" class="btn btn-danger">
                     <i class="fas fa-trash"></i>
-                    Supprimer la signature électronique
+                    Supprimer la signature
                 </a>
 
             <?php endif; ?>

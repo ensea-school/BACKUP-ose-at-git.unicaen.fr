@@ -176,15 +176,19 @@ class ContratController extends AbstractController
              * @var ProcessStep $step
              */
             //On récupère les informations du process
+
             foreach ($contrats as $keyContrat => $contrat) {
-                $infosSignature[$keyContrat] = [];
-                $this->em()->refresh($contrat);
-                $process = $contrat->getProcessSignature();
-                if (!empty($process)) {
-                    $infosSignature[$keyContrat] = $this->getProcessService()->getInfosProcess($process);
+                if ($contrat->getProcessSignature()) {
+                    $infosSignature[$keyContrat] = [];
+                    $this->em()->refresh($contrat);
+                    $process = $contrat->getProcessSignature();
+                    if (!empty($process)) {
+                        $infosSignature[$keyContrat]['processSignature'] = $this->getProcessService()->getInfosProcess($process);
+                    }
+                    $infosSignature[$keyContrat]['urlFichierContrat'] = $this->getServiceContrat()->getUrlSignedContrat($contrat);
                 }
             }
-
+           
         }
 
 
@@ -740,13 +744,29 @@ class ContratController extends AbstractController
 
             $this->getServiceContrat()->rafraichirProcessSignatureElectronique($contrat);
             $this->updateTableauxBord($intervenant);
-
-
             $this->flashMessenger()->addSuccessMessage('Signature électronique mise à jour');
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
+    }
+
+
+
+    public function voirContratSignatureAction()
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /** @var Contrat $contrat */
+        $contrat = $this->getEvent()->getParam('contrat');
+
+
+        if (!$pieceJointe || $pieceJointe->getIntervenant()->getCode() != $intervenant->getCode()) {
+            // un intervenant tente de télécharger la PJ d'un autre intervenant
+            throw new \Exception('La pièce jointe n\'existe pas ou bien elle appartient à un autre intervenant');
+        }
+
+        $this->uploader()->download($fichier);
     }
 }

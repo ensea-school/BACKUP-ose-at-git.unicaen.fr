@@ -128,6 +128,14 @@ return [
                     'action'      => 'telecharger-fichier',
                     'controller'  => ContratController::class,
                 ],
+                'deposer-fichier'              => [
+                    'route'       => '/:contrat/deposer-fichier',
+                    'constraints' => [
+                        'contrat' => '[0-9]*',
+                    ],
+                    'action'      => 'deposer-fichier',
+                    'controller'  => ContratController::class,
+                ],
                 'supprimer-fichier'            => [
                     'route'       => '/:contrat/supprimer-fichier[/:fichier]',
                     'constraints' => [

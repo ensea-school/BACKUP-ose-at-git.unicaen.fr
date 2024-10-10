@@ -8,6 +8,7 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Lieu\Entity\Db\Structure;
+use Intervenant\Entity\Db\Intervenant;
 
 
 /**

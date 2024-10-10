@@ -3,10 +3,10 @@
 namespace Paiement\Service;
 
 
+use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 
 
@@ -80,6 +80,16 @@ class TblPaiementService extends AbstractEntityService
         return $qb;
     }
 
+
+
+    /*public function finderByStructure(Structure $structure, QueryBuilder $qb = null, $alias = null): QueryBuilder
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $qb->andWhere("$alias.structure = :structure")->setParameter('structure', $structure->getId());
+
+        return $qb;
+    }*/
 
 
     public function filteredByCentreCoutNotNull(QueryBuilder $qb, $alias = null): QueryBuilder

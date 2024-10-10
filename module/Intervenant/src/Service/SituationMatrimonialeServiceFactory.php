@@ -18,7 +18,7 @@ class SituationMatrimonialeServiceFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return CiviliteService
+     * @return SituationMatrimonialeService
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {

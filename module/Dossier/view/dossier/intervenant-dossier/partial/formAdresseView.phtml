@@ -33,22 +33,13 @@ $dossierAdresse = $form->get('DossierAdresse');
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$tblDossier->getCompletudeAdresse()): ?>
                     <div class="messenger alert alert-secondary ">
-                        Pour compléter votre adresse vous devez renseigner au minimum le champ complément d'adresse ou renseigner votre numéro de rue pour
+                        Pour compléter votre adresse vous devez renseigner au minimum le champ complément d'adresse ou
+                        renseigner votre numéro de rue pour
                         avoir une adresse valide.
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
 
-            <div class="form-group">
-                <?= $this->formLabel($dossierAdresse->get('precisions')); ?>
-                <div class="input-group cold-md-6 readonly">
-                    <?php
-                    if (!empty($intervenantDossier->getAdressePrecisions())) {
-                        echo ($viewAdresse) ? $intervenantDossier->getAdressePrecisions() : '*******************';
-                    }
-                    ?>
-                </div>
-            </div>
             <div class="form-group">
                 <?= $this->formLabel($dossierAdresse->get('lieuDit')); ?>
                 <div class="input-group cold-md-6 readonly">
@@ -106,6 +97,16 @@ $dossierAdresse = $form->get('DossierAdresse');
                         }
                         ?>
                     </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <?= $this->formLabel($dossierAdresse->get('precisions')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($intervenantDossier->getAdressePrecisions())) {
+                        echo ($viewAdresse) ? $intervenantDossier->getAdressePrecisions() : '*******************';
+                    }
+                    ?>
                 </div>
             </div>
             <div class="row">

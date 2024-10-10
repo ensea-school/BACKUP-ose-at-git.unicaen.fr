@@ -217,7 +217,7 @@ SELECT DISTINCT
         WHEN 'M' THEN 'M.'
         ELSE 'Mme'
         END                                                                            z_civilite_id,
-    CAST(NULL AS varchar2(255))                                                        z_situation_matrimoniale,
+    CAST(NULL AS varchar2(255))                                                        z_situation_matrimoniale_id,
     COALESCE(initcap(vind.nom_usage), initcap(ind.nom_famille))                        nom_usuel,
     COALESCE(initcap(vind.prenom), initcap(ind.prenom))                                prenom,
     COALESCE(ind.d_naissance_ow, ind.d_naissance, to_date('01/01/1900', 'dd/mm/YYYY')) date_naissance,

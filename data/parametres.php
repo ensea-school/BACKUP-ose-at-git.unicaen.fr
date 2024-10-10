@@ -48,6 +48,11 @@ return [
         "DESCRIPTION" => "État de sortie pour l'extraction de paie",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
+    "es_extraction_indemnites"                   => [
+        "VALEUR"      => "siham-indemnites",
+        "DESCRIPTION" => "État de sortie pour l'extraction des indemnites de fin de mission",
+        "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
+    ],
     "es_services_pdf"                            => [
         "VALEUR"      => "export_services",
         "DESCRIPTION" => "État de sortie pour l'édition PDF des services",
@@ -87,7 +92,7 @@ return [
         "VALEUR"      => "prorata",
         "DESCRIPTION" => "Ventilation des heures AA/AC",
     ],
-    "pourc_aa_referentiel" => [
+    "pourc_aa_referentiel"                       => [
         "VALEUR"      => '0.4',
         "DESCRIPTION" => "Pourcentage AA pour les heures de référentiel",
     ],
@@ -109,7 +114,7 @@ return [
         "VALEUR"      => 0.1,
         "DESCRIPTION" => "Taux de majoration des heures pour prise en compte des congés payés",
     ],
-    "distinction_fi_fa_fc" => [
+    "distinction_fi_fa_fc"                       => [
         "VALEUR"      => 1,
         "DESCRIPTION" => "Distinction FI/FA/FC des heures à payer",
     ],
@@ -121,7 +126,7 @@ return [
     "doc-intervenant-permanents"                 => [
         "DESCRIPTION" => "URL de la documentation OSE pour les permanents",
     ],
-    "doc-intervenant-etudiants"                 => [
+    "doc-intervenant-etudiants"                  => [
         "DESCRIPTION" => "URL de la documentation OSE pour les étudiants",
     ],
 

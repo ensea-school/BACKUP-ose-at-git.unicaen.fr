@@ -276,12 +276,12 @@ class ContratService extends AbstractEntityService
                     $contrat->setProcessSignature($process);
                     //Déclenchement de la première étape de signature du circuit
                     $this->getProcessService()->trigger($process, true);
-                    //Sauvegarde du contrat initial avec entity fichier
-                    $file['tmp_name'] = $contratFilePath;
-                    $file['type']     = 'application/pdf';
-                    $file['size']     = filesize($contratFilePath);
-                    $file['name']     = $filename;
-                    $files[]          = $file;
+                    //Sauvegarde du contrat initial dans fichier
+                    $dataFile['tmp_name'] = $contratFilePath;
+                    $dataFile['type']     = 'application/pdf';
+                    $dataFile['size']     = filesize($contratFilePath);
+                    $dataFile['name']     = $filename;
+                    $files[]              = $dataFile;
                     $this->creerFichiers($files, $contrat, true);
                 } else {
                     throw new \Exception("Aucun circuit de signature paramètré pour cet état de sortie");
@@ -397,86 +397,23 @@ class ContratService extends AbstractEntityService
 
 
 
-    public function envoyerContratSignatureElectronique(Contrat $contrat)
+    public function supprimerFichiers(Contrat $contrat): Contrat
     {
-        //1- On génére le contrat et on le stock temporairement
-        $contratFilePath = $this->generer($contrat, false, true);
-        $filename        = basename($contratFilePath);
-        //2- On récupére le parapheur
-        $letterFileParam = $this->getServiceParametres()->get('signature_electronique_parapheur');
-        $letterFile      = $this->getSignatureService()->getLetterfileService()->getLetterFileStrategy($letterFileParam);
-        $letterFileLevel = $contrat->getIntervenant()->getStatut()->getContratSignatureType();
+        if ($contrat instanceof Contrat) {
+            $files = $contrat->getFichier();
+            if (!empty($files)) {
+                foreach ($files as $file) {
+                    $contrat->removeFichier($file);
+                }
+                $this->save($contrat);
+                $this->getEntityManager()->refresh($contrat);
 
-        /**
-         * @var Contrat $contrat
-         */
-
-        $libelleContrat = ($contrat->estUnAvenant()) ? 'Signature de l\'avenant N°' . $contrat->getId() : 'Signature du Contrat N°' . $contrat->getId();
-        $signature      = new Signature();
-        $signature->setLetterfileKey($letterFile->getName());
-        $signature->setType($letterFileLevel)
-            ->setLabel('Test')
-            ->setDateCreated(new \DateTime())
-            ->setAllSignToComplete(true)
-            ->setDescription($libelleContrat)
-            ->setDocumentPath($filename);
-
-        //On traite les destinataires
-        //TODO : on doit récupérer le statut de l'intervenant pour savoir quel rôle va devoir signer les contrats electroniquement
-        //TODO : Rajouter un paramètre au niveau du statut pour savoir si tous les utilisateurs affectés au rôle en question doivent signer le contrat
-        /**
-         * @var Statut $statut
-         */
-        $listeSignatairesEtablissement = [];
-        $statut                        = $contrat->getIntervenant()->getStatut();
-        $roleSignataire                = $statut->getContratSignatureRole();
-        //Si on est dans un périmètre composante, on prendra uniquement les utilisateurs ayant un rôle sur la dite composante
-        $qb = $this->getServiceAffectation()->finderByRole($roleSignataire);
-        if ($roleSignataire->getPerimetre()->getCode() == 'composante') {
-            $structure = $contrat->getStructure();
-            $qb        = $this->getServiceAffectation()->finderByStructure($contrat->getStructure(), $qb);
+            }
+            return $contrat;
+        } else {
+            throw new \LogicException("Aucun contrat valide n'est spéciié");
         }
-        $affectations = $qb->getQuery()->getResult();
-        $i            = 1;
-        foreach ($affectations as $a) {
-            $listeSignatairesEtablissement[] = [
-                'role'             => $a->getRole()->getLibelle(),
-                'nom'              => $a->getUtilisateur()->getDisplayName(),
-                'email'            => 'anthony.lecourtes+' . $i . '@gmail.com',//$a->getUtilisateur()->getEmail(),
-                'structureCode'    => $a->getStructure()->getCode(),
-                'structureLibelle' => $a->getStructure()->getLibelle(),
-
-            ];
-            break;
-            $i++;
-        }
-        //On ajouter les signataires établissement
-
-        foreach ($listeSignatairesEtablissement as $signataire) {
-            $sr = new SignatureRecipient();
-            $sr->setSignature($signature);
-            $sr->setStatus(Signature::STATUS_SIGNATURE_DRAFT);
-            $sr->setEmail($signataire['email']);
-            //$sr->setPhone('0679434732');
-            $destinataires[] = $sr;
-        }
-        //On rajoute le signataire intervenant
-        $intervenant      = $contrat->getIntervenant();
-        $emailIntervenant = ($intervenant->getEmailPerso() ?: $intervenant->getEmailPro());
-        $sr               = new SignatureRecipient();
-        $sr->setSignature($signature);
-        $sr->setStatus(Signature::STATUS_SIGNATURE_DRAFT);
-        $sr->setEmail('antony.lecourtes@unicaen.fr');
-        $destinataires[] = $sr;
-        //$sr->setEmail($emailIntervenant);
-
-        $signature->setRecipients($destinataires);
-        $this->getSignatureService()->saveNewSignature($signature, true);
-        $contrat->setSignature($signature);
-
-        $this->save($contrat);
-
-        return $contrat;
+        return $instances;
     }
 
 

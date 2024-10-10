@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 23.8](#ose-239-23092024)
+[OSE 23.8](#ose-2310-03102024)
 
 
 
@@ -11,11 +11,18 @@
 * Signature électronique
 
 
-# OSE 23.10 (à venir)
+
+# OSE 23.11 (à venir)
+
+## Corrections de bugs
+
+* Dysfonctionnenent des demandes de mises en paiement par lot suite au filtrage par structure (#58788)
+
+# OSE 23.10 (03/10/2024)
 
 ## Nouveautés
 
-* Nouveau paramètrage générale pour sélectionner l'état de sortir à utiliser pour l'extraction des indémnités de fin de mission.
+* Nouveau paramétrage général pour sélectionner l'état de sortie à utiliser pour l'extraction des indémnités de fin de mission.
 
 
 ## Corrections de bugs
@@ -24,6 +31,7 @@
 * Correction sur le calcul du montant des indémnités des missions
 * L'utilisation de la fonctionnalité de demande de mise en paiement en lot mettait toutes les heures de l'intervenant sélectionné en demandes de mise en paiement sans tenir compte de la composante sélectionnée. (#58607)
 * Ajout d'une variable de contrat nommé "numeroAvenant" pour numéroter les éditions d'avenant (#58658)
+
 
 
 # OSE 23.9 (23/09/2024)

@@ -100,6 +100,27 @@ return [
 
         ],
 
+        //paramètrage pour le contrat dans siham
+        'contrat'                         => [
+            'active'     => true,
+            'parameters' => [
+                'natureContrat'     => 'CO',
+                'typeContrat'       => 'TC01',
+                'typeLienJuridique' => 'TL01',
+                'modeRemuneration'  => 'MR08',
+                'modeDeGestion'     => 'MG08',
+                'temoinValidite'    => '1',
+                'categorieContrat'  => '1',
+                'gradeTG'           => [
+                    'C2038' => '0499010000',
+                    'C2041' => '0499010000',
+                    'C2052' => '0499020000',
+                    'C1204' => '0499010000',
+                ],
+
+            ],
+        ],
+
         'code-administration' => 'UCN',
         'code-etablissement'  => '0141408E',
         

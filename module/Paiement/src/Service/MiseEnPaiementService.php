@@ -10,6 +10,7 @@ use Formule\Entity\Db\FormuleResultatService;
 use Formule\Entity\Db\FormuleResultatServiceReferentiel;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Mission\Service\MissionServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
@@ -26,7 +27,7 @@ use RuntimeException;
  */
 class MiseEnPaiementService extends AbstractEntityService
 {
-    use \Intervenant\Service\IntervenantServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;

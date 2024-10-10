@@ -3,6 +3,8 @@
 namespace Intervenant;
 
 use Application\Provider\Privilege\Privileges;
+use Intervenant\Service\SituationMatrimonialeService;
+use Intervenant\Service\SituationMatrimonialeServiceFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 
@@ -207,6 +209,7 @@ return [
         Assertion\IntervenantAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\IntervenantService::class     => Service\IntervenantServiceFactory::class,
         Processus\IntervenantProcessus::class => Processus\IntervenantProcessusFactory::class,
+        SituationMatrimonialeService::class   => SituationMatrimonialeServiceFactory::class,
     ],
 
 

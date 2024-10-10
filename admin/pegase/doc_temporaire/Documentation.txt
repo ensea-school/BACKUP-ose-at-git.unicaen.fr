@@ -1,8 +1,6 @@
 Installation du connecteur :
     Installation de la version :
-        Pour le premier passage sur la branche, comme pour une mise à jour normale, faire un "/bin/ose update"
-        Lors du choix de version saisir (bien que le choix ne soit pas proposé dans la liste) : FJ_Pegase_Connecteur
-        Dans le cas ou l'on est déjà sur la branche, faire un git pull dans le répertoire de OSE pour récupérer les modifications de la branche
+        Pour le premier passage sur la version contenant le connecteur pégase, comme pour une mise à jour normale, faire un "/bin/ose update"
 
         Pensez à installer le driver postgresql qui n'est pas présent dans les versions précédentes de OSE.
 
@@ -23,7 +21,7 @@ Installation du connecteur :
                     /* Mot de passe */
                     'password'        => 'XXXX',
                 ],
-                /* Le type d'étapes a récupèrer (code du type dans pégase), si cet argument est laissé vide, ce sont les éléments les plus hauts de l'arbre qui sont récupéré
+                /* Les types d'étapes a récupèrer (code du type dans pégase), si cet argument est laissé vide, ce sont les éléments les plus hauts de l'arbre qui sont récupéré
                 'etapes' => ['XXX','YYYY','FORMATION'],
             ],
 
@@ -32,7 +30,7 @@ Installation du connecteur :
          ou
             'etapes' => ['ANNEE'],
 
-    Utiliser le connecteur Pégase :
+            Utiliser le connecteur Pégase :
         Pour créer les tables tampons liés à Pégase (PEG_XXXX) :
             "/bin/ose pegase install"
         Pour synchroniser les données de DRE dans les tables tampons

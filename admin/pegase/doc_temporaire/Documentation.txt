@@ -1,3 +1,9 @@
+Explication du fonctionnement :
+    Le connecteur Pégase => OSE ne fonctionne actuellement que pour l'offre de formation, c'est à dire les éléments pédagogiques, les étapes, les types de formations, les structures et les volumes horaires.
+    L'établissement doit donner les types d'étapes a récupérer dans Pégase et les éléments pédagogiques liés a ces étapes seront automatiquement récupéré.
+    Le connecteur créer des tables dans la base OSE nommés PEG_XXX, il revient a l'établissement de reprendre les vues fournit et de les personnaliser pour les adapter à leur besoin.
+    Ces vues sont utilisé pour la remontées des données dans OSE
+
 Installation du connecteur :
     Installation de la version :
         Pour le premier passage sur la version contenant le connecteur pégase, comme pour une mise à jour normale, faire un "/bin/ose update"
@@ -52,4 +58,4 @@ Mise en place des vues sources :
         - Toute les données remontes dans la vue source, mais ne pourront pas forcément être synchronisé
             --> Exemple : une étape sans structure sera présent dans la vue source, mais ne sera pas possible de remonter dans OSE, un message d'erreur apparaitra lors de la synchronisation sur la page OSE.
 Après synchronisation depuis la page de différentiel dans OSE :
-    - Penser à ajo                                                                  euter les types de missions dans des groupes (sauf si la vue source a été modifié pour le faire automatiquement)
+    - Penser à ajouter les types de missions dans des groupes (sauf si la vue source a été modifié pour le faire automatiquement)

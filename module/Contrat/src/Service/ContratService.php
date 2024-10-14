@@ -158,115 +158,118 @@ class ContratService extends AbstractEntityService
     public function creerProcessContratSignatureElectronique(Contrat $contrat)
     {
         //On récupere le contenu du contrat
-        $document = $this->generer($contrat, false, false);
-        //Création du nom du contrat
-        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
-                            $contrat->getIntervenant()->getNomUsuel(),
-                            $contrat->getIntervenant()->getCode());
+        try {
+            $document = $this->generer($contrat, false, false);
+            //Création du nom du contrat
+            $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+                ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
+                                $contrat->getIntervenant()->getNomUsuel(),
+                                $contrat->getIntervenant()->getCode());
 
-        $config  = \OseAdmin::instance()->config()->get('unicaen-signature');
-        $content = $document->saveToData();
-        file_put_contents($config['documents_path'] . '/' . $fileName, $content);
-        $contratFilePath = $config['documents_path'] . '/' . $fileName;
-        $filename        = basename($contratFilePath);
+            $config  = \OseAdmin::instance()->config()->get('unicaen-signature');
+            $content = $document->saveToData();
+            file_put_contents($config['documents_path'] . '/' . $fileName, $content);
+            $contratFilePath = $config['documents_path'] . '/' . $fileName;
+            $filename        = basename($contratFilePath);
 
 
-        //Récupération du circuit de signature si la signature est activé pour l'état de sortie de ce contrat
-        $intervenant       = $contrat->getIntervenant();
-        $etatSortieContrat = $intervenant->getStatut()->getContratEtatSortie();
-        if ($etatSortieContrat instanceof EtatSortie) {
-            //Vérification si la signature électronique est activée pour cet état de sortie.
-            if ($etatSortieContrat->isSignatureActivation()) {
-                $signatureFlow = $etatSortieContrat->getSignatureCircuit();
-                if (!empty($signatureFlow)) {
-                    $signatureFlowDatas = $this->getSignatureService()->createSignatureFlowDatasById(
-                        "",
-                        $signatureFlow->getId(),
-                        []
-                    )['signatureflow'];
+            //Récupération du circuit de signature si la signature est activé pour l'état de sortie de ce contrat
+            $intervenant       = $contrat->getIntervenant();
+            $etatSortieContrat = $intervenant->getStatut()->getContratEtatSortie();
+            if ($etatSortieContrat instanceof EtatSortie) {
+                //Vérification si la signature électronique est activée pour cet état de sortie.
+                if ($etatSortieContrat->isSignatureActivation()) {
+                    $signatureFlow = $etatSortieContrat->getSignatureCircuit();
+                    if (!empty($signatureFlow)) {
+                        $signatureFlowDatas = $this->getSignatureService()->createSignatureFlowDatasById(
+                            "",
+                            $signatureFlow->getId(),
+                            []
+                        )['signatureflow'];
 
-                    //On doit aller chercher les recipients
-                    foreach ($signatureFlowDatas['steps'] as $key => $step) {
-                        //Si l'étape de process concerne un rôle de l'application on va chercher les utilisateurs de ce role.
-                        if ($step['recipient_method'] == 'by_role' && empty($step['recipients'])) {
-                            $role = '';
-                            if (array_key_exists('by_role', $step['options'])) {
-                                $role = $this->getServiceRole()->get($step['options']['by_role']);
-                            }
-                            //On a trouvé le rôle pour la signature établissement
-                            if ($role instanceof Role) {
-                                $utilisateurs = $this->getServiceUtilisateur()->getUtilisateursByRole($role);
-
-                                $recipients = [];
-                                /**
-                                 * @var Utilisateur $utilisateur
-                                 */
-                                foreach ($utilisateurs as $utilisateur) {
-                                    $recipients[] = [
-                                        'firstname' => $utilisateur['DISPLAY_NAME'],
-                                        'lastname'  => '',
-                                        'email'     => $utilisateur['EMAIL'],
-                                    ];
+                        //On doit aller chercher les recipients
+                        foreach ($signatureFlowDatas['steps'] as $key => $step) {
+                            //Si l'étape de process concerne un rôle de l'application on va chercher les utilisateurs de ce role.
+                            if ($step['recipient_method'] == 'by_role' && empty($step['recipients'])) {
+                                $role = '';
+                                if (array_key_exists('by_role', $step['options'])) {
+                                    $role = $this->getServiceRole()->get($step['options']['by_role']);
                                 }
-                            }
-                            //HOOK pour ne forcer l'envoie dans esup avec mon email
-                            $recipients   = [];
-                            $recipients[] = [
-                                'firstname' => 'Antony',
-                                'lastname'  => 'Le Courtes',
-                                'email'     => 'antony.lecourtes@unicaen.fr',
-                            ];
+                                //On a trouvé le rôle pour la signature établissement
+                                if ($role instanceof Role) {
+                                    $utilisateurs = $this->getServiceUtilisateur()->getUtilisateursByRole($role);
 
-                            $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
-                        }
-                        //Si l'étape de process concerne l'intervenant du contrat on va chercher l'email de l'intervenant.
-                        if ($step['recipient_method'] == 'by_intervenant' && empty($step['recipients'])) {
-                            $intervenant = $contrat->getIntervenant();
-                            $nom         = $intervenant->getNomUsuel();
-                            $prenom      = $intervenant->getPrenom();
-                            $mail        = $intervenant->getEmailPerso();
-
-                            $recipients[] =
-                                [
-                                    'firstname' => $prenom,
-                                    'lastname'  => $nom,
-                                    'email'     => $mail,
+                                    $recipients = [];
+                                    /**
+                                     * @var Utilisateur $utilisateur
+                                     */
+                                    foreach ($utilisateurs as $utilisateur) {
+                                        $recipients[] = [
+                                            'firstname' => $utilisateur['DISPLAY_NAME'],
+                                            'lastname'  => '',
+                                            'email'     => $utilisateur['EMAIL'],
+                                        ];
+                                    }
+                                }
+                                //HOOK pour ne forcer l'envoie dans esup avec mon email
+                                $recipients   = [];
+                                $recipients[] = [
+                                    'firstname' => 'Antony',
+                                    'lastname'  => 'Le Courtes',
+                                    'email'     => 'antony.lecourtes@unicaen.fr',
                                 ];
-                            //HOOK pour ne forcer l'envoie dans esup avec mon email
-                            $recipients                                      = [];
-                            $recipients[]                                    = [
-                                'firstname' => 'Antony',
-                                'lastname'  => 'Le Courtes',
-                                'email'     => 'antony.lecourtes@unicaen.fr',
-                            ];
-                            $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
+
+                                $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
+                            }
+                            //Si l'étape de process concerne l'intervenant du contrat on va chercher l'email de l'intervenant.
+                            if ($step['recipient_method'] == 'by_intervenant' && empty($step['recipients'])) {
+                                $intervenant = $contrat->getIntervenant();
+                                $nom         = $intervenant->getNomUsuel();
+                                $prenom      = $intervenant->getPrenom();
+                                $mail        = $intervenant->getEmailPerso();
+
+                                $recipients[] =
+                                    [
+                                        'firstname' => $prenom,
+                                        'lastname'  => $nom,
+                                        'email'     => $mail,
+                                    ];
+                                //HOOK pour ne forcer l'envoie dans esup avec mon email
+                                $recipients                                      = [];
+                                $recipients[]                                    = [
+                                    'firstname' => 'Antony',
+                                    'lastname'  => 'Le Courtes',
+                                    'email'     => 'antony.lecourtes@unicaen.fr',
+                                ];
+                                $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
+                            }
                         }
+
+                        //Création du processus de signature
+                        $process = $this->getProcessService()->createUnconfiguredProcess($filename, $signatureFlow->getId());
+                        //Création des différentes étapes de signature du circuit
+                        $this->getProcessService()->configureProcess($process, $signatureFlowDatas);
+                        $contrat->setProcessSignature($process);
+                        //Déclenchement de la première étape de signature du circuit
+                        $this->getProcessService()->trigger($process, true);
+                        //Sauvegarde du contrat initial dans fichier
+                        $dataFile['tmp_name'] = $contratFilePath;
+                        $dataFile['type']     = 'application/pdf';
+                        $dataFile['size']     = filesize($contratFilePath);
+                        $dataFile['name']     = $filename;
+                        $files[]              = $dataFile;
+                        $this->creerFichiers($files, $contrat, true);
+                    } else {
+                        throw new \Exception("Aucun circuit de signature paramètré pour cet état de sortie");
                     }
 
-                    //Création du processus de signature
-                    $process = $this->getProcessService()->createUnconfiguredProcess($filename, $signatureFlow->getId());
-                    //Création des différentes étapes de signature du circuit
-                    $this->getProcessService()->configureProcess($process, $signatureFlowDatas);
-                    $contrat->setProcessSignature($process);
-                    //Déclenchement de la première étape de signature du circuit
-                    $this->getProcessService()->trigger($process, true);
-                    //Sauvegarde du contrat initial dans fichier
-                    $dataFile['tmp_name'] = $contratFilePath;
-                    $dataFile['type']     = 'application/pdf';
-                    $dataFile['size']     = filesize($contratFilePath);
-                    $dataFile['name']     = $filename;
-                    $files[]              = $dataFile;
-                    $this->creerFichiers($files, $contrat, true);
-                } else {
-                    throw new \Exception("Aucun circuit de signature paramètré pour cet état de sortie");
                 }
 
+
             }
-
-
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
-
 
         return true;
 
@@ -378,6 +381,14 @@ class ContratService extends AbstractEntityService
         //Si j'ai bien un processus de signature alors je peux procéder à sa suppression
         if ($processSignature instanceof Process) {
             try {
+                $this->getEntityManager()->refresh($contrat);
+                //On remet la date de retour signée à null
+                $contrat->setDateRetourSigne(null);
+                //On supprime la relation du contrat au process signature
+                $contrat->setProcessSignature(null);
+                //On save le contrat
+                $this->save($contrat);
+                //On supprime l'ensemble du process et des process step
                 $this->getProcessService()->deleteProcess($processSignature);
             } catch (\Exception $e) {
                 throw $e;
@@ -385,11 +396,6 @@ class ContratService extends AbstractEntityService
         }
         //On supprime les fichiers liés au contrat
         $this->supprimerFichiers($contrat);
-        $this->getEntityManager()->refresh($contrat);
-        //On remet la date de retour signée à null
-        $contrat->setDateRetourSigne(null);
-        $contrat->setProcessSignature(null);
-        $this->save($contrat);
 
         return $contrat;
     }

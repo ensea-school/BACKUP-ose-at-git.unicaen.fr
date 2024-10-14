@@ -48,6 +48,11 @@ return [
         "DESCRIPTION" => "État de sortie pour l'extraction de paie",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
+    "es_extraction_indemnites"                   => [
+        "VALEUR"      => "siham-indemnites",
+        "DESCRIPTION" => "État de sortie pour l'extraction des indemnites de fin de mission",
+        "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
+    ],
     "es_services_pdf"                            => [
         "VALEUR"      => "export_services",
         "DESCRIPTION" => "État de sortie pour l'édition PDF des services",

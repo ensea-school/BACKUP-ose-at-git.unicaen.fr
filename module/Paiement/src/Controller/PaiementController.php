@@ -59,65 +59,9 @@ class PaiementController extends AbstractController
     use TableauBordServiceAwareTrait;
     use NumeroPriseEnChargeServiceAwareTrait;
 
-    /**
-     * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
-     * éventuelles
-     * (services sur des enseignements fermés, etc.)
-     */
-    protected function initFilters()
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            MiseEnPaiement::class,
-            VolumeHoraire::class,
-            ServiceReferentiel::class,
-            VolumeHoraireReferentiel::class,
-            Validation::class,
-            TypeRessource::class,
-        ]);
-    }
-
-
-
     public function indexAction()
     {
         return [];
-    }
-
-
-
-    /**
-     * @return int
-     */
-    protected function getChangeIndex()
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cgtIndex)) $session->cgtIndex = 0;
-        $result = $session->cgtIndex;
-        $session->cgtIndex++;
-
-        return $result;
-    }
-
-
-
-    protected function isChangeIndexSaved($changeIndex)
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cht)) $session->cht = [];
-
-        return isset($session->cht[$changeIndex]) && $session->cht[$changeIndex];
-    }
-
-
-
-    protected function setChangeIndexSaved($changeIndex)
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cht)) $session->cht = [];
-        $session->cht[$changeIndex] = true;
-
-        return $this;
     }
 
 
@@ -218,6 +162,74 @@ class PaiementController extends AbstractController
 
 
 
+    /**
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
+     * éventuelles
+     * (services sur des enseignements fermés, etc.)
+     */
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+                                                                  MiseEnPaiement::class,
+                                                                  VolumeHoraire::class,
+                                                                  ServiceReferentiel::class,
+                                                                  VolumeHoraireReferentiel::class,
+                                                                  Validation::class,
+                                                                  TypeRessource::class,
+                                                              ]);
+    }
+
+
+
+    /**
+     * @return int
+     */
+    protected function getChangeIndex()
+    {
+        $session = $this->getSessionContainer();
+        if (!isset($session->cgtIndex)) $session->cgtIndex = 0;
+        $result = $session->cgtIndex;
+        $session->cgtIndex++;
+
+        return $result;
+    }
+
+
+
+    protected function isChangeIndexSaved($changeIndex)
+    {
+        $session = $this->getSessionContainer();
+        if (!isset($session->cht)) $session->cht = [];
+
+        return isset($session->cht[$changeIndex]) && $session->cht[$changeIndex];
+    }
+
+
+
+    /**
+     * @param Intervenant $intervenant
+     */
+    private function updateTableauxBord($intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+                                                              'paiement',
+                                                          ], $intervenant);
+    }
+
+
+
+    protected function setChangeIndexSaved($changeIndex)
+    {
+        $session = $this->getSessionContainer();
+        if (!isset($session->cht)) $session->cht = [];
+        $session->cht[$changeIndex] = true;
+
+        return $this;
+    }
+
+
+
     function demandeMiseEnPaiementLotAction()
     {
         $structures        = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
@@ -244,19 +256,23 @@ class PaiementController extends AbstractController
     function processDemandeMiseEnPaiementLotAction()
     {
 
+
         if ($this->getRequest()->isPost()) {
-            $datasIntervenant = $this->getRequest()->getPost('intervenant');
-            if (empty($datasIntervenant)) {
+            //On récupére la structure pour laquelle on fait les demandes de mise en paiement par lot
+            $selectedStructure = $this->getRequest()->getPost('selectedStructure');
+            $structure         = $this->getServiceStructure()->get($selectedStructure);
+            $datasIntervenant  = $this->getRequest()->getPost('intervenant');
+            if (empty($datasIntervenant) || empty($structure)) {
                 return false;
             }
             $intervenantIds = array_keys($datasIntervenant);
             foreach ($intervenantIds as $id) {
                 $intervenant = $this->getServiceIntervenant()->get($id);
                 if ($intervenant) {
-                    $this->getServiceMiseEnPaiement()->demandesMisesEnPaiementIntervenant($intervenant);
+                    $this->getServiceMiseEnPaiement()->demandesMisesEnPaiementIntervenant($intervenant, $structure);
                 }
             }
-            $this->flashMessenger()->addSuccessMessage("Les demandes de mise en paiement ont bien été effectuée");
+            $this->flashMessenger()->addSuccessMessage("Les demandes de mise en paiement ont bien été effectuée pour la structure " . $structure->getLibelleLong());
 
             return $this->redirect()->toRoute('paiement/demande-mise-en-paiement-lot');
         }
@@ -527,7 +543,8 @@ class PaiementController extends AbstractController
             $recherche->setPeriode($periode);
             $filters = $recherche->getFilters();
 
-            $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'winpaie-indemnites']);
+
+            $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_extraction_indemnites');
             $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
             $csvModel->setFilename(str_replace(' ', '_', 'ose-export-indemnite-' . strtolower($periode->getLibelleAnnuel($annee)) . '.csv'));
 
@@ -678,17 +695,5 @@ class PaiementController extends AbstractController
         $debugger->run($intervenant);
 
         return compact('intervenant', 'debugger');
-    }
-
-
-
-    /**
-     * @param Intervenant $intervenant
-     */
-    private function updateTableauxBord($intervenant)
-    {
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'paiement',
-        ], $intervenant);
     }
 }

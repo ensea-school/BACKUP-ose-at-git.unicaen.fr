@@ -183,12 +183,13 @@ class ContratController extends AbstractController
                     $this->em()->refresh($contrat);
                     $process = $contrat->getProcessSignature();
                     if (!empty($process)) {
-                        $infosSignature[$keyContrat]['processSignature'] = $this->getProcessService()->getInfosProcess($process);
+                        $infosSignature[$keyContrat]['processSignature']  = $this->getProcessService()->getInfosProcess($process);
+                        $infosSignature[$keyContrat]['urlFichierContrat'] = $this->getServiceContrat()->getUrlSignedContrat($contrat);
                     }
-                    $infosSignature[$keyContrat]['urlFichierContrat'] = $this->getServiceContrat()->getUrlSignedContrat($contrat);
                 }
             }
-           
+          
+
         }
 
 
@@ -679,17 +680,6 @@ class ContratController extends AbstractController
 
     public function creerProcessSignatureAction()
     {
-        /*
-         * 1 - On vérifie que l'on a bien le privilège pour envoyer dans le parapheur le contrat pour signature
-         * 2 - On génére le PDF et on le stock dans contrat_fichier pour avoir le fichier physique sur le serveur
-         * 3 - On récupére les informations des personnes signataires (intervenant, role devant signer le contrat pour ce statut)
-         * 4 - On créer la signature electronique en envoyant le document dans le parapheur configuré
-         * 5 - Un process doit vérfier régulièrement l'état d'avancement du contrat dans le parapheur
-         * 6 - Si signature complète, on met à jour la date de retour signé sur le contrat pour pouvoir avancer dans le workflow
-         * 7 - On récupère le document signé et on remplace le fichier dans contrat_fichier
-         *
-         * 2 -
-         * */
 
         /**
          * @var Contrat $contrat

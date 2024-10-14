@@ -218,10 +218,10 @@ class IndicateurController extends AbstractController
         }
 
         return new JsonModel([
-            'status'  => $status,
-            'message' => $message,
-            'infos'   => $notificationIndicateur ? $notificationIndicateur->getExtraInfos() : null,
-        ]);
+                                 'status'  => $status,
+                                 'message' => $message,
+                                 'infos'   => $notificationIndicateur ? $notificationIndicateur->getExtraInfos() : null,
+                             ]);
     }
 
 
@@ -450,9 +450,6 @@ class IndicateurController extends AbstractController
 }
 
 
-
-
-
 /**
  * Classe dédiée à l'envoi des mails aux intervenants retournés par un indicateur.
  */
@@ -487,15 +484,48 @@ class IndicateurIntervenantsMailer
 
 
 
-    public function send($emails, $data)
+    public function getDefaultSubject()
     {
-        foreach ($emails as $email => $name) {
-            $message = $this->createMessage($data);
+        /** @var ContextService $context */
+        $context = $this->controller->getServiceContext();
+
+        $subject = sprintf("%s %s : %s",
+                           $this->controller->appInfos()->getNom(),
+                           $context->getAnnee(),
+                           strip_tags($this->indicateur->getTypeIndicateur())
+        );
+
+        return $subject;
+    }
+
+
+
+    public function getDefaultBody()
+    {
+        /** @var ContextService $context */
+        $context = $this->controller->getServiceContext();
+
+        // corps au format HTML
+        $html = $this->renderer->render('indicateur/indicateur/mail/intervenants', [
+            'phrase'    => '',
+            'signature' => $context->getUtilisateur(),
+            'structure' => $context->getStructure(),
+        ]);
+
+        return $html;
+    }
+
+
+
+    public function sendCopyEmail($emailsUtilisateur, $emailsIntervenant, $data, $logs = null)
+    {
+        $data['emailsIntervenant'] = $emailsIntervenant;
+        $message                   = $this->createMessage($data);
+        $message->setSubject('COPIE | ' . $data['subject']);
+        foreach ($emailsUtilisateur as $email => $name) {
             $message->setTo($email, $name);
-
-
-            $this->controller->mail()->send($message);
         }
+        $this->controller->mail()->send($message);
     }
 
 
@@ -534,10 +564,10 @@ class IndicateurIntervenantsMailer
     public function getFrom()
     {
         /** @var ContextService $context */
-        $context   = $this->controller->getServiceContext();
-        $parametre = $this->getServiceParametres();
-
-        $from = trim($parametre->get('indicateur_email_expediteur'));
+        $context                   = $this->controller->getServiceContext();
+        $parametre                 = $this->getServiceParametres();
+        $indicateurEmailExpediteur = $parametre->get('indicateur_email_expediteur');
+        $from                      = !empty($indicateurEmailExpediteur) ? trim($indicateurEmailExpediteur) : $indicateurEmailExpediteur;
         if (!empty($from)) {
             return $from;
         }
@@ -549,47 +579,14 @@ class IndicateurIntervenantsMailer
 
 
 
-    public function getDefaultSubject()
+    public function send($emails, $data)
     {
-        /** @var ContextService $context */
-        $context = $this->controller->getServiceContext();
-
-        $subject = sprintf("%s %s : %s",
-            $this->controller->appInfos()->getNom(),
-            $context->getAnnee(),
-            strip_tags($this->indicateur->getTypeIndicateur())
-        );
-
-        return $subject;
-    }
-
-
-
-    public function getDefaultBody()
-    {
-        /** @var ContextService $context */
-        $context = $this->controller->getServiceContext();
-
-        // corps au format HTML
-        $html = $this->renderer->render('indicateur/indicateur/mail/intervenants', [
-            'phrase'    => '',
-            'signature' => $context->getUtilisateur(),
-            'structure' => $context->getStructure(),
-        ]);
-
-        return $html;
-    }
-
-
-
-    public function sendCopyEmail($emailsUtilisateur, $emailsIntervenant, $data, $logs = null)
-    {
-        $data['emailsIntervenant'] = $emailsIntervenant;
-        $message                   = $this->createMessage($data);
-        $message->setSubject('COPIE | ' . $data['subject']);
-        foreach ($emailsUtilisateur as $email => $name) {
+        foreach ($emails as $email => $name) {
+            $message = $this->createMessage($data);
             $message->setTo($email, $name);
+
+
+            $this->controller->mail()->send($message);
         }
-        $this->controller->mail()->send($message);
     }
 }

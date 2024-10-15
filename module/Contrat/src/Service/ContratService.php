@@ -20,6 +20,7 @@ use Doctrine\ORM\QueryBuilder;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
+use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use phpDocumentor\Reflection\Types\Collection;
 use RuntimeException;
@@ -165,14 +166,12 @@ class ContratService extends AbstractEntityService
                 ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
                                 $contrat->getIntervenant()->getNomUsuel(),
                                 $contrat->getIntervenant()->getCode());
-
+            //Récupération de la configuration de unicaen signature
             $config  = \OseAdmin::instance()->config()->get('unicaen-signature');
             $content = $document->saveToData();
             file_put_contents($config['documents_path'] . '/' . $fileName, $content);
             $contratFilePath = $config['documents_path'] . '/' . $fileName;
             $filename        = basename($contratFilePath);
-
-
             //Récupération du circuit de signature si la signature est activé pour l'état de sortie de ce contrat
             $intervenant       = $contrat->getIntervenant();
             $etatSortieContrat = $intervenant->getStatut()->getContratEtatSortie();
@@ -197,7 +196,26 @@ class ContratService extends AbstractEntityService
                                 }
                                 //On a trouvé le rôle pour la signature établissement
                                 if ($role instanceof Role) {
-                                    $utilisateurs = $this->getServiceUtilisateur()->getUtilisateursByRole($role);
+                                    //Si c'est un rôle etablissement, on prend tous les utilisateurs affectés à ce rôle
+                                    if ($role->getPerimetre()->getCode() == 'etabalissement') {
+                                        $utilisateurs = $this->getServiceUtilisateur()->getUtilisateursByRole($role);
+                                    } else {
+                                        $structure = $contrat->getStructure();
+                                        if ($structure instanceof Structure) {
+                                            //On prend tous les utilisateurs du role attendu par le circuit de signature y
+                                            // compris les utilisateurs ayant le même rôle dans les structures hiérarchique
+                                            $utilisateurs = $this->getServiceUtilisateur()->getUtilisateursByRoleAndStructure($role, $structure);
+                                        } else {
+                                            //Cas d'un contrat n'ayant pas de structure, on prend tous les rôles peut importe la structure
+                                            $utilisateurs = $this->getServiceUtilisateur()->getUtilisateursByRole($role);
+                                        }
+
+                                        /*C'est un rôle avec un périmètre composante donc on va chercher
+                                        uniquement les utilisateurs de la dites composantes et éventuellement
+                                        de ses sous structures*/
+
+
+                                    }
 
                                     $recipients = [];
                                     /**
@@ -210,9 +228,13 @@ class ContratService extends AbstractEntityService
                                             'email'     => $utilisateur['EMAIL'],
                                         ];
                                     }
+                                } else {
+                                    throw new \Exception("Le rôle paramètré pour ce circuit de signature n'existe pas.");
                                 }
                                 //HOOK pour ne forcer l'envoie dans esup avec mon email
-                                $recipients   = [];
+                                $recipients = [];
+                                //On regarde si on a le paramétrage hook_recepient dans la config pour forcer l'envoie
+                                //des signatures toujours à la même personne
                                 $recipients[] = [
                                     'firstname' => 'Antony',
                                     'lastname'  => 'Le Courtes',
@@ -220,6 +242,7 @@ class ContratService extends AbstractEntityService
                                 ];
 
                                 $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
+
                             }
                             //Si l'étape de process concerne l'intervenant du contrat on va chercher l'email de l'intervenant.
                             if ($step['recipient_method'] == 'by_intervenant' && empty($step['recipients'])) {
@@ -242,6 +265,7 @@ class ContratService extends AbstractEntityService
                                     'email'     => 'antony.lecourtes@unicaen.fr',
                                 ];
                                 $signatureFlowDatas['steps'][$key]['recipients'] = $recipients;
+
                             }
                         }
 
@@ -263,6 +287,8 @@ class ContratService extends AbstractEntityService
                         throw new \Exception("Aucun circuit de signature paramètré pour cet état de sortie");
                     }
 
+                } else {
+                    throw new \Exception("La signature électronique n'est pas activée pour cet état de sortie");
                 }
 
 
@@ -538,8 +564,8 @@ class ContratService extends AbstractEntityService
                 /**
                  * @var Fichier $fichierContrat
                  */
-                /*On redépose le fichier du  contrat dans l'état actuel dans un repértoire temporaire pour qu'il
-                puisse être physiquement envoyé dans Esup*/
+                /*On redépose le fichier du  contrat dans l'état actuel dans le répertoire temporaire de la conf singature
+                 pour qu'il puisse être physiquement envoyé dans Esup*/
                 $fichierContratContent = $fichierContrat->getContenu();
                 $fichierContratNom     = $fichierContrat->getNom();
                 file_put_contents($path . '/' . $fichierContratNom, $fichierContratContent);

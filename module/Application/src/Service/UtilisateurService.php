@@ -8,6 +8,7 @@ use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
 use UnicaenApp\Util;
 use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 
@@ -88,6 +89,31 @@ class UtilisateurService extends AbstractEntityService
 
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
+        return $res;
+
+    }
+
+
+
+    public function getUtilisateursByRoleAndStructure(Role $role, Structure $structure)
+    {
+        //On prend les utilisateurs de la structure et du role donnée ainsi que les utilisateurs ayant le même rôle dans les structures hiérarchique
+        if ($structure instanceof Structure) {
+            $ids = $structure->getIdsArray();
+            $ids = implode(',', $ids);
+
+            $sql = '
+            SELECT * FROM affectation a
+            JOIN UTILISATEUR u ON a.UTILISATEUR_ID = u.ID 
+            JOIN structure s ON a.structure_id = s.ID
+            WHERE a.HISTO_DESTRUCTION IS NULL
+            AND a.structure_id IN (' . $ids . ')
+            AND a.role_id = ' . $role->getId();
+        } else {
+            throw new \Exception("Strucutre fournie non valide.");
+        }
+
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         return $res;
 
     }

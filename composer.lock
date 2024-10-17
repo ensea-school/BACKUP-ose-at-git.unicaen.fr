@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9af2905c498667f3603b3cb4f4f5830",
+    "content-hash": "6e606f57cbe4073fadd88d7c3470a6e3",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -8269,11 +8269,11 @@
         },
         {
             "name": "unicaen/signature",
-            "version": "dev-sb-comments-update",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/signature.git",
-                "reference": "f8c22cfae0861668514b9a8ce2a85d6289dab4f7"
+                "reference": "d4a5f49fb49c2c04360a1f741c25248ac6e3142c"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -8281,29 +8281,18 @@
                 "monolog/monolog": "^2.0",
                 "symfony/console": "^6.0"
             },
-            "require-dev": {
-                "phpunit/phpunit": "^10"
-            },
             "bin": [
                 "bin/unicaen-signature"
             ],
             "type": "library",
             "autoload": {
                 "psr-0": [],
-                "psr-4": {
-                    "UnicaenSignature\\": "src/"
-                },
                 "classmap": [
                     "Module.php"
                 ]
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
             "description": "Module de signature électronique",
-            "time": "2024-10-16T14:38:03+00:00"
+            "time": "2024-10-16T10:01:25+00:00"
         },
         {
             "name": "unicaen/siham",

@@ -12,11 +12,17 @@
 
 
 
-# OSE 23.11 (à venir)
+# OSE 23.11 (17/10/2024)
 
 ## Corrections de bugs
 
 * Dysfonctionnenent des demandes de mises en paiement par lot suite au filtrage par structure (#58788)
+
+## Nouveautés
+
+* Nouvelle formule pour Bretagne Occidentale (Brest)
+
+
 
 # OSE 23.10 (03/10/2024)
 

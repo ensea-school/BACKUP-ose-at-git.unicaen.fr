@@ -7,6 +7,7 @@ use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
+use Unicaen\BddAdmin\Bdd;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -43,21 +44,6 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function init(array $params = [])
-    {
-        $parametres = $this->getServiceParametres();
-
-
-        $this->regleA   = $parametres->get('avenant');
-        $this->regleEns = $parametres->get('contrat_ens');
-        $this->regleMis = $parametres->get('contrat_mis');
-
-        $this->services = [];
-        $this->tblData  = [];
-    }
-
-
-
     public function run(TableauBord $tableauBord, array $params = [])
     {
 
@@ -85,6 +71,55 @@ class ContratProcess implements ProcessInterface
         $this->traitement();
 
         return $this->services;
+    }
+
+
+
+    public function init(array $params = [])
+    {
+        $parametres = $this->getServiceParametres();
+
+
+        $this->regleA   = $parametres->get('avenant');
+        $this->regleEns = $parametres->get('contrat_ens');
+        $this->regleMis = $parametres->get('contrat_mis');
+
+        $this->services = [];
+        $this->tblData  = [];
+    }
+
+
+
+    protected function loadAContractualiser(array $params)
+    {
+        $conn = $this->getServiceBdd()->getEntityManager()->getConnection();
+
+        $sql = 'SELECT * FROM ('
+            . $this->getServiceBdd()->injectKey($this->heuresAContractualiserSql(), $params)
+            . ') t '
+            . $this->getServiceBdd()->makeWhere($params)
+            . ' ORDER BY intervenant_id, contrat_id ASC';
+
+        $servicesContrat = \OseAdmin::instance()->getBdd()->selectEach($sql);
+
+        $taux_remu_temp = 0;
+        $listeContrat   = [];
+        while ($serviceContrat = $servicesContrat->next()) {
+            $res            = $this->traitementQuery($serviceContrat, $listeContrat, $taux_remu_temp);
+            $listeContrat   = $res[0];
+            $taux_remu_temp = $res[1];
+        }
+
+        // on vide pour limiter la conso de RAM
+        unset($servicesContrat);
+        unset($listeContrat);
+    }
+
+
+
+    protected function heuresAContractualiserSql(): string
+    {
+        return $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT');
     }
 
 
@@ -119,35 +154,26 @@ class ContratProcess implements ProcessInterface
 
             //Calcul pour savoir si le contrat devra être un avenant ou un contrat
             if ($service["TYPE_CONTRAT_ID"] == null) {
-
-                $contratPresent = false;
                 if ($service['TYPE_SERVICE_CODE'] != 'MIS') {
-                    if ($this->regleMis == Parametre::CONTRAT_ENS_COMPOSANTE) {
-                        if (isset($this->intervenantContrat[$service['STRUCTURE_ID']])) {
-                            $service["TYPE_CONTRAT_ID"] = 2;
-                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['STRUCTURE_ID']];
-                        }
-                    }
-                    if ($this->regleMis == Parametre::CONTRAT_ENS_GLOBALE) {
-                        if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
-                            $service["TYPE_CONTRAT_ID"] = 2;
-                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['INTERVENANT_ID']];
 
-                        }
+                    if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
+                        $service["TYPE_CONTRAT_ID"] = 2;
+                        $service["CONTRAT_PARENT_ID"]      = $this->intervenantContrat[$service['INTERVENANT_ID']];
+
                     }
                 }
                 if ($service['TYPE_SERVICE_CODE'] == 'MIS') {
                     if ($this->regleMis == Parametre::CONTRAT_MIS_COMPOSANTE) {
                         if (isset($this->intervenantContrat[$service['STRUCTURE_ID']])) {
                             $service["TYPE_CONTRAT_ID"] = 2;
-                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['STRUCTURE_ID']];
+                            $service["CONTRAT_PARENT_ID"]      = $this->intervenantContrat[$service['STRUCTURE_ID']];
 
                         }
                     }
                     if ($this->regleMis == Parametre::CONTRAT_MIS_MISSION) {
                         if (isset($this->intervenantContrat[$service['MISSION_ID']])) {
                             $service["TYPE_CONTRAT_ID"] = 2;
-                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['MISSION_ID']];
+                            $service["CONTRAT_PARENT_ID"]      = $this->intervenantContrat[$service['MISSION_ID']];
 
                         }
 
@@ -155,7 +181,7 @@ class ContratProcess implements ProcessInterface
                     if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBALE) {
                         if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
                             $service["TYPE_CONTRAT_ID"] = 2;
-                            $service["CONTRAT_ID"]      = $this->intervenantContrat[$service['INTERVENANT_ID']];
+                            $service["CONTRAT_PARENT_ID"]      = $this->intervenantContrat[$service['INTERVENANT_ID']];
 
                         }
                     }
@@ -172,67 +198,6 @@ class ContratProcess implements ProcessInterface
 
             $this->services[$id] = $service;
         }
-    }
-
-
-
-    public function getServices(): array
-    {
-        return $this->services;
-    }
-
-
-
-    protected function enregistrement(TableauBord $tableauBord, array $params)
-    {
-        // Enregistrement en BDD
-        $key = $tableauBord->getOption('key');
-
-        $table = \OseAdmin::instance()->getBdd()->getTable('TBL_CONTRAT');
-
-        // on force la DDL pour éviter de faire des requêtes en plus
-        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
-        // on merge dans la table
-
-        $options = [
-            'where'              => $params,
-            'return-insert-data' => false,
-        ];
-
-        $table->merge($this->tblData, $key, $options);
-        // on vide pour limiter la conso de RAM
-        $this->tblData = [];
-    }
-
-
-
-    protected function loadAContractualiser(array $params)
-    {
-        $conn = $this->getServiceBdd()->getEntityManager()->getConnection();
-
-        $sql = 'SELECT * FROM ('
-            . $this->getServiceBdd()->injectKey($this->heuresAContractualiserSql(), $params)
-            . ') t '
-            . $this->getServiceBdd()->makeWhere($params)
-            . ' ORDER BY intervenant_id, contrat_id ASC';
-
-        $servicesContrat = $conn->executeQuery($sql);
-        $taux_remu_temp  = 0;
-        $listeContrat    = [];
-        while ($serviceContrat = $servicesContrat->fetchAssociative()) {
-            $res            = $this->traitementQuery($serviceContrat, $listeContrat, $taux_remu_temp);
-            $listeContrat   = $res[0];
-            $taux_remu_temp = $res[1];
-        }
-        unset($servicesContrat);
-        unset($listeContrat);
-    }
-
-
-
-    protected function heuresAContractualiserSql(): string
-    {
-        return $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT');
     }
 
 
@@ -288,6 +253,36 @@ class ContratProcess implements ProcessInterface
 
 
 
+    protected function enregistrement(TableauBord $tableauBord, array $params)
+    {
+        // Enregistrement en BDD
+        $key = $tableauBord->getOption('key');
+
+        $table = \OseAdmin::instance()->getBdd()->getTable('TBL_CONTRAT');
+
+//         on force la DDL pour éviter de faire des requêtes en plus
+//        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
+        $table->setDdl(require 'data/ddl/table/TBL_CONTRAT.php');
+
+        $options = [
+            'where'              => $params,
+            'return-insert-data' => false,
+        ];
+
+        $table->merge($this->tblData, $key, $options);
+        // on vide pour limiter la conso de RAM
+        $this->tblData = [];
+    }
+
+
+
+    public function getServices(): array
+    {
+        return $this->services;
+    }
+
+
+
     private function clear()
     {
         unset($this->services);
@@ -313,16 +308,9 @@ class ContratProcess implements ProcessInterface
         } else if ($typeContrat != null && $serviceContrat['TYPE_SERVICE_CODE'] == 'MIS') {
             $listeContrat[$serviceContrat["INTERVENANT_ID"]][$serviceContrat["MISSION_ID"]] = true;
         }
-
         if ($serviceContrat['CONTRAT_ID'] != null) {
             if ($serviceContrat['TYPE_SERVICE_CODE'] != 'MIS') {
-                if ($this->regleMis == Parametre::CONTRAT_ENS_COMPOSANTE) {
-                    $this->intervenantContrat[$serviceContrat['STRUCTURE_ID']] = $serviceContrat['CONTRAT_ID'];
-                }
-                if ($this->regleMis == Parametre::CONTRAT_ENS_GLOBALE) {
-                    $this->intervenantContrat[$serviceContrat['INTERVENANT_ID']] = $serviceContrat['CONTRAT_ID'];
-                }
-
+                $this->intervenantContrat[$serviceContrat['INTERVENANT_ID']] = $serviceContrat['CONTRAT_ID'];
             }
             if ($serviceContrat['TYPE_SERVICE_CODE'] == 'MIS') {
                 if ($this->regleMis == Parametre::CONTRAT_MIS_COMPOSANTE) {
@@ -371,6 +359,7 @@ class ContratProcess implements ProcessInterface
 
     public function clearAfterTest()
     {
+        // on vide pour limiter la conso de RAM
         $this->regleA             = '';
         $this->intervenantContrat = [];
         $this->tauxRemuUuid       = [];

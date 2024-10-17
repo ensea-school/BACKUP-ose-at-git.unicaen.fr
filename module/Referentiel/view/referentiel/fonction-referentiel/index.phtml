@@ -24,7 +24,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
     <th>
         <abbr title="Détermine si les heures de cette fonction référentielle peuvent être comptées dans le service statutaire des intervenants ou non">Peut
             dans serv.</abbr></th>
-    <?php if ($canEdit) echo '<th>Actions</th>' ?>
+    <?php if ($canEdit) : echo '<th>Actions</th>'; endif?>
     </thead>
     <tbody>
     <?php foreach ($fonctionsReferentiels as $fr): if ($fr->estNonHistorise()): ?>

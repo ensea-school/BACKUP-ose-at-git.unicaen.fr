@@ -146,22 +146,22 @@ class ContratController extends AbstractController
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
             $this->flashMessenger()->addSuccessMessage("La création de contrat/avenant pour $intervenant n'est pas possible.");
         } else {
-//            try {
+            try {
 
-            $this->getProcessusContrat()->enregistrer($contrat, $uuid);
-//                if ($contratDirect) {
-//                    $this->getProcessusContrat()->valider($contrat);
-//                }
-//
-//                $this->updateTableauxBord($contrat->getIntervenant());
-//                if ($contratDirect) {
-//                    $this->flashMessenger()->addSuccessMessage(($contrat->estUnAvenant() ? 'L\'avenant' : 'Le contrat') . ' a bien été créé.');
-//                } else {
-//                    $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');
-//                }
-//            } catch (\Exception $e) {
-//                $this->flashMessenger()->addErrorMessage($this->translate($e));
-//            }
+                $this->getProcessusContrat()->enregistrer($contrat, $uuid);
+                if ($contratDirect) {
+                    $this->getProcessusContrat()->valider($contrat);
+                }
+
+                $this->updateTableauxBord($contrat->getIntervenant());
+                if ($contratDirect) {
+                    $this->flashMessenger()->addSuccessMessage(($contrat->estUnAvenant() ? 'L\'avenant' : 'Le contrat') . ' a bien été créé.');
+                } else {
+                    $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');
+                }
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
         }
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);

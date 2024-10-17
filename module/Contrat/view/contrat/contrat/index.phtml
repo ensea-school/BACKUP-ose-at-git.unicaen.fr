@@ -2,9 +2,9 @@
 
 use Application\Provider\Privilege\Privileges;
 use Application\View\Renderer\PhpRenderer;
+use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TypeContrat;
 use Intervenant\Entity\Db\Intervenant;
-use Service\Entity\Db\TypeService;
 
 /**
  * @var PhpRenderer $this
@@ -23,7 +23,7 @@ if (!empty($services['NoContrat'])) {
 } else {
     $this->messenger()->addMessage('Tous les enseignements prévisionnels validés ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
 }
-$this->messenger() ?>
+echo $this->messenger() ?>
 
 <style>
     th.structure, td.structure {
@@ -37,10 +37,9 @@ $this->messenger() ?>
     td .card {
         margin-bottom: 0px;
     }
-
 </style>
 
-<?php if (!empty($services['Contrat']) || !empty($services['NoContrat'])) : ?> :
+<?php if (!empty($services['Contrat']) || !empty($services['NoContrat'])) : ?>
     <?php if (isset($services['NoContrat'])): ?>
         <table class="table table-bordered table-hover">
             <tr>
@@ -56,7 +55,7 @@ $this->messenger() ?>
                 /** @var \Contrat\Entity\Db\TblContrat $tblContratVh */
                 $structure   = $tblContratVh->getStructure();
                 $structureId = ($structure) ? $structure->getId() : null;
-                $contrat     = new \Contrat\Entity\Db\Contrat();
+                $contrat     = new Contrat();
                 $contrat->setIntervenant($intervenant);
                 $contrat->setStructure($structure);
 
@@ -64,12 +63,14 @@ $this->messenger() ?>
                 ?>
 
                 <tr>
-                    <td><?php
+                    <td>
+                        <?php
                         if ($structure):
                             echo $structure;
                         else:
                             echo 'toutes composantes';
-                        endif; ?></td>
+                        endif; ?>
+                    </td>
                     <td>
                         <?php if ($canCreer): ?>
                             <a class="btn btn-primary"
@@ -117,11 +118,11 @@ $this->messenger() ?>
                 <?php foreach ($contrat as $typeCode => $volumesHoraireToContrat):
                     $tblContratVh = $volumesHoraireToContrat[0];
                     break;
-                endforeach;
-                ?>
+                endforeach; ?>
 
-                <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]);
-                ?>
+                <?php if ($tblContratVh): ?>
+                    <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]); ?>
+                <?php endif; ?>
 
             <?php endforeach; ?>
         </div>

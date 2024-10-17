@@ -5,6 +5,7 @@ namespace Contrat\Entity\Db;
 use Application\Entity\Db\Annee;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
@@ -16,10 +17,10 @@ use Service\Entity\Db\TypeService;
 class TblContrat
 {
     private int                       $id;
-    private int                       $actif;
+    private int                       $actif                = 1;
     private ?string                   $uuid                 = null;
     private Annee                     $annee;
-    private int                       $intervenant;
+    private ?Intervenant              $intervenant          = null;
     private ?Structure                $structure            = null;
     private ?Contrat                  $contrat              = null;
     private ?Contrat                  $contratParent        = null;
@@ -111,14 +112,14 @@ class TblContrat
 
 
 
-    public function getIntervenant(): int
+    public function getIntervenant(): ?Intervenant
     {
         return $this->intervenant;
     }
 
 
 
-    public function setIntervenant(int $intervenant): void
+    public function setIntervenant(?Intervenant $intervenant): void
     {
         $this->intervenant = $intervenant;
     }

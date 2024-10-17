@@ -249,6 +249,18 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
+        'REFUSED_TEXT'          => [
+            'name'        => 'REFUSED_TEXT',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 400,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 21,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

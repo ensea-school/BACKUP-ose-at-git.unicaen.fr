@@ -15,7 +15,7 @@ return [
         'letterfiles'            => $config->get('unicaen-signature', 'letterfiles') ? $config->get('unicaen-signature', 'letterfiles') : [],
         'get_recipients_methods' => $config->get('unicaen-signature', 'get_recipients_methods') ? $config->get('unicaen-signature', 'get_recipients_methods') : [],
         'signature_levels'       => $config->get('unicaen-signature', 'signature_levels') ? $config->get('unicaen-signature', 'signature_levels') : [],
-        'hook_recipient'         => $config->get('unicaen-signature', 'hook_recipient'),
+        'hook_recipients'        => $config->get('unicaen-signature', 'hook_recipients') ? $config->get('unicaen-signature', 'hook_recipients') : [],
 
     ],
 ];

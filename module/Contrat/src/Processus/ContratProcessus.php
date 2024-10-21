@@ -74,8 +74,8 @@ class ContratProcessus extends AbstractProcessus
         $query->setParameter('uuid', $uuid);
 
         foreach ($query->execute() as $tblContrat) {
-            /** @var TblContrat $service */
-            $tblContrats[$service->getId()] = $tblContrat;
+            /** @var TblContrat $tblContrat */
+            $tblContrats[$tblContrat->getId()] = $tblContrat;
         }
 
         return $tblContrats;
@@ -142,6 +142,7 @@ class ContratProcessus extends AbstractProcessus
 
         $structure = $this->getServiceStructure()->get($volumeHoraire['structureId']);
         $contrat->setStructure($structure);
+        $contrat->setContrat($volumeHoraire['contratParentId']);
         //Revoir la fonction de calcul de total HETD
         $contrat->setTotalHetd($volumeHoraire['hetdTotal']);
         $contrat->setDebutValidite($volumeHoraire['dateDebut']);

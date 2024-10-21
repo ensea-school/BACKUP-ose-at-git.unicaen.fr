@@ -30,7 +30,7 @@
         </many-to-one>
         <many-to-one field="contratParent" target-entity="Contrat\Entity\Db\Contrat">
             <join-columns>
-                <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
+                <join-column name="CONTRAT_PARENT_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
         <many-to-one field="typeContrat" target-entity="Contrat\Entity\Db\TypeContrat">

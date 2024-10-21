@@ -142,8 +142,7 @@ class ContratProcessus extends AbstractProcessus
 
         $structure = $this->getServiceStructure()->get($volumeHoraire['structureId']);
         $contrat->setStructure($structure);
-        $contrat->setContrat($volumeHoraire['contratParentId']);
-        //Revoir la fonction de calcul de total HETD
+
         $contrat->setTotalHetd($volumeHoraire['hetdTotal']);
         $contrat->setDebutValidite($volumeHoraire['dateDebut']);
         $contrat->setFinValidite($volumeHoraire['dateFin']);
@@ -152,8 +151,9 @@ class ContratProcessus extends AbstractProcessus
             $contrat->setNumeroAvenant(0);
         } else {
             $this->getServiceContrat()->get($volumeHoraire['contratParentId']);
+            $contratParent = $this->getServiceContrat()->get($volumeHoraire['contratParentId']);
 
-            $contrat->setContrat($volumeHoraire['contratParent']);
+            $contrat->setContrat($contratParent);
             $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant()));
         }
 

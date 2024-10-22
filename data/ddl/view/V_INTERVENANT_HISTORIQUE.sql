@@ -510,8 +510,8 @@ SELECT
    s.intervenant_id                                                                            intervenant_id,
        '8 - Mise en paiement'                                 								   categorie,
         CASE WHEN mep.heures < 1
-       		THEN  REPLACE(TO_CHAR(mep.heures, 'FM0.00'),'.',',') || 'h ' || th.libelle_court
-       		ELSE  mep.heures || 'h ' || th.libelle_court END                                   label,
+       		THEN  REPLACE(TO_CHAR(mep.heures, 'FM0.00'),'.',',') || 'h ' || th.libelle_court || ' ' || (p.libelle_long)
+       		ELSE  mep.heures || 'h ' || th.libelle_court || ' ' || (p.libelle_long) END          label,
        mep.histo_modification                                                                  histo_date,
        mep.histo_modificateur_id                                                               histo_createur_id,
        u.display_name                                                                          histo_user,
@@ -526,8 +526,6 @@ FROM
   LEFT JOIN periode p ON p.id = mep.periode_paiement_id
   WHERE
   mep.histo_destruction IS NULL AND mep.date_mise_en_paiement IS NOT NULL
-
-
 
 )
 SELECT rownum id,

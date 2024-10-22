@@ -11,6 +11,12 @@
 * Signature électronique
 
 
+# OSE 23.12 (à venir)
+
+## Améliorations
+
+* Au niveau de la fiche intervenant, de l'onglet notes, distinction dans l'historique des demandes de mise en paiement et des mises en paiement (#58342)
+
 
 # OSE 23.11 (17/10/2024)
 

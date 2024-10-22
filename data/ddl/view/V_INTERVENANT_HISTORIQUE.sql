@@ -483,36 +483,40 @@ GROUP BY i.id
 UNION ALL
 --Demande de mise en paiement
 SELECT
-   s.intervenant_id                                                                     intervenant_id,
-       '7 - Demande de mise en paiement'                                            categorie,
-       mep.heures || 'h ' || th.libelle_court                                           label,
-       mep.histo_modification                                                                histo_date,
-       mep.histo_modificateur_id                                                             histo_createur_id,
-       u.display_name                                                        histo_user,
-       'glyphicon glyphicon-ok'                                              icon,
-       7                                ordre
+   s.intervenant_id                                                                     		intervenant_id,
+       '7 - Demande de mise en paiement'                                            			categorie,
+       CASE WHEN mep.heures < 1
+       		THEN  REPLACE(TO_CHAR(mep.heures, 'FM0.00'),'.',',') || 'h ' || th.libelle_court
+       		ELSE  mep.heures || 'h ' || th.libelle_court END                                    label,
+       mep.histo_creation                                                             			histo_date,
+       mep.histo_createur_id                                                             		histo_createur_id,
+       u.display_name                                                        					histo_user,
+       'glyphicon glyphicon-ok'                                              					icon,
+       7                                														ordre
 FROM
   mise_en_paiement mep
   JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
   JOIN service s ON s.id = frs.service_id
   JOIN type_heures th ON th.id = mep.type_heures_id
-  JOIN utilisateur u ON u.id = mep.histo_modificateur_id
+  JOIN utilisateur u ON u.id = mep.histo_createur_id
   LEFT JOIN periode p ON p.id = mep.periode_paiement_id
   WHERE
-  mep.histo_destruction IS NULL AND mep.date_mise_en_paiement IS NULL
+  mep.histo_destruction IS NULL
 
 
 UNION ALL
 --Mise en paiement
 SELECT
-   s.intervenant_id                                                                     intervenant_id,
-       '8 - Mise en paiement'                                 categorie,
-       mep.heures || 'h ' || th.libelle_court || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END                      label,
-       mep.histo_modification                                                                histo_date,
-       mep.histo_modificateur_id                                                             histo_createur_id,
-       u.display_name                                                        histo_user,
-       'glyphicon glyphicon-ok'                                              icon,
-       8                                ordre
+   s.intervenant_id                                                                            intervenant_id,
+       '8 - Mise en paiement'                                 								   categorie,
+        CASE WHEN mep.heures < 1
+       		THEN  REPLACE(TO_CHAR(mep.heures, 'FM0.00'),'.',',') || 'h ' || th.libelle_court
+       		ELSE  mep.heures || 'h ' || th.libelle_court END                                   label,
+       mep.histo_modification                                                                  histo_date,
+       mep.histo_modificateur_id                                                               histo_createur_id,
+       u.display_name                                                                          histo_user,
+       'glyphicon glyphicon-ok'                                                                icon,
+       8                                                                                       ordre
 FROM
   mise_en_paiement mep
   JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id

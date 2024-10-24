@@ -500,7 +500,7 @@ return [
         ],
     ],
 
-    'taux' => [
+    'taux'      => [
         'libelle'    => 'Taux',
         'privileges' => [
             'visualisation' => 'Visualisation des taux',
@@ -508,13 +508,19 @@ return [
             'suppression'   => 'Suppression des taux',
         ],
     ],
-    'mail' => [
+    'mail'      => [
         'libelle'    => 'UnicaenMail - Gestion des mails',
         'privileges' => [
             'mail_index'     => 'Afficher un mail',
             'mail_afficher'  => 'Ré-envoi d\'un mail',
             'mail_supprimer' => 'Suppression d\'un mail',
             'mail_test'      => 'Envoi d\'un mail de test',
+        ],
+    ],
+    'signature' => [
+        'libelle'    => 'Signature',
+        'privileges' => [
+            'flow-edition' => 'Administrer les circuits de signatures',
         ],
     ],
 

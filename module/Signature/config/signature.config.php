@@ -2,6 +2,7 @@
 
 namespace Signature;
 
+use Application\Provider\Privilege\Privileges;
 use PieceJointe\Controller\PieceJointeController;
 use Signature\Controller\CircuitController;
 use Signature\Controller\CircuitControllerFactory;
@@ -54,37 +55,12 @@ return [
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
-
-                'configuration'    => [
-                    'route'      => '/configuration',
-                    'controller' => SignatureController::class,
-                    'action'     => 'configuration',
-                ],
-                'liste-contrat'    => [
-                    'route'      => '/liste-contrat',
-                    'controller' => SignatureController::class,
-                    'action'     => 'liste-contrat',
-                ],
-                'get-data-contrat' => [
-                    'route'         => '/data-contrat',
-                    'controller'    => SignatureController::class,
-                    'action'        => 'get-data-contrat',
-                    'may_terminate' => true,
-                ],
-                'get-document'     => [
+                'get-document' => [
                     'route'         => '/:signature/get-document',
                     'controller'    => SignatureController::class,
                     'action'        => 'get-document',
                     'may_terminate' => true,
                 ],
-                'update-signature' => [
-                    'route'         => '/:signature/update-signature',
-                    'controller'    => SignatureController::class,
-                    'action'        => 'update-signature',
-                    'may_terminate' => true,
-                ],
-
-
             ],
         ],
     ],
@@ -94,30 +70,14 @@ return [
             'pages' => [
                 'signature' => [
                     'pages' => [
-                        'signature-flow'          => [
+                        'signature-flow' => [
                             'label'      => "Gestion des circuits de signatures",
                             'title'      => "Gestion des circuits de signatures",
                             'route'      => 'signature-flow',
+                            'resource'   => PrivilegeController::getResourceId(SignatureFlowController::class, 'index'),
                             'withtarget' => true,
                             'order'      => 10,
                         ],
-                        'signature-configuration' => [
-                            'label'      => "Liste des parapheurs",
-                            'title'      => "Permet de visualiser la liste et la configuration des différents parapheurs.",
-                            'route'      => 'signature/configuration',
-                            'withtarget' => true,
-                            'order'      => 20,
-                            //'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
-                        ],
-                        'signature-contrat-liste' => [
-                            'label'      => "Liste des signatures de contrat",
-                            'title'      => "Liste les signatures électroniques de contrat",
-                            'route'      => 'signature/liste-contrat',
-                            'withtarget' => true,
-                            'order'      => 30,
-                            //'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
-                        ],
-
                     ],
                 ],
             ],
@@ -127,14 +87,18 @@ return [
     'guards'      => [
         [
             'controller' => SignatureController::class,
-            'action'     => ['index', 'configuration', 'liste-contrat', 'get-data-contrat', 'get-document', 'update-signature'],
-            'roles'      => ['guest'],
+            'action'     => ['index', 'get-document'],
+            'privileges' => [
+                Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE,
+            ],
 
         ],
         [
             'controller' => SignatureFlowController::class,
             'action'     => ['index', 'saisir-circuit', 'supprimer-circuit', 'saisir-etape', 'supprimer-etape'],
-            'roles'      => ['guest'],
+            'privileges' => [
+                Privileges::SIGNATURE_FLOW_EDITION,
+            ],
 
         ],
 

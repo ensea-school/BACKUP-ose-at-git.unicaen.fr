@@ -31,49 +31,6 @@ class SignatureController extends AbstractController
 
 
 
-    public function configurationAction()
-    {
-        $parapheurs = $this->getSignatureConfigurationService()->getLetterfileConfiguration();
-        $logger     = $this->getSignatureConfigurationService()->getLoggerConfiguration();
-
-
-        return compact('logger', 'parapheurs');
-    }
-
-
-
-    public function listeContratAction()
-    {
-        $vm = new VueModel();
-        $vm->setTemplate('signature/liste-contrat');
-
-        return $vm;
-    }
-
-
-
-    public function getDataContratAction()
-    {
-        $post = $this->axios()->fromPost();
-
-        return $this->getServiceContrat()->getDataSignatureContrat($post);
-    }
-
-
-
-    public function updateSignatureAction()
-    {
-        /**
-         * @var Signature $signature
-         */
-        $signature = $this->getEvent()->getParam('signature');
-        $this->getSignatureService()->updateStatusSignature($signature);
-
-        return false;
-    }
-
-
-
     public function getDocumentAction()
     {
 

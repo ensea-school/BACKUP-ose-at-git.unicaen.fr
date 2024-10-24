@@ -9,8 +9,7 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
-{
+class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                  = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION              = 'agrement-conseil-academique-suppression';
@@ -59,12 +58,12 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const CONTRAT_DEPOT_RETOUR_SIGNE                           = 'contrat-depot-retour-signe';
     const CONTRAT_DEVALIDATION                                 = 'contrat-devalidation';
     const CONTRAT_ENVOI_EMAIL                                  = 'contrat-envoi-email';
+    const CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE               = 'contrat-envoyer-signature-electronique';
     const CONTRAT_PROJET_GENERATION                            = 'contrat-projet-generation';
     const CONTRAT_SAISIE_DATE_RETOUR_SIGNE                     = 'contrat-saisie-date-retour-signe';
     const CONTRAT_SUPPRESSION                                  = 'contrat-suppression';
     const CONTRAT_VALIDATION                                   = 'contrat-validation';
     const CONTRAT_VISUALISATION                                = 'contrat-visualisation';
-    const CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE               = 'contrat-envoyer-signature-electronique';
     const DISCIPLINE_EDITION                                   = 'discipline-edition';
     const DISCIPLINE_GESTION                                   = 'discipline-gestion';
     const DISCIPLINE_VISUALISATION                             = 'discipline-visualisation';
@@ -287,6 +286,7 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const REFERENTIEL_REALISE_VALIDATION                       = 'referentiel-realise-validation';
     const REFERENTIEL_REALISE_VISUALISATION                    = 'referentiel-realise-visualisation';
     const REFERENTIEL_SAISIE_TOUTES_COMPOSANTES                = 'referentiel-saisie-toutes-composantes';
+    const SIGNATURE_FLOW_EDITION                               = 'signature-flow-edition';
     const STRUCTURES_ADMINISTRATION_EDITION                    = 'structures-administration-edition';
     const STRUCTURES_ADMINISTRATION_VISUALISATION              = 'structures-administration-visualisation';
     const TAG_ADMINISTRATION_EDITION                           = 'tag-administration-edition';

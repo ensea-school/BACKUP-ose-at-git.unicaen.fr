@@ -445,7 +445,7 @@ class ContratController extends AbstractController
     {
         /* @var Contrat $contrat */
         $contrat = $this->getEvent()->getParam('contrat');
-
+        //On teste si on a le droit de télécharger le contrat
         if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
             throw new UnAuthorizedException("Génération du contrat interdite.");
         }

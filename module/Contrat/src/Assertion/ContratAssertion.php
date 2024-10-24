@@ -224,6 +224,19 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertGeneration(Contrat $contrat)
     {
+        /**
+         * @var Role    $role
+         * @var Contrat $contrat
+         */
+        $role = $this->getRole();
+        //Si je suis connecté en tant qu'intervenant
+        if ($role->getIntervenant()) {
+            //Si le role à le même intervenant que le contrat et que le contrat est validé
+            if ($role->getIntervenant() == $contrat->getIntervenant() && !$contrat->estUnProjet()) {
+                return true;
+            }
+        }
+
         if ($contrat->estUnProjet()) {
             return $this->getRole()->hasPrivilege(Privileges::CONTRAT_PROJET_GENERATION);
         } else {

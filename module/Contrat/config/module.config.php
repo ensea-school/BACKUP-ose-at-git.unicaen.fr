@@ -131,8 +131,6 @@ return [
         [
             'controller' => ContratController::class,
             'action'     => ['exporter'],
-            'privileges' => [Privileges::CONTRAT_CONTRAT_GENERATION, Privileges::CONTRAT_PROJET_GENERATION],
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
         ],
         [
             'controller' => ContratController::class,

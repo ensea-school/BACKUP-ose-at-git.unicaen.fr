@@ -20,10 +20,17 @@
 * Possibilité d'ajouter dynamiquement l'url de la page contrat de l'intervenant directement dans le corps du mail d'envoi de contrat (paramètres généraux)
 
 
+
 ## Améliorations
 
 * Au niveau de la fiche intervenant, de l'onglet notes, distinction dans l'historique des demandes de mise en paiement et des mises en paiement (#58342)
 * L'indicateur 210 ne nécessite plus d'avoir obligatoirement un service prévisionnel de renseigné pour remonter les intervenants ayant des pièces justificatives manquantes (#58301)
+
+## Corrections de bugs
+
+* Au niveau des missions, le contrat est marqué comme fait s'il a été réellement finalisé avec date de retour signé le cas échéant
+* Au niveau de la saisie du suivi des missions, gestion correcte du cas où un même intervenant a plusieurs missions, mais qu'un des contrats n'a pas été finalisé
+* Éradication de l'utilisation de certains caractères spéciaux dans le cache de OSE qui faisait planter l'application
 
 
 # OSE 23.11 (17/10/2024)

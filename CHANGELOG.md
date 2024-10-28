@@ -11,12 +11,31 @@
 * Signature électronique
 
 
+# OSE 23.12 (à venir)
 
-# OSE 23.11 (à venir)
+## Nouveautés
+
+* Possiblité de ne pas inclure le contrat en pièce jointe lors de l'envoi du mail contrat à l'intervenant (#58818)
+* Nouvel indicateur 471 permettant de lister les intervenants pour qui l'envoi du contrat par mail n'a pas encore éte effectué
+* Possibilité d'ajouter dynamiquement l'url de la page contrat de l'intervenant directement dans le corps du mail d'envoi de contrat (paramètres généraux)
+
+
+## Améliorations
+
+* Au niveau de la fiche intervenant, de l'onglet notes, distinction dans l'historique des demandes de mise en paiement et des mises en paiement (#58342)
+
+
+# OSE 23.11 (17/10/2024)
 
 ## Corrections de bugs
 
 * Dysfonctionnenent des demandes de mises en paiement par lot suite au filtrage par structure (#58788)
+
+## Nouveautés
+
+* Nouvelle formule pour Bretagne Occidentale (Brest)
+
+
 
 # OSE 23.10 (03/10/2024)
 

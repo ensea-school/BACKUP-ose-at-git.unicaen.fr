@@ -64,6 +64,18 @@ class EnvoiMailContratForm extends AbstractForm
             ]
         );
 
+        $this->add([
+                       'name'       => 'contrat-piece-jointe',
+                       'type'       => Element\Checkbox::class,
+                       'options'    => [
+                           'label' => "Envoyer le contrat en pièce jointe",
+                       ],
+                       'attributes' => [
+                           'value' => 1,
+                       ],
+                   ]
+        );
+
         $this->add(new Csrf('security'));
         $this->add([
             'name'       => 'submit',
@@ -101,6 +113,10 @@ class EnvoiMailContratForm extends AbstractForm
                 ],
             ],
             'destinataire-cc-mail' => [
+                'required' => false,
+
+            ],
+            'contrat-piece-jointe' => [
                 'required' => false,
 
             ],

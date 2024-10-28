@@ -105,7 +105,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             r.histoDestruction IS NULL'
         )->setParameter('utilisateur', $utilisateur);
         $query->useResultCache(true);
-        $query->setResultCacheId(__CLASS__ . '/affectations');
+        $query->setResultCacheId(str_replace('\\', '_', __CLASS__) . '_affectations');
 
 
         $result          = $query->getResult();

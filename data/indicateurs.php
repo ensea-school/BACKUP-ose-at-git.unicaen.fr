@@ -227,6 +227,13 @@ return [
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],
+            471 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s contrat  n\'a pas été <i>envoyé par e-mail</i> à l\'intervenant',
+                'libelle_pluriel'   => '%s contrats  n\'ont pas été <i>envoyés par e-mail</i> aux intervenants',
+                'route'             => 'intervenant/contrat',
+                'irrecevables'      => false,
+            ],
             480 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s contrat n\'a pas de date de retour',

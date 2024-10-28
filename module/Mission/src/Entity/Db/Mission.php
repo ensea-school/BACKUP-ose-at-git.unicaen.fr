@@ -461,7 +461,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
         $vhs = $this->getVolumesHorairesPrevus();
 
         foreach ($vhs as $vh) {
-            if ($vh->estNonHistorise() && $vh->getContrat() && $vh->getContrat()->estNonHistorise()) {
+            if ($vh->estNonHistorise() && $vh->getContrat() && $vh->getContrat()->estFinalise()) {
                 return true;
             }
         }

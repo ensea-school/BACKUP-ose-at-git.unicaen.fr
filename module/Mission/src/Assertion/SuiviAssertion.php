@@ -24,7 +24,6 @@ class SuiviAssertion extends AbstractAssertion
     use WorkflowServiceAwareTrait;
 
 
-
     protected function assertController($controller, $action = null, $privilege = null)
     {
         /* @var $role Role */
@@ -66,8 +65,7 @@ class SuiviAssertion extends AbstractAssertion
             $entity = $entity->getMission();
         }
         if ($entity instanceof Mission) {
-            $structure = $entity->getStructure();
-            $entity = $entity->getIntervenant();
+            return $this->assertMissionEditionRealise($entity);
         }
 
         $wfEtape = $this->getServiceWorkflow()->getEtape($codeEtape, $entity, $structure);
@@ -90,8 +88,10 @@ class SuiviAssertion extends AbstractAssertion
         // pareil si le rôle ne possède pas le privilège adéquat
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
-        if (!$this->assertWorkflow($entity)){
-            return false;
+        if ($entity instanceof Mission || $entity instanceof Intervenant || $entity instanceof VolumeHoraireMission) {
+            if (!$this->assertWorkflow($entity)) {
+                return false;
+            }
         }
 
         switch (true) {
@@ -147,6 +147,19 @@ class SuiviAssertion extends AbstractAssertion
         return $this->asserts([
             $this->assertMission($role, $vhm->getMission())
         ]);
+    }
+
+
+
+    protected function assertMissionEditionRealise(Mission $mission)
+    {
+        $besoinContrat = $mission->getIntervenant()->getStatut()->getContrat();
+
+        if (!$besoinContrat) {
+            return true;
+        }
+
+        return $mission->hasContrat();
     }
 
 

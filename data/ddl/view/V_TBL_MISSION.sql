@@ -8,8 +8,6 @@ SELECT
   i.structure_id                                                                           intervenant_structure_id,
   CASE WHEN m.auto_validation = 1 OR vm.mission_id IS NOT NULL THEN 1 ELSE 0 END           valide,
   vm.validation_id                                                                         validation_id,
-  0                                                                                        contractualise,
-  null                                                                                     contrat_id,
   SUM(CASE WHEN tvh.code = 'PREVU' THEN COALESCE(vhm.heures,0) ELSE 0 END)                 heures_prevues_saisies,
   SUM(CASE WHEN tvh.code = 'PREVU' AND (vhm.auto_validation = 1 OR vvhm.volume_horaire_mission_id IS NOT NULL) THEN COALESCE(vhm.heures,0) ELSE 0 END) heures_prevues_validees,
   SUM(CASE WHEN tvh.code = 'REALISE' THEN COALESCE(vhm.heures,0) ELSE 0 END)               heures_realisees_saisies,

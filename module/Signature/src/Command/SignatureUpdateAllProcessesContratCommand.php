@@ -34,10 +34,9 @@ class SignatureUpdateAllProcessesContratCommand extends SignatureCommandAbstract
          */
         $processService = \OseAdmin::instance()->container()->get(ProcessService::class);
         $contratService = \OseAdmin::instance()->container()->get(ContratService::class);
+        $io             = $this->getIO($input, $output);
 
-        $io = $this->getIO($input, $output);
-
-        $headers     = ['id', 'label', 'status', 'msg'];
+        $headers     = ['id', 'intervenant', 'label', 'status', 'msg'];
         $rows        = [];
         $listContrat = $contratService->getContratWithProcessWaiting();
 
@@ -47,11 +46,13 @@ class SignatureUpdateAllProcessesContratCommand extends SignatureCommandAbstract
                 /**
                  * @var Contrat $contrat
                  */
-                $process = $contrat->getProcessSignature();
-                $msg     = "Rien à faire";
-                $row     = [
+                $intervenant = $contrat->getIntervenant();
+                $process     = $contrat->getProcessSignature();
+                $msg         = "Rien à faire";
+                $row         = [
                     $process->getId(),
                     $process->getLabel(),
+                    $intervenant->getPrenom() . ' ' . $intervenant->getNomUsuel(),
                     $process->getStatusText(),
                 ];
                 if ($process->isTriggerable()) {
@@ -59,8 +60,15 @@ class SignatureUpdateAllProcessesContratCommand extends SignatureCommandAbstract
                     try {
                         //On met à jour le process et le contrat qui lui est rattaché
                         //Récupération du contrat rattacher au process
-                        $contratService->rafraichirProcessSignatureElectronique($contrat);
-                        $msg = "Fait";
+                        $etat = $contratService->rafraichirProcessSignatureElectronique($contrat);
+                        $row  = [
+                            $process->getId(),
+                            $process->getLabel(),
+                            $intervenant->getPrenom() . ' ' . $intervenant->getNomUsuel(),
+                            $process->getStatusText(),
+                        ];
+                        $msg  = ($etat) ? "Mis à jour" : 'Aucune mise à jour';
+
                     } catch (\Exception $e) {
                         $msg = 'Error : ' . $e->getMessage();
                     }
@@ -68,9 +76,10 @@ class SignatureUpdateAllProcessesContratCommand extends SignatureCommandAbstract
                 $row[]  = $msg;
                 $rows[] = $row;
             }
+            $io->table($headers, $rows);
+        } else {
+            $io->info("Aucun contrat avec des signatures en cours");
         }
-
-        $io->table($headers, $rows);
 
 
         return self::SUCCESS;

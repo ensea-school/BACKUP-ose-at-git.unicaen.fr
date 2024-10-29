@@ -488,7 +488,7 @@ class PlafondService extends AbstractEntityService
         $tvhPrevuId = $this->getServiceTypeVolumeHoraire()->getPrevu()->getId();
         $tvhRealiseId = $this->getServiceTypeVolumeHoraire()->getRealise()->getId();
         $configTablesJoin = [
-            "structure"      => "plafond_structure ps ON ps.plafond_id = p.plafond_id AND ps.structure_id = p.structure_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL",
+            "structure"      => "plafond_structure ps ON ps.plafond_id = p.plafond_id AND ps.structure_id = p.structure_id AND ps.annee_id = p.annee_id AND ps.histo_destruction IS NULL",
             "intervenant"    => "plafond_statut ps ON ps.plafond_id = p.plafond_id AND ps.statut_id = i.statut_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL",
             "element"        => "plafond_statut ps ON 1 = 0",
             "volume_horaire" => "plafond_statut ps ON 1 = 0",
@@ -567,7 +567,9 @@ class PlafondService extends AbstractEntityService
                 $view .= " FROM dual WHERE 0 = 1";
             }
             $view .= "\n  ) p";
-            $view .= "\n  JOIN intervenant i ON i.id = p.intervenant_id";
+            if ($perimetre->getCode() !== $perimetre::STRUCTURE) {
+                $view .= "\n  JOIN intervenant i ON i.id = p.intervenant_id";
+            }
             $view .= "\n  LEFT JOIN " . $configTablesJoin[$perimetre->getCode()];
             $view .= "\n  LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL";
             $view .= "\nWHERE\n";

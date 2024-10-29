@@ -177,4 +177,37 @@ $this->messenger() ?>
         event.div.modal('hide'); // ferme la fenêtre modale
         window.location.reload();
     });
+    $(document).ready(function () {
+
+        let btnEnvoyerSignature = $("a[id='envoyer-signature']");
+        let btnRefreshSignature = $("a[id='refresh-signature']");
+        let btnSupprimerSignature = $("a[id='supprimer-signature']");
+        let btnWaiting = $('#waiting-signature');
+        let btnWaitingDelete = $('#waiting-delete-signature');
+
+
+        btnEnvoyerSignature.click(function (e) {
+            e.preventDefault();
+            window.location.href = this.href;
+            btnWaiting.removeClass('d-none');
+            $(this).addClass('d-none');
+        });
+
+        btnRefreshSignature.click(function (e) {
+            e.preventDefault();
+            window.location.href = this.href;
+            btnWaiting.removeClass('d-none');
+            $(this).addClass('d-none');
+        });
+
+        btnSupprimerSignature.click(function (e) {
+            e.preventDefault();
+            window.location.href = this.href;
+            btnWaitingDelete.removeClass('d-none');
+            $(this).addClass('d-none');
+        });
+
+
+    });
+
 </script>

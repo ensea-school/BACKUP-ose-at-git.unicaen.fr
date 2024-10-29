@@ -186,8 +186,17 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 </a>
             <?php endif; ?>
 
+            <!--UX Button waiting-->
+            <!--waiting envoyer et rafraichir-->
+            <button id="waiting-signature" class=" disabled  d-none btn btn-primary"
+                    title="En cours d'exécution">
+                <span id="spinner" aria-hidden="true" class="spinner-border spinner-border-sm" role="status"></span>
+                &nbsp;Veuillez patienter...
+            </button>
+
             <?php if (!$contrat->getProcessSignature() && $contratSignatureActivation && !empty($urlCreerProcessSignature)): ?>
-                <a href="<?= $urlCreerProcessSignature ?>" class="btn btn-primary"
+
+                <a id="envoyer-signature" href="<?= $urlCreerProcessSignature ?>" class="btn btn-primary"
                    title="Envoyer dans circuit '<?= $libelleCircuitSignature; ?>'">
                     <i class="fas fa-signature"></i>
                     Envoyer pour signature
@@ -196,7 +205,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php endif; ?>
 
             <?php if ($urlRafraichirProcessSignature && $contrat->getProcessSignature() && empty($retourSigne)): ?>
-                <a href="<?= $urlRafraichirProcessSignature ?>" class="btn btn-primary">
+                <a id="refresh-signature" href="<?= $urlRafraichirProcessSignature ?>" class="btn btn-primary">
                     <i class="fas fa-arrows-rotate"></i>
                     Rafraîchir la signature
                 </a>
@@ -216,12 +225,20 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php endif; ?>
 
             <?php if ($urlSupprimerProcessSignature && $contrat->getProcessSignature()): ?>
-                <a href="<?= $urlSupprimerProcessSignature ?>" class="btn btn-danger">
+                <a id="supprimer-signature" href="<?= $urlSupprimerProcessSignature ?>" class="btn btn-danger">
                     <i class="fas fa-trash"></i>
                     Supprimer la procédure de signature
                 </a>
 
             <?php endif; ?>
+
+            <!--UX Button waiting-->
+            <!--waiting supprimer-->
+            <button id="waiting-delete-signature" class=" disabled  d-none btn btn-danger"
+                    title="Signature en cours de suppression">
+                <span id="spinner" aria-hidden="true" class="spinner-border spinner-border-sm" role="status"></span>
+                &nbsp;Veuillez patienter...
+            </button>
 
 
             <?php if ($urlSaisieRetour && !$contratSignatureActivation): ?>

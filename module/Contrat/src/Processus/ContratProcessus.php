@@ -430,17 +430,11 @@ class ContratProcessus extends AbstractProcessus
     /**
      * @throws Exception
      */
-    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null): MailMessage
+    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null, $pieceJointe = true): MailMessage
     {
-        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-                            $contrat->getStructure()?->getCode(),
-                            $contrat->getIntervenant()->getNomUsuel(),
-                            $contrat->getIntervenant()->getCode());
 
-        $document = $this->getServiceContrat()->generer($contrat, false);
-        $content  = $document->saveToData();
 
-        if (empty($subject)) {
+       if (empty($subject)) {
             $subject = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
         }
 
@@ -462,19 +456,27 @@ class ContratProcessus extends AbstractProcessus
         $text->type    = Mime::TYPE_HTML;
         $text->charset = 'utf-8';
         $body->addPart($text);
-        $nameFrom = "Application OSE";
-
-
+        $nameFrom    = "Application OSE";
+        $messageType = Mime::TYPE_HTML;
         //Contrat en pièce jointe
-        $attachment              = new Part($content);
-        $attachment->type        = 'application/pdf';
-        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-        $attachment->encoding    = Mime::ENCODING_BASE64;
-        $attachment->filename    = $fileName;
-        $body->addPart($attachment);
+        if ($pieceJointe) {
+            $messageType = Mime::MULTIPART_RELATED;
+            $fileName    = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+                                   $contrat->getStructure()?->getCode(),
+                                   $contrat->getIntervenant()->getNomUsuel(),
+                                   $contrat->getIntervenant()->getCode());
 
-        $message     = new MailMessage();
-        $messageType = 'multipart/related';
+            $document                = $this->getServiceContrat()->generer($contrat, false);
+            $content                 = $document->saveToData();
+            $attachment              = new Part($content);
+            $attachment->type        = 'application/pdf';
+            $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+            $attachment->encoding    = Mime::ENCODING_BASE64;
+            $attachment->filename    = $fileName;
+            $body->addPart($attachment);
+        }
+
+        $message = new MailMessage();
         $message->setEncoding('UTF-8')
             ->setFrom($from, $nameFrom)
             ->setSubject($subject)

@@ -18,6 +18,8 @@ use Mission\Form\OffreEmploiFormAwareTrait;
 use Mission\Service\CandidatureServiceAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use Mission\Service\OffreEmploiServiceAwareTrait;
+use Plafond\Processus\PlafondProcessusAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
 
 
@@ -35,6 +37,8 @@ class  OffreEmploiController extends AbstractController
     use ContextServiceAwareTrait;
     use MissionServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use PlafondProcessusAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
 
 
     public function indexAction()
@@ -56,9 +60,24 @@ class  OffreEmploiController extends AbstractController
         } else {
             $title = "Modification d'une offre d'emploi";
         }
-        $form->bindRequestSave($offreEmploi, $this->getRequest(), function () use ($offreEmploi, $form) {
 
-            $this->getServiceOffreEmploi()->save($offreEmploi);
+        // A adapter pour utiliser le futur type de volume horaire "BESOIN"
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
+        $hDeb = $offreEmploi->getNombreHeures() * $offreEmploi->getNombrePostes();
+        $form->bindRequestSave($offreEmploi, $this->getRequest(), function () use ($offreEmploi, $form, $hDeb, $typeVolumeHoraire) {
+
+            $this->getProcessusPlafond()->beginTransaction();
+            try {
+                $this->getServiceOffreEmploi()->save($offreEmploi);
+                $hFin = $offreEmploi->getNombreHeures() * $offreEmploi->getNombrePostes();
+                $this->getProcessusPlafond()->endTransaction($offreEmploi->getStructure(), $typeVolumeHoraire, $hFin < $hDeb);
+
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+                $this->em()->rollback();
+            }
+
 
             $this->flashMessenger()->addSuccessMessage(
                 "Enregistrement effectué"

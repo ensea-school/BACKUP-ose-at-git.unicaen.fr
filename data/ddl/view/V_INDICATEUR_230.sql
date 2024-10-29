@@ -7,7 +7,7 @@ FROM
   tbl_workflow w
   JOIN tbl_workflow wc ON wc.intervenant_id = w.intervenant_id
   JOIN intervenant i ON i.id = w.intervenant_id
-  JOIN PIECE_JOINTE pj ON i.id = pj.intervenant_id
+  LEFT JOIN PIECE_JOINTE pj ON i.id = pj.intervenant_id
 WHERE
   w.etape_code = 'PJ_VALIDATION'
   AND wc.etape_code = 'PJ_SAISIE'

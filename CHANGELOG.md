@@ -18,7 +18,7 @@
 * Possiblité de ne pas inclure le contrat en pièce jointe lors de l'envoi du mail contrat à l'intervenant (#58818)
 * Nouvel indicateur 471 permettant de lister les intervenants pour qui l'envoi du contrat par mail n'a pas encore éte effectué
 * Possibilité d'ajouter dynamiquement l'url de la page contrat de l'intervenant directement dans le corps du mail d'envoi de contrat (paramètres généraux)
-
+* Possibilité de renseigner l'adresse mail perso d'un intervenant dans le formulaire de création (#58904)
 
 
 ## Améliorations

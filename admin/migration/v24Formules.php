@@ -50,6 +50,14 @@ class v24Formules extends AbstractMigration
             $bdd->exec("ALTER TABLE FORMULE_TEST_VOLUME_HORAIRE RENAME COLUMN $old TO $new");
         }
 
+        $bdd->exec('ALTER TABLE FORMULE ADD (CODE VARCHAR2(50))');
+        $bdd->exec('UPDATE formule SET code = package_name');
+    }
+
+
+
+    public function after()
+    {
         /** @var \Formule\Service\FormuleService $fs */
         $fs = $this->manager->getOseAdmin()->container()->get(\Formule\Service\FormuleService::class);
 

@@ -13,7 +13,7 @@ return [
     'Agrement\Entity\Db\TypeAgrement'                       => __DIR__ . '/src/Entity/Db/TypeAgrement.php',
     'Agrement\Form\Factory\AgrementFormFactory'             => __DIR__ . '/src/Form/Factory/AgrementFormFactory.php',
     'Agrement\Form\Saisie'                                  => __DIR__ . '/src/Form/Saisie.php',
-    'Agrement\Module'                                       => __DIR__ . '/Module.php',
+    'Module'                                                => __DIR__ . '/Module.php',
     'Agrement\Service\AgrementService'                      => __DIR__ . '/src/Service/AgrementService.php',
     'Agrement\Service\AgrementServiceFactory'               => __DIR__ . '/src/Service/AgrementServiceFactory.php',
     'Agrement\Service\TblAgrementService'                   => __DIR__ . '/src/Service/TblAgrementService.php',

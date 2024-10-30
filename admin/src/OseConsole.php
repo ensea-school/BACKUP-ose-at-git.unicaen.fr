@@ -1,10 +1,6 @@
 <?php
 
-use Unicaen\BddAdmin\Logger\LoggerInterface;
-
-
-
-class OseConsole implements LoggerInterface
+class OseConsole
 {
     const COLOR_BLACK        = '0;30';
     const COLOR_DARK_GRAY    = '1;30';

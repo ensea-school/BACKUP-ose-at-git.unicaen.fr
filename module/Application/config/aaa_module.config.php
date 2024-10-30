@@ -3,9 +3,11 @@
 namespace Application;
 
 use Application\Mouchard\MouchardCompleterContextFactory;
+use Application\Service\OseBddAdminFactory;
 use Application\View\Helper\LocalConnectViewHelperFactory;
 use Application\View\Helper\UserProfileSelectRadioItem;
 use Application\View\Helper\UserProfileSelectRadioItemFactory;
+use Unicaen\BddAdmin\Bdd;
 use UnicaenAuthentification\View\Helper\LocalConnectViewHelper;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
@@ -186,6 +188,7 @@ $config = [
             HostLocalization\HostLocalizationOse::class                 => HostLocalization\HostLocalizationOseFactory::class,
             ORM\RouteEntitiesInjector::class                            => ORM\RouteEntitiesInjectorFactory::class,
             ORM\Event\Listeners\HistoriqueListener::class               => ORM\Event\Listeners\HistoriqueListenerFactory::class,
+            Bdd::class                                                  => OseBddAdminFactory::class,
         ],
         'aliases'    => [
             'HostLocalization' => HostLocalization\HostLocalizationOse::class,

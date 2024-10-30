@@ -1,7 +1,6 @@
 <?php
 
 use Unicaen\BddAdmin\Bdd;
-use Unicaen\BddAdmin\DataUpdater;
 use Psr\Container\ContainerInterface;
 use Laminas\Cli\ApplicationFactory;
 use Laminas\Cli\ApplicationProvisioner;
@@ -25,13 +24,11 @@ class OseAdmin
 
     protected ?Bdd $bdd = null;
 
-    protected ?DataUpdater $dataUpdater = null;
-
     private ?int $oseAppliId = null;
 
     private ?int $sourceOseId = null;
 
-    private string $maintenanceText = "OSE est actuellement en maintenance. Veuillez nous excuser pour ce déagrément.";
+    private string $maintenanceText = "OSE est actuellement en maintenance. Veuillez nous excuser pour ce désagrément.";
 
 
 
@@ -127,7 +124,7 @@ class OseAdmin
             $filename = $cible . '/actions/' . $action . '.php';
         } elseif (is_dir($cible . '/' . $action)) {
             $sousAction = $this->console()->getArg(2);
-            $filename = $cible . '/' . $action . '/actions/' . $sousAction . '.php';
+            $filename   = $cible . '/' . $action . '/actions/' . $sousAction . '.php';
         } else {
             $filename = null;
         }
@@ -139,7 +136,7 @@ class OseAdmin
                 );
             } else {
                 $oa = $this;
-                $c = $this->console();
+                $c  = $this->console();
                 require_once $filename;
             }
         } else {
@@ -223,7 +220,7 @@ class OseAdmin
             $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
             $smConfig = new \Laminas\Mvc\Service\ServiceManagerConfig($smConfig);
 
-            $serviceManager = new Laminas\ServiceManager\ServiceManager();
+            $serviceManager  = new Laminas\ServiceManager\ServiceManager();
             $this->container = $serviceManager;
             $smConfig->configureServiceManager($serviceManager);
             $serviceManager->setService('ApplicationConfig', $configuration);
@@ -266,7 +263,7 @@ class OseAdmin
         }
 
         $oa = $this;
-        $c = $this->console();
+        $c  = $this->console();
         require_once($cible);
     }
 
@@ -274,32 +271,14 @@ class OseAdmin
 
     public function getOseAppliId(): int
     {
-        if (!$this->oseAppliId) {
-            $u = $this->getBdd()->select("SELECT ID FROM UTILISATEUR WHERE USERNAME='oseappli'");
-            if (isset($u[0]['ID'])) {
-                $this->oseAppliId = (int)$u[0]['ID'];
-            } else {
-                throw new \Exception('Utilisateur système "oseappli" non trouvé!!');
-            }
-        }
-
-        return $this->oseAppliId;
+        return $this->getBdd()->getHistoUserId();
     }
 
 
 
     public function getSourceOseId(): int
     {
-        if (!$this->sourceOseId) {
-            $src = $this->getBdd()->select("SELECT ID FROM SOURCE WHERE CODE='OSE'");
-            if (isset($src[0]['ID'])) {
-                $this->sourceOseId = (int)$src[0]['ID'];
-            } else {
-                throw new \Exception('Source d\'import "OSE" non trouvée!!');
-            }
-        }
-
-        return $this->sourceOseId;
+        return $this->getBdd()->getSourceId();
     }
 
 
@@ -341,30 +320,12 @@ class OseAdmin
 
     public function getBdd(): Bdd
     {
-        if (!$this->bdd) {
-            $this->bdd = new Bdd($this->config()->get('bdd'));
-            if (PHP_SAPI == 'cli') {
-                $this->bdd->setLogger($this->console());
-            }
-
-            try {
-                $this->bdd->setOption('source-id', $this->getSourceOseId());
-                $this->bdd->setOption('histo-user-id', $this->getOseAppliId());
-                $this->bdd->setOption(Bdd::OPTION_DDL_DIR, getcwd() . '/data/ddl');
-                $this->bdd->setOption(Bdd::OPTION_COLUMNS_POSITIONS_FILE, getcwd() . '/data/ddl_columns_pos.php');
-            } catch (\Exception $e) {
-
-            }
-
-            $du = $this->bdd->dataUpdater();
-            $du->setConfig(require getcwd() . '/data/data_updater_config.php');
-            $du->addSource(new \DataSource($this));
-            $du->addSource(getcwd() . '/data/nomenclatures.php');
-            $du->addSource(getcwd() . '/data/donnees_par_defaut.php');
-            $du->addAction('privileges', 'Mise à jour des privilèges dans la base de données');
-        }
-
-        return $this->bdd;
+        return $this->container()->get(Bdd::class);
+//            $du->setConfig(require getcwd() . '/data/data_updater_config.php');
+//            $du->addSource(new \DataSource($this));
+//            $du->addSource(getcwd() . '/data/nomenclatures.php');
+//            $du->addSource(getcwd() . '/data/donnees_par_defaut.php');
+//            $du->addAction('privileges', 'Mise à jour des privilèges dans la base de données');
     }
 
 }

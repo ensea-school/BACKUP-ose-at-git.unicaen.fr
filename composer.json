@@ -1,5 +1,6 @@
 {
     "name"             : "unicaen/ose",
+    "version"          : "1.0.0",
     "description"      : "Organisation des Services d'Enseignement (OSE)",
     "repositories"     : [
         {
@@ -21,7 +22,7 @@
         "unicaen/siham"                               : "6.1.6",
         "unicaen/mail"                                : "6.1.5",
         "unicaen/vue"                                 : "6.2.4",
-        "unicaen/bddadmin"                            : "0.9.7",
+        "unicaen/bddadmin"                            : "dev-modernisation-gestion-donnees",
         "laminas/laminas-cache-storage-adapter-memory": "2.3.0",
         "laminas/laminas-text"                        : "2.11",
         "unicaen/console"                             : "6.1.0",

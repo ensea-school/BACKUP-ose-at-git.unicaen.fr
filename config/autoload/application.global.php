@@ -3,7 +3,7 @@
 $config = \OseAdmin::instance()->config();
 
 return [
-    'doctrine'     => [
+    'doctrine'   => [
         'connection'    => [
             'orm_default' => [
                 'params' => [
@@ -28,11 +28,15 @@ return [
                 'proxy_dir'        => 'cache/DoctrineProxy',
             ],
         ],
+        'cache'         => [
+            'filesystem' => [
+                'class'     => 'Doctrine\Common\Cache\FilesystemCache',
+                'directory' => 'cache/DoctrineModule',
+                'namespace' => 'DoctrineModule',
+            ],
+        ],
     ],
-    'view_manager' => [
-        'display_not_found_reason' => $config->get('global', 'affichageErreurs'),
-    ],
-    'cli_config'   => [
+    'cli_config' => [
         'scheme' => $config->get('global', 'scheme'),
         'domain' => $config->get('global', 'domain'),
     ],
@@ -67,8 +71,8 @@ return [
             'tmp-dir' => $config->get('etats-sortie', 'tmp-dir', getcwd() . '/cache/'),
         ],
     ],
-    'view_manager' => [
-        'display_not_found_reason' => $config->get('global','affichageErreurs'), // display 404 reason in template
-        'display_exceptions'       => $config->get('global','affichageErreurs'),
-        ],
+    'view_manager'    => [
+        'display_not_found_reason' => $config->get('global', 'affichageErreurs'), // display 404 reason in template
+        'display_exceptions'       => $config->get('global', 'affichageErreurs'),
+    ],
 ];

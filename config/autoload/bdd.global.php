@@ -7,7 +7,7 @@ return [
 
         'connection' => [
             'default' => [
-                'driver'   => $config->get('bdd', 'host', 'Oracle'),
+                'driver'   => $config->get('bdd', 'driver', 'Oracle'),
                 'host'     => $config->get('bdd', 'host'),
                 'port'     => $config->get('bdd', 'port'),
                 'dbname'   => $config->get('bdd', 'dbname'),

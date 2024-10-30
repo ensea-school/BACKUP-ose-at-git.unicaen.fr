@@ -1,6 +1,6 @@
 <?php
 
-$oa->getBdd()->dataUpdater()->run('privileges');
+$oa->getBdd()->data()->run('privileges');
 
 $args = 'UnicaenCode GeneratePrivileges write=true';
 $c->passthru("php " . getcwd() . "/public/index.php " . $args);

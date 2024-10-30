@@ -750,7 +750,7 @@ class PlafondService extends AbstractEntityService
     public function construire()
     {
         $oseAdmin = \OseAdmin::instance();
-        $oseAdmin->getBdd()->dataUpdater()->run('update', 'INDICATEUR');
+        $oseAdmin->getBdd()->data()->run('update', 'INDICATEUR');
         $this->construireVues();
     }
 

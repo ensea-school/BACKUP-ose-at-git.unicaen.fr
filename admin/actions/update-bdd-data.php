@@ -4,7 +4,7 @@
 $bdd = $oa->getBdd();
 
 $bdd->logBegin('Contrôle et mise à jour des données');
-$bdd->dataUpdater()->run('update');
+$bdd->data()->run('update');
 $bdd->logEnd('Données à jour');
 
 // Néttoyage des caches

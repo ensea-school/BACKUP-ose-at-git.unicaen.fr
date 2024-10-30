@@ -59,7 +59,7 @@ $bdd->majSequences($ref);
 
 // Mise à jour des données
 $bdd->logBegin('Contrôle et mise à jour des données');
-$bdd->dataUpdater()->run('update');
+$bdd->data()->run('update');
 $bdd->logEnd('Données à jour');
 
 

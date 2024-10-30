@@ -34,7 +34,7 @@ class OseBddAdminFactory extends BddFactory
 
 
 
-    private function getOseAppliId(Bdd $bdd): int
+    public static function getOseAppliId(Bdd $bdd): int
     {
         $u = $bdd->select("SELECT ID FROM UTILISATEUR WHERE USERNAME='oseappli'");
         if (isset($u[0]['ID'])) {
@@ -46,7 +46,7 @@ class OseBddAdminFactory extends BddFactory
 
 
 
-    private function getSourceOseId(Bdd $bdd): int
+    public static function getSourceOseId(Bdd $bdd): int
     {
         $src = $bdd->select("SELECT ID FROM SOURCE WHERE CODE='OSE'");
         if (isset($src[0]['ID'])) {

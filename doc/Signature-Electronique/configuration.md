@@ -29,8 +29,7 @@ Voici les paramètres à mettre en place  :
 
         ],
 
-        //Cette partie permet de surcharger les personnes à qui seront envoyées les signatures électronique. L'envoi des mail étant géré directement par le parafeur
-        //Cela permet de jouer des circuits de signature sans que les emails partent aux personnes concernées
+        /*Cette partie permet de surcharger les personnes à qui seront envoyées les signatures électroniques. L'envoi des emails étant géré directement par le parafeur cela permet de jouer des circuits de signature sans que les emails partent aux personnes concernées*/
         'hook_recipients' => [
                 ['firstname' => 'Jean',
                  'lastname'  => 'Dupont',

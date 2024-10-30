@@ -1,7 +1,6 @@
 <?php
 
 $bdd = $oa->getBdd();
-$bdd->setLogger($c);
 
 $fichier = getcwd() . '/cache/bdd-update-diff.sql';
 

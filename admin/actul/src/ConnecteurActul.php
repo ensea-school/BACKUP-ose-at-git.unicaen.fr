@@ -76,7 +76,7 @@ class ConnecteurActul
     {
         $bddConf = OseAdmin::instance()->config()->get('actul');
         $this->actul = new Bdd($bddConf);
-        $this->actul->setLogger($this->oa->console());
+        //$this->actul->setLogger($this->oa->console());
 
         $this->ose = $this->oa->getBdd();
 

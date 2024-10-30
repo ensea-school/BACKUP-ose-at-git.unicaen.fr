@@ -2,7 +2,6 @@
 
 // Initialisation
 $bdd = $oa->getBdd();
-$bdd->setLogger($c);
 
 $c->begin("\nMise à jour des taux de mixité");
 

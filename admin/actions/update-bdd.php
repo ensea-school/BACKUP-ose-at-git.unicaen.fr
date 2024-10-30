@@ -6,15 +6,13 @@ use Plafond\Service\PlafondService;
 
 // Initialisation
 $bdd = $oa->getBdd();
-$bdd->setLogger($c);
 
 $c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);
 $c->println("\n" . 'Mise à jour des définitions de la base de données. Merci de patienter ...', $c::COLOR_LIGHT_PURPLE);
 
 
 // Récupération du schéma de référence
-$ref = new Ddl();
-$ref->loadFromDir($bdd->getOption($bdd::OPTION_DDL_DIR));
+$ref = $bdd->getRefDdl();
 
 
 // Construction de la config de DDL pour filtrer

@@ -4,7 +4,6 @@ use Unicaen\BddAdmin\Ddl\Ddl;
 
 /* Initialisation */
 $bdd = $oa->getBdd();
-$bdd->setLogger($c);
 
 /* Mise en place du schéma de la BDD */
 $ref = new Ddl();
@@ -16,8 +15,6 @@ $bdd->create($ref);
 // On s'occupe d'abord de créer puis d'initialiser l'utilisateur OSE et la source OSE
 $bdd->dataUpdater()->run('install', 'UTILISATEUR');
 $bdd->dataUpdater()->run('install', 'SOURCE');
-$bdd->setOption('source-id', $oa->getSourceOseId());
-$bdd->setOption('histo-user-id', $oa->getOseAppliId());
 
 // On installe ensuite toutes les données
 $bdd->dataUpdater()->run('install');

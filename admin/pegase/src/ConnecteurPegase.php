@@ -41,7 +41,7 @@ class ConnecteurPegase
         $config = OseAdmin::instance()->config()->get('pegase');
         $console = OseAdmin::instance()->console();
         $this->pegase = new Bdd($config['dre']);
-        $this->pegase->setLogger($this->oa->console());
+        //$this->pegase->setLogger($this->oa->console());
 
         $this->ose = $this->oa->getBdd();
 

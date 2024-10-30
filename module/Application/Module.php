@@ -10,9 +10,9 @@
 namespace Application;
 
 use Application\ORM\RouteEntitiesInjector;
+use Laminas\Config\Factory as ConfigFactory;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Stdlib\Glob;
-use Laminas\Config\Factory as ConfigFactory;
 use UnicaenAuthentification\Service\UserContext;
 
 include_once(__DIR__ . '/src/functions.php');
@@ -20,10 +20,6 @@ include_once(__DIR__ . '/src/functions.php');
 
 class Module
 {
-    private $modules = [];
-
-
-
     public function onBootstrap(MvcEvent $e)
     {
         // Récupération du container, ici le serviceManager de l'application
@@ -68,34 +64,5 @@ class Module
                 ],
             ],
         ];
-    }
-
-
-
-    public function getConsoleUsage()
-    {
-        return [
-            "Notifications",
-            'notifier indicateurs [--force]' => "Notification par mail des personnes abonnées à des indicateurs",
-            ['--force', "Facultatif", "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."],
-            "Charges d'enseignement",
-            'chargens-calc-effectifs' => "Calcul des effectifs du module Charges",
-            "Tableaux de bord",
-            'calcul-tableaux-bord' => "Calcul de tous les tableaux de bord (sauf la formule qui est à part)",
-            "Formule de calcul",
-            'formule-calcul' => "Calcul de toutes les heures complémentaires à l'aide de la formule",
-
-            "Administration : Changement de mot de passe",
-            'changement-mot-de-passe' => "Paramètres : --utilisateur, --mot-de-passe",
-            "Administration : Recalcul de la complétude des dossiers",
-            'calcul-completude-dossier' => "Paramètres : --annee, --intervenant",
-        ];
-    }
-
-
-
-    public function getConsoleBanner()
-    {
-        return "OSE";
     }
 }

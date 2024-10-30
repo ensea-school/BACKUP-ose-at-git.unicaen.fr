@@ -4,9 +4,6 @@ namespace Signature\Command;
 
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratService;
-use DoctrineORMModule\Proxy\__CG__\UnicaenSignature\Entity\Db\Process;
-use Laminas\ServiceManager\ServiceManager;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use UnicaenSignature\Command\SignatureCommandAbstract;

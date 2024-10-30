@@ -1,27 +1,19 @@
 <?php
 
+namespace Administration\DataSource;
+
+use Unicaen\BddAdmin\BddAwareTrait;
 
 class DataSource
 {
-    private OseAdmin $oseAdmin;
-
-
-
-    /**
-     * @param OseAdmin $oseAdmin
-     */
-    public function __construct(OseAdmin $oseAdmin)
-    {
-        $this->oseAdmin = $oseAdmin;
-    }
-
+    use BddAwareTrait;
 
 
     private function getAnneeCourante(): int
     {
-        $now = new \DateTime();
-        $year = (int)$now->format('Y');
-        $mois = (int)$now->format('m');
+        $now      = new \DateTime();
+        $year     = (int)$now->format('Y');
+        $mois     = (int)$now->format('m');
         $anneeRef = $year;
         if ($mois < 9) $anneeRef--;
 
@@ -35,10 +27,10 @@ class DataSource
         $annees = [];
         for ($a = 1950; $a < 2100; $a++) {
             $dateDebut = \DateTime::createFromFormat('Y-m-d H:i:s', $a . '-09-01 00:00:00');
-            $dateFin = \DateTime::createFromFormat('Y-m-d H:i:s', ($a + 1) . '-08-31 00:00:00');
+            $dateFin   = \DateTime::createFromFormat('Y-m-d H:i:s', ($a + 1) . '-08-31 00:00:00');
 
             $anneeRef = $this->getAnneeCourante();
-            $active = ($a >= $anneeRef && $a < $anneeRef + 3);
+            $active   = ($a >= $anneeRef && $a < $anneeRef + 3);
 
             $annees[$a] = [
                 'ID'         => $a,
@@ -59,7 +51,7 @@ class DataSource
     {
         $departements = [];
 
-        $r = fopen(getcwd() . '/data/departement.csv', 'r');
+        $r = fopen('data/departement.csv', 'r');
         $i = 0;
         while ($d = fgetcsv($r, 0, ',', '"')) {
             $i++;
@@ -85,15 +77,15 @@ class DataSource
 
     public function IMPORT_TABLES()
     {
-        $data = require getcwd() . '/data/import_tables.php';
+        $data = require 'data/import_tables.php';
 
         $ordre = 0;
-        $d = [];
+        $d     = [];
         foreach ($data as $table => $td) {
             $ordre++;
             $td['TABLE_NAME'] = $table;
-            $td['ORDRE'] = $ordre;
-            $d[] = $td;
+            $td['ORDRE']      = $ordre;
+            $d[]              = $td;
         }
 
         return $d;
@@ -103,24 +95,24 @@ class DataSource
 
     public function JOUR_FERIE()
     {
-        $joursFeries = require getcwd() . '/data/jours_feries.php';
+        $joursFeries = require 'data/jours_feries.php';
 
         $jfs = [];
         for ($a = 1950; $a < 2100; $a++) {
-            foreach( $joursFeries as $date => $libelle ){
-                if (strlen($date) == 5){
+            foreach ($joursFeries as $date => $libelle) {
+                if (strlen($date) == 5) {
                     $jfs[] = [
-                        'LIBELLE'    => $libelle,
-                        'DATE_JOUR' => \DateTime::createFromFormat('Y-m-d H:i:s', $a . '-'.$date.' 00:00:00'),
+                        'LIBELLE'   => $libelle,
+                        'DATE_JOUR' => \DateTime::createFromFormat('Y-m-d H:i:s', $a . '-' . $date . ' 00:00:00'),
                     ];
                 }
             }
         }
-        foreach( $joursFeries as $date => $libelle ){
-            if (strlen($date) == 10){
+        foreach ($joursFeries as $date => $libelle) {
+            if (strlen($date) == 10) {
                 $jfs[] = [
-                    'LIBELLE'    => $libelle,
-                    'DATE_JOUR' => \DateTime::createFromFormat('Y-m-d H:i:s', $date.' 00:00:00'),
+                    'LIBELLE'   => $libelle,
+                    'DATE_JOUR' => \DateTime::createFromFormat('Y-m-d H:i:s', $date . ' 00:00:00'),
                 ];
             }
         }
@@ -132,14 +124,14 @@ class DataSource
 
     public function ETAT_SORTIE()
     {
-        return require getcwd() . '/data/etats_sortie.php';
+        return require 'data/etats_sortie.php';
     }
 
 
 
     public function CATEGORIE_PRIVILEGE()
     {
-        $data = require getcwd() . '/data/privileges.php';
+        $data       = require 'data/privileges.php';
         $categories = [];
         foreach ($data as $code => $record) {
             $categories[] = [
@@ -156,7 +148,7 @@ class DataSource
 
     public function PRIVILEGE()
     {
-        $data = require getcwd() . '/data/privileges.php';
+        $data       = require 'data/privileges.php';
         $privileges = [];
         foreach ($data as $code => $record) {
             $io = 0;
@@ -178,49 +170,53 @@ class DataSource
 
     public function STATUT()
     {
-        $donneesParDefaut = require getcwd() . '/data/donnees_par_defaut.php';
-        $data = $donneesParDefaut['STATUT'];
+        $donneesParDefaut = require 'data/donnees_par_defaut.php';
+        $data             = $donneesParDefaut['STATUT'];
 
         $statuts = [];
         for ($a = 2010; $a <= 2099; $a++) {
             foreach ($data as $d) {
-                $d['ANNEE_ID'] = $a;
+                $d['ANNEE_ID']              = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
-                $statuts[] = $d;
+                $statuts[]                  = $d;
             }
         }
 
         return $statuts;
     }
 
+
+
     public function FONCTION_REFERENTIEL()
     {
-        $donneesParDefaut = require getcwd() . '/data/donnees_par_defaut.php';
-        $data = $donneesParDefaut['FONCTION_REFERENTIEL'];
+        $donneesParDefaut = require 'data/donnees_par_defaut.php';
+        $data             = $donneesParDefaut['FONCTION_REFERENTIEL'];
 
         $fonctions = [];
         for ($a = 2010; $a <= 2099; $a++) {
             foreach ($data as $d) {
-                $d['ANNEE_ID'] = $a;
+                $d['ANNEE_ID']              = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
-                $fonctions[] = $d;
+                $fonctions[]                = $d;
             }
         }
 
         return $fonctions;
     }
 
+
+
     public function TYPE_PIECE_JOINTE_STATUT()
     {
-        $donneesParDefaut = require getcwd() . '/data/donnees_par_defaut.php';
-        $data = $donneesParDefaut['TYPE_PIECE_JOINTE_STATUT'];
+        $donneesParDefaut = require 'data/donnees_par_defaut.php';
+        $data             = $donneesParDefaut['TYPE_PIECE_JOINTE_STATUT'];
 
         $statuts = [];
         for ($a = 2010; $a <= 2099; $a++) {
             foreach ($data as $d) {
-                $d['ANNEE_ID'] = $a;
+                $d['ANNEE_ID']              = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
-                $statuts[] = $d;
+                $statuts[]                  = $d;
             }
         }
 
@@ -231,20 +227,20 @@ class DataSource
 
     public function PLAFOND()
     {
-        $data = require getcwd() . '/data/plafonds.php';
+        $data     = require 'data/plafonds.php';
         $plafonds = [];
 
         foreach ($data['plafonds'] as $numero => $p) {
-            $psql = 'SELECT id FROM plafond_perimetre WHERE code = :code';
-            $perimetreId = $this->oseAdmin->getBdd()->selectOne($psql, ['code' => $p['perimetre']], 'ID');
-            $plafond = [
+            $psql        = 'SELECT id FROM plafond_perimetre WHERE code = :code';
+            $perimetreId = $this->getBdd()->selectOne($psql, ['code' => $p['perimetre']], 'ID');
+            $plafond     = [
                 'NUMERO'               => $numero,
                 'LIBELLE'              => $p['libelle'],
                 'MESSAGE'              => $p['message'] ?? null,
                 'PLAFOND_PERIMETRE_ID' => $perimetreId,
                 'REQUETE'              => $p['requete'],
             ];
-            $plafonds[] = $plafond;
+            $plafonds[]  = $plafond;
         }
 
         return $plafonds;
@@ -254,11 +250,11 @@ class DataSource
 
     public function PLAFOND_ETAT()
     {
-        $data = require getcwd() . '/data/plafonds.php';
+        $data     = require 'data/plafonds.php';
         $plafonds = [];
-        $id = 1;
+        $id       = 1;
         foreach ($data['etats'] as $code => $pe) {
-            $plafond = [
+            $plafond    = [
                 'ID'       => $id,
                 'CODE'     => $code,
                 'LIBELLE'  => $pe['libelle'],
@@ -275,12 +271,12 @@ class DataSource
 
     public function PLAFOND_PERIMETRE()
     {
-        $data = require getcwd() . '/data/plafonds.php';
+        $data     = require 'data/plafonds.php';
         $plafonds = [];
-        $id = 0;
+        $id       = 0;
         foreach ($data['perimetres'] as $code => $libelle) {
             $id++;
-            $plafond = [
+            $plafond    = [
                 'ID'      => $id,
                 'CODE'    => $code,
                 'LIBELLE' => $libelle,
@@ -295,7 +291,7 @@ class DataSource
 
     public function TAUX_REMU(string $action)
     {
-        $data = require getcwd() . '/data/taux_remu.php';
+        $data = require 'data/taux_remu.php';
 
         $tauxRemu = [];
 
@@ -319,7 +315,7 @@ class DataSource
 
     public function TAUX_REMU_VALEUR(string $action)
     {
-        $data = require getcwd() . '/data/taux_remu.php';
+        $data = require 'data/taux_remu.php';
 
         $tauxValeurs = [];
 
@@ -345,7 +341,7 @@ class DataSource
 
     public function TYPE_MISSION()
     {
-        $data = require getcwd() . '/data/type_mission.php';
+        $data = require 'data/type_mission.php';
 
         $tms = [];
 
@@ -370,11 +366,11 @@ class DataSource
 
     public function TYPE_INDICATEUR()
     {
-        $data = require getcwd() . '/data/indicateurs.php';
+        $data        = require 'data/indicateurs.php';
         $indicateurs = [];
-        $ordre = 0;
+        $ordre       = 0;
         foreach ($data as $libelle => $indicateur) {
-            $idata = [
+            $idata         = [
                 'ID'      => $indicateur['id'],
                 'LIBELLE' => $libelle,
                 'ORDRE'   => $ordre++,
@@ -389,9 +385,9 @@ class DataSource
 
     public function INDICATEUR()
     {
-        $data = require getcwd() . '/data/indicateurs.php';
+        $data        = require 'data/indicateurs.php';
         $indicateurs = [];
-        $ordre = 0;
+        $ordre       = 0;
         foreach ($data as $typeIndicateur) {
             foreach ($typeIndicateur['indicateurs'] as $numero => $idata) {
                 $indicateur = [
@@ -406,7 +402,7 @@ class DataSource
             }
         }
 
-        $pis = $this->oseAdmin->getBdd()->select('SELECT * FROM V_PLAFOND_INDICATEURS');
+        $pis = $this->getBdd()->select('SELECT * FROM V_PLAFOND_INDICATEURS');
         foreach ($pis as $pi) {
             $indicateurs[] = $pi;
         }
@@ -418,13 +414,13 @@ class DataSource
 
     public function WF_ETAPE()
     {
-        $data = require getcwd() . '/data/workflow_etapes.php';
+        $data   = require 'data/workflow_etapes.php';
         $etapes = [];
-        $ordre = 1;
+        $ordre  = 1;
         foreach ($data as $code => $etape) {
-            $etape['CODE'] = $code;
+            $etape['CODE']  = $code;
             $etape['ORDRE'] = $ordre++ * 10;
-            $etapes[] = $etape;
+            $etapes[]       = $etape;
         }
 
         return $etapes;
@@ -434,7 +430,7 @@ class DataSource
 
     public function PARAMETRE()
     {
-        $bdd = $this->oseAdmin->getBdd();
+        $bdd = $this->getBdd();
 
         $data = require getcwd() . '/data/parametres.php';
 
@@ -451,14 +447,14 @@ class DataSource
             }
         }
 
-        $data['annee']['VALEUR'] = (string)$this->getAnneeCourante();
+        $data['annee']['VALEUR']        = (string)$this->getAnneeCourante();
         $data['annee_import']['VALEUR'] = (string)$this->getAnneeCourante();
-        $data['oseuser']['VALEUR'] = (string)$this->oseAdmin->getOseAppliId();
+        $data['oseuser']['VALEUR']      = (string)$bdd->getHistoUserId();
 
         $parametres = [];
         foreach ($data as $nom => $params) {
             $params['NOM'] = $nom;
-            $parametres[] = $params;
+            $parametres[]  = $params;
         }
 
         return $parametres;

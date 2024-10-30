@@ -13,11 +13,6 @@ use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 $config = [
     'doctrine'   => [
-        'connection'    => [
-            'orm_default' => [
-                'driverClass' => \Doctrine\DBAL\Driver\OCI8\Driver::class,
-            ],
-        ],
         'driver'        => [
             'orm_default_driver' => [
                 'class' => \Doctrine\ORM\Mapping\Driver\XmlDriver::class,
@@ -46,35 +41,17 @@ $config = [
         'eventmanager'  => [
             'orm_default' => [
                 'subscribers' => [
-                    \Doctrine\DBAL\Event\Listeners\OracleSessionInit::class,
                     ORM\Event\Listeners\HistoriqueListener::class,
                     ORM\Event\Listeners\ParametreEntityListener::class,
                     ORM\Event\Listeners\EntityManagerListener::class,
                 ],
             ],
         ],
-        'cache'         => [
-            'apc'        => [
-                'namespace' => 'OSE__' . __NAMESPACE__,
-            ],
-            'filesystem' => [
-                'directory' => getcwd() . '/cache/Doctrine',
-            ],
-        ],
     ],
     'zfcuser'    => [
         'user_entity_class' => Entity\Db\Utilisateur::class,
     ],
-    'translator' => [
-        'locale'                    => \OseAdmin::instance()->config()->get('global', 'locale'),
-        'translation_file_patterns' => [
-            [
-                'type'     => 'gettext',
-                'base_dir' => getcwd() . '/language',
-                'pattern'  => '%s.mo',
-            ],
-        ],
-    ],
+
     'router'     => [
         'routes' => [
             'home'             => [

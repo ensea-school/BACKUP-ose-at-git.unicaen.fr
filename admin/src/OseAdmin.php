@@ -321,11 +321,6 @@ class OseAdmin
     public function getBdd(): Bdd
     {
         return $this->container()->get(Bdd::class);
-//            $du->setConfig(require getcwd() . '/data/data_updater_config.php');
-//            $du->addSource(new \DataSource($this));
-//            $du->addSource(getcwd() . '/data/nomenclatures.php');
-//            $du->addSource(getcwd() . '/data/donnees_par_defaut.php');
-//            $du->addAction('privileges', 'Mise à jour des privilèges dans la base de données');
     }
 
 }

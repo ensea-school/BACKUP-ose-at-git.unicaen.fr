@@ -1,7 +1,10 @@
 <?php
 
+namespace Administration\Migration;
 
-class v24Primes extends AbstractMigration
+use Unicaen\BddAdmin\Migration\MigrationAction;
+
+class v24Primes extends MigrationAction
 {
 
     public function description(): string
@@ -13,14 +16,14 @@ class v24Primes extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasColumn('CC_ACTIVITE', 'FC_MAJOREES');
+        return $this->manager()->hasColumn('CC_ACTIVITE', 'FC_MAJOREES');
     }
 
 
 
     public function before()
     {
-        $bdd = $this->manager->getBdd();
+        $bdd = $this->getBdd();
 
         $bdd->exec('ALTER TABLE CC_ACTIVITE RENAME COLUMN FC_MAJOREES TO PRIMES');
         $bdd->exec('ALTER TABLE TYPE_RESSOURCE RENAME COLUMN FC_MAJOREES TO PRIMES');

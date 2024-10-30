@@ -7,6 +7,26 @@ use UnicaenPrivilege\Guard\PrivilegeController;
 $config = OseAdmin::instance()->config();
 
 return [
+    'unicaen-app' => [
+
+        /**
+         * Options concernant l'envoi de mail par l'application
+         */
+        'mail' => [
+            // transport des mails
+            'transport_options' => [
+                'host' => $config->get('mail', 'smtpHost'),
+                'port' => $config->get('mail', 'smtpPort'),
+            ],
+            // adresses à substituer à celles des destinataires originaux ('CURRENT_USER' équivaut à l'utilisateur connecté)
+            'redirect_to'       => $config->get('mail', 'redirection'),
+            // adresse d'expéditeur par défaut
+            'from'              => $config->get('mail', 'from'),
+            // désactivation totale de l'envoi de mail par l'application
+            'do_not_send'       => $config->get('mail', 'envoiDesactive'),
+        ],
+    ],
+
     'unicaen-mail' => [
         /**
          * Classe de entité

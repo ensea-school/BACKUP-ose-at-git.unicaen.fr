@@ -10,23 +10,16 @@ class OseConfig
 
 
 
-    public function hasLocalConfig(): bool
-    {
-        return file_exists(getcwd() . self::LOCAL_APPLICATION_CONFIG_FILE);
-    }
-
-
-
     public function get(string $section = null, string $key = null, $default = null)
     {
-        if (empty($this->config)){
+        if (empty($this->config)) {
             $configFilename = getcwd() . self::LOCAL_APPLICATION_CONFIG_FILE;
             if (file_exists($configFilename)) {
                 $this->config = require $configFilename;
             }
         }
 
-        if (empty($this->config)){
+        if (empty($this->config)) {
             return $default;
         }
 

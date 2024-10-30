@@ -1,7 +1,10 @@
 <?php
 
+namespace Administration\Migration;
 
-class v24MisesEnPaiement extends AbstractMigration
+use Unicaen\BddAdmin\Migration\MigrationAction;
+
+class v24MisesEnPaiement extends MigrationAction
 {
 
     public function description(): string
@@ -13,35 +16,34 @@ class v24MisesEnPaiement extends AbstractMigration
 
     public function utile(): bool
     {
-        return !$this->manager->hasColumn('MISE_EN_PAIEMENT', 'SERVICE_ID');
+        return !$this->manager()->hasColumn('MISE_EN_PAIEMENT', 'SERVICE_ID');
     }
 
 
 
     public function before()
     {
-        $c   = $this->manager->getOseAdmin()->console();
-        $bdd = $this->manager->getBdd();
+        $bdd = $this->getBdd();
 
-        $this->manager->sauvegarderTable('MISE_EN_PAIEMENT', 'SAVE_MISE_EN_PAIEMENT');
+        $this->manager()->sauvegarderTable('MISE_EN_PAIEMENT', 'SAVE_MISE_EN_PAIEMENT');
         $bdd->exec('ALTER TABLE MISE_EN_PAIEMENT ADD (SERVICE_ID NUMBER)');
         $bdd->exec('ALTER TABLE MISE_EN_PAIEMENT ADD (SERVICE_REFERENTIEL_ID NUMBER)');
 
-        $c->msg('Injection des ID de SERVICE dans MISE_EN_PAIEMENT...');
+        $this->logMsg('Injection des ID de SERVICE dans MISE_EN_PAIEMENT...');
         $sql = 'UPDATE mise_en_paiement SET service_id = (SELECT service_id FROM formule_resultat_service WHERE id = formule_res_service_id) WHERE service_id IS NULL AND formule_res_service_id IS NOT NULL';
         $bdd->exec($sql);
 
-        $c->msg('Injection des ID de SERVICE_REFERENTIEL dans MISE_EN_PAIEMENT...');
+        $$this->logMsg('Injection des ID de SERVICE_REFERENTIEL dans MISE_EN_PAIEMENT...');
         $sql = 'UPDATE mise_en_paiement SET service_referentiel_id = (SELECT service_referentiel_id FROM formule_resultat_service_ref WHERE id = formule_res_service_ref_id) WHERE service_referentiel_id IS NULL AND formule_res_service_ref_id IS NOT NULL';
         $bdd->exec($sql);
 
-        $c->msg('Contrôle final');
+        $this->logMsg('Contrôle final');
         $sql = "SELECT ID from mise_en_paiement WHERE mission_id IS NULL AND service_id IS NULL AND service_referentiel_id IS NULL";
         if ($bdd->select($sql)) {
-            $c->printDie('Attention : certaines mises en paiement n\'ont pu être reliées à aucun service');
+            $this->logError('Attention : certaines mises en paiement n\'ont pu être reliées à aucun service');
         } else {
-            $this->manager->supprimerSauvegarde('SAVE_MISE_EN_PAIEMENT');
-            $c->println('Les mises en paiement sont toutes conformes');
+            $this->manager()->supprimerSauvegarde('SAVE_MISE_EN_PAIEMENT');
+            $this->logMsg('Les mises en paiement sont toutes conformes');
         }
 
         $sqls = [

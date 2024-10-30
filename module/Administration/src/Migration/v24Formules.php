@@ -1,8 +1,13 @@
 <?php
 
+namespace Administration\Migration;
 
-class v24Formules extends AbstractMigration
+use Formule\Service\FormuleServiceAwareTrait;
+use Unicaen\BddAdmin\Migration\MigrationAction;
+
+class v24Formules extends MigrationAction
 {
+    use FormuleServiceAwareTrait;
 
     public function description(): string
     {
@@ -13,15 +18,14 @@ class v24Formules extends AbstractMigration
 
     public function utile(): bool
     {
-        return !$this->manager->hasColumn('FORMULE_TEST_INTERVENANT', 'SERVICE_DU');
+        return !$this->manager()->hasColumn('FORMULE_TEST_INTERVENANT', 'SERVICE_DU');
     }
 
 
 
     public function before()
     {
-        $c   = $this->manager->getOseAdmin()->console();
-        $bdd = $this->manager->getBdd();
+        $bdd = $this->getBdd();
 
         $vhColRenames = [
             'INTERVENANT_TEST_ID'        => 'FORMULE_INTERVENANT_TEST_ID',
@@ -58,10 +62,7 @@ class v24Formules extends AbstractMigration
 
     public function after()
     {
-        /** @var \Formule\Service\FormuleService $fs */
-        $fs = $this->manager->getOseAdmin()->container()->get(\Formule\Service\FormuleService::class);
-
-        $sTbl = $fs->getServiceTableauBord();
+        $sTbl = $this->getServiceFormule()->getServiceTableauBord();
         $sTbl->calculer('formule', []);
     }
 

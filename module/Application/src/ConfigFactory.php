@@ -49,6 +49,7 @@ class ConfigFactory
             foreach ($config['console'] as $cr => $cc) {
                 $finalConfig['console']['router']['routes'][$cr] = self::routeSimplified($cc, $routeGuards, true);
             }
+            unset($config['console']);
         }
 
         if (isset($config['routes'])) {
@@ -56,6 +57,7 @@ class ConfigFactory
             foreach ($config['routes'] as $cr => $cc) {
                 $finalConfig['router']['routes'][$cr] = self::routeSimplified($cc, $routeGuards, false);
             }
+            unset($config['routes']);
         }
 
         if (isset($config['navigation'])) {
@@ -66,6 +68,7 @@ class ConfigFactory
                     ],
                 ],
             ];
+            unset($config['navigation']);
         }
 
         if (isset($config['guards'])) {
@@ -74,6 +77,7 @@ class ConfigFactory
                     PrivilegeController::class => $config['guards'],
                 ],
             ];
+            unset($config['guards']);
         }
 
         if (!empty($routeGuards)) {
@@ -89,6 +93,7 @@ class ConfigFactory
                     'allow' => $config['rules'],
                 ],
             ];
+            unset($config['rules']);
         }
 
         if (isset($config['resources'])) {
@@ -96,34 +101,42 @@ class ConfigFactory
             $finalConfig['bjyauthorize']['resource_providers'] = [
                 \BjyAuthorize\Provider\Resource\Config::class => $config['resources'],
             ];
+            unset($config['resources']);
         }
 
         if (isset($config['controllers'])) {
             $finalConfig['controllers'] = [
                 'factories' => $config['controllers'],
             ];
+            unset($config['controllers']);
         }
 
         if (isset($config['services'])) {
             $finalConfig['service_manager'] = [
                 'factories' => $config['services'],
             ];
+            unset($config['services']);
         }
 
         if (isset($config['forms'])) {
             $finalConfig['form_elements'] = [
                 'factories' => $config['forms'],
             ];
+            unset($config['forms']);
         }
 
         if (isset($config['view_helpers'])) {
             $finalConfig['view_helpers'] = [
                 'factories' => $config['view_helpers'],
             ];
+            unset($config['view_helpers']);
         }
 
-        if (isset($config['laminas-cli'])) {
-            $finalConfig['laminas-cli'] = $config['laminas-cli'];
+        if (!empty($config)){
+            // on réintègre tout ce qui reste
+            foreach( $config as $k => $v ){
+                $finalConfig[$k] = $v;
+            }
         }
 
         return $finalConfig;

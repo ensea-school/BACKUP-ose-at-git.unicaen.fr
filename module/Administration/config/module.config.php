@@ -20,6 +20,7 @@ return [
     ],
 
     'services' => [
+        Service\AdministrationService::class       => Service\AdministrationServiceFactory::class,
         DataSource\DataSource::class               => DataSource\DataSourceFactory::class,
         Command\InstallCommand::class              => Command\InstallCommandFactory::class,
         Command\InstallBddCommand::class           => Command\InstallBddCommandFactory::class,
@@ -28,6 +29,7 @@ return [
         Command\UpdateBddDataCommand::class        => Command\UpdateBddDataCommandFactory::class,
         Command\UpdateBddPrivilegesCommand::class  => Command\UpdateBddPrivilegesCommandFactory::class,
         Command\ClearCacheCommand::class           => Command\ClearCacheCommandFactory::class,
+        Command\CalculTableauxBordCommand::class   => Command\CalculTableauxBordCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -40,6 +42,7 @@ return [
             'update-bdd-data'         => Command\UpdateBddDataCommand::class,
             'update-bdd-privileges'   => Command\UpdateBddPrivilegesCommand::class,
             'clear-cache'             => Command\ClearCacheCommand::class,
+            'calcul-tableaux-bord'    => Command\CalculTableauxBordCommand::class,
         ],
     ],
 ];

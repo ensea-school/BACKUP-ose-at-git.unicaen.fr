@@ -2,12 +2,11 @@
 
 namespace Administration\Command;
 
+use Administration\Service\AdministrationServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
  * Description of ClearCacheCommand
@@ -16,7 +15,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  */
 class ClearCacheCommand extends Command
 {
-    use EntityManagerAwareTrait;
+    use AdministrationServiceAwareTrait;
 
     protected function configure(): void
     {
@@ -29,28 +28,8 @@ class ClearCacheCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $em = $this->getEntityManager();
-
-        $filesystem = new Filesystem();
         try {
-            // Suppression des fichiers de cache
-            $cachePath = getcwd() . '/cache';
-            if ($filesystem->exists($cachePath)) {
-                $filesystem->remove($cachePath);
-            }
-
-            // Nettoyage des proxies
-            $destPath = $em->getConfiguration()->getProxyDir();
-            if (!is_dir($destPath)) {
-                mkdir($destPath, 0775, true);
-            }
-
-            $destPath = realpath($destPath);
-            $metadatas = $em->getMetadataFactory()->getAllMetadata();
-            $em->getProxyFactory()->generateProxyClasses($metadatas, $destPath);
-
-            // Réattribuer les permissions
-            $filesystem->chmod($cachePath, 0777, 0000, true);
+            $this->getServiceAdministration()->clearCache();
 
             $io->success('Cache nettoyé, proxies actualisés');
         } catch (\Exception $e) {

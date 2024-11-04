@@ -1,0 +1,24 @@
+name: Clone from GitLab
+
+on:
+  workflow_dispatch:
+
+jobs:
+  clone-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this GitHub repository
+        uses: actions/checkout@v3
+
+      - name: Clone GitLab repository
+        run: |
+          # Clone the GitLab repository using the GitLab token
+          git clone https://git.unicaen.fr/open-source/OSE.git
+          cd OSE
+
+          # Configure git to push to GitHub
+          git remote remove origin
+          git remote add origin https://github.com/${{ github.repository }}.git
+          git push -u origin --all
+          git push -u origin --tags

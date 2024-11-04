@@ -19,6 +19,6 @@ jobs:
 
           # Configure git to push to GitHub
           git remote remove origin
-          git remote add origin https://github.com/${{ github.repository }}.git
+          git remote add origin https://github.com/ensea-school/${{ github.repository }}
           git push -u origin --all
           git push -u origin --tags

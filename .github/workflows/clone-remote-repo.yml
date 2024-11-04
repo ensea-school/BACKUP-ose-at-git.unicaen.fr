@@ -13,26 +13,36 @@ jobs:
       - name: Checkout this GitHub repository
         uses: actions/checkout@v3
 
-      - name: Check for updates in GitLab repository
+      - name: Get the last commit date from GitLab
         run: |
-          # Récupérer le dernier commit de la branche principale du dépôt GitLab public
-          latest_commit_gitlab=$(git ls-remote https://git.unicaen.fr/open-source/OSE.git HEAD | awk '{print $1}')
-          echo "Dernier commit sur GitLab : $latest_commit_gitlab"
+          # Cloner seulement l'historique du dernier commit de GitLab pour récupérer la date
+          git clone --depth 1 https://git.unicaen.fr/open-source/OSE.git temp_gitlab_repo
+          cd temp_gitlab_repo
+          latest_commit_date_gitlab=$(git log -1 --format=%cI)
+          echo "Date du dernier commit sur GitLab : $latest_commit_date_gitlab"
+          cd ..
+          rm -rf temp_gitlab_repo
           
-          # Récupérer le dernier commit actuellement dans le dépôt GitHub
-          latest_commit_github=$(git ls-remote origin HEAD | awk '{print $1}')
+          # Enregistrer la date dans un fichier temporaire pour l'utiliser dans la prochaine étape
+          echo "latest_commit_date_gitlab=$latest_commit_date_gitlab" >> $GITHUB_ENV
 
-          # Comparer les commits pour décider de continuer
-          if [ "$latest_commit_gitlab" = "$latest_commit_github" ]; then
-            echo "Le dépôt GitLab n'a pas reçu de nouveaux commits. Arrêt du workflow."
+      - name: Get the last commit date from GitHub
+        run: |
+          # Récupérer la date du dernier commit de GitHub
+          latest_commit_date_github=$(git log -1 --format=%cI)
+          echo "Date du dernier commit sur GitHub : $latest_commit_date_github"
+
+          # Comparer les dates
+          if [[ "$latest_commit_date_gitlab" <= "$latest_commit_date_github" ]]; then
+            echo "Le dépôt GitLab n'a pas reçu de nouveaux commits plus récents. Arrêt du workflow."
             exit 0
           else
             echo "Nouveaux commits détectés. Clonage et synchronisation avec GitHub."
           fi
 
-      - name: Clone GitLab repository
+      - name: Clone GitLab repository and push to GitHub
         run: |
-          # Cloner le dépôt GitLab public
+          # Cloner le dépôt GitLab
           git clone https://git.unicaen.fr/open-source/OSE.git
           cd OSE
 

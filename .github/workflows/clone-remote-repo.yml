@@ -1,4 +1,4 @@
-name: Dailly clone from git.unicaen.fr
+name: Daily clone from git.unicaen.fr
 
 on:
   workflow_dispatch:
@@ -13,45 +13,68 @@ jobs:
       - name: Checkout this GitHub repository
         uses: actions/checkout@v3
 
-      - name: Get the last commit date from GitLab
+      - name: Get the last commit dates from GitHub branches (excluding 'clone')
+        id: get_github_dates
         run: |
-          # Cloner seulement l'historique du dernier commit de GitLab pour récupérer la date
+          # Récupérer toutes les branches et leurs derniers commits sur GitHub
+          branches=$(git branch -r | grep -v 'clone' | sed 's/origin\///')
+          latest_commit_dates_github=()
+
+          for branch in $branches; do
+            commit_date=$(git log -1 --format=%cI origin/$branch)
+            latest_commit_dates_github+=("$commit_date")
+            echo "Date du dernier commit sur GitHub pour la branche $branch : $commit_date"
+          done
+
+          # Trouver la date la plus récente
+          latest_commit_date_github=$(printf '%s\n' "${latest_commit_dates_github[@]}" | sort -r | head -n 1)
+          echo "La date du dernier commit la plus récente sur GitHub (hors 'clone') : $latest_commit_date_github"
+          echo "latest_commit_date_github=$latest_commit_date_github" >> $GITHUB_ENV
+
+      - name: Get the last commit date from GitLab
+        id: get_gitlab_date
+        run: |
+          # Cloner seulement l'historique du dernier commit de GitLab pour récupérer les dates
           git clone --depth 1 https://git.unicaen.fr/open-source/OSE.git temp_gitlab_repo
           cd temp_gitlab_repo
-          latest_commit_date_gitlab=$(git log -1 --format=%cI)
-          echo "Date du dernier commit sur GitLab : $latest_commit_date_gitlab"
+          
+          # Récupérer les dates des commits pour toutes les branches
+          latest_commit_dates_gitlab=()
+          for branch in $(git branch -r | grep -v '\->'); do
+            commit_date=$(git log -1 --format=%cI "$branch")
+            latest_commit_dates_gitlab+=("$commit_date")
+            echo "Date du dernier commit sur GitLab pour la branche $branch : $commit_date"
+          done
+
+          # Trouver la date la plus récente
+          latest_commit_date_gitlab=$(printf '%s\n' "${latest_commit_dates_gitlab[@]}" | sort -r | head -n 1)
+          echo "La date du dernier commit la plus récente sur GitLab : $latest_commit_date_gitlab"
+          echo "latest_commit_date_gitlab=$latest_commit_date_gitlab" >> $GITHUB_ENV
+          
           cd ..
           rm -rf temp_gitlab_repo
-          
-          # Convertir la date du dernier commit en timestamp
-          latest_commit_timestamp_gitlab=$(date -d "$latest_commit_date_gitlab" +%s)
-          
-          # Calculer le timestamp pour 24 heures en arrière
-          current_timestamp=$(date +%s)
-          threshold_timestamp=$((current_timestamp - 86400)) # 86400 secondes = 24 heures
 
-          # Comparer la date du dernier commit avec le seuil des 24 heures
-          if [ "$latest_commit_timestamp_gitlab" -ge "$threshold_timestamp" ]; then
+      - name: Determine if cloning is required
+        run: |
+          if [[ "$latest_commit_date_gitlab" > "$latest_commit_date_github" ]]; then
             echo "clone_required=true" >> $GITHUB_ENV
-            echo "Le clonage est nécessaire : un commit a été effectué sur GitLab dans les dernières 24 heures."
+            echo "Le clonage est nécessaire : un commit a été effectué sur GitLab qui est plus récent que GitHub."
           else
             echo "clone_required=false" >> $GITHUB_ENV
-            echo "Le clonage n'est pas nécessaire : aucun commit récent sur GitLab dans les dernières 24 heures."
+            echo "Le clonage n'est pas nécessaire : le dernier commit sur GitHub est plus récent ou égal à celui de GitLab."
           fi
 
       - name: Clone GitLab repository and push to GitHub
         if: env.clone_required == 'true'
         run: |
-          # Cloner le dépôt GitLab
-          git clone https://git.unicaen.fr/open-source/OSE.git
-          cd OSE
+          # Cloner le dépôt GitLab, incluant toutes les branches
+          git clone --mirror https://git.unicaen.fr/open-source/OSE.git
+          cd OSE.git
 
           # Configurer Git pour l'authentification GitHub
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # Rediriger l'origine vers GitHub et pousser les mises à jour
-          git remote remove origin
-          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git push -u origin --all
-          git push -u origin --tags
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push --mirror origin

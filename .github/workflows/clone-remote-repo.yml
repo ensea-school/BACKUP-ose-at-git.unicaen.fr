@@ -17,8 +17,14 @@ jobs:
           git clone https://git.unicaen.fr/open-source/OSE.git
           cd OSE
 
+          # Configure Git with GitHub authentication
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
           # Configure git to push to GitHub
           git remote remove origin
-          git remote add origin https://github.com/${{ github.repository }}
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git push -u origin --all
           git push -u origin --tags
+          
+

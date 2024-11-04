@@ -99,7 +99,7 @@
             </section>
         <?php endforeach; ?>
 
-        <a class="btn btn-primary mod-ajax" data-event="type-edition"
+        <a class="btn btn-primary mod-ajax" data-submit-reload="true" data-event="type-edition"
            href="<?= $this->url("signature-flow/saisir-circuit", []) ?>"
            title="Ajouter un nouveau circuit">
             <i class="fas fa-handshake"></i> Ajouter un nouveau circuit

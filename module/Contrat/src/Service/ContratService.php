@@ -183,6 +183,7 @@ class ContratService extends AbstractEntityService
                         $signatureFlowDatas['label'] .= " - " . $intervenant->__toString();
 
 
+                        $recipients = [];
                         //On regarde si on a le paramétrage hook_recepient dans la config
                         //pour forcer l'envoie toujours à la même personne
                         $recipientsHook = [];
@@ -199,12 +200,16 @@ class ContratService extends AbstractEntityService
                             }
                         }
                         //On doit aller chercher les destinataires pour la signature électronique
+
                         foreach ($signatureFlowDatas['steps'] as $key => $step) {
                             //Si l'étape de process concerne un rôle de l'application on va chercher les utilisateurs de ce role.
-                            if ($step['recipient_method'] == 'by_role' && empty($step['recipients'])) {
+                            if (in_array($step['recipient_method'], ['by_etablissement', 'by_etablissement_and_intervenant']) && empty($step['recipients'])) {
                                 $role = '';
-                                if (array_key_exists('by_role', $step['options'])) {
-                                    $role = $this->getServiceRole()->get($step['options']['by_role']);
+                                if (array_key_exists('by_etablissement', $step['options'])) {
+                                    $role = $this->getServiceRole()->get($step['options']['by_etablissement']);
+                                }
+                                if (array_key_exists('by_etablissement_and_intervenant', $step['options'])) {
+                                    $role = $this->getServiceRole()->get($step['options']['by_etablissement_and_intervenant']);
                                 }
                                 //On a trouvé le rôle pour la signature établissement
                                 if ($role instanceof Role) {
@@ -223,16 +228,9 @@ class ContratService extends AbstractEntityService
                                                 throw new \Exception("Aucun utilisateur trouvé pour le rôle <strong>" . $role->getLibelle() . "</strong> habilité pour la structure <strong>" . $structure->getLibelleCourt() . "</strong> nécessaire pour ce circuit de signature électronique.");
                                             }
                                         } else {
-                                            //Cas d'un contrat n'ayant pas de structure, on prend tous les utilisateurs peu importe la structure
-                                            $utilisateurs = $this->getServiceUtilisateur()->getUtilisateursByRole($role);
-                                            //Si on a trouvé aucun utilisateur pour ce rôle on arrete la création du processus de signature
-                                            if (empty($utilisateurs)) {
-                                                throw new \Exception("Aucun utilisateur trouvé pour le rôle <strong>" . $role->getLibelle() . "</strong> nécessaire pour ce circuit de signature électronique");
-                                            }
+                                            throw new \Exception("Le contrat n'est rattaché à aucune composante, la signature ne peut se faire que sur un rôle avec un périmètre établissement");
                                         }
                                     }
-
-                                    $recipients = [];
                                     foreach ($utilisateurs as $utilisateur) {
                                         $recipients[] = [
                                             'firstname' => $utilisateur['DISPLAY_NAME'],
@@ -253,7 +251,7 @@ class ContratService extends AbstractEntityService
 
                             }
                             //Si l'étape de process concerne l'intervenant du contrat on va chercher l'email de l'intervenant.
-                            if ($step['recipient_method'] == 'by_intervenant' && empty($step['recipients'])) {
+                            if (in_array($step['recipient_method'], ['by_intervenant', 'by_etablissement_and_intervenant']) && empty($step['recipients'])) {
                                 $intervenant = $contrat->getIntervenant();
                                 $nom         = $intervenant->getNomUsuel();
                                 $prenom      = $intervenant->getPrenom();
@@ -263,7 +261,6 @@ class ContratService extends AbstractEntityService
                                 }
                                 //On envoie en priorité sur l'email pro, notamment pour les étudiants qui on un compte numérique avec une adresse etu.unicaen.fr
                                 $email        = (!empty($intervenant->getEmailPro())) ? $intervenant->getEmailPro() : $intervenant->getEmailPerso();
-                                $recipients   = [];
                                 $recipients[] =
                                     [
                                         'firstname' => $prenom,

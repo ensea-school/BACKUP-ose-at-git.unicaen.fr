@@ -32,8 +32,8 @@ class SignatureFlowStepForm extends AbstractForm
         $labels  = [
             'label'             => 'Nom de l\'étape',
             'level'             => 'Niveau de signature',
-            'recipientMethod'   => 'Type de signataire',
-            'roles'             => 'Rôle des signataires',
+            'recipientMethod'   => 'Signataire(s)',
+            'roles'             => 'Rôle établissement pour la signature',
             'order'             => 'Order de l\'étape',
             'allRecipientsSign' => 'Tous les signataires doivent signer',
 
@@ -74,8 +74,9 @@ class SignatureFlowStepForm extends AbstractForm
                        ],
                        'type'       => 'Select',
                    ]);
-        $this->get('recipientMethod')->setValueOptions(['by_intervenant' => 'Intervenant',
-                                                        'by_role'        => 'Rôles',]);
+        $this->get('recipientMethod')->setValueOptions(['by_intervenant'                   => 'Intervenant',
+                                                        'by_etablissement'                 => 'Etablissement',
+                                                        'by_etablissement_and_intervenant' => "Etablissement et intervenant"]);
 
         $this->add([
                        'name'       => 'roles',

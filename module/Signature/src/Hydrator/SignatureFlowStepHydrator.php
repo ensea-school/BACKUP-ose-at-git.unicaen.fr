@@ -36,7 +36,7 @@ class SignatureFlowStepHydrator implements HydratorInterface
         //Hydrator spécifique pour les options recipient
         $recipientMethod = $data['recipientMethod'];
         $role            = $data['roles'];
-        if ($recipientMethod == 'by_role') {
+        if ($recipientMethod == 'by_etablissement' || $recipientMethod == 'by_etablissement_and_intervenant') {
             $options = [$recipientMethod => $role];
         } else {
             $options = [$recipientMethod => ''];
@@ -68,9 +68,12 @@ class SignatureFlowStepHydrator implements HydratorInterface
         ];
         //On travaille sur l'extract du type de signataire
         $options = $object->getOptions();
-        if (array_key_exists('by_role', $options)) {
-            $data['recipientMethod'] = 'by_role';
-            $data['roles']           = $options['by_role'];
+        if (array_key_exists('by_etablissement', $options)) {
+            $data['recipientMethod'] = 'by_etablissement';
+            $data['roles']           = $options['by_etablissement'];
+        } elseif (array_key_exists('by_etablissement_and_intervenant', $options)) {
+            $data['recipientMethod'] = 'by_etablissement_and_intervenant';
+            $data['roles']           = $options['by_etablissement_and_intervenant'];
         } else {
             $data['recipientMethod'] = 'by_intervenant';
         }

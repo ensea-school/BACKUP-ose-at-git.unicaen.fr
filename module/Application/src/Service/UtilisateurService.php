@@ -84,8 +84,7 @@ class UtilisateurService extends AbstractEntityService
             SELECT * FROM affectation a
             JOIN UTILISATEUR u ON a.UTILISATEUR_ID = u.ID 
             WHERE a.HISTO_DESTRUCTION IS NULL
-            AND a.role_id = 60
-        ';
+            AND a.role_id = ' . $role->getId();
 
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
@@ -110,7 +109,7 @@ class UtilisateurService extends AbstractEntityService
             AND a.structure_id IN (' . $ids . ')
             AND a.role_id = ' . $role->getId();
         } else {
-            throw new \Exception("Strucutre fournie non valide.");
+            throw new \Exception("Structure fournie non valide.");
         }
 
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);

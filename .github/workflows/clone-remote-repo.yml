@@ -28,6 +28,7 @@ jobs:
           echo "latest_commit_timestamp_gitlab=$latest_commit_timestamp_gitlab" >> $GITHUB_ENV
 
       - name: Get the last commit date from GitHub
+        id: check_dates
         run: |
           # Récupérer la date du dernier commit de GitHub
           latest_commit_date_github=$(git log -1 --format=%cI)
@@ -38,15 +39,17 @@ jobs:
           echo "Timestamp GitHub : $latest_commit_timestamp_github"
           echo "Timestamp GitLab : $latest_commit_timestamp_gitlab"
 
-          # Comparer les timestamps
+          # Comparer les timestamps et définir clone_required
           if [ "$latest_commit_timestamp_gitlab" -le "$latest_commit_timestamp_github" ]; then
-            echo "Le dépôt GitLab n'a pas reçu de nouveaux commits plus récents. Arrêt du workflow."
-            exit 0
+            echo "clone_required=false" >> $GITHUB_ENV
+            echo "Le clonage n'est pas nécessaire : le dépôt GitHub est à jour avec GitLab."
           else
-            echo "Nouveaux commits détectés. Clonage et synchronisation avec GitHub."
+            echo "clone_required=true" >> $GITHUB_ENV
+            echo "Le clonage est nécessaire : un commit plus récent est disponible sur GitLab."
           fi
 
       - name: Clone GitLab repository and push to GitHub
+        if: env.clone_required == 'true'
         run: |
           # Cloner le dépôt GitLab
           git clone https://git.unicaen.fr/open-source/OSE.git

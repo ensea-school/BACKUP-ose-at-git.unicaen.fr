@@ -67,17 +67,25 @@ jobs:
       - name: Clone GitLab repository and push to GitHub
         if: env.clone_required == 'true'
         run: |
-          # Cloner le dépôt GitLab en mode miroir
-          git clone --mirror https://git.unicaen.fr/open-source/OSE.git
-          cd OSE.git
+          # Cloner le dépôt GitLab normalement
+          git clone https://git.unicaen.fr/open-source/OSE.git
+          cd OSE
 
           # Configurer Git pour l'authentification GitHub
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Rediriger l'origine vers GitHub et pousser toutes les branches sauf 'clone'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          
-          # Pousser toutes les branches sauf la branche "clone"
-          git push --all --prune origin
+          # Rediriger l'origine vers GitHub
+          git remote remove origin
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+          # Pousser toutes les branches sauf 'clone'
+          branches=$(git branch | sed 's/* //') # Récupérer toutes les branches locales
+          for branch in $branches; do
+            if [[ "$branch" != "clone" ]]; then
+              git push -u origin "$branch"
+            fi
+          done
+
+          # Pousser les tags
           git push --tags origin

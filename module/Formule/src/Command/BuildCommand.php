@@ -5,6 +5,7 @@ namespace Formule\Command;
 use Formule\Service\FormulatorServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -21,7 +22,9 @@ class BuildCommand extends Command
 
     protected function configure(): void
     {
+        $this->setDescription('Construction de toutes les formules de calcul');
         $this->addArgument('name');
+
     }
 
 

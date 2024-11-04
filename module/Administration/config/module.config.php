@@ -31,6 +31,7 @@ return [
             'install'                 => Command\InstallCommand::class,
             'install-bdd'             => Command\InstallBddCommand::class,
             'changement-mot-de-passe' => Command\ChangementMotDePasseCommand::class,
+            'update-ddl'              => \Unicaen\BddAdmin\Command\UpdateDdlCommand::class,
         ],
     ],
 ];

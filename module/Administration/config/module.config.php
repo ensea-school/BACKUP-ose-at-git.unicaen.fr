@@ -24,6 +24,10 @@ return [
         Command\InstallCommand::class              => Command\InstallCommandFactory::class,
         Command\InstallBddCommand::class           => Command\InstallBddCommandFactory::class,
         Command\ChangementMotDePasseCommand::class => Command\ChangementMotDePasseCommandFactory::class,
+        Command\UpdateBddCommand::class            => Command\UpdateBddCommandFactory::class,
+        Command\UpdateBddDataCommand::class        => Command\UpdateBddDataCommandFactory::class,
+        Command\UpdateBddPrivilegesCommand::class  => Command\UpdateBddPrivilegesCommandFactory::class,
+        Command\ClearCacheCommand::class           => Command\ClearCacheCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -32,6 +36,10 @@ return [
             'install-bdd'             => Command\InstallBddCommand::class,
             'changement-mot-de-passe' => Command\ChangementMotDePasseCommand::class,
             'update-ddl'              => \Unicaen\BddAdmin\Command\UpdateDdlCommand::class,
+            'update-bdd'              => Command\UpdateBddCommand::class,
+            'update-bdd-data'         => Command\UpdateBddDataCommand::class,
+            'update-bdd-privileges'   => Command\UpdateBddPrivilegesCommand::class,
+            'clear-cache'             => Command\ClearCacheCommand::class,
         ],
     ],
 ];

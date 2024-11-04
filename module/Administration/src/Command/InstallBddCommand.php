@@ -31,7 +31,7 @@ class InstallBddCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Choix d\'un mot de passe pour l\'utilisateur oseappli')
+            ->setDescription('Installation de la base de données')
             ->addOption('oseappli-pwd', null, InputOption::VALUE_OPTIONAL, 'Choix d\'un mot de passe pour l\'utilisateur système oseappli');
     }
 

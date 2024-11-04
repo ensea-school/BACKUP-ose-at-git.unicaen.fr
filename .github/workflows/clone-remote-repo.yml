@@ -1,4 +1,4 @@
-name: Clone from GitLab
+name: Dailly clone from git.unicaen.fr
 
 on:
   workflow_dispatch:
@@ -23,29 +23,20 @@ jobs:
           cd ..
           rm -rf temp_gitlab_repo
           
-          # Convertir la date en timestamp et l'enregistrer dans un fichier temporaire
+          # Convertir la date du dernier commit en timestamp
           latest_commit_timestamp_gitlab=$(date -d "$latest_commit_date_gitlab" +%s)
-          echo "latest_commit_timestamp_gitlab=$latest_commit_timestamp_gitlab" >> $GITHUB_ENV
+          
+          # Calculer le timestamp pour 24 heures en arrière
+          current_timestamp=$(date +%s)
+          threshold_timestamp=$((current_timestamp - 86400)) # 86400 secondes = 24 heures
 
-      - name: Get the last commit date from GitHub
-        id: check_dates
-        run: |
-          # Récupérer la date du dernier commit de GitHub
-          latest_commit_date_github=$(git log -1 --format=%cI)
-          echo "Date du dernier commit sur GitHub : $latest_commit_date_github"
-
-          # Convertir la date en timestamp
-          latest_commit_timestamp_github=$(date -d "$latest_commit_date_github" +%s)
-          echo "Timestamp GitHub : $latest_commit_timestamp_github"
-          echo "Timestamp GitLab : $latest_commit_timestamp_gitlab"
-
-          # Comparer les timestamps et définir clone_required
-          if [ "$latest_commit_timestamp_gitlab" -le "$latest_commit_timestamp_github" ]; then
-            echo "clone_required=false" >> $GITHUB_ENV
-            echo "Le clonage n'est pas nécessaire : le dépôt GitHub est à jour avec GitLab."
-          else
+          # Comparer la date du dernier commit avec le seuil des 24 heures
+          if [ "$latest_commit_timestamp_gitlab" -ge "$threshold_timestamp" ]; then
             echo "clone_required=true" >> $GITHUB_ENV
-            echo "Le clonage est nécessaire : un commit plus récent est disponible sur GitLab."
+            echo "Le clonage est nécessaire : un commit a été effectué sur GitLab dans les dernières 24 heures."
+          else
+            echo "clone_required=false" >> $GITHUB_ENV
+            echo "Le clonage n'est pas nécessaire : aucun commit récent sur GitLab dans les dernières 24 heures."
           fi
 
       - name: Clone GitLab repository and push to GitHub

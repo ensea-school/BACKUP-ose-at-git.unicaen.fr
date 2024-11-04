@@ -7,37 +7,42 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Unicaen\BddAdmin\BddAwareTrait;
+use Unicaen\BddAdmin\Data\DataManager;
 
 /**
- * Description of ClearCacheCommand
+ * Description of UpdateBddPrivilegesCommand
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class ClearCacheCommand extends Command
+class UpdateBddPrivilegesCommand extends Command
 {
+    use BddAwareTrait;
     use AdministrationServiceAwareTrait;
 
     protected function configure(): void
     {
-        $this->setDescription('Nettoyage des caches et mise à jour des proxies Doctrine');
+        $this->setDescription('Mise à jour des privilèges');
     }
 
 
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $io  = new SymfonyStyle($input, $output);
+        $bdd = $this->getBdd()->setLogger($io);
 
+        $io->title('Mise à jour des privilèges de l\'application');
         try {
-            $this->getServiceAdministration()->clearCache();
+            $bdd->data()->run('privileges');
 
-            $io->success('Cache nettoyé, proxies actualisés');
+            $args = 'UnicaenCode GeneratePrivileges write=true';
+            passthru("php " . getcwd() . "/public/index.php " . $args);
+
+            $this->getServiceAdministration()->clearCache();
+            $io->success('Privilèges à jour');
         } catch (\Exception $e) {
             $io->error($e->getMessage());
-            $io->error(
-                'Un problème est survenu : le cache de OSE n\'a pas été vidé. '
-                . 'Merci de supprimer le contenu du répertoire /cache de OSE, puis de lancer la commande ./bin/ose clear-cache pour y remédier'
-            );
             return Command::FAILURE;
         }
 

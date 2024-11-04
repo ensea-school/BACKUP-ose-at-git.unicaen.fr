@@ -7,37 +7,38 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Unicaen\BddAdmin\BddAwareTrait;
+use Unicaen\BddAdmin\Data\DataManager;
 
 /**
- * Description of ClearCacheCommand
+ * Description of UpdateBddDataCommand
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class ClearCacheCommand extends Command
+class UpdateBddDataCommand extends Command
 {
+    use BddAwareTrait;
     use AdministrationServiceAwareTrait;
 
     protected function configure(): void
     {
-        $this->setDescription('Nettoyage des caches et mise à jour des proxies Doctrine');
+        $this->setDescription('Mise à jour du jeu de données');
     }
 
 
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $io  = new SymfonyStyle($input, $output);
+        $bdd = $this->getBdd()->setLogger($io);
 
+        $io->title('Contrôle et mise à jour du jeu de données');
         try {
+            $bdd->data()->run(DataManager::ACTION_UPDATE);
             $this->getServiceAdministration()->clearCache();
-
-            $io->success('Cache nettoyé, proxies actualisés');
+            $io->success('Données à jour');
         } catch (\Exception $e) {
             $io->error($e->getMessage());
-            $io->error(
-                'Un problème est survenu : le cache de OSE n\'a pas été vidé. '
-                . 'Merci de supprimer le contenu du répertoire /cache de OSE, puis de lancer la commande ./bin/ose clear-cache pour y remédier'
-            );
             return Command::FAILURE;
         }
 

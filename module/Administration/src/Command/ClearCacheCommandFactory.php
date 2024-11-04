@@ -2,7 +2,6 @@
 
 namespace Administration\Command;
 
-use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 
@@ -25,8 +24,6 @@ class ClearCacheCommandFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): ClearCacheCommand
     {
         $command = new ClearCacheCommand;
-
-        $command->setEntityManager($container->get(EntityManager::class));
 
         return $command;
     }

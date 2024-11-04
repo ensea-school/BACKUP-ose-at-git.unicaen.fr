@@ -23,8 +23,9 @@ jobs:
           cd ..
           rm -rf temp_gitlab_repo
           
-          # Enregistrer la date dans un fichier temporaire pour l'utiliser dans la prochaine étape
-          echo "latest_commit_date_gitlab=$latest_commit_date_gitlab" >> $GITHUB_ENV
+          # Convertir la date en timestamp et l'enregistrer dans un fichier temporaire
+          latest_commit_timestamp_gitlab=$(date -d "$latest_commit_date_gitlab" +%s)
+          echo "latest_commit_timestamp_gitlab=$latest_commit_timestamp_gitlab" >> $GITHUB_ENV
 
       - name: Get the last commit date from GitHub
         run: |
@@ -32,8 +33,13 @@ jobs:
           latest_commit_date_github=$(git log -1 --format=%cI)
           echo "Date du dernier commit sur GitHub : $latest_commit_date_github"
 
-          # Comparer les dates
-          if [[ "$latest_commit_date_gitlab" <= "$latest_commit_date_github" ]]; then
+          # Convertir la date en timestamp
+          latest_commit_timestamp_github=$(date -d "$latest_commit_date_github" +%s)
+          echo "Timestamp GitHub : $latest_commit_timestamp_github"
+          echo "Timestamp GitLab : $latest_commit_timestamp_gitlab"
+
+          # Comparer les timestamps
+          if [ "$latest_commit_timestamp_gitlab" -le "$latest_commit_timestamp_github" ]; then
             echo "Le dépôt GitLab n'a pas reçu de nouveaux commits plus récents. Arrêt du workflow."
             exit 0
           else

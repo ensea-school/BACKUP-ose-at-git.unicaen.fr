@@ -67,7 +67,7 @@ jobs:
       - name: Clone GitLab repository and push to GitHub
         if: env.clone_required == 'true'
         run: |
-          # Cloner le dépôt GitLab, incluant toutes les branches
+          # Cloner le dépôt GitLab en mode miroir
           git clone --mirror https://git.unicaen.fr/open-source/OSE.git
           cd OSE.git
 
@@ -75,6 +75,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Rediriger l'origine vers GitHub et pousser les mises à jour
+          # Rediriger l'origine vers GitHub et pousser toutes les branches sauf 'clone'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git push --mirror origin
+          
+          # Pousser toutes les branches sauf la branche "clone"
+          git push --all --prune origin
+          git push --tags origin

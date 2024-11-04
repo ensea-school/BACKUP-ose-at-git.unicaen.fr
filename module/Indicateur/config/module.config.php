@@ -159,11 +159,18 @@ return [
         'Indicateur\Controller\Indicateur' => Controller\IndicateurControllerFactory::class,
     ],
 
-    'services' => [
+    'services'    => [
         Service\IndicateurService::class             => Service\IndicateurServiceFactory::class,
         Service\NotificationIndicateurService::class => Service\NotificationIndicateurServiceFactory::class,
         Processus\IndicateurProcessus::class         => Processus\IndicateurProcessusFactory::class,
+        Command\NotifierCommand::class               => Command\NotifierCommandFactory::class,
     ],
+    'laminas-cli' => [
+        'commands' => [
+            'notifier-indicateurs' => Command\NotifierCommand::class,
+        ],
+    ],
+
 
     'forms' => [
     ],

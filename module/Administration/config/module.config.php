@@ -20,15 +20,17 @@ return [
     ],
 
     'services' => [
-        DataSource\DataSource::class => DataSource\DataSourceFactory::class,
-        Command\InstallCommand::class => Command\InstallCommandFactory::class,
-        Command\InstallBddCommand::class => Command\InstallBddCommandFactory::class,
+        DataSource\DataSource::class               => DataSource\DataSourceFactory::class,
+        Command\InstallCommand::class              => Command\InstallCommandFactory::class,
+        Command\InstallBddCommand::class           => Command\InstallBddCommandFactory::class,
+        Command\ChangementMotDePasseCommand::class => Command\ChangementMotDePasseCommandFactory::class,
     ],
 
     'laminas-cli' => [
         'commands' => [
-            'install' => Command\InstallCommand::class,
-            'install-bdd' => Command\InstallBddCommand::class,
+            'install'                 => Command\InstallCommand::class,
+            'install-bdd'             => Command\InstallBddCommand::class,
+            'changement-mot-de-passe' => Command\ChangementMotDePasseCommand::class,
         ],
     ],
 ];

@@ -61,7 +61,7 @@ class UpdateBddCommand extends Command
 
     private function runCommand(OutputInterface $output, string $commandName, array $options = []): int
     {
-        $command = $this->getApplication()->find($commandName);
+        $command = $this->getApplication()->get($commandName);
         $input   = new ArrayInput($options);
 
         return $command->run($input, $output);

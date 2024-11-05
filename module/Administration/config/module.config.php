@@ -31,6 +31,9 @@ return [
         Command\UpdateBddPrivilegesCommand::class  => Command\UpdateBddPrivilegesCommandFactory::class,
         Command\ClearCacheCommand::class           => Command\ClearCacheCommandFactory::class,
         Command\CalculTableauxBordCommand::class   => Command\CalculTableauxBordCommandFactory::class,
+        Command\UpdateCommand::class               => Command\UpdateCommandFactory::class,
+        Command\UpdateCodeCommand::class           => Command\UpdateCodeCommandFactory::class,
+        Command\UpdateComposerCommand::class       => Command\UpdateComposerCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -38,12 +41,15 @@ return [
             'install'                 => Command\InstallCommand::class,
             'install-bdd'             => Command\InstallBddCommand::class,
             'changement-mot-de-passe' => Command\ChangementMotDePasseCommand::class,
+            'update'                  => Command\UpdateCommand::class,
             'update-ddl'              => \Unicaen\BddAdmin\Command\UpdateDdlCommand::class,
             'update-bdd'              => Command\UpdateBddCommand::class,
             'update-bdd-data'         => Command\UpdateBddDataCommand::class,
             'update-bdd-privileges'   => Command\UpdateBddPrivilegesCommand::class,
             'clear-cache'             => Command\ClearCacheCommand::class,
             'calcul-tableaux-bord'    => Command\CalculTableauxBordCommand::class,
+            'update-code'             => Command\UpdateCodeCommand::class,
+            'update-composer'         => Command\UpdateComposerCommand::class,
         ],
     ],
 ];

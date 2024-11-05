@@ -28,6 +28,8 @@ class ClearCacheCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        $io->title('Nettoyage des caches et mise à jour des proxies Doctrine');
+
         try {
             $this->getServiceAdministration()->clearCache();
 

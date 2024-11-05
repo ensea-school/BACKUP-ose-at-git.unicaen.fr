@@ -16,7 +16,6 @@ class AdministrationService
 {
     use EntityManagerAwareTrait;
     use BddAwareTrait;
-    use PlafondServiceAwareTrait;
 
     public function clearCache(): void
     {
@@ -44,20 +43,4 @@ class AdministrationService
         $filesystem->chmod($cachePath, 0777, 0000, true);
     }
 
-
-
-    public function calcData()
-    {
-// Mise à jour du cache des structures
-        $this->getEntityManager()->getConnection()->executeQuery('BEGIN OSE_DIVERS.UPDATE_STRUCTURES(); END;');
-
-        $this->getServicePlafond()->construire();
-
-        /** @var WorkflowController $wf */
-        $c->begin('Mise à jour des tableaux de bords');
-        $wf = $oa->getController(WorkflowController::class);
-        $wf->calculTableauxBordAction();
-
-
-    }
 }

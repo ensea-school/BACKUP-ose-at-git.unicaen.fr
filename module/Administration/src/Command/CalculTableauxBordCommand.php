@@ -26,6 +26,8 @@ class CalculTableauxBordCommand extends SymfonyCommand
     {
         $io  = new SymfonyStyle($input, $output);
 
+        $io->title('Calcul des tableaux de bord');
+
         $result = $this->getServiceTableauBord()->calculerTout(['formule'],function (array $d) use ($io) {
             $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
 

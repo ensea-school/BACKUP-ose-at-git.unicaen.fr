@@ -1,38 +1,47 @@
 <?php
 
-class OseRepo
+namespace Administration\Service;
+
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+
+
+/**
+ * Description of GitRepoService
+ *
+ * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
+ */
+class GitRepoService
 {
-    const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
-    const MIN_VERSION = 17; // version minimum installable
+    const OSE_ORIGIN   = 'https://git.unicaen.fr/open-source/OSE.git';
+    const VERSION_FILE = 'VERSION';
+    const MIN_VERSION  = 17; // version minimum installable
 
-    private OseAdmin $oseAdmin;
 
-    /**
-     * @var array
-     */
-    private $tags = false;
-
-    /**
-     * @var array
-     */
-    private $branches = false;
-
-    /**
-     * @var string
-     */
-    protected $oldVersion;
-
-    /**
-     * @var string
-     */
-    protected $version;
+    private array|bool $tags     = false;
+    private array|bool $branches = false;
+    protected string   $oldVersion;
+    protected string   $version;
 
 
 
-    public function __construct(OseAdmin $oseAdmin)
+    public function __construct()
     {
-        $this->oseAdmin = $oseAdmin;
         $this->oldVersion = $this->currentVersion();
+    }
+
+
+
+    private function exec(string $command): string
+    {
+        $process = new Process(explode(' ', $command));
+
+        try {
+            $process->mustRun();
+            return $process->getOutput();
+        } catch (ProcessFailedException $exception) {
+            throw new \RuntimeException('Erreur lors de l\'exécution de la commande : ' . $exception->getMessage());
+        }
     }
 
 
@@ -49,9 +58,9 @@ class OseRepo
         if (false === $this->tags) {
             $this->tags = [];
 
-            $ts = $this->oseAdmin->console()->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false);
+            $ts = $this->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false);
             foreach ($ts as $tag) {
-                $tag = substr($tag, strpos($tag, 'refs/tags/') + 10);
+                $tag              = substr($tag, strpos($tag, 'refs/tags/') + 10);
                 $this->tags[$tag] = $this->extractTagInfos($tag);
             }
 
@@ -92,7 +101,7 @@ class OseRepo
         if (false === $this->branches) {
             $this->branches = [];
 
-            $bs = $this->oseAdmin->console()->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false);
+            $bs = $this->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false);
             foreach ($bs as $branche) {
                 $this->branches[] = substr($branche, strpos($branche, 'refs/heads/') + 11);
             }
@@ -107,7 +116,7 @@ class OseRepo
 
     public function getCurrentBranche(): ?string
     {
-        $ts = $this->oseAdmin->console()->exec("git branch", false);
+        $ts = $this->exec("git branch", false);
         foreach ($ts as $t) {
             if (0 === strpos($t, '*')) {
                 return trim(substr($t, 1));
@@ -119,16 +128,11 @@ class OseRepo
 
 
 
-    /**
-     * @param string $tag
-     *
-     * @return bool
-     */
     public function tagIsValid(string $tag): bool
     {
         $tags = $this->getTags();
-        foreach( $tags as $t ){
-            if ($t['tag'] == $tag){
+        foreach ($tags as $t) {
+            if ($t['tag'] == $tag) {
                 return true;
             }
         }
@@ -137,11 +141,6 @@ class OseRepo
 
 
 
-    /**
-     * @param string $tag
-     *
-     * @return bool
-     */
     public function brancheIsValid(string $branche): bool
     {
         return in_array($branche, $this->getBranches());
@@ -158,12 +157,11 @@ class OseRepo
 
     public function currentVersion(): string
     {
-        $vf = getcwd() . '/VERSION';
-        if (!file_exists($vf)) {
+        if (!file_exists(self::VERSION_FILE)) {
             return 'inconnue';
         }
 
-        return trim(file_get_contents($vf));
+        return trim(file_get_contents(self::VERSION_FILE));
     }
 
 
@@ -171,7 +169,7 @@ class OseRepo
     public function writeVersion(string $version)
     {
         $this->version = $version;
-        file_put_contents(getcwd() . '/VERSION', $version);
+        file_put_contents(self::VERSION_FILE, $version);
     }
 
 
@@ -202,10 +200,10 @@ class OseRepo
                 $btxt = substr($txt, 4);
 
                 if ($btxt === '') {
-                    $i['beta'] = true;
+                    $i['beta']    = true;
                     $i['betaNum'] = 0;
                 } elseif ((int)$btxt != 0) {
-                    $i['beta'] = true;
+                    $i['beta']    = true;
                     $i['betaNum'] = (int)$btxt;
                 } else {
                     $i['other'] = $txt;

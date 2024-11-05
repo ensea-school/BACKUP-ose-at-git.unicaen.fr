@@ -21,6 +21,7 @@ return [
 
     'services' => [
         Service\AdministrationService::class       => Service\AdministrationServiceFactory::class,
+        Service\GitRepoService::class              => Service\GitRepoServiceFactory::class,
         DataSource\DataSource::class               => DataSource\DataSourceFactory::class,
         Command\InstallCommand::class              => Command\InstallCommandFactory::class,
         Command\InstallBddCommand::class           => Command\InstallBddCommandFactory::class,

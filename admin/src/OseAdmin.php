@@ -18,8 +18,6 @@ class OseAdmin
 
     protected ?OseEnv $env = null;
 
-    protected ?OseRepo $repo = null;
-
     private ?ContainerInterface $container = null;
 
     protected ?Bdd $bdd = null;
@@ -73,17 +71,6 @@ class OseAdmin
         }
 
         return $this->env;
-    }
-
-
-
-    public function repo(): OseRepo
-    {
-        if (!$this->repo) {
-            $this->repo = new OseRepo($this);
-        }
-
-        return $this->repo;
     }
 
 

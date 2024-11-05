@@ -2,7 +2,7 @@
 
 class OseConfig
 {
-    const LOCAL_APPLICATION_CONFIG_FILE = '/config.local.php';
+    const LOCAL_APPLICATION_CONFIG_FILE = 'config.local.php';
 
     private array $config = [];
 
@@ -13,7 +13,7 @@ class OseConfig
     public function get(string $section = null, string $key = null, $default = null)
     {
         if (empty($this->config)) {
-            $configFilename = getcwd() . self::LOCAL_APPLICATION_CONFIG_FILE;
+            $configFilename = self::LOCAL_APPLICATION_CONFIG_FILE;
             if (file_exists($configFilename)) {
                 $this->config = require $configFilename;
             }
@@ -46,7 +46,7 @@ class OseConfig
     public function getApplicationConfig(): array
     {
         if (empty($this->applicationConfig)) {
-            $this->applicationConfig = require getcwd() . '/config/application.config.php';
+            $this->applicationConfig = require 'config/application.config.php';
         }
 
         return $this->applicationConfig;

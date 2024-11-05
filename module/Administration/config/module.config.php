@@ -33,7 +33,6 @@ return [
         Command\CalculTableauxBordCommand::class   => Command\CalculTableauxBordCommandFactory::class,
         Command\UpdateCommand::class               => Command\UpdateCommandFactory::class,
         Command\UpdateCodeCommand::class           => Command\UpdateCodeCommandFactory::class,
-        Command\UpdateComposerCommand::class       => Command\UpdateComposerCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -49,7 +48,6 @@ return [
             'clear-cache'             => Command\ClearCacheCommand::class,
             'calcul-tableaux-bord'    => Command\CalculTableauxBordCommand::class,
             'update-code'             => Command\UpdateCodeCommand::class,
-            'update-composer'         => Command\UpdateComposerCommand::class,
         ],
     ],
 ];

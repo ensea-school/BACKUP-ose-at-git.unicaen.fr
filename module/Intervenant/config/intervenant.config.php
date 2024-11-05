@@ -207,6 +207,7 @@ return [
         Assertion\IntervenantAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\IntervenantService::class     => Service\IntervenantServiceFactory::class,
         Processus\IntervenantProcessus::class => Processus\IntervenantProcessusFactory::class,
+        Command\ExempleCommand::class         => Command\CalculFeuilleDeRouteCommandFactory::class,
     ],
 
 
@@ -217,5 +218,11 @@ return [
 
     'forms' => [
         Form\EditionForm::class => Form\EditionFormFactory::class,
+    ],
+
+    'laminas-cli' => [
+        'commands' => [
+            'calcul-feuille-de-route' => Command\ExempleCommand::class,
+        ],
     ],
 ];

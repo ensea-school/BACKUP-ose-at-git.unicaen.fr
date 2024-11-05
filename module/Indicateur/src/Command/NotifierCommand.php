@@ -27,8 +27,10 @@ class NotifierCommand extends SymfonyCommand
     protected function configure(): void
     {
         $this
-            ->setDescription('Lance les notifications des indicateurs')
+            ->setName('notifier-indicateurs')
+            ->setDescription('Lance les notifications des indicateurs, --force pour forcer l\'envoi des notifications')
             ->addOption('force', null, InputOption::VALUE_NONE, 'Forcer l\'envoi de toutes les notifications');
+
     }
 
 

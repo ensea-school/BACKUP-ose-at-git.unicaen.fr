@@ -1,0 +1,64 @@
+<?php
+
+namespace Intervenant\Command;
+
+use Application\Entity\Db\Traits\UtilisateurAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+
+/**
+ * Description of CalculFeuilleDeRouteCommand
+ *
+ * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
+ */
+class CalculFeuilleDeRouteCommand extends SymfonyCommand
+{
+    use WorkflowServiceAwareTrait;
+    use EntityManagerAwareTrait;
+
+
+    protected function configure(): void
+    {
+        $this
+            ->setName('calcul-feuille-de-route')
+            ->setDescription('Recalcule la feuille de route d\'intervenenant')
+            ->addOption('intervenantId', null, InputOption::VALUE_REQUIRED, 'Id de l\'intervenant pour lequel il faut recalculer la feuille de route');
+
+    }
+
+
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $io = new SymfonyStyle($input, $output);
+
+        $intervenantId = $input->getOption('intervenantId');
+        if (empty($intervenantId)) {
+            $io->error('Vous devez préciser l\'intervenant ID que vous souhaitez mettre à jour via l\'option --intervenantId');
+        }
+
+        $intervenant = $this->getEntityManager()->getRepository(Intervenant::class)->find($intervenantId);
+        if (!$intervenant) {
+            $io->error('Intervenant n\'existe pas');
+            return Command::FAILURE;
+        }
+
+        $io->title('Actualisation de la feuille de route de ' . $intervenant);
+        $io->writeln('Année universitaire : ' . $intervenant->getAnnee());
+        $io->writeln('Statut de l\'intervenant : ' . $intervenant->getStatut());
+        $io->writeln('Calcul en cours ...');
+        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+        $io->success('Feuille de route de ' . $intervenant . ' actualisée avec succés !');
+
+        return Command::SUCCESS;
+
+
+    }
+}

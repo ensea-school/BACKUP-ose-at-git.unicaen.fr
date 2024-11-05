@@ -6,7 +6,6 @@ use Application\Entity\Db\Traits\UtilisateurAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,7 +17,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class CalculFeuilleDeRouteCommand extends SymfonyCommand
+class CalculFeuilleDeRouteCommand extends Command
 {
     use WorkflowServiceAwareTrait;
     use EntityManagerAwareTrait;

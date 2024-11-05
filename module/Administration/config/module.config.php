@@ -33,6 +33,7 @@ return [
         Command\CalculTableauxBordCommand::class   => Command\CalculTableauxBordCommandFactory::class,
         Command\UpdateCommand::class               => Command\UpdateCommandFactory::class,
         Command\UpdateCodeCommand::class           => Command\UpdateCodeCommandFactory::class,
+        Command\UpdateEmployeur::class             => Command\UpdateEmployeurFactory::class,
     ],
 
     'laminas-cli' => [
@@ -48,6 +49,7 @@ return [
             'clear-cache'             => Command\ClearCacheCommand::class,
             'calcul-tableaux-bord'    => Command\CalculTableauxBordCommand::class,
             'update-code'             => Command\UpdateCodeCommand::class,
+            'update-employeur'        => Command\UpdateEmployeur::class,
         ],
     ],
 ];

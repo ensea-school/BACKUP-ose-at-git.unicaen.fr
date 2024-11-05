@@ -4,6 +4,7 @@ namespace Dossier\Service;
 
 use Application\Constants;
 use Psr\Container\ContainerInterface;
+use Unicaen\BddAdmin\Bdd;
 
 
 class EmployeurServiceFactory
@@ -20,6 +21,7 @@ class EmployeurServiceFactory
     {
         $service = new EmployeurService();
         $service->setEntityManager($container->get(Constants::BDD));
+        $service->setBdd($container->get(Bdd::class));
 
         /* Injectez vos dépendances ICI */
 

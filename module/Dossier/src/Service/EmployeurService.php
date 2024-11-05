@@ -3,11 +3,13 @@
 namespace Dossier\Service;
 
 use Application\Service\AbstractEntityService;
+use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenVue\Util;
 use UnicaenVue\View\Model\AxiosModel;
 
 class EmployeurService extends AbstractEntityService
 {
+    use BddAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -41,7 +43,7 @@ class EmployeurService extends AbstractEntityService
         ";
 
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
-        
+
         return $res;
     }
 
@@ -130,5 +132,96 @@ class EmployeurService extends AbstractEntityService
 
         return Util::tableAjaxData($em, $post, $sql);
     }
+
+
+
+    public function mergeDatasEmployeur(string $filepath, int $idSource, int $idUser): bool
+    {
+
+        $tableEmployeur = $this->bdd->getTable('EMPLOYEUR');
+        $csvFile        = fopen($filepath, "r");
+
+        $num   = str_replace('.csv', '', basename($filepath));
+        $row   = 0;
+        $datas = [];
+        while (($data = fgetcsv($csvFile, 1000, ",")) !== false) {
+
+            /*
+            * $data[0] = Siren
+            * $data[1] = Etat Administratif
+            * $data[2] = Nom unité légale (cas entreprise en nom propre)
+            * $data[3] = Nom usage unité légale
+            * $data[4] = Raison sociale pour les personnes morales
+            * $data[5] = Nom sous lequel est connu l'entreprise du grand public (champ N°1 à 70 carac)
+            * $data[6] = Nom sous lequel est connu l'entreprise du grand public (champ N°2 à 70 carac)
+            * $data[7] = Nom sous lequel est connu l'entreprise du grand public (champ N°3 à 70 carac)
+            * $data[8] = Date de dernier traitement de l'unité légale
+            * $data[9] = Unité pouvant employer des personnes
+            * $data[10] = Identifiant association
+            * $data[12] = Siret
+            *
+            */
+
+            $nomCommercial = (!empty($data[5])) ? $data[5] : '';
+            $nomCommercial .= (!empty($data[6])) ? ' ' . $data[6] : '';
+            $nomCommercial .= (!empty($data[7])) ? ' ' . $data[7] : '';
+            $nomCommercial = str_replace("''", "'", $nomCommercial);
+            //RAISON_SOCIALE
+            $nomJuridique = $data[4];
+            //SIREN
+            $siren = $data[0];
+            //SIRET
+            $siret = (isset($data[12])) ? $data[0] . $data[12] : '';
+
+            //IDENTIFIANT ASSOCIATION
+            $identifiantAssociation = $data[10];
+            //Nom propre entité
+            $nomPropre = $data[2];
+            //Nom usage entité au lieu du nom propre
+            $nomUsage = $data[3];
+            //Raison sociale
+            if (!empty($nomJuridique)) {
+                $raisonSociale = $nomJuridique;
+            } elseif (!empty($nomUsage)) {
+                $raisonSociale = $nomUsage;
+            } elseif (!empty($nomPropre)) {
+                $raisonSociale = $nomPropre;
+            }
+            $raisonSociale = str_replace("''", "'", $raisonSociale);
+            //Si pas de raison sociale et pas de nom commercial on passe
+            if (empty($raisonSociale) && empty($nomCommercial)) {
+                continue;
+            }
+            if (!empty($siren) && empty($siret)) {
+                //Compilation des datas
+
+                $data                            = [];
+                $options                         = [];
+                $data['SIREN']                   = $siren;
+                $data['SIRET']                   = $siret;
+                $data['RAISON_SOCIALE']          = $raisonSociale;
+                $data['NOM_COMMERCIAL']          = $nomCommercial;
+                $data['SOURCE_CODE']             = $siret;
+                $data['SOURCE_ID']               = $idSource;
+                $data['HISTO_DESTRUCTEUR_ID']    = null;
+                $data['HISTO_DESTRUCTION']       = null;
+                $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
+                $data['CRITERE_RECHERCHE']       = \UnicaenApp\Util::reduce($raisonSociale . ' ' . $nomCommercial . ' ' . $siren . ' ' . $siret);
+                $datas[]                         = $data;
+                $options['histo-user-id']        = $idUser;
+                $options['where']                = 'SIREN LIKE \'' . $num . '%\' AND SOURCE_ID = (SELECT id FROM source WHERE code = \'INSEE\') AND SIREN NOT IN (\'999999999\', \'000000000000\')';
+                $options['delete']               = false;
+
+            }
+        }
+
+
+        //$tableEmployeur->merge($datas, 'SIREN', $options);
+        /* if (!$haveAlreadySiret) {
+             $c->println('Migration avec ajouts des SIRET des entreprises');
+             $tableEmployeur->merge($datas, 'SIRET', $options);
+         }*/
+    }
+
 
 }

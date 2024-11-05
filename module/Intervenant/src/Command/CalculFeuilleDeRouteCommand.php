@@ -37,11 +37,10 @@ class CalculFeuilleDeRouteCommand extends SymfonyCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-
+        $io            = new SymfonyStyle($input, $output);
         $intervenantId = $input->getOption('intervenantId');
         if (empty($intervenantId)) {
-            $io->error('Vous devez préciser l\'intervenant ID que vous souhaitez mettre à jour via l\'option --intervenantId');
+            $intervenantId = $io->ask("Veuillez saisir l'ID de l'intervenant à actualiser :");
         }
 
         $intervenant = $this->getEntityManager()->getRepository(Intervenant::class)->find($intervenantId);

@@ -2,6 +2,7 @@
 
 namespace Administration\Command;
 
+use Administration\Service\AdministrationServiceAwareTrait;
 use Application\Service\OseBddAdminFactory;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
@@ -23,6 +24,7 @@ class InstallBddCommand extends Command
     use BddAwareTrait;
     use PlafondServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
+    use AdministrationServiceAwareTrait;
 
     private SymfonyStyle $io;
 
@@ -32,7 +34,7 @@ class InstallBddCommand extends Command
     {
         $this
             ->setDescription('Installation de la base de données')
-            ->addOption('oseappli-pwd', null, InputOption::VALUE_OPTIONAL, 'Choix d\'un mot de passe pour l\'utilisateur système oseappli');
+            ->addOption('oseappli-pwd', 'p', InputOption::VALUE_OPTIONAL, 'Choix d\'un mot de passe pour l\'utilisateur système oseappli');
     }
 
 
@@ -46,6 +48,7 @@ class InstallBddCommand extends Command
         $this->pj();
         $this->plafonds();
         $this->motDePasse($input);
+        $this->getServiceAdministration()->clearCache();
 
         $this->io->success('L\'installation de la base de données est maintenant terminée!');
 

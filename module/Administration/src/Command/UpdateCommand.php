@@ -42,10 +42,9 @@ class UpdateCommand extends Command
         if ($maintenanceMsg === 'yes') {
             // Affichage du message de confirmation
             $output->writeln("Assurez-vous bien d'avoir mis OSE en mode maintenance avant de démarrer");
-            $output->writeln("(pressez Entrée pour continuer)...");
 
             // Attente de l'appui sur Entrée
-            fgets(STDIN);
+            $io->ask("(pressez Entrée pour continuer)...");
         } elseif ($maintenanceMsg !== 'no') {
             $io->error('Valeur de --maintenance-msg invalide. Utilisez "yes" ou "no".');
             return Command::INVALID;

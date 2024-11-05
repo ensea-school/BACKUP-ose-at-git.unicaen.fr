@@ -58,7 +58,7 @@ class GitRepoService
         if (false === $this->tags) {
             $this->tags = [];
 
-            $ts = $this->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false);
+            $ts = explode("\n",trim($this->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false)));
             foreach ($ts as $tag) {
                 $tag              = substr($tag, strpos($tag, 'refs/tags/') + 10);
                 $this->tags[$tag] = $this->extractTagInfos($tag);
@@ -101,7 +101,7 @@ class GitRepoService
         if (false === $this->branches) {
             $this->branches = [];
 
-            $bs = $this->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false);
+            $bs = explode("\n",trim($this->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false)));
             foreach ($bs as $branche) {
                 $this->branches[] = substr($branche, strpos($branche, 'refs/heads/') + 11);
             }
@@ -116,7 +116,7 @@ class GitRepoService
 
     public function getCurrentBranche(): ?string
     {
-        $ts = $this->exec("git branch", false);
+        $ts = explode("\n",trim($this->exec("git branch", false)));
         foreach ($ts as $t) {
             if (0 === strpos($t, '*')) {
                 return trim(substr($t, 1));

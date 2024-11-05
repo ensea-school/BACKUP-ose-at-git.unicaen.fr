@@ -13,13 +13,6 @@ class OseEnv
 
 
 
-    public function inConsole()
-    {
-        return PHP_SAPI == 'cli';
-    }
-
-
-
     public function getEnv()
     {
         $forcedEnv = $this->oa->config()->get('dev', 'forced-env', false);

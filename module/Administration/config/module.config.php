@@ -21,6 +21,7 @@ return [
 
     'services' => [
         Service\AdministrationService::class       => Service\AdministrationServiceFactory::class,
+        Service\GitRepoService::class              => Service\GitRepoServiceFactory::class,
         DataSource\DataSource::class               => DataSource\DataSourceFactory::class,
         Command\InstallCommand::class              => Command\InstallCommandFactory::class,
         Command\InstallBddCommand::class           => Command\InstallBddCommandFactory::class,
@@ -30,6 +31,8 @@ return [
         Command\UpdateBddPrivilegesCommand::class  => Command\UpdateBddPrivilegesCommandFactory::class,
         Command\ClearCacheCommand::class           => Command\ClearCacheCommandFactory::class,
         Command\CalculTableauxBordCommand::class   => Command\CalculTableauxBordCommandFactory::class,
+        Command\UpdateCommand::class               => Command\UpdateCommandFactory::class,
+        Command\UpdateCodeCommand::class           => Command\UpdateCodeCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -37,12 +40,14 @@ return [
             'install'                 => Command\InstallCommand::class,
             'install-bdd'             => Command\InstallBddCommand::class,
             'changement-mot-de-passe' => Command\ChangementMotDePasseCommand::class,
+            'update'                  => Command\UpdateCommand::class,
             'update-ddl'              => \Unicaen\BddAdmin\Command\UpdateDdlCommand::class,
             'update-bdd'              => Command\UpdateBddCommand::class,
             'update-bdd-data'         => Command\UpdateBddDataCommand::class,
             'update-bdd-privileges'   => Command\UpdateBddPrivilegesCommand::class,
             'clear-cache'             => Command\ClearCacheCommand::class,
             'calcul-tableaux-bord'    => Command\CalculTableauxBordCommand::class,
+            'update-code'             => Command\UpdateCodeCommand::class,
         ],
     ],
 ];

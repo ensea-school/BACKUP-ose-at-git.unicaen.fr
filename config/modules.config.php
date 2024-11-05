@@ -59,7 +59,7 @@ if ($oa->env()->inDev()) {
     $modules[] = 'Laminas\DeveloperTools';
 }
 
-if ($oa->env()->inConsole() || $oa->env()->inDev()) {
+if (PHP_SAPI == 'cli' || $oa->env()->inDev()) {
     $modules[] = 'UnicaenCode';
 }
 

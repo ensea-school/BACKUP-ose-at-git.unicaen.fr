@@ -8,7 +8,7 @@
  * @var $viewFile   string
  */
 
-$bdd = OseAdmin::instance()->getBdd();
+$bdd = $container->get(\Unicaen\BddAdmin\Bdd::class);
 
 $sql = "
 SELECT

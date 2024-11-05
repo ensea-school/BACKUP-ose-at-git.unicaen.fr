@@ -186,7 +186,7 @@ class OseAdmin
         $this->maintenanceText = '<h2>Une erreur est survenue !</h2>'
             . '<p>' . $exception->getMessage() . '</p>'
             . '<p style="color:darkred">' . $exception->getFile() . ' ligne ' . $exception->getLine() . '</p>';
-        if (!$this->env()->inConsole()) {
+        if (PHP_SAPI != 'cli') {
             require 'public/maintenance.php';
         } else {
             echo $this->maintenanceText . "\n";
@@ -199,12 +199,12 @@ class OseAdmin
     public function start(): void
     {
         if (!$this->container) {
-            $configuration = $this->config()->getApplicationConfig();
+            $configuration = require 'config/application.config.php';
 
             //Laminas\Mvc\Application::init(AppConfig::getGlobal())->run();
 
             // Prepare the service manager
-            $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
+            $smConfig = $configuration['service_manager'] ?? [];
             $smConfig = new \Laminas\Mvc\Service\ServiceManagerConfig($smConfig);
 
             $serviceManager  = new Laminas\ServiceManager\ServiceManager();
@@ -272,7 +272,7 @@ class OseAdmin
 
     public function inMaintenance(): bool
     {
-        if ($this->env()->inConsole()) {
+        if (PHP_SAPI == 'cli') {
             // pas de mode de maintenance en mode console
             return false;
         }

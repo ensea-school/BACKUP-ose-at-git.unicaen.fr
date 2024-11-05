@@ -17,9 +17,9 @@ return [
             './vendor',
         ],
         'cache_dir'                => 'cache/',
-        'config_cache_enabled'     => ($oa->env()->inProd() && !$oa->env()->inConsole()),
+        'config_cache_enabled'     => ($oa->env()->inProd() && PHP_SAPI != 'cli'),
         'config_cache_key'         => 'application.config.cache',
-        'module_map_cache_enabled' => ($oa->env()->inProd() && !$oa->env()->inConsole()),
+        'module_map_cache_enabled' => ($oa->env()->inProd() && PHP_SAPI != 'cli'),
         'module_map_cache_key'     => 'application.module.cache',
     ],
 ];

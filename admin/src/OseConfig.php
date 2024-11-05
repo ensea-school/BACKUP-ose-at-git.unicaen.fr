@@ -6,8 +6,6 @@ class OseConfig
 
     private array $config = [];
 
-    private array $applicationConfig = [];
-
 
 
     public function get(string $section = null, string $key = null, $default = null)
@@ -41,14 +39,4 @@ class OseConfig
         return $this->config;
     }
 
-
-
-    public function getApplicationConfig(): array
-    {
-        if (empty($this->applicationConfig)) {
-            $this->applicationConfig = require 'config/application.config.php';
-        }
-
-        return $this->applicationConfig;
-    }
 }

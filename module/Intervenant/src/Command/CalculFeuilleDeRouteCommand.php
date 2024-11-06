@@ -6,6 +6,7 @@ use Application\Entity\Db\Traits\UtilisateurAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,9 +27,10 @@ class CalculFeuilleDeRouteCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('calcul-feuille-de-route')
+            ->setName(' calcul-feuille-de-route')
             ->setDescription('Recalcule la feuille de route d\'intervenant')
-            ->addOption('intervenantId', null, InputOption::VALUE_REQUIRED, 'Id de l\'intervenant pour lequel il faut recalculer la feuille de route');
+            ->addArgument('intervenantId', InputArgument::REQUIRED, 'Id de l\'intervenant pour lequel il faut recalculer la feuille de route');
+
 
     }
 
@@ -37,7 +39,7 @@ class CalculFeuilleDeRouteCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io            = new SymfonyStyle($input, $output);
-        $intervenantId = $input->getOption('intervenantId');
+        $intervenantId = $input->getArgument('intervenantId');
         if (empty($intervenantId)) {
             $intervenantId = $io->ask("Veuillez saisir l'ID de l'intervenant à actualiser :");
         }

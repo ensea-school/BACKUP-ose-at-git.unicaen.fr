@@ -34,6 +34,7 @@ return [
         Command\UpdateCommand::class               => Command\UpdateCommandFactory::class,
         Command\UpdateCodeCommand::class           => Command\UpdateCodeCommandFactory::class,
         Command\UpdateEmployeur::class             => Command\UpdateEmployeurFactory::class,
+        Command\SynchronisationCommand::class      => Command\SynchronisationCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -50,6 +51,7 @@ return [
             'calcul-tableaux-bord'    => Command\CalculTableauxBordCommand::class,
             'update-code'             => Command\UpdateCodeCommand::class,
             'update-employeur'        => Command\UpdateEmployeur::class,
+            'synchronisation'         => Command\SynchronisationCommand::class,
         ],
     ],
 ];

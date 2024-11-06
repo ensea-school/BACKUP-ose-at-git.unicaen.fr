@@ -135,15 +135,16 @@ class EmployeurService extends AbstractEntityService
 
 
 
-    public function mergeDatasEmployeur(string $filepath, int $idSource, int $idUser): bool
+    public function mergeDatasEmployeur(string $filepath, int $idSource): void
     {
 
         $tableEmployeur = $this->bdd->getTable('EMPLOYEUR');
         $csvFile        = fopen($filepath, "r");
 
-        $num   = str_replace('.csv', '', basename($filepath));
-        $row   = 0;
-        $datas = [];
+        $num     = str_replace('.csv', '', basename($filepath));
+        $row     = 0;
+        $datas   = [];
+        $options = [];
         while (($data = fgetcsv($csvFile, 1000, ",")) !== false) {
 
             /*
@@ -192,35 +193,72 @@ class EmployeurService extends AbstractEntityService
             if (empty($raisonSociale) && empty($nomCommercial)) {
                 continue;
             }
-            if (!empty($siren) && empty($siret)) {
-                //Compilation des datas
 
-                $data                            = [];
-                $options                         = [];
-                $data['SIREN']                   = $siren;
-                $data['SIRET']                   = $siret;
-                $data['RAISON_SOCIALE']          = $raisonSociale;
-                $data['NOM_COMMERCIAL']          = $nomCommercial;
-                $data['SOURCE_CODE']             = $siret;
-                $data['SOURCE_ID']               = $idSource;
-                $data['HISTO_DESTRUCTEUR_ID']    = null;
-                $data['HISTO_DESTRUCTION']       = null;
-                $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
-                $data['CRITERE_RECHERCHE']       = \UnicaenApp\Util::reduce($raisonSociale . ' ' . $nomCommercial . ' ' . $siren . ' ' . $siret);
-                $datas[]                         = $data;
-                $options['histo-user-id']        = $idUser;
-                $options['where']                = 'SIREN LIKE \'' . $num . '%\' AND SOURCE_ID = (SELECT id FROM source WHERE code = \'INSEE\') AND SIREN NOT IN (\'999999999\', \'000000000000\')';
-                $options['delete']               = false;
+            //Compilation des datas
 
-            }
+            $data                            = [];
+            $options                         = [];
+            $data['SIREN']                   = $siren;
+            $data['SIRET']                   = $siret;
+            $data['RAISON_SOCIALE']          = $raisonSociale;
+            $data['NOM_COMMERCIAL']          = $nomCommercial;
+            $data['SOURCE_CODE']             = $siret;
+            $data['SOURCE_ID']               = $idSource;
+            $data['HISTO_DESTRUCTEUR_ID']    = null;
+            $data['HISTO_DESTRUCTION']       = null;
+            $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
+            $data['CRITERE_RECHERCHE']       = \UnicaenApp\Util::reduce($raisonSociale . ' ' . $nomCommercial . ' ' . $siren . ' ' . $siret);
+            $datas[]                         = $data;
+            $options['where']                = 'SIREN LIKE \'' . $num . '%\' AND SOURCE_ID = (SELECT id FROM source WHERE code = \'INSEE\') AND SIREN NOT IN (\'999999999\', \'000000000000\')';
+            $options['delete']               = false;
+
+        }
+        if (!empty($datas)) {
+            $tableEmployeur->merge($datas, 'SIREN', $options);
         }
 
+    }
 
-        //$tableEmployeur->merge($datas, 'SIREN', $options);
-        /* if (!$haveAlreadySiret) {
-             $c->println('Migration avec ajouts des SIRET des entreprises');
-             $tableEmployeur->merge($datas, 'SIRET', $options);
-         }*/
+
+
+    public function mergeDefaultEmployeur($idSource): void
+    {
+
+        $tableEmployeur = $this->bdd->getTable('EMPLOYEUR');
+        //Employeur étrangé
+        $data                            = [];
+        $data['SIREN']                   = '999999999';
+        $data['RAISON_SOCIALE']          = 'EMPLOYEUR ETRANGÉ';
+        $data['NOM_COMMERCIAL']          = 'EMPLOYEUR ETRANGÉ';
+        $data['SOURCE_CODE']             = '999999999';
+        $data['SOURCE_ID']               = $idSource;
+        $data['HISTO_DESTRUCTEUR_ID']    = null;
+        $data['HISTO_DESTRUCTION']       = null;
+        $data['IDENTIFIANT_ASSOCIATION'] = null;
+        $data['CRITERE_RECHERCHE']       = \UnicaenApp\Util::reduce('Employeur étrangé 999999999');
+        $options['where']                = 'SIREN = \'999999999\'';
+        $options['soft-delete']          = true;
+        $datas                           = [];
+        $datas[]                         = $data;
+        $tableEmployeur->merge($datas, 'SIREN', $options);
+
+        //Employeur non présent dans la liste
+        $data                            = [];
+        $data['SIREN']                   = '000000000000';
+        $data['RAISON_SOCIALE']          = 'Employeur non présent dans la liste';
+        $data['NOM_COMMERCIAL']          = 'Employeur non présent dans la liste';
+        $data['SOURCE_CODE']             = '000000000000';
+        $data['SOURCE_ID']               = $idSource;
+        $data['HISTO_DESTRUCTEUR_ID']    = null;
+        $data['HISTO_DESTRUCTION']       = null;
+        $data['IDENTIFIANT_ASSOCIATION'] = null;
+        $data['CRITERE_RECHERCHE']       = \UnicaenApp\Util::reduce('Employeur non présent dans la liste 000000000000');
+        $options['where']                = 'SIREN = \'000000000000\'';
+        $options['soft-delete']          = true;
+        $datas                           = [];
+        $datas[]                         = $data;
+        $tableEmployeur->merge($datas, 'SIREN', $options);
+
     }
 
 

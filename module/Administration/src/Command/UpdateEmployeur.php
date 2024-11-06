@@ -32,10 +32,10 @@ class UpdateEmployeur extends Command
         $importDirectory = dirname(__DIR__, 4) . '/cache/employeurs/';
         $importArchive   = 'employeurs.tar.gz';
         $importFilePath  = $importDirectory . $importArchive;
-        if ($filesystem->exists($importDirectory)) {
+        if (!$filesystem->exists($importDirectory)) {
             $filesystem->mkdir($importDirectory);
         }
-        $io->writeln("Récupération de l'archive employeur...");
+        $io->writeln("<fg=yellow;options=bold>Récupération de l'archive employeur...</>");
         $processRecupTar = new Process(['wget', '-O', 'employeurs.tar.gz', 'https://ose.unicaen.fr/employeurs.tar.gz'], $importDirectory);
 
         $processRecupTar->run();
@@ -51,29 +51,40 @@ class UpdateEmployeur extends Command
             $processUnTar->run();
         }
         //On vérifie si la source INSEE existe dans OSE
-        $io->writeln('Vérification que la source INSEE existe bien dans OSE');
+        $io->writeln('<fg=yellow;options=bold>Vérification que la source INSEE existe bien dans OSE</>');
         $haveAlreadyInseeSource = $this->bdd->select("SELECT * FROM source WHERE code='INSEE'", [], ['fetch' => $this->bdd::FETCH_ONE]);
         //Sinon on la crée
         if (!($haveAlreadyInseeSource)) {
-            $io->writeln('La source INSEE n\'existe pas, on la crée');
+            $io->writeln('<fg=green>La source INSEE n\'existe pas, on la crée</>');
             $data = ['CODE' => 'INSEE', 'LIBELLE' => 'INSEE', 'IMPORTABLE' => 1];
             $this->bdd->getTable('SOURCE')->insert($data);
             $idSource = $this->bdd->selectOne('select ID from source where code = :code', ['CODE' => 'INSEE'], 'ID');
             $this->bdd->exec("UPDATE employeur SET source_id = $idSource");
         } else {
             $idSource = $haveAlreadyInseeSource['ID'];
-            $io->writeln("La source INSEE existe déjà avec l'ID : " . $idSource);
+            $io->writeln("<fg=green>La source INSEE existe déjà avec l'ID : " . $idSource . "</>");
         }
         //On récupére les fichiers csv à importer
         $listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
         $nbFiles   = count($listFiles);
-        $io->writeln("Nombre de fichier à charger : $nbFiles");
+        $io->writeln("<fg=yellow;options=bold>Chargement des fichiers employeurs</>");
+
+        $io->writeln("<fg=green>Nombre de fichier à charger : $nbFiles</>");
+        $io->writeln('<fg=green>Traitement des ' . count($listFiles) . ' fichiers csv employeurs</>');
+        $io->progressStart($nbFiles);
         foreach ($listFiles as $file) {
             $filepath = $importDirectory . $file;
-            $this->getServiceEmployeur()->mergeDatasEmployeur($filepath, $idSource, $oseId);
+            $this->getServiceEmployeur()->mergeDatasEmployeur($filepath, $idSource);
+            $io->progressAdvance();
             break;
+
         }
-        
+        $this->getServiceEmployeur()->mergeDefaultEmployeur($idSource);
+        $io->progressFinish();
+        $io->writeln('<fg=yellow;options=bold>Suppression des fichiers employeurs</>');
+        $filesystem->remove($importDirectory);
+        $io->success('Fin du traitement des employeurs');
+
 
         return Command::SUCCESS;
 

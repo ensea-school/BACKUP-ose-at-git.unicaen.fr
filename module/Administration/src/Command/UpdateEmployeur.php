@@ -5,6 +5,7 @@ namespace Administration\Command;
 use Dossier\Service\Traits\EmployeurServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
@@ -20,6 +21,13 @@ class UpdateEmployeur extends Command
 {
     use BddAwareTrait;
     use EmployeurServiceAwareTrait;
+
+    protected function configure(): void
+    {
+        $this->setDescription('Mise à jour de la table employeurs avec les fichiers INSEE');
+
+    }
+
 
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -76,8 +84,7 @@ class UpdateEmployeur extends Command
             $filepath = $importDirectory . $file;
             $this->getServiceEmployeur()->mergeDatasEmployeur($filepath, $idSource);
             $io->progressAdvance();
-            break;
-
+            
         }
         $this->getServiceEmployeur()->mergeDefaultEmployeur($idSource);
         $io->progressFinish();

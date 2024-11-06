@@ -22,11 +22,17 @@ class UpdateCommand extends Command
             ->setDescription('Mise à jour de l\'application')
             ->addOption(
                 'maintenance-msg',
-                null,
+                'm',
                 InputOption::VALUE_OPTIONAL,
                 'Indique si un message de maintenance doit être affiché (y ou n)',
                 'yes' // Valeur par défaut
-            );;
+            )
+            ->addOption(
+                'cible',
+                'c',
+                InputOption::VALUE_OPTIONAL,
+                'Version cible de OSE à déployer',
+            );
     }
 
 
@@ -51,7 +57,13 @@ class UpdateCommand extends Command
         }
 
         // Mise à jour du code source
-        $this->runCommand($output, 'update-code');
+        $version = $input->getOption('cible');
+        if (!empty($version)){
+            $options = ['--cible' => $version];
+        }else{
+            $options = [];
+        }
+        $this->runCommand($output, 'update-code', $options);
 
         // Mise à jour de la base de données à partir d'un nouveau processus
         $this->runCommand($output, 'update-bdd');

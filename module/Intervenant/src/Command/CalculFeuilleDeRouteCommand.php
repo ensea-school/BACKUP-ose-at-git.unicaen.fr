@@ -27,7 +27,7 @@ class CalculFeuilleDeRouteCommand extends Command
     {
         $this
             ->setName('calcul-feuille-de-route')
-            ->setDescription('Recalcule la feuille de route d\'intervenenant')
+            ->setDescription('Recalcule la feuille de route d\'intervenant')
             ->addOption('intervenantId', null, InputOption::VALUE_REQUIRED, 'Id de l\'intervenant pour lequel il faut recalculer la feuille de route');
 
     }

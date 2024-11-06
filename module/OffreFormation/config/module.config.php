@@ -637,6 +637,7 @@ return [
         Service\TypeInterventionStatutService::class    => Service\Factory\TypeInterventionStatutServiceFactory::class,
         Service\TypeHeuresService::class                => Service\TypeHeuresServiceFactory::class,
         Service\CentreCoutEpService::class              => Service\CentreCoutEpServiceFactory::class,
+        Command\MajTauxMixiteCommand::class             => Command\MajTauxMixiteCommandFactory::class,
     ],
     'forms'        => [
         Form\DisciplineForm::class                                       => Form\Factory\DisciplineFormFactory::class,
@@ -672,5 +673,11 @@ return [
         'fieldsetElementPedagogiqueRecherche' => View\Helper\Factory\FieldsetElementPedagogiqueRechercheFactory::class,
         'elementPedagogique'                  => View\Helper\Factory\ElementPedagogiqueViewHelperFactory::class,
         'typeInterventionAdmin'               => View\Helper\Factory\TypeInterventionAdminViewHelperFactory::class,
+    ],
+
+    'laminas-cli' => [
+        'commands' => [
+            'maj-taux-mixite' => Command\MajTauxMixiteCommand::class,
+        ],
     ],
 ];

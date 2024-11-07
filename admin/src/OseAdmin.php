@@ -127,12 +127,29 @@ class OseAdmin
                 require_once $filename;
             }
         } else {
+
             // lancement d'une commande Symphony
             $app                      = (new ApplicationFactory())();
             $definition               = $app->getDefinition();
             $output                   = new ConsoleOutput();
             $containerNotFoundMessage = '';
             $input                    = new ArgvInput();
+
+            set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($output) {
+                $output->writeln("<error>Erreur : $errstr</error>");
+                echo "Dans le fichier : $errfile à la ligne : $errline\n\n";
+
+                if (OseAdmin::instance()->env()->inDev()) {
+                    echo "Trace d'exécution :\n";
+                    $trace = debug_backtrace();
+                    foreach ($trace as $index => $info) {
+                        echo "#{$index} {$info['file']} ({$info['line']}): ";
+                        echo isset($info['class']) ? "{$info['class']}::" : '';
+                        echo "{$info['function']}()\n";
+                    }
+                    echo "\n";
+                }
+            });
 
             try {
                 $input->bind($definition);

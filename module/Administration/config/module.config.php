@@ -37,6 +37,7 @@ return [
         Command\UpdateEmployeur::class             => Command\UpdateEmployeurFactory::class,
         Command\SynchronisationCommand::class      => Command\SynchronisationCommandFactory::class,
         Command\MajExportsCommand::class           => Command\MajExportsCommandFactory::class,
+        Command\CreerUtilisateurCommand::class     => Command\CreerUtilisateurCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -56,6 +57,7 @@ return [
             'update-employeur'        => Command\UpdateEmployeur::class,
             'synchronisation'         => Command\SynchronisationCommand::class,
             'maj-exports'             => Command\MajExportsCommand::class,
+            'creer-utilisateur'       => Command\CreerUtilisateurCommand::class,
         ],
     ],
 ];

@@ -4,7 +4,6 @@ namespace Indicateur\Command;
 
 use Indicateur\Processus\IndicateurProcessusAwareTrait;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,7 +15,7 @@ use Unicaen\Console\Console;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class NotifierCommand extends SymfonyCommand
+class NotifierCommand extends Command
 {
     use IndicateurProcessusAwareTrait;
 

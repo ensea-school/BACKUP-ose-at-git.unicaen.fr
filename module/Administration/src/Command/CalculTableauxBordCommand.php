@@ -2,7 +2,7 @@
 
 namespace Administration\Command;
 
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -13,7 +13,7 @@ use UnicaenTbl\Service\TableauBordServiceAwareTrait;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class CalculTableauxBordCommand extends SymfonyCommand
+class CalculTableauxBordCommand extends Command
 {
     use TableauBordServiceAwareTrait;
 
@@ -26,7 +26,7 @@ class CalculTableauxBordCommand extends SymfonyCommand
     {
         $io  = new SymfonyStyle($input, $output);
 
-        $io->title('Calcul des tableaux de bord');
+        $io->title($this->getDescription());
 
         $result = $this->getServiceTableauBord()->calculerTout(['formule'],function (array $d) use ($io) {
             $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
@@ -47,10 +47,10 @@ class CalculTableauxBordCommand extends SymfonyCommand
         $io->comment('Fin du calcul des tableaux de bord');
         if ($result) {
             $io->success('Tout c\'est bien passé');
-            return SymfonyCommand::SUCCESS;
+            return Command::SUCCESS;
         } else {
             $io->error('Attention : des erreurs ont été rencontrées!!');
-            return SymfonyCommand::FAILURE;
+            return Command::FAILURE;
         }
     }
 }

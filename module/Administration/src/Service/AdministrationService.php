@@ -2,7 +2,6 @@
 
 namespace Administration\Service;
 
-use Plafond\Service\PlafondServiceAwareTrait;
 use Symfony\Component\Filesystem\Filesystem;
 use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;

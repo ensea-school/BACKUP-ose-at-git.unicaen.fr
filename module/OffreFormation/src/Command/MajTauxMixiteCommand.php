@@ -3,7 +3,6 @@
 namespace OffreFormation\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -14,7 +13,7 @@ use Unicaen\BddAdmin\BddAwareTrait;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class MajTauxMixiteCommand extends SymfonyCommand
+class MajTauxMixiteCommand extends Command
 {
 
     use BddAwareTrait;

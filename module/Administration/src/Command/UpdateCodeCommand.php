@@ -4,7 +4,6 @@ namespace Administration\Command;
 
 use Administration\Service\GitRepoServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,7 @@ use Symfony\Component\Process\Process;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class UpdateCodeCommand extends SymfonyCommand
+class UpdateCodeCommand extends Command
 {
     use GitRepoServiceAwareTrait;
 
@@ -95,7 +94,7 @@ class UpdateCodeCommand extends SymfonyCommand
 
         $this->exec($composerCmd . ' install --optimize-autoloader', $env);
 
-        return SymfonyCommand::SUCCESS;
+        return Command::SUCCESS;
     }
 
 

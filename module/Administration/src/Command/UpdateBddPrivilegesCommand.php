@@ -22,7 +22,7 @@ class UpdateBddPrivilegesCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Mise à jour des privilèges');
+        $this->setDescription('Mise à jour des privilèges de l\'application');
     }
 
 
@@ -32,7 +32,7 @@ class UpdateBddPrivilegesCommand extends Command
         $io  = new SymfonyStyle($input, $output);
         $bdd = $this->getBdd()->setLogger($io);
 
-        $io->title('Mise à jour des privilèges de l\'application');
+        $io->title($this->getDescription());
         try {
             $bdd->data()->run('privileges');
 

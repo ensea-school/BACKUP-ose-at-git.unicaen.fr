@@ -4,6 +4,7 @@ namespace Application\Provider\Chargens;
 
 use OffreFormation\Service\TypeHeuresService;
 use Psr\Container\ContainerInterface;
+use Unicaen\BddAdmin\Bdd;
 use Unicaen\Console\Console;
 use UnicaenTbl\Service\TableauBordService;
 
@@ -21,6 +22,7 @@ class ChargensProviderFactory
 
         $chargensProvider = new ChargensProvider();
         $chargensProvider->setEntityManager($em);
+        $chargensProvider->setBdd($container->get(Bdd::class));
 
         if ($container->has('BjyAuthorize\Service\Authorize')) {
             $serviceAuthorize = $container->get('BjyAuthorize\Service\Authorize');

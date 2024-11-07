@@ -12,6 +12,7 @@ use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use Lieu\Entity\Db\StructureAwareTrait;
+use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
@@ -24,6 +25,7 @@ class ChargensProvider
     use TypeHeuresServiceAwareTrait;
     use TableauBordServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
+    use BddAwareTrait;
 
     /**
      * @var Authorize
@@ -92,34 +94,6 @@ class ChargensProvider
 
 
     /**
-     * @return NoeudProvider
-     */
-    public function getNoeuds()
-    {
-        if (empty($this->noeuds)) {
-            $this->noeuds = new NoeudProvider($this);
-        }
-
-        return $this->noeuds;
-    }
-
-
-
-    /**
-     * @return LienProvider
-     */
-    public function getLiens()
-    {
-        if (empty($this->liens)) {
-            $this->liens = new LienProvider($this);
-        }
-
-        return $this->liens;
-    }
-
-
-
-    /**
      * @return ScenarioNoeudProvider
      */
     public function getScenarioNoeuds()
@@ -143,20 +117,6 @@ class ChargensProvider
         }
 
         return $this->scenarioLiens;
-    }
-
-
-
-    /**
-     * @return EntityProvider
-     */
-    public function getEntities()
-    {
-        if (empty($this->entities)) {
-            $this->entities = new EntityProvider($this);
-        }
-
-        return $this->entities;
     }
 
 
@@ -211,13 +171,15 @@ class ChargensProvider
 
 
     /**
-     * @param $noeudId
-     *
-     * @return Noeud|null
+     * @return EntityProvider
      */
-    public function loadNoeud($noeudId)
+    public function getEntities()
     {
-        return $this->getNoeuds()->getNoeud($noeudId);
+        if (empty($this->entities)) {
+            $this->entities = new EntityProvider($this);
+        }
+
+        return $this->entities;
     }
 
 
@@ -271,36 +233,41 @@ class ChargensProvider
 
 
     /**
-     * @return Scenario|null
-     * @throws \Exception
+     * @return NoeudProvider
      */
-    public function getScenario()
+    public function getNoeuds()
     {
-        return $this->scenario;
+        if (empty($this->noeuds)) {
+            $this->noeuds = new NoeudProvider($this);
+        }
+
+        return $this->noeuds;
     }
 
 
 
     /**
-     * @param Scenario $scenario
-     *
-     * @return ChargeProvider
+     * @return LienProvider
      */
-    public function setScenario(Scenario $scenario = null)
+    public function getLiens()
     {
-        $this->scenario = $scenario;
-
-        if ($scenario) {
-            $this->getEntities()->add($scenario);
-            $this->getScenarioNoeuds()->load();
-            $this->getScenarioLiens()->load();
-            $this->getNoeuds()->loadSeuilsHeures();
-        } else {
-            $this->getScenarioNoeuds()->clear();
-            $this->getScenarioLiens()->clear();
+        if (empty($this->liens)) {
+            $this->liens = new LienProvider($this);
         }
 
-        return $this;
+        return $this->liens;
+    }
+
+
+
+    /**
+     * @param $noeudId
+     *
+     * @return Noeud|null
+     */
+    public function loadNoeud($noeudId)
+    {
+        return $this->getNoeuds()->getNoeud($noeudId);
     }
 
 
@@ -363,6 +330,41 @@ class ChargensProvider
 
 
 
+    /**
+     * @return Scenario|null
+     * @throws \Exception
+     */
+    public function getScenario()
+    {
+        return $this->scenario;
+    }
+
+
+
+    /**
+     * @param Scenario $scenario
+     *
+     * @return ChargeProvider
+     */
+    public function setScenario(Scenario $scenario = null)
+    {
+        $this->scenario = $scenario;
+
+        if ($scenario) {
+            $this->getEntities()->add($scenario);
+            $this->getScenarioNoeuds()->load();
+            $this->getScenarioLiens()->load();
+            $this->getNoeuds()->loadSeuilsHeures();
+        } else {
+            $this->getScenarioNoeuds()->clear();
+            $this->getScenarioLiens()->clear();
+        }
+
+        return $this;
+    }
+
+
+
     public function getHeuresFi(Structure $structure = null)
     {
         $res = [
@@ -414,6 +416,35 @@ class ChargensProvider
         }
 
         return $res;
+    }
+
+
+
+    /**
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function updateDiagrammeData(array $data)
+    {
+        $oldData = $this->getDbData();
+
+        if (isset($data['noeuds'])) $this->getNoeuds()->updateDiagrammeData($data['noeuds']);
+        if (isset($data['liens'])) $this->getLiens()->updateDiagrammeData($data['liens']);
+
+        $newData = $this->getDbData();
+
+        $diffData = $this->diffDbData($oldData, $newData);
+        $this->persist($diffData);
+
+        $sql = "BEGIN UNICAEN_TBL.CALCULER_DEMANDES; END;";
+        $this->getEntityManager()->getConnection()->executeStatement($sql);
+
+        if ($this->getScenario()) {
+            $this->setScenario($this->getScenario());
+        }
+
+        return $this;
     }
 
 
@@ -473,35 +504,6 @@ class ChargensProvider
 
 
     /**
-     * @param array $data
-     *
-     * @return $this
-     */
-    public function updateDiagrammeData(array $data)
-    {
-        $oldData = $this->getDbData();
-
-        if (isset($data['noeuds'])) $this->getNoeuds()->updateDiagrammeData($data['noeuds']);
-        if (isset($data['liens'])) $this->getLiens()->updateDiagrammeData($data['liens']);
-
-        $newData = $this->getDbData();
-
-        $diffData = $this->diffDbData($oldData, $newData);
-        $this->persist($diffData);
-
-        $sql = "BEGIN UNICAEN_TBL.CALCULER_DEMANDES; END;";
-        $this->getEntityManager()->getConnection()->executeStatement($sql);
-
-        if ($this->getScenario()) {
-            $this->setScenario($this->getScenario());
-        }
-
-        return $this;
-    }
-
-
-
-    /**
      * @return $this
      */
     public function persist(array $data)
@@ -510,6 +512,51 @@ class ChargensProvider
         $this->getLiens()->persist($data);
 
         return $this;
+    }
+
+
+
+    public function getScenarioNoeudsEffectifs(): ?array
+    {
+        $sql = "
+            SELECT
+              sne.id scenario_noeud_effectif_id,
+              sne.effectif effectif,
+              sn.noeud_id,
+              sn.scenario_id,
+              sne.type_heures_id,
+              sne.etape_id,
+              n.annee_id
+            FROM
+              scenario_noeud_effectif sne
+              JOIN scenario_noeud sn ON sn.id = sne.scenario_noeud_id
+              JOIN noeud n ON n.id = sn.noeud_id
+            WHERE
+              n.etape_id IS NOT NULL
+              AND COALESCE(sne.effectif_calcule,-1) <> sne.effectif
+            ORDER BY 
+              n.annee_id DESC
+            ";
+
+        return $this->bdd->select($sql);
+    }
+
+
+
+    public function calculChargeScenarioNoeudEffectif(array $scenarioNoeudEffectif): void
+    {
+
+        $sneId      = (int)$scenarioNoeudEffectif['SCENARIO_NOEUD_EFFECTIF_ID'];
+        $effectif   = (float)$scenarioNoeudEffectif['EFFECTIF'];
+        $noeud      = (int)$scenarioNoeudEffectif['NOEUD_ID'];
+        $scenario   = (int)$scenarioNoeudEffectif['SCENARIO_ID'];
+        $typeHeures = (int)$scenarioNoeudEffectif['TYPE_HEURES_ID'];
+        $etape      = (int)$scenarioNoeudEffectif['ETAPE_ID'];
+        $annee      = ((int)$scenarioNoeudEffectif['ANNEE_ID']) . '/' . ((int)$scenarioNoeudEffectif['ANNEE_ID'] + 1);
+
+        $this->bdd->exec("BEGIN OSE_CHARGENS.CALC_SUB_EFFECTIF( $noeud, $scenario, $typeHeures, $etape ); END;");
+        $this->bdd->getTable('SCENARIO_NOEUD_EFFECTIF')->update(['EFFECTIF_CALCULE' => $effectif], ['ID' => $sneId]);
+
     }
 
 

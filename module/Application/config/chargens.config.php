@@ -370,9 +370,11 @@ return [
             Service\ScenarioService::class => Service\ScenarioService::class,
         ],
         'factories'  => [
-            Service\SeuilChargeService::class         => Service\Factory\SeuilChargeServiceFactory::class,
-            Provider\Chargens\ChargensProvider::class => Provider\Chargens\ChargensProviderFactory::class,
-            Assertion\ChargensAssertion::class        => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+            Service\SeuilChargeService::class            => Service\Factory\SeuilChargeServiceFactory::class,
+            Provider\Chargens\ChargensProvider::class    => Provider\Chargens\ChargensProviderFactory::class,
+            Assertion\ChargensAssertion::class           => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+            Command\ChargensCalculEffectifCommand::class => Command\ChargensCalculEffectifCommandFactory::class,
+
         ],
     ],
     'view_helpers'    => [
@@ -389,4 +391,11 @@ return [
             Form\Chargens\DifferentielForm::class        => Form\Chargens\DifferentielForm::class,
         ],
     ],
+
+    'laminas-cli' => [
+        'commands' => [
+            'chargens-calcul-effectifs' => Command\ChargensCalculEffectifCommand::class,
+        ],
+    ],
+
 ];

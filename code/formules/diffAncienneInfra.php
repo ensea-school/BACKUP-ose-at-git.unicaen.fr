@@ -2,10 +2,7 @@
 
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
- * @var $controller \Laminas\Mvc\Controller\AbstractController
  * @var $container  \Psr\Container\ContainerInterface
- * @var $viewName   string
- * @var $viewFile   string
  */
 
 
@@ -136,7 +133,7 @@ function isDiffAC(\Formule\Entity\Db\FormuleTestIntervenant $test): ?string
 }
 
 try {
-    $params = \UnicaenCode\Util::$controller->getRequest()->getParams();
+    $params = \UnicaenCode\Util::$inputParams;
 
     $formuleName = $params[2] ?? null;
 

@@ -30,14 +30,14 @@ class MajTauxMixiteCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Mise à jour des taux de mixité');
-        $io->writeln('<info>Actualisation des taux ...</');
+        $io->writeln('<info>Actualisation des taux ...</info>');
         $this->bdd->exec("BEGIN UNICAEN_IMPORT.SYNCHRONISATION('ELEMENT_TAUX_REGIMES', 'JOIN element_pedagogique ep ON ep.id = element_pedagogique_id WHERE import_action = ''update'' AND annee_id >= OSE_PARAMETRE.GET_ANNEE_IMPORT'); END;");
 
         $io->writeln('<info>Actualisation des éléments pédagogiques ...</info>');
         $this->bdd->exec("BEGIN UNICAEN_IMPORT.SYNCHRONISATION('ELEMENT_PEDAGOGIQUE'); END;");
 
         $io->success("Mise à jour des taux de mixité terminée avec succés");
-       
+
 
         return Command::SUCCESS;
     }

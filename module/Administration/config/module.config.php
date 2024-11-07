@@ -2,6 +2,7 @@
 
 namespace Administration;
 
+
 return [
     'unicaen-bddadmin' => [
 
@@ -35,6 +36,7 @@ return [
         Command\UpdateCodeCommand::class           => Command\UpdateCodeCommandFactory::class,
         Command\UpdateEmployeur::class             => Command\UpdateEmployeurFactory::class,
         Command\SynchronisationCommand::class      => Command\SynchronisationCommandFactory::class,
+        Command\MajExportsCommand::class           => Command\MajExportsCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -44,6 +46,7 @@ return [
             'changement-mot-de-passe' => Command\ChangementMotDePasseCommand::class,
             'update'                  => Command\UpdateCommand::class,
             'update-ddl'              => \Unicaen\BddAdmin\Command\UpdateDdlCommand::class,
+            'build-synchronisation'   => \UnicaenImport\Command\MajVuesFonctionsCommand::class,
             'update-bdd'              => Command\UpdateBddCommand::class,
             'update-bdd-data'         => Command\UpdateBddDataCommand::class,
             'update-bdd-privileges'   => Command\UpdateBddPrivilegesCommand::class,
@@ -52,6 +55,7 @@ return [
             'update-code'             => Command\UpdateCodeCommand::class,
             'update-employeur'        => Command\UpdateEmployeur::class,
             'synchronisation'         => Command\SynchronisationCommand::class,
+            'maj-exports'             => Command\MajExportsCommand::class,
         ],
     ],
 ];

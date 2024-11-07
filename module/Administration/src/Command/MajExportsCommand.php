@@ -35,7 +35,7 @@ class MajExportsCommand extends Command
         $this->bdd->refreshMaterializedViews();
         $io->success('Mise à jour des vues matérialisées réalisée avec succés');
 
-        Command::SUCCESS;
+        return Command::SUCCESS;
 
     }
 }

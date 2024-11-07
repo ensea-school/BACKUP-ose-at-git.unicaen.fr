@@ -22,7 +22,7 @@ class SynchronisationCommand extends Command
     protected function configure(): void
     {
         $this->setName('calcul-feuille-de-route')
-            ->setDescription('Lance les jobs de synchronisation de OSE, non du job en argument')
+            ->setDescription('Lancement les jobs de synchronisation de OSE')
             ->addArgument('job', InputArgument::REQUIRED, 'Nom du job que vous souhaitez lancer');
 
     }
@@ -34,7 +34,7 @@ class SynchronisationCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $oa = \OseAdmin::instance();
 
-        $io->title('Lancement des jobs de synchronisation de OSE');
+        $io->title($this->getDescription());
         if ($oa->inMaintenance()) {
             $io->writeln("OSE est en maintenance. La synchronisation est coupée pendant ce temps");
             return Command::FAILURE;

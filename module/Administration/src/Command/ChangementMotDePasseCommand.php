@@ -35,6 +35,8 @@ class ChangementMotDePasseCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
+        $this->io->title($this->getDescription());
+
         $this->motDePasse($input);
 
         return Command::SUCCESS;

@@ -22,7 +22,7 @@ class UpdateBddDataCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Mise à jour du jeu de données');
+        $this->setDescription('Contrôle et mise à jour du jeu de données');
     }
 
 
@@ -32,7 +32,7 @@ class UpdateBddDataCommand extends Command
         $io  = new SymfonyStyle($input, $output);
         $bdd = $this->getBdd()->setLogger($io);
 
-        $io->title('Contrôle et mise à jour du jeu de données');
+        $io->title($this->getDescription());
         try {
             $bdd->data()->run(DataManager::ACTION_UPDATE);
             $this->getServiceAdministration()->clearCache();

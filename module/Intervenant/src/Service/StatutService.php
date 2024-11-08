@@ -2,6 +2,7 @@
 
 namespace Intervenant\Service;
 
+use Application\Entity\Db\Annee;
 use Application\Service\AbstractEntityService;
 use Intervenant\Entity\Db\Statut;
 use Doctrine\ORM\QueryBuilder;
@@ -44,12 +45,17 @@ class StatutService extends AbstractEntityService
 
     /**
      * @param string $code
+     * @param ?Annee $annee
+     *
      *
      * @return ?Statut
      */
-    public function getByCode(string $code): ?Statut
+    public function getByCode(string $code, Annee $annee = null): ?Statut
     {
-        return $this->getRepo()->findOneBy(['code' => $code, 'annee' => $this->getServiceContext()->getAnnee()]);
+        if (!$annee instanceof Annee) {
+            $annee = $this->getServiceContext()->getAnnee();
+        }
+        return $this->getRepo()->findOneBy(['code' => $code, 'annee' => $annee]);
     }
 
 

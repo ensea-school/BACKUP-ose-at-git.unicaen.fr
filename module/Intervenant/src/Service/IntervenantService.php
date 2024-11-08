@@ -520,7 +520,7 @@ class IntervenantService extends AbstractEntityService
         if (!isset($params['statut']) || empty($params['statut'])) {
             $params['statut'] = $this->getServiceStatut()->getAutres();
         } elseif (!$params['statut'] instanceof Statut) {
-            $params['statut'] = $this->getServiceStatut()->getByCode($params['statut']);
+            $params['statut'] = $this->getServiceStatut()->getByCode($params['statut'], $params['annee']);
         }
 
         $intervenant = new Intervenant;

@@ -33,8 +33,6 @@ class UpdateEmployeur extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $filesystem = new Filesystem();
-        $oseSource  = \OseAdmin::instance()->getSourceOseId();
-        $oseId      = \OseAdmin::instance()->getOseAppliId();
         $io         = new SymfonyStyle($input, $output);
         $io->title('Mise à jour de la table employeurs');
         $importDirectory = dirname(__DIR__, 4) . '/cache/employeurs/';

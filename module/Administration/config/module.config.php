@@ -3,6 +3,7 @@
 namespace Administration;
 
 
+
 return [
     'unicaen-bddadmin' => [
 
@@ -38,6 +39,7 @@ return [
         Command\SynchronisationCommand::class      => Command\SynchronisationCommandFactory::class,
         Command\MajExportsCommand::class           => Command\MajExportsCommandFactory::class,
         Command\CreerUtilisateurCommand::class     => Command\CreerUtilisateurCommandFactory::class,
+        Command\FichiersVersFilesystemCommand::class => Command\FichiersVersFilesystemCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -58,6 +60,7 @@ return [
             'synchronisation'         => Command\SynchronisationCommand::class,
             'maj-exports'             => Command\MajExportsCommand::class,
             'creer-utilisateur'       => Command\CreerUtilisateurCommand::class,
+            'fichiers-vers-filesystem' => Command\FichiersVersFilesystemCommand::class,
         ],
     ],
 ];

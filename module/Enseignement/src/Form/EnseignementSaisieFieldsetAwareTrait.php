@@ -33,6 +33,6 @@ trait EnseignementSaisieFieldsetAwareTrait
             return $this->fieldsetEnseignementSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(EnseignementSaisieFieldset::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(EnseignementSaisieFieldset::class);
     }
 }

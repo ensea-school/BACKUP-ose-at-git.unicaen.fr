@@ -7,7 +7,7 @@
     <h3><?= $previous->getMessage() ?></h3>
 <?php endif ?>
 
-<?php if (OseAdmin::instance()->config()->get('global', 'affichageErreurs')): ?>
+<?php if (AppAdmin::config()['global']['affichageErreurs'] ?? true): ?>
 
 <?php if (isset($this->exception) && ($this->exception instanceof \Exception || $this->exception instanceof \Error)): ?>
 

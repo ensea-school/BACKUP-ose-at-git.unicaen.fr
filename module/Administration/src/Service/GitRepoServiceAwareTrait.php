@@ -31,7 +31,7 @@ trait GitRepoServiceAwareTrait
     public function getServiceGitRepo(): ?GitRepoService
     {
         if (empty($this->serviceGitRepo)) {
-            $this->serviceGitRepo = \OseAdmin::instance()->container()->get(GitRepoService::class);
+            $this->serviceGitRepo = \AppAdmin::container()->get(GitRepoService::class);
         }
 
         return $this->serviceGitRepo;

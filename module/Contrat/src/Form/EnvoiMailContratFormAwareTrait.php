@@ -33,6 +33,6 @@ trait EnvoiMailContratFormAwareTrait
             return $this->formContratEnvoiMailContrat;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(EnvoiMailContratForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(EnvoiMailContratForm::class);
     }
 }

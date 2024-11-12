@@ -31,7 +31,7 @@ trait MiseEnPaiementIntervenantStructureServiceAwareTrait
     public function getServiceMiseEnPaiementIntervenantStructure(): ?MiseEnPaiementIntervenantStructureService
     {
         if (empty($this->serviceMiseEnPaiementIntervenantStructure)) {
-            $this->serviceMiseEnPaiementIntervenantStructure = \OseAdmin::instance()->container()->get(MiseEnPaiementIntervenantStructureService::class);
+            $this->serviceMiseEnPaiementIntervenantStructure = \AppAdmin::container()->get(MiseEnPaiementIntervenantStructureService::class);
         }
 
         return $this->serviceMiseEnPaiementIntervenantStructure;

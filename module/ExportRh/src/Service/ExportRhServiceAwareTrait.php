@@ -31,7 +31,7 @@ trait ExportRhServiceAwareTrait
     public function getServiceExportRh(): ?ExportRhService
     {
         if (empty($this->serviceExportRh)) {
-            $this->serviceExportRh = \OseAdmin::instance()->container()->get(ExportRhService::class);
+            $this->serviceExportRh = \AppAdmin::container()->get(ExportRhService::class);
         }
 
         return $this->serviceExportRh;

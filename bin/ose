@@ -1,9 +1,3 @@
-#!/usr/bin/env php
-<?php
+#!/bin/bash
 
-/** @var OseAdmin $oa */
-$oa = require dirname(__DIR__) . '/admin/src/start.php';
-
-$c = $oa->console();
-
-$oa->run($c->getArg(1) ?: 'help');
+vendor/bin/laminas $1

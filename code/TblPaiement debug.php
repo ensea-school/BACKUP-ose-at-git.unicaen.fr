@@ -1,7 +1,12 @@
 <?php
 
-/** @var \UnicaenTbl\Service\TableauBordService $c */
+/**
+ * @var $this       \Application\View\Renderer\PhpRenderer
+ * @var $container  \Psr\Container\ContainerInterface
+ */
+
 $c = $container->get(\UnicaenTbl\Service\TableauBordService::class);
+$bdd = $container->get(\Unicaen\BddAdmin\Bdd::class);
 
 $ptbl = $c->getTableauBord('paiement');
 
@@ -27,7 +32,7 @@ echo phpDump($data);
 $ptbl->calculer($params);
 
 
-$res = phpDump(OseAdmin::instance()->getBdd()->getTable('TBL_PAIEMENT')->select($params));
+$res = phpDump($bdd->getTable('TBL_PAIEMENT')->select($params));
 echo '<h2>Résultat</h2>';
 echo phpDump($res);
 

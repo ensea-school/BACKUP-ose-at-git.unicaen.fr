@@ -32,7 +32,7 @@ trait EtatSortieServiceAwareTrait
     public function getServiceEtatSortie(): ?EtatSortieService
     {
         if (empty($this->serviceEtatSortie)) {
-            $this->serviceEtatSortie = \OseAdmin::instance()->container()->get(EtatSortieService::class);
+            $this->serviceEtatSortie = \AppAdmin::container()->get(EtatSortieService::class);
         }
 
         return $this->serviceEtatSortie;

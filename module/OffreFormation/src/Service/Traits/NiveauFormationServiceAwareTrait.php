@@ -32,7 +32,7 @@ trait NiveauFormationServiceAwareTrait
     public function getServiceNiveauFormation(): ?NiveauFormationService
     {
         if (empty($this->serviceNiveauFormation)) {
-            $this->serviceNiveauFormation = \OseAdmin::instance()->container()->get(NiveauFormationService::class);
+            $this->serviceNiveauFormation = \AppAdmin::container()->get(NiveauFormationService::class);
         }
 
         return $this->serviceNiveauFormation;

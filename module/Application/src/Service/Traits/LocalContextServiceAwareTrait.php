@@ -32,7 +32,7 @@ trait LocalContextServiceAwareTrait
     public function getServiceLocalContext(): ?LocalContextService
     {
         if (empty($this->serviceLocalContext)) {
-            $this->serviceLocalContext = \OseAdmin::instance()->container()->get(LocalContextService::class);
+            $this->serviceLocalContext = \AppAdmin::container()->get(LocalContextService::class);
         }
 
         return $this->serviceLocalContext;

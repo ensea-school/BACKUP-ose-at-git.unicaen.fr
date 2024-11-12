@@ -32,7 +32,7 @@ trait TypePieceJointeStatutServiceAwareTrait
     public function getServiceTypePieceJointeStatut(): ?TypePieceJointeStatutService
     {
         if (empty($this->serviceTypePieceJointeStatut)) {
-            $this->serviceTypePieceJointeStatut = \OseAdmin::instance()->container()->get(TypePieceJointeStatutService::class);
+            $this->serviceTypePieceJointeStatut = \AppAdmin::container()->get(TypePieceJointeStatutService::class);
         }
 
         return $this->serviceTypePieceJointeStatut;

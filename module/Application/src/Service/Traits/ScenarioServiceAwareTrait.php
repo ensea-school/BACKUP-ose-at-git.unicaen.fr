@@ -32,7 +32,7 @@ trait ScenarioServiceAwareTrait
     public function getServiceScenario(): ?ScenarioService
     {
         if (empty($this->serviceScenario)) {
-            $this->serviceScenario = \OseAdmin::instance()->container()->get(ScenarioService::class);
+            $this->serviceScenario = \AppAdmin::container()->get(ScenarioService::class);
         }
 
         return $this->serviceScenario;

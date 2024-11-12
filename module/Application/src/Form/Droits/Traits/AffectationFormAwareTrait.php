@@ -35,6 +35,6 @@ trait AffectationFormAwareTrait
             return $this->formDroitsAffectation;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(AffectationForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(AffectationForm::class);
     }
 }

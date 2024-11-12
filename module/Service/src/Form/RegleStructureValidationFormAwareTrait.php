@@ -33,6 +33,6 @@ trait RegleStructureValidationFormAwareTrait
             return $this->formRegleStructureValidation;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(RegleStructureValidationForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(RegleStructureValidationForm::class);
     }
 }

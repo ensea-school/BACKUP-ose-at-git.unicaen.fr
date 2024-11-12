@@ -30,7 +30,7 @@ trait PaysServiceAwareTrait
     public function getServicePays(): ?PaysService
     {
         if (empty($this->servicePays)) {
-            $this->servicePays = \OseAdmin::instance()->container()->get(PaysService::class);
+            $this->servicePays = \AppAdmin::container()->get(PaysService::class);
         }
 
         return $this->servicePays;

@@ -32,7 +32,7 @@ trait SourceServiceAwareTrait
     public function getServiceSource(): ?SourceService
     {
         if (empty($this->serviceSource)) {
-            $this->serviceSource = \OseAdmin::instance()->container()->get(SourceService::class);
+            $this->serviceSource = \AppAdmin::container()->get(SourceService::class);
         }
 
         return $this->serviceSource;

@@ -35,6 +35,6 @@ trait ScenarioFormAwareTrait
             return $this->formChargensScenario;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ScenarioForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(ScenarioForm::class);
     }
 }

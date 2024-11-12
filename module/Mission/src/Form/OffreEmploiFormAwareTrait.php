@@ -34,6 +34,6 @@ trait OffreEmploiFormAwareTrait
             return $this->formOffreEmploi;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(OffreEmploiForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(OffreEmploiForm::class);
     }
 }

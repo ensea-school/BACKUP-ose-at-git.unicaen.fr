@@ -58,7 +58,7 @@ class IndexController extends AbstractController
 
     public function planAction()
     {
-        $configPages = \OseAdmin::instance()->container()->get('config')['navigation']['default']['home']['pages'];
+        $configPages = \AppAdmin::container()->get('config')['navigation']['default']['home']['pages'];
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         return compact('configPages', 'role');

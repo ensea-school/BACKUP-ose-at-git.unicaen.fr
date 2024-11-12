@@ -33,6 +33,6 @@ trait EditionFormAwareTrait
             return $this->formIntervenantEdition;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(EditionForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(EditionForm::class);
     }
 }

@@ -35,6 +35,6 @@ trait RoleFormAwareTrait
             return $this->formDroitsRole;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(RoleForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(RoleForm::class);
     }
 }

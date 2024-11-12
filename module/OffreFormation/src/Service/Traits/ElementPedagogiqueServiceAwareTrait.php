@@ -32,7 +32,7 @@ trait ElementPedagogiqueServiceAwareTrait
     public function getServiceElementPedagogique(): ?ElementPedagogiqueService
     {
         if (empty($this->serviceElementPedagogique)) {
-            $this->serviceElementPedagogique = \OseAdmin::instance()->container()->get(ElementPedagogiqueService::class);
+            $this->serviceElementPedagogique = \AppAdmin::container()->get(ElementPedagogiqueService::class);
         }
 
         return $this->serviceElementPedagogique;

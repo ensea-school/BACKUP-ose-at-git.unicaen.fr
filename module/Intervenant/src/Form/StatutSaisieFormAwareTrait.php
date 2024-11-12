@@ -34,6 +34,6 @@ trait StatutSaisieFormAwareTrait
             return $this->formStatutSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(StatutSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(StatutSaisieForm::class);
     }
 }

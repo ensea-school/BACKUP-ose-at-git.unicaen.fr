@@ -30,7 +30,7 @@ trait ValidationReferentielProcessusAwareTrait
     public function getProcessusValidationReferentiel(): ?ValidationReferentielProcessus
     {
         if (empty($this->processusValidationReferentiel)) {
-            $this->processusValidationReferentiel = \OseAdmin::instance()->container()->get(ValidationReferentielProcessus::class);
+            $this->processusValidationReferentiel = \AppAdmin::container()->get(ValidationReferentielProcessus::class);
         }
 
         return $this->processusValidationReferentiel;

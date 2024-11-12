@@ -41,6 +41,6 @@ trait EtapeTauxRemuFormAwareTrait
             return $this->formEtapeTauxRemuEtapeTauxRemu;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(EtapeTauxRemuForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(EtapeTauxRemuForm::class);
     }
 }

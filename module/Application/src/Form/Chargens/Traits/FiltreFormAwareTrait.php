@@ -35,6 +35,6 @@ trait FiltreFormAwareTrait
             return $this->formChargensFiltre;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(FiltreForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(FiltreForm::class);
     }
 }

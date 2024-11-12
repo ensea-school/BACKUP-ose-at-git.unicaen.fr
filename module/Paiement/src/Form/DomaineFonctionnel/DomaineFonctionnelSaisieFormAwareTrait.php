@@ -34,6 +34,6 @@ trait DomaineFonctionnelSaisieFormAwareTrait
             return $this->formDomaineFonctionnelDomaineFonctionnelSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(DomaineFonctionnelSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(DomaineFonctionnelSaisieForm::class);
     }
 }

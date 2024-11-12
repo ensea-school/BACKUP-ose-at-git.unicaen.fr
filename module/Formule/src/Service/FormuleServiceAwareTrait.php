@@ -31,7 +31,7 @@ trait FormuleServiceAwareTrait
     public function getServiceFormule(): ?FormuleService
     {
         if (empty($this->serviceFormule)) {
-            $this->serviceFormule = \OseAdmin::instance()->container()->get(FormuleService::class);
+            $this->serviceFormule = \AppAdmin::container()->get(FormuleService::class);
         }
 
         return $this->serviceFormule;

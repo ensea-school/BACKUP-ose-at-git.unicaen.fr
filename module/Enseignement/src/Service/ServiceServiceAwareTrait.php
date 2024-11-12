@@ -30,7 +30,7 @@ trait ServiceServiceAwareTrait
     public function getServiceService(): ?ServiceService
     {
         if (empty($this->serviceService)) {
-            $this->serviceService = \OseAdmin::instance()->container()->get(ServiceService::class);
+            $this->serviceService = \AppAdmin::container()->get(ServiceService::class);
         }
 
         return $this->serviceService;

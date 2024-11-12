@@ -1,10 +1,8 @@
 <?php
 
-use UnicaenMail\Controller\MailController;
 use UnicaenMail\Entity\Db\Mail;
-use UnicaenPrivilege\Guard\PrivilegeController;
 
-$config = OseAdmin::instance()->config();
+$conf = AppAdmin::config();
 
 return [
     'unicaen-app' => [
@@ -15,15 +13,15 @@ return [
         'mail' => [
             // transport des mails
             'transport_options' => [
-                'host' => $config->get('mail', 'smtpHost'),
-                'port' => $config->get('mail', 'smtpPort'),
+                'host' => $conf['mail']['smtpHost'] ?? 'localhost',
+                'port' => $conf['mail']['smtpPort'] ?? null,
             ],
             // adresses à substituer à celles des destinataires originaux ('CURRENT_USER' équivaut à l'utilisateur connecté)
-            'redirect_to'       => $config->get('mail', 'redirection'),
+            'redirect_to'       => $conf['mail']['redirection'] ?? null,
             // adresse d'expéditeur par défaut
-            'from'              => $config->get('mail', 'from'),
+            'from'              => $conf['mail']['from'] ?? null,
             // désactivation totale de l'envoi de mail par l'application
-            'do_not_send'       => $config->get('mail', 'envoiDesactive'),
+            'do_not_send'       => $conf['mail']['envoiDesactive'] ?? true,
         ],
     ],
 
@@ -37,17 +35,17 @@ return [
          * Options concernant l'envoi de mail par l'application
          */
         'transport_options' => [
-            'host' => $config->get('mail', 'smtpHost'),
-            'port' => $config->get('mail', 'smtpPort'),
+            'host' => $conf['mail']['smtpHost'] ?? 'localhost',
+            'port' => $conf['mail']['smtpPort'] ?? null,
         ],
 
-        'redirect_to' => $config->get('mail', 'redirection'),
-        'do_not_send' => $config->get('mail', 'envoiDesactive'),
-        'redirect'    => !empty($config->get('mail', 'redirection')),
+        'redirect_to' => $conf['mail']['redirection'] ?? null,
+        'do_not_send' => $conf['mail']['envoiDesactive'] ?? true,
+        'redirect'    => !empty($conf['mail']['redirection'] ?? null),
 
         'subject_prefix' => 'OSE',
         'from_name'      => 'Application',
-        'from_email'     => $config->get('mail', 'from'),
+        'from_email'     => $conf['mail']['from'] ?? null,
 
         /**
          * Adresses des redirections si do_not_send est à true
@@ -55,19 +53,19 @@ return [
 
         'module' => [
             'default' => [
-                'redirect_to'    => $config->get('mail', 'redirection'),
-                'do_not_send'    => $config->get('mail', 'envoiDesactive'),
-                'redirect'       => !empty($config->get('mail', 'redirection')),
+                'redirect_to'    => $conf['mail']['redirection'] ?? null,
+                'do_not_send'    => $conf['mail']['envoiDesactive'] ?? true,
+                'redirect'       => !empty($conf['mail']['redirection'] ?? null),
                 'subject_prefix' => 'OSE',
                 'from_name'      => 'OSE | Application',
-                'from_email'     => $config->get('mail', 'from'),
+                'from_email'     => $conf['mail']['from'] ?? null,
 
             ],
 
         ],
     ],
 
-    'server_url' => $config->get('global', 'scheme') . '://' . $config->get('global', 'domain'),
+    'server_url' => ($conf['global']['scheme'] ?? 'http') . '://' . ($conf['global']['domain'] ?? 'localhost'),
 
     /*'navigation' => [
         'default' => [

@@ -31,11 +31,16 @@ echo $this->doctype();
     <?= $this->headTitle($this->appInfos()->nom)->setSeparator(' - ')->setAutoEscape(true) . "\n"; ?>
 
     <!-- Dépendances -->
-    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/open-sans-main/open-sans.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/font-awesome-6.0.0/css/all.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/css/bootstrap-select.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/DataTables-1.12.1/css/dataTables.bootstrap5.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.css') ?>" media="all" rel="stylesheet"
+          type="text/css">
+    <link href="<?= $this->basePath('/vendor/open-sans-main/open-sans.css') ?>" media="all" rel="stylesheet"
+          type="text/css">
+    <link href="<?= $this->basePath('/vendor/font-awesome-6.0.0/css/all.min.css') ?>" media="all" rel="stylesheet"
+          type="text/css">
+    <link href="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/css/bootstrap-select.min.css') ?>" media="all"
+          rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/DataTables-1.12.1/css/dataTables.bootstrap5.min.css') ?>" media="all"
+          rel="stylesheet" type="text/css">
 
 
     <!-- CSS générale à l'application -->
@@ -45,26 +50,25 @@ echo $this->doctype();
     <?= $this->headLink(); ?>
 
     <!-- Eléments de mise en forme (CSS et icônes) chargés depuis la config OSE -->
-    <?php if ($customCss = OseAdmin::instance()->config()->get('etablissement', 'css')) : ?>
+    <?php if ($customCss = (AppAdmin::config()['etablissement']['css'] ?? null)) : ?>
         <link href="<?= $customCss ?>" media="all" rel="stylesheet" type="text/css">
     <?php endif; ?>
 
     <?php
-    $icons = OseAdmin::instance()->config()->get('etablissement', 'icons');
-    if (is_array($icons)) {
-        foreach ($icons as $icon) {
-            // Protection pour éviter d'appeler d'anciennes icônes Unicaen
-            $forbidden = 'www.unicaen.fr/images/favicon/';
-            if (isset($icon['href']) && str_contains($icon['href'], $forbidden)) {
-                continue;
-            }
-            $ihtml = "\t<link rel=\"icon\" ";
-            foreach ($icon as $attrName => $attrVal) {
-                $ihtml .= $attrName . '="' . $attrVal . '" ';
-            }
-            $ihtml .= "/>\n";
-            echo $ihtml;
+    $icons = AppAdmin::config()['etablissement']['css'] ?? [];
+
+    foreach ($icons as $icon) {
+        // Protection pour éviter d'appeler d'anciennes icônes Unicaen
+        $forbidden = 'www.unicaen.fr/images/favicon/';
+        if (isset($icon['href']) && str_contains($icon['href'], $forbidden)) {
+            continue;
         }
+        $ihtml = "\t<link rel=\"icon\" ";
+        foreach ($icon as $attrName => $attrVal) {
+            $ihtml .= $attrName . '="' . $attrVal . '" ';
+        }
+        $ihtml .= "/>\n";
+        echo $ihtml;
     }
     ?>
 
@@ -77,13 +81,14 @@ echo $this->doctype();
 
 </head>
 
-<body class="<?= OseAdmin::instance()->env()->getEnv() ?> p-0" data-base-url="<?= $this->url('home') ?>">
+<body class="<?= AppAdmin::env() ?> p-0" data-base-url="<?= $this->url('home') ?>">
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
     <div class="container">
         <?= $this->appLink($this->appInfos()->nom) ?>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -102,7 +107,8 @@ echo $this->doctype();
     <?php $pages->rewind();
     if ($menuSecondaire = $navigationHelper->menuSecondaire($pages)->render()): ?>
         <div class="row">
-            <div id="sidebar" data-url="<?= $this->intervenant()->menuUrl() ?>" class="col-xs-6 col-md-2" role="navigation">
+            <div id="sidebar" data-url="<?= $this->intervenant()->menuUrl() ?>" class="col-xs-6 col-md-2"
+                 role="navigation">
                 <?= $menuSecondaire; ?>
             </div>
             <div id="content" class="col-xs-12 col-md-10">
@@ -116,21 +122,28 @@ echo $this->doctype();
 
 
 <nav id="footer" class="nav justify-content-center">
-    <a title="<?= OseAdmin::instance()->config()->get('etablissement', 'logoDescription') ?>" class="nav-link lien-univ"
-       href="<?= OseAdmin::instance()->config()->get('etablissement', 'logoUri') ?>"><?= OseAdmin::instance()->config()->get('etablissement', 'nom') ?></a>
-    <a title="&#xC0;propos de cette application" class="nav-link apropos" href="<?= $this->basePath('apropos') ?>">À propos</a>
+    <a title="<?= AppAdmin::config()['etablissement']['logoDescription'] ?? null ?>" class="nav-link lien-univ"
+       href="<?= AppAdmin::config()['etablissement']['logoUri'] ?? null ?>"><?= AppAdmin::config()['etablissement']['nom'] ?? null ?></a>
+    <a title="&#xC0;propos de cette application" class="nav-link apropos" href="<?= $this->basePath('apropos') ?>">À
+        propos</a>
     <a title="Contact concernant l'application" class="nav-link contact" href="<?= $this->basePath('contact') ?>">Contact</a>
-    <a title="Page de navigation au sein de l'application" class="nav-link plan" href="<?= $this->basePath('plan') ?>">Plan de navigation</a>
-    <a title="Mentions légales" class="nav-link ml" href="<?= OseAdmin::instance()->config()->get('etablissement', 'mentionsLegales') ?>">Mentions légales</a>
-    <a title="Vie privée" class="nav-link il" href="<?= OseAdmin::instance()->config()->get('etablissement', 'viePrivee') ?>">Vie privée</a>
+    <a title="Page de navigation au sein de l'application" class="nav-link plan" href="<?= $this->basePath('plan') ?>">Plan
+        de navigation</a>
+    <a title="Mentions légales" class="nav-link ml"
+       href="<?= AppAdmin::config()['etablissement']['mentionsLegales'] ?? null ?>">Mentions légales</a>
+    <a title="Vie privée" class="nav-link il"
+       href="<?= AppAdmin::config()['etablissement']['viePrivee'] ?? null ?>">Vie privée</a>
 </nav>
 
 
 <!-- Scripts (dépendances) -->
-<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-5.0.2/dist/js/bootstrap.bundle.js') ?>"></script>
+<script type="text/javascript"
+        src="<?= $this->basePath('/vendor/bootstrap-5.0.2/dist/js/bootstrap.bundle.js') ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery.form-3.51.js') ?>"></script>
-<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/bootstrap-select.min.js') ?>"></script>
-<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/i18n/defaults-fr_FR.js') ?>"></script>
+<script type="text/javascript"
+        src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/bootstrap-select.min.js') ?>"></script>
+<script type="text/javascript"
+        src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/i18n/defaults-fr_FR.js') ?>"></script>
 
 <!-- Scripts de l'application -->
 <script type="text/javascript" src="<?= $this->basePath('/js/unicaen.js?v=' . $version) ?>"></script>

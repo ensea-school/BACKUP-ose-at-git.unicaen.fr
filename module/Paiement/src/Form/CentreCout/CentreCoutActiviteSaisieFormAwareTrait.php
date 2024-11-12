@@ -34,6 +34,6 @@ trait CentreCoutActiviteSaisieFormAwareTrait
             return $this->formCentreCoutCentreCoutActiviteSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(CentreCoutActiviteSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(CentreCoutActiviteSaisieForm::class);
     }
 }

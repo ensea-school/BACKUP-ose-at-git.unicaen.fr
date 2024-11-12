@@ -32,7 +32,7 @@ trait OffreFormationServiceAwareTrait
     public function getServiceOffreFormation(): ?OffreFormationService
     {
         if (empty($this->serviceOffreFormation)) {
-            $this->serviceOffreFormation = \OseAdmin::instance()->container()->get(OffreFormationService::class);
+            $this->serviceOffreFormation = \AppAdmin::container()->get(OffreFormationService::class);
         }
 
         return $this->serviceOffreFormation;

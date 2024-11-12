@@ -30,7 +30,7 @@ trait CiviliteServiceAwareTrait
     public function getServiceCivilite(): ?CiviliteService
     {
         if (empty($this->serviceCivilite)) {
-            $this->serviceCivilite = \OseAdmin::instance()->container()->get(CiviliteService::class);
+            $this->serviceCivilite = \AppAdmin::container()->get(CiviliteService::class);
         }
 
         return $this->serviceCivilite;

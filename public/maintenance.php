@@ -25,7 +25,7 @@ $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDE
         <h1>OSE
             <small>Organisation des Services d'Enseignement</small>
         </h1>
-        <p class="lead"><?= \OseAdmin::instance()->maintenanceText() ?></p>
+        <p class="lead"><?= \AppAdmin::config()['maintenance']['messageInfo'] ?? 'L\'application est actuellement indisponible' ?></p>
 
 </div>
 <style>

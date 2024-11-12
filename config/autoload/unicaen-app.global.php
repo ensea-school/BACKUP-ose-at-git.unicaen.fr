@@ -1,12 +1,6 @@
 <?php
-$versionFile = dirname(dirname(__DIR__)) . '/VERSION';
-if (file_exists($versionFile)) {
-    $version = file_get_contents($versionFile);
-} else {
-    $version = OseAdmin::instance()->env()->getEnv();
-}
 
-$config = OseAdmin::instance()->config();
+$conf = AppAdmin::config();
 
 return [
     'unicaen-app' => [
@@ -32,11 +26,11 @@ return [
         'app_infos'              => [
             'nom'                    => "OSE",
             'desc'                   => "Organisation des Services d'Enseignement",
-            'version'                => $version,
-            'date'                   => '31/05/2018',
+            'version'                => AppAdmin::version(),
+            'date'                   => '08/11/2024',
             'contact'                => ['mail' => null],
-            'mentionsLegales'        => $config->get('etablissement', 'mentionsLegales'),
-            'informatiqueEtLibertes' => $config->get('etablissement', 'informatiqueEtLibertes'),
+            'mentionsLegales'        => AppAdmin::config()['etablissement']['mentionsLegales'] ?? null,
+            'informatiqueEtLibertes' => AppAdmin::config()['etablissement']['informatiqueEtLibertes'] ?? null,
         ],
 
         /**
@@ -48,35 +42,35 @@ return [
             'connection'  => [
                 'default' => [
                     'params' => [
-                        'host'                => ($config->get('ldap', 'actif', true) || $config->get('cas', 'actif', true)) ? $config->get('ldap', 'host') : null,
-                        'username'            => $config->get('ldap', 'username'),
-                        'password'            => $config->get('ldap', 'password'),
-                        'baseDn'              => $config->get('ldap', 'baseDn'),
-                        'bindRequiresDn'      => $config->get('ldap', 'bindRequiresDn'),
-                        'accountFilterFormat' => "(&(objectClass=" . $config->get('ldap', 'loginObjectClass', 'posixAccount') . ")(" . $config->get('ldap', 'loginAttribute') . "=%s))",
-                        'port'                => $config->get('ldap', 'port'),
-                        'useSsl'              => $config->get('ldap', 'useSsl', false)
+                        'host'                => (($conf['ldap']['actif'] ?? true) || ($conf['cas']['actif'] ?? true)) ? ($conf['ldap']['host'] ?? null) : null,
+                        'username'            => $conf['ldap']['username'] ?? null,
+                        'password'            => $conf['ldap']['password'] ?? null,
+                        'baseDn'              => $conf['ldap']['baseDn'] ?? null,
+                        'bindRequiresDn'      => $conf['ldap']['bindRequiresDn'] ?? null,
+                        'accountFilterFormat' => "(&(objectClass=" . ($conf['ldap']['loginObjectClass'] ?? 'posixAccount') . ")(" . ($conf['ldap']['loginAttribute'] ?? null) . "=%s))",
+                        'port'                => $conf['ldap']['port'] ?? null,
+                        'useSsl'              => $conf['ldap']['useSsl'] ?? false,
                     ],
                 ],
             ],
             'dn'          => [
-                'UTILISATEURS_BASE_DN'            => $config->get('ldap', 'utilisateursBaseDN'),
-                'UTILISATEURS_DESACTIVES_BASE_DN' => $config->get('ldap', 'utilisateursDesactivesBaseDN'),
-                'GROUPS_BASE_DN'                  => $config->get('ldap', 'groupsBaseDN'),
-                'STRUCTURES_BASE_DN'              => $config->get('ldap', 'structuresBaseDN'),
+                'UTILISATEURS_BASE_DN'            => $conf['ldap']['utilisateursBaseDN'] ?? null,
+                'UTILISATEURS_DESACTIVES_BASE_DN' => $conf['ldap']['utilisateursDesactivesBaseDN'] ?? null,
+                'GROUPS_BASE_DN'                  => $conf['ldap']['groupsBaseDN'] ?? null,
+                'STRUCTURES_BASE_DN'              => $conf['ldap']['structuresBaseDN'] ?? null,
             ],
             'filters'     => [
-                'LOGIN_FILTER'                 => '(' . $config->get('ldap', 'loginAttribute') . '=%s)',
-                'LOGIN_OR_NAME_FILTER'         => '(|(' . $config->get('ldap', 'loginAttribute') . '=%s)(cn=%s*))',
+                'LOGIN_FILTER'                 => '(' . ($conf['ldap']['loginAttribute'] ?? null) . '=%s)',
+                'LOGIN_OR_NAME_FILTER'         => '(|(' . ($conf['ldap']['loginAttribute'] ?? null) . '=%s)(cn=%s*))',
                 'FILTER_STRUCTURE_DN'          => '(%s)',
-                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . $config->get('ldap', 'structureCode') . '=%s)',
-                'NO_INDIVIDU_FILTER'           => '(' . $config->get('ldap', 'utilisateurCode') . '=%s)',
+                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . ($conf['ldap']['structureCode'] ?? null) . '=%s)',
+                'NO_INDIVIDU_FILTER'           => '(' . ($conf['ldap']['utilisateurCode'] ?? null) . '=%s)',
             ],
             'utilisateur' => [
-                'LOGIN'      => $config->get('ldap', 'loginAttribute'),
-                'FILTER'     => $config->get('ldap', 'utilisateurFiltre'),
-                'CODE'       => $config->get('ldap', 'utilisateurCode'),
-                'CODEFILTER' => $config->get('ldap', 'utilisateurCodeFiltre'),
+                'LOGIN'      => $conf['ldap']['loginAttribute'] ?? null,
+                'FILTER'     => $conf['ldap']['utilisateurFiltre'] ?? null,
+                'CODE'       => $conf['ldap']['utilisateurCode'] ?? null,
+                'CODEFILTER' => $conf['ldap']['utilisateurCodeFiltre'] ?? null,
             ],
         ],
     ],

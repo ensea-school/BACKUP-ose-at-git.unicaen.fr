@@ -5,7 +5,7 @@
  * @var $container  \Psr\Container\ContainerInterface
  */
 
-$bdd = OseAdmin::instance()->getBdd();
+$bdd = $container->get(\Unicaen\BddAdmin\Bdd::class);
 
 /*$tables = [
     [

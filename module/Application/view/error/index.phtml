@@ -1,7 +1,7 @@
 <?php
 
 $this->headTitle()->append($title = 'Une erreur est survenue');
-$details = OseAdmin::instance()->config()->get('global', 'affichageErreurs') && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);
+$details = (AppAdmin::config()['global']['affichageErreurs'] ?? true) && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);
 
 ?>
 <div class="alert alert-danger exception" role="alert">

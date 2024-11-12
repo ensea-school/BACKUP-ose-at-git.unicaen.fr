@@ -1,7 +1,5 @@
 <?php
 
-$oa = OseAdmin::instance();
-
 return [
     'translator'              => [
         'locale' => 'fr_FR',
@@ -10,16 +8,16 @@ return [
     'module_listener_options' => [
         //'use_laminas_loader'       => false,
         'config_glob_paths'        => [
-            'config/autoload/{,*.}{global,local' . ($oa->env()->inDev() ? ',dev' : '') . '}.php',
+            realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php',
         ],
         'module_paths'             => [
             './module',
             './vendor',
         ],
         'cache_dir'                => 'cache/',
-        'config_cache_enabled'     => ($oa->env()->inProd() && PHP_SAPI != 'cli'),
+        'config_cache_enabled'     => AppAdmin::inCli(), // pas de cache en mode cli
         'config_cache_key'         => 'application.config.cache',
-        'module_map_cache_enabled' => ($oa->env()->inProd() && PHP_SAPI != 'cli'),
+        'module_map_cache_enabled' => true,
         'module_map_cache_key'     => 'application.module.cache',
     ],
 ];

@@ -1,8 +1,6 @@
 <?php
 
-$oa = OseAdmin::instance();
-
-$modules = [
+return [
     'Laminas\Cache',
     'Laminas\Filter',
     'Laminas\Form',
@@ -54,13 +52,3 @@ $modules = [
     'Parametre',
     'Formule',
 ];
-
-if ($oa->env()->inDev()) {
-    $modules[] = 'Laminas\DeveloperTools';
-}
-
-if (PHP_SAPI == 'cli' || $oa->env()->inDev()) {
-    $modules[] = 'UnicaenCode';
-}
-
-return $modules;

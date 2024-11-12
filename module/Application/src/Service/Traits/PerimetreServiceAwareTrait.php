@@ -32,7 +32,7 @@ trait PerimetreServiceAwareTrait
     public function getServicePerimetre(): ?PerimetreService
     {
         if (empty($this->servicePerimetre)) {
-            $this->servicePerimetre = \OseAdmin::instance()->container()->get(PerimetreService::class);
+            $this->servicePerimetre = \AppAdmin::container()->get(PerimetreService::class);
         }
 
         return $this->servicePerimetre;

@@ -36,6 +36,6 @@ trait AutresFormAwareTrait
             return $this->formIntervenantAutres;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(AutresForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(AutresForm::class);
     }
 }

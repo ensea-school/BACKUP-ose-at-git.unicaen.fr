@@ -12,6 +12,7 @@ use Paiement\Tbl\Process\Sub\MiseEnPaiement;
 use Paiement\Tbl\Process\Sub\Rapprocheur;
 use Paiement\Tbl\Process\Sub\Repartiteur;
 use Paiement\Tbl\Process\Sub\ServiceAPayer;
+use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -26,6 +27,7 @@ class PaiementProcess implements ProcessInterface
     use BddServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
+    use BddAwareTrait;
 
     /** @var array|ServiceAPayer[] */
     protected array $services = [];
@@ -149,7 +151,7 @@ class PaiementProcess implements ProcessInterface
         // Enregistrement en BDD
         $key = $tableauBord->getOption('key');
 
-        $table = \OseAdmin::instance()->getBdd()->getTable('TBL_PAIEMENT');
+        $table = $this->getBdd()->getTable('TBL_PAIEMENT');
 
         // on force la DDL pour éviter de faire des requêtes en plus
         $table->setDdl(['columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);

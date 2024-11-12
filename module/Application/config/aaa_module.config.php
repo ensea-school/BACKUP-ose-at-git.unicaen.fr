@@ -212,7 +212,7 @@ $config = [
     ],
 ];
 
-if ($customCss = \OseAdmin::instance()->config()->get('etablissement', 'css')) {
+if ($customCss = \AppAdmin::$config['etablissement']['css'] ?? null) {
     $config['public_files']['stylesheets']['999_'] = $customCss;
 }
 

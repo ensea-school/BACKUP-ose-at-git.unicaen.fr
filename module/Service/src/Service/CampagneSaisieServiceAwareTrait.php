@@ -30,7 +30,7 @@ trait CampagneSaisieServiceAwareTrait
     public function getServiceCampagneSaisie(): ?CampagneSaisieService
     {
         if (empty($this->serviceCampagneSaisie)) {
-            $this->serviceCampagneSaisie = \OseAdmin::instance()->container()->get(CampagneSaisieService::class);
+            $this->serviceCampagneSaisie = \AppAdmin::container()->get(CampagneSaisieService::class);
         }
 
         return $this->serviceCampagneSaisie;

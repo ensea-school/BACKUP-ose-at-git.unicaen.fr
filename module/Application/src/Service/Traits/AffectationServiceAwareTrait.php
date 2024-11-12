@@ -32,7 +32,7 @@ trait AffectationServiceAwareTrait
     public function getServiceAffectation(): ?AffectationService
     {
         if (empty($this->serviceAffectation)) {
-            $this->serviceAffectation = \OseAdmin::instance()->container()->get(AffectationService::class);
+            $this->serviceAffectation = \AppAdmin::container()->get(AffectationService::class);
         }
 
         return $this->serviceAffectation;

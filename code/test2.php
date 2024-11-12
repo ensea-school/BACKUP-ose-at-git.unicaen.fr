@@ -5,10 +5,8 @@
  * @var $container  \Psr\Container\ContainerInterface
  */
 
-/** @var \UnicaenTbl\Service\TableauBordService $c */
 $c = $container->get(\UnicaenTbl\Service\TableauBordService::class);
-
-$bdd = OseAdmin::instance()->getBdd();
+$bdd = $container->get(\Unicaen\BddAdmin\Bdd::class);
 
 
 $tbls = [

@@ -34,6 +34,6 @@ trait MotifNonPaiementSaisieFormAwareTrait
             return $this->formMotifNonPaiementMotifNonPaiementSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(MotifNonPaiementSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(MotifNonPaiementSaisieForm::class);
     }
 }

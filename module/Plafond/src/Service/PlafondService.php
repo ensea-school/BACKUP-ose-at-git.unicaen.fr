@@ -30,6 +30,7 @@ use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use RuntimeException;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
 /**
@@ -46,6 +47,7 @@ class PlafondService extends AbstractEntityService
 {
     use TableauBordServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
+    use BddAwareTrait;
 
     /**
      * @var PlafondPerimetre[]
@@ -749,8 +751,7 @@ class PlafondService extends AbstractEntityService
 
     public function construire()
     {
-        $oseAdmin = \OseAdmin::instance();
-        $oseAdmin->getBdd()->data()->run('update', 'INDICATEUR');
+        $this->getBdd()->data()->run('update', 'INDICATEUR');
         $this->construireVues();
     }
 

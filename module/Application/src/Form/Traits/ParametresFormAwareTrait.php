@@ -35,6 +35,6 @@ trait ParametresFormAwareTrait
             return $this->formParametres;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ParametresForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(ParametresForm::class);
     }
 }

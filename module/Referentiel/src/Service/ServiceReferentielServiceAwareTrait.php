@@ -30,7 +30,7 @@ trait ServiceReferentielServiceAwareTrait
     public function getServiceServiceReferentiel(): ?ServiceReferentielService
     {
         if (empty($this->serviceServiceReferentiel)) {
-            $this->serviceServiceReferentiel = \OseAdmin::instance()->container()->get(ServiceReferentielService::class);
+            $this->serviceServiceReferentiel = \AppAdmin::container()->get(ServiceReferentielService::class);
         }
 
         return $this->serviceServiceReferentiel;

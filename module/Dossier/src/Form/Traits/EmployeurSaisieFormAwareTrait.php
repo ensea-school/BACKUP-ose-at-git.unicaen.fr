@@ -30,6 +30,6 @@ trait EmployeurSaisieFormAwareTrait
             return $this->formEmployeurSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(EmployeurSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(EmployeurSaisieForm::class);
     }
 }

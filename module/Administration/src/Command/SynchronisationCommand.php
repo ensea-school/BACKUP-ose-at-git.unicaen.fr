@@ -5,7 +5,6 @@ namespace Administration\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
@@ -32,13 +31,12 @@ class SynchronisationCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $oa = \OseAdmin::instance();
 
         $io->title($this->getDescription());
-        if ($oa->inMaintenance()) {
+        if (\AppAdmin::inMaintenance()) {
             $io->writeln("OSE est en maintenance. La synchronisation est coupée pendant ce temps");
             return Command::FAILURE;
-        } elseif ($oa->config()->get('maintenance', 'desactivationSynchronisation', false)) {
+        } elseif (\AppAdmin::config()['maintenance']['desactivationSynchronisation'] ?? false) {
             $io->writeln("La synchronisation est désactivée");
             return Command::FAILURE;
         } else {

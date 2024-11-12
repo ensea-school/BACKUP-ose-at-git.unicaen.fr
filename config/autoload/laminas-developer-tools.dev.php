@@ -103,7 +103,7 @@ return [
              * Expects: bool
              * Default: false
              */
-            'enabled'       => OseAdmin::instance()->config()->get('dev', 'toolbar', true),
+            'enabled'       => AppAdmin::config()['dev']['toolbar'] ?? true,
 
             /**
              * If enabled, every empty collector will be hidden.

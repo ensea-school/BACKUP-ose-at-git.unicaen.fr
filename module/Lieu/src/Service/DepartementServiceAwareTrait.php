@@ -30,7 +30,7 @@ trait DepartementServiceAwareTrait
     public function getServiceDepartement(): ?DepartementService
     {
         if (empty($this->serviceDepartement)) {
-            $this->serviceDepartement = \OseAdmin::instance()->container()->get(DepartementService::class);
+            $this->serviceDepartement = \AppAdmin::container()->get(DepartementService::class);
         }
 
         return $this->serviceDepartement;

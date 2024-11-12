@@ -35,6 +35,6 @@ trait PeriodeSaisieFormAwareTrait
             return $this->formPeriodePeriodeSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(PeriodeSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(PeriodeSaisieForm::class);
     }
 }

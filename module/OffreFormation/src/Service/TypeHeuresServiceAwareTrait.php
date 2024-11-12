@@ -31,7 +31,7 @@ trait TypeHeuresServiceAwareTrait
     public function getServiceTypeHeures(): ?TypeHeuresService
     {
         if (empty($this->serviceTypeHeures)) {
-            $this->serviceTypeHeures = \OseAdmin::instance()->container()->get(TypeHeuresService::class);
+            $this->serviceTypeHeures = \AppAdmin::container()->get(TypeHeuresService::class);
         }
 
         return $this->serviceTypeHeures;

@@ -59,8 +59,8 @@ class LdapConnecteurFactory
             $service->setUtilisateurCodeFiltre($configLdapUtilisateur['CODEFILTER']);
         }
 
-        $service->setUtilisateurExtraMasque(\OseAdmin::instance()->config()->get('ldap', 'utilisateurExtraMasque', ''));
-        $service->setUtilisateurExtraAttributes(\OseAdmin::instance()->config()->get('ldap', 'utilisateurExtraAttributes', []));
+        $service->setUtilisateurExtraMasque(\AppAdmin::config()['ldap']['utilisateurExtraMasque'] ?? '');
+        $service->setUtilisateurExtraAttributes(\AppAdmin::config()['ldap']['utilisateurExtraAttributes'] ?? []);
 
         return $service;
     }

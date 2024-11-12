@@ -31,7 +31,7 @@ trait CcActiviteServiceAwareTrait
     public function getServiceCcActivite(): ?CcActiviteService
     {
         if (empty($this->serviceCcActivite)) {
-            $this->serviceCcActivite = \OseAdmin::instance()->container()->get(CcActiviteService::class);
+            $this->serviceCcActivite = \AppAdmin::container()->get(CcActiviteService::class);
         }
 
         return $this->serviceCcActivite;

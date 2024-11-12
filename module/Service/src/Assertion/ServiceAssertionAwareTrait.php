@@ -30,7 +30,7 @@ trait ServiceAssertionAwareTrait
     public function getAssertionService(): ?ServiceAssertion
     {
         if (empty($this->assertionService)) {
-            $this->assertionService = \OseAdmin::instance()->container()->get(ServiceAssertion::class);
+            $this->assertionService = \AppAdmin::container()->get(ServiceAssertion::class);
         }
 
         return $this->assertionService;

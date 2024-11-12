@@ -19,7 +19,7 @@ trait TagSaisieFormAwareTrait
             return $this->formTag;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(TagSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(TagSaisieForm::class);
     }
 
 

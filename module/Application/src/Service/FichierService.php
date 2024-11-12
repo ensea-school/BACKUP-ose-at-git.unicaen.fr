@@ -151,8 +151,7 @@ class FichierService extends AbstractEntityService
 
     public function getConfigStockage(): string
     {
-        $conf     = \OseAdmin::instance()->config()->get('fichiers');
-        $stockage = isset($conf['stockage']) ? $conf['stockage'] : 'bdd';
+        $stockage = \AppAdmin::config()['fichiers']['stockage'] ?? 'bdd';
 
         return $stockage;
     }
@@ -161,8 +160,8 @@ class FichierService extends AbstractEntityService
 
     protected function getConfigDir(): string
     {
-        $conf = \OseAdmin::instance()->config()->get('fichiers');
-        $dir  = isset($conf['dir']) ? $conf['dir'] : 'data/fichiers';
+        $dir = \AppAdmin::config()['fichiers']['dir'] ?? 'data/fichiers';
+
         if (substr($dir, -1) != '/') $dir .= '/';
 
         return $dir;

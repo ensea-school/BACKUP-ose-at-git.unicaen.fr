@@ -1,20 +1,3 @@
-#!/usr/bin/env php
-<?php
+#!/bin/bash
 
-$oa = require dirname(__DIR__) . '/admin/src/start.php';
-
-$c = $oa->console();
-
-$filter = $c->getArg(1) ?: null;
-
-if ($filter == 'help'){
-    $c->println("Précisez un nom de répertoire du dossier tests pour filtrer, ou bien rien du tout pour lancer tous les tests");
-
-    return;
-}
-
-if ($filter){
-    $filter = '--filter '.$filter;
-}
-$c->exec('clear');
-passthru(dirname(__DIR__)."/vendor/bin/phpunit tests $filter --color=always");
+/app/vendor/bin/phpunit tests --color=always $1

@@ -19,7 +19,7 @@ final class ProcessTest extends OseTestCase
     protected function setUp(): void
     {
         /** @var \UnicaenTbl\Service\TableauBordService $c */
-        $c = \OseAdmin::instance()->container()->get(TableauBordService::class);
+        $c = \AppAdmin::container()->get(TableauBordService::class);
 
         $tauxRemuMock = $this->getMockBuilder(TauxRemuService::class)->onlyMethods(['getTauxMap'])->getMock();
 

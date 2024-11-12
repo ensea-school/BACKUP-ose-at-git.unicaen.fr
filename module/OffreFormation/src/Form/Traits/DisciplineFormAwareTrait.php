@@ -35,6 +35,6 @@ trait DisciplineFormAwareTrait
             return $this->formDiscipline;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(DisciplineForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(DisciplineForm::class);
     }
 }

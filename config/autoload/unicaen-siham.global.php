@@ -1,36 +1,36 @@
 <?php
 
-$config = OseAdmin::instance()->config();
+$conf = AppAdmin::config();
 
 return [
     'unicaen-siham' => [
 
         // Options concernant l'appel du web service .
-        'api' => $config->get('export-rh', 'api'),
+        'api' => $conf['export-rh']['api'] ?? false,
 
-        'debug'       => $config->get('export-rh', 'debug'),
+        'debug'       => $conf['export-rh']['debug'] ?? true,
 
 
         // Options du client SOAP utilisé pour appeler le web service.
-        'soap_client' => $config->get('export-rh', 'soap_client'),
+        'soap_client' => $conf['export-rh']['soap_client'] ?? null,
 
-        'code-nomenclature' => $config->get('export-rh', 'code-nomenclature'),
+        'code-nomenclature' => $conf['export-rh']['code-nomenclature'] ?? null,
 
-        'code-type-structure-affectation' => $config->get('export-rh', 'code-type-structure-affectation'),
-        'code-administration'             => $config->get('export-rh', 'code-administration'),
-        'code-etablissement'              => $config->get('export-rh', 'code-etablissement'),
+        'code-type-structure-affectation' => $conf['export-rh']['code-type-structure-affectation'] ?? null,
+        'code-administration'             => $conf['export-rh']['code-administration'] ?? null,
+        'code-etablissement'              => $conf['export-rh']['code-etablissement'] ?? null,
 
-        'contrat' => $config->get('export-rh', 'contrat'),
+        'contrat' => $conf['export-rh']['contrat'] ?? false,
 
-        'cloture' => $config->get('export-rh', 'cloture'),
+        'cloture' => $conf['export-rh']['cloture'] ?? false,
 
-        'filters' => $config->get('export-rh', 'filters'),
+        'filters' => $conf['export-rh']['filters'] ?? [],
 
-        'exclude-statut-ose' => $config->get('export-rh', 'exclude-statut-ose'),
+        'exclude-statut-ose' => $conf['export-rh']['exclude-statut-ose'] ?? false,
 
-        'type-affectation' => $config->get('export-rh', 'type-affectation'),
+        'type-affectation' => $conf['export-rh']['type-affectation'] ?? null,
 
-        'unites-organisationelles' => $config->get('export-rh', 'unites-organisationelles'),
+        'unites-organisationelles' => $conf['export-rh']['unites-organisationelles'] ?? [],
 
     ],
 ];

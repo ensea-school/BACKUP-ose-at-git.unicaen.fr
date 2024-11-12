@@ -15,6 +15,7 @@ use Formule\Service\FormuleServiceAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
+use Unicaen\BddAdmin\BddAwareTrait;
 use Unicaen\BddAdmin\Table;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
@@ -32,6 +33,7 @@ class FormuleProcess implements ProcessInterface
     use BddServiceAwareTrait;
     use ContextServiceAwareTrait;
     use AnneeServiceAwareTrait;
+    use BddAwareTrait;
 
     protected Formule $formule;
 
@@ -72,7 +74,7 @@ class FormuleProcess implements ProcessInterface
 
         if (!$this->resultatIntervenantTable || !$this->resultatVolumeHoraireTable) {
             /* Initialisation des objets tables */
-            $bddAdmin = \OseAdmin::instance()->getBdd();
+            $bddAdmin = $this->getBdd();
 
             $this->resultatIntervenantTable   = $bddAdmin->getTable('FORMULE_RESULTAT_INTERVENANT');
             $this->resultatVolumeHoraireTable = $bddAdmin->getTable('FORMULE_RESULTAT_VOLUME_HORAIRE');

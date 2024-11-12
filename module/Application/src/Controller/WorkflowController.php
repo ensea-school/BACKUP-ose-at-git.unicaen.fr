@@ -141,35 +141,6 @@ class WorkflowController extends AbstractController
 
 
 
-    public function calculTableauxBordAction()
-    {
-        $result = $this->getServiceTableauBord()->calculerTout(['formule'],function (array $d) {
-            $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
-            $c       = \OseAdmin::instance()->console();
-            $c->print($tblLine);
-            $c->print('Calcul en cours...', $c::COLOR_LIGHT_PURPLE);
-        }, function (array $d) {
-            $c       = \OseAdmin::instance()->console();
-            $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
-            $c->print("\r" . $tblLine);
-            if ($d['result']) {
-                $duree = round($d['duree'], 3) . ' secondes';
-                $c->println('Effectué en ' . $duree, $c::COLOR_GREEN);
-            } else {
-                $c->println('Erreur : ' . $d['exception']->getMessage(), $c::BG_RED);
-            }
-        });
-        $c      = \OseAdmin::instance()->console();
-        $c->println('Fin du calcul des tableaux de bord');
-        if ($result) {
-            $c->println('Tout c\'est bien passé', $c::COLOR_GREEN);
-        } else {
-            $c->println('Attention : des erreurs ont été rencontrées!!', $c::BG_RED);
-        }
-    }
-
-
-
     public function feuilleDeRouteRefreshAction()
     {
         /** @var Intervenant $intervenant */

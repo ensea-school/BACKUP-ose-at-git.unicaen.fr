@@ -25,7 +25,7 @@ class AbstractService implements EntityManagerAwareInterface
      */
     public function getAuthorize()
     {
-        return \OseAdmin::instance()->container()->get('BjyAuthorize\Service\Authorize');
+        return \AppAdmin::container()->get('BjyAuthorize\Service\Authorize');
     }
 
 }

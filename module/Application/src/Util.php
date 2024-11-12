@@ -86,7 +86,7 @@ class Util
      */
     static public function routeToControllerAction($route)
     {
-        $container = \OseAdmin::instance()->container();
+        $container = \AppAdmin::container();
         if (!$container) throw new \LogicException('Le container n\'est pas accessible!!!');
 
         if (!array_key_exists($route, self::$rcaCache)) {
@@ -244,7 +244,7 @@ class Util
         /* Si c'est une entité Doctrine, on récupère les infos du mapping */
         try {
             /** @var EntityManager $em */
-            $em = \OseAdmin::instance()->container()->get(Constants::BDD);
+            $em = \AppAdmin::container()->get(Constants::BDD);
             $cmd = $em->getClassMetadata($class);
         } catch (\Exception $e) {
             $cmd = null;

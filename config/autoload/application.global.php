@@ -2,12 +2,10 @@
 
 use Laminas\Log\Logger;
 
-$config = \OseAdmin::instance()->config();
-
 return [
     'cli_config' => [
-        'scheme' => $config->get('global', 'scheme'),
-        'domain' => $config->get('global', 'domain'),
+        'scheme' => AppAdmin::config()['global']['scheme'] ?? 'https',
+        'domain' => AppAdmin::config()['global']['domain'] ?? null,
     ],
 
     'session_config' => [
@@ -35,18 +33,18 @@ return [
 
     'application'     => [
         'etats-sortie' => [
-            'host'    => $config->get('etats-sortie', 'host', '127.0.0.1'),
-            'tmp-dir' => $config->get('etats-sortie', 'tmp-dir', getcwd() . '/cache/'),
+            'host'    => AppAdmin::config()['etats-sortie']['host'] ?? '127.0.0.1',
+            'tmp-dir' => AppAdmin::config()['etats-sortie']['tmp-dir'] ?? 'cache/',
         ],
     ],
 
     'view_manager'    => [
-        'display_not_found_reason' => $config->get('global', 'affichageErreurs'), // display 404 reason in template
-        'display_exceptions'       => $config->get('global', 'affichageErreurs'),
+        'display_not_found_reason' => AppAdmin::config()['global']['affichageErreurs'] ?? true, // display 404 reason in template
+        'display_exceptions'       => AppAdmin::config()['global']['affichageErreurs'] ?? true,
     ],
 
     'translator' => [
-        'locale'                    => $config->get('global', 'locale'),
+        'locale'                    => AppAdmin::config()['global']['locale'] ?? 'fr_FR',
         'translation_file_patterns' => [
             [
                 'type'     => 'gettext',

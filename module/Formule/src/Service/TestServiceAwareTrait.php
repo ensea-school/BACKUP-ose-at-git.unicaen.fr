@@ -30,7 +30,7 @@ trait TestServiceAwareTrait
     public function getServiceTest(): ?TestService
     {
         if (empty($this->serviceTest)) {
-            $this->serviceTest = \OseAdmin::instance()->container()->get(TestService::class);
+            $this->serviceTest = \AppAdmin::container()->get(TestService::class);
         }
 
         return $this->serviceTest;

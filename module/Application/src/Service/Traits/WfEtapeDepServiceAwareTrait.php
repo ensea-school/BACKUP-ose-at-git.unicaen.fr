@@ -32,7 +32,7 @@ trait WfEtapeDepServiceAwareTrait
     public function getServiceWfEtapeDep(): ?WfEtapeDepService
     {
         if (empty($this->serviceWfEtapeDep)) {
-            $this->serviceWfEtapeDep = \OseAdmin::instance()->container()->get(WfEtapeDepService::class);
+            $this->serviceWfEtapeDep = \AppAdmin::container()->get(WfEtapeDepService::class);
         }
 
         return $this->serviceWfEtapeDep;

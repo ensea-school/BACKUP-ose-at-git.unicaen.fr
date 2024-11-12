@@ -32,7 +32,7 @@ trait PeriodeServiceAwareTrait
     public function getServicePeriode(): ?PeriodeService
     {
         if (empty($this->servicePeriode)) {
-            $this->servicePeriode = \OseAdmin::instance()->container()->get(PeriodeService::class);
+            $this->servicePeriode = \AppAdmin::container()->get(PeriodeService::class);
         }
 
         return $this->servicePeriode;

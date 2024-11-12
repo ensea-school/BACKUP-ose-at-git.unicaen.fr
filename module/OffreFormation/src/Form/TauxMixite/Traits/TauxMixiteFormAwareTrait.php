@@ -35,6 +35,6 @@ trait TauxMixiteFormAwareTrait
             return $this->formOffreFormationTauxMixiteTauxMixite;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(TauxMixiteForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(TauxMixiteForm::class);
     }
 }

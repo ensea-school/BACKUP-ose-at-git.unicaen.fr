@@ -31,7 +31,7 @@ trait BudgetServiceAwareTrait
     public function getServiceBudget(): ?BudgetService
     {
         if (empty($this->serviceBudget)) {
-            $this->serviceBudget = \OseAdmin::instance()->container()->get(BudgetService::class);
+            $this->serviceBudget = \AppAdmin::container()->get(BudgetService::class);
         }
 
         return $this->serviceBudget;

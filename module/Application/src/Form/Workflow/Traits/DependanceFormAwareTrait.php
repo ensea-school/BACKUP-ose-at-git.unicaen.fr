@@ -35,6 +35,6 @@ trait DependanceFormAwareTrait
             return $this->formWorkflowDependance;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(DependanceForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(DependanceForm::class);
     }
 }

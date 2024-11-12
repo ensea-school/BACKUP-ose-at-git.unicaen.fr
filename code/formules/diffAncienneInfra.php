@@ -10,14 +10,14 @@ function calculAttendus()
 {
     $min = 143143;
 
-    $bdd = OseAdmin::instance()->getBdd();
+    $bdd = AppAdmin::container()->get(\Unicaen\BddAdmin\Bdd::class);
 
     echo "Calcul de tous les tests\n";
-    $sql = "SELECT count(*) c FROM formule_test_intervenant WHERE id >= $min";
+    $sql   = "SELECT count(*) c FROM formule_test_intervenant WHERE id >= $min";
     $count = (int)$bdd->selectOne($sql, [], 'C');
-    $i = 0;
-    $sql = "SELECT id FROM formule_test_intervenant WHERE id >= $min ORDER BY id";
-    $q = $bdd->select($sql);
+    $i     = 0;
+    $sql   = "SELECT id FROM formule_test_intervenant WHERE id >= $min ORDER BY id";
+    $q     = $bdd->select($sql);
     foreach ($q as $fti) {
         $i++;
         try {
@@ -33,15 +33,11 @@ function calculAttendus()
 
 function calculTests(string $formuleName)
 {
-    $c = OseAdmin::instance()->console();
+    $bdd = AppAdmin::container()->get(\Unicaen\BddAdmin\Bdd::class);
 
-    $bdd = OseAdmin::instance()->getBdd();
 
-    /** @var \Formule\Service\TestService $testService */
-    $testService = OseAdmin::instance()->container()->get(\Formule\Service\TestService::class);
-
-    /** @var \Formule\Service\FormulatorService $formulator */
-    $formulator = OseAdmin::instance()->container()->get(\Formule\Service\FormulatorService::class);
+    $testService = AppAdmin::container()->get(\Formule\Service\TestService::class);
+    $formulator = AppAdmin::container()->get(\Formule\Service\FormulatorService::class);
 
     $selectSql = "
     SELECT
@@ -55,15 +51,15 @@ function calculTests(string $formuleName)
       i.id
     ";
 
-    $count = $bdd->selectOne("SELECT count(*) C FROM ($selectSql) t", [], 'C');
-    $numero = 0;
+    $count       = $bdd->selectOne("SELECT count(*) C FROM ($selectSql) t", [], 'C');
+    $numero      = 0;
     $selectQuery = $bdd->selectEach($selectSql);
-    while( $d = $selectQuery->next()){
+    while ($d = $selectQuery->next()) {
         $numero++;
-        $testId = (int)$d['ID'];
+        $testId  = (int)$d['ID'];
         $libelle = $d['LIBELLE'];
         $formule = $d['CODE'];
-        $annee = $d['ANNEE_ID'];
+        $annee   = $d['ANNEE_ID'];
 
         $calculText = "Calcul $numero/$count, id=$testId, $annee, $formule, $libelle";
 
@@ -71,26 +67,26 @@ function calculTests(string $formuleName)
         try {
             $formulator->calculer($test);
 
-            if (isDiffAC($test)){
+            if (isDiffAC($test)) {
                 $testService->calculerAttendu($test);
                 $formulator->calculer($test);
                 $testService->save($test);
             }
-            if ($msg = isDiffAC($test)){
-                $c->println($calculText);
-                $c->println($msg, $c::COLOR_RED);
+            if ($msg = isDiffAC($test)) {
+                echo $calculText . "\n";
+                echo "DIFF " . $msg . "\n";
                 $testService->save($test);
-            }else{
-                $c->msg($calculText, true);
+            } else {
+                echo $calculText . "\n";
                 //$testService->save($test);
             }
 
-        }catch(\Throwable $e){
-            $c->println($calculText, $c::COLOR_RED);
-            $c->println($e->getMessage(), $c::COLOR_RED);
+        } catch (\Throwable $e) {
+            echo 'ERREUR : ' . $calculText . "\n";
+            echo 'ERREUR : ' . $e->getMessage() . "\n";
         }
     }
-    $c->msg('Test terminé pour '.$formuleName.'!!                                                                             ');
+    echo 'Test terminé pour ' . $formuleName . '!!                                                                             ' . "\n";
 }
 
 
@@ -109,22 +105,22 @@ function isDiffAC(\Formule\Entity\Db\FormuleTestIntervenant $test): ?string
     ];
 
     $diff = false;
-    foreach( $test->getVolumesHoraires() as $vh){
+    foreach ($test->getVolumesHoraires() as $vh) {
         /** @var $vh \Formule\Entity\Db\FormuleTestVolumeHoraire */
 
-        foreach($methods as $m){
-            $mc = 'getHeures'.$m;
-            $ma = 'getHeuresAttendues'.$m;
+        foreach ($methods as $m) {
+            $mc = 'getHeures' . $m;
+            $ma = 'getHeuresAttendues' . $m;
 
-            $hc = round($vh->$mc(),2);
-            $ha = round($vh->$ma(),2);
+            $hc = round($vh->$mc(), 2);
+            $ha = round($vh->$ma(), 2);
 
-            $diff = round(abs($hc-$ha), 2);
+            $diff = round(abs($hc - $ha), 2);
 
-            if ($diff > 0.01){
+            if ($diff > 0.01) {
                 return "Différence de $diff heures trouvée";
             }
-            if ($diff != 0){
+            if ($diff != 0) {
                 //return "Différence arrondi";
             }
         }
@@ -139,8 +135,8 @@ try {
 
     calculTests($formuleName);
 
-}catch(\Throwable $e){
-    OseAdmin::instance()->console()->printDie($e->getMessage());
+} catch (\Throwable $e) {
+    die('ERREUR :' . $e->getMessage());
 }
 
 /*

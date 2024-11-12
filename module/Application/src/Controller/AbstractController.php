@@ -50,7 +50,7 @@ abstract class AbstractController extends AbstractActionController
      */
     protected function em()
     {
-        return \OseAdmin::instance()->container()->get(\Application\Constants::BDD);
+        return \AppAdmin::container()->get(\Application\Constants::BDD);
     }
 
 }

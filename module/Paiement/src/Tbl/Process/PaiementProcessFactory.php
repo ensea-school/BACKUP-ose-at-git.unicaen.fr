@@ -3,6 +3,7 @@
 namespace Paiement\Tbl\Process;
 
 use Psr\Container\ContainerInterface;
+use Unicaen\BddAdmin\Bdd;
 use UnicaenTbl\Service\BddService;
 
 
@@ -26,6 +27,7 @@ class PaiementProcessFactory
         $service = new PaiementProcess;
 
         $service->setServiceBdd($container->get(BddService::class));
+        $service->setBdd($container->get(Bdd::class));
 
         return $service;
     }

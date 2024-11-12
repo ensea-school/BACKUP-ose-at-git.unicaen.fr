@@ -38,7 +38,7 @@ trait TypeInterventionStatutAwareTrait
     public function getServiceTypeInterventionStatut()
     {
         if (empty($this->serviceTypeInterventionStatut)) {
-            $this->serviceTypeInterventionStatut = \OseAdmin::instance()->container()->get(TypeInterventionStatutService::class);
+            $this->serviceTypeInterventionStatut = \AppAdmin::container()->get(TypeInterventionStatutService::class);
         }
 
         return $this->serviceTypeInterventionStatut;

@@ -33,6 +33,6 @@ trait VoirieSaisieFormAwareTrait
             return $this->formVoirieSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(VoirieSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(VoirieSaisieForm::class);
     }
 }

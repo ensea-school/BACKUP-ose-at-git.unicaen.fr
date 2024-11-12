@@ -33,6 +33,6 @@ trait PaysSaisieFormAwareTrait
             return $this->formPaysSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(PaysSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(PaysSaisieForm::class);
     }
 }

@@ -30,7 +30,7 @@ trait VoirieServiceAwareTrait
     public function getServiceVoirie(): ?VoirieService
     {
         if (empty($this->serviceVoirie)) {
-            $this->serviceVoirie = \OseAdmin::instance()->container()->get(VoirieService::class);
+            $this->serviceVoirie = \AppAdmin::container()->get(VoirieService::class);
         }
 
         return $this->serviceVoirie;

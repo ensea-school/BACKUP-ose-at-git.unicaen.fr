@@ -33,6 +33,6 @@ trait FonctionReferentielSaisieFormAwareTrait
             return $this->formFonctionReferentielFonctionReferentielSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(FonctionReferentielSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(FonctionReferentielSaisieForm::class);
     }
 }

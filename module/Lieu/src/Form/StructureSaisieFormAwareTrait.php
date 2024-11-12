@@ -35,7 +35,7 @@ trait StructureSaisieFormAwareTrait
         if (!empty($this->formStructureSaisie)) {
             return $this->formStructureSaisie;
         }
-        $form = \OseAdmin::instance()->container()->get('FormElementManager')->get(StructureSaisieForm::class);
+        $form = \AppAdmin::container()->get('FormElementManager')->get(StructureSaisieForm::class);
         $form->setStructure($structure);
         $form->initCentreCout();
 

@@ -34,6 +34,6 @@ trait ModificationServiceDuFormAwareTrait
             return $this->formIntervenantModificationServiceDu;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ModificationServiceDuForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(ModificationServiceDuForm::class);
     }
 }

@@ -33,6 +33,6 @@ trait EtablissementSaisieFormAwareTrait
             return $this->formEtablissementSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(EtablissementSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(EtablissementSaisieForm::class);
     }
 }

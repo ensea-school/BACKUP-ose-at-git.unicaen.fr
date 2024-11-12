@@ -35,6 +35,6 @@ trait ScenarioFiltreFormAwareTrait
             return $this->formChargensScenarioFiltre;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ScenarioFiltreForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(ScenarioFiltreForm::class);
     }
 }

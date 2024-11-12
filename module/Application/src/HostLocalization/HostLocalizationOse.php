@@ -8,7 +8,7 @@ class HostLocalizationOse implements HostLocalizationInterface
 {
     public function inEtablissement(): bool
     {
-        $inEtablissement = \OseAdmin::instance()->config()->get('global', 'inEtablissement', true);
+        $inEtablissement = \AppAdmin::config()['global']['inEtablissement'] ?? true;
         if ($inEtablissement instanceof HostLocalizationInterface) {
             $inEtablissement = $inEtablissement->inEtablissement();
         }

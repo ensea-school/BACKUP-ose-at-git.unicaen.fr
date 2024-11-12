@@ -32,7 +32,7 @@ trait AgrementServiceAwareTrait
     public function getServiceAgrement(): ?AgrementService
     {
         if (empty($this->serviceAgrement)) {
-            $this->serviceAgrement = \OseAdmin::instance()->container()->get(AgrementService::class);
+            $this->serviceAgrement = \AppAdmin::container()->get(AgrementService::class);
         }
 
         return $this->serviceAgrement;

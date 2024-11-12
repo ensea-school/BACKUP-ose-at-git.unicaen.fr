@@ -36,7 +36,7 @@ trait <classname>
             return $this-><variable>;
         }
         
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(<targetClassname>::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(<targetClassname>::class);
     }
 <endif useGetter>
 }

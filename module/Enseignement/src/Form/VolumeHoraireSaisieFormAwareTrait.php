@@ -33,6 +33,6 @@ trait VolumeHoraireSaisieFormAwareTrait
             return $this->formVolumeHoraireSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(VolumeHoraireSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(VolumeHoraireSaisieForm::class);
     }
 }

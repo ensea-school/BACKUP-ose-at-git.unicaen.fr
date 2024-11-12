@@ -31,7 +31,7 @@ trait MotifNonPaiementServiceAwareTrait
     public function getServiceMotifNonPaiement(): ?MotifNonPaiementService
     {
         if (empty($this->serviceMotifNonPaiement)) {
-            $this->serviceMotifNonPaiement = \OseAdmin::instance()->container()->get(MotifNonPaiementService::class);
+            $this->serviceMotifNonPaiement = \AppAdmin::container()->get(MotifNonPaiementService::class);
         }
 
         return $this->serviceMotifNonPaiement;

@@ -476,7 +476,7 @@ class IntervenantService extends AbstractEntityService
     {
         if (!$intervenant->getSource()->getImportable()) return null;
 
-        $url = \OseAdmin::instance()->config()->get('ldap', 'systemeInformationUrl');
+        $url = \AppAdmin::config()['ldap']['systemeInformationUrl'] ?? null;
         if (!$url) return null;
 
         $hydrator = new ClassMethodsHydrator();
@@ -609,7 +609,7 @@ class IntervenantService extends AbstractEntityService
 
     public function updateSource (Intervenant $intervenant): Intervenant
     {
-        $config = \OseAdmin::instance()->config()->get('export-rh');
+        $config = \AppAdmin::config()['export-rh'] ?? [];
         if (!empty($config['sync-source'])) {
             //On regarde si le code fourni correspond bien à une source valide
             $source = $this->getServiceSource()->getByCode($config['sync-source']);

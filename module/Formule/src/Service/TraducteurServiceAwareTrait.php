@@ -31,7 +31,7 @@ trait TraducteurServiceAwareTrait
     public function getServiceTraducteur(): ?TraducteurService
     {
         if (empty($this->serviceTraducteur)) {
-            $this->serviceTraducteur = \OseAdmin::instance()->container()->get(TraducteurService::class);
+            $this->serviceTraducteur = \AppAdmin::container()->get(TraducteurService::class);
         }
 
         return $this->serviceTraducteur;

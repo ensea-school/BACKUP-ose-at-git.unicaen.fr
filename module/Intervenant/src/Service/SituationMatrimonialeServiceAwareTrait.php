@@ -30,7 +30,7 @@ trait SituationMatrimonialeServiceAwareTrait
     public function getServiceSituationMatrimoniale(): ?SituationMatrimonialeService
     {
         if (empty($this->serviceSituationMatrimoniale)) {
-            $this->serviceSituationMatrimoniale = \OseAdmin::instance()->container()->get(SituationMatrimonialeService::class);
+            $this->serviceSituationMatrimoniale = \AppAdmin::container()->get(SituationMatrimonialeService::class);
         }
 
         return $this->serviceSituationMatrimoniale;

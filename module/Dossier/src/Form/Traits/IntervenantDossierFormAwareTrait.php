@@ -36,6 +36,6 @@ trait IntervenantDossierFormAwareTrait
             return $this->formIntervenantIntervenantDossier;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(IntervenantDossierForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(IntervenantDossierForm::class);
     }
 }

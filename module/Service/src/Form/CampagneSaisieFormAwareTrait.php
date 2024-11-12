@@ -33,6 +33,6 @@ trait CampagneSaisieFormAwareTrait
             return $this->formCampagneSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(CampagneSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(CampagneSaisieForm::class);
     }
 }

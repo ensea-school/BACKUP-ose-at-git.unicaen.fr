@@ -355,7 +355,7 @@ class WorkflowService extends AbstractService
      */
     protected function getUrl ($name = null, $params = [], $options = [], $reuseMatchedParams = false)
     {
-        $url = \OseAdmin::instance()->container()->get('ViewHelperManager')->get('url');
+        $url = \AppAdmin::container()->get('ViewHelperManager')->get('url');
 
         /* @var $url \Laminas\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);

@@ -32,7 +32,7 @@ trait TypeFormationServiceAwareTrait
     public function getServiceTypeFormation(): ?TypeFormationService
     {
         if (empty($this->serviceTypeFormation)) {
-            $this->serviceTypeFormation = \OseAdmin::instance()->container()->get(TypeFormationService::class);
+            $this->serviceTypeFormation = \AppAdmin::container()->get(TypeFormationService::class);
         }
 
         return $this->serviceTypeFormation;

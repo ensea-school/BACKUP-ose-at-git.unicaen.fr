@@ -32,7 +32,7 @@ trait PieceJointeServiceAwareTrait
     public function getServicePieceJointe(): ?PieceJointeService
     {
         if (empty($this->servicePieceJointe)) {
-            $this->servicePieceJointe = \OseAdmin::instance()->container()->get(PieceJointeService::class);
+            $this->servicePieceJointe = \AppAdmin::container()->get(PieceJointeService::class);
         }
 
         return $this->servicePieceJointe;

@@ -23,7 +23,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
                         class="c3">E</span></span></h1>
         <p class="texte">
         <h1 class="titre">
-            <small><?= OseAdmin::instance()->config()->get('etablissement', 'ose', 'Organisation des Services d\'Enseignement') ?></small>
+            <small><?= AppAdmin::config()['etablissement']['ose'] ?? 'Organisation des Services d\'Enseignement' ?></small>
         </h1>
         <p class="text-accueil"><?= $pageAccueil ?></p>
         <p class="annee">Année <?= $annee ?>.</p>

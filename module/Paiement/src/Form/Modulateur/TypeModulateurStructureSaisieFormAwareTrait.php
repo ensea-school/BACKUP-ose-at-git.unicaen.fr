@@ -34,6 +34,6 @@ trait TypeModulateurStructureSaisieFormAwareTrait
             return $this->formModulateurTypeModulateurStructureSaisie;
         }
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(TypeModulateurStructureSaisieForm::class);
+        return \AppAdmin::container()->get('FormElementManager')->get(TypeModulateurStructureSaisieForm::class);
     }
 }

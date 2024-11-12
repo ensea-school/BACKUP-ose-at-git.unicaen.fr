@@ -30,7 +30,7 @@ trait RechercheHydratorAwareTrait
     public function getHydratorServiceRecherche(): ?RechercheHydrator
     {
         if (empty($this->hydratorServiceRecherche)) {
-            $this->hydratorServiceRecherche = \OseAdmin::instance()->container()->get(RechercheHydrator::class);
+            $this->hydratorServiceRecherche = \AppAdmin::container()->get(RechercheHydrator::class);
         }
 
         return $this->hydratorServiceRecherche;

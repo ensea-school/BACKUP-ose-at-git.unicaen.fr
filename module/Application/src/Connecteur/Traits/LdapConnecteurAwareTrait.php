@@ -32,7 +32,7 @@ trait LdapConnecteurAwareTrait
     public function getConnecteurLdap(): ?LdapConnecteur
     {
         if (empty($this->connecteurLdap)) {
-            $this->connecteurLdap = \OseAdmin::instance()->container()->get(LdapConnecteur::class);
+            $this->connecteurLdap = \AppAdmin::container()->get(LdapConnecteur::class);
         }
 
         return $this->connecteurLdap;

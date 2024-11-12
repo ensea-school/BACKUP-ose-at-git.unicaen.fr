@@ -9,7 +9,6 @@ return [
     'Laminas\InputFilter',
     'Laminas\Log',
     'Laminas\Mail',
-    'Unicaen\Console',
     'Laminas\Mvc\I18n',
     'Laminas\Mvc\Plugin\FlashMessenger',
     'Laminas\Mvc\Plugin\Prg',

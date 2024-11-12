@@ -10,7 +10,17 @@ $c->setInputOptions([
 
 $od = new OseDeploy($c);
 
-$c->printMainTitle("Installation de OSE", 13);
+$pstr = str_repeat(' ', $spaces);
+$t    = $pstr . $title . $pstr;
+
+$len = strlen($t);
+
+echo "╔═════════════════════════════════╗\n";
+echo "║                                 ║\n";
+echo "║       Installation de OSE       ║\n";
+echo "║                                 ║\n";
+echo "╚═════════════════════════════════╝\n";
+
 $c->check([
     'git'     => 'Gestionnaire de versions',
     'php'     => 'Langage PHP',
@@ -496,22 +506,6 @@ class Console
 
 
 
-    public function printMainTitle($title, $spaces = 1)
-    {
-        $pstr = str_repeat(' ', $spaces);
-        $t    = $pstr . $title . $pstr;
-
-        $len = strlen($t);
-
-        echo '╔' . str_repeat('═', $len) . "╗\n";
-        echo '║' . str_repeat(' ', $len) . "║\n";
-        echo "║" . $t . "║\n";
-        echo '║' . str_repeat(' ', $len) . "║\n";
-        echo '╚' . str_repeat('═', $len) . "╝\n\n";
-    }
-
-
-
     public function print($text, $color = null, $bgColor = null)
     {
         if ($bgColor) $bgColor = ';' . $bgColor;
@@ -617,45 +611,6 @@ class Console
         }
 
         return trim(fgets(STDIN));
-    }
-
-
-
-    public function getSilentInput($option = null)
-    {
-        if ($option) {
-            $optionParam = $this->getOption($option);
-            if (null !== $optionParam) {
-                return $optionParam;
-            }
-        }
-
-        if (preg_match('/^win/i', PHP_OS)) {
-            $vbscript = sys_get_temp_dir() . 'prompt_password.vbs';
-            file_put_contents(
-                $vbscript, 'wscript.echo(InputBox("'
-                . addslashes('')
-                . '", "", "password here"))');
-            $command  = "cscript //nologo " . escapeshellarg($vbscript);
-            $password = rtrim(shell_exec($command));
-            unlink($vbscript);
-
-            return $password;
-        } else {
-            $command = "/usr/bin/env bash -c 'echo OK'";
-            if (rtrim(shell_exec($command)) !== 'OK') {
-                trigger_error("Can't invoke bash");
-
-                return;
-            }
-            $command  = "/usr/bin/env bash -c 'read -s -p \""
-                . addslashes('')
-                . "\" mypassword && echo \$mypassword'";
-            $password = rtrim(shell_exec($command));
-            echo "\n";
-
-            return $password;
-        }
     }
 
 

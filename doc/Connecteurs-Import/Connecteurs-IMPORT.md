@@ -102,6 +102,8 @@ En voici la liste :
 * [Mangue](Mangue/Connecteur.md) pour les intervenants
 * [Siham](Siham/Connecteur.md) pour les données RH et diverses
 * [Sifac](Sifac/Connecteur.md) pour les données comptables
+* [Pégase](Pégase/Connecteur.md) pour les données d'offre de formation
+* [Actul](https://git.unicaen.fr/open-source/connecteur-ose/actul/doc/doc.md) pour les données d'offre de formation
 * [Apogée](Apogée/Connecteur.md) pour l'offre de formation
 * [FCA Manager](FCA-Manager/Connecteur.md) également pour l'offre de formation
 * [Calcul](Calcul/Connecteur.md) pour des données essentiellement liées à l'offre de formation

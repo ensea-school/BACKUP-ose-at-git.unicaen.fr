@@ -1,6 +1,6 @@
 <?php
 
-return [
+$modules = [
     'Laminas\Cache',
     'Laminas\Filter',
     'Laminas\Form',
@@ -51,3 +51,9 @@ return [
     'Parametre',
     'Formule',
 ];
+
+if (AppAdmin::config()['actul']['host'] ?? null){
+    $modules[] = 'Connecteur\\Actul';
+}
+
+return $modules;

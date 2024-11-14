@@ -56,4 +56,8 @@ if (AppAdmin::config()['actul']['host'] ?? null){
     $modules[] = 'Connecteur\\Actul';
 }
 
+if (AppAdmin::config()['pegase']['actif'] ?? false){
+    $modules[] = 'Connecteur\\Pegase';
+}
+
 return $modules;

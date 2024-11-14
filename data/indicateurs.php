@@ -220,6 +220,13 @@ return [
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],
+            461 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s contrat peut être soumis à une signature électronique',
+                'libelle_pluriel'   => '%s contrats peuvent être soumis à une signature électronique',
+                'route'             => 'intervenant/contrat',
+                'irrecevables'      => false,
+            ],
             470 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s contrat  <i>envoyé par e-mail</i> est en attente de retour',
@@ -238,6 +245,13 @@ return [
                 'enabled'           => true,
                 'libelle_singulier' => '%s contrat n\'a pas de date de retour',
                 'libelle_pluriel'   => '%s contrats n\'ont pas de date de retour',
+                'route'             => 'intervenant/contrat',
+                'irrecevables'      => false,
+            ],
+            481 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s contrat est en attente d\'une signature électronique',
+                'libelle_pluriel'   => '%s contrats sont en attente d\'une signature électronique',
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],

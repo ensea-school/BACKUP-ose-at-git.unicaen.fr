@@ -3,10 +3,12 @@
 namespace Application\Service;
 
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
+use Application\Entity\Db\Role;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
 use UnicaenApp\Util;
 use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 
@@ -71,6 +73,48 @@ class UtilisateurService extends AbstractEntityService
     public function getByUsername($username)
     {
         return $this->getConnecteurLdap()->getUtilisateur($username);
+    }
+
+
+
+    public function getUtilisateursByRole(Role $role)
+    {
+
+        $sql = '
+            SELECT * FROM affectation a
+            JOIN UTILISATEUR u ON a.UTILISATEUR_ID = u.ID 
+            WHERE a.HISTO_DESTRUCTION IS NULL
+            AND a.role_id = ' . $role->getId();
+
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
+
+        return $res;
+
+    }
+
+
+
+    public function getUtilisateursByRoleAndStructure(Role $role, Structure $structure)
+    {
+        //On prend les utilisateurs de la structure et du role donnée ainsi que les utilisateurs ayant le même rôle dans les structures hiérarchique
+        if ($structure instanceof Structure) {
+            $ids = $structure->getIdsArray();
+            $ids = implode(',', $ids);
+
+            $sql = '
+            SELECT * FROM affectation a
+            JOIN UTILISATEUR u ON a.UTILISATEUR_ID = u.ID 
+            JOIN structure s ON a.structure_id = s.ID
+            WHERE a.HISTO_DESTRUCTION IS NULL
+            AND a.structure_id IN (' . $ids . ')
+            AND a.role_id = ' . $role->getId();
+        } else {
+            throw new \Exception("Structure fournie non valide.");
+        }
+
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
+        return $res;
+
     }
 
 

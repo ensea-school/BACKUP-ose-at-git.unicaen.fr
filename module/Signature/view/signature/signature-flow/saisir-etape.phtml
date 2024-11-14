@@ -1,0 +1,43 @@
+<?php
+echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNamespace('error');
+
+echo $this->form()->openTag($form);
+echo $this->formControlGroup($form->get('label'));
+echo $this->formControlGroup($form->get('level'));
+echo $this->formControlGroup($form->get('recipientMethod'));
+echo $this->formControlGroup($form->get('roles'));
+echo $this->formControlGroup($form->get('order'));
+echo $this->formControlGroup($form->get('allRecipientsSign'));
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag($form);
+
+?>
+
+<script>
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var recipientMethod = document.getElementById('recipient-method');
+        console.log(recipientMethod);
+        if (recipientMethod.value != 'by_etablissement') {
+            document.querySelectorAll('.liste-roles').forEach(function (element) {
+                element.style.display = 'none';
+            });
+        }
+        recipientMethod.addEventListener('change', function () {
+            var elements = document.querySelectorAll('.liste-roles');
+
+            // Parcourir chaque élément et modifier son style pour le masquer
+
+            if (recipientMethod.value == 'by_etablissement') {
+                elements.forEach(function (element) {
+                    element.style.display = 'block';
+                });
+            } else {
+                elements.forEach(function (element) {
+                    element.style.display = 'none';
+                });
+            }
+        });
+    });
+</script>

@@ -28,14 +28,21 @@ use Enseignement\Service\ServiceServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Http\Response;
+use Laminas\Validator\Date;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use LogicException;
+use PHPUnit\Exception;
 use Service\Entity\Db\TypeService;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Unicaen\OpenDocument\Document;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenSignature\Entity\Db\Process;
+use UnicaenSignature\Entity\Db\ProcessStep;
+use UnicaenSignature\Entity\Db\Signature;
+use UnicaenSignature\Service\ProcessServiceAwareTrait;
 
 /**
  * Description of ContratController
@@ -59,6 +66,7 @@ class ContratController extends AbstractController
     use NoteServiceAwareTrait;
     use ContratServiceListeServiceAwareTrait;
     use TblContratServiceAwareTrait;
+    use ProcessServiceAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -75,8 +83,6 @@ class ContratController extends AbstractController
                                                                   Validation::class,
                                                               ]);
     }
-
-
 
     public function indexAction()
     {
@@ -106,7 +112,34 @@ class ContratController extends AbstractController
 
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+        //@TODO CONTRAT : contrat n'existe plus service
+        $contratSignatureActivation = false;
+        $infosSignature             = [];
+        $libelleCircuitSignature    = null;
+        if (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))
+            && $intervenant->getStatut()->getContratEtatSortie()->isSignatureActivation()
+            && $intervenant->getStatut()->getContratEtatSortie()->getSignatureCircuit()) {
+            $contratSignatureActivation = true;
+            $libelleCircuitSignature    = $intervenant->getStatut()->getContratEtatSortie()->getSignatureCircuit()->getLabel();
 
+            /**
+             * @var Contrat     $contrat
+             * @var Process     $process
+             * @var ProcessStep $step
+             */
+            //On récupère les informations du process
+
+            foreach ($contrats as $keyContrat => $contrat) {
+                if ($contrat->getProcessSignature()) {
+                    $infosSignature[$keyContrat] = [];
+                    $this->em()->refresh($contrat);
+                    $process = $contrat->getProcessSignature();
+                    if (!empty($process)) {
+                        $infosSignature[$keyContrat]['processSignature']  = $this->getProcessService()->getInfosProcess($process);
+                        $infosSignature[$keyContrat]['urlFichierContrat'] = $this->getServiceContrat()->getUrlSignedContrat($contrat);
+                    }
+                }
+            }
         //Récupération email intervenant (Perso puis unicaen)
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
         $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
@@ -117,11 +150,12 @@ class ContratController extends AbstractController
             'intervenant',
             'services',
             'emailIntervenant',
-            'contratDirect'
+            'contratDirect',
+            'contratSignatureActivation',
+            'infosSignature',
+            'libelleCircuitSignature'
         );
-
     }
-
 
 
     public function creerAction()
@@ -532,7 +566,91 @@ class ContratController extends AbstractController
 
 
 
-    private function updateTableauxBord(Intervenant $intervenant)
+
+
+        public function creerProcessSignatureAction()
+    {
+
+        /**
+         * @var Contrat $contrat
+         */
+        $contrat = $this->getEvent()->getParam('contrat');
+        try {
+            $this->getServiceContrat()->creerProcessContratSignatureElectronique($contrat);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
+    }
+
+
+
+        public function supprimerProcessSignatureAction()
+    {
+        //TODO : vérifier qu'on a bien le droit de supprimer cette signature, pour ce contrat
+        $contrat        = $this->getEvent()->getParam('contrat');
+        $libelleContrat = "Contrat N°" . $contrat->getId();
+        try {
+            if ($this->getServiceContrat()->supprimerSignatureElectronique($contrat)) {
+                $this->flashMessenger()->addSuccessMessage("Signature électronique supprimée avec succés pour le " . $libelleContrat);
+            } else {
+                $this->flashMessenger()->addErrorMessage("Impossible de supprimer la signature électronique pour le " . $libelleContrat);
+            }
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+        //Mise à jour des tableaux de bord nécessaires
+        /**
+         * @var Contrat $contrat
+         */
+        $intervenant = $contrat->getIntervenant();
+        $this->updateTableauxBord($intervenant);
+
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
+    }
+
+
+
+        public function rafraichirProcessSignatureAction()
+    {
+        /**
+         * @var Contrat $contrat
+         */
+
+        $contrat     = $this->getEvent()->getParam('contrat');
+        $intervenant = $contrat->getIntervenant();
+        try {
+
+            $this->getServiceContrat()->rafraichirProcessSignatureElectronique($contrat);
+            $this->updateTableauxBord($intervenant);
+            $this->flashMessenger()->addSuccessMessage('Signature électronique mise à jour');
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
+    }
+
+
+
+        public function voirContratSignatureAction()
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /** @var Contrat $contrat */
+        $contrat = $this->getEvent()->getParam('contrat');
+
+
+        if (!$pieceJointe || $pieceJointe->getIntervenant()->getCode() != $intervenant->getCode()) {
+            // un intervenant tente de télécharger la PJ d'un autre intervenant
+            throw new \Exception('La pièce jointe n\'existe pas ou bien elle appartient à un autre intervenant');
+        }
+
+        $this->uploader()->download($fichier);
+    }
+
+        private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
                                                               'formule',
@@ -540,4 +658,5 @@ class ContratController extends AbstractController
                                                               'mission',
                                                           ], $intervenant);
     }
-}
+
+    }

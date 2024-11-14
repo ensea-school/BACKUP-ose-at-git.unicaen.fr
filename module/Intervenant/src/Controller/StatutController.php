@@ -4,6 +4,7 @@ namespace Intervenant\Controller;
 
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Controller\AbstractController;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
 use Intervenant\Form\StatutSaisieForm;
@@ -23,6 +24,7 @@ class StatutController extends AbstractController
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
     use PlafondConfigFormAwareTrait;
+    use ParametresServiceAwareTrait;
 
     public function indexAction()
     {
@@ -69,7 +71,7 @@ class StatutController extends AbstractController
         $canEdit = $this->isAllowed($statut, Privileges::INTERVENANT_STATUT_EDITION);
         if ($canEdit) {
             $request = $this->getRequest();
-            $form->bindRequestSave($statut, $request, function (Statut $si) use ($request) {
+            $form->bindRequestSave($statut, $request, function(Statut $si) use ($request){
                 $isNew = !$si->getId();
                 $this->getServiceStatut()->save($si);
                 $this->getFormPlafondConfig()->requestSaveConfigs($si, $request);
@@ -84,12 +86,13 @@ class StatutController extends AbstractController
             $elements = $form->getElements();
             $elements = array_keys($elements);
             $form->readOnly(true, $elements);
-
         }
+
+        $signatureActivated = (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))) ? true : false;
 
         $vm = new ViewModel();
         $vm->setTemplate('intervenant/statut/saisie');
-        $vm->setVariables(compact('typesIntervenants', 'canEdit', 'statut', 'statuts', 'form', 'title'));
+        $vm->setVariables(compact('typesIntervenants', 'canEdit', 'statut', 'statuts', 'form', 'title', 'signatureActivated'));
 
         return $vm;
     }

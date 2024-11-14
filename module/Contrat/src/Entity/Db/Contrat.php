@@ -4,12 +4,13 @@ namespace Contrat\Entity\Db;
 
 use Application\Entity\Db\Parametre;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Entity\Structure;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenSignature\Entity\Db\Process;
+use UnicaenSignature\Entity\Db\Signature;
 
 /**
  * Contrat
@@ -85,9 +86,9 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $totalHetd;
 
     /**
-     * @var Mission
+     * @var ?Process
      */
-    private $mission;
+    private $processSignature;
 
 
 
@@ -570,19 +571,38 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * @return Mission|null
-     */
-    public function getMission(): ?Mission
+
+
+    public function getProcessSignature(): ?Process
     {
-        return $this->mission;
+        return $this->processSignature;
     }
 
 
 
-    public function setMission(Mission $mission)
+    public function setProcessSignature(?Process $processSignature): self
     {
-        $this->mission = $mission;
+        $this->processSignature = $processSignature;
+
+        return $this;
+    }
+
+
+
+    public function getStatutProcessSignature(): string
+    {
+        return 'Todo Signature electronique';
+        if ($this->signature) {
+            if ($this->signature->getStatus() == Signature::STATUS_SIGNATURE_WAIT) {
+                return ($this->estUnAvenant()) ? 'Avenant en attente du ou des signataires' : 'Contrat en attente du ou des signataires';
+            } elseif ($this->signature->getStatus() == Signature::STATUS_SIGNATURE_SIGNED) {
+                return ($this->estUnAvenant()) ? 'Avenant signé électroniquement le xx/xx/xxx' : 'Contrat signé électroniquement le xx/xx/xxx';
+            } else {
+                return "Statut de la signature électronique non disponible";
+            }
+        }
+
+        return 'Aucune signature électronique en cours';
     }
 
 }

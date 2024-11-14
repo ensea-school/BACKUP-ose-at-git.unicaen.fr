@@ -2,7 +2,12 @@
 
 namespace Application;
 
+use Application\Form\EtatSortieForm;
+use Application\Form\Factory\EtatSortieFormFactory;
+use Application\Form\Factory\ParametresFormFactory;
+use Application\Form\ParametresForm;
 use Application\Provider\Privilege\Privileges;
+use Mpdf\Form;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
@@ -103,8 +108,8 @@ return [
     ],
 
     'form_elements' => [
-        'invokables' => [
-            Form\ParametresForm::class => Form\ParametresForm::class,
+        'factories' => [
+            ParametresForm::class => ParametresFormFactory::class,
         ],
     ],
 ];

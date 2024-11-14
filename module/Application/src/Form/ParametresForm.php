@@ -19,6 +19,7 @@ use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
+use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
 
 
 /**
@@ -37,10 +38,13 @@ class ParametresForm extends AbstractForm
     use EtatSortieServiceAwareTrait;
     use FormuleServiceAwareTrait;
     use WfEtapeServiceAwareTrait;
+    use SignatureConfigurationServiceAwareTrait;
 
 
     public function init()
     {
+
+
         $this->setAttribute('action', $this->getCurrentUrl());
 
         $this->add([
@@ -83,12 +87,12 @@ class ParametresForm extends AbstractForm
                    ]);
 
         $this->add([
-                       'type'    => Structure::class,
-                       'name'    => 'structure_univ',
-                       'options' => [
-                           'label' => 'Composante représentant l\'université',
-                       ],
-                   ]);
+            'type'    => Structure::class,
+            'name'    => 'structure_univ',
+            'options' => [
+                'label' => 'Composante représentant l\'université',
+            ],
+        ]);
 
         $this->add([
                        'name'    => 'discipline_codes_corresp_1_libelle',
@@ -249,19 +253,19 @@ class ParametresForm extends AbstractForm
                    ]);
 
         $this->add([
-                       'type'       => 'Select',
-                       'name'       => 'distinction_fi_fa_fc',
-                       'options'    => [
-                           'label'         => 'Distinction FI/FA/FC des heures à payer',
-                           'value_options' => [
-                               '1' => 'Oui, distinguer la FI, la FA et la FC pour les heures à payer',
-                               '0' => 'Non, toutes les heures d\'enseignement seront traitées sous l label "Enseignement"',
-                           ],
-                       ],
-                       'attributes' => [
-                           'class' => 'selectpicker',
-                       ],
-                   ]);
+            'type'       => 'Select',
+            'name'       => 'distinction_fi_fa_fc',
+            'options'    => [
+                'label'         => 'Distinction FI/FA/FC des heures à payer',
+                'value_options' => [
+                    '1' => 'Oui, distinguer la FI, la FA et la FC pour les heures à payer',
+                    '0' => 'Non, toutes les heures d\'enseignement seront traitées sous l label "Enseignement"',
+                ],
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+            ],
+        ]);
 
         $this->add([
                        'name'    => 'doc-intervenant-vacataires',
@@ -585,6 +589,26 @@ class ParametresForm extends AbstractForm
                            'data-live-search' => 'true',
                        ],
                    ]);
+
+        //Récupération des parapheurs disponibles dans l'application
+        $letterFiles              = $this->getSignatureConfigurationService()->getLetterFiles();
+        $listeLetterFiles['none'] = 'Signature électronique désactivée';
+        foreach ($letterFiles as $key => $value) {
+            $listeLetterFiles[$key] = $value['label'];
+        }
+
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'signature_electronique_parapheur',
+            'options'    => [
+                'value_options' => $listeLetterFiles,
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
 
 
         $this->add([

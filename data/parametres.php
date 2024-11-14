@@ -224,8 +224,10 @@ Cordialement,
         "VALEUR"      => "",
         "DESCRIPTION" => "Email souhaité pour l'expéditeur du mail candidature",
     ],
-
-
+    "signature_electronique_parapheur"          => [
+        "VALEUR"      => "",
+        "DESCRIPTION" => "Choix du parpaheur électronique pour l'application",
+    ],
     /* Export RH*/
     "export_rh_franchissement"                  => [
         "VALEUR"      => "",

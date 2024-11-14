@@ -1,9 +1,6 @@
 <?php
 
 return [
-    'translator'              => [
-        'locale' => 'fr_FR',
-    ],
     'modules'                 => require __DIR__ . '/modules.config.php',
     'module_listener_options' => [
         //'use_laminas_loader'       => false,

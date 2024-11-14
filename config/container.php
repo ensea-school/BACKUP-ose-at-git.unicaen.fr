@@ -97,7 +97,9 @@ class AppAdmin
 
         self::$config = require 'config.local.php';
 
-        if (self::inMaintenance()){
+        \Locale::setDefault(self::$config['global']['locale'] ?? 'fr_FR');
+
+        if (self::inMaintenance()) {
             require 'public/maintenance.php';
         }
 
@@ -107,17 +109,13 @@ class AppAdmin
         } else {
             error_reporting(E_ERROR);
             set_exception_handler(function ($e) { // on affiche quand même les erreurs fatales pour expliquer!
-                self::$config['maintenance']['messageInfo'] = '<h2>Une erreur est survenue !</h2>'
-                    . '<p>' . $e->getMessage() . '</p>'
-                    . '<p style="color:darkred">' . $e->getFile() . ' ligne ' . $e->getLine() . '</p>';
+                self::$config['maintenance']['messageInfo'] = $e;
                 require 'public/maintenance.php';
             });
         }
 
         // Retrieve configuration
         $appConfig = require __DIR__ . '/application.config.php';
-
-        \Locale::setDefault($appConfig['translator']['locale'] ?? 'fr_FR');
 
         if (self::inDev()) {
             /** @var array $devConfig */

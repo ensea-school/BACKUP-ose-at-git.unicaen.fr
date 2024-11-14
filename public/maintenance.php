@@ -5,6 +5,8 @@ header("HTTP/1.1 503 Service Unavailable");
 $remoteAddr = $_SERVER['REMOTE_ADDR'];
 $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : null;
 
+$message = \AppAdmin::config()['maintenance']['messageInfo'] ?? 'L\'application est actuellement indisponible';
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -24,17 +26,25 @@ $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDE
 
 <div id="contenu">
 
-        <h1>OSE
-            <small>Organisation des Services d'Enseignement</small>
-        </h1>
-        <p class="lead"><?= \AppAdmin::config()['maintenance']['messageInfo'] ?? 'L\'application est actuellement indisponible' ?></p>
+    <h1>OSE
+        <small>Organisation des Services d'Enseignement</small>
+    </h1>
+    <p class="lead">
+        <?php if ($message instanceof Throwable): ?>
+    <h2>Une erreur est survenue !</h2>
+    <p><?= $message->getMessage() ?></p>
+    <p style="color:darkred"><?= $message->getFile() ?> ligne <?= $message->getLine() ?></p>
+    <?php else: ?>
+        <?= $message ?>
+    <?php endif; ?>
+    </p>
 
 </div>
 <style>
 
-    body{
+    body {
         margin: 0px;
-        padding:0px;
+        padding: 0px;
     }
 
     #navbar {
@@ -57,14 +67,14 @@ $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDE
     }
 
     #navbar .info {
-        color:#555;
+        color: #555;
         text-align: right;
         margin-right: 5px;
     }
 
     #contenu {
         margin: 2em;
-        padding:1em;
+        padding: 1em;
         background-color: #f2dede;
         border-radius: 6px;
         border: 1px #d5c0c0 solid;

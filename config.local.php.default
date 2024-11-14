@@ -464,4 +464,18 @@ return [
         /* Mot de passe */
         'password'        => 'password',
     ],
+
+    /* Lien avec Pégase */
+    'pegase' => [
+        'actif' => false,
+        'dre'    => [
+            'driver'   => 'Postgresql',
+            'host'     => 'xxx.votre-etablissement.fr',
+            'port'     => '5432',
+            'dbname'   => 'dbname',
+            'username' => 'ose',
+            'password' => 'password',
+        ],
+        'etapes' => ['FORMATION'],
+    ],
 ];

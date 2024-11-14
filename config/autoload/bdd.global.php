@@ -23,7 +23,7 @@ return [
             'update-bdd-filters' => require 'data/ddl_config.php',
 
             'update-ddl-filters' => [
-                'table'              => ['excludes' => ['UNICAEN_ELEMENT_DISCIPLINE', 'UNICAEN_CORRESP_STRUCTURE_CC', 'SYS_EXPORT_SCHEMA_%', 'ACT_%']],
+                'table'              => ['excludes' => ['UNICAEN_ELEMENT_DISCIPLINE', 'UNICAEN_CORRESP_STRUCTURE_CC', 'SYS_EXPORT_SCHEMA_%', 'ACT_%', 'PEG_%']],
                 'sequence'           => ['excludes' => ['UNICAEN_CORRESP_STRUCTU_ID_SEQ']],
                 'primary-constraint' => ['excludes' => ['UNICAEN_CORRESP_STR_CC_PK', 'UNICAEN_ELEMENT_DISCIPLINE_PK', 'ACT_%']],
                 'index'              => ['excludes' => ['UNICAEN_CORRESP_STR_CC_PK', 'UNICAEN_ELEMENT_DISCIPLINE_PK', 'ACT_%']],

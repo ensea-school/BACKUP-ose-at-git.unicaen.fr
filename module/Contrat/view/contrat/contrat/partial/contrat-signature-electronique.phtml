@@ -111,7 +111,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
         <?php endif; ?>
 
         <h3><?= $contrat->toString() ?>
-            <?php if ($avenant_param >= 0): ?>- <?= $contrat->getStructure() ?><?php endif; ?></h3>
+            <?php if ($contrat->getStructure() != null): ?>- <?= $contrat->getStructure() ?><?php endif; ?></h3>
     </div>
 
     <div class="card-body">
@@ -129,10 +129,6 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <li><i class="fas fa-thumbs-up"></i> Envoyé par email
                     le <?= $dateEnvoiEmail->format(\Application\Constants::DATE_FORMAT) ?>
                 </li>
-            <?php endif; ?>
-            <?php if ($avenant_param < 0): ?>
-                <li><i class="fas fa-thumbs-up"></i> Modifiable par la structure
-                    <?= $contrat->getStructure() ?></li>
             <?php endif; ?>
             <?php if (!$contrat->getProcessSignature() && $contratSignatureActivation && $contrat->getValidation()): ?>
                 <li><i class="fas fa-hourglass-start"></i> En attente d'envoi pour signature électronique</li>

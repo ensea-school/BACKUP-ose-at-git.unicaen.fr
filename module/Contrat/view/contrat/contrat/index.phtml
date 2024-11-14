@@ -117,13 +117,15 @@ echo $this->messenger() ?>
             <h2>Contrats et avenants</h2>
 
             <?php foreach ($services['Contrat'] as $key => $tblContrat): ?>
-                <?php foreach ($tblContrat as $typeCode => $volumesHoraireToContrat):
+
+                <?php
+                foreach ($tblContrat as $typeCode => $volumesHoraireToContrat):
                     $tblContratVh = $volumesHoraireToContrat[0];
                     break;
                 endforeach; ?>
 
                 <?php if ($tblContratVh): ?>
-                    <?php if ($contratSignatureActivation && !(!empty($tblContrat->getContrat()->getDateRetourSigne() && empty($tblContrat->getContrat()->getProcessSignature())))): ?>
+                    <?php if ($contratSignatureActivation && !(!empty($tblContratVh->getContrat()->getDateRetourSigne() && empty($tblContratVh->getContrat()->getProcessSignature())))): ?>
                         <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'contratSignatureActivation' => $contratSignatureActivation, 'libelleCircuitSignature' => $libelleCircuitSignature, 'infosSignature' => $infosSignature]); ?>
                     <?php else: ?>
                         <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]); ?>

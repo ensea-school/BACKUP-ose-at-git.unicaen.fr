@@ -10,7 +10,6 @@ SELECT
     JOIN type_volume_horaire tvh ON tvh.code = 'PREVU' AND tvh.id = vh.type_volume_horaire_id
   WHERE
     vh.histo_destruction IS NULL
-    AND s.intervenant_id = 951289
     /*@INTERVENANT_ID=s.intervenant_id*/
   GROUP BY
     s.intervenant_id, ep.structure_id
@@ -26,7 +25,6 @@ SELECT
     JOIN type_volume_horaire tvh ON tvh.code = 'PREVU' AND tvh.id = vh.type_volume_horaire_id
   WHERE
     vh.histo_destruction IS NULL
-    AND s.intervenant_id = 951289
     /*@INTERVENANT_ID=s.intervenant_id*/
   GROUP BY
     s.intervenant_id, s.structure_id

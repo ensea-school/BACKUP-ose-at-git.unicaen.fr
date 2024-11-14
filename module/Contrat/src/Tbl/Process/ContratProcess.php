@@ -128,6 +128,8 @@ class ContratProcess implements ProcessInterface
 
     public function traitement()
     {
+
+
         foreach ($this->services as $id => $service) {
             $uuid = $service['UUID'];
             // Calcul du taux a afficher dans le contrat selon les services se retrouvant dans un même contrat
@@ -220,6 +222,113 @@ class ContratProcess implements ProcessInterface
 
             $this->services[$id] = $service;
         }
+
+
+        $sql                   = 'SELECT 
+    i.id AS intervenant_id,
+    i.annee_id,
+    parent_c.contrat_id AS contrat_parent_id,
+    MAX(c.date_fin) AS max_date_fin_contrat,
+    MAX(m.date_fin) AS max_date_fin_mission,
+    CASE 
+        WHEN pce.nom = \'contrat_mis\' AND pce.valeur = \'contrat_mis_globale\' THEN NULL
+        ELSE m.structure_id
+    END AS structure_id,
+    m.id AS mission_id,
+    ts.id as type_service_id
+FROM 
+    v_tbl_contrat c
+JOIN 
+    v_tbl_contrat parent_c ON c.contrat_parent_id = parent_c.contrat_id OR c.contrat_id = parent_c.contrat_id
+JOIN 
+    mission m ON c.mission_id = m.id
+JOIN 
+    intervenant i ON parent_c.intervenant_id = i.id
+JOIN 
+    parametre pce ON pce.nom = \'contrat_mis\'
+JOIN 
+      type_service                    ts ON ts.code = \'MIS\'
+
+JOIN 
+    (SELECT 
+         mission_id 
+     FROM 
+         tbl_contrat 
+     GROUP BY 
+         mission_id 
+     HAVING 
+         COUNT(CASE WHEN contrat_id IS NULL THEN 1 END) = 0
+    ) valid_missions ON c.mission_id = valid_missions.mission_id
+GROUP BY 
+    i.id, parent_c.contrat_id, m.structure_id, pce.nom, pce.valeur, i.annee_id, m.id, ts.id
+HAVING 
+    MAX(c.date_fin) < MAX(m.date_fin)
+';
+        $avenantNecessaireDate = \OseAdmin::instance()->getBdd()->select($sql);
+
+        foreach ($avenantNecessaireDate as $avenant) {
+
+            $newAvenant                      = [];
+            $newAvenant["INTERVENANT_ID"]    = $avenant['INTERVENANT_ID'];
+            $newAvenant["ANNEE_ID"]          = $avenant['ANNEE_ID'];
+            $newAvenant["STRUCTURE_ID"]      = $avenant['STRUCTURE_ID'];
+            $newAvenant["CONTRAT_PARENT_ID"] = $avenant['CONTRAT_PARENT_ID'];
+
+            $newAvenant["UUID"] = 'avenant_' . $newAvenant["INTERVENANT_ID"] . '_' . $newAvenant["CONTRAT_PARENT_ID"];
+
+            $newAvenant["EDITE"]                     = 0;
+            $newAvenant["SIGNE"]                     = 0;
+            $newAvenant["TERMINE"]                   = 0;
+            $newAvenant["AUTRES"]                    = NULL;
+            $newAvenant["AUTRE_LIBELLE"]             = NULL;
+            $newAvenant["CM"]                        = NULL;
+            $newAvenant["TD"]                        = NULL;
+            $newAvenant["TP"]                        = NULL;
+            $newAvenant["CONTRAT_ID"]                = NULL;
+            $newAvenant["TYPE_CONTRAT_ID"]           = 2;
+            $newAvenant["DATE_CREATION"]             = NULL;
+            $newAvenant["DATE_DEBUT"]                = NULL;
+            $newAvenant["DATE_FIN"]                  = NULL;
+            $newAvenant["HETD"]                      = NULL;
+            $newAvenant["HEURES"]                    = NULL;
+            $newAvenant["MISSION_ID"]                =  $avenant['MISSION_ID'];
+            $newAvenant["SERVICE_ID"]                = NULL;
+            $newAvenant["SERVICE_REFERENTIEL_ID"]    = NULL;
+            $newAvenant["TAUX_CONGES_PAYES"]         = NULL;
+            $newAvenant["TAUX_REMU_DATE"]            = NULL;
+            $newAvenant["TAUX_REMU_ID"]              = NULL;
+            $newAvenant["TAUX_REMU_MAJORE_DATE"]     = NULL;
+            $newAvenant["TAUX_REMU_MAJORE_ID"]       = NULL;
+            $newAvenant["TAUX_REMU_MAJORE_VALEUR"]   = NULL;
+            $newAvenant["TAUX_REMU_VALEUR"]          = NULL;
+            $newAvenant["VOLUME_HORAIRE_ID"]         = NULL;
+            $newAvenant["VOLUME_HORAIRE_REF_ID"]     = NULL;
+            $newAvenant["VOLUME_HORAIRE_MISSION_ID"] = NULL;
+            $newAvenant["TYPE_SERVICE_ID"]           = $avenant['TYPE_SERVICE_ID'];
+            $newAvenant["PROCESS_ID"]                = NULL;
+
+            if ($this->regleA == Parametre::AVENANT_AUTORISE) {
+                $newAvenant["ACTIF"] = 1;
+
+            }
+            $this->services[$newAvenant["UUID"]] = $newAvenant;
+
+        }
+
+
+        $sql2 = 'SELECT c.*
+FROM contrat c
+LEFT JOIN v_tbl_contrat v ON c.id = v.contrat_id
+WHERE v.contrat_id IS NULL
+AND c.histo_destruction IS NULL;';
+
+
+        $contratSansHeure = \OseAdmin::instance()->getBdd()->select($sql);
+
+//        foreach ($contratSansHeure as $contrat) {
+//
+//        }
+
     }
 
 
@@ -265,8 +374,6 @@ class ContratProcess implements ProcessInterface
                 "UUID"                      => $service["UUID"],
                 "TYPE_SERVICE_ID"           => $service["TYPE_SERVICE_ID"],
                 "PROCESS_ID"                => $service["PROCESS_ID"],
-                //A retirer apres refonte calcul workflow
-                "NBVH"                      => 1,
             ];
             $this->tblData[] = $ldata;
         }

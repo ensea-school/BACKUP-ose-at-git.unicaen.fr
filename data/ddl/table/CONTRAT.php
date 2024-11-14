@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'FIN_VALIDITE'          => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'     => [
@@ -164,18 +164,6 @@ return [
             'default'     => NULL,
             'position'    => 3,
             'commentaire' => NULL,
-        ],
-        'MISSION_ID'            => [
-            'name'        => 'MISSION_ID',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 17,
-            'commentaire' => 'Utilisé pour la contrainte d\'unicité. Le service ne peut avoir qu\'un projet par structure mais les mission peuvent avoir deux projets de contrats dans la même structure si se sont des missions différentes',
         ],
         'NUMERO_AVENANT'        => [
             'name'        => 'NUMERO_AVENANT',

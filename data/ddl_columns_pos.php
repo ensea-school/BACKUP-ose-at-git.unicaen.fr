@@ -222,7 +222,6 @@ return [
         'VALIDATION_ID',
         'TOTAL_HETD',
         'DATE_ENVOI_EMAIL',
-        'MISSION_ID',
         'DEBUT_VALIDITE',
         'FIN_VALIDITE',
     ],

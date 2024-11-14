@@ -84,6 +84,8 @@ class ContratController extends AbstractController
                                                               ]);
     }
 
+
+
     public function indexAction()
     {
         $this->initFilters();
@@ -112,7 +114,6 @@ class ContratController extends AbstractController
 
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
-        //@TODO CONTRAT : contrat n'existe plus service
         $contratSignatureActivation = false;
         $infosSignature             = [];
         $libelleCircuitSignature    = null;
@@ -128,7 +129,8 @@ class ContratController extends AbstractController
              * @var ProcessStep $step
              */
             //On récupère les informations du process
-
+            $qb       = $this->getServiceContrat()->finderByIntervenant($intervenant);
+            $contrats = $this->getServiceContrat()->getList($qb);
             foreach ($contrats as $keyContrat => $contrat) {
                 if ($contrat->getProcessSignature()) {
                     $infosSignature[$keyContrat] = [];
@@ -140,6 +142,7 @@ class ContratController extends AbstractController
                     }
                 }
             }
+        }
         //Récupération email intervenant (Perso puis unicaen)
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
         $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
@@ -158,6 +161,7 @@ class ContratController extends AbstractController
     }
 
 
+
     public function creerAction()
     {
         $this->initFilters();
@@ -174,11 +178,11 @@ class ContratController extends AbstractController
         }
 
         $volumeHorairesTotal = $this->getServiceTblContrat()->getVolumeTotalCreationContratByUuid($uuid);
-        if($volumeHorairesTotal == null){
+        if ($volumeHorairesTotal == null) {
             $volumeHorairesTotal = 0;
         }
 
-        $contrat             = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal);
+        $contrat = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal);
 
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
@@ -429,7 +433,7 @@ class ContratController extends AbstractController
                     $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
                     $vAnnee       = $this->getServiceContext()->getAnnee()->getLibelle();
                     $vLienContrat = '';
-                    $conf = \OseAdmin::instance()->config()->get('global');
+                    $conf         = \OseAdmin::instance()->config()->get('global');
                     if ($conf) {
                         $urlContrat   = $conf['scheme'] . '://' . $conf['domain'] . $this->url()->fromRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()], [], true);
                         $vLienContrat = '<a href="' . $urlContrat . '">' . $urlContrat . '</a>';
@@ -566,9 +570,7 @@ class ContratController extends AbstractController
 
 
 
-
-
-        public function creerProcessSignatureAction()
+    public function creerProcessSignatureAction()
     {
 
         /**
@@ -586,7 +588,7 @@ class ContratController extends AbstractController
 
 
 
-        public function supprimerProcessSignatureAction()
+    public function supprimerProcessSignatureAction()
     {
         //TODO : vérifier qu'on a bien le droit de supprimer cette signature, pour ce contrat
         $contrat        = $this->getEvent()->getParam('contrat');
@@ -612,7 +614,7 @@ class ContratController extends AbstractController
 
 
 
-        public function rafraichirProcessSignatureAction()
+    public function rafraichirProcessSignatureAction()
     {
         /**
          * @var Contrat $contrat
@@ -634,23 +636,7 @@ class ContratController extends AbstractController
 
 
 
-        public function voirContratSignatureAction()
-    {
-        /** @var Intervenant $intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /** @var Contrat $contrat */
-        $contrat = $this->getEvent()->getParam('contrat');
-
-
-        if (!$pieceJointe || $pieceJointe->getIntervenant()->getCode() != $intervenant->getCode()) {
-            // un intervenant tente de télécharger la PJ d'un autre intervenant
-            throw new \Exception('La pièce jointe n\'existe pas ou bien elle appartient à un autre intervenant');
-        }
-
-        $this->uploader()->download($fichier);
-    }
-
-        private function updateTableauxBord(Intervenant $intervenant)
+    private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
                                                               'formule',
@@ -659,4 +645,4 @@ class ContratController extends AbstractController
                                                           ], $intervenant);
     }
 
-    }
+}

@@ -12,6 +12,12 @@ use Contrat\Assertion\ContratAssertion;
  * @var $infosSignature             array
  */
 
+
+foreach ($services as $typeCode => $volumesHoraireContrat):
+    $contrat = $volumesHoraireContrat[0]->getContrat();
+    break;
+endforeach;
+
 $validation     = $contrat->getValidation();
 $retourSigne    = $contrat->getDateRetourSigne();
 $dateEnvoiEmail = $contrat->getDateEnvoiEmail();
@@ -151,6 +157,11 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
         </ul>
 
         <!-- Liste des enseignements concernés -->
+        <!-- Liste des enseignements concernés -->
+        <?php foreach ($volumesHoraireContrat as $vhTblContrat):
+            $uuid = $vhTblContrat->getUuid();
+            break;
+        endforeach; ?>
         <div>
             <hr/>
             <a title="Cliquez pour afficher/masquer les enseignements concernés"

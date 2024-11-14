@@ -13,6 +13,8 @@ use Intervenant\Entity\Db\Intervenant;
  * @var bool        $contratDirect
  * @var string      $emailIntervenant
  * @var array       $services
+ * @var string      $libelleCircuitSignature
+ * @var array       $infosSignature
  * @var $contratSignatureActivation     boolean
 */
 
@@ -114,33 +116,23 @@ echo $this->messenger() ?>
         <div class="well">
             <h2>Contrats et avenants</h2>
 
-            <?php foreach ($services['Contrat'] as $key => $contrat): ?>
-                <?php foreach ($contrat as $typeCode => $volumesHoraireToContrat):
+            <?php foreach ($services['Contrat'] as $key => $tblContrat): ?>
+                <?php foreach ($tblContrat as $typeCode => $volumesHoraireToContrat):
                     $tblContratVh = $volumesHoraireToContrat[0];
                     break;
                 endforeach; ?>
 
                 <?php if ($tblContratVh): ?>
-                    <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]); ?>
+                    <?php if ($contratSignatureActivation && !(!empty($tblContrat->getContrat()->getDateRetourSigne() && empty($tblContrat->getContrat()->getProcessSignature())))): ?>
+                        <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'contratSignatureActivation' => $contratSignatureActivation, 'libelleCircuitSignature' => $libelleCircuitSignature, 'infosSignature' => $infosSignature]); ?>
+                    <?php else: ?>
+                        <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]); ?>
+                    <?php endif; ?>
                 <?php endif; ?>
 
             <?php endforeach; ?>
         </div>
-        <!-- @TODO CONTRAT
-         <div class="well">
-        <h2>Contrats et avenants</h2>
-        <?php foreach ($contrats as $key => $contrat): ?>
-            <!--La signature électronique est activé et il n'y a pas déjà eu de date de retour signée renseignée manuellement-->
-            <?php if ($contratSignatureActivation && !(!empty($contrat->getDateRetourSigne() && empty($contrat->getProcessSignature())))): ?>
-                <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param, 'contratSignatureActivation' => $contratSignatureActivation, 'libelleCircuitSignature' => $libelleCircuitSignature, 'infosSignature' => $infosSignature]); ?>
-            <?php else: ?>
-                <!--Signature électronique n'est pas activé on reste sur le mode manuel-->
-                <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param]); ?>
-            <?php endif; ?>
 
-        <?php endforeach; ?>
-    </div>
-        -->
     <?php endif; ?>
 <?php else: ?>
     <p>Aucun contrat/avenant trouvé.</p>

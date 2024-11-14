@@ -1,5 +1,7 @@
 <?php
 
+header("HTTP/1.1 503 Service Unavailable");
+
 $remoteAddr = $_SERVER['REMOTE_ADDR'];
 $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : null;
 

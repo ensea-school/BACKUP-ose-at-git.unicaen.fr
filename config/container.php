@@ -44,7 +44,7 @@ class AppAdmin
 
 
 
-    public function inMaintenance(): bool
+    public static function inMaintenance(): bool
     {
         if (self::inCli()) {
             // pas de mode de maintenance en mode console
@@ -97,8 +97,28 @@ class AppAdmin
 
         self::$config = require 'config.local.php';
 
+        if (self::inMaintenance()){
+            require 'public/maintenance.php';
+        }
+
+        /* Définition de la config globale, éventuellement à partir du fichier de config général */
+        if (self::config()['global']['affichageErreurs'] ?? true) {
+            error_reporting(E_ALL);
+        } else {
+            error_reporting(E_ERROR);
+            set_exception_handler(function ($e) { // on affiche quand même les erreurs fatales pour expliquer!
+                self::$config['maintenance']['messageInfo'] = '<h2>Une erreur est survenue !</h2>'
+                    . '<p>' . $e->getMessage() . '</p>'
+                    . '<p style="color:darkred">' . $e->getFile() . ' ligne ' . $e->getLine() . '</p>';
+                require 'public/maintenance.php';
+            });
+        }
+
         // Retrieve configuration
         $appConfig = require __DIR__ . '/application.config.php';
+
+        \Locale::setDefault($appConfig['translator']['locale'] ?? 'fr_FR');
+
         if (self::inDev()) {
             /** @var array $devConfig */
             $devConfig = require __DIR__ . '/development.config.php';
@@ -124,7 +144,7 @@ class AppAdmin
 
         $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
 
-        $application = self::$container->get('Application')->bootstrap($listeners);
+        self::$container->get('Application')->bootstrap($listeners);
 
         return self::$container;
     }

@@ -10,6 +10,13 @@ use Laminas\Mvc\Application;
  */
 chdir(dirname(__DIR__));
 
+ini_set('session.cookie_samesite', 'Strict');
+
+if (!defined('REQUEST_MICROTIME')) {
+    define('REQUEST_MICROTIME', microtime(true));
+}
+
+
 // Decline static file requests back to the PHP built-in webserver
 if (php_sapi_name() === 'cli-server') {
     $path = realpath(__DIR__ . parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH));
@@ -31,6 +38,7 @@ if (! class_exists(Application::class)) {
 }
 
 $container = require __DIR__ . '/../config/container.php';
+
 // Run the application!
 /** @var Application $app */
 $app = $container->get('Application');

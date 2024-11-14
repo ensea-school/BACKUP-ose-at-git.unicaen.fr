@@ -357,6 +357,18 @@ return [
             'position'    => 20,
             'commentaire' => NULL,
         ],
+        'TERMINE'                   => [
+            'name'        => 'TERMINE',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 37,
+            'commentaire' => 'Nombre de volumes horaires signés',
+        ],
         'TP'                        => [
             'name'        => 'TP',
             'type'        => 'float',

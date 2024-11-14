@@ -2,17 +2,20 @@ CREATE OR REPLACE FORCE VIEW V_INDICATEUR_390 AS
 SELECT DISTINCT
   w.intervenant_id,
   CASE
-  WHEN w.structure_id IS NOT NULL
-    THEN w.structure_id
+    WHEN w.structure_id IS NOT NULL
+      THEN w.structure_id
     ELSE i.structure_id
-  END structure_id
-  FROM tbl_workflow w
-  JOIN intervenant  i ON w.intervenant_id = i.id
-  JOIN mission mi ON mi.intervenant_id = i.id
-  JOIN volume_horaire_mission vhm ON vhm.mission_id = mi.id
-  JOIN statut      si ON si.id = i.statut_id
-  LEFT JOIN contrat c ON c.mission_id = vhm.mission_id
-  JOIN TYPE_VOLUME_HORAIRE tvh ON tvh.CODE = 'PREVU'
+    END structure_id
+FROM
+  tbl_workflow w
+  JOIN intervenant  i                   ON w.intervenant_id = i.id
+  JOIN mission mi                       ON mi.intervenant_id = i.id
+  JOIN volume_horaire_mission vhm       ON vhm.mission_id = mi.id
+  JOIN statut      si                   ON si.id = i.statut_id
+  JOIN TYPE_VOLUME_HORAIRE tvh          ON tvh.CODE = 'PREVU'
+  JOIN validation_vol_horaire_miss vvhm ON vvhm.volume_horaire_mission_id = vhm.id
+  JOIN validation v                     ON vvhm.validation_id = v.id
+  LEFT JOIN tbl_contrat tblc            ON tblc.mission_id = vhm.mission_id
 WHERE
   w.atteignable = 1
   AND w.etape_code = 'CONTRAT'
@@ -23,4 +26,6 @@ WHERE
   AND vhm.contrat_id IS NULL
   AND vhm.histo_destruction IS NULL
   AND vhm.type_volume_horaire_id = tvh.ID
-  AND c.id IS NOT NULL
+  AND tblc.contrat_parent_id IS NOT NULL
+  AND v.histo_destruction IS NULL
+  AND tblc.actif = 1

@@ -1511,6 +1511,7 @@ return [
         'VOLUME_HORAIRE_MISSION_ID',
         'VOLUME_HORAIRE_REF_ID',
         'NBVH',
+        'TERMINE',
     ],
     'TBL_DMEP_LIQUIDATION'           => [
         'ID',

@@ -87,7 +87,6 @@ echo $this->messenger() ?>
                             try {
                                 echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
                             } catch (\Exception $e) {
-                                //TODO Le referentiel ne possède pas d'agréement et ne peut donc etre contractualisé sans service lorsque l'agréement est obligatoire
                                 echo "Ces heures ne peuvent pas être contractualisées";
                             }
                         endif; ?>

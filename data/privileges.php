@@ -25,7 +25,6 @@ return [
             'reconduction-offre'                 => 'Prolongation de l\'offre l\'année suivante',
             'reconduction-centre-cout'           => 'Reconduction des centres de coûts de l\'offre de formation',
             'reconduction-modulateur'            => 'Reconduction des modulateurs de l\'offre de formation',
-
         ],
     ],
 

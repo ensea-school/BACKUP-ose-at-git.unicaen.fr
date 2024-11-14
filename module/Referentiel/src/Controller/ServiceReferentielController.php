@@ -9,6 +9,7 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
+use Lieu\Entity\Db\Structure;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Referentiel\Entity\Db\ServiceReferentiel;
@@ -393,13 +394,13 @@ class ServiceReferentielController extends AbstractController
         $this->initFilters();
 
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
-        /* @var $typeVolumeHoraire TypeVolumeHoraire */
+        /* @var TypeVolumeHoraire $typeVolumeHoraire */
 
         $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
+        /* @var Intervenant $intervenant */
 
         $structure = $this->getEvent()->getParam('structure');
-        /* @var $structure Structure */
+        /* @var Structure $structure */
 
 
         $validation = $this->getProcessusValidationReferentiel()->creer($intervenant, $structure);

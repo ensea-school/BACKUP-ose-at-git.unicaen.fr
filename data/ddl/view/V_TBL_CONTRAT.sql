@@ -153,23 +153,28 @@ WHERE
 UNION ALL
 
 
+
 SELECT
   NULL                                                                            id,
   i.annee_id                                                                      annee_id,
   i.id                                                                            intervenant_id,
   1                                                                               actif,
-    CASE
-  WHEN c.id IS NOT NULL
-  THEN 'contrat_' || i.id || '_' || c.id
-  ELSE
+  CASE
+    WHEN c.id IS NOT NULL
+      THEN 'contrat_' || i.id || '_' || c.id
+    ELSE
       CASE pce.valeur
-                   WHEN 'contrat_mis_mission'       THEN 'm_' || i.id || '_' || m.id
-                   WHEN 'contrat_mis_composante'    THEN 'm_' || i.id || '_' || str.id
-                   WHEN 'contrat_mis_globale'       THEN 'm_' || i.id
-      END
-  END                                                                             uuid,
+        WHEN 'contrat_mis_mission'       THEN 'm_' || i.id || '_' || m.id
+        WHEN 'contrat_mis_composante'    THEN 'm_' || i.id || '_' || str.id
+        WHEN 'contrat_mis_globale'       THEN 'm_' || i.id
+        END
+    END                                                                             uuid,
 
-  str.id                                                                          structure_id,
+  CASE
+    WHEN c.id IS NOT NULL
+      THEN c.structure_id
+      ELSE str.id
+    END                                                                           structure_id,
   c.id                                                                            contrat_id,
   c.contrat_id                                                                    contrat_parent_id,
   c.type_contrat_id                                                               type_contrat_id,
@@ -195,33 +200,34 @@ SELECT
   NULL                                                                            td,
   NULL                                                                            tp,
   vhm.heures                                                                      autres,
-  vhm.heures                                                                       heures,
+  vhm.heures                                                                      heures,
   vhm.heures                                                                      hetd,
   tm.libelle                                                                      autre_libelle,
 
-  COALESCE(si.taux_remu_id, CAST(ptr.valeur AS INT))                              taux_remu_id,
-  COALESCE(si.taux_remu_id, CAST(ptr.valeur AS INT))                              taux_remu_majore_id,
+  COALESCE(si.taux_remu_id, CAST(ptr.valeur AS FLOAT))                            taux_remu_id,
+  COALESCE(si.taux_remu_id, CAST(ptr.valeur AS FLOAT))                            taux_remu_majore_id,
 
-  CAST(tcp.valeur AS FLOAT)                                                       taux_conges_payes,
+  TO_NUMBER(tcp.valeur , '9999.9')                                                taux_conges_payes,
   0.0                                                                             process_id
 FROM
-            volume_horaire_mission          vhm
-       JOIN type_service                    ts ON ts.code = 'MIS'
-       JOIN type_volume_horaire            tvh ON tvh.id = vhm.type_volume_horaire_id AND tvh.code = 'PREVU'
-       JOIN v_volume_horaire_mission_etat vvhe ON vvhe.volume_horaire_mission_id = vhm.id
-       JOIN etat_volume_horaire            evh ON evh.id = vvhe.etat_volume_horaire_id
-       JOIN mission                          m ON m.id = vhm.mission_id
-       JOIN intervenant                      i ON i.id = m.intervenant_id
-       JOIN statut                          si ON si.id = i.statut_id
-       JOIN type_mission                    tm ON tm.id = m.type_mission_id
-       JOIN parametre                      pce ON pce.nom = 'contrat_mis'
-       JOIN parametre                      ptr ON ptr.nom = 'taux-remu'
-       JOIN parametre                      tcp ON ptr.nom = 'taux_conges_payes'
-       JOIN structure                      str ON str.id = m.structure_id
+  volume_horaire_mission          vhm
+  JOIN type_service                    ts ON ts.code = 'MIS'
+  JOIN type_volume_horaire            tvh ON tvh.id = vhm.type_volume_horaire_id AND tvh.code = 'PREVU'
+  JOIN v_volume_horaire_mission_etat vvhe ON vvhe.volume_horaire_mission_id = vhm.id
+  JOIN etat_volume_horaire            evh ON evh.id = vvhe.etat_volume_horaire_id
+  JOIN mission                          m ON m.id = vhm.mission_id
+  JOIN intervenant                      i ON i.id = m.intervenant_id
+  JOIN statut                          si ON si.id = i.statut_id
+  JOIN type_mission                    tm ON tm.id = m.type_mission_id
+  JOIN parametre                      pce ON pce.nom = 'contrat_mis'
+  JOIN parametre                      ptr ON ptr.nom = 'taux-remu'
+  JOIN parametre                      tcp ON tcp.nom = 'taux_conges_payes'
+  JOIN structure                      str ON str.id = m.structure_id
   LEFT JOIN contrat                          c ON c.id = vhm.contrat_id
 WHERE
   vhm.histo_destruction IS NULL
   AND evh.code <> 'saisi'
+  AND c.histo_destruction IS NULL
   /*@INTERVENANT_ID=i.id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@STATUT_ID=si.id*/

@@ -83,8 +83,8 @@ if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
         <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL] as $element): ?>
             <tr>
                 <td>
-                    <?php echo $element->getFonctionReferentiel()->getLibelleLong() ?>
-                    (<?php echo $element->getFonctionReferentiel()->getCode() ?>)
+                    <?php echo $element->getServiceReferentiel()->getFonctionReferentiel()->getLibelleLong() ?>
+                    (<?php echo $element->getServiceReferentiel()->getFonctionReferentiel()->getCode() ?>)
                 </td>
                 <td>
                     <?php echo $element->getAutres() ?>
@@ -100,6 +100,7 @@ if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
         <thead>
         <tr>
             <th>Type de mission</th>
+            <th>Libellé de mission</th>
             <th>Heures</th>
         </tr>
         </thead>
@@ -107,8 +108,11 @@ if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
         <?php foreach ($services[TypeService::CODE_MISSION] as $element): ?>
             <tr>
                 <td>
-                    <?php echo $element->getTypeMission()->getLibelle() ?>
-                    (<?php echo $element->getTypeMission()->getCode() ?>)
+                    <?php echo $element->getMission()->getTypeMission()->getLibelle() ?>
+                    (<?php echo $element->getMission()->getTypeMission()->getCode() ?>)
+                </td>
+                <td>
+                    <?php echo $element->getMission()->getLibelle() ?>
                 </td>
                 <td>
                     <?php echo $element->getAutres() ?>

@@ -34,6 +34,7 @@ class ContratProcess implements ProcessInterface
     private string $regleA;
     private string $regleEns;
     private string $regleMis;
+    private string $regleTermine;
 
 
 
@@ -80,9 +81,10 @@ class ContratProcess implements ProcessInterface
         $parametres = $this->getServiceParametres();
 
 
-        $this->regleA   = $parametres->get('avenant');
-        $this->regleEns = $parametres->get('contrat_ens');
-        $this->regleMis = $parametres->get('contrat_mis');
+        $this->regleA       = $parametres->get('avenant');
+        $this->regleEns     = $parametres->get('contrat_ens');
+        $this->regleMis     = $parametres->get('contrat_mis');
+        $this->regleTermine = $parametres->get('contrat_regle_franchissement');
 
         $this->services = [];
         $this->tblData  = [];
@@ -128,12 +130,32 @@ class ContratProcess implements ProcessInterface
     {
         foreach ($this->services as $id => $service) {
             $uuid = $service['UUID'];
-
             // Calcul du taux a afficher dans le contrat selon les services se retrouvant dans un même contrat
             $service['TAUX_REMU_VALEUR']        = null;
             $service['TAUX_REMU_DATE']          = null;
             $service['TAUX_REMU_MAJORE_VALEUR'] = null;
             $service['TAUX_REMU_MAJORE_DATE']   = null;
+
+
+            if ($service['CONTRAT_ID'] != null) {
+
+                if (($this->regleTermine == Parametre::CONTRAT_FRANCHI_VALIDATION && $service['EDITE'] == 1)
+                    || ($this->regleTermine == Parametre::CONTRAT_FRANCHI_DATE_RETOUR && $service['SIGNE'] == 1)
+                ) {
+                    $service['TERMINE'] = 1;
+                } else {
+                    $service['TERMINE'] = 0;
+                }
+            } else {
+                $service['TERMINE'] = 0;
+
+                if (($service['TYPE_SERVICE_CODE'] != 'MIS' && $this->regleEns == Parametre::CONTRAT_ENS_GLOBALE)
+                    ||
+                    ($service['TYPE_SERVICE_CODE'] == 'MIS' && $this->regleEns == Parametre::CONTRAT_MIS_GLOBALE)) {
+                    $service["STRUCTURE_ID"] = null;
+                }
+            }
+
             if ($this->tauxRemuUuid[$uuid]) {
                 //Calcul de la valeur et date du taux
                 $tauxRemuId       = $service['TAUX_REMU_ID'];
@@ -152,40 +174,40 @@ class ContratProcess implements ProcessInterface
                 }
             }
 
+
             //Calcul pour savoir si le contrat devra être un avenant ou un contrat
             if ($service["TYPE_CONTRAT_ID"] == null) {
                 if ($service['TYPE_SERVICE_CODE'] != 'MIS') {
 
                     if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
-                        $service["TYPE_CONTRAT_ID"] = 2;
-                        $service["CONTRAT_PARENT_ID"]      = $this->intervenantContrat[$service['INTERVENANT_ID']];
-
+                        $service["TYPE_CONTRAT_ID"]   = 2;
+                        $service["CONTRAT_PARENT_ID"] = $this->intervenantContrat[$service['INTERVENANT_ID']];
                     }
+
+
                 }
                 if ($service['TYPE_SERVICE_CODE'] == 'MIS') {
                     if ($this->regleMis == Parametre::CONTRAT_MIS_COMPOSANTE) {
                         if (isset($this->intervenantContrat[$service['STRUCTURE_ID']])) {
-                            $service["TYPE_CONTRAT_ID"] = 2;
-                            $service["CONTRAT_PARENT_ID"]      = $this->intervenantContrat[$service['STRUCTURE_ID']];
+                            $service["TYPE_CONTRAT_ID"]   = 2;
+                            $service["CONTRAT_PARENT_ID"] = $this->intervenantContrat[$service['STRUCTURE_ID']];
 
                         }
                     }
                     if ($this->regleMis == Parametre::CONTRAT_MIS_MISSION) {
                         if (isset($this->intervenantContrat[$service['MISSION_ID']])) {
-                            $service["TYPE_CONTRAT_ID"] = 2;
-                            $service["CONTRAT_PARENT_ID"]      = $this->intervenantContrat[$service['MISSION_ID']];
+                            $service["TYPE_CONTRAT_ID"]   = 2;
+                            $service["CONTRAT_PARENT_ID"] = $this->intervenantContrat[$service['MISSION_ID']];
 
                         }
 
                     }
                     if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBALE) {
                         if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
-                            $service["TYPE_CONTRAT_ID"] = 2;
-                            $service["CONTRAT_PARENT_ID"]      = $this->intervenantContrat[$service['INTERVENANT_ID']];
-
+                            $service["TYPE_CONTRAT_ID"]   = 2;
+                            $service["CONTRAT_PARENT_ID"] = $this->intervenantContrat[$service['INTERVENANT_ID']];
                         }
                     }
-
                 }
 
                 if ($service["TYPE_CONTRAT_ID"] == null) {
@@ -212,6 +234,7 @@ class ContratProcess implements ProcessInterface
                 "STRUCTURE_ID"              => $service["STRUCTURE_ID"],
                 "EDITE"                     => $service["EDITE"],
                 "SIGNE"                     => $service["SIGNE"],
+                "TERMINE"                   => $service["TERMINE"],
                 "ACTIF"                     => $service["ACTIF"],
                 "AUTRES"                    => $service["AUTRES"],
                 "AUTRE_LIBELLE"             => $service["AUTRE_LIBELLE"],

@@ -4,6 +4,7 @@ namespace Contrat\Entity\Db;
 
 use Application\Entity\Db\Parametre;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Entity\Structure;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
@@ -387,11 +388,11 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set intervenant
      *
-     * @param \Intervenant\Entity\Db\Intervenant $intervenant
+     * @param Intervenant|null $intervenant
      *
      * @return self
      */
-    public function setIntervenant (\Application\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -417,7 +418,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @param \Lieu\Entity\Db\Structure $structure
      *
-     * @return Intervenant
+     * @return Contrat
      */
     public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
     {

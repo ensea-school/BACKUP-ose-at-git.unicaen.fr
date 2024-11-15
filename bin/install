@@ -64,7 +64,6 @@ $c = new Console();
 $repo = new GitRepoService();
 $repo->setMinVersion($minVersion);
 $repo->setUrl($gitRepoUrl);
-$repo->setVersionFile($versionFile);
 
 
 /* ---------- Récup & contrôle des paramètres en entrée --------- */
@@ -174,6 +173,7 @@ $c->exec($cmds);
 
 // Ecriture de la version dans le fichier
 if ($versionFile) {
+    $repo->setVersionFile($dir.$versionFile);
     $repo->writeVersion($version);
 }
 

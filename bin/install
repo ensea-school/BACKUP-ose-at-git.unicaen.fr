@@ -202,7 +202,7 @@ if ($composerInstall) {
 
 // Chargement des dépendances à l'aide de Composer
 $c->section('Chargement des dépendances à l\'aide de Composer');
-$c->passthru("cd $dir;$composerCommand update --optimize-autoloader");
+$c->passthru("cd $dir;$composerCommand install --optimize-autoloader");
 
 
 // La suite de l'installation sera lancée par composer avec les post-install-cmd

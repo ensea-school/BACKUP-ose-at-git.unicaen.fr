@@ -36,6 +36,9 @@ $composerCommand = 'composer';
 // Répertoire de cache de l'application (chemin relatif)
 $cacheDir = 'cache';
 
+// Commande à lancer après l'installation de l'application
+$postInstallCommand = './vendor/bin/laminas install';
+
 // Liste des commandes systèmes qui doivent être installées
 $depCommands = [
     'git'     => 'Gestionnaire de versions',
@@ -218,7 +221,11 @@ $c->section('Chargement des dépendances à l\'aide de Composer');
 $c->passthru("cd $dir;$composerCommand install --optimize-autoloader");
 
 
-// La suite de l'installation sera lancée par composer avec les post-install-cmd
+// Poursuite de la procédure d'installation en passant la main
+if ($postInstallCommand){
+    $c->passthru(["cd $dir;$postInstallCommand"]);
+}
+
 
 /************************************************************
  *                      Classes utiles                      *

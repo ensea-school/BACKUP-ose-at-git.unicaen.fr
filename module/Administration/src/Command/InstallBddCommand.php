@@ -106,8 +106,8 @@ class InstallBddCommand extends Command
         // On présuppose que le MDP oseappli a été transmis depuis les options de la ligne de commande
         $pwd1 = $input->getOption('oseappli-pwd');
 
+        $saisi = false;
         if (!$pwd1) {
-
             $this->io->text("Choix d'un mot de passe pour l'utilisateur système oseappli");
             $pwd1 = $this->io->askHidden("Veuillez saisir un mot de passe (au minimum 6 caractères) :");
 

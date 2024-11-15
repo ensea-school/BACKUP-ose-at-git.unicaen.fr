@@ -85,8 +85,9 @@ class InstallCommand extends Command
     {
         $config = require 'config.local.php';
         $config = $config['bdd'];
-        var_dump($config);
+        //var_dump($config);
 
+        return true;
     }
 
 

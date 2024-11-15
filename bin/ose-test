@@ -1,3 +1,14 @@
 #!/bin/bash
 
-../vendor/bin/phpunit tests --color=always $@
+# Résoudre le chemin réel du script, même si c'est un lien symbolique
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  # Si le lien symbolique est relatif, résolvez-le par rapport à son répertoire
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+echo $DIR
+# Exécuter le binaire relatif au répertoire du script
+"$DIR/../vendor/bin/phpunit" "$DIR/../tests" "--color=always" "$@"

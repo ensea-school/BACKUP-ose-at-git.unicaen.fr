@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
+use Unicaen\BddAdmin\Bdd;
 
 /**
  * Description of InstallCommand
@@ -59,8 +60,7 @@ class InstallCommand extends Command
         $io->comment('Initialisation des répertoires de travail OK');
 
         if ($this->hasConfigBdd()) {
-            //$this->runCommand($output, 'install-bdd');
-            echo '$this->runCommand($output, \'install-bdd\');';
+            $this->runCommand($output, 'install-bdd');
         } else {
             $io->section("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
 
@@ -85,9 +85,12 @@ class InstallCommand extends Command
     {
         $config = require 'config.local.php';
         $config = $config['bdd'];
-        //var_dump($config);
-
-        return true;
+        try {
+            new Bdd($config);
+            return true;
+        }catch (\Exception $e){
+            return false;
+        }
     }
 
 

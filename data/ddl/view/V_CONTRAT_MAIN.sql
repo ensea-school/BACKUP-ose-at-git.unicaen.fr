@@ -1,3 +1,4 @@
+CREATE OR REPLACE FORCE VIEW V_CONTRAT_SERVICES AS
 WITH hs AS (
   SELECT contrat_id, SUM(heures) "serviceTotal", SUM("hetd") "hetdContrat" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
 ),

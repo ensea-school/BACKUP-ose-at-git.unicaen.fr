@@ -6,7 +6,6 @@ use Application\Entity\Db\Parametre;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Mission\Entity\Db\Mission;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenSignature\Entity\Db\Process;

@@ -19,8 +19,7 @@ use Intervenant\Entity\Db\Intervenant;
 */
 
 $this->intervenant($intervenant)->renderTitle("Contrat/avenant");
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
-
+$this->messenger()->setMessagesFromFlashMessengerWithNoNamespace();
 if (!empty($services['NoContrat'])) {
     $this->messenger()->addMessage('Des heures prévisionnelles d\'enseignement validées ne font l\'objet d\'aucun contrat ou avenant. En voici la liste ci-dessous :', 'danger');
 } else {

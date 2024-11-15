@@ -127,7 +127,7 @@ class InstallBddCommand extends Command
         if (!$pwd1){
             $this->io->info(
                 'Avant de vous connecter à OSE avec le login "oseappli", il vous faudra définir son mot de passe.'."\n"
-                .'Vous devrez pour ceci éxécuter la commande suivante ./bin/ose changement-mot-de-passe'
+                .'Vous devrez pour ceci éxécuter la commande suivante:'."\n".' ./bin/ose changement-mot-de-passe'
             );
         }else {
             $utilisateur = 'oseappli';

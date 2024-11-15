@@ -3,6 +3,7 @@
 namespace Administration\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -29,10 +30,17 @@ class InstallCommand extends Command
 
         $io->title($this->getDescription());
 
+        $io->section("Mise en place des répertoires de travail");
+
         if (!$filesystem->exists('cache')) {
             $filesystem->mkdir('cache');
         }
         $filesystem->chmod('cache', 0777);
+
+        if (!$filesystem->exists('cache/Doctrine')) {
+            $filesystem->mkdir('cache/Doctrine');
+        }
+        $filesystem->chmod('cache/Doctrine', 0777);
 
         if (!$filesystem->exists('data/fichiers')) {
             $filesystem->mkdir('data/fichiers');
@@ -42,29 +50,52 @@ class InstallCommand extends Command
         if (!$filesystem->exists('log')) {
             $filesystem->mkdir('log');
         }
-        $filesystem->chmod('cache', 0777);
+        $filesystem->chmod('log', 0777);
 
         $filesystem->chmod('bin/ose', 0755);
-
-        if (!$filesystem->exists('config.local.php')) {
-            $filesystem->copy('config.local.php.default', 'config.local.php');
-        }
+        $filesystem->chmod('bin/ose-code', 0755);
+        $filesystem->chmod('bin/ose-test', 0755);
 
         $io->comment('Initialisation des répertoires de travail OK');
 
-        $io->section("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
+        if ($this->hasConfigBdd()) {
+            //$this->runCommand($output, 'install-bdd');
+            echo '$this->runCommand($output, \'install-bdd\');';
+        } else {
+            $io->section("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
 
-        $io->listing([
-                         "1 - Configurez le cas échéant votre serveur Apache",
-                         "2 - Veuillez personnaliser le fichier de configuration de OSE `config.local.php`, si ce n'est déjà le cas",
-                         "3 - La base de données devra au besoin être initialisée à l'aide de la commande `./bin/ose install-bdd`",
-                         "4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.)",
-                     ]);
+            $io->listing([
+                             "1 - Configurez le cas échéant votre serveur Apache",
+                             "2 - Veuillez personnaliser le fichier de configuration de OSE `config.local.php`",
+                             "3 - La base de données devra être initialisée à l'aide de la commande `./bin/ose install-bdd`",
+                             "4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.)",
+                         ]);
 
-        $io->text(
-            "Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application",
-        );
+            $io->text(
+                "Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application",
+            );
+        }
 
         return Command::SUCCESS;
+    }
+
+
+
+    protected function hasConfigBdd(): bool
+    {
+        $config = require 'config.local.php';
+        $config = $config['bdd'];
+        var_dump($config);
+
+    }
+
+
+
+    private function runCommand(OutputInterface $output, string $commandName, array $options = []): int
+    {
+        $command = $this->getApplication()->get($commandName);
+        $input   = new ArrayInput($options);
+
+        return $command->run($input, $output);
     }
 }

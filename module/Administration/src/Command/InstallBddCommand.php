@@ -43,6 +43,7 @@ class InstallBddCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->getBdd()->setLogger($this->io);
+        $this->io->title($this->getDescription());
 
         $this->install();
         $this->pj();

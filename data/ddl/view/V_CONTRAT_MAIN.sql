@@ -1,30 +1,25 @@
-CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
   SELECT contrat_id, SUM(heures) "serviceTotal", SUM("hetd") "hetdContrat" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
 ),
-
-
-la AS(
-        SELECT
-                contrat_id,
-                LISTAGG( libelle, ',')  WITHIN GROUP (ORDER BY libelle)                                                     autre_libelles
-        FROM
-        (
-            SELECT DISTINCT
-                c.contrat_id,
-                ti.libelle                                                                                                  libelle
-            FROM
-                contrat c
-                JOIN volume_horaire vh ON c.id = vh.contrat_id
-                JOIN type_intervention ti ON ti.id = vh.type_intervention_id
-                LEFT JOIN                      hs ON hs.contrat_id = c.id
-            WHERE
-                ti.code NOT IN ('CM','TD','TP')
-        )
-        GROUP BY contrat_id
-    )
-
-
+     la AS(
+       SELECT
+         contrat_id,
+         LISTAGG( libelle, ',')  WITHIN GROUP (ORDER BY libelle)                                                     autre_libelles
+FROM
+  (
+  SELECT DISTINCT
+  c.contrat_id,
+  ti.libelle                                                                                                  libelle
+  FROM
+  contrat c
+  JOIN volume_horaire vh ON c.id = vh.contrat_id
+  JOIN type_intervention ti ON ti.id = vh.type_intervention_id
+  LEFT JOIN                      hs ON hs.contrat_id = c.id
+  WHERE
+  ti.code NOT IN ('CM','TD','TP')
+  )
+GROUP BY contrat_id
+  )
 SELECT ct.annee_id,
        ct.structure_id,
        ct.intervenant_id,
@@ -171,6 +166,7 @@ FROM (  SELECT c.*,
                c.numero_avenant                                                                                                                                "numeroAvenant"
         FROM
           contrat                         c
+            JOIN TBL_CONTRAT                tblc ON c.id = tblc.contrat_id
             JOIN type_contrat               tc ON tc.id = c.type_contrat_id
             JOIN intervenant                i ON i.id = c.intervenant_id
             JOIN annee                      a ON a.id = i.annee_id
@@ -187,7 +183,7 @@ FROM (  SELECT c.*,
             LEFT JOIN                       hs ON hs.contrat_id = c.id
             LEFT JOIN                       la ON la.contrat_id = c.id
             LEFT JOIN contrat               cp ON cp.id = c.contrat_id
-            LEFT JOIN mission               m ON c.mission_id = m.id
+            LEFT JOIN mission               m ON tblc.mission_id = m.id
             LEFT JOIN type_mission          tm ON m.type_mission_id = tm.id
             JOIN taux_remu                  tr ON tr.id = COALESCE(m.taux_remu_id, tm.taux_remu_id, si.taux_remu_id, to_number(ptr.valeur))
             JOIN taux_remu                  trm ON trm.id = COALESCE(m.taux_remu_majore_id,m.taux_remu_id, tm.taux_remu_majore_id, tm.taux_remu_id, si.taux_remu_id, to_number(ptr.valeur))

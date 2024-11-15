@@ -27,6 +27,17 @@ return [
             // a vous d'écrire votre propre test.
             return true;
         },
+
+        /*
+         * Mot de passe par défaut pour l'utilisateur OseAppli
+         * Ce mot de passe vous sera demandé pour votre première connexion à l'application, avec le login oseappli
+         * Vous serez connecté en tant qu'administrateur. Ensuite, vous devrez nommer d'autres utilisateurs
+         * en tant qu'administrateurs et ne plus utiliser ce compte oseappli.
+         *
+         * Vous n'êtes pas obligé de renseigner ce mot de passe ici. Vous pouvez aussi lancer la commande
+         * ./bin/ose chanement-mot-de-passe
+         */
+        'oseappliPassword' => null,
     ],
 
 

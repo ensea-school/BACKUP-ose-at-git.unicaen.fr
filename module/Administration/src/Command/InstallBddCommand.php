@@ -103,9 +103,11 @@ class InstallBddCommand extends Command
 
     private function motDePasse(InputInterface $input)
     {
+        // On présuppose que le MDP oseappli a été transmis depuis les options de la ligne de commande
         $pwd1 = $input->getOption('oseappli-pwd');
 
         if (!$pwd1) {
+
             $this->io->text("Choix d'un mot de passe pour l'utilisateur système oseappli");
             $pwd1 = $this->io->askHidden("Veuillez saisir un mot de passe (au minimum 6 caractères) :");
 
@@ -115,20 +117,34 @@ class InstallBddCommand extends Command
                 $this->io->error('Les mots de passe saisis ne correspondent pas!');
                 $this->motDePasse($input);
             }
+            $saisi = true;
         }
 
-        $utilisateur = 'oseappli';
-        $motDePasse  = $pwd1;
-
-        $userObject = $this->getServiceUtilisateur()->getByUsername($utilisateur);
-
-        if (!$userObject) {
-            $this->io->error("Utilisateur $utilisateur non trouvé");
-            die();
+        if ('no' == $pwd1) {
+            $pwd1 = \AppAdmin::config()['global']['oseappliPassword'] ?? null;
         }
 
-        $this->getServiceUtilisateur()->changerMotDePasse($userObject, $motDePasse);
-        $this->io->comment('Mot de passe enregistré');
-        $this->io->info('Vous pourrez vous connecteur à OSE avec le login "oseappli" et votre nouveau mot de passe.');
+        if (!$pwd1){
+            $this->io->info(
+                'Avant de vous connecter à OSE avec le login "oseappli", il vous faudra définir son mot de passe.'."\n"
+                .'Vous devrez pour ceci éxécuter la commande suivante ./bin/ose changement-mot-de-passe'
+            );
+        }else {
+            $utilisateur = 'oseappli';
+            $motDePasse  = $pwd1;
+
+            $userObject = $this->getServiceUtilisateur()->getByUsername($utilisateur);
+
+            if (!$userObject) {
+                $this->io->error("Utilisateur $utilisateur non trouvé");
+                die();
+            }
+
+            $this->getServiceUtilisateur()->changerMotDePasse($userObject, $motDePasse);
+            if ($saisi) {
+                $this->io->comment('Mot de passe enregistré');
+                $this->io->info('Vous pourrez vous connecteur à OSE avec le login "oseappli" et votre nouveau mot de passe.');
+            }
+        }
     }
 }

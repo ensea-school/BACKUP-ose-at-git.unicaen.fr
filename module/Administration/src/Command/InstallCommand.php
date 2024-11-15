@@ -60,7 +60,7 @@ class InstallCommand extends Command
         $io->comment('Initialisation des répertoires de travail OK');
 
         if ($this->hasConfigBdd()) {
-            $this->runCommand($output, 'install-bdd', ['oseappli-pwd' => 'no']);
+            $this->runCommand($output, 'install-bdd', ['--oseappli-pwd' => 'no']);
         } else {
             $io->section("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
 

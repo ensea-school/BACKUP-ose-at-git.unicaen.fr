@@ -10,5 +10,8 @@ while [ -L "$SOURCE" ]; do
 done
 DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 
-# Exécuter le binaire relatif au répertoire du script
-"$DIR/../vendor/bin/laminas" "$@"
+APP_DIR="$(dirname "$DIR")"
+
+cd $APP_DIR;
+
+./vendor/bin/laminas $@

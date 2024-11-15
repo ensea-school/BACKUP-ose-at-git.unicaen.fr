@@ -9,6 +9,9 @@ while [ -L "$SOURCE" ]; do
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
-echo $DIR
-# Exécuter le binaire relatif au répertoire du script
-"$DIR/../vendor/bin/phpunit" "$DIR/../tests" "--color=always" "$@"
+
+APP_DIR="$(dirname "$DIR")"
+
+cd $APP_DIR;
+
+./vendor/bin/phpunit tests --color=always $@

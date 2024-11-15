@@ -25,7 +25,8 @@ class GitRepoServiceFactory
     {
         $service = new GitRepoService;
 
-        /* Injectez vos dépendances ICI */
+        $service->setUrl('https://git.unicaen.fr/open-source/OSE.git');
+        $service->setMinVersion(17);
 
         return $service;
     }

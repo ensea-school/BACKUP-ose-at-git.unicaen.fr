@@ -1,224 +1,252 @@
 #!/usr/bin/env php
 <?php
 
-$c = new Console();
-$c->setInputOptions([
-    'version:',
-    'config-file:',
-    'ose-dir:',
-]);
+/* --------------- Début des paramétrages --------------- */
 
-$od = new OseDeploy($c);
+// Titre...
+$title = 'Installation de OSE';
 
-$pstr = str_repeat(' ', $spaces);
-$t    = $pstr . $title . $pstr;
+// Version minimale proposée, pour ne pas afficher de vieilles versions, 0 si pas de minimum
+$minVersion = 20;
 
-$len = strlen($t);
+// Fichier spécifiant la version installée dans le code source du projet (chemin relatif)
+// Si null, pas de version enregistrée
+$versionFile = 'VERSION';
 
-echo "╔═════════════════════════════════╗\n";
-echo "║                                 ║\n";
-echo "║       Installation de OSE       ║\n";
-echo "║                                 ║\n";
-echo "╚═════════════════════════════════╝\n";
+// URL du dépôt Git
+$gitRepoUrl = 'https://git.unicaen.fr/open-source/OSE.git';
 
-$c->check([
+// Si le projet n'a pas de fichier de configuration global => on passe à false
+$hasConfigFile = true;
+
+// Fichier de configuration par défaut dans le code source du projet (chemin relatif)
+// Utile uniquement si $hasConfigFile = true
+$defaultConfigFile = 'config.local.php.default';
+
+// Nom du fichier de configuration dans le code source du projet (chemin relatif)
+// Utile uniquement si $hasConfigFile = true
+$configFileName = 'config.local.php';
+
+// Doit s'occuper d'installer composer ou pas (bool)
+$composerInstall = true;
+
+// Commande pour exécuter composer
+$composerCommand = 'composer';
+
+// Liste des commandes systèmes qui doivent être installées
+$depCommands = [
     'git'     => 'Gestionnaire de versions',
     'php'     => 'Langage PHP',
     'wget'    => 'Téléchargement en ligne de commande',
     'unoconv' => ['description' => 'Convertisseur OpenDocument vers PDF', 'facultatif' => false],
-]);
+];
 
-if (!$od->checkPhpModules([
+// Liste des modules PHP qui doivent être installés
+$depModules = [
     'curl'         => 'Curl',
     'intl'         => 'Intl',
     'json'         => 'Json',
     'ldap'         => 'Ldap',
     'mbstring'     => 'MbString',
-    //  'mcrypt'       => 'MCrypt',
     'Zend OPcache' => 'Zend OPcache',
     'xml'          => 'XML',
     'zip'          => 'ZIP',
     'bcmath'       => 'BCMath',
     'gd'           => 'GD',
     'oci8'         => 'OCI8 (Pilote Oracle)',
-])) {
-    $c->printDie('Un ou plusieurs modules PHP sont manquants. Merci de les installer pour poursuivre l\'installation de OSE');
-};
+];
 
-// Mise en place de la clé SSH
-$c->println("\nTest de connexion au serveur GitLab hébergeant OSE", $c::COLOR_LIGHT_CYAN);
-if (!$od->gitlabIsReachable()) {
-    $c->printDie($od::OSE_ORIGIN . " est inaccessible.");
-} else {
-    $c->println("URL Gitlab (" . $od::OSE_ORIGIN . ") accessible", $c::COLOR_LIGHT_GREEN);
+
+/* --------------- Initialisation --------------- */
+
+$c = new Console();
+
+$repo = new GitRepoService();
+$repo->setMinVersion($minVersion);
+$repo->setUrl($gitRepoUrl);
+$repo->setVersionFile($versionFile);
+
+
+/* ---------- Récup & contrôle des paramètres en entrée --------- */
+
+$inputOptions = [
+    'no-check',
+    'no-title',
+    'no-composer-install',
+    'version:',
+    'dir:',
+    'config-file:',
+];
+$c->setInputOptions($inputOptions);
+
+
+// Affichage du titre
+if (!$c->getOption('no-title')) {
+    $c->title($title, 13);
 }
 
 
-// Création du dossier
-$c->println("\nCréation du dossier et initialisation de GIT", $c::COLOR_LIGHT_CYAN);
-$c->print("Veuillez indiquer un nouveau répertoire où implanter OSE: ");
-$osedir = $c->getInput('ose-dir');
-
-if (file_exists($osedir)) {
-    $c->printDie("Le répertoire $osedir existe déjà. Merci d'en spécifier un nouveau.");
+// Contrôle des dépendances
+if (!$c->getOption('no-check')) {
+    $controle = new AppControle($c);
+    $controle->checkCommands($depCommands);
+    $controle->checkPhpModules($depModules);
 }
 
-$c->exec([
-    "mkdir $osedir",
-    "cd $osedir",
-    "git init",
-    "git remote add origin " . $od::OSE_ORIGIN,
-    "git fetch --all --tags --prune",
-]);
+if (!$repo->gitlabIsReachable()) {
+    $c->error("Le dépôt \"$gitRepoUrl\" de l'application est inaccessible.");
+}
 
 
 // Choix de la version
 $version = $c->getOption('version');
 if (!$version) {
-    $c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
-    $c->println("Voici la liste des versions de OSE disponibles:");
-    $tags = $od->getTags();
+    $c->section("\nSélection de la version à déployer");
+    $c->writeln("Voici la liste des versions disponibles:");
+    $tags = $repo->getTags();
     foreach ($tags as $tag) {
-        $c->println($tag);
+        $c->writeln('  ' . $tag['tag']);
     }
-    $c->print("Veuillez choisir une version à déployer: ");
+    $c->write("Veuillez choisir une version à déployer: ");
     $version = $c->getInput('version');
 }
 
-if (!($od->tagIsValid($version) || $od->brancheIsValid($version))) {
-    $c->printDie("$version n'est pas dans la liste des versions disponibles.");
+if ($repo->tagIsValid($version)) {
+    $isTag     = true;
+    $isBranche = false;
+} elseif ($repo->brancheIsValid($version)) {
+    $isTag     = false;
+    $isBranche = true;
+} else {
+    $c->error('La version ou la branche ' . $version . ' est invalide');
 }
 
 
-// Récupération des sources
-$c->println("\nDéploiement à partir des sources GIT", $c::COLOR_LIGHT_CYAN);
-$tbr = $od->tagIsValid($version) ? 'tags/' : '';
-$c->exec([
-    "cd $osedir",
-    "git checkout $tbr$version",
-    "mkdir cache",
-    "mkdir cache/Doctrine",
-    "chmod 777 cache/Doctrine",
-    "chmod 777 cache",
-    "mkdir data/fichiers",
-    "chmod 777 data/fichiers",
-    "mkdir log",
-    "chmod 777 log",
-    "chmod +x bin/ose",
-]);
-$od->writeVersion($osedir, $version);
-$intVersion = (int)substr($version, 0, 2);
+// Détermination du répertoire d'installation
+$dir = $c->getOption('dir');
+if (null === $dir) {
+    $c->write("Veuillez indiquer un nouveau répertoire où implanter OSE: ");
+    $dir = $c->getInput('ose-dir');
+}
+$dir = $c->absolutePath($dir, __DIR__);
+if (file_exists($dir)) {
+    $c->error("Le répertoire $dir existe déjà. Merci de le supprimer ou d'en spécifier un nouveau.");
+}
 
 
-// Récupération de Composer
-$c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
-//$c->passthru("cd $osedir;wget https://getcomposer.org/composer-1.phar; mv composer-1.phar composer.phar");
-
-if ($intVersion > 0 && $intVersion < 18) {
-    // versions stables antérieures à la v18
-    $c->passthru("cd $osedir;wget https://getcomposer.org/download/1.10.21/composer.phar");
-} else {
-    // à partir de la v18, et toutes les branches
-    $osedir = realpath($osedir);
-    $composerSetupFile = 'composer-setup.php';
-    $c->passthru("cd $osedir;wget https://getcomposer.org/installer; mv installer $composerSetupFile");
-    if (!hash_file('sha384', $composerSetupFile) === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') {
-        die('Installateur de composer corrompu');
-        unlink($composerSetupFile);
+// Si config-file est fourni, test de l'existence du fichier
+if ($hasConfigFile) {
+    $configFile = $c->getOption('config-file');
+    if ($configFile) {
+        $configFile = $c->absoluteFilename($configFile, __DIR__);
+        if (!file_exists($configFile) || !is_file($configFile)) {
+            $c->error('Le fichier de configuration "' . $configFile . '" transmis est inexistant ou n\'est pas un fichier');
+        }
+    } else {
+        $configFile = $dir . $defaultConfigFile;
     }
-    $c->passthru("cd $osedir;php $composerSetupFile");
-}
-
-// Récupération des dépendances
-$c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
-
-if ($intVersion === 0) {
-    // à partir d'une branche, on ignore les prérequis pour composer, afin de tester
-    $c->passthru("cd $osedir;php composer.phar install --optimize-autoloader --ignore-platform-reqs");
 } else {
-    // à partir de la v18, et toutes les branches
-    $c->passthru("cd $osedir;php composer.phar install --optimize-autoloader");
-}
-
-
-if ($intVersion > 0 && $intVersion < 18) {
-    // Création des liens symboliques
-    $c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
-    $od->majUnicaenSymLinks($osedir);
-    $c->println('Liens mis en place', $c::COLOR_LIGHT_GREEN);
-}
-
-// Configuration locale
-//$c->println("\nMise en place de la base de données", $c::COLOR_LIGHT_CYAN);
-//$c->println("\nUne base de données Oracle doit préalablement avoir été créée. Merci de fournir dès à présent ses"
-//." paramètres d'accès pour que OSE initialialise la base de données :");
-
-$configFile = $c->getOption('config-file');
-if ($configFile && !file_exists($configFile)) {
-    $configFile = getcwd() . '/' . $configFile;
-}
-if ($configFile && !file_exists($configFile)) {
-    $c->println("Le fichier de configuration $configFile est introuvable. A sa place, un nouveau fichier de configuration ser créé sur la base de celui par défaut.");
     $configFile = null;
 }
-if ($configFile) {
-    $configFile = realpath($configFile);
-} else {
-    $configFile = $osedir . '/config.local.php.default';
+
+// Paramétrages pour composer
+if ($c->getOption('no-composer-install')) {
+    $composerInstall = false;
 }
-copy($configFile, $osedir . '/config.local.php');
 
 
-// Génération des proxies pour l'ORM Doctrine
+/* --------------- Début de l'installation --------------- */
+
+$bt = $isTag ? 'version' : 'branche';
+$c->section('Début de l\'installation de la ' . $bt . ' ' . $version);
+$c->section('Rapatriement du dépot GIT');
+$tbr  = $isTag ? 'tags/' : '';
+$cmds = [
+    "mkdir $dir",
+    "cd $dir",
+    "git init",
+    "git remote add origin " . $gitRepoUrl,
+    "git fetch --all --tags --prune > /dev/null 2>&1",
+    "git checkout $tbr$version",
+];
+$c->exec($cmds);
+
+
+// Ecriture de la version dans le fichier
+if ($versionFile) {
+    $repo->writeVersion($version);
+}
+
+
+// Mise en place du fichier de configuration
+if ($hasConfigFile && $configFile) {
+    $c->section('Mise en place du fichier de configuration');
+    copy($configFile, $dir . $configFileName);
+}
+
+
+// Installation de Composer
+if ($composerInstall) {
+    $c->section('Installation de Composer pour la gestion des dépendances');
+    $composerSetupFile = 'composer-setup.php';
+    $c->passthru("cd $dir;wget https://getcomposer.org/installer; mv installer $composerSetupFile");
+    if (!hash_file('sha384', $dir . $composerSetupFile) === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') {
+        die('Installeur de composer corrompu');
+        unlink($dir . $composerSetupFile);
+    }
+    $c->passthru("cd $dir;php $composerSetupFile");
+    unlink($dir . $composerSetupFile);
+    $composerCommand = 'php ' . $dir . 'composer.phar';
+}
+
+
+// Chargement des dépendances à l'aide de Composer
+$c->section('Chargement des dépendances à l\'aide de Composer');
+$c->passthru("cd $dir;$composerCommand update --optimize-autoloader");
+
+return;
+
+
 $c->exec([
-    "cd $osedir",
-    "php bin/ose clear-cache",
-]);
-
-// Mise en place des tâches CRON ??
+             "cd $osedir",
+             "git checkout $tbr$version",
+             "mkdir cache",
+             "mkdir cache/Doctrine",
+             "chmod 777 cache/Doctrine",
+             "chmod 777 cache",
+             "mkdir data/fichiers",
+             "chmod 777 data/fichiers",
+             "mkdir log",
+             "chmod 777 log",
+             "chmod +x bin/ose",
+         ]);
 
 // Conclusion
-$c->println("\nFin du script d'installation des fichiers", $c::COLOR_LIGHT_GREEN);
-$c->println("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
-$c->println(" 1 - Configurez votre serveur Apache si ce n'est déjà fait");
-$c->println(" 2 - Veuillez personnaliser le fichier de configuration de OSE config.local.php, si ce n'est déjà le cas");
-$c->println(" 3 - La base de données devra au besoin être initialisée à l'aide de la commande ./bin/ose install-bdd. Si votre base était déjà initialisée, alors la commande ./bin/ose update-bdd sera privilégiée");
-$c->println(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
-$c->println('');
-$c->println("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
-$c->println('');
-
-
-
+$c->section("\nFin du script d'installation des fichiers");
+$c->writeln("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
+$c->writeln(" 1 - Configurez votre serveur Apache si ce n'est déjà fait");
+$c->writeln(" 2 - Veuillez personnaliser le fichier de configuration de OSE config.local.php, si ce n'est déjà le cas");
+$c->writeln(" 3 - La base de données devra au besoin être initialisée à l'aide de la commande ./bin/ose install-bdd. Si votre base était déjà initialisée, alors la commande ./bin/ose update-bdd sera privilégiée");
+$c->writeln(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
+$c->writeln('');
+$c->writeln("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
+$c->writeln('');
 
 
 /************************************************************
  *                      Classes utiles                      *
  ************************************************************/
-class OseDeploy
+class AppControle
 {
-    const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
-    const MIN_VERSION = 17; // version minimum installable
-
     /**
      * @var Console
      */
     protected $console;
 
-    /**
-     * @var array
-     */
-    private $tags = false;
-
-    /**
-     * @var array
-     */
-    private $branches = false;
-
 
 
     /**
-     * OseDeploy constructor.
+     * AppControle constructor.
      *
      * @param Console $console
      */
@@ -229,201 +257,84 @@ class OseDeploy
 
 
 
-    public function majUnicaenSymLinks($oseDir): bool
+    public function checkCommands(array $prerequis): bool
     {
-        if (substr($oseDir, -1) !== '/') {
-            $oseDir .= '/';
+        if (empty($prerequis)) {
+            return true;
         }
 
-        $oldLibs = [];
-        $od      = array_filter(glob($oseDir . 'public/vendor/unicaen/*'), 'is_dir');
-        foreach ($od as $dir) {
-            $oldLibs[] = basename($dir);
-        }
+        $len = 60;
+        $res = true;
 
-        $newLibs = [];
-        $nd      = array_filter(glob($oseDir . 'vendor/unicaen/*'), 'is_dir');
-        foreach ($nd as $dir) {
-            if (is_dir($dir . '/public')) {
-                $newLibs[] = basename($dir);
-            }
-        }
-
-        $deleteLibs = array_diff($oldLibs, $newLibs);
-        $createLibs = array_diff($newLibs, $oldLibs);
-
-        foreach ($deleteLibs as $lib) {
-            $command = "rm $oseDir" . "public/vendor/unicaen/$lib";
-            $this->console->print($command);
-            $this->console->exec($command);
-        }
-
-        foreach ($createLibs as $lib) {
-            if (is_dir($oseDir . "/vendor/unicaen/$lib/public/unicaen/$lib")) {
-                $command = "cd $oseDir" . "public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public/unicaen/$lib $lib";
+        $this->console->section("Contrôle des prérequis à l'exécution du script");
+        $this->console->writeln($this->console->strPad('Commande (description éventuelle)', $len) . "Résultat");
+        $this->console->writeln($this->console->strPad('----------------------', $len) . "--------");
+        foreach ($prerequis as $command => $desc) {
+            if (is_array($desc)) {
+                extract($desc);
             } else {
-                $command = "cd $oseDir" . "public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
+                $description = $desc;
+                $facultatif  = false;
             }
-            $this->console->print($command);
-            $this->console->exec($command);
+
+            $return = null;
+            exec('command -v ' . $command, $null, $result);
+            $passed = ($result == 0);
+
+            $this->console->write($this->console->strPad($command . ($description ? " ($description)" : ''), $len));
+            if ($passed) {
+                $this->console->write('Commande trouvée' . "\n", $this->console::COLOR_LIGHT_GREEN);
+            } elseif ($facultatif) {
+                $this->console->write('Manquante, facultative' . "\n", $this->console::COLOR_LIGHT_PURPLE);
+            } else {
+                $this->console->write('Commande manquante' . "\n", $this->console::COLOR_LIGHT_RED);
+                $res = false;
+            }
         }
 
-        return !(empty($deleteLibs) && empty($createLibs));
+        if (!$res) {
+            $this->console->error('Un ou plusieurs prérequis nécessaires ne sont pas présents sur cette machine. Merci de les installer avant de poursuivre l\'installation.');
+        }
+
+        return $res;
     }
 
 
 
-    public function checkPhpModules(array $modules)
+    public function checkPhpModules(array $modules): bool
     {
+        if (empty($modules)) {
+            return true;
+        }
+
         $len    = 60;
         $result = true;
 
-        $this->console->println("Contrôle d'existance des modules PHP nécessaires", $this->console::COLOR_LIGHT_CYAN);
-        $this->console->println($this->console->strPad('Module PHP', $len) . "Résultat");
-        $this->console->println($this->console->strPad('----------', $len) . "--------");
+        $this->console->section("Contrôle d'existance des modules PHP nécessaires");
+        $this->console->writeln($this->console->strPad('Module PHP', $len) . "Résultat");
+        $this->console->writeln($this->console->strPad('----------', $len) . "--------");
         foreach ($modules as $module => $description) {
             $return = null;
             $passed = in_array($module, get_loaded_extensions());
 
-            $this->console->print($this->console->strPad($description, $len));
+            $this->console->write($this->console->strPad($description, $len));
             if ($passed) {
-                $this->console->println('Module trouvé', $this->console::COLOR_LIGHT_GREEN);
+                $this->console->write('Module trouvé' . "\n", $this->console::COLOR_LIGHT_GREEN);
             } else {
-                $this->console->println('Module manquant', $this->console::COLOR_LIGHT_RED);
+                $this->console->write('Module manquant' . "\n", $this->console::COLOR_LIGHT_RED);
             }
 
             if (!$passed) $result = false;
         }
 
+        if (!$result) {
+            $this->console->error('Un ou plusieurs modules PHP sont manquants. Merci de les installer pour poursuivre l\'installation de OSE');
+        }
+
         return $result;
     }
 
-
-
-    public function gitlabIsReachable(): bool
-    {
-        return $this->brancheIsValid('master');
-    }
-
-
-
-    public function getTags($minVersion = self::MIN_VERSION): array
-    {
-        if (false === $this->tags) {
-            $this->tags = [];
-
-            $ts = $this->console->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false);
-            foreach ($ts as $tag) {
-                $this->tags[] = substr($tag, strpos($tag, 'refs/tags/') + 10);
-            }
-
-            usort($this->tags, function ($a, $b) {
-                if ((string)(int)$a !== $a) {
-                    $va = (int)substr($a, 0, strpos($a, '.'));
-                } else {
-                    $va = (int)$a;
-                }
-                if ((string)(int)$b !== $b) {
-                    $vb = (int)substr($b, 0, strpos($b, '.'));
-                } else {
-                    $vb = (int)$b;
-                }
-
-                if ($va == $vb) return $a > $b ? 1 : -1;
-
-                return $va - $vb;
-            });
-        }
-
-        $tags = $this->tags;
-        foreach ($tags as $i => $tag) {
-            if ((string)(int)$tag !== $tag) {
-                $version = (int)substr($tag, 0, strpos($tag, '.'));
-            } else {
-                $version = (int)$tag;
-            }
-            if ($version < $minVersion) unset($tags[$i]);
-        }
-
-        return $tags;
-    }
-
-
-
-    public function getBranches(): array
-    {
-        if (false === $this->branches) {
-            $this->branches = [];
-
-            $bs = $this->console->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false);
-            foreach ($bs as $branche) {
-                $this->branches[] = substr($branche, strpos($branche, 'refs/heads/') + 11);
-            }
-
-            sort($this->branches);
-        }
-
-        return $this->branches;
-    }
-
-
-
-    /**
-     * @param string $tag
-     *
-     * @return bool
-     */
-    public function tagIsValid(string $tag): bool
-    {
-        return in_array($tag, $this->getTags());
-    }
-
-
-
-    /**
-     * @param string $tag
-     *
-     * @return bool
-     */
-    public function brancheIsValid(string $branche): bool
-    {
-        return in_array($branche, $this->getBranches());
-    }
-
-
-
-    public function currentVersion(string $osedir): string
-    {
-        $vf = $this->getVersionFile($osedir);
-        if (!file_exists($vf)) {
-            return 'inconnue';
-        }
-
-        return file_get_contents($vf);
-    }
-
-
-
-    public function writeVersion(string $osedir, string $version)
-    {
-        $vf = $this->getVersionFile($osedir);
-        file_put_contents($vf, $version);
-    }
-
-
-
-    private function getVersionFile(string $osedir): string
-    {
-        if ('/' == substr($osedir, -1)) {
-            return $osedir . 'VERSION';
-        } else {
-            return $osedir . '/VERSION';
-        }
-    }
 }
-
-
-
 
 
 class Console
@@ -466,47 +377,23 @@ class Console
 
 
 
-    public function check(array $prerequis)
+    public function title($title, $spaces = 1): void
     {
-        $len = 60;
-        $res = true;
+        $pstr = str_repeat(' ', $spaces);
+        $t    = $pstr . $title . $pstr;
 
-        $this->println("Contrôle des prérequis à l'exécution du script", self::COLOR_LIGHT_CYAN);
-        $this->println($this->strPad('Commande (description éventuelle)', $len) . "Résultat");
-        $this->println($this->strPad('----------------------', $len) . "--------");
-        foreach ($prerequis as $command => $desc) {
-            if (is_array($desc)) {
-                extract($desc);
-            } else {
-                $description = $desc;
-                $facultatif  = false;
-            }
+        $len = strlen($t);
 
-            $return = null;
-            exec('command -v ' . $command, $null, $result);
-            $passed = ($result == 0);
-
-            $this->print($this->strPad($command . ($description ? " ($description)" : ''), $len));
-            if ($passed) {
-                $this->println('Commande trouvée', self::COLOR_LIGHT_GREEN);
-            } elseif ($facultatif) {
-                $this->println('Manquante, facultative', self::COLOR_LIGHT_PURPLE);
-            } else {
-                $this->println('Commande manquante', self::COLOR_LIGHT_RED);
-                $res = false;
-            }
-        }
-
-        if (!$res) {
-            $this->printDie('Un ou plusieurs prérequis nécessaires ne sont pas présents sur cette machine. Merci de les installer avant de poursuivre l\'installation.');
-        }
-
-        return $res;
+        echo '╔' . str_repeat('═', $len) . "╗\n";
+        echo '║' . str_repeat(' ', $len) . "║\n";
+        echo "║" . $t . "║\n";
+        echo '║' . str_repeat(' ', $len) . "║\n";
+        echo '╚' . str_repeat('═', $len) . "╝\n\n";
     }
 
 
 
-    public function print($text, $color = null, $bgColor = null)
+    public function write(string $text, string $color = null, string $bgColor = null): void
     {
         if ($bgColor) $bgColor = ';' . $bgColor;
 
@@ -519,43 +406,34 @@ class Console
 
 
 
-    public function println($text, $color = null, $bgColor = null)
+    public function section(string $text): void
     {
-        $this->print($text, $color, $bgColor);
-        echo "\n";
+        $this->write($text . "\n", self::COLOR_LIGHT_CYAN);
     }
 
 
 
-    public function gestExitCode($code)
+    public function writeln(string $text): void
+    {
+        $this->write($text . "\n");
+    }
+
+
+
+    private function gestExitCode($code): void
     {
         if (0 == $code) return;
 
-        $this->printDie("Une erreur ($code) est survenue. Le script est stoppé");
+        $this->error("Une erreur ($code) est survenue. Le script est stoppé");
     }
 
 
 
-    public function printDie($text)
+    public function error($text): void
     {
-        $this->println($text, self::COLOR_LIGHT_RED);
-        $this->println(' -- FIN Prématurée de l\'exécution du script -- ', null, self::BG_RED);
+        $this->write($text . "\n", self::COLOR_LIGHT_RED);
+        $this->write(' -- FIN Prématurée de l\'exécution du script -- ' . "\n", null, self::BG_RED);
         die("\n");
-    }
-
-
-
-    public function getArg($index = null)
-    {
-        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
-
-        if (null === $index) return $args;
-
-        if (isset($args[$index])) {
-            return $args[$index];
-        } else {
-            return null;
-        }
     }
 
 
@@ -573,14 +451,14 @@ class Console
     /**
      * @param array $inputOptions
      */
-    public function setInputOptions(array $inputOptions)
+    public function setInputOptions(array $inputOptions): void
     {
         $this->inputOptions = $inputOptions;
     }
 
 
 
-    public function getOption(string $option)
+    public function getOption(string $option): mixed
     {
         if (!is_array($this->options)) {
             if (is_array($this->inputOptions)) {
@@ -591,7 +469,11 @@ class Console
         }
 
         if (isset($this->options[$option])) {
-            return $this->options[$option];
+            if (false === $this->options[$option]) {
+                return true;
+            } else {
+                return $this->options[$option];
+            }
         } else {
             return null;
         }
@@ -599,12 +481,12 @@ class Console
 
 
 
-    public function getInput($option = null)
+    public function getInput($option = null): mixed
     {
         if ($option) {
             $optionParam = $this->getOption($option);
             if (null !== $optionParam) {
-                $this->println($optionParam);
+                $this->writeln($optionParam);
 
                 return $optionParam;
             }
@@ -615,7 +497,7 @@ class Console
 
 
 
-    public function exec($command, $autoDisplay = true)
+    public function exec(string|array $command, bool $autoDisplay = true): mixed
     {
         if (is_array($command)) {
             $command = implode(';', $command);
@@ -632,7 +514,7 @@ class Console
 
 
 
-    public function passthru($command)
+    public function passthru(string|array $command): mixed
     {
         if (is_array($command)) {
             $command = implode(';', $command);
@@ -646,8 +528,350 @@ class Console
 
 
 
-    public function strPad($input, $padLength = null, $padString = ' ')
+    public function strPad(string $input, ?int $padLength = null, string $padString = ' ', string $align = STR_PAD_LEFT): string
     {
-        return str_pad($input, $padLength, $padString);
+        $strLen = mb_strlen($input);
+        if ($strLen >= $padLength) {
+            return $input;
+        }
+
+        $diff    = $padLength - $strLen;
+        $padding = mb_substr(str_repeat($padString, $diff), 0, $diff);
+
+        switch ($align) {
+            case STR_PAD_BOTH:
+                $diffHalf = (int)($diff / 2 + 0.5);
+                $padding  = str_repeat($padString, $diffHalf);
+                $result   = "{$padding}{$input}{$padding}";
+                break;
+            case STR_PAD_LEFT:
+                $result = "{$padding}{$input}";
+                $result = "{$input}{$padding}";
+                break;
+            case STR_PAD_RIGHT:
+            default:
+                $result = "{$input}{$padding}";
+                break;
+        }
+
+        return \mb_substr($result, 0, $padLength);
+    }
+
+
+
+    public function absolutePath(string $path, string $refDir = __DIR__): string
+    {
+        $path = $this->absoluteFilename($path, $refDir);
+        if (!str_ends_with($path, '/')) {
+            $path .= '/';
+        }
+
+        return $path;
+    }
+
+
+
+    public function absoluteFilename(string $filename, string $refDir = __DIR__): string
+    {
+        if (!str_starts_with($filename, '/')) {
+            $filename = $refDir . '/' . $filename;
+        }
+        while (false !== strpos($filename, '..')) {
+            // Sépare les parties du chemin
+            $parts     = array_filter(explode('/', $filename), 'strlen');
+            $absolutes = [];
+
+            foreach ($parts as $part) {
+                if ($part == '.') continue;
+                if ($part == '..') {
+                    array_pop($absolutes);
+                } else {
+                    $absolutes[] = $part;
+                }
+            }
+            $filename = '/' . implode('/', $absolutes);
+        }
+
+        return $filename;
+    }
+}
+
+
+class GitRepoService
+{
+    private array|bool $tags        = false;
+    private array|bool $branches    = false;
+    protected string   $oldVersion;
+    protected string   $version;
+    protected string   $url;
+    protected string   $versionFile = 'VERSION';
+    protected int      $minVersion  = 0;
+
+
+
+    public function __construct()
+    {
+        $this->oldVersion = $this->currentVersion();
+    }
+
+
+
+    public function getMinVersion(): int
+    {
+        return $this->minVersion;
+    }
+
+
+
+    public function setMinVersion(int $minVersion): GitRepoService
+    {
+        $this->minVersion = $minVersion;
+        return $this;
+    }
+
+
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+
+
+    public function setUrl(string $url): GitRepoService
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+
+
+    public function getVersionFile(): string
+    {
+        return $this->versionFile;
+    }
+
+
+
+    public function setVersionFile(string $versionFile): GitRepoService
+    {
+        $this->versionFile = $versionFile;
+        return $this;
+    }
+
+
+
+    private function exec(string|array $command, bool $autoDisplay = true)
+    {
+        if (is_array($command)) {
+            $command = implode(';', $command);
+        }
+
+        exec($command, $output, $return);
+        if ($autoDisplay) {
+            echo implode("\n", $output) . "\n";
+        }
+        //$this->gestExitCode($return);
+
+        return $output;
+    }
+
+
+
+    public function gitlabIsReachable(): bool
+    {
+        return $this->brancheIsValid('master');
+    }
+
+
+
+    public function getTags(): array
+    {
+        if (false === $this->tags) {
+            $this->tags = [];
+
+            $ts = $this->exec("git ls-remote --tags --refs " . $this->getUrl(), false);
+            foreach ($ts as $tag) {
+                $tag              = substr($tag, strpos($tag, 'refs/tags/') + 10);
+                $this->tags[$tag] = $this->extractTagInfos($tag);
+            }
+
+            uasort($this->tags, function ($a, $b) {
+                $oa = $this->tagOrderString($a);
+                $ob = $this->tagOrderString($b);
+
+                return $oa > $ob ? 1 : -1;
+            });
+        }
+
+        $tags = $this->tags;
+
+        foreach ($tags as $tag => $infos) {
+            if ($infos['major'] < $this->getMinVersion()) unset($tags[$tag]);
+            if (isset($tags[$tag]) && $infos['beta']) {
+                $stableFound = false;
+                foreach ($this->tags as $t => $i) {
+                    if ($t !== $tag && !$i['beta']) {
+                        if (str_starts_with($tag, $t)) {
+                            $stableFound = true;
+                        }
+                    }
+                }
+                if ($stableFound) {
+                    unset($tags[$tag]);
+                }
+            }
+        }
+
+        return $tags;
+    }
+
+
+
+    public function getBranches(): array
+    {
+        if (false === $this->branches) {
+            $this->branches = [];
+
+            $bs = $this->exec("git ls-remote --heads --refs " . $this->getUrl(), false);
+            foreach ($bs as $branche) {
+                $this->branches[] = substr($branche, strpos($branche, 'refs/heads/') + 11);
+            }
+
+            sort($this->branches);
+        }
+
+        return $this->branches;
+    }
+
+
+
+    public function getCurrentBranche(): ?string
+    {
+        $ts = $this->exec("git branch", false);
+        foreach ($ts as $t) {
+            if (0 === strpos($t, '*')) {
+                return trim(substr($t, 1));
+            }
+        }
+
+        return null;
+    }
+
+
+
+    public function tagIsValid(string $tag): bool
+    {
+        $tags = $this->getTags();
+        foreach ($tags as $t) {
+            if ($t['tag'] == $tag) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    public function brancheIsValid(string $branche): bool
+    {
+        return in_array($branche, $this->getBranches());
+    }
+
+
+
+    public function oldVersion(): string
+    {
+        return $this->oldVersion;
+    }
+
+
+
+    public function currentVersion(): string
+    {
+        if (!file_exists($this->getVersionFile())) {
+            return 'inconnue';
+        }
+
+        return trim(file_get_contents($this->getVersionFile()));
+    }
+
+
+
+    public function writeVersion(string $version)
+    {
+        $this->version = $version;
+        file_put_contents($this->getVersionFile(), $version);
+    }
+
+
+
+    protected function extractTagInfos(string $tag): array
+    {
+        $i = [
+            'tag'     => $tag,
+            'major'   => 0,
+            'minor'   => 0,
+            'rev'     => 0,
+            'beta'    => false,
+            'betaNum' => null,
+            'other'   => null,
+        ];
+
+        if ((string)(int)$tag === $tag) {
+            // uniquement une version majeure
+            $i['major'] = (int)$tag;
+            return $i;
+        }
+
+
+        if (false !== strpos($tag, '-')) {
+            $txt = substr($tag, strpos($tag, '-') + 1);
+
+            if (str_starts_with(strtolower($txt), 'beta')) {
+                $btxt = substr($txt, 4);
+
+                if ($btxt === '') {
+                    $i['beta']    = true;
+                    $i['betaNum'] = 0;
+                } elseif ((int)$btxt != 0) {
+                    $i['beta']    = true;
+                    $i['betaNum'] = (int)$btxt;
+                } else {
+                    $i['other'] = $txt;
+                }
+            } else {
+                $i['other'] = $txt;
+            }
+
+            // ne reste que le numéro de version
+            $tag = substr($tag, 0, strpos($tag, '-'));
+        }
+
+        $nums = explode('.', $tag);
+
+        if (isset($nums[0])) {
+            $i['major'] = (int)$nums[0];
+        }
+        if (isset($nums[1])) {
+            $i['minor'] = (int)$nums[1];
+        }
+        if (isset($nums[2])) {
+            $i['rev'] = (int)$nums[2];
+        }
+
+        return $i;
+    }
+
+
+
+    protected function tagOrderString(array $infos): string
+    {
+        return str_pad((string)$infos['major'], 5, '0', STR_PAD_LEFT)
+            . 'x' . str_pad((string)$infos['minor'], 5, '0', STR_PAD_LEFT)
+            . 'x' . str_pad((string)$infos['rev'], 5, '0', STR_PAD_LEFT)
+            . 'x' . ($infos['beta'] ? '0' : '1')
+            . 'x' . str_pad((string)$infos['betaNum'], 5, '0', STR_PAD_LEFT)
+            . 'x' . $infos['other'];
     }
 }

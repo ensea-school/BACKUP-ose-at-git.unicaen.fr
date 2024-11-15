@@ -2,9 +2,6 @@
 
 namespace Administration\Service;
 
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-
 
 /**
  * Description of GitRepoService
@@ -13,15 +10,13 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  */
 class GitRepoService
 {
-    const OSE_ORIGIN   = 'https://git.unicaen.fr/open-source/OSE.git';
-    const VERSION_FILE = 'VERSION';
-    const MIN_VERSION  = 17; // version minimum installable
-
-
-    private array|bool $tags     = false;
-    private array|bool $branches = false;
+    private array|bool $tags        = false;
+    private array|bool $branches    = false;
     protected string   $oldVersion;
     protected string   $version;
+    protected string   $url;
+    protected string   $versionFile = 'VERSION';
+    protected int      $minVersion  = 0;
 
 
 
@@ -32,16 +27,64 @@ class GitRepoService
 
 
 
-    private function exec(string $command): string
+    public function getMinVersion(): int
     {
-        $process = new Process(explode(' ', $command));
+        return $this->minVersion;
+    }
 
-        try {
-            $process->mustRun();
-            return $process->getOutput();
-        } catch (ProcessFailedException $exception) {
-            throw new \RuntimeException('Erreur lors de l\'exécution de la commande : ' . $exception->getMessage());
+
+
+    public function setMinVersion(int $minVersion): GitRepoService
+    {
+        $this->minVersion = $minVersion;
+        return $this;
+    }
+
+
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+
+
+    public function setUrl(string $url): GitRepoService
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+
+
+    public function getVersionFile(): string
+    {
+        return $this->versionFile;
+    }
+
+
+
+    public function setVersionFile(string $versionFile): GitRepoService
+    {
+        $this->versionFile = $versionFile;
+        return $this;
+    }
+
+
+
+    private function exec(string|array $command, bool $autoDisplay = true)
+    {
+        if (is_array($command)) {
+            $command = implode(';', $command);
         }
+
+        exec($command, $output, $return);
+        if ($autoDisplay) {
+            echo implode("\n", $output) . "\n";
+        }
+        //$this->gestExitCode($return);
+
+        return $output;
     }
 
 
@@ -53,12 +96,12 @@ class GitRepoService
 
 
 
-    public function getTags($minVersion = self::MIN_VERSION): array
+    public function getTags(): array
     {
         if (false === $this->tags) {
             $this->tags = [];
 
-            $ts = explode("\n",trim($this->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false)));
+            $ts = $this->exec("git ls-remote --tags --refs " . $this->getUrl(), false);
             foreach ($ts as $tag) {
                 $tag              = substr($tag, strpos($tag, 'refs/tags/') + 10);
                 $this->tags[$tag] = $this->extractTagInfos($tag);
@@ -75,7 +118,7 @@ class GitRepoService
         $tags = $this->tags;
 
         foreach ($tags as $tag => $infos) {
-            if ($infos['major'] < $minVersion) unset($tags[$tag]);
+            if ($infos['major'] < $this->getMinVersion()) unset($tags[$tag]);
             if (isset($tags[$tag]) && $infos['beta']) {
                 $stableFound = false;
                 foreach ($this->tags as $t => $i) {
@@ -101,7 +144,7 @@ class GitRepoService
         if (false === $this->branches) {
             $this->branches = [];
 
-            $bs = explode("\n",trim($this->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false)));
+            $bs = $this->exec("git ls-remote --heads --refs " . $this->getUrl(), false);
             foreach ($bs as $branche) {
                 $this->branches[] = substr($branche, strpos($branche, 'refs/heads/') + 11);
             }
@@ -116,7 +159,7 @@ class GitRepoService
 
     public function getCurrentBranche(): ?string
     {
-        $ts = explode("\n",trim($this->exec("git branch", false)));
+        $ts = $this->exec("git branch", false);
         foreach ($ts as $t) {
             if (0 === strpos($t, '*')) {
                 return trim(substr($t, 1));
@@ -157,11 +200,11 @@ class GitRepoService
 
     public function currentVersion(): string
     {
-        if (!file_exists(self::VERSION_FILE)) {
+        if (!file_exists($this->getVersionFile())) {
             return 'inconnue';
         }
 
-        return trim(file_get_contents(self::VERSION_FILE));
+        return trim(file_get_contents($this->getVersionFile()));
     }
 
 
@@ -169,7 +212,7 @@ class GitRepoService
     public function writeVersion(string $version)
     {
         $this->version = $version;
-        file_put_contents(self::VERSION_FILE, $version);
+        file_put_contents($this->getVersionFile(), $version);
     }
 
 

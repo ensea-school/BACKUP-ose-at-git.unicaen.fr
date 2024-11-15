@@ -196,7 +196,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/open-source/connecteur-ose/actul.git",
-                "reference": "dc4e9dc49ac71e3aa9dea0d1139ed8dcb787c2aa"
+                "reference": "2bcda103b583cf65f0439ed13741706a802969cb"
             },
             "type": "library",
             "autoload": {
@@ -205,7 +205,7 @@
                 }
             },
             "description": "Connecteur Actul pour OSE",
-            "time": "2024-11-14T08:43:05+00:00"
+            "time": "2024-11-14T10:44:04+00:00"
         },
         {
             "name": "connecteur-ose/pegase",
@@ -213,7 +213,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/open-source/connecteur-ose/pegase.git",
-                "reference": "ca4b96e19e32697997c75d6145a5cbdf5fe1d10b"
+                "reference": "6be848e57b313368f382314aa1793bf299feca7c"
             },
             "type": "library",
             "autoload": {
@@ -222,7 +222,7 @@
                 }
             },
             "description": "Connecteur Pégase pour OSE",
-            "time": "2024-11-14T08:43:54+00:00"
+            "time": "2024-11-14T10:43:54+00:00"
         },
         {
             "name": "doctrine/annotations",

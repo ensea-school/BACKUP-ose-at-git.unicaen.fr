@@ -49,11 +49,7 @@
     "scripts"          : {
         "sniffer:php8"    : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
         "phpcs"           : "./vendor/bin/phpcs -p ./module --standard=PSR12",
-        "post-install-cmd": [
-            "mkdir cache",
-            "chmod 777 cache",
-            "./vendor/bin/laminas install"
-        ]
+        "post-install-cmd": "./vendor/bin/laminas install"
     },
     "minimum-stability": "dev"
 }

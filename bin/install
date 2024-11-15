@@ -33,6 +33,9 @@ $composerInstall = true;
 // Commande pour exécuter composer
 $composerCommand = 'composer';
 
+// Répertoire de cache de l'application (chemin relatif)
+$cacheDir = 'cache';
+
 // Liste des commandes systèmes qui doivent être installées
 $depCommands = [
     'git'     => 'Gestionnaire de versions',
@@ -173,7 +176,7 @@ $c->exec($cmds);
 
 // Ecriture de la version dans le fichier
 if ($versionFile) {
-    $repo->setVersionFile($dir.$versionFile);
+    $repo->setVersionFile($dir . $versionFile);
     $repo->writeVersion($version);
 }
 
@@ -182,6 +185,16 @@ if ($versionFile) {
 if ($hasConfigFile && $configFile) {
     $c->section('Mise en place du fichier de configuration');
     copy($configFile, $dir . $configFileName);
+}
+
+
+// Préparation du dossier de cache
+if ($cacheDir) {
+    $c->section('Mise en place du cache');
+    if (!file_exists($dir . $cacheDir)) {
+        mkdir($dir . $cacheDir);
+    }
+    chmod($dir . $cacheDir, 0777);
 }
 
 

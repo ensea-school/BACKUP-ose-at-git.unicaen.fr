@@ -440,7 +440,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             'taux'       => '',
         ];
 
-        $sql = 'SELECT "hetdContrat","tauxHoraireValeur" FROM V_CONTRAT_MAIN WHERE intervenant_id = :intervenant';
+        $sql = 'SELECT SUM("hetdContrat"),MAX("tauxHoraireValeur") FROM V_CONTRAT_MAIN WHERE intervenant_id = :intervenant GROUP BY intervenant_id';
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $intervenant->getId()]);
 
         if (!empty($res)) {

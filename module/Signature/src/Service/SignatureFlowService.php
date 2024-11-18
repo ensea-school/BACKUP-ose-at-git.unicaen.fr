@@ -95,9 +95,6 @@ class SignatureFlowService extends AbstractEntityService
 
 
 
-    public function getListeCircuit()
-    {
 
-    }
 
 }

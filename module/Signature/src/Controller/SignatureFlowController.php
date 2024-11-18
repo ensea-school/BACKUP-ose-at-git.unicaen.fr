@@ -102,7 +102,7 @@ class SignatureFlowController extends AbstractController
         $form = $this->getformSignatureFlowStep();
 
         $form->bindRequestSave($signatureFlowStep, $this->getRequest(), function ($signatureFlowStep) {
-            $this->getserviceSignatureFlowStep()->save($signatureFlowStep);
+            $this->getServiceSignatureFlowStep()->save($signatureFlowStep);
         });
 
         return compact('form');
@@ -118,7 +118,7 @@ class SignatureFlowController extends AbstractController
             $signatureFlow instanceof SignatureFlow) {
             //Si l'étape appartient bien au circuit de signature
             if ($signatureFlowStep->getSignatureFlow()->getId() == $signatureFlow->getId()) {
-                $this->getserviceSignatureFlowStep()->delete($signatureFlowStep);
+                $this->getServiceSignatureFlowStep()->delete($signatureFlowStep);
             }
         }
 

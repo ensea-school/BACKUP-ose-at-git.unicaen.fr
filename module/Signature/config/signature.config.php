@@ -3,9 +3,6 @@
 namespace Signature;
 
 use Application\Provider\Privilege\Privileges;
-use PieceJointe\Controller\PieceJointeController;
-use Signature\Controller\CircuitController;
-use Signature\Controller\CircuitControllerFactory;
 use Signature\Controller\SignatureController;
 use Signature\Controller\SignatureControllerFactory;
 use Signature\Controller\SignatureFlowController;

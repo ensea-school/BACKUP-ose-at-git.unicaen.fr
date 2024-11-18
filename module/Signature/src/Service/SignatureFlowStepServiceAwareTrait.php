@@ -19,7 +19,7 @@ trait SignatureFlowStepServiceAwareTrait
      *
      * @return self
      */
-    public function setserviceSignatureFlowStep(?SignatureFlowStepService $serviceSignatureFlowStep): self
+    public function setServiceSignatureFlowStep(?SignatureFlowStepService $serviceSignatureFlowStep): self
     {
         $this->serviceSignatureFlowStep = $serviceSignatureFlowStep;
 
@@ -28,7 +28,7 @@ trait SignatureFlowStepServiceAwareTrait
 
 
 
-    public function getserviceSignatureFlowStep(): ?SignatureFlowStepService
+    public function getServiceSignatureFlowStep(): ?SignatureFlowStepService
     {
         return $this->serviceSignatureFlowStep;
     }

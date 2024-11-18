@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 23.8](#ose-239-23092024)
+[OSE 23.11](#ose-2311-17102024)
 
 
 
@@ -11,11 +11,45 @@
 * Signature électronique
 
 
-# OSE 23.10 (à venir)
+# OSE 23.12 (à venir)
 
 ## Nouveautés
 
-* Nouveau paramètrage générale pour sélectionner l'état de sortir à utiliser pour l'extraction des indémnités de fin de mission.
+* Possiblité de ne pas inclure le contrat en pièce jointe lors de l'envoi du mail contrat à l'intervenant (#58818)
+* Nouvel indicateur 471 permettant de lister les intervenants pour qui l'envoi du contrat par mail n'a pas encore éte effectué
+* Possibilité d'ajouter dynamiquement l'url de la page contrat de l'intervenant directement dans le corps du mail d'envoi de contrat (paramètres généraux)
+* Possibilité de renseigner l'adresse mail perso d'un intervenant dans le formulaire de création (#58904)
+
+
+## Améliorations
+
+* Au niveau de la fiche intervenant, de l'onglet notes, distinction dans l'historique des demandes de mise en paiement et des mises en paiement (#58342)
+* L'indicateur 210 ne nécessite plus d'avoir obligatoirement un service prévisionnel de renseigné pour remonter les intervenants ayant des pièces justificatives manquantes (#58301)
+
+## Corrections de bugs
+
+* Au niveau des missions, le contrat est marqué comme fait s'il a été réellement finalisé avec date de retour signé le cas échéant
+* Au niveau de la saisie du suivi des missions, gestion correcte du cas où un même intervenant a plusieurs missions, mais qu'un des contrats n'a pas été finalisé
+* Éradication de l'utilisation de certains caractères spéciaux dans le cache de OSE qui faisait planter l'application
+
+
+# OSE 23.11 (17/10/2024)
+
+## Corrections de bugs
+
+* Dysfonctionnenent des demandes de mises en paiement par lot suite au filtrage par structure (#58788)
+
+## Nouveautés
+
+* Nouvelle formule pour Bretagne Occidentale (Brest)
+
+
+
+# OSE 23.10 (03/10/2024)
+
+## Nouveautés
+
+* Nouveau paramétrage général pour sélectionner l'état de sortie à utiliser pour l'extraction des indémnités de fin de mission.
 
 
 ## Corrections de bugs
@@ -23,6 +57,7 @@
 * Correction d'un problème intervenu en 23.9 : impossibilité de valider du suivi de mission.
 * Correction sur le calcul du montant des indémnités des missions
 * L'utilisation de la fonctionnalité de demande de mise en paiement en lot mettait toutes les heures de l'intervenant sélectionné en demandes de mise en paiement sans tenir compte de la composante sélectionnée. (#58607)
+* Ajout d'une variable de contrat nommé "numeroAvenant" pour numéroter les éditions d'avenant (#58658)
 
 
 

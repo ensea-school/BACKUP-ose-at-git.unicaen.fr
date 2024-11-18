@@ -207,6 +207,7 @@ return [
         Assertion\IntervenantAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\IntervenantService::class     => Service\IntervenantServiceFactory::class,
         Processus\IntervenantProcessus::class => Processus\IntervenantProcessusFactory::class,
+        Service\SituationMatrimonialeService::class   => Service\SituationMatrimonialeServiceFactory::class,
         Command\ExempleCommand::class         => Command\CalculFeuilleDeRouteCommandFactory::class,
     ],
 

@@ -211,10 +211,10 @@ class IndicateurController extends AbstractController
         }
 
         return new JsonModel([
-            'status'  => $status,
-            'message' => $message,
-            'infos'   => $notificationIndicateur ? $notificationIndicateur->getExtraInfos() : null,
-        ]);
+                                 'status'  => $status,
+                                 'message' => $message,
+                                 'infos'   => $notificationIndicateur ? $notificationIndicateur->getExtraInfos() : null,
+                             ]);
     }
 
 

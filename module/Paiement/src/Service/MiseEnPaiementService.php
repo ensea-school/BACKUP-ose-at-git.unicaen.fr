@@ -27,7 +27,13 @@ class MiseEnPaiementService extends AbstractEntityService
     use Traits\WorkflowServiceAwareTrait;
 
 
-    public function getEntityClass(): string
+    /**
+     * retourne la classe des entités
+     *
+     * @return string
+     * @throws RuntimeException
+     */
+    public function getEntityClass()
     {
         return MiseEnPaiement::class;
     }

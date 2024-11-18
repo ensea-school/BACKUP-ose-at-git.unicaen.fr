@@ -46,10 +46,10 @@ FROM (
 		MAX(i.annee_id)              	    annee_id,
 		max(p.code) 						periode_code,
 		max(p.id) 							periode_id,
-		MAX(hpm.total_paie)                 paie_mission,
-		MAX(hpm.total_heures_a_payer)       total_heures_a_payer,
-		MAX(hpm.total_heures_payees)        total_heures_payees,
-		MAX(round(hpm.total_paie * 0.1,2))  montant_prime
+		SUM(hpm.total_paie)                 paie_mission,
+		SUM(hpm.total_heures_a_payer)       total_heures_a_payer,
+		SUM(hpm.total_heures_payees)        total_heures_payees,
+		SUM(round(hpm.total_paie * 0.1,2))  montant_prime
 	FROM mission_prime mp
 	JOIN mission m ON mp.id = m.prime_id
 	JOIN intervenant i ON i.id = m.intervenant_id

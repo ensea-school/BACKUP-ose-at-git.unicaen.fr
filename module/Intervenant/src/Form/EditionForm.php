@@ -18,7 +18,9 @@ use Intervenant\Service\CiviliteServiceAwareTrait;
 use Intervenant\Service\GradeServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element;
+use Laminas\Form\Element\Email;
 use Laminas\Form\FormInterface;
+use Laminas\Validator\EmailAddress;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\Discipline;
@@ -61,6 +63,7 @@ class EditionForm extends AbstractForm
         'code'               => ['type' => 'string'],
         'codeRh'             => ['type' => 'string'],
         'utilisateurCode'    => ['type' => 'string'],
+        'emailPerso'         => ['type' => 'string'],
         'source'             => ['type' => Source::class],
         'sourceCode'         => ['type' => 'string'],
         'syncStatut'         => ['type' => 'bool'],
@@ -72,11 +75,11 @@ class EditionForm extends AbstractForm
         'validiteFin'        => ['type' => \DateTime::class],
     ];
 
-    protected $readOnly         = false;
+    protected $readOnly = false;
 
 
 
-    public function init ()
+    public function init()
     {
         $hydrator = new EditionFormHydrator($this->getServiceSource()->getEntityManager(), $this->hydratorElements);
         $this->setHydrator($hydrator);
@@ -230,6 +233,20 @@ class EditionForm extends AbstractForm
                 'label_options' => ['disable_html_escape' => true],
             ],
 
+        ]);
+
+        $this->add([
+            'name'       => 'emailPerso',
+            'type'       => Email::class,
+            'options'    => [
+                'label' => 'E-mail personnel',
+                //'label_options' => ['disable_html_escape' => true],
+            ],
+            'attributes' => [
+                //'placeholder' => "Email établissement",
+                //'class'     => 'form-control left-border-none dossierElement',
+            ],
+            'type'       => Email::class,
         ]);
 
         $utilisateur = new SearchAndSelect('utilisateur');
@@ -394,21 +411,21 @@ class EditionForm extends AbstractForm
 
 
 
-    public function getDisciplines (): array
+    public function getDisciplines(): array
     {
         return $this->getServiceDiscipline()->getList($this->getServiceDiscipline()->finderByHistorique());
     }
 
 
 
-    public function getGrades (): array
+    public function getGrades(): array
     {
         return $this->getServiceGrade()->getList($this->getServiceGrade()->finderByHistorique());
     }
 
 
 
-    public function getStatuts (): array
+    public function getStatuts(): array
     {
         $statuts = $this->getServiceStatut()->getStatuts();
         $res     = [];
@@ -428,7 +445,7 @@ class EditionForm extends AbstractForm
 
 
 
-    public function bind ($object, $flags = FormInterface::VALUES_NORMALIZED)
+    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
         /* @var $object Intervenant */
         parent::bind($object, $flags);
@@ -443,7 +460,7 @@ class EditionForm extends AbstractForm
     /**
      * @return boolean
      */
-    public function isReadOnly ()
+    public function isReadOnly()
     {
         return $this->readOnly;
     }
@@ -455,14 +472,14 @@ class EditionForm extends AbstractForm
      *
      * @return Dossier
      */
-    public function setReadOnly ($readOnly)
+    public function setReadOnly($readOnly)
     {
         $this->readOnly = $readOnly;
     }
 
 
 
-    public function activerEditionAvancee ()
+    public function activerEditionAvancee()
     {
         $elements = ['source', 'code', 'numeroPec', 'numeroInsee'];
         foreach ($this->getElements() as $element) {
@@ -478,7 +495,7 @@ class EditionForm extends AbstractForm
 
 
 
-    public function protection ($object)
+    public function protection($object)
     {
         if ($this->isReadOnly()) {
 
@@ -534,7 +551,7 @@ class EditionForm extends AbstractForm
      *
      * @return array
      */
-    public function getInputFilterSpecification ()
+    public function getInputFilterSpecification()
     {
         return [
             'montantIndemniteFc'           => [
@@ -548,6 +565,12 @@ class EditionForm extends AbstractForm
             'nomPatronymique'              => ['required' => false],
             'prenom'                       => ['required' => true],
             'dateNaissance'                => ['required' => true],
+            'emailPerso'                   => [
+                'required'   => false,
+                'validators' => [
+                    ['name' => EmailAddress::class],
+                ],
+            ],
             'statut'                       => ['required' => false],
             'structure'                    => ['required' => false],
             'discipline'                   => ['required' => false],
@@ -579,9 +602,6 @@ class EditionForm extends AbstractForm
 }
 
 
-
-
-
 class EditionFormHydrator extends GenericHydrator
 {
     use UtilisateurServiceAwareTrait;
@@ -597,7 +617,7 @@ class EditionFormHydrator extends GenericHydrator
      *
      * @return object
      */
-    public function hydrate (array $data, $object)
+    public function hydrate(array $data, $object)
     {
         parent::hydrate($data, $object);
 
@@ -621,7 +641,7 @@ class EditionFormHydrator extends GenericHydrator
      *
      * @return array
      */
-    public function extract ($object): array
+    public function extract($object): array
     {
         $res = parent::extract($object);
 

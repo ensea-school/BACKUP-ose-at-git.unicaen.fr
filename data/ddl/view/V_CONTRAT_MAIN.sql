@@ -73,50 +73,51 @@ SELECT ct.annee_id,
        ct."libelleMission",
        ct."heuresFormation",
        CASE ct.est_contrat
-           WHEN 1 THEN -- contrat
-               'Contrat de travail'
-           ELSE
-                   'Avenant au contrat de travail initial modifiant le volume horaire initial'
-                   || ' de recrutement en qualité'
-           END                                                                                                              "titre",
+         WHEN 1 THEN -- contrat
+           'Contrat de travail'
+         ELSE
+           'Avenant au contrat de travail initial modifiant le volume horaire initial'
+             || ' de recrutement en qualité'
+         END                                                                                                              "titre",
        CASE
-           WHEN ct.est_atv = 1 THEN
-               'd''agent temporaire vacataire'
-           ELSE
-               'de chargé' || ct."e" || ' d''enseignement vacataire'
-           END                                                                                                              "qualite",
+         WHEN ct.est_atv = 1 THEN
+           'd''agent temporaire vacataire'
+         ELSE
+           'de chargé' || ct."e" || ' d''enseignement vacataire'
+         END                                                                                                              "qualite",
 
        CASE
-           WHEN ct.est_projet = 1 AND ct.est_contrat = 1 THEN 'Projet de contrat'
-           WHEN ct.est_projet = 0 AND ct.est_contrat = 1 THEN 'Contrat n°' || ct.id
-           WHEN ct.est_projet = 1 AND ct.est_contrat = 0 THEN 'Projet d''avenant'
-           WHEN ct.est_projet = 0 AND ct.est_contrat = 0 THEN 'Avenant n°' || ct.contrat_id || '.' || ct.numero_avenant
-           END                                                                                                              "titreCourt"
+         WHEN ct.est_projet = 1 AND ct.est_contrat = 1 THEN 'Projet de contrat'
+         WHEN ct.est_projet = 0 AND ct.est_contrat = 1 THEN 'Contrat n°' || ct.id
+         WHEN ct.est_projet = 1 AND ct.est_contrat = 0 THEN 'Projet d''avenant'
+         WHEN ct.est_projet = 0 AND ct.est_contrat = 0 THEN 'Avenant n°' || ct.contrat_id || '.' || ct.numero_avenant
+         END                                                                                                              "titreCourt",
+       ct."numeroAvenant"
 FROM (  SELECT c.*,
-             i.annee_id                                                                                                                                    annee_id,
-             fr.id                                                                                                                                         formule_resultat_id,
-             s.libelle_court                                                                                                                               "composante",
-             a.libelle                                                                                                                                     "annee",
-             COALESCE(d.nom_usuel, i.nom_usuel)                                                                                                            "nom",
-             COALESCE(d.prenom, i.prenom)                                                                                                                  "prenom",
-             civ.libelle_court                                                                                                                             "civilite",
-             CASE WHEN civ.sexe = 'F' THEN 'e' ELSE '' END                                                                                                 "e",
-             to_char(COALESCE(d.date_naissance, i.date_naissance), 'dd/mm/YYYY')                                                                           "dateNaissance",
-             COALESCE(
-                     ose_divers.formatted_adresse(
-                             d.adresse_precisions, d.adresse_lieu_dit,
-                             d.adresse_numero, d.adresse_numero_compl_id, d.adresse_voirie_id, d.adresse_voie,
-                             d.adresse_code_postal, d.adresse_commune, d.adresse_pays_id
-                         ),
-                     ose_divers.formatted_adresse(
-                             i.adresse_precisions, i.adresse_lieu_dit,
-                             i.adresse_numero, i.adresse_numero_compl_id, i.adresse_voirie_id, i.adresse_voie,
-                             i.adresse_code_postal, i.adresse_commune, i.adresse_pays_id
-                         )
-                 )                                                                                                                                          "adresse",
-             COALESCE(d.numero_insee, i.numero_insee)                                                                                                       "numInsee",
-             si.libelle                                                                                                                                     "statut",
-             REPLACE(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',')                                                            "totalHETD",
+               i.annee_id                                                                                                                                    annee_id,
+               fr.id                                                                                                                                         formule_resultat_id,
+               s.libelle_court                                                                                                                               "composante",
+               a.libelle                                                                                                                                     "annee",
+               COALESCE(d.nom_usuel, i.nom_usuel)                                                                                                            "nom",
+               COALESCE(d.prenom, i.prenom)                                                                                                                  "prenom",
+               civ.libelle_court                                                                                                                             "civilite",
+               CASE WHEN civ.sexe = 'F' THEN 'e' ELSE '' END                                                                                                 "e",
+               to_char(COALESCE(d.date_naissance, i.date_naissance), 'dd/mm/YYYY')                                                                           "dateNaissance",
+               COALESCE(
+                   ose_divers.formatted_adresse(
+                       d.adresse_precisions, d.adresse_lieu_dit,
+                       d.adresse_numero, d.adresse_numero_compl_id, d.adresse_voirie_id, d.adresse_voie,
+                       d.adresse_code_postal, d.adresse_commune, d.adresse_pays_id
+                   ),
+                   ose_divers.formatted_adresse(
+                       i.adresse_precisions, i.adresse_lieu_dit,
+                       i.adresse_numero, i.adresse_numero_compl_id, i.adresse_voirie_id, i.adresse_voie,
+                       i.adresse_code_postal, i.adresse_commune, i.adresse_pays_id
+                   )
+               )                                                                                                                                          "adresse",
+               COALESCE(d.numero_insee, i.numero_insee)                                                                                                       "numInsee",
+               si.libelle                                                                                                                                     "statut",
+               REPLACE(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',')                                                            "totalHETD",
                REPLACE(ltrim(to_char(COALESCE(OSE_PAIEMENT.get_taux_horaire(tr.id, a.date_debut), 0), '999999.00')), '.', ',')                              "tauxHoraireValeur",
                COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(tr.id, a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')                                 "tauxHoraireDate",
                tr.id                                                                                                                                        "tauxId",
@@ -125,50 +126,51 @@ FROM (  SELECT c.*,
                COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(trm.id, a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')                                "tauxMajoreHoraireDate",
                trm.id                                                                                                                                       "tauxMajoreId",
                trm.libelle                                                                                                                                  "tauxMajoreNom",
-             to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                                                                                "dateSignature",
-             CASE
+               to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                                                                                "dateSignature",
+               CASE
                  WHEN c.structure_id <> COALESCE(cp.structure_id, 0) THEN 'modifié'
                  ELSE 'complété' END                                                                                                                        "modifieComplete",
-             CASE
+               CASE
                  WHEN s.aff_adresse_contrat = 1 THEN
-                         ' signé à l''adresse suivante :' || chr(13) || chr(10) ||
-                         s.libelle_court || ' - ' || REPLACE(ose_divers.formatted_adresse(
-                                                                     s.adresse_precisions, s.adresse_lieu_dit,
-                                                                     s.adresse_numero, s.adresse_numero_compl_id,
-                                                                     s.adresse_voirie_id, s.adresse_voie,
-                                                                     s.adresse_code_postal, s.adresse_commune,
-                                                                     s.adresse_pays_id
-                                                                 ), chr(13), ' - ')
+                   ' signé à l''adresse suivante :' || chr(13) || chr(10) ||
+                   s.libelle_court || ' - ' || REPLACE(ose_divers.formatted_adresse(
+                                                           s.adresse_precisions, s.adresse_lieu_dit,
+                                                           s.adresse_numero, s.adresse_numero_compl_id,
+                                                           s.adresse_voirie_id, s.adresse_voie,
+                                                           s.adresse_code_postal, s.adresse_commune,
+                                                           s.adresse_pays_id
+                                                       ), chr(13), ' - ')
                  ELSE '' END                                                                                                                                "exemplaire2",
-            REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')                                                                 "serviceTotal",
-            REPLACE(ltrim(to_char(COALESCE(hs."hetdContrat", 0), '999999.00')), '.', ',')                                                                 "hetdContrat",
+               REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')                                                                 "serviceTotal",
+               REPLACE(ltrim(to_char(COALESCE(hs."hetdContrat", 0), '999999.00')), '.', ',')                                                                 "hetdContrat",
 
-            CASE
-                WHEN COALESCE(hs."serviceTotal"/10, 0) < 1
-                THEN CONCAT('0', REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ','))
-                ELSE REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ',')
-                END                                                                                                                                         "totalDiviseParDix",
-             REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"+(hs."serviceTotal"/10), 0), '999999.00')), '.', ',')                                          "serviceTotalPaye",
-             CASE
+               CASE
+                 WHEN COALESCE(hs."serviceTotal"/10, 0) < 1
+                   THEN CONCAT('0', REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ','))
+                 ELSE REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ',')
+                 END                                                                                                                                         "totalDiviseParDix",
+               REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"+(hs."serviceTotal"/10), 0), '999999.00')), '.', ',')                                          "serviceTotalPaye",
+               CASE
                  WHEN la.autre_libelles IS NOT NULL
-                     THEN '*Dont type(s) intervention(s) : ' || la.autre_libelles END                                                                       "legendeAutresHeures",
-             CASE
+                   THEN '*Dont type(s) intervention(s) : ' || la.autre_libelles END                                                                       "legendeAutresHeures",
+               CASE
                  WHEN la.autre_libelles IS NOT NULL THEN 'Autres heures*'
                  ELSE 'Autres heures' END                                                                                                                   "enteteAutresHeures",
-             CASE WHEN c.contrat_id IS NULL THEN 1 ELSE 0 END                                                                                               est_contrat,
-             CASE WHEN v.id IS NULL THEN 1 ELSE 0 END                                                                                                       est_projet,
-             CASE WHEN LOWER(si.codes_corresp_2) = 'oui' THEN 1 ELSE 0 END                                                                                  est_atv,
-             tm.libelle                                                                                                                                     "missionNom",
-             to_char(c.debut_validite, 'dd/mm/YYYY')                                                                                                        "debutValidite",
-             to_char(c.fin_validite, 'dd/mm/YYYY')                                                                                                          "finValidite",
-             p.libelle                                                                                                                                      "pays_nationalite",
-             COALESCE(v.histo_creation,c.histo_creation)                                                                                                    "date_creation",
-             cp.date_retour_signe                                                                                                                           "date_contrat_lie",
-             m.libelle_mission                                                                                                                              "libelleMission",
-             m.heures_formation                                                                                                                             "heuresFormation",
-             to_char(cp.fin_validite, 'dd/mm/YYYY')                                                                                                         "finValiditeParent"
+               CASE WHEN c.contrat_id IS NULL THEN 1 ELSE 0 END                                                                                               est_contrat,
+               CASE WHEN v.id IS NULL THEN 1 ELSE 0 END                                                                                                       est_projet,
+               CASE WHEN LOWER(si.codes_corresp_2) = 'oui' THEN 1 ELSE 0 END                                                                                  est_atv,
+               tm.libelle                                                                                                                                     "missionNom",
+               to_char(c.debut_validite, 'dd/mm/YYYY')                                                                                                        "debutValidite",
+               to_char(c.fin_validite, 'dd/mm/YYYY')                                                                                                          "finValidite",
+               p.libelle                                                                                                                                      "pays_nationalite",
+               COALESCE(v.histo_creation,c.histo_creation)                                                                                                    "date_creation",
+               cp.date_retour_signe                                                                                                                           "date_contrat_lie",
+               m.libelle_mission                                                                                                                              "libelleMission",
+               m.heures_formation                                                                                                                             "heuresFormation",
+               to_char(cp.fin_validite, 'dd/mm/YYYY')                                                                                                         "finValiditeParent",
+               c.numero_avenant                                                                                                                                "numeroAvenant"
         FROM
-            contrat                         c
+          contrat                         c
             JOIN type_contrat               tc ON tc.id = c.type_contrat_id
             JOIN intervenant                i ON i.id = c.intervenant_id
             JOIN annee                      a ON a.id = i.annee_id
@@ -190,5 +192,5 @@ FROM (  SELECT c.*,
             JOIN taux_remu                  tr ON tr.id = COALESCE(m.taux_remu_id, tm.taux_remu_id, si.taux_remu_id, to_number(ptr.valeur))
             JOIN taux_remu                  trm ON trm.id = COALESCE(m.taux_remu_majore_id,m.taux_remu_id, tm.taux_remu_majore_id, tm.taux_remu_id, si.taux_remu_id, to_number(ptr.valeur))
         WHERE
-            c.histo_destruction IS NULL
-) ct
+          c.histo_destruction IS NULL
+     ) ct

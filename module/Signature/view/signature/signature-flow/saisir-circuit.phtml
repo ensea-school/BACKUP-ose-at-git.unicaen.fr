@@ -1,7 +1,21 @@
 <?php
+echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNamespace('error');
+
 echo $this->form()->openTag($form);
+echo '<div class="row">';
+echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('label'));
+echo '</div>';
+echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('description'));
+echo '</div>';
+echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('enabled'));
+echo '</div>';
+echo '<div class="col-md-12">';
 echo $this->formSubmit($form->get('submit'));
+echo '</div>';
 echo $this->form()->closeTag($form);
+echo '<div class="row">';
+
+?>

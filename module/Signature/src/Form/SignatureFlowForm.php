@@ -22,14 +22,16 @@ class SignatureFlowForm extends AbstractForm
         $this->setAttribute('id', uniqid('fm'));
         $this->setHydrator(new SignatureFlowHydrator());
 
+        $this->setAttribute('id', uniqid('fm'));
 
         $this->spec(SignatureFlow::class);
 
         $this->spec([
+                        'label'  => ['input' => ['required' => true]],
                         'description' => ['type' => 'Textarea'],
                         'enabled'     => ['type' => 'Checkbox'],
-
-                    ]);
+                    ],
+        );
 
         $this->build();
 
@@ -41,5 +43,16 @@ class SignatureFlowForm extends AbstractForm
 
         $this->addSubmit();
     }
+
+    public function getInputFilterSpecification()
+    {
+
+        return [
+            'label'      => [
+                'required'   => true,
+            ],
+        ];
+    }
+
 
 }

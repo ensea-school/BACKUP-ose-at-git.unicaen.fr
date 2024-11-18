@@ -5,6 +5,7 @@ namespace Signature\Form;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
+use Laminas\Form\Element\Number;
 use Signature\Hydrator\SignatureFlowStepHydrator;
 use UnicaenApp\Util;
 use UnicaenSignature\Entity\Data\LevelInfo;
@@ -28,12 +29,12 @@ class SignatureFlowStepForm extends AbstractForm
 
         $this->setAttribute('id', uniqid('fm'));
         $this->setHydrator(new SignatureFlowStepHydrator());
-        $ignored = ['letterfileName', 'signatureFlow', 'recipientsMethod', 'notificationsRecipients', 'editableRecipients', 'options', 'observers_options', 'observersMethod'];
+        $ignored = ['order','letterfileName', 'signatureFlow', 'recipientsMethod', 'notificationsRecipients', 'editableRecipients', 'options', 'observers_options', 'observersMethod'];
         $labels  = [
             'label'             => 'Nom de l\'étape',
             'level'             => 'Niveau de signature',
             'recipientMethod'   => 'Signataire(s)',
-            'roles'             => 'Rôle établissement pour la signature',
+            'roles'             => 'Choix du rôle utilisateur pour la signature',
             'order'             => 'Order de l\'étape',
             'allRecipientsSign' => 'Tous les signataires doivent signer',
 
@@ -43,7 +44,6 @@ class SignatureFlowStepForm extends AbstractForm
         //On récupére la liste de niveau de signature possible
         $paramLetterFile             = $this->getServiceParametres()->get("signature_electronique_parapheur");
         $levelLetterFiles            = $this->getSignatureConfigurationService()->getLevels();
-        $listeSignatureTypes['none'] = 'aucun';
         if (!empty($paramLetterFile)) {
 
             /**
@@ -52,16 +52,19 @@ class SignatureFlowStepForm extends AbstractForm
             foreach ($levelLetterFiles as $key => $value) {
                 if ($value->isUsed()) {
                     $listeSignatureTypes[$value->getKey()] = $value->getLabel();
+
                 }
             }
         }
-        $this->spec(['level' => [
+        $this->spec([
+            'level' => [
             'type'    => 'Select',
             'name'    => 'level',
             'options' => [
                 'value_options' => $listeSignatureTypes,
             ],
-        ]]);
+            ],
+                    ]);
 
         $this->add([
                        'name'       => 'recipientMethod',
@@ -90,10 +93,21 @@ class SignatureFlowStepForm extends AbstractForm
                        ],
                        'type'       => 'Select',
                    ]);
+        $this->add([
+           'type'       => Number::class,
+           'name'       => 'order',
+           'options' => [
+               'label' => 'Ordre',
+           ],
+           'attributes' => [
+               'min' => '1',
+               'max' => '10',
+               'step' => '1',
+           ],]);
         $this->get('roles')->setValueOptions(Util::collectionAsOptions($this->getServiceRole()->getList()));
 
-
         $this->build();
+
         $this->setLabels($labels);
 
 
@@ -108,6 +122,20 @@ class SignatureFlowStepForm extends AbstractForm
             'roles' => [
                 'required' => false,
             ],
+            'label' => [
+                'required' => true,
+            ],
+            'recipientMethod' => [
+                'required' => true,
+            ],
+            'level' => [
+                'required' => true,
+            ],
+            'order' => [
+                'required' => true,
+            ],
+
+
         ];
     }
 

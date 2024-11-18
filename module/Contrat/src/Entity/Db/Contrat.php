@@ -2,6 +2,8 @@
 
 namespace Contrat\Entity\Db;
 
+use Application\Entity\Db\Parametre;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
@@ -16,6 +18,7 @@ use UnicaenSignature\Entity\Db\Signature;
 class Contrat implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
+    use ParametresServiceAwareTrait;
 
     /**
      * @var \Contrat\Entity\Db\Contrat
@@ -343,6 +346,39 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
 
+    public function estFinalise(): bool
+    {
+        // contrat historisé
+        if ($this->estHistorise()) {
+            return false;
+        }
+
+        // contrat pas validé
+        $validation = $this->getValidation();
+        if (!$validation) {
+            return false;
+        }
+
+        // La validation est historisée
+        if ($validation->estHistorise()) {
+            return false;
+        }
+
+        $contratRegleFranchissement = $this->getServiceParametres()->get('contrat_regle_franchissement');
+        switch ($contratRegleFranchissement) {
+            case Parametre::CONTRAT_FRANCHI_VALIDATION:
+                // déjà validé => ça suffit, c'est OK
+                return true;
+            case Parametre::CONTRAT_FRANCHI_DATE_RETOUR:
+                // La date de retour signée doit être renseignée
+                return !empty($this->getDateRetourSigne());
+        }
+
+        return true;
+    }
+
+
+
     /**
      * Get intervenant
      *
@@ -362,7 +398,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return self
      */
-    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant (\Application\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 

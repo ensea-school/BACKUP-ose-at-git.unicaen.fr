@@ -398,7 +398,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return self
      */
-    public function setIntervenant (\Application\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant (Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 

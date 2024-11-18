@@ -5,12 +5,13 @@ namespace Signature\Hydrator;
 
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
-use UnicaenSignature\Entity\Db\SignatureFlow;
+use Signature\Service\SignatureFlowStepServiceAwareTrait;
 use UnicaenSignature\Entity\Db\SignatureFlowStep;
 
 class SignatureFlowStepHydrator implements HydratorInterface
 {
     use ParametresServiceAwareTrait;
+    use SignatureFlowStepServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.
@@ -57,14 +58,33 @@ class SignatureFlowStepHydrator implements HydratorInterface
      *
      * @return array
      */
+
     public function extract($object): array
     {
+        //Lors de l'ajout d'une nouvelle étape on init l'ordre de l'étape à la valeur supérieur de la dernière étape
+        $order = $object->getOrder();
+        $signatureFlow = $object->getSignatureFlow();
+        if(isset($signatureFlow) && $order == 0)
+        {
+            $steps = $signatureFlow->getSteps();
+            if($steps)
+            {
+                foreach ($steps as $step) {
+                    if($step->getOrder() >= $order)
+                    {
+                        $order = $step->getOrder()+1;
+                    }
+                }
+
+            }
+        }
+
         $data = [
             'label'             => $object->getLabel(),
             'letterfileName'    => $object->getLetterfileName(),
             'level'             => $object->getLevel(),
             'allRecipientsSign' => $object->isAllRecipientsSign(),
-            'order'             => $object->getOrder(),
+            'order'             => $order,
         ];
         //On travaille sur l'extract du type de signataire
         $options = $object->getOptions();

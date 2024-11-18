@@ -1,43 +1,64 @@
 <?php
 echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNamespace('error');
 
+
 echo $this->form()->openTag($form);
+echo '<div class="row">';
+echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('label'));
+echo '</div>';
+echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('level'));
+echo '</div>';
+echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('recipientMethod'));
+echo '</div>';
+echo '<div class="col-md-12" id="roleEtablissement">';
 echo $this->formControlGroup($form->get('roles'));
+echo '</div>';
+echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('order'));
+echo '</div>';
+echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('allRecipientsSign'));
+echo '</div>';
+echo '<div class="col-md-12">';
 echo $this->formSubmit($form->get('submit'));
+echo '</div>';
+echo '</div>';
 echo $this->form()->closeTag($form);
 
 ?>
 
+
 <script>
 
+    function formElement()
+    {
+        return $('#<?= $form->getAttribute('id') ?>');
+    }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        var recipientMethod = document.getElementById('recipient-method');
-        console.log(recipientMethod);
-        if (recipientMethod.value != 'by_etablissement') {
-            document.querySelectorAll('.liste-roles').forEach(function (element) {
-                element.style.display = 'none';
-            });
+    function toggleViewElements(init)
+    {
+        var method = formElement().find('[name=recipientMethod]').val();
+
+        if(method == 'by_etablissement' || method == 'by_etablissement_and_intervenant') {
+            console.log('show');
+            $('#roleEtablissement').show();
+        } else {
+            console.log('hide')
+            $('#roleEtablissement').hide();
         }
-        recipientMethod.addEventListener('change', function () {
-            var elements = document.querySelectorAll('.liste-roles');
+        console.log(init);
+        if (init !== true) {
+            console.log(init);
+            $('#roleEablissement').hide();
+        }
+    }
 
-            // Parcourir chaque élément et modifier son style pour le masquer
-
-            if (recipientMethod.value == 'by_etablissement') {
-                elements.forEach(function (element) {
-                    element.style.display = 'block';
-                });
-            } else {
-                elements.forEach(function (element) {
-                    element.style.display = 'none';
-                });
-            }
-        });
+    $(function () {
+        formElement().find('[name=recipientMethod]').on('change', toggleViewElements);
+        toggleViewElements(true);
     });
+
 </script>

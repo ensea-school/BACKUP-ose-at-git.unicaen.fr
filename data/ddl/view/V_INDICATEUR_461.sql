@@ -1,5 +1,3 @@
---Indicateur listant les contrats éligibles à la signature électronique mais
---qui n'ont pas encore été envoyé dans un circuit de signature
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_461 AS
 SELECT DISTINCT
   c.intervenant_id,

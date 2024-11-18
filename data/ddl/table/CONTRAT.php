@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 20,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'          => [

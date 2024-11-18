@@ -14,7 +14,7 @@ FROM
     JOIN tbl_contrat tblc ON tblc.mission_id = m.id
     LEFT JOIN mission_prime mp ON m.prime_id = mp.id AND mp.histo_destruction IS null
 WHERE i.histo_destruction IS NULL
-  tblc.termine = 1
+  AND tblc.termine = 1
 /*@INTERVENANT_ID=i.id*/
 /*@ANNEE_ID=i.annee_id*/
 GROUP BY

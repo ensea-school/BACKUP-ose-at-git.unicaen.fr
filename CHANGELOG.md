@@ -25,6 +25,7 @@
 
 * Au niveau de la fiche intervenant, de l'onglet notes, distinction dans l'historique des demandes de mise en paiement et des mises en paiement (#58342)
 * L'indicateur 210 ne nécessite plus d'avoir obligatoirement un service prévisionnel de renseigné pour remonter les intervenants ayant des pièces justificatives manquantes (#58301)
+* Meilleure prise en compte du nombre d'heures contractualisées à transmettre lors d'une prise en charge ou renouvellement ose vers siham
 
 ## Corrections de bugs
 

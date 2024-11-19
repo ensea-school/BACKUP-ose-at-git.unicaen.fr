@@ -15,7 +15,7 @@ signée.
 # Configuration du connecteur SIHAM
 
 Pour utiliser le module ExportRh Siham vous devez ajouter dans le fichier de configuration config.local.php les lignes
-suivantes :
+suivantes et faire le paramètrage souhaité :
 
 ```php
    'export-rh' => [
@@ -24,17 +24,6 @@ suivantes :
         'connecteur' => 'siham',//Le nom du connecteur dont vous avez besoin, pour le moment seul le connecteur SIHAM a été développé.
         'sync-code'  => false,//Permet de venir forcer le code de l'intervenant avec le matricule siham en retour d'un renouvellement ou d'une prise en charge
         'sync-source'  => '',//Code de la source à remplacer après la synchronisation
-    ],
-```
-
-L'utilisation du connecteur SIHAM du module ExportRh nécessite aussi l'ajout d'un fichier de configration spécifique à
-SIHAM dans le dossier à la racine /config/autoload/unicaen-siham.local.php
-
-```php
-<?php
-
-return [
-    'unicaen-siham' => [
 
         // Options concernant l'appel du web service .
         'api' => [
@@ -195,10 +184,9 @@ return [
             ],
         ],
         
-
     ],
-];
 ```
+
 
 
 

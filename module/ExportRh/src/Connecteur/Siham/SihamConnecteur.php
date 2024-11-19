@@ -10,6 +10,8 @@ use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
+use Mission\Entity\Db\Mission;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Form\Fieldset;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
@@ -27,6 +29,7 @@ class SihamConnecteur implements ConnecteurRhInterface
     use VoirieServiceAwareTrait;
     use ContratServiceAwareTrait;
     use SituationMatrimonialeServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
 
     public Siham $siham;
 
@@ -236,7 +239,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /*CONTRAT*/
             //On récupére le nombre d'heures du contrat et le taux horaire appliqué
-            $infos  = $this->getInfosContrat($intervenant);
+            $infos = $this->getInfosContrat($intervenant, $firstMission);
             $config = $this->siham->getConfig();
             if ($this->siham->getConfig()['contrat']) {
                 //On récupere le gradeTG pour le contrat
@@ -433,19 +436,33 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function getInfosContrat(Intervenant $intervenant): array
+    public function getInfosContrat(Intervenant $intervenant, ?Mission $mission = null): array
     {
         $infos = [
-            'totalHeure' => '',
-            'taux'       => '',
+            'totalHeure' => 0,
+            'taux'       => 0,
         ];
+        if (empty($mission)) {
+            $sql = 'SELECT "hetdContrat","tauxHoraireValeur" FROM V_CONTRAT_MAIN WHERE intervenant_id = :intervenant';
+            $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $intervenant->getId()]);
 
-        $sql = 'SELECT SUM("hetdContrat"),MAX("tauxHoraireValeur") FROM V_CONTRAT_MAIN WHERE intervenant_id = :intervenant GROUP BY intervenant_id';
-        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $intervenant->getId()]);
-
-        if (!empty($res)) {
-            $infos['totalHeure'] = str_replace(',', '.', $res[0]['hetdContrat']);
-            $infos['taux']       = str_replace(',', '.', $res[0]['tauxHoraireValeur']);
+            if (!empty($res)) {
+                $infos['totalHeure'] = 0;
+                $infos['taux']       = 0;
+                foreach ($res as $value) {
+                    $infos['totalHeure'] += (float)str_replace(',', '.', $value['hetdContrat']);
+                    $infos['taux']       = $value['tauxHoraireValeur'];
+                }
+                $infos['totalHeure'] = str_replace(',', '.', $infos['totalHeure']);
+                $infos['taux']       = str_replace(',', '.', $infos['taux']);
+            }
+        } else {
+            $infos['totalHeure'] = str_replace(',', '.', $mission->getHeures());
+            //On va chercher la valeur du taux de la mission
+            $dateDebutMission = $mission->getDateDebut();
+            $idTauxRemu       = $mission->getTauxRemu()->getId();
+            $valeurTaux       = $this->getServiceTauxRemu()->getTauxRemuValeur($idTauxRemu)->getValeur();
+            $infos['taux']    = str_replace(',', '.', $valeurTaux);
         }
 
         return $infos;
@@ -505,6 +522,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /*Recherche de la date d'effet à passer selon enseignement ou mission, si mission on prend la première mission de l'année universitaire
             sinon on prend les dates de début et de fin de l'année universitaire*/
+
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
             if (!empty($firstMission)) {
                 $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
@@ -524,10 +542,6 @@ class SihamConnecteur implements ConnecteurRhInterface
             if (!empty($intervenant->getCodeRh()) && empty($matricule)) {
                 $matricule = $intervenant->getCodeRh();
             }
-            //Si code RH ne contient pas UCN alors on le reformate
-            /*if (!strstr($matricule, 'UCN')) {
-                $matricule = $this->siham->getCodeAdministration() . str_pad($matricule, 9, '0', STR_PAD_LEFT);
-            }/*/
 
             /*POSITION ADMINISTRATIVE*/
             $position[] =
@@ -540,10 +554,9 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /*CONTRAT*/
             //On récupére le nombre d'heures du contrat et le taux horaire appliqué
-            $infos   = $this->getInfosContrat($intervenant);
+            $infos = $this->getInfosContrat($intervenant, $firstMission);
             $config  = $this->siham->getConfig();
             $contrat = [];
-
             if ($this->siham->getConfig()['contrat']) {
                 //On récupere le gradeTG pour le contrat
                 $codeStatut = $datas['connecteurForm']['statut'];

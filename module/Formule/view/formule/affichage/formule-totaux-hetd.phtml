@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @var $this                     Application\View\Renderer\PhpRenderer
+ * @var $formuleResultat          \Formule\Entity\Db\FormuleResultatIntervenant
+ */
+
+$refreshUrl = $this->url(
+    'intervenant/formule-totaux-hetd', [
+    'intervenant'       => $formuleResultat->getIntervenant()->getId(),
+    'typeVolumeHoraire' => $formuleResultat->getTypeVolumeHoraire()->getId(),
+    'etatVolumeHoraire' => $formuleResultat->getEtatVolumeHoraire()->getId(),
+]);
+
+?>
+<div id="formule-totaux-hetd" data-url="<?= $refreshUrl ?>">
+    <h1>Totaux <abbr title="Heures Équivalent TD">HETD</abbr></h1>
+
+
+    TODO
+
+
+</div>

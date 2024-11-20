@@ -224,102 +224,6 @@ class ContratProcess implements ProcessInterface
 
             $this->services[$id] = $service;
         }
-
-
-        $sql                   = 'SELECT 
-    i.id AS intervenant_id,
-    i.annee_id,
-    parent_c.contrat_id AS contrat_parent_id,
-    MAX(c.date_fin) AS max_date_fin_contrat,
-    MAX(m.date_fin) AS max_date_fin_mission,
-    CASE 
-        WHEN pce.nom = \'contrat_mis\' AND pce.valeur = \'contrat_mis_globale\' THEN NULL
-        ELSE m.structure_id
-    END AS structure_id,
-    m.id AS mission_id,
-    ts.id as type_service_id
-FROM 
-    v_tbl_contrat c
-JOIN 
-    v_tbl_contrat parent_c ON c.contrat_parent_id = parent_c.contrat_id OR c.contrat_id = parent_c.contrat_id
-JOIN 
-    mission m ON c.mission_id = m.id
-JOIN 
-    intervenant i ON parent_c.intervenant_id = i.id
-JOIN 
-    parametre pce ON pce.nom = \'contrat_mis\'
-JOIN 
-      type_service                    ts ON ts.code = \'MIS\'
-
-JOIN 
-    (SELECT 
-         mission_id 
-     FROM 
-         tbl_contrat 
-     GROUP BY 
-         mission_id 
-     HAVING 
-         COUNT(CASE WHEN contrat_id IS NULL THEN 1 END) = 0
-    ) valid_missions ON c.mission_id = valid_missions.mission_id
-GROUP BY 
-    i.id, parent_c.contrat_id, m.structure_id, pce.nom, pce.valeur, i.annee_id, m.id, ts.id
-HAVING 
-    MAX(c.date_fin) < MAX(m.date_fin)
-';
-        $avenantNecessaireDate = \OseAdmin::instance()->getBdd()->select($sql);
-
-        foreach ($avenantNecessaireDate as $avenant) {
-
-            $newAvenant                      = [];
-            $newAvenant['INTERVENANT_ID']    = $avenant['INTERVENANT_ID'];
-            $newAvenant['ANNEE_ID']          = $avenant['ANNEE_ID'];
-            $newAvenant['STRUCTURE_ID']      = $avenant['STRUCTURE_ID'];
-            $newAvenant['CONTRAT_PARENT_ID'] = $avenant['CONTRAT_PARENT_ID'];
-
-            $newAvenant['UUID'] = 'avenant_' . $newAvenant['INTERVENANT_ID'] . '_' . $newAvenant['CONTRAT_PARENT_ID'];
-
-            $newAvenant['EDITE']           = 0;
-            $newAvenant['SIGNE']           = 0;
-            $newAvenant['TERMINE']         = 0;
-            $newAvenant['TYPE_CONTRAT_ID'] = 2;
-            $newAvenant['MISSION_ID']      = $avenant['MISSION_ID'];
-            $newAvenant['TYPE_SERVICE_ID'] = $avenant['TYPE_SERVICE_ID'];
-            $newAvenant['AUTRES']                    = NULL;
-            $newAvenant['AUTRE_LIBELLE']             = NULL;
-            $newAvenant['CM']                        = NULL;
-            $newAvenant['TD']                        = NULL;
-            $newAvenant['TP']                        = NULL;
-            $newAvenant['CONTRAT_ID']                = NULL;
-            $newAvenant['DATE_CREATION']             = NULL;
-            $newAvenant['DATE_DEBUT']                = NULL;
-            $newAvenant['DATE_FIN']                  = NULL;
-            $newAvenant['HETD']                      = NULL;
-            $newAvenant['HEURES']                    = NULL;
-            $newAvenant['SERVICE_ID']                = NULL;
-            $newAvenant['SERVICE_REFERENTIEL_ID']    = NULL;
-            $newAvenant['TAUX_CONGES_PAYES']         = NULL;
-            $newAvenant['TAUX_REMU_DATE']            = NULL;
-            $newAvenant['TAUX_REMU_ID']              = NULL;
-            $newAvenant['TAUX_REMU_MAJORE_DATE']     = NULL;
-            $newAvenant['TAUX_REMU_MAJORE_ID']       = NULL;
-            $newAvenant['TAUX_REMU_MAJORE_VALEUR']   = NULL;
-            $newAvenant['TAUX_REMU_VALEUR']          = NULL;
-            $newAvenant['VOLUME_HORAIRE_ID']         = NULL;
-            $newAvenant['VOLUME_HORAIRE_REF_ID']     = NULL;
-            $newAvenant['VOLUME_HORAIRE_MISSION_ID'] = NULL;
-            $newAvenant['PROCESS_ID'] = NULL;
-
-            if ($this->regleA == Parametre::AVENANT_AUTORISE) {
-                $newAvenant['ACTIF'] = 1;
-            } else {
-                $newAvenant['ACTIF'] = 0;
-
-            }
-            $this->services[$newAvenant['UUID']] = $newAvenant;
-
-        }
-
-
         $sql2 = 'SELECT 
                 c.id contrat_id, 
                 c.contrat_id contrat_parent_id,
@@ -414,6 +318,126 @@ HAVING
 
             $this->services[$contratToTbl['UUID']] = $contratToTbl;
         }
+
+
+        $sql = 'WITH contrat_et_avenants AS (
+    SELECT 
+        c.id AS contrat_id_principal,
+        c.debut_validite AS date_debut,
+        c.fin_validite AS date_fin_contrat,
+        c.structure_id AS parent_structure_id,
+        vtblc.mission_id AS mission_id_principal,
+        ap.fin_validite AS date_fin_avenant,
+        vtblc.intervenant_id
+    FROM 
+        contrat c
+    LEFT JOIN 
+        contrat ap ON c.id = ap.contrat_id AND (ap.histo_destruction IS NULL)
+    LEFT JOIN
+        v_tbl_contrat vtblc ON vtblc.contrat_id = c.id
+    WHERE 
+        c.histo_destruction IS NULL
+),
+contrats_max_dates AS (
+    SELECT 
+        contrat_id_principal,
+        date_debut,
+        parent_structure_id,
+        mission_id_principal,
+        intervenant_id,
+        MAX(COALESCE(date_fin_avenant, date_fin_contrat)) AS max_date_fin_contrat
+    FROM 
+        contrat_et_avenants
+    GROUP BY 
+        contrat_id_principal, date_debut, parent_structure_id, mission_id_principal, intervenant_id
+),
+missions_dates AS (
+    SELECT 
+        vtblc.mission_id,
+        MAX(m.date_fin) AS max_date_fin_mission
+    FROM 
+        v_tbl_contrat vtblc
+    JOIN 
+        mission m ON vtblc.mission_id = m.id
+    WHERE 
+        m.histo_destruction IS NULL
+    GROUP BY 
+        vtblc.mission_id
+)
+SELECT 
+    cma.contrat_id_principal AS contrat_parent_id,
+    cma.date_debut AS date_debut,
+    cma.parent_structure_id AS structure_id,
+    cma.intervenant_id,
+    vtblc.mission_id AS mission_id,
+    cma.max_date_fin_contrat AS date_fin_contrat,
+    md.max_date_fin_mission AS max_date_fin_mission,
+    vtblc.type_service_id,
+    vtblc.annee_id
+FROM 
+    contrats_max_dates cma
+LEFT JOIN 
+    missions_dates md ON cma.mission_id_principal = md.mission_id
+LEFT JOIN 
+    v_tbl_contrat vtblc ON vtblc.contrat_id = cma.contrat_id_principal
+WHERE 
+    cma.max_date_fin_contrat < md.max_date_fin_mission';
+        $avenantNecessaireDate = \OseAdmin::instance()->getBdd()->select($sql);
+
+        foreach ($avenantNecessaireDate as $avenant) {
+
+            $newAvenant                      = [];
+            $newAvenant['INTERVENANT_ID']    = $avenant['INTERVENANT_ID'];
+            $newAvenant['ANNEE_ID']          = $avenant['ANNEE_ID'];
+            $newAvenant['STRUCTURE_ID']      = $avenant['STRUCTURE_ID'];
+            $newAvenant['CONTRAT_PARENT_ID'] = $avenant['CONTRAT_PARENT_ID'];
+
+            $newAvenant['UUID'] = 'avenant_' . $newAvenant['INTERVENANT_ID'] . '_' . $newAvenant['CONTRAT_PARENT_ID'];
+
+            $newAvenant['EDITE']                     = 0;
+            $newAvenant['SIGNE']                     = 0;
+            $newAvenant['TERMINE']                   = 0;
+            $newAvenant['TYPE_CONTRAT_ID']           = 2;
+            $newAvenant['MISSION_ID']                = $avenant['MISSION_ID'];
+            $newAvenant['TYPE_SERVICE_ID']           = $avenant['TYPE_SERVICE_ID'];
+            $newAvenant['AUTRES']                    = NULL;
+            $newAvenant['AUTRE_LIBELLE']             = NULL;
+            $newAvenant['CM']                        = NULL;
+            $newAvenant['TD']                        = NULL;
+            $newAvenant['TP']                        = NULL;
+            $newAvenant['CONTRAT_ID']                = NULL;
+            $newAvenant['DATE_CREATION']             = NULL;
+            $newAvenant['DATE_DEBUT']                = $avenant['DATE_DEBUT'];
+            $newAvenant['DATE_FIN']                  = $avenant['MAX_DATE_FIN_MISSION'];
+            $newAvenant['HETD']                      = NULL;
+            $newAvenant['HEURES']                    = NULL;
+            $newAvenant['SERVICE_ID']                = NULL;
+            $newAvenant['SERVICE_REFERENTIEL_ID']    = NULL;
+            $newAvenant['TAUX_CONGES_PAYES']         = NULL;
+            $newAvenant['TAUX_REMU_DATE']            = NULL;
+            $newAvenant['TAUX_REMU_ID']              = NULL;
+            $newAvenant['TAUX_REMU_MAJORE_DATE']     = NULL;
+            $newAvenant['TAUX_REMU_MAJORE_ID']       = NULL;
+            $newAvenant['TAUX_REMU_MAJORE_VALEUR']   = NULL;
+            $newAvenant['TAUX_REMU_VALEUR']          = NULL;
+            $newAvenant['VOLUME_HORAIRE_ID']         = NULL;
+            $newAvenant['VOLUME_HORAIRE_REF_ID']     = NULL;
+            $newAvenant['VOLUME_HORAIRE_MISSION_ID'] = NULL;
+            $newAvenant['PROCESS_ID']                = NULL;
+
+            if ($this->regleA == Parametre::AVENANT_AUTORISE) {
+                $newAvenant['ACTIF'] = 1;
+            } else {
+                $newAvenant['ACTIF'] = 0;
+
+            }
+            if($newAvenant['CONTRAT_PARENT_ID'] == 154){
+                var_dump($newAvenant);
+            }
+            $this->services[$newAvenant['UUID']] = $newAvenant;
+
+        }
+
 
     }
 

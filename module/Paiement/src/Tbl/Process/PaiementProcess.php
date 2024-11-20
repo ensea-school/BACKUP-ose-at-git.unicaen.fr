@@ -153,8 +153,6 @@ class PaiementProcess implements ProcessInterface
 
         $table = $this->getBdd()->getTable('TBL_PAIEMENT');
 
-        // on force la DDL pour éviter de faire des requêtes en plus
-        $table->setDdl(['columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
         // on merge dans la table
         $table->merge($this->tblData, $key, ['where' => $params]);
         // on vide pour limiter la conso de RAM

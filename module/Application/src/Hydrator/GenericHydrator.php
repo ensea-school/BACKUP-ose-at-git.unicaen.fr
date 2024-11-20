@@ -41,7 +41,7 @@ class GenericHydrator implements HydratorInterface
 
     public function spec(string|object|array $spec, array $ignore = []): void
     {
-        $spec = Util::spec($spec, $ignore);
+        $spec = Util::spec($spec, $ignore + $this->noGenericParse);
         $this->spec = ArrayUtils::merge($this->spec, $spec);
     }
 
@@ -90,9 +90,9 @@ class GenericHydrator implements HydratorInterface
         if (method_exists($object, 'getId')) {
             $data['id'] = (string)$object->getId();
         }
-        foreach ($this->spec as $name => $params) {
+        foreach ($this->spec as $name => $ph) {
             if (!in_array($name, $this->noGenericParse)) {
-                $params = $params['hydrator'] ?? [];
+                $params = $ph['hydrator'] ?? [];
                 $type = isset($params['type']) ? $params['type'] : null;
                 $getter = isset($params['getter']) ? $params['getter'] : null;
 

@@ -302,6 +302,7 @@ class  IntervenantController extends AbstractController
         $isNew = !$intervenant;
         if (!$intervenant) {
             $intervenant = $this->getServiceIntervenant()->newEntity();
+            $intervenant->setSource($this->getServiceSource()->getOse());
         }
 
         if ($actionDetail == 'dupliquer') {

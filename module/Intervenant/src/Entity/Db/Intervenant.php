@@ -15,7 +15,6 @@ use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Formule\Entity\Db\FormuleResultatIntervenant;
 use Indicateur\Entity\Db\IndicModifDossier;
-use Intervenant\Entity\Db\SituationMatrimonialeAwareTrait;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\AdresseInterface;
@@ -502,7 +501,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Statut
      */
-    public function getStatut ()
+    public function getStatut (): ?Statut
     {
         return $this->statut;
     }

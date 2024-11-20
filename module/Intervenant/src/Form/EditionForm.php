@@ -82,6 +82,7 @@ class EditionForm extends AbstractForm
     public function init()
     {
         $hydrator = new EditionFormHydrator($this->getServiceSource()->getEntityManager(), $this->hydratorElements);
+        $hydrator->spec(Intervenant::class);
         $this->setHydrator($hydrator);
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->setAttribute('class', 'form-intervenant-edition no-intranavigation');
@@ -607,7 +608,7 @@ class EditionFormHydrator extends GenericHydrator
     use UtilisateurServiceAwareTrait;
     use LdapConnecteurAwareTrait;
 
-    protected $noGenericParse = ['utilisateur', 'creerUtilisateur'];
+    protected $noGenericParse = ['utilisateur', 'creerUtilisateur', 'entityManager'];
 
 
 

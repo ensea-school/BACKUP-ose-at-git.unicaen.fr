@@ -78,18 +78,6 @@ class FormuleProcess implements ProcessInterface
 
             $this->resultatIntervenantTable   = $bddAdmin->getTable('FORMULE_RESULTAT_INTERVENANT');
             $this->resultatVolumeHoraireTable = $bddAdmin->getTable('FORMULE_RESULTAT_VOLUME_HORAIRE');
-
-            // on force les DDL à partir des positions de colonnes pour éviter de faire des requêtes en plus
-            $colPosFile = $bddAdmin->getOption($bddAdmin::OPTION_COLUMNS_POSITIONS_FILE);
-            if (file_exists($colPosFile)) {
-                $positions = require $colPosFile;
-                if (!is_array($positions)) {
-                    throw new \exception('Fichiers des positionnements de colonnes non trouvé');
-                }
-            }
-
-            $this->resultatIntervenantTable->setDdl(require $bddAdmin->getOption($bddAdmin::OPTION_DDL_DIR) . '/table/FORMULE_RESULTAT_INTERVENANT.php');
-            $this->resultatVolumeHoraireTable->setDdl(require $bddAdmin->getOption($bddAdmin::OPTION_DDL_DIR) . '/table/FORMULE_RESULTAT_VOLUME_HORAIRE.php');
         }
     }
 

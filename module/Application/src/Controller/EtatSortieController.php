@@ -7,6 +7,7 @@ use Application\Entity\Db\EtatSortie;
 use Application\Entity\Db\Fichier;
 use Application\Form\Traits\EtatSortieFormAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -19,6 +20,7 @@ class EtatSortieController extends AbstractController
 {
     use EtatSortieServiceAwareTrait;
     use EtatSortieFormAwareTrait;
+    use ParametresServiceAwareTrait;
 
 
 
@@ -44,6 +46,8 @@ class EtatSortieController extends AbstractController
         } else {
             $title = 'Modification d\'un état de sortie';
         }
+        $activationSignatureElectronique = $this->getServiceParametres()->get('signature_electronique_parapheur');
+
 
         $form->bindRequestSave($etatSortie, $this->getRequest(), function (EtatSortie $es) {
             try {
@@ -55,7 +59,7 @@ class EtatSortieController extends AbstractController
             }
         });
 
-        return compact('form', 'title');
+        return compact('form', 'title', 'activationSignatureElectronique');
     }
 
 

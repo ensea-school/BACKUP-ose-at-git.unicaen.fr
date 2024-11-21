@@ -55,7 +55,7 @@ echo $this->doctype();
     <?php endif; ?>
 
     <?php
-    $icons = AppAdmin::config()['etablissement']['css'] ?? [];
+    $icons = AppAdmin::config()['etablissement']['icons'] ?? [];
 
     foreach ($icons as $icon) {
         // Protection pour éviter d'appeler d'anciennes icônes Unicaen

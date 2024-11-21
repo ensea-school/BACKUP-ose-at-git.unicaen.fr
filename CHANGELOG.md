@@ -33,6 +33,7 @@
 * Au niveau des missions, le contrat est marqué comme fait s'il a été réellement finalisé avec date de retour signé le cas échéant
 * Au niveau de la saisie du suivi des missions, gestion correcte du cas où un même intervenant a plusieurs missions, mais qu'un des contrats n'a pas été finalisé
 * Éradication de l'utilisation de certains caractères spéciaux dans le cache de OSE qui faisait planter l'application
+* Correction sur la visualisation des candidatures d'une offre d'emploi quand on a le privilège 'Visualiser les candidatures d'une offre' (#59099)
 
 
 # OSE 23.11 (17/10/2024)

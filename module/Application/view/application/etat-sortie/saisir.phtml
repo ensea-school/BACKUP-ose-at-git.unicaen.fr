@@ -4,6 +4,7 @@
  * @var $this  \Application\View\Renderer\PhpRenderer
  * @var $form  EtatSortieForm
  * @var $title string
+ * @var $activationSignatureElectronique ?string
  */
 
 use Application\Form\EtatSortieForm;
@@ -183,10 +184,16 @@ echo $this->form()->openTag($form);
         <br/>
         <div class="card bg-default variables">
             <div class="card-header">Paramètrage signature électronique</div>
+            <?php if($activationSignatureElectronique): ?>
             <div class="card-body" style="padding:10px;">
                 <?= $this->formControlGroup($form->get('signatureActivation')); ?>
                 <?= $this->formControlGroup($form->get('signatureCircuit')); ?>
             </div>
+            <?php else: ?>
+                <div class="card-body" style="padding:10px;">
+                    <p style="text-align:center;">Vous n'avez aucun parapheur électronique d'activé sur votre instance.</p>
+                </div>
+            <?php endif; ?>
 
         </div>
     </div>

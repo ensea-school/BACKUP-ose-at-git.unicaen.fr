@@ -194,7 +194,9 @@ class EnseignementController extends AbstractController
                     $form->saveToContext();
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
+                        $this->em()->getConnection()->setAutoCommit(true);
                         $service = $this->getServiceService()->save($service);
+                        $this->em()->getConnection()->setAutoCommit(false);
                         $saved   = $service;
                         $form->get('service')->get('id')->setValue($service->getId()); // transmet le nouvel ID
                         $hFin = $service->getVolumeHoraireListe()->getHeures();

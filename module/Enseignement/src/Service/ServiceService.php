@@ -70,7 +70,7 @@ class ServiceService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass ()
+    public function getEntityClass()
     {
         return Service::class;
     }
@@ -85,7 +85,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEtape (Etape $etape, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtape(Etape $etape, QueryBuilder $qb = null, $alias = null)
     {
         $serviceElement = $this->getServiceElementPedagogique();
 
@@ -106,7 +106,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByNiveauEtape (NiveauEtape $niveauEtape, QueryBuilder $qb = null, $alias = null)
+    public function finderByNiveauEtape(NiveauEtape $niveauEtape, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($niveauEtape && $niveauEtape->getId() !== '|') {
@@ -136,7 +136,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByComposante (Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByComposante(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -167,7 +167,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias ()
+    public function getAlias()
     {
         return 's';
     }
@@ -182,7 +182,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByStructureAff (Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructureAff(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -205,7 +205,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByStructureEns (Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructureEns(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -226,7 +226,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByContext (QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -252,7 +252,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByTypeIntervenant (TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($typeIntervenant) {
@@ -272,7 +272,7 @@ class ServiceService extends AbstractEntityService
      * @param Intervenant $intervenant
      *
      */
-    public function setPrevusFromPrevus (Intervenant $intervenant)
+    public function setPrevusFromPrevus(Intervenant $intervenant)
     {
         $old               = $this->getPrevusFromPrevusData($intervenant);
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
@@ -311,7 +311,7 @@ class ServiceService extends AbstractEntityService
 
 
 
-    public function getPrevusFromPrevusData (Intervenant $intervenant)
+    public function getPrevusFromPrevusData(Intervenant $intervenant)
     {
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $tvhSource = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
@@ -425,7 +425,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByTypeVolumeHoraire (TypeVolumeHoraire $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($typeVolumeHoraire) {
@@ -448,7 +448,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEtatVolumeHoraire (EtatVolumeHoraire $etatVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
@@ -468,7 +468,7 @@ class ServiceService extends AbstractEntityService
      * @param Service[]         $services
      * @param TypeVolumeHoraire $typeVolumehoraire
      */
-    public function setTypeVolumehoraire ($services, TypeVolumeHoraire $typeVolumeHoraire)
+    public function setTypeVolumehoraire($services, TypeVolumeHoraire $typeVolumeHoraire)
     {
         foreach ($services as $service) {
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
@@ -484,7 +484,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return Periode
      */
-    public function getPeriode (Service $service)
+    public function getPeriode(Service $service)
     {
         if (!$this->isLocal($service)) return null;
         if (!$service->getElementPedagogique()) return null;
@@ -501,7 +501,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return boolean
      */
-    protected function isLocal (Service $service)
+    protected function isLocal(Service $service)
     {
         if (!$service->getEtablissement()) return true; // par défaut
         if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) return true;
@@ -517,7 +517,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return Periode[]
      */
-    public function getPeriodes (Service $service)
+    public function getPeriodes(Service $service)
     {
         $p = $this->getPeriode($service);
         if (null === $p) {
@@ -536,7 +536,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return TypeIntervention[]
      */
-    public function getTypesIntervention ($services)
+    public function getTypesIntervention($services)
     {
         if ($services instanceof Service) $services = [$services];
         $typesIntervention = [];
@@ -568,17 +568,17 @@ class ServiceService extends AbstractEntityService
      *
      * @return null|Service
      */
-    public function getBy (
-        Intervenant $intervenant,
-        $elementPedagogique,
+    public function getBy(
+        Intervenant   $intervenant,
+                      $elementPedagogique,
         Etablissement $etablissement
     )
     {
         $result = $this->getRepo()->findBy([
-            'intervenant'        => $intervenant,
-            'elementPedagogique' => $elementPedagogique,
-            'etablissement'      => $etablissement,
-        ]);
+                                               'intervenant'        => $intervenant,
+                                               'elementPedagogique' => $elementPedagogique,
+                                               'etablissement'      => $etablissement,
+                                           ]);
 
         if (count($result) > 1) {
             foreach ($result as $sr) {
@@ -601,7 +601,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return Service
      */
-    public function newEntity ()
+    public function newEntity()
     {
         /** @var Service $entity */
         $entity = parent::newEntity();
@@ -623,81 +623,73 @@ class ServiceService extends AbstractEntityService
      * @param Service $entity
      *
      * @return Service
-     * @throws Exception
      */
-    public function save ($entity)
+    public function save($entity)
     {
-        $this->getEntityManager()->beginTransaction();
-        try {
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
+        if (!$entity->getEtablissement()) {
+            $entity->setEtablissement($this->getServiceContext()->getEtablissement());
             if (!$entity->getEtablissement()) {
-                $entity->setEtablissement($this->getServiceContext()->getEtablissement());
-                if (!$entity->getEtablissement()) {
-                    throw new \LogicException('L\'établissement n\'est pas renseigné dans les paramétrages généraux de OSE');
-                }
+                throw new \LogicException('L\'établissement n\'est pas renseigné dans les paramétrages généraux de OSE');
             }
-            if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
-                $entity->setIntervenant($intervenant);
-            }
-            if (!$this->getAuthorize()->isAllowed($entity, $entity->getTypeVolumeHoraire()->getPrivilegeEnseignementEdition())) {
-                throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
-            }
+        }
+        if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
+            $entity->setIntervenant($intervenant);
+        }
+        if (!$this->getAuthorize()->isAllowed($entity, $entity->getTypeVolumeHoraire()->getPrivilegeEnseignementEdition())) {
+            throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
+        }
 
-            $serviceAllreadyExists = null;
-            if (!$entity->getId()) { // uniquement pour les nouveaux services!!
-                $serviceAllreadyExists = $this->getBy(
-                    $entity->getIntervenant(),
-                    $entity->getElementPedagogique(),
-                    $entity->getEtablissement()
-                );
-            }
-            if ($serviceAllreadyExists) {
-                $result = $serviceAllreadyExists;
+        $serviceAllreadyExists = null;
+        if (!$entity->getId()) { // uniquement pour les nouveaux services!!
+            $serviceAllreadyExists = $this->getBy(
+                $entity->getIntervenant(),
+                $entity->getElementPedagogique(),
+                $entity->getEtablissement()
+            );
+        }
+        if ($serviceAllreadyExists) {
+            $result = $serviceAllreadyExists;
+        } else {
+            if ($entity->hasChanged()) {
+                $sourceOse = $this->getServiceSource()->getOse();
+                if (!$entity->getSource()) {
+                    $entity->setSource($sourceOse);
+                }
+                if (!$entity->getSourceCode()) {
+                    $entity->setSourceCode(uniqid('ose-'));
+                }
+                foreach ($entity->getVolumeHoraire() as $vh) {
+                    if (!$vh->getSource()) {
+                        $vh->setSource($sourceOse);
+                    }
+                    if (!$vh->getSourceCode()) {
+                        $vh->setSourceCode(uniqid('ose-'));
+                    }
+                }
+
+                $result = parent::save($entity);
+                $entity->setChanged(false);
             } else {
-                if ($entity->hasChanged()) {
-                    $sourceOse = $this->getServiceSource()->getOse();
-                    if (!$entity->getSource()) {
-                        $entity->setSource($sourceOse);
-                    }
-                    if (!$entity->getSourceCode()) {
-                        $entity->setSourceCode(uniqid('ose-'));
-                    }
-                    foreach ($entity->getVolumeHoraire() as $vh) {
-                        if (!$vh->getSource()) {
-                            $vh->setSource($sourceOse);
-                        }
-                        if (!$vh->getSourceCode()) {
-                            $vh->setSourceCode(uniqid('ose-'));
-                        }
-                    }
-
-                    $result = parent::save($entity);
-                    $entity->setChanged(false);
-                } else {
-                    $result = $entity;
-                }
+                $result = $entity;
             }
+        }
 
-            /* Sauvegarde automatique des volumes horaires associés */
-            $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
-            foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
-                /* @var $volumeHoraire VolumeHoraire */
-                if ($result !== $entity) $volumeHoraire->setService($result);
-                if ($volumeHoraire->getRemove()) {
-                    if ($volumeHoraire->getId()) {
-                        $serviceVolumeHoraire->delete($volumeHoraire);
-                    } else {
-                        $entity->removeVolumeHoraire($volumeHoraire);
-                    }
+        /* Sauvegarde automatique des volumes horaires associés */
+        $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
+        foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
+            /* @var $volumeHoraire VolumeHoraire */
+            if ($result !== $entity) $volumeHoraire->setService($result);
+            if ($volumeHoraire->getRemove()) {
+                if ($volumeHoraire->getId()) {
+                    $serviceVolumeHoraire->delete($volumeHoraire);
                 } else {
-                    $serviceVolumeHoraire->save($volumeHoraire, false); // pas de contrôle de plafond sur le VH ! ! !
+                    $entity->removeVolumeHoraire($volumeHoraire);
                 }
+            } else {
+                $serviceVolumeHoraire->save($volumeHoraire, false); // pas de contrôle de plafond sur le VH ! ! !
             }
-            $this->getEntityManager()->commit();
-        } catch (\Exception $e) {
-            $this->getEntityManager()->rollBack();
-            throw $e;
         }
 
         return $result;
@@ -713,7 +705,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return self
      */
-    public function delete ($entity, $softDelete = true)
+    public function delete($entity, $softDelete = true)
     {
         if ($softDelete) {
             $vhListe = $entity->getVolumeHoraireListe();
@@ -746,7 +738,7 @@ class ServiceService extends AbstractEntityService
 
 
 
-    public function setRealisesFromPrevus (Service $service)
+    public function setRealisesFromPrevus(Service $service)
     {
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $rStructure = $role ? $role->getStructure() : null;
@@ -810,7 +802,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne le total HETD des enseignements (réalisés et validés) d'un intervenant.
      */
-    public function getTotalHetdIntervenant (Intervenant $intervenant)
+    public function getTotalHetdIntervenant(Intervenant $intervenant)
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();

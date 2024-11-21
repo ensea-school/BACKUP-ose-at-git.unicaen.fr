@@ -246,7 +246,7 @@ class FormuleProcess implements ProcessInterface
     protected function calculer(): void
     {
         $formulator = $this->getServiceFormulator();
-        foreach ($this->data as $formuleIntervenant) {echo '.';
+        foreach ($this->data as $formuleIntervenant) {
             $formulator->calculer($formuleIntervenant, $this->formule, true);
             $trace = $formuleIntervenant->getArrondisseurTrace();
         }

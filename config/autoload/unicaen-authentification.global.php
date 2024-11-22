@@ -64,6 +64,7 @@ $settings = [
              * Possibilité ou non de s'authentifier via l'annuaire LDAP ET en local!!.
              */
             'enabled' => ($conf['ldap']['actif'] ?? true) && !(($conf['cas']['actif'] ?? false) && ($conf['cas']['exclusif'] ?? false)),
+            'username' => strtolower($conf['ldap']['loginAttribute'] ?? ''),
         ],
     ],
 

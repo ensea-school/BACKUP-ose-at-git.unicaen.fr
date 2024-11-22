@@ -11,22 +11,13 @@ namespace ExportRh;
 
 
 use Application\ConfigFactory;
-use Laminas\Mvc\MvcEvent;
-use Laminas\Stdlib\Glob;
 
 class Module
 {
 
     public function getConfig()
     {
-        return ConfigFactory::configFromSimplified(__DIR__, __NAMESPACE__);
-    }
-
-
-
-    public function getAutoloaderConfig()
-    {
-        return ConfigFactory::autoloaderConfig(__DIR__, __NAMESPACE__);
+        return ConfigFactory::configFromSimplified(dirname(__DIR__), __NAMESPACE__);
     }
 
 }

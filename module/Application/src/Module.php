@@ -15,7 +15,7 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\Stdlib\Glob;
 use UnicaenAuthentification\Service\UserContext;
 
-include_once(__DIR__ . '/src/functions.php');
+include_once(__DIR__ . '/functions.php');
 
 
 class Module
@@ -45,24 +45,9 @@ class Module
 
     public function getConfig()
     {
-        $paths = Glob::glob(__DIR__ . '/config/{,*.}{config}.php', Glob::GLOB_BRACE);
+        $paths = Glob::glob(dirname(__DIR__) . '/config/{,*.}{config}.php', Glob::GLOB_BRACE);
 
         return ConfigFactory::fromFiles($paths);
     }
 
-
-
-    public function getAutoloaderConfig()
-    {
-        return [
-            'Laminas\Loader\ClassMapAutoloader' => [
-                __DIR__ . '/autoload_classmap.php',
-            ],
-            'Laminas\Loader\StandardAutoloader' => [
-                'namespaces' => [
-                    __NAMESPACE__ => __DIR__ . '/src',
-                ],
-            ],
-        ];
-    }
 }

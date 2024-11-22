@@ -3,6 +3,7 @@
     "version"          : "1.0.0",
     "description"      : "Organisation des Services d'Enseignement (OSE)",
     "repositories"     : [
+
         {
             "type": "composer",
             "url" : "https://gest.unicaen.fr/packagist"
@@ -20,7 +21,7 @@
         "unicaen/tbl"                                 : "6.2.3",
         "unicaen/open-document"                       : "6.0.10",
         "unicaen/siham"                               : "6.1.6",
-        "unicaen/mail"                                : "6.1.5",
+        "unicaen/mail"                                : "6.1.9",
         "unicaen/vue"                                 : "6.2.4",
         "unicaen/bddadmin"                            : "1.0.2",
         "laminas/laminas-cache-storage-adapter-memory": "2.3.0",
@@ -29,6 +30,29 @@
         "symfony/process"                             : "7.1.5",
         "connecteur-ose/actul": "dev-master",
         "connecteur-ose/pegase": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Administration\\": "module/Administration/src/",
+            "Agrement\\": "module/Agrement/src/",
+            "Application\\": "module/Application/src/",
+            "Contrat\\": "module/Contrat/src/",
+            "Dossier\\": "module/Dossier/src/",
+            "Enseignement\\": "module/Enseignement/src/",
+            "ExportRh\\": "module/ExportRh/src/",
+            "Formule\\": "module/Formule/src/",
+            "Indicateur\\": "module/Indicateur/src/",
+            "Intervenant\\": "module/Intervenant/src/",
+            "Lieu\\": "module/Lieu/src/",
+            "Mission\\": "module/Mission/src/",
+            "OffreFormation\\": "module/OffreFormation/src/",
+            "Paiement\\": "module/Paiement/src/",
+            "Parametre\\": "module/Parametre/src/",
+            "PieceJointe\\": "module/PieceJointe/src/",
+            "Plafond\\": "module/Plafond/src/",
+            "Referentiel\\": "module/Referentiel/src/",
+            "Service\\": "module/Service/src/"
+        }
     },
     "require-dev"      : {
         "squizlabs/php_codesniffer"         : "*",

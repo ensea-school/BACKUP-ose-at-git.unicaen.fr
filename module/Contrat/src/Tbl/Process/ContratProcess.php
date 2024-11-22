@@ -133,13 +133,13 @@ class ContratProcess implements ProcessInterface
         foreach ($this->services as $id => $service) {
             $uuid = $service['UUID'];
             // Calcul du taux a afficher dans le contrat selon les services se retrouvant dans un même contrat
-            $service['TAUX_REMU_VALEUR']        = null;
-            $service['TAUX_REMU_DATE']          = null;
-            $service['TAUX_REMU_MAJORE_VALEUR'] = null;
-            $service['TAUX_REMU_MAJORE_DATE']   = null;
+            $service['TAUX_REMU_VALEUR']        = NULL;
+            $service['TAUX_REMU_DATE']          = NULL;
+            $service['TAUX_REMU_MAJORE_VALEUR'] = NULL;
+            $service['TAUX_REMU_MAJORE_DATE']   = NULL;
 
 
-            if ($service['CONTRAT_ID'] != null) {
+            if ($service['CONTRAT_ID'] != NULL) {
 
                 if (($this->regleTermine == Parametre::CONTRAT_FRANCHI_VALIDATION && $service['EDITE'] == 1)
                     || ($this->regleTermine == Parametre::CONTRAT_FRANCHI_DATE_RETOUR && $service['SIGNE'] == 1)
@@ -154,7 +154,7 @@ class ContratProcess implements ProcessInterface
                 if (($service['TYPE_SERVICE_CODE'] != 'MIS' && $this->regleEns == Parametre::CONTRAT_ENS_GLOBALE)
                     ||
                     ($service['TYPE_SERVICE_CODE'] == 'MIS' && $this->regleEns == Parametre::CONTRAT_MIS_GLOBALE)) {
-                    $service['STRUCTURE_ID'] = null;
+                    $service['STRUCTURE_ID'] = NULL;
                 }
             }
 
@@ -162,13 +162,13 @@ class ContratProcess implements ProcessInterface
                 //Calcul de la valeur et date du taux
                 $tauxRemuId       = $service['TAUX_REMU_ID'];
                 $tauxRemuMajoreId = isset($service['TAUX_REMU_MAJORE_ID']) ? $service['TAUX_REMU_MAJORE_ID'] : null;
-                if ($service['CONTRAT_ID'] != null) {
+                if ($service['CONTRAT_ID'] != NULL) {
                     $date                        = max($service['DATE_DEBUT'], $service['DATE_CREATION']);
                     $tauxRemuValeur              = $this->getServiceTauxRemu()->tauxValeur($tauxRemuId, $date);
                     $service['TAUX_REMU_VALEUR'] = $tauxRemuValeur;
                     $service['TAUX_REMU_DATE']   = $date;
 
-                    if ($tauxRemuMajoreId != null) {
+                    if ($tauxRemuMajoreId != NULL) {
                         $tauxRemuMajoreValeur               = $this->getServiceTauxRemu()->tauxValeur($tauxRemuMajoreId, $date);
                         $service['TAUX_REMU_MAJORE_VALEUR'] = $tauxRemuMajoreValeur;
                         $service['TAUX_REMU_MAJORE_DATE']   = $date;
@@ -178,7 +178,7 @@ class ContratProcess implements ProcessInterface
 
 
             //Calcul pour savoir si le contrat devra être un avenant ou un contrat
-            if ($service['TYPE_CONTRAT_ID'] == null) {
+            if ($service['TYPE_CONTRAT_ID'] == NULL) {
                 if ($service['TYPE_SERVICE_CODE'] != 'MIS') {
 
                     if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
@@ -212,7 +212,7 @@ class ContratProcess implements ProcessInterface
                     }
                 }
 
-                if ($service['TYPE_CONTRAT_ID'] == null) {
+                if ($service['TYPE_CONTRAT_ID'] == NULL) {
                     $service['TYPE_CONTRAT_ID'] = 1;
                 }
                 if ($service['TYPE_CONTRAT_ID'] == 2 && $this->regleA == Parametre::AVENANT_DESACTIVE) {
@@ -259,23 +259,23 @@ class ContratProcess implements ProcessInterface
             $contratToTbl['STRUCTURE_ID']      = $contratSansHeure['STRUCTURE_ID'];
             $contratToTbl['CONTRAT_PARENT_ID'] = $contratSansHeure['CONTRAT_PARENT_ID'];
 
-            $contratToTbl['UUID'] = 'avenant_' . $contratSansHeure['INTERVENANT_ID'] . '_' . $contratSansHeure['CONTRAT_ID'];
+            $contratToTbl['UUID'] = 'avenant_' . $contratSansHeure['INTERVENANT_ID'] . '_' . $contratSansHeure['CONTRAT_PARENT_ID'] . '_' . $contratSansHeure['CONTRAT_ID'];
 
             $contratToTbl['EDITE']                  = 0;
             $contratToTbl['SIGNE']                  = 0;
             $contratToTbl['TERMINE']                = 0;
-            $contratToTbl['AUTRES']                 = NULL;
+            $contratToTbl['AUTRES']                 = 0;
             $contratToTbl['AUTRE_LIBELLE']          = $contratSansHeure['AUTRE_LIBELLE'];
-            $contratToTbl['CM']                     = NULL;
-            $contratToTbl['TD']                     = NULL;
-            $contratToTbl['TP']                     = NULL;
+            $contratToTbl['CM']                     = 0;
+            $contratToTbl['TD']                     = 0;
+            $contratToTbl['TP']                     = 0;
             $contratToTbl['CONTRAT_ID']             = $contratSansHeure['CONTRAT_ID'];
             $contratToTbl['TYPE_CONTRAT_ID']        = 2;
             $contratToTbl['DATE_CREATION']          = $contratSansHeure['DATE_CREATION'];
             $contratToTbl['DATE_DEBUT']             = $contratSansHeure['DATE_DEBUT'];
             $contratToTbl['DATE_FIN']               = $contratSansHeure['DATE_FIN'];
-            $contratToTbl['HETD']                   = NULL;
-            $contratToTbl['HEURES']                 = NULL;
+            $contratToTbl['HETD']                   = 0;
+            $contratToTbl['HEURES']                 = 0;
             $contratToTbl['MISSION_ID']             = $contratSansHeure['MISSION_ID'];
             $contratToTbl['SERVICE_ID']             = NULL;
             $contratToTbl['SERVICE_REFERENTIEL_ID'] = NULL;
@@ -320,7 +320,7 @@ class ContratProcess implements ProcessInterface
         }
 
 
-        $sql = 'WITH contrat_et_avenants AS (
+        $sql                   = 'WITH contrat_et_avenants AS (
     SELECT 
         c.id AS contrat_id_principal,
         c.debut_validite AS date_debut,
@@ -387,10 +387,10 @@ WHERE
         foreach ($avenantNecessaireDate as $avenant) {
 
             $newAvenant                      = [];
-            $newAvenant['INTERVENANT_ID']    = $avenant['INTERVENANT_ID'];
-            $newAvenant['ANNEE_ID']          = $avenant['ANNEE_ID'];
-            $newAvenant['STRUCTURE_ID']      = $avenant['STRUCTURE_ID'];
-            $newAvenant['CONTRAT_PARENT_ID'] = $avenant['CONTRAT_PARENT_ID'];
+            $newAvenant['INTERVENANT_ID']    = (int)$avenant['INTERVENANT_ID'];
+            $newAvenant['ANNEE_ID']          = (int)$avenant['ANNEE_ID'];
+            $newAvenant['STRUCTURE_ID']      = (int)$avenant['STRUCTURE_ID'];
+            $newAvenant['CONTRAT_PARENT_ID'] = (int)$avenant['CONTRAT_PARENT_ID'];
 
             $newAvenant['UUID'] = 'avenant_' . $newAvenant['INTERVENANT_ID'] . '_' . $newAvenant['CONTRAT_PARENT_ID'];
 
@@ -398,19 +398,19 @@ WHERE
             $newAvenant['SIGNE']                     = 0;
             $newAvenant['TERMINE']                   = 0;
             $newAvenant['TYPE_CONTRAT_ID']           = 2;
-            $newAvenant['MISSION_ID']                = $avenant['MISSION_ID'];
-            $newAvenant['TYPE_SERVICE_ID']           = $avenant['TYPE_SERVICE_ID'];
-            $newAvenant['AUTRES']                    = NULL;
+            $newAvenant['MISSION_ID']                = (int)$avenant['MISSION_ID'];
+            $newAvenant['TYPE_SERVICE_ID']           = (int)$avenant['TYPE_SERVICE_ID'];
+            $newAvenant['AUTRES']                    = 0;
             $newAvenant['AUTRE_LIBELLE']             = NULL;
-            $newAvenant['CM']                        = NULL;
-            $newAvenant['TD']                        = NULL;
-            $newAvenant['TP']                        = NULL;
+            $newAvenant['CM']                        = 0;
+            $newAvenant['TD']                        = 0;
+            $newAvenant['TP']                        = 0;
             $newAvenant['CONTRAT_ID']                = NULL;
             $newAvenant['DATE_CREATION']             = NULL;
             $newAvenant['DATE_DEBUT']                = $avenant['DATE_DEBUT'];
             $newAvenant['DATE_FIN']                  = $avenant['MAX_DATE_FIN_MISSION'];
-            $newAvenant['HETD']                      = NULL;
-            $newAvenant['HEURES']                    = NULL;
+            $newAvenant['HETD']                      = 0;
+            $newAvenant['HEURES']                    = 0;
             $newAvenant['SERVICE_ID']                = NULL;
             $newAvenant['SERVICE_REFERENTIEL_ID']    = NULL;
             $newAvenant['TAUX_CONGES_PAYES']         = NULL;
@@ -431,9 +431,7 @@ WHERE
                 $newAvenant['ACTIF'] = 0;
 
             }
-            if($newAvenant['CONTRAT_PARENT_ID'] == 154){
-                var_dump($newAvenant);
-            }
+
             $this->services[$newAvenant['UUID']] = $newAvenant;
 
         }
@@ -447,7 +445,7 @@ WHERE
     {
         foreach ($this->services as $service) {
 
-            $ldata           = [
+            $ldata = [
                 'INTERVENANT_ID'            => $service['INTERVENANT_ID'],
                 'ANNEE_ID'                  => $service['ANNEE_ID'],
                 'STRUCTURE_ID'              => $service['STRUCTURE_ID'],
@@ -485,6 +483,7 @@ WHERE
                 'TYPE_SERVICE_ID'           => $service['TYPE_SERVICE_ID'],
                 'PROCESS_ID'                => $service['PROCESS_ID'],
             ];
+
             $this->tblData[] = $ldata;
         }
 
@@ -502,7 +501,6 @@ WHERE
 
 //         on force la DDL pour éviter de faire des requêtes en plus
 //        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
-        $table->setDdl(require 'data/ddl/table/TBL_CONTRAT.php');
 
         $options = [
             'where'              => $params,

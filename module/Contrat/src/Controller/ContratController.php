@@ -112,8 +112,8 @@ class ContratController extends AbstractController
             }
         }
 
-        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
-        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+        $contratDirectResult        = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect              = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
         $contratSignatureActivation = false;
         $infosSignature             = [];
         $libelleCircuitSignature    = null;
@@ -638,11 +638,16 @@ class ContratController extends AbstractController
 
     private function updateTableauxBord(Intervenant $intervenant)
     {
-        $this->getServiceWorkflow()->calculerTableauxBord([
-                                                              'formule',
-                                                              'contrat',
-                                                              'mission',
-                                                          ], $intervenant);
+        $errors = $this->getServiceWorkflow()->calculerTableauxBord([
+                                                                        'formule',
+                                                                        'contrat',
+                                                                        'mission',
+                                                                    ], $intervenant);
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                $this->flashMessenger()->addErrorMessage($error->getMessage());
+            }
+        }
     }
 
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e275af1f4ce9d0631d9cc0b09bbb5616",
+    "content-hash": "0dce6f4aaeed31d9c8e4598aa3ca665f",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -2553,75 +2553,6 @@
                 }
             ],
             "time": "2024-11-21T11:31:22+00:00"
-        },
-        {
-            "name": "laminas/laminas-file",
-            "version": "2.13.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-file.git",
-                "reference": "54b354bff5dca67af3452b1f73a0ab66e4c4a5e5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-file/zipball/54b354bff5dca67af3452b1f73a0ab66e4c4a5e5",
-                "reference": "54b354bff5dca67af3452b1f73a0ab66e4c4a5e5",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-stdlib": "^2.7.7 || ^3.15.0",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
-            },
-            "conflict": {
-                "zendframework/zend-file": "*"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "~1.0.0",
-                "laminas/laminas-filter": "^2.23.2",
-                "laminas/laminas-i18n": "^2.7.4",
-                "laminas/laminas-progressbar": "^2.5.2",
-                "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
-                "laminas/laminas-session": "^2.8",
-                "laminas/laminas-validator": "^2.10.1",
-                "phpunit/phpunit": "^9.5.10"
-            },
-            "suggest": {
-                "laminas/laminas-filter": "Laminas\\Filter component",
-                "laminas/laminas-i18n": "Laminas\\I18n component",
-                "laminas/laminas-validator": "Laminas\\Validator component"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\File\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Locate PHP classfiles",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "file",
-                "laminas"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-file/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-file/issues",
-                "rss": "https://github.com/laminas/laminas-file/releases.atom",
-                "source": "https://github.com/laminas/laminas-file"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "abandoned": true,
-            "time": "2023-11-21T14:05:55+00:00"
         },
         {
             "name": "laminas/laminas-filter",
@@ -7375,16 +7306,15 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.2.1",
+            "version": "6.2.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "c29a8b0c673e2df2de59d5e75ef86d92e084f083"
+                "reference": "02ec5343649e0543f39cf60dd9f0cd6f909d382c"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
                 "laminas/laminas-developer-tools": "^2.8",
-                "laminas/laminas-file": "^2.12",
                 "symfony/console": "^6.0|^7.0"
             },
             "type": "library",
@@ -7397,7 +7327,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2024-11-13T13:12:07+00:00"
+            "time": "2024-11-22T11:14:02+00:00"
         },
         {
             "name": "unicaen/import",
@@ -7603,11 +7533,11 @@
         },
         {
             "name": "unicaen/zfc-user",
-            "version": "6.0.1",
+            "version": "6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/zfc-user.git",
-                "reference": "fa0b8b14dd5ac677f0b2aab550de1d4decb61948"
+                "reference": "f968ccd2855759b2019b27ddb60abf1e53b2c660"
             },
             "require": {
                 "laminas/laminas-authentication": "^2.9",
@@ -7618,7 +7548,6 @@
                 "laminas/laminas-hydrator": "^4.3",
                 "laminas/laminas-i18n": "^2.13",
                 "laminas/laminas-inputfilter": "^2.13",
-                "laminas/laminas-loader": "^2.8",
                 "laminas/laminas-modulemanager": "^2.11",
                 "laminas/laminas-mvc": "^3.3",
                 "laminas/laminas-mvc-plugin-flashmessenger": "^1.5",
@@ -7649,7 +7578,7 @@
                 ]
             },
             "description": "A generic user registration and authentication module for ZF2. Supports Laminas\\Db and Doctrine2.",
-            "time": "2023-12-18T16:14:37+00:00"
+            "time": "2024-11-22T10:59:26+00:00"
         },
         {
             "name": "webimpress/safe-writer",

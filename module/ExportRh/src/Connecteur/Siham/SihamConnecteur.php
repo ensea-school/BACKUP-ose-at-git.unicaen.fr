@@ -824,8 +824,14 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
         try {
-            $anneeUniversitaire = $intervenant->getAnnee();
-            $dateSortie         = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
+
+            if (!empty($firstMission)) {
+                $dateSortie = $firstMission->getDateFin()->format('Y-m-d');
+            } else {
+                $anneeUniversitaire = $intervenant->getAnnee();
+                $dateSortie         = $anneeUniversitaire->getDateFin()->format('Y-m-d');
+            }
 
             $matricule = '';
             //On récupére le code RH par le INSEE

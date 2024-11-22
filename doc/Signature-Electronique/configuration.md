@@ -18,7 +18,7 @@ Voici les paramètres à mettre en place  :
         //Répertoir de travail permettant de générer et/ou récupérer physiquement les document au format pdf pour les envoyer par la suite dans le parafeur    
         'documents_path' => __DIR__ . '/data/signature',
 
-        //Paramétrage des logs concernant la signature. Permet d'avoir un certain nomnbre de trace sur le fonctionnement de la signature électronique
+        //Paramétrage des logs concernant la signature. Permet d'avoir un certain nomnbre de traces sur le fonctionnement de la signature électronique
         'logger' => [
             'enable'          => true,
             'level'           => \Monolog\Logger::DEBUG,
@@ -29,7 +29,9 @@ Voici les paramètres à mettre en place  :
 
         ],
 
-        /*Cette partie permet de surcharger les personnes à qui seront envoyées les signatures électroniques. L'envoi des emails étant géré directement par le parafeur cela permet de jouer des circuits de signature sans que les emails partent aux personnes concernées*/
+        /*Cette partie permet de surcharger les personnes à qui seront envoyées les signatures électroniques. 
+        L'envoi des emails étant géré directement par le parafeur cela permet de jouer des circuits de signature 
+        en pré-production sans que les emails partent aux personnes concernées*/
         'hook_recipients' => [
                 ['firstname' => 'Jean',
                  'lastname'  => 'Dupont',
@@ -48,7 +50,7 @@ Voici les paramètres à mettre en place  :
                     'default'     => true,
                     'class'       => \UnicaenSignature\Strategy\Letterfile\Esup\EsupLetterfileStrategy::class,
                     'description' => 'Esup',
-                    //Les différents niveaux de signature à activer au sein de OSE
+                    //Les différents niveaux de signature à activer au sein de OSE, vous pouvez retirer les lignes que vous ne souhaitez pas utiliser avec ose
                     'levels'      => [
                         'visa_hidden' => 'hiddenVisa',
                         'visa_visual' => 'visa',
@@ -86,6 +88,27 @@ Voici les paramètres à mettre en place  :
 ```
 
 # Activer la signature électronique dans OSE
+
+Pour activer la signature dans OSE, il faut se rendre dans les paramètres généraux de ose, et activer la signature électronique en choisissant le parapheur voulu.
+
+![Activation parapheur électronique](param_generaux_signature.png)
+
+Il vous faudra ensuite définit un circuit de signature dans administration > signature électronique > Gestion des circuits de signatures :
+
+![circuit Signature électronique](circuit_signature.png)
+
+![création circuit Signature électronique](gestion_circuit_signature.png)
+
+Un fois le circuit de signature paramétré, il faut paramètrer l'état de sortie du contrat pour qu'il utilise ce circuit de signature en remplacement du fonctionnement habituel de OSE : 
+
+![Paramètrage de l'état de sortie](parametrage_etat_sortie.png)
+
+Maintenant les statuts ayant ce modèle d'état de sortie comme contrat pourront bénéficier de la signature électronique du contrat : 
+
+![Signature électronique du contrat](contrat_signature.png)
+
+
+
 
 
 

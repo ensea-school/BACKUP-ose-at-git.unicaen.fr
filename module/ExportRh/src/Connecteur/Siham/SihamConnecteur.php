@@ -824,8 +824,8 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
         try {
+            //On regarde si on est dans le cas d'une cloture pour une mission étudiante pour mettre la bonne date de sortie
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
-
             if (!empty($firstMission)) {
                 $dateSortie = $firstMission->getDateFin()->format('Y-m-d');
             } else {

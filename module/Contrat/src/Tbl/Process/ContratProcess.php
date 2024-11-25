@@ -56,7 +56,7 @@ class ContratProcess implements ProcessInterface
         } else {
             $this->init($params);
             $this->loadAContractualiser($params);
-            $this->traitement();
+            $this->traitement($params);
             $this->exporter();
             $this->enregistrement($tableauBord, $params);
             $this->clear();
@@ -69,7 +69,7 @@ class ContratProcess implements ProcessInterface
     {
         $this->init();
         $this->heuresAContractualiserSql($params);
-        $this->traitement();
+        $this->traitement($params);
 
         return $this->services;
     }
@@ -126,7 +126,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function traitement()
+    public function traitement(array $params)
     {
 
 
@@ -224,34 +224,41 @@ class ContratProcess implements ProcessInterface
 
             $this->services[$id] = $service;
         }
-        $sqlSansHeure = 'SELECT 
-                c.id contrat_id, 
-                c.contrat_id contrat_parent_id,
-                c.histo_creation date_creation,
-                c.debut_validite date_debut,
-                c.fin_validite date_fin,
-                c.structure_id,
-                vtblcp.mission_id,
-                c.numero_avenant,
-                c.process_signature_id,
-                c.validation_id,
-                vtblcp.taux_remu_id ,
-                vtblcp.taux_remu_majore_id,
-                vtblcp.autre_libelle,
-                vtblcp.taux_conges_payes,
-                vtblcp.type_service_id,
-                vtblcp.intervenant_id,
-                vtblcp.annee_id,
-                c.process_signature_id process_id
+
+        $serviceBdd = $this->getServiceBdd();
+        $sqlVTblContrat = $serviceBdd->getViewDefinition('V_TBL_CONTRAT');
+
+        $sqlSansHeure = "SELECT 
+                    c.id contrat_id, 
+                    c.contrat_id contrat_parent_id,
+                    c.histo_creation date_creation,
+                    c.debut_validite date_debut,
+                    c.fin_validite date_fin,
+                    c.structure_id,
+                    vtblcp.mission_id,
+                    c.numero_avenant,
+                    c.process_signature_id,
+                    c.validation_id,
+                    vtblcp.taux_remu_id ,
+                    vtblcp.taux_remu_majore_id,
+                    vtblcp.autre_libelle,
+                    vtblcp.taux_conges_payes,
+                    vtblcp.type_service_id,
+                    vtblcp.intervenant_id,
+                    vtblcp.annee_id,
+                    c.process_signature_id process_id
                 FROM contrat c
-                LEFT JOIN v_tbl_contrat vtbl ON c.id = vtbl.contrat_id
-                LEFT JOIN v_tbl_contrat vtblcp ON c.contrat_id = vtblcp.contrat_id
+                JOIN INTERVENANT i ON c.intervenant_id = i.id
+                LEFT JOIN ($sqlVTblContrat) vtbl ON c.id = vtbl.contrat_id
+                LEFT JOIN ($sqlVTblContrat) vtblcp ON c.contrat_id = vtblcp.contrat_id
                 WHERE vtbl.contrat_id IS NULL
-                AND c.histo_destruction IS NULL';
+                  AND c.histo_destruction IS NULL
+                  /*@INTERVENANT_ID=c.intervenant_id*/
+                  /*@ANNEE_ID=i.annee_id*/
+                  ";
 
-        $sqlSansHeure .= 'AND c.intervenant_id = :intervenant';
 
-
+        $sqlSansHeure = $serviceBdd->injectKey($sqlSansHeure, $params);
         $contratsSansHeure = \OseAdmin::instance()->getBdd()->select($sqlSansHeure);
 
 
@@ -323,7 +330,8 @@ class ContratProcess implements ProcessInterface
         }
 
 
-        $sql                   = 'WITH contrat_et_avenants AS (
+
+        $sql                   = "WITH contrat_et_avenants AS (
     SELECT 
         c.id AS contrat_id_principal,
         c.debut_validite AS date_debut,
@@ -334,12 +342,15 @@ class ContratProcess implements ProcessInterface
         vtblc.intervenant_id
     FROM 
         contrat c
+    JOIN INTERVENANT i ON c.intervenant_id = i.id
     LEFT JOIN 
         contrat ap ON c.id = ap.contrat_id AND (ap.histo_destruction IS NULL)
     LEFT JOIN
-        v_tbl_contrat vtblc ON vtblc.contrat_id = c.id
+        ($sqlVTblContrat) vtblc ON vtblc.contrat_id = c.id
     WHERE 
         c.histo_destruction IS NULL
+        /*@INTERVENANT_ID=c.intervenant_id*/
+        /*@ANNEE_ID=i.annee_id*/
 ),
 contrats_max_dates AS (
     SELECT 
@@ -359,7 +370,7 @@ missions_dates AS (
         vtblc.mission_id,
         MAX(m.date_fin) AS max_date_fin_mission
     FROM 
-        v_tbl_contrat vtblc
+        ($sqlVTblContrat) vtblc
     JOIN 
         mission m ON vtblc.mission_id = m.id
     WHERE 
@@ -382,9 +393,12 @@ FROM
 LEFT JOIN 
     missions_dates md ON cma.mission_id_principal = md.mission_id
 LEFT JOIN 
-    v_tbl_contrat vtblc ON vtblc.contrat_id = cma.contrat_id_principal
+    ($sqlVTblContrat) vtblc ON vtblc.contrat_id = cma.contrat_id_principal
 WHERE 
-    cma.max_date_fin_contrat < md.max_date_fin_mission';
+    cma.max_date_fin_contrat < md.max_date_fin_mission";
+
+        $sql = $serviceBdd->injectKey($sql, $params);
+
         $avenantNecessaireDate = \OseAdmin::instance()->getBdd()->select($sql);
 
         foreach ($avenantNecessaireDate as $avenant) {

@@ -1,19 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Contrat\Entity\Db\TblContrat" table="TBL_CONTRAT">
-    <id name="id" type="integer" column="ID" />
-    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
-      <join-column name="ANNEE_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant" fetch="LAZY">
-      <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure" fetch="LAZY">
-      <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <field name="actif" type="boolean" column="ACTIF" nullable="false" />
-    <field name="edite" type="float" column="EDITE" precision="126" scale="0" nullable="false" />
-    <field name="signe" type="float" column="SIGNE" precision="126" scale="0" nullable="false" />
-    <field name="nbvh" type="float" column="NBVH" precision="126" scale="0" nullable="false" />
-  </entity>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Contrat\Entity\Db\TblContrat" table="TBL_CONTRAT">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <field name="actif" type="boolean" column="ACTIF" nullable="false"/>
+        <field name="uuid" type="string" column="UUID" length="120" nullable="true"/>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-columns>
+                <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant">
+            <join-columns>
+                <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure">
+            <join-columns>
+                <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="contrat" target-entity="Contrat\Entity\Db\Contrat">
+            <join-columns>
+                <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="contratParent" target-entity="Contrat\Entity\Db\Contrat">
+            <join-columns>
+                <join-column name="CONTRAT_PARENT_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="typeContrat" target-entity="Contrat\Entity\Db\TypeContrat">
+            <join-columns>
+                <join-column name="TYPE_CONTRAT_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <field name="edite" type="float" column="EDITE" nullable="false"/>
+        <field name="signe" type="float" column="SIGNE" nullable="false"/>
+        <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="true"/>
+        <field name="dateFin" type="datetime" column="DATE_FIN" nullable="true"/>
+        <field name="dateCreation" type="datetime" column="DATE_CREATION" nullable="true"/>
+        <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
+            <join-columns>
+                <join-column name="MISSION_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
+            <join-columns>
+                <join-column name="SERVICE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel">
+            <join-columns>
+                <join-column name="SERVICE_REFERENTIEL_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="typeService" target-entity="Service\Entity\Db\TypeService">
+            <join-columns>
+                <join-column name="TYPE_SERVICE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <field name="cm" type="float" column="CM" nullable="true"/>
+        <field name="td" type="float" column="TD" nullable="true"/>
+        <field name="tp" type="float" column="TP" nullable="true"/>
+        <field name="autres" type="float" column="AUTRES" nullable="true"/>
+        <field name="autreLibelle" type="string" column="AUTRE_LIBELLE" length="4000" nullable="true"/>
+        <field name="heures" type="float" column="HEURES" nullable="true"/>
+        <field name="hetd" type="float" column="HETD" nullable="true"/>
+        <many-to-one field="tauxRemu" target-entity="Paiement\Entity\Db\TauxRemu">
+            <join-columns>
+                <join-column name="TAUX_REMU_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <field name="tauxRemuValeur" type="float" column="TAUX_REMU_VALEUR" nullable="true"/>
+        <field name="tauxRemuDate" type="datetime" column="TAUX_REMU_DATE" nullable="true"/>
+        <many-to-one field="tauxRemuMajore" target-entity="Paiement\Entity\Db\TauxRemu">
+            <join-columns>
+                <join-column name="TAUX_REMU_MAJORE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <field name="tauxRemuMajoreValeur" type="float" column="TAUX_REMU_MAJORE_VALEUR" nullable="true"/>
+        <field name="tauxRemuMajoreDate" type="datetime" column="TAUX_REMU_MAJORE_DATE" nullable="true"/>
+        <field name="tauxCongesPayes" type="float" column="TAUX_CONGES_PAYES" nullable="true"/>
+        <many-to-one field="volumeHoraire" target-entity="Enseignement\Entity\Db\VolumeHoraire">
+            <join-columns>
+                <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="volumeHoraireMission" target-entity="Mission\Entity\Db\VolumeHoraireMission">
+            <join-columns>
+                <join-column name="VOLUME_HORAIRE_MISSION_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="volumeHoraireRef" target-entity="Referentiel\Entity\Db\VolumeHoraireReferentiel">
+            <join-columns>
+                <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <field name="nbvh" type="float" column="NBVH" nullable="false"/>
+    </entity>
 </doctrine-mapping>

@@ -2,8 +2,11 @@
 
 namespace Application\Form;
 
-use Application\Entity\Db\EtatSortie;
-use Laminas\Hydrator\HydratorInterface;
+
+use Application\Hydrator\EtatSortieHydrator;
+use Signature\Service\SignatureFlowServiceAwareTrait;
+use UnicaenApp\Util;
+use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
 
 
 /**
@@ -13,164 +16,193 @@ use Laminas\Hydrator\HydratorInterface;
  */
 class EtatSortieForm extends AbstractForm
 {
+    use SignatureFlowServiceAwareTrait;
+    use SignatureConfigurationServiceAwareTrait;
+
+
     public function init()
     {
-        $hydrator = new EtatSortieHydrator;
+        $hydrator = new EtatSortieHydrator();
         $this->setHydrator($hydrator);
 
 
         $this->setAttributes([
-            'action'  => $this->getCurrentUrl(),
-            'class'   => 'etat-sortie-saisir',
-            'enctype' => 'multipart/form-data',
-        ]);
+                                 'action'  => $this->getCurrentUrl(),
+                                 'class'   => 'etat-sortie-saisir',
+                                 'enctype' => 'multipart/form-data',
+                             ]);
 
         $this->add([
-            'type'    => 'Text',
-            'name'    => 'code',
-            'options' => [
-                'label' => "Code",
-            ],
-        ]);
+                       'type'    => 'Text',
+                       'name'    => 'code',
+                       'options' => [
+                           'label' => "Code",
+                       ],
+                   ]);
 
         $this->add([
-            'type'    => 'Text',
-            'name'    => 'libelle',
-            'options' => [
-                'label' => "Libellé",
-            ],
-        ]);
+                       'type'    => 'Text',
+                       'name'    => 'libelle',
+                       'options' => [
+                           'label' => "Libellé",
+                       ],
+                   ]);
 
         $this->add([
-            'type'    => 'Text',
-            'name'    => 'cle',
-            'options' => [
-                'label' => "Champ clé",
-            ],
-        ]);
+                       'type'    => 'Text',
+                       'name'    => 'cle',
+                       'options' => [
+                           'label' => "Champ clé",
+                       ],
+                   ]);
 
         $this->add([
-            'type'       => 'Textarea',
-            'name'       => 'csv-params',
-            'options'    => [
-                'label' => "Paramètres d'export CSV (format JSON)",
-            ],
-            'attributes' => [
-                'id'   => 'csv-params',
-                'rows' => '25',
-            ],
-        ]);
+                       'type'       => 'Textarea',
+                       'name'       => 'csv-params',
+                       'options'    => [
+                           'label' => "Paramètres d'export CSV (format JSON)",
+                       ],
+                       'attributes' => [
+                           'id'   => 'csv-params',
+                           'rows' => '25',
+                       ],
+                   ]);
 
         $this->add([
-            'type'       => 'Textarea',
-            'name'       => 'pdf-traitement',
-            'options'    => [
-                'label' => "Traitement des données (code PHP)",
-            ],
-            'attributes' => [
-                'id'   => 'pdf-traitement',
-                'rows' => '25',
-            ],
-        ]);
+                       'type'       => 'Textarea',
+                       'name'       => 'pdf-traitement',
+                       'options'    => [
+                           'label' => "Traitement des données (code PHP)",
+                       ],
+                       'attributes' => [
+                           'id'   => 'pdf-traitement',
+                           'rows' => '25',
+                       ],
+                   ]);
 
         $this->add([
-            'type'       => 'Textarea',
-            'name'       => 'csv-traitement',
-            'options'    => [
-                'label' => "Traitement des données (code PHP)",
-            ],
-            'attributes' => [
-                'id'   => 'csv-traitement',
-                'rows' => '25',
-            ],
-        ]);
+                       'type'       => 'Textarea',
+                       'name'       => 'csv-traitement',
+                       'options'    => [
+                           'label' => "Traitement des données (code PHP)",
+                       ],
+                       'attributes' => [
+                           'id'   => 'csv-traitement',
+                           'rows' => '25',
+                       ],
+                   ]);
 
         $this->add([
-            'type'    => 'Checkbox',
-            'name'    => 'auto-break',
-            'options' => [
-                'label'              => 'Saut de page automatique : en cas de publipostage, chaque copie démarre en haut de page plutôt qu\'à la suite',
-                'use_hidden_element' => true,
-                'checked_value'      => 'true',
-                'unchecked_value'    => 'false',
-            ],
-        ]);
+                       'type'    => 'Checkbox',
+                       'name'    => 'auto-break',
+                       'options' => [
+                           'label'              => 'Saut de page automatique : en cas de publipostage, chaque copie démarre en haut de page plutôt qu\'à la suite',
+                           'use_hidden_element' => true,
+                           'checked_value'      => 'true',
+                           'unchecked_value'    => 'false',
+                       ],
+                   ]);
 
         $this->add([
-            'type'       => 'File',
-            'name'       => 'fichier',
-            'options'    => [
-                'label'         => "Modèle au format OpenDocument Texte (ODT) <small>(à fournir seulement si changement)</small>",
-                'label_options' => ['disable_html_escape' => true],
-            ],
-            'attributes' => [
-                'id'       => 'fichier',
-                'multiple' => false,
-                'accept'   => 'application/vnd.oasis.opendocument.text',
-            ],
-        ]);
+                       'type'       => 'File',
+                       'name'       => 'fichier',
+                       'options'    => [
+                           'label'         => "Modèle au format OpenDocument Texte (ODT) <small>(à fournir seulement si changement)</small>",
+                           'label_options' => ['disable_html_escape' => true],
+                       ],
+                       'attributes' => [
+                           'id'       => 'fichier',
+                           'multiple' => false,
+                           'accept'   => 'application/vnd.oasis.opendocument.text',
+                       ],
+                   ]);
 
         $this->add([
-            'type'       => 'Textarea',
-            'name'       => 'requete',
-            'options'    => [
-                'label' => "Requête SQL",
-            ],
-            'attributes' => [
-                'id'   => 'requete',
-                'rows' => '20',
-            ],
-        ]);
+                       'type'       => 'Textarea',
+                       'name'       => 'requete',
+                       'options'    => [
+                           'label' => "Requête SQL",
+                       ],
+                       'attributes' => [
+                           'id'   => 'requete',
+                           'rows' => '20',
+                       ],
+                   ]);
+
+        $this->add([
+                       'type'    => 'Select',
+                       'name'    => "signatureActivation",
+                       'options' => [
+                           'label'         => "Activer la signature électronique pour cet état de sortie",
+                           'value_options' => [
+                               1 => 'Oui',
+                               0 => 'Non',
+                           ],
+                       ],
+                   ]);
+
+        $this->add([
+                       'type'    => 'Select',
+                       'name'    => "signatureCircuit",
+                       'options' => [
+                           'label'         => "Circuit à utiliser pour la signature électronique",
+                           'value_options' => ['' => '(Sélectionnez un circuit)'] + Util::collectionAsOptions($this->getServiceSignatureFlow()->getList()),
+                       ],
+                   ]);
+
 
         for ($i = 1; $i <= 10; $i++) {
             $this->add([
-                'type'       => 'Text',
-                'name'       => "bloc-$i-nom",
-                'options'    => [
-                    'label' => "Nom",
-                ],
-                'attributes' => [
-                    'class' => 'form-control bloc-nom',
-                    'style' => 'width:30%',
-                ],
-            ]);
+                           'type'       => 'Text',
+                           'name'       => "bloc-$i-nom",
+                           'options'    => [
+                               'label' => "Nom",
+                           ],
+                           'attributes' => [
+                               'class' => 'form-control bloc-nom',
+                               'style' => 'width:30%',
+                           ],
+                       ]);
 
             $this->add([
-                'type'       => 'Select',
-                'name'       => "bloc-$i-zone",
-                'options'    => [
-                    'label'         => "",
-                    'value_options' => [
-                        'table:table-row' => 'Tableau',
-                    ],
-                ],
-                'attributes' => [
-                    'class' => 'form-control bloc-zone',
-                    'style' => 'width:30%',
-                ],
-            ]);
+                           'type'       => 'Select',
+                           'name'       => "bloc-$i-zone",
+                           'options'    => [
+                               'label'         => "",
+                               'value_options' => [
+                                   'table:table-row' => 'Tableau',
+                               ],
+                           ],
+                           'attributes' => [
+                               'class' => 'form-control bloc-zone',
+                               'style' => 'width:30%',
+                           ],
+                       ]);
 
             $this->add([
-                'type'       => 'Textarea',
-                'name'       => "bloc-$i-requete",
-                'options'    => [
-                    'label' => "Requête générale",
-                ],
-                'attributes' => [
-                    'id'   => "bloc-$i-requete",
-                    'rows' => '15',
-                ],
-            ]);
+                           'type'       => 'Textarea',
+                           'name'       => "bloc-$i-requete",
+                           'options'    => [
+                               'label' => "Requête générale",
+                           ],
+                           'attributes' => [
+                               'id'   => "bloc-$i-requete",
+                               'rows' => '15',
+                           ],
+                       ]);
         }
 
+
         $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => 'Enregistrer',
-                'class' => 'btn btn-primary btn-save',
-            ],
-        ]);
+                       'name'       => 'submit',
+                       'type'       => 'Submit',
+                       'attributes' => [
+                           'value' => 'Enregistrer',
+                           'class' => 'btn btn-primary btn-save',
+                       ],
+                   ]);
+
+
     }
 
 
@@ -184,6 +216,12 @@ class EtatSortieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         $filters = [
+            "signatureActivation" => [
+                'required' => false,
+            ],
+            "signatureCircuit"    => [
+                'required' => false,
+            ],
         ];
 
         for ($i = 1; $i <= 10; $i++) {
@@ -195,80 +233,3 @@ class EtatSortieForm extends AbstractForm
     }
 }
 
-
-
-
-
-class EtatSortieHydrator implements HydratorInterface
-{
-
-    /**
-     * @param array      $data
-     * @param EtatSortie $object
-     *
-     * @return object
-     */
-    public function hydrate(array $data, $object)
-    {
-        $object->setCode($data['code']);
-        $object->setLibelle($data['libelle']);
-        $object->setCle($data['cle']);
-        $object->setCsvParams($data['csv-params']);
-        $object->setPdfTraitement($data['pdf-traitement']);
-        $object->setCsvTraitement($data['csv-traitement']);
-        $object->setAutoBreak($data['auto-break'] === 'true');
-        $object->setRequete($data['requete']);
-        if (isset($data['fichier']['tmp_name']) && $data['fichier']['tmp_name']) {
-            $object->setFichier(file_get_contents($data['fichier']['tmp_name']));
-            unlink($data['fichier']['tmp_name']);
-        }
-
-        $blocs = [];
-
-        for ($i = 1; $i <= 10; $i++) {
-            if (isset($data["bloc-$i-nom"]) && $data["bloc-$i-nom"]
-                && isset($data["bloc-$i-requete"]) && $data["bloc-$i-requete"]) {
-                $blocs[$data["bloc-$i-nom"]] = [
-                    'nom'     => $data["bloc-$i-nom"],
-                    'zone'    => $data["bloc-$i-zone"],
-                    'requete' => $data["bloc-$i-requete"],
-                ];
-            }
-        }
-        $object->setBlocs($blocs);
-
-        return $object;
-    }
-
-
-
-    /**
-     * @param EtatSortie $object
-     *
-     * @return array
-     */
-    public function extract($object): array
-    {
-        $data = [
-            'code'           => $object->getCode(),
-            'libelle'        => $object->getLibelle(),
-            'cle'            => $object->getCle(),
-            'csv-params'     => $object->getCsvParams(),
-            'pdf-traitement' => $object->getPdfTraitement(),
-            'csv-traitement' => $object->getCsvTraitement(),
-            'auto-break'     => $object->isAutoBreak() ? 'true' : 'false',
-            'requete'        => $object->getRequete(),
-        ];
-
-        $blocs = $object->getBlocs();
-        $i     = 1;
-        foreach ($blocs as $nom => $boptions) {
-            $data["bloc-$i-nom"]     = $boptions['nom'];
-            $data["bloc-$i-zone"]    = $boptions['zone'];
-            $data["bloc-$i-requete"] = $boptions['requete'];
-            $i++;
-        }
-
-        return $data;
-    }
-}

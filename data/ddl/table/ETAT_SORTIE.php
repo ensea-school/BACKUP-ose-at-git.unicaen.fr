@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'ETAT_SORTIE_ID_SEQ',
     'columns'     => [
-        'AUTO_BREAK'     => [
+        'AUTO_BREAK'           => [
             'name'        => 'AUTO_BREAK',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'BLOC10_NOM'     => [
+        'BLOC10_NOM'           => [
             'name'        => 'BLOC10_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -33,7 +33,7 @@ return [
             'position'    => 38,
             'commentaire' => NULL,
         ],
-        'BLOC10_REQUETE' => [
+        'BLOC10_REQUETE'       => [
             'name'        => 'BLOC10_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -45,7 +45,7 @@ return [
             'position'    => 40,
             'commentaire' => NULL,
         ],
-        'BLOC10_ZONE'    => [
+        'BLOC10_ZONE'          => [
             'name'        => 'BLOC10_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -57,7 +57,7 @@ return [
             'position'    => 39,
             'commentaire' => NULL,
         ],
-        'BLOC1_NOM'      => [
+        'BLOC1_NOM'            => [
             'name'        => 'BLOC1_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -69,7 +69,7 @@ return [
             'position'    => 11,
             'commentaire' => NULL,
         ],
-        'BLOC1_REQUETE'  => [
+        'BLOC1_REQUETE'        => [
             'name'        => 'BLOC1_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -81,7 +81,7 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
-        'BLOC1_ZONE'     => [
+        'BLOC1_ZONE'           => [
             'name'        => 'BLOC1_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -93,7 +93,7 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
-        'BLOC2_NOM'      => [
+        'BLOC2_NOM'            => [
             'name'        => 'BLOC2_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -105,7 +105,7 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
-        'BLOC2_REQUETE'  => [
+        'BLOC2_REQUETE'        => [
             'name'        => 'BLOC2_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -117,7 +117,7 @@ return [
             'position'    => 16,
             'commentaire' => NULL,
         ],
-        'BLOC2_ZONE'     => [
+        'BLOC2_ZONE'           => [
             'name'        => 'BLOC2_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -129,7 +129,7 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
-        'BLOC3_NOM'      => [
+        'BLOC3_NOM'            => [
             'name'        => 'BLOC3_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -141,7 +141,7 @@ return [
             'position'    => 17,
             'commentaire' => NULL,
         ],
-        'BLOC3_REQUETE'  => [
+        'BLOC3_REQUETE'        => [
             'name'        => 'BLOC3_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -153,7 +153,7 @@ return [
             'position'    => 19,
             'commentaire' => NULL,
         ],
-        'BLOC3_ZONE'     => [
+        'BLOC3_ZONE'           => [
             'name'        => 'BLOC3_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -165,7 +165,7 @@ return [
             'position'    => 18,
             'commentaire' => NULL,
         ],
-        'BLOC4_NOM'      => [
+        'BLOC4_NOM'            => [
             'name'        => 'BLOC4_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -177,7 +177,7 @@ return [
             'position'    => 20,
             'commentaire' => NULL,
         ],
-        'BLOC4_REQUETE'  => [
+        'BLOC4_REQUETE'        => [
             'name'        => 'BLOC4_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -189,7 +189,7 @@ return [
             'position'    => 22,
             'commentaire' => NULL,
         ],
-        'BLOC4_ZONE'     => [
+        'BLOC4_ZONE'           => [
             'name'        => 'BLOC4_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -201,7 +201,7 @@ return [
             'position'    => 21,
             'commentaire' => NULL,
         ],
-        'BLOC5_NOM'      => [
+        'BLOC5_NOM'            => [
             'name'        => 'BLOC5_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -213,7 +213,7 @@ return [
             'position'    => 23,
             'commentaire' => NULL,
         ],
-        'BLOC5_REQUETE'  => [
+        'BLOC5_REQUETE'        => [
             'name'        => 'BLOC5_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -225,7 +225,7 @@ return [
             'position'    => 25,
             'commentaire' => NULL,
         ],
-        'BLOC5_ZONE'     => [
+        'BLOC5_ZONE'           => [
             'name'        => 'BLOC5_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -237,7 +237,7 @@ return [
             'position'    => 24,
             'commentaire' => NULL,
         ],
-        'BLOC6_NOM'      => [
+        'BLOC6_NOM'            => [
             'name'        => 'BLOC6_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -249,7 +249,7 @@ return [
             'position'    => 26,
             'commentaire' => NULL,
         ],
-        'BLOC6_REQUETE'  => [
+        'BLOC6_REQUETE'        => [
             'name'        => 'BLOC6_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -261,7 +261,7 @@ return [
             'position'    => 27,
             'commentaire' => NULL,
         ],
-        'BLOC6_ZONE'     => [
+        'BLOC6_ZONE'           => [
             'name'        => 'BLOC6_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -273,7 +273,7 @@ return [
             'position'    => 28,
             'commentaire' => NULL,
         ],
-        'BLOC7_NOM'      => [
+        'BLOC7_NOM'            => [
             'name'        => 'BLOC7_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -285,7 +285,7 @@ return [
             'position'    => 29,
             'commentaire' => NULL,
         ],
-        'BLOC7_REQUETE'  => [
+        'BLOC7_REQUETE'        => [
             'name'        => 'BLOC7_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -297,7 +297,7 @@ return [
             'position'    => 31,
             'commentaire' => NULL,
         ],
-        'BLOC7_ZONE'     => [
+        'BLOC7_ZONE'           => [
             'name'        => 'BLOC7_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -309,7 +309,7 @@ return [
             'position'    => 30,
             'commentaire' => NULL,
         ],
-        'BLOC8_NOM'      => [
+        'BLOC8_NOM'            => [
             'name'        => 'BLOC8_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -321,7 +321,7 @@ return [
             'position'    => 32,
             'commentaire' => NULL,
         ],
-        'BLOC8_REQUETE'  => [
+        'BLOC8_REQUETE'        => [
             'name'        => 'BLOC8_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -333,7 +333,7 @@ return [
             'position'    => 34,
             'commentaire' => NULL,
         ],
-        'BLOC8_ZONE'     => [
+        'BLOC8_ZONE'           => [
             'name'        => 'BLOC8_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -345,7 +345,7 @@ return [
             'position'    => 33,
             'commentaire' => NULL,
         ],
-        'BLOC9_NOM'      => [
+        'BLOC9_NOM'            => [
             'name'        => 'BLOC9_NOM',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -357,7 +357,7 @@ return [
             'position'    => 35,
             'commentaire' => NULL,
         ],
-        'BLOC9_REQUETE'  => [
+        'BLOC9_REQUETE'        => [
             'name'        => 'BLOC9_REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -369,7 +369,7 @@ return [
             'position'    => 37,
             'commentaire' => NULL,
         ],
-        'BLOC9_ZONE'     => [
+        'BLOC9_ZONE'           => [
             'name'        => 'BLOC9_ZONE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -381,7 +381,7 @@ return [
             'position'    => 36,
             'commentaire' => NULL,
         ],
-        'CLE'            => [
+        'CLE'                  => [
             'name'        => 'CLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -393,7 +393,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'CODE'           => [
+        'CODE'                 => [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -405,7 +405,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'CSV_PARAMS'     => [
+        'CSV_PARAMS'           => [
             'name'        => 'CSV_PARAMS',
             'type'        => 'clob',
             'bdd-type'    => 'CLOB',
@@ -417,7 +417,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'CSV_TRAITEMENT' => [
+        'CSV_TRAITEMENT'       => [
             'name'        => 'CSV_TRAITEMENT',
             'type'        => 'clob',
             'bdd-type'    => 'CLOB',
@@ -429,7 +429,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'FICHIER'        => [
+        'FICHIER'              => [
             'name'        => 'FICHIER',
             'type'        => 'blob',
             'bdd-type'    => 'BLOB',
@@ -441,7 +441,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'ID'             => [
+        'ID'                   => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -453,7 +453,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'LIBELLE'        => [
+        'LIBELLE'              => [
             'name'        => 'LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -465,7 +465,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'PDF_TRAITEMENT' => [
+        'PDF_TRAITEMENT'       => [
             'name'        => 'PDF_TRAITEMENT',
             'type'        => 'clob',
             'bdd-type'    => 'CLOB',
@@ -477,7 +477,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'REQUETE'        => [
+        'REQUETE'              => [
             'name'        => 'REQUETE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -487,6 +487,30 @@ return [
             'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 5,
+            'commentaire' => NULL,
+        ],
+        'SIGNATURE_ACTIVATION' => [
+            'name'        => 'SIGNATURE_ACTIVATION',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 41,
+            'commentaire' => NULL,
+        ],
+        'SIGNATURE_CIRCUIT_ID' => [
+            'name'        => 'SIGNATURE_CIRCUIT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 38,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 42,
             'commentaire' => NULL,
         ],
     ],

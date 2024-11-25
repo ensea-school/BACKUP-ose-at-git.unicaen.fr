@@ -22,6 +22,7 @@ use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Lieu\Entity\Db\Etablissement;
+use Lieu\Entity\Db\Structure;
 use Lieu\Service\EtablissementServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
@@ -527,13 +528,13 @@ class EnseignementController extends AbstractController
         $this->initFilters();
 
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
-        /* @var $typeVolumeHoraire TypeVolumeHoraire */
+        /* @var TypeVolumeHoraire $typeVolumeHoraire */
 
         $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
+        /* @var Intervenant $intervenant */
 
         $structure = $this->getEvent()->getParam('structure');
-        /* @var $structure Structure */
+        /* @var Structure $structure */
 
 
         $plafondOk = $this->getProcessusPlafond()->controle($intervenant, $typeVolumeHoraire, true);

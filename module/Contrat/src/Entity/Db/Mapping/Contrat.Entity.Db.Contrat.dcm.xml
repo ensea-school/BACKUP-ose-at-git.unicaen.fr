@@ -71,9 +71,9 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
+        <many-to-one field="processSignature" target-entity="UnicaenSignature\Entity\Db\Process" fetch="EAGER">
             <join-columns>
-                <join-column name="MISSION_ID" referenced-column-name="ID"/>
+                <join-column name="PROCESS_SIGNATURE_ID"/>
             </join-columns>
         </many-to-one>
     </entity>

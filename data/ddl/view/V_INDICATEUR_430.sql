@@ -9,9 +9,12 @@ SELECT
 FROM
   intervenant i
   JOIN tbl_workflow w ON w.intervenant_id = i.id
-  JOIN tbl_contrat c ON c.intervenant_id = i.id
+  JOIN tbl_contrat tblc ON tblc.intervenant_id = i.id
+  JOIN type_service ts ON tblc.type_service_id = ts.id
 WHERE
   w.atteignable = 1
   AND w.etape_code = 'CONTRAT'
-  AND c.edite > 0
-  AND c.edite < c.NBVH
+  AND tblc.contrat_id IS NULL
+  AND tblc.contrat_parent_id IS NOT NULL
+  AND tblc.actif = 1
+  AND ts.code != 'MIS'

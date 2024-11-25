@@ -127,6 +127,8 @@
                             <li><strong>:url :</strong> Lien html vers la page contrat de l'intervenant</li>
                         </ul>
                         </p>
+                        <?= $this->formControlGroup($form->get('contrat_ens')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_mis')); ?>
                         <?= $this->formControlGroup($form->get('avenant')); ?>
                         <?= $this->formControlGroup($form->get('contrat_direct')); ?>
                         <?= $this->formControlGroup($form->get('contrat_date')); ?>
@@ -174,6 +176,19 @@
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('export_rh_franchissement')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Signature électronique</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('signature_electronique_parapheur')); ?>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,65 @@
+<h1>Liste des parapheurs configurés</h1>
+<?php foreach ($parapheurs as $key => $parapheur): ?>
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="true"
+                    :aria-controls="<?= $key ?>">
+
+                <?= $parapheur['label'] ?>
+
+            </button>
+
+        </h2>
+        <div class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <hr class="space">
+                <div class="row">
+                    <div class="col-md-5"><strong>Description</strong> :</div>
+                    <div class="col-md-5"><?= $parapheur['description'] ?></div>
+                </div>
+                <hr class="space">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <strong>Niveau(x) de signature disponible(s) :</strong>
+
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table table-bordered ">
+                            <tbody>
+                            <?php foreach ($parapheur['levels'] as $key => $level): ?>
+                                <tr>
+                                    <td><strong><?= $key ?></strong></td>
+                                    <td><?= $level ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr class="space"/>
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <strong>Configuration spécifique :</strong>
+
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table table-bordered ">
+                            <tbody>
+                            <?php foreach ($parapheur['config'] as $key => $value): ?>
+                                <tr>
+                                    <td><strong><?= $key ?></strong></td>
+                                    <td><?= $value ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<?php endforeach; ?>

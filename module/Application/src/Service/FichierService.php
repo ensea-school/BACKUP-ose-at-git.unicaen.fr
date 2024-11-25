@@ -81,6 +81,43 @@ class FichierService extends AbstractEntityService
 
 
 
+    public function getConfigStockage(): string
+    {
+        $conf     = \OseAdmin::instance()->config()->get('fichiers');
+        $stockage = isset($conf['stockage']) ? $conf['stockage'] : 'bdd';
+
+        return $stockage;
+    }
+
+
+
+    public function getFichierFilename(Fichier $fichier): string
+    {
+        if (!$fichier->getId()) {
+            throw new \Exception('Le contenu ne peut pas être récupéré ou stocké : le fichier n\'a pas d\'ID');
+        }
+
+        $id       = $fichier->getId();
+        $filename = 'd' . (str_pad((string)floor($id / 1000), 4, '0', STR_PAD_LEFT))
+            . '/f'
+            . str_pad((string)($id % 1000), 3, '0', STR_PAD_LEFT);
+
+        return $this->getConfigDir() . $filename;
+    }
+
+
+
+    protected function getConfigDir(): string
+    {
+        $conf = \OseAdmin::instance()->config()->get('fichiers');
+        $dir  = isset($conf['dir']) ? $conf['dir'] : 'data/fichiers';
+        if (substr($dir, -1) != '/') $dir .= '/';
+
+        return $dir;
+    }
+
+
+
     public function isValide(Fichier $fichier): bool
     {
         $exts = [
@@ -180,22 +217,6 @@ class FichierService extends AbstractEntityService
         }
 
         return $fichier->getContenu(true);
-    }
-
-
-
-    protected function getFichierFilename(Fichier $fichier): string
-    {
-        if (!$fichier->getId()) {
-            throw new \Exception('Le contenu ne peut pas être récupéré ou stocké : le fichier n\'a pas d\'ID');
-        }
-
-        $id       = $fichier->getId();
-        $filename = 'd' . (str_pad((string)floor($id / 1000), 4, '0', STR_PAD_LEFT))
-            . '/f'
-            . str_pad((string)($id % 1000), 3, '0', STR_PAD_LEFT);
-
-        return $this->getConfigDir() . $filename;
     }
 
 

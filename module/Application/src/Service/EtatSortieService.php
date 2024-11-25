@@ -28,6 +28,7 @@ class EtatSortieService extends AbstractEntityService
     private $config;
 
 
+
     /**
      * retourne la classe des entités
      *
@@ -38,6 +39,7 @@ class EtatSortieService extends AbstractEntityService
     {
         return EtatSortie::class;
     }
+
 
 
     /**
@@ -51,6 +53,7 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
+
     /**
      * @param string $param
      *
@@ -60,7 +63,7 @@ class EtatSortieService extends AbstractEntityService
     public function getByParametre(string $param): EtatSortie
     {
         $etatSortieId = $this->getServiceParametres()->get($param);
-        $etatSortie = $this->get($etatSortieId);
+        $etatSortie   = $this->get($etatSortieId);
         if (!$etatSortie) {
             throw new \Exception('Etat de sortie "' . $param . '" non configuré dans les paramètres de OSE');
         }
@@ -69,10 +72,11 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
+
     /***
      * @param EtatSortie $etatSortie
-     * @param array $filtres
-     * @param array $options
+     * @param array      $filtres
+     * @param array      $options
      *
      * @return Document
      * @throws \Exception
@@ -96,8 +100,8 @@ class EtatSortieService extends AbstractEntityService
         }
 
         $entityManager = $this->getEntityManager();
-        $data = $this->generateData($etatSortie, $filtres);
-        $role = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
+        $data          = $this->generateData($etatSortie, $filtres);
+        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
 
         if (trim($etatSortie->getPdfTraitement())) {
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getPdfTraitement();
@@ -105,20 +109,20 @@ class EtatSortieService extends AbstractEntityService
             $traitement = function () use ($document, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
                 $dir = getcwd();
 
-                if (\AppAdmin::inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')){
-                    $filename = getcwd().'/code/'.substr($__PHP__CODE__TRAITEMENT__,strlen('UnicaenCode:')).'.php';
-                    if (file_exists($filename)){
+                if (\AppAdmin::inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')) {
+                    $filename = getcwd() . '/code/' . substr($__PHP__CODE__TRAITEMENT__, strlen('UnicaenCode:')) . '.php';
+                    if (file_exists($filename)) {
                         require $filename;
-                    }else{
-                        die('Fichier "'.$filename.'" introuvable');
+                    } else {
+                        die('Fichier "' . $filename . '" introuvable');
                     }
-                }else{
+                } else {
                     eval($__PHP__CODE__TRAITEMENT__);
                 }
 
                 return $data;
             };
-            $data = $traitement();
+            $data       = $traitement();
         }
         if (!$document->getPublisher()->isPublished()) $document->publish($data);
 
@@ -270,6 +274,7 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
+
     private function generateDataWithCle(EtatSortie $etatSortie, array $filtres)
     {
         $cle = $etatSortie->getCle();
@@ -288,7 +293,7 @@ class EtatSortieService extends AbstractEntityService
 
         $blocs = $etatSortie->getBlocs();
         foreach ($blocs as $bname => $boptions) {
-            $bdata = $this->connBlocFetch($boptions['requete'], $etatSortie->getRequete(), $cle, $filtres);
+            $bdata   = $this->connBlocFetch($boptions['requete'], $etatSortie->getRequete(), $cle, $filtres);
             $blocKey = $boptions['nom'] . '@' . $boptions['zone'];
             foreach ($bdata as $d) {
                 if (!array_key_exists($cle, $d)) {
@@ -306,11 +311,12 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
+
     private function connFetch(string $sql, array $filtres)
     {
         $connection = $this->getEntityManager()->getConnection();
 
-        $query = "SELECT q.* FROM ($sql) q WHERE 1=1";
+        $query        = "SELECT q.* FROM ($sql) q WHERE 1=1";
         $queryFilters = $filtres;
         foreach ($filtres as $filtre => $values) {
             if (is_array($values)) {
@@ -319,13 +325,13 @@ class EtatSortieService extends AbstractEntityService
                 $query .= " AND (";
                 foreach ($values as $val) {
                     $op = '=';
-                    if (str_contains($val, '%')){
+                    if (str_contains($val, '%')) {
                         $op = 'LIKE';
                     }
                     if ($index > 0) {
                         $query .= ' OR ';
                     }
-                    $query .= "q.\"$filtre\" $op :$filtre$index";
+                    $query                          .= "q.\"$filtre\" $op :$filtre$index";
                     $queryFilters[$filtre . $index] = $val;
                     $index++;
                 }
@@ -333,14 +339,14 @@ class EtatSortieService extends AbstractEntityService
             } else {
                 if (false !== strpos($filtre, ' OR ')) {
                     $newFiltre = str_replace(' ', '_', $filtre);
-                    $op = '=';
-                    if (str_contains($values, '%')){
+                    $op        = '=';
+                    if (str_contains($values, '%')) {
                         $op = 'LIKE';
                     }
                     $queryFilters[$newFiltre] = $queryFilters[$filtre];
                     unset($queryFilters[$filtre]);
                     $orFiltres = explode(" OR ", $filtre);
-                    $orQuery = '';
+                    $orQuery   = '';
                     foreach ($orFiltres as $orFiltre) {
                         if ($orQuery) $orQuery .= ' OR ';
                         $orQuery .= "q.\"$orFiltre\" $op :$newFiltre";
@@ -348,7 +354,7 @@ class EtatSortieService extends AbstractEntityService
                     $query .= " AND ($orQuery)";
                 } else {
                     $op = '=';
-                    if (str_contains($values, '%')){
+                    if (str_contains($values, '%')) {
                         $op = 'LIKE';
                     }
 
@@ -361,11 +367,12 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
+
     private function connBlocFetch(string $sql, string $mainSql, string $cle, array $filtres)
     {
         $connection = $this->getEntityManager()->getConnection();
 
-        $query = "SELECT q.* FROM ($sql) q JOIN ($mainSql) mq ON mq.\"$cle\" = q.\"$cle\" WHERE 1=1";
+        $query        = "SELECT q.* FROM ($sql) q JOIN ($mainSql) mq ON mq.\"$cle\" = q.\"$cle\" WHERE 1=1";
         $queryFilters = $filtres;
         foreach ($filtres as $filtre => $values) {
             if (is_array($values)) {
@@ -376,7 +383,7 @@ class EtatSortieService extends AbstractEntityService
                     if ($index > 0) {
                         $query .= ' OR ';
                     }
-                    $query .= "mq.\"$filtre\" = :$filtre$index";
+                    $query                          .= "mq.\"$filtre\" = :$filtre$index";
                     $queryFilters[$filtre . $index] = $val;
                     $index++;
                 }
@@ -390,23 +397,98 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
-    /**
-     * @return array
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
 
     /**
-     * @param array $config
+     * @param EtatSortie $etatSortie
+     * @param array      $filtres
+     * @param array      $options
      *
-     * @return EtatSortieService
+     * @return CsvModel
+     * @throws \Exception
      */
-    public function setConfig(array $config): EtatSortieService
+    public function genererCsv(EtatSortie $etatSortie, array $filtres, array $options = []): CsvModel
     {
-        $this->config = $config;
+        $csv = new CsvModel();
+        //Uniquement dans le cas de la préliquidation siham
+        if ($etatSortie->getCode() == 'preliquidation-siham') {
+            $periode      = (array_key_exists('periode', $options)) ? $options['periode'] : null;
+            $periodeCode  = (array_key_exists('periode', $options)) ? $periode->getCode() : null;
+            $filtresAnnee = (array_key_exists('ANNEE_ID', $filtres)) ? $filtres['ANNEE_ID'] : null;
+            if ($filtresAnnee) {
+                $this->setAnneePaie($filtresAnnee, $periodeCode);
+            }
+            if ($periode) {
+                $this->setMoisPaie($periodeCode);
+
+            }
+        }
+
+        $entityManager = $this->getEntityManager();
+        $data          = $this->generateData($etatSortie, $filtres);
+        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
+
+
+        if (trim($etatSortie->getCsvTraitement() ?? '')) {
+            $__PHP__CODE__TRAITEMENT__ = $etatSortie->getCsvTraitement();
+            // Isolation de traitement pour éviter tout débordement...
+            $traitement = function () use ($csv, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
+                $dir = getcwd();
+
+                if (\OseAdmin::instance()->env()->inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')) {
+                    $filename = getcwd() . '/code/' . substr($__PHP__CODE__TRAITEMENT__, strlen('UnicaenCode:')) . '.php';
+                    if (file_exists($filename)) {
+                        require $filename;
+                    } else {
+                        die('Fichier "' . $filename . '" introuvable');
+                    }
+                } else {
+                    eval($__PHP__CODE__TRAITEMENT__);
+                }
+
+                return $data;
+            };
+            $data       = $traitement();
+        }
+
+
+        if (!$csv->getFilename()) {
+            $csv->setFilename($etatSortie->getLibelle() . '.csv');
+        }
+        if (empty($csv->getHeader()) && empty($csv->getData())) {
+            $params = $etatSortie->getCsvParamsArray();
+
+            $blocs = $etatSortie->getBlocs();
+            $bkey  = null;
+            foreach ($blocs as $bloc) {
+                $bkey = $bloc['nom'] . '@' . $bloc['zone'];
+                break;
+            }
+
+            foreach ($data as $k => $d) {
+
+                /* On récupère les sous-données éventuelles */
+                if (array_key_exists($bkey, $d)) {
+                    $bdata = $d[$bkey];
+                } else {
+                    $bdata = null;
+                }
+
+                /* On supprime toutes les sous-données */
+                foreach ($d as $dk => $dv) {
+                    if (false !== strpos($dk, '@')) {
+                        unset($d[$dk]);
+                    }
+                }
+
+                /* Si il y a des sous-données */
+                if ($bdata) {
+                    foreach ($bdata as $bd) {
+                        $csv->addLine($this->filterData($d + $bd, $params));
+                    }
+                } else {
+                    $csv->addLine($this->filterData($d, $params));
+                }
+            }
 
         return $this;
     }

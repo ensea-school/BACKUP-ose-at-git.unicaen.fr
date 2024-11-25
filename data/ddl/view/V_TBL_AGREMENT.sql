@@ -1,6 +1,6 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_AGREMENT AS
 WITH i_s AS (
-  SELECT
+SELECT
     s.intervenant_id intervenant_id,
     ep.structure_id  structure_id,
     sum(vh.heures)   heures
@@ -14,6 +14,21 @@ WITH i_s AS (
     /*@INTERVENANT_ID=s.intervenant_id*/
   GROUP BY
     s.intervenant_id, ep.structure_id
+  HAVING
+    sum(vh.heures) > 0
+UNION
+SELECT
+    s.intervenant_id intervenant_id,
+    s.structure_id  structure_id
+  FROM
+    volume_horaire_ref vh
+    JOIN service_referentiel s ON s.id = vh.service_referentiel_id
+    JOIN type_volume_horaire tvh ON tvh.code = 'PREVU' AND tvh.id = vh.type_volume_horaire_id
+  WHERE
+    vh.histo_destruction IS NULL
+    /*@INTERVENANT_ID=s.intervenant_id*/
+  GROUP BY
+    s.intervenant_id, s.structure_id
   HAVING
     sum(vh.heures) > 0
 ),

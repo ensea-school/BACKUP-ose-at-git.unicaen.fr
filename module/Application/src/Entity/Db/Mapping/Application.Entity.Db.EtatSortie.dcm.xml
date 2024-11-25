@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Application\Entity\Db\EtatSortie" table="ETAT_SORTIE">
         <id name="id" type="integer" column="ID">
@@ -55,5 +55,10 @@
         <field name="bloc10Nom" type="string" column="BLOC10_NOM" nullable="true"/>
         <field name="bloc10Zone" type="string" column="BLOC10_ZONE" nullable="true"/>
         <field name="bloc10Requete" type="string" column="BLOC10_REQUETE" nullable="true"/>
+
+        <field name="signatureActivation" type="boolean" column="SIGNATURE_ACTIVATIOn" nullable="false"/>
+        <many-to-one field="signatureCircuit" target-entity="UnicaenSignature\Entity\Db\SignatureFlow">
+            <join-column name="SIGNATURE_CIRCUIT_ID" referenced-column-name="id"/>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

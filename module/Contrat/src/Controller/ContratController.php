@@ -13,11 +13,13 @@ use BjyAuthorize\Exception\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\ContratServiceListe;
+use Contrat\Entity\Db\TblContrat;
 use Contrat\Form\ContratRetourFormAwareTrait;
 use Contrat\Form\EnvoiMailContratFormAwareTrait;
 use Contrat\Processus\ContratProcessusAwareTrait;
 use Contrat\Service\ContratServiceAwareTrait;
 use Contrat\Service\ContratServiceListeServiceAwareTrait;
+use Contrat\Service\TblContratServiceAwareTrait;
 use DateTime;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
@@ -26,14 +28,21 @@ use Enseignement\Service\ServiceServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Http\Response;
+use Laminas\Validator\Date;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use LogicException;
+use PHPUnit\Exception;
 use Service\Entity\Db\TypeService;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Unicaen\OpenDocument\Document;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenSignature\Entity\Db\Process;
+use UnicaenSignature\Entity\Db\ProcessStep;
+use UnicaenSignature\Entity\Db\Signature;
+use UnicaenSignature\Service\ProcessServiceAwareTrait;
 
 /**
  * Description of ContratController
@@ -56,7 +65,8 @@ class ContratController extends AbstractController
     use EnvoiMailContratFormAwareTrait;
     use NoteServiceAwareTrait;
     use ContratServiceListeServiceAwareTrait;
-
+    use TblContratServiceAwareTrait;
+    use ProcessServiceAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -67,20 +77,15 @@ class ContratController extends AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            Contrat::class,
-            Service::class,
-            VolumeHoraire::class,
-            Validation::class,
-        ]);
+                                                                  Contrat::class,
+                                                                  Service::class,
+                                                                  VolumeHoraire::class,
+                                                                  Validation::class,
+                                                              ]);
     }
 
 
 
-    /**
-     * Point d'entrée sur les contrats/avenants.
-     *
-     * @return array
-     */
     public function indexAction()
     {
         $this->initFilters();
@@ -95,86 +100,64 @@ class ContratController extends AbstractController
         $title = "Contrat/avenants <small>{$intervenant}</small>";
 
 
-        $avenantResult = $this->getServiceParametres()->get('avenant');
-        switch ($avenantResult) {
-            case Parametre::AVENANT_AUTORISE :
-                $avenant_param = 1;
-            break;
-            case Parametre::AVENANT_STRUCT :
-                $avenant_param = 0;
-            break;
-            default :
-                $avenant_param = -1;
-        }
+        $volumesHoraireIntervenant = $this->getServiceTblContrat()->getContratVolumeHoraireByIntervenant($intervenant, $structure);
+        $services                  = [];
+        foreach ($volumesHoraireIntervenant as $volumeHoraireIntervenant) {
+            /** @var TblContrat $volumesHoraireIntervenant */
 
-        $sContrat     = $this->getServiceContrat();
-        $qbTest       = $sContrat->finderByIntervenant($intervenant);
-        $contratsTest = $sContrat->getList($qbTest);
-        if (empty($contratsTest)) {
-            $hasContrat = false;
-        } else {
-            $hasContrat = true;
-        }
-
-
-        $sContrat = $this->getServiceContrat();
-        $qb       = $sContrat->finderByIntervenant($intervenant);
-        if ($structure && $avenant_param >= 0) {
-            $qb->andWhere();
-            $sContrat->finderByStructure($structure, $qb);
-        }
-
-        $contrats = $sContrat->getList($qb);
-
-        $services = [
-            'contractualises'     => [],
-            'non-contractualises' => [],
-        ];
-
-        foreach ($contrats as $contrat) {
-            $services['contractualises'][$contrat->getId()] = [];
-        }
-
-        $sContratListe   = $this->getServiceContratServiceListe();
-        $needToSeeResult = $sContratListe->getListeServiceContratIntervenant($intervenant);
-        $missionNotContrat=[];
-
-        /** @var ContratServiceListe $serviceTest */
-        foreach ($needToSeeResult as $serviceTest) {
-            if ($serviceTest->getContrat() != null) {
-                if (!isset($services['contractualises'][$serviceTest->getContrat()->getId()][$serviceTest->getTypeService()->getCode()])) {
-                    $services['contractualises'][$serviceTest->getContrat()->getId()][$serviceTest->getTypeService()->getCode()] = [];
-                }
-                $services ['contractualises'][$serviceTest->getContrat()->getId()][$serviceTest->getTypeService()->getCode()][] = $serviceTest;
+            if ($volumeHoraireIntervenant->getContrat() == null) {
+                $services['NoContrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
             } else {
-                if (!isset($services['non-contractualises'][$serviceTest->getStructure()->getId()])) {
-                    $services['non-contractualises'][$serviceTest->getStructure()->getId()] = [];
-                    foreach (TypeService::CODES as $code) {
-                        $services['non-contractualises'][$serviceTest->getStructure()->getId()][$code]     = [];
-                    }
-                }
-                $services ['non-contractualises'][$serviceTest->getStructure()->getId()][$serviceTest->getTypeService()->getCode()][$serviceTest->getId()] = $serviceTest;
-                if($serviceTest->getTypeService()->getCode() == TypeService::CODE_MISSION){
-                    $mission = $this->getServiceContrat()->getContratInitialMission($serviceTest->getMission());
-                    if($mission == null){
-                        $missionNotContrat[$serviceTest->getMission()->getId()] = true;
+                $services['Contrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
+            }
+        }
+
+        $contratDirectResult        = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect              = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+        $contratSignatureActivation = false;
+        $infosSignature             = [];
+        $libelleCircuitSignature    = null;
+        if (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))
+            && $intervenant->getStatut()->getContratEtatSortie()->isSignatureActivation()
+            && $intervenant->getStatut()->getContratEtatSortie()->getSignatureCircuit()) {
+            $contratSignatureActivation = true;
+            $libelleCircuitSignature    = $intervenant->getStatut()->getContratEtatSortie()->getSignatureCircuit()->getLabel();
+
+            /**
+             * @var Contrat     $contrat
+             * @var Process     $process
+             * @var ProcessStep $step
+             */
+            //On récupère les informations du process
+            $qb       = $this->getServiceContrat()->finderByIntervenant($intervenant);
+            $contrats = $this->getServiceContrat()->getList($qb);
+            foreach ($contrats as $keyContrat => $contrat) {
+                if ($contrat->getProcessSignature()) {
+                    $infosSignature[$keyContrat] = [];
+                    $this->em()->refresh($contrat);
+                    $process = $contrat->getProcessSignature();
+                    if (!empty($process)) {
+                        $infosSignature[$keyContrat]['processSignature']  = $this->getProcessService()->getInfosProcess($process);
+                        $infosSignature[$keyContrat]['urlFichierContrat'] = $this->getServiceContrat()->getUrlSignedContrat($contrat);
                     }
                 }
             }
         }
-
-
         //Récupération email intervenant (Perso puis unicaen)
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
         $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
         $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
 
-
-        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
-        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
-
-
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect', 'missionNotContrat');
+        return compact(
+            'title',
+            'intervenant',
+            'services',
+            'emailIntervenant',
+            'contratDirect',
+            'contratSignatureActivation',
+            'infosSignature',
+            'libelleCircuitSignature'
+        );
     }
 
 
@@ -184,10 +167,8 @@ class ContratController extends AbstractController
         $this->initFilters();
 
         $intervenant = $this->getEvent()->getParam('intervenant');
+        $uuid        = $this->params()->fromRoute('uuid');
         /* @var $intervenant Intervenant */
-        $serviceNC = $this->getEvent()->getParam('serviceNC');
-        $structure = $this->getEvent()->getParam('structure');
-        /* @var $structure Structure */
 
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
@@ -196,11 +177,12 @@ class ContratController extends AbstractController
             throw new LogicException('L\'intervenant n\'est pas précisé');
         }
 
-//        if (!$structure) {
-//            throw new LogicException('La structure n\'est pas précisée');
-//        }
+        $volumeHorairesTotal = $this->getServiceTblContrat()->getVolumeTotalCreationContratByUuid($uuid);
+        if ($volumeHorairesTotal == null) {
+            $volumeHorairesTotal = 0;
+        }
 
-        $contrat = $this->getProcessusContrat()->creer($intervenant, $structure);
+        $contrat = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal);
 
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
@@ -208,7 +190,7 @@ class ContratController extends AbstractController
         } else {
             try {
 
-                $this->getProcessusContrat()->enregistrer($contrat);
+                $this->getProcessusContrat()->enregistrer($contrat, $uuid);
                 if ($contratDirect) {
                     $this->getProcessusContrat()->valider($contrat);
                 }
@@ -227,52 +209,7 @@ class ContratController extends AbstractController
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
     }
 
-    public function creerMissionAction()
-    {
-        $this->initFilters();
 
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-        $mission = $this->getEvent()->getParam('mission');
-        $structure = $mission->getStructure();
-        /* @var $structure Structure */
-
-        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
-        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
-
-        if (!$intervenant) {
-            throw new LogicException('L\'intervenant n\'est pas précisé');
-        }
-
-//        if (!$structure) {
-//            throw new LogicException('La structure n\'est pas précisée');
-//        }
-
-        $contrat = $this->getProcessusContrat()->creer($intervenant, $structure, $mission);
-
-        if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
-            $this->flashMessenger()->addSuccessMessage("La création de contrat/avenant pour $intervenant n'est pas possible.");
-        } else {
-            try {
-
-                $this->getProcessusContrat()->enregistrer($contrat, $mission);
-                if ($contratDirect) {
-                    $this->getProcessusContrat()->valider($contrat);
-                }
-
-                $this->updateTableauxBord($contrat->getIntervenant());
-                if ($contratDirect) {
-                    $this->flashMessenger()->addSuccessMessage(($contrat->estUnAvenant() ? 'L\'avenant' : 'Le contrat') . ' a bien été créé.');
-                } else {
-                    $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');
-                }
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-        }
-
-        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
-    }
 
     /**
      * Suppression d'un projet de contrat/avenant par la composante d'intervention.
@@ -496,7 +433,7 @@ class ContratController extends AbstractController
                     $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
                     $vAnnee       = $this->getServiceContext()->getAnnee()->getLibelle();
                     $vLienContrat = '';
-                    $conf = \OseAdmin::instance()->config()->get('global');
+                    $conf         = \OseAdmin::instance()->config()->get('global');
                     if ($conf) {
                         $urlContrat   = $conf['scheme'] . '://' . $conf['domain'] . $this->url()->fromRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()], [], true);
                         $vLienContrat = '<a href="' . $urlContrat . '">' . $urlContrat . '</a>';
@@ -633,12 +570,84 @@ class ContratController extends AbstractController
 
 
 
+    public function creerProcessSignatureAction()
+    {
+
+        /**
+         * @var Contrat $contrat
+         */
+        $contrat = $this->getEvent()->getParam('contrat');
+        try {
+            $this->getServiceContrat()->creerProcessContratSignatureElectronique($contrat);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
+    }
+
+
+
+    public function supprimerProcessSignatureAction()
+    {
+        //TODO : vérifier qu'on a bien le droit de supprimer cette signature, pour ce contrat
+        $contrat        = $this->getEvent()->getParam('contrat');
+        $libelleContrat = "Contrat N°" . $contrat->getId();
+        try {
+            if ($this->getServiceContrat()->supprimerSignatureElectronique($contrat)) {
+                $this->flashMessenger()->addSuccessMessage("Signature électronique supprimée avec succés pour le " . $libelleContrat);
+            } else {
+                $this->flashMessenger()->addErrorMessage("Impossible de supprimer la signature électronique pour le " . $libelleContrat);
+            }
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+        //Mise à jour des tableaux de bord nécessaires
+        /**
+         * @var Contrat $contrat
+         */
+        $intervenant = $contrat->getIntervenant();
+        $this->updateTableauxBord($intervenant);
+
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
+    }
+
+
+
+    public function rafraichirProcessSignatureAction()
+    {
+        /**
+         * @var Contrat $contrat
+         */
+
+        $contrat     = $this->getEvent()->getParam('contrat');
+        $intervenant = $contrat->getIntervenant();
+        try {
+
+            $this->getServiceContrat()->rafraichirProcessSignatureElectronique($contrat);
+            $this->updateTableauxBord($intervenant);
+            $this->flashMessenger()->addSuccessMessage('Signature électronique mise à jour');
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $contrat->getIntervenant()->getId()], [], true);
+    }
+
+
+
     private function updateTableauxBord(Intervenant $intervenant)
     {
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule',
-            'contrat',
-            'mission',
-        ], $intervenant);
+        $errors = $this->getServiceWorkflow()->calculerTableauxBord([
+                                                                        'formule',
+                                                                        'contrat',
+                                                                        'mission',
+                                                                    ], $intervenant);
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                $this->flashMessenger()->addErrorMessage($error->getMessage());
+            }
+        }
     }
+
 }

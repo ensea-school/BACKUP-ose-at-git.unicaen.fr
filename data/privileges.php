@@ -25,7 +25,6 @@ return [
             'reconduction-offre'                 => 'Prolongation de l\'offre l\'année suivante',
             'reconduction-centre-cout'           => 'Reconduction des centres de coûts de l\'offre de formation',
             'reconduction-modulateur'            => 'Reconduction des modulateurs de l\'offre de formation',
-
         ],
     ],
 
@@ -231,16 +230,17 @@ return [
     'contrat' => [
         'libelle'    => 'Contrats de travail/Avenants',
         'privileges' => [
-            'visualisation'            => 'Visualisation',
-            'creation'                 => 'Création d\'un projet',
-            'suppression'              => 'Suppression d\'un projet',
-            'validation'               => 'Validation',
-            'devalidation'             => 'Dévalidation',
-            'depot-retour-signe'       => 'Dépôt de contrat signé',
-            'saisie-date-retour-signe' => 'Saisie de date retour',
-            'projet-generation'        => 'Génération de projet de contrat',
-            'contrat-generation'       => 'Génération de contrat',
-            'envoi-email'              => 'Envoyer le contrat par email',
+            'visualisation'                  => 'Visualisation',
+            'creation'                       => 'Création d\'un projet',
+            'suppression'                    => 'Suppression d\'un projet',
+            'validation'                     => 'Validation',
+            'devalidation'                   => 'Dévalidation',
+            'depot-retour-signe'             => 'Dépôt de contrat signé',
+            'saisie-date-retour-signe'       => 'Saisie de date retour',
+            'projet-generation'              => 'Génération de projet de contrat',
+            'contrat-generation'             => 'Génération de contrat',
+            'envoi-email'                    => 'Envoyer le contrat par email',
+            'envoyer-signature-electronique' => 'Envoyer un contrat pour signature électronique',
         ],
     ],
 
@@ -501,7 +501,7 @@ return [
         ],
     ],
 
-    'taux' => [
+    'taux'      => [
         'libelle'    => 'Taux',
         'privileges' => [
             'visualisation' => 'Visualisation des taux',
@@ -509,13 +509,19 @@ return [
             'suppression'   => 'Suppression des taux',
         ],
     ],
-    'mail' => [
+    'mail'      => [
         'libelle'    => 'UnicaenMail - Gestion des mails',
         'privileges' => [
             'mail_index'     => 'Afficher un mail',
             'mail_afficher'  => 'Ré-envoi d\'un mail',
             'mail_supprimer' => 'Suppression d\'un mail',
             'mail_test'      => 'Envoi d\'un mail de test',
+        ],
+    ],
+    'signature' => [
+        'libelle'    => 'Signature',
+        'privileges' => [
+            'flow-edition' => 'Administrer les circuits de signatures',
         ],
     ],
 

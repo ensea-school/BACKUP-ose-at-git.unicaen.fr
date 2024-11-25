@@ -11,10 +11,10 @@ SELECT
 FROM
     intervenant i
     JOIN mission m ON m.intervenant_id = i.id
-    JOIN contrat c ON c.mission_id = m.id AND c.histo_destruction IS NULL
+    JOIN tbl_contrat tblc ON tblc.mission_id = m.id
     LEFT JOIN mission_prime mp ON m.prime_id = mp.id AND mp.histo_destruction IS null
 WHERE i.histo_destruction IS NULL
-  AND c.date_retour_signe IS NOT NULL
+  AND tblc.signe = 1
 /*@INTERVENANT_ID=i.id*/
 /*@ANNEE_ID=i.annee_id*/
 GROUP BY

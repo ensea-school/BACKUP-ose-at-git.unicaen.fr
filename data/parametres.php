@@ -224,8 +224,10 @@ Cordialement,
         "VALEUR"      => "",
         "DESCRIPTION" => "Email souhaité pour l'expéditeur du mail candidature",
     ],
-
-
+    "signature_electronique_parapheur"          => [
+        "VALEUR"      => "",
+        "DESCRIPTION" => "Choix du parpaheur électronique pour l'application",
+    ],
     /* Export RH*/
     "export_rh_franchissement"                  => [
         "VALEUR"      => "",
@@ -281,6 +283,15 @@ Cordialement,
         "DESCRIPTION" => "Permettre la création d'un contrat sans passé par le projet",
     ],
 
+    "contrat_mis" => [
+        "VALEUR"      => "contrat_mis_mission",
+        "DESCRIPTION" => "Un contrat par mission",
+    ],
+
+    "contrat_ens" => [
+        "VALEUR"      => "contrat_ens_composante",
+        "DESCRIPTION" => "Un contrat ou un avenant par composante",
+    ],
     "contrat_date" => [
         "VALEUR"      => "desactive",
         "DESCRIPTION" => "Permettre de saisir une date de retour signé pour un contrat sans ajouter de fichier",

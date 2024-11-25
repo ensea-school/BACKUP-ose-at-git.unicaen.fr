@@ -1,17 +1,19 @@
 <?php
 
 /**
- * @var $this           \Application\View\Renderer\PhpRenderer
- * @var $services
- * @var $structure      \Lieu\Entity\Db\Structure
- * @var $avenant_param  int
- * @var $mission        int
- * @var $contractualiser  bool
+ *
+ * @var               $this             \Application\View\Renderer\PhpRenderer
+ * @var array         $services
  *
  */
 
+
+use Service\Entity\Db\TypeService;
+
 ?>
-<?php if (($mission == null || $contractualiser) && isset($services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT]) && count($services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT])>0): ?>
+
+<?php
+if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -25,34 +27,32 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT] as $element):
-
-
-            if ($element->getStructure() != $structure && $element->getStructure() != null) {
-                continue;
-            }
-            ?>
+        <?php foreach ($services[TypeService::CODE_ENSEIGNEMENT] as $element): ?>
             <tr>
                 <td>
-                    <?php if ($element->getElementPedagogique() && $element->getElementPedagogique()->getCheminPedagogique()->count() > 1): ?>
+                    <?php if ($element->getService()->getElementPedagogique()
+                        && $element->getService()->getElementPedagogique()->getCheminPedagogique()->count() > 1): ?>
                         <small class="badge bg-secondary" style="font-size:8pt"
                                title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement
                             mutualisé</small><br/>
                     <?php endif; ?>
-                    <?php $url = $this->url('of/etape/voir', ['etape' => $element->getElementPedagogique()->getEtape()->getId()]); ?>
-                    <a href="<?php echo $url ?>" class="ajax-modal"><?php echo $element->getElementPedagogique()->getEtape() ?>
-                        (<?php echo $element->getElementPedagogique()->getEtape()->getCode() ?>)</td>
-                </a>
-
-                <td><?php if ($element->getElementPedagogique()->getPeriode()) {
-                        echo $element->getElementPedagogique()->getPeriode()->getCode();
-                    } ?></td>
+                    <?php $url = $this->url('of/etape/voir', ['etape' => $element->getService()->getElementPedagogique()->getEtape()->getId()]); ?>
+                    <a href="<?php echo $url ?>"
+                       class="ajax-modal"><?php echo $element->getService()->getElementPedagogique()->getEtape() ?>
+                        (<?php echo $element->getService()->getElementPedagogique()->getEtape()->getCode() ?>)
+                    </a>
+                </td>
                 <td>
-                    <?php $url = $this->url('of/element/voir', ['elementPedagogique' => $element->getElementPedagogique()->getId()]); ?>
-                    <a href="<?php echo $url ?>" class="ajax-modal"><?php echo $element->getElementPedagogique()->getLibelle() ?>
-                        (<?php echo $element->getElementPedagogique()->getCode() ?>)</td>
-                </a>
-
+                    <?php if ($element->getService()->getElementPedagogique()->getPeriode()) {
+                        echo $element->getService()->getElementPedagogique()->getPeriode()->getCode();
+                    } ?>
+                </td>
+                <td>
+                    <?php $url = $this->url('of/element/voir', ['elementPedagogique' => $element->getService()->getElementPedagogique()->getId()]); ?>
+                    <a href="<?php echo $url ?>"
+                       class="ajax-modal"><?php echo $element->getService()->getElementPedagogique()->getLibelle() ?>
+                        (<?php echo $element->getService()->getElementPedagogique()->getCode() ?>)
+                    </a>
                 </td>
                 <td>
                     <?php echo $element->getCm() ?>
@@ -71,7 +71,7 @@
         </tbody>
     </table>
 <?php endif; ?>
-<?php if (($mission == null || $contractualiser) && isset($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL]) && count($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL])>0): ?>
+<?php if (isset($services[TypeService::CODE_REFERENTIEL])): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -80,14 +80,11 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL] as $element):
-            if ($element->getStructure() != $structure && $element->getStructure() != null) {
-                continue;
-            }
-            ?>
+        <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL] as $element): ?>
             <tr>
                 <td>
-                    <?php echo $element->getFonctionReferentiel()->getLibelleLong() ?>(<?php echo $element->getFonctionReferentiel()->getCode() ?>)
+                    <?php echo $element->getServiceReferentiel()->getFonctionReferentiel()->getLibelleLong() ?>
+                    (<?php echo $element->getServiceReferentiel()->getFonctionReferentiel()->getCode() ?>)
                 </td>
                 <td>
                     <?php echo $element->getAutres() ?>
@@ -98,23 +95,24 @@
         </tbody>
     </table>
 <?php endif; ?>
-<?php if (($mission != null||$contractualiser) && isset($services[\Service\Entity\Db\TypeService::CODE_MISSION]) && count($services[\Service\Entity\Db\TypeService::CODE_MISSION])>0): ?>
+<?php if (isset($services[TypeService::CODE_MISSION])): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
             <th>Type de mission</th>
+            <th>Libellé de mission</th>
             <th>Heures</th>
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_MISSION] as $element):
-            if (($element->getStructure() != $structure && $element->getStructure() != null) || ($element->getMission()->getId() != $mission && $contractualiser ==false)) {
-                continue;
-            }
-            ?>
+        <?php foreach ($services[TypeService::CODE_MISSION] as $element): ?>
             <tr>
                 <td>
-                    <?php echo $element->getTypeMission()->getLibelle() ?> (<?php echo $element->getTypeMission()->getCode() ?>)
+                    <?php echo $element->getMission()->getTypeMission()->getLibelle() ?>
+                    (<?php echo $element->getMission()->getTypeMission()->getCode() ?>)
+                </td>
+                <td>
+                    <?php echo $element->getMission()->getLibelle() ?>
                 </td>
                 <td>
                     <?php echo $element->getAutres() ?>

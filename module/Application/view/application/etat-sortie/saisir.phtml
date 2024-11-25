@@ -4,6 +4,7 @@
  * @var $this  \Application\View\Renderer\PhpRenderer
  * @var $form  EtatSortieForm
  * @var $title string
+ * @var $activationSignatureElectronique ?string
  */
 
 use Application\Form\EtatSortieForm;
@@ -33,6 +34,9 @@ echo $this->form()->openTag($form);
             CSV</a></li>
     <li role="presentation"><a class="nav-link" href="#pdf" aria-controls="pdf" role="tab" data-bs-toggle="tab">Export
             PDF</a></li>
+    <li role="presentation"><a class="nav-link" href="#parametrage" aria-controls="parametrage" role="tab"
+                               data-bs-toggle="tab">Paramétrages</a>
+    </li>
 </ul>
 
 <div class="tab-content etat-sortie-saisir">
@@ -176,6 +180,23 @@ echo $this->form()->openTag($form);
             </div>
         </div>
     </div>
+    <div role="tabcard" class="tab-pane" id="parametrage">
+        <br/>
+        <div class="card bg-default variables">
+            <div class="card-header">Paramètrage signature électronique</div>
+            <?php if($activationSignatureElectronique): ?>
+            <div class="card-body" style="padding:10px;">
+                <?= $this->formControlGroup($form->get('signatureActivation')); ?>
+                <?= $this->formControlGroup($form->get('signatureCircuit')); ?>
+            </div>
+            <?php else: ?>
+                <div class="card-body" style="padding:10px;">
+                    <p style="text-align:center;">Vous n'avez aucun parapheur électronique d'activé sur votre instance.</p>
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </div>
 </div>
 
 <?php
@@ -291,6 +312,11 @@ echo $this->form()->closeTag();
 
 </script>
 <style>
+
+    #parametrage {
+
+    }
+
     .etat-sortie-saisir .etat-sortie-bloc {
         display: none;
     }

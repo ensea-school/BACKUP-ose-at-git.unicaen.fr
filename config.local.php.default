@@ -453,6 +453,74 @@ return [
         ],
 
     ],
+     //Configuration pour la signature electronique
+     'unicaen-signature' => [
+
+            'documents_path' => __DIR__ . '/data/signature',
+
+            'logger' => [
+                'enable'          => true,
+                'level'           => \Monolog\Logger::DEBUG,
+                'file'            => __DIR__ . '/cache/unicaen-signature.log',
+                'stdout'          => false,
+                'file_permission' => 0666,
+                'customLogger'    => null,
+
+            ],
+
+            'hook_recipients' => [
+                ['firstname' => 'Jean',
+                 'lastname'  => 'Dupont',
+                 'email'     => 'jean.dupont@universite.fr',],
+                ['firstname' => 'Jean',
+                                 'lastname'  => 'Dupont',
+                                 'email'     => 'jean.dupont@universite.fr'],
+            ],
+
+            'letterfiles' =>
+                [
+                    [
+
+                        'label'       => 'ESUP signature',
+                        'name'        => 'esup',
+                        'default'     => true,
+                        'class'       => \UnicaenSignature\Strategy\Letterfile\Esup\EsupLetterfileStrategy::class,
+                        'description' => 'Esup',
+                        'levels'      => [
+                            'visa_hidden' => 'hiddenVisa',
+                            'visa_visual' => 'visa',
+                            'sign_visual' => 'pdfImageStamp',
+                            'sign_certif' => 'certSign',
+                            'sign_eidas'  => 'nexuSign',
+
+                        ],
+                        'config'      => [
+                            // ESUP configuration
+                            'url'           => "https://xxxxxxxxxx.fr",
+                            // Créateur
+                            'createdByEppn' => 'xxxxxxxxx@unicaen.fr',
+                        ],
+                    ],
+                ],
+
+            'get_recipients_methods' => [
+                [
+                    ///// key : Clef unique pour identifier le méthode
+                    'key'           => 'by_role',
+                    'label'         => 'Personnes par rôle',                                   // Intitulé
+                    'description'   => 'Selectionne les personnes en fonction de leurs rôles', // Description
+                    'getRecipients' => [],
+                ],
+                [
+                    ///// key : Clef unique pour identifier le méthode
+                    'key'           => 'by_intervenant',
+                    'label'         => 'Personnes par rôle',                                   // Intitulé
+                    'description'   => 'Selectionne les personnes en fonction de leurs rôles', // Description
+                    'getRecipients' => [],
+                ],
+            ],
+
+        ],
 
 
     /* Base de données Actul+ */

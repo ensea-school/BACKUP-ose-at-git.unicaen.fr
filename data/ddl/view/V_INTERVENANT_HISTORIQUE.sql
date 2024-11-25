@@ -356,7 +356,7 @@ SELECT C.intervenant_id                                intervenant_id,
        5                                               ordre
 FROM fichier f
          JOIN contrat_fichier cf ON cf.fichier_id = f.id AND histo_destruction IS NULL
-         JOIN contrat C ON C.id = cf.contrat_id
+         JOIN contrat C ON C.id = cf.contrat_id and c.process_signature_id IS NULL
          JOIN type_contrat tc ON tc.id = C.type_contrat_id
          JOIN STRUCTURE s ON s.id = C.structure_id
          JOIN utilisateur u ON u.id = f.histo_createur_id
@@ -379,6 +379,52 @@ FROM contrat C
          JOIN utilisateur u ON u.id = C.histo_modificateur_id
 WHERE C.histo_destruction IS NULL
   AND C.date_retour_signe IS NOT NULL
+  AND c.process_signature_id IS NULL
+
+UNION ALL
+
+--Contrat en cours de signature electronique
+SELECT C.intervenant_id                                  intervenant_id,
+      '5 - Contractualisation'                          categorie,
+     CASE WHEN tc.code = 'CONTRAT' THEN 'Contrat' ELSE 'Avenant' END || ' N° ' ||
+      C.id || ' pour la composante ' || s.libelle_court
+      || ' en cours de signature électronique'          label,
+      usp.datecreated                              	 histo_date,
+      C.histo_modificateur_id                           histo_createur_id,
+      p.valeur	 	                                     histo_user,
+      'fas fa-book'                                     icon,
+      5                                                 ordre
+FROM contrat C
+        JOIN type_contrat tc ON tc.id = C.type_contrat_id
+        JOIN STRUCTURE s ON s.id = C.structure_id
+        JOIN utilisateur u ON u.id = C.histo_modificateur_id
+        JOIN unicaen_signature_process usp ON c.process_signature_id = usp.id
+  JOIN parametre p ON 1=1 AND nom = 'signature_electronique_parapheur'
+WHERE C.histo_destruction IS NULL
+AND usp.status = 105
+
+UNION ALL
+
+--Contrat signé électroniquement
+SELECT C.intervenant_id                                  intervenant_id,
+      '5 - Contractualisation'                          categorie,
+     CASE WHEN tc.code = 'CONTRAT' THEN 'Contrat' ELSE 'Avenant' END || ' N° ' ||
+      C.id || ' pour la composante ' || s.libelle_court
+      || ' signé électroniquement'                      label,
+      usp.lastupdate                              	     histo_date,
+      C.histo_modificateur_id                           histo_createur_id,
+      p.valeur	 	                                     histo_user,
+      'fas fa-book'                                     icon,
+      5                                                 ordre
+FROM contrat C
+        JOIN type_contrat tc ON tc.id = C.type_contrat_id
+        JOIN STRUCTURE s ON s.id = C.structure_id
+        JOIN utilisateur u ON u.id = C.histo_modificateur_id
+        JOIN unicaen_signature_process usp ON c.process_signature_id = usp.id
+        JOIN parametre p ON 1=1 AND nom = 'signature_electronique_parapheur'
+WHERE C.histo_destruction IS NULL
+AND usp.status = 201
+
 
 UNION ALL
 

@@ -50,6 +50,8 @@ $modules = [
     'Lieu',
     'Parametre',
     'Formule',
+    'UnicaenSignature',
+    'Signature',
 ];
 
 if (AppAdmin::config()['actul']['host'] ?? null){

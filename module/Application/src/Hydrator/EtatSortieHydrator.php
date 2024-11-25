@@ -29,8 +29,7 @@ class EtatSortieHydrator implements HydratorInterface
         $object->setAutoBreak($data['auto-break'] === 'true');
         $object->setRequete($data['requete']);
         $object->setSignatureActivation($data['signatureActivation']);
-        $serviceSignatureFlow = \OseAdmin::instance()->container()->get(SignatureFlowService::class);
-        $signatureFlow        = $serviceSignatureFlow->get($data['signatureCircuit']);
+        $signatureFlow        = $this->getServiceSignatureFlow()->get($data['signatureCircuit']);
         $object->setSignatureCircuit($signatureFlow);
         if (isset($data['fichier']['tmp_name']) && $data['fichier']['tmp_name']) {
             $object->setFichier(file_get_contents($data['fichier']['tmp_name']));

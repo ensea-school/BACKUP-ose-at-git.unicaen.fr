@@ -30,7 +30,7 @@ trait TblContratServiceAwareTrait
     public function getServiceTblContrat(): ?TblContratService
     {
         if (empty($this->serviceTblContrat)) {
-            $this->serviceTblContrat = \OseAdmin::instance()->container()->get(TblContratService::class);
+            $this->serviceTblContrat = \AppAdmin::container()->get(TblContratService::class);
         }
 
         return $this->serviceTblContrat;

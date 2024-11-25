@@ -433,20 +433,16 @@ class ContratController extends AbstractController
                     $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
                     $vAnnee       = $this->getServiceContext()->getAnnee()->getLibelle();
                     $vLienContrat = '';
-                    $conf         = \OseAdmin::instance()->config()->get('global');
-                    if ($conf) {
-                        $urlContrat   = $conf['scheme'] . '://' . $conf['domain'] . $this->url()->fromRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()], [], true);
-                        $vLienContrat = '<a href="' . $urlContrat . '">' . $urlContrat . '</a>';
-
-                    }
-                    $html        = str_replace([':intervenant', ':utilisateur', ':annee', ':url'], [$vIntervenant, $vUtilisateur, $vAnnee, $vLienContrat], $html);
-                    $subject     = $this->getServiceParametres()->get('contrat_modele_mail_objet');
-                    $subject     = str_replace(':intervenant', $vIntervenant, $subject);
-                    $from        = $this->getRequest()->getPost('expediteur-mail');
-                    $to          = $this->getRequest()->getPost('destinataire-mail-hide');
-                    $cci         = $this->getRequest()->getPost('destinataire-cc-mail');
-                    $pieceJointe = $this->getRequest()->getPost('contrat-piece-jointe');
-                    $message     = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
+                    $urlContrat   = $this->url()->fromRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()], ['force_canonical' => true], true);
+                    $vLienContrat = '<a href="' . $urlContrat . '">' . $urlContrat . '</a>';
+                    $html         = str_replace([':intervenant', ':utilisateur', ':annee', ':url'], [$vIntervenant, $vUtilisateur, $vAnnee, $vLienContrat], $html);
+                    $subject      = $this->getServiceParametres()->get('contrat_modele_mail_objet');
+                    $subject      = str_replace(':intervenant', $vIntervenant, $subject);
+                    $from         = $this->getRequest()->getPost('expediteur-mail');
+                    $to           = $this->getRequest()->getPost('destinataire-mail-hide');
+                    $cci          = $this->getRequest()->getPost('destinataire-cc-mail');
+                    $pieceJointe  = $this->getRequest()->getPost('contrat-piece-jointe');
+                    $message      = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
                     /*Create Note from email for this intervenant*/
                     $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $html);
                     $mail           = $this->mail()->send($message);

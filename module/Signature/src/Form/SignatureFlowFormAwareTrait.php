@@ -29,10 +29,10 @@ trait SignatureFlowFormAwareTrait
 
     public function getFormSignatureFLow(): ?SignatureFlowForm
     {
-        if (!empty($this->formSignatureFlow)) {
-            return $this->formSignatureFlow;
+        if (empty($this->formSignatureFlow)) {
+            return \AppAdmin::container()->get('FormElementManager')->get(SignatureFlowForm::class);
         }
+        return $this->formSignatureFlow;
 
-        return \OseAdmin::instance()->container()->get('FormElementManager')->get(SignatureFlowForm::class);
     }
 }

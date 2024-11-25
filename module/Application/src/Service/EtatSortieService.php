@@ -30,7 +30,7 @@ class EtatSortieService extends AbstractEntityService
 
 
     /**
-     * retourne la classe des entités
+     * Retourne la classe des entités
      *
      * @return string
      * @throws RuntimeException
@@ -394,103 +394,6 @@ class EtatSortieService extends AbstractEntityService
         }
 
         return $connection->fetchAllAssociative($query, $queryFilters);
-    }
-
-
-
-    /**
-     * @param EtatSortie $etatSortie
-     * @param array      $filtres
-     * @param array      $options
-     *
-     * @return CsvModel
-     * @throws \Exception
-     */
-    public function genererCsv(EtatSortie $etatSortie, array $filtres, array $options = []): CsvModel
-    {
-        $csv = new CsvModel();
-        //Uniquement dans le cas de la préliquidation siham
-        if ($etatSortie->getCode() == 'preliquidation-siham') {
-            $periode      = (array_key_exists('periode', $options)) ? $options['periode'] : null;
-            $periodeCode  = (array_key_exists('periode', $options)) ? $periode->getCode() : null;
-            $filtresAnnee = (array_key_exists('ANNEE_ID', $filtres)) ? $filtres['ANNEE_ID'] : null;
-            if ($filtresAnnee) {
-                $this->setAnneePaie($filtresAnnee, $periodeCode);
-            }
-            if ($periode) {
-                $this->setMoisPaie($periodeCode);
-
-            }
-        }
-
-        $entityManager = $this->getEntityManager();
-        $data          = $this->generateData($etatSortie, $filtres);
-        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
-
-
-        if (trim($etatSortie->getCsvTraitement() ?? '')) {
-            $__PHP__CODE__TRAITEMENT__ = $etatSortie->getCsvTraitement();
-            // Isolation de traitement pour éviter tout débordement...
-            $traitement = function () use ($csv, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
-                $dir = getcwd();
-
-                if (\OseAdmin::instance()->env()->inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')) {
-                    $filename = getcwd() . '/code/' . substr($__PHP__CODE__TRAITEMENT__, strlen('UnicaenCode:')) . '.php';
-                    if (file_exists($filename)) {
-                        require $filename;
-                    } else {
-                        die('Fichier "' . $filename . '" introuvable');
-                    }
-                } else {
-                    eval($__PHP__CODE__TRAITEMENT__);
-                }
-
-                return $data;
-            };
-            $data       = $traitement();
-        }
-
-
-        if (!$csv->getFilename()) {
-            $csv->setFilename($etatSortie->getLibelle() . '.csv');
-        }
-        if (empty($csv->getHeader()) && empty($csv->getData())) {
-            $params = $etatSortie->getCsvParamsArray();
-
-            $blocs = $etatSortie->getBlocs();
-            $bkey  = null;
-            foreach ($blocs as $bloc) {
-                $bkey = $bloc['nom'] . '@' . $bloc['zone'];
-                break;
-            }
-
-            foreach ($data as $k => $d) {
-
-                /* On récupère les sous-données éventuelles */
-                if (array_key_exists($bkey, $d)) {
-                    $bdata = $d[$bkey];
-                } else {
-                    $bdata = null;
-                }
-
-                /* On supprime toutes les sous-données */
-                foreach ($d as $dk => $dv) {
-                    if (false !== strpos($dk, '@')) {
-                        unset($d[$dk]);
-                    }
-                }
-
-                /* Si il y a des sous-données */
-                if ($bdata) {
-                    foreach ($bdata as $bd) {
-                        $csv->addLine($this->filterData($d + $bd, $params));
-                    }
-                } else {
-                    $csv->addLine($this->filterData($d, $params));
-                }
-            }
-
-        return $this;
     }
 
 }

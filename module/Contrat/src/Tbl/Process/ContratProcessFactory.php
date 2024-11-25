@@ -4,6 +4,7 @@ namespace Contrat\Tbl\Process;
 
 use Contrat\Tbl\Process\ContratProcess;
 use Psr\Container\ContainerInterface;
+use Unicaen\BddAdmin\Bdd;
 use UnicaenTbl\Service\BddService;
 
 
@@ -26,6 +27,7 @@ class ContratProcessFactory
         $service = new ContratProcess();
 
         $service->setServiceBdd($container->get(BddService::class));
+        $service->setBdd($container->get(Bdd::class));
 
         return $service;
     }

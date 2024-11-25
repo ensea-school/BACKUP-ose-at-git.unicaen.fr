@@ -52,6 +52,17 @@ class ContratService extends AbstractEntityService
     use RoleServiceAwareTrait;
     use TblContratServiceAwareTrait;
 
+    protected array $unicaenSignatureConfig = [];
+
+
+
+    public function __construct(array $unicaenSignatureConfig)
+    {
+        $this->unicaenSignatureConfig = $unicaenSignatureConfig;
+    }
+
+
+
     /**
      * Retourne la classe des entités
      *
@@ -162,10 +173,9 @@ class ContratService extends AbstractEntityService
                                 $contrat->getIntervenant()->getNomUsuel(),
                                 $contrat->getIntervenant()->getCode());
             //Récupération de la configuration de unicaen signature
-            $config  = \OseAdmin::instance()->config()->get('unicaen-signature');
             $content = $document->saveToData();
-            file_put_contents($config['documents_path'] . '/' . $fileName, $content);
-            $contratFilePath = $config['documents_path'] . '/' . $fileName;
+            file_put_contents($this->unicaenSignatureConfig['documents_path'] . '/' . $fileName, $content);
+            $contratFilePath = $this->unicaenSignatureConfig['documents_path'] . '/' . $fileName;
             $filename        = basename($contratFilePath);
             //Récupération du circuit de signature si la signature est activé pour l'état de sortie de ce contrat
             $intervenant       = $contrat->getIntervenant();
@@ -188,9 +198,9 @@ class ContratService extends AbstractEntityService
                         //On regarde si on a le paramétrage hook_recepient dans la config
                         //pour forcer l'envoie toujours à la même personne
                         $recipientsHook = [];
-                        if (array_key_exists('hook_recipients', $config)) {
-                            if (!empty($config['hook_recipients'])) {
-                                foreach ($config['hook_recipients'] as $recipient) {
+                        if (array_key_exists('hook_recipients', $this->unicaenSignatureConfig)) {
+                            if (!empty($this->unicaenSignatureConfig['hook_recipients'])) {
+                                foreach ($this->unicaenSignatureConfig['hook_recipients'] as $recipient) {
                                     $recipientsHook[] = [
                                         'firstname' => $recipient['firstname'],
                                         'lastname'  => $recipient['lastname'],
@@ -337,15 +347,14 @@ class ContratService extends AbstractEntityService
 
 
         if ($save) {
-            $config = \OseAdmin::instance()->config()->get('unicaen-signature');
             //On récupere le contenu du contrat pour le stocker temporairement afin de pouvoir l'envoyer dans le parapheur
             $content = $document->saveToData();
-            file_put_contents($config['documents_path'] . '/' . $fileName, $content);
-            /*            $var = exec('chmod 777 ' . $config['documents_path'] . '/copy.pdf');
+            file_put_contents($this->unicaenSignatureConfig['documents_path'] . '/' . $fileName, $content);
+            /*            $var = exec('chmod 777 ' . $this->unicaenSignatureConfig['documents_path'] . '/copy.pdf');
                         dump($var);
                         die;
             */
-            return $config['documents_path'] . '/' . $fileName;
+            return $this->unicaenSignatureConfig['documents_path'] . '/' . $fileName;
         }
         if ($download) {
             $document->download($fileName);
@@ -501,10 +510,9 @@ class ContratService extends AbstractEntityService
 
     public function rafraichirProcessSignatureElectronique(Contrat $contrat): bool
     {
-        $config = \OseAdmin::instance()->config()->get('unicaen-signature');
         if ($contrat instanceof Contrat) {
             $process = $contrat->getProcessSignature();
-            $path    = $config['documents_path'];
+            $path    = $this->unicaenSignatureConfig['documents_path'];
             try {
                 $fichierContrat = $this->recupererFichierContrat($contrat, $path);
                 if ($process instanceof Process) {

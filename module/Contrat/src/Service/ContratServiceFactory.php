@@ -25,11 +25,9 @@ class ContratServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): ContratService
     {
-        $service = new ContratService();
-        /* Injectez vos dépendances ICI */
+        $service = new ContratService($container->get('config')['unicaen-signature'] ?? []);
         $service->setSignatureService($container->get(SignatureService::class));
         $service->setProcessService($container->get(ProcessService::class));
-
 
         return $service;
     }

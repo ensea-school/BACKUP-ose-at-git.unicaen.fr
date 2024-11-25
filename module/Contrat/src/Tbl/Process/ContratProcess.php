@@ -7,7 +7,7 @@ use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
-use Unicaen\BddAdmin\Bdd;
+use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -15,6 +15,7 @@ use UnicaenTbl\TableauBord;
 class ContratProcess implements ProcessInterface
 {
     use BddServiceAwareTrait;
+    use BddAwareTrait;
     use ParametresServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
     use AnneeServiceAwareTrait;
@@ -102,7 +103,7 @@ class ContratProcess implements ProcessInterface
             . $this->getServiceBdd()->makeWhere($params)
             . ' ORDER BY intervenant_id, contrat_id ASC';
 
-        $servicesContrat = \OseAdmin::instance()->getBdd()->selectEach($sql);
+        $servicesContrat = $this->getBdd()->selectEach($sql);
 
         $taux_remu_temp = 0;
         $listeContrat   = [];
@@ -259,7 +260,7 @@ class ContratProcess implements ProcessInterface
 
 
         $sqlSansHeure = $serviceBdd->injectKey($sqlSansHeure, $params);
-        $contratsSansHeure = \OseAdmin::instance()->getBdd()->select($sqlSansHeure);
+        $contratsSansHeure = $this->getBdd()->select($sqlSansHeure);
 
 
         foreach ($contratsSansHeure as $contratSansHeure) {
@@ -399,7 +400,7 @@ WHERE
 
         $sql = $serviceBdd->injectKey($sql, $params);
 
-        $avenantNecessaireDate = \OseAdmin::instance()->getBdd()->select($sql);
+        $avenantNecessaireDate = $this->getBdd()->select($sql);
 
         foreach ($avenantNecessaireDate as $avenant) {
 
@@ -514,7 +515,7 @@ WHERE
         // Enregistrement en BDD
         $key = $tableauBord->getOption('key');
 
-        $table = \OseAdmin::instance()->getBdd()->getTable('TBL_CONTRAT');
+        $table = $this->getBdd()->getTable('TBL_CONTRAT');
 
 //         on force la DDL pour éviter de faire des requêtes en plus
 //        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);

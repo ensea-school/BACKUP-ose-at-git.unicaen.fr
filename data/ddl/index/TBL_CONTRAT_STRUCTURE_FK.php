@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CONTRAT_STRUCTURE_INDEX',
+    'name'    => 'TBL_CONTRAT_STRUCTURE_FK',
     'unique'  => FALSE,
     'table'   => 'TBL_CONTRAT',
     'columns' => [

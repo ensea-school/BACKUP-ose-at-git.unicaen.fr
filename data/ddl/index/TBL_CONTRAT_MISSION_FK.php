@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CONTRAT_CONTRAT_PARENT_INDEX',
+    'name'    => 'TBL_CONTRAT_MISSION_FK',
     'unique'  => FALSE,
     'table'   => 'TBL_CONTRAT',
     'columns' => [
-        'CONTRAT_PARENT_ID',
+        'MISSION_ID',
     ],
 ];
 

@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CONTRAT_SERVICE_INDEX',
+    'name'    => 'TBL_CONTRAT_TAUX_REMU_FK',
     'unique'  => FALSE,
     'table'   => 'TBL_CONTRAT',
     'columns' => [
-        'SERVICE_ID',
+        'TAUX_REMU_ID',
     ],
 ];
 

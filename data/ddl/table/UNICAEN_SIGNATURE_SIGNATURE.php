@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'UNICAEN_SIGNATURE_SIGNATURE_ID_SEQ',
     'columns'     => [
         'ALLSIGNTOCOMPLETE'       => [
             'name'        => 'ALLSIGNTOCOMPLETE',
@@ -134,7 +134,7 @@ return [
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => '0',
+            'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
@@ -206,7 +206,7 @@ return [
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => '0',
+            'scale'       => NULL,
             'precision'   => 38,
             'nullable'    => TRUE,
             'default'     => NULL,

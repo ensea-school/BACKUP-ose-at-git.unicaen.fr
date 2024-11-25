@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'UNICAEN_SIGNATURE_RECIPIENT_ID_SEQ',
     'columns'     => [
         'DATEFINISHED' => [
             'name'        => 'DATEFINISHED',
@@ -62,7 +62,7 @@ return [
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => '0',
+            'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,

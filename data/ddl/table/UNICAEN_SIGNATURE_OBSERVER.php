@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'UNICAEN_SIGNATURE_OBSERVER_ID_SEQ',
     'columns'     => [
         'EMAIL'        => [
             'name'        => 'EMAIL',
@@ -38,7 +38,7 @@ return [
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => '0',
+            'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,

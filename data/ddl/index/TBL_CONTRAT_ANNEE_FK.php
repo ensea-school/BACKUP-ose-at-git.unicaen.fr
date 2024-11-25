@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CONTRAT_CONTRAT_INDEX',
+    'name'    => 'TBL_CONTRAT_ANNEE_FK',
     'unique'  => FALSE,
     'table'   => 'TBL_CONTRAT',
     'columns' => [
-        'CONTRAT_ID',
+        'ANNEE_ID',
     ],
 ];
 

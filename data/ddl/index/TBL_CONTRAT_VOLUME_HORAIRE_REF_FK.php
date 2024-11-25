@@ -3,11 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CONTRAT_MISSION_INDEX',
+    'name'    => 'TBL_CONTRAT_VOLUME_HORAIRE_REF_FK',
     'unique'  => FALSE,
     'table'   => 'TBL_CONTRAT',
     'columns' => [
-        'MISSION_ID',
+        'VOLUME_HORAIRE_REF_ID',
     ],
 ];
 

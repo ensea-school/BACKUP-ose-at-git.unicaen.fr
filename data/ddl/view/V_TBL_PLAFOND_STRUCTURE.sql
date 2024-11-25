@@ -34,8 +34,7 @@ FROM
         i.annee_id, vhr.type_volume_horaire_id, i.id, s.id
     ) p
   ) p
-  JOIN intervenant i ON i.id = p.intervenant_id
-  LEFT JOIN plafond_structure ps ON ps.plafond_id = p.plafond_id AND ps.structure_id = p.structure_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL
+  LEFT JOIN plafond_structure ps ON ps.plafond_id = p.plafond_id AND ps.structure_id = p.structure_id AND ps.annee_id = p.annee_id AND ps.histo_destruction IS NULL
   LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL
 WHERE
   CASE

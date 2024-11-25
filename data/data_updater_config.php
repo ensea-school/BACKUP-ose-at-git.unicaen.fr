@@ -151,6 +151,8 @@ return [
         'options' => [
             'update'  => true,
             'delete'  => false,
+            'undelete'  => false,
+            'soft-delete'  => false,
             'columns' => [
                 'TAUX_REMU_ID' => [
                     'transformer' => 'SELECT id FROM taux_remu WHERE histo_destruction IS NULL AND code = %s',
@@ -164,6 +166,7 @@ return [
         'options' => [
             'update'  => true,
             'delete'  => false,
+            'undelete'  => false,
             'columns' => [
                 'TAUX_REMU_ID' => [
                     'transformer' => 'SELECT id FROM taux_remu WHERE histo_destruction IS NULL AND code = %s',

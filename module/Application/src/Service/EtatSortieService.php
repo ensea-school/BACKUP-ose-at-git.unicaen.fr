@@ -130,10 +130,11 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
+
     /**
      * @param EtatSortie $etatSortie
-     * @param array $filtres
-     * @param array $options
+     * @param array      $filtres
+     * @param array      $options
      *
      * @return CsvModel
      * @throws \Exception
@@ -143,14 +144,14 @@ class EtatSortieService extends AbstractEntityService
         $csv = new CsvModel();
         //Uniquement dans le cas de la préliquidation siham
         if ($etatSortie->getCode() == 'preliquidation-siham') {
-            $periode = (array_key_exists('periode', $options)) ? $options['periode'] : null;
-            $periodeCode = (array_key_exists('periode', $options)) ? $periode->getCode() : null;
+            $periode      = (array_key_exists('periode', $options)) ? $options['periode'] : null;
+            $periodeCode  = (array_key_exists('periode', $options)) ? $periode->getCode() : null;
             $filtresAnnee = (array_key_exists('ANNEE_ID', $filtres)) ? $filtres['ANNEE_ID'] : null;
         }
 
         $entityManager = $this->getEntityManager();
-        $data = $this->generateData($etatSortie, $filtres);
-        $role = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
+        $data          = $this->generateData($etatSortie, $filtres);
+        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
 
 
         if (trim($etatSortie->getCsvTraitement() ?? '')) {
@@ -159,22 +160,21 @@ class EtatSortieService extends AbstractEntityService
             $traitement = function () use ($csv, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
                 $dir = getcwd();
 
-                if (\AppAdmin::inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')){
-                    $filename = getcwd().'/code/'.substr($__PHP__CODE__TRAITEMENT__,strlen('UnicaenCode:')).'.php';
-                    if (file_exists($filename)){
+                if (\AppAdmin::inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')) {
+                    $filename = getcwd() . '/code/' . substr($__PHP__CODE__TRAITEMENT__, strlen('UnicaenCode:')) . '.php';
+                    if (file_exists($filename)) {
                         require $filename;
-                    }else{
-                        die('Fichier "'.$filename.'" introuvable');
+                    } else {
+                        die('Fichier "' . $filename . '" introuvable');
                     }
-                }else{
+                } else {
                     eval($__PHP__CODE__TRAITEMENT__);
                 }
 
                 return $data;
             };
-            $data = $traitement();
+            $data       = $traitement();
         }
-
 
 
         if (!$csv->getFilename()) {
@@ -184,7 +184,7 @@ class EtatSortieService extends AbstractEntityService
             $params = $etatSortie->getCsvParamsArray();
 
             $blocs = $etatSortie->getBlocs();
-            $bkey = null;
+            $bkey  = null;
             foreach ($blocs as $bloc) {
                 $bkey = $bloc['nom'] . '@' . $bloc['zone'];
                 break;
@@ -231,6 +231,7 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
+
     private function filterData(array $line, array $params): array
     {
         foreach ($line as $k => $v) {
@@ -245,7 +246,7 @@ class EtatSortieService extends AbstractEntityService
                     case 'date':
                         $date = $v ? \DateTime::createFromFormat('Y-m-d H:i:s', $v) : null;
                         if ($date instanceof \DateTime) {
-                            $format = isset($params[$k]['format']) ? $params[$k]['format'] : Constants::DATE_FORMAT;
+                            $format   = isset($params[$k]['format']) ? $params[$k]['format'] : Constants::DATE_FORMAT;
                             $line[$k] = $date->format($format);
                         }
                         break;
@@ -255,6 +256,7 @@ class EtatSortieService extends AbstractEntityService
 
         return $line;
     }
+
 
 
     private function generateData(EtatSortie $etatSortie, array $filtres)
@@ -394,6 +396,30 @@ class EtatSortieService extends AbstractEntityService
         }
 
         return $connection->fetchAllAssociative($query, $queryFilters);
+    }
+
+
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+
+
+    /**
+     * @param array $config
+     *
+     * @return EtatSortieService
+     */
+    public function setConfig(array $config): EtatSortieService
+    {
+        $this->config = $config;
+
+        return $this;
     }
 
 }

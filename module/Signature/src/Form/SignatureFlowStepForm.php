@@ -35,7 +35,7 @@ class SignatureFlowStepForm extends AbstractForm
             'level'             => 'Niveau de signature',
             'recipientMethod'   => 'Signataire(s)',
             'roles'             => 'Choix du rôle utilisateur pour la signature',
-            'order'             => 'Order de l\'étape',
+            'order'             => 'Ordre de l\'étape',
             'allRecipientsSign' => 'Tous les signataires doivent signer',
 
         ];

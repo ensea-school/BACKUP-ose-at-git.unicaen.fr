@@ -204,7 +204,6 @@ return [
                     'INTERVENANT_STRUCTURE_ID',
                     'VALIDE',
                     'VALIDATION_ID',
-                    'CONTRACTUALISE',
                     'HEURES_PREVUES_SAISIES',
                     'HEURES_PREVUES_VALIDEES',
                     'HEURES_REALISEES_SAISIES',

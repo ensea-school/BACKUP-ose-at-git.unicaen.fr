@@ -27,7 +27,7 @@ class EtatSortieServiceFactory
         $service = new EtatSortieService;
         $service->setEntityManager($container->get(Constants::BDD));
 
-        $config = $container->get('Config');
+        $config = $container->get('config');
 
         if (isset($config['application']['etats-sortie'])) {
             $service->setConfig($config['application']['etats-sortie']);

@@ -48,10 +48,15 @@ class InstallCommand extends Command
         }
         $filesystem->chmod('data/fichiers', 0777);
 
-        if (!$filesystem->exists('log')) {
-            $filesystem->mkdir('log');
+        if (!$filesystem->exists('data/log')) {
+            $filesystem->mkdir('data/log');
         }
-        $filesystem->chmod('log', 0777);
+        $filesystem->chmod('data/log', 0777);
+
+        if (!$filesystem->exists('data/signature')) {
+            $filesystem->mkdir('data/signature');
+        }
+        $filesystem->chmod('data/signature', 0777);
 
         $filesystem->chmod('bin/ose', 0755);
         $filesystem->chmod('bin/ose-code', 0755);

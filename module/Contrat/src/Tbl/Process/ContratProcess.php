@@ -245,8 +245,8 @@ class ContratProcess implements ProcessInterface
                     vtblcp.autre_libelle,
                     vtblcp.taux_conges_payes,
                     vtblcp.type_service_id,
-                    vtblcp.intervenant_id,
-                    vtblcp.annee_id,
+                    i.id intervenant_id,
+                    i.annee_id,
                     c.process_signature_id process_id
                 FROM contrat c
                 JOIN INTERVENANT i ON c.intervenant_id = i.id
@@ -260,10 +260,10 @@ class ContratProcess implements ProcessInterface
 
 
         $sqlSansHeure = $serviceBdd->injectKey($sqlSansHeure, $params);
-        $contratsSansHeure = $this->getBdd()->select($sqlSansHeure);
+        $contratsSansHeure = $this->getBdd()->selectEach($sqlSansHeure);
 
 
-        foreach ($contratsSansHeure as $contratSansHeure) {
+        while ($contratSansHeure = $contratsSansHeure->next()) {
             $contratToTbl                      = [];
             $contratToTbl['INTERVENANT_ID']    = $contratSansHeure['INTERVENANT_ID'];
             $contratToTbl['ANNEE_ID']          = $contratSansHeure['ANNEE_ID'];
@@ -340,7 +340,8 @@ class ContratProcess implements ProcessInterface
         c.structure_id AS parent_structure_id,
         vtblc.mission_id AS mission_id_principal,
         ap.fin_validite AS date_fin_avenant,
-        vtblc.intervenant_id
+        i.id intervenant_id,
+        i.annee_id
     FROM 
         contrat c
     JOIN INTERVENANT i ON c.intervenant_id = i.id
@@ -360,11 +361,12 @@ contrats_max_dates AS (
         parent_structure_id,
         mission_id_principal,
         intervenant_id,
+        annee_id,
         MAX(COALESCE(date_fin_avenant, date_fin_contrat)) AS max_date_fin_contrat
     FROM 
         contrat_et_avenants
     GROUP BY 
-        contrat_id_principal, date_debut, parent_structure_id, mission_id_principal, intervenant_id
+        contrat_id_principal, date_debut, parent_structure_id, mission_id_principal, intervenant_id, annee_id
 ),
 missions_dates AS (
     SELECT 
@@ -384,11 +386,11 @@ SELECT
     cma.date_debut AS date_debut,
     cma.parent_structure_id AS structure_id,
     cma.intervenant_id,
-    vtblc.mission_id AS mission_id,
-    cma.max_date_fin_contrat AS date_fin_contrat,
-    md.max_date_fin_mission AS max_date_fin_mission,
+    vtblc.mission_id             mission_id,
+    cma.max_date_fin_contrat     date_fin_contrat,
+    md.max_date_fin_mission      max_date_fin_mission,
     vtblc.type_service_id,
-    vtblc.annee_id
+    cma.annee_id
 FROM 
     contrats_max_dates cma
 LEFT JOIN 

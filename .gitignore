@@ -11,4 +11,6 @@ public/unicaen/*
 public/.gitignore
 composer.phar
 data/fichiers
+data/signature
+log
 .phpunit.result.cache

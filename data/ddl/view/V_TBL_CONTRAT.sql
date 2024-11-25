@@ -62,8 +62,8 @@ FROM
        JOIN parametre              ptr ON ptr.nom = 'taux-remu'
        JOIN element_pedagogique     ep ON ep.id = s.element_pedagogique_id
        JOIN structure              str ON ep.structure_id = str.id
-       JOIN formule_resultat        fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id AND fr.type_volume_horaire_id = tvh.id
-       JOIN formule_resultat_vh    frv ON frv.volume_horaire_id = vh.id AND frv.formule_resultat_id = fr.id
+       JOIN formule_resultat_intervenant    fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id AND fr.type_volume_horaire_id = tvh.id
+       JOIN formule_resultat_volume_horaire frv ON frv.volume_horaire_id = vh.id AND frv.formule_resultat_intervenant_id = fr.id
   LEFT JOIN contrat                  c ON c.id = vh.contrat_id
 WHERE
   vh.histo_destruction IS NULL
@@ -139,8 +139,8 @@ FROM
        JOIN parametre                  pce ON pce.nom = 'contrat_ens'
        JOIN parametre                  ptr ON ptr.nom = 'taux-remu'
        JOIN structure                  str ON str.id = sr.structure_id
-       JOIN formule_resultat            fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id AND fr.type_volume_horaire_id = tvh.id
-       JOIN formule_resultat_vh_ref   frvr ON frvr.volume_horaire_ref_id = vhr.id AND frvr.formule_resultat_id = fr.id
+       JOIN formule_resultat_intervenant fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id AND fr.type_volume_horaire_id = tvh.id
+       JOIN formule_resultat_volume_horaire frvr ON frvr.volume_horaire_ref_id = vhr.id AND frvr.formule_resultat_intervenant_id = fr.id
   LEFT JOIN contrat                      c ON c.id = vhr.contrat_id
 WHERE
   vhr.histo_destruction IS NULL

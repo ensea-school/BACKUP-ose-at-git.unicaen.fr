@@ -205,7 +205,6 @@ return [
                     'VALIDE',
                     'VALIDATION_ID',
                     'CONTRACTUALISE',
-                    'CONTRAT_ID',
                     'HEURES_PREVUES_SAISIES',
                     'HEURES_PREVUES_VALIDEES',
                     'HEURES_REALISEES_SAISIES',

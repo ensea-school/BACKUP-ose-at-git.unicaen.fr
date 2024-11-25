@@ -46,7 +46,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function run(TableauBord $tableauBord, array $params = [])
+    public function run(TableauBord $tableauBord, array $params = []): void
     {
 
         if (empty($params)) {

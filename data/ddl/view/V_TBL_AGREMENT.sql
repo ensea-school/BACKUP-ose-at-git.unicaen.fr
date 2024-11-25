@@ -2,8 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_TBL_AGREMENT AS
 WITH i_s AS (
 SELECT
     s.intervenant_id intervenant_id,
-    ep.structure_id  structure_id,
-    sum(vh.heures)   heures
+    ep.structure_id  structure_id
   FROM
     volume_horaire vh
     JOIN service s ON s.id = vh.service_id

@@ -224,7 +224,7 @@ class ContratProcess implements ProcessInterface
 
             $this->services[$id] = $service;
         }
-        $sql2 = 'SELECT 
+        $sqlSansHeure = 'SELECT 
                 c.id contrat_id, 
                 c.contrat_id contrat_parent_id,
                 c.histo_creation date_creation,
@@ -249,8 +249,11 @@ class ContratProcess implements ProcessInterface
                 WHERE vtbl.contrat_id IS NULL
                 AND c.histo_destruction IS NULL';
 
+        $sqlSansHeure .= 'AND c.intervenant_id = :intervenant';
 
-        $contratsSansHeure = \OseAdmin::instance()->getBdd()->select($sql2);
+
+        $contratsSansHeure = \OseAdmin::instance()->getBdd()->select($sqlSansHeure);
+
 
         foreach ($contratsSansHeure as $contratSansHeure) {
             $contratToTbl                      = [];

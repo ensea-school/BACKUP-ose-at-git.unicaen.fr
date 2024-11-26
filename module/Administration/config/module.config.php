@@ -18,6 +18,8 @@ return [
             Migration\v24Formules::class,
             Migration\v24MisesEnPaiement::class,
             Migration\v24Primes::class,
+            Migration\v24Signature::class
+
         ],
     ],
 

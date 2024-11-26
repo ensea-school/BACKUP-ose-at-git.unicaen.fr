@@ -192,9 +192,9 @@ class  IntervenantController extends AbstractController
 
             return $vh;
         }
-        $date = new \DateTime();
-        $date->sub(new \DateInterval('P7D'));
-        $notificationNote = $this->getServiceNote()->countNote($intervenant, $date);
+        /*$date = new \DateTime();
+         $date->sub(new \DateInterval('P7D'));*/
+        $notificationNote = $this->getServiceNote()->countNote($intervenant);
         $this->addIntervenantRecent($intervenant);
 
         return compact('intervenant', 'tab', 'notificationNote');

@@ -68,6 +68,9 @@ class UpdateCommand extends Command
         // Mise à jour de la base de données à partir d'un nouveau processus
         $this->runCommand($output, 'update-bdd');
 
+        // Recalcul des formules
+        $this->runCommand($output, 'build-formules');
+
         //Conclusion
         $io->success("Fin de la mise à jour.");
         if ($maintenanceMsg === 'yes') {

@@ -4,18 +4,21 @@ namespace Signature\Command;
 
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratService;
+use Contrat\Service\ContratServiceAwareTrait;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use UnicaenSignature\Command\SignatureCommandAbstract;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use UnicaenSignature\Service\ProcessService;
+use UnicaenSignature\Service\ProcessServiceAwareTrait;
 
-class SignatureUpdateAllProcessesContratCommand extends SignatureCommandAbstract
+class UpdateSignaturesContratsProcessesCommand extends Command
 {
-    protected static $defaultName = 'signature:update-process-contrat-all';
+    use ContratServiceAwareTrait;
+    use ProcessServiceAwareTrait;
 
 
-
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription("Actualise l'état des procédures de signature de contrat/avenant en cours");
@@ -29,9 +32,9 @@ class SignatureUpdateAllProcessesContratCommand extends SignatureCommandAbstract
          * @var ProcessService $processService
          * @var ContratService $contratService
          */
-        $processService = \OseAdmin::instance()->container()->get(ProcessService::class);
-        $contratService = \OseAdmin::instance()->container()->get(ContratService::class);
-        $io             = $this->getIO($input, $output);
+        $processService = $this->getProcessService();
+        $contratService = $this->getServiceContrat();
+        $io             = new SymfonyStyle($input, $output);
 
         $headers     = ['id', 'intervenant', 'label', 'status', 'msg'];
         $rows        = [];

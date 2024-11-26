@@ -208,7 +208,7 @@ return [
         Service\IntervenantService::class     => Service\IntervenantServiceFactory::class,
         Processus\IntervenantProcessus::class => Processus\IntervenantProcessusFactory::class,
         Service\SituationMatrimonialeService::class   => Service\SituationMatrimonialeServiceFactory::class,
-        Command\ExempleCommand::class         => Command\CalculFeuilleDeRouteCommandFactory::class,
+        Command\CalculFeuilleDeRouteCommand::class    => Command\CalculFeuilleDeRouteCommandFactory::class,
     ],
 
 
@@ -223,7 +223,7 @@ return [
 
     'laminas-cli' => [
         'commands' => [
-            'calcul-feuille-de-route' => Command\ExempleCommand::class,
+            'calcul-feuille-de-route' => Command\CalculFeuilleDeRouteCommand::class
         ],
     ],
 ];

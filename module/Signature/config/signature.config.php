@@ -3,6 +3,8 @@
 namespace Signature;
 
 use Application\Provider\Privilege\Privileges;
+use Signature\Command\UpdateSignaturesContratsProcessesCommand;
+use Signature\Command\UpdateSignaturesContratsProcessesCommandFactory;
 use Signature\Controller\SignatureController;
 use Signature\Controller\SignatureControllerFactory;
 use Signature\Controller\SignatureFlowController;
@@ -115,8 +117,15 @@ return [
     ],
 
     'services' => [
-        SignatureFlowService::class     => SignatureFlowServiceFactory::class,
-        SignatureFlowStepService::class => SignatureFlowStepServiceFactory::class,
+        SignatureFlowService::class                     => SignatureFlowServiceFactory::class,
+        SignatureFlowStepService::class                 => SignatureFlowStepServiceFactory::class,
+        UpdateSignaturesContratsProcessesCommand::class => UpdateSignaturesContratsProcessesCommandFactory::class,
+    ],
+
+    'laminas-cli' => [
+        'commands' => [
+            'update-signatures-contrats-processes' => Command\UpdateSignaturesContratsProcessesCommand::class
+        ],
     ],
 
 

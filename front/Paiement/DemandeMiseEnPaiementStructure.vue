@@ -658,7 +658,7 @@ export default {
                 this.$emit('refresh');
                 setTimeout(() => {
                     this.btnState('remove-' + id, 'enabled');
-                }, 4500);
+                }, 6000);
             }).catch(error => {
                 this.$emit('refresh');
                 setTimeout(() => {
@@ -765,7 +765,7 @@ export default {
                 this.$emit('refresh');
                 setTimeout(() => {
                     this.btnState('add-' + id, 'enabled');
-                }, 4000);
+                }, 6000);
 
             }).catch(error => {
                 console.error(error);
@@ -823,7 +823,7 @@ export default {
                 this.$emit('refresh');
                 setTimeout(() => {
                     this.btnState('add-all-' + codeStructure, 'enabled');
-                }, 2500);
+                }, 4000);
 
             }).catch(error => {
                 this.$emit('refresh');

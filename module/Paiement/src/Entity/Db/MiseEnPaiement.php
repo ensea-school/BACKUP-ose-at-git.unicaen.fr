@@ -5,8 +5,6 @@ namespace Paiement\Entity\Db;
 use Application\Entity\Db\Periode;
 use Doctrine\Common\Collections\Collection;
 use Enseignement\Entity\Db\Service;
-use Formule\Entity\Db\FormuleResultatService;
-use Formule\Entity\Db\FormuleResultatServiceReferentiel;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;

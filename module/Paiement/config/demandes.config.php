@@ -79,7 +79,7 @@ return [
                     ],
                     'withtarget'          => true,
                     'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
-                    'resource'            => PrivilegeController::getResourceId(Controller\PaiementController::class, 'demandeMiseEnPaiement'),
+                    'resource'            => PrivilegeController::getResourceId(Controller\DemandesController::class, 'demandeMiseEnPaiement'),
                     'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 16,
                 ],

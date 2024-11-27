@@ -27,6 +27,14 @@ class v24Formules extends MigrationAction
     {
         $bdd = $this->getBdd();
 
+        // Sauvegarde des anciennes tables
+        // afin de pouvoir faire des comparatifs au besoin
+        $this->manager()->sauvegarderTable('FORMULE_RESULTAT_SERVICE', 'SAVE_V24_FRES_SERVICE');
+        $this->manager()->sauvegarderTable('FORMULE_RESULTAT_SERVICE_REF', 'SAVE_V24_FRES_SERVICE_REF');
+        $this->manager()->sauvegarderTable('FORMULE_RESULTAT_VH', 'SAVE_V24_FRES_VH');
+        $this->manager()->sauvegarderTable('FORMULE_RESULTAT_VH_REF', 'SAVE_V24_FRES_VH_REF');
+
+        // Renommage de colonnes/tables pour les tests
         $vhColRenames = [
             'INTERVENANT_TEST_ID'        => 'FORMULE_INTERVENANT_TEST_ID',
             'A_SERVICE_FI'               => 'HEURES_ATTENDUES_SERVICE_FI',
@@ -54,6 +62,7 @@ class v24Formules extends MigrationAction
             $bdd->exec("ALTER TABLE FORMULE_TEST_VOLUME_HORAIRE RENAME COLUMN $old TO $new");
         }
 
+        // Préparation aux modifs de la table formule
         $bdd->exec('ALTER TABLE FORMULE ADD (CODE VARCHAR2(50))');
         $bdd->exec('UPDATE formule SET code = package_name');
     }
@@ -62,8 +71,21 @@ class v24Formules extends MigrationAction
 
     public function after()
     {
+        $bdd = $this->getBdd();
+
+        // On désactive l'arrondisseur pour tous les intervenants ayant déjà des mises en paiement
+        $bdd->exec("UPDATE intervenant SET formule_calcul_arrondisseur = 0 WHERE id IN (
+          SELECT DISTINCT intervenant_id
+          FROM tbl_paiement p
+          WHERE p.heures_payees_aa + p.heures_payees_ac > 0
+        )");
+
+        // On calcule toutes les formules
+        $this->logBegin('Calcul des formules pour toutes les fiches de service');
+        $this->logMsg('/!\ Ce traitement peut prendre plusieurs heures /!\\');
         $sTbl = $this->getServiceFormule()->getServiceTableauBord();
         $sTbl->calculer('formule', []);
+        $this->logEnd('Toutes les fiches de service sont recalculées');
     }
 
 }

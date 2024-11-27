@@ -15,19 +15,8 @@ Voici les paramètres à mettre en place  :
 
 ```php
    'unicaen-signature' => [
-        //Répertoir de travail permettant de générer et/ou récupérer physiquement les document au format pdf pour les envoyer par la suite dans le parafeur    
-        'documents_path' => __DIR__ . '/data/signature',
-
-        //Paramétrage des logs concernant la signature. Permet d'avoir un certain nomnbre de traces sur le fonctionnement de la signature électronique
-        'logger' => [
-            'enable'          => true,
-            'level'           => \Monolog\Logger::DEBUG,
-            'file'            => __DIR__ . '/cache/unicaen-signature.log',
-            'stdout'          => false,
-            'file_permission' => 0666,
-            'customLogger'    => null,
-
-        ],
+        
+       'log' => true,
 
         /*Cette partie permet de surcharger les personnes à qui seront envoyées les signatures électroniques. 
         L'envoi des emails étant géré directement par le parafeur cela permet de jouer des circuits de signature 
@@ -68,21 +57,7 @@ Voici les paramètres à mettre en place  :
                     ],
                 ],
             ],
-        //Nécessaire pour le bon fonctionnement du module, laisser tel quel.
-        'get_recipients_methods' => [
-            [
-                'key'           => 'by_role',
-                'label'         => 'Personnes par rôle',                                   // Intitulé
-                'description'   => 'Selectionne les personnes en fonction de leurs rôles', // Description
-                'getRecipients' => [],
-            ],
-            [
-                'key'           => 'by_intervenant',
-                'label'         => 'Personnes par rôle',                                   // Intitulé
-                'description'   => 'Selectionne les personnes en fonction de leurs rôles', // Description
-                'getRecipients' => [],
-            ],
-        ],
+       
 
     ],
 ```

@@ -23,20 +23,20 @@ return [
         'get_recipients_methods' => [
             [
                 'key'           => 'by_etablissement',
-                'label'         => 'Etablissement',                                                         // Intitulé
-                'description'   => 'Signature par l\'établissement',                                        // Description
+                'label'         => 'Etablissement',
+                'description'   => 'Signature par l\'établissement',
                 'getRecipients' => [],
             ],
             [
                 'key'           => 'by_intervenant',
-                'label'         => 'Intervenant',                                          // Intitulé
-                'description'   => 'Signature par l\'intervenant',                         // Description
+                'label'         => 'Intervenant',
+                'description'   => 'Signature par l\'intervenant',
                 'getRecipients' => [],
             ],
             [
                 'key'           => 'by_etablissement_and_intervenant',
-                'label'         => 'Personnes par rôle',                                   // Intitulé
-                'description'   => 'Signature par l\'etablissement et l\'intervenant',     // Description
+                'label'         => 'Personnes par rôle',
+                'description'   => 'Signature par l\'etablissement et l\'intervenant',
                 'getRecipients' => [],
             ],
         ],

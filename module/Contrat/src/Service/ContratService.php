@@ -15,6 +15,7 @@ use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
+use Contrat\Entity\Db\TblContrat;
 use Doctrine\ORM\QueryBuilder;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
@@ -672,13 +673,15 @@ class ContratService extends AbstractEntityService
 
     public function getFirstContratMission(Intervenant $intervenant): ?Mission
     {
-        $dql = " SELECT c,m
-            FROM " . Contrat::class . " c
-            JOIN c.intervenant i
-            JOIN c.mission m
-            WHERE c.intervenant = :intervenant
-                --AND c.dateRetourSigne IS NOT NULL
-                AND c.histoDestruction IS NULL
+        $dql = "
+            SELECT tblc, c,m
+            FROM ".TblContrat::class." tblc
+            JOIN tblc.intervenant i
+            JOIN tblc.contrat c
+            JOIN tblc.mission m
+            WHERE tblc.intervenant = :intervenant
+            AND tblc.mission IS NOT NULL
+            AND c.histoDestruction IS NULL
             ORDER BY m.dateDebut ASC
         ";
 
@@ -695,43 +698,8 @@ class ContratService extends AbstractEntityService
     }
 
 
-
-    public function getContratInitialMission(?Mission $mission)
-    {
-        $dql = '
-        SELECT
-          c
-        FROM
-        Contrat\Entity\Db\Contrat c
-        JOIN c.mission m
-        JOIN m.volumesHoraires      vhm
-        WHERE
-          m.histoDestruction IS NULL
-          AND vhm.histoDestruction IS NULL
-          AND  m.id = :mission
-          AND c.contrat IS NULL';
-
-        $query = $this->getEntityManager()->createQuery($dql);
-        $query->setParameter('mission', $mission->getId());
-
-        $res = $query->getResult();
-        if ($res) {
-            return $res[0];
-        }
-
-        return null;
-    }
-
-
-
     public function getContratWithProcessWaiting()
     {
-
-        /*
-         *         $dql   = "SELECT cm FROM " . CentreCout::class." cm WHERE cm.histoDestruction IS NULL";
-        $query = $this->getEntityManager()->createQuery($dql);
-
-        return $query->getResult();*/
 
         $dql = "
             SELECT c

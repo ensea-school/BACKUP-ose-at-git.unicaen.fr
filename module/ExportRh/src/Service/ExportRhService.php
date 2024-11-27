@@ -217,11 +217,7 @@ class ExportRhService extends AbstractService
     public function haveToSyncCode (): bool
     {
         $config = $this->config;
-        if ($config['export-rh']['sync-code'] === true) {
-            return true;
-        }
-
-        return false;
+        return $config['export-rh']['sync-code'] ?? false;
     }
 
 
@@ -230,12 +226,11 @@ class ExportRhService extends AbstractService
     {
 
         $config = $this->config;
-        if (!empty($config['export-rh']['sync-source'])) {
-            //On regarde si le code fourni correspond bien à une source valide
-            $source = $this->getServiceSource()->getByCode($config['export-rh']['sync-source']);
-            if (!empty($source)) {
-                return true;
-            }
+        $syncSource = $config['export-rh']['sync-source'] ?? '';
+        //On regarde si le code fourni correspond bien à une source valide
+        $source = $this->getServiceSource()->getByCode($syncSource);
+        if (!empty($source)) {
+            return true;
         }
 
         return false;
@@ -244,11 +239,8 @@ class ExportRhService extends AbstractService
     public function haveToSyncCodeRh(): bool
     {
         $config = $this->config;
-        if ($config['export-rh']['sync-code-rh'] === true) {
-            return true;
-        }
+        return $config['export-rh']['sync-code-rh'] ?? false;
 
-        return false;
     }
 
 

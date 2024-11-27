@@ -6,5 +6,6 @@ return [
         'connecteur'  => AppAdmin::config()['export-rh']['connecteur'] ?? '',
         'sync-code'   => AppAdmin::config()['export-rh']['sync-code'] ?? false,
         'sync-source' => AppAdmin::config()['export-rh']['sync-source'] ?? '',
+        'sync-code-rh' => AppAdmin::config()['export-rh']['sync-code-rh'] ?? '',
     ],
 ];

@@ -120,21 +120,7 @@ $config = [
             ],
         ],
         'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'Information' => [],
-            ],
             Provider\Resource\ResourceProvider::class     => [],
-        ],
-        'rule_providers'     => [
-            PrivilegeRuleProvider::class => [
-                'allow' => [
-                    [
-                        'roles'     => ['user'],
-                        'resources' => 'Information',
-                        'assertion' => Assertion\InformationAssertion::class,
-                    ],
-                ],
-            ],
         ],
     ],
     'service_manager'    => [
@@ -161,7 +147,6 @@ $config = [
             Connecteur\LdapConnecteur::class                            => Connecteur\Factory\LdapConnecteurFactory::class,
             Cache\CacheService::class                                   => Cache\Factory\CacheServiceFactory::class,
             Service\UtilisateurService::class                           => Service\Factory\UtilisateurServiceFactory::class,
-            Assertion\InformationAssertion::class                       => \UnicaenPrivilege\Assertion\AssertionFactory::class,
             HostLocalization\HostLocalizationOse::class                 => HostLocalization\HostLocalizationOseFactory::class,
             ORM\RouteEntitiesInjector::class                            => ORM\RouteEntitiesInjectorFactory::class,
             ORM\Event\Listeners\HistoriqueListener::class               => ORM\Event\Listeners\HistoriqueListenerFactory::class,

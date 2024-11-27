@@ -18,11 +18,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <h1 class="page-header">Services <small>Année universitaire <?= $annee; ?></small></h1>
 <?php
 
-if ($this->isAllowed('Information', 'info-only-structure')) {
-    echo $this->messenger()->setMessages(['warning' => "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
-        . "ou enseignant dans votre structure de responsabilité ou l'une de ses sous-structures."]);
-}
-
 echo $this->recherche;
 
 $isResume = isset($resumeServices);

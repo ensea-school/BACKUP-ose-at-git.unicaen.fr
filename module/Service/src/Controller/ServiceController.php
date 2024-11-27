@@ -2,6 +2,7 @@
 
 namespace Service\Controller;
 
+use Application\Acl\Role;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
@@ -61,13 +62,13 @@ class ServiceController extends AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Enseignement\Entity\Db\Service::class,
-            \Enseignement\Entity\Db\VolumeHoraire::class,
-            \Application\Entity\Db\Validation::class,
-        ]);
+                                                                  \Enseignement\Entity\Db\Service::class,
+                                                                  \Enseignement\Entity\Db\VolumeHoraire::class,
+                                                                  \Application\Entity\Db\Validation::class,
+                                                              ]);
         $this->em()->getFilters()->enable('annee')->init([
-            ElementPedagogique::class,
-        ]);
+                                                             ElementPedagogique::class,
+                                                         ]);
     }
 
 
@@ -83,6 +84,14 @@ class ServiceController extends AbstractController
 
         $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $viewModel        = new ViewModel();
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role->getStructure()) {
+            $this->flashMessenger()->addWarningMessage(
+                "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
+                . "ou enseignant dans votre structure de responsabilité ou l'une de ses sous-structures."
+            );
+        }
 
         $canAddService = Privileges::ENSEIGNEMENT_PREVU_EDITION || Privileges::ENSEIGNEMENT_REALISE_EDITION;
 
@@ -187,16 +196,16 @@ class ServiceController extends AbstractController
     protected function intervenantSaisieAction(TypeVolumeHoraire $typeVolumeHoraire)
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Enseignement\Entity\Db\Service::class,
-            \Enseignement\Entity\Db\VolumeHoraire::class,
-            \OffreFormation\Entity\Db\CheminPedagogique::class,
-            \Referentiel\Entity\Db\ServiceReferentiel::class,
-            \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
-            \Application\Entity\Db\Validation::class,
-        ]);
+                                                                  \Enseignement\Entity\Db\Service::class,
+                                                                  \Enseignement\Entity\Db\VolumeHoraire::class,
+                                                                  \OffreFormation\Entity\Db\CheminPedagogique::class,
+                                                                  \Referentiel\Entity\Db\ServiceReferentiel::class,
+                                                                  \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
+                                                                  \Application\Entity\Db\Validation::class,
+                                                              ]);
         $this->em()->getFilters()->enable('annee')->init([
-            \OffreFormation\Entity\Db\ElementPedagogique::class,
-        ]);
+                                                             \OffreFormation\Entity\Db\ElementPedagogique::class,
+                                                         ]);
 
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -279,8 +288,8 @@ class ServiceController extends AbstractController
     public function intervenantClotureAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            Validation::class,
-        ]);
+                                                                  Validation::class,
+                                                              ]);
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */

@@ -23,10 +23,6 @@ class IndexController extends AbstractController
     use ParametresServiceAwareTrait;
 
 
-    /**
-     *
-     * @return type
-     */
     public function indexAction()
     {
         $role = $this->serviceUserContext->getSelectedIdentityRole();

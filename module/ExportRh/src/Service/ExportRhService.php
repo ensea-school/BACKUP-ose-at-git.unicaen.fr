@@ -164,9 +164,9 @@ class ExportRhService extends AbstractService
 
 
 
-    public function cloreDossier (Intervenant $intervenant)
+    public function cloreDossier(Intervenant $intervenant, string $codeStatutSiham)
     {
-        return $this->connecteur->cloreDossier($intervenant);
+        return $this->connecteur->cloreDossier($intervenant, $codeStatutSiham);
     }
 
 
@@ -240,5 +240,16 @@ class ExportRhService extends AbstractService
 
         return false;
     }
+
+    public function haveToSyncCodeRh(): bool
+    {
+        $config = $this->config;
+        if ($config['export-rh']['sync-code-rh'] === true) {
+            return true;
+        }
+
+        return false;
+    }
+
 
 }

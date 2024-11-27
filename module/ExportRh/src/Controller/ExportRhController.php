@@ -91,14 +91,24 @@ class ExportRhController extends AbstractController
                 }
 
                 $posts  = $this->getRequest()->getPost();
-                $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
-                if ($result !== false) {
-                    $this->exportRhService->cloreDossier($intervenant);
+                if (empty($posts['connecteurForm']['statut']) || $posts['connecteurForm']['statut'] != '') {
+                    $codeStatut = $posts['connecteurForm']['statut'];
+                } else {
+                    throw new \Exception("Le statut de prise en charge n'a pas été précisé");
+                }
+
+                $matricule = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
+                if ($matricule !== false) {
+                    $this->exportRhService->cloreDossier($intervenant, $codeStatut);
                     $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');
                     $this->getServiceIntervenant()->updateExportDate($intervenant);
                     //On met à jour le code intervenant si l'option est activée
                     if ($this->exportRhService->haveToSyncCode()) {
-                        $this->getServiceIntervenant()->updateCode($intervenant, $result);
+                        $this->getServiceIntervenant()->updateCode($intervenant, $matricule);
+                    }
+                    //On met à jour le code rh si l'option est activée
+                    if ($this->exportRhService->haveToSyncCodeRh()) {
+                        $this->getServiceIntervenant()->updateCodeRh($intervenant, $matricule);
                     }
                     //On met à jour le source code lors de la synchronisauot
                     if ($this->exportRhService->haveToSyncSource()) {
@@ -111,6 +121,8 @@ class ExportRhController extends AbstractController
         } catch (\Exception $e) {
 
             $this->flashMessenger()->addErrorMessage($e->getMessage());
+            return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()]);
+
         }
 
         return $this->exporterAction();
@@ -231,9 +243,8 @@ class ExportRhController extends AbstractController
     public function renouvellementAction()
     {
         try {
-
+            $intervenant = $this->getEvent()->getParam('intervenant');
             if ($this->getRequest()->isPost()) {
-                $intervenant = $this->getEvent()->getParam('intervenant');
                 if (!$intervenant) {
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
@@ -247,14 +258,20 @@ class ExportRhController extends AbstractController
                     $this->flashMessenger()->addErrorMessage('Vous n\'avez pas choisi de type d\'emploi pour l\'agent');
                     $missingArgument++;
                 }
+                if (isset($posts['connecteurForm']['statut'])) {
+                    $codeStatut = $posts['connecteurForm']['statut'];
+                } else {
+                    throw new \Exception("Le statut de prise en charge n'a pas été précisé");
+                }
+
                 if ($missingArgument == 0) {
-                    $result = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
-                    if ($result !== false) {
-                        $this->exportRhService->cloreDossier($intervenant);
+                    $matricule = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
+                    if ($matricule !== false) {
+                        $this->exportRhService->cloreDossier($intervenant, $codeStatut);
                         $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
                         $this->getServiceIntervenant()->updateExportDate($intervenant);
                         if ($this->exportRhService->haveToSyncCode()) {
-                            $this->getServiceIntervenant()->updateCode($intervenant, $result);
+                            $this->getServiceIntervenant()->updateCode($intervenant, $matricule);
                         }
                         if ($this->exportRhService->haveToSyncSource()) {
                             $this->getServiceIntervenant()->updateSource($intervenant);
@@ -266,6 +283,8 @@ class ExportRhController extends AbstractController
             }
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
+            return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()]);
+
         }
 
         return $this->exporterAction();

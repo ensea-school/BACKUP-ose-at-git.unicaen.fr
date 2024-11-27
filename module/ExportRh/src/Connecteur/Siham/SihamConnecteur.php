@@ -818,7 +818,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
-    public function cloreDossier(Intervenant $intervenant): ?bool
+    public function cloreDossier(Intervenant $intervenant, string $codeStatutSiham): ?bool
     {
 
 
@@ -843,11 +843,27 @@ class SihamConnecteur implements ConnecteurRhInterface
             $motifSituation     = 'MC141';
             //On regarde si des valeurs ont été spécifié dans la configuration siham
             if (isset($this->siham->getConfig()['cloture'])) {
-                if (isset($this->siham->getConfig()['cloture']['categorie-situation'])) {
-                    $categorieSituation = $this->siham->getConfig()['cloture']['categorie-situation'];
-                }
-                if (isset($this->siham->getConfig()['cloture']['motif-situation'])) {
-                    $motifSituation = $this->siham->getConfig()['cloture']['motif-situation'];
+                if (array_key_exists($codeStatutSiham, $this->siham->getConfig()['cloture'])) {
+                    if (isset($this->siham->getConfig()['cloture'][$codeStatutSiham]['categorie-situation'])) {
+                        $categorieSituation = $this->siham->getConfig()['cloture'][$codeStatutSiham]['categorie-situation'];
+                    }
+                    if (isset($this->siham->getConfig()['cloture'][$codeStatutSiham]['motif-situation'])) {
+                        $motifSituation = $this->siham->getConfig()['cloture'][$codeStatutSiham]['motif-situation'];
+                    }
+                } elseif (isset($this->siham->getConfig()['cloture']['default'])) {
+                    if (isset($this->siham->getConfig()['cloture']['default']['categorie-situation'])) {
+                        $categorieSituation = $this->siham->getConfig()['cloture']['default']['categorie-situation'];
+                    }
+                    if (isset($this->siham->getConfig()['cloture']['default']['motif-situation'])) {
+                        $motifSituation = $this->siham->getConfig()['cloture']['default']['motif-situation'];
+                    }
+                } else {
+                    if (isset($this->siham->getConfig()['cloture']['categorie-situation'])) {
+                        $categorieSituation = $this->siham->getConfig()['cloture']['categorie-situation'];
+                    }
+                    if (isset($this->siham->getConfig()['cloture']['motif-situation'])) {
+                        $motifSituation = $this->siham->getConfig()['cloture']['motif-situation'];
+                    }
                 }
 
             }

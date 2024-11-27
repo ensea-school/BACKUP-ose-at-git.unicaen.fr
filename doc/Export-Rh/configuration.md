@@ -122,6 +122,31 @@ suivantes et faire le paramètrage souhaité :
             'categorie-situation' => 'MC140',
             'motif-situation'     => 'MC601',
         ],
+        
+        //ou avec un paramètrage affiné par code statut siham
+         //Parametrage de la cloture d'un dossier
+        'cloture'                         => [
+            'C2038' => [
+                'categorie-situation' => 'MC140',
+                'motif-situation'     => 'MC141',
+            ],
+            'C2041' => [
+                'categorie-situation' => 'MC150',
+                'motif-situation'     => 'MC151',
+            ],
+            'C2052' => [
+                'categorie-situation' => 'MC160',
+                'motif-situation'     => 'MC161',
+            ],
+            'C1204' => [
+                'categorie-situation' => 'MC170',
+                'motif-situation'     => 'MC171',
+            ],
+            'default' => [
+                'categorie-situation' => 'MC140',
+                'motif-situation'     => 'MC141',
+            ],
+        ],
 
 
         

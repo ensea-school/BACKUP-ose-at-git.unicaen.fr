@@ -605,6 +605,19 @@ class IntervenantService extends AbstractEntityService
         return $intervenant;
     }
 
+    public function updateCodeRh(Intervenant $intervenant, $codeRh): Intervenant
+    {
+        if (!empty($codeRh)) {
+            $intervenant->setCodeRh($codeRh);
+            $this->getEntityManager()->persist($intervenant);
+            $this->getEntityManager()->flush();
+            //On recalcul les tablaeux de bords de l'intervenant
+            $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+        }
+
+        return $intervenant;
+    }
+
 
 
     public function updateSource (Intervenant $intervenant): Intervenant

@@ -103,6 +103,10 @@ class AppAdmin
             require 'public/maintenance.php';
         }
 
+        if (self::inCli()){ // plus de limite de RAM en CLI
+            ini_set('memory_limit', '-1');
+        }
+
         /* Définition de la config globale, éventuellement à partir du fichier de config général */
         if (self::config()['global']['affichageErreurs'] ?? true) {
             error_reporting(E_ALL);

@@ -64,7 +64,9 @@ class FormuleProcess implements ProcessInterface
         /* Initialisation de l'année et de la formule à utiliser */
         if (array_key_exists('ANNEE_ID', $params)) {
             $annee = $this->getServiceBdd()->entityGet(Annee::class, $params['ANNEE_ID']);
-        } else {
+        } elseif(array_key_exists('INTERVENANT_ID', $params) && !array_key_exists('ANNEE_ID', $params)) {
+            $annee = $this->getBdd()->selectOne('SELECT annee_id FROM intervenant WHERE id = :id', ['id' => $params['INTERVENANT_ID']], 'ANNEE_ID');
+        }else{
             /* Si l'année n'est pas précisée, alors on ne calcule que sur l'année en cours pour éviter des problèmes de mémoire */
             $annee              = $this->getServiceContext()->getAnnee();
             $params['ANNEE_ID'] = $annee->getId();
@@ -100,13 +102,16 @@ class FormuleProcess implements ProcessInterface
 
 
 
-    public function getFormuleServiceIntervenant(int $intervenantId, int $typeVolumehoraireId, int $etatVolumeHoraireId): FormuleServiceIntervenant
+    public function getFormuleServiceIntervenant(int $intervenantId, int $typeVolumehoraireId, int $etatVolumeHoraireId, ?int $anneeId): FormuleServiceIntervenant
     {
         $params = [
             'INTERVENANT_ID'         => $intervenantId,
             'TYPE_VOLUME_HORAIRE_ID' => $typeVolumehoraireId,
             'ETAT_VOLUME_HORAIRE_ID' => $etatVolumeHoraireId,
         ];
+        if ($anneeId){
+            $params['ANNEE_ID'] = $anneeId;
+        }
 
         $this->init($params);
         $this->load($params);
@@ -248,7 +253,7 @@ class FormuleProcess implements ProcessInterface
         $formulator = $this->getServiceFormulator();
         foreach ($this->data as $formuleIntervenant) {
             $formulator->calculer($formuleIntervenant, $this->formule, true);
-            $trace = $formuleIntervenant->getArrondisseurTrace();
+            //$trace = $formuleIntervenant->getArrondisseurTrace();
         }
     }
 

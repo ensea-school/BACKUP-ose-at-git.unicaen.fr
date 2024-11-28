@@ -17,13 +17,13 @@ class Arrondisseur
 
 
 
-    public function arrondir(FormuleIntervenant $fi, bool $arrondir = true): void
+    public function arrondir(FormuleIntervenant $fi): void
     {
         $this->calculs = [];
 
         $data = $this->makeData($fi);
 
-        if ($arrondir) {
+        if ($fi->isArrondisseur()) {
             $this->preparerCalculs($data);
         } elseif(!$fi instanceof FormuleTestIntervenant) {
             $this->preparerCalculsMinimaux($data);

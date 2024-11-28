@@ -156,7 +156,9 @@ class FormuleService extends AbstractService
 
     public function getFormuleServiceIntervenant(int|Intervenant $intervenant, int|TypeVolumeHoraire $typeVolumeHoraire, int|EtatVolumeHoraire $etatVolumeHoraire): FormuleServiceIntervenant
     {
+        $annee = null;
         if ($intervenant instanceof Intervenant){
+            $annee = $intervenant->getAnnee()?->getId() ?? null;
             $intervenant = $intervenant->getId();
         }
 
@@ -171,7 +173,7 @@ class FormuleService extends AbstractService
         /** @var FormuleProcess $process */
         $process = $this->getServiceTableauBord()->getTableauBord('formule')->getProcess();
 
-        return $process->getFormuleServiceIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+        return $process->getFormuleServiceIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire, $annee);
     }
 
 

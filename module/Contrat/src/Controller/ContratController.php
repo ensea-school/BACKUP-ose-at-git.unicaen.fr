@@ -12,7 +12,6 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
-use Contrat\Entity\Db\ContratServiceListe;
 use Contrat\Entity\Db\TblContrat;
 use Contrat\Form\ContratRetourFormAwareTrait;
 use Contrat\Form\EnvoiMailContratFormAwareTrait;
@@ -28,20 +27,14 @@ use Enseignement\Service\ServiceServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Http\Response;
-use Laminas\Validator\Date;
 use Laminas\View\Model\JsonModel;
-use Lieu\Entity\Db\Structure;
 use LogicException;
-use PHPUnit\Exception;
-use Service\Entity\Db\TypeService;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Unicaen\OpenDocument\Document;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\ProcessStep;
-use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
 
 /**
@@ -640,7 +633,6 @@ class ContratController extends AbstractController
         $errors = $this->getServiceWorkflow()->calculerTableauxBord([
                                                                         'formule',
                                                                         'contrat',
-                                                                        'mission',
                                                                     ], $intervenant);
         if (!empty($errors)) {
             foreach ($errors as $error) {

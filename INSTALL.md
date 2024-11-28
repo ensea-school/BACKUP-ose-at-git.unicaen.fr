@@ -148,9 +148,14 @@ systemctl start unoconv.service
 L'installation se fait en récupérant les sources directement depuis le dépôt GitLab de l'Université de Caen.
 Un script a été conçu pour automatiser cette opération.
 
-Exécutez la commande suivante sur votre serveur :
+Pour installer OSE en version 24 et supérieures, exécutez la commande suivante sur votre serveur :
 ```bash
 wget https://ose.unicaen.fr/install && php install
+```
+
+Pour installer les versions 23 et antérieures, exécutez la commande suivante sur votre serveur :
+```bash
+wget https://ose.unicaen.fr/install-legacy && php install-legacy
 ```
 
 ### Configuration d'Apache

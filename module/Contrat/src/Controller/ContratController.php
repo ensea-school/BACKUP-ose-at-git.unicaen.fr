@@ -105,11 +105,14 @@ class ContratController extends AbstractController
         foreach ($volumesHoraireIntervenant as $volumeHoraireIntervenant) {
             /** @var TblContrat $volumesHoraireIntervenant */
 
-            if ($volumeHoraireIntervenant->getContrat() == null) {
-                $services['NoContrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
-            } else {
-                $services['Contrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
+            if ($volumeHoraireIntervenant->getTypeService() != null) {
+                if ($volumeHoraireIntervenant->getContrat() == null) {
+                    $services['NoContrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
+                } else {
+                    $services['Contrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
+                }
             }
+
         }
 
         $contratDirectResult        = $this->getServiceParametres()->get('contrat_direct');

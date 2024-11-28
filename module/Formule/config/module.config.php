@@ -71,12 +71,14 @@ return [
         Service\FormuleService::class     => Service\FormuleServiceFactory::class,
         Tbl\Process\FormuleProcess::class => Tbl\Process\FormuleProcessFactory::class,
         Command\BuildCommand::class  => Command\BuildCommandFactory::class,
+        Command\CalculCommand::class => Command\CalculCommandFactory::class,
     ],
 
 
     'laminas-cli' => [
         'commands' => [
             'build-formules' => Command\BuildCommand::class,
+            'formule-calcul' => Command\CalculCommand::class,
         ],
     ],
 ];

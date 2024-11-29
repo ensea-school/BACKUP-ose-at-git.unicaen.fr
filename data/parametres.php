@@ -285,12 +285,12 @@ Cordialement,
 
     "contrat_mis" => [
         "VALEUR"      => "contrat_mis_mission",
-        "DESCRIPTION" => "Un contrat par mission",
+        "DESCRIPTION" => "Paramètre sur quelles missions un contrat porte",
     ],
 
     "contrat_ens" => [
         "VALEUR"      => "contrat_ens_composante",
-        "DESCRIPTION" => "Un contrat ou un avenant par composante",
+        "DESCRIPTION" => "Paramètre sur quels enseignements un contrat porte",
     ],
     "contrat_date" => [
         "VALEUR"      => "desactive",

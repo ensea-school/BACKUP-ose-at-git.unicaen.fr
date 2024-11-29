@@ -30,6 +30,11 @@ class Parametre implements HistoriqueAwareInterface
     const SERVICES_MODALITE_CALENDAIRE = 'calendaire';
     const SERVICES_MODALITE_SEMESTRIEL = 'semestriel';
 
+    /* Nécessaire pour la migration de 23 a 24 */
+    const OLD_AVENANT_AUTORISE  = 'avenant_autorise';
+    const OLD_AVENANT_STRUCT    = 'avenant_struct';
+    const OLD_AVENANT_DESACTIVE = 'avenant_desactive';
+
     use HistoriqueAwareTrait;
 
     /**

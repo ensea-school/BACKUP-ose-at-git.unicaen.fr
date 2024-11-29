@@ -124,10 +124,10 @@ class FormuleService extends AbstractService
 
 
 
-    public function calculer(FormuleIntervenant $formuleIntervenant, bool $arrondir=true): void
+    public function calculer(FormuleIntervenant $formuleIntervenant): void
     {
         $formule = $this->getCurrent($formuleIntervenant->getAnnee());
-        $this->getServiceFormulator()->calculer($formuleIntervenant, $formule, $arrondir);
+        $this->getServiceFormulator()->calculer($formuleIntervenant, $formule);
     }
 
 

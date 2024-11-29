@@ -13,16 +13,17 @@ $ts = $container->get(\Formule\Service\TestService::class);
 
 
 $intervenantId = 784094;
-$intervenantId = 2032;
+//$intervenantId = 2032;
 $typeVolumeHoraireId = 1;
 $etatVolumeHoraireId = 1;
-$arrondir = false;
+$arrondir = true;
 
 $fi = $fs->getFormuleServiceIntervenant($intervenantId, $typeVolumeHoraireId, $etatVolumeHoraireId);
+$fi->setArrondisseur($arrondir);
 
 /* Calcul & affichage des résultats d'arrondissage */
 if (isset($fi)) {
-    $ts->getServiceFormule()->calculer($fi, $arrondir);
+    $ts->getServiceFormule()->calculer($fi);
     $aff = new \Formule\Model\Arrondisseur\Afficheur();
     $aff->afficher($fi->getArrondisseurTrace());
 }

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Stocke le répertoire d'oû est lancé le script, au cas où
+export SCRIPT_LAUNCH_DIR="$PWD"
+
 # Résoudre le chemin réel du script, même si c'est un lien symbolique
 SOURCE="${BASH_SOURCE[0]}"
 while [ -L "$SOURCE" ]; do

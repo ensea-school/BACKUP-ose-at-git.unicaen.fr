@@ -22,7 +22,7 @@
         "unicaen/siham"                               : "6.1.6",
         "unicaen/mail"                                : "6.1.10",
         "unicaen/vue"                                 : "6.2.4",
-        "unicaen/bddadmin"                            : "1.0.2",
+        "unicaen/bddadmin"                            : "1.0.3",
         "unicaen/signature"                           : "1.0.0",
         "laminas/laminas-cache-storage-adapter-memory": "2.3.0",
         "laminas/laminas-text"                        : "2.11",

@@ -657,13 +657,14 @@ export default {
             })).then(response => {
                 this.$emit('refresh');
                 setTimeout(() => {
-                    this.btnState('remove-' + id, 'enabled');
-                }, 6000);
+                    this.btnResetState();
+                }, 3000);
+
             }).catch(error => {
                 this.$emit('refresh');
                 setTimeout(() => {
-                    this.btnState('remove-' + id, 'enabled');
-                }, 2500);
+                    this.btnResetState();
+                }, 3000);
             })
         },
         disabledPaiement(value)
@@ -717,13 +718,13 @@ export default {
             //Si centre de cout non sélectionné
             if (centreCoutId == '') {
                 unicaenVue.flashMessenger.toast("Vous devez sélectionner un centre de coût pour demander la mise en paiement de ces heures", 'error', options)
-                this.btnState('add-' + id, 'enabled');
+                this.btnResetState();
                 return false;
             }
             //Si le nombre d'heure demandées est supérieur au nombre d'heures maximum pour cette ligne
             if (heureADemander > 0 && heureADemander > heureADemanderMax) {
                 unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible, vous demandez " + heureADemander + " hetd(s) alors que vous pouvez demander maximum " + heureADemanderMax + " hetd(s)", 'error', options);
-                this.btnState('add-' + id, 'enabled');
+                this.btnResetState();
                 return false;
             }
             //Si je suis sur une demande de mise en paiement avec des fonds paie etat
@@ -731,7 +732,7 @@ export default {
                 let solde = this.dotationPaieEtat - (this.consommationPaieEtat + heureADemander);
                 if (solde <= 0) {
                     unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'paie etat' pour ces heures", 'error', options)
-                    this.btnState('add-' + id, 'enabled');
+                    this.btnResetState();
                     return false;
                 }
             }
@@ -740,7 +741,7 @@ export default {
                 let solde = this.dotationRessourcesPropres - (this.consommationRessourcesPropres + heureADemander);
                 if (solde <= 0) {
                     unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'ressources propres' pour ces heures", 'error', options)
-                    this.btnState('add-' + id, 'enabled');
+                    this.btnResetState();
                     return false;
                 }
             }
@@ -764,14 +765,14 @@ export default {
             unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas).then(response => {
                 this.$emit('refresh');
                 setTimeout(() => {
-                    this.btnState('add-' + id, 'enabled');
-                }, 6000);
+                    this.btnResetState();
+                }, 4000);
 
             }).catch(error => {
                 console.error(error);
                 setTimeout(() => {
-                    this.btnState('add-' + id, 'enabled');
-                }, 2500);
+                    this.btnResetState();
+                }, 4000);
             })
 
 
@@ -822,14 +823,14 @@ export default {
             unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas).then(response => {
                 this.$emit('refresh');
                 setTimeout(() => {
-                    this.btnState('add-all-' + codeStructure, 'enabled');
-                }, 4000);
+                    this.btnResetState();
+                }, 3000);
 
             }).catch(error => {
                 this.$emit('refresh');
                 setTimeout(() => {
-                    this.btnState('add-all-' + codeStructure, 'enabled');
-                }, 2500);
+                    this.btnResetState();
+                }, 3000);
             })
         },
         filtrerCentresCouts(centresCouts, typeHeures)
@@ -903,6 +904,32 @@ export default {
                 return true;
             }
             return false;
+
+        },
+        btnResetState()
+        {
+            //Reset des boutons remove
+            let elementsBtnRemove = Array.from(document.querySelectorAll('[id^="remove-"]'));
+            elementsBtnRemove.forEach(el => {
+                el.disabled = false;
+                el.querySelector('#waiting').style.display = 'none';
+                el.querySelector('#action').style.display = 'inline-block';
+            });
+            //Reset des boutons add
+            let elementsBtnAdd = Array.from(document.querySelectorAll('[id^="add-"]'));
+            elementsBtnAdd.forEach(el => {
+                el.disabled = false;
+                el.querySelector('#waiting').style.display = 'none';
+                el.querySelector('#action').style.display = 'inline-block';
+            });
+            //Reset des boutons add-all
+            let elementsBtnAddAll = Array.from(document.querySelectorAll('[id^="add-all"]'));
+            elementsBtnAddAll.forEach(el => {
+                el.disabled = false;
+                el.querySelector('#waiting').style.display = 'none';
+                el.querySelector('#action').style.display = 'inline-block';
+            });
+
 
         },
         formatDate(val, format)

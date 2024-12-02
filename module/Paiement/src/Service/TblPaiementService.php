@@ -3,7 +3,6 @@
 namespace Paiement\Service;
 
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\Intervenant;

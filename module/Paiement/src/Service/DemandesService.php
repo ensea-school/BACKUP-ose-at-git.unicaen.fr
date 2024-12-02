@@ -57,7 +57,7 @@ class DemandesService extends AbstractService
                 $data                   = [];
                 $data['heures']         = $heures->getHeuresAPayerAA() + $heures->getHeuresAPayerAC();
                 $data['centre-cout-id'] = ($heures->getCentreCout()) ? $heures->getCentreCout()->getId() : '';;
-                $data['domaine-fonctionnel-id'] = ($heures->getDomaineFonctionel()) ? $heures->getDomaineFonctionel()->getId() : '';
+                $data['domaine-fonctionnel-id'] = ($heures->getDomaineFonctionnel()) ? $heures->getDomaineFonctionnel()->getId() : '';
                 $data['service-id']             = ($heures->getService()) ? $heures->getService()->getId() : '';
                 $data['service-referentiel-id'] = ($heures->getServiceReferentiel()) ? $heures->getServiceReferentiel()->getId() : '';
                 $data['mission-id']             = ($heures->getMission()) ? $heures->getMission()->getId() : '';

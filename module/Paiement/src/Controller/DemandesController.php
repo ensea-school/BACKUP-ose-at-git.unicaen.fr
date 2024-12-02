@@ -9,6 +9,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
@@ -31,6 +32,7 @@ class DemandesController extends AbstractController
     use ContextServiceAwareTrait;
     use DemandesServiceAwareTrait;
     use StructureServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
 
 
     protected function initFilters(): void

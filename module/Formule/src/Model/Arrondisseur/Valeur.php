@@ -66,8 +66,9 @@ class Valeur
         $this->value = $value;
 
         // Le diff = int des 2 premiers chiffres après la virgule
-        $vDiff         = round($value * 100, 2);
-        $vDiff         = $vDiff - (int)floor($vDiff);
+        $v100 = $value * 100;
+        $vDiff         = round($v100, 2);
+        $vDiff         = $vDiff - (int)floor($v100);
         $vDiff         *= 100;
         $this->diff    = (int)round($vDiff);
         $this->arrondi = 0;

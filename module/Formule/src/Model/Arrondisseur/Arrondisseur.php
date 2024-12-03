@@ -5,6 +5,7 @@ namespace Formule\Model\Arrondisseur;
 use Enseignement\Entity\Db\Service;
 use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\FormuleIntervenant;
+use Formule\Entity\FormuleServiceIntervenant;
 use Formule\Entity\FormuleVolumeHoraire;
 use Referentiel\Entity\Db\ServiceReferentiel;
 
@@ -15,10 +16,18 @@ class Arrondisseur
     /** @var array|Calcul[] */
     protected $calculs = [];
 
+    protected string $intervenant;
+
 
 
     public function arrondir(FormuleIntervenant $fi): void
     {
+        if ($fi instanceof FormuleServiceIntervenant) {
+            $this->intervenant = $fi->getIntervenantId();
+        }else{
+            $this->intervenant = $fi->getId() ?? "inconnu";
+        }
+
         $this->calculs = [];
 
         $data = $this->makeData($fi);
@@ -109,10 +118,17 @@ class Arrondisseur
         foreach ($vns as $vn) {
             $v = $data->getValeur($vn);
             $c = $this->addCalcul($v);
+            $noDiff = true;
             foreach ($subs as $sub) {
                 $sv = $sub->getValeur($v->getName());
                 $c->addValeur($sv);
+                if ($sv->getDiff() !== 0){
+                    $noDiff = false;
+                }
                 $this->preparationVerticale($sub);
+            }
+            if ($noDiff) {
+                $v->setDiff(0);
             }
         }
     }
@@ -194,7 +210,7 @@ class Arrondisseur
         }
 
         if (!$valToModif) {
-            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir en excès');
+            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir en excès, intervenant '.$this->intervenant);
         }
 
         $valToModif->addArrondi(1);
@@ -221,7 +237,7 @@ class Arrondisseur
         }
 
         if (!$valToModif) {
-            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir par troncature');
+            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir par troncature, intervenant '.$this->intervenant);
         }
 
         $valToModif->addArrondi(-1);

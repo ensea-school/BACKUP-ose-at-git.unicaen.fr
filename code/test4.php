@@ -8,8 +8,11 @@
 $sf = $container->get(\Formule\Service\FormuleService::class);
 
 $params = [
-    'INTERVENANT_ID' => 2032
+    'INTERVENANT_ID' => 2459
 ];
 
 $sTbl = $sf->getServiceTableauBord();
 $sTbl->calculer('formule', $params);
+
+//$bdd = $container->get(\Unicaen\BddAdmin\Bdd::class);
+//$bdd->majSequences();

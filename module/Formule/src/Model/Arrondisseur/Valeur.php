@@ -65,12 +65,21 @@ class Valeur
     {
         $this->value = $value;
 
-        // Le diff = int des 2 premiers chiffres après la virgule
-        $v100 = $value * 100;
-        $vDiff         = round($v100, 2);
-        $vDiff         = $vDiff - (int)floor($v100);
-        $vDiff         *= 100;
-        $this->diff    = (int)round($vDiff);
+        // Le diff = int des 2 premiers chiffres après la virgule de $value*100
+        //$vDiff = round($value * 100,2);
+        //$this->diff    = (int)round(($vDiff - floor($vDiff)) * 100);
+
+        $dVal = $value * 100;
+        $strVal = (string)$dVal;
+        $dotPos = strpos($strVal,'.');
+        if (false !== $dotPos){
+            $intVal = (int)substr($strVal, 0, $dotPos);
+            $dVal -= $intVal;
+            $this->diff = (int)(round($dVal, 2)*100);
+        }else{
+            $this->diff = 0;
+        }
+
         $this->arrondi = 0;
     }
 

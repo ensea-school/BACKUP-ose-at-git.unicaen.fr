@@ -17,6 +17,7 @@ use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Unicaen\BddAdmin\BddAwareTrait;
 use Unicaen\BddAdmin\Table;
+use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -47,6 +48,8 @@ class FormuleProcess implements ProcessInterface
     protected ?Table $resultatVolumeHoraireTable = null;
 
     protected Testeur $arrondisseurTesteur;
+
+    protected TableauBord $tableauBord;
 
 
 
@@ -87,6 +90,8 @@ class FormuleProcess implements ProcessInterface
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
+        $this->tableauBord = $tableauBord;
+
         if (empty($params)) {
             $annees = $this->getServiceAnnee()->getActives();
             foreach ($annees as $annee) {
@@ -94,8 +99,11 @@ class FormuleProcess implements ProcessInterface
             }
         } else {
             $this->init($params);
+            $this->tableauBord->onAction(Event::GET);
             $this->load($params);
+            $this->tableauBord->onAction(Event::PROCESS, 0, count($this->data));
             $this->calculer();
+            $this->tableauBord->onAction(Event::SET,0, count($this->data));
             $this->save($params);
         }
     }
@@ -251,7 +259,11 @@ class FormuleProcess implements ProcessInterface
     protected function calculer(): void
     {
         $formulator = $this->getServiceFormulator();
+        $index = 0;
+        $count = count($this->data);
         foreach ($this->data as $formuleIntervenant) {
+            $index++;
+            $this->tableauBord->onAction(Event::PROGRESS, $index, $count);
             $formulator->calculer($formuleIntervenant, $this->formule, true);
             //$trace = $formuleIntervenant->getArrondisseurTrace();
         }
@@ -408,6 +420,9 @@ class FormuleProcess implements ProcessInterface
             'custom-select'      => $fIntervenantSelect,
             'where'              => $params,
             'return-insert-data' => true,
+            'callback' => function(string $action, int $progress, int $total, array $data=[], array $key=[]){
+                $this->tableauBord->onAction(Event::PROGRESS, $progress, $total);
+            },
         ];
         $res                = $this->resultatIntervenantTable->merge($rIntervenants, $keyColumns, $options);
         // Fin du travail au niveau des données intervenants
@@ -442,6 +457,9 @@ class FormuleProcess implements ProcessInterface
             'custom-select'      => $fVolumeHoraireSelect,
             'where'              => $params,
             'return-insert-data' => false,
+            'callback' => function(string $action, int $progress, int $total, array $data=[], array $key=[]){
+                $this->tableauBord->onAction(Event::PROGRESS, $progress, $total);
+            },
         ];
         $keyColumns           = ['FORMULE_RESULTAT_INTERVENANT_ID', 'VOLUME_HORAIRE_ID', 'VOLUME_HORAIRE_REF_ID'];
         $this->resultatVolumeHoraireTable->merge($rVolumesHoraires, $keyColumns, $options);

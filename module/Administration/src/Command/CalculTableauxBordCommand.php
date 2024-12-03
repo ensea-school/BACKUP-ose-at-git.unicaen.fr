@@ -6,6 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use UnicaenTbl\Event;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
 /**
@@ -28,21 +29,11 @@ class CalculTableauxBordCommand extends Command
 
         $io->title($this->getDescription());
 
-        $result = $this->getServiceTableauBord()->calculerTout(['formule'],function (array $d) use ($io) {
-            $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
-
-            $io->write($tblLine);
-            $io->write('Calcul en cours...');
-        }, function (array $d) use ($io) {
-            $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
-            $io->write("\r" . $tblLine);
-            if ($d['result']) {
-                $duree = round($d['duree'], 3) . ' secondes';
-                $io->writeln('Effectué en ' . $duree);
-            } else {
-                $io->writeln('Erreur : ' . $d['exception']->getMessage());
-            }
+        $this->getServiceTableauBord()->setOnAction(function(Event $event) use ($io){
+            $this->onEvent($event, $io);
         });
+
+        $result = $this->getServiceTableauBord()->calculerTout(['formule']);
 
         $io->comment('Fin du calcul des tableaux de bord');
         if ($result) {
@@ -53,4 +44,21 @@ class CalculTableauxBordCommand extends Command
             return Command::FAILURE;
         }
     }
+
+
+
+    protected function onEvent(Event $event, SymfonyStyle $io)
+    {
+        switch ($event->action){
+            case Event::CALCUL:
+                $io->block("Calcul de ".$event->tableauBord->getName());
+                break;
+            case Event::FINISH:
+                $io->info("Calcul effectué en ".round($event->tableauBord->getTiming(), 3)." secondes");
+                break;
+            default:
+                echo $event->action."\n";
+        }
+    }
+
 }

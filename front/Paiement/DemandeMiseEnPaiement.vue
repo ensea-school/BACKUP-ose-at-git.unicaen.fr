@@ -41,10 +41,38 @@ export default {
             unicaenVue.axios.get(this.urlGetDemandesMiseEnPaiement)
                 .then(response => {
                     this.datasDemandesMiseEnPaiement = response.data;
-                })
-                .catch(error => {
+                }).then(response => {
+                    this.btnResetState();
+                }).catch(error => {
+                    this.btnResetState();
                     console.error(error);
                 })
+
+        },
+        btnResetState()
+        {
+            //Reset des boutons remove
+            let elementsBtnRemove = Array.from(document.querySelectorAll('[id^="remove-"]'));
+            elementsBtnRemove.forEach(el => {
+                el.disabled = false;
+                el.querySelector('#waiting').style.display = 'none';
+                el.querySelector('#action').style.display = 'inline-block';
+            });
+            //Reset des boutons add
+            let elementsBtnAdd = Array.from(document.querySelectorAll('[id^="add-"]'));
+            elementsBtnAdd.forEach(el => {
+                el.disabled = false;
+                el.querySelector('#waiting').style.display = 'none';
+                el.querySelector('#action').style.display = 'inline-block';
+            });
+            //Reset des boutons add-all
+            let elementsBtnAddAll = Array.from(document.querySelectorAll('[id^="add-all"]'));
+            elementsBtnAddAll.forEach(el => {
+                el.disabled = false;
+                el.querySelector('#waiting').style.display = 'none';
+                el.querySelector('#action').style.display = 'inline-block';
+            });
+
 
         },
 
@@ -61,7 +89,8 @@ export default {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
 
-    }
+    },
+
 
 
 

@@ -656,15 +656,9 @@ export default {
                 dmep: id
             })).then(response => {
                 this.$emit('refresh');
-                setTimeout(() => {
-                    this.btnResetState();
-                }, 3000);
 
             }).catch(error => {
                 this.$emit('refresh');
-                setTimeout(() => {
-                    this.btnResetState();
-                }, 3000);
             })
         },
         disabledPaiement(value)
@@ -764,15 +758,9 @@ export default {
 
             unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas).then(response => {
                 this.$emit('refresh');
-                setTimeout(() => {
-                    this.btnResetState();
-                }, 4000);
-
             }).catch(error => {
+                this.$emit('refresh');
                 console.error(error);
-                setTimeout(() => {
-                    this.btnResetState();
-                }, 4000);
             })
 
 
@@ -822,15 +810,9 @@ export default {
 
             unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas).then(response => {
                 this.$emit('refresh');
-                setTimeout(() => {
-                    this.btnResetState();
-                }, 3000);
 
             }).catch(error => {
                 this.$emit('refresh');
-                setTimeout(() => {
-                    this.btnResetState();
-                }, 3000);
             })
         },
         filtrerCentresCouts(centresCouts, typeHeures)
@@ -906,32 +888,7 @@ export default {
             return false;
 
         },
-        btnResetState()
-        {
-            //Reset des boutons remove
-            let elementsBtnRemove = Array.from(document.querySelectorAll('[id^="remove-"]'));
-            elementsBtnRemove.forEach(el => {
-                el.disabled = false;
-                el.querySelector('#waiting').style.display = 'none';
-                el.querySelector('#action').style.display = 'inline-block';
-            });
-            //Reset des boutons add
-            let elementsBtnAdd = Array.from(document.querySelectorAll('[id^="add-"]'));
-            elementsBtnAdd.forEach(el => {
-                el.disabled = false;
-                el.querySelector('#waiting').style.display = 'none';
-                el.querySelector('#action').style.display = 'inline-block';
-            });
-            //Reset des boutons add-all
-            let elementsBtnAddAll = Array.from(document.querySelectorAll('[id^="add-all"]'));
-            elementsBtnAddAll.forEach(el => {
-                el.disabled = false;
-                el.querySelector('#waiting').style.display = 'none';
-                el.querySelector('#action').style.display = 'inline-block';
-            });
 
-
-        },
         formatDate(val, format)
         {
             return Util.dateToString(val);

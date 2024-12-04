@@ -9,6 +9,7 @@
 * Nouvelle infrastructure de gestion des formules de calcul
 * Nouvelle page de demandes de mise en paiement
 * Signature électronique
+* Paramétrage fin des codes situation pour l'export siham
 
 
 # OSE 23.12 (26/11/2024)

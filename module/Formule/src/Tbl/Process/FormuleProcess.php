@@ -67,9 +67,9 @@ class FormuleProcess implements ProcessInterface
         /* Initialisation de l'année et de la formule à utiliser */
         if (array_key_exists('ANNEE_ID', $params)) {
             $annee = $this->getServiceBdd()->entityGet(Annee::class, $params['ANNEE_ID']);
-        } elseif(array_key_exists('INTERVENANT_ID', $params) && !array_key_exists('ANNEE_ID', $params)) {
+        } elseif (array_key_exists('INTERVENANT_ID', $params) && !array_key_exists('ANNEE_ID', $params)) {
             $annee = $this->getBdd()->selectOne('SELECT annee_id FROM intervenant WHERE id = :id', ['id' => $params['INTERVENANT_ID']], 'ANNEE_ID');
-        }else{
+        } else {
             /* Si l'année n'est pas précisée, alors on ne calcule que sur l'année en cours pour éviter des problèmes de mémoire */
             $annee              = $this->getServiceContext()->getAnnee();
             $params['ANNEE_ID'] = $annee->getId();
@@ -103,7 +103,7 @@ class FormuleProcess implements ProcessInterface
             $this->load($params);
             $this->tableauBord->onAction(Event::PROCESS, 0, count($this->data));
             $this->calculer();
-            $this->tableauBord->onAction(Event::SET,0, count($this->data));
+            $this->tableauBord->onAction(Event::SET, 0, count($this->data));
             $this->save($params);
         }
     }
@@ -117,7 +117,7 @@ class FormuleProcess implements ProcessInterface
             'TYPE_VOLUME_HORAIRE_ID' => $typeVolumehoraireId,
             'ETAT_VOLUME_HORAIRE_ID' => $etatVolumeHoraireId,
         ];
-        if ($anneeId){
+        if ($anneeId) {
             $params['ANNEE_ID'] = $anneeId;
         }
 
@@ -259,8 +259,8 @@ class FormuleProcess implements ProcessInterface
     protected function calculer(): void
     {
         $formulator = $this->getServiceFormulator();
-        $index = 0;
-        $count = count($this->data);
+        $index      = 0;
+        $count      = count($this->data);
         foreach ($this->data as $formuleIntervenant) {
             $index++;
             $this->tableauBord->onAction(Event::PROGRESS, $index, $count);
@@ -420,7 +420,8 @@ class FormuleProcess implements ProcessInterface
             'custom-select'      => $fIntervenantSelect,
             'where'              => $params,
             'return-insert-data' => true,
-            'callback' => function(string $action, int $progress, int $total, array $data=[], array $key=[]){
+            'transaction'        => !isset($params['INTERVENANT_ID']),
+            'callback'           => function (string $action, int $progress, int $total, array $data = [], array $key = []) {
                 $this->tableauBord->onAction(Event::PROGRESS, $progress, $total);
             },
         ];
@@ -457,7 +458,8 @@ class FormuleProcess implements ProcessInterface
             'custom-select'      => $fVolumeHoraireSelect,
             'where'              => $params,
             'return-insert-data' => false,
-            'callback' => function(string $action, int $progress, int $total, array $data=[], array $key=[]){
+            'transaction'        => !isset($params['INTERVENANT_ID']),
+            'callback'           => function (string $action, int $progress, int $total, array $data = [], array $key = []) {
                 $this->tableauBord->onAction(Event::PROGRESS, $progress, $total);
             },
         ];

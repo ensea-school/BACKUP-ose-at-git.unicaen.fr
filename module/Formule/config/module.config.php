@@ -14,7 +14,7 @@ return [
 
         'intervenant' => [
             'child_routes' => [
-                'details'    => [
+                'details'             => [
                     'route'      => '/:intervenant/formule/details',
                     'controller' => Controller\AffichageController::class,
                     'action'     => 'details',
@@ -22,10 +22,9 @@ return [
                     'assertion'  => Assertion\FormuleAssertion::class,
                 ],
                 'formule-totaux-hetd' => [
-                    'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
+                    'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire',
                     'constraints' => [
                         'typeVolumeHoraire' => '[0-9]*',
-                        'etatVolumeHoraire' => '[0-9]*',
                     ],
                     'controller'  => Controller\AffichageController::class,
                     'action'      => 'formule-totaux-hetd',
@@ -70,8 +69,9 @@ return [
         Assertion\FormuleAssertion::class => AssertionFactory::class,
         Service\FormuleService::class     => Service\FormuleServiceFactory::class,
         Tbl\Process\FormuleProcess::class => Tbl\Process\FormuleProcessFactory::class,
-        Command\BuildCommand::class  => Command\BuildCommandFactory::class,
-        Command\CalculCommand::class => Command\CalculCommandFactory::class,
+        Command\BuildCommand::class       => Command\BuildCommandFactory::class,
+        Command\CalculCommand::class      => Command\CalculCommandFactory::class,
+        Service\AfficheurService::class   => Service\AfficheurServiceFactory::class,
     ],
 
 

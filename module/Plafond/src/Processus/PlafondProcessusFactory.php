@@ -3,6 +3,7 @@
 namespace Plafond\Processus;
 
 use Psr\Container\ContainerInterface;
+use Unicaen\BddAdmin\Bdd;
 
 
 /**
@@ -25,6 +26,7 @@ class PlafondProcessusFactory
         $flashMessenger = $container->get('ControllerPluginManager')->get('FlashMessenger');
 
         $service = new PlafondProcessus($flashMessenger);
+        $service->setBdd($container->get(Bdd::class));
 
         return $service;
     }

@@ -3,10 +3,16 @@
 namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
+use Formule\Service\AfficheurServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 
 class  AffichageController extends AbstractController
 {
+    use AfficheurServiceAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
 
     public function detailsAction()
     {
@@ -60,11 +66,16 @@ class  AffichageController extends AbstractController
     public function formuleTotauxHetdAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
+        /** @var $intervenant Intervenant */
+
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
-        $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
+        /** @var $typeVolumeHoraire TypeVolumeHoraire */
+
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
         $formuleResultat   = $intervenant->getFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
-        return compact('formuleResultat');
+        $data = $this->getServiceAfficheur()->resultatToJson($formuleResultat);
+
+        return new AxiosModel( compact('data'));
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Service\Controller;
 
-use Application\Acl\Role;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
@@ -12,7 +11,6 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
-use Formule\Controller\AffichageController;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Http\Request;
 use Laminas\View\Model\ViewModel;
@@ -261,14 +259,6 @@ class ServiceController extends AbstractController
         } else {
             $referentiels = false;
         }
-
-        /* Totaux HETD */
-        $params = $this->getEvent()->getRouteMatch()->getParams();
-        $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
-        $this->getEvent()->setParam('etatVolumeHoraire', $etatVolumeHoraire);
-        $params['action'] = 'formuleTotauxHetd';
-        $widget           = $this->forward()->dispatch(AffichageController::class, $params);
-        if ($widget) $vm->addChild($widget, 'formuleTotauxHetd');
 
         /* Clôture de saisie (si nécessaire) */
         if ($typeVolumeHoraire->isRealise() && $intervenant->getStatut()->getCloture()) {

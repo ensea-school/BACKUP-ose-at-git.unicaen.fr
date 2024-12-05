@@ -51,9 +51,10 @@ if ($cloture) {
     echo $this->partial('service/intervenant/cloture', compact('cloture', 'bottom'));
 }
 
-
-echo $formuleTotauxHetd;
-
+echo $this->vue('formule/totaux-hetd', [
+    'intervenant' => $intervenant->getId(),
+    'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+]);
 
 echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
 
@@ -73,7 +74,7 @@ if ($enseignements !== false || $referentiels !== false): ?>
                 'heures-change': function ()
                 {
                     // on met à jour le résultat de la formule
-                    $("#formule-totaux-hetd").refresh(); // HETD rafraichis
+                    window.dispatchEvent(new CustomEvent("Formule/TotauxHetd.refresh"));
 
                     // on met à jour l'horodatage des services !!
                     $("#s-horodatage").refresh();
@@ -98,7 +99,7 @@ if ($enseignements !== false || $referentiels !== false): ?>
                 'heures-change': function ()
                 {
                     // on met à jour le résultat de la formule
-                    $("#formule-totaux-hetd").refresh(); // HETD rafraichis
+                    window.dispatchEvent(new CustomEvent("Formule/TotauxHetd.refresh"));
 
                     // on met à jour l'horodatage des services !!
                     $("#sr-horodatage").refresh();

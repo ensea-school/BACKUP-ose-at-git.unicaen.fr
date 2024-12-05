@@ -11,6 +11,11 @@
 * Signature électronique
 * Paramétrage fin des codes situation pour l'export siham
 
+# OSE 23.13 (à venir)
+
+## Corrections
+
+* Correction pour injecter le bon taux horaire d'une mission dans le cadre de l'export RH Siham
 
 # OSE 23.12 (26/11/2024)
 

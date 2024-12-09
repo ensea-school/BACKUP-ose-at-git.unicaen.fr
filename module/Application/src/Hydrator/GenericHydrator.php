@@ -33,7 +33,7 @@ class GenericHydrator implements HydratorInterface
     {
         $this->setEntityManager($entityManager);
         if (!empty($spec)) {
-            ArrayUtils::merge($this->spec, $spec);
+            $this->spec = ArrayUtils::merge($this->spec, $spec);
         }
     }
 

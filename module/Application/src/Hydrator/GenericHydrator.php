@@ -150,7 +150,9 @@ class GenericHydrator implements HydratorInterface
     {
         foreach ($this->spec as $name => $params) {
             if (!in_array($name, $this->noGenericParse)) {
-                $params = $params['hydrator'] ?? [];
+                if(isset($params['hydrator'])) {
+                    $params = $params['hydrator'];
+                }
                 $setter = isset($params['setter']) ? $params['setter'] : 'set' . ucfirst($name);
                 $type = ($setter instanceof \Closure) ? 'string' : (isset($params['type']) ? $params['type'] : null);
                 $readOnly = isset($params['readonly']) ? (bool)$params['readonly'] : false;

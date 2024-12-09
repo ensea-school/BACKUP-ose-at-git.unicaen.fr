@@ -11,6 +11,8 @@
 * Signature électronique
 * Paramétrage fin des codes situation pour l'export siham
 
+Note de mise à jour : penser à modifier l'état de sortie export des services, pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
+
 # OSE 23.13 (à venir)
 
 ## Corrections

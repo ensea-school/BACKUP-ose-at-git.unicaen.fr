@@ -107,6 +107,8 @@ class AppAdmin
             ini_set('memory_limit', '-1');
         }
 
+        require_once('module/Application/src/functions.php');
+
         /* Définition de la config globale, éventuellement à partir du fichier de config général */
         if (self::config()['global']['affichageErreurs'] ?? true) {
             error_reporting(E_ALL);

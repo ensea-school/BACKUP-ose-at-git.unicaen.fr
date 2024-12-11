@@ -24,6 +24,11 @@ function intToString($value)
     return (string)$value;
 }
 
+function topChrono()
+{
+    UnicaenApp\Util::topChrono();
+}
+
 
 /**
  * @param string $value

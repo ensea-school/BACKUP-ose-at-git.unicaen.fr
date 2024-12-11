@@ -15,7 +15,6 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\Stdlib\Glob;
 use UnicaenAuthentification\Service\UserContext;
 
-include_once(__DIR__ . '/functions.php');
 
 
 class Module

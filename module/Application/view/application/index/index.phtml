@@ -1,6 +1,10 @@
 <?php
 /* @var $this Application\View\Renderer\PhpRenderer */
-/* @var $context ContextService */
+/* @var $intervenant \Intervenant\Entity\Db\Intervenant|null */
+/* @var $utilisateur \Application\Entity\Db\Utilisateur|null */
+/* @var $onlyIntervenant bool */
+/* @var $noPrivilege bool */
+
 
 /* @var $documentation string[] */
 
@@ -13,9 +17,6 @@ echo $this->messenger()
     ->addMessagesFromFlashMessenger('UnicaenAuth/*');
 
 $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ABONNEMENT));
-
-$intervenant = $context->getIntervenant();
-$onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()->getDbRole());
 
 ?>
     <div class="container-fluid text-sm p-5 jumbotron page-accueil">
@@ -30,8 +31,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
         </p>
 
         <?php
-        if ($context->getUtilisateur()) {
-
+        if ($utilisateur) {
             if ($onlyIntervenant) {
                 if ($intervenant->getStatut()->isNonAutorise()) {
 
@@ -52,7 +52,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
                         );
                     }
                 }
-            } elseif ($context->getUtilisateur()->getAffectation()->count() == 0) {
+            } elseif ($noPrivilege) {
                 ?>
                 <div class="alert alert-danger" role="alert">
                     <?= $connexionSansRoleNiStatut ?>

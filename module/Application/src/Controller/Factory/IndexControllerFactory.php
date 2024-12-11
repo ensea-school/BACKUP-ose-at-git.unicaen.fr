@@ -19,11 +19,6 @@ class IndexControllerFactory
     {
         $controller = new IndexController();
 
-        /** @var UserContext $userContextService */
-        $userContextService = $container->get(UserContext::class);
-
-        $controller->setServiceUserContext($userContextService);
-
         return $controller;
     }
 

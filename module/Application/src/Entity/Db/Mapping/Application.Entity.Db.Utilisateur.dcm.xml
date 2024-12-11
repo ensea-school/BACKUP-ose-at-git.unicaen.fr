@@ -13,7 +13,5 @@
     <field name="state" type="integer" column="STATE" nullable="false"/>
     <field name="username" type="string" column="USERNAME" length="255" nullable="false"/>
     <field name="code" type="string" column="CODE" length="60" nullable="true"/>
-
-    <one-to-many field="affectation" target-entity="Application\Entity\Db\Affectation" mapped-by="utilisateur" />
   </entity>
 </doctrine-mapping>

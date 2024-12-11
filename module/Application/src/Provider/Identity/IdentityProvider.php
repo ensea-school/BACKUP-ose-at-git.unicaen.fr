@@ -70,7 +70,8 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
              */
             if ($utilisateur = $this->getServiceContext()->getUtilisateur()) {
                 $this->identityRoles = ['user' => 'user'];
-                foreach ($utilisateur->getAffectation() as $affectation) {
+                $affectations = $this->getEntityManager()->getRepository(Affectation::class)->findBy(['utilisateur' => $utilisateur]);
+                foreach ($affectations as $affectation) {
                     /* @var $affectation Affectation */
                     $role = $affectation->getRole();
                     try {

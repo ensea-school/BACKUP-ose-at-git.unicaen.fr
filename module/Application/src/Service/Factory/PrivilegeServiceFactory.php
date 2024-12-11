@@ -4,7 +4,6 @@ namespace Application\Service\Factory;
 
 use Application\Constants;
 use Application\Service\PrivilegeService;
-use Application\Entity\Db\Privilege;
 use Psr\Container\ContainerInterface;
 
 

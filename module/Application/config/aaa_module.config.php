@@ -142,7 +142,6 @@ $config = [
             Provider\Identity\IdentityProvider::class                   => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class                               => Service\Factory\ContextServiceFactory::class,
             'MouchardCompleterContext'                                  => MouchardCompleterContextFactory::class,
-            Service\PrivilegeService::class                             => Service\Factory\PrivilegeServiceFactory::class,
             \UnicaenPrivilege\Service\Privilege\PrivilegeService::class => Service\Factory\PrivilegeServiceFactory::class,
             Connecteur\LdapConnecteur::class                            => Connecteur\Factory\LdapConnecteurFactory::class,
             Cache\CacheService::class                                   => Cache\Factory\CacheServiceFactory::class,
@@ -154,6 +153,7 @@ $config = [
         ],
         'aliases'    => [
             'HostLocalization' => HostLocalization\HostLocalizationOse::class,
+            Service\PrivilegeService::class => \UnicaenPrivilege\Service\Privilege\PrivilegeService::class,
         ],
     ],
     'view_helpers'       => [

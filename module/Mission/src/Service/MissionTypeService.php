@@ -7,7 +7,6 @@ use Application\Service\AbstractEntityService;
 use Mission\Entity\Db\CentreCoutTypeMission;
 use Mission\Entity\Db\TypeMission;
 use Paiement\Entity\Db\CentreCout;
-use UnicaenApp\Traits\SessionContainerTrait;
 
 /**
  * Description of MissionTypeService
@@ -16,7 +15,6 @@ use UnicaenApp\Traits\SessionContainerTrait;
  */
 class MissionTypeService extends AbstractEntityService
 {
-    use SessionContainerTrait;
 
     /**
      * retourne la classe des entités

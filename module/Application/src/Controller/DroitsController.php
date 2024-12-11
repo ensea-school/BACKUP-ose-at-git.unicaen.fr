@@ -2,12 +2,14 @@
 
 namespace Application\Controller;
 
+use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Privilege;
 use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
+use Application\Service\PrivilegeService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PrivilegeServiceAwareTrait;
@@ -38,6 +40,7 @@ class DroitsController extends AbstractController
     use AffectationFormAwareTrait;
     use ContextServiceAwareTrait;
     use SessionContainerTrait;
+    use CacheContainerTrait;
 
     protected FilesystemCache $doctrineCache;
 
@@ -155,6 +158,7 @@ class DroitsController extends AbstractController
         $action    = $this->params()->fromPost('action');
 
         $this->getSessionContainer()->offsetUnset('privileges' . $this->getServiceContext()->getAnnee()->getId());
+        unset($this->getCacheContainer(PrivilegeService::class)->privilegesRoles);
 
         switch ($action) {
             case 'accorder':

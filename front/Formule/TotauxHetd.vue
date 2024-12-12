@@ -1,7 +1,7 @@
 <template>
     <b-row v-if="data.types.length > 0">
         <b-col cols="6">
-            <h2>Totaux en heures équivalents TD</h2>
+            <h2>Totaux en heures équivalent TD</h2>
             <table class="table table-bordered">
                 <tr>
                     <th>&nbsp;</th>

@@ -177,10 +177,11 @@ class ServiceReferentielController extends AbstractController
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
                 $hFin = $entity->getVolumeHoraireReferentielListe()->getHeures();
-                $this->updateTableauxBord($intervenant);
+                //$this->updateTableauxBord($intervenant, $typeVolumeHoraire);
                 if (!$this->getProcessusPlafond()->endTransaction($entity, $typeVolumeHoraire, $hFin < $hDeb)) {
-                    $this->updateTableauxBord($intervenant);
+                    // rien ici
                 }
+                $this->updateTableauxBord($intervenant, $typeVolumeHoraire);
             } else {
                 $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
             }
@@ -195,12 +196,22 @@ class ServiceReferentielController extends AbstractController
 
 
 
-    private function updateTableauxBord (Intervenant $intervenant, $validation = false)
+    private function updateTableauxBord (Intervenant $intervenant, ?TypeVolumeHoraire $typeVolumeHoraire=null, bool $validation = false)
     {
-        $this->getServiceWorkflow()->calculerTableauxBord(['formule', 'validation_referentiel', 'referentiel', 'contrat'], $intervenant);
-        if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['referentiel', 'piece_jointe_fournie'], $intervenant);
+        $tbls = ['formule', 'validation_referentiel', 'referentiel'];
+        if ($typeVolumeHoraire && $typeVolumeHoraire->isRealise()){
+            if ($validation){
+                $tbls[] = 'paiement';
+            }
+        }else{
+            if ($validation) {
+                $tbls[] = 'contrat';
+            }else{
+                $tbls[] = 'piece_jointe_fournie';
+            }
         }
+
+        $this->getServiceWorkflow()->calculerTableauxBord($tbls, $intervenant);
     }
 
 
@@ -260,7 +271,7 @@ class ServiceReferentielController extends AbstractController
                 if ($this->isAllowed($service, Privileges::REFERENTIEL_REALISE_EDITION)) {
                     $this->getProcessusPlafond()->beginTransaction();
                     $this->getServiceServiceReferentiel()->setRealisesFromPrevus($service);
-                    $this->updateTableauxBord($service->getIntervenant());
+                    $this->updateTableauxBord($service->getIntervenant(), $typeVolumeHoraire);
                     $this->getProcessusPlafond()->endTransaction($service, $typeVolumeHoraire);
                 }
             }
@@ -297,7 +308,7 @@ class ServiceReferentielController extends AbstractController
             $this->getProcessusPlafond()->beginTransaction();
             try {
                 $this->getServiceServiceReferentiel()->delete($service);
-                $this->updateTableauxBord($service->getIntervenant());
+                $this->updateTableauxBord($service->getIntervenant(), $typeVolumeHoraire);
                 $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -409,7 +420,7 @@ class ServiceReferentielController extends AbstractController
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationReferentiel()->enregistrer($typeVolumeHoraire, $validation);
-                    $this->updateTableauxBord($intervenant, true);
+                    $this->updateTableauxBord($intervenant, $typeVolumeHoraire, true);
                     $this->flashMessenger()->addSuccessMessage(
                         "Validation effectuée avec succès."
                     );
@@ -437,7 +448,7 @@ class ServiceReferentielController extends AbstractController
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationReferentiel()->supprimer($validation);
-                    $this->updateTableauxBord($validation->getIntervenant(), true);
+                    $this->updateTableauxBord($validation->getIntervenant(), null,true);
                     $this->flashMessenger()->addSuccessMessage(
                         "Dévalidation effectuée avec succès."
                     );

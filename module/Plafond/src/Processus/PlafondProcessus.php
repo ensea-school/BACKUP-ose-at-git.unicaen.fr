@@ -44,7 +44,6 @@ class PlafondProcessus extends AbstractProcessus
     public function beginTransaction(): self
     {
         $this->getEntityManager()->beginTransaction();
-        $this->getBdd()->beginTransaction(); // plus nécessaire sous Postgresql
 
         return $this;
     }
@@ -70,15 +69,12 @@ class PlafondProcessus extends AbstractProcessus
         if ($passed) {
             try {
                 $this->getEntityManager()->commit();
-                $this->getBdd()->commitTransaction(); // plus nécessaire sous Postgresql
                 $this->getServicePlafond()->calculerDepuisEntite($entity); // on met à jour les TBLs
             }catch(ConnectionException $e){
                 $this->getEntityManager()->rollback();
-                $this->getBdd()->rollbackTransaction(); // plus nécessaire sous Postgresql
             }
         } else {
             $this->getEntityManager()->rollback();
-            $this->getBdd()->rollbackTransaction(); // plus nécessaire sous Postgresql
         }
 
         return $passed;

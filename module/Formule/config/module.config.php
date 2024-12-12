@@ -15,7 +15,11 @@ return [
         'intervenant' => [
             'child_routes' => [
                 'details'             => [
-                    'route'      => '/:intervenant/formule/details',
+                    'route'      => '/:intervenant/formule/details[/:typeVolumeHoraire/:etatVolumeHoraire]',
+                    'constraints' => [
+                        'typeVolumeHoraire' => '[0-9]*',
+                        'etatVolumeHoraire' => '[0-9]*',
+                    ],
                     'controller' => Controller\AffichageController::class,
                     'action'     => 'details',
                     'privileges' => [Privileges::INTERVENANT_CALCUL_HETD],

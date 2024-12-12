@@ -267,30 +267,23 @@ class ServiceReferentielService extends AbstractEntityService
         }
 
         // Enregistrement en BDD
-        $this->getEntityManager()->beginTransaction();
-        try {
-            if ($serviceAllreadyExists) {
-                // on déplace les nouveaux volumes horaires sur l'ancien
-                foreach ($entity->getVolumeHoraireReferentiel() as $vhr) {
-                    $vhr->setServiceReferentiel($serviceAllreadyExists);
-                    $this->getEntityManager()->persist($vhr);
-                }
-                // l'ancien remplace le nouveau
-                $entity = $serviceAllreadyExists;
+        if ($serviceAllreadyExists) {
+            // on déplace les nouveaux volumes horaires sur l'ancien
+            foreach ($entity->getVolumeHoraireReferentiel() as $vhr) {
+                $vhr->setServiceReferentiel($serviceAllreadyExists);
+                $this->getEntityManager()->persist($vhr);
             }
+            // l'ancien remplace le nouveau
+            $entity = $serviceAllreadyExists;
+        }
 
-            $entity = parent::save($entity);
-            foreach ($entity->getVolumeHoraireReferentiel() as $volumeHoraire) {
-                if ($volumeHoraire->getRemove()) {
-                    $this->getServiceVolumeHoraireReferentiel()->delete($volumeHoraire);
-                } else {
-                    $this->getServiceVolumeHoraireReferentiel()->save($volumeHoraire);
-                }
+        $this->getEntityManager()->persist($entity);
+        foreach ($entity->getVolumeHoraireReferentiel() as $volumeHoraire) {
+            if ($volumeHoraire->getRemove()) {
+                $this->getServiceVolumeHoraireReferentiel()->delete($volumeHoraire);
+            } else {
+                $this->getServiceVolumeHoraireReferentiel()->save($volumeHoraire);
             }
-            $this->getEntityManager()->commit();
-        } catch (\Exception $e) {
-            $this->getEntityManager()->rollBack();
-            throw $e;
         }
 
         return $entity;
@@ -357,7 +350,7 @@ class ServiceReferentielService extends AbstractEntityService
                 $service = $this->newEntity();
                 $service->setIntervenant($intervenant);
 
-                $annee = $this->getServiceContext()->getAnnee()->getId();
+                $annee                 = $this->getServiceContext()->getAnnee()->getId();
                 $fonctionAnneeCourante = $this->getServiceFonctionReferentiel()->getFonctionByCodeAndAnnee($o['fonction']->getCode(), $annee);
                 $service->setFonctionReferentiel($fonctionAnneeCourante);
 
@@ -402,7 +395,7 @@ class ServiceReferentielService extends AbstractEntityService
 
         $this->finderByHistorique($qb);
         $this->finderByIntervenant($intervenantPrec, $qb);
-        $this->getServiceFonctionReferentiel()->finderByHistorique($qb);// pour éviter que des fonctions devenues historiques ne soient reconduites
+        $this->getServiceFonctionReferentiel()->finderByHistorique($qb); // pour éviter que des fonctions devenues historiques ne soient reconduites
         $this->getServiceStructure()->finderByHistorique($qb);           // idem pour les structures anciennes!!
         $sVolumeHoraireReferentiel->finderByHistorique($qb);
         $sVolumeHoraireReferentiel->finderByTypeVolumeHoraire($tvhSource, $qb);

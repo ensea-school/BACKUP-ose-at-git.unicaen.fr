@@ -525,6 +525,7 @@ WHERE
         $options = [
             'where'              => $params,
             'return-insert-data' => false,
+            'transaction'        => !isset($params['INTERVENANT_ID']),
         ];
 
         $table->merge($this->tblData, $key, $options);

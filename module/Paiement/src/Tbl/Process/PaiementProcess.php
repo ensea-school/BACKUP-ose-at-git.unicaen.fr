@@ -31,21 +31,21 @@ class PaiementProcess implements ProcessInterface
 
     /** @var array|ServiceAPayer[] */
     protected array $services = [];
-    protected array $tblData = [];
+    protected array $tblData  = [];
 
-    protected Repartiteur $repartiteur;
-    protected Rapprocheur $rapprocheur;
+    protected Repartiteur   $repartiteur;
+    protected Rapprocheur   $rapprocheur;
     protected Consolidateur $consolidateur;
-    protected Exporteur $exporteur;
+    protected Exporteur     $exporteur;
 
 
 
     public function __construct()
     {
-        $this->repartiteur = new repartiteur();
-        $this->rapprocheur = new Rapprocheur();
+        $this->repartiteur   = new repartiteur();
+        $this->rapprocheur   = new Rapprocheur();
         $this->consolidateur = new Consolidateur();
-        $this->exporteur = new Exporteur();
+        $this->exporteur     = new Exporteur();
     }
 
 
@@ -67,7 +67,7 @@ class PaiementProcess implements ProcessInterface
         $this->repartiteur->setPourAAReferentiel($pourcAAReferentiel);
 
         $this->services = [];
-        $this->tblData = [];
+        $this->tblData  = [];
     }
 
 
@@ -92,7 +92,7 @@ class PaiementProcess implements ProcessInterface
             . $this->getServiceBdd()->makeWhere($params);
 
         $aPayerStmt = $conn->executeQuery($sql);
-        $res = [];
+        $res        = [];
         while ($lap = $aPayerStmt->fetchAssociative()) {
             $res[] = $lap;
 
@@ -129,7 +129,7 @@ class PaiementProcess implements ProcessInterface
 
 
 
-    protected function traitement(bool $export=true, bool $consolidation=true)
+    protected function traitement(bool $export = true, bool $consolidation = true)
     {
         foreach ($this->services as $sid => $serviceAPayer) {
             $this->repartiteur->repartir($serviceAPayer);
@@ -153,8 +153,13 @@ class PaiementProcess implements ProcessInterface
 
         $table = $this->getBdd()->getTable('TBL_PAIEMENT');
 
+        $options = [
+            'where'       => $params,
+            'transaction' => !isset($params['INTERVENANT_ID']),
+        ];
+
         // on merge dans la table
-        $table->merge($this->tblData, $key, ['where' => $params]);
+        $table->merge($this->tblData, $key, $options);
         // on vide pour limiter la conso de RAM
         $this->tblData = [];
     }
@@ -180,7 +185,7 @@ class PaiementProcess implements ProcessInterface
 
     protected function loadLigneAPayer(array $data)
     {
-        $key = $data['KEY'];
+        $key    = $data['KEY'];
         $lapKey = (int)$data['A_PAYER_ID'];
         $mepKey = (int)$data['MISE_EN_PAIEMENT_ID'];
 
@@ -191,16 +196,16 @@ class PaiementProcess implements ProcessInterface
         }
 
         if (!array_key_exists($lapKey, $this->services[$key]->lignesAPayer)) {
-            $lap = new LigneAPayer();
-            $tauxRemu = (int)$data['TAUX_REMU_ID'];
-            $horaireDebut = (string)$data['HORAIRE_DEBUT'];
+            $lap             = new LigneAPayer();
+            $tauxRemu        = (int)$data['TAUX_REMU_ID'];
+            $horaireDebut    = (string)$data['HORAIRE_DEBUT'];
             $lap->tauxValeur = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $horaireDebut);
-            $lap->pourcAA = $this->repartiteur->fromBdd($data);
+            $lap->pourcAA    = $this->repartiteur->fromBdd($data);
             $lap->fromBdd($data);
             $this->services[$key]->lignesAPayer[$lapKey] = $lap;
         }
 
-        if ($mepKey > 0 && !array_key_exists($mepKey,$this->services[$key]->misesEnPaiement )) {
+        if ($mepKey > 0 && !array_key_exists($mepKey, $this->services[$key]->misesEnPaiement)) {
             $mep = new MiseEnPaiement();
             $mep->fromBdd($data);
             $this->services[$key]->misesEnPaiement[$mepKey] = $mep;

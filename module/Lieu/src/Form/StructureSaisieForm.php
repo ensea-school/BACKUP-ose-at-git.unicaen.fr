@@ -10,7 +10,6 @@ use Lieu\Entity\Db\Pays;
 use Lieu\Entity\Db\Structure;
 use Lieu\Entity\Db\StructureAwareTrait;
 use Lieu\Entity\Db\Voirie;
-use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Service\CentreCoutServiceAwareTrait;
 use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
@@ -32,7 +31,7 @@ class StructureSaisieForm extends AbstractForm
 
     public function init ()
     {
-        $ignore = ['autre', 'autre1', 'autre2', 'autre3', 'autre4', 'autre5'];
+        $ignore = ['autre', 'autre1', 'autre2', 'autre3', 'autre4', 'autre5','source'];
 
         $this->spec(Structure::class, $ignore);
         $this->spec(['structure' => ['type' => \Lieu\Form\Element\Structure::class, 'input' => ['required' => false]]]);
@@ -49,6 +48,7 @@ class StructureSaisieForm extends AbstractForm
         $this->spec(['domaineFonctionnelDefault' => ['type' => 'Select', 'input' => ['required' => false,],]]);
 
         $this->build();
+
 
         $this->setLabels([
             'structure'                 => 'Structure parente',

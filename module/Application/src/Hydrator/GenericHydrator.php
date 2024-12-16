@@ -90,11 +90,13 @@ class GenericHydrator implements HydratorInterface
         if (method_exists($object, 'getId')) {
             $data['id'] = (string)$object->getId();
         }
-        foreach ($this->spec as $name => $ph) {
+        foreach ($this->spec as $name => $params) {
             if (!in_array($name, $this->noGenericParse)) {
-                $params = $ph['hydrator'] ?? [];
-                $type = isset($params['type']) ? $params['type'] : null;
+                if(isset($params['hydrator'])) {
+                    $params = $params['hydrator'];
+                }
                 $getter = isset($params['getter']) ? $params['getter'] : null;
+                $type = ($getter instanceof \Closure) ? 'string' : (isset($params['type']) ? $params['type'] : null);
 
                 /* Récupération de la valeur */
                 $value = null;

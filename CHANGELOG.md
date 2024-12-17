@@ -6,10 +6,16 @@
 
 # OSE 24 (à venir)
 
+## Nouveautés
 * Nouvelle infrastructure de gestion des formules de calcul
 * Nouvelle page de demandes de mise en paiement
 * Signature électronique
 * Paramétrage fin des codes situation pour l'export siham
+
+## Corrections 
+
+* Correction d'un bug lors de la suppression de referentiel fonction (#59691)
+* Correction d'un bug sur la gestion des fonctions referentiels parents (#59063) 
 
 Note de mise à jour : penser à modifier l'état de sortie export des services, pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 

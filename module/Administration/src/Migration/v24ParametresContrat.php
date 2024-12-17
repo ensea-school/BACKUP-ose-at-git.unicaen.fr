@@ -6,25 +6,7 @@ use Application\Entity\Db\Parametre;
 use Symfony\Component\Filesystem\Filesystem;
 use Unicaen\BddAdmin\Migration\MigrationAction;
 
-class
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-v24ParametresContrat extends MigrationAction
+class v24ParametresContrat extends MigrationAction
 {
 
 

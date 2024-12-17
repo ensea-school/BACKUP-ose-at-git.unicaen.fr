@@ -24,13 +24,13 @@ class ParametreEntityListener implements EventSubscriber
     use ParametresServiceAwareTrait;
 
 
-    protected LifecycleEventArgs       $args;
+    protected LifecycleEventArgs $args;
 
-    protected EntityManager            $em;
+    protected EntityManager $em;
 
     protected ParametreEntityInterface $entity;
 
-    protected bool                     $isSaving = false;
+    protected bool $isSaving = false;
 
 
 
@@ -147,26 +147,27 @@ class ParametreEntityListener implements EventSubscriber
         $next = $this->nextEntities($this->entity);
         foreach ($next as $anneeId => $entity) {
             if (null === $entity) {
-                $entity                     = new $classname;
-                $annnee                     = $this->em->getRepository(Annee::class)->find($anneeId);
-                $entityData                 = $data;
-                $entityData['key']['annee'] = $annnee;
-                foreach ($entityData['key'] as $k => $v) {
-                    if ($v instanceof ParametreEntityInterface) {
-                        $entityData['key'][$k] = $this->entityAutreAnnee($v, $annnee);
-                    }
-                }
-                foreach ($entityData['data'] as $k => $v) {
-                    if ($v instanceof ParametreEntityInterface) {
-                        $entityData['data'][$k] = $this->entityAutreAnnee($v, $annnee);
-                    }
-                }
-                $this->hydrate($entityData, $entity);
-            } else {
-                $entityData        = $data;
-                $entityData['key'] = [];
-                $this->hydrate($entityData, $entity);
+                $entity = new $classname;
             }
+            $annnee                     = $this->em->getRepository(Annee::class)->find($anneeId);
+            $entityData                 = $data;
+            $entityData['key']['annee'] = $annnee;
+            foreach ($entityData['key'] as $k => $v) {
+                if ($v instanceof ParametreEntityInterface) {
+                    $entityData['key'][$k] = $this->entityAutreAnnee($v, $annnee);
+                }
+            }
+            foreach ($entityData['data'] as $k => $v) {
+                if ($v instanceof ParametreEntityInterface) {
+                    $entityData['data'][$k] = $this->entityAutreAnnee($v, $annnee);
+                }
+            }
+            $this->hydrate($entityData, $entity);
+//            } else {
+//                $entityData        = $data;
+//                $entityData['key'] = [];
+//                $this->hydrate($entityData, $entity);
+//            }
 
             $this->em->persist($entity);
             $this->em->flush($entity);
@@ -347,10 +348,10 @@ class ParametreEntityListener implements EventSubscriber
         }
 
         foreach ($metadata->associationMappings as $field => $associationMapping) {
-           if (!in_array($field, $keyFields)
-               && !in_array($field, ['annee'])
-               && $associationMapping['type'] == ClassMetadataInfo::MANY_TO_ONE
-           ) {
+            if (!in_array($field, $keyFields)
+                && !in_array($field, ['annee'])
+                && $associationMapping['type'] == ClassMetadataInfo::MANY_TO_ONE
+            ) {
                 $dataFields[] = $field;
             }
         }

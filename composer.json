@@ -97,6 +97,25 @@
 
             "rm -rf public/vendor/bootstrap-select",
             "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select"
+        ],
+        "post-install-cmd": [
+            "rm -rf public/vendor/bootstrap",
+            "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
+
+            "rm -rf public/vendor/jquery",
+            "cp -R vendor/components/jquery public/vendor/jquery",
+
+            "rm -rf public/vendor/open-sans",
+            "cp -R vendor/webfontkit/open-sans public/vendor/open-sans",
+
+            "rm -rf public/vendor/font-awesome",
+            "cp -R vendor/components/font-awesome public/vendor/font-awesome",
+
+            "rm -rf public/vendor/tinymce",
+            "cp -R vendor/tinymce/tinymce public/vendor/tinymce",
+
+            "rm -rf public/vendor/bootstrap-select",
+            "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select"
         ]
     },
     "minimum-stability": "dev"

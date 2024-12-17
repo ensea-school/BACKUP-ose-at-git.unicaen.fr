@@ -11,6 +11,10 @@
 * Nouvelle page de demandes de mise en paiement
 * Signature électronique
 * Paramétrage fin des codes situation pour l'export siham
+* Modification du tableau de bord des contrats (TBL_CONTRAT) et du paramètrage des contrats
+* Possibilité de contractualiser du référentiel sans heures d'enseignements
+* Possibilité de créer un contrat de mission sur seul prolongation de fin de date de contrat
+* possibilité de créer des contrats multi-missions
 
 ## Corrections 
 

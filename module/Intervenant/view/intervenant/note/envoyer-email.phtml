@@ -47,7 +47,7 @@ echo $this->form()->closeTag();
      */
     function installEditor(selector, form)
     {
-        WidgetInitializer.includeJs(unicaenVue.url('vendor/tinymce-4.4.1/js/tinymce/tinymce.min.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/tinymce/tinymce.min.js'));
         tinymce.editors = [];
         tinymce.init({
             selector: selector,

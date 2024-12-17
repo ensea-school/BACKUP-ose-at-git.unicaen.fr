@@ -14,10 +14,9 @@ use Parametre\Interface\ChampsAutresInterface;
 use Parametre\Trait\ChampsAutresTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
-use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-class FonctionReferentiel implements HistoriqueAwareInterface, ParametreEntityInterface, PlafondPerimetreInterface, PlafondDataInterface, ResourceInterface, ChampsAutresInterface
+class FonctionReferentiel implements ParametreEntityInterface, PlafondPerimetreInterface, PlafondDataInterface, ResourceInterface, ChampsAutresInterface
 {
     use ParametreEntityTrait;
     use HistoriqueAwareTrait;

@@ -21,6 +21,10 @@
 * Correction d'un bug lors de la suppression de referentiel fonction (#59691)
 * Correction d'un bug sur la gestion des fonctions referentiels parents (#59063) 
 
+Corrections de bugs
+
+* Le différentiel s'affiche correctement dans la page d'administration de l'import  (#59394)
+
 Note de mise à jour : penser à modifier l'état de sortie export des services, pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 
 # OSE 23.13 (à venir)

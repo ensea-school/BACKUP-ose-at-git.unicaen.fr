@@ -25,6 +25,17 @@ return [
                     'privileges' => [Privileges::INTERVENANT_CALCUL_HETD],
                     'assertion'  => Assertion\FormuleAssertion::class,
                 ],
+                'details-data'             => [
+                    'route'      => '/:intervenant/formule/details-data[/:typeVolumeHoraire/:etatVolumeHoraire]',
+                    'constraints' => [
+                        'typeVolumeHoraire' => '[0-9]*',
+                        'etatVolumeHoraire' => '[0-9]*',
+                    ],
+                    'controller' => Controller\AffichageController::class,
+                    'action'     => 'details-data',
+                    'privileges' => [Privileges::INTERVENANT_CALCUL_HETD],
+                    'assertion'  => Assertion\FormuleAssertion::class,
+                ],
                 'formule-totaux-hetd' => [
                     'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire',
                     'constraints' => [

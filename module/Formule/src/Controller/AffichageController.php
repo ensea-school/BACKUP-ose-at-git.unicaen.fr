@@ -3,7 +3,9 @@
 namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
+use Formule\Model\FormuleDetailsExtractor;
 use Formule\Service\AfficheurServiceAwareTrait;
+use Formule\Service\FormuleServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -13,6 +15,7 @@ class  AffichageController extends AbstractController
 {
     use AfficheurServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
+    use FormuleServiceAwareTrait;
 
     public function detailsAction()
     {
@@ -39,26 +42,58 @@ class  AffichageController extends AbstractController
           tvh.ordre, evh.ordre            
         ";
 
-        $data = [];
-
         $res = $this->em()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $intervenant->getId()]);
 
+        $typesVolumesHoraires = [];
         foreach ($res as $r) {
-            $tvhId = (int)$r['TYPE_VOLUME_HORAIRE_ID'];
+            $tvhId  = (int)$r['TYPE_VOLUME_HORAIRE_ID'];
             $tvhLib = $r['TYPE_VOLUME_HORAIRE_LIBELLE'];
-            $evhId = (int)$r['ETAT_VOLUME_HORAIRE_ID'];
+            $evhId  = (int)$r['ETAT_VOLUME_HORAIRE_ID'];
             $evhLib = $r['ETAT_VOLUME_HORAIRE_LIBELLE'];
 
-            if (!isset($data[$tvhId])) {
-                $data[$tvhId] = [
+            if (!isset($typesVolumesHoraires[$tvhId])) {
+                $typesVolumesHoraires[$tvhId] = [
                     'libelle' => $tvhLib,
                     'etats'   => [],
                 ];
             }
-            $data[$tvhId]['etats'][$evhId] = $evhLib;
+            $typesVolumesHoraires[$tvhId]['etats'][$evhId] = $evhLib;
         }
 
-        return compact('intervenant', 'data');
+        return compact('intervenant', 'typesVolumesHoraires');
+    }
+
+
+
+    public function detailsDataAction()
+    {
+        /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        /** @var $typeVolumeHoraire */
+        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+
+        /** @var $etatVolumeHoraire */
+        $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
+
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
+        if (!$typeVolumeHoraire) {
+            throw new \LogicException('Type de volume horaire non précisé ou inexistant');
+        }
+
+        if (!$etatVolumeHoraire) {
+            throw new \LogicException('Etat de volume horaire non précisé ou inexistant');
+        }
+
+        $fi = $this->getServiceFormule()->getFormuleServiceIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+
+        $extractor = new FormuleDetailsExtractor();
+        $data      = $extractor->extract($fi);
+
+        return new AxiosModel($data);
     }
 
 
@@ -76,6 +111,6 @@ class  AffichageController extends AbstractController
 
         $data = $this->getServiceAfficheur()->resultatToJson($formuleResultat);
 
-        return new AxiosModel( compact('data'));
+        return new AxiosModel(compact('data'));
     }
 }

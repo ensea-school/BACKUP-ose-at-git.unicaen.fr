@@ -9,6 +9,14 @@ VERSION
 public/vendor/unicaen/*
 public/unicaen/*
 public/.gitignore
+
+public/vendor/bootstrap
+public/vendor/bootstrap-select
+public/vendor/jquery
+public/vendor/open-sans
+public/vendor/font-awesome
+public/vendor/tinymce
+
 composer.phar
 data/fichiers
 data/signature

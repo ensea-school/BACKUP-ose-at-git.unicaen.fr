@@ -96,7 +96,7 @@ class IndicateurIntervenantsMailer
         $context   = $this->controller->getServiceContext();
         $parametre = $this->getServiceParametres();
 
-        $from = trim($parametre->get('indicateur_email_expediteur'));
+        $from = trim($parametre->get('indicateur_email_expediteur') ?? '');
         if (!empty($from)) {
             return $from;
         }

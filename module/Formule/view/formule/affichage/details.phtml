@@ -3,12 +3,12 @@
 /**
  * @var $this                     Application\View\Renderer\PhpRenderer
  * @var $intervenant              \Intervenant\Entity\Db\Intervenant
- * @var $data                     array
+ * @var $typesVolumesHoraires     array
  */
 
 $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
 echo $this->vue('formule/details', [
-    'intervenant' => $intervenant->getId(),
-    'data'        => $data,
+    'intervenant'          => $intervenant->getId(),
+    'typesVolumesHoraires' => $typesVolumesHoraires,
 ]);

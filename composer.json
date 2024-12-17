@@ -3,7 +3,6 @@
     "version"          : "1.0.0",
     "description"      : "Organisation des Services d'Enseignement (OSE)",
     "repositories"     : [
-
         {
             "type": "composer",
             "url" : "https://gest.unicaen.fr/packagist"
@@ -28,8 +27,14 @@
         "laminas/laminas-text"                        : "2.11",
         "laminas/laminas-cli"                         : "1.10.0",
         "symfony/process"                             : "7.1.5",
-        "connecteur-ose/actul": "dev-master",
-        "connecteur-ose/pegase": "dev-master"
+        "connecteur-ose/actul"                        : "dev-master",
+        "connecteur-ose/pegase"                       : "dev-master",
+        "twbs/bootstrap"                              : "5.3.3",
+        "components/jquery"                           : "3.6.0",
+        "webfontkit/open-sans"                        : "1.0.0",
+        "components/font-awesome"                     : "6.5.2",
+        "tinymce/tinymce"                             : "7.6.0",
+        "snapappointments/bootstrap-select"           : "1.14.0-beta3"
     },
     "autoload": {
         "psr-4": {
@@ -73,7 +78,26 @@
     },
     "scripts"          : {
         "sniffer:php8"    : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
-        "phpcs"           : "./vendor/bin/phpcs -p ./module --standard=PSR12"
+        "phpcs"           : "./vendor/bin/phpcs -p ./module --standard=PSR12",
+        "post-update-cmd": [
+            "rm -rf public/vendor/bootstrap",
+            "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
+
+            "rm -rf public/vendor/jquery",
+            "cp -R vendor/components/jquery public/vendor/jquery",
+
+            "rm -rf public/vendor/open-sans",
+            "cp -R vendor/webfontkit/open-sans public/vendor/open-sans",
+
+            "rm -rf public/vendor/font-awesome",
+            "cp -R vendor/components/font-awesome public/vendor/font-awesome",
+
+            "rm -rf public/vendor/tinymce",
+            "cp -R vendor/tinymce/tinymce public/vendor/tinymce",
+
+            "rm -rf public/vendor/bootstrap-select",
+            "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select"
+        ]
     },
     "minimum-stability": "dev"
 }

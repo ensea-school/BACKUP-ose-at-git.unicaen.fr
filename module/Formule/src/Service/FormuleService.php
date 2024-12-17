@@ -44,7 +44,7 @@ class FormuleService extends AbstractService
     private function actuCache(): void
     {
         if (empty($this->formules)) {
-            $qb = $this->getRepo()->createQueryBuilder('f', 'f.id');
+            $qb             = $this->getRepo()->createQueryBuilder('f', 'f.id');
             $this->formules = $qb->getQuery()->getResult();
         }
     }
@@ -157,16 +157,16 @@ class FormuleService extends AbstractService
     public function getFormuleServiceIntervenant(int|Intervenant $intervenant, int|TypeVolumeHoraire $typeVolumeHoraire, int|EtatVolumeHoraire $etatVolumeHoraire): FormuleServiceIntervenant
     {
         $annee = null;
-        if ($intervenant instanceof Intervenant){
-            $annee = $intervenant->getAnnee()?->getId() ?? null;
+        if ($intervenant instanceof Intervenant) {
+            $annee       = $intervenant->getAnnee()?->getId() ?? null;
             $intervenant = $intervenant->getId();
         }
 
-        if ($typeVolumeHoraire instanceof TypeVolumeHoraire){
+        if ($typeVolumeHoraire instanceof TypeVolumeHoraire) {
             $typeVolumeHoraire = $typeVolumeHoraire->getId();
         }
 
-        if ($etatVolumeHoraire instanceof EtatVolumeHoraire){
+        if ($etatVolumeHoraire instanceof EtatVolumeHoraire) {
             $etatVolumeHoraire = $etatVolumeHoraire->getId();
         }
 

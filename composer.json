@@ -79,7 +79,7 @@
     "scripts"          : {
         "sniffer:php8"    : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
         "phpcs"           : "./vendor/bin/phpcs -p ./module --standard=PSR12",
-        "post-update-cmd": [
+        "update-front": [
             "rm -rf public/vendor/bootstrap",
             "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
 
@@ -99,23 +99,10 @@
             "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select"
         ],
         "post-install-cmd": [
-            "rm -rf public/vendor/bootstrap",
-            "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
-
-            "rm -rf public/vendor/jquery",
-            "cp -R vendor/components/jquery public/vendor/jquery",
-
-            "rm -rf public/vendor/open-sans",
-            "cp -R vendor/webfontkit/open-sans public/vendor/open-sans",
-
-            "rm -rf public/vendor/font-awesome",
-            "cp -R vendor/components/font-awesome public/vendor/font-awesome",
-
-            "rm -rf public/vendor/tinymce",
-            "cp -R vendor/tinymce/tinymce public/vendor/tinymce",
-
-            "rm -rf public/vendor/bootstrap-select",
-            "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select"
+            "@update-front"
+        ],
+        "post-update-cmd": [
+            "@update-front"
         ]
     },
     "minimum-stability": "dev"

@@ -9,55 +9,56 @@
         }
     ],
     "require"          : {
-        "php"                                         : ">=8.2",
-        "unicaen/app"                                 : "6.1.4",
-        "unicaen/authentification"                    : "6.1.0",
-        "unicaen/privilege"                           : "6.1.2",
-        "unicaen/utilisateur"                         : "6.1.3",
-        "unicaen/code"                                : "6.2.2",
-        "unicaen/import"                              : "6.0.4",
-        "unicaen/tbl"                                 : "6.2.4",
-        "unicaen/open-document"                       : "6.0.10",
-        "unicaen/siham"                               : "6.1.6",
-        "unicaen/mail"                                : "6.1.10",
-        "unicaen/vue"                                 : "6.2.4",
-        "unicaen/bddadmin"                            : "1.0.6",
-        "unicaen/signature"                           : "1.0.0",
-        "laminas/laminas-cache-storage-adapter-memory": "2.3.0",
-        "laminas/laminas-text"                        : "2.11",
-        "laminas/laminas-cli"                         : "1.11.0",
-        "symfony/process"                             : "7.1.5",
-        "connecteur-ose/actul"                        : "dev-master",
-        "connecteur-ose/pegase"                       : "dev-master",
-        "twbs/bootstrap"                              : "5.3.3",
-        "components/jquery"                           : "3.6.0",
-        "webfontkit/open-sans"                        : "1.0.0",
-        "components/font-awesome"                     : "6.5.2",
-        "tinymce/tinymce"                             : "7.6.0",
-        "snapappointments/bootstrap-select"           : "1.14.0-beta3"
+        "php"                              : ">=8.2",
+        "laminas/laminas-cli"              : "1.11.0",
+        "symfony/process"                  : "7.1.5",
+
+        "twbs/bootstrap"                   : "5.3.3",
+        "components/jquery"                : "3.6.0",
+        "webfontkit/open-sans"             : "1.0.0",
+        "components/font-awesome"          : "6.5.2",
+        "tinymce/tinymce"                  : "7.6.0",
+        "snapappointments/bootstrap-select": "1.14.0-beta3",
+
+        "unicaen/app"                      : "6.1.4",
+        "unicaen/authentification"         : "6.1.0",
+        "unicaen/privilege"                : "6.1.2",
+        "unicaen/utilisateur"              : "6.1.3",
+        "unicaen/code"                     : "6.2.2",
+        "unicaen/import"                   : "6.0.4",
+        "unicaen/tbl"                      : "6.2.4",
+        "unicaen/open-document"            : "6.0.10",
+        "unicaen/siham"                    : "6.1.6",
+        "unicaen/mail"                     : "6.1.10",
+        "unicaen/vue"                      : "6.2.4",
+        "unicaen/bddadmin"                 : "1.0.6",
+        "unicaen/signature"                : "1.0.0",
+
+        "connecteur-ose/actul"             : "dev-master",
+        "connecteur-ose/pegase"            : "dev-master"
     },
-    "autoload": {
+    "autoload"         : {
         "psr-4": {
             "Administration\\": "module/Administration/src/",
-            "Agrement\\": "module/Agrement/src/",
-            "Application\\": "module/Application/src/",
-            "Contrat\\": "module/Contrat/src/",
-            "Dossier\\": "module/Dossier/src/",
-            "Enseignement\\": "module/Enseignement/src/",
-            "ExportRh\\": "module/ExportRh/src/",
-            "Formule\\": "module/Formule/src/",
-            "Indicateur\\": "module/Indicateur/src/",
-            "Intervenant\\": "module/Intervenant/src/",
-            "Lieu\\": "module/Lieu/src/",
-            "Mission\\": "module/Mission/src/",
+            "Agrement\\"      : "module/Agrement/src/",
+            "Application\\"   : "module/Application/src/",
+            "Contrat\\"       : "module/Contrat/src/",
+            "Dossier\\"       : "module/Dossier/src/",
+            "Enseignement\\"  : "module/Enseignement/src/",
+            "ExportRh\\"      : "module/ExportRh/src/",
+            "Formule\\"       : "module/Formule/src/",
+            "Indicateur\\"    : "module/Indicateur/src/",
+            "Intervenant\\"   : "module/Intervenant/src/",
+            "Lieu\\"          : "module/Lieu/src/",
+            "Mission\\"       : "module/Mission/src/",
             "OffreFormation\\": "module/OffreFormation/src/",
-            "Paiement\\": "module/Paiement/src/",
-            "Signature\\": "module/Signature/src/",
-            "Parametre\\": "module/Parametre/src/",
-            "PieceJointe\\": "module/PieceJointe/src/",
-            "Plafond\\": "module/Plafond/src/",
-            "Referentiel\\": "module/Referentiel/src/",
-            "Service\\": "module/Service/src/"
+            "Paiement\\"      : "module/Paiement/src/",
+            "Signature\\"     : "module/Signature/src/",
+            "Parametre\\"     : "module/Parametre/src/",
+            "PieceJointe\\"   : "module/PieceJointe/src/",
+            "Plafond\\"       : "module/Plafond/src/",
+            "Referentiel\\"   : "module/Referentiel/src/",
+            "Service\\"       : "module/Service/src/"
         }
     },
     "require-dev"      : {
@@ -77,9 +78,9 @@
         }
     },
     "scripts"          : {
-        "sniffer:php8"    : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
-        "phpcs"           : "./vendor/bin/phpcs -p ./module --standard=PSR12",
-        "update-front": [
+        "sniffer:php8"        : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
+        "phpcs"               : "./vendor/bin/phpcs -p ./module --standard=PSR12",
+        "update-public-vendor": [
             "rm -rf public/vendor/bootstrap",
             "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
 
@@ -98,11 +99,11 @@
             "rm -rf public/vendor/bootstrap-select",
             "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select"
         ],
-        "post-install-cmd": [
-            "@update-front"
+        "post-install-cmd"    : [
+            "@update-public-vendor"
         ],
-        "post-update-cmd": [
-            "@update-front"
+        "post-update-cmd"     : [
+            "@update-public-vendor"
         ]
     },
     "minimum-stability": "dev"

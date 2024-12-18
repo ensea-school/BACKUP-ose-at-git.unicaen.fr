@@ -19,6 +19,7 @@
         "components/font-awesome"          : "6.5.2",
         "tinymce/tinymce"                  : "7.6.0",
         "snapappointments/bootstrap-select": "1.14.0-beta3",
+        "datatables.net/datatables.net-bs5": "2.1.8",
 
         "unicaen/app"                      : "6.1.4",
         "unicaen/authentification"         : "6.1.0",
@@ -97,7 +98,12 @@
             "cp -R vendor/tinymce/tinymce public/vendor/tinymce",
 
             "rm -rf public/vendor/bootstrap-select",
-            "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select"
+            "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select",
+
+            "rm -rf public/vendor/datatables",
+            "cp -R vendor/datatables.net/datatables.net public/vendor/datatables",
+            "cp -R vendor/datatables.net/datatables.net-bs5/* public/vendor/datatables/",
+            "cp public/vendor/datatables/css/dataTables.bootstrap5.min.css public/vendor/datatables/css/dataTables.bootstrap5.min.scss"
         ],
         "post-install-cmd"    : [
             "@update-public-vendor"

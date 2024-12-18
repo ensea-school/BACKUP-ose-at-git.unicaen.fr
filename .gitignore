@@ -16,6 +16,7 @@ public/vendor/jquery
 public/vendor/open-sans
 public/vendor/font-awesome
 public/vendor/tinymce
+public/vendor/datatables
 
 composer.phar
 data/fichiers

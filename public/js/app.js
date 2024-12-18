@@ -8,8 +8,8 @@ $(function ()
 
     WidgetInitializer.add('table-sort', 'tableSort', function ()
     {
-        WidgetInitializer.includeJs(unicaenVue.url('vendor/DataTables-1.12.1/js/jquery.dataTables.min.js'));
-        WidgetInitializer.includeJs(unicaenVue.url('vendor/DataTables-1.12.1/js/dataTables.bootstrap5.min.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/datatables/js/dataTables.min.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/datatables/js/dataTables.bootstrap5.min.js'));
         WidgetInitializer.includeJs(unicaenVue.url('js/table-sort.js'));
 
         (function () {

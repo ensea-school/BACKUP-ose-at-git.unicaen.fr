@@ -33,7 +33,7 @@ class ChargensAssertion extends AbstractAssertion
     /**
      * Exemple
      */
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(string|ResourceInterface|null $entity = null, ?string $privilege = null): bool
     {
         $role = $this->getRole();
         // Si le rôle n'est pas renseigné alors on s'en va...
@@ -67,7 +67,7 @@ class ChargensAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController(string $controller, ?string $action = null, ?string $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -102,14 +102,14 @@ class ChargensAssertion extends AbstractAssertion
 
 
 
-    private function assertScenarioEdition(Scenario $scenario)
+    private function assertScenarioEdition(Scenario $scenario): bool
     {
         return $this->assertScenarioStructureEdition($scenario->getStructure());
     }
 
 
 
-    private function assertScenarioStructureEdition(Structure $structure = null)
+    private function assertScenarioStructureEdition(?Structure $structure = null): bool
     {
         /** @var Role $role */
         $role = $this->getRole();

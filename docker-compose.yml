@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        PHP_VERSION: 8.2
+        PHP_VERSION: 8.4
         APPLICATION_ENV: dev
 
     volumes:
@@ -50,7 +50,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        PHP_VERSION: 8.0
+        PHP_VERSION: 8.2
         APPLICATION_ENV: test
 
     volumes:

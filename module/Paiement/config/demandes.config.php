@@ -111,14 +111,6 @@ return [
         ],
     ],
 
-    'rules' => [
-        [
-            'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-            'resources'  => 'MiseEnPaiement',
-            'assertion'  => Assertion\PaiementAssertion::class,
-        ],
-    ],
-
     'services' => [
         Service\DemandesService::class => Service\DemandesServiceFactory::class,
     ],

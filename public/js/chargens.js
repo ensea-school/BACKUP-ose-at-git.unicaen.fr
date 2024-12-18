@@ -18,9 +18,7 @@ $.widget("ose.chargens", {
     editionLienId: undefined,
 
 
-
-    _create: function ()
-    {
+    _create: function () {
         var that = this;
 
         this.typesIntervention = this.element.data('type-intervention');
@@ -34,19 +32,27 @@ $.widget("ose.chargens", {
         this.formLien = this.element.find(".form-lien");
         this.formLienModal = new bootstrap.Modal(this.formLien, {});
 
-        $(document).mousemove(function (event)
-        {
+        $(document).mousemove(function (event) {
             that.mousePosEvent = event;
         });
 
-        this.element.find('.controles .zplus').click(function () { that.zoomPlus(); });
-        this.element.find('.controles .zmoins').click(function () { that.zoomMoins(); });
-        this.element.find('.controles .zdefaut').click(function () { that.zoomDefaut(); });
-        this.element.find('.controles .fullscreen').change(function () { that.fullScreen(); });
-        this.element.find('.controles .dupliquer').click(function () { that.demanderDuplication(); });
+        this.element.find('.controles .zplus').click(function () {
+            that.zoomPlus();
+        });
+        this.element.find('.controles .zmoins').click(function () {
+            that.zoomMoins();
+        });
+        this.element.find('.controles .zdefaut').click(function () {
+            that.zoomDefaut();
+        });
+        this.element.find('.controles .fullscreen').change(function () {
+            that.fullScreen();
+        });
+        this.element.find('.controles .dupliquer').click(function () {
+            that.demanderDuplication();
+        });
 
-        this.diagramme.addDiagramListener("ObjectSingleClicked", function (e)
-        {
+        this.diagramme.addDiagramListener("ObjectSingleClicked", function (e) {
             var part = e.subject.part;
 
             if (part instanceof go.Link) {
@@ -56,24 +62,20 @@ $.widget("ose.chargens", {
             }
         });
 
-        this.getFormNoeudBtnCancel().click(function ()
-        {
+        this.getFormNoeudBtnCancel().click(function () {
             that.diagramme.clearSelection();
         });
-        this.getFormNoeudBtnSave().click(function ()
-        {
+        this.getFormNoeudBtnSave().click(function () {
             that.applicationEditionNoeud();
             that.formNoeudModal.hide();
             that.diagramme.clearSelection();
         });
 
-        this.getFormLienBtnCancel().click(function ()
-        {
+        this.getFormLienBtnCancel().click(function () {
             that.formLien.dialog('close');
             that.diagramme.clearSelection();
         });
-        this.getFormLienBtnSave().click(function ()
-        {
+        this.getFormLienBtnSave().click(function () {
             that.applicationEditionLien();
             that.formLienModal.hide();
             that.diagramme.clearSelection();
@@ -83,33 +85,25 @@ $.widget("ose.chargens", {
     },
 
 
-
-    zoomPlus: function ()
-    {
+    zoomPlus: function () {
         this.diagramme.commandHandler.increaseZoom(1.2);
         return this;
     },
 
 
-
-    zoomMoins: function ()
-    {
+    zoomMoins: function () {
         this.diagramme.commandHandler.increaseZoom(0.8);
         return this;
     },
 
 
-
-    zoomDefaut: function ()
-    {
+    zoomDefaut: function () {
         this.diagramme.commandHandler.resetZoom();
         return this;
     },
 
 
-
-    demanderDuplication: function ()
-    {
+    demanderDuplication: function () {
         var that = this;
         var source = this.element.find('.controles #scenario').val();
         var eltDupl = this.element.find('.controles .dupliquer');
@@ -121,8 +115,7 @@ $.widget("ose.chargens", {
             title: 'Dupliquer les données de ce diagramme dans un autre scénario',
             autoShow: true,
             submitClose: true,
-            change: function (event, popAjax)
-            {
+            change: function (event, popAjax) {
                 if (content = popAjax.getContent()) {
                     var noeuds = '';
                     var liens = '';
@@ -146,9 +139,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    editionNoeud: function (noeudId)
-    {
+    editionNoeud: function (noeudId) {
         var noeud = this.noeuds[noeudId];
         this.editionNoeudId = noeudId;
 
@@ -223,9 +214,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    applicationEditionNoeud: function ()
-    {
+    applicationEditionNoeud: function () {
         var assiduite = this.formNoeud.find('#assiduite').val();
 
         var noeud = {
@@ -255,9 +244,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    mergeNoeudData: function (data)
-    {
+    mergeNoeudData: function (data) {
         var noeud = this.noeuds[data.id];
 
         noeud['assiduite'] = data['assiduite'];
@@ -280,9 +267,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    noeudToNodeData: function (noeudId)
-    {
+    noeudToNodeData: function (noeudId) {
         var noeud = this.noeuds[noeudId];
 
         var category = noeud.etape ? 'etape' : noeud['element-pedagogique'] ? 'element' : 'noeud';
@@ -371,9 +356,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    majNoeud: function (noeudId, noTransaction)
-    {
+    majNoeud: function (noeudId, noTransaction) {
         var model = this.diagramme.model;
 
         if (!noTransaction) model.startTransaction("majNoeud");
@@ -393,9 +376,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    editionLien: function (lienId)
-    {
+    editionLien: function (lienId) {
         var lien = this.liens[lienId];
         var noeudInf = this.noeuds[lien['noeud-inf']];
 
@@ -434,9 +415,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    applicationEditionLien: function ()
-    {
+    applicationEditionLien: function () {
         var choixMinimum = this.formLien.find('#choix-minimum').val();
         var choixMaximum = this.formLien.find('#choix-maximum').val();
 
@@ -454,9 +433,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    mergeLienData: function (data)
-    {
+    mergeLienData: function (data) {
         var lien = this.liens[data.id];
 
         lien['choix-minimum'] = data['choix-minimum'];
@@ -474,9 +451,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    lienToLinkData: function (lienId)
-    {
+    lienToLinkData: function (lienId) {
         var lien = this.liens[lienId];
 
         var data = {
@@ -493,9 +468,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    majLien: function (lienId, noTransaction)
-    {
+    majLien: function (lienId, noTransaction) {
         var model = this.diagramme.model;
 
         if (!noTransaction) model.startTransaction("majLien");
@@ -514,9 +487,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    majDiagramme: function ()
-    {
+    majDiagramme: function () {
         var nd = [];
 
         for (var noeudId in this.noeuds) {
@@ -537,9 +508,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    majDiagrammeData: function ()
-    {
+    majDiagrammeData: function () {
         var model = this.diagramme.model;
 
         model.startTransaction("majDiagrammeData");
@@ -555,9 +524,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    chargerDonnees: function (etape, scenario, data)
-    {
+    chargerDonnees: function (etape, scenario, data) {
         if (!data.noeuds) return this;
 
         this.scenario = scenario;
@@ -581,9 +548,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    updateHeuresComposante: function ()
-    {
+    updateHeuresComposante: function () {
         var str = '';
         var heures = 'NC';
         var hetd = 'NC';
@@ -597,16 +562,12 @@ $.widget("ose.chargens", {
     },
 
 
-
-    isFullScreen: function ()
-    {
+    isFullScreen: function () {
         return this.element.hasClass('fullscreen');
     },
 
 
-
-    fullScreen: function ()
-    {
+    fullScreen: function () {
         if (this.isFullScreen()) {
             this.element.removeClass('fullscreen');
             var maxHeight = window.innerHeight - this.element.find('.dessin').offset().top;
@@ -625,9 +586,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    charger: function (etape, scenario)
-    {
+    charger: function (etape, scenario) {
         if (etape && scenario) {
             this.element.find('#chargens-attente').show();
         }
@@ -642,9 +601,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    enregistrer: function (data)
-    {
+    enregistrer: function (data) {
         var url = this.element.data('url-enregistrer');
         var params = {
             etape: this.etape,
@@ -656,9 +613,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    highlight: function (noeudId, hover, sens, noTransaction)
-    {
+    highlight: function (noeudId, hover, sens, noTransaction) {
         var model = this.diagramme.model;
 
         if (!noTransaction) model.startTransaction("highlight");
@@ -685,9 +640,7 @@ $.widget("ose.chargens", {
     },
 
 
-
-    __actionServeur: function (url, params)
-    {
+    __actionServeur: function (url, params) {
         var that = this;
         var p = params;
 
@@ -695,8 +648,7 @@ $.widget("ose.chargens", {
             type: 'POST',
             url: url,
             data: params,
-            success: function (data)
-            {
+            success: function (data) {
                 if (data.erreur) {
                     unicaenVue.flashMessenger.toast(data.erreur, 'error');
                 } else if (data.noeuds) {
@@ -706,8 +658,7 @@ $.widget("ose.chargens", {
                 }
 
             },
-            error: function (jqXHR)
-            {
+            error: function (jqXHR) {
                 unicaenVue.flashMessenger.toast(jqXHR.responseText, 'error');
                 console.log(jqXHR);
             }
@@ -715,17 +666,24 @@ $.widget("ose.chargens", {
     },
 
 
+    getFormNoeudBtnCancel: function () {
+        return this.formNoeud.find('#btn-cancel')
+    },
+    getFormNoeudBtnSave: function () {
+        return this.formNoeud.find('#btn-save')
+    },
+    getFormLienBtnCancel: function () {
+        return this.formLien.find('#btn-cancel')
+    },
+    getFormLienBtnSave: function () {
+        return this.formLien.find('#btn-save')
+    },
+    getHeuresComposante: function () {
+        return this.element.find('#heures-composante')
+    },
 
-    getFormNoeudBtnCancel: function () { return this.formNoeud.find('#btn-cancel')},
-    getFormNoeudBtnSave: function () { return this.formNoeud.find('#btn-save')},
-    getFormLienBtnCancel: function () { return this.formLien.find('#btn-cancel')},
-    getFormLienBtnSave: function () { return this.formLien.find('#btn-save')},
-    getHeuresComposante: function () { return this.element.find('#heures-composante')},
 
-
-
-    __makeGraph: function ()
-    {
+    __makeGraph: function () {
         var that = this;
         var $ = go.GraphObject.make;
 
@@ -738,7 +696,9 @@ $.widget("ose.chargens", {
                 fill: $(go.Brush, "Linear", {0: "rgb(252, 248, 227)", 1: "rgb(250, 242, 204)"}),
                 stroke: "#edd6a3"
             },
-            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#edd6a3";})
+            new go.Binding("stroke", "hover", function (hover) {
+                return hover ? highlightColor : "#edd6a3";
+            })
         ];
 
         var grayGradient = [
@@ -746,7 +706,9 @@ $.widget("ose.chargens", {
                 fill: $(go.Brush, "Linear", {0: "rgb(245, 245, 245)", 1: "rgb(232, 232, 232)"}),
                 stroke: "#ccc"
             },
-            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#ccc";})
+            new go.Binding("stroke", "hover", function (hover) {
+                return hover ? highlightColor : "#ccc";
+            })
         ];
 
         var blueGradient = [
@@ -754,7 +716,9 @@ $.widget("ose.chargens", {
                 fill: $(go.Brush, "Linear", {0: "rgb(217, 237, 247)", 1: "rgb(196, 227, 243)"}),
                 stroke: "#98CED9"
             },
-            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#98CED9";})
+            new go.Binding("stroke", "hover", function (hover) {
+                return hover ? highlightColor : "#98CED9";
+            })
         ];
 
         var d =
@@ -771,8 +735,7 @@ $.widget("ose.chargens", {
                         columnSpacing: 4,
                         aggressiveOption: go.LayeredDigraphLayout.AggressiveMore
                     }),
-                    InitialLayoutCompleted: function (e)
-                    {
+                    InitialLayoutCompleted: function (e) {
                         var maxHeight = window.innerHeight - that.element.find('.dessin').offset().top;
                         var dia = e.diagram;
                         var height = dia.documentBounds.height + 20;
@@ -784,16 +747,19 @@ $.widget("ose.chargens", {
                 }
             );
 
-        var nodeTemplate = function (gradient)
-        {
+        var nodeTemplate = function (gradient) {
             return $(go.Node, "Vertical", {
                     selectionAdornmentTemplate: $(go.Adornment, "Auto",
                         $(go.Shape, "RoundedRectangle",
                             {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
                         $(go.Placeholder)
                     ),
-                    mouseEnter: function (e, obj) { that.highlight(obj.part.data.id, true); },
-                    mouseLeave: function (e, obj) { that.highlight(obj.part.data.id, false); }
+                    mouseEnter: function (e, obj) {
+                        that.highlight(obj.part.data.id, true);
+                    },
+                    mouseLeave: function (e, obj) {
+                        that.highlight(obj.part.data.id, false);
+                    }
                 },
                 $(go.Panel, "Auto",
                     {name: 'panel', width: 110},
@@ -850,8 +816,12 @@ $.widget("ose.chargens", {
                         {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
                     $(go.Placeholder)
                 ),
-                mouseEnter: function (e, obj) { that.highlight(obj.part.data.id, true); },
-                mouseLeave: function (e, obj) { that.highlight(obj.part.data.id, false); }
+                mouseEnter: function (e, obj) {
+                    that.highlight(obj.part.data.id, true);
+                },
+                mouseLeave: function (e, obj) {
+                    that.highlight(obj.part.data.id, false);
+                }
             },
             $(go.Panel, "Auto",
                 {name: 'panel', width: 10, height: 10},
@@ -860,8 +830,12 @@ $.widget("ose.chargens", {
                         fill: '#3F3F3F',
                         stroke: '#3F3F3F'
                     },
-                    new go.Binding("fill", "hover", function (hover) {return hover ? highlightColor : "#3F3F3F";}),
-                    new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#3F3F3F";})
+                    new go.Binding("fill", "hover", function (hover) {
+                        return hover ? highlightColor : "#3F3F3F";
+                    }),
+                    new go.Binding("stroke", "hover", function (hover) {
+                        return hover ? highlightColor : "#3F3F3F";
+                    })
                 ),
                 $(go.Panel, "Vertical",
                     {padding: 10}
@@ -878,12 +852,13 @@ $.widget("ose.chargens", {
             $(
                 go.Shape,
                 new go.Binding("strokeWidth", "poids"),
-                new go.Binding("stroke", "", function (data)
-                {
+                new go.Binding("stroke", "", function (data) {
                     if (data.hover) return highlightColor;
                     return data.actif ? "#3F3F3F" : "#CB0000";
                 }),
-                new go.Binding("strokeDashArray", "actif", function (actif) {return actif ? null : [3, 5];})
+                new go.Binding("strokeDashArray", "actif", function (actif) {
+                    return actif ? null : [3, 5];
+                })
             )
         );
 
@@ -902,42 +877,36 @@ $.widget("ose.chargens", {
 });
 
 
-
-
-
 $.widget("ose.chargensFiltre", {
     structuresEtapes: [],
     structuresScenarios: [],
     etapesStructure: [],
 
-    _create: function ()
-    {
+    _create: function () {
         var that = this;
 
         this.structuresEtapes = this.getStructureElement().data('etapes');
         this.structuresScenarios = this.getStructureElement().data('scenarios');
         this.etapesStructure = this.getEtapeElement().data('structures');
 
-        this.getStructureElement().change(function ()
-        {
+        this.getStructureElement().change(function () {
             that.updateEtapeValues();
             that.change();
         });
-        this.getEtapeElement().change(function ()
-        {
+        this.getEtapeElement().change(function () {
             that.updateScenarioValues();
             that.change();
         });
-        this.getScenarioElement().change(function () { that.change(); });
+        this.getScenarioElement().change(function () {
+            that.change();
+        });
 
         this.updateEtapeValues();
         this.change();
     },
 
 
-
-    updateEtapeValues: function ()
-    {
+    updateEtapeValues: function () {
         var structure = this.getStructureElement().val();
 
         var etapes = structure ? this.structuresEtapes[structure] : 'all';
@@ -947,9 +916,7 @@ $.widget("ose.chargensFiltre", {
     },
 
 
-
-    updateScenarioValues: function ()
-    {
+    updateScenarioValues: function () {
         var etape = this.getEtapeElement().val();
         var structure = this.getStructureElement().val();
 
@@ -963,9 +930,7 @@ $.widget("ose.chargensFiltre", {
     },
 
 
-
-    change: function ()
-    {
+    change: function () {
         var etape = this.getEtapeElement().val();
         var scenario = this.getScenarioElement().val();
 
@@ -975,9 +940,22 @@ $.widget("ose.chargensFiltre", {
     },
 
 
+    getStructureElement: function () {
+        return this.element.find('#structure');
+    },
+    getEtapeElement: function () {
+        return this.element.find('#etape');
+    },
+    getScenarioElement: function () {
+        return this.element.find('#scenario');
+    }
 
-    getStructureElement: function () { return this.element.find('#structure'); },
-    getEtapeElement: function () { return this.element.find('#etape'); },
-    getScenarioElement: function () { return this.element.find('#scenario'); }
+});
+
+$(function () {
+
+    /* Charges d'enseignement */
+    WidgetInitializer.add('chargens', 'chargens');
+    WidgetInitializer.add('chargens-filtre', 'chargensFiltre');
 
 });

@@ -1,9 +1,5 @@
 $(function ()
 {
-    WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function () {
-        WidgetInitializer.includeJs(unicaenVue.url('js/intervenant-recherche.js'));
-    });
-
     WidgetInitializer.add('jstree', 'jstree', function ()
     {
         WidgetInitializer.includeJs(unicaenVue.url('vendor/vakata-jstree-3.3.8/dist/jstree.min.js'));
@@ -88,16 +84,6 @@ $(function ()
     });
     WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie', function () {
         WidgetInitializer.includeJs(unicaenVue.url('js/offre-formation.js'));
-    });
-
-
-    /* Charges d'enseignement */
-    WidgetInitializer.add('chargens', 'chargens', function () {
-        WidgetInitializer.includeJs(unicaenVue.url('vendor/go.js'));
-        //   WidgetInitializer.includeJs(unicaenVue.url('js/chargens.js'));
-    });
-    WidgetInitializer.add('chargens-filtre', 'chargensFiltre', function () {
-        //     WidgetInitializer.includeJs(unicaenVue.url('js/chargens.js'));
     });
 
 

@@ -133,9 +133,7 @@ echo $this->doctype();
 <!-- Scripts (dépendances) -->
 <script type="text/javascript"
         src="<?= $this->basePath('/vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
-<!--
-A décommenter si on s'aperçoit que ce vieux code est encore utile, sinon js à supprimer
-<script type="text/javascript" src="<?= $this->basePath('/vendor/jquery.form-3.51.js') ?>"></script>-->
+<script type="text/javascript" src="<?= $this->basePath('/vendor/jquery.form-3.51.js') ?>"></script>
 <script type="text/javascript"
         src="<?= $this->basePath('/vendor/bootstrap-select/js/bootstrap-select.js') ?>"></script>
 <script type="text/javascript"
@@ -146,12 +144,10 @@ A décommenter si on s'aperçoit que ce vieux code est encore utile, sinon js à
 <script type="text/javascript" src="<?= $this->basePath('/js/widget-initializer.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/intranavigator.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/pop-ajax.js?v=' . $version) ?>"></script>
-<script type="text/javascript" src="<?= $this->basePath('/js/chargens.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/mod-ajax.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/tab-ajax.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/app.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/paiement.js?v=' . $version) ?>"></script>
-<script type="text/javascript" src="<?= $this->basePath('/js/piece-jointe.js?v=' . $version) ?>"></script>
 
 <!-- Scripts chargés dynamiquement -->
 <?= $this->inlineScript(); ?>

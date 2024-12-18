@@ -220,7 +220,7 @@ if ($composerInstall) {
 
 // Chargement des dépendances à l'aide de Composer
 $c->section('Chargement des dépendances à l\'aide de Composer');
-$c->passthru("cd $dir;COMPOSER_ALLOW_SUPERUSER=1 $composerCommand install --quiet --optimize-autoloader");
+$c->passthru("cd $dir;COMPOSER_ALLOW_SUPERUSER=1 $composerCommand install --optimize-autoloader");
 
 
 // Poursuite de la procédure d'installation en passant la main

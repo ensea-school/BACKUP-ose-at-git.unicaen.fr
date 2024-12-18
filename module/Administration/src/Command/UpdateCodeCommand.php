@@ -92,7 +92,7 @@ class UpdateCodeCommand extends Command
             $composerCmd = 'composer';
         }
 
-        $this->exec($composerCmd . ' install --quiet --optimize-autoloader', $env);
+        $this->exec($composerCmd . ' install --optimize-autoloader', $env);
 
         return Command::SUCCESS;
     }

@@ -163,8 +163,7 @@ copy($configFile, $osedir . '/config.local.php');
 $c->println("\nGénération des proxies pour l'ORM Doctrine", $c::COLOR_LIGHT_CYAN);
 $c->exec([
     "cd $osedir",
-    "php vendor/bin/doctrine-module orm:generate-proxies",
-    "chmod -R 777 cache/DoctrineProxy",
+    "php bin/ose clear-cache"
 ]);
 
 // Mise en place des tâches CRON ??

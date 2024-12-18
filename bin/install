@@ -10,6 +10,8 @@ $c->setInputOptions([
 
 $od = new OseDeploy($c);
 
+unlink(__FILE__);
+
 $c->printMainTitle("Installation de OSE", 13);
 $c->check([
     'git'     => 'Gestionnaire de versions',

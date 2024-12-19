@@ -40,14 +40,21 @@ class UpdateBddCommand extends Command
             // Mise à jour générale de la BDD
             $bdd->update();
 
+            // On vide le cache
+            $this->runCommand($output, 'clear-cache');
+
             // Traitements supplémentaires
             $this->getServiceStructure()->updateStructures();
 
+            // on s'occupe des TBLs
             $io->title('Construction & calcul des plafonds');
             $this->getServicePlafond()->construire();
 
+            // On reconstruit les formules
+            $this->runCommand($output, 'build-formules');
+
+            // Enfin on calcule les TBLs
             $this->runCommand($output, 'calcul-tableaux-bord');
-            $this->runCommand($output, 'clear-cache');
 
             return Command::SUCCESS;
         } catch (\Exception $e) {

@@ -42,18 +42,18 @@ $postInstallFnc = function (Console $c, string $dir) {
     if (file_exists($piFile)) {
         $c->passthru(["cd $dir", "./vendor/bin/laminas install"]);
     } else {
-        $c->println("\nGénération des proxies pour l'ORM Doctrine", $c::COLOR_LIGHT_CYAN);
+        $c->writeln("\nGénération des proxies pour l'ORM Doctrine", $c::COLOR_LIGHT_CYAN);
         $c->exec(["cd $dir", "php bin/ose clear-cache"]);
 
-        $c->println("\nFin du script d'installation des fichiers", $c::COLOR_LIGHT_GREEN);
-        $c->println("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
-        $c->println(" 1 - Configurez votre serveur Apache si ce n'est déjà fait");
-        $c->println(" 2 - Veuillez personnaliser le fichier de configuration de OSE config.local.php, si ce n'est déjà le cas");
-        $c->println(" 3 - La base de données devra au besoin être initialisée à l'aide de la commande ./bin/ose install-bdd. Si votre base était déjà initialisée, alors la commande ./bin/ose update-bdd sera privilégiée");
-        $c->println(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
-        $c->println('');
-        $c->println("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
-        $c->println('');
+        $c->writeln("\nFin du script d'installation des fichiers", $c::COLOR_LIGHT_GREEN);
+        $c->writeln("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
+        $c->writeln(" 1 - Configurez votre serveur Apache si ce n'est déjà fait");
+        $c->writeln(" 2 - Veuillez personnaliser le fichier de configuration de OSE config.local.php, si ce n'est déjà le cas");
+        $c->writeln(" 3 - La base de données devra au besoin être initialisée à l'aide de la commande ./bin/ose install-bdd. Si votre base était déjà initialisée, alors la commande ./bin/ose update-bdd sera privilégiée");
+        $c->writeln(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
+        $c->writeln('');
+        $c->writeln("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
+        $c->writeln('');
     }
 };
 

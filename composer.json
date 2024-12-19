@@ -82,25 +82,15 @@
         "sniffer:php8"        : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
         "phpcs"               : "./vendor/bin/phpcs -p ./module --standard=PSR12",
         "update-public-vendor": [
-            "rm -rf public/vendor/bootstrap",
+            "rm -rf public/vendor",
+            "mkdir public/vendor",
+
             "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
-
-            "rm -rf public/vendor/jquery",
             "cp -R vendor/components/jquery public/vendor/jquery",
-
-            "rm -rf public/vendor/open-sans",
             "cp -R vendor/webfontkit/open-sans public/vendor/open-sans",
-
-            "rm -rf public/vendor/font-awesome",
             "cp -R vendor/components/font-awesome public/vendor/font-awesome",
-
-            "rm -rf public/vendor/tinymce",
             "cp -R vendor/tinymce/tinymce public/vendor/tinymce",
-
-            "rm -rf public/vendor/bootstrap-select",
             "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select",
-
-            "rm -rf public/vendor/datatables",
             "cp -R vendor/datatables.net/datatables.net public/vendor/datatables",
             "cp -R vendor/datatables.net/datatables.net-bs5/* public/vendor/datatables/",
             "cp public/vendor/datatables/css/dataTables.bootstrap5.min.css public/vendor/datatables/css/dataTables.bootstrap5.min.scss"

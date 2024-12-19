@@ -14,7 +14,7 @@
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 /* On réutilise l'ACE d'UnicaenImport (pas top) */
-echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-master/src-min/ace.js');
+echo $this->inlinescript()->appendFile($this->basePath() . '/ext/ace-builds-master/src-min/ace.js');
 
 echo $this->form($form);
 

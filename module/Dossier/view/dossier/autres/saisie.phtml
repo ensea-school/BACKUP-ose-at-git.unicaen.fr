@@ -8,7 +8,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 $type = $dossierAutre->getType()->getId();
 
-echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-master/src-min/ace.js');
+echo $this->inlinescript()->appendFile($this->basePath() . '/ext/ace-builds-master/src-min/ace.js');
 
 echo $this->form()->openTag($form); ?>
 

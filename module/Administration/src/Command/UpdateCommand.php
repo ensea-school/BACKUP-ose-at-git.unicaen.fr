@@ -20,7 +20,7 @@ class UpdateCommand extends Command
         $this
             ->setDescription('Mise à jour de l\'application')
             ->addOption(
-                'maintenance-msg',
+                'maintenance',
                 'm',
                 InputOption::VALUE_OPTIONAL,
                 'Indique si un message de maintenance doit être affiché (y ou n)',
@@ -42,7 +42,7 @@ class UpdateCommand extends Command
 
         $io->title($this->getDescription());
 
-        $maintenanceMsg = $input->getOption('maintenance-msg');
+        $maintenanceMsg = $input->getOption('maintenance');
 
         if ($maintenanceMsg === 'yes') {
             // Affichage du message de confirmation

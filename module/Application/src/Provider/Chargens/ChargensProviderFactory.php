@@ -5,7 +5,6 @@ namespace Application\Provider\Chargens;
 use OffreFormation\Service\TypeHeuresService;
 use Psr\Container\ContainerInterface;
 use Unicaen\BddAdmin\Bdd;
-use Unicaen\Console\Console;
 use UnicaenTbl\Service\TableauBordService;
 
 /**

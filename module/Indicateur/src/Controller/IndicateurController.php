@@ -24,7 +24,6 @@ use Laminas\Router\Http\TreeRouteStack;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Renderer\PhpRenderer;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Unicaen\Console\Console;
 use UnicaenApp\View\Model\CsvModel;
 
 
@@ -349,48 +348,6 @@ class IndicateurController extends AbstractController
             'sansMail' => $intervenantsWithNoEmail,
             'form'     => $form,
         ];
-    }
-
-
-
-    /**
-     * Notifications par mail des personnes abonnées à des indicateurs.
-     *
-     * Accessible en ligne de commande, par exemple (on suppose que l'on est situé dans le répertoire de l'appli) :
-     *      php public/index.php notifier indicateurs --force
-     * Arguments de la ligne de commande :
-     * - <code>force</code> (facultatif)
-     */
-    public function envoiNotificationsAction()
-    {
-        // S'il s'agit d'une requête de type Console (CLI), le plugin de contrôleur Url utilisé par les indicateurs
-        // n'est pas en mesure de construire des URL (car le ConsoleRouter ne sait pas ce qu'est une URL!).
-        // On injecte donc provisoirement un HttpRouter dans le circuit.
-        $event  = $this->getEvent();
-        $router = $event->getRouter();
-        $event->setRouter($this->httpRouter);
-
-        // De plus, pour fonctionner, le HttpRouter a besoin du "prefixe" à utiliser pour assembler les URL
-        // (ex: "http://localhost/ose"). Ce prefixe est fourni via un HttpUri initialisé à partir de 2 arguments
-        // de la ligne de commande : "requestUriHost" (obligatoire) et "requestUriScheme" (facultatif, "http" par défaut).
-        $httpUri = (new \Laminas\Uri\Http())
-            ->setHost($this->cliConfig['domain'])// ex: "/localhost/ose", "ose.unicaen.fr"
-            ->setScheme($this->cliConfig['scheme']);
-        $this->httpRouter->setRequestUri($httpUri);
-
-
-        $request = $this->getRequest();
-
-        $force = (bool)$request->getParam('force');
-
-        $this->getProcessusIndicateur()->envoiNotifications($force);
-
-        // S'il s'agit d'une requête de type Console (CLI), rétablissement du router initial (cf. commentaires plus haut).
-        if (Console::isConsole()) {
-            $event->setRouter($router);
-        }
-
-        exit;
     }
 
 

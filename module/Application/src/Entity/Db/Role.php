@@ -71,6 +71,20 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
+    public function isDisplayed(): bool
+    {
+        return true;
+    }
+
+
+
+    public function setDisplayed(bool $accessibleExterieur): void
+    {
+
+    }
+
+
+
     /**
      * Returns the string identifier of the Role
      *

@@ -4,7 +4,6 @@ namespace Application\Service\Factory;
 
 use Application\Service\WorkflowService;
 use Psr\Container\ContainerInterface;
-use Unicaen\Console\Console;
 use UnicaenTbl\Service\TableauBordService;
 
 class WorkflowServiceFactory

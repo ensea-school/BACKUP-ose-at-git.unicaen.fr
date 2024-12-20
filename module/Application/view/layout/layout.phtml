@@ -15,7 +15,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 $navigationHelper = $this->navigation('navigation');
 $pages            = $navigationHelper->getContainer();
 
-$version = '889889';//$this->appInfos()->getConfig()->get('version');
+$version = $this->appInfos()->getConfig()->get('version');
+$appLayout = $this->appLayout();
 
 echo $this->doctype();
 ?>
@@ -91,7 +92,7 @@ echo $this->doctype();
                 ->menu($pages)
                 ->setUlClass('navbar-nav me-auto mb-2 mb-lg-0')
                 ->setPartial('layout/menu-principal.phtml'); ?>
-            <?= $this->appConnection(); ?>
+            <?= $this->vue('application/connexion', ['data' => $appLayout->connexionData()]); ?>
         </div>
     </div>
 </nav>

@@ -5,9 +5,11 @@ namespace Application\Controller;
 use Application\Acl\Role;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Laminas\Http\Request;
 use Laminas\View\Model\JsonModel;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenAuthentification\Controller\UtilisateurController as BaseController;
+use UnicaenUtilisateur\Formatter\RoleFormatter;
 use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 
 
@@ -25,11 +27,15 @@ class UtilisateurController extends BaseController
      */
     public function selectionnerProfilAction($addFlashMessage = true)
     {
-        parent::selectionnerProfilAction($addFlashMessage = false);
+        $roleId = $this->axios()->fromPost('role');
+        $structureId = $this->axios()->fromPost('structure');
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($roleId) {
+            $this->serviceUserContext->setSelectedIdentityRole($roleId);
+        }
+
         /* @var $role Role */
-        $structureId = $this->getRequest()->getPost('structure-' . $role->getRoleId());
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($role->getPerimetre() && $role->getPerimetre()->isEtablissement()) {
             $structure = null;

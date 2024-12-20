@@ -11,6 +11,7 @@ namespace Application\View\Renderer;
  * @method \Agrement\View\Helper\AgrementViewHelper agrement(?\Agrement\Entity\Db\Agrement $agrement = null, ?\Agrement\Entity\Db\TblAgrement $tblAgrement = null)
  * @method \Application\Form\View\Helper\FormSearchAndSelect formSearchAndSelect(?Laminas\Form\ElementInterface $element = null)
  * @method \Application\View\Helper\CartridgeViewHelper cartridge(array $items, array $options = [])
+ * @method \Application\View\Helper\LayoutViewHelper appLayout()
  * @method \Application\View\Helper\Chargens\ChargensViewHelper chargens()
  * @method \Application\View\Helper\FormButtonGroupViewHelper formButtonGroup(?Laminas\Form\ElementInterface $element = null, ?string $labelPosition = null)
  * @method \Application\View\Helper\FormSupprimerViewHelper formSupprimer($form)

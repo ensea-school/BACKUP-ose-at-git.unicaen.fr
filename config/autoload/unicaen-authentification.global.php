@@ -29,11 +29,6 @@ $settings = [
     'role_entity_class'            => 'Application\Entity\Db\Role',
 
     /**
-     * Attribut LDAP utilisé pour le username des utilisateurs
-     */
-    'ldap_username'                => strtolower($conf['ldap']['loginAttribute'] ?? ''),
-
-    /**
      * Gestion des autorisations d'usurpation
      */
     'usurpation_allowed_usernames' => $conf['ldap']['autorisationsUrsurpation'] ?? [],

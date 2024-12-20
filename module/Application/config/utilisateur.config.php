@@ -16,31 +16,6 @@ return [
         ],
     ],
 
-    'console' => [
-        'router' => [
-            'routes' => [
-                'changement-mot-de-passe' => [
-                    'options' => [
-                        'route'    => 'changement-mot-de-passe [--utilisateur=] [--mot-de-passe=]',
-                        'defaults' => [
-                            'controller' => \Application\Controller\UtilisateurController::class,
-                            'action'     => 'changement-mot-de-passe',
-                        ],
-                    ],
-                ],
-                'creer-utilisateur'       => [
-                    'options' => [
-                        'route'    => 'creer-utilisateur [--data=]',
-                        'defaults' => [
-                            'controller' => \Application\Controller\UtilisateurController::class,
-                            'action'     => 'creation',
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
-
     'bjyauthorize' => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [

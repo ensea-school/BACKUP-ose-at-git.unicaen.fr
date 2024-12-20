@@ -184,18 +184,6 @@ Util = {
 
 
 
-    userProfileStructureChange: function (select)
-    {
-        var roleInput = $(select).parent().find('input.user-profile-select-input');
-        if (!roleInput.attr("checked")) {
-            roleInput.attr("checked", "checked");
-        }
-        var event = new Event('change', {bubbles: true});
-        roleInput[0].dispatchEvent(event);
-    },
-
-
-
     filterSelectPicker: function (select, values)
     {
         var ul = select.parent().find('ul');

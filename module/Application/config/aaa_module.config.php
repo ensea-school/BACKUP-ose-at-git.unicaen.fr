@@ -5,11 +5,8 @@ namespace Application;
 use Application\Mouchard\MouchardCompleterContextFactory;
 use Application\Service\OseBddAdminFactory;
 use Application\View\Helper\LocalConnectViewHelperFactory;
-use Application\View\Helper\UserProfileSelectRadioItem;
-use Application\View\Helper\UserProfileSelectRadioItemFactory;
 use Unicaen\BddAdmin\Bdd;
 use UnicaenAuthentification\View\Helper\LocalConnectViewHelper;
-use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 $config = [
     'doctrine'   => [
@@ -162,13 +159,12 @@ $config = [
             'headLink'                   => \Laminas\View\Helper\HeadLink::class,
             'headScript'                 => \Laminas\View\Helper\HeadScript::class,
             'inlineScript'               => \Laminas\View\Helper\InlineScript::class,
-            'userProfileSelectRadioItem' => UserProfileSelectRadioItem::class,
         ],
         'factories'  => [
-            UserProfileSelectRadioItem::class      => UserProfileSelectRadioItemFactory::class,
             \UnicaenApp\View\Helper\AppLink::class => View\Helper\AppLinkFactory::class,
             LocalConnectViewHelper::class          => LocalConnectViewHelperFactory::class,
             'tab'                                  => View\Helper\TabViewHelperFactory::class,
+            'appLayout'                            => View\Helper\LayoutViewHelperFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,

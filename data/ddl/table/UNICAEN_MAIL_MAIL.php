@@ -117,6 +117,18 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
+        'ATTACHMENT_PATHS'                  => [
+            'name'        => 'ATTACHMENT_PATHS',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

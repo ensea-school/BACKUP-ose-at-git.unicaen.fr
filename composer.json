@@ -21,7 +21,7 @@
         "snapappointments/bootstrap-select": "1.14.0-beta3",
         "datatables.net/datatables.net-bs5": "2.1.8",
 
-        "unicaen/app"                      : "6.2.1",
+        "unicaen/app"                      : "6.2.2",
         "unicaen/authentification"         : "6.3.1",
         "unicaen/privilege"                : "6.2.1",
         "unicaen/utilisateur"              : "6.3.1",

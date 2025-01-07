@@ -28,11 +28,11 @@ use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Http\Response;
 use Laminas\View\Model\JsonModel;
-use LogicException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\ProcessStep;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
@@ -60,6 +60,7 @@ class ContratController extends AbstractController
     use ContratServiceListeServiceAwareTrait;
     use TblContratServiceAwareTrait;
     use ProcessServiceAwareTrait;
+    use MailServiceAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -438,10 +439,10 @@ class ContratController extends AbstractController
                     $to           = $this->getRequest()->getPost('destinataire-mail-hide');
                     $cci          = $this->getRequest()->getPost('destinataire-cc-mail');
                     $pieceJointe  = $this->getRequest()->getPost('contrat-piece-jointe');
-                    $message      = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
+                    $mail      = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
                     /*Create Note from email for this intervenant*/
                     $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $html);
-                    $mail           = $this->mail()->send($message);
+                    $this->getMailService()->getMailer()->send($mail);
                     $dateEnvoiEmail = new DateTime();
                     $contrat->setDateEnvoiEmail($dateEnvoiEmail);
                     $this->getServiceContrat()->save($contrat);

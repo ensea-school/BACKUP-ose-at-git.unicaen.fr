@@ -34,6 +34,9 @@ use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 
 
 /**
@@ -53,6 +56,7 @@ class ContratProcessus extends AbstractProcessus
     use ValidationServiceAwareTrait;
     use HistoriqueListenerAwareTrait;
     use StructureServiceAwareTrait;
+    use MailServiceAwareTrait;
 
     /**
      * @param Intervenant    $intervenant
@@ -413,14 +417,13 @@ class ContratProcessus extends AbstractProcessus
     /**
      * @throws Exception
      */
-    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null, $pieceJointe = true): MailMessage
+    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null, $pieceJointe = true): Email
     {
 
 
        if (empty($subject)) {
             $subject = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
         }
-
 
         if (empty($to)) {
             throw new Exception("Aucun email disponible pour le destinataire / Envoi du contrat impossible");
@@ -433,98 +436,33 @@ class ContratProcessus extends AbstractProcessus
             $bcc = explode(';', $cci);
         }
 
-        $body = new Message();
+        $mail = new Email();
+        $mail->from(new Address($from, 'Application OSE'))
+            ->subject($subject)
+            ->to($to)
+            ->html($htmlContent);
 
-        $text          = new Part($htmlContent);
-        $text->type    = Mime::TYPE_HTML;
-        $text->charset = 'utf-8';
-        $body->addPart($text);
-        $nameFrom    = "Application OSE";
-        $messageType = Mime::TYPE_HTML;
-        //Contrat en pièce jointe
+        foreach($bcc as $address)
+        {
+            $mail->addBcc($address);
+        }
+
         if ($pieceJointe) {
-            $messageType = Mime::MULTIPART_RELATED;
+            //Nom du fichier
             $fileName    = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
                                    $contrat->getStructure()?->getCode(),
                                    $contrat->getIntervenant()->getNomUsuel(),
                                    $contrat->getIntervenant()->getCode());
-
+            //Contenu du fichier
             $document                = $this->getServiceContrat()->generer($contrat, false);
             $content                 = $document->saveToData();
-            $attachment              = new Part($content);
-            $attachment->type        = 'application/pdf';
-            $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-            $attachment->encoding    = Mime::ENCODING_BASE64;
-            $attachment->filename    = $fileName;
-            $body->addPart($attachment);
+            $mail->attach($content, $fileName, 'application/pdf' );
         }
 
-        $message = new MailMessage();
-        $message->setEncoding('UTF-8')
-            ->setFrom($from, $nameFrom)
-            ->setSubject($subject)
-            ->addTo($to)
-            ->addBcc($bcc)
-            ->setBody($body)
-            ->getHeaders()->get('content-type')->setType($messageType);
-
-        return $message;
+        return $mail;
     }
 
 
-
-    private function getServicesMission(Intervenant $intervenant, Contrat $contrat = null, Mission $mission = null, bool $detach = true)
-    {
-        $services = [];
-
-        $fContrat    = "vhm.contrat = :contrat";
-        $fNonContrat = "vhm.contrat IS NULL "
-            . "AND tvm.code = '" . TypeVolumeHoraire::CODE_PREVU . "' "
-            . "AND evm.code = '" . EtatVolumeHoraire::CODE_VALIDE . "' ";
-
-        if ($mission) {
-            $fMission = "AND m.id = :mission";
-        } else {
-            $fMission = '';
-        }
-
-        $dql   = "
-        SELECT
-          m, tm, str, i, vhm, evm, tvm
-        FROM
-          Mission\Entity\Db\Mission m
-          JOIN m.volumesHoraires      vhm
-          JOIN m.typeMission tm
-          JOIN m.structure         str
-          JOIN m.intervenant        i
-          JOIN vhm.etatVolumeHoraire evm
-          JOIN vhm.typeVolumeHoraire tvm
-        WHERE
-          i = :intervenant
-          AND m.histoDestruction IS NULL
-          AND vhm.histoDestruction IS NULL
-          AND " . ($contrat ? $fContrat : $fNonContrat) . "
-          $fMission
-        ";
-        $query = $this->getEntityManager()->createQuery($dql);
-        $query->setParameter('intervenant', $intervenant);
-        if ($contrat) {
-            $query->setParameter('contrat', $contrat);
-        }
-        if ($fMission) {
-            $query->setParameter('mission', $mission->getId());
-        }
-
-        foreach ($query->execute() as $service) {
-            /* @var $service Service */
-            if ($detach) {
-                $this->getEntityManager()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
-            }
-            $services[$service->getId()] = $service;
-        }
-
-        return $services;
-    }
 
 
 }

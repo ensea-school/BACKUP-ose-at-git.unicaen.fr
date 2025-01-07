@@ -5,6 +5,7 @@ namespace Contrat\Controller;
 use Contrat\Service\ContratServiceListeService;
 use Contrat\Service\TblContratService;
 use Psr\Container\ContainerInterface;
+use UnicaenMail\Service\Mail\MailService;
 use UnicaenSignature\Service\ProcessService;
 
 class ContratControllerFactory
@@ -22,6 +23,7 @@ class ContratControllerFactory
         $controller->setServiceContratServiceListe($container->get(ContratServiceListeService::class));
         $controller->setServiceTblContrat($container->get(TblContratService::class));
         $controller->setProcessService($container->get(ProcessService::class));
+        $controller->setMailService($container->get(MailService::class));
 
         return $controller;
     }

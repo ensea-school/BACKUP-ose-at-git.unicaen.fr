@@ -6,14 +6,6 @@ use Application\Provider\Privilege\Privileges;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
-    'console' => [
-        'notifier-indicateurs' => [
-            'route'      => 'notifier indicateurs [--force]',
-            'controller' => 'Indicateur\Controller\Indicateur',
-            'action'     => 'envoi-notifications',
-        ],
-    ],
-
     'routes' => [
         'indicateur' => [
             'route'         => '/gestion/indicateur',

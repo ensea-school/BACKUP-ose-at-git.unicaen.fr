@@ -61,7 +61,7 @@ if (!$notification->getIndicateur()->isSpecial() && count($result) > 0):
                 <td style="text-align: center"><?= $r['prioritaire'] ? 'P*' : '' ?></td>
                 <td><?php printValue($r['structure-libelle']); ?></td>
                 <td>
-                    <a href="<?= $this->url($notification->getIndicateur()->getRoute(), ['intervenant' => $intervenantId], ['force_canonical' => true]) ?>">
+                    <a href="<?= $host . $this->url($notification->getIndicateur()->getRoute(), ['intervenant' => $intervenantId]) ?>">
                         <?= $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . ' <small>(n°' . $r['intervenant-code'] . ' / ' . $r['statut-libelle'] . ')</small>' ?>
                     </a>
                 </td>
@@ -73,12 +73,12 @@ if (!$notification->getIndicateur()->isSpecial() && count($result) > 0):
         </tbody>
     </table>
 <?php else: ?>
-<a href="<?= $this->url($notification->getIndicateur()->getRoute(), [], ['force_canonical' => true]); ?>">Pour vous rendre sur OSE, veuillez cliquer sur ce lien.</a>
+<a href="<?= $host . $this->url($notification->getIndicateur()->getRoute(),[]); ?>">Pour vous rendre sur OSE, veuillez cliquer sur ce lien.</a>
 <?php endif; ?>
 <p>
     Vous vous êtes abonné(e) à cet indicateur
     le <?= $notification->getDateAbonnement()->format(Constants::DATETIME_FORMAT) ?>.<br/>
-    <a href="<?= $this->url('indicateur', [], ['force_canonical' => true]) ?>"
+    <a href="<?= $host . $this->url('indicateur') ?>"
        title="Cliquez pour vous rendre à la page de gestion de vos abonnements aux indicateurs">Gérer vos abonnements à
         des indicateurs</a>
 </p>

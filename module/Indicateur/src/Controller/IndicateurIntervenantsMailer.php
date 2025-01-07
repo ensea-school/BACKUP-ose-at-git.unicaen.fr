@@ -11,6 +11,8 @@ use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
 use Laminas\View\Renderer\PhpRenderer;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 /**
  * Classe dédiée à l'envoi des mails aux intervenants retournés par un indicateur.
@@ -45,21 +47,7 @@ class IndicateurIntervenantsMailer
     }
 
 
-
-    public function send($emails, $data)
-    {
-        foreach ($emails as $email => $name) {
-            $message = $this->createMessage($data);
-            $message->setTo($email, $name);
-
-
-            $this->controller->mail()->send($message);
-        }
-    }
-
-
-
-    private function createMessage($data)
+    private function createMessage($data, $emails)
     {
         // corps au format HTML
         $html = $data['body'];
@@ -73,19 +61,20 @@ class IndicateurIntervenantsMailer
             $htmlLog .= "</p>";
             $html    .= $htmlLog;
         }
-        $part          = new MimePart($html);
-        $part->type    = Mime::TYPE_HTML;
-        $part->charset = 'UTF-8';
-        $body          = new MimeMessage();
-        $body->addPart($part);
+
 
         $from = (isset($data['from'])) ? $data['from'] : $this->getFrom();
 
-        return (new MailMessage())
-            ->setEncoding('UTF-8')
-            ->setFrom($from, "Contact Application " . ($app = $this->controller->appInfos()->getNom()))
-            ->setSubject($data['subject'])
-            ->setBody($body);
+        $email = new Email();
+        $email->from(new Address($from,"Contact Application " . ($app = $this->controller->appInfos()->getNom())))
+              ->subject($data['subject'])
+              ->html($html);
+
+        foreach ($emails as $value => $name) {
+            $email->addTo($value, $name);
+        }
+
+        return $email;
     }
 
 
@@ -144,10 +133,10 @@ class IndicateurIntervenantsMailer
     public function sendCopyEmail($emailsUtilisateur, $emailsIntervenant, $data, $logs = null)
     {
         $data['emailsIntervenant'] = $emailsIntervenant;
-        $message                   = $this->createMessage($data);
-        $message->setSubject('COPIE | ' . $data['subject']);
+        $email                   = $this->createMessage($data);
+        $email->subject('COPIE | ' . $data['subject']);
         foreach ($emailsUtilisateur as $email => $name) {
-            $message->setTo($email, $name);
+            $email->to($email, $name);
         }
         $this->controller->mail()->send($message);
     }

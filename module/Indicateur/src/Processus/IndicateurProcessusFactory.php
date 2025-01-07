@@ -3,6 +3,7 @@
 namespace Indicateur\Processus;
 
 use Psr\Container\ContainerInterface;
+use UnicaenMail\Service\Mail\MailService;
 
 /**
  *
@@ -14,9 +15,17 @@ class IndicateurProcessusFactory
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $renderer = $container->get('ViewHelperManager')->getRenderer();
-        $mail     = $container->get('ControllerPluginManager')->get('mail');
 
-        $processus = new IndicateurProcessus($renderer, $mail);
+        $config = $container->get('Config');
+
+        $scheme = $config['cli_config']['scheme'] ?? 'https';
+        $domain = $config['cli_config']['domain'] ?? null;
+
+        $host = $scheme.'://'.$domain;
+
+
+        $processus = new IndicateurProcessus($renderer, $host);
+        $processus->setMailService($container->get(MailService::class));
 
         return $processus;
     }

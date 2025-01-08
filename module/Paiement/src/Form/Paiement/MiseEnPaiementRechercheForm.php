@@ -61,7 +61,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
             ->setAllowedObjectBindingClass(MiseEnPaiementRecherche::class);
 
         $this->setAttribute('method', 'post')
-            ->setAttribute('class', 'paiement-mise-en-paiement-recherche-form')
+            ->setAttribute('class', 'paiement-mise-en-paiement-recherche-form no-intranavigation')
             ->setAttribute('id', $this->getId());
 
         $this->add([

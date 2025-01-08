@@ -1,18 +1,16 @@
 IntraNavigator = {
+    axios: null,
+    loadingTooltip: null,
 
-    getElementToRefresh: function (element)
-    {
+    getElementToRefresh: function (element) {
         return $($(element).parents('.intranavigator').get(0));
     },
 
 
-
-    refreshElement: function (element, data, isSubmit)
-    {
+    refreshElement: function (element, data, isSubmit) {
         element.html(data);
         element.trigger('intranavigator-refresh', {element: element, isSubmit: isSubmit});
     },
-
 
 
     hasErrors: function (element) {
@@ -24,7 +22,6 @@ IntraNavigator = {
 
         return errs > 0;
     },
-
 
 
     extractTitle: function (element) {
@@ -51,16 +48,12 @@ IntraNavigator = {
     },
 
 
-
-    embeds: function (element)
-    {
+    embeds: function (element) {
         return $(element).parents('.intranavigator').length > 0;
     },
 
 
-
-    add: function (element)
-    {
+    add: function (element) {
         if (!$(element).hasClass('intranavigator')) {
             $(element).addClass('intranavigator');
             //IntraNavigator.run();
@@ -68,30 +61,7 @@ IntraNavigator = {
     },
 
 
-
-    waiting: function (element, message)
-    {
-        if ($(element).find('.intramessage').length == 0) {
-            var msg = message ? message : 'Chargement';
-            msg += ' <span class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-            msg = '<div class="alert alert-success intramessage" role="alert">' + msg + '</div>';
-            $(element).append(msg);
-        } else {
-            $(element).find('.intramessage').show();
-        }
-    },
-
-
-
-    endWaiting: function ()
-    {
-        $('.intramessage').hide();
-    },
-
-
-
-    formSubmitListener: function (e)
-    {
+    formSubmitListener: function (e) {
         var form = $(e.target);
         var postData = form.serializeArray(); // paramètre "modal" indispensable
         var url = form.attr('action');
@@ -99,51 +69,152 @@ IntraNavigator = {
 
         if (elementToRefresh) {
             // requête AJAX de soumission du formulaire
-            IntraNavigator.waiting(elementToRefresh, 'Veuillez patienter s\'il vous plaît...');
-            $.post(url, postData, $.proxy(function (data)
-            {
-                IntraNavigator.refreshElement(elementToRefresh, data, true);
-            }, this));
+            IntraNavigator.pageBeforeLoad(url, elementToRefresh);
+            IntraNavigator.axios.post(
+                url, postData
+            ).then(response => {
+                if (response.headers["content-disposition"]) {
+                    IntraNavigator.downloadFile(response);
+                } else {
+                    IntraNavigator.refreshElement(elementToRefresh, response.request.responseText, true);
+                }
+                IntraNavigator.pageAfterLoad(url, elementToRefresh);
+            }).catch(error => {
+                IntraNavigator.pageAfterLoadError(url, elementToRefresh, error);
+            });
         }
+
         e.preventDefault();
     },
 
 
-
-    innerAnchorClickListener: function (e)
-    {
+    innerAnchorClickListener: function (e) {
         var anchor = $(e.currentTarget);
         var url = anchor.attr('href');
         var elementToRefresh = IntraNavigator.getElementToRefresh(anchor);
 
         if (elementToRefresh && url && url !== "#") {
-            // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
-            IntraNavigator.waiting(elementToRefresh, 'Chargement');
-            $.get(url, {}, $.proxy(function (data)
-            {
-                IntraNavigator.refreshElement(elementToRefresh, data, false);
-            }, this));
+            IntraNavigator.pageBeforeLoad(url, elementToRefresh);
+            IntraNavigator.axios.get(
+                url
+            ).then(response => {
+                if (response.headers["content-disposition"]) {
+                    IntraNavigator.downloadFile(response);
+                } else {
+                    IntraNavigator.refreshElement(elementToRefresh, response.request.responseText, false);
+                }
+                IntraNavigator.pageAfterLoadSuccess(url, elementToRefresh);
+            }).catch(error => {
+                IntraNavigator.pageAfterLoadError(url, elementToRefresh, error);
+            });
         }
 
         e.preventDefault();
     },
 
 
+    pageBeforeLoad(url, elementToRefresh)
+    {
+        IntraNavigator.loadingTooltip.style.display = 'block';
+    },
 
-    /*btnPrimaryClickListener: function (e)
-     {
-     var form = IntraNavigator.getElementToRefresh(e.target).find('form');
-     if (form.length) {
-     form.submit();
-     e.preventDefault();
-     }
-     },*/
+
+    pageAfterLoadSuccess(url, elementToRefresh)
+    {
+        if (elementToRefresh.hasClass('intranavigator-page')) {
+            history.pushState({url}, null, url);
+        }
+        IntraNavigator.loadingTooltip.style.display = 'none';
+    },
+
+
+    pageAfterLoadError(url, elementToRefresh, error)
+    {
+        console.log(error);
+        IntraNavigator.loadingTooltip.style.display = 'none';
+    },
+
+
+    downloadFile(response)
+    {
+        // Fonction pour extraire le nom du fichier depuis l'en-tête Content-Disposition
+        const getFilenameFromHeader = (contentDisposition) => {
+            const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const matches = filenameRegex.exec(contentDisposition);
+            if (matches != null && matches[1]) {
+                // Retirer les guillemets autour du nom de fichier si présents
+                return matches[1].replace(/['"]/g, '');
+            }
+            return null;
+        };
+
+        // Extraire le nom du fichier depuis l'en-tête Content-Disposition
+        const contentDisposition = response.headers['content-disposition'];
+        const filename = getFilenameFromHeader(contentDisposition);
+
+        if (!filename) {
+            throw new Error('Nom du fichier non trouvé dans l\'en-tête Content-Disposition');
+        }
+
+        // Créer un objet Blob à partir des données reçues
+        const blob = new Blob([response.data]);
+
+        // Créer un lien de téléchargement
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = filename; // Utiliser le nom du fichier extrait
+
+        // Simuler un clic sur le lien pour déclencher le téléchargement
+        link.click();
+
+        // Libérer l'objet URL
+        window.URL.revokeObjectURL(link.href);
+    },
+
+
+
+    createLoadingTooltip()
+    {
+        const loadingTooltip = document.createElement('div');
+        IntraNavigator.loadingTooltip = loadingTooltip;
+
+        loadingTooltip.id = 'loading-tooltip';
+
+        // Ajouter du contenu à la div (icône de chargement et texte)
+        loadingTooltip.innerHTML = '<i class="fas fa-spinner"></i> Chargement...';
+
+        // Appliquer des styles à la div
+        Object.assign(loadingTooltip.style, {
+            position: 'absolute',
+            display: 'none', // Cachée par défaut
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            fontSize: '14px',
+            pointerEvents: 'none', // Permet de cliquer à travers la div
+            zIndex: '1000', // S'assure qu'elle est au-dessus des autres éléments
+        });
+
+        // Ajouter la div au body
+        document.body.appendChild(loadingTooltip);
+
+        document.addEventListener('mousemove', IntraNavigator.moveLoadingTooltip);
+    },
+
+
+    moveLoadingTooltip(event)
+    {
+        // Déplacer la div à la position de la souris
+        IntraNavigator.loadingTooltip.style.left = `${event.clientX + 10}px`;
+        IntraNavigator.loadingTooltip.style.top = `${event.clientY + 10}px`;
+    },
+
 
     /**
      * Lance automatiquement l'association de tous les widgets déclarés avec les éléments HTMl de classe correspondante
      */
-    run: function ()
-    {
+    run() {
         var submitSelector = '.intranavigator form:not(.no-intranavigation)';
         var clickSelector = '.intranavigator a:not(.pop-ajax):not(.ajax-modal):not(.no-intranavigation):not(.no-intranavigation a)';
 
@@ -162,19 +233,32 @@ IntraNavigator = {
     },
 
 
-
     /**
      * Installe le WidgetInitializer pour qu'il se lance au chargement de la page ET après chaque requête AJAX
      */
-    install: function ()
-    {
+    install() {
         var that = this;
 
+        this.axios = unicaenVue.axios;
+
+        this.createLoadingTooltip();
+
         this.run();
-        $(document).ajaxSuccess(function ()
-        {
+        $(document).ajaxSuccess(function () {
             that.run();
-            that.endWaiting();
         });
+
+        // Gérer les changements d'URL (par exemple, quand l'utilisateur utilise les boutons Précédent/Suivant)
+        window.onpopstate = function (event) {
+            const url = event.state ? event.state.page : '/';
+
+            let content = document.getElementsByClassName('intranavigator-page');
+
+            IntraNavigator.axios.get(
+                url
+            ).then(response => {
+                content.innerHTML = response.request.responseText;
+            });
+        };
     }
 };

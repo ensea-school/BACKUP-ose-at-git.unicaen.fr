@@ -25,6 +25,7 @@ use Laminas\View\Model\JsonModel;
 use Laminas\View\Renderer\PhpRenderer;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 
 
 class IndicateurController extends AbstractController
@@ -37,6 +38,7 @@ class IndicateurController extends AbstractController
     use TypeVolumeHoraireServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use NoteServiceAwareTrait;
+    use MailServiceAwareTrait;
 
     /**
      * @var TreeRouteStack
@@ -286,10 +288,17 @@ class IndicateurController extends AbstractController
                 $intervenantsWithNoEmail[$intervenantId] = $indicRes;
             }
         }
-        $mailer  = new IndicateurIntervenantsMailer($this, $indicateur, $this->renderer);
-        $from    = $mailer->getFrom();
-        $subject = $mailer->getDefaultSubject();
-        $body    = $mailer->getDefaultBody();
+
+
+        $from    = $this->getServiceIndicateur()->getFrom();
+        $fromName = "Contact Application " . $this->appInfos()->getNom();
+        $subject = sprintf("%s %s : %s",
+                           $this->appInfos()->getNom(),
+                           $this->getServiceContext()->getAnnee(),
+                           strip_tags($indicateur->getTypeIndicateur())
+        );
+
+        $body    = $this->getServiceIndicateur()->getDefaultBody();
 
         $form = new Form();
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
@@ -313,7 +322,10 @@ class IndicateurController extends AbstractController
                 } else {
                     $emailsList = $emails;
                 }
-                $mailer->send($emailsList, $post);
+                $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName);
+                $this->getMailService()->getMailer()->send($email);
+
+                //$mailer->send($emailsList, $post);
                 //Création d'une note email pour chaque intervenant concerné
                 foreach ($intervenantsIds as $id) {
                     $intervenant = $this->getServiceIntervenant()->get($id);
@@ -323,17 +335,15 @@ class IndicateurController extends AbstractController
                 }
                 if ($post['copy']) {
                     //envoi une copie du mail à l'utilisateur s'il l'a demandé
-                    $utilisateur                                = $this->getServiceContext()->getUtilisateur();
-                    $emailUtilisateur[$utilisateur->getEmail()] = $utilisateur->getDisplayName();
-                    $mailer->sendCopyEmail($emailUtilisateur, $emailsList, $post);
+                    $emailUtilisateur = [$this->getServiceContext()->getUtilisateur()->getEmail()];
+                    $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName,$emailUtilisateur);
+                    $this->getMailService()->getMailer()->send($email);
                 }
                 if ($post['cci'] && !empty($post['cci'])) {
                     $emailsCci = explode(';', $post['cci']);
-                    foreach ($emailsCci as $emailCci) {
-                        $listEmailsCci            = [];
-                        $listEmailsCci[$emailCci] = $emailCci;
-                        $mailer->sendCopyEmail($listEmailsCci, $emailsList, $post);
-                    }
+                    $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName,$emailsCci);
+                    $this->getMailService()->getMailer()->send($email);
+
                 }
                 $count   = count($emailsList);
                 $pluriel = $count > 1 ? 's' : '';

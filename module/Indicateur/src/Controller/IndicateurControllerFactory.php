@@ -4,6 +4,7 @@ namespace Indicateur\Controller;
 
 use Psr\Container\ContainerInterface;
 use Laminas\View\Renderer\PhpRenderer;
+use UnicaenMail\Service\Mail\MailService;
 
 class IndicateurControllerFactory
 {
@@ -21,6 +22,7 @@ class IndicateurControllerFactory
         $cliConfig  = $this->getCliConfig($container);
 
         $controller = new IndicateurController($httpRouter, $renderer, $cliConfig);
+        $controller->setMailService($container->get(MailService::class));
 
         return $controller;
     }

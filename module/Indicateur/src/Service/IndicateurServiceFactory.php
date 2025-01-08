@@ -15,6 +15,9 @@ class IndicateurServiceFactory
     {
         $service = new IndicateurService();
 
+        $service->setRenderer($container->get(\Laminas\View\Renderer\PhpRenderer::class));
+
+
         return $service;
     }
 

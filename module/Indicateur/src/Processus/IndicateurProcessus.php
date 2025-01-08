@@ -10,11 +10,6 @@ use Indicateur\Service\NotificationIndicateurServiceAwareTrait;
 use Laminas\View\Renderer\PhpRenderer;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use UnicaenApp\Controller\Plugin\Mail;
-use Laminas\Mime\Part as MimePart;
-use Laminas\Mime\Mime;
-use Laminas\Mail\Message as MailMessage;
-use Laminas\Mime\Message as MimeMessage;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 
 

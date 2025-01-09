@@ -11,7 +11,7 @@
     "require"          : {
         "php"                              : ">=8.2",
         "laminas/laminas-cli"              : "1.11.0",
-        "symfony/process"                  : "7.1.5",
+        "symfony/process"                  : "7.2.0",
 
         "twbs/bootstrap"                   : "5.3.3",
         "components/jquery"                : "3.6.0",

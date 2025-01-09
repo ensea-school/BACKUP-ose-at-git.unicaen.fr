@@ -29,12 +29,11 @@
         "unicaen/import"                   : "6.0.5",
         "unicaen/tbl"                      : "6.2.5",
         "unicaen/open-document"            : "6.0.10",
-        "unicaen/siham"                    : "6.1.6",
+        "unicaen/siham"                    : "6.2.0",
         "unicaen/mail"                     : "7.0.0",
         "unicaen/vue"                      : "6.2.7",
         "unicaen/bddadmin"                 : "1.0.6",
         "unicaen/signature"                : "1.0.0",
-
         "connecteur-ose/actul"             : "dev-master",
         "connecteur-ose/pegase"            : "dev-master"
     },

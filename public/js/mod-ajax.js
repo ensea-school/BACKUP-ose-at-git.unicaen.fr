@@ -360,6 +360,10 @@ function modAjax(element, onSubmit)
 {
     var widget = $(element).data('unicaenModAjax');
 
+    if (!element.classList.contains('no-intranavigation')) {
+        element.classList.add('no-intranavigation');
+    }
+
     if (!widget) {
         $(element).modAjax();
         widget = $(element).data('unicaenModAjax');

@@ -83,30 +83,30 @@ class DemandesController extends AbstractController
             $this->updateTableauxBord($intervenant);
             //Traitement des messages de succes ou d'erreur (Toast)
             if ($success == 0) {
-                $this->flashMessenger()->addInfoMessage('Aucun demande de mise en paiement a effectué pour cette composante');
+                $this->flashMessenger()->addInfoMessage('Aucune demande de mise en paiement à effectuer pour cette composante');
             }
             //Demandes de mise en paiement effectuées
             if ($success > 0) {
                 if ($success > 1) {
-                    $this->flashMessenger()->addSuccessMessage($success . " demandes de mise en paiement ont été effectué pour cette composante.");
+                    $this->flashMessenger()->addSuccessMessage($success . " demandes de mise en paiement effectuées pour cette composante.");
                 } else {
-                    $this->flashMessenger()->addSuccessMessage($success . " demande de mise en paiement a été effectué pour cette composante.");
+                    $this->flashMessenger()->addSuccessMessage($success . " demande de mise en paiement effectuée pour cette composante.");
                 }
             }
             //Erreur de demande de mise en paiement pour mauvais paramètrage de centre de cout ou de domaine fonctionnel
             if ($error > 0) {
                 if ($error > 1) {
-                    $this->flashMessenger()->addErrorMessage("Attention, $error demandes de mise en paiement n'ont pas pu être traité pour cette composante.");
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demandes de mise en paiement n'ont pas pu être traitées pour cette composante.");
                 } else {
-                    $this->flashMessenger()->addErrorMessage("Attention, $error demande de mise en paiement n'a pas pu être traité pour cette composante.");
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demande de mise en paiement n'a pas pu être traitée pour cette composante.");
                 }
             }
             //Erreur de mise en paiement pour raison de dépassement de budget
             if ($errorBudget > 0) {
                 if ($errorBudget > 1) {
-                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demandes de mise en paiement n'ont pas pu être traité pour cette composante car votre budget ne permet plus d'en faire la demande.");
+                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demandes de mise en paiement n'ont pas pu être traitées pour cette composante car votre budget ne permet plus d'en faire la demande.");
                 } else {
-                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demande de mise en paiement n'a pas pu être traité pour cette composante car votre budget ne permet plus d'en faire la demande.");
+                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demande de mise en paiement n'a pas pu être traitée pour cette composante car votre budget ne permet plus d'en faire la demande.");
                 }
             }
 

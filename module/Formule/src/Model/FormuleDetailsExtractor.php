@@ -59,7 +59,7 @@ class FormuleDetailsExtractor implements ExtractionInterface
             'iParams'            => $this->iParams,
             'vhParams'           => $this->vhParams,
             'typesInterventions' => $this->typesInterventions,
-            'typesHetd'          => $this->typesHetd,
+            'typesHetd'          => $this->finaliserTypesHetd($this->typesHetd),
             'intervenant'        => $this->intervenant,
             'services'           => $this->services,
         ];
@@ -74,18 +74,18 @@ class FormuleDetailsExtractor implements ExtractionInterface
 
         /* Initialisation des types d'heures HETD utiles */
         foreach ($this->trace->getValeurs() as $vn => $valeur) {
-            if ($valeur->getValue() != 0.0) {
+            if ($this->typeHetdEligible($vn, $valeur)) {
                 $typesHetd[$vn] = true;
             }
             foreach ($this->trace->getSubs() as $sub) {
                 foreach ($sub->getValeurs() as $vn => $valeur) {
-                    if ($valeur->getValue() != 0.0) {
+                    if ($this->typeHetdEligible($vn, $valeur)) {
                         $typesHetd[$vn] = true;
                     }
                 }
                 foreach ($sub->getSubs() as $ssub) {
                     foreach ($ssub->getValeurs() as $vn => $valeur) {
-                        if ($valeur->getValue() != 0.0) {
+                        if ($this->typeHetdEligible($vn, $valeur)) {
                             $typesHetd[$vn] = true;
                         }
                     }
@@ -93,6 +93,63 @@ class FormuleDetailsExtractor implements ExtractionInterface
             }
         }
         $this->typesHetd = array_keys($typesHetd);
+    }
+
+
+
+    private function typeHetdEligible(string $nom, Valeur $valeur): bool
+    {
+        if ($valeur->getValue() == 0) {
+            return false;
+        }
+
+        if ($nom == 'HeuresServiceEnseignement') {
+            return false;
+        }
+
+        if ($nom == 'HeuresComplEnseignement') {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    private function finaliserTypesHetd(array $typesHetd): array
+    {
+        $tree = ['Total' => []];
+
+        $tradCats  = [
+            Ligne::CAT_SERVICE     => 'Service',
+            Ligne::CAT_COMPL       => 'Heures compl.',
+            Ligne::CAT_NON_PAYABLE => 'Non payable',
+        ];
+        $tradTypes = [
+            Ligne::TYPE_FI          => 'FI',
+            Ligne::TYPE_FA          => 'FA',
+            Ligne::TYPE_FC          => 'FC',
+            Ligne::TYPE_REFERENTIEL => 'Référentiel',
+        ];
+
+        foreach (Ligne::CATEGORIES as $cat) {
+            foreach (Ligne::TYPES as $type) {
+                if (in_array($cat . $type, $typesHetd)) {
+                    $tcat  = $tradCats[$cat];
+                    $ttype = $tradTypes[$type];
+                    if (!array_key_exists($tcat, $tree)) {
+                        $tree[$tcat] = [];
+                    }
+                    $tree[$tcat][] = $ttype;
+                }
+            }
+        }
+
+        if (in_array(Ligne::CAT_TYPE_PRIME, $typesHetd)) {
+            $tree['Primes'] = [];
+        }
+
+        return $tree;
     }
 
 
@@ -124,7 +181,12 @@ class FormuleDetailsExtractor implements ExtractionInterface
             'depassementServiceDuSansHC' => $this->fres->isDepassementServiceDuSansHC(),
             'params'                     => [], // peuplé par prepareParams
             'serviceDu'                  => $this->fres->getServiceDu(),
+            'hetd'                       => [],
         ];
+        foreach ($this->typesHetd as $typeHetd) {
+            $valeur                               = $this->trace->getValeur($typeHetd);
+            $this->intervenant['hetd'][$typeHetd] = $this->valeurToJson($valeur);
+        }
     }
 
 
@@ -219,8 +281,8 @@ class FormuleDetailsExtractor implements ExtractionInterface
                         'libelle' => $data['EP_LIBELLE'],
                     ] : null,
                     'tauxFi'             => (float)$data['TAUX_FI'],
-                    'tauxFa'             => (float)$data['TAUX_FI'],
-                    'tauxFc'             => (float)$data['TAUX_FI'],
+                    'tauxFa'             => (float)$data['TAUX_FA'],
+                    'tauxFc'             => (float)$data['TAUX_FC'],
                 ];
 
                 $this->services['e' . $data['ID']] = array_merge($this->services['e' . $data['ID']], $sdata);
@@ -280,9 +342,17 @@ class FormuleDetailsExtractor implements ExtractionInterface
                     $rIds[] = $vh->getVolumeHoraire()->getVolumeHoraireReferentiel();
                 }
                 $this->services[$sId]['volumesHoraires'][$vhId] = [
-                    'type' => str_starts_with($vhId, 'e') ? 'enseignement' : 'referentiel',
-                    'id'   => substr($vhId, 1),
+                    'type'                    => str_starts_with($vhId, 'e') ? 'enseignement' : 'referentiel',
+                    'id'                      => substr($vhId, 1),
+                    'tauxServiceDu'           => $vh->getVolumeHoraire()->getTauxServiceDu(),
+                    'tauxServiceCompl'        => $vh->getVolumeHoraire()->getTauxServiceCompl(),
+                    'ponderationServiceDu'    => $vh->getVolumeHoraire()->getPonderationServiceDu(),
+                    'ponderationServiceCompl' => $vh->getVolumeHoraire()->getPonderationServiceCompl(),
+                    'params'                  => [],
                 ];
+                foreach ($this->vhParams as $i => $null) {
+                    $this->services[$sId]['volumesHoraires'][$vhId]['params'][$i] = $vh->getVolumeHoraire()->{"getParam$i"}();
+                }
                 foreach ($this->typesHetd as $typeHetd) {
                     $valeur                                                            = $service->getValeur($typeHetd);
                     $this->services[$sId]['volumesHoraires'][$vhId]['hetd'][$typeHetd] = $this->valeurToJson($valeur);
@@ -292,25 +362,33 @@ class FormuleDetailsExtractor implements ExtractionInterface
         if (!empty($eIds)) {
             $sql   = "
             SELECT
-              vh.service_id     service_id,
-              vh.id             id,
-              vh.heures         heures,
-              vh.horaire_debut  horaire_debut,
-              vh.horaire_fin    horaire_fin,
-              p.id              periode_id,
-              p.code            periode_code,
-              p.libelle_court   periode_libelle,
-              ti.id             type_intervention_id,
-              ti.code           type_intervention_id,
-              ti.libelle        type_intervention_id,
-              mnp.id            motif_non_paiement_id,
-              mnp.code          motif_non_paiement_code,
-              mnp.libelle_court motif_non_paiement_code
+              vh.service_id         service_id,
+              vh.id                 id,
+              vh.heures             heures,
+              vh.horaire_debut      horaire_debut,
+              vh.horaire_fin        horaire_fin,
+              p.id                  periode_id,
+              p.code                periode_code,
+              p.libelle_court       periode_libelle,
+              ti.id                 type_intervention_id,
+              ti.code               type_intervention_code,
+              ti.libelle            type_intervention_libelle,
+              mnp.id                motif_non_paiement_id,
+              mnp.code              motif_non_paiement_code,
+              mnp.libelle_court     motif_non_paiement_code,
+              vh.histo_creation     histo_creation,
+              hcu.id                histo_createur_id,
+              hcu.display_name      histo_createur_libelle,
+              vh.histo_modification histo_modification,
+              hmu.id                histo_modificateur_id,
+              hmu.display_name      histo_modificateur_libelle
             FROM
               volume_horaire vh
               JOIN periode p ON p.id = vh.periode_id
               JOIN type_intervention ti ON ti.id = vh.type_intervention_id
               LEFT JOIN motif_non_paiement mnp ON mnp.id = vh.motif_non_paiement_id
+              LEFT JOIN utilisateur hcu ON hcu.id = vh.histo_createur_id
+              LEFT JOIN utilisateur hmu ON hmu.id = vh.histo_modificateur_id
             WHERE
               vh.id IN (" . implode(',', $eIds) . ")";
             $query = $this->getServiceFormule()->getEntityManager()->getConnection()->executeQuery($sql);
@@ -330,10 +408,22 @@ class FormuleDetailsExtractor implements ExtractionInterface
                         'code'    => $data['TYPE_INTERVENTION_CODE'],
                         'libelle' => $data['TYPE_INTERVENTION_LIBELLE'],
                     ],
-                    'motifNonPaiement' => [
+                    'motifNonPaiement' => $data['MOTIF_NON_PAIEMENT_ID'] ? [
                         'id'      => (int)$data['MOTIF_NON_PAIEMENT_ID'],
                         'code'    => $data['MOTIF_NON_PAIEMENT_CODE'],
                         'libelle' => $data['MOTIF_NON_PAIEMENT_LIBELLE'],
+                    ] : null,
+                    'histo'            => [
+                        'creation'     => $data['HISTO_CREATION'],
+                        'createur'     => [
+                            'id'      => $data['HISTO_CREATEUR_ID'],
+                            'libelle' => $data['HISTO_CREATEUR_LIBELLE'],
+                        ],
+                        'modification' => $data['HISTO_MODIFICATION'],
+                        'modificateur' => [
+                            'id'      => $data['HISTO_MODIFICATEUR_ID'],
+                            'libelle' => $data['HISTO_MODIFICATEUR_LIBELLE'],
+                        ],
                     ],
                 ];
                 $vhId                                           = 'e' . $data['ID'];
@@ -344,16 +434,24 @@ class FormuleDetailsExtractor implements ExtractionInterface
         if (!empty($rIds)) {
             $sql   = "
             SELECT
-              sr.id             service_referentiel_id,
-              vhr.id            id,
-              vhr.heures        heures,
-              mnp.id            motif_non_paiement_id,
-              mnp.code          motif_non_paiement_code,
-              mnp.libelle_court motif_non_paiement_code
+              sr.id                  service_referentiel_id,
+              vhr.id                 id,
+              vhr.heures             heures,
+              mnp.id                 motif_non_paiement_id,
+              mnp.code               motif_non_paiement_code,
+              mnp.libelle_court      motif_non_paiement_code,
+              vhr.histo_creation     histo_creation,
+              hcu.id                 histo_createur_id,
+              hcu.display_name       histo_createur_libelle,
+              vhr.histo_modification histo_modification,
+              hmu.id                 histo_modificateur_id,
+              hmu.display_name       histo_modificateur_libelle
             FROM
               volume_horaire_ref vhr
               JOIN service_referentiel sr ON sr.id = vhr.service_referentiel_id
               LEFT JOIN motif_non_paiement mnp ON mnp.id = sr.motif_non_paiement_id
+              LEFT JOIN utilisateur hcu ON hcu.id = vhr.histo_createur_id
+              LEFT JOIN utilisateur hmu ON hmu.id = vhr.histo_modificateur_id
             WHERE
               vhr.id IN (" . implode(',', $rIds) . ")";
             $query = $this->getServiceFormule()->getEntityManager()->getConnection()->executeQuery($sql);
@@ -361,10 +459,22 @@ class FormuleDetailsExtractor implements ExtractionInterface
                 $sdata                                          = [
                     'id'               => (int)$data['ID'],
                     'heures'           => (float)$data['HEURES'],
-                    'motifNonPaiement' => [
+                    'motifNonPaiement' => $data['MOTIF_NON_PAIEMENT_ID'] ? [
                         'id'      => (int)$data['MOTIF_NON_PAIEMENT_ID'],
                         'code'    => $data['MOTIF_NON_PAIEMENT_CODE'],
                         'libelle' => $data['MOTIF_NON_PAIEMENT_LIBELLE'],
+                    ] : null,
+                    'histo'            => [
+                        'creation'     => $data['HISTO_CREATION'],
+                        'createur'     => [
+                            'id'      => $data['HISTO_CREATEUR_ID'],
+                            'libelle' => $data['HISTO_CREATEUR_LIBELLE'],
+                        ],
+                        'modification' => $data['HISTO_MODIFICATION'],
+                        'modificateur' => [
+                            'id'      => $data['HISTO_MODIFICATEUR_ID'],
+                            'libelle' => $data['HISTO_MODIFICATEUR_LIBELLE'],
+                        ],
                     ],
                 ];
                 $vhId                                           = 'r' . $data['ID'];

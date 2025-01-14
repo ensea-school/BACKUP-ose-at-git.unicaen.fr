@@ -1,12 +1,12 @@
 <template>
     <h1>Administration des structures</h1>
-    <div class="accordion">
+    <div class="accordion no-intranavigation">
     <structure v-for="structure in structures"
                :key="structure.id"
                :structure="structure"
     ></structure>
     </div>
-    <a v-if="canAdd" class="btn btn-primary"
+    <a v-if="canAdd" class="btn btn-primary no-intranavigation"
        :href="ajoutUrl"
        @click.prevent="ajout"
        title="Ajouter une structure"
@@ -42,7 +42,6 @@ export default {
         ajout(event)
         {
             modAjax(event.currentTarget, (widget) => {
-                console.log('coucou');
                 this.reload();
             });
         },

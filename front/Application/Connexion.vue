@@ -13,7 +13,6 @@
         :click="true"
         :close-on-hide="true"
         :delay="{show: 0, hide: 0}"
-        :boundary-padding="{top: navHeight}"
         target="user-current-info"
     >
         <template #title>Utilisateur connecté à l'application</template>

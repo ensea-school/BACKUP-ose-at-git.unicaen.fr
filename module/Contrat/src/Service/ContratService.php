@@ -582,9 +582,12 @@ class ContratService extends AbstractEntityService
                  pour qu'il puisse être physiquement envoyé dans Esup*/
                 $fichierContratContent = $fichierContrat->getContenu();
                 $fichierContratNom     = $fichierContrat->getNom();
-                file_put_contents($path . '/' . $fichierContratNom, $fichierContratContent);
+                $filename = $path . '/' . $fichierContratNom;
+                //file_put_contents($path . '/' . $fichierContratNom, $fichierContratContent);
                 $filesystem = new Filesystem();
+                $filesystem->appendToFile($filename, $fichierContratContent);
                 $filesystem->chmod($path . '/' . $fichierContratNom, 0777);
+
             }
             return $fichierContrat;
         } else {

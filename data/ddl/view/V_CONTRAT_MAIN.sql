@@ -2,25 +2,43 @@ CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
   SELECT contrat_id, SUM(heures) "serviceTotal", SUM("hetd") "hetdContrat" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
 ),
-     la AS(
-       SELECT
-         contrat_id,
-         LISTAGG( libelle, ',')  WITHIN GROUP (ORDER BY libelle)                                                     autre_libelles
-FROM
-  (
-  SELECT DISTINCT
-  c.contrat_id,
-  ti.libelle                                                                                                  libelle
-  FROM
-  contrat c
-  JOIN volume_horaire vh ON c.id = vh.contrat_id
-  JOIN type_intervention ti ON ti.id = vh.type_intervention_id
-  LEFT JOIN                      hs ON hs.contrat_id = c.id
-  WHERE
-  ti.code NOT IN ('CM','TD','TP')
-  )
-GROUP BY contrat_id
-  )
+la AS(
+   SELECT
+     contrat_id,
+     LISTAGG( libelle, ',')  WITHIN GROUP (ORDER BY libelle)                                                     autre_libelles
+    FROM
+      (
+      SELECT DISTINCT
+      c.contrat_id,
+      ti.libelle                                                                                                  libelle
+      FROM
+      contrat c
+      JOIN volume_horaire vh ON c.id = vh.contrat_id
+      JOIN type_intervention ti ON ti.id = vh.type_intervention_id
+      LEFT JOIN                      hs ON hs.contrat_id = c.id
+      WHERE
+      ti.code NOT IN ('CM','TD','TP')
+      )
+    GROUP BY contrat_id
+),
+lm AS(
+    SELECT
+             contrat_id,
+             LISTAGG( libelle, ',')  WITHIN GROUP (ORDER BY libelle)                                                     libelle,
+             SUM(heures_formation)                                                                                      heures_formation
+    FROM
+      (
+      SELECT DISTINCT
+      c.contrat_id,
+      tm.libelle                                                                                                  libelle,
+      m.heures_formation heures_formation
+      FROM
+      tbl_contrat c
+      JOIN mission m ON c.mission_id = m.id
+      JOIN type_mission tm ON tm.id = m.type_mission_id
+    )
+    GROUP BY contrat_id
+)
 SELECT ct.annee_id,
        ct.structure_id,
        ct.intervenant_id,
@@ -155,14 +173,14 @@ FROM (  SELECT c.*,
                CASE WHEN c.contrat_id IS NULL THEN 1 ELSE 0 END                                                                                               est_contrat,
                CASE WHEN v.id IS NULL THEN 1 ELSE 0 END                                                                                                       est_projet,
                CASE WHEN LOWER(si.codes_corresp_2) = 'oui' THEN 1 ELSE 0 END                                                                                  est_atv,
-               tm.libelle                                                                                                                                     "missionNom",
+               lm.libelle                                                                                                                                     "missionNom",
                to_char(c.debut_validite, 'dd/mm/YYYY')                                                                                                        "debutValidite",
                to_char(c.fin_validite, 'dd/mm/YYYY')                                                                                                          "finValidite",
                p.libelle                                                                                                                                      "pays_nationalite",
                COALESCE(v.histo_creation,c.histo_creation)                                                                                                    "date_creation",
                cp.date_retour_signe                                                                                                                           "date_contrat_lie",
                m.libelle_mission                                                                                                                              "libelleMission",
-               m.heures_formation                                                                                                                             "heuresFormation",
+               lm.heures_formation                                                                                                                             "heuresFormation",
                to_char(cp.fin_validite, 'dd/mm/YYYY')                                                                                                         "finValiditeParent",
                c.numero_avenant                                                                                                                                "numeroAvenant"
         FROM
@@ -183,6 +201,7 @@ FROM (  SELECT c.*,
             JOIN parametre                  ptr ON ptr.nom = 'taux-remu'
             LEFT JOIN                       hs ON hs.contrat_id = c.id
             LEFT JOIN                       la ON la.contrat_id = c.id
+            LEFT JOIN                       lm ON lm.contrat_id = c.id
             LEFT JOIN contrat               cp ON cp.id = c.contrat_id
             LEFT JOIN mission               m ON tblc.mission_id = m.id
             LEFT JOIN type_mission          tm ON m.type_mission_id = tm.id

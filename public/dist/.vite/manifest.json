@@ -1,18 +1,18 @@
 {
-  "_vendor-DWyVorzg.js": {
-    "file": "assets/vendor-DWyVorzg.js",
+  "_vendor-CBqQR21d.js": {
+    "file": "assets/vendor-CBqQR21d.js",
     "name": "vendor"
   },
   "main.js": {
-    "file": "assets/main-Bgf2H007.js",
+    "file": "assets/main-GOSSUQZJ.js",
     "name": "main",
     "src": "main.js",
     "isEntry": true,
     "imports": [
-      "_vendor-DWyVorzg.js"
+      "_vendor-CBqQR21d.js"
     ],
     "css": [
-      "assets/main-DQKK3V54.css"
+      "assets/main-Dro19tzX.css"
     ]
   }
 }

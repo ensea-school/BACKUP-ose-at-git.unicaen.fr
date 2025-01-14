@@ -33,7 +33,7 @@ class v24MisesEnPaiement extends MigrationAction
         $sql = 'UPDATE mise_en_paiement SET service_id = (SELECT service_id FROM formule_resultat_service WHERE id = formule_res_service_id) WHERE service_id IS NULL AND formule_res_service_id IS NOT NULL';
         $bdd->exec($sql);
 
-        $$this->logMsg('Injection des ID de SERVICE_REFERENTIEL dans MISE_EN_PAIEMENT...');
+        $this->logMsg('Injection des ID de SERVICE_REFERENTIEL dans MISE_EN_PAIEMENT...');
         $sql = 'UPDATE mise_en_paiement SET service_referentiel_id = (SELECT service_referentiel_id FROM formule_resultat_service_ref WHERE id = formule_res_service_ref_id) WHERE service_referentiel_id IS NULL AND formule_res_service_ref_id IS NOT NULL';
         $bdd->exec($sql);
 

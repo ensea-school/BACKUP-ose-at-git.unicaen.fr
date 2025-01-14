@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "259c9b9a94554744da2976738a6ba6d3",
+    "content-hash": "115c110416ff71cdaf751f8351d28c1d",
     "packages": [
         {
             "name": "apereo/phpcas",
-            "version": "1.5.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apereo/phpCAS.git",
-                "reference": "d6f5797fb568726f34c8e48741776d81e4a2646b"
+                "reference": "c129708154852656aabb13d8606cd5b12dbbabac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/d6f5797fb568726f34c8e48741776d81e4a2646b",
-                "reference": "d6f5797fb568726f34c8e48741776d81e4a2646b",
+                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/c129708154852656aabb13d8606cd5b12dbbabac",
+                "reference": "c129708154852656aabb13d8606cd5b12dbbabac",
                 "shasum": ""
             },
             "require": {
@@ -38,6 +38,9 @@
                 }
             },
             "autoload": {
+                "files": [
+                    "source/CAS.php"
+                ],
                 "classmap": [
                     "source/"
                 ]
@@ -70,9 +73,9 @@
             ],
             "support": {
                 "issues": "https://github.com/apereo/phpCAS/issues",
-                "source": "https://github.com/apereo/phpCAS/tree/1.5.0"
+                "source": "https://github.com/apereo/phpCAS/tree/1.6.1"
             },
-            "time": "2022-05-03T21:12:54+00:00"
+            "time": "2023-02-19T19:52:35+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -314,16 +317,16 @@
         },
         {
             "name": "datatables.net/datatables.net",
-            "version": "2.2.0",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DataTables/Dist-DataTables.git",
-                "reference": "fb1c55771232d22b1b41244066bbbbbc559654b9"
+                "reference": "33f552b5d2829e5768eaeed1e79714dd5c7be6ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DataTables/Dist-DataTables/zipball/fb1c55771232d22b1b41244066bbbbbc559654b9",
-                "reference": "fb1c55771232d22b1b41244066bbbbbc559654b9",
+                "url": "https://api.github.com/repos/DataTables/Dist-DataTables/zipball/33f552b5d2829e5768eaeed1e79714dd5c7be6ac",
+                "reference": "33f552b5d2829e5768eaeed1e79714dd5c7be6ac",
                 "shasum": ""
             },
             "require": {
@@ -351,7 +354,7 @@
                 "forum": "https://datatables.net/forums",
                 "source": "https://github.com/DataTables/Dist-DataTables"
             },
-            "time": "2025-01-06T16:00:23+00:00"
+            "time": "2025-01-09T17:20:45+00:00"
         },
         {
             "name": "datatables.net/datatables.net-bs5",
@@ -7725,16 +7728,16 @@
         },
         {
             "name": "unicaen/authentification",
-            "version": "6.3.2",
+            "version": "6.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/authentification.git",
-                "reference": "9b77c07ef766f72678a0209765a69653c47d3be9"
+                "reference": "8e518af2342ff23efa344aa4c807e8f031045b25"
             },
             "require": {
-                "apereo/phpcas": "1.5.*",
+                "apereo/phpcas": "1.6.*",
                 "ramsey/uuid": "^3.7",
-                "unicaen/app": ">=6.2",
+                "unicaen/app": "^6.0|^7.0",
                 "unicaen/bjy-authorize": "^6.0",
                 "unicaen/utilisateur": "^6.3|^7.0"
             },
@@ -7751,7 +7754,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen - Version Laminas",
-            "time": "2025-01-09T13:14:37+00:00"
+            "time": "2025-01-10T09:05:20+00:00"
         },
         {
             "name": "unicaen/bddadmin",
@@ -11178,6 +11181,6 @@
     "platform": {
         "php": ">=8.2"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

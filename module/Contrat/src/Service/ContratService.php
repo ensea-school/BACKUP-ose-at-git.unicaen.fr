@@ -586,8 +586,6 @@ class ContratService extends AbstractEntityService
                 //file_put_contents($path . '/' . $fichierContratNom, $fichierContratContent);
                 $filesystem = new Filesystem();
                 $filesystem->appendToFile($filename, $fichierContratContent);
-                $filesystem->chown($filename, 'www-data');
-                $filesystem->chgrp($filename, 'www-data');
                 $filesystem->chmod($path . '/' . $fichierContratNom, 0777);
 
             }

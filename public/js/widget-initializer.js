@@ -80,8 +80,7 @@ WidgetInitializer = {
         var that = this;
 
         this.run();
-        $(document).ajaxSuccess(function ()
-        {
+        window.addEventListener("intranavigator.change", (event) => {
             that.run();
         });
     },

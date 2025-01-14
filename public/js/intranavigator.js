@@ -1,5 +1,4 @@
 IntraNavigator = {
-    axios: null,
     loadingTooltip: null,
 
     getElementToRefresh: function (element) {
@@ -56,29 +55,43 @@ IntraNavigator = {
     add: function (element) {
         if (!$(element).hasClass('intranavigator')) {
             $(element).addClass('intranavigator');
-            //IntraNavigator.run();
         }
     },
 
 
     formSubmitListener: function (e) {
-        var form = $(e.target);
-        var postData = form.serializeArray(); // paramètre "modal" indispensable
-        var url = form.attr('action');
-        var elementToRefresh = IntraNavigator.getElementToRefresh(form);
+        const postData = new FormData(e.target); // paramètre "modal" indispensable
+        const url = e.target.getAttribute('action');
+        const elementToRefresh = IntraNavigator.getElementToRefresh(e.target);
 
         if (elementToRefresh) {
             // requête AJAX de soumission du formulaire
             IntraNavigator.pageBeforeLoad(url, elementToRefresh);
-            IntraNavigator.axios.post(
-                url, postData
-            ).then(response => {
-                if (response.headers["content-disposition"]) {
-                    IntraNavigator.downloadFile(response);
-                } else {
-                    IntraNavigator.refreshElement(elementToRefresh, response.request.responseText, true);
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    //    'Content-Type': 'application/x-www-form-urlencoded'
+                    'X-Requested-With': 'XMLHttpRequest' // Indique que c'est une requête AJAX
+                },
+                body: postData
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP : ${response.status} ${response.statusText}`);
                 }
-                IntraNavigator.pageAfterLoad(url, elementToRefresh);
+
+                const contentType = response.headers.get('content-type');
+
+                if (contentType && contentType.includes('text/html')) {
+                    response.text().then(htmlData => {
+                        IntraNavigator.refreshElement(elementToRefresh, htmlData, true);
+
+                        // Appeler la fonction de succès
+                        IntraNavigator.pageAfterLoadSuccess(url, elementToRefresh);
+                    });
+                } else {
+                    IntraNavigator.downloadFile(response);
+                }
             }).catch(error => {
                 IntraNavigator.pageAfterLoadError(url, elementToRefresh, error);
             });
@@ -89,22 +102,38 @@ IntraNavigator = {
 
 
     innerAnchorClickListener: function (e) {
-        var anchor = $(e.currentTarget);
-        var url = anchor.attr('href');
-        var elementToRefresh = IntraNavigator.getElementToRefresh(anchor);
+        const anchor = e.target;
+        const url = anchor.getAttribute('href');
+        const elementToRefresh = IntraNavigator.getElementToRefresh(anchor);
 
         if (elementToRefresh && url && url !== "#") {
             IntraNavigator.pageBeforeLoad(url, elementToRefresh);
-            IntraNavigator.axios.get(
-                url
-            ).then(response => {
-                if (response.headers["content-disposition"]) {
-                    IntraNavigator.downloadFile(response);
-                } else {
-                    IntraNavigator.refreshElement(elementToRefresh, response.request.responseText, false);
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Indique que c'est une requête AJAX
                 }
-                IntraNavigator.pageAfterLoadSuccess(url, elementToRefresh);
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur HTTP : ' + response.status);
+                }
+
+                // Vérifier si la réponse est en HTML
+                const contentType = response.headers.get('content-type');
+
+                if (contentType && contentType.includes('text/html')) {
+                    response.text().then(htmlData => {
+                        IntraNavigator.refreshElement(elementToRefresh, htmlData, false);
+
+                        // Appeler la fonction de succès
+                        IntraNavigator.pageAfterLoadSuccess(url, elementToRefresh);
+                    });
+                } else {
+                    IntraNavigator.downloadFile(response);
+                }
             }).catch(error => {
+                // Appeler la fonction d'erreur
                 IntraNavigator.pageAfterLoadError(url, elementToRefresh, error);
             });
         }
@@ -121,16 +150,16 @@ IntraNavigator = {
 
     pageAfterLoadSuccess(url, elementToRefresh)
     {
-        if (elementToRefresh.hasClass('intranavigator-page')) {
+        if (elementToRefresh && elementToRefresh.hasClass('intranavigator-page')) {
             history.pushState({url}, null, url);
         }
+        window.dispatchEvent(new CustomEvent("intranavigator.change"));
         IntraNavigator.loadingTooltip.style.display = 'none';
     },
 
 
     pageAfterLoadError(url, elementToRefresh, error)
     {
-        console.log(error);
         IntraNavigator.loadingTooltip.style.display = 'none';
     },
 
@@ -148,29 +177,28 @@ IntraNavigator = {
             return null;
         };
 
-        // Extraire le nom du fichier depuis l'en-tête Content-Disposition
-        const contentDisposition = response.headers['content-disposition'];
+        const contentDisposition = response.headers.get('content-disposition');
         const filename = getFilenameFromHeader(contentDisposition);
 
         if (!filename) {
             throw new Error('Nom du fichier non trouvé dans l\'en-tête Content-Disposition');
         }
 
-        // Créer un objet Blob à partir des données reçues
-        const blob = new Blob([response.data]);
+        return response.blob().then(blobData => {
+            // Créer un lien de téléchargement
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blobData);
+            link.download = filename; // Utiliser le nom du fichier extrait
 
-        // Créer un lien de téléchargement
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = filename; // Utiliser le nom du fichier extrait
+            // Simuler un clic sur le lien pour déclencher le téléchargement
+            link.click();
 
-        // Simuler un clic sur le lien pour déclencher le téléchargement
-        link.click();
+            // Libérer l'objet URL
+            window.URL.revokeObjectURL(link.href);
 
-        // Libérer l'objet URL
-        window.URL.revokeObjectURL(link.href);
+            IntraNavigator.pageAfterLoadSuccess();
+        });
     },
-
 
 
     createLoadingTooltip()
@@ -181,7 +209,9 @@ IntraNavigator = {
         loadingTooltip.id = 'loading-tooltip';
 
         // Ajouter du contenu à la div (icône de chargement et texte)
-        loadingTooltip.innerHTML = '<i class="fas fa-spinner"></i> Chargement...';
+        loadingTooltip.innerHTML = '<div class="spinner-border text-primary" role="status">\n' +
+            '  <span class="visually-hidden">Loading...</span>\n' +
+            '</div> Chargement...';
 
         // Appliquer des styles à la div
         Object.assign(loadingTooltip.style, {
@@ -211,54 +241,136 @@ IntraNavigator = {
     },
 
 
+    installAnchorEvents()
+    {
+        function shouldBlockAnchor(element)
+        {
+            const classesToCheck = ['no-intranavigation','pop-ajax','ajax-modal','mod-ajax', 'tab-ajax'];
+
+            for (const cls of classesToCheck) {
+                if (element.classList.contains(cls)) {
+                    return false; // on bloque l'intranavigation => autre mécanisme
+                }
+            }
+
+
+            // Trouver le parent le plus proche ayant l'une des deux classes
+            const closestParent = element.closest('.intranavigator, .no-intranavigation');
+
+            // Si un parent est trouvé
+            if (closestParent) {
+                // Bloquer uniquement si le parent a la classe "intranavigator"
+                return closestParent.classList.contains('intranavigator');
+            }
+
+            // Si aucun parent n'est trouvé, vérifier si l'ancre elle-même a la classe "intranavigation"
+            return element.classList.contains('intranavigator');
+        }
+
+        // Fonction pour bloquer les clics sur les ancres ciblées
+        function blockAnchorClicks(event)
+        {
+            const anchor = event.target;
+
+            // Vérifier si l'ancre doit être bloquée et si aucun gestionnaire d'événements n'est déjà attaché
+            if (anchor.tagName === 'A' && shouldBlockAnchor(anchor)) {
+                IntraNavigator.innerAnchorClickListener(event);
+            }
+        }
+
+        // Attacher un gestionnaire d'événements global pour les clics
+        document.addEventListener('click', blockAnchorClicks, true); // Utiliser la capture pour intercepter tôt
+
+        // Observer les modifications du DOM pour les nouvelles ancres
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+                mutation.addedNodes.forEach(node => {
+                    if (node.tagName === 'A' && shouldBlockAnchor(node)) {
+                        // Bloquer les clics sur les nouvelles ancres ciblées
+                        node.addEventListener('click', blockAnchorClicks);
+                    } else if (node.querySelectorAll) {
+                        // Bloquer les clics sur les ancres ciblées à l'intérieur des nouveaux éléments
+                        node.querySelectorAll('a').forEach(anchor => {
+                            if (shouldBlockAnchor(anchor)) {
+                                //anchor.addEventListener('click', blockAnchorClicks);
+                                anchor.addEventListener('click', IntraNavigator.innerAnchorClickListener);
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+        // Démarrer l'observation du DOM
+        observer.observe(document.body, {
+            childList: true, // Observer les ajouts/suppressions d'enfants
+            subtree: true    // Observer tout le sous-arbre du DOM
+        });
+    },
+
+
     /**
      * Lance automatiquement l'association de tous les widgets déclarés avec les éléments HTMl de classe correspondante
      */
-    run() {
+    installSubmitEvents()
+    {
         var submitSelector = '.intranavigator form:not(.no-intranavigation)';
-        var clickSelector = '.intranavigator a:not(.pop-ajax):not(.ajax-modal):not(.no-intranavigation):not(.no-intranavigation a)';
-
-        /* TODO: trouver une meilleure solution que d'utiliser la classe CSS "no-intranavigation" pour désactiver l'intra-navigation ?*/
 
         $('body').off("submit", submitSelector, IntraNavigator.formSubmitListener);
-        $('body').off("click", clickSelector, IntraNavigator.innerAnchorClickListener);
-        //$('body').off("click", ".intranavigator .btn-primary", IntraNavigator.btnPrimaryClickListener);
-
         $('body').one("submit", submitSelector, IntraNavigator.formSubmitListener);
-        $('body').one("click", clickSelector, IntraNavigator.innerAnchorClickListener);
-
-        //$('body').one("click", ".intranavigator .btn-primary", IntraNavigator.btnPrimaryClickListener);
-        // Réglage du focus sur le champ de formulaire ayant l'attribut 'autofocus'
         $('.intranavigator [autofocus]').trigger("focus");
     },
 
 
     /**
-     * Installe le WidgetInitializer pour qu'il se lance au chargement de la page ET après chaque requête AJAX
+     * Gère les changements d'URL (par exemple, quand l'utilisateur utilise les boutons Précédent/Suivant)
      */
-    install() {
-        var that = this;
-
-        this.axios = unicaenVue.axios;
-
-        this.createLoadingTooltip();
-
-        this.run();
-        $(document).ajaxSuccess(function () {
-            that.run();
-        });
-
-        // Gérer les changements d'URL (par exemple, quand l'utilisateur utilise les boutons Précédent/Suivant)
+    installNavigation()
+    {
         window.onpopstate = function (event) {
-            const url = event.state ? event.state.page : '/';
-
-            let content = document.getElementsByClassName('intranavigator-page');
-
-            IntraNavigator.axios.get(
-                url
-            ).then(response => {
-                content.innerHTML = response.request.responseText;
-            });
+            IntraNavigator.loadPage(url);
         };
+    },
+
+
+    /**
+     * Installe le WidgetInitializer pour qu'il se lance au chargement de la page ET après chaque modification du DOM
+     */
+    install()
+    {
+        this.createLoadingTooltip();
+        this.installAnchorEvents();
+        this.installSubmitEvents();
+        this.installNavigation();
+    },
+
+
+    /**
+     * Charge une URL pour mettre à jour la page
+     */
+    loadPage(url)
+    {
+        if (!url){
+            url = window.location.href;
+        }
+
+        IntraNavigator.pageBeforeLoad(url);
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // Indique que c'est une requête AJAX
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur HTTP : ' + response.status);
+            }
+
+            response.text().then(htmlData => {
+                document.getElementsByClassName('intranavigator-page')[0].innerHTML = htmlData;
+                IntraNavigator.pageAfterLoadSuccess(url);
+            });
+        }).catch(error => {
+            console.error('Erreur :', error);
+        });
     }
 };

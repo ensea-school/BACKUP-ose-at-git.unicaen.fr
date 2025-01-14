@@ -23,6 +23,7 @@ use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use RuntimeException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Symfony\Component\Filesystem\Filesystem;
 use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
@@ -582,6 +583,8 @@ class ContratService extends AbstractEntityService
                 $fichierContratContent = $fichierContrat->getContenu();
                 $fichierContratNom     = $fichierContrat->getNom();
                 file_put_contents($path . '/' . $fichierContratNom, $fichierContratContent);
+                $filesystem = new Filesystem();
+                $filesystem->chmod($path . '/' . $fichierContratNom, 0777);
             }
             return $fichierContrat;
         } else {

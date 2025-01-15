@@ -1,13 +1,17 @@
 <template>
     <td style="text-align: center"><abbr :title="histoTooltip()"><i class="fa-regular fa-user"></i></abbr></td>
-    <td></td>
-    <td></td>
+    <td v-if="visibilite.horaires"></td>
+    <td v-if="visibilite.horaires"></td>
     <td></td>
     <td v-for="(param,pi) in vhr.params" :key="pi">{{ param }}</td>
-    <td>{{ motifNonPaiement() }}</td>
+    <td v-if="visibilite.motifsNonPaiement">{{ motifNonPaiement() }}</td>
     <td>Référentiel</td>
-    <td>{{ floatToString(vhr.ponderationServiceDu) }}</td>
-    <td>{{ floatToString(vhr.ponderationServiceCompl) }}</td>
+    <td v-if="visibilite.servicesStatutaire">
+        <i v-if="vh.serviceStatutaire" class="fa fa-check text-success"></i>
+        <i v-else class="fa fa-xmark text-danger"></i>
+    </td>
+    <td v-if="visibilite.majorations">{{ floatToString(vhr.ponderationServiceDu) }}</td>
+    <td v-if="visibilite.majorations">{{ floatToString(vhr.ponderationServiceCompl) }}</td>
     <td><u-heures :valeur="vhr.heures"></u-heures></td>
     <td>&nbsp;</td>
 </template>
@@ -17,7 +21,8 @@ export default {
     name: 'DetailsVolumeHoraireReferentiel',
     components: {},
     props: {
-        vhr: {type: Object}
+        vhr: {type: Object},
+        visibilite: {type: Object},
     },
     methods: {
         histoTooltip()
@@ -29,9 +34,11 @@ export default {
         },
         motifNonPaiement()
         {
-            if (this.vhr.motifNonPaiement) {
-                return this.vhr.motifNonPaiement.libelle;
-            } else {
+            if (this.vh.motifNonPaiement) {
+                return this.vh.motifNonPaiement.libelle;
+            } else if (this.vh.nonPayable) {
+                return 'Non payable';
+            }else {
                 return '';
             }
         },

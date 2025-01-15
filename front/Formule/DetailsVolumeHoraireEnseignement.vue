@@ -1,13 +1,17 @@
 <template>
     <td style="text-align: center"><abbr :title="histoTooltip()"><i class="fa-regular fa-user"></i></abbr></td>
-    <td>{{ vh.horaireDebut }}</td>
-    <td>{{ vh.horaireFin }}</td>
+    <td v-if="visibilite.horaires">{{ vh.horaireDebut }}</td>
+    <td v-if="visibilite.horaires">{{ vh.horaireFin }}</td>
     <td style="text-align: center">{{ vh.periode.libelle }}</td>
     <td v-for="(param,pi) in vh.params" :key="pi">{{ param }}</td>
-    <td>{{ motifNonPaiement() }}</td>
+    <td v-if="visibilite.motifsNonPaiement">{{ motifNonPaiement() }}</td>
     <td><abbr :title="typeInterventionTooltip()">{{ vh.typeIntervention.code }}</abbr></td>
-    <td>{{ floatToString(vh.ponderationServiceDu) }}</td>
-    <td>{{ floatToString(vh.ponderationServiceCompl) }}</td>
+    <td v-if="visibilite.servicesStatutaire">
+        <i v-if="vh.serviceStatutaire" class="fa fa-check text-success"></i>
+        <i v-else class="fa fa-xmark text-danger"></i>
+    </td>
+    <td v-if="visibilite.majorations">{{ floatToString(vh.ponderationServiceDu) }}</td>
+    <td v-if="visibilite.majorations">{{ floatToString(vh.ponderationServiceCompl) }}</td>
     <td>
         <u-heures :valeur="vh.heures"></u-heures>
     </td>
@@ -19,7 +23,8 @@ export default {
     name: 'DetailsVolumeHoraireEnseignement',
     components: {},
     props: {
-        vh: {type: Object}
+        vh: {type: Object},
+        visibilite: {type: Object},
     },
     methods: {
         histoTooltip()
@@ -38,7 +43,9 @@ export default {
         {
             if (this.vh.motifNonPaiement) {
                 return this.vh.motifNonPaiement.libelle;
-            } else {
+            } else if (this.vh.nonPayable) {
+                return 'Non payable';
+            }else {
                 return '';
             }
         },

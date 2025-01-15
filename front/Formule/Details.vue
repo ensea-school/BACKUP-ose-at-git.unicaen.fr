@@ -72,40 +72,44 @@
                 </tr>
                 <tr class="details">
                     <th rowspan="2">&nbsp;</th>
-                    <th colspan="2">Horaire</th>
+                    <th colspan="2" v-if="data.visibilite.horaires">Horaire</th>
                     <th rowspan="2">Période</th>
                     <th rowspan="2" v-for="(param,pi) in data.vhParams" :key="pi">{{ param }}</th>
-                    <th rowspan="2">Motif non paiement</th>
+                    <th rowspan="2" v-if="data.visibilite.motifsNonPaiement">Motif non paiement</th>
                     <th rowspan="2">Type d'intervention</th>
-                    <th colspan="2">Majoration</th>
+                    <th rowspan="2" v-if="data.visibilite.servicesStatutaire"><abbr title="Détermine si les heures peuvent être comptées dans le service statutaire de l'intervenant ou non">Peut dans serv.</abbr></th>
+                    <th colspan="2" v-if="data.visibilite.majorations">Majoration</th>
                     <th rowspan="2">Heures</th>
                     <th rowspan="2">&nbsp;</th>
                     <template v-for="(sousTypesHetd,typeHetd) in data.typesHetd" :key="typeHetd">
-                        <th :rowspan="sousTypesHetd.length == 0 ? 2 : 1" :colspan="Math.max(sousTypesHetd.length,1)">{{ typeHetd }}</th>
+                        <th :rowspan="sousTypesHetd.length == 0 ? 2 : 1" :colspan="Math.max(sousTypesHetd.length,1)">
+                            {{ typeHetd }}
+                        </th>
                     </template>
                 </tr>
                 <tr class="details">
-                    <th>Début</th>
-                    <th>Fin</th>
-                    <th>Service</th>
-                    <th>Compl.</th>
+                    <th v-if="data.visibilite.horaires">Début</th>
+                    <th v-if="data.visibilite.horaires">Fin</th>
+                    <th v-if="data.visibilite.majorations">Service</th>
+                    <th v-if="data.visibilite.majorations">Compl.</th>
                     <template v-for="typeHetd in data.typesHetd" :key="typeHetd">
                         <th v-for="(sth,k) in typeHetd" :key="k">{{ sth }}</th>
                     </template>
                 </tr>
                 <tr v-for="(vhdata, vhid) in sdata.volumesHoraires" :key="vhid">
-                    <details-volume-horaire-enseignement v-if="sdata.type=='enseignement'" :vh="vhdata"/>
-                    <details-volume-horaire-referentiel v-else :vhr="vhdata"/>
+                    <details-volume-horaire-enseignement v-if="sdata.type=='enseignement'" :vh="vhdata"
+                                                         :visibilite="data.visibilite"/>
+                    <details-volume-horaire-referentiel v-else :vhr="vhdata" :visibilite="data.visibilite"/>
                     <details-hetds :hetds="vhdata.hetd"/>
                 </tr>
                 <tr>
-                    <th class="total" colspan="9">Total</th>
+                    <th class="total" :colspan="totalColSpan()">Total</th>
                     <th>&nbsp;</th>
                     <details-hetds :hetds="sdata.hetd"/>
                 </tr>
             </template>
             <tr>
-                <th class="total" colspan="9">Total intervenant</th>
+                <th class="total" :colspan="totalColSpan()">Total intervenant</th>
                 <th>&nbsp;</th>
                 <details-hetds :hetds="data.intervenant.hetd"/>
             </tr>
@@ -175,6 +179,25 @@ export default {
         dataUrl()
         {
 
+        },
+        totalColSpan()
+        {
+            let tcs = 4;
+
+            if (this.data.visibilite.horaires){
+                tcs += 2;
+            }
+            if (this.data.visibilite.motifsNonPaiement){
+                tcs += 1;
+            }
+            if (this.data.visibilite.servicesStatutaire){
+                tcs += 1;
+            }
+            if (this.data.visibilite.majorations){
+                tcs += 2;
+            }
+
+            return tcs;
         },
         countChoix()
         {

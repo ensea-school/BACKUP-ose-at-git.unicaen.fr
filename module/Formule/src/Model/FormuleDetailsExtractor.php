@@ -25,6 +25,12 @@ class FormuleDetailsExtractor implements ExtractionInterface
     private array $typesHetd          = [];
     private array $intervenant        = [];
     private array $services           = [];
+    private array $visibilite         = [
+        'horaires'          => false,
+        'motifsNonPaiement' => false,
+        'majorations'       => false,
+        'servicesStatutaire' => false,
+    ];
 
 
 
@@ -62,6 +68,7 @@ class FormuleDetailsExtractor implements ExtractionInterface
             'typesHetd'          => $this->finaliserTypesHetd($this->typesHetd),
             'intervenant'        => $this->intervenant,
             'services'           => $this->services,
+            'visibilite'         => $this->visibilite,
         ];
 
         return $result;
@@ -308,30 +315,42 @@ class FormuleDetailsExtractor implements ExtractionInterface
         $eIds = [];
         $rIds = [];
         foreach ($this->trace->getSubs() as $sname => $service) {
-            foreach ($service->getSubs() as $vh) {
-                if ($vh->getVolumeHoraire()->getVolumeHoraire()) {
-                    $sId    = 'e' . $vh->getVolumeHoraire()->getService();
-                    $vhId   = 'e' . $vh->getVolumeHoraire()->getVolumeHoraire();
-                    $eIds[] = $vh->getVolumeHoraire()->getVolumeHoraire();
+            foreach ($service->getSubs() as $subVh) {
+                $vh = $subVh->getVolumeHoraire();
+                if ($vh->getVolumeHoraire()) {
+                    $sId    = 'e' . $vh->getService();
+                    $vhId   = 'e' . $vh->getVolumeHoraire();
+                    $eIds[] = $vh->getVolumeHoraire();
                 } else {
-                    $sId    = 'r' . $vh->getVolumeHoraire()->getServiceReferentiel();
-                    $vhId   = 'r' . $vh->getVolumeHoraire()->getVolumeHoraireReferentiel();
-                    $rIds[] = $vh->getVolumeHoraire()->getVolumeHoraireReferentiel();
+                    $sId    = 'r' . $vh->getServiceReferentiel();
+                    $vhId   = 'r' . $vh->getVolumeHoraireReferentiel();
+                    $rIds[] = $vh->getVolumeHoraireReferentiel();
                 }
                 $this->services[$sId]['volumesHoraires'][$vhId] = [
                     'type'                    => str_starts_with($vhId, 'e') ? 'enseignement' : 'referentiel',
                     'id'                      => substr($vhId, 1),
-                    'tauxServiceDu'           => $vh->getVolumeHoraire()->getTauxServiceDu(),
-                    'tauxServiceCompl'        => $vh->getVolumeHoraire()->getTauxServiceCompl(),
-                    'ponderationServiceDu'    => $vh->getVolumeHoraire()->getPonderationServiceDu(),
-                    'ponderationServiceCompl' => $vh->getVolumeHoraire()->getPonderationServiceCompl(),
+                    'tauxServiceDu'           => $vh->getTauxServiceDu(),
+                    'tauxServiceCompl'        => $vh->getTauxServiceCompl(),
+                    'ponderationServiceDu'    => $vh->getPonderationServiceDu(),
+                    'ponderationServiceCompl' => $vh->getPonderationServiceCompl(),
+                    'nonPayable'              => $vh->isNonPayable(),
+                    'serviceStatutaire'       => $vh->isServiceStatutaire(),
                     'params'                  => [],
                 ];
+                if (!$this->visibilite['majorations'] && ($vh->getPonderationServiceDu() != 1.0 && $vh->getPonderationServiceCompl() != 1.0)) {
+                    $this->visibilite['majorations'] = true;
+                }
+                if (!$this->visibilite['motifsNonPaiement'] && $vh->isNonPayable()){
+                    $this->visibilite['motifsNonPaiement'] = true;
+                }
+                if (!$this->visibilite['servicesStatutaire'] && !$vh->isServiceStatutaire()){
+                    $this->visibilite['servicesStatutaire'] = true;
+                }
                 foreach ($this->vhParams as $i => $null) {
-                    $this->services[$sId]['volumesHoraires'][$vhId]['params'][$i] = $vh->getVolumeHoraire()->{"getParam$i"}();
+                    $this->services[$sId]['volumesHoraires'][$vhId]['params'][$i] = $vh->{"getParam$i"}();
                 }
                 foreach ($this->typesHetd as $typeHetd) {
-                    $valeur                                                            = $vh->getValeur($typeHetd);
+                    $valeur                                                            = $subVh->getValeur($typeHetd);
                     $this->services[$sId]['volumesHoraires'][$vhId]['hetd'][$typeHetd] = $this->valeurToJson($valeur);
                 }
             }
@@ -370,7 +389,7 @@ class FormuleDetailsExtractor implements ExtractionInterface
               vh.id IN (" . implode(',', $eIds) . ")";
             $query = $this->getServiceFormule()->getEntityManager()->getConnection()->executeQuery($sql);
             while ($data = $query->fetchAssociative()) {
-                $sdata                                          = [
+                $sdata = [
                     'id'               => (int)$data['ID'],
                     'heures'           => (float)$data['HEURES'],
                     'horaireDebut'     => $data['HORAIRE_DEBUT'],
@@ -403,6 +422,13 @@ class FormuleDetailsExtractor implements ExtractionInterface
                         ],
                     ],
                 ];
+
+                if (($sdata['horaireDebut'] || $sdata['horaireFin']) && !$this->visibilite['horaires']) {
+                    $this->visibilite['horaires'] = true;
+                }
+                if ($sdata['motifNonPaiement'] && !$this->visibilite['motifsNonPaiement']) {
+                    $this->visibilite['motifsNonPaiement'] = true;
+                }
                 $vhId                                           = 'e' . $data['ID'];
                 $sId                                            = 'e' . $data['SERVICE_ID'];
                 $this->services[$sId]['volumesHoraires'][$vhId] = array_merge($this->services[$sId]['volumesHoraires'][$vhId], $sdata);
@@ -433,7 +459,7 @@ class FormuleDetailsExtractor implements ExtractionInterface
               vhr.id IN (" . implode(',', $rIds) . ")";
             $query = $this->getServiceFormule()->getEntityManager()->getConnection()->executeQuery($sql);
             while ($data = $query->fetchAssociative()) {
-                $sdata                                          = [
+                $sdata = [
                     'id'               => (int)$data['ID'],
                     'heures'           => (float)$data['HEURES'],
                     'motifNonPaiement' => $data['MOTIF_NON_PAIEMENT_ID'] ? [
@@ -454,6 +480,9 @@ class FormuleDetailsExtractor implements ExtractionInterface
                         ],
                     ],
                 ];
+                if ($sdata['motifNonPaiement'] && !$this->visibilite['motifsNonPaiement']) {
+                    $this->visibilite['motifsNonPaiement'] = true;
+                }
                 $vhId                                           = 'r' . $data['ID'];
                 $sId                                            = 'r' . $data['SERVICE_REFERENTIEL_ID'];
                 $this->services[$sId]['volumesHoraires'][$vhId] = array_merge($this->services[$sId]['volumesHoraires'][$vhId], $sdata);

@@ -226,8 +226,8 @@ FROM (
 			ROUND(p.montant,2)  								  	 			  									montant,
             p.taux_conges_payes																			   			taux_conges_payes,
             COALESCE(p.unite_budgetaire, '') || ' ' ||
-            TO_CHAR(date_mise_en_paiement, 'YY')	 || '-' ||
-            TO_CHAR(date_mise_en_paiement+1, 'YY')	 		libelle,
+            LPAD(TO_CHAR(TO_NUMBER(TO_CHAR(date_mise_en_paiement, 'YY'))), 2, '0')	 || '-' ||
+            LPAD(TO_CHAR(TO_NUMBER(TO_CHAR(date_mise_en_paiement, 'YY')) + 1), 2, '0')						 		libelle,
             si.code_indemnite																				   		code_indemnite,
             si.type_paie																					   		type_paie,
             si.code_indemnite_prime																			   		code_indemnite_prime,

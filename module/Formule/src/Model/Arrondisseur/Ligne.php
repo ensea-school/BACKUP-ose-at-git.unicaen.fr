@@ -39,14 +39,90 @@ class Ligne
 
     public function __construct()
     {
-        $this->valeurs[self::TOTAL]             = new Valeur($this, self::TOTAL);
-        $this->valeurs[self::CAT_TYPE_PRIME]    = new Valeur($this, self::CAT_TYPE_PRIME);
+        // Total général
+        $this->valeurs[self::TOTAL] = new Valeur($this, self::TOTAL);
+
+        // Tout ce qui est payable
         foreach (self::CATEGORIES as $categorie) {
-            $this->valeurs[$categorie]                           = new Valeur($this, $categorie);
-            $this->valeurs[$categorie . self::TYPE_ENSEIGNEMENT] = new Valeur($this, $categorie . self::TYPE_ENSEIGNEMENT);
-            foreach (self::TYPES as $type) {
-                $this->valeurs[$categorie . $type] = new Valeur($this, $categorie . $type);
+            if ($categorie == self::CAT_NON_PAYABLE) {
+                continue;
             }
+            $this->initCategorie($categorie);
+        }
+        $this->valeurs[self::CAT_TYPE_PRIME] = new Valeur($this, self::CAT_TYPE_PRIME);
+
+        // On finit avec le non payable
+        $this->initCategorie(self::CAT_NON_PAYABLE);
+    }
+
+
+
+    public function getValeursUtilisees(): array
+    {
+        $valeurs = array_fill_keys(array_keys($this->getValeurs()), false);
+
+        foreach ($valeurs as $vn => $null) {
+            if ($this->getValeur($vn)->getValue() != 0.0) {
+                $valeurs[$vn] = true;
+            }
+        }
+        foreach ($this->getSubs() as $sub) {
+            $subValeurs = $sub->getValeursUtilisees();
+            foreach ($subValeurs as $vn) {
+                $valeurs[$vn] = true;
+            }
+        }
+
+
+        $hasCat = [];
+        foreach (self::CATEGORIES as $categorie) {
+            $count = 0;
+
+            foreach (self::TYPES_ENSEIGNEMENT as $tens) {
+                if ($valeurs[$categorie . $tens]) {
+                    $count++;
+                    $hasCat[$categorie] = true;
+                }
+            }
+            if ($count < 2) {
+                $valeurs[$categorie . self::TYPE_ENSEIGNEMENT] = false;
+            }
+
+            if ($valeurs[$categorie . self::TYPE_REFERENTIEL]) {
+                $hasCat[$categorie] = true;
+            }
+
+            if (!($count > 0 && $valeurs[$categorie . self::TYPE_REFERENTIEL])) {
+                $valeurs[$categorie] = false;
+            }
+        }
+        if ($valeurs[self::CAT_TYPE_PRIME]) {
+            $hasCat[Ligne::CAT_TYPE_PRIME] = true;
+        }
+
+        if (count($hasCat) < 2) {
+            $valeurs[self::TOTAL] = false;
+        }
+
+
+        $res = [];
+        foreach ($valeurs as $vn => $vu) {
+            if ($vu) {
+                $res[] = $vn;
+            }
+        }
+
+        return $res;
+    }
+
+
+
+    private function initCategorie(string $categorie): void
+    {
+        $this->valeurs[$categorie]                           = new Valeur($this, $categorie);
+        $this->valeurs[$categorie . self::TYPE_ENSEIGNEMENT] = new Valeur($this, $categorie . self::TYPE_ENSEIGNEMENT);
+        foreach (self::TYPES as $type) {
+            $this->valeurs[$categorie . $type] = new Valeur($this, $categorie . $type);
         }
     }
 
@@ -135,6 +211,9 @@ class Ligne
 
     public function getValeur(string $catType): Valeur
     {
+        if (!array_key_exists($catType, $this->valeurs)) {
+            throw new \Exception('La valeur "' . $catType . '" n\'existe pas');
+        }
         return $this->valeurs[$catType];
     }
 

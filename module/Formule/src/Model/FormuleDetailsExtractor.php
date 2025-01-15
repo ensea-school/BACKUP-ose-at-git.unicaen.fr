@@ -71,54 +71,18 @@ class FormuleDetailsExtractor implements ExtractionInterface
 
     private function prepareTypesHetd(): void
     {
-
-        /* Initialisation des types d'heures HETD utiles */
-        foreach ($this->trace->getValeurs() as $vn => $valeur) {
-            if ($this->typeHetdEligible($vn, $valeur)) {
-                $typesHetd[$vn] = true;
-            }
-            foreach ($this->trace->getSubs() as $sub) {
-                foreach ($sub->getValeurs() as $vn => $valeur) {
-                    if ($this->typeHetdEligible($vn, $valeur)) {
-                        $typesHetd[$vn] = true;
-                    }
-                }
-                foreach ($sub->getSubs() as $ssub) {
-                    foreach ($ssub->getValeurs() as $vn => $valeur) {
-                        if ($this->typeHetdEligible($vn, $valeur)) {
-                            $typesHetd[$vn] = true;
-                        }
-                    }
-                }
-            }
-        }
-        $this->typesHetd = array_keys($typesHetd);
-    }
-
-
-
-    private function typeHetdEligible(string $nom, Valeur $valeur): bool
-    {
-        if ($valeur->getValue() == 0) {
-            return false;
-        }
-
-        if ($nom == 'HeuresServiceEnseignement') {
-            return false;
-        }
-
-        if ($nom == 'HeuresComplEnseignement') {
-            return false;
-        }
-
-        return true;
+        $this->typesHetd = $this->trace->getValeursUtilisees();
     }
 
 
 
     private function finaliserTypesHetd(array $typesHetd): array
     {
-        $tree = ['Total' => []];
+        $tree = [];
+
+        if (in_array(Ligne::TOTAL, $typesHetd)) {
+            $tree['Total'] = [];
+        }
 
         $tradCats  = [
             Ligne::CAT_SERVICE     => 'Service',
@@ -133,9 +97,15 @@ class FormuleDetailsExtractor implements ExtractionInterface
         ];
 
         foreach (Ligne::CATEGORIES as $cat) {
+            $tcat = $tradCats[$cat];
+            if (in_array($cat, $typesHetd)) {
+                $tree[$tcat][] = 'Total';
+            }
+            if (in_array($cat . Ligne::TYPE_ENSEIGNEMENT, $typesHetd)) {
+                $tree[$tcat][] = 'Tot. Ens.';
+            }
             foreach (Ligne::TYPES as $type) {
                 if (in_array($cat . $type, $typesHetd)) {
-                    $tcat  = $tradCats[$cat];
                     $ttype = $tradTypes[$type];
                     if (!array_key_exists($tcat, $tree)) {
                         $tree[$tcat] = [];
@@ -147,6 +117,13 @@ class FormuleDetailsExtractor implements ExtractionInterface
 
         if (in_array(Ligne::CAT_TYPE_PRIME, $typesHetd)) {
             $tree['Primes'] = [];
+        }
+
+        // on repasse le non payable en dernier
+        if (isset($tree[$tradCats[Ligne::CAT_NON_PAYABLE]])) {
+            $np = $tree[$tradCats[Ligne::CAT_NON_PAYABLE]];
+            unset($tree[$tradCats[Ligne::CAT_NON_PAYABLE]]);
+            $tree[$tradCats[Ligne::CAT_NON_PAYABLE]] = $np;
         }
 
         return $tree;
@@ -354,7 +331,7 @@ class FormuleDetailsExtractor implements ExtractionInterface
                     $this->services[$sId]['volumesHoraires'][$vhId]['params'][$i] = $vh->getVolumeHoraire()->{"getParam$i"}();
                 }
                 foreach ($this->typesHetd as $typeHetd) {
-                    $valeur                                                            = $service->getValeur($typeHetd);
+                    $valeur                                                            = $vh->getValeur($typeHetd);
                     $this->services[$sId]['volumesHoraires'][$vhId]['hetd'][$typeHetd] = $this->valeurToJson($valeur);
                 }
             }

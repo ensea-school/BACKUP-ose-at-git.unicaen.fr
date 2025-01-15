@@ -81,8 +81,7 @@
                     <th rowspan="2">Heures</th>
                     <th rowspan="2">&nbsp;</th>
                     <template v-for="(sousTypesHetd,typeHetd) in data.typesHetd" :key="typeHetd">
-
-                        <th :rowspan="sousTypesHetd.length == 0 ? 2 : 1" :colspan="Math.min(sousTypesHetd.length,1)">{{ typeHetd }}</th>
+                        <th :rowspan="sousTypesHetd.length == 0 ? 2 : 1" :colspan="Math.max(sousTypesHetd.length,1)">{{ typeHetd }}</th>
                     </template>
                 </tr>
                 <tr class="details">

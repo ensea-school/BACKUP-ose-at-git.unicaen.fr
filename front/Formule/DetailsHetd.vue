@@ -1,8 +1,6 @@
 <template>
-    <td>
-        <div :class="arrondiClass" :title="legende">
-            <u-heures :valeur="hetd.valeur"></u-heures>
-        </div>
+    <td :class="arrondiClass" :title="legende">
+        <u-heures :valeur="hetd.valeur"></u-heures>
     </td>
 </template>
 <script>
@@ -20,24 +18,27 @@ export default {
             switch(this.hetd.arrondi){
                 case -1: return 'arrondi-defaut';
                 case 1: return 'arrondi-exces';
-                default: return "";
             }
+            if (this.hetd.original != this.hetd.valeur){
+                return 'arrondi';
+            }
+            return "";
         },
         legende()
         {
             let titre = "";
 
             if (this.hetd.arrondi == 1){
-                titre = "Arrondi à l'excès";
+                titre = "L'arrondisseur de règle de calcul a procédé à un arrondi à l'excès";
             }else if (this.hetd.arrondi == -1){
-                titre = "Arrondi par défaut";
+                titre = "L'arrondisseur de règle de calcul a procédé à un arrondi par troncature";
             }
 
             if (this.hetd.original != this.hetd.valeur){
                 if (titre != ""){
                     titre += "\n";
                 }
-                titre += "Valeur originale : " + Util.floatToString(this.hetd.original);
+                titre += "Valeur originale : " + Util.floatToString(this.hetd.original, 15);
             }
 
             return titre;
@@ -48,12 +49,20 @@ export default {
 </script>
 <style scoped>
 
+.arrondi {
+    text-decoration: underline dotted;
+}
+
 .arrondi-defaut {
-    color: #083d77;
+    color: blue;
+    background-color: #E6E6FF;
+    text-decoration: underline dotted;
 }
 
 .arrondi-exces {
-    color: #8c1c2e;
+    color: red;
+    background-color: #FFE6E6;
+    text-decoration: underline dotted;
 }
 
 </style>

@@ -261,14 +261,18 @@ Util = {
      *
      * @return string
      */
-    floatToString: function (value)
+    floatToString: function (value, maximumFractionDigits)
     {
+        if (undefined == maximumFractionDigits){
+            maximumFractionDigits = 2;
+        }
+
         var test = Math.round(value * 1000000) / 1000000;
         if (undefined !== this.fractions[test]) {
             return this.fractions[test];
         }
         var locale = 'fr';
-        var options = {minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false};
+        var options = {minimumFractionDigits: 0, maximumFractionDigits: maximumFractionDigits, useGrouping: false};
         var formatter = new Intl.NumberFormat(locale, options);
 
         return formatter.format(value);

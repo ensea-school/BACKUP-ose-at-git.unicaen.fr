@@ -147,6 +147,7 @@ $config = [
             ORM\RouteEntitiesInjector::class                            => ORM\RouteEntitiesInjectorFactory::class,
             ORM\Event\Listeners\HistoriqueListener::class               => ORM\Event\Listeners\HistoriqueListenerFactory::class,
             Bdd::class                                                  => OseBddAdminFactory::class,
+            \UnicaenMail\Service\Mail\MailService::class                => Service\MailServiceFactory::class
         ],
         'aliases'    => [
             'HostLocalization' => HostLocalization\HostLocalizationOse::class,

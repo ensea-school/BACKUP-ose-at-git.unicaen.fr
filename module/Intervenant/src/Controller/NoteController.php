@@ -146,7 +146,7 @@ class NoteController extends AbstractController
                 {
                     $mail->cc($copy);
                 }
-                $this->getMailService()->getMailer()->send($mail);
+                $this->getMailService()->send($mail);
                 //Création d'une trace de l'envoi dans les notes de l'intervenant
                 $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $content);
                 $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');

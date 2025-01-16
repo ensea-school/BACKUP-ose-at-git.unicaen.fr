@@ -557,7 +557,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
                     $mail->cc($copy);
                 }
                 
-                $this->getMailService()->getMailer()->send($mail);
+                $this->getMailService()->send($mail);
 
                 //Création d'une trace de l'envoi dans les notes de l'intervenant
                 $this->getServiceNote()->createNoteFromEmail($pj->getIntervenant(), $subject, $content);

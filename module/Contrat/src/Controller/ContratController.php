@@ -442,7 +442,7 @@ class ContratController extends AbstractController
                     $mail      = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
                     /*Create Note from email for this intervenant*/
                     $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $html);
-                    $this->getMailService()->getMailer()->send($mail);
+                    $this->getMailService()->send($mail);
                     $dateEnvoiEmail = new DateTime();
                     $contrat->setDateEnvoiEmail($dateEnvoiEmail);
                     $this->getServiceContrat()->save($contrat);

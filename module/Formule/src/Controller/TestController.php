@@ -12,6 +12,7 @@ use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Model\FormuleCalcul;
 use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Service\TestServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -193,8 +194,14 @@ class TestController extends AbstractController
     public function creerFromReelAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
+        /** @var $intervenant Intervenant */
+
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+        /** @var $typeVolumeHoraire TypeVolumeHoraire */
+
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
+        /** @var $etatVolumeHoraire EtatVolumeHoraire */
+
 
         $formuleTestIntervenant = $this->getServiceTest()->creerDepuisIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
 

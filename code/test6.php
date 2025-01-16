@@ -5,19 +5,24 @@
  * @var $container  \Psr\Container\ContainerInterface
  */
 
-use Formule\Model\FormuleDetailsExtractor;
+$em = $container->get(\Doctrine\ORM\EntityManager::class);
 
-$fs = $container->get(\Formule\Service\FormuleService::class);
+$fts = $container->get(\Formule\Service\TestService::class);
+
+
 
 
 //2023/2024 - DALMASSO Marion
-$fi = $fs->getFormuleServiceIntervenant(783665, 1, 1);
+$intervenantId = 783665;
+$typeVolumeHoraireId = 1;
+$etatVolumeHoraireId = 1;
 
-if (null == $fi->getArrondisseurTrace()) {
-    $fs->calculer($fi);
-}
-$trace = $fi->getArrondisseurTrace();
 
-$vu = $trace->getValeursUtilisees();
+$intervenant = $em->find(\Intervenant\Entity\Db\Intervenant::class, $intervenantId);
+$typeVolumeHoraire = $em->find(\Service\Entity\Db\TypeVolumeHoraire::class, $typeVolumeHoraireId);
+$etatVolumeHoraire = $em->find(\Service\Entity\Db\EtatVolumeHoraire::class, $etatVolumeHoraireId);
 
-var_dump($vu);
+
+$ft = $fts->creerDepuisIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+
+var_dump($ft);

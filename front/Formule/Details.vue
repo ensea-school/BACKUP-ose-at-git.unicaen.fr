@@ -22,6 +22,7 @@
         <h2>{{ listeTypes[typeVolumeHoraire] }} {{ listeEtats[etatVolumeHoraire] }}</h2>
     </div>
     <div v-if="Object.keys(this.data).length > 0">
+        <h2>Paramètres intervenant</h2>
         <table class="table table-bordered">
             <tbody>
             <tr>
@@ -59,6 +60,7 @@
             </tbody>
         </table>
 
+        <h2>Données utilisées pour le calcul des <abbr title="Heures équivalent TD">HETD</abbr></h2>
         <table class="table table-bordered table-xs table-details">
             <thead>
             </thead>
@@ -115,6 +117,8 @@
             </tr>
             </tbody>
         </table>
+
+        <a v-if="canReporter" :href="reportUrl()" class="btn btn-secondary">Reporter les données de cet intervenant dans l'interface de tests de formule</a>
     </div>
 </template>
 <script>
@@ -137,6 +141,7 @@ export default {
     props: {
         intervenant: {type: Number},
         typesVolumesHoraires: {type: Object},
+        canReporter: {type: Boolean},
     },
     data()
     {
@@ -176,9 +181,14 @@ export default {
                 this.data = response.data;
             });
         },
-        dataUrl()
+        reportUrl()
         {
-
+            const params = {
+                intervenant: this.intervenant,
+                typeVolumeHoraire: this.data.intervenant.typeVolumeHoraireId,
+                etatVolumeHoraire: this.data.intervenant.etatVolumeHoraireId,
+            };
+            return unicaenVue.url('formule-test/creer-from-reel/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire', params);
         },
         totalColSpan()
         {
@@ -262,7 +272,7 @@ table tr.details th {
     font-weight: bold;
 }
 
-table.table {
+table.table-details {
     border-top: 0px white solid;
 }
 

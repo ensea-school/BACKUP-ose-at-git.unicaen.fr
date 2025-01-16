@@ -5,6 +5,7 @@ namespace Formule\Service;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Formule\Entity\FormuleVolumeHoraire;
 use RuntimeException;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
@@ -74,38 +75,41 @@ class TestService extends AbstractEntityService
 
     public function creerDepuisIntervenant(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): FormuleTestIntervenant
     {
-        $conn = $this->getEntityManager()->getConnection();
-
-        $formule = $this->getServiceFormule()->getCurrent();
-        $intervenantQuery = trim($conn->executeQuery('SELECT ' . $formule->getCode() . '.INTERVENANT_QUERY Q FROM DUAL')->fetchOne());
-        $volumeHoraireQuery = trim($conn->executeQuery('SELECT ' . $formule->getCode() . '.VOLUME_HORAIRE_QUERY Q FROM DUAL')->fetchOne());
-
-        $sql = "BEGIN ose_formule.intervenant.id := " . $intervenant->getId() . "; END;";
-        $conn->executeStatement($sql);
-
-        $params = ['intervenant' => $intervenant->getId()];
-
-        $idata = $conn->fetchAllAssociative('SELECT * FROM (' . $intervenantQuery . ') q WHERE intervenant_id = :intervenant', $params)[0];
-        $params['typeVolumeHoraire'] = $typeVolumeHoraire->getId();
-        $params['etatVolumeHoraire'] = $etatVolumeHoraire->getId();
-        $vhdata = $conn->fetchAllAssociative('SELECT * FROM (' . $volumeHoraireQuery . ') q WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND etat_volume_horaire_id >= :etatVolumeHoraire', $params);
+        $fsi = $this->getServiceFormule()->getFormuleServiceIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
 
         $fti = new FormuleTestIntervenant();
+
+        $hydrator = new GenericHydrator($this->getEntityManager(), $fsi);
+        $hydrator->setExtractType($hydrator::EXTRACT_TYPE_ORIGINAL);
+
+        $data = $hydrator->extract($fsi);
+
+        unset($data['id']);
+        $hydrator->hydrate($data, $fti);
+
+        $taux = [];
+
+        $vhIgnore = ['id','formuleIntervenant', 'tauxServiceDu', 'tauxServiceCompl'];
+        $vhHydrator = new GenericHydrator($this->getEntityManager(), FormuleVolumeHoraire::class, $vhIgnore);
+        foreach( $fsi->getVolumesHoraires() as $vh){
+            $taux[$vh->getTypeInterventionCode()] = [
+                'serviceDu' => $vh->getTauxServiceDu(),
+                'serviceCompl' => $vh->getTauxServiceCompl(),
+            ];
+            $vhData = $vhHydrator->extract($vh);
+            unset($vhData['id']);
+            $tvh = new FormuleTestVolumeHoraire();
+            $vhHydrator->hydrate($vhData, $tvh);
+            $fti->addVolumeHoraire($tvh);
+        }
+
         $fti->setLibelle((string)$intervenant);
-        $fti->setFormule($formule);
-        $fti->setAnnee($intervenant->getAnnee());
-        $fti->setTypeIntervenant($intervenant->getStatut()->getTypeIntervenant());
-        $fti->setTypeVolumeHoraire($typeVolumeHoraire);
-        $fti->setEtatVolumeHoraire($etatVolumeHoraire);
-        $fti->setHeuresServiceStatutaire((float)$idata['HEURES_SERVICE_STATUTAIRE']);
-        $fti->setHeuresServiceModifie((float)$idata['HEURES_SERVICE_MODIFIE']);
-        $fti->setDepassementServiceDuSansHC($idata['DEPASSEMENT_SERVICE_DU_SANS_HC'] == '1');
-        $fti->setParam1($idata['PARAM_1']);
-        $fti->setParam2($idata['PARAM_2']);
-        $fti->setParam3($idata['PARAM_3']);
-        $fti->setParam4($idata['PARAM_4']);
-        $fti->setParam5($idata['PARAM_5']);
-        $fti->setStructureCode($idata['STRUCTURE_CODE']);
+        $fti->setFormule($this->getServiceFormule()->getCurrent($intervenant->getId()));
+
+        /* Traitement des taux */
+
+        return $fti;
+
 
         /* Réduction des types d'intervention de la fiche à CP/TD/TP/AUTRE */
         $typesIntervention = [
@@ -170,7 +174,7 @@ class TestService extends AbstractEntityService
             $ftvh->setHeures((float)$vh['HEURES']);
             $fti->addVolumeHoraireTest($ftvh);
         }
-        $this->save($fti);
+        //$this->save($fti);
 
         return $fti;
     }

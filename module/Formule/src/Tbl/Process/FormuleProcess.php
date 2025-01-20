@@ -7,6 +7,7 @@ use Application\Entity\Db\Annee;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Formule\Entity\Db\Formule;
+use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleServiceIntervenant;
 use Formule\Entity\FormuleServiceVolumeHoraire;
 use Formule\Model\Arrondisseur\Testeur;
@@ -171,7 +172,8 @@ class FormuleProcess implements ProcessInterface
         $intervenant->setHeuresServiceStatutaire((float)$data['HEURES_SERVICE_STATUTAIRE']);
         $intervenant->setHeuresServiceModifie((float)$data['HEURES_SERVICE_MODIFIE']);
         $intervenant->setDepassementServiceDuSansHC($data['DEPASSEMENT_SERVICE_DU_SANS_HC'] == '1');
-        $intervenant->setArrondisseur($data['ARRONDISSEUR'] == '1');
+
+        $intervenant->setArrondisseur(($data['ARRONDISSEUR'] == '1') ? FormuleIntervenant::ARRONDISSEUR_FULL : FormuleIntervenant::ARRONDISSEUR_MINIMAL);
     }
 
 

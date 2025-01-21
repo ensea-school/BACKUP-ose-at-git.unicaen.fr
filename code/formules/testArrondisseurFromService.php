@@ -16,7 +16,7 @@ $intervenantId = 784094;
 //$intervenantId = 2032;
 $typeVolumeHoraireId = 1;
 $etatVolumeHoraireId = 1;
-$arrondir = true;
+$arrondir = \Formule\Entity\FormuleIntervenant::ARRONDISSEUR_FULL;
 
 $fi = $fs->getFormuleServiceIntervenant($intervenantId, $typeVolumeHoraireId, $etatVolumeHoraireId);
 $fi->setArrondisseur($arrondir);

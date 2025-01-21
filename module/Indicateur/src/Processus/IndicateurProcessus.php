@@ -51,7 +51,7 @@ class IndicateurProcessus extends AbstractProcessus
 
             if ($mail) {
 
-                $this->getMailService()->getMailer()->send($mail);
+                $this->getMailService()->send($mail);
 
                 if (!$force) {
                     // enregistrement de la date de dernière notification

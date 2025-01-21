@@ -15,4 +15,11 @@ class FormuleResultatVolumeHoraire extends FormuleVolumeHoraire
         return $this->total;
     }
 
+
+
+    public function isStructureExterieur(): bool
+    {
+        return $this->service !== null && $this->getStructureCode() === null;
+    }
+
 }

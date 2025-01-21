@@ -29,11 +29,11 @@ class GenericHydrator implements HydratorInterface
 
 
 
-    public function __construct(EntityManager $entityManager, string|object|array $spec = [])
+    public function __construct(EntityManager $entityManager, string|object|array $spec = [], array $ignore = [])
     {
         $this->setEntityManager($entityManager);
         if (!empty($spec)) {
-            $this->spec = ArrayUtils::merge($this->spec, $spec);
+            $this->spec($spec, $ignore);
         }
     }
 

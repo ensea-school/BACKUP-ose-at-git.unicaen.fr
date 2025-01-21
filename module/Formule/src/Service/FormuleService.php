@@ -214,7 +214,7 @@ class FormuleService extends AbstractService
             $formuleResultatIntervenant->setDepassementServiceDuSansHC($intervenant->getStatut()->getDepassementServiceDuSansHC());
         }
 
-        return $formuleResultatIntervenant;
+        return $formuleResultatIntervenant[0];
     }
 
 }

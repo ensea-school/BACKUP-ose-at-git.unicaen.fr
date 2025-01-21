@@ -24,18 +24,26 @@ class Arrondisseur
     {
         if ($fi instanceof FormuleServiceIntervenant) {
             $this->intervenant = $fi->getIntervenantId();
-        }else{
+        } else {
             $this->intervenant = $fi->getId() ?? "inconnu";
         }
 
         $this->calculs = [];
 
+        if ($fi::ARRONDISSEUR_NO == $fi->getArrondisseur()) {
+            return; // Aucun arrondissage à effectuer
+        }
+
         $data = $this->makeData($fi);
 
-        if ($fi->isArrondisseur()) {
-            $this->preparerCalculs($data);
-        } elseif(!$fi instanceof FormuleTestIntervenant) {
-            $this->preparerCalculsMinimaux($data);
+
+        switch ($fi->getArrondisseur()) {
+            case $fi::ARRONDISSEUR_FULL:
+                $this->preparerCalculs($data);
+                break;
+            case $fi::ARRONDISSEUR_MINIMAL:
+                $this->preparerCalculsMinimaux($data);
+                break;
         }
 
         foreach ($this->calculs as $ci => $calcul) {
@@ -116,13 +124,13 @@ class Arrondisseur
         }
 
         foreach ($vns as $vn) {
-            $v = $data->getValeur($vn);
-            $c = $this->addCalcul($v);
+            $v      = $data->getValeur($vn);
+            $c      = $this->addCalcul($v);
             $noDiff = true;
             foreach ($subs as $sub) {
                 $sv = $sub->getValeur($v->getName());
                 $c->addValeur($sv);
-                if ($sv->getDiff() !== 0){
+                if ($sv->getDiff() !== 0) {
                     $noDiff = false;
                 }
                 $this->preparationVerticale($sub);
@@ -210,7 +218,7 @@ class Arrondisseur
         }
 
         if (!$valToModif) {
-            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir en excès, intervenant '.$this->intervenant);
+            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir en excès, intervenant ' . $this->intervenant);
         }
 
         $valToModif->addArrondi(1);
@@ -237,7 +245,7 @@ class Arrondisseur
         }
 
         if (!$valToModif) {
-            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir par troncature, intervenant '.$this->intervenant);
+            throw new \Exception('Aucune valeur n\'a été trouvée pour arrondir par troncature, intervenant ' . $this->intervenant);
         }
 
         $valToModif->addArrondi(-1);

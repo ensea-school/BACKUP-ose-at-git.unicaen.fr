@@ -323,7 +323,7 @@ class IndicateurController extends AbstractController
                     $emailsList = $emails;
                 }
                 $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName);
-                $this->getMailService()->getMailer()->send($email);
+                $this->getMailService()->send($email);
 
                 //$mailer->send($emailsList, $post);
                 //Création d'une note email pour chaque intervenant concerné
@@ -337,12 +337,12 @@ class IndicateurController extends AbstractController
                     //envoi une copie du mail à l'utilisateur s'il l'a demandé
                     $emailUtilisateur = [$this->getServiceContext()->getUtilisateur()->getEmail()];
                     $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName,$emailUtilisateur);
-                    $this->getMailService()->getMailer()->send($email);
+                    $this->getMailService()->send($email);
                 }
                 if ($post['cci'] && !empty($post['cci'])) {
                     $emailsCci = explode(';', $post['cci']);
                     $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName,$emailsCci);
-                    $this->getMailService()->getMailer()->send($email);
+                    $this->getMailService()->send($email);
 
                 }
                 $count   = count($emailsList);

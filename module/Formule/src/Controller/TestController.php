@@ -138,7 +138,6 @@ class TestController extends AbstractController
 
             if (!$simpleCalcul) {
                 $this->getServiceTest()->save($formuleTestIntervenant);
-                $this->getServiceTest()->calculerAttendu($formuleTestIntervenant);
             }
             $data = $this->getServiceTest()->toJson($formuleTestIntervenant);
             $data['debug'] = $debug;
@@ -154,8 +153,8 @@ class TestController extends AbstractController
 
     public function supprimerAction()
     {
-        /* @var $formuleTestIntervenant FormuleTestIntervenant */
-        $formuleTestIntervenant = $this->getEvent()->getParam('formuleTestIntervenant');
+        $formuleTestIntervenantId = (int)$this->params()->fromRoute('formuleTestIntervenant');
+        $formuleTestIntervenant = $this->getServiceTest()->get($formuleTestIntervenantId);
 
         try {
             $this->getServiceTest()->delete($formuleTestIntervenant);

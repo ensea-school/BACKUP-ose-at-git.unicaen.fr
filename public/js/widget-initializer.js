@@ -28,8 +28,7 @@ WidgetInitializer = {
                 WidgetInitializer.widgets[className].initialized = true;
             }
             if (widgetName) {
-                widgets.each(function ()
-                {
+                widgets.each(function () {
                     try {
                         $(this)[widgetName]($(this).data('widget'));
                     } catch (e) {
@@ -81,6 +80,9 @@ WidgetInitializer = {
 
         this.run();
         window.addEventListener("intranavigator.change", (event) => {
+            that.run();
+        });
+        $(document).ajaxSuccess(function () {
             that.run();
         });
     },

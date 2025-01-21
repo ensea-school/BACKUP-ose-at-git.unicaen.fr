@@ -51,7 +51,9 @@ $(function ()
 
     /* Services */
     WidgetInitializer.add('enseignements', 'enseignements');
-    WidgetInitializer.add('service-form', 'serviceForm');
+    WidgetInitializer.add('service-form', 'serviceForm', function(){return
+        console.log('load serviceForm');
+    });
     WidgetInitializer.add('service-filtres', 'serviceFiltres');
 
     /* Service référentiel */

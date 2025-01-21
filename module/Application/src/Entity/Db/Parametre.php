@@ -24,8 +24,8 @@ class Parametre implements HistoriqueAwareInterface
     const CONTRAT_FRANCHI_VALIDATION = 'validation';
 
     const CONTRAT_MIS_COMPOSANTE = 'contrat_mis_composante';
-    const CONTRAT_MIS_GLOBALE = 'contrat_mis_globale';
-    const CONTRAT_MIS_MISSION = 'contrat_mis_mission';
+    const CONTRAT_MIS_GLOBALE    = 'contrat_mis_globale';
+    const CONTRAT_MIS_MISSION    = 'contrat_mis_mission';
 
     const SERVICES_MODALITE_CALENDAIRE = 'calendaire';
     const SERVICES_MODALITE_SEMESTRIEL = 'semestriel';

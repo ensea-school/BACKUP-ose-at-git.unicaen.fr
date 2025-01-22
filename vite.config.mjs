@@ -25,4 +25,5 @@ export default unicaenVue.defineConfig({
     resolvers: [
         // Liste de resolvers pour faire de l'auto-import
     ],
+    logLevel: 'warning',
 });

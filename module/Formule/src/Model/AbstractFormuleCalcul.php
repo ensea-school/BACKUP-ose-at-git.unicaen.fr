@@ -166,6 +166,9 @@ class AbstractFormuleCalcul
                 $this->calculNonPayable($l, $volumeHoraire);
             }else {
                 $this->calculPayable($l, $volumeHoraire);
+                if ($intervenant->isDepassementServiceDuSansHC()){
+                    $this->interdictionHC($l, $volumeHoraire);
+                }
             }
         }
 
@@ -220,6 +223,28 @@ class AbstractFormuleCalcul
                 $val = 0.0;
             }
             $volumeHoraire->{'set' . $resCol}($val);
+        }
+    }
+
+
+
+    protected function interdictionHC(int $l, FormuleVolumeHoraire $volumeHoraire): void
+    {
+        if ($volumeHoraire->getHeuresComplFi() !== 0.0){
+            $volumeHoraire->setHeuresNonPayableFi($volumeHoraire->getHeuresComplFi());
+            $volumeHoraire->setHeuresComplFi(0);
+        }
+        if ($volumeHoraire->getHeuresComplFa() !== 0.0){
+            $volumeHoraire->setHeuresNonPayableFa($volumeHoraire->getHeuresComplFa());
+            $volumeHoraire->setHeuresComplFa(0);
+        }
+        if ($volumeHoraire->getHeuresComplFc() !== 0.0){
+            $volumeHoraire->setHeuresNonPayableFc($volumeHoraire->getHeuresComplFc());
+            $volumeHoraire->setHeuresComplFc(0);
+        }
+        if ($volumeHoraire->getHeuresComplReferentiel() !== 0.0){
+            $volumeHoraire->setHeuresNonPayableReferentiel($volumeHoraire->getHeuresComplReferentiel());
+            $volumeHoraire->setHeuresComplReferentiel(0);
         }
     }
 }

@@ -110,6 +110,7 @@
                     <details-hetds :hetds="sdata.hetd"/>
                 </tr>
             </template>
+            <tr><th class="service" colspan="999">&nbsp;</th></tr>
             <tr>
                 <th class="total" :colspan="totalColSpan()">Total intervenant</th>
                 <th>&nbsp;</th>

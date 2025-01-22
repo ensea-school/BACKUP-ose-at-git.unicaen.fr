@@ -162,14 +162,10 @@ class AbstractFormuleCalcul
         ];
 
         foreach ($this->volumesHoraires as $l => $volumeHoraire) {
-            foreach (self::RESCOLS as $resCol) {
-                $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
-                if ($cellColPos) {
-                    $val = $this->c($cellColPos, $l);
-                } else {
-                    $val = 0.0;
-                }
-                $volumeHoraire->{'set' . $resCol}($val);
+            if ($volumeHoraire->isNonPayable()){
+                $this->calculNonPayable($l, $volumeHoraire);
+            }else {
+                $this->calculPayable($l, $volumeHoraire);
             }
         }
 
@@ -192,6 +188,38 @@ class AbstractFormuleCalcul
             });
 
             $this->intervenant->setDebugTrace($this->cache);
+        }
+    }
+
+
+
+    protected function calculNonPayable(int $l, FormuleVolumeHoraire $volumeHoraire): void
+    {
+        if ($volumeHoraire->getVolumeHoraire()){
+            $hetd = $volumeHoraire->getHeures() * $volumeHoraire->getPonderationServiceCompl() * $volumeHoraire->getTauxServiceCompl();
+
+            $volumeHoraire->setHeuresNonPayableFi($hetd * $volumeHoraire->getTauxFi());
+            $volumeHoraire->setHeuresNonPayableFa($hetd * $volumeHoraire->getTauxFa());
+            $volumeHoraire->setHeuresNonPayableFc($hetd * $volumeHoraire->getTauxFc());
+        }else{
+            $hetd = $volumeHoraire->getHeures() * $volumeHoraire->getPonderationServiceCompl();
+
+            $volumeHoraire->setHeuresNonPayableReferentiel($hetd);
+        }
+    }
+
+
+
+    protected function calculPayable(int $l, FormuleVolumeHoraire $volumeHoraire): void
+    {
+        foreach (self::RESCOLS as $resCol) {
+            $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
+            if ($cellColPos) {
+                $val = $this->c($cellColPos, $l);
+            } else {
+                $val = 0.0;
+            }
+            $volumeHoraire->{'set' . $resCol}($val);
         }
     }
 }

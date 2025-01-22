@@ -58,21 +58,6 @@ class TestService extends AbstractEntityService
 
 
 
-    public function calculerAttendu(FormuleTestIntervenant $formuleTestIntervenant): TestService
-    {
-        $sql = "BEGIN ose_formule.test(" . ((int)$formuleTestIntervenant->getId()) . "); END;";
-        $this->getEntityManager()->getConnection()->executeStatement($sql);
-
-        $this->getEntityManager()->refresh($formuleTestIntervenant);
-        foreach ($formuleTestIntervenant->getVolumesHoraires() as $vhe) {
-            $this->getEntityManager()->refresh($vhe);
-        }
-
-        return $this;
-    }
-
-
-
     public function creerDepuisIntervenant(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): FormuleTestIntervenant
     {
         //$fsi = $this->getServiceFormule()->getFormuleServiceIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);

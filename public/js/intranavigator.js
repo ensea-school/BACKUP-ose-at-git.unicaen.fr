@@ -245,7 +245,7 @@ IntraNavigator = {
     {
         function shouldBlockAnchor(element)
         {
-            const classesToCheck = ['no-intranavigation','pop-ajax','ajax-modal','mod-ajax', 'tab-ajax'];
+            const classesToCheck = ['no-intranavigation', 'pop-ajax', 'ajax-modal', 'mod-ajax', 'tab-ajax'];
 
             for (const cls of classesToCheck) {
                 if (element.classList.contains(cls)) {
@@ -327,9 +327,11 @@ IntraNavigator = {
      */
     installNavigation()
     {
-        window.onpopstate = function (event) {
-            IntraNavigator.loadPage(url);
-        };
+        if (document.querySelector('.intranavigator-page')) {
+            //window.onpopstate = function (event) {
+            //    IntraNavigator.loadPage(url);
+            //};
+        }
     },
 
 
@@ -350,7 +352,7 @@ IntraNavigator = {
      */
     loadPage(url)
     {
-        if (!url){
+        if (!url) {
             url = window.location.href;
         }
 

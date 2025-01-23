@@ -169,6 +169,8 @@ class TestService extends AbstractEntityService
         $volumeHoraireHydrator->setExtractType($volumeHoraireHydrator::EXTRACT_TYPE_JSON);
 
         $iData = $intervenantHydrator->extract($formuleTestIntervenant);
+        $iData['serviceDu'] = $formuleTestIntervenant->getServiceDu();
+
         $iData['heuresServiceFi'] = $formuleTestIntervenant->getHeuresServiceFi();
         $iData['heuresServiceFa'] = $formuleTestIntervenant->getHeuresServiceFa();
         $iData['heuresServiceFc'] = $formuleTestIntervenant->getHeuresServiceFc();

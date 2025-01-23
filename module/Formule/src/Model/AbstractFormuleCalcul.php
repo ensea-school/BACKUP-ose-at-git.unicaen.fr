@@ -198,8 +198,17 @@ class AbstractFormuleCalcul
 
     protected function calculNonPayable(int $l, FormuleVolumeHoraire $volumeHoraire): void
     {
+        $volumeHoraire->setHeuresPrimes(0);
         if ($volumeHoraire->getVolumeHoraire()){
             $hetd = $volumeHoraire->getHeures() * $volumeHoraire->getPonderationServiceCompl() * $volumeHoraire->getTauxServiceCompl();
+
+            $volumeHoraire->setHeuresServiceFi(0);
+            $volumeHoraire->setHeuresServiceFa(0);
+            $volumeHoraire->setHeuresServiceFc(0);
+
+            $volumeHoraire->setHeuresComplFi(0);
+            $volumeHoraire->setHeuresComplFa(0);
+            $volumeHoraire->setHeuresComplFc(0);
 
             $volumeHoraire->setHeuresNonPayableFi($hetd * $volumeHoraire->getTauxFi());
             $volumeHoraire->setHeuresNonPayableFa($hetd * $volumeHoraire->getTauxFa());
@@ -207,6 +216,8 @@ class AbstractFormuleCalcul
         }else{
             $hetd = $volumeHoraire->getHeures() * $volumeHoraire->getPonderationServiceCompl();
 
+            $volumeHoraire->setHeuresServiceReferentiel(0);
+            $volumeHoraire->setHeuresComplReferentiel(0);
             $volumeHoraire->setHeuresNonPayableReferentiel($hetd);
         }
     }
@@ -245,6 +256,10 @@ class AbstractFormuleCalcul
         if ($volumeHoraire->getHeuresComplReferentiel() !== 0.0){
             $volumeHoraire->setHeuresNonPayableReferentiel($volumeHoraire->getHeuresComplReferentiel());
             $volumeHoraire->setHeuresComplReferentiel(0);
+        }
+        if ($volumeHoraire->getHeuresPrimes() !== 0.0){
+            /* Aucun endroit prévu pour stocker le non payable des primes */
+            $volumeHoraire->setHeuresPrimes(0);
         }
     }
 }

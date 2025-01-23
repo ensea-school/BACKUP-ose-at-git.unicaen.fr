@@ -349,7 +349,7 @@
             <thead>
             <tr>
                 <th rowspan="3"></th>
-                <th :colspan="9+vhParamCount" class="vh-donnees">Données</th>
+                <th :colspan="10+vhParamCount" class="vh-donnees">Données</th>
                 <th rowspan="3" class="spacer">&nbsp;</th>
                 <th colspan="13">
                     <select v-model="resMode" class="form-select res-mode">
@@ -361,6 +361,7 @@
             </tr>
             <tr>
                 <th rowspan="2" style="min-width:10em">Structure</th>
+                <th rowspan="2">Non payable</th>
                 <th rowspan="2">Compte dans le service statutaire</th>
                 <th rowspan="2" style="min-width:5em">Type d'intervention</th>
                 <th colspan="3">Répartition</th>
@@ -423,6 +424,10 @@
                 <td><select v-model="vh.structureCode" :data-variable="l" class="dinput"
                             @change="selectStructure">
                     <option v-for="(v,k) in structures" :value="k" :key="k">{{ v }}</option>
+                </select></td>
+                <td><select v-model="vh.nonPayable" class="dinput" v-show="vh.structureCode">
+                    <option :value="true">Oui</option>
+                    <option :value="false">Non</option>
                 </select></td>
                 <td><select v-model="vh.serviceStatutaire" class="dinput" v-show="vh.structureCode">
                     <option :value="true">Oui</option>
@@ -799,6 +804,7 @@ export default {
             for (const l in this.volumesHoraires) {
                 const vh = this.volumesHoraires[l];
                 content += (vh.structureCode ? vh.structureCode : '') + ";"
+                    + (vh.nonPayable ? 'Oui' : 'Non') + ";"
                     + (vh.serviceStatutaire ? 'Oui' : 'Non') + ";"
                     + (vh.nonPayable ? 'Oui' : 'Non') + ";"
                     + (vh.referentiel ? 'Référentiel' : (vh.typeInterventionCode ? vh.typeInterventionCode : '')) + ";"

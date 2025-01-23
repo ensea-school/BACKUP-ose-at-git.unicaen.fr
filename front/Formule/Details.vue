@@ -1,4 +1,7 @@
 <template>
+    <div v-if="countChoix() == 0">
+        <div class="alert alert-info">Aucun service saisi</div>
+    </div>
     <div v-if="countChoix()>1">
         <div class="d-flex justify-content-center align-items-center">
             <div>
@@ -22,6 +25,10 @@
         <h2>{{ listeTypes[typeVolumeHoraire] }} {{ listeEtats[etatVolumeHoraire] }}</h2>
     </div>
     <div v-if="Object.keys(this.data).length > 0">
+        <div v-if="data.typesHetd.length == 0">
+            <div class="alert alert-warning">Aucune heure HETD n'a été calculée</div>
+        </div>
+
         <h2>Paramètres intervenant</h2>
         <table class="table table-bordered">
             <tbody>

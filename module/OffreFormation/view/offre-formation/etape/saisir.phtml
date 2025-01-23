@@ -64,7 +64,7 @@ echo $this->form()->closeTag();
 <script>
     var pertinencesNiveau = <?= \Laminas\Json\Json::encode($form->getPertinencesNiveau()) ?>;
     $(function () {
-        $("select[name=type-formation]")
+        $("select[name=typeFormation]")
             .change(function () {
                 var niveau = $("input[name=niveau]");
                 var tfId = $(this).val();

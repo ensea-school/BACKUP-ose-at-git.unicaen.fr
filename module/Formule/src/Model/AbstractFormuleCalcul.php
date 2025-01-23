@@ -162,14 +162,13 @@ class AbstractFormuleCalcul
         ];
 
         foreach ($this->volumesHoraires as $l => $volumeHoraire) {
-            foreach (self::RESCOLS as $resCol) {
-                $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
-                if ($cellColPos) {
-                    $val = $this->c($cellColPos, $l);
-                } else {
-                    $val = 0.0;
+            if ($volumeHoraire->isNonPayable()){
+                $this->calculNonPayable($l, $volumeHoraire);
+            }else {
+                $this->calculPayable($l, $volumeHoraire);
+                if ($intervenant->isDepassementServiceDuSansHC()){
+                    $this->interdictionHC($l, $volumeHoraire);
                 }
-                $volumeHoraire->{'set' . $resCol}($val);
             }
         }
 
@@ -192,6 +191,60 @@ class AbstractFormuleCalcul
             });
 
             $this->intervenant->setDebugTrace($this->cache);
+        }
+    }
+
+
+
+    protected function calculNonPayable(int $l, FormuleVolumeHoraire $volumeHoraire): void
+    {
+        if ($volumeHoraire->getVolumeHoraire()){
+            $hetd = $volumeHoraire->getHeures() * $volumeHoraire->getPonderationServiceCompl() * $volumeHoraire->getTauxServiceCompl();
+
+            $volumeHoraire->setHeuresNonPayableFi($hetd * $volumeHoraire->getTauxFi());
+            $volumeHoraire->setHeuresNonPayableFa($hetd * $volumeHoraire->getTauxFa());
+            $volumeHoraire->setHeuresNonPayableFc($hetd * $volumeHoraire->getTauxFc());
+        }else{
+            $hetd = $volumeHoraire->getHeures() * $volumeHoraire->getPonderationServiceCompl();
+
+            $volumeHoraire->setHeuresNonPayableReferentiel($hetd);
+        }
+    }
+
+
+
+    protected function calculPayable(int $l, FormuleVolumeHoraire $volumeHoraire): void
+    {
+        foreach (self::RESCOLS as $resCol) {
+            $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
+            if ($cellColPos) {
+                $val = $this->c($cellColPos, $l);
+            } else {
+                $val = 0.0;
+            }
+            $volumeHoraire->{'set' . $resCol}($val);
+        }
+    }
+
+
+
+    protected function interdictionHC(int $l, FormuleVolumeHoraire $volumeHoraire): void
+    {
+        if ($volumeHoraire->getHeuresComplFi() !== 0.0){
+            $volumeHoraire->setHeuresNonPayableFi($volumeHoraire->getHeuresComplFi());
+            $volumeHoraire->setHeuresComplFi(0);
+        }
+        if ($volumeHoraire->getHeuresComplFa() !== 0.0){
+            $volumeHoraire->setHeuresNonPayableFa($volumeHoraire->getHeuresComplFa());
+            $volumeHoraire->setHeuresComplFa(0);
+        }
+        if ($volumeHoraire->getHeuresComplFc() !== 0.0){
+            $volumeHoraire->setHeuresNonPayableFc($volumeHoraire->getHeuresComplFc());
+            $volumeHoraire->setHeuresComplFc(0);
+        }
+        if ($volumeHoraire->getHeuresComplReferentiel() !== 0.0){
+            $volumeHoraire->setHeuresNonPayableReferentiel($volumeHoraire->getHeuresComplReferentiel());
+            $volumeHoraire->setHeuresComplReferentiel(0);
         }
     }
 }

@@ -14,8 +14,7 @@ SELECT
   CASE WHEN COALESCE(str.id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
   CASE WHEN s.element_pedagogique_id IS NULL THEN 1 ELSE 0 END         structure_is_exterieur,
   COALESCE(tf.service_statutaire,1)                                    service_statutaire,
-  -- TOTO ajouter les heures non payables
-  0                                                                    non_payable,
+  CASE WHEN vh.motif_non_paiement_id IS NULL THEN 0 ELSE 1 END         non_payable,
 
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fi ELSE 1 END               taux_fi,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fa ELSE 0 END               taux_fa,
@@ -75,7 +74,6 @@ WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
   AND vh.heures <> 0
-  AND vh.motif_non_paiement_id IS NULL
   /*@INTERVENANT_ID=i.id*/
   /*@STATUT_ID=si.id*/
   /*@TYPE_INTERVENANT_ID=si.type_intervenant_id*/
@@ -100,10 +98,9 @@ SELECT
   CASE WHEN COALESCE(sr.structure_id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
   0                                                                    structure_is_exterieur,
   COALESCE(fr.service_statutaire,1)                                    service_statutaire,
-  -- TOTO ajouter les heures non payables
-  0                                                                    non_payable,
+  CASE WHEN sr.motif_non_paiement_id IS NULL THEN 0 ELSE 1 END         non_payable,
 
-  0                                                                    taux_fi,
+  1                                                                    taux_fi,
   0                                                                    taux_fa,
   0                                                                    taux_fc,
   1                                                                    taux_service_du,
@@ -132,7 +129,6 @@ WHERE
   vhr.histo_destruction IS NULL
   AND sr.histo_destruction IS NULL
   AND vhr.heures <> 0
-  AND sr.motif_non_paiement_id IS NULL
   /*@INTERVENANT_ID=i.id*/
   /*@STATUT_ID=si.id*/
   /*@TYPE_INTERVENANT_ID=si.type_intervenant_id*/

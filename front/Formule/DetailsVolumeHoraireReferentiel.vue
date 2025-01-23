@@ -34,9 +34,9 @@ export default {
         },
         motifNonPaiement()
         {
-            if (this.vh.motifNonPaiement) {
-                return this.vh.motifNonPaiement.libelle;
-            } else if (this.vh.nonPayable) {
+            if (this.vhr.motifNonPaiement) {
+                return this.vhr.motifNonPaiement.libelle;
+            } else if (this.vhr.nonPayable) {
                 return 'Non payable';
             }else {
                 return '';

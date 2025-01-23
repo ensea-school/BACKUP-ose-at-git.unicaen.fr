@@ -87,12 +87,12 @@ class ParametresForm extends AbstractForm
                    ]);
 
         $this->add([
-            'type'    => Structure::class,
-            'name'    => 'structure_univ',
-            'options' => [
-                'label' => 'Composante représentant l\'université',
-            ],
-        ]);
+                       'type'    => Structure::class,
+                       'name'    => 'structure_univ',
+                       'options' => [
+                           'label' => 'Composante représentant l\'université',
+                       ],
+                   ]);
 
         $this->add([
                        'name'    => 'discipline_codes_corresp_1_libelle',
@@ -253,19 +253,19 @@ class ParametresForm extends AbstractForm
                    ]);
 
         $this->add([
-            'type'       => 'Select',
-            'name'       => 'distinction_fi_fa_fc',
-            'options'    => [
-                'label'         => 'Distinction FI/FA/FC des heures à payer',
-                'value_options' => [
-                    '1' => 'Oui, distinguer la FI, la FA et la FC pour les heures à payer',
-                    '0' => 'Non, toutes les heures d\'enseignement seront traitées sous l label "Enseignement"',
-                ],
-            ],
-            'attributes' => [
-                'class' => 'selectpicker',
-            ],
-        ]);
+                       'type'       => 'Select',
+                       'name'       => 'distinction_fi_fa_fc',
+                       'options'    => [
+                           'label'         => 'Distinction FI/FA/FC des heures à payer',
+                           'value_options' => [
+                               '1' => 'Oui, distinguer la FI, la FA et la FC pour les heures à payer',
+                               '0' => 'Non, toutes les heures d\'enseignement seront traitées sous l label "Enseignement"',
+                           ],
+                       ],
+                       'attributes' => [
+                           'class' => 'selectpicker',
+                       ],
+                   ]);
 
         $this->add([
                        'name'    => 'doc-intervenant-vacataires',
@@ -599,16 +599,16 @@ class ParametresForm extends AbstractForm
 
 
         $this->add([
-            'type'       => 'Select',
-            'name'       => 'signature_electronique_parapheur',
-            'options'    => [
-                'value_options' => $listeLetterFiles,
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-        ]);
+                       'type'       => 'Select',
+                       'name'       => 'signature_electronique_parapheur',
+                       'options'    => [
+                           'value_options' => $listeLetterFiles,
+                       ],
+                       'attributes' => [
+                           'class'            => 'selectpicker',
+                           'data-live-search' => 'true',
+                       ],
+                   ]);
 
 
         $this->add([
@@ -676,44 +676,44 @@ class ParametresForm extends AbstractForm
                        'options'    => [
                            'label' => 'En cas de changement (heures ou date de fin) sur des contrats ou avenants existants :',
 
-                'value_options' => [
-                    PARAMETRE::AVENANT_AUTORISE  => 'demander à générer des avenants',
-                    PARAMETRE::AVENANT_DESACTIVE => 'ne rien faire, laisser le contrat tel quel',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
+                           'value_options' => [
+                               PARAMETRE::AVENANT_AUTORISE  => 'demander à générer des avenants',
+                               PARAMETRE::AVENANT_DESACTIVE => 'ne rien faire, laisser le contrat tel quel',
+                           ],
+                       ],
+                       'attributes' => [
+                           'class'     => 'selectpicker',
+                           'data-size' => 20,
+                       ],
+                   ]);
 
         $this->add([
-            'type'       => 'Select',
-            'name'       => 'contrat_ens',
-            'options'    => [
-                'label' => 'Pour les enseignements et le référentiel',
+                       'type'       => 'Select',
+                       'name'       => 'contrat_ens',
+                       'options'    => [
+                           'label' => 'Pour les enseignements et le référentiel',
 
                            'value_options' => [
                                PARAMETRE::CONTRAT_ENS_GLOBALE    => 'Un contrat global pour l\'établissement',
                                PARAMETRE::CONTRAT_ENS_COMPOSANTE => 'Un contrat ou un avenant par composante',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
+                           ],
+                       ],
+                       'attributes' => [
+                           'class'     => 'selectpicker',
+                           'data-size' => 20,
+                       ],
+                   ]);
 
         $this->add([
-            'type'       => 'Select',
-            'name'       => 'contrat_mis',
-            'options'    => [
-                'label' => 'Pour les missions',
+                       'type'       => 'Select',
+                       'name'       => 'contrat_mis',
+                       'options'    => [
+                           'label' => 'Pour les missions',
 
-                'value_options' => [
-                    PARAMETRE::CONTRAT_MIS_GLOBALE    => 'Un contrat global pour l\'établissement',
+                           'value_options' => [
+                               PARAMETRE::CONTRAT_MIS_GLOBALE    => 'Un contrat global pour l\'établissement',
                                PARAMETRE::CONTRAT_MIS_COMPOSANTE => 'Un contrat ou un avenant par composante',
-                    PARAMETRE::CONTRAT_MIS_MISSION    => 'Un contrat par mission',
+                               PARAMETRE::CONTRAT_MIS_MISSION    => 'Un contrat par mission',
                            ],
                        ],
                        'attributes' => [

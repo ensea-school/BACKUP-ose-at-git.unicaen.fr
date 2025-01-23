@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b48ca2b6015199df1ca7bdbd689465c8",
+    "content-hash": "4be47e49d874fb1638963f3aa8d52232",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -2079,16 +2079,16 @@
         },
         {
             "name": "laminas/laminas-cache",
-            "version": "3.12.2",
+            "version": "3.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache.git",
-                "reference": "f99d10dd1f13d5163a924f8561e9dca3d27d8ad2"
+                "reference": "8225b16d03bbff2ecf2bd5a4f38c39ca47389e50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache/zipball/f99d10dd1f13d5163a924f8561e9dca3d27d8ad2",
-                "reference": "f99d10dd1f13d5163a924f8561e9dca3d27d8ad2",
+                "url": "https://api.github.com/repos/laminas/laminas-cache/zipball/8225b16d03bbff2ecf2bd5a4f38c39ca47389e50",
+                "reference": "8225b16d03bbff2ecf2bd5a4f38c39ca47389e50",
                 "shasum": ""
             },
             "require": {
@@ -2096,7 +2096,7 @@
                 "laminas/laminas-eventmanager": "^3.4",
                 "laminas/laminas-servicemanager": "^3.21",
                 "laminas/laminas-stdlib": "^3.6",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
                 "psr/cache": "^1.0",
                 "psr/clock": "^1.0",
                 "psr/simple-cache": "^1.0",
@@ -2176,7 +2176,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-06-14T13:39:14+00:00"
+            "time": "2025-01-21T12:32:41+00:00"
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-memory",
@@ -8084,11 +8084,11 @@
         },
         {
             "name": "unicaen/vue",
-            "version": "6.2.7",
+            "version": "6.3.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/vue.git",
-                "reference": "1356aa9cba6812104e3def04d19b02c454dcd98f"
+                "reference": "711faf702e40cf43c7dfbe44671ae25ab31a7d64"
             },
             "type": "library",
             "autoload": {
@@ -8100,7 +8100,7 @@
                 ]
             },
             "description": "Module pour utiliser Vue.js",
-            "time": "2025-01-08T09:59:29+00:00"
+            "time": "2025-01-22T09:35:03+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -8150,34 +8150,6 @@
             },
             "description": "A generic user registration and authentication module for ZF2. Supports Laminas\\Db and Doctrine2.",
             "time": "2024-11-22T10:59:26+00:00"
-        },
-        {
-            "name": "webfontkit/open-sans",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webfontkit/open-sans.git",
-                "reference": "00ab31e690edfd0d88f9ffbcd998cf298b9687e9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webfontkit/open-sans/zipball/00ab31e690edfd0d88f9ffbcd998cf298b9687e9",
-                "reference": "00ab31e690edfd0d88f9ffbcd998cf298b9687e9",
-                "shasum": ""
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "Open Sans is a humanist sans serif typeface designed by Steve Matteson, Type Director of Ascender Corp. This version contains the complete 897 character set, which includes the standard ISO Latin 1, Latin CE, Greek and Cyrillic character sets. Open Sans was designed with an upright stress, open forms and a neutral, yet friendly appearance. It was optimized for print, web, and mobile interfaces, and has excellent legibility characteristics in its letterforms.",
-            "homepage": "http://www.google.com/fonts/specimen/Open+Sans",
-            "support": {
-                "issues": "https://github.com/webfontkit/open-sans/issues",
-                "source": "https://github.com/webfontkit/open-sans",
-                "wiki": "https://github.com/webfontkit/open-sans"
-            },
-            "time": "2014-08-20T20:43:34+00:00"
         },
         {
             "name": "webimpress/safe-writer",

@@ -121,6 +121,6 @@ return [
     'unicaen-auth' => $settings,
 
     'zfcuser' => [
-        $k = 'enable_registration' => isset($settings[$k]) ? $settings[$k] : false,
+        'enable_registration' => $settings['enable_registration'],
     ],
 ];

@@ -282,7 +282,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             $situationFamiliale = [];
             if ($dossierIntervenant->getSituationMatrimoniale()) {
                 $dateEffetSituationFamilliale = ($dossierIntervenant->getDateSituationMatrimoniale()) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : $dateEffet;
-                $codeSituationFamilliale      = ($dossierIntervenant->getSituationMatrimoniale()) ? $dossierIntervenant->getSituationMatrimoniale()->getCode() : '';
+                $codeSituationFamilliale      = ($dossierIntervenant->getSituationMatrimoniale()) ? $dossierIntervenant->getSituationMatrimoniale()->getCode() : 'CEL';
                 $situationFamiliale[]         =
                     ['dateEffetSituFam' => $dateEffetSituationFamilliale,
                      'situFam'          => $codeSituationFamilliale,

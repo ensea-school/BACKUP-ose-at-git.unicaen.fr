@@ -17,7 +17,12 @@ class v24Signature extends MigrationAction
 
     public function utile(): bool
     {
-        return $this->manager()->hasColumn('CONTRAT', 'PROCESS_SIGNATURE_ID');
+        $filesystem = new Filesystem();
+
+        if (!$filesystem->exists('data/signature')) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -31,8 +36,6 @@ class v24Signature extends MigrationAction
             $filesystem->mkdir('data/signature');
         }
         $filesystem->chmod('data/signature', 0777);
-
-
 
     }
 

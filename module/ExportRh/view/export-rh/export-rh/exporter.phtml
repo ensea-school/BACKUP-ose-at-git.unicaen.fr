@@ -233,6 +233,10 @@ if ($priseEnCharge) {
                     <button id="sihamButton" class="btn btn-primary">Synchroniser les données personnelles dans <?= $nameConnecteur; ?></button>
                 </p>
             <?php endif; ?>
+            <button id="sihamButton-inprogress"  class="btn btn-primary d-none" disabled type="button">
+                <span id="spinner" aria-hidden="true" class="spinner-border spinner-border-sm" role="status"></span>
+                &nbsp;Veuillez patienter...
+            </button>
         <?php endif; ?>
 
 
@@ -252,7 +256,11 @@ if ($priseEnCharge) {
             if (emploi.val() == '' || affectation.val() == '') {
                 alert("Vous devez obligatoirement renseigner une affectation et un type d'emploi pour un renouvellement ou une prise en charge dans SIHAM")
             } else {
-                $("#sihamButton").hide();
+                let btnSiham = document.getElementById('sihamButton');
+                let btnSihamInProgress = document.getElementById('sihamButton-inprogress');
+                btnSihamInProgress.classList.remove('d-none');
+                btnSiham.classList.add('d-none');
+                btnSiham.disabled = true;
                 $('.form-export-rh').submit();
             }
 

@@ -19,7 +19,7 @@ if ($priseEnCharge) {
 <br/>
 <?php if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH)): ?>
 
-<form class="form-export-rh" action="<?= $this->url($action, ['intervenant' => $intervenant->getId()]) ?>" method="post">
+<form class="form-export-rh no-intranavigation" action="<?= $this->url($action, ['intervenant' => $intervenant->getId()]) ?>" method="post">
     <?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
 
 

@@ -64,7 +64,7 @@ $.widget("unicaen.modAjax", {
 
             }
         });*/
-        that.contentDiv.on('intranavigator-refresh', (event, args) => {
+        that.contentDiv.on('intranavigator.refresh', (event, args) => {
             that.setContent(that.contentDiv.html());
             if (args.isSubmit) {
                 that.contentSubmit(that.contentDiv);

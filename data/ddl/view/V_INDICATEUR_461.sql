@@ -13,7 +13,10 @@ FROM
   LEFT JOIN fichier f ON f.id = cf.fichier_id AND f.histo_destruction IS NULL
   WHERE
   --La signature électronique doit avoit été activé sur l'état de sortie du contrat
-  es.signature_activation IS NOT NULL
+  es.signature_activation != 0
+  --L'état de sortie du contrat doit avoir un circuit de signature paramétré
+  AND
+  es.signature_circuit_id IS NOT NULL
   --Contrat ne doit pas avoir de fichier déposé
   AND f.id IS NULL
   --Contrat ne doit pas avoir de date de retour signé

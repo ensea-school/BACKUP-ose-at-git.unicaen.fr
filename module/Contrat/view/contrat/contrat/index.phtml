@@ -124,7 +124,8 @@ echo $this->messenger() ?>
                 endforeach; ?>
 
                 <?php if ($tblContratVh): ?>
-                    <?php if ($contratSignatureActivation && !(!empty($tblContratVh->getContrat()->getDateRetourSigne() && empty($tblContratVh->getContrat()->getProcessSignature())))): ?>
+
+                    <?php if ($contratSignatureActivation && !((!empty($tblContratVh->getContrat()->getDateRetourSigne() || !$tblContratVh->getContrat()->getFichier()->isEmpty()) && empty($tblContratVh->getContrat()->getProcessSignature())))): ?>
                         <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'contratSignatureActivation' => $contratSignatureActivation, 'libelleCircuitSignature' => $libelleCircuitSignature, 'infosSignature' => $infosSignature]); ?>
                     <?php else: ?>
                         <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]); ?>
@@ -144,7 +145,6 @@ echo $this->messenger() ?>
 
 <script>
     $("body").on("envoi-mail-contrat", function (event, data) {
-        console.log('event envoyé et affiché');
         event.div.modal('hide'); // ferme la fenêtre modale
         window.location.reload();
     });

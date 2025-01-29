@@ -178,8 +178,8 @@ IntraNavigator = {
             return false;
         }
 
-        // l'ancre est une interne => pas d'intranavigation possible
-        if (a.getAttribute('href').startsWith('#')) {
+        // l'ancre est une interne ou bien elle n'a pas de href => pas d'intranavigation possible
+        if (!a.getAttribute('href') || a.getAttribute('href').startsWith('#')) {
             return false;
         }
 

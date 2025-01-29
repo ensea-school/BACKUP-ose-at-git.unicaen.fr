@@ -20,10 +20,10 @@
         "snapappointments/bootstrap-select": "1.14.0-beta3",
         "datatables.net/datatables.net-bs5": "2.1.8",
 
-        "unicaen/app"                      : "7.0.0",
-        "unicaen/authentification"         : "6.4.1",
+        "unicaen/app"                      : "7.1.0",
+        "unicaen/authentification"         : "6.4.3",
         "unicaen/privilege"                : "6.2.1",
-        "unicaen/utilisateur"              : "7.0.0",
+        "unicaen/utilisateur"              : "7.0.2",
         "unicaen/code"                     : "6.2.3",
         "unicaen/import"                   : "6.0.5",
         "unicaen/tbl"                      : "6.2.5",

@@ -64,9 +64,10 @@ $.widget("unicaen.modAjax", {
 
             }
         });*/
-        that.contentDiv.on('intranavigator.refresh', (event, args) => {
+
+        that.contentDiv[0].addEventListener('intranavigator.refresh', (event) => {
             that.setContent(that.contentDiv.html());
-            if (args.isSubmit) {
+            if (event.detail.isSubmit) {
                 that.contentSubmit(that.contentDiv);
             }
         });

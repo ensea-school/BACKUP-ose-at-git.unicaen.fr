@@ -51,6 +51,8 @@ IntraNavigator = {
 
 
     hasErrors: function (element) {
+        element = this.__dejqueryfy(element);
+
         if (typeof element === 'string') {
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = element;
@@ -64,6 +66,8 @@ IntraNavigator = {
 
 
     extractTitle: function (element) {
+        element = this.__dejqueryfy(element);
+
         const res = {
             content: undefined,
             title: undefined
@@ -417,6 +421,10 @@ IntraNavigator = {
 
     __dejqueryfy(element)
     {
+        if (typeof element === 'string') {
+            return element;
+        }
+
         if (element[0] && element.length && element.length > 0) {
             element = element[0];
         }

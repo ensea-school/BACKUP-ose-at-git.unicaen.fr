@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09314fbe79a88c67867032265356e809",
+    "content-hash": "7b2e8cc494a6a1d716f06fbf4a773acd",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7620,11 +7620,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.2.3",
+            "version": "6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "d54fefd0dcfacbc8159c5841bdd6ecb3a5892e8d"
+                "reference": "466bb948c660e318dd87dbac5cafcd639332cf98"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7641,7 +7641,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2024-12-20T08:49:27+00:00"
+            "time": "2025-01-30T09:01:11+00:00"
         },
         {
             "name": "unicaen/import",

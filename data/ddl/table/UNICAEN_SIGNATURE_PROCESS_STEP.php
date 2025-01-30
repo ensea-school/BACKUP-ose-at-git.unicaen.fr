@@ -33,11 +33,11 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'SIGNATUREFLOWSTEP_ID' => [
-            'name'        => 'SIGNATUREFLOWSTEP_ID',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
+        'LABEL' => [
+            'name'        => 'LABEL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 2000,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,

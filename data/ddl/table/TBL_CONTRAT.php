@@ -201,18 +201,6 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
-        'NBVH'                      => [
-            'name'        => 'NBVH',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 36,
-            'commentaire' => 'Nombre de volumes horaires contractualisables',
-        ],
         'SERVICE_ID'                => [
             'name'        => 'SERVICE_ID',
             'type'        => 'int',

@@ -28,6 +28,7 @@ use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Http\Response;
 use Laminas\View\Model\JsonModel;
+use LogicException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;

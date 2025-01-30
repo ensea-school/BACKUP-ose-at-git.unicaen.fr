@@ -227,7 +227,6 @@ return [
                     'INTERVENANT_ID',
                     'ACTIF',
                     'STRUCTURE_ID',
-                    'NBVH',
                     'EDITE',
                     'SIGNE',
                     'UUID',

@@ -100,6 +100,5 @@
                 <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <field name="nbvh" type="float" column="NBVH" nullable="false"/>
     </entity>
 </doctrine-mapping>

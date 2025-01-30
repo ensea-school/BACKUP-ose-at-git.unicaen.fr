@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1e8698120ea6718ec01780376c10032",
+    "content-hash": "7b2e8cc494a6a1d716f06fbf4a773acd",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7536,11 +7536,11 @@
         },
         {
             "name": "unicaen/bddadmin",
-            "version": "1.0.6",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
-                "reference": "a29f8a2742dc6b4f1e5aa77a29801e81c6c8a5aa"
+                "reference": "c17d4cf88d42545825b1a072ef045f427bd452a4"
             },
             "require": {
                 "php": ">=8.2"
@@ -7553,7 +7553,7 @@
                 }
             },
             "description": "Module pour administrer des bases de données Postgresql et Oracle",
-            "time": "2024-12-05T14:03:47+00:00"
+            "time": "2025-01-30T08:25:34+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
@@ -7620,11 +7620,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.2.3",
+            "version": "6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "d54fefd0dcfacbc8159c5841bdd6ecb3a5892e8d"
+                "reference": "466bb948c660e318dd87dbac5cafcd639332cf98"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7641,7 +7641,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2024-12-20T08:49:27+00:00"
+            "time": "2025-01-30T09:01:11+00:00"
         },
         {
             "name": "unicaen/import",
@@ -7743,11 +7743,11 @@
         },
         {
             "name": "unicaen/signature",
-            "version": "1.0.3",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/signature.git",
-                "reference": "87a139971f8154afeb124240ea0111f942d34880"
+                "reference": "50ee646f86a796a9b060bc3985ec5d20e8a8d966"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -7777,7 +7777,7 @@
                 }
             },
             "description": "Module de signature électronique",
-            "time": "2025-01-30T14:00:28+00:00"
+            "time": "2024-10-21T11:57:30+00:00"
         },
         {
             "name": "unicaen/siham",

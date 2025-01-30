@@ -44,6 +44,7 @@ class PlafondProcessus extends AbstractProcessus
     public function beginTransaction(): self
     {
         $this->getEntityManager()->beginTransaction();
+        $this->getBdd()->setDoctrineConnection($this->getEntityManager()->getConnection());
 
         return $this;
     }
@@ -77,6 +78,7 @@ class PlafondProcessus extends AbstractProcessus
             $this->getEntityManager()->rollback();
         }
 
+        $this->getBdd()->setDoctrineConnection(null);
         return $passed;
     }
 

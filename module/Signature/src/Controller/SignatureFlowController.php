@@ -78,7 +78,12 @@ class SignatureFlowController extends AbstractController
     {
         $signatureFlow = $this->getEvent()->getParam('signatureFlow');
         if ($signatureFlow instanceof SignatureFlow) {
-            $this->getServiceSignatureFlow()->delete($signatureFlow);
+            try{
+                $this->getServiceSignatureFlow()->delete($signatureFlow);
+            }catch (\Exception $e){
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+
+            }
         }
 
         return true;

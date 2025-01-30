@@ -51,7 +51,6 @@ class TblContrat
     private ?VolumeHoraire            $volumeHoraire        = null;
     private ?VolumeHoraireMission     $volumeHoraireMission = null;
     private ?VolumeHoraireReferentiel $volumeHoraireRef     = null;
-    private float                     $nbvh;
 
 
 
@@ -546,17 +545,6 @@ class TblContrat
 
 
 
-    public function getNbvh(): float
-    {
-        return $this->nbvh;
-    }
-
-
-
-    public function setNbvh(float $nbvh): void
-    {
-        $this->nbvh = $nbvh;
-    }
 
 
 }

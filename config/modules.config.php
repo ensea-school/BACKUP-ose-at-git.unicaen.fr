@@ -7,7 +7,6 @@ $modules = [
     'Laminas\Hydrator',
     'Laminas\I18n',
     'Laminas\InputFilter',
-    'Laminas\Log',
     'Laminas\Mvc\I18n',
     'Laminas\Mvc\Plugin\FlashMessenger',
     'Laminas\Mvc\Plugin\Prg',

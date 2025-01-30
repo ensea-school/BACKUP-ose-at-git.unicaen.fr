@@ -60,8 +60,9 @@ $.widget("unicaen.popAjax", {
                     that.setContent(pob.html());
                 }
             });
-            pob.on('intranavigator-refresh', (event, args) => {
-                if (args.isSubmit) {
+
+            pob[0].addEventListener('intranavigator.refresh', (event) => {
+                if (event.detail.isSubmit) {
                     that.contentSubmit(pob);
                 }
             });

@@ -107,7 +107,7 @@ IntraNavigator = {
         // Ajouter du contenu à la div (icône de chargement et texte)
         loadingTooltip.innerHTML = '<div class="spinner-border text-primary" role="status">\n' +
             '  <span class="visually-hidden">Loading...</span>\n' +
-            '</div> Chargement...';
+            '</div> <span style="line-height: 35px;display: block;float: right;margin-left: 10px;">Chargement...</span>';
 
         // Appliquer des styles à la div
         Object.assign(loadingTooltip.style, {
@@ -394,10 +394,24 @@ IntraNavigator = {
     },
 
 
-    _pageBeforeLoad(url, elementToRefresh)
+    loadBegin()
     {
         IntraNavigator._loadingTooltip.style.display = 'block';
         this._loading = true;
+    },
+
+
+
+    loadEnd()
+    {
+        IntraNavigator._loadingTooltip.style.display = 'none';
+        this._loading = false;
+    },
+
+
+    _pageBeforeLoad(url, elementToRefresh)
+    {
+        this.loadBegin();
     },
 
 
@@ -407,15 +421,14 @@ IntraNavigator = {
             history.pushState({url}, null, url);
         }
         window.dispatchEvent(new CustomEvent("intranavigator.load"));
-        IntraNavigator._loadingTooltip.style.display = 'none';
-        this._loading = false;
+
+        this.loadEnd();
     },
 
 
     _pageAfterLoadError(url, elementToRefresh, error)
     {
-        IntraNavigator._loadingTooltip.style.display = 'none';
-        this._loading = false;
+        this.loadEnd();
     },
 
 

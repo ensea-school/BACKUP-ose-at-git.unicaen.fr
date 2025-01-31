@@ -198,10 +198,12 @@ export default {
                 etatVolumeHoraire: this.etatVolumeHoraire,
             };
 
+            IntraNavigator.loadBegin();
             unicaenVue.axios.get(
                 unicaenVue.url('intervenant/:intervenant/formule/details-data/:typeVolumeHoraire/:etatVolumeHoraire', params)
             ).then(response => {
                 this.data = response.data;
+                IntraNavigator.loadEnd();
             });
         },
         reportUrl()

@@ -842,9 +842,9 @@ export default {
         {
             let values = this.filtrerCentresCouts(centresCouts, typeHeures)
             if (values.length != 0) {
-                return "Choisir un centre de coût";
+                return "Choisir un centre de coûts";
             } else {
-                return "Aucun centre de coût disponible demande de paiement impossible";
+                return "Aucun centre de coûts disponible: demande de paiement impossible";
             }
 
         },

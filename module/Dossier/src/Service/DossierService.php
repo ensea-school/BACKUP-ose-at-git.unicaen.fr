@@ -258,7 +258,7 @@ class DossierService extends AbstractEntityService
         $newDatas['RIB']           = $rib;
         $intervenantDossierAdresse = $intervenantDossier->getAdresse();
         /*Normalisation et nettoyage de l'adresse pour comparaison*/
-        $intervenantDossierAdresse = trim(strtolower($intervenantDossierAdresse));
+        $intervenantDossierAdresse = trim(strtolower($intervenantDossierAdresse ?? ""));
         $intervenantDossierAdresse = str_replace(["\r\n", "\n", "\r", ",", "'"], ' ', $intervenantDossierAdresse);
         $intervenantDossierAdresse = preg_replace('/\s\s+/', ' ', $intervenantDossierAdresse);
         $newDatas['ADRESSE']       = (!empty($intervenantDossierAdresse)) ? $intervenantDossierAdresse : '(aucun)';

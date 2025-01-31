@@ -2,13 +2,13 @@
 
 namespace Dossier\Validator;
 
+use Application\Constants;
 use Intervenant\Entity\Db\Civilite;
 use Intervenant\Service\CiviliteServiceAwareTrait;
 use Lieu\Entity\Db\Departement;
 use Lieu\Entity\Db\Pays;
 use Lieu\Service\DepartementServiceAwareTrait;
 use Lieu\Service\PaysServiceAwareTrait;
-use UnicaenApp\Form\Element\Date;
 use UnicaenApp\Validator\NumeroINSEE;
 
 /**
@@ -102,7 +102,7 @@ class NumeroINSEEValidator extends NumeroINSEE
 
         if ($this->civilite && !$this->isValidCivilite()) return false;*/
 
-        $this->dateNaissance = (!empty($dateDeNaissance)) ? \DateTime::createFromFormat(Date::DATE_FORMAT_PHP, $dateDeNaissance) : null;
+        $this->dateNaissance = (!empty($dateDeNaissance)) ? \DateTime::createFromFormat(Constants::DATE_FORMAT, $dateDeNaissance) : null;
 
         if ($this->dateNaissance && !$this->isValidDateNaissance()) return false;
 

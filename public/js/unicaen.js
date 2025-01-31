@@ -289,10 +289,12 @@ function AjaxModalListener(dialogDivId)
             this.modalEventName = anchor.data('event');
 
             // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
+            IntraNavigator.loadBegin();
             $.get(url, {modal: 1}, $.proxy(function (data)
             {
                 // remplacement du contenu de la fenêtre modale
                 $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
+                IntraNavigator.loadEnd();
 
             }, this));
         }

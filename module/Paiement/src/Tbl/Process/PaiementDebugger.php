@@ -190,7 +190,7 @@ class PaiementDebugger
             }
             if ($service->serviceReferentiel) {
                 $s['type'] = 'Référentiel';
-                $s['libelle'] = (string)$this->getEntity(ServiceReferentiel::class, $service->referentiel)->getFonctionReferentiel();
+                $s['libelle'] = (string)$this->getEntity(ServiceReferentiel::class, $service->serviceReferentiel)->getFonctionReferentiel();
             }
             if ($service->mission) {
                 $s['type'] = 'Mission';
@@ -234,8 +234,8 @@ class PaiementDebugger
                         /** @var $entity HistoriqueAwareInterface */
                         $l['volumeHoraireHisto'] = 'Dernière modification par '.$entity->getHistoModificateur().' le '.$entity->getHistoModification()->format('d/m/Y');
                     }
-                }elseif($service->referentiel){
-                    $l['volumeHoraireId'] = $this->getReferentielVhs($service->formuleResServiceRef);
+                }elseif($service->serviceReferentiel){
+                    $l['volumeHoraireId'] = $this->getReferentielVhs($service->serviceReferentiel);
                 }
                 $l['tauxRemu'] = (string)$this->getEntity(TauxRemu::class, $l['tauxRemu']);
                 $l['tauxValeur'] = $this->fts($l['tauxValeur']);
@@ -361,7 +361,7 @@ class PaiementDebugger
         WHERE
           frvh.id = :frsr
         ORDER BY
-          frvhr.id
+          frvh.id
         ";
 
         return $conn->fetchAllAssociative($sql, ['frsr' => $formuleResultatServiceRefId]);

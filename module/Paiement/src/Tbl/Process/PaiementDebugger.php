@@ -176,6 +176,8 @@ class PaiementDebugger
                 'parametres' => [],
             ];
 
+            $inutile = $service->heures == null;
+
             if ($service->service) {
                 $s['type'] = 'Enseignement';
 
@@ -215,6 +217,10 @@ class PaiementDebugger
             $s['laps'] = [];
 
             foreach ($service->lignesAPayer as $lap) {
+                if ($lap->heuresAA + $lap->heuresAC !== 0){
+                    $inutile = false;
+                }
+
                 $l = $lap->toArray();
                 if (!isset($l['misesEnPaiement'])) {
                     $l['misesEnPaiement'] = [];
@@ -268,6 +274,7 @@ class PaiementDebugger
             $s['misesEnPaiement'] = [];
 
             foreach ($service->misesEnPaiement as $mep) {
+                $inutile = false;
                 $m = $mep->toArray();
 
                 /** @var CentreCout $centreCouts */
@@ -283,7 +290,9 @@ class PaiementDebugger
                 $s['misesEnPaiement'][] = $m;
             }
 
-            $saps[] = $s;
+            if (!$inutile) {
+                $saps[] = $s;
+            }
         }
 
         return $saps;

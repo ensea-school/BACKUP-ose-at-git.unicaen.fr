@@ -166,6 +166,7 @@ class FormuleDetailsExtractor implements ExtractionInterface
             'params'                     => [], // peuplé par prepareParams
             'serviceDu'                  => $this->fres->getServiceDu(),
             'hetd'                       => [],
+            'arrondisseur'               => $this->fres->getArrondisseur(),
         ];
         foreach ($this->typesHetd as $typeHetd) {
             $valeur                               = $this->trace->getValeur($typeHetd);

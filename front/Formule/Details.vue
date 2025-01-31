@@ -68,6 +68,16 @@
         </table>
 
         <h2>Données utilisées pour le calcul des <abbr title="Heures équivalent TD">HETD</abbr></h2>
+
+        <div v-if="data.intervenant.arrondisseur == 0" class="alert alert-info">L'arrondisseur de calcul HETD est
+            désactivé
+        </div>
+        <div v-if="data.intervenant.arrondisseur == 1" class="alert alert-info">L'arrondisseur de calcul HETD est ici
+            activé en mode "minimal" :
+            les opérations d'arrondissage ne se font ici qu'au niveau des volumes horaires et ne prennent pas en compte
+            la totalisation des heures au niveau de la fiche de l'intervenant.
+        </div>
+
         <table class="table table-bordered table-xs table-details">
             <thead>
             </thead>
@@ -86,7 +96,9 @@
                     <th rowspan="2" v-for="(param,pi) in data.vhParams" :key="pi">{{ param }}</th>
                     <th rowspan="2" v-if="data.visibilite.motifsNonPaiement">Motif non paiement</th>
                     <th rowspan="2">Type d'intervention</th>
-                    <th rowspan="2" v-if="data.visibilite.servicesStatutaire"><abbr title="Détermine si les heures peuvent être comptées dans le service statutaire de l'intervenant ou non">Peut dans serv.</abbr></th>
+                    <th rowspan="2" v-if="data.visibilite.servicesStatutaire"><abbr
+                        title="Détermine si les heures peuvent être comptées dans le service statutaire de l'intervenant ou non">Peut
+                        dans serv.</abbr></th>
                     <th colspan="2" v-if="data.visibilite.majorations">Majoration</th>
                     <th rowspan="2">Heures</th>
                     <th rowspan="2">&nbsp;</th>
@@ -117,7 +129,9 @@
                     <details-hetds :hetds="sdata.hetd"/>
                 </tr>
             </template>
-            <tr><th class="service" colspan="999">&nbsp;</th></tr>
+            <tr>
+                <th class="service" colspan="999">&nbsp;</th>
+            </tr>
             <tr>
                 <th class="total" :colspan="totalColSpan()">Total intervenant</th>
                 <th>&nbsp;</th>
@@ -126,7 +140,8 @@
             </tbody>
         </table>
 
-        <a v-if="canReporter" :href="reportUrl()" class="btn btn-secondary">Reporter les données de cet intervenant dans l'interface de tests de formule</a>
+        <a v-if="canReporter" :href="reportUrl()" class="btn btn-secondary">Reporter les données de cet intervenant dans
+            l'interface de tests de formule</a>
     </div>
 </template>
 <script>
@@ -202,16 +217,16 @@ export default {
         {
             let tcs = 4;
 
-            if (this.data.visibilite.horaires){
+            if (this.data.visibilite.horaires) {
                 tcs += 2;
             }
-            if (this.data.visibilite.motifsNonPaiement){
+            if (this.data.visibilite.motifsNonPaiement) {
                 tcs += 1;
             }
-            if (this.data.visibilite.servicesStatutaire){
+            if (this.data.visibilite.servicesStatutaire) {
                 tcs += 1;
             }
-            if (this.data.visibilite.majorations){
+            if (this.data.visibilite.majorations) {
                 tcs += 2;
             }
 

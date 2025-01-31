@@ -86,6 +86,15 @@ class v24Formules extends MigrationAction
         $sTbl = $this->getServiceFormule()->getServiceTableauBord();
         $sTbl->calculer('formule', []);
         $this->logEnd('Toutes les fiches de service sont recalculées');
+
+        // Mise à jour des états de sortie pour renommer HEURES_COMPL_FC_MAJOREES en HEURES_PRIMES
+        $sql = "UPDATE etat_sortie SET 
+          REQUETE = REPLACE(REQUETE, 'HEURES_COMPL_FC_MAJOREES', 'HEURES_PRIMES'), 
+          CSV_PARAMS = REPLACE(CSV_PARAMS, 'HEURES_COMPL_FC_MAJOREES', 'HEURES_PRIMES'), 
+          PDF_TRAITEMENT = REPLACE(PDF_TRAITEMENT, 'HEURES_COMPL_FC_MAJOREES', 'HEURES_PRIMES'),
+          CSV_TRAITEMENT = REPLACE(CSV_TRAITEMENT, 'HEURES_COMPL_FC_MAJOREES', 'HEURES_PRIMES')
+        ";
+        $bdd->exec($sql);
     }
 
 }

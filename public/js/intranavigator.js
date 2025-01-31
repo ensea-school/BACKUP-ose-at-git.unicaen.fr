@@ -119,7 +119,7 @@ IntraNavigator = {
             borderRadius: '4px',
             fontSize: '14px',
             pointerEvents: 'none', // Permet de cliquer à travers la div
-            zIndex: '1000', // S'assure qu'elle est au-dessus des autres éléments
+            zIndex: '2500', // S'assure qu'elle est au-dessus des autres éléments
         });
 
         // Ajouter la div au body

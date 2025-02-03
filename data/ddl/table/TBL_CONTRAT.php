@@ -354,7 +354,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 37,
+            'position'    => 36,
             'commentaire' => 'Nombre de volumes horaires signés',
         ],
         'TP'                        => [

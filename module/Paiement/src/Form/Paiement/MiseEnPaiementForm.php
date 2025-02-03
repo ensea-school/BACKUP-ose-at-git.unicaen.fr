@@ -59,7 +59,6 @@ class MiseEnPaiementForm extends AbstractForm
             'name'       => 'date-mise-en-paiement',
             'options'    => [
                 'label'  => 'Date de mise en paiement',
-                'format' => 'd/m/Y',
             ],
             'attributes' => [
                 'step'     => '1',

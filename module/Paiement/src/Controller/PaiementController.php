@@ -413,7 +413,7 @@ class PaiementController extends AbstractController
 
             $dateMiseEnPaiementValue = $this->params()->fromPost('date-mise-en-paiement');
             if ($dateMiseEnPaiementValue) {
-                $dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiementValue);
+                $dateMiseEnPaiement = \DateTime::createFromFormat('Y-m-d', $dateMiseEnPaiementValue);
             } else {
                 $dateMiseEnPaiement = $periode->getDatePaiement($this->getServiceContext()->getAnnee()); // à défaut
             }

@@ -10,16 +10,20 @@
 * Nouvelle infrastructure de gestion des formules de calcul
 * Nouvelle page de demandes de mise en paiement
 * Signature électronique
-* Paramétrage fin des codes situation pour l'export siham
+* Paramétrage affiné des codes situation pour l'export siham
 * Modification du tableau de bord des contrats (TBL_CONTRAT) et du paramètrage des contrats
 * Possibilité de contractualiser du référentiel sans heures d'enseignements
 * Possibilité de créer un contrat de mission sur seul prolongation de fin de date de contrat
 * possibilité de créer des contrats multi-missions
 
-## Corrections 
+## Améliorations
+* Injection de la situation matrimoniale "Célibataire" par défaut pour l'export SIHAM si celle-ci n'est pas renseignée par l'intervenant (#60066)
 
+## Corrections 
 * Correction d'un bug lors de la suppression de referentiel fonction (#59691)
 * Correction d'un bug sur la gestion des fonctions referentiels parents (#59063) 
+* Bug sur l'onglet service avec un utilisateur ayant un rôle avec un périmètre composante (#60291)
+
 
 Corrections de bugs
 

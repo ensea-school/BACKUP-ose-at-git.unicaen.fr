@@ -171,7 +171,6 @@ $.widget("ose.paiementMiseEnPaiementForm", {
 
         if (periodeId == periodePaiementTardifId) {
             dateMiseEnPaiementElement.prop('disabled', false);
-            dateMiseEnPaiementElement.datepicker(); // pour le rafraichissement!!
         } else {
             dateMiseEnPaiementElement.prop('disabled', true);
         }

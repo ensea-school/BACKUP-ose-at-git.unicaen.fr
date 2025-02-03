@@ -7,7 +7,7 @@
     </div>
     <div id="accordionPanelsStayOpenExample" class="accordion">
 
-        <demande-mise-en-paiement-structure v-for="(structure, code) in datasDemandesMiseEnPaiement"
+        <demande-mise-en-paiement-structure @refresh-btn-state="btnResetState" v-for="(structure, code) in datasDemandesMiseEnPaiement"
                                             :datas="structure"
                                             :intervenant="intervenant"
                                             @refresh="getDemandesMiseEnPaiement"/>

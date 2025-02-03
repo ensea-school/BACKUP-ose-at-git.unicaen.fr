@@ -712,13 +712,13 @@ export default {
             //Si centre de cout non sélectionné
             if (centreCoutId == '') {
                 unicaenVue.flashMessenger.toast("Vous devez sélectionner un centre de coût pour demander la mise en paiement de ces heures", 'error', options)
-                this.btnResetState();
+                this.$emit('refresh-btn-state');
                 return false;
             }
             //Si le nombre d'heure demandées est supérieur au nombre d'heures maximum pour cette ligne
             if (heureADemander > 0 && heureADemander > heureADemanderMax) {
                 unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible, vous demandez " + heureADemander + " hetd(s) alors que vous pouvez demander maximum " + heureADemanderMax + " hetd(s)", 'error', options);
-                this.btnResetState();
+                this.$emit('refresh-btn-state');;
                 return false;
             }
             //Si je suis sur une demande de mise en paiement avec des fonds paie etat
@@ -726,7 +726,7 @@ export default {
                 let solde = this.dotationPaieEtat - (this.consommationPaieEtat + heureADemander);
                 if (solde <= 0) {
                     unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'paie etat' pour ces heures", 'error', options)
-                    this.btnResetState();
+                    this.$emit('refresh-btn-state');
                     return false;
                 }
             }
@@ -735,7 +735,7 @@ export default {
                 let solde = this.dotationRessourcesPropres - (this.consommationRessourcesPropres + heureADemander);
                 if (solde <= 0) {
                     unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'ressources propres' pour ces heures", 'error', options)
-                    this.btnResetState();
+                    this.$emit('refresh-btn-state');
                     return false;
                 }
             }

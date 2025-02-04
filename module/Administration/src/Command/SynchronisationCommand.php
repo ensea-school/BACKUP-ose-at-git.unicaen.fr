@@ -3,6 +3,7 @@
 namespace Administration\Command;
 
 use Application\Provider\Role\RoleProvider;
+use Application\Service\Traits\AffectationServiceAwareTrait;
 use Doctrine\Common\Cache\FilesystemCache;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,9 +20,7 @@ use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 class SynchronisationCommand extends Command
 {
     use ImportProcessusAwareTrait;
-
-    protected FilesystemCache $doctrineCache;
-
+    use AffectationServiceAwareTrait;
 
     protected function configure(): void
     {
@@ -56,9 +55,7 @@ class SynchronisationCommand extends Command
             $io->writeln("Fin du job '" . $job . "'");
             //Suppresion du cache des affectations
             $io->writeln("Suppression du cache doctrine des affectations");
-
-            $this->doctrineCache->delete(str_replace('\\', '_', RoleProvider::class) . '_affectations');
-
+            $this->getServiceAffectation()->deleteCacheAffectation();
         }
 
         return Command::SUCCESS;

@@ -3,8 +3,10 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Role;
+use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Entity\Db\Affectation;
+use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Lieu\Entity\Db\Structure;
@@ -23,6 +25,8 @@ class AffectationService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
     use StructureServiceAwareTrait;
+
+    protected FilesystemCache $doctrineCache;
 
 
     /**
@@ -104,6 +108,18 @@ class AffectationService extends AbstractEntityService
         $qb->andWhere("$structureAlias = :structure")->setParameter('structure', $structure);
 
         return $qb;
+    }
+
+    public function setDoctrineCache(FilesystemCache $doctrineCache):affectationService
+    {
+        $this->doctrineCache = $doctrineCache;
+
+        return $this;
+    }
+
+    public function deleteCacheAffectation():void
+    {
+        $this->doctrineCache->delete(str_replace('\\', '_', RoleProvider::class) . '_affectations');
     }
 
 }

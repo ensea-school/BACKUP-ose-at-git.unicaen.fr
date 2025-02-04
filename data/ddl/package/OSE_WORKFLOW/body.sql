@@ -816,7 +816,6 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
                     tbl_contrat c
                 WHERE
                 ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'c') || '
-                 AND actif = 1
             ) c';
 
 

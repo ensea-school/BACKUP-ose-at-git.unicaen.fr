@@ -297,8 +297,9 @@ class ContratAssertion extends AbstractAssertion
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
         return $this->asserts([
+                                  $devalid,
                                   $this->assertRole($contrat),
-                                  !$contrat->getValidation() || ($contratDirect && $devalid),
+                                  !$contrat->getValidation() || $contratDirect,
                                   !$contrat->getDateRetourSigne(),
                               ]);
     }

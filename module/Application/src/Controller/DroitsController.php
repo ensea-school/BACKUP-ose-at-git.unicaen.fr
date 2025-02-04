@@ -254,7 +254,7 @@ class DroitsController extends AbstractController
                 }
             }
         }
-        $this->doctrineCache->delete(RoleProvider::class . '_affectations');
+        $this->doctrineCache->delete(str_replace('\\', '_', RoleProvider::class) . '_affectations');
 
         return compact('form', 'title', 'errors');
     }

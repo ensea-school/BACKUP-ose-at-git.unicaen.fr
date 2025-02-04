@@ -40,6 +40,8 @@ return [
         'includes' => [
             'OSE_EVENT',
             'OSE_HISTO',
+            'FORMULE_%',
+            'OSE_FORMULE',
         ],
     ],
     'trigger'           => [

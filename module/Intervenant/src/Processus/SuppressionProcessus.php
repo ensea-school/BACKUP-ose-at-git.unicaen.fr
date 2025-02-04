@@ -218,11 +218,12 @@ SELECT
   c.intervenant_id              parent_id,
   c.id                          id,
   tc.libelle || 's'             categorie,
-  'N°' || c.id || ', ' || s.libelle_court || case WHEN c.date_retour_signe IS NOT NULL THEN ', retourné signé le ' || to_char( c.date_retour_signe, 'dd/mm/YYYY' ) ELSE '' END label,
+  'N°' || c.id || ', ' || COALESCE(s.libelle_court, 'établissement') || case WHEN c.date_retour_signe IS NOT NULL THEN ', retourné signé le ' || to_char( c.date_retour_signe, 'dd/mm/YYYY' ) ELSE '' END label,
   'fas fa-book'    icon
 FROM
   contrat c
-  JOIN type_contrat tc ON tc.id = c.type_contrat_id JOIN structure s ON s.id = c.structure_id
+  JOIN type_contrat tc ON tc.id = c.type_contrat_id 
+  LEFT JOIN structure s ON s.id = c.structure_id
 WHERE
   c.intervenant_id IN (:id)
 ORDER BY            

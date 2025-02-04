@@ -98,7 +98,7 @@ class DroitsController extends AbstractController
             if ($form->isValid()) {
                 try {
                     $this->getServiceRole()->save($role);
-                    $this->doctrineCache->delete(RoleProvider::class . '_affectations');
+                    $this->doctrineCache->delete(str_replace('\\', '_', RoleProvider::class) . '_affectations');
                     $form->get('id')->setValue($role->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
                     $errors[] = $this->translate($e);
@@ -118,7 +118,7 @@ class DroitsController extends AbstractController
         $title = "Suppression du rôle";
         $form  = $this->makeFormSupprimer(function () use ($role) {
             $this->getServiceRole()->delete($role);
-            $this->doctrineCache->delete(RoleProvider::class . '_affectations');
+            $this->doctrineCache->delete(str_replace('\\', '_', RoleProvider::class) . '_affectations');
             $this->getSessionContainer()->offsetUnset('privileges' . $this->getServiceContext()->getAnnee()->getId());
         });
 
@@ -168,7 +168,7 @@ class DroitsController extends AbstractController
                 if ($role) $this->roleRemovePrivilege($role, $privilege);
             break;
         }
-        $this->doctrineCache->delete(RoleProvider::class . '_affectations');
+        $this->doctrineCache->delete(str_replace('\\', '_', RoleProvider::class) . '_affectations');
 
         return compact('role', 'privilege');
     }
@@ -270,7 +270,7 @@ class DroitsController extends AbstractController
         $form = $this->makeFormSupprimer(function () use ($affectation) {
             $this->getServiceAffectation()->delete($affectation);
         });
-        $this->doctrineCache->delete(RoleProvider::class . '_affectations');
+        $this->doctrineCache->delete(str_replace('\\', '_', RoleProvider::class) . '_affectations');
 
         return compact('affectation', 'title', 'form');
     }

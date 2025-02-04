@@ -23,9 +23,11 @@ class SynchronisationCommandFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): SynchronisationCommand
     {
+        $doctrineCache = $container->get('doctrine.cache.filesystem');
         $command = new SynchronisationCommand;
         $command->setProcessusImport($container->get(ImportProcessus::class));
-        
+        $command->setDoctrineCache($doctrineCache);
+
         /* Injectez vos dépendances ICI */
 
         return $command;

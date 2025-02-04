@@ -20,7 +20,7 @@ class SynchronisationCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('calcul-feuille-de-route')
+        $this->setName('synchronisation')
             ->setDescription('Lancement les jobs de synchronisation de OSE')
             ->addArgument('job', InputArgument::REQUIRED, 'Nom du job que vous souhaitez lancer');
 

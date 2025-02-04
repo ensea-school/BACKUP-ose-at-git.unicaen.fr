@@ -6,6 +6,7 @@ use Application\Controller\AbstractController;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Intervenant\Entity\Db\Intervenant;
@@ -33,6 +34,7 @@ class DemandesController extends AbstractController
     use DemandesServiceAwareTrait;
     use StructureServiceAwareTrait;
     use IntervenantServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
 
     protected function initFilters(): void
@@ -120,9 +122,12 @@ class DemandesController extends AbstractController
 
     public function getDemandesMiseEnPaiementAction()
     {
-        $structure = null;
+        $structureRole = null;
         $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
+        /**
+         * @var Intervenant $intervenant
+         */
         $intervenant = $this->getEvent()->getParam('intervenant');
         //Un intervenant ne peut pas récuperer les datas de demande de mise en paiement
         if ($role->getIntervenant()) {
@@ -130,11 +135,10 @@ class DemandesController extends AbstractController
         }
         //$this->updateTableauxBord($intervenant);
         if ($role->getPerimetre()->isComposante()) {
-            $structure = $role->getStructure();
+            $structureRole = $role->getStructure();
         }
 
-        $servicesAPayer = $this->getServiceDemandes()->getDemandeMiseEnPaiementResume($intervenant, $structure);
-
+        $servicesAPayer = $this->getServiceDemandes()->getDemandeMiseEnPaiementResume($intervenant, $structureRole);
 
         return new AxiosModel($servicesAPayer);
     }
@@ -151,9 +155,9 @@ class DemandesController extends AbstractController
             //On redirige vers la visualisation des mises en paiement
             $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
         }
+        $intervenantStructure = ($intervenant->getStructure())?$intervenant->getStructure()->getLibelleCourt():'';
 
-
-        return compact('intervenant');
+        return compact('intervenant', 'intervenantStructure');
     }
 
 

@@ -17,6 +17,7 @@ use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TblPaiement;
 use Referentiel\Entity\Db\ServiceReferentiel;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * Description of DemandesService
@@ -170,6 +171,25 @@ class DemandesService extends AbstractService
         $dmep = [];
         //Récupération du paramétrage des centres de cout pour les paiements
         $parametreCentreCout = $this->getServiceParametres()->get('centres_couts_paye');
+        $intervenantStrucutre = $intervenant->getStructure();
+        if($intervenantStrucutre instanceof Structure && $structure instanceof Structure)
+        {
+            if($parametreCentreCout == 'affectation')
+            {   //Cas ou c'est la composante d'affectation qui fait les demandes de mises en paiement
+                if($intervenantStrucutre->getId() == $structure->getId())
+                {
+                    /*Si j'ai un role avec un périmètre composante et que ma structure d'affectation est la même que
+                    celle de l'intervenant j'accède à toutes les demandes de mise en paiement peu importe la structure
+                    de l'enseignement réalisé de l'intervenant on ne filtre pas les dmep*/
+                    $structure = null;
+                }
+                else{
+                    //Sinon on ne doit voir aucune demande de mise en paiement
+                    return $dmep;
+                }
+            }
+        }
+
 
         $sql = "
         
@@ -496,16 +516,17 @@ class DemandesService extends AbstractService
             }
 
 
-            //On alimente les centres couts disponibles pour ces demandes de mise en paiement
-            //Si le paramétrage est affectation, on va chercher une fois pour toutes les centres de couts de paiement de la structure d'affectation de l'intervenant
-            if ($parametreCentreCout == 'affectation' && empty($centresCoutsPaiementAffectation)) {
+            /*On alimente les centres couts disponibles pour ces demandes de mise en paiement
+            Si le paramétrage est affectation, on va chercher une fois pour toutes les centres de couts de paiement
+            de la structure d'affectation de l'intervenant*/
+            if ($parametreCentreCout == 'affectation' && empty($centresCoutsPaiementAffectation) && $intervenant->getStructure()) {
                 $structure                       = $this->getServiceStructure()->get($intervenant->getStructure()->getId());
                 $centresCoutsPaiementAffectation = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
             }
 
             if (!array_key_exists('centreCoutPaiement', $dmep[$value['STRUCTURE_CODE']])) {
                 $dmep[$value['STRUCTURE_CODE']]['centreCoutPaiement'] = [];
-                if ($parametreCentreCout == 'enseignement') {
+                if ($parametreCentreCout == 'enseignement' || empty($intervenant->getStructure())) {
                     $structure    = $this->getServiceStructure()->get($value['STRUCTURE_ID']);
                     $centresCouts = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
                 } else {

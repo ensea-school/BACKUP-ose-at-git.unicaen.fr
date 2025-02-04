@@ -227,7 +227,7 @@ class AgrementAssertion extends AbstractAssertion
         $structureContractualise = $tblContrat->getStructureContractualise($entity->getIntervenant());
         $ids                     = array_column($structureContractualise, 'id');
 
-        if (in_array($entity->getStructure()->getId(), $ids)) {
+        if ($entity->getStructure() != NULL && in_array($entity->getStructure()->getId(), $ids)) {
             return false;
         } else {
             if ($structure = $entity->getStructure()) {
@@ -251,7 +251,7 @@ class AgrementAssertion extends AbstractAssertion
         $structureContractualise = $tblContrat->getStructureContractualise($entity->getIntervenant());
         $ids                     = array_column($structureContractualise, 'id');
 
-        if (in_array($entity->getStructure()->getId(), $ids)) {
+        if ($entity->getStructure() != NULL && in_array($entity->getStructure()->getId(), $ids)) {
             return false;
         } else {
             if ($structure = $entity->getStructure()) {

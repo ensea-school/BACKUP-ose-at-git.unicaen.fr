@@ -311,17 +311,17 @@ $fieldsets = $form->getFieldsets();
             {
                 var selectSituationMatrimoniale = $("select[name='DossierIdentite[situationMatrimoniale]']");
                 var dateSituationMatrimoniale = $("input[name='DossierIdentite[dateSituationMatrimoniale]']").parent('div').parent('div');
-                console.log(dateSituationMatrimoniale);
 
                 var situation = $("option:selected", selectSituationMatrimoniale).html();
 
-                if (situation == 'Célibataire') {
+                if (situation == 'Célibataire' || situation == '- NON RENSEIGNÉ') {
                     dateSituationMatrimoniale.hide();
                 }
 
                 selectSituationMatrimoniale.change(function () {
                     var situation = $("option:selected", selectSituationMatrimoniale).html();
-                    if (situation == 'Célibataire') {
+                    console.log(situation);
+                    if (situation == 'Célibataire' || situation == '- NON RENSEIGNÉ -') {
                         dateSituationMatrimoniale.hide();
                     } else {
                         dateSituationMatrimoniale.show();

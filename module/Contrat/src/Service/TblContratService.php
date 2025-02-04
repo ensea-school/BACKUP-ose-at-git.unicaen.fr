@@ -89,4 +89,21 @@ class TblContratService extends AbstractEntityService
 
         return $query->getOneOrNullResult();
     }
+
+
+
+    public function getStructureContractualise(Intervenant $intervenant)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = 'SELECT s.id FROM ' . TblContrat::class . ' tblc 
+        JOIN tblc.structure s
+        WHERE tblc.intervenant = :intervenant AND tblc.actif = 1 AND tblc.contrat IS NOT NULL';
+
+        $query = $em->createQuery($dql)
+            ->setParameter('intervenant', $intervenant);
+        return $query->getResult();
+
+
+    }
 }

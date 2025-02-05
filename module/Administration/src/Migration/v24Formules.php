@@ -2,6 +2,7 @@
 
 namespace Administration\Migration;
 
+use Administration\Command\UpdateBddCommand;
 use Formule\Service\FormuleServiceAwareTrait;
 use Unicaen\BddAdmin\Migration\MigrationAction;
 
@@ -80,12 +81,8 @@ class v24Formules extends MigrationAction
           WHERE p.heures_payees_aa + p.heures_payees_ac > 0
         )");
 
-        // On calcule toutes les formules
-        $this->logBegin('Calcul des formules pour toutes les fiches de service');
-        $this->logMsg('/!\ Ce traitement peut prendre plusieurs heures /!\\');
-        $sTbl = $this->getServiceFormule()->getServiceTableauBord();
-        $sTbl->calculer('formule', []);
-        $this->logEnd('Toutes les fiches de service sont recalculées');
+        // On demande le recalcul de toutes les formules
+        UpdateBddCommand::$needCalculFormules = true;
 
         // Mise à jour des états de sortie pour renommer HEURES_COMPL_FC_MAJOREES en HEURES_PRIMES
         $sql = "UPDATE etat_sortie SET 

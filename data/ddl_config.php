@@ -21,6 +21,7 @@ return [
     ],
     'view'              => [
         'includes'    => [
+            'V_HAS_DMEP_A_FAIRE',
             'V_INDIC_ATT_VALID_ENS_AUTRE',
             'V_INDIC_ATT_VALID_REF_AUTRE',
             'V_INDIC_ATT_VALID_SERVICE',

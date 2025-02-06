@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8fa952a0887945ebdeb9124cccdd35db",
+    "content-hash": "00ff9bc298c69f77e92b5892881a7db4",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7672,11 +7672,11 @@
         },
         {
             "name": "unicaen/mail",
-            "version": "7.1.0",
+            "version": "7.1.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/mail.git",
-                "reference": "fafdc3f20ed76d45ea3596f1986336a74227169a"
+                "reference": "12c1c629d3d498e7aec8721f2b73ddc8cfda304a"
             },
             "require": {
                 "symfony/mailer": "^7",
@@ -7692,7 +7692,7 @@
                 ]
             },
             "description": "Module d'envoi de mail",
-            "time": "2025-01-16T12:50:52+00:00"
+            "time": "2025-02-06T09:50:32+00:00"
         },
         {
             "name": "unicaen/open-document",

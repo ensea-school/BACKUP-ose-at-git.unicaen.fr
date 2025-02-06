@@ -154,7 +154,7 @@ class ContratProcess implements ProcessInterface
 
                 if (($service['TYPE_SERVICE_CODE'] != 'MIS' && $this->regleEns == Parametre::CONTRAT_ENS_GLOBALE)
                     ||
-                    ($service['TYPE_SERVICE_CODE'] == 'MIS' && $this->regleEns == Parametre::CONTRAT_MIS_GLOBALE)) {
+                    ($service['TYPE_SERVICE_CODE'] == 'MIS' && $this->regleMis == Parametre::CONTRAT_MIS_GLOBALE)) {
                     $service['STRUCTURE_ID'] = NULL;
                 }
             }

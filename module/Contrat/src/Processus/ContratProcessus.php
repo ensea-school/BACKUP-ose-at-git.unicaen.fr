@@ -85,9 +85,9 @@ class ContratProcessus extends AbstractProcessus
     {
         $tblContrats = [];
         $query       = $this->getEntityManager()->createQuery(
-            'SELECT tblc, vh
+            'SELECT tblc, vhr
                  FROM ' . TblContrat::class . ' tblc
-                 JOIN tblc.volumeHoraireRef vh
+                 JOIN tblc.volumeHoraireRef vhr
                  WHERE tblc.uuid = :uuid'
         );
         $query->setParameter('uuid', $uuid);
@@ -106,9 +106,9 @@ class ContratProcessus extends AbstractProcessus
     {
         $tblContrats = [];
         $query       = $this->getEntityManager()->createQuery(
-            'SELECT tblc, vh
+            'SELECT tblc, vhm
                  FROM ' . TblContrat::class . ' tblc
-                 JOIN tblc.volumeHoraireMission vh
+                 JOIN tblc.volumeHoraireMission vhm
                  WHERE tblc.uuid = :uuid'
         );
         $query->setParameter('uuid', $uuid);
@@ -184,8 +184,10 @@ class ContratProcessus extends AbstractProcessus
         $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
         foreach ($tblContrats as $tblContrat) {
             $vh = $tblContrat->getVolumeHoraire();
-            $vh->setContrat($contrat);
-            $this->getEntityManager()->persist($vh);
+            if ($vh != null) {
+                $vh->setContrat($contrat);
+                $this->getEntityManager()->persist($vh);
+            }
         }
 
         // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
@@ -193,17 +195,21 @@ class ContratProcessus extends AbstractProcessus
         $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
         foreach ($tblContrats as $tblContrat) {
             $vhr = $tblContrat->getVolumeHoraireRef();
-            $vhr->setContrat($contrat);
-            $this->getEntityManager()->persist($vhr);
+            if ($vhr != null) {
+                $vhr->setContrat($contrat);
+                $this->getEntityManager()->persist($vhr);
+            }
         }
 
 //        // on récupère les heures de mission et on les places dans le contrat
         $tblContrats = $this->getVolumeHoraireMissionTblContrat($uuid);
         $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
         foreach ($tblContrats as $tblContrat) {
-            $vhr = $tblContrat->getVolumeHoraireRef();
-            $vhr->setContrat($contrat);
-            $this->getEntityManager()->persist($vhr);
+            $vhm = $tblContrat->getVolumeHoraireMission();
+            if ($vhm != null) {
+                $vhm->setContrat($contrat);
+                $this->getEntityManager()->persist($vhm);
+            }
         }
 
 
@@ -415,7 +421,7 @@ class ContratProcessus extends AbstractProcessus
     {
 
 
-       if (empty($subject)) {
+        if (empty($subject)) {
             $subject = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
         }
 
@@ -436,27 +442,24 @@ class ContratProcessus extends AbstractProcessus
             ->to($to)
             ->html($htmlContent);
 
-        foreach($bcc as $address)
-        {
+        foreach ($bcc as $address) {
             $mail->addBcc($address);
         }
 
         if ($pieceJointe) {
             //Nom du fichier
-            $fileName    = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-                                   $contrat->getStructure()?->getCode(),
-                                   $contrat->getIntervenant()->getNomUsuel(),
-                                   $contrat->getIntervenant()->getCode());
+            $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+                                $contrat->getStructure()?->getCode(),
+                                $contrat->getIntervenant()->getNomUsuel(),
+                                $contrat->getIntervenant()->getCode());
             //Contenu du fichier
-            $document                = $this->getServiceContrat()->generer($contrat, false);
-            $content                 = $document->saveToData();
-            $mail->attach($content, $fileName, 'application/pdf' );
+            $document = $this->getServiceContrat()->generer($contrat, false);
+            $content  = $document->saveToData();
+            $mail->attach($content, $fileName, 'application/pdf');
         }
 
         return $mail;
     }
-
-
 
 
 }

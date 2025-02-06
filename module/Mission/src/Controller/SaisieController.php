@@ -162,12 +162,11 @@ class SaisieController extends AbstractController
             try {
                 $this->getServiceMission()->save($mission);
                 $hFin = $mission->getHeures();
-                $this->updateTableauxBord($mission);
-                if (!$this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, $hFin < $hDeb)) {
-                    $this->updateTableauxBord($mission);
-                }else{
+                if ($this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, $hFin <= $hDeb)) {
                     $this->flashMessenger()->addSuccessMessage('Mission bien enregistrée');
                 }
+                $this->updateTableauxBord($mission);
+
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
                 $this->em()->rollback();

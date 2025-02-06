@@ -176,9 +176,6 @@ class ContratController extends AbstractController
         }
 
         $volumeHorairesTotal = $this->getServiceTblContrat()->getVolumeTotalCreationContratByUuid($uuid);
-        if ($volumeHorairesTotal == null) {
-            $volumeHorairesTotal = 0;
-        }
 
         $contrat = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal);
 

@@ -73,7 +73,7 @@ class TblContratService extends AbstractEntityService
     {
         $em = $this->getEntityManager();
 
-        $dql = 'SELECT SUM(tblc.hetd) AS hetdTotal, tblc.uuid, i.id AS intervenantId, s.id AS structureId, tblc.dateDebut, tblc.dateFin, cp.id AS contratParentId, tc.code AS typeContratCode
+        $dql = 'SELECT SUM(tblc.hetd) AS hetdTotal, tblc.uuid, i.id AS intervenantId, s.id AS structureId, MIN(tblc.dateDebut) AS dateDebut, MAX(tblc.dateFin) AS dateFin, cp.id AS contratParentId, tc.code AS typeContratCode
         FROM ' . TblContrat::class . ' tblc
         JOIN tblc.typeContrat tc
         JOIN tblc.intervenant i
@@ -81,7 +81,7 @@ class TblContratService extends AbstractEntityService
         LEFT JOIN tblc.contratParent cp
         WHERE tblc.uuid = :uuid
         AND tblc.actif = 1
-        GROUP BY tblc.uuid, i.id, s.id, tblc.dateDebut, tblc.dateFin, cp.id, tc.code';
+        GROUP BY tblc.uuid, i.id, s.id, cp.id, tc.code';
 
 
         $query = $em->createQuery($dql)

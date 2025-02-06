@@ -45,6 +45,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'COPIES'          => [
+            'name'        => 'COPIES',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 500,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 11,
+            'commentaire' => NULL,
+        ],
         'DESTINATAIRES_INITIALS' => [
             'name'        => 'DESTINATAIRES_INITIALS',
             'type'        => 'string',

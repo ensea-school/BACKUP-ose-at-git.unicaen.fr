@@ -226,7 +226,7 @@ class ContratProcess implements ProcessInterface
             $this->services[$id] = $service;
         }
 
-        $serviceBdd = $this->getServiceBdd();
+        $serviceBdd     = $this->getServiceBdd();
         $sqlVTblContrat = $serviceBdd->getViewDefinition('V_TBL_CONTRAT');
 
         $sqlSansHeure = "SELECT 
@@ -259,7 +259,7 @@ class ContratProcess implements ProcessInterface
                   ";
 
 
-        $sqlSansHeure = $serviceBdd->injectKey($sqlSansHeure, $params);
+        $sqlSansHeure      = $serviceBdd->injectKey($sqlSansHeure, $params);
         $contratsSansHeure = $this->getBdd()->selectEach($sqlSansHeure);
 
 
@@ -331,13 +331,16 @@ class ContratProcess implements ProcessInterface
         }
 
 
-
-        $sql                   = "WITH contrat_et_avenants AS (
+        $sql = "WITH contrat_et_avenants AS (
     SELECT 
         c.id AS contrat_id_principal,
         c.debut_validite AS date_debut,
         c.fin_validite AS date_fin_contrat,
-        c.structure_id AS parent_structure_id,
+        CASE pm.valeur
+            WHEN 'contrat_mis_mission'       
+            THEN c.structure_id 
+            ELSE NULL
+            END AS parent_structure_id,
         vtblc.mission_id AS mission_id_principal,
         ap.fin_validite AS date_fin_avenant,
         i.id intervenant_id,
@@ -345,6 +348,7 @@ class ContratProcess implements ProcessInterface
     FROM 
         contrat c
     JOIN INTERVENANT i ON c.intervenant_id = i.id
+    JOIN parametre pm ON pm.nom = 'contrat_mis'
     LEFT JOIN 
         contrat ap ON c.id = ap.contrat_id AND (ap.histo_destruction IS NULL)
     LEFT JOIN
@@ -407,10 +411,10 @@ WHERE
         foreach ($avenantNecessaireDate as $avenant) {
 
             $newAvenant                      = [];
-            $newAvenant['INTERVENANT_ID']    = (int)$avenant['INTERVENANT_ID'];
-            $newAvenant['ANNEE_ID']          = (int)$avenant['ANNEE_ID'];
-            $newAvenant['STRUCTURE_ID']      = (int)$avenant['STRUCTURE_ID'];
-            $newAvenant['CONTRAT_PARENT_ID'] = (int)$avenant['CONTRAT_PARENT_ID'];
+            $newAvenant['INTERVENANT_ID']    = (int)($avenant['INTERVENANT_ID'] ?? NULL);
+            $newAvenant['ANNEE_ID']          = (int)($avenant['ANNEE_ID'] ?? NULL);
+            $newAvenant['STRUCTURE_ID']      = (int)($avenant['STRUCTURE_ID'] ?? NULL);
+            $newAvenant['CONTRAT_PARENT_ID'] = (int)($avenant['CONTRAT_PARENT_ID'] ?? NULL);
 
             $newAvenant['UUID'] = 'avenant_' . $newAvenant['INTERVENANT_ID'] . '_' . $newAvenant['CONTRAT_PARENT_ID'];
 
@@ -418,8 +422,8 @@ WHERE
             $newAvenant['SIGNE']                     = 0;
             $newAvenant['TERMINE']                   = 0;
             $newAvenant['TYPE_CONTRAT_ID']           = 2;
-            $newAvenant['MISSION_ID']                = (int)$avenant['MISSION_ID'];
-            $newAvenant['TYPE_SERVICE_ID']           = (int)$avenant['TYPE_SERVICE_ID'];
+            $newAvenant['MISSION_ID']                = (int)($avenant['MISSION_ID']?? NULL);;
+            $newAvenant['TYPE_SERVICE_ID']           = (int)($avenant['TYPE_SERVICE_ID']?? NULL);;
             $newAvenant['AUTRES']                    = 0;
             $newAvenant['AUTRE_LIBELLE']             = NULL;
             $newAvenant['CM']                        = 0;

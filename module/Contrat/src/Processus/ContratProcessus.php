@@ -142,8 +142,20 @@ class ContratProcessus extends AbstractProcessus
         $contrat->setStructure($structure);
 
         $contrat->setTotalHetd($volumeHoraire['hetdTotal']);
-        $contrat->setDebutValidite($volumeHoraire['dateDebut']);
-        $contrat->setFinValidite($volumeHoraire['dateFin']);
+        try {
+            $dateDebut = new \DateTime($volumeHoraire['dateDebut']);
+
+        } catch (\Exception $e) {
+            $dateDebut = null;
+        }
+        $contrat->setDebutValidite($dateDebut);
+
+        try {
+            $dateFin = new \DateTime($volumeHoraire['dateFin']);
+        } catch (\Exception $e) {
+            $dateFin = null;
+        }
+        $contrat->setFinValidite($dateFin);
         $contrat->setTypeContrat($this->getServiceTypeContrat()->getByCode($volumeHoraire['typeContratCode']));
         if ($volumeHoraire['contratParentId'] == NULL) {
             $contrat->setNumeroAvenant(0);

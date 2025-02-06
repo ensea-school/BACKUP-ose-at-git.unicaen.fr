@@ -363,6 +363,8 @@ class ReferentielsViewHelper extends AbstractHtmlElement
         if ($this->getColumnVisibility('structure')) $colspan++;
         if ($this->getColumnVisibility('fonction')) $colspan++;
         if ($this->getColumnVisibility('commentaires')) $colspan++;
+        if ($this->getColumnVisibility('motif-non-paiement')) $colspan++;
+        if ($this->getColumnVisibility('tags')) $colspan++;
 //        if ($this->getColumnVisibility('heures'       ))  $colspan ++;
         if ($this->getColumnVisibility('annee')) $colspan++;
 
@@ -487,6 +489,7 @@ class ReferentielsViewHelper extends AbstractHtmlElement
         $multiAnnees = false;
         $intervenant = null;
         $multiIntervenants = false;
+        $motifNonPaiement = false;
         foreach ($services as $service) {
             if (empty($intervenant)) {
                 $intervenant = $service->getIntervenant();
@@ -501,9 +504,13 @@ class ReferentielsViewHelper extends AbstractHtmlElement
                 $multiAnnees = true;
                 break;
             }
+            if ($service->getMotifNonPaiement()){
+                $motifNonPaiement = true;
+            }
         }
         $this->setColumnVisibility('annee', $multiAnnees);
         $this->setColumnVisibility('intervenant', $multiIntervenants);
+        $this->setColumnVisibility('motif-non-paiement', $motifNonPaiement);
 
         return $this;
     }

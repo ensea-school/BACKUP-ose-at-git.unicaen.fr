@@ -2,8 +2,8 @@ $(function ()
 {
     WidgetInitializer.add('jstree', 'jstree', function ()
     {
-        WidgetInitializer.includeJs(unicaenVue.url('ext/vakata-jstree-3.3.17/dist/jstree.min.js'));
-        WidgetInitializer.includeCss(unicaenVue.url('ext/vakata-jstree-3.3.17/dist/themes/default/style.min.css'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/jstree/jstree.min.js'));
+        WidgetInitializer.includeCss(unicaenVue.url('vendor/jstree/themes/default/style.min.css'));
     });
 
     WidgetInitializer.add('table-sort', 'tableSort', function ()

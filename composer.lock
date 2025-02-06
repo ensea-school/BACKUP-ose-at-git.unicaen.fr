@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "810e0e21bf5cb4487f056ddae601215e",
+    "content-hash": "8fa952a0887945ebdeb9124cccdd35db",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7672,11 +7672,11 @@
         },
         {
             "name": "unicaen/mail",
-            "version": "7.1.2",
+            "version": "7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/mail.git",
-                "reference": "12c1c629d3d498e7aec8721f2b73ddc8cfda304a"
+                "reference": "fafdc3f20ed76d45ea3596f1986336a74227169a"
             },
             "require": {
                 "symfony/mailer": "^7",
@@ -7692,7 +7692,7 @@
                 ]
             },
             "description": "Module d'envoi de mail",
-            "time": "2025-02-06T09:50:32+00:00"
+            "time": "2025-01-16T12:50:52+00:00"
         },
         {
             "name": "unicaen/open-document",
@@ -7930,6 +7930,74 @@
             },
             "description": "A generic user registration and authentication module for ZF2. Supports Laminas\\Db and Doctrine2.",
             "time": "2025-01-29T08:18:07+00:00"
+        },
+        {
+            "name": "vakata/jstree",
+            "version": "3.3.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vakata/jstree.git",
+                "reference": "6256df013ebd98aea138402d8ac96db3efe0c0da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vakata/jstree/zipball/6256df013ebd98aea138402d8ac96db3efe0c0da",
+                "reference": "6256df013ebd98aea138402d8ac96db3efe0c0da",
+                "shasum": ""
+            },
+            "require": {
+                "components/jquery": ">=1.9.1"
+            },
+            "suggest": {
+                "robloach/component-installer": "Allows installation of Components via Composer"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "files": [
+                        "dist/jstree.min.js",
+                        "dist/themes/default/style.min.css",
+                        "dist/themes/default/32px.png",
+                        "dist/themes/default/40px.png",
+                        "dist/themes/default/throbber.gif"
+                    ],
+                    "images": [
+                        "dist/themes/default/32px.png",
+                        "dist/themes/default/40px.png",
+                        "dist/themes/default/throbber.gif"
+                    ],
+                    "styles": [
+                        "dist/themes/default/style.css"
+                    ],
+                    "scripts": [
+                        "dist/jstree.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Bozhanov",
+                    "email": "jstree@jstree.com"
+                }
+            ],
+            "description": "jsTree is jquery plugin, that provides interactive trees.",
+            "homepage": "http://jstree.com",
+            "support": {
+                "forum": "https://groups.google.com/forum/#!forum/jstree",
+                "issues": "https://github.com/vakata/jstree/issues",
+                "source": "https://github.com/vakata/jstree"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/vakata",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-09-03T07:13:38+00:00"
         },
         {
             "name": "webimpress/safe-writer",

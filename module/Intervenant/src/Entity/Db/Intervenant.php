@@ -1414,6 +1414,23 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         return $contrats;
     }
 
+    public function getAvenantEnfant (Contrat $contratParent)
+    {
+        if (null === $this->contrat) {
+            return null;
+        }
+
+        $filter   = function (Contrat $contrat) use ($contratParent) {
+            if($contrat->getContrat() != $contratParent){
+                return false;
+            }
+
+            return true;
+        };
+        $contrats = $this->contrat->filter($filter);
+
+        return $contrats;
+    }
 
 
     /**

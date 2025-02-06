@@ -288,7 +288,7 @@ class ContratAssertion extends AbstractAssertion
     protected function assertSuppression(Contrat $contrat)
     {
         if (!$contrat->estUnAvenant()) {
-            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut supprimer un contrat que si aucun avenant n'existe
+            $devalid = $contrat->getIntervenant()->getAvenantEnfant($contrat)->count() < 1; // on ne peut supprimer un contrat que si aucun avenant n'existe
         } else {
             $devalid = true;
         }

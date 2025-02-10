@@ -219,11 +219,17 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
         $element = $fieldset->getObject()->getService()->getElementPedagogique();
         if ($element) {
             $typesIntervention = $element->getTypeIntervention();
+            $typesIntervention->getValues();           // Retourne un tableau des éléments
+            $elements = $typesIntervention->toArray(); // Copie en tableau
+            usort($elements, function ($a, $b) {
+                return $a->getOrdre() <=> $b->getOrdre();
+            });
         } else {
             $qb = $this->getServiceTypeIntervention()->finderByHistorique();
             $this->getServiceTypeIntervention()->finderByContext($qb);
             $this->getServiceTypeIntervention()->finderByVisibleExterieur(true, $qb);
             $typesIntervention = $this->getServiceTypeIntervention()->getList($qb);
+
         }
 
         $res = $this->getView()->formHidden($fieldset->get('service'));

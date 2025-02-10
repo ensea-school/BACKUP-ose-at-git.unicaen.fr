@@ -411,19 +411,19 @@ WHERE
         foreach ($avenantNecessaireDate as $avenant) {
 
             $newAvenant                      = [];
-            $newAvenant['INTERVENANT_ID']    = (int)($avenant['INTERVENANT_ID'] ?? NULL);
-            $newAvenant['ANNEE_ID']          = (int)($avenant['ANNEE_ID'] ?? NULL);
-            $newAvenant['STRUCTURE_ID']      = (int)($avenant['STRUCTURE_ID'] ?? NULL);
-            $newAvenant['CONTRAT_PARENT_ID'] = (int)($avenant['CONTRAT_PARENT_ID'] ?? NULL);
+            $newAvenant['INTERVENANT_ID']    = $avenant['INTERVENANT_ID'] ? (int)$avenant['INTERVENANT_ID'] : NULL;
+            $newAvenant['ANNEE_ID']          = $avenant['ANNEE_ID'] ? (int)$avenant['ANNEE_ID'] : NULL;
+            $newAvenant['STRUCTURE_ID']      = $avenant['STRUCTURE_ID'] ? (int)$avenant['STRUCTURE_ID'] : NULL;
+            $newAvenant['CONTRAT_PARENT_ID'] = $avenant['CONTRAT_PARENT_ID'] ? (int)$avenant['CONTRAT_PARENT_ID'] : NULL;
 
             $newAvenant['UUID'] = 'avenant_' . $newAvenant['INTERVENANT_ID'] . '_' . $newAvenant['CONTRAT_PARENT_ID'];
 
-            $newAvenant['EDITE']                     = 0;
-            $newAvenant['SIGNE']                     = 0;
-            $newAvenant['TERMINE']                   = 0;
-            $newAvenant['TYPE_CONTRAT_ID']           = 2;
-            $newAvenant['MISSION_ID']                = (int)($avenant['MISSION_ID']?? NULL);;
-            $newAvenant['TYPE_SERVICE_ID']           = (int)($avenant['TYPE_SERVICE_ID']?? NULL);;
+            $newAvenant['EDITE']           = 0;
+            $newAvenant['SIGNE']           = 0;
+            $newAvenant['TERMINE']         = 0;
+            $newAvenant['TYPE_CONTRAT_ID'] = 2;
+            $newAvenant['MISSION_ID']      = (int)($avenant['MISSION_ID'] ?? NULL);;
+            $newAvenant['TYPE_SERVICE_ID'] = (int)($avenant['TYPE_SERVICE_ID'] ?? NULL);;
             $newAvenant['AUTRES']                    = 0;
             $newAvenant['AUTRE_LIBELLE']             = NULL;
             $newAvenant['CM']                        = 0;

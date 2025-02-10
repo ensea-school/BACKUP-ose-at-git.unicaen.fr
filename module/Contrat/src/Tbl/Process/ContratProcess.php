@@ -422,8 +422,8 @@ WHERE
             $newAvenant['SIGNE']           = 0;
             $newAvenant['TERMINE']         = 0;
             $newAvenant['TYPE_CONTRAT_ID'] = 2;
-            $newAvenant['MISSION_ID']      = (int)($avenant['MISSION_ID'] ?? NULL);;
-            $newAvenant['TYPE_SERVICE_ID'] = (int)($avenant['TYPE_SERVICE_ID'] ?? NULL);;
+            $newAvenant['MISSION_ID']      = $avenant['MISSION_ID'] ?  (int)$avenant['MISSION_ID'] :NULL;
+            $newAvenant['TYPE_SERVICE_ID'] = $avenant['TYPE_SERVICE_ID'] ? (int) $avenant['TYPE_SERVICE_ID'] : NULL;
             $newAvenant['AUTRES']                    = 0;
             $newAvenant['AUTRE_LIBELLE']             = NULL;
             $newAvenant['CM']                        = 0;

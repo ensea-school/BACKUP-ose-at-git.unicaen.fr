@@ -349,12 +349,14 @@ class ContratProcess implements ProcessInterface
         contrat c
     JOIN INTERVENANT i ON c.intervenant_id = i.id
     JOIN parametre pm ON pm.nom = 'contrat_mis'
+    JOIN type_contrat tc ON tc.code = 'CONTRAT'
     LEFT JOIN 
         contrat ap ON c.id = ap.contrat_id AND (ap.histo_destruction IS NULL)
     LEFT JOIN
         ($sqlVTblContrat) vtblc ON vtblc.contrat_id = c.id
     WHERE 
         c.histo_destruction IS NULL
+        AND c.type_contrat_id = tc.id        
         /*@INTERVENANT_ID=c.intervenant_id*/
         /*@ANNEE_ID=i.annee_id*/
 ),
@@ -366,7 +368,7 @@ contrats_max_dates AS (
         mission_id_principal,
         intervenant_id,
         annee_id,
-        MAX(COALESCE(date_fin_avenant, date_fin_contrat)) AS max_date_fin_contrat
+        MAX(GREATEST(date_fin_avenant, date_fin_contrat)) AS max_date_fin_contrat
     FROM 
         contrat_et_avenants
     GROUP BY 

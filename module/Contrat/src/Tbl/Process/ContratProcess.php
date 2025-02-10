@@ -77,7 +77,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function init(array $params = [])
+    public function init(array $params = []): void
     {
         $parametres = $this->getServiceParametres();
 
@@ -93,7 +93,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    protected function loadAContractualiser(array $params)
+    protected function loadAContractualiser(array $params): void
     {
         $conn = $this->getServiceBdd()->getEntityManager()->getConnection();
 
@@ -127,7 +127,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function traitement(array $params)
+    public function traitement(array $params): void
     {
 
 
@@ -465,7 +465,7 @@ WHERE
 
 
 
-    private function exporter()
+    private function exporter(): void
     {
         foreach ($this->services as $service) {
 
@@ -516,7 +516,7 @@ WHERE
 
 
 
-    protected function enregistrement(TableauBord $tableauBord, array $params)
+    protected function enregistrement(TableauBord $tableauBord, array $params): void
     {
         // Enregistrement en BDD
         $key = $tableauBord->getOption('key');
@@ -546,7 +546,7 @@ WHERE
 
 
 
-    private function clear()
+    private function clear(): void
     {
         unset($this->services);
         unset($this->tblData);

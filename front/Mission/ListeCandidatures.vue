@@ -12,12 +12,12 @@
                 <th>Composante</th>
                 <th>Etat</th>
                 <th>Date commission</th>
-                <th v-if="canValiderCandidature || canRefuserCandidature">Action</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
             <tr v-if="candidatures.length == 0">
-                <td v-if="canValiderCandidature" colspan="5" style="text-align:center;">Aucune candidature</td>
+                <td  colspan="5" style="text-align:center;">Aucune candidature</td>
 
             </tr>
 
@@ -37,8 +37,8 @@
                     <u-date v-if="candidature.dateCommission" :value="candidature.dateCommission"/>
                 </td>
 
-                <td v-if="this.canValiderCandidature || this.canRefuserCandidature" style="text-align:center;">
-                    <a v-if="!candidature.validation && this.canValiderCandidature"
+                <td style="text-align:center;">
+                    <a v-if="!candidature.validation && candidature.canValider"
                        :href="urlAccepterCandidature(candidature)"
                        class="btn btn-success"
                        data-content="Êtes vous sûr de vouloir accepter cette candidature ?"
@@ -48,7 +48,7 @@
                        @click.prevent="validerCandidature">
                         <i class="fa-solid fa-check"></i>
                     </a>&nbsp;
-                    <a v-if="this.canRefuserCandidature" :href="urlRefuserCandidature(candidature)"
+                    <a v-if="!candidature.motif && candidature.canRefuser" :href="urlRefuserCandidature(candidature)"
                        class="btn btn-danger"
                        data-content="Êtes vous sûr de vouloir refuser cette candidature ?"
                        data-title="Refuser la candidature"
@@ -81,8 +81,6 @@ export default {
     name: "ListeCandidatures.vue",
     props: {
         intervenant: {required: true},
-        canValiderCandidature: {type: Boolean, required: false},
-        canRefuserCandidature: {type: Boolean, required: false},
         renseignerDonneesPersonnelles: {type: Boolean, required: false},
 
     },

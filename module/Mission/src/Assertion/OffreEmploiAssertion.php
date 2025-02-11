@@ -9,6 +9,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
+use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -87,9 +88,10 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
                         return $this->assertOffreEmploiSupprimer($role, $entity);
                 }
             break;
-            case $entity instanceof Intervenant:
+            case $entity instanceof Candidature:
                 switch ($privilege) {
                     case Privileges::MISSION_CANDIDATURE_VALIDER:
+                    case Privileges::MISSION_CANDIDATURE_REFUSER:
                         return $this->assertCandidatureValider($role, $entity);
                 }
             break;
@@ -122,15 +124,18 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             $entity = $this->getMvcEvent()->getParam('volumeHoraireMission');
         }
         if (!$entity) {
+            $entity = $this->getMvcEvent()->getParam('candidature');
+        }
+        if (!$entity) {
             return false;
         }
 
         switch ($action) {
-            case 'candidature':
-                if ($entity instanceof Intervenant){
-                    // à revoir : réorganiser l'assertion
-                    // intégrer le workflow
-                    return $entity->getStatut()->getOffreEmploiPostuler();
+            case 'accepter-candidature':
+            case 'refuser-candidature':
+                if ($entity instanceof Candidature){
+                    $assert = $this->assertCandidatureValider($role, $entity);
+                    return $assert;
                 }
                 break;
         }
@@ -258,14 +263,16 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertCandidatureValider (Role $role, Intervenant $intervenant)
+    protected function assertCandidatureValider (Role $role, Candidature $candidature)
     {
         $codeEtape = WfEtape::CANDIDATURE_VALIDATION;
+        $intervenant = $candidature->getIntervenant();
         $wfEtape   = $this->getServiceWorkflow()->getEtape($codeEtape, $intervenant);
+        $structureOffre = $candidature->getOffre()->getStructure();
 
         return $this->asserts([
             $wfEtape && $wfEtape->isAtteignable(),
-            $this->haveRole(),
+            $this->assertStructure($role, $structureOffre),
         ]);
     }
 

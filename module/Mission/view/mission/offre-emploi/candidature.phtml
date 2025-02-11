@@ -1,17 +1,11 @@
 <?php
 
-use Application\Provider\Privilege\Privileges;
 
 $this->intervenant($intervenant)->renderTitle('Candidature');
-$canValiderCandidature = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
-$canRefuserCandidature = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_REFUSER);
-
 
 echo $this->vue('mission/liste-candidatures', [
 
     'intervenant'                   => $intervenant->getId(),
-    'canValiderCandidature'         => $canValiderCandidature,
-    'canRefuserCandidature'         => $canRefuserCandidature,
     'renseignerDonneesPersonnelles' => $renseignerDonneesPersonnelles,
 ]);
 

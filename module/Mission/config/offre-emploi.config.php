@@ -91,12 +91,14 @@ return [
                     'controller' => OffreEmploiController::class,
                     'action'     => 'accepter-candidature',
                     'privileges' => Privileges::MISSION_CANDIDATURE_VALIDER,
+                    'assertion'  => Assertion\OffreEmploiAssertion::class,
                 ],
                 'refuser-candidature'  => [
                     'route'      => '/refuser-candidature/:candidature',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'refuser-candidature',
                     'privileges' => Privileges::MISSION_CANDIDATURE_REFUSER,
+                    'assertion'  => Assertion\OffreEmploiAssertion::class,
                 ],
 
 
@@ -167,7 +169,6 @@ return [
                 Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
                 Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
                 Privileges::MISSION_CANDIDATURE_VISUALISATION,
-                Privileges::MISSION_CANDIDATURE_VALIDER,
                 Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION,
 
             ],
@@ -179,7 +180,7 @@ return [
                 Privileges::MISSION_CANDIDATURE_VALIDER,
                 Privileges::MISSION_CANDIDATURE_REFUSER,
             ],
-            'resources'  => ['Intervenant'],
+            'resources'  => 'Candidature',
             'assertion'  => Assertion\OffreEmploiAssertion::class,
         ],
 

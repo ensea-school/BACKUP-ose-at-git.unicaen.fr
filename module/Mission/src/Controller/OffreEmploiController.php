@@ -319,10 +319,14 @@ class  OffreEmploiController extends AbstractController
          * @var WorkflowEtape $etapeDonneesPersos
          */
         $intervenant                   = $this->getEvent()->getParam('intervenant');
+        $renseignerDonneesPersonnelles = false;
         $canValiderCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
         $canRefuserCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_REFUSER);
         $etapeDonneesPersos            = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
-        $renseignerDonneesPersonnelles = ($etapeDonneesPersos->getFranchie() == 1) ? false : true;
+        if(!empty($etapeDonneesPersos))
+        {
+            $renseignerDonneesPersonnelles = ($etapeDonneesPersos->getFranchie() == 1) ? false : true;
+        }
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');

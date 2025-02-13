@@ -38,11 +38,10 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     {
         switch ($page['route']) {
             case 'offre-emploi':
-                $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL AND validation_id IS NOT NULL';
-                $conn  = $this->getEntityManager()->getConnection();
-
-                if (false === $conn->executeQuery($query)->fetchOne()) {
-                    // Aucune offre => pas de lien
+            case 'candidature':
+                //Si il n'y a pas d'offre d'emploi alors il ne peut pas y avoir des candidatures
+                if(!$this->canHaveCandidature())
+                {
                     return false;
                 }
 
@@ -137,6 +136,9 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
                     $assert = $this->assertCandidatureValider($role, $entity);
                     return $assert;
                 }
+                break;
+            case 'candidature':
+                return $this->canHaveCandidature();
                 break;
         }
         return true;
@@ -259,6 +261,16 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             $this->haveRole(),
             $this->assertOffreEmploi($role, $offre),
         ]);
+    }
+
+    protected function canHaveCandidature()
+    {
+        $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL AND validation_id IS NOT NULL';
+        $conn  = $this->getEntityManager()->getConnection();
+        if (false === $conn->executeQuery($query)->fetchOne()) {
+            return false;
+        }
+        return true;
     }
 
 

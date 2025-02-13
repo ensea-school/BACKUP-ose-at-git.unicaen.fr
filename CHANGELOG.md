@@ -23,6 +23,7 @@
 * Correction d'un bug lors de la suppression de referentiel fonction (#59691)
 * Correction d'un bug sur la gestion des fonctions referentiels parents (#59063) 
 * Bug sur l'onglet service avec un utilisateur ayant un rôle avec un périmètre composante (#60291)
+* Renforcement pour limiter la validation ou le refus d'une candidature à sa propre composante uniquement (#60566)
 
 
 Corrections de bugs

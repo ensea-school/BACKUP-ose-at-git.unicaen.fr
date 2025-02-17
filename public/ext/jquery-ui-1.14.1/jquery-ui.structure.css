@@ -8,6 +8,9 @@
  *
  * https://api.jqueryui.com/category/theming/
  */
+.ui-sortable-handle {
+	touch-action: none;
+}
 /* Layout helpers
 ----------------------------------*/
 .ui-helper-hidden {

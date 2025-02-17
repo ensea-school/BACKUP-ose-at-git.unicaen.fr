@@ -7,11 +7,10 @@ if ($c->getOption('maintenance') != 'no') {
     $c->getInput();
 }
 
-// Mise à jour du code source
-$oa->run('update-code', false);
 
-// Mise à jour de la base de données à partir d'un nouveau processus
-$oa->run('update-bdd', true);
+$bin = getcwd()."/bin/ose";
+passthru("$bin update-code");
+passthru("$bin update-bdd");
 
 //Conclusion
 $c->println("\nFin de la mise à jour.");

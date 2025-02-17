@@ -460,8 +460,8 @@ class SihamConnecteur implements ConnecteurRhInterface
             $infos['totalHeure'] = str_replace(',', '.', $mission->getHeures());
             //On va chercher la valeur du taux de la mission
             $dateDebutMission = $mission->getDateDebut();
-            $idTauxRemu       = $mission->getTauxRemu()->getId();
-            $valeurTaux       = $this->getServiceTauxRemu()->getTauxRemuValeur($idTauxRemu)->getValeur();
+            $tauxRemu = $mission->getTauxRemu();
+            $valeurTaux = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $dateDebutMission);
             $infos['taux']    = str_replace(',', '.', $valeurTaux);
         }
 

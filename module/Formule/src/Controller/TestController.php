@@ -58,7 +58,7 @@ class TestController extends AbstractController
           lower(fti.libelle || ' ' || f.libelle || ' ' || a.libelle) like :search
         ";
 
-        return Util::tableAjaxData($this->em(), $this->axios()->fromPOst(), $sql);
+        return Util::tableAjaxData($this->em(), $this->axios()->fromPost(), $sql);
     }
 
 

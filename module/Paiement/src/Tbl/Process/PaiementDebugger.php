@@ -19,6 +19,8 @@ use Paiement\Entity\Db\TauxRemu;
 use Paiement\Tbl\Process\Sub\ServiceAPayer;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 
 /**
@@ -365,10 +367,13 @@ class PaiementDebugger
           'Dernière modification par ' || u.display_name || ' le ' || to_char(vhr.histo_modification,'dd/mm/YYYY') histo
         FROM
           formule_resultat_volume_horaire frvh
+          JOIN formule_resultat_intervenant fri ON fri.id = frvh.formule_resultat_intervenant_id
+          JOIN type_volume_horaire tvh ON tvh.id = fri.type_volume_horaire_id AND tvh.code = '".TypeVolumeHoraire::CODE_REALISE."'
+          JOIN etat_volume_horaire evh ON evh.id = fri.etat_volume_horaire_id AND evh.code = '".EtatVolumeHoraire::CODE_VALIDE."'
           JOIN volume_horaire_ref vhr ON vhr.id = frvh.volume_horaire_ref_id
           JOIN utilisateur u ON u.id = vhr.histo_modificateur_id
         WHERE
-          frvh.id = :frsr
+          frvh.service_referentiel_id = :frsr
         ORDER BY
           frvh.id
         ";

@@ -2,21 +2,16 @@
 
 namespace Mission\Service;
 
-use Application\Acl\Role;
+
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Validation;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Contrat\Entity\Db\Contrat;
-use Mission\Assertion\SaisieAssertion;
-use Mission\Entity\Db\Candidature;
+use Contrat\Entity\Db\TblContrat;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\Prime;
-use Mission\Entity\Db\VolumeHoraireMission;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
 
@@ -215,15 +210,15 @@ class PrimeService extends AbstractEntityService
 
         $dql = "
         SELECT 
-          c,m,t
+          tc,m,t
         FROM 
-          " . Contrat::class . " c
-          JOIN c.mission m
+          " . TblContrat::class . " tc
+          JOIN tc.mission m
           JOIN m.typeMission t
         WHERE 
-          c.dateRetourSigne IS NOT NULL
+          tc.signe = 1
           " . dqlAndWhere([
-                'intervenant' => 'c.intervenant',
+                'intervenant' => 'tc.intervenant',
             ], $parameters) . "
         ORDER BY
           m.dateDebut
@@ -231,7 +226,9 @@ class PrimeService extends AbstractEntityService
 
         $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
 
+
         $contrats = $query->getResult();
+
         $missions = [];
 
         foreach ($contrats as $contrat) {

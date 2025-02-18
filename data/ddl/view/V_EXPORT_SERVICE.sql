@@ -115,7 +115,8 @@ SELECT
 
   0                                 heures,
   vhr.heures                        heures_ref,
-  0                                 heures_non_payees,
+  CASE WHEN mnp.id IS NOT NULL
+  THEN 1 ELSE 0 END                 heures_non_payees,
   mnp.libelle_court                 motif_non_paiement,
   t.libelle_court                   tag,
   0                                 service_fi,

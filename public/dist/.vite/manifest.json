@@ -1,18 +1,18 @@
 {
-  "_vendor-KzP7jRq0.js": {
-    "file": "assets/vendor-KzP7jRq0.js",
+  "_vendor-DcfRBLtF.js": {
+    "file": "assets/vendor-DcfRBLtF.js",
     "name": "vendor"
   },
   "main.js": {
-    "file": "assets/main-eCHYcd8Z.js",
+    "file": "assets/main-DFMBTCJ0.js",
     "name": "main",
     "src": "main.js",
     "isEntry": true,
     "imports": [
-      "_vendor-KzP7jRq0.js"
+      "_vendor-DcfRBLtF.js"
     ],
     "css": [
-      "assets/main-kRnov-Gx.css"
+      "assets/main-CloYvy8G.css"
     ]
   }
 }

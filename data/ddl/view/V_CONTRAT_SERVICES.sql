@@ -74,8 +74,8 @@ WITH services AS (
             JOIN fonction_referentiel fr ON fr.id = sr.fonction_id
             JOIN type_volume_horaire tvh ON tvh.id = vhr.type_volume_horaire_id
             JOIN etat_volume_horaire evh ON evh.code = 'valide'
-            JOIN formule_resultat_intervenant fr ON fr.intervenant_id = sr.intervenant_id AND fr.etat_volume_horaire_id = evh.id
-            LEFT JOIN formule_resultat_volume_horaire frvh ON frvh.volume_horaire_ref_id = vhr.id AND frvh.formule_resultat_intervenant_id = fr.id
+            JOIN formule_resultat_intervenant fri ON fri.intervenant_id = sr.intervenant_id AND fri.etat_volume_horaire_id = evh.id
+            LEFT JOIN formule_resultat_volume_horaire frvh ON frvh.volume_horaire_ref_id = vhr.id AND frvh.formule_resultat_intervenant_id = fri.id
             LEFT JOIN contrat c ON c.id = vhr.contrat_id
             LEFT JOIN STRUCTURE str ON sr.structure_id = str.id
         WHERE

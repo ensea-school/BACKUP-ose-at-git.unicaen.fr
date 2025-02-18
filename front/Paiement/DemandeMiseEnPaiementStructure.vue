@@ -80,8 +80,8 @@
                     <div v-for="(enseignement,codeEnseignement) in etape.enseignements">
                         <div class="cartridge gray bordered" style="padding-bottom: 5px">
                             <span>Enseignement</span>
-                            <span v-html="shorten(etape.libelle, 50)"></span>
-                            <span>{{ enseignement.libelle }}</span>
+                            <span v-html="codeEtape +  ' - ' + shorten(etape.libelle, 50)"></span>
+                            <span>{{ codeEnseignement + ' - ' + enseignement.libelle }}</span>
                         </div>
                         <div class="container">
                             <div class="row">
@@ -231,7 +231,7 @@
                 <div v-for="(fonction, codeFonction) in datas.fonctionsReferentiels">
                     <div class="cartridge gray bordered" style="padding-bottom: 5px">
                         <span>Référentiel</span>
-                        <span>{{ fonction.libelle }}</span>
+                        <span>{{codeFonction + ' - ' + fonction.libelle }}</span>
                     </div>
                     <div class="container">
                         <div class="row">

@@ -179,6 +179,13 @@ class PaiementProcess implements ProcessInterface
         while ($lap = $aPayerStmt->fetchAssociative()) {
             $this->loadLigneAPayer($lap);
         }
+
+        foreach($this->services as $sk => $serviceAPayer) {
+            $serviceAPayer->heures = 0;
+            foreach( $serviceAPayer->lignesAPayer as $lap ){
+                $serviceAPayer->heures += $lap->heuresAA + $lap->heuresAC;
+            }
+        }
     }
 
 
@@ -202,12 +209,7 @@ class PaiementProcess implements ProcessInterface
         $lap->pourcAA    = $this->repartiteur->fromBdd($data);
         $lap->fromBdd($data);
         if (!array_key_exists($lapKey, $this->services[$key]->lignesAPayer)) {
-
             $this->services[$key]->lignesAPayer[$lapKey] = $lap;
-        }else{
-            $olap = &$this->services[$key]->lignesAPayer[$lapKey];
-            $olap->heuresAA += $lap->heuresAA;
-            $olap->heuresAC += $lap->heuresAC;
         }
 
         if ($mepKey > 0 && !array_key_exists($mepKey, $this->services[$key]->misesEnPaiement)) {

@@ -87,9 +87,12 @@ class AnneeService extends AbstractEntityService
     /**
      * @return array|Annee[]
      */
-    public function getActives(): array
+    public function getActives(bool $desc = false): array
     {
         $dql = "SELECT a FROM ".Annee::class." a WHERE a.active = 1 ORDER BY a.id";
+        if ($desc){
+            $dql .= " DESC";
+        }
 
         $query = $this->getEntityManager()->createQuery($dql);
 

@@ -1523,7 +1523,6 @@ return [
         'VOLUME_HORAIRE_ID',
         'VOLUME_HORAIRE_MISSION_ID',
         'VOLUME_HORAIRE_REF_ID',
-        'NBVH',
         'TERMINE',
     ],
     'TBL_DMEP_LIQUIDATION'                => [
@@ -2567,6 +2566,8 @@ return [
         'CORPS',
         'MOTS_CLEFS',
         'LOG',
+        'ATTACHMENT_PATHS',
+        'COPIES',
     ],
     'JOUR_FERIE'                          => [
         'ID',
@@ -2702,12 +2703,13 @@ return [
         'DATECREATED',
         'LASTUPDATE',
         'SIGNATUREFLOW_ID',
+        'LABEL',
     ],
     'UNICAEN_SIGNATURE_PROCESS_STEP'      => [
         'ID',
         'PROCESS_ID',
         'SIGNATURE_ID',
-        'SIGNATUREFLOWSTEP_ID',
+        'LABEL',
     ],
     'UNICAEN_SIGNATURE_RECIPIENT'         => [
         'ID',

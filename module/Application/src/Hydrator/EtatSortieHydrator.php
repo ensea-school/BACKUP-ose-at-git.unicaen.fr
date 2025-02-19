@@ -29,9 +29,12 @@ class EtatSortieHydrator implements HydratorInterface
         $object->setCsvTraitement($data['csv-traitement']);
         $object->setAutoBreak($data['auto-break'] === 'true');
         $object->setRequete($data['requete']);
-        $object->setSignatureActivation($data['signatureActivation']);
-        $signatureFlow        = $this->getServiceSignatureFlow()->get($data['signatureCircuit']);
-        $object->setSignatureCircuit($signatureFlow);
+        $signatureActivation = isset($data['signatureActivation']) && $data['signatureActivation'];
+        $object->setSignatureActivation($signatureActivation);
+        if (isset($data['signatureCircuit'])) {
+            $signatureFlow = $this->getServiceSignatureFlow()->get($data['signatureCircuit']);
+            $object->setSignatureCircuit($signatureFlow);
+        }
         if (isset($data['fichier']['tmp_name']) && $data['fichier']['tmp_name']) {
             $object->setFichier(file_get_contents($data['fichier']['tmp_name']));
             unlink($data['fichier']['tmp_name']);

@@ -583,8 +583,11 @@ class EtatSortie
 
 
 
-    public function setSignatureActivation(bool $signatureActivation): EtatSortie
+    public function setSignatureActivation(?bool $signatureActivation): EtatSortie
     {
+        if ($signatureActivation == null) {
+            $signatureActivation = false;
+        }
         $this->signatureActivation = $signatureActivation;
 
         return $this;

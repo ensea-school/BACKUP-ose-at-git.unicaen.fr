@@ -3,6 +3,7 @@
 namespace Application\Hydrator;
 
 
+use Application\Entity\Db\EtatSortie;
 use Laminas\Hydrator\HydratorInterface;
 use Signature\Service\SignatureFlowService;
 use Signature\Service\SignatureFlowServiceAwareTrait;

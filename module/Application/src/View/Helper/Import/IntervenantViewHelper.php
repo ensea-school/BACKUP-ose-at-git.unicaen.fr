@@ -30,7 +30,7 @@ class IntervenantViewHelper extends DifferentielLigne
                 $this->ligne->get('ANNEE_ID') . '-' . ($this->ligne->get('ANNEE_ID') + 1)
             );
         } else {
-            $entity = $this->ligne->getEntity();
+            $entity = $this->ligne->getEntity(Intervenant::class);
 
             /* @var $entity Intervenant */
             return sprintf(

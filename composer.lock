@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f8edc2714f74ed7fca3e6e1e0d5d974",
+    "content-hash": "9accc3996ab03b6d67f9cb6c27b04cef",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7644,11 +7644,11 @@
         },
         {
             "name": "unicaen/import",
-            "version": "6.0.5",
+            "version": "6.0.6",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "8c3deaf69891cdefe7984139a9c8320c286654ce"
+                "reference": "f638f0edc86c4803ec45e67ea66ddc3f3080be0e"
             },
             "require": {
                 "symfony/console": "^4.4|^5.4|^6.0|^7.0",
@@ -7667,7 +7667,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2025-01-09T13:06:16+00:00"
+            "time": "2025-02-20T14:50:17+00:00"
         },
         {
             "name": "unicaen/mail",

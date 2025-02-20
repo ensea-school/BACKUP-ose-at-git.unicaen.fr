@@ -46,7 +46,9 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
                 <div class="input-group cold-md-6 readonly">
                     <?php
                     if (!empty($dossierIdentiteComplementaire->get('dateNaissance')->getValue())) {
-                        echo ($viewIdentite) ? $dossierIdentiteComplementaire->get('dateNaissance')->getValue() : '**/**/****';
+                        $dateNaissance = $dossierIdentiteComplementaire->get('dateNaissance')->getValue();
+                        $dateNaissanceFormatted = DateTime::createFromFormat('Y-m-d',$dateNaissance)->format('d/m/Y');
+                        echo ($viewIdentite) ? $dateNaissanceFormatted : '**/**/****';
                     }
                     ?>
                 </div>

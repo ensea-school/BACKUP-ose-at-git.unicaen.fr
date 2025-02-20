@@ -31,7 +31,7 @@ FROM
             volume_horaire            vh
        JOIN parametre                  p ON p.nom = 'structure_univ'
        JOIN service                    s ON s.id = vh.service_id
-       JOIN intervenant                i ON i.id = s.intervenant_id AND i.histo_destruction IS NULL
+       JOIN intervenant                i ON i.id = s.intervenant_id
        JOIN statut                    si ON si.id = i.statut_id
        JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
        JOIN v_vol_horaire_etat_multi vhe ON vhe.volume_horaire_id = vh.id
@@ -115,7 +115,7 @@ FROM
             volume_horaire_ref            vhr
        JOIN parametre                       p ON p.nom = 'structure_univ'
        JOIN service_referentiel            sr ON sr.id = vhr.service_referentiel_id
-       JOIN intervenant                     i ON i.id = sr.intervenant_id AND i.histo_destruction IS NULL
+       JOIN intervenant                     i ON i.id = sr.intervenant_id
        JOIN statut                         si ON si.id = i.statut_id
        JOIN v_vol_horaire_ref_etat_multi vher ON vher.volume_horaire_ref_id = vhr.id
        JOIN etat_volume_horaire           evh ON evh.id = vher.etat_volume_horaire_id

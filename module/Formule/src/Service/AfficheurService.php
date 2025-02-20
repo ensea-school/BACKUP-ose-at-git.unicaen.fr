@@ -93,17 +93,25 @@ class AfficheurService
 
         if (count($types) > 1) {
             $types[] = 'total';
-            foreach ($data['heures'] as $categorie => $null) {
-                $data['heures'][$categorie]['total'] = $fr->getHeures($categorie);
+            foreach ($data['heures'] as $categorie => $values) {
+                foreach($values as $type => $heures){
+                    if(!array_key_exists('total',$data['heures'][$categorie])){
+                        $data['heures'][$categorie]['total'] = 0;
+                    }
+                    if($type != 'total')
+                    {
+                        $data['heures'][$categorie]['total'] += $heures;
+                    }
+                }
             }
         }
 
         if (count($data['heures']) > 1) {
             $data['heures']['total'] = array_fill_keys($types, 0.0);
             foreach ($data['heures'] as $categorie => $ht) {
-                if ('primes' !== $categorie) {
+                if ('primes' !== $categorie && 'total' !== $categorie) {
                     foreach ($types as $type) {
-                        $data['heures']['total'][$type] += $ht[$type];
+                            $data['heures']['total'][$type] += $ht[$type];
                     }
                 }
             }

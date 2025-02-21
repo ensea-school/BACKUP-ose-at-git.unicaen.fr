@@ -1,6 +1,6 @@
 CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
-  SELECT contrat_id, SUM(heures) "serviceTotal", SUM("hetd") "hetdContrat" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
+  SELECT contrat_id, SUM(heures) "serviceTotal", SUM(hetd) "hetdContrat" FROM tbl_contrat GROUP BY contrat_id
 ),
 la AS(
    SELECT
@@ -39,7 +39,7 @@ lm AS(
     )
     GROUP BY contrat_id
 )
-SELECT ct.annee_id,
+SELECT DISTINCT ct.annee_id,
        ct.structure_id,
        ct.intervenant_id,
        ct.formule_resultat_id,

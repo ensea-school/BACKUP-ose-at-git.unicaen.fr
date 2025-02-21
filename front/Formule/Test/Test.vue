@@ -447,14 +447,14 @@
                 <td>
                     <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
                         <u-input-float v-model="vh.tauxFa" is-pourc class="dinput" :data-variable="l"
-                                       @change="majTauxFi" style="width:3em"/>
+                                       @change="majTauxFi" @click="majTauxFi" style="width:3em"/>
                         <span class="pourc">%</span>
                     </div>
                 </td>
                 <td>
                     <div v-show="!['', null, 'Référentiel'].includes(vh.typeInterventionCode)">
                         <u-input-float v-model="vh.tauxFc" is-pourc class="dinput" :data-variable="l"
-                                       @change="majTauxFi" style="width:3em"/>
+                                       @change="majTauxFi" @click="majTauxFi" style="width:3em"/>
                         <span class="pourc">%</span>
                     </div>
                 </td>
@@ -806,7 +806,6 @@ export default {
                 content += (vh.structureCode ? vh.structureCode : '') + ";"
                     + (vh.nonPayable ? 'Oui' : 'Non') + ";"
                     + (vh.serviceStatutaire ? 'Oui' : 'Non') + ";"
-                    + (vh.nonPayable ? 'Oui' : 'Non') + ";"
                     + (vh.referentiel ? 'Référentiel' : (vh.typeInterventionCode ? vh.typeInterventionCode : '')) + ";"
                     + (vh.tauxFi ? vh.tauxFi.toLocaleString('fr-FR') : '') + ";"
                     + (vh.tauxFa ? vh.tauxFa.toLocaleString('fr-FR') : '') + ";"

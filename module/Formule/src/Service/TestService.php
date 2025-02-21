@@ -232,6 +232,8 @@ class TestService extends AbstractEntityService
             unset($vh['tauxServiceDu']);
             unset($vh['tauxServiceCompl']);
 
+            $vh['tauxFi'] = round(1 - $vh['tauxFa'] - $vh['tauxFc'],2);
+
             $vhOk = ($vh['structureCode'] ?? null) !== null && ($vh['heures'] ?? null) !== null;
 
             if ($vhOk) {

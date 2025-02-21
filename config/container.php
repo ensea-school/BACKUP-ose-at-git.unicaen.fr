@@ -107,6 +107,8 @@ class AppAdmin
             ini_set('memory_limit', '-1');
         }
 
+        ini_set('precision', 15);
+
         require_once('module/Application/src/functions.php');
 
         /* Définition de la config globale, éventuellement à partir du fichier de config général */

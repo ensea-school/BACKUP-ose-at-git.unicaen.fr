@@ -206,7 +206,7 @@ class  IntervenantController extends AbstractController
      *
      * @param \Intervenant\Entity\Db\Intervenant $intervenant
      *
-     * @return \Application\Controller\IntervenantController
+     * @return IntervenantController
      */
     protected function addIntervenantRecent(Intervenant $intervenant)
     {

@@ -365,7 +365,7 @@ return [
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,
-            'default'     => '1',
+            'default'     => '0',
             'position'    => 65,
             'commentaire' => '1 = arrondisseur en mode complet, 0 en mode minimal (juste sur les volumes horaires/services',
         ],

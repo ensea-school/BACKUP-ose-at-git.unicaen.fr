@@ -131,7 +131,7 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Contrat
      */
-    public function creer(Intervenant $intervenant, $volumeHoraire): Contrat
+    public function creer(Intervenant $intervenant, $volumeHoraire, float $totalHetd): Contrat
     {
         $contrat = $this->getServiceContrat()->newEntity();
         /* @var $contrat Contrat */
@@ -141,7 +141,7 @@ class ContratProcessus extends AbstractProcessus
         $structure = $this->getServiceStructure()->get($volumeHoraire['structureId']);
         $contrat->setStructure($structure);
 
-        $contrat->setTotalHetd($volumeHoraire['hetdTotal']);
+        $contrat->setTotalHetd($totalHetd);
         try {
             $dateDebut = new \DateTime($volumeHoraire['dateDebut']);
 

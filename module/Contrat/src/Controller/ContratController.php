@@ -176,8 +176,13 @@ class ContratController extends AbstractController
         }
 
         $volumeHorairesTotal = $this->getServiceTblContrat()->getVolumeTotalCreationContratByUuid($uuid);
+        if($volumeHorairesTotal['contratParentId'] != null){
+            $totalContratHetd = $this->getServiceTblContrat()->getTotalHetdIntervenant($uuid, $volumeHorairesTotal['contratParentId']);
+        }else{
+            $totalContratHetd = $volumeHorairesTotal['hetdTotal'];
+        }
 
-        $contrat = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal);
+        $contrat = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal, $totalContratHetd);
 
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {

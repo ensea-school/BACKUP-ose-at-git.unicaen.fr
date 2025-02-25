@@ -92,6 +92,27 @@ class TblContratService extends AbstractEntityService
 
 
 
+    public function getTotalHetdIntervenant(string $uuid, ?string $contratParentId): ?array
+    {
+        $em = $this->getEntityManager();
+
+        $sql = 'SELECT SUM(hetd) as hetdTotal
+                FROM tbl_contrat tblc_all 
+                WHERE (tblc_all.contrat_id = :contratParentId 
+                OR tblc_all.contrat_parent_id = :contratParentId)
+                AND (tblc_all.contrat_id IS NOT NULL OR tblc_all.uuid = :uuid)';
+
+
+        $query = $em->createQuery($sql)
+            ->setParameter('uuid', $uuid);
+
+        $result = $query->getOneOrNullResult();
+        return $result['hetdTotal'];
+
+    }
+
+
+
     public function getStructureContractualise(Intervenant $intervenant)
     {
         $em = $this->getEntityManager();

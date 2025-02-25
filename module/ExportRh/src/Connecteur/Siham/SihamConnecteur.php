@@ -210,9 +210,9 @@ class SihamConnecteur implements ConnecteurRhInterface
             /*Recherche de la date d'effet à passer selon enseignement ou mission, si mission on prend la première mission de l'année universitaire
             sinon on prend les dates de début et de fin de l'année universitaire*/
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
+            $dateMission = ($this->siham->getConfig()['contrat']['missionDate'])??'MISSION';
 
-
-            if (!empty($firstMission)) {
+            if (!empty($firstMission) && $dateMission == 'MISSION') {
                 $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
                 $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
             } else {
@@ -236,6 +236,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                  'position'          => $datas['connecteurForm']['position'],
                  'temoinValidite'    => 1,
                 ];
+
 
             /*CONTRAT*/
             //On récupére le nombre d'heures du contrat et le taux horaire appliqué
@@ -524,7 +525,9 @@ class SihamConnecteur implements ConnecteurRhInterface
             sinon on prend les dates de début et de fin de l'année universitaire*/
 
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
-            if (!empty($firstMission)) {
+            $dateMission = ($this->siham->getConfig()['contrat']['missionDate'])??'MISSION';
+
+            if (!empty($firstMission) && $dateMission == 'MISSION') {
                 $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
                 $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
             } else {
@@ -534,8 +537,6 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
 
             /*Formatage du matricule*/
-
-            $matricule = '';
             //On récupére le code RH par le INSEE
             $matricule = $this->trouverCodeRhByInsee($intervenant);
 

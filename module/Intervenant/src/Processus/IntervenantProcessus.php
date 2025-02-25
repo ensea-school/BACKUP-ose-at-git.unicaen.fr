@@ -3,7 +3,6 @@
 namespace Intervenant\Processus;
 
 use Application\Processus\AbstractProcessus;
-use Application\Processus\IntervenantServiceProcessus;
 use Intervenant\Entity\Db\Intervenant;
 
 

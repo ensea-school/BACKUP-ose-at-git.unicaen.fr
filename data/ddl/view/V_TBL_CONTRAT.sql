@@ -109,7 +109,7 @@ SELECT
   CASE WHEN evh.code IN ('contrat-edite','contrat-signe') THEN 1 ELSE 0 END       edite,
   CASE WHEN evh.code IN ('contrat-signe')                 THEN 1 ELSE 0 END       signe,
 
-  c.debut_validite                                                                date_debut,
+  c.debut_validite                                                                    date_debut,
   c.fin_validite                                                                  date_fin,
   c.histo_creation                                                                date_creation,
 
@@ -192,8 +192,8 @@ SELECT
   CASE WHEN evh.code IN ('contrat-edite','contrat-signe') THEN 1 ELSE 0 END       edite,
   CASE WHEN evh.code IN ('contrat-signe')                 THEN 1 ELSE 0 END       signe,
 
-  c.debut_validite                                                                date_debut,
-  c.fin_validite                                                                  date_fin,
+  m.date_debut                                                                  date_debut,
+  m.date_fin                                                                    date_fin,
   c.histo_creation                                                                date_creation,
 
   0                                                                               cm,

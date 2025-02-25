@@ -164,7 +164,7 @@ class ContratProcess implements ProcessInterface
                 $tauxRemuId       = $service['TAUX_REMU_ID'];
                 $tauxRemuMajoreId = isset($service['TAUX_REMU_MAJORE_ID']) ? $service['TAUX_REMU_MAJORE_ID'] : null;
                 if ($service['CONTRAT_ID'] != NULL) {
-                    $date                        = max($service['DATE_DEBUT'], $service['DATE_CREATION']);
+                    $date                        = $service['DATE_DEBUT'] ?? $service['DATE_CREATION'];
                     $tauxRemuValeur              = $this->getServiceTauxRemu()->tauxValeur($tauxRemuId, $date);
                     $service['TAUX_REMU_VALEUR'] = $tauxRemuValeur;
                     $service['TAUX_REMU_DATE']   = $date;
@@ -302,7 +302,7 @@ class ContratProcess implements ProcessInterface
             $contratToTbl['TAUX_REMU_MAJORE_VALEUR'] = NULL;
 
             if ($contratSansHeure['TAUX_REMU_ID'] != NULL) {
-                $date           = max($contratSansHeure['DATE_DEBUT'], $contratSansHeure['DATE_CREATION']);
+                $date           = $contratSansHeure['DATE_DEBUT'] ?? $contratSansHeure['DATE_CREATION'];
                 $tauxRemuValeur = $this->getServiceTauxRemu()->tauxValeur($contratSansHeure['TAUX_REMU_ID'], $date);
 
                 $contratToTbl['TAUX_REMU_DATE']   = $date;

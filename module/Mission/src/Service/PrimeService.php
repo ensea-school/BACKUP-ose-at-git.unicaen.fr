@@ -230,9 +230,20 @@ class PrimeService extends AbstractEntityService
         $contrats = $query->getResult();
 
         $missions = [];
+        $idMissions = [];
 
         foreach ($contrats as $contrat) {
-            $missions[] = $contrat->getMission();
+            $mission = $contrat->getMission();
+            $now = new \DateTime();
+
+            /**
+             * @var Mission $mission
+             */
+            if(!in_array($mission->getId(), $idMissions) && $mission->getDateFin() < $now)
+            {
+                $idMissions[] = $mission->getId();
+                $missions[] = $contrat->getMission();
+            }
         }
 
         return $missions;

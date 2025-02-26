@@ -12,7 +12,7 @@
 ?>
 
 <?= $this->tag('h1', ['class' => 'page-header'])->html($title); ?>
-
+<?php if(!empty($missions)): ?>
 <form action="<?= $this->url('prime/saisie', ['intervenant' => $intervenant->getId(), 'prime' => ($prime) ? $prime->getId() : '']) ?>" method="post">
 
     <?php foreach ($missions as $mission): ?>
@@ -35,3 +35,6 @@
 
     <input type="submit" name="submit" class="btn btn-primary btn-save" value="Enregistrer">
 </form>
+<?php else: ?>
+<div class="text-center" >Aucune mission éligible à une indémnité de fin de contrat</div>
+<?php endif; ?>

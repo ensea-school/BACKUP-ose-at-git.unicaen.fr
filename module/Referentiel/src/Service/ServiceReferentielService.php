@@ -277,7 +277,7 @@ class ServiceReferentielService extends AbstractEntityService
             $entity = $serviceAllreadyExists;
         }
 
-        $this->getEntityManager()->persist($entity);
+        $entity = parent::save($entity);
         foreach ($entity->getVolumeHoraireReferentiel() as $volumeHoraire) {
             if ($volumeHoraire->getRemove()) {
                 $this->getServiceVolumeHoraireReferentiel()->delete($volumeHoraire);

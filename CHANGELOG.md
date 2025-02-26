@@ -24,11 +24,19 @@
 * Correction d'un bug sur la gestion des fonctions referentiels parents (#59063) 
 * Bug sur l'onglet service avec un utilisateur ayant un rôle avec un périmètre composante (#60291)
 * Renforcement pour limiter la validation ou le refus d'une candidature à sa propre composante uniquement (#60566)
-
-
-Corrections de bugs
-
 * Le différentiel s'affiche correctement dans la page d'administration de l'import  (#59394)
+
+## Notes de mise à jour
+
+Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuel rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
+
+`
+#avant
+/usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
+`
+
+`#après
+/chemin_absolu_vers/bin/ose notifier-indicateurs`
 
 Note de mise à jour : penser à modifier l'état de sortie export des services, pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 

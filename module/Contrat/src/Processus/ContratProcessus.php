@@ -131,7 +131,7 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Contrat
      */
-    public function creer(Intervenant $intervenant, $volumeHoraire, float $totalHetd): Contrat
+    public function creer(Intervenant $intervenant, $volumeHoraire): Contrat
     {
         $contrat = $this->getServiceContrat()->newEntity();
         /* @var $contrat Contrat */
@@ -141,9 +141,9 @@ class ContratProcessus extends AbstractProcessus
         $structure = $this->getServiceStructure()->get($volumeHoraire['structureId']);
         $contrat->setStructure($structure);
 
-        $contrat->setTotalHetd($totalHetd);
+        $contrat->setTotalHetd($this->getIntervenantTotalHetd($intervenant));
         try {
-            $dateDebut = new \DateTime($volumeHoraire['dateDebut']);
+            $dateDebut = $volumeHoraire['dateDebut'] ? new \DateTime($volumeHoraire['dateDebut']) : null;
 
         } catch (\Exception $e) {
             $dateDebut = null;
@@ -151,7 +151,7 @@ class ContratProcessus extends AbstractProcessus
         $contrat->setDebutValidite($dateDebut);
 
         try {
-            $dateFin = new \DateTime($volumeHoraire['dateFin']);
+            $dateFin = $volumeHoraire['dateFin'] ? new \DateTime($volumeHoraire['dateFin']) : null;
         } catch (\Exception $e) {
             $dateFin = null;
         }
@@ -169,6 +169,29 @@ class ContratProcessus extends AbstractProcessus
 
 
         return $contrat;
+    }
+
+
+
+    /**
+     * @param Intervenant $intervenant
+     *
+     * @return float
+     */
+    public function getIntervenantTotalHetd(Intervenant $intervenant): float
+    {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
+
+        $sql = "SELECT total FROM formule_resultat_intervenant WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :tvh AND etat_volume_horaire_id = :evh";
+        $params = [
+            'intervenant' => $intervenant->getId(),
+            'tvh' => $typeVolumeHoraire->getId(),
+            'evh' => $etatVolumeHoraire->getId(),
+        ];
+        $hetd = (float)$this->getEntityManager()->getConnection()->fetchOne($sql, $params);
+
+        return $hetd;
     }
 
 

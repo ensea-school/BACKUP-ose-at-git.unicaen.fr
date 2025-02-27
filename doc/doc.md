@@ -14,7 +14,7 @@
 
 [Comment exploiter des données issues de OSE](export.md)
 [Modèle de données dédié à l'export](export-pilotage.md)
-
+[Créer ses propres scripts en s'appuyant sur l'application](scripts.md)
 
 ## Configuration
 

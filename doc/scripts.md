@@ -61,11 +61,6 @@ array(1) {
 // Récupération du container. Ce dernier permet d'accéder à tous les services de l'application
 $container = require dirname(__DIR__).'/bin/loader.php';
 
-// Récupération de la base de données à l'aide du container
-// BddAdmin permet de faire toutes sortes d'opérations sur la base de données
-// Documentation ici de BddAdmin : https://git.unicaen.fr/lib/unicaen/bddadmin
-$bdd = $container->get(Unicaen\BddAdmin\Bdd::class);
-
 // Récupération de l'entityManager Doctrine
 /** @var $entityManager Doctrine\ORM\EntityManager */
 $entityManager = $container->get(Doctrine\ORM\EntityManager::class);

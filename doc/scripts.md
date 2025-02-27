@@ -56,6 +56,8 @@ array(1) {
 ## Exemple 2 : Re-calcul de la feuille de route d'un intervenant
 
 ```php
+<?php
+
 // Récupération du container. Ce dernier permet d'accéder à tous les services de l'application
 $container = require dirname(__DIR__).'/bin/loader.php';
 

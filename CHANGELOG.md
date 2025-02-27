@@ -9,21 +9,21 @@
 ## Nouveautés
 * Nouvelle infrastructure de gestion des formules de calcul
   * Calcul plus rapide de l'ensemble des fiches, avec ajout de jauges pour le suivi d'exécution en ligne de commande
-  * Les tableurs sont tous centralisés dans l'application et accessibles via le menu d'administration (51993) 
-  * Possibilité de téléverser par vous-mêmes vos fichiers tableurs (51994)
-  * Les requêtes d'alimentation en données ainsi que les règles de délégation sont maintenant paramétrables directement dans le fichier tableur (51553)
-  * Prise en compte des heures non payables (23420)
-  * Nouvelle page de détail des calculs plus complète (23421)
-  * Meilleure lisibilité du résumé des heures HETD (23421)
-  * Nouveau dispositif de tests des formules, avec possibilité d'exporter en CSV les données, en plus du format JSON existant (55389)
-* Nouvelle page de demandes de mise en paiement (53922)
-* Signature électronique (support d'Esup Signature pour le moment) (26825)
+  * Les tableurs sont tous centralisés dans l'application et accessibles via le menu d'administration (#51993) 
+  * Possibilité de téléverser par vous-mêmes vos fichiers tableurs (#51994)
+  * Les requêtes d'alimentation en données ainsi que les règles de délégation sont maintenant paramétrables directement dans le fichier tableur (#51553)
+  * Prise en compte des heures non payables (#23420)
+  * Nouvelle page de détail des calculs plus complète (#23421)
+  * Meilleure lisibilité du résumé des heures HETD (#23421)
+  * Nouveau dispositif de tests des formules, avec possibilité d'exporter en CSV les données, en plus du format JSON existant (#55389)
+* Nouvelle page de demandes de mise en paiement (#53922)
+* Signature électronique (support d'Esup Signature pour le moment) (#26825)
 * Paramétrage affiné des codes situation pour l'export siham
-* Nouvelles possibilités de paramétrage des contrats (51241)
-  * Possibilité de contractualiser du référentiel sans heure d'enseignement (38876)
+* Nouvelles possibilités de paramétrage des contrats (#51241)
+  * Possibilité de contractualiser du référentiel sans heure d'enseignement (#38876)
   * Possibilité de créer un contrat de mission sur seule prolongation de fin de date de contrat
   * possibilité de créer des contrats multi-missions
-* [Possibilité de créer vos propres scripts PHP exploitant OSE](/doc/scripts.md)
+* [Possibilité de créer vos propres scripts PHP exploitant OSE](/doc/scripts.md) (#60691)
 
 ## Améliorations
 * Injection de la situation matrimoniale "Célibataire" par défaut pour l'export SIHAM si celle-ci n'est pas renseignée par l'intervenant (#60066)

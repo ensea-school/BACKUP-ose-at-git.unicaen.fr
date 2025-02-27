@@ -18,7 +18,7 @@ Si ce n'est pas le cas, alors vous devrez remplacer dans les exemples ci-dessous
 <?php
 
 // Récupération du container. Ce dernier permet d'accéder à tous les services de l'application
-$container = require dirname(__DIR__).'/bin/loader.php';
+$container = require '/var/www/html/bin/loader.php';
 
 // Récupération de la base de données à l'aide du container
 // BddAdmin permet de faire toutes sortes d'opérations sur la base de données
@@ -59,7 +59,7 @@ array(1) {
 <?php
 
 // Récupération du container. Ce dernier permet d'accéder à tous les services de l'application
-$container = require dirname(__DIR__).'/bin/loader.php';
+$container = require '/var/www/html/bin/loader.php';
 
 // Récupération de l'entityManager Doctrine
 /** @var $entityManager Doctrine\ORM\EntityManager */

@@ -8,23 +8,36 @@
 
 ## Nouveautés
 * Nouvelle infrastructure de gestion des formules de calcul
-* Nouvelle page de demandes de mise en paiement
-* Signature électronique
+  * Calcul plus rapide de l'ensemble des fiches, avec ajout de jauges pour le suivi d'exécution en ligne de commande
+  * Les tableurs sont tous centralisés dans l'application et accessibles via le menu d'administration (51993) 
+  * Possibilité de téléverser par vous-mêmes vos fichiers tableurs (51994)
+  * Les requêtes d'alimentation en données ainsi que les règles de délégation sont maintenant paramétrables directement dans le fichier tableur (51553)
+  * Prise en compte des heures non payables (23420)
+  * Nouvelle page de détail des calculs plus complète (23421)
+  * Meilleure lisibilité du résumé des heures HETD (23421)
+  * Nouveau dispositif de tests des formules, avec possibilité d'exporter en CSV les données, en plus du format JSON existant (55389)
+* Nouvelle page de demandes de mise en paiement (53922)
+* Signature électronique (support d'Esup Signature pour le moment) (26825)
 * Paramétrage affiné des codes situation pour l'export siham
-* Modification du tableau de bord des contrats (TBL_CONTRAT) et du paramètrage des contrats
-* Possibilité de contractualiser du référentiel sans heures d'enseignements
-* Possibilité de créer un contrat de mission sur seul prolongation de fin de date de contrat
-* possibilité de créer des contrats multi-missions
+* Nouvelles possibilités de paramétrage des contrats (51241)
+  * Possibilité de contractualiser du référentiel sans heure d'enseignement (38876)
+  * Possibilité de créer un contrat de mission sur seule prolongation de fin de date de contrat
+  * possibilité de créer des contrats multi-missions
+* [Possibilité de créer vos propres scripts PHP exploitant OSE](/doc/scripts.md)
 
 ## Améliorations
 * Injection de la situation matrimoniale "Célibataire" par défaut pour l'export SIHAM si celle-ci n'est pas renseignée par l'intervenant (#60066)
+* Diverses optimisations rendant l'application plus réactive
+* Optimisation de la base de données : reconstruction des indexs systématique lors de chaque mise à jour
+* Renforcement de la sécurité avec la mise à jour de plusieurs dépendances du projet
+* Nouveau mode en ligne de commande : ./bin/ose vous donne maintenant la liste de toutes commandes possibles
 
 ## Corrections 
-* Correction d'un bug lors de la suppression de referentiel fonction (#59691)
-* Correction d'un bug sur la gestion des fonctions referentiels parents (#59063) 
+* Correction d'un bug lors de la suppression de référentiel fonction (#59691)
+* Correction d'un bug sur la gestion des fonctions référentiels parents (#59063) 
 * Bug sur l'onglet service avec un utilisateur ayant un rôle avec un périmètre composante (#60291)
 * Renforcement pour limiter la validation ou le refus d'une candidature à sa propre composante uniquement (#60566)
-* Le différentiel s'affiche correctement dans la page d'administration de l'import  (#59394)
+* Le différentiel s'affiche correctement dans la page d'administration de l'import (#59394)
 
 ## Notes de mise à jour
 

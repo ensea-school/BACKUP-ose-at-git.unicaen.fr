@@ -111,12 +111,12 @@ class ExportRhController extends AbstractController
                     if ($this->exportRhService->haveToSyncCodeRh()) {
                         $this->getServiceIntervenant()->updateCodeRh($intervenant, $matricule);
                     }
-                    //On met à jour le source code lors de la synchronisauot
+                    //On met à jour le source code lors de la synchronisation
                     if ($this->exportRhService->haveToSyncSource()) {
                         $this->getServiceIntervenant()->updateSource($intervenant);
                     }
                 } else {
-                    $this->flashMessenger()->addErrorMessage('Probleme prise en charge');
+                    $this->flashMessenger()->addErrorMessage('Problème prise en charge');
                 }
             }
         } catch (\Exception $e) {

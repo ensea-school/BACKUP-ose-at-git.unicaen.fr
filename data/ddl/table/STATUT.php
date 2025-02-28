@@ -591,7 +591,7 @@ return [
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
             'scale'       => NULL,
-            'precision'   => 38,
+            'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
             'position'    => 104,

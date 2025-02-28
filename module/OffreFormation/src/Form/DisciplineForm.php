@@ -2,8 +2,8 @@
 
 namespace OffreFormation\Form;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
 /**

@@ -2,11 +2,11 @@
 
 namespace Mission\Assertion;
 
-use Application\Entity\Db\WfEtape;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**

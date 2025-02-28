@@ -2,16 +2,16 @@
 
 namespace Lieu\Entity\Db;
 
-use Intervenant\Entity\Db\Intervenant;
+use Administration\Interfaces\ChampsAutresInterface;
+use Administration\Traits\ChampsAutresTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\AdresseInterface;
 use Lieu\Entity\AdresseTrait;
 use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\DomaineFonctionnel;
-use Parametre\Interface\ChampsAutresInterface;
-use Parametre\Trait\ChampsAutresTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;

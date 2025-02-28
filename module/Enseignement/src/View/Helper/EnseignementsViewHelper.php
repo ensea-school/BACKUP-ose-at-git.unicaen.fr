@@ -2,9 +2,9 @@
 
 namespace Enseignement\View\Helper;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Intervenant\Entity\Db\Intervenant;

@@ -1,0 +1,219 @@
+<?php
+
+/**
+ * @var $this         \Application\View\Renderer\PhpRenderer
+ * @var $form         \Chargens\Form\DifferentielForm
+ * @var $diff         array
+ * @var $avantLibelle string
+ * @var $apresLibelle string
+ */
+
+use Application\Filter\StringFromFloat;
+
+$title    = "Différentiel entre deux exports des charges d'enseignement";
+$uploader = $this->uploader();
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php
+
+
+echo $this->form()->openTag($form);
+
+echo '<div class="row">';
+
+echo '<div class="col-md-6">';
+echo $this->formControlGroup($form->get('avant'));
+echo $this->formControlGroup($form->get('avant-fichier'));
+echo '</div>';
+
+echo '<div class="col-md-6">';
+echo $this->formControlGroup($form->get('apres'));
+echo $this->formControlGroup($form->get('apres-fichier'));
+echo '</div>';
+
+echo '</div>';
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();
+
+?>
+<script type="text/javascript">
+
+    $(function () {
+
+        $("[name='avant'").change(function () {
+            var value = $(this).val();
+            if (value == 'export') {
+                $("[name=avant-fichier").show();
+            } else {
+                $("[name=avant-fichier").hide();
+            }
+        });
+
+        $("[name='apres'").change(function () {
+            var value = $(this).val();
+            if (value == 'export') {
+                $("[name=apres-fichier").show();
+            } else {
+                $("[name=apres-fichier").hide();
+            }
+        });
+
+        $(".diff-details-ep").click(function () {
+            var pb = $(this).parent().parent().parent();
+            var etapeElements = pb.find('.etape-elements');
+
+            if (etapeElements.is(':hidden')) {
+                etapeElements.show();
+                $(this).html('Masquer les éléments <i class="fas fa-arrow-up"></i>');
+            } else {
+                etapeElements.hide();
+                $(this).html('Afficher les éléments <i class="fas fa-arrow-down"></i>');
+            }
+        });
+
+        $("[name='avant'").change();
+        $("[name='apres'").change();
+
+    });
+
+</script>
+<?php
+
+$tks = [
+    'seuil-ouverture'    => 'Seuil d\'ouverture',
+    'seuil-dedoublement' => 'Seuil de dédoublement',
+    'assiduite'          => 'Assiduité',
+    'heures-ens'         => 'Heures d\'enseignement',
+    'groupes'            => 'Groupes',
+    'heures'             => 'Heures',
+    'hetd'               => 'HETD',
+];
+
+$error = (string)$this->messenger()->addCurrentMessagesFromFlashMessenger();
+if ($error) {
+    echo '<br />' . $error;
+} elseif (null === $diff) {
+    echo '<br /><div class="alert alert-warning">Veuillez choisir vos exports de charges d\'enseignement...</div>';
+} elseif (empty($diff)) {
+    echo '<br /><div class="alert alert-info">Il n\'y a aucune différence entre les deux exports de charges</div>';
+} else {
+    echo '<br />';
+    $first = true;
+    echo '<ul class="nav nav-tabs" role="tablist">';
+    foreach ($diff as $dk => $dc) {
+        echo '<li class="nav-item"><button data-bs-toggle="tab" data-bs-target="#composante-' . $dk . '" class="nav-link ' . ($first ? ' active' : '') . '">' . $dc['libelle'] . '</button></li>';
+        $first = false;
+    }
+    echo '</ul>';
+    echo '<div class="tab-content">';
+    $first = true;
+    foreach ($diff as $dk => $dc) {
+        echo '<div class="tab-pane ' . ($first ? ' show active' : '') . '" id="composante-' . $dk . '">';
+        $first = false;
+        echo '<table class="table table-bordered table-sm" style="width:70%">'
+            . '<tr><th style="width:25%">Totaux Heures/HETD</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th><th style="width:25%">Différence</th></tr>'
+            . '<tr>'
+            . '<th>Heures</th>'
+            . '<td>' . StringFromFloat::run($dc['avant']['heures'], false) . '</td>'
+            . '<td>' . StringFromFloat::run($dc['apres']['heures'], false) . '</td>'
+            . '<td>' . StringFromFloat::run($dc['apres']['heures'] - $dc['avant']['heures'], false) . '</td>'
+            . '</tr>'
+            . '<tr>'
+            . '<th>HETD</th>'
+            . '<td>' . StringFromFloat::run($dc['avant']['hetd'], false) . '</td>'
+            . '<td>' . StringFromFloat::run($dc['apres']['hetd'], false) . '</td>'
+            . '<td>' . StringFromFloat::run($dc['apres']['hetd'] - $dc['avant']['hetd'], false) . '</td>'
+            . '</tr>'
+            . '</table>';
+        foreach ($dc['etapes'] as $de) {
+            echo '<div class="card bg-default">';
+            echo '<div class="card-header">';
+            echo '<h5 class="card-title"><span class="label label-default">' . $de['code'] . '</span> ' . $de['libelle'] . '</h5>';
+            echo '</div>';
+            echo '<div class="card-body">';
+            echo '<div class="row">';
+            echo '<div class="col-md-9">';
+            echo '<table class="table table-bordered table-sm">'
+                . '<tr><th style="width:25%">Totaux Heures/HETD</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th><th style="width:25%">Différence</th></tr>'
+                . '<tr>'
+                . '<th>Heures</th>'
+                . '<td>' . StringFromFloat::run($de['avant']['heures'], false) . '</td>'
+                . '<td>' . StringFromFloat::run($de['apres']['heures'], false) . '</td>'
+                . '<td>' . StringFromFloat::run($de['apres']['heures'] - $de['avant']['heures'], false) . '</td>'
+                . '</tr>'
+                . '<tr>'
+                . '<th>HETD</th>'
+                . '<td>' . StringFromFloat::run($de['avant']['hetd'], false) . '</td>'
+                . '<td>' . StringFromFloat::run($de['apres']['hetd'], false) . '</td>'
+                . '<td>' . StringFromFloat::run($de['apres']['hetd'] - $de['avant']['hetd'], false) . '</td>'
+                . '</tr>'
+                . '</table>';
+            echo '</div>';
+            echo '<div class="col-md-3">';
+            echo '<button class="btn btn-info diff-details-ep">Afficher les éléments <i class="fas fa-arrow-down"></i></button>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="etape-elements" style="display:none">';
+            foreach ($de['elements'] as $ep) {
+                $diff = $ep['diff'];
+                echo '<h4><span class="label label-default">' . $ep['code'] . '</span> ' . $ep['libelle'] . '</h4>';
+                echo '<div style="margin-left:2em;">';
+                if (is_array($diff)) {
+                    echo '<table class="table table-bordered table-xs table-hover">';
+                    echo '<tr><th style="width:50%">Différentiel</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th></tr>';
+                    if (isset($diff['effectifs'])) {
+                        echo '<tr><th>Effectifs</th><td></td><td></td></tr>';
+                        foreach ($diff['effectifs'] as $th => $null) {
+                            echo '<tr><th style="padding-left:2em">' . strtoupper($th) . '</th>'
+                                . '<td>' . StringFromFloat::run($ep['avant']['effectifs'][$th], false) . '</td>'
+                                . '<td>' . StringFromFloat::run($ep['apres']['effectifs'][$th], false) . '</td>'
+                                . '</tr>';
+                        }
+                    }
+                    if (isset($diff['ti'])) {
+                        foreach ($diff['ti'] as $ti => $tdata) {
+                            if (is_array($tdata)) {
+                                echo '<tr><th>' . $ti . '</th><td></td><td></td></tr>';
+                                foreach ($tdata as $tk => $null) {
+                                    echo '<tr><th style="padding-left:2em">' . (isset($tks[$tk]) ? $tks[$tk] : $tk) . '</th>'
+                                        . '<td>' . StringFromFloat::run($ep['avant']['ti'][$ti][$tk], false) . '</td>'
+                                        . '<td>' . StringFromFloat::run($ep['apres']['ti'][$ti][$tk], false) . '</td>'
+                                        . '</tr>';
+                                }
+                            } else {
+                                echo '<tr><th>' . $ti . '</th><td colspan="2">';
+                                if ($tdata == 'new') {
+                                    echo '<span class="label label-info">Nouveau type d\'intervention</span>';
+                                } elseif ($tdata == 'old') {
+                                    echo '<span class="badge bg-warning text-dark">Ancien type d\'intervention</span>';
+                                }
+                                echo '</td></tr>';
+                            }
+                        }
+                    }
+                    echo '</table>';
+                } else {
+                    if ($diff == 'new') {
+                        echo '<p class="alert alert-info">Pas de charges pour comparaison dans le premier export </p >';
+                    } elseif ($diff == 'old') {
+                        echo '<p class="alert alert-warning"> Pas de charges pour comparaison dans l\'export le plus récent </p >';
+                    }
+                }
+                echo '</div > ';
+            }
+            echo '</div > ';
+            echo '</div > ';
+            echo '</div > ';
+        }
+        echo '</div > ';
+    }
+    echo '</div > ';
+}
+
+?>
+<a class="btn btn-secondary" href="<?= $this->url('chargens'); ?>">
+    <i class="fas fa-rotate-left" aria-hidden="true"></i>
+    Retour au menu des charges d'enseignement
+</a>

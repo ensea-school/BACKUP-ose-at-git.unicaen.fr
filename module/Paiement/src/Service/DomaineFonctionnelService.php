@@ -3,7 +3,6 @@
 namespace Paiement\Service;
 
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits;
 use Doctrine\ORM\QueryBuilder;
 use Paiement\Entity\Db\DomaineFonctionnel;
 use RuntimeException;
@@ -15,7 +14,7 @@ use RuntimeException;
  */
 class DomaineFonctionnelService extends AbstractEntityService
 {
-    use Traits\ParametresServiceAwareTrait;
+    use \Administration\Service\ParametresServiceAwareTrait;
 
     /**
      * retourne la classe des entités

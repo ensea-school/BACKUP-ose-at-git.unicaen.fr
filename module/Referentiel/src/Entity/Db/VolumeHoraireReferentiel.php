@@ -2,7 +2,6 @@
 
 namespace Referentiel\Entity\Db;
 
-use Application\Entity\Db\Validation;
 use Contrat\Entity\Db\Contrat;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +13,7 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use Workflow\Entity\Db\Validation;
 
 /**
  * VolumeHoraireReferentiel

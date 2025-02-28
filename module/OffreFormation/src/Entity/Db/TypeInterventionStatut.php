@@ -2,8 +2,8 @@
 
 namespace OffreFormation\Entity\Db;
 
-use Application\Interfaces\ParametreEntityInterface;
-use Application\Traits\ParametreEntityTrait;
+use Administration\Interfaces\ParametreEntityInterface;
+use Administration\Traits\ParametreEntityTrait;
 use Intervenant\Entity\Db\StatutAwareTrait;
 use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
 

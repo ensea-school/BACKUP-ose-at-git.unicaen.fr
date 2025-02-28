@@ -9,8 +9,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Form\EditionFormAwareTrait;
@@ -31,6 +29,8 @@ use UnicaenImport\Entity\Differentiel\Query;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 use UnicaenImport\Service\Traits\DifferentielServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
+use Workflow\Service\ValidationServiceAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of IntervenantController

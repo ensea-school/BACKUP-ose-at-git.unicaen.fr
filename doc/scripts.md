@@ -72,8 +72,8 @@ $intervenantId = 1138871;
 /** @var Intervenant\Entity\Db\Intervenant $intervenant */
 $intervenant = $entityManager->find(Intervenant\Entity\Db\Intervenant::class, $intervenantId);
 
-/** @var Application\Service\WorkflowService $serviceWorkflow */
-$serviceWorkflow = $container->get(Application\Service\WorkflowService::class);
+/** @var \Workflow\Service\WorkflowService $serviceWorkflow */
+$serviceWorkflow = $container->get(\Workflow\Service\WorkflowService::class);
 
 // Calcul de la feuille de route complète de l'intervenant
 // [] = pas de tableau de bord listé, donc tout est recalculé

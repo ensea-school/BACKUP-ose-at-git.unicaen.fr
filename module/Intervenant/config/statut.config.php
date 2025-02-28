@@ -3,6 +3,7 @@
 namespace Intervenant;
 
 use Application\Provider\Privilege\Privileges;
+use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 
@@ -89,7 +90,7 @@ return [
 
     'services' => [
         Service\StatutService::class          => Service\StatutServiceFactory::class,
-        Assertion\StatutAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Assertion\StatutAssertion::class      => AssertionFactory::class,
     ],
 
 

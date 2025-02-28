@@ -2,15 +2,15 @@
 
 namespace Application\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Role;
 use Application\Entity\Db\Utilisateur;
-use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use UnicaenApp\Util;
 use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of Utilisateur

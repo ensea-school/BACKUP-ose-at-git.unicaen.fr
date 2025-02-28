@@ -6,7 +6,6 @@ use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
 use Lieu\Entity\Db\Structure;
@@ -24,6 +23,7 @@ use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\RechercheServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of ServiceReferentielController
@@ -81,7 +81,7 @@ class ServiceReferentielController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             \Referentiel\Entity\Db\ServiceReferentiel::class,
             \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
-            \Application\Entity\Db\Validation::class,
+            \Workflow\Entity\Db\Validation::class,
         ]);
     }
 

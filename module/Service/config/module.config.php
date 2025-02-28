@@ -2,7 +2,6 @@
 
 namespace Service;
 
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\CampagneSaisieController;
@@ -10,6 +9,7 @@ use Service\Controller\RegleStructureValidationController;
 use Service\Controller\ServiceController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
+use Workflow\Entity\Db\WfEtape;
 
 
 return [

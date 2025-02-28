@@ -2,7 +2,6 @@
 
 namespace Dossier;
 
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Dossier\Assertion\IntervenantDossierAssertion;
 use Dossier\Controller\AutresController;
@@ -25,6 +24,7 @@ use Dossier\Service\EmployeurServiceFactory;
 use Dossier\View\Helper\ValidationViewHelperFactory;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
+use Workflow\Entity\Db\WfEtape;
 
 return [
     'routes' => [

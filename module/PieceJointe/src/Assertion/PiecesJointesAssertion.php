@@ -3,13 +3,13 @@
 namespace PieceJointe\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use PieceJointe\Controller\PieceJointeController;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 

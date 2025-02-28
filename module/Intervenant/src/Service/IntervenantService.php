@@ -6,7 +6,6 @@ use Application\Entity\Db\Annee;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
@@ -15,6 +14,7 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use RuntimeException;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**

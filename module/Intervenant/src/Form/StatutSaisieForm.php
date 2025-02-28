@@ -2,19 +2,14 @@
 
 namespace Intervenant\Form;
 
-use Application\Entity\Db\EtatSortie;
-use Application\Entity\Db\Parametre;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
+use EtatSortie\Entity\Db\EtatSortie;
 use Intervenant\Entity\Db\Statut;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
-use Signature\Service\SignatureFlowServiceAwareTrait;
-use UnicaenApp\Util;
-use UnicaenSignature\Entity\Data\LevelInfo;
-use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>

@@ -3,9 +3,9 @@
 namespace Formule\Service;
 
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Annee;
 use Application\Service\AbstractService;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Doctrine\ORM\EntityRepository;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleResultatIntervenant;

@@ -4,15 +4,15 @@
  * @var $role                         \Application\Entity\Db\Role
  * @var $intervenant                  \Intervenant\Entity\Db\Intervenant
  * @var $intervenantDossier           \Dossier\Entity\Db\IntervenantDossier
- * @var $intervenantDossierValidation \Application\Entity\Db\Validation
+ * @var $intervenantDossierValidation \Workflow\Entity\Db\Validation
  * @var $intervenantDossierStatut     \Intervenant\Entity\Db\Statut
  * @var $fieldsetRules                Array
  * @var $champsAutres                 \Application\Entity\Collection
  */
 
 
-use Application\Entity\Db\WfEtape;
 use Dossier\Assertion\IntervenantDossierAssertion;
+use Workflow\Entity\Db\WfEtape;
 
 $editIdentite  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IDENTITE);
 $editAdresse   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE);

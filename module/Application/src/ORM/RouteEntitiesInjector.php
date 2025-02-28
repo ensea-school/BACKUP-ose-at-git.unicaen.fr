@@ -3,9 +3,9 @@
 namespace Application\ORM;
 
 
+use Administration\Interfaces\ParametreEntityInterface;
 use Agrement\Entity\Db\TypeAgrement;
 use Application\Cache\Traits\CacheContainerTrait;
-use Application\Interfaces\ParametreEntityInterface;
 use Application\ORM\Event\Listeners\ParametreEntityListener;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Service\IntervenantService;

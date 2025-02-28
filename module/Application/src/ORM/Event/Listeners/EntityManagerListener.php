@@ -3,15 +3,9 @@
 namespace Application\ORM\Event\Listeners;
 
 
-use Application\Interfaces\ParametreEntityInterface;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Mapping\PostLoad;
-use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 
 /**

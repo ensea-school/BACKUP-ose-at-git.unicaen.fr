@@ -117,4 +117,4 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
     </script>
 <?php
 
-echo $this->feuilleDeRoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_PJ_VALIDATION);
+echo $this->feuilleDeRoute($intervenant)->renderNav(\Workflow\Entity\Db\WfEtape::CODE_PJ_VALIDATION);

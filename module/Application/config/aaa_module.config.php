@@ -2,7 +2,6 @@
 
 namespace Application;
 
-use Application\Mouchard\MouchardCompleterContextFactory;
 use Application\Service\OseBddAdminFactory;
 use Application\View\Helper\LocalConnectViewHelperFactory;
 use Unicaen\BddAdmin\Bdd;
@@ -122,15 +121,12 @@ $config = [
     ],
     'service_manager'    => [
         'invokables' => [
-            Service\AnneeService::class          => Service\AnneeService::class,
-            Service\LocalContextService::class   => Service\LocalContextService::class,
-            Service\ParametresService::class     => Service\ParametresService::class,
-            Service\SourceService::class         => Service\SourceService::class,
-            Service\AffectationService::class    => Service\AffectationService::class,
-            Service\RoleService::class           => Service\RoleService::class,
-            Service\FichierService::class        => Service\FichierService::class,
-            Service\TypeValidationService::class => Service\TypeValidationService::class,
-            Service\ValidationService::class     => Service\ValidationService::class,
+            Service\AnneeService::class                    => Service\AnneeService::class,
+            Service\LocalContextService::class             => Service\LocalContextService::class,
+            Service\SourceService::class                   => Service\SourceService::class,
+            Service\AffectationService::class              => Service\AffectationService::class,
+            Service\RoleService::class                     => Service\RoleService::class,
+            Service\FichierService::class                  => Service\FichierService::class,
         ],
         'factories'  => [
             \Laminas\Navigation\Navigation::class                       => Navigation\NavigationFactory::class,
@@ -138,7 +134,6 @@ $config = [
             Provider\Resource\ResourceProvider::class                   => Provider\Resource\ResourceProviderFactory::class,
             Provider\Identity\IdentityProvider::class                   => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class                               => Service\Factory\ContextServiceFactory::class,
-            'MouchardCompleterContext'                                  => MouchardCompleterContextFactory::class,
             \UnicaenPrivilege\Service\Privilege\PrivilegeService::class => Service\Factory\PrivilegeServiceFactory::class,
             Connecteur\LdapConnecteur::class                            => Connecteur\Factory\LdapConnecteurFactory::class,
             Cache\CacheService::class                                   => Cache\Factory\CacheServiceFactory::class,

@@ -2,7 +2,7 @@
 
 namespace Plafond\Traits;
 
-use Application\Traits\ParametreEntityTrait;
+use Administration\Traits\ParametreEntityTrait;
 use Plafond\Entity\Db\PlafondAwareTrait;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Interfaces\PlafondConfigInterface;

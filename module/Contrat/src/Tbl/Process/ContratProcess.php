@@ -3,9 +3,9 @@
 namespace Contrat\Tbl\Process;
 
 
-use Application\Entity\Db\Parametre;
+use Administration\Entity\Db\Parametre;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenTbl\Process\ProcessInterface;

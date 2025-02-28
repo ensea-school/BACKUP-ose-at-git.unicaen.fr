@@ -2,8 +2,8 @@
 
 namespace Mission\Entity\Db;
 
-use Application\Interfaces\ParametreEntityInterface;
-use Application\Traits\ParametreEntityTrait;
+use Administration\Interfaces\ParametreEntityInterface;
+use Administration\Traits\ParametreEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Paiement\Entity\Db\TauxRemu;
 use Plafond\Interfaces\PlafondDataInterface;

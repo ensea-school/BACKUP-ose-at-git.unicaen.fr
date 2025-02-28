@@ -2,11 +2,11 @@
 
 namespace Mission;
 
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Mission\Controller\PrimeController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
+use Workflow\Entity\Db\WfEtape;
 
 
 return [

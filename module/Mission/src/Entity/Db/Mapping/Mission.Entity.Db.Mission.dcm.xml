@@ -41,7 +41,7 @@
         </many-to-many>
 
         <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>
-        <many-to-many field="validations" target-entity="Application\Entity\Db\Validation">
+        <many-to-many field="validations" target-entity="Workflow\Entity\Db\Validation">
             <join-table name="VALIDATION_MISSION">
                 <join-columns>
                     <join-column name="MISSION_ID" referenced-column-name="ID"/>

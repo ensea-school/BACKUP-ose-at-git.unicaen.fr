@@ -37,7 +37,7 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
     private $fichier;
 
     /**
-     * @var \Application\Entity\Db\Validation
+     * @var \Workflow\Entity\Db\Validation
      */
     private $validation;
 
@@ -183,11 +183,11 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set validation
      *
-     * @param \Application\Entity\Db\Validation $validation
+     * @param \Workflow\Entity\Db\Validation $validation
      *
      * @return PieceJointe
      */
-    public function setValidation(\Application\Entity\Db\Validation $validation = null)
+    public function setValidation(\Workflow\Entity\Db\Validation $validation = null)
     {
         $this->validation = $validation;
 
@@ -199,7 +199,7 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get validation
      *
-     * @return \Application\Entity\Db\Validation
+     * @return \Workflow\Entity\Db\Validation
      */
     public function getValidation()
     {

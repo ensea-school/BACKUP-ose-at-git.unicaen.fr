@@ -3,10 +3,7 @@
 namespace PieceJointe\Controller;
 
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Validation;
-use Application\Entity\Db\WfEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Entity\Db\TypeIntervenant;
@@ -27,6 +24,9 @@ use PieceJointe\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Symfony\Component\Mime\Email;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;
+use Workflow\Entity\Db\Validation;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**

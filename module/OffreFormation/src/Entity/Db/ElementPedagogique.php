@@ -2,18 +2,18 @@
 
 namespace OffreFormation\Entity\Db;
 
+use Administration\Interfaces\ChampsAutresInterface;
+use Administration\Traits\ChampsAutresTrait;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\StructureAwareTrait;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
 use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
-use Parametre\Interface\ChampsAutresInterface;
-use Parametre\Trait\ChampsAutresTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
-use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;

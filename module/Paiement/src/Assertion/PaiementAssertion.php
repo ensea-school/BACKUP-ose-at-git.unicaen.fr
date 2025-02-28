@@ -3,11 +3,11 @@
 namespace Paiement\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\WfEtape;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of PaiementAssertion

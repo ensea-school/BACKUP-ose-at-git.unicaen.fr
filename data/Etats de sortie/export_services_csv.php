@@ -1,7 +1,7 @@
 <?php
 /**
  * @return array
- * @var $etatSortie    \Application\Entity\Db\EtatSortie
+ * @var $etatSortie    \EtatSortie\Entity\Db\EtatSortie
  * @var $data          array
  * @var $filtres       array
  * @var $entityManager \Doctrine\ORM\EntityManager

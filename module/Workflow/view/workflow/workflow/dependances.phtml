@@ -1,0 +1,104 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $deps \Workflow\Entity\Db\WfEtapeDep[][]
+ */
+
+$ok = '<i class="fas fa-check text-succes"></i>';
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_EDITION));
+
+?>
+<h1 class="page-header">Workflow : gestion des dépendances</h1>
+<style>
+
+    .dependances {
+        width: 60em;
+        margin-left: 5em;
+    }
+
+    .dependances .attrib {
+        text-align: center;
+        width: 7em;
+    }
+
+    .dependances tr.inactive {
+        opacity: .3;
+        background-color: #eee;
+    }
+
+</style>
+
+<?php foreach ($etapes as $etape): ?>
+    <h2><?= $etape->getLibelleAutres() ?></h2>
+    <div class="dependances">
+        <?php if (isset($deps[$etape->getId()])): ?>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Étape(s) antérieure(s)</th>
+                    <th><abbr
+                                title="Le test ne se fait qu'au sein d'une même composante ou sur des étapes non attachées à des composantes">Locale</abbr>
+                    </th>
+                    <th><abbr title="Franchissement impératif pour toutes les composantes concernées">Intégrale</abbr></th>
+                    <th><abbr title="La dépendance impose à l'étape précédente d'être franchie à plus de 0%">Obligatoire</abbr></th>
+                    <th><abbr title="L'étape peut n'être que partiellement franchie">Partielle</abbr></th>
+                    <th>Intervenant</th>
+                </tr>
+                <?php foreach ($deps[$etape->getId()] as $d): ?>
+                    <tr<?php if (!$d->getActive()) echo ' class="inactive" title="Dépendance désactivée"' ?>>
+                        <td>
+                            <?php if ($canEdit): ?>
+                                <a href="<?= $this->url('workflow/dependances/saisie', ['wfEtapeDep' => $d->getId()]) ?>"
+                                   class="ajax-modal" data-event="dependances-saisie"><i
+                                            class="fas fa-pen-to-square"></i></a>
+                                <a href="<?= $this->url('workflow/dependances/suppression', ['wfEtapeDep' => $d->getId()]) ?>"
+                                   class="ajax-modal" data-event="dependances-suppression"><i class="fas fa-trash-can"></i></a>
+                            <?php endif; ?>
+                            <?= $d->getEtapePrec()->getLibelleAutres() ?>
+                        </td>
+                        <td class="attrib"><?= $d->getLocale() ? $ok : '' ?></td>
+                        <td class="attrib"><?= $d->getIntegrale() ? $ok : '' ?></td>
+                        <td class="attrib"><?= $d->getObligatoire() ? $ok : '' ?></td>
+                        <td class="attrib"><?= $d->getPartielle() ? $ok : '' ?></td>
+                        <td class="attrib"><?= $d->getTypeIntervenant() ? $d->getTypeIntervenant() : 'Tous' ?></td>
+                    </tr>
+
+                <?php endforeach; ?>
+
+
+            </table>
+        <?php else: ?>
+            <div class="alert alert-warning">Pas de dépendance</div>
+        <?php endif; ?>
+        <?php if ($canEdit): ?>
+            <a href="<?= $this->url('workflow/dependances/saisie', [], ['query' => ['etapeSuivante' => $etape->getId()]]) ?>"
+               class="btn btn-primary btn-sm ajax-modal"
+               data-event="dependances-saisie"><i class="fas fa-plus"></i> Ajouter une dépendance</a>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
+<br/>
+<hr/>
+<?php if ($canEdit): ?>
+    <a href="<?= $this->url('workflow/dependances/saisie') ?>" class="btn btn-primary ajax-modal"
+       data-event="dependances-saisie"><i class="fas fa-plus"></i> Ajouter une dépendance</a>
+    <a href="<?= $this->url('workflow/calculer-tout') ?>" class="btn btn-secondary ajax-modal"><i
+                class="fas fa-gears"></i> Recalculer le Workflow</a>
+<?php endif; ?>
+<script type="text/javascript">
+    $(function ()
+    {
+        $("body").on("dependances-saisie", function (event, data)
+        {
+            window.location.reload();
+        });
+
+        $("body").on("dependances-suppression", function (event, data)
+        {
+            window.location.reload();
+        });
+    });
+</script>

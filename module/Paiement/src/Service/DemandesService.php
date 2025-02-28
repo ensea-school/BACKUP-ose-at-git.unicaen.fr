@@ -3,10 +3,8 @@
 namespace Paiement\Service;
 
 
-use Application\Entity\Db\WfEtape;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Service\AbstractService;
-use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
@@ -17,7 +15,8 @@ use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TblPaiement;
 use Referentiel\Entity\Db\ServiceReferentiel;
-use UnicaenVue\View\Model\AxiosModel;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of DemandesService

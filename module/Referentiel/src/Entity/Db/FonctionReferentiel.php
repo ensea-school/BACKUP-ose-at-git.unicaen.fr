@@ -2,16 +2,16 @@
 
 namespace Referentiel\Entity\Db;
 
-use Application\Interfaces\ParametreEntityInterface;
-use Application\Traits\ParametreEntityTrait;
+use Administration\Interfaces\ChampsAutresInterface;
+use Administration\Interfaces\ParametreEntityInterface;
+use Administration\Traits\ChampsAutresTrait;
+use Administration\Traits\ParametreEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityNotFoundException;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\StructureAwareTrait;
 use Paiement\Entity\Db\DomaineFonctionnelAwareTrait;
-use Parametre\Interface\ChampsAutresInterface;
-use Parametre\Trait\ChampsAutresTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;

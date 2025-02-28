@@ -2,11 +2,11 @@
 
 namespace OffreFormation\Controller;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
-use OffreFormation\Form\Traits\DisciplineFormAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use OffreFormation\Entity\Db\Discipline;
+use OffreFormation\Form\Traits\DisciplineFormAwareTrait;
 use OffreFormation\Service\Traits\DisciplineServiceAwareTrait;
 
 

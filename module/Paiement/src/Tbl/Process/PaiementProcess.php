@@ -3,7 +3,7 @@
 namespace Paiement\Tbl\Process;
 
 
-use Application\Service\Traits\ParametresServiceAwareTrait;
+use Administration\Service\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use Paiement\Tbl\Process\Sub\Consolidateur;
 use Paiement\Tbl\Process\Sub\Exporteur;

@@ -2,8 +2,8 @@
 
 namespace Service\Entity\Db;
 
-use Parametre\Interface\ChampsAutresInterface;
-use Parametre\Trait\ChampsAutresTrait;
+use Administration\Interfaces\ChampsAutresInterface;
+use Administration\Traits\ChampsAutresTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

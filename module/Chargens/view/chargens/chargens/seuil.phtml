@@ -1,0 +1,142 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this      \Application\View\Renderer\PhpRenderer
+ * @var $scenario  \Chargens\Entity\Db\Scenario
+ * @var $seuils    array
+ */
+
+$title = "Gestion des seuils de dédoublement";
+
+$this->headTitle()->append($title);
+
+$canEditEtab = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_ETABLISSEMENT_EDITION));
+$canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_COMPOSANTE_EDITION));
+
+?>
+<h1 class="page-header"><?= $title ?></h1>
+
+<div class="chargens-filtre">
+    <label>Scénario : </label>
+    <?= $this->formSelect($filtre->get('scenario')) ?>
+    <button class="btn btn-secondary" type="button" onclick="changeScenario()"><i class="fas fa-square-right"></i> Afficher</button>
+</div>
+<br/>
+
+<?php if ($scenario) {
+    foreach ($seuils['structures'] as $sid => $structure): ?>
+        <div class="card bg-default" style="margin-left:<?= $structure['level']*2 ?>em">
+            <div class="card-header card-header-h3">
+                <h3>
+                    <?= $structure['libelle'] ?>
+                    <span class="float-end" style="font-size:80%" id="heures-<?= $sid ?>"></span>
+                </h3>
+            </div>
+            <table class="table table-hover table-xs table-bordered seuils-dedoublement">
+                <thead>
+                <tr>
+                    <th style="width:30%">Type de formation</th>
+                    <?php foreach ($structure['types-interventions'] as $tiid => $typeIntervention): ?>
+                        <th style="width:10em"
+                            title="<?= $typeIntervention['libelle'] ?>"><?= $typeIntervention['code'] ?></th>
+                    <?php endforeach; ?>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($structure['groupes-type-formations'] as $gtfid => $gtfLibelle): ?>
+                    <tr id="seuil-gtf-<?= $gtfid ?>">
+                        <td><?= $gtfLibelle; ?></td>
+                        <?php foreach ($structure['types-interventions'] as $tiid => $typeIntervention): ?>
+                            <td style="text-align:center">
+                                <?php
+                                /** @var \Chargens\Entity\Db\SeuilCharge $seuil */
+                                $seuil = isset($seuils['seuils'][$sid][$gtfid][$tiid]) ? $seuils['seuils'][$sid][$gtfid][$tiid] : null;
+
+                                if (($sid && $canEditcomp) || (!$sid && $canEditEtab)) {
+                                    $input = new \Laminas\Form\Element\Text('sd-' . $sid . '-' . $gtfid . '-' . $tiid);
+                                    $input->setAttributes([
+                                        'class'                      => 'form-control',
+                                        'onchange'                   => 'changementSeuil(this)',
+                                        'data-structure'             => $sid,
+                                        'data-groupe-type-formation' => $gtfid,
+                                        'data-type-intervention'     => $tiid,
+                                    ]);
+                                    if ($seuil) $input->setValue($seuil->getDedoublement());
+                                    echo $this->formInput($input);
+                                } else {
+                                    if ($seuil) echo $seuil->getDedoublement();
+                                }
+
+                                ?>
+                            </td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endforeach;
+} ?>
+
+<a class="btn btn-secondary" href="<?= $this->url('chargens'); ?>">
+    <i class="fas fa-rotate-left" aria-hidden="true"></i>
+    Retour au menu des charges d'enseignement
+</a>
+<script type="text/javascript" src="<?= $this->basePath('/js/chargens.js') ?>"></script>
+<script>
+
+    function changementSeuil(element)
+    {
+        var params = $(element).data();
+        params.dedoublement = $(element).val();
+
+        $.ajax({
+            type: 'POST',
+            url: "<?= $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>",
+            data: params,
+            success: function () {
+                unicaenVue.flashMessenger.toast("Le nouveau seuil a bien été pris en compte", 'success');
+                seuilCalcHeures();
+            },
+        });
+    }
+
+    function seuilCalcHeures()
+    {
+        $.ajax({
+            type: 'POST',
+            url: "<?= $scenario ? $this->url('chargens/seuil/calc-heures', ['scenario' => $scenario->getId()]) : null ?>",
+            data: {},
+            success: function (data) {
+                for (sid in data) {
+                    $('#heures-' + sid).html(
+                        'Heures (FI) : ' + Formatter.floatToString(data[sid]['heures'])
+                        + '; HETD (FI) : ' + Formatter.floatToString(data[sid]['hetd'])
+                    );
+                }
+            }
+        });
+
+    }
+
+    function changeScenario()
+    {
+        var url = "<?= $this->url('chargens/seuil') ?>";
+
+        location.href = url + '/' + $(".chargens-filtre #scenario").val();
+    }
+
+    $(function ()
+    {
+        $(".chargens-filtre #scenario").change(function ()
+        {
+            changeScenario();
+        });
+
+        seuilCalcHeures();
+    });
+
+</script>
+

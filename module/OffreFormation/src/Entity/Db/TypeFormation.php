@@ -2,10 +2,10 @@
 
 namespace OffreFormation\Entity\Db;
 
+use Administration\Interfaces\ChampsAutresInterface;
+use Administration\Traits\ChampsAutresTrait;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Parametre\Interface\ChampsAutresInterface;
-use Parametre\Trait\ChampsAutresTrait;
 use RuntimeException;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;

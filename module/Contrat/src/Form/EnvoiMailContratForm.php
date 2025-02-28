@@ -2,10 +2,9 @@
 
 namespace Contrat\Form;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
-use Intervenant\Entity\Db\Intervenant;
 use Laminas\Form\Element;
 use Laminas\Form\Element\Csrf;
 

@@ -2,7 +2,7 @@
 
 namespace Formule\Service;
 
-use Application\Service\ParametresService;
+use Administration\Service\ParametresService;
 use Psr\Container\ContainerInterface;
 
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Workflow\Entity\Db\TblWorkflow" table="TBL_WORKFLOW">
+    <id name="id" type="integer" column="ID" />
+    <field name="atteignable" type="boolean" column="ATTEIGNABLE" nullable="false">
+      <options>
+        <option name="comment">Témoin indiquant si l'étape est atteignable ou non</option>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="objectif" type="float" column="OBJECTIF" precision="126" scale="0" nullable="false">
+      <options>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="realisation" type="float" column="REALISATION" precision="126" scale="0" nullable="false">
+      <options>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure" fetch="LAZY">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant" fetch="LAZY">
+      <join-columns>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="etape" target-entity="Workflow\Entity\Db\WfEtape" fetch="LAZY">
+      <join-columns>
+        <join-column name="ETAPE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-many field="etapeDeps" target-entity="Workflow\Entity\Db\WfDepBloquante" mapped-by="tblWorkflow"/>
+  </entity>
+</doctrine-mapping>

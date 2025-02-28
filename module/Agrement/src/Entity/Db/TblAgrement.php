@@ -6,10 +6,10 @@ use Agrement\Entity\Db\Traits\AgrementAwareTrait;
 use Agrement\Entity\Db\Traits\TypeAgrementAwareTrait;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
-use Application\Resource\WorkflowResource;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\StructureAwareTrait;
+use Workflow\Resource\WorkflowResource;
 
 
 class TblAgrement implements ResourceInterface

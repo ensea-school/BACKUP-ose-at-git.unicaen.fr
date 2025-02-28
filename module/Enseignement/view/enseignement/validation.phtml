@@ -2,7 +2,7 @@
 
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
- * @var $validations       \Application\Entity\Db\Validation[]
+ * @var $validations       \Workflow\Entity\Db\Validation[]
  * @var $typeVolumehoraire \Service\Entity\Db\TypeVolumeHoraire
  */
 
@@ -35,6 +35,6 @@ foreach ($wells as $well => $title) {
 
 echo $this->feuilleDeRoute($intervenant)->renderNav(
     $typeVolumeHoraire->isPrevu() ?
-        \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION
-        : \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION_REALISE
+        \Workflow\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION
+        : \Workflow\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION_REALISE
 );

@@ -1,0 +1,75 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+use EtatSortie\Entity\Db\EtatSortie;
+
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $etatsSortie EtatSortie[]
+ */
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_ADMINISTRATION_EDITION));
+
+
+?>
+<h1 class="page-header">États de sortie</h1>
+<?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger() ?>
+<table class="table table-bordered table-sort">
+    <thead>
+    <tr>
+        <th>Code</th>
+        <th>Libellé</th>
+        <th style="width:1%">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($etatsSortie as $etatSortie): ?>
+        <tr>
+            <td><?= $etatSortie->getCode(); ?></td>
+            <td><?= $etatSortie->getLibelle(); ?></td>
+            <td style=" white-space: nowrap">
+                <?php if ($canEdit): ?>
+                    <a href="<?= $this->url('etat-sortie/saisir', ['etatSortie' => $etatSortie->getId()]) ?>">
+                        <i class="fas fa-pencil"></i>
+                    </a>
+                    <a class="pop-ajax"
+                       data-event="type-intervention-saisie"
+                       href="<?= $this->url('etat-sortie/supprimer', ['etatSortie' => $etatSortie->getId()]) ?>"
+                       title="Supprimer l'état de sortie"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <i class="fas fa-trash-can"></i>
+                    </a>
+                <?php endif; ?>&nbsp;
+                <?php if ($etatSortie->hasFichier()) {
+
+                    echo $this->tag('a', [
+                        'class' => 'btn btn-secondary btn-sm',
+                        'href'  => $this->url('etat-sortie/telecharger', ['etatSortie' => $etatSortie->getId()]),
+                    ])->text('Télécharger le modèle');
+
+                    echo $this->tag('a', [
+                        'class' => 'btn btn-secondary btn-sm',
+                        'href'  => $this->url('etat-sortie/generer-pdf', ['etatSortie' => $etatSortie->getId()]),
+                    ])->text('Extraction en PDF');
+                }
+                echo $this->tag('a', [
+                    'class' => 'btn btn-secondary btn-sm',
+                    'href'  => $this->url('etat-sortie/generer-csv', ['etatSortie' => $etatSortie->getId()]),
+                ])->text('Extraction pour tableur (CSV)');
+                ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary" href="<?= $this->url('etat-sortie/saisir') ?>">
+        <i class="fas fa-plus"></i>
+        Ajouter un état de sortie
+    </a>
+<?php endif; ?>

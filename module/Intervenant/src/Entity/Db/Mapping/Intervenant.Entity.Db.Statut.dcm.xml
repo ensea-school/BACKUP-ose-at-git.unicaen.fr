@@ -80,10 +80,10 @@
         <field name="contratVisualisation" type="boolean" column="CONTRAT_VISUALISATION" nullable="false"/>
         <field name="contratDepot" type="boolean" column="CONTRAT_DEPOT" nullable="false"/>
         <field name="contratGeneration" type="boolean" column="CONTRAT_GENERATION" nullable="false"/>
-        <many-to-one field="contratEtatSortie" target-entity="Application\Entity\Db\EtatSortie">
+        <many-to-one field="contratEtatSortie" target-entity="EtatSortie\Entity\Db\EtatSortie">
             <join-column name="CONTRAT_ETAT_SORTIE_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="avenantEtatSortie" target-entity="Application\Entity\Db\EtatSortie">
+        <many-to-one field="avenantEtatSortie" target-entity="EtatSortie\Entity\Db\EtatSortie">
             <join-column name="AVENANT_ETAT_SORTIE_ID" referenced-column-name="ID"/>
         </many-to-one>
 

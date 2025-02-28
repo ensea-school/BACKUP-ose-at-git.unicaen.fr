@@ -2,19 +2,18 @@
 
 namespace Dossier\Entity\Db;
 
+use Administration\Interfaces\ChampsAutresInterface;
+use Administration\Traits\ChampsAutresTrait;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Intervenant\Entity\Db\CiviliteAwareTrait;
-use Intervenant\Entity\Db\SituationMatrimoniale;
-use Intervenant\Entity\Db\SituationMatrimonialeAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\SituationMatrimonialeAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\AdresseInterface;
 use Lieu\Entity\AdresseTrait;
 use Lieu\Entity\Db\Departement;
 use Lieu\Entity\Db\Pays;
-use Parametre\Interface\ChampsAutresInterface;
-use Parametre\Trait\ChampsAutresTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;

@@ -2,8 +2,8 @@
 
 namespace TblContrat;
 
-use Application\Entity\Db\Parametre;
-use Application\Service\ParametresService;
+use Administration\Entity\Db\Parametre;
+use Administration\Service\ParametresService;
 use Contrat\Tbl\Process\ContratProcess;
 use Paiement\Service\TauxRemuService;
 use tests\OseTestCase;

@@ -2,10 +2,10 @@
 
 namespace ExportRh\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Annee;
 use Application\Service\AbstractService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use ExportRh\Entity\IntervenantRHExportParams;
 use Intervenant\Entity\Db\Intervenant;

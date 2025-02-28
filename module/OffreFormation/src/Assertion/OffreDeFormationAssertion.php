@@ -2,11 +2,11 @@
 
 namespace OffreFormation\Assertion;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Acl\Role;
 use Application\Entity\Db\Annee;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\CentreCoutEp;

@@ -2,8 +2,8 @@
 
 namespace Signature\Form;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Laminas\Form\Element\Number;
 use Signature\Hydrator\SignatureFlowStepHydrator;

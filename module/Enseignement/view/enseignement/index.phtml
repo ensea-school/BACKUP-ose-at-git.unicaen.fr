@@ -7,7 +7,7 @@
  * @var $enseignements            Enseignement\Entity\Db\Service[]
  */
 
-use Application\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WfEtape;
 
 if ($typeVolumeHoraire->isPrevu()) {
     $nextEtape = WfEtape::CODE_SERVICE_SAISIE;

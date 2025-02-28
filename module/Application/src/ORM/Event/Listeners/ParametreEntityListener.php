@@ -2,11 +2,10 @@
 
 namespace Application\ORM\Event\Listeners;
 
-use Application\Constants;
+use Administration\Interfaces\ParametreEntityInterface;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Annee;
-use Application\Interfaces\ParametreEntityInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManager;
@@ -14,7 +13,6 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class ParametreEntityListener implements EventSubscriber

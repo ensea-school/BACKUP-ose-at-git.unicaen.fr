@@ -2,7 +2,6 @@
 
 namespace Administration\Migration;
 
-use Application\Entity\Db\Parametre;
 use Unicaen\BddAdmin\Migration\MigrationAction;
 
 class v24FonctionReferentielParent extends MigrationAction

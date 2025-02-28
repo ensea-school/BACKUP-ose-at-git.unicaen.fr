@@ -2,8 +2,8 @@
 
 namespace Lieu\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Lieu\Entity\Db\Pays;
 use UnicaenApp\Util;

@@ -2,9 +2,9 @@
 
 namespace Enseignement\Processus;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Processus\AbstractProcessus;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Service\ServiceServiceAwareTrait;

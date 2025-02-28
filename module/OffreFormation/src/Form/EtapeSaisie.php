@@ -2,10 +2,10 @@
 
 namespace OffreFormation\Form;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\Form\FormInterface;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Form\Element\Structure;

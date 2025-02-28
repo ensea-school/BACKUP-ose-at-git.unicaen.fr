@@ -9,7 +9,6 @@ namespace Application;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\PeriodeService;
 use UnicaenPrivilege\Guard\PrivilegeController;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return [
     'router' => [

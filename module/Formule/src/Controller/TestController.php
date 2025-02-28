@@ -3,10 +3,10 @@
 namespace Formule\Controller;
 
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Annee;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Formule\Entity\Db\Formule;
 use Formule\Model\FormuleCalcul;
 use Formule\Service\FormulatorServiceAwareTrait;

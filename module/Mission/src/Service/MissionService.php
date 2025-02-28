@@ -2,16 +2,10 @@
 
 namespace Mission\Service;
 
-use Application\Acl\Role;
-use Application\Constants;
-use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Contrat\Entity\Db\Contrat;
 use Mission\Assertion\SaisieAssertion;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
@@ -19,6 +13,8 @@ use Mission\Entity\Db\Prime;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
+use Workflow\Service\TypeValidationServiceAwareTrait;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 /**
  * Description of MissionService

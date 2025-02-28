@@ -6,14 +6,14 @@ use Agrement\Entity\Db\Agrement;
 use Agrement\Entity\Db\TblAgrement;
 use Agrement\Entity\Db\TypeAgrement;
 use Application\Acl\Role;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Application\Resource\WorkflowResource;
 use Contrat\Service\TblContratServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Resource\WorkflowResource;
 
 
 /**

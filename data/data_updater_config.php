@@ -56,10 +56,10 @@ return [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',
     ],
-    'WF_ETAPE'                   => [
+    'WORKFLOW_ETAPE'                   => [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',
-        'options' => ['update-ignore-cols' => ['LIBELLE_INTERVENANT', 'LIBELLE_AUTRES']],
+        'options' => ['update-ignore-cols' => ['LIBELLE_INTERVENANT', 'LIBELLE_AUTRES', 'ORDRE']],
     ],
     'TYPE_AGREMENT'              => [
         'actions' => ['install', 'update'],

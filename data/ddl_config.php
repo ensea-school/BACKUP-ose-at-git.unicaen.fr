@@ -9,6 +9,8 @@ return [
             'FORMULE_RESULTAT_SERVICE',
             'FORMULE_RESULTAT_SERVICE_REF',
             'FORMULE_RESULTAT',
+            'WF_ETAPE',
+            'WF_ETAPE_DEP',
         ],
     ],
     'materialized-view' => [
@@ -43,6 +45,7 @@ return [
             'OSE_HISTO',
             'FORMULE_%',
             'OSE_FORMULE',
+            'OSE_WORKFLOW',
         ],
     ],
     'trigger'           => [

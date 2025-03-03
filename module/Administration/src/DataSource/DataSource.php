@@ -412,15 +412,30 @@ class DataSource
 
 
 
-    public function WF_ETAPE()
+    public function WORKFLOW_ETAPE()
     {
+        $pdata      = $this->getBdd()->select('SELECT id, code FROM perimetre');
+        $perimetres = [];
+        foreach ($pdata as $pdatum) {
+            $perimetres[$pdatum['CODE']] = (int)$pdatum['ID'];
+        }
+
         $data   = require 'data/workflow_etapes.php';
         $etapes = [];
         $ordre  = 1;
         foreach ($data as $code => $etape) {
-            $etape['CODE']  = $code;
-            $etape['ORDRE'] = $ordre++ * 10;
-            $etapes[]       = $etape;
+            $edata = [
+                'CODE'                => $code,
+                'ORDRE'               => $ordre++,
+                'PERIMETRE_ID'        => $perimetres[$etape['perimetre']],
+                'DESC_NON_FRANCHIE'   => $etape['desc_non_franchie'] ?? null,
+                'DESC_SANS_OBJECTIF'  => $etape['desc_sans_objectif'] ?? null,
+                'LIBELLE_AUTRES'      => $etape['libelle_autres'],
+                'LIBELLE_INTERVENANT' => $etape['libelle_intervenant'],
+                'ROUTE'               => $etape['route'],
+                'ROUTE_INTERVENANT'   => $etape['libelle_intervenant'],
+            ];
+            $etapes[]              = $edata;
         }
 
         return $etapes;

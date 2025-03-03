@@ -98,7 +98,7 @@ class ContratProcess implements ProcessInterface
             $data          = array_change_key_case($data, CASE_LOWER);
             $intervenantId = (int)$data['intervenant_id'];
             $contratId     = (int)$data['contrat_id'];
-            $uuid          = $this->generateUUID($contratId);
+            $uuid          = $this->generateUUID($intervenantId, $contratId);
             $contrat       = $this->getContrat($intervenantId, $uuid);
             $this->contratHydrateFromDb($contrat, $data);
         }
@@ -114,7 +114,7 @@ class ContratProcess implements ProcessInterface
         $contrat->structureId   = (int)$data['structure_id'] ?: null;
         $parentId               = (int)$data['parent_id'] ?: null;
         if ($parentId) {
-            $uuid            = $this->generateUUID($parentId);
+            $uuid            = $this->generateUUID($contrat->intervenantId, $parentId);
             $contrat->parent = $this->getContrat($contrat->intervenantId, $uuid);
         }
         $contrat->numeroAvenant = (int)$data['numero_avenant'];
@@ -148,9 +148,9 @@ class ContratProcess implements ProcessInterface
             $volumeHoraire = new VolumeHoraire();
             $this->volumeHoraireHydrateFromDb($volumeHoraire, $data);
 
-            $intervenantId = (int)$data['intervenant_id'];
-            $contratId = (int)$data['contrat_id'] ?: null;
-            $uuid = $this->generateUUID($contratId, $volumeHoraire->structureId, $volumeHoraire->missionId);
+            $intervenantId                                              = (int)$data['intervenant_id'];
+            $contratId                                                  = (int)$data['contrat_id'] ?: null;
+            $uuid                                                       = $this->generateUUID($intervenantId, $contratId, $volumeHoraire->structureId, $volumeHoraire->missionId);
             $this->getContrat($intervenantId, $uuid)->volumesHoraires[] = $volumeHoraire;
         }
     }
@@ -180,18 +180,28 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function generateUUID(?int $contratId, ?int $structureId = null, ?int $missionId = null): string
+    public function generateUUID(int $intervenant_id, ?int $contratId, ?int $structureId = null, ?int $missionId = null): string
     {
         if ($contratId) {
             return 'contrat_id_' . $contratId;
         }
 
         if ($missionId != null) {
-            /* à compléter !!! */
-        }else{
-            /* à compléter !!! */
+            switch ($this->parametreMis) {
+                case 'contrat_mis_mission':
+                    return 'mis_mission_' . $intervenant_id . '_' . $missionId;
+                case 'contrat_mis_composante':
+                    return 'mis_structure_' . $intervenant_id . '_' . $structureId;
+                default:
+                    return 'mis_global_' . $intervenant_id;
+            }
+        } else {
+            switch ($this->parametreMis) {
+                case 'contrat_ens_composante':
+                    return 'ens_structure_' . $intervenant_id . '_' . $structureId;
+                default:
+                    return 'ens_global_' . $intervenant_id;
+            }
         }
-
-        return 'TODO';
     }
 }

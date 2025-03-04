@@ -1,6 +1,6 @@
 <?php
 
-namespace Contrat\Tbl\Process\Sub;
+namespace Contrat\Tbl\Process\Model;
 
 class VolumeHoraire
 {

@@ -3,10 +3,12 @@
 namespace Contrat\Tbl\Process;
 
 
+use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Contrat\Tbl\Process\Sub\Contrat;
-use Contrat\Tbl\Process\Sub\VolumeHoraire;
+use Contrat\Tbl\Process\Model\Contrat;
+use Contrat\Tbl\Process\Model\VolumeHoraire;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
@@ -18,6 +20,7 @@ class ContratProcess implements ProcessInterface
     use BddAwareTrait;
     use AnneeServiceAwareTrait;
     use ParametresServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
 
     private string $parametreAvenant;
 
@@ -27,13 +30,16 @@ class ContratProcess implements ProcessInterface
 
     private string $parametreFranchissement;
 
-    private float $parametreTauxRemu = 1.0;
+    private int $parametreTauxRemuId;
 
     private float $parametreTauxCongesPayes = 0.1;
 
+    /** @var array|Contrat[][] */
     private array $intervenants = [];
 
     private array $contrats = [];
+
+    private array $tblData = [];
 
 
 
@@ -48,6 +54,9 @@ class ContratProcess implements ProcessInterface
             $this->init();
             $this->loadContrats($params);
             $this->loadVolumesHoraires($params);
+            $this->traitement();
+            $this->exporter();
+            //$this->enregistrement($tableauBord, $params);
         }
         $tata = 'toto';
     }
@@ -62,7 +71,7 @@ class ContratProcess implements ProcessInterface
         $this->parametreEns             = $parametres->get('contrat_ens');
         $this->parametreMis             = $parametres->get('contrat_mis');
         $this->parametreFranchissement  = $parametres->get('contrat_regle_franchissement');
-        $this->parametreTauxRemu        = (int)$parametres->get('taux-remu');
+        $this->parametreTauxRemuId      = (int)$parametres->get('taux-remu');
         $this->parametreTauxCongesPayes = (float)$parametres->get('taux_conges_payes');
 
         $this->intervenants = [];
@@ -72,26 +81,7 @@ class ContratProcess implements ProcessInterface
 
     protected function loadContrats(array $params): void
     {
-        $sql = "
-        SELECT
-            c.id contrat_id,
-            i.id intervenant_id,
-            c.structure_id,
-            c.contrat_id parent_id,
-            c.numero_avenant,
-            c.debut_validite,
-            c.fin_validite
-        FROM
-            contrat c
-            JOIN intervenant i ON i.id = c.intervenant_id
-            JOIN statut si ON si.id = i.statut_id
-        WHERE
-            c.histo_destruction IS NULL
-            /*@INTERVENANT_ID=i.id*/
-            /*@ANNEE_ID=i.annee_id*/
-            /*@STATUT_ID=i.statut_id*/
-        ";
-
+        $sql    = $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT_CONTRAT');
         $sql    = $this->getServiceBdd()->injectKey($sql, $params);
         $parser = $this->getBdd()->selectEach($sql);
         while ($data = $parser->next()) {
@@ -109,10 +99,12 @@ class ContratProcess implements ProcessInterface
 
     public function contratHydrateFromDb(Contrat $contrat, array $data): void
     {
-        $contrat->id            = (int)$data['contrat_id'];
-        $contrat->intervenantId = (int)$data['intervenant_id'];
-        $contrat->structureId   = (int)$data['structure_id'] ?: null;
-        $parentId               = (int)$data['parent_id'] ?: null;
+        $contrat->actif          = $data['actif'] === '1';
+        $contrat->anneeDateDebut = new \DateTime($data['annee_date_debut']);
+        $contrat->id             = (int)$data['contrat_id'];
+        $contrat->intervenantId  = (int)$data['intervenant_id'];
+        $contrat->structureId    = (int)$data['structure_id'] ?: null;
+        $parentId                = (int)$data['parent_id'] ?: null;
         if ($parentId) {
             $uuid            = $this->generateUUID($contrat->intervenantId, $parentId);
             $contrat->parent = $this->getContrat($contrat->intervenantId, $uuid);
@@ -120,6 +112,11 @@ class ContratProcess implements ProcessInterface
         $contrat->numeroAvenant = (int)$data['numero_avenant'];
         $contrat->debutValidite = $data['debut_validite'] ? new \DateTime($data['debut_validite']) : null;
         $contrat->finValidite   = $data['fin_validite'] ? new \DateTime($data['fin_validite']) : null;
+        $contrat->histoCreation = $data['histo_creation'] ? new \DateTime($data['histo_creation']) : null;
+        $contrat->edite         = $data['edite'] === '1';
+        $contrat->envoye        = $data['envoye'] === '1';
+        $contrat->retourne      = $data['retourne'] === '1';
+        $contrat->signe         = $data['signe'] === '1';
     }
 
 
@@ -131,7 +128,7 @@ class ContratProcess implements ProcessInterface
         }
 
         if (!array_key_exists($uuid, $this->intervenants[$intervenantId])) {
-            $this->intervenants[$intervenantId][$uuid] = new Contrat();
+            $this->intervenants[$intervenantId][$uuid] = new Contrat($uuid);
         }
         return $this->intervenants[$intervenantId][$uuid];
     }
@@ -180,6 +177,136 @@ class ContratProcess implements ProcessInterface
 
 
 
+    public function traitement(): void
+    {
+        foreach ($this->intervenants as $intervenantId => $contrats) {
+            /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
+            foreach ($contrats as $uuid => $contrat) {
+                $this->calculDates($contrat);
+                $this->calculTypeService($contrat);
+                $this->calculStructure($contrat);
+                $this->calculTauxRemu($contrat); // il nous faut le parent_id aussi
+            }
+            $this->calculParentsIds($contrats);
+            $this->calculNumerosAvenants($contrats);
+            $this->calculTotauxHETDs($contrats);
+        }
+    }
+
+
+
+    public function calculDates(Contrat $contrat): void
+    {
+        // les dates devront être not null
+        // rendre not null les dates début & fin
+    }
+
+
+
+    public function calculTypeService(Contrat $contrat): void
+    {
+        if ($contrat->parent && $contrat->parent->isMission) {
+            $contrat->isMission = true;
+            return;
+        }
+
+        $hasMissions = false;
+        $hasEnsRef   = false;
+
+        foreach ($contrat->volumesHoraires as $vh) {
+            if ($vh->missionId) $hasMissions = true;
+            if ($vh->serviceId || $vh->serviceReferentielId) $hasEnsRef = true;
+        }
+
+        if ($hasMissions && $hasEnsRef) {
+            throw new \Exception('Un même contrat ne peut pas mélanger des heures de missions avec des heures d\'enseignement et/ou de référentiel');
+        }
+
+        $contrat->isMission = $hasMissions;
+    }
+
+
+
+    public function calculStructure(Contrat $contrat): void
+    {
+
+    }
+
+
+
+    public function calculTauxRemu(Contrat $contrat): void
+    {
+        if ($contrat->isMission) {
+            /* Dans le cas où le contrat n'a pas d'heures et que c'est une mission, on utilise les taux du parent */
+            if (empty($contrat->volumesHoraires) && $contrat->parent && $contrat->parent->isMission) {
+                $contrat->tauxRemuId       = $contrat->parent->tauxRemuId;
+                $contrat->tauxRemuMajoreId = $contrat->parent->tauxRemuMajoreId;
+            } else {
+                $listeTauxRemu       = [];
+                $listeTauxRemuMajore = [];
+
+                foreach ($contrat->volumesHoraires as $vh) {
+                    $listeTauxRemu[$vh->tauxRemuId]                  = $vh->tauxRemuId;
+                    $listeTauxRemuMajore[$vh->tauxRemuMajoreId ?? 0] = $vh->tauxRemuMajoreId;
+                }
+
+                $countTauxRemu       = count($listeTauxRemu);
+                $countTauxRemuMajore = count($listeTauxRemuMajore);
+
+                if ($countTauxRemu == 1) {
+                    $contrat->tauxRemuId = current($listeTauxRemu);
+                }
+                if ($countTauxRemuMajore == 1) {
+                    $contrat->tauxRemuMajoreId = current($listeTauxRemuMajore);
+                }
+            }
+        }
+
+        if (empty($contrat->tauxRemuId)) {
+            $contrat->tauxRemuId = $this->parametreTauxRemuId;
+        }
+
+        if (empty($contrat->tauxRemuMajoreId)) {
+            $contrat->tauxRemuMajoreId = $contrat->tauxRemuId;
+        }
+
+        $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->anneeDateDebut;
+        $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->tauxRemuDate);
+        $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $contrat->tauxRemuDate);
+    }
+
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     */
+    public function calculParentsIds(array $contrats): void
+    {
+
+    }
+
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     */
+    public function calculNumerosAvenants(array $contrats): void
+    {
+
+    }
+
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     */
+    public function calculTotauxHETDs(array $contrats): void
+    {
+
+    }
+
+
+
     public function generateUUID(int $intervenant_id, ?int $contratId, ?int $structureId = null, ?int $missionId = null): string
     {
         if ($contratId) {
@@ -188,20 +315,70 @@ class ContratProcess implements ProcessInterface
 
         if ($missionId != null) {
             switch ($this->parametreMis) {
-                case 'contrat_mis_mission':
+                case Parametre::CONTRAT_MIS_MISSION:
                     return 'mis_mission_' . $intervenant_id . '_' . $missionId;
-                case 'contrat_mis_composante':
+                case Parametre::CONTRAT_MIS_COMPOSANTE:
                     return 'mis_structure_' . $intervenant_id . '_' . $structureId;
                 default:
                     return 'mis_global_' . $intervenant_id;
             }
         } else {
             switch ($this->parametreMis) {
-                case 'contrat_ens_composante':
+                case Parametre::CONTRAT_ENS_COMPOSANTE:
                     return 'ens_structure_' . $intervenant_id . '_' . $structureId;
                 default:
                     return 'ens_global_' . $intervenant_id;
             }
         }
     }
+
+
+
+    public function extractContratVolumeHoraire(int $intervenantId, Contrat $contrat, VolumeHoraire $vh): array
+    {
+        $data = [];
+
+        /* TODO process data */
+
+        return $data;
+    }
+
+
+
+    public function exporter(): void
+    {
+        $this->tblData = [];
+        foreach ($this->intervenants as $intervenantId => $contrats) {
+            foreach ($contrats as $uuid => $contrat) {
+                foreach ($contrat->volumesHoraires as $volumeHoraire) {
+                    $this->tblData[] = $this->extractContratVolumeHoraire($intervenantId, $contrat, $volumeHoraire);
+                }
+            }
+        }
+    }
+
+
+
+    public function enregistrement(TableauBord $tableauBord, array $params): void
+    {
+
+        // Enregistrement en BDD
+        $key = $tableauBord->getOption('key');
+
+        $table = $this->getBdd()->getTable('TBL_CONTRAT');
+
+//         on force la DDL pour éviter de faire des requêtes en plus
+//        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
+
+        $options = [
+            'where'              => $params,
+            'return-insert-data' => false,
+            'transaction'        => !isset($params['INTERVENANT_ID']),
+        ];
+
+        $table->merge($this->tblData, $key, $options);
+        // on vide pour limiter la conso de RAM
+        $this->tblData = [];
+    }
+
 }

@@ -1,11 +1,17 @@
 <?php
 
-namespace Contrat\Tbl\Process\Sub;
+namespace Contrat\Tbl\Process\Model;
 
 
 class Contrat
 {
+    public bool $actif = false;
+
+    public \DateTime $anneeDateDebut;
+
     public ?int $id = null;
+
+    public bool $isMission = false;
 
     public ?string $uuid = null;
 
@@ -15,40 +21,47 @@ class Contrat
 
     public ?Contrat $parent = null;
 
+//    public array $avenants = [];
+
     public int $numeroAvenant = 0;
 
     public ?\DateTime $debutValidite = null;
 
     public ?\DateTime $finValidite = null;
 
-    public bool $valide = false; // ou edite ?
+    public ?\DateTime $histoCreation = null;
+
+    public bool $edite = false;
 
     public bool $envoye = false;
 
-    public bool $signe = false;
-
     public bool $retourne = false;
+
+    public bool $signe = false;
 
     //public float $hetd = 0.0;
 
     public float $totalHetd = 0.0;
 
-    public ?int $processSignatureId = null;
-
     public ?int $tauxRemuId = null;
 
-    public ?\DateTime $tauxRemuDateEffet = null;
+    public ?\DateTime $tauxRemuDate = null;
 
     public float $tauxRemuValeur = 0.0;
 
     public ?int $tauxRemuMajoreId = null;
-
-    public ?\DateTime $tauxRemuMajoreDateEffet = null;
 
     public float $tauxRemuMajoreValeur = 0.0;
 
 
     /** @var VolumeHoraire[] */
     public array $volumesHoraires = [];
+
+
+
+    public function __construct(string $uuid)
+    {
+        $this->uuid = $uuid;
+    }
 
 }

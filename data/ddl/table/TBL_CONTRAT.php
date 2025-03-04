@@ -285,18 +285,6 @@ return [
             'position'    => 26,
             'commentaire' => NULL,
         ],
-        'TAUX_REMU_MAJORE_DATE'     => [
-            'name'        => 'TAUX_REMU_MAJORE_DATE',
-            'type'        => 'date',
-            'bdd-type'    => 'DATE',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 31,
-            'commentaire' => NULL,
-        ],
         'TAUX_REMU_MAJORE_ID'       => [
             'name'        => 'TAUX_REMU_MAJORE_ID',
             'type'        => 'int',

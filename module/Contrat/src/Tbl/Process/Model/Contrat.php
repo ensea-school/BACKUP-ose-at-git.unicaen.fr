@@ -21,7 +21,7 @@ class Contrat
 
     public ?Contrat $parent = null;
 
-//    public array $avenants = [];
+    public array $avenants = [];
 
     public int $numeroAvenant = 0;
 
@@ -64,4 +64,21 @@ class Contrat
         $this->uuid = $uuid;
     }
 
+
+
+    public function getMissionId(): ?int
+    {
+        $missions = [];
+
+        if (empty($this->volumesHoraires) && $this->parent){
+            // On est dans un contexte de missions, donc pas de contrat sans VHs, donc on a un parent!
+            return $this->parent->getMissionId();
+        }else{
+            $vhs = $this->volumesHoraires;
+        }
+
+        foreach( $this->volumesHoraires as $vh){
+
+        }
+    }
 }

@@ -108,6 +108,7 @@ class ContratProcess implements ProcessInterface
         if ($parentId) {
             $uuid            = $this->generateUUID($contrat->intervenantId, $parentId);
             $contrat->parent = $this->getContrat($contrat->intervenantId, $uuid);
+            $contrat->parent->avenants[] = $contrat;
         }
         $contrat->numeroAvenant = (int)$data['numero_avenant'];
         $contrat->debutValidite = $data['debut_validite'] ? new \DateTime($data['debut_validite']) : null;
@@ -180,14 +181,18 @@ class ContratProcess implements ProcessInterface
     public function traitement(): void
     {
         foreach ($this->intervenants as $intervenantId => $contrats) {
-            /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
             foreach ($contrats as $uuid => $contrat) {
-                $this->calculDates($contrat);
                 $this->calculTypeService($contrat);
                 $this->calculStructure($contrat);
-                $this->calculTauxRemu($contrat); // il nous faut le parent_id aussi
             }
+
             $this->calculParentsIds($contrats);
+
+            /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
+            foreach ($contrats as $uuid => $contrat) {
+                $this->calculTauxRemu($contrat);
+            }
+
             $this->calculNumerosAvenants($contrats);
             $this->calculTotauxHETDs($contrats);
         }
@@ -195,21 +200,8 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function calculDates(Contrat $contrat): void
-    {
-        // les dates devront être not null
-        // rendre not null les dates début & fin
-    }
-
-
-
     public function calculTypeService(Contrat $contrat): void
     {
-        if ($contrat->parent && $contrat->parent->isMission) {
-            $contrat->isMission = true;
-            return;
-        }
-
         $hasMissions = false;
         $hasEnsRef   = false;
 
@@ -222,14 +214,98 @@ class ContratProcess implements ProcessInterface
             throw new \Exception('Un même contrat ne peut pas mélanger des heures de missions avec des heures d\'enseignement et/ou de référentiel');
         }
 
-        $contrat->isMission = $hasMissions;
+        if (!$hasMissions && !$hasEnsRef) {
+            // aucun volume horaire
+            if ($contrat->parent) {
+                // s'il a un parent, c'est qu'on est sur un avenant de modif de date de fin de mission
+                $contrat->isMission = true;
+            } else {
+                // S'il n'a pas de parent, c'est qu'on est sur un contrat d'enseignement/référentiel sans prévisionnel
+                $contrat->isMission = false;
+            }
+        } else {
+            // C'est forcément l'un des 2 selon les volumes horaires...
+            $contrat->isMission = $hasMissions;
+        }
     }
 
 
 
     public function calculStructure(Contrat $contrat): void
     {
+        if ($contrat->id) {
+            // Si le contrat existe déjà, on ne touche à rien et on remonte ce qui avait déjà été décidé avant
+            return;
+        }
 
+        if ($contrat->isMission){
+            if ($this->parametreMis == Parametre::CONTRAT_MIS_GLOBALE){
+                $contrat->structureId = null;
+                return;
+            }
+        }else{
+            if ($this->parametreEns == Parametre::CONTRAT_ENS_GLOBALE){
+                $contrat->structureId = null;
+                return;
+            }
+        }
+
+        $structures = [];
+        foreach($contrat->volumesHoraires as $vh) {
+            $structures[$vh->structureId] = $vh->structureId;
+        }
+
+        if (count($structures) == 1) {
+            $contrat->structureId = current($structures);
+        }else{
+            $contrat->structureId = null;
+        }
+    }
+
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     */
+    public function calculParentsIds(array $contrats): void
+    {
+        if (count($contrats) < 2){
+            // On élague tous les cas simples où il n'y a qu'un document max => c'est forcément un contrat
+            return;
+        }
+
+        $boites = [];
+        foreach( $contrats as $contrat){
+            $bid = $this->contratGetBid($contrat);
+            if (!isset($boites[$bid])){
+                $boites[$bid] = [];
+            }
+            $boites[$bid][] = $contrat;
+        }
+
+    }
+
+
+
+    public function contratGetBid(Contrat $contrat): string
+    {
+        if ($contrat->isMission) {
+            switch ($this->parametreMis) {
+                case Parametre::CONTRAT_MIS_MISSION:
+                    return 'mis_mission_' . $contrat->missionId;
+                case Parametre::CONTRAT_MIS_COMPOSANTE:
+                    return 'mis_structure_' . $structureId;
+                default:
+                    return 'mis_global';
+            }
+        } else {
+            switch ($this->parametreMis) {
+                case Parametre::CONTRAT_ENS_COMPOSANTE:
+                    return 'ens_structure_' . $structureId;
+                default:
+                    return 'ens_global';
+            }
+        }
     }
 
 
@@ -273,16 +349,6 @@ class ContratProcess implements ProcessInterface
         $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->anneeDateDebut;
         $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->tauxRemuDate);
         $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $contrat->tauxRemuDate);
-    }
-
-
-
-    /**
-     * @param array|Contrat[] $contrats
-     */
-    public function calculParentsIds(array $contrats): void
-    {
-
     }
 
 

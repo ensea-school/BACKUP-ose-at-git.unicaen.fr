@@ -1,5 +1,3 @@
-version: '3'
-
 # Ne pas oublier d'ajouter au fichier /etc/hosts :
 # 172.21.0.10 ose-dev.localhost.unicaen.fr
 # 172.21.0.15 ose-test.localhost.unicaen.fr
@@ -69,5 +67,5 @@ services:
 
 networks:
   devnet:
-    external:
-      name: laures
+    name: laures
+    external: true

@@ -235,8 +235,8 @@ class ContratProcess implements ProcessInterface
 
     public function calculStructure(Contrat $contrat): void
     {
-        if ($contrat->id) {
-            // Si le contrat existe déjà, on ne touche à rien et on remonte ce qui avait déjà été décidé avant
+        if ($contrat->id && $contrat->edite == 1) {
+            // Si le contrat existe déjà et a été valider, on ne touche à rien et on remonte ce qui avait déjà été décidé avant, on recalcule pour un projet
             return;
         }
 
@@ -363,7 +363,7 @@ class ContratProcess implements ProcessInterface
     public function calculNumerosAvenants(array $contrats): void
     {
         foreach ($contrats as $contrat) {
-            $this->calculNumeroAvenant($contrat, $contrats);
+            $this->calculNumeroAvenant($contrat);
         }
     }
 
@@ -375,8 +375,8 @@ class ContratProcess implements ProcessInterface
      */
     public function calculNumeroAvenant(Contrat $contrat): void
     {
-        //On connait deja les numéro d'avenant récuperé de la table contrat
-        if (!$contrat->id) {
+        //On connait deja les numéro d'avenant récuperé de la table contrat et on a pas besoin de le recalculer pour les contrat editer (on le fait cependant pour les projets)
+        if ($contrat->id && $contrat->edite == 1) {
             exit;
         }
 
@@ -410,7 +410,7 @@ class ContratProcess implements ProcessInterface
      */
     public function calculTotalHETD(Contrat $contrat): void
     {
-        if ($contrat->id) {
+        if ($contrat->id && $contrat->edite == 1) {
             //Si le contrat exite on recupere le total hetd de la table contrat
             exit;
         }

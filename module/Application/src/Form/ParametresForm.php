@@ -724,7 +724,7 @@ class ParametresForm extends AbstractForm
 
         $this->add([
                        'type'       => 'Select',
-                       'name'       => 'contrat_direct',
+                       'name'       => Parametre::CONTRAT_DIRECT,
                        'options'    => [
                            'label'         => 'Étape facultative de projet de contrat',
                            'value_options' => [
@@ -742,7 +742,7 @@ class ParametresForm extends AbstractForm
                        'type'       => 'Select',
                        'name'       => 'contrat_date',
                        'options'    => [
-                           'label'         => 'Possibilité de saisir la date de retour signé sans ajouté le contrat',
+                           'label'         => 'Possibilité de saisir la date de retour signé sans ajouter le contrat',
                            'value_options' => [
                                PARAMETRE::CONTRAT_DATE => 'La saisie est possible sans contrat',
                                'desactive'             => 'Le contrat est nécessaire pour pouvoir saisir',

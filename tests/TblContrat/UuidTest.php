@@ -13,8 +13,6 @@ final class UuidTest extends TblContratTestCase
                 'contratId'     => 1,    // int|null,
                 'structureId'   => null, // int|null
                 //'missionId'     => null, // int|null
-
-                //'expected' => ,
             ],
         ];
 

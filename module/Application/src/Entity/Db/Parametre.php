@@ -82,7 +82,11 @@ class Parametre implements HistoriqueAwareInterface
     const AVENANT_DESACTIVE = 'avenant_desactive';
 
     const CONTRAT_DIRECT = 'contrat_direct';
-    const CONTRAT_MIS    = 'contrat_mis';
+    // VALEURS AVENANT
+    // CONTRAT_DIRECT = 'contrat_direct';
+    const CONTRAT_DIRECT_DESACTIVE = 'desactive';
+
+    const CONTRAT_MIS = 'contrat_mis';
     // VALEURS CONTRAT_MIS
     const CONTRAT_MIS_COMPOSANTE = 'contrat_mis_composante';
     const CONTRAT_MIS_GLOBALE    = 'contrat_mis_globale';

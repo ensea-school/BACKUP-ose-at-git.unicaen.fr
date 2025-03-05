@@ -8,6 +8,7 @@ SELECT
     c.structure_id,
     c.contrat_id parent_id,
     c.numero_avenant,
+    c.total_hetd,
     c.debut_validite,
     c.fin_validite,
     c.histo_creation,

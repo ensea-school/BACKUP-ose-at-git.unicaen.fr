@@ -106,11 +106,12 @@ class ContratProcess implements ProcessInterface
         $contrat->structureId    = (int)$data['structure_id'] ?: null;
         $parentId                = (int)$data['parent_id'] ?: null;
         if ($parentId) {
-            $uuid            = $this->generateUUID($contrat->intervenantId, $parentId);
-            $contrat->parent = $this->getContrat($contrat->intervenantId, $uuid);
+            $uuid                        = $this->generateUUID($contrat->intervenantId, $parentId);
+            $contrat->parent             = $this->getContrat($contrat->intervenantId, $uuid);
             $contrat->parent->avenants[] = $contrat;
         }
         $contrat->numeroAvenant = (int)$data['numero_avenant'];
+        $contrat->totalHetd     = $data['totalHetd'] != null ? (int)$data['totalHetd'] : null;
         $contrat->debutValidite = $data['debut_validite'] ? new \DateTime($data['debut_validite']) : null;
         $contrat->finValidite   = $data['fin_validite'] ? new \DateTime($data['fin_validite']) : null;
         $contrat->histoCreation = $data['histo_creation'] ? new \DateTime($data['histo_creation']) : null;
@@ -191,10 +192,11 @@ class ContratProcess implements ProcessInterface
             /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
             foreach ($contrats as $uuid => $contrat) {
                 $this->calculTauxRemu($contrat);
+                $this->calculTotalHETD($contrat);
+
             }
 
             $this->calculNumerosAvenants($contrats);
-            $this->calculTotauxHETDs($contrats);
         }
     }
 
@@ -238,26 +240,26 @@ class ContratProcess implements ProcessInterface
             return;
         }
 
-        if ($contrat->isMission){
-            if ($this->parametreMis == Parametre::CONTRAT_MIS_GLOBALE){
+        if ($contrat->isMission) {
+            if ($this->parametreMis == Parametre::CONTRAT_MIS_GLOBALE) {
                 $contrat->structureId = null;
                 return;
             }
-        }else{
-            if ($this->parametreEns == Parametre::CONTRAT_ENS_GLOBALE){
+        } else {
+            if ($this->parametreEns == Parametre::CONTRAT_ENS_GLOBALE) {
                 $contrat->structureId = null;
                 return;
             }
         }
 
         $structures = [];
-        foreach($contrat->volumesHoraires as $vh) {
+        foreach ($contrat->volumesHoraires as $vh) {
             $structures[$vh->structureId] = $vh->structureId;
         }
 
         if (count($structures) == 1) {
             $contrat->structureId = current($structures);
-        }else{
+        } else {
             $contrat->structureId = null;
         }
     }
@@ -269,10 +271,12 @@ class ContratProcess implements ProcessInterface
      */
     public function calculParentsIds(array $contrats): void
     {
-        if (count($contrats) < 2){
+        if (count($contrats) < 2) {
             // On élague tous les cas simples où il n'y a qu'un document max => c'est forcément un contrat
             return;
         }
+
+        //TODO
 
         $boites = [];
         foreach( $contrats as $contrat){
@@ -292,16 +296,16 @@ class ContratProcess implements ProcessInterface
         if ($contrat->isMission) {
             switch ($this->parametreMis) {
                 case Parametre::CONTRAT_MIS_MISSION:
-                    return 'mis_mission_' . $contrat->missionId;
+                    return 'mis_mission_' ;//. $contrat->missionId;
                 case Parametre::CONTRAT_MIS_COMPOSANTE:
-                    return 'mis_structure_' . $structureId;
+                    return 'mis_structure_' ;//. $structureId;
                 default:
                     return 'mis_global';
             }
         } else {
             switch ($this->parametreMis) {
                 case Parametre::CONTRAT_ENS_COMPOSANTE:
-                    return 'ens_structure_' . $structureId;
+                    return 'ens_structure_' ;// . $structureId;
                 default:
                     return 'ens_global';
             }
@@ -358,7 +362,33 @@ class ContratProcess implements ProcessInterface
      */
     public function calculNumerosAvenants(array $contrats): void
     {
+        foreach ($contrats as $contrat) {
+            $this->calculNumeroAvenant($contrat, $contrats);
+        }
+    }
 
+
+
+    /**
+     * @param Contrat         $contrat
+     * @param array|Contrat[] $contrats
+     */
+    public function calculNumeroAvenant(Contrat $contrat): void
+    {
+        //On connait deja les numéro d'avenant récuperé de la table contrat
+        if (!$contrat->id) {
+            exit;
+        }
+
+        //On cherche l'avenant au numéro le plus grand et on incrémente de 1 pour l'avenant suivant
+        $contratNumero = 0;
+        foreach ($contrat->parent->avenants as $contratParser) {
+            //On ne s'interesse qu'au avenant étant deja créer
+            if ($contratParser->id && $contratParser->NumeroAvenant > $contratNumero) {
+                $contratNumero = $contratParser->NumeroAvenant;
+            }
+        }
+        $contrat->numeroAvenant = $contratNumero + 1;
     }
 
 
@@ -368,7 +398,51 @@ class ContratProcess implements ProcessInterface
      */
     public function calculTotauxHETDs(array $contrats): void
     {
+        foreach ($contrats as $contrat) {
+            $this->calculTotalHETD($contrat);
+        }
+    }
 
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     */
+    public function calculTotalHETD(Contrat $contrat): void
+    {
+        if ($contrat->id) {
+            //Si le contrat exite on recupere le total hetd de la table contrat
+            exit;
+        }
+
+        $total = 0;
+        if ($contrat->parent == null) {
+            //s'il n'a pas de parent alors il est un contrat on n'a besoin d'ajouter que ses propres heures
+            foreach ($contrat->volumesHoraires as $vh) {
+                $total += $vh->hetd;
+            }
+        } else {
+            //On ajoute les heures du contrat a contractualisé
+            foreach ($contrat->volumesHoraires as $vh) {
+                $total += $vh->hetd;
+            }
+            // On ajout les heures des autres avenants lié au meme contrat deja contractualisé
+            foreach ($contrat->parent->avenants as $contratParser) {
+                //On ne s'occupe que des avenants deja contractualisé
+                if (!$contratParser->id) {
+                    continue;
+                }
+
+                foreach ($contratParser->volumesHoraires as $vh) {
+                    $total += $vh->hetd;
+                }
+            }
+            //On ajoutes les volumes horaire lié au contrat parent
+            foreach ($contrat->parent->volumesHoraires as $vh) {
+                $total += $vh->hetd;
+            }
+        }
+        $contrat->totalHetd = $total;
     }
 
 

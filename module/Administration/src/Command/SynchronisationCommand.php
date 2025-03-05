@@ -51,7 +51,7 @@ class SynchronisationCommand extends Command
 
             }
             $io->writeln("Lancement du job '" . $job . "'");
-            //$this->getProcessusImport()->syncJob($job);
+            $this->getProcessusImport()->syncJob($job);
             $io->writeln("Fin du job '" . $job . "'");
             //Suppresion du cache des affectations
             $io->writeln("Suppression du cache doctrine des affectations");

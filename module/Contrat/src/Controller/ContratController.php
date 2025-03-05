@@ -348,7 +348,7 @@ class ContratController extends AbstractController
         }
         $canSaisieDateSigne = true;
 
-        $contratDateSansFichierResult = $this->getServiceParametres()->get('contrat_date');
+        $contratDateSansFichierResult = $this->getServiceParametres()->get(Parametre::CONTRAT_DATE);
         $contratDateSansFichier       = ($contratDateSansFichierResult == Parametre::CONTRAT_DATE);
 
         if ($contrat->getDateRetourSigne() != null || $contrat->getFichier()->count() > 0 || $contratDateSansFichier) {
@@ -364,7 +364,7 @@ class ContratController extends AbstractController
             $canSaisieDateSigne = false;
         }
 
-        $contratDateResult = $this->getServiceParametres()->get('contrat_date');
+        $contratDateResult = $this->getServiceParametres()->get(Parametre::CONTRAT_DATE);
         $contratDate       = ($contratDateResult == Parametre::CONTRAT_DATE);
 
         return compact('form', 'done', 'title', 'canSaisieDateSigne', 'contratDate');

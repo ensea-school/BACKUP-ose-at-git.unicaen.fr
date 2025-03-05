@@ -41,7 +41,7 @@
 
 ## Notes de mise à jour
 
-ATTENTION : la version 24 ne peut être installée qu'à partir des versions 23.13 ou supérieures. Pour les versions antérieures, il vous faut préalablement monter en 23.13 minimum.
+**ATTENTION : la version 24 ne peut être installée qu'à partir des versions 23.13 ou supérieures. Pour les versions antérieures, il vous faut préalablement monter en 23.13 minimum.**
 
 Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuel rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
 

@@ -48,17 +48,17 @@ class v24ParametresContrat extends MigrationAction
             $valeurMis     = '';
             $valeurEns     = '';
             switch ($oldAvenant) {
-                case Parametre::OLD_AVENANT_AUTORISE:
+                case 'avenant_autorise':
                     $valeurMis     = Parametre::CONTRAT_MIS_MISSION;
                     $valeurAvenant = Parametre::AVENANT_AUTORISE;
                     $valeurEns     = Parametre::CONTRAT_ENS_COMPOSANTE;
                     break;
-                case Parametre::OLD_AVENANT_STRUCT:
+                case 'avenant_struct':
                     $valeurMis     = Parametre::CONTRAT_MIS_COMPOSANTE;
                     $valeurAvenant = Parametre::AVENANT_AUTORISE;
                     $valeurEns     = Parametre::CONTRAT_ENS_COMPOSANTE;
                     break;
-                case Parametre::OLD_AVENANT_DESACTIVE:
+                case 'avenant_desactive':
                     $valeurMis     = Parametre::CONTRAT_MIS_GLOBALE;
                     $valeurAvenant = Parametre::AVENANT_DESACTIVE;
                     $valeurEns     = Parametre::CONTRAT_ENS_GLOBALE;

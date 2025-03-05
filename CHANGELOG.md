@@ -41,17 +41,18 @@
 
 ## Notes de mise à jour
 
-Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuel rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
+* **ATTENTION : la version 24 ne peut être installée qu'à partir des versions 23.13 ou supérieures. Pour les versions antérieures, il vous faut préalablement monter en 23.13 minimum.**
 
+* Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuelle rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui-ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
 `
 #avant
 /usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
 `
-
 `#après
 /chemin_absolu_vers/bin/ose notifier-indicateurs`
 
-Note de mise à jour : penser à modifier l'état de sortie export des services, pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
+* L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
+Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.
 
 # OSE 23.13 (à venir)
 

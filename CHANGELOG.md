@@ -1,10 +1,10 @@
 # Version stable
 
-[OSE 23.12](#ose-2312-26112024)
+[OSE 23.14](#ose-2314-05032025)
 
 
 
-# OSE 24 (à venir)
+# OSE 24 (fin mars/début avril, version 24.0-beta13 disponible pour préprod)
 
 ## Nouveautés
 * Nouvelle infrastructure de gestion des formules de calcul
@@ -54,7 +54,16 @@
 * L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.
 
-# OSE 23.13 (à venir)
+
+
+# OSE 23.14 (05/03/2025)
+
+## Corrections
+
+* **Faille de sécurité importante corrigée** : un intervenant connecté ayant accès aux contrats téléversés pouvait télécharger les contrats d'autres intervenants
+
+
+# OSE 23.13 (17/02/2025)
 
 ## Corrections
 

@@ -588,15 +588,21 @@ class ContratController extends AbstractController
     public function telechargerFichierAction()
     {
         $contrat = $this->getEvent()->getParam('contrat');
-        /* @var $contrat Contrat */
+        $fichierDemandee = $this->getEvent()->getParam('fichier');
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)) {
             throw new UnAuthorizedException('Vous n\'avez pas de droit de télécharger ce fichier');
         }
 
-        $fichier = $this->getEvent()->getParam('fichier');
+        $fichiersContrat = $contrat->getFichier();
+        foreach ($fichiersContrat as $fichier) {
+            if ($fichier->getId() == $fichierDemandee->getId()) {
+                $this->uploader()->download($fichier);
+            }
+        }
 
-        $this->uploader()->download($fichier);
+        throw new \Exception('Le fichier n\'existe pas ou bien il appartient à un autre intervenant');
+
     }
 
 

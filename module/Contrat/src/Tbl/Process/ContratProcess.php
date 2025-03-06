@@ -408,7 +408,7 @@ class ContratProcess implements ProcessInterface
      * @param array|Contrat[] $contrats
      */
     public function calculTotalHETD(Contrat $contrat): void
-    {
+    {// ne pas prendre en compte les projets amont
         if ($contrat->id && $contrat->edite == 1) {
             //Si le contrat exite on recupere le total hetd de la table contrat
             exit;

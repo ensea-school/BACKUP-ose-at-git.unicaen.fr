@@ -34,25 +34,25 @@ final class UuidTest extends TblContratTestCase
         $this->useParametres($parametres);
 
         $dataset = [
-            "contrat_id_1" => [
+            "contrat_id_1"       => [
                 'contratId' => 1,    // int|null,
             ],
             "ens_structure_18_2" => [
-                'intervenantId' => 18,    // int|null,
-                'contratId' => null,    // int|null,
-                'structureId' => 2,    // int|null,
+                'intervenantId' => 18,      // int|null,
+                'contratId'     => null,    // int|null,
+                'structureId'   => 2,       // int|null,
             ],
-            "mis_mission_18_5" => [
-                'intervenantId' => 18,    // int|null,
-                'contratId' => null,    // int|null,
-                'structureId' => 2,    // int|null,
-                'missionId' => 5,    // int|null,
+            "mis_mission_18_5"   => [
+                'intervenantId' => 18,      // int|null,
+                'contratId'     => null,    // int|null,
+                'structureId'   => 2,       // int|null,
+                'missionId'     => 5,       // int|null,
             ],
-            "contrat_id_8" => [
+            "contrat_id_8"       => [
                 'intervenantId' => 18,    // int|null,
-                'contratId' => 8,    // int|null,
-                'structureId' => 2,    // int|null,
-                'missionId' => 5,    // int|null,
+                'contratId'     => 8,     // int|null,
+                'structureId'   => 2,     // int|null,
+                'missionId'     => 5,     // int|null,
             ],
             // autres cas à ajouter ...
         ];
@@ -71,20 +71,20 @@ final class UuidTest extends TblContratTestCase
         $this->useParametres($parametres);
 
         $dataset = [
-            "ens_globale_20" => [         // à adapter...
-                'contratId' => null,    // int|null,
-                'structureId' => 20,    // int|null,
+            "ens_globale_20" => [                                                                                                                                         // à adapter...
+                'contratId'   => null,                                                                                                                                    // int|null,
+                'structureId' => 20,                                                                                                                                      // int|null,
             ],
-            "ens_globale_18" => [         // à adapter...
-                'intervenantId' => 18,    // int|null,
-                'contratId' => null,    // int|null,
-                'structureId' => 20,    // int|null,
+            "ens_globale_18" => [           // à adapter...
+                'intervenantId' => 18,      // int|null,
+                'contratId'     => null,    // int|null,
+                'structureId'   => 20,      // int|null,
             ],
-            "mis_globale_18" => [         // à adapter...
-                'intervenantId' => 18,    // int|null,
-                'contratId' => null,    // int|null,
-                'structureId' => 20,    // int|null,
-                'missionId' => 15,    // int|null,
+            "mis_globale_18" => [           // à adapter...
+                'intervenantId' => 18,      // int|null,
+                'contratId'     => null,    // int|null,
+                'structureId'   => 20,      // int|null,
+                'missionId'     => 15,      // int|null,
             ],
             // autres cas à ajouter ...
         ];

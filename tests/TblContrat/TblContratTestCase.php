@@ -35,21 +35,15 @@ abstract class TblContratTestCase extends OseTestCase
         $ptbl          = $c->getTableauBord('contrat');
         $this->process = $ptbl->getProcess();
         $this->process->setServiceTauxRemu(TauxRemuMock::create($this));
-        $this->process->setServiceParametres(ParametreMock::create($this, $defaultParametres));
+        $this->process->setServiceParametres(new ParametreMock($defaultParametres));
     }
 
 
 
     protected function useParametres(array $parametres)
     {
-        $parametres = ParametreMock::parametresFormat($parametres);
-
-        $this->process->getServiceParametres()->expects($this->any())
-            ->method('get')
-            ->willReturnMap($parametres);
-
+        $this->process->getServiceParametres()->setParametres($parametres);
         $this->process->init();
-
     }
 
 }

@@ -3,33 +3,44 @@
 namespace tests\Mocks;
 
 use Application\Service\ParametresService;
-use PHPUnit\Framework\TestCase;
 
-class ParametreMock
+class ParametreMock extends ParametresService
 {
 
-    public static function create(TestCase $test, array $parametres = []): mixed
-    {
-        $parametreMock = $test->getMockBuilder(ParametresService::class)->getMock();
+    private array $parametres = [];
 
-        if (!empty($parametres)) {
-            $parametreMock->expects($test->any())
-                ->method('get')
-                ->willReturnMap(self::parametresFormat($parametres));
+
+
+    public function get($param)
+    {
+        if (!isset($this->parametres[$param])){
+            throw new \Exception("Parametre $param non défini par défaut");
         }
 
-        return $parametreMock;
+        return $this->parametres[$param];
     }
 
 
 
-    public static function parametresFormat(array $parametres): array
+    public function set($param, $value)
     {
-        $ps = [];
-        foreach ($parametres as $key => $value) {
-            $ps[] = [$key, $value];
+        $this->parametres[$param] = $value;
+    }
+
+
+
+    public function setParametres(array $parametres)
+    {
+        foreach( $parametres as $param => $value){
+            $this->set($param, $value);
         }
-        return $ps;
+    }
+
+
+
+    public function __construct(array $parametres = [])
+    {
+        $this->setParametres($parametres);
     }
 
 }

@@ -4,6 +4,10 @@ namespace tests\TblContrat;
 
 use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\ContratProcess;
+use Contrat\Tbl\Process\Model\Contrat;
+use Contrat\Tbl\Process\Strategy\VolumeHoraireStrategy;
+use Laminas\Hydrator\ObjectPropertyHydrator;
+use Laminas\Hydrator\Strategy\DateTimeFormatterStrategy;
 use tests\Mocks\ParametreMock;
 use tests\Mocks\TauxRemuMock;
 use tests\OseTestCase;
@@ -44,6 +48,45 @@ abstract class TblContratTestCase extends OseTestCase
     {
         $this->process->getServiceParametres()->setParametres($parametres);
         $this->process->init();
+    }
+
+    protected function hydrateContrat(array $data): Contrat
+    {
+
+        $hydrator = new ObjectPropertyHydrator();
+        $strategyDate = new DateTimeFormatterStrategy('Y-m-d');
+        $strategyVolumeHoraire = new VolumeHoraireStrategy();
+        $hydrator->addStrategy('anneeDateDebut',$strategyDate);
+        $hydrator->addStrategy('debutValidite',$strategyDate);
+        $hydrator->addStrategy('finValidite',$strategyDate);
+        $hydrator->addStrategy('histoCreation',$strategyDate);
+        $hydrator->addStrategy('tauxRemuDate',$strategyDate);
+        $hydrator->addStrategy('volumesHoraires',$strategyVolumeHoraire);
+
+        $uuid = $this->process->generateUUID(1, 1);
+        $contrat = new Contrat($uuid);
+        $hydrator->hydrate($data, $contrat);
+
+        return $contrat;
+
+    }
+
+    protected function extractContrat(Contrat $contrat): array
+    {
+        $hydrator = new ObjectPropertyHydrator();
+        $strategyDate = new DateTimeFormatterStrategy('Y-m-d');
+        $strategyVolumeHoraire = new VolumeHoraireStrategy();
+        $hydrator->addStrategy('anneeDateDebut',$strategyDate);
+        $hydrator->addStrategy('debutValidite',$strategyDate);
+        $hydrator->addStrategy('finValidite',$strategyDate);
+        $hydrator->addStrategy('histoCreation',$strategyDate);
+        $hydrator->addStrategy('tauxRemuDate',$strategyDate);
+        $hydrator->addStrategy('volumesHoraires',$strategyVolumeHoraire);
+
+        $data = $hydrator->extract($contrat);
+
+        return $data;
+
     }
 
 }

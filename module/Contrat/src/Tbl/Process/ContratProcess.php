@@ -463,7 +463,7 @@ class ContratProcess implements ProcessInterface
                     return 'mis_global_' . $intervenant_id;
             }
         } else {
-            switch ($this->parametreMis) {
+            switch ($this->parametreEns) {
                 case Parametre::CONTRAT_ENS_COMPOSANTE:
                     return 'ens_structure_' . $intervenant_id . '_' . $structureId;
                 default:

@@ -240,12 +240,12 @@ class ContratProcess implements ProcessInterface
         }
 
         if ($contrat->isMission) {
-            if ($this->parametreMis == Parametre::CONTRAT_MIS_GLOBALE) {
+            if ($this->parametreMis == Parametre::CONTRAT_MIS_GLOBAL) {
                 $contrat->structureId = null;
                 return;
             }
         } else {
-            if ($this->parametreEns == Parametre::CONTRAT_ENS_GLOBALE) {
+            if ($this->parametreEns == Parametre::CONTRAT_ENS_GLOBAL) {
                 $contrat->structureId = null;
                 return;
             }

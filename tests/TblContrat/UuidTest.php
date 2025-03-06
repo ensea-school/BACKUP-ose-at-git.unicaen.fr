@@ -65,24 +65,30 @@ final class UuidTest extends TblContratTestCase
     {
         $parametres = [
             Parametre::AVENANT     => Parametre::AVENANT_DESACTIVE,
-            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_GLOBALE,
-            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBALE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_GLOBAL,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBAL,
         ];
         $this->useParametres($parametres);
 
         $dataset = [
-            "ens_globale_20" => [                                                                                                                                         // à adapter...
+            "ens_global_1" => [                                                                                                                                         // à adapter...
                 'contratId'   => null,                                                                                                                                    // int|null,
                 'structureId' => 20,                                                                                                                                      // int|null,
             ],
-            "ens_globale_18" => [           // à adapter...
+            "ens_global_18" => [           // à adapter...
                 'intervenantId' => 18,      // int|null,
                 'contratId'     => null,    // int|null,
                 'structureId'   => 20,      // int|null,
             ],
-            "mis_globale_18" => [           // à adapter...
+            "mis_global_18" => [           // à adapter...
                 'intervenantId' => 18,      // int|null,
                 'contratId'     => null,    // int|null,
+                'structureId'   => 20,      // int|null,
+                'missionId'     => 15,      // int|null,
+            ],
+            "contrat_id_2" => [           // à adapter...
+                'intervenantId' => 18,      // int|null,
+                'contratId'     => 2,    // int|null,
                 'structureId'   => 20,      // int|null,
                 'missionId'     => 15,      // int|null,
             ],

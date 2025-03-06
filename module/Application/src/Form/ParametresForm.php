@@ -694,7 +694,7 @@ class ParametresForm extends AbstractForm
                            'label' => 'Pour les enseignements et le référentiel',
 
                            'value_options' => [
-                               PARAMETRE::CONTRAT_ENS_GLOBALE    => 'Un contrat global pour l\'établissement',
+                               PARAMETRE::CONTRAT_ENS_GLOBAL     => 'Un contrat global pour l\'établissement',
                                PARAMETRE::CONTRAT_ENS_COMPOSANTE => 'Un contrat ou un avenant par composante',
                            ],
                        ],
@@ -711,7 +711,7 @@ class ParametresForm extends AbstractForm
                            'label' => 'Pour les missions',
 
                            'value_options' => [
-                               PARAMETRE::CONTRAT_MIS_GLOBALE    => 'Un contrat global pour l\'établissement',
+                               PARAMETRE::CONTRAT_MIS_GLOBAL     => 'Un contrat global pour l\'établissement',
                                PARAMETRE::CONTRAT_MIS_COMPOSANTE => 'Un contrat ou un avenant par composante',
                                PARAMETRE::CONTRAT_MIS_MISSION    => 'Un contrat par mission',
                            ],

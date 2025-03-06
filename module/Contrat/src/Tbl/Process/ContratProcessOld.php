@@ -152,9 +152,9 @@ class ContratProcess implements ProcessInterface
             } else {
                 $service['TERMINE'] = 0;
 
-                if (($service['TYPE_SERVICE_CODE'] != 'MIS' && $this->regleEns == Parametre::CONTRAT_ENS_GLOBALE)
+                if (($service['TYPE_SERVICE_CODE'] != 'MIS' && $this->regleEns == Parametre::CONTRAT_ENS_GLOBAL)
                     ||
-                    ($service['TYPE_SERVICE_CODE'] == 'MIS' && $this->regleMis == Parametre::CONTRAT_MIS_GLOBALE)) {
+                    ($service['TYPE_SERVICE_CODE'] == 'MIS' && $this->regleMis == Parametre::CONTRAT_MIS_GLOBAL)) {
                     $service['STRUCTURE_ID'] = NULL;
                 }
             }
@@ -205,7 +205,7 @@ class ContratProcess implements ProcessInterface
                         }
 
                     }
-                    if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBALE) {
+                    if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBAL) {
                         if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
                             $service['TYPE_CONTRAT_ID']   = 2;
                             $service['CONTRAT_PARENT_ID'] = $this->intervenantContrat[$service['INTERVENANT_ID']];
@@ -584,7 +584,7 @@ WHERE
                 if ($this->regleMis == Parametre::CONTRAT_MIS_MISSION) {
                     $this->intervenantContrat[$serviceContrat['MISSION_ID']] = $serviceContrat['CONTRAT_ID'];
                 }
-                if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBALE) {
+                if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBAL) {
                     $this->intervenantContrat[$serviceContrat['INTERVENANT_ID']] = $serviceContrat['CONTRAT_ID'];
                 }
 

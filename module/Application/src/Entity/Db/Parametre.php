@@ -89,13 +89,13 @@ class Parametre implements HistoriqueAwareInterface
     const CONTRAT_MIS = 'contrat_mis';
     // VALEURS CONTRAT_MIS
     const CONTRAT_MIS_COMPOSANTE = 'contrat_mis_composante';
-    const CONTRAT_MIS_GLOBALE    = 'contrat_mis_globale';
+    const CONTRAT_MIS_GLOBAL     = 'contrat_mis_globale';
     const CONTRAT_MIS_MISSION    = 'contrat_mis_mission';
 
     const CONTRAT_ENS = 'contrat_ens';
     // VALEURS CONTRAT_ENS
     const CONTRAT_ENS_COMPOSANTE = 'contrat_ens_composante';
-    const CONTRAT_ENS_GLOBALE    = 'contrat_ens_globale';
+    const CONTRAT_ENS_GLOBAL    = 'contrat_ens_global';
 
     const CONTRAT_DATE = 'contrat_date';
 

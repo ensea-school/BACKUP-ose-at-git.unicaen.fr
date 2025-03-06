@@ -59,9 +59,9 @@ class v24ParametresContrat extends MigrationAction
                     $valeurEns     = Parametre::CONTRAT_ENS_COMPOSANTE;
                     break;
                 case 'avenant_desactive':
-                    $valeurMis     = Parametre::CONTRAT_MIS_GLOBALE;
+                    $valeurMis     = Parametre::CONTRAT_MIS_GLOBAL;
                     $valeurAvenant = Parametre::AVENANT_DESACTIVE;
-                    $valeurEns     = Parametre::CONTRAT_ENS_GLOBALE;
+                    $valeurEns     = Parametre::CONTRAT_ENS_GLOBAL;
                     break;
                 default:
                     break;

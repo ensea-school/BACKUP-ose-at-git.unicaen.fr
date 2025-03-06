@@ -32,6 +32,7 @@ final class UuidTest extends TblContratTestCase
             Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_COMPOSANTE,
         ];
         $this->useParametres($parametres);
+        $this->process->init();
 
         $dataset = [
             "contrat_id_1" => [
@@ -52,6 +53,7 @@ final class UuidTest extends TblContratTestCase
             Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBALE,
         ];
         $this->useParametres($parametres);
+        $this->process->init();
 
         $dataset = [
             "contrat_id_1" => [         // à adapter...

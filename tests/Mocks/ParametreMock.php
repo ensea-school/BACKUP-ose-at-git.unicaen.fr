@@ -15,10 +15,21 @@ class ParametreMock
         if (!empty($parametres)) {
             $parametreMock->expects($test->any())
                 ->method('get')
-                ->willReturnMap($parametres);
+                ->willReturnMap(self::parametresFormat($parametres));
         }
 
         return $parametreMock;
+    }
+
+
+
+    public static function parametresFormat(array $parametres): array
+    {
+        $ps = [];
+        foreach ($parametres as $key => $value) {
+            $ps[] = [$key, $value];
+        }
+        return $ps;
     }
 
 }

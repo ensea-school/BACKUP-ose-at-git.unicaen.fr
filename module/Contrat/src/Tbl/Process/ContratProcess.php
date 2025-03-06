@@ -58,21 +58,20 @@ class ContratProcess implements ProcessInterface
             $this->exporter();
             //$this->enregistrement($tableauBord, $params);
         }
-        $tata = 'toto';
     }
 
 
 
-    protected function init(): void
+    public function init(): void
     {
         $parametres = $this->getServiceParametres();
 
-        $this->parametreAvenant         = $parametres->get('avenant');
-        $this->parametreEns             = $parametres->get('contrat_ens');
-        $this->parametreMis             = $parametres->get('contrat_mis');
-        $this->parametreFranchissement  = $parametres->get('contrat_regle_franchissement');
-        $this->parametreTauxRemuId      = (int)$parametres->get('taux-remu');
-        $this->parametreTauxCongesPayes = (float)$parametres->get('taux_conges_payes');
+        $this->parametreAvenant         = $parametres->get(Parametre::AVENANT);
+        $this->parametreEns             = $parametres->get(Parametre::CONTRAT_ENS);
+        $this->parametreMis             = $parametres->get(Parametre::CONTRAT_MIS);
+        $this->parametreFranchissement  = $parametres->get(Parametre::CONTRAT_REGLE_FRANCHISSEMENT);
+        $this->parametreTauxRemuId      = (int)$parametres->get(Parametre::TAUX_REMU);
+        $this->parametreTauxCongesPayes = (float)$parametres->get(Parametre::TAUX_CONGES_PAYES);
 
         $this->intervenants = [];
     }

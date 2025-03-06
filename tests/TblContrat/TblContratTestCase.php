@@ -47,6 +47,9 @@ abstract class TblContratTestCase extends OseTestCase
         $this->process->getServiceParametres()->expects($this->any())
             ->method('get')
             ->willReturnMap($parametres);
+
+        $this->process->init();
+
     }
 
 }

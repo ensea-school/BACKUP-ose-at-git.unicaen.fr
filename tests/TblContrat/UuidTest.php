@@ -32,12 +32,15 @@ final class UuidTest extends TblContratTestCase
             Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_COMPOSANTE,
         ];
         $this->useParametres($parametres);
-        $this->process->init();
 
         $dataset = [
             "contrat_id_1" => [
                 'contratId' => 1,    // int|null,
             ],
+//            "ens_structure_2" => [
+//                'contratId' => null,    // int|null,
+//                'structureId' => 2,    // int|null,
+//            ],
             // autres cas à ajouter ...
         ];
         $this->assertUuidDataset($dataset);
@@ -53,15 +56,16 @@ final class UuidTest extends TblContratTestCase
             Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBALE,
         ];
         $this->useParametres($parametres);
-        $this->process->init();
 
         $dataset = [
-            "contrat_id_1" => [         // à adapter...
+            "ens_globale_20" => [         // à adapter...
                 'contratId' => null,    // int|null,
+                'structureId' => 20,    // int|null,
             ],
             // autres cas à ajouter ...
         ];
 
         $this->assertUuidDataset($dataset);
     }
+
 }

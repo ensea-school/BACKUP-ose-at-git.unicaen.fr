@@ -505,7 +505,7 @@ final class CalculParentsTest extends TblContratTestCase
         //COntrat 3 par composante
         $contrat3              = new Contrat();
         $contrat3->id          = null;
-        $contrat1->uuid        = 'avenant_a_calculer';
+        $contrat3->uuid        = 'avenant_a_calculer';
         $contrat3->isMission   = true;
         $contrat3->parent      = null;
         $contrat3->structureId = 10;

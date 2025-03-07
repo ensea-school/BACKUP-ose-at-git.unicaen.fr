@@ -28,7 +28,7 @@ class VolumeHoraireStrategy implements StrategyInterface
         return $volumeHoraire;
     }
 
-    public function extractVolumeHoraire($vh): Array
+    public function extractVolumeHoraire($vh): array
     {
         $hydrator = new ObjectPropertyHydrator();
         $data = $hydrator->extract($vh);

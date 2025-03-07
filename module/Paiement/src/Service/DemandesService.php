@@ -678,7 +678,7 @@ class DemandesService extends AbstractService
             $totalHeuresAPayer    += $dmep['TOTAL_HEURES_A_PAYER'];
             if ($serviceReferentielId === $dmep['SERVICE_REFERENTIEL_ID'] || $serviceId === $dmep['SERVICE_ID'] || $missionId === $dmep['MISSION_ID']) {
                 $soldeHeures = ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']);
-                if ($heuresDemandees > $soldeHeures) {
+                if (bccomp((string)$heuresDemandees, (string)$soldeHeures,2) > 0) {
                     if ($soldeHeures >= 0) {
                         throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous pouvez demander maximum ' . ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']) . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
                     } else {
@@ -698,7 +698,7 @@ class DemandesService extends AbstractService
             }
         }
         //On vérifie en dernier si l'ensemble des heures déjà payé ne dépasse pas le nombre d'heures réalisées tout service confondu.
-        if (($totalHeuresAPayer - $totalHeuresDemandees) < $heuresDemandees) {
+        if (bccomp((string)($totalHeuresAPayer - $totalHeuresDemandees), (string)$heuresDemandees, 2) < 0) {
             throw new \Exception('Demande de mise en paiement impossible, la somme des heures déjà demandée en paiement pour tous les services confondus ne permet plus de demander en paiement les ' . $heuresDemandees . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
         }
 

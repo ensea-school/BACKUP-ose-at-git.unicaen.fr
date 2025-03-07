@@ -179,22 +179,23 @@ class ContratProcess implements ProcessInterface
 
     public function traitement(): void
     {
-        foreach ($this->intervenants as $intervenantId => $contrats) {
-            foreach ($contrats as $uuid => $contrat) {
+        foreach ($this->intervenants as $contrats) {
+            foreach ($contrats as $contrat) {
                 $this->calculTypeService($contrat);
                 $this->calculStructure($contrat);
             }
-
             $this->calculParentsIds($contrats);
+            // ajout d'avenants vides pour les missions avec des prolongations de dates
 
             /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
-            foreach ($contrats as $uuid => $contrat) {
+            foreach ($contrats as $contrat) {
                 $this->calculTauxRemu($contrat);
                 $this->calculTotalHETD($contrat);
-
             }
 
             $this->calculNumerosAvenants($contrats);
+            // ajout de contrats vides d'enseignement si aucune
+            // Activer les lignes où il y a besoin de contrats/avenants
         }
     }
 
@@ -274,13 +275,11 @@ class ContratProcess implements ProcessInterface
             return;
         }
 
-        // Calcul de tous les BID et tri par $contratsEdites / $avenantsEdites / $autres
+        // Calcul et tri par $contratsEdites / $avenantsEdites / $autres
         $contratsEdites = [];
         //$avenantsEdites = [];
         $autres = [];
         foreach ($contrats as $contrat) {
-            $contrat->bid = $this->calcBid($contrat);
-
             if ($contrat->id && $contrat->edite) {
                 if ($contrat->parent) {
                     // On est sur un avenant, donc déjà associé à un contrat
@@ -300,7 +299,12 @@ class ContratProcess implements ProcessInterface
 
         // On traite tous les autres pour leur trouver un éventuel parent
         foreach ($autres as $autre) {
-            $parentsPotentiels = $this->detectionParentsPotentiels($autre, $contratsEdites);
+            $parentsPotentiels = [];
+            foreach ($contratsEdites as $candidat) {
+                if ($this->isParentPotentiel($autre, $candidat)) {
+                    $parentsPotentiels[] = $candidat;
+                }
+            }
 
             if (!empty($parentsPotentiels)) {
                 // Si on a des parents potentiels, on lui donne le meilleur
@@ -311,30 +315,44 @@ class ContratProcess implements ProcessInterface
 
 
 
-    /**
-     * @param Contrat         $contrat
-     * @param array|Contrat[] $contrats
-     * @return array
-     */
-    public function detectionParentsPotentiels(Contrat $contrat, array $contrats): array
+    public function isParentPotentiel(Contrat $contrat, Contrat $candidat): bool
     {
-        $parentsPotentiels = [];
+        if ($candidat->isMission !== $contrat->isMission) {
+            return false; // pas les mêmes types => pas de lien
+        }
 
-        foreach ($contrats as $parentTest) {
-            if ($parentTest->isMission !== $contrat->isMission) {
-                continue; // pas les mêmes types => pas de lien
+        if ($contrat->isMission) {
+            switch ($this->parametreMis) {
+                case Parametre::CONTRAT_MIS_GLOBAL:
+                    return true; // paramètre global => ce sera un avenant
+                case Parametre::CONTRAT_MIS_COMPOSANTE:
+                    if (empty($contrat->structureId)) {
+                        throw new \Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
+                    }
+
+                    return $candidat->hasStructureId($contrat->structureId);
+                case Parametre::CONTRAT_MIS_MISSION:
+                    $contratMissionId = $contrat->getMissionId();
+                    if (empty($contratMissionId)) {
+                        throw new \Exception('En paramétrage par mission, le nouveau contrat doit avoir une mission unique bien identifiée');
+                    }
+
+                    return $candidat->hasMissionId($contratMissionId);
             }
+        } else {
+            switch ($this->parametreEns) {
+                case Parametre::CONTRAT_ENS_GLOBAL:
+                    return true;
+                case Parametre::CONTRAT_ENS_COMPOSANTE:
+                    if (empty($contrat->structureId)) {
+                        throw new \Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
+                    }
 
-            if ($this->bidIsGlobal($parentTest->bid) || $this->bidIsGlobal($contrat->bid)) {
-                $parentsPotentiels[] = $parentTest;
-            } elseif ($this->bidIsStructure($parentTest->bid, $parentTest->structureId) && $this->bidIsStructure($contrat->bid, $contrat->structureId)) {
-                $parentsPotentiels[] = $parentTest;
-            } elseif ($this->bidIsMission($parentTest->bid, $parentTest->getMissionId()) && $this->bidIsMission($contrat->bid, $contrat->getMissionId())) {
-                $parentsPotentiels[] = $parentTest;
+                    return $candidat->hasStructureId($contrat->structureId);
             }
         }
 
-        return $parentsPotentiels;
+        throw new \Exception('Une erreur est survenue : cas de détection de parent potentiel non géré');
     }
 
 
@@ -351,85 +369,17 @@ class ContratProcess implements ProcessInterface
             return current($parents);
         }
 
-        // Si on en a plusieurs...
-        throw new \Exception('Plusieurs parents : cas non géré pour le moment');
-    }
-
-
-
-    public function bidIsGlobal(string $bid): bool
-    {
-        return str_contains($bid, 'global');
-    }
-
-
-
-    public function bidIsStructure(string $bid, int $structureId): bool
-    {
-        return str_contains($bid, 'structure:' . $structureId);
-    }
-
-
-
-    public function bidIsMission(string $bid, int $missionId): bool
-    {
-        return str_contains($bid, 'mission:' . $missionId);
-    }
-
-
-
-    public function calcBid(Contrat $contrat): string
-    {
-        if ($contrat->isMission) {
-            return $this->calcBidMission($contrat);
-        } else {
-            return $this->calcBidEnseignement($contrat);
-        }
-    }
-
-
-
-    public function calcBidMission(Contrat $contrat): string
-    {
-        $bid = [];
-
-        if ($this->parametreMis == Parametre::CONTRAT_MIS_COMPOSANTE || $this->parametreMis == Parametre::CONTRAT_MIS_MISSION) {
-            if ($contrat->structureId) {
-                $bid[] = '____structure:' . $contrat->structureId;
+        $idMax    = -1;
+        $meilleur = null;
+        foreach ($parents as $parent) {
+            if ($parent->id > $idMax) {
+                $meilleur = $parent;
+                $idMax    = $parent->id;
             }
         }
+        // on retourne le dernier projet créé, sans tenir compte des dates
 
-        if ($this->parametreMis == Parametre::CONTRAT_MIS_MISSION) {
-            $missionId = $contrat->getMissionId();
-            if ($missionId) {
-                $bid[] = '______mission:' . $missionId;
-            }
-        }
-
-        if (empty($bid)) {
-            return '_______global';
-        } else {
-            return implode('_', $bid);
-        }
-    }
-
-
-
-    public function calcBidEnseignement(Contrat $contrat): string
-    {
-        $bid = [];
-
-        if ($this->parametreEns == Parametre::CONTRAT_ENS_COMPOSANTE) {
-            if ($contrat->structureId) {
-                $bid[] = '____structure:' . $contrat->structureId;
-            }
-        }
-
-        if (empty($bid)) {
-            return '_______global';
-        } else {
-            return implode('_', $bid);
-        }
+        return $meilleur;
     }
 
 
@@ -531,7 +481,7 @@ class ContratProcess implements ProcessInterface
     public function calculTotalHETD(Contrat $contrat): void
     {// ne pas prendre en compte les projets amont
         if ($contrat->id && $contrat->edite == 1) {
-            //Si le contrat exite on recupere le total hetd de la table contrat
+            //Si le contrat existe on recupère le total hetd de la table contrat
             exit;
         }
 

@@ -15,8 +15,6 @@ class Contrat
 
     public ?string $uuid = null;
 
-    public ?string $bid = null;
-
     public ?int $intervenantId = null;
 
     public ?int $structureId = null;
@@ -67,6 +65,52 @@ class Contrat
             $this->uuid = $uuid;
         }
     }
+
+
+
+    public function hasStructureId(int $structureId): bool
+    {
+        if ($this->structureId){
+            return $this->structureId == $structureId;
+        }
+
+        if (empty($this->volumesHoraires) && $this->parent) {
+            // On est dans un contexte de missions, donc pas de contrat sans VHs, donc on a un parent!
+            return $this->parent->hasStructureId($structureId);
+        }
+
+        foreach($this->volumesHoraires as $vh){
+            if ($vh->structureId === $structureId){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+    public function hasMissionId(int $missionId): bool
+    {
+        if (!$this->isMission){
+            return false;
+        }
+
+        if (empty($this->volumesHoraires) && $this->parent) {
+            // On est dans un contexte de missions, donc pas de contrat sans VHs, donc on a un parent!
+            return $this->parent->hasMissionId($missionId);
+        }
+
+        foreach($this->volumesHoraires as $vh){
+            if ($vh->missionId === $missionId){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 
 
 

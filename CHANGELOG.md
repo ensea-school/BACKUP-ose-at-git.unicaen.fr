@@ -4,7 +4,7 @@
 
 
 
-# OSE 24 (fin mars/début avril, version 24.0-beta14 disponible pour préprod)
+# OSE 24 (fin mars/début avril, version 24.0-beta15 disponible pour préprod)
 
 ## Nouveautés
 * Nouvelle infrastructure de gestion des formules de calcul

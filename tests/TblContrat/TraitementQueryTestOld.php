@@ -9,7 +9,7 @@ use Paiement\Service\TauxRemuService;
 use tests\OseTestCase;
 use UnicaenTbl\Service\TableauBordService;
 
-final class TraitementQueryTest extends OseTestCase
+final class TraitementQueryTestOld extends OseTestCase
 {
 
     protected ContratProcess $pp;

@@ -87,7 +87,7 @@ final class CalculParentsTest extends TblContratTestCase
         $contrat2->id          = 2;
         $contrat2->uuid        = 'avenant_edite';
         $contrat2->isMission   = true;
-        $contrat2->parent      = &$contrat1;
+        $contrat2->setParent($contrat1);
         $contrat2->structureId = 1;
         $contrat2->avenants    = [];
 
@@ -99,8 +99,6 @@ final class CalculParentsTest extends TblContratTestCase
         // Ajout des objets dans l'array volumesHoraires
         $contrat2->volumesHoraires = [$volumeHoraire1];
 
-
-        $contrat1->avenants[] = &$contrat2;
 
         //COntrat 3 par composante sur structure 2
         $contrat3              = new Contrat();
@@ -458,7 +456,7 @@ final class CalculParentsTest extends TblContratTestCase
         $this->assertArrayEquals($uuidsExpected, $uuids);
         $this->assertNotNull($contrat2->parent);
         $this->assertNull($contrat3->parent);
-        $this->assertEquals($contrat1->id, $contrat3->parent->id);
+        $this->assertEquals($contrat1->id, $contrat3->parent?->id);
 
     }
     public function testDeuxParentsPotentielsPrendreDernierProjetCreer(): void
@@ -538,7 +536,7 @@ final class CalculParentsTest extends TblContratTestCase
         $this->assertNull($contrat1->parent);
         $this->assertNull($contrat2->parent);
         $this->assertNotNull($contrat3->parent);
-        $this->assertEquals($contrat2->id, $contrat3->parent->id);
+        $this->assertEquals($contrat2->id, $contrat3->parent?->id);
 
     }
 

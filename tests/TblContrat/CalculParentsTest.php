@@ -3,6 +3,7 @@
 namespace tests\TblContrat;
 
 use Application\Entity\Db\Parametre;
+use Contrat\Tbl\Process\Model\Contrat;
 
 final class CalculParentsTest extends TblContratTestCase
 {
@@ -31,38 +32,18 @@ final class CalculParentsTest extends TblContratTestCase
         $this->useParametres($parametres);
 
         /* Jeu de données initial */
-        $contrat1 = [
-            'id'        => 1,
-            'isMission' => false,
-            'edite'     => true,
-            'avenants'  => [],
-        ];
+        $contrat1 = new Contrat();
+        $contrat1->id = 1;
+        $contrat1->edite = true;
+        $contrat1->isMission = false;
 
-        $contrat2 = [
-            'id'        => null,
-            'isMission' => false,
-            'avenants'  => [],
-        ];
+        $contrat2 = new Contrat();
+        $contrat2->isMission = false;
 
+        $this->process->calculParentsIds([$contrat1,$contrat2]);
 
-        $contrats = [
-            $contrat1,
-            $contrat2,
-        ];
-
-        /* Calculs manuels */
-
-        $contrat1['avenants'] = [&$contrat2];
-        $contrat2['parent']   = &$contrat1;
-
-
-        /* Expected */
-        $expected = [
-            $contrat1,
-            $contrat2,
-        ];
-
-        $this->assertContrats($contrats, $expected);
+        $this->assertNotNull($contrat2->parent);
+        $this->assertEquals(1, $contrat2->parent->id);
     }
 
 

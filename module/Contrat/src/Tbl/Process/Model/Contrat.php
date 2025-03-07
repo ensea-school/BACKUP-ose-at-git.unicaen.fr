@@ -15,6 +15,8 @@ class Contrat
 
     public ?string $uuid = null;
 
+    public ?string $bid = null;
+
     public ?int $intervenantId = null;
 
     public ?int $structureId = null;
@@ -90,5 +92,13 @@ class Contrat
             }
         }
         return $missionId;
+    }
+
+
+
+    public function setParent(Contrat $parent): void
+    {
+        $this->parent = $parent;
+        $parent->avenants[] = $this;
     }
 }

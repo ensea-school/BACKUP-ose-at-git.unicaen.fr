@@ -105,9 +105,8 @@ class ContratProcess implements ProcessInterface
         $contrat->structureId    = (int)$data['structure_id'] ?: null;
         $parentId                = (int)$data['parent_id'] ?: null;
         if ($parentId) {
-            $uuid                        = $this->generateUUID($contrat->intervenantId, $parentId);
-            $contrat->parent             = $this->getContrat($contrat->intervenantId, $uuid);
-            $contrat->parent->avenants[] = $contrat;
+            $uuid = $this->generateUUID($contrat->intervenantId, $parentId);
+            $contrat->setParent($this->getContrat($contrat->intervenantId, $uuid));
         }
         $contrat->numeroAvenant = (int)$data['numero_avenant'];
         $contrat->totalHetd     = $data['totalHetd'] != null ? (int)$data['totalHetd'] : null;
@@ -275,20 +274,19 @@ class ContratProcess implements ProcessInterface
             return;
         }
 
-        // On récup tous les contrats pouvant être parents
-        // On récup le + gros bid
-        // Ou alors on récup l'ID le plus fin ?
-
+        // Calcul de tous les BID et tri par $contratsEdites / $avenantsEdites / $autres
         $contratsEdites = [];
         //$avenantsEdites = [];
         $autres = [];
+        foreach ($contrats as $contrat) {
+            $contrat->bid = $this->calcBid($contrat);
 
-        foreach ($contrats as $index => $contrat) {
             if ($contrat->id && $contrat->edite) {
                 if ($contrat->parent) {
-                    //$avenantsEdites[] = ['bid' => $this->calcBid($contrat), 'model' => $contrat];
+                    // On est sur un avenant, donc déjà associé à un contrat
+                    //$avenantsEdites[] = $contrat;
                 } else {
-                    $contratsEdites[] = ['bid' => $this->calcBid($contrat), 'model' => $contrat];
+                    $contratsEdites[] = $contrat;
                 }
             } else {
                 $autres[] = $contrat;
@@ -296,32 +294,65 @@ class ContratProcess implements ProcessInterface
         }
 
         if (empty($contratsEdites)) {
-            return; // on n'a trouvé aucun contrat déjà édité pour y associer des avenants
+            // on n'a trouvé aucun contrat déjà édité pour y associer des avenants
+            return;
         }
 
+        // On traite tous les autres pour leur trouver un éventuel parent
         foreach ($autres as $autre) {
-            $bid               = $this->calcBid($autre);
-            $parentsPotentiels = [];
-            foreach ($contratsEdites as $bidModel) {
-                ['bid' => $contratBid, 'model' => $contrat] = $bidModel;
+            $parentsPotentiels = $this->detectionParentsPotentiels($autre, $contratsEdites);
 
-                if ($contrat->isMission !== $autre->isMission) {
-                    continue; // pas les mêmes types => pas de lien
-                }
+            if (!empty($parentsPotentiels)) {
+                // Si on a des parents potentiels, on lui donne le meilleur
+                $autre->setParent($this->meilleurParent($autre, $parentsPotentiels));
+            }
+        }
+    }
 
-                if ($this->bidIsGlobal($contratBid) || $this->bidIsGlobal($bid)) {
-                    $parentsPotentiels[] = $bidModel;
-                } elseif ($this->bidIsStructure($contratBid, $contrat->structureId) && $this->bidIsStructure($bid, $autre->structureId)) {
-                    $parentsPotentiels[] = $bidModel;
-                } elseif ($this->bidIsMission($contratBid, $contrat->getMissionId()) && $this->bidIsMission($bid, $autre->getMissionId())) {
-                    $parentsPotentiels[] = $bidModel;
-                }
+
+
+    /**
+     * @param Contrat         $contrat
+     * @param array|Contrat[] $contrats
+     * @return array
+     */
+    public function detectionParentsPotentiels(Contrat $contrat, array $contrats): array
+    {
+        $parentsPotentiels = [];
+
+        foreach ($contrats as $parentTest) {
+            if ($parentTest->isMission !== $contrat->isMission) {
+                continue; // pas les mêmes types => pas de lien
             }
 
-            // Calcul du parent potentiel en 2 étapes :
-            // 1 = prendre la chaine la + longue
-            // 2 = prendre la dernière chaine triée par ordre alphabétique
+            if ($this->bidIsGlobal($parentTest->bid) || $this->bidIsGlobal($contrat->bid)) {
+                $parentsPotentiels[] = $parentTest;
+            } elseif ($this->bidIsStructure($parentTest->bid, $parentTest->structureId) && $this->bidIsStructure($contrat->bid, $contrat->structureId)) {
+                $parentsPotentiels[] = $parentTest;
+            } elseif ($this->bidIsMission($parentTest->bid, $parentTest->getMissionId()) && $this->bidIsMission($contrat->bid, $contrat->getMissionId())) {
+                $parentsPotentiels[] = $parentTest;
+            }
         }
+
+        return $parentsPotentiels;
+    }
+
+
+
+    /**
+     * @param Contrat         $contrat
+     * @param array|Contrat[] $parents
+     * @return Contrat
+     */
+    public function meilleurParent(Contrat $contrat, array $parents): Contrat
+    {
+        // Cas facile : 1 parent => c'est lui
+        if (count($parents) == 1) {
+            return current($parents);
+        }
+
+        // Si on en a plusieurs...
+        throw new \Exception('Plusieurs parents : cas non géré pour le moment');
     }
 
 

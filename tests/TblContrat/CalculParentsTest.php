@@ -81,6 +81,7 @@ final class CalculParentsTest extends TblContratTestCase
             'id'              => 1,
             'isMission'       => true,
             'structureId'     => null,
+            'edite'           => true,
             'avenants'        => [],
             'volumesHoraires' => [
                 [
@@ -157,6 +158,7 @@ final class CalculParentsTest extends TblContratTestCase
             'id'              => 1,
             'isMission'       => true,
             'structureId'     => 3,
+            'edite'           => true,
             'avenants'        => [],
             'volumesHoraires' => [
                 ['missionId' => 18],
@@ -168,6 +170,7 @@ final class CalculParentsTest extends TblContratTestCase
             'isMission'       => true,
             'parents'         => null,
             'structureId'     => 3,
+            'edite'           => true,
             'avenants'        => [],
             'volumesHoraires' => [
                 ['missionId' => 1],
@@ -197,6 +200,156 @@ final class CalculParentsTest extends TblContratTestCase
 
         $contrat2['avenants'] = [&$contrat3];
         $contrat3['parent']   = &$contrat2;
+
+
+        /* Expected */
+        $expected = [
+            $contrat1,
+            $contrat2,
+            $contrat3,
+        ];
+
+        $this->assertContrats($contrats, $expected);
+    }
+
+
+
+    public function testMissionComposanteContratEtProjet(): void
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_COMPOSANTE,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBAL,
+        ];
+        $this->useParametres($parametres);
+
+        /* Jeu de données initial */
+
+        //deux contrats anciennement créer sous un parametrage contrat_mis_mission, l'un est un projet l'autre non
+        $contrat1 = [
+            'id'              => 1,
+            'isMission'       => true,
+            'structureId'     => 3,
+            'edite'           => true,
+            'avenants'        => [],
+            'volumesHoraires' => [
+                ['missionId' => 18],
+            ],
+        ];
+
+        $contrat2 = [
+            'id'              => 2,
+            'isMission'       => true,
+            'parents'         => null,
+            'structureId'     => 3,
+            'edite'           => false,
+            'avenants'        => [],
+            'volumesHoraires' => [
+                ['missionId' => 1],
+            ],
+        ];
+
+        //un nouveau contrat a créer apres changement de parametrage en contrat_mis_composante
+        $contrat3 = [
+            'id'              => null,
+            'isMission'       => true,
+            'parents'         => null,
+            'structureId'     => 3,
+            'avenants'        => [],
+            'volumesHoraires' => [
+                ['missionId' => 1],
+            ],
+        ];
+
+
+        $contrats = [
+            $contrat1,
+            $contrat2,
+            $contrat3,
+        ];
+
+        /* Calculs manuels */
+
+        $contrat1['avenants'] = [&$contrat3];
+        $contrat3['parent']   = &$contrat1;
+
+
+        /* Expected */
+        $expected = [
+            $contrat1,
+            $contrat2,
+            $contrat3,
+        ];
+
+        $this->assertContrats($contrats, $expected);
+    }
+
+    public function testContratGlobalParamParMission(): void
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_MISSION,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBAL,
+        ];
+        $this->useParametres($parametres);
+
+        /* Jeu de données initial */
+
+        //deux contrats anciennement créer sous un parametrage contrat_mis_mission, l'un est un projet l'autre non
+        $contrat1 = [
+            'id'              => 1,
+            'isMission'       => true,
+            'structureId'     => null,
+            'edite'           => true,
+            'avenants'        => [],
+            'volumesHoraires' => [
+                [
+                    'missionId' => 1,
+                ],
+                [
+                    'missionId' => 2,
+                ],
+                [
+                    'missionId' => 3,
+                ],
+            ],
+        ];
+
+        $contrat2 = [
+            'id'              => null,
+            'isMission'       => true,
+            'parents'         => null,
+            'structureId'     => 3,
+            'avenants'        => [],
+            'volumesHoraires' => [
+                ['missionId' => 4],
+            ],
+        ];
+
+        //un nouveau contrat a créer apres changement de parametrage en contrat_mis_composante
+        $contrat3 = [
+            'id'              => null,
+            'isMission'       => true,
+            'parents'         => null,
+            'structureId'     => 3,
+            'avenants'        => [],
+            'volumesHoraires' => [
+                ['missionId' => 1],
+            ],
+        ];
+
+
+        $contrats = [
+            $contrat1,
+            $contrat2,
+            $contrat3,
+        ];
+
+        /* Calculs manuels */
+
+        $contrat1['avenants'] = [&$contrat2,&$contrat3];
+        $contrat2['parent']   = &$contrat1;
+        $contrat3['parent']   = &$contrat1;
 
 
         /* Expected */

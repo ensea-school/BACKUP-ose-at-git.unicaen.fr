@@ -275,12 +275,56 @@ class ContratProcess implements ProcessInterface
             return;
         }
 
-        //TODO
+        // On récup tous les contrats pouvant être parents
+        // On récup le + gros bid
+        // Ou alors on récup l'ID le plus fin ?
 
         $boites = [];
-        foreach( $contrats as $contrat){
+
+        $contratsEdites = [];
+        //$avenantsEdites = [];
+        $autres = [];
+
+        foreach ($contrats as $index => $contrat) {
+            if ($contrat->id && $contrat->edite) {
+                if ($contrat->parent) {
+                    //$avenantsEdites[] = ['bid' => $this->calcBid($contrat), 'model' => $contrat];
+                } else {
+                    $contratsEdites[] = ['bid' => $this->calcBid($contrat), 'model' => $contrat];
+                }
+            } else {
+                $autres[] = $contrat;
+            }
+        }
+
+        foreach ($autres as $autre) {
+            $bid               = $this->calcBid($autre);
+            $parentsPotentiels = [];
+            foreach ($contratsEdites as $bidModel) {
+                ['bid' => $contratBid, 'model' => $contrat] = $bidModel;
+
+                if ($contrat->isMission !== $autre->isMission) {
+                    continue; // pas les mêmes types => pas de lien
+                }
+
+                if ($this->bidIsGlobal($contratBid) || $this->bidIsGlobal($bid)) {
+                    $parentsPotentiels[] = $bidModel;
+                } elseif ($this->bidIsStructure($contratBid, $contrat->structureId) && $this->bidIsStructure($bid, $autre->structureId)) {
+                    $parentsPotentiels[] = $bidModel;
+                } elseif ($this->bidIsMission($contratBid, $contrat->getMissionId()) && $this->bidIsMission($bid, $autre->getMissionId())) {
+                    $parentsPotentiels[] = $bidModel;
+                }
+            }
+
+            // Calcul du parent potentiel en 2 étapes :
+            // 1 = prendre la chaine la + longue
+            // 2 = prendre la dernière chaine triée par ordre alphabétique
+        }
+
+
+        foreach ($contrats as $contrat) {
             $bid = $this->contratGetBid($contrat);
-            if (!isset($boites[$bid])){
+            if (!isset($boites[$bid])) {
                 $boites[$bid] = [];
             }
             $boites[$bid][] = $contrat;
@@ -290,24 +334,78 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function contratGetBid(Contrat $contrat): string
+    public function bidIsGlobal(string $bid): bool
+    {
+        return str_contains($bid, 'global');
+    }
+
+
+
+    public function bidIsStructure(string $bid, int $structureId): bool
+    {
+        return str_contains($bid, 'structure:' . $structureId);
+    }
+
+
+
+    public function bidIsMission(string $bid, int $missionId): bool
+    {
+        return str_contains($bid, 'mission:' . $missionId);
+    }
+
+
+
+    public function calcBid(Contrat $contrat): string
     {
         if ($contrat->isMission) {
-            switch ($this->parametreMis) {
-                case Parametre::CONTRAT_MIS_MISSION:
-                    return 'mis_mission_' ;//. $contrat->missionId;
-                case Parametre::CONTRAT_MIS_COMPOSANTE:
-                    return 'mis_structure_' ;//. $structureId;
-                default:
-                    return 'mis_global';
-            }
+            return $this->calcBidMission($contrat);
         } else {
-            switch ($this->parametreMis) {
-                case Parametre::CONTRAT_ENS_COMPOSANTE:
-                    return 'ens_structure_' ;// . $structureId;
-                default:
-                    return 'ens_global';
+            return $this->calcBidEnseignement($contrat);
+        }
+    }
+
+
+
+    public function calcBidMission(Contrat $contrat): string
+    {
+        $bid = [];
+
+        if ($this->parametreMis == Parametre::CONTRAT_MIS_COMPOSANTE || $this->parametreMis == Parametre::CONTRAT_MIS_MISSION) {
+            if ($contrat->structureId) {
+                $bid[] = '____structure:' . $contrat->structureId;
             }
+        }
+
+        if ($this->parametreMis == Parametre::CONTRAT_MIS_MISSION) {
+            $missionId = $contrat->getMissionId();
+            if ($missionId) {
+                $bid[] = '______mission:' . $missionId;
+            }
+        }
+
+        if (empty($bid)) {
+            return '_______global';
+        } else {
+            return implode('_', $bid);
+        }
+    }
+
+
+
+    public function calcBidEnseignement(Contrat $contrat): string
+    {
+        $bid = [];
+
+        if ($this->parametreEns == Parametre::CONTRAT_ENS_COMPOSANTE) {
+            if ($contrat->structureId) {
+                $bid[] = '____structure:' . $contrat->structureId;
+            }
+        }
+
+        if (empty($bid)) {
+            return '_______global';
+        } else {
+            return implode('_', $bid);
         }
     }
 

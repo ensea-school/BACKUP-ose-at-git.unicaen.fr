@@ -68,17 +68,25 @@ class Contrat
 
     public function getMissionId(): ?int
     {
-        $missions = [];
-
-        if (empty($this->volumesHoraires) && $this->parent){
+        if (empty($this->volumesHoraires) && $this->parent) {
             // On est dans un contexte de missions, donc pas de contrat sans VHs, donc on a un parent!
             return $this->parent->getMissionId();
-        }else{
-            $vhs = $this->volumesHoraires;
         }
 
-        foreach( $this->volumesHoraires as $vh){
-
+        // On retourne la mission ID s'il y en a une et une seule,
+        // et NULL s'il n'y en a aucune ou plusieurs <>
+        $missionId = null;
+        foreach ($this->volumesHoraires as $vh) {
+            if ($vh->missionId) {
+                if (!$missionId) {
+                    $missionId = $vh->missionId;
+                } else {
+                    if ($vh->missionId != $missionId) {
+                        return null;
+                    }
+                }
+            }
         }
+        return $missionId;
     }
 }

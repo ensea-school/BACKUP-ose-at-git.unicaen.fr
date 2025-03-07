@@ -45,6 +45,7 @@ final class CalculParentsTest extends TblContratTestCase
 
         $this->assertNotNull($contrat2->parent);
         $this->assertEquals(1, $contrat2->parent->id);
+
     }
 
 
@@ -59,6 +60,7 @@ final class CalculParentsTest extends TblContratTestCase
         $this->useParametres($parametres);
 
         /* Jeu de données initial */
+        //Contrat 1 global
         $contrat1              = new Contrat();
         $contrat1->id          = 1;
         $contrat1->uuid        = 'contrat_principal';
@@ -67,17 +69,20 @@ final class CalculParentsTest extends TblContratTestCase
         $contrat1->edite       = true;
         $contrat1->avenants    = [];
         // Création des objets VolumeHoraire
-        $volumeHoraire1            = new VolumeHoraire();
-        $volumeHoraire1->missionId = 1;
-        $volumeHoraire2            = new VolumeHoraire();
-        $volumeHoraire2->missionId = 1;
-        $volumeHoraire3            = new VolumeHoraire();
-        $volumeHoraire3->missionId = 1;
+        $volumeHoraire1              = new VolumeHoraire();
+        $volumeHoraire1->missionId   = 1;
+        $volumeHoraire1->structureId = 1;
+        $volumeHoraire2              = new VolumeHoraire();
+        $volumeHoraire2->missionId   = 1;
+        $volumeHoraire2->structureId = 1;
+        $volumeHoraire3              = new VolumeHoraire();
+        $volumeHoraire3->missionId   = 1;
+        $volumeHoraire3->structureId = 2;
         // Ajout des objets dans l'array volumesHoraires
 
         $contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3];
 
-
+        //Contrat 2 par composante
         $contrat2              = new Contrat();
         $contrat2->id          = 2;
         $contrat2->uuid        = 'avenant_edite';
@@ -87,8 +92,9 @@ final class CalculParentsTest extends TblContratTestCase
         $contrat2->avenants    = [];
 
         // Création des objets VolumeHoraire
-        $volumeHoraire1            = new VolumeHoraire();
-        $volumeHoraire1->missionId = 1;
+        $volumeHoraire1              = new VolumeHoraire();
+        $volumeHoraire1->missionId   = 1;
+        $volumeHoraire1->structureId = 1;
 
         // Ajout des objets dans l'array volumesHoraires
         $contrat2->volumesHoraires = [$volumeHoraire1];
@@ -96,7 +102,7 @@ final class CalculParentsTest extends TblContratTestCase
 
         $contrat1->avenants[] = &$contrat2;
 
-
+        //COntrat 3 par composante sur structure 2
         $contrat3              = new Contrat();
         $contrat3->id          = null;
         $contrat1->uuid        = 'avenant_a_calculer';
@@ -364,4 +370,176 @@ final class CalculParentsTest extends TblContratTestCase
         $this->assertEquals($contrat1->id, $contrat3->parent->id);
 
     }
+
+
+
+    public function testContratGlobalEtNouveauContratComplique(): void
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_MISSION,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBAL,
+        ];
+        $this->useParametres($parametres);
+
+        /* Jeu de données initial */
+        //Contrat 1 global
+        $contrat1              = new Contrat();
+        $contrat1->id          = 1;
+        $contrat1->uuid        = 'contrat_principal';
+        $contrat1->isMission   = true;
+        $contrat1->structureId = null;
+        $contrat1->edite       = true;
+        $contrat1->avenants    = [];
+        // Création des objets VolumeHoraire
+        $volumeHoraire1              = new VolumeHoraire();
+        $volumeHoraire1->missionId   = 1;
+        $volumeHoraire1->structureId = 1;
+        $volumeHoraire2              = new VolumeHoraire();
+        $volumeHoraire2->missionId   = 1;
+        $volumeHoraire2->structureId = 1;
+        $volumeHoraire3              = new VolumeHoraire();
+        $volumeHoraire3->missionId   = 1;
+        $volumeHoraire3->structureId = 2;
+        // Ajout des objets dans l'array volumesHoraires
+
+        $contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3];
+
+        //Contrat 2 par mission
+        $contrat2              = new Contrat();
+        $contrat2->id          = 2;
+        $contrat2->uuid        = 'avenant_edite';
+        $contrat2->isMission   = true;
+        $contrat2->parent      = &$contrat1;
+        $contrat2->structureId = 1;
+        $contrat2->avenants    = [];
+
+        // Création des objets VolumeHoraire
+        $volumeHoraire1              = new VolumeHoraire();
+        $volumeHoraire1->missionId   = 1;
+        $volumeHoraire1->structureId = 1;
+
+        // Ajout des objets dans l'array volumesHoraires
+        $contrat2->volumesHoraires = [$volumeHoraire1];
+
+
+        $contrat1->avenants[] = &$contrat2;
+
+        //COntrat 3 par mission
+        $contrat3              = new Contrat();
+        $contrat3->id          = null;
+        $contrat1->uuid        = 'avenant_a_calculer';
+        $contrat3->isMission   = true;
+        $contrat3->parent      = null;
+        $contrat3->structureId = 3;
+        $contrat3->avenants    = [];
+
+        // Création des objets VolumeHoraire
+        $volumeHoraire1              = new VolumeHoraire();
+        $volumeHoraire1->missionId   = 4;
+        $volumeHoraire1->structureId = 3;
+
+        // Ajout des objets dans l'array volumesHoraires
+        $contrat3->volumesHoraires = [$volumeHoraire1];
+
+        $this->process->calculParentsIds([$contrat1, $contrat2, $contrat3]);
+
+
+        /* Verification des calculs */
+
+        $this->assertCount(1, $contrat1->avenants);
+        $this->assertCount(0, $contrat2->avenants);
+        $this->assertCount(0, $contrat3->avenants);
+        $uuids = [];
+        foreach ($contrat1->avenants as $avenant) {
+            $uuids[] = $avenant->uuid;
+        }
+        $uuidsExpected = [$contrat2->uuid];
+        $this->assertArrayEquals($uuidsExpected, $uuids);
+        $this->assertNotNull($contrat2->parent);
+        $this->assertNull($contrat3->parent);
+        $this->assertEquals($contrat1->id, $contrat3->parent->id);
+
+    }
+    public function testDeuxParentsPotentielsPrendreDernierProjetCreer(): void
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_COMPOSANTE,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBAL,
+        ];
+        $this->useParametres($parametres);
+
+        /* Jeu de données initial */
+        //Contrat 1 par mission
+        $contrat1              = new Contrat();
+        $contrat1->id          = 1;
+        $contrat1->uuid        = 'contrat_principal';
+        $contrat1->isMission   = true;
+        $contrat1->structureId = 10;
+        $contrat1->edite       = true;
+        $contrat1->avenants    = [];
+        // Création des objets VolumeHoraire
+        $volumeHoraire1              = new VolumeHoraire();
+        $volumeHoraire1->missionId   = 1;
+        $volumeHoraire1->structureId = 10;
+        // Ajout des objets dans l'array volumesHoraires
+
+        $contrat1->volumesHoraires = [$volumeHoraire1];
+
+        //Contrat 2 par mission
+        $contrat2              = new Contrat();
+        $contrat2->id          = 2;
+        $contrat2->uuid        = 'avenant_edite';
+        $contrat2->isMission   = true;
+        $contrat2->parent      = null;
+        $contrat2->structureId = 10;
+        $contrat2->avenants    = [];
+
+        // Création des objets VolumeHoraire
+        $volumeHoraire1              = new VolumeHoraire();
+        $volumeHoraire1->missionId   = 2;
+        $volumeHoraire1->structureId = 10;
+
+        // Ajout des objets dans l'array volumesHoraires
+        $contrat2->volumesHoraires = [$volumeHoraire1];
+
+        //COntrat 3 par composante
+        $contrat3              = new Contrat();
+        $contrat3->id          = null;
+        $contrat1->uuid        = 'avenant_a_calculer';
+        $contrat3->isMission   = true;
+        $contrat3->parent      = null;
+        $contrat3->structureId = 10;
+        $contrat3->avenants    = [];
+
+        // Création des objets VolumeHoraire
+        $volumeHoraire1              = new VolumeHoraire();
+        $volumeHoraire1->missionId   = 1;
+        $volumeHoraire1->structureId = 10;
+
+        // Ajout des objets dans l'array volumesHoraires
+        $contrat3->volumesHoraires = [$volumeHoraire1];
+
+        $this->process->calculParentsIds([$contrat1, $contrat2, $contrat3]);
+
+
+        /* Verification des calculs */
+
+        $this->assertCount(0, $contrat1->avenants);
+        $this->assertCount(1, $contrat2->avenants);
+        $this->assertCount(0, $contrat3->avenants);
+        $uuids = [];
+        foreach ($contrat2->avenants as $avenant) {
+            $uuids[] = $avenant->uuid;
+        }
+        $uuidsExpected = [$contrat3->uuid];
+        $this->assertArrayEquals($uuidsExpected, $uuids);
+        $this->assertNull($contrat1->parent);
+        $this->assertNull($contrat2->parent);
+        $this->assertNotNull($contrat3->parent);
+        $this->assertEquals($contrat2->id, $contrat3->parent->id);
+
+    }
+
 }

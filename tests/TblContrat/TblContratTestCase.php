@@ -63,8 +63,7 @@ abstract class TblContratTestCase extends OseTestCase
         $hydrator->addStrategy('tauxRemuDate',$strategyDate);
         $hydrator->addStrategy('volumesHoraires',$strategyVolumeHoraire);
 
-        $uuid = $this->process->generateUUID(1, 1);
-        $contrat = new Contrat($uuid);
+        $contrat = new Contrat();
         $hydrator->hydrate($data, $contrat);
 
         return $contrat;

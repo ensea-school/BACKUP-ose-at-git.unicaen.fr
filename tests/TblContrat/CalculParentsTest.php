@@ -10,11 +10,11 @@ final class CalculParentsTest extends TblContratTestCase
     {
         $contratsModels = [];
         foreach ($contrats as $contrat) {
-            $contratsModels[] = $this->contratArrayToEntite($contrat);
+            $contratsModels[] = $this->hydrateContrat($contrat);
         }
         $this->process->calculParentsIds($contratsModels);
         foreach ($contratsModels as $index => $model) {
-            $contratsModels[$index] = $this->contratEntiteToArray($model);
+            $contratsModels[$index] = $this->extractContrat($model);
         }
         $this->assertArrayEquals($expected, $contratsModels, false);
     }
@@ -34,6 +34,7 @@ final class CalculParentsTest extends TblContratTestCase
         $contrat1 = [
             'id'        => 1,
             'isMission' => false,
+            'edite'     => true,
             'avenants'  => [],
         ];
 

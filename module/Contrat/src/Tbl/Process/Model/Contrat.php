@@ -59,9 +59,11 @@ class Contrat
 
 
 
-    public function __construct(string $uuid)
+    public function __construct(?string $uuid = null)
     {
-        $this->uuid = $uuid;
+        if ($uuid) {
+            $this->uuid = $uuid;
+        }
     }
 
 

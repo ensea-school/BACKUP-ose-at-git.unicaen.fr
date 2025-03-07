@@ -279,8 +279,6 @@ class ContratProcess implements ProcessInterface
         // On récup le + gros bid
         // Ou alors on récup l'ID le plus fin ?
 
-        $boites = [];
-
         $contratsEdites = [];
         //$avenantsEdites = [];
         $autres = [];
@@ -295,6 +293,10 @@ class ContratProcess implements ProcessInterface
             } else {
                 $autres[] = $contrat;
             }
+        }
+
+        if (empty($contratsEdites)) {
+            return; // on n'a trouvé aucun contrat déjà édité pour y associer des avenants
         }
 
         foreach ($autres as $autre) {
@@ -320,16 +322,6 @@ class ContratProcess implements ProcessInterface
             // 1 = prendre la chaine la + longue
             // 2 = prendre la dernière chaine triée par ordre alphabétique
         }
-
-
-        foreach ($contrats as $contrat) {
-            $bid = $this->contratGetBid($contrat);
-            if (!isset($boites[$bid])) {
-                $boites[$bid] = [];
-            }
-            $boites[$bid][] = $contrat;
-        }
-
     }
 
 

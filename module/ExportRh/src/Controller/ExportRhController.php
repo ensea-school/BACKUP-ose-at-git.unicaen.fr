@@ -270,7 +270,7 @@ class ExportRhController extends AbstractController
                     $matricule = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
                     if ($matricule !== false) {
                         $this->exportRhService->cloreDossier($intervenant, $codeStatut);
-                        $this->flashMessenger()->   //addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
+                        $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
                         $this->getServiceIntervenant()->updateExportDate($intervenant);
                         if ($this->exportRhService->haveToSyncCode()) {
                             $this->getServiceIntervenant()->updateCode($intervenant, $matricule);

@@ -270,6 +270,7 @@ class DemandesService extends AbstractService
         GROUP BY
             tp.intervenant_id ,
             tp.structure_id,
+            tp.mission_id,
             e.code,
             ep.code,
             fr.code,

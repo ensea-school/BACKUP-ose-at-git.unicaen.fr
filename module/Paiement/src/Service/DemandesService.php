@@ -612,7 +612,7 @@ class DemandesService extends AbstractService
                         if ($budget['dotation']['ressourcePropre'] > 0) {
 
                             //4 - on regarde si il y a encore assez de budget pour demander les heures en paiement
-                            $total = $budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'];
+                            $total = round($budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'],2);
                             if ($total <= $budget['dotation']['ressourcePropre']) {
                                 $totalHeuresDemandees['ressourcePropre'] += $demande['heures'];
                             } else {
@@ -625,7 +625,7 @@ class DemandesService extends AbstractService
                         //Si la dotation est supérieur à 0, alors on vérifie s'il reste du budget disponible
                         if ($budget['dotation']['paieEtat'] > 0) {
                             //4bis - on regarde s'il y a encore assez de budget pour demander les heures en paiement
-                            $total = $budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'];
+                            $total = round($budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'],2);
                             if ($total <= $budget['dotation']['paieEtat']) {
                                 $totalHeuresDemandees['paieEtat'] += $demande['heures'];
                             } else {

@@ -678,7 +678,7 @@ class DemandesService extends AbstractService
             $totalHeuresDemandees += $dmep['TOTAL_HEURES_DEMANDEES'];
             $totalHeuresAPayer    += $dmep['TOTAL_HEURES_A_PAYER'];
             if ($serviceReferentielId === $dmep['SERVICE_REFERENTIEL_ID'] || $serviceId === $dmep['SERVICE_ID'] || $missionId === $dmep['MISSION_ID']) {
-                $soldeHeures = ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']);
+                $soldeHeures = round($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES'],2);
                 if (bccomp((string)$heuresDemandees, (string)$soldeHeures,2) > 0) {
                     if ($soldeHeures >= 0) {
                         throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous pouvez demander maximum ' . ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']) . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
@@ -688,6 +688,8 @@ class DemandesService extends AbstractService
                 }
             }
         }
+        $totalHeuresAPayer = round($totalHeuresAPayer,2);
+        $totalHeuresDemandees = round($totalHeuresDemandees,2);
         //On  vérifie qu'il y a bien un centre de cout
         if (empty($data['centreCoutId'])) {
             throw new \Exception('Vous devez renseigner un centre de coûts pour demander ce paiement', self::EXCEPTION_DMEP_CENTRE_COUT);

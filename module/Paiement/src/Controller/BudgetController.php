@@ -342,8 +342,8 @@ class BudgetController extends AbstractController
             'heures-fi'          => 'FI',
             'heures-fa'          => 'FA',
             'heures-fc'          => 'FC',
-            'heures-primes'      => 'Prime Rém. FC D714-60',
             'heures-referentiel' => 'Référentiel',
+            'heures-primes'      => 'Prime Rém. FC D714-60',
         ]);
         $csvModel->addLines($data);
         $csvModel->setFilename('budget_mises_en_paiement.csv');

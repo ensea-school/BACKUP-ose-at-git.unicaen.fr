@@ -17,6 +17,6 @@ WHERE
   AND w.realisation = 0
   AND i.histo_destruction IS NULL
   AND si.histo_destruction IS NULL
-  AND tblc.id IS NULL
+  AND tblc.contrat_id IS NULL
   AND si.contrat = 1
   AND tblc.actif = 1

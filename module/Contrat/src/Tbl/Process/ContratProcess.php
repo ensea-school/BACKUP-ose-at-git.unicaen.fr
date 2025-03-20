@@ -491,8 +491,8 @@ class ContratProcess implements ProcessInterface
         $contratNumero = 0;
         foreach ($contrat->parent->avenants as $contratParser) {
             //On ne s'interesse qu'au avenant étant deja créer
-            if ($contratParser->id && $contratParser->NumeroAvenant > $contratNumero) {
-                $contratNumero = $contratParser->NumeroAvenant;
+            if ($contratParser->id && $contratParser->numeroAvenant > $contratNumero) {
+                $contratNumero = $contratParser->numeroAvenant;
             }
         }
         $contrat->numeroAvenant = $contratNumero + 1;

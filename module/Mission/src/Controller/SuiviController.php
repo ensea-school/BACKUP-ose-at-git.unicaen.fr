@@ -74,7 +74,7 @@ class SuiviController extends AbstractController
 
         $properties = [
             'id',
-            ['mission', ['id', 'libelleCourt']],
+            ['mission', ['id', 'libelleCourt', 'libelleMission']],
             'date',
             'heureDebut',
             'heureFin',

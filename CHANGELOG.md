@@ -1,10 +1,10 @@
 # Version stable
 
-[OSE 23.12](#ose-2312-26112024)
+[OSE 23.14](#ose-2314-05032025)
 
 
 
-# OSE 24 (à venir)
+# OSE 24 (fin mars/début avril, version 24.0-beta15 disponible pour préprod)
 
 ## Nouveautés
 * Nouvelle infrastructure de gestion des formules de calcul
@@ -43,6 +43,8 @@
 
 * **ATTENTION : la version 24 ne peut être installée qu'à partir des versions 23.13 ou supérieures. Pour les versions antérieures, il vous faut préalablement monter en 23.13 minimum.**
 
+* L'opération de migration peut durer assez longtemps : prévoyez jusqu'à 2h de durée d'exécution pour le script de mise à jour.
+
 * Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuelle rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui-ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
 `
 #avant
@@ -54,7 +56,16 @@
 * L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.
 
-# OSE 23.13 (à venir)
+
+
+# OSE 23.14 (05/03/2025)
+
+## Corrections
+
+* **Faille de sécurité importante corrigée** : un intervenant connecté ayant accès aux contrats téléversés pouvait télécharger les contrats d'autres intervenants
+
+
+# OSE 23.13 (17/02/2025)
 
 ## Corrections
 

@@ -6,9 +6,11 @@ namespace Contrat\Tbl\Process;
 use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Contrat\Service\TypeContratServiceAwareTrait;
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Model\VolumeHoraire;
 use Paiement\Service\TauxRemuServiceAwareTrait;
+use Service\Service\TypeServiceServiceAwareTrait;
 use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
@@ -21,6 +23,8 @@ class ContratProcess implements ProcessInterface
     use AnneeServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
+    use TypeContratServiceAwareTrait;
+    use TypeServiceServiceAwareTrait;
 
     private string $parametreAvenant;
 
@@ -579,9 +583,61 @@ class ContratProcess implements ProcessInterface
 
     public function extractContratVolumeHoraire(int $intervenantId, Contrat $contrat, VolumeHoraire $vh): array
     {
-        $data = [];
+        // récup des types de contrats
+        if (empty($contrat->parent)) {
+            $typeContrat = $this->getServiceTypeContrat()->getContrat();
+        } else {
+            $typeContrat = $this->getServiceTypeContrat()->getAvenant();
+        }
 
-        /* TODO process data */
+        // récup du type de service
+        if ($vh->serviceId) {
+            $typeService = $this->getServiceTypeService()->getEnseignement();
+        } elseif ($vh->serviceReferentielId) {
+            $typeService = $this->getServiceTypeService()->getReferentiel();
+        } elseif ($vh->missionId) {
+            $typeService = $this->getServiceTypeService()->getMission();
+        } else {
+            throw new \Exception('Impossible de déterminer le type de service pour ce volume horaire de contrat');
+        }
+
+        $data = [
+            'annee_id'                  => null,
+            'intervenant_id'            => $intervenantId,
+            'actif'                     => $contrat->actif,
+            'structure_id'              => $contrat->structureId,
+            'edite'                     => $contrat->edite,
+            'signe'                     => $contrat->signe,
+            'autre_libelle'             => $vh->autreLibelle,
+            'autres'                    => $vh->autres,
+            'cm'                        => $vh->cm,
+            'contrat_id'                => $contrat->id,
+            'contrat_parent_id'         => $contrat->parent?->id,
+            'date_creation'             => $contrat->histoCreation?->format('Y-m-d'),
+            'date_debut'                => $contrat->debutValidite?->format('Y-m-d'),
+            'date_fin'                  => $contrat->finValidite?->format('Y-m-d'),
+            'hetd'                      => $vh->hetd,
+            'heures'                    => $vh->heures,
+            'mission_id'                => $vh->missionId,
+            'service_id'                => $vh->serviceId,
+            'service_referentiel_id'    => $vh->serviceReferentielId,
+            'taux_conges_payes'         => null,
+            'taux_remu_date'            => $contrat->tauxRemuDate?->format('Y-m-d'),
+            'taux_remu_id'              => $contrat->tauxRemuId,
+            'taux_remu_majore_date'     => null,
+            'taux_remu_majore_id'       => $contrat->tauxRemuMajoreId,
+            'taux_remu_majore_valeur'   => $contrat->tauxRemuMajoreValeur,
+            'taux_remu_valeur'          => $contrat->tauxRemuValeur,
+            'td'                        => $vh->td,
+            'termine'                   => null,
+            'tp'                        => $vh->tp,
+            'type_contrat_id'           => $typeContrat->getId(),
+            'type_service_id'           => $typeService->getId(),
+            'uuid'                      => $contrat->uuid,
+            'volume_horaire_id'         => $vh->volumeHoraireId,
+            'volume_horaire_mission_id' => $vh->volumeHoraireMissionId,
+            'volume_horaire_ref_id'     => $vh->volumeHoraireRefId,
+        ];
 
         return $data;
     }
@@ -594,7 +650,8 @@ class ContratProcess implements ProcessInterface
         foreach ($this->intervenants as $intervenantId => $contrats) {
             foreach ($contrats as $uuid => $contrat) {
                 foreach ($contrat->volumesHoraires as $volumeHoraire) {
-                    $this->tblData[] = $this->extractContratVolumeHoraire($intervenantId, $contrat, $volumeHoraire);
+                    $ligne           = $this->extractContratVolumeHoraire($intervenantId, $contrat, $volumeHoraire);
+                    $this->tblData[] = array_change_key_case($ligne, CASE_UPPER);
                 }
             }
         }

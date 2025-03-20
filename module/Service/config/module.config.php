@@ -282,6 +282,7 @@ return [
     ],
 
     'services' => [
+        Service\TypeServiceService::class              => Service\TypeServiceServiceFactory::class,
         Service\EtatVolumeHoraireService::class        => InvokableFactory::class,
         Service\TypeVolumeHoraireService::class        => InvokableFactory::class,
         Service\CampagneSaisieService::class           => InvokableFactory::class,

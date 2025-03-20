@@ -142,7 +142,9 @@ class Contrat
 
     public function setParent(Contrat $parent): void
     {
-        $this->parent = $parent;
-        $parent->avenants[] = $this;
+        if ($this->parent !== $parent) {
+            $this->parent = $parent;
+            $parent->avenants[] = $this;
+        }
     }
 }

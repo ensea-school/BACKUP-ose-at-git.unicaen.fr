@@ -43,6 +43,20 @@ class ContratProcess implements ProcessInterface
 
 
 
+    public function getIntervenants(): array
+    {
+        return $this->intervenants;
+    }
+
+
+
+    public function getContrats(): array
+    {
+        return $this->contrats;
+    }
+
+
+
     public function run(TableauBord $tableauBord, array $params = []): void
     {
         if (empty($params)) {
@@ -84,14 +98,23 @@ class ContratProcess implements ProcessInterface
         $sql    = $this->getServiceBdd()->injectKey($sql, $params);
         $parser = $this->getBdd()->selectEach($sql);
         while ($data = $parser->next()) {
-            $data          = array_change_key_case($data, CASE_LOWER);
-            $intervenantId = (int)$data['intervenant_id'];
-            $contratId     = (int)$data['contrat_id'];
-            $uuid          = $this->generateUUID($intervenantId, $contratId);
-            $contrat       = $this->getContrat($intervenantId, $uuid);
-            $this->contratHydrateFromDb($contrat, $data);
+            $this->loadContratsWhile($data);
         }
+    }
 
+
+
+    /**
+     * @param array $data
+     */
+    public function loadContratsWhile(array $data): void
+    {
+        $data          = array_change_key_case($data, CASE_LOWER);
+        $intervenantId = (int)$data['intervenant_id'];
+        $contratId     = (int)$data['contrat_id'];
+        $uuid          = $this->generateUUID($intervenantId, $contratId);
+        $contrat       = $this->getContrat($intervenantId, $uuid);
+        $this->contratHydrateFromDb($contrat, $data);
     }
 
 
@@ -141,15 +164,25 @@ class ContratProcess implements ProcessInterface
         $sql    = $this->getServiceBdd()->injectKey($sql, $params);
         $parser = $this->getBdd()->selectEach($sql);
         while ($data = $parser->next()) {
-            $data          = array_change_key_case($data, CASE_LOWER);
-            $volumeHoraire = new VolumeHoraire();
-            $this->volumeHoraireHydrateFromDb($volumeHoraire, $data);
-
-            $intervenantId                                              = (int)$data['intervenant_id'];
-            $contratId                                                  = (int)$data['contrat_id'] ?: null;
-            $uuid                                                       = $this->generateUUID($intervenantId, $contratId, $volumeHoraire->structureId, $volumeHoraire->missionId);
-            $this->getContrat($intervenantId, $uuid)->volumesHoraires[] = $volumeHoraire;
+            $this->loadVolumesHorairesWhile($data);
         }
+    }
+
+
+
+    /**
+     * @param array $data
+     */
+    public function loadVolumesHorairesWhile(array $data): void
+    {
+        $data          = array_change_key_case($data, CASE_LOWER);
+        $volumeHoraire = new VolumeHoraire();
+        $this->volumeHoraireHydrateFromDb($volumeHoraire, $data);
+
+        $intervenantId                                              = (int)$data['intervenant_id'];
+        $contratId                                                  = (int)$data['contrat_id'] ?: null;
+        $uuid                                                       = $this->generateUUID($intervenantId, $contratId, $volumeHoraire->structureId, $volumeHoraire->missionId);
+        $this->getContrat($intervenantId, $uuid)->volumesHoraires[] = $volumeHoraire;
     }
 
 
@@ -590,5 +623,4 @@ class ContratProcess implements ProcessInterface
         // on vide pour limiter la conso de RAM
         $this->tblData = [];
     }
-
 }

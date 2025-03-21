@@ -4,6 +4,8 @@ namespace Contrat\Tbl\Process\Model;
 
 class VolumeHoraire
 {
+    public Contrat $contrat;
+
     public ?int $anneeId                = null;
     public ?int $structureId            = null;
     public ?int $serviceId              = null;
@@ -22,4 +24,12 @@ class VolumeHoraire
     public float   $heures       = 0.0;
     public float   $hetd         = 0.0;
     public ?string $autreLibelle = null;
+
+
+
+    public function setContrat(Contrat $contrat): void
+    {
+        $this->contrat              = $contrat;
+        $contrat->volumesHoraires[] = $this;
+    }
 }

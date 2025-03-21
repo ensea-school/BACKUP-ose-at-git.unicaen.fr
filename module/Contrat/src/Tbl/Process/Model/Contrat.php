@@ -3,6 +3,8 @@
 namespace Contrat\Tbl\Process\Model;
 
 
+use Service\Entity\Db\TypeService;
+
 class Contrat
 {
     public bool $actif = false;
@@ -10,6 +12,10 @@ class Contrat
     public \DateTime $anneeDateDebut;
 
     public ?int $id = null;
+
+    public ?TypeService $typeService = null;
+
+    public ?int $anneeId = null;
 
     public bool $isMission = false;
 
@@ -21,6 +27,7 @@ class Contrat
 
     public ?Contrat $parent = null;
 
+    /** @var Contrat[]  */
     public array $avenants = [];
 
     public int $numeroAvenant = 0;
@@ -39,6 +46,8 @@ class Contrat
 
     public bool $signe = false;
 
+    public bool $termine = false;
+
     //public float $hetd = 0.0;
 
     public float $totalHetd = 0.0;
@@ -52,6 +61,8 @@ class Contrat
     public ?int $tauxRemuMajoreId = null;
 
     public float $tauxRemuMajoreValeur = 0.0;
+
+    public float $tauxCongesPayes = 1.0;
 
 
     /** @var VolumeHoraire[] */

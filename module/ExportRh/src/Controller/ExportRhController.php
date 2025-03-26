@@ -270,7 +270,7 @@ class ExportRhController extends AbstractController
                     $matricule = $this->exportRhService->renouvellementIntervenantRh($intervenant, $posts);
                     if ($matricule !== false) {
                         $this->exportRhService->cloreDossier($intervenant, $codeStatut);
-                        $this->flashMessenger()->   //addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
+                        $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
                         $this->getServiceIntervenant()->updateExportDate($intervenant);
                         if ($this->exportRhService->haveToSyncCode()) {
                             $this->getServiceIntervenant()->updateCode($intervenant, $matricule);
@@ -285,11 +285,11 @@ class ExportRhController extends AbstractController
             }
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
-            return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()]);
+            return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+
 
         }
-
-        return $this->exporterAction();
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
     }
 
 
@@ -297,8 +297,8 @@ class ExportRhController extends AbstractController
     public function synchroniserAction()
     {
         try {
+            $intervenant = $this->getEvent()->getParam('intervenant');
             if ($this->getRequest()->isPost()) {
-                $intervenant = $this->getEvent()->getParam('intervenant');
                 if (!$intervenant) {
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
@@ -315,7 +315,8 @@ class ExportRhController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-        return $this->exporterAction();
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+
     }
 
 }

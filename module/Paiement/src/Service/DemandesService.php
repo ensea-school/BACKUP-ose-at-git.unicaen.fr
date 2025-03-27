@@ -700,8 +700,9 @@ class DemandesService extends AbstractService
                 throw new \Exception('Vous devez renseigner un domaine fonctionnel pour demander ce paiement', self::EXCEPTION_DMEP_DOMAINE_FONCTIONNEL);
             }
         }
+        $soldeTotalHeures = round($totalHeuresAPayer - $totalHeuresDemandees,2);
         //On vérifie en dernier si l'ensemble des heures déjà payé ne dépasse pas le nombre d'heures réalisées tout service confondu.
-        if (bccomp((string)($totalHeuresAPayer - $totalHeuresDemandees), (string)$heuresDemandees, 2) < 0) {
+        if (bccomp((string)($soldeTotalHeures), (string)$heuresDemandees, 2) < 0) {
             throw new \Exception('Demande de mise en paiement impossible, la somme des heures déjà demandée en paiement pour tous les services confondus ne permet plus de demander en paiement les ' . $heuresDemandees . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
         }
 

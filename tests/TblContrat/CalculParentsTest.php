@@ -128,10 +128,10 @@ final class CalculParentsTest extends TblContratTestCase
         }
         $uuidsExpected = [$contrat2->uuid, $contrat3->uuid];
         $this->assertArrayEquals($uuidsExpected, $uuids);
-        $this->assertNotNull($contrat2->parent);
-        $this->assertNotNull($contrat3->parent);
-        $this->assertEquals($contrat1->id, $contrat2->parent->id);
-        $this->assertEquals($contrat1->id, $contrat3->parent->id);
+        CalculParentsTest::assertNotNull($contrat2->parent);
+        CalculParentsTest::assertNotNull($contrat3->parent);
+        CalculParentsTest::assertEquals($contrat1->id, $contrat2->parent->id);
+        CalculParentsTest::assertEquals($contrat1->id, $contrat3->parent->id);
 
     }
 

@@ -206,6 +206,7 @@ class ContratProcess implements ProcessInterface
         $vh->volumeHoraireMissionId = (int)$data['volume_horaire_mission_id'] ?: null;
         $vh->tauxRemuId             = (int)$data['taux_remu_id'] ?: null;
         $vh->tauxRemuMajoreId       = (int)$data['taux_remu_majore_id'] ?: null;
+        $vh->dateFinMission         = $data['date_fin_mission'] ? new \DateTime($data['date_fin_mission']) : null;
         $vh->cm                     = (float)$data['cm'];
         $vh->td                     = (float)$data['td'];
         $vh->tp                     = (float)$data['tp'];
@@ -226,6 +227,7 @@ class ContratProcess implements ProcessInterface
             }
             $this->calculParentsIds($contrats);
             // ajout d'avenants vides pour les missions avec des prolongations de dates
+            $this->contratProlongationMission($contrats);
 
             /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
             foreach ($contrats as $contrat) {
@@ -236,8 +238,17 @@ class ContratProcess implements ProcessInterface
             }
 
             $this->calculNumerosAvenants($contrats);
-            // ajout de contrats vides d'enseignement si aucune
+            // Ajout de contrats vides d'enseignement si aucune
             // Activer les lignes où il y a besoin de contrats/avenants
+        }
+    }
+
+
+
+    public function contratProlongationMission(array $contrats): void
+    {
+        foreach ($contrats as $contrat) {
+
         }
     }
 

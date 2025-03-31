@@ -5,12 +5,19 @@ namespace TblContrat;
 use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Model\VolumeHoraire;
+use DateTime;
 use tests\TblContrat\TblContratTestCase;
 
+/**
+ *
+ */
 final class ProlongationMissionTest extends TblContratTestCase
 {
 
 
+    /**
+     * @return void
+     */
     public function testCasSimple(): void
     {
         $parametres = [
@@ -25,17 +32,17 @@ final class ProlongationMissionTest extends TblContratTestCase
         $contrat1->id          = 1;
         $contrat1->edite       = true;
         $contrat1->isMission   = true;
-        $contrat1->finValidite = new \DateTime('2020-02-20');
+        $contrat1->finValidite = new DateTime('2020-02-20');
 
         $volumeHoraire1                 = new VolumeHoraire();
         $volumeHoraire1->missionId      = 18;
-        $volumeHoraire1->dateFinMission = new \DateTime('2020-02-21');
+        $volumeHoraire1->dateFinMission = new DateTime('2020-02-21');
         $contrat1->volumesHoraires      = [$volumeHoraire1];
 
         $this->process->contratProlongationMission([$contrat1]);
 
-        $this->assertCount($contrat1->id, $contrat1->avenants[0]->parent->id);
-        $this->assertEquals(1, $contrat1->avenants[0]->parent->id);
+        ProlongationMissionTest::assertCount(1, $contrat1->avenants);
+        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
 
     }
 
@@ -45,8 +52,57 @@ final class ProlongationMissionTest extends TblContratTestCase
         un nouveau volume horaire sur mission 1 (donc avenant d'heure)
         une prolongation de date sur mission 3 : date fin 2020-02-24 (donc avenant de prolongation)
 
-        resultat attendu : creation de deux avenant, un d'heure sur mission 1 et un de prolongation (avenant au contrat sans volume horaire)
+        resultat attendu : creation de deux avenant, un d'heure sur mission 1 et un de prolongation sur mission 3 (avenant au contrat sans volume horaire)
     */
+    /**
+     * @return void
+     */
+    public function testDoubleAvenantAvecHeureEtProlongationMission()
+    {
+        $contrat1              = new Contrat();
+        $contrat1->id          = 1;
+        $contrat1->edite       = true;
+        $contrat1->isMission   = true;
+        $contrat1->finValidite = new DateTime('2020-02-20');
+
+        $volumeHoraireMission1                 = new VolumeHoraire();
+        $volumeHoraireMission1->missionId      = 1;
+        $volumeHoraireMission1->dateFinMission = new DateTime('2020-02-20');
+
+        $volumeHoraireMission2                 = new VolumeHoraire();
+        $volumeHoraireMission2->missionId      = 2;
+        $volumeHoraireMission2->dateFinMission = new DateTime('2020-02-20');
+
+        $volumeHoraireMission3                 = new VolumeHoraire();
+        $volumeHoraireMission3->missionId      = 3;
+        $volumeHoraireMission3->dateFinMission = new DateTime('2020-02-22');
+
+        $contrat1->volumesHoraires = [$volumeHoraireMission1, $volumeHoraireMission2, $volumeHoraireMission3];
+
+
+        $avenant              = new Contrat();
+        $avenant->id          = 1;
+        $avenant->edite       = true;
+        $avenant->isMission   = true;
+        $avenant->parent      = $contrat1;
+        $avenant->finValidite = new DateTime('2020-02-20');
+
+        $volumeHoraire2                 = new VolumeHoraire();
+        $volumeHoraire2->missionId      = 1;
+        $volumeHoraire2->dateFinMission = new DateTime('2020-02-20');
+        $avenant->volumesHoraires[]     = $volumeHoraire2;
+        $contrat1->avenants = [$avenant];
+
+
+        $this->process->contratProlongationMission([$contrat1,$avenant]);
+
+        ProlongationMissionTest::assertCount(2, $contrat1->avenants);
+        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
+        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[1]->parent->id);
+
+
+    }
+
 
     /* cas de test a dev :
     Parametre par mission
@@ -93,6 +149,9 @@ final class ProlongationMissionTest extends TblContratTestCase
 
     resultat attendu : Création de deux avenant de prolongation, un avenant au contrat 1 et un avenant au contrat 2
     */
+    /**
+     * @return void
+     */
     public function testCasComplique(): void
     {
     }

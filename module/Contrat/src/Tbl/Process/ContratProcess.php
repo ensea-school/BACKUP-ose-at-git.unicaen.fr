@@ -245,10 +245,16 @@ class ContratProcess implements ProcessInterface
 
 
 
+    /**
+     * @param array $contrats
+     * @return void
+     */
     public function contratProlongationMission(array $contrats): void
     {
-        foreach ($contrats as $contrat) {
-
+        foreach ($contrats as $contratParcours) {
+            /* @var Contrat $contratParcours */
+            $test = $contratParcours->id;
+            $contratParcours->id = 1;
         }
     }
 

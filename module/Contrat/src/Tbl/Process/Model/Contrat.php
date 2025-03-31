@@ -3,19 +3,18 @@
 namespace Contrat\Tbl\Process\Model;
 
 
+use Application\Entity\Db\Annee;
 use Service\Entity\Db\TypeService;
 
 class Contrat
 {
     public bool $actif = false;
 
-    public \DateTime $anneeDateDebut;
-
     public ?int $id = null;
 
     public ?TypeService $typeService = null;
 
-    public ?int $anneeId = null;
+    public ?Annee $annee = null;
 
     public bool $isMission = false;
 

@@ -43,8 +43,6 @@ class ContratProcess implements ProcessInterface
     /** @var array|Contrat[][] */
     private array $intervenants = [];
 
-    private array $contrats = [];
-
     private array $tblData = [];
 
 
@@ -74,9 +72,11 @@ class ContratProcess implements ProcessInterface
             $this->init();
             $this->loadContrats($params);
             $this->loadVolumesHoraires($params);
-            $this->traitement();
+            foreach ($this->intervenants as $contrats) {
+                $this->traitement($contrats);
+            }
             $this->exporter();
-            //$this->enregistrement($tableauBord, $params);
+            $this->enregistrement($tableauBord, $params);
         }
     }
 
@@ -126,19 +126,20 @@ class ContratProcess implements ProcessInterface
 
     public function contratHydrateFromDb(Contrat $contrat, array $data): void
     {
-        $contrat->actif          = $data['actif'] === '1';
-        $contrat->anneeDateDebut = new \DateTime($data['annee_date_debut']);
-        $contrat->id             = (int)$data['contrat_id'];
-        $contrat->intervenantId  = (int)$data['intervenant_id'];
-        $contrat->anneeId        = (int)$data['annee_id'];
-        $contrat->structureId    = (int)$data['structure_id'] ?: null;
-        $parentId                = (int)$data['parent_id'] ?: null;
+        $annee = $this->getServiceAnnee()->get((int)$data['annee_id']);
+
+        $contrat->actif         = $data['actif'] === '1';
+        $contrat->id            = (int)$data['contrat_id'] ?: null;
+        $contrat->intervenantId = (int)$data['intervenant_id'];
+        $contrat->annee         = $annee;
+        $contrat->structureId   = (int)$data['structure_id'] ?: null;
+        $parentId               = (int)$data['parent_id'] ?: null;
         if ($parentId) {
             $uuid = $this->generateUUID($contrat->intervenantId, $parentId);
             $contrat->setParent($this->getContrat($contrat->intervenantId, $uuid));
         }
         $contrat->numeroAvenant = (int)$data['numero_avenant'];
-        $contrat->totalHetd     = $data['totalHetd'] != null ? (int)$data['totalHetd'] : null;
+        $contrat->totalHetd     = (int)$data['total_hetd'];
         $contrat->debutValidite = $data['debut_validite'] ? new \DateTime($data['debut_validite']) : null;
         $contrat->finValidite   = $data['fin_validite'] ? new \DateTime($data['fin_validite']) : null;
         $contrat->histoCreation = $data['histo_creation'] ? new \DateTime($data['histo_creation']) : null;
@@ -157,7 +158,10 @@ class ContratProcess implements ProcessInterface
         }
 
         if (!array_key_exists($uuid, $this->intervenants[$intervenantId])) {
-            $this->intervenants[$intervenantId][$uuid] = new Contrat($uuid);
+            $contrat                = new Contrat($uuid);
+            $contrat->intervenantId = $intervenantId;
+
+            $this->intervenants[$intervenantId][$uuid] = $contrat;
         }
         return $this->intervenants[$intervenantId][$uuid];
     }
@@ -187,6 +191,9 @@ class ContratProcess implements ProcessInterface
         $uuid = $this->generateUUID($intervenantId, $contratId, $volumeHoraire->structureId, $volumeHoraire->missionId);
 
         $contrat = $this->getContrat($intervenantId, $uuid);
+        if (empty($contrat->annee)) {
+            $contrat->annee = $this->getServiceAnnee()->get((int)$data['annee_id']);
+        }
         $volumeHoraire->setContrat($contrat);
 
         return $volumeHoraire;
@@ -196,7 +203,6 @@ class ContratProcess implements ProcessInterface
 
     public function volumeHoraireHydrateFromDb(VolumeHoraire $vh, array $data): void
     {
-        $vh->anneeId                = (int)$data['annee_id'];
         $vh->structureId            = (int)$data['structure_id'];
         $vh->serviceId              = (int)$data['service_id'] ?: null;
         $vh->serviceReferentielId   = (int)$data['service_referentiel_id'] ?: null;
@@ -218,29 +224,28 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function traitement(): void
+    public function traitement(array &$contrats): void
     {
-        foreach ($this->intervenants as $contrats) {
-            foreach ($contrats as $contrat) {
-                $this->calculTypeService($contrat);
-                $this->calculStructure($contrat);
-            }
-            $this->calculParentsIds($contrats);
-            // ajout d'avenants vides pour les missions avec des prolongations de dates
-            $this->contratProlongationMission($contrats);
-
-            /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
-            foreach ($contrats as $contrat) {
-                $this->calculTauxRemu($contrat);
-                $this->calculTotalHETD($contrat);
-                $this->calculTermine($contrat);
-                $this->calculTauxCongesPayes($contrat);
-            }
-
-            $this->calculNumerosAvenants($contrats);
-            // Ajout de contrats vides d'enseignement si aucune
-            // Activer les lignes où il y a besoin de contrats/avenants
+        foreach ($contrats as $contrat) {
+            $this->calculTypeService($contrat);
+            $this->calculStructure($contrat);
+            $this->completionContrat($contrat);
         }
+        $this->calculParentsIds($contrats);
+        // ajout d'avenants vides pour les missions avec des prolongations de dates
+        $this->contratProlongationMission($contrats);
+
+        /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
+        foreach ($contrats as $contrat) {
+            $this->calculTauxRemu($contrat);
+            $this->calculTotalHETD($contrat);
+            $this->calculTermine($contrat);
+            $this->calculTauxCongesPayes($contrat);
+        }
+
+        $this->calculNumerosAvenants($contrats);
+        // ajout de contrats vides d'enseignement si aucune
+        // Activer les lignes où il y a besoin de contrats/avenants
     }
 
 
@@ -320,6 +325,13 @@ class ContratProcess implements ProcessInterface
         } else {
             $contrat->structureId = null;
         }
+    }
+
+
+
+    public function completionContrat(Contrat $contrat): void
+    {
+        // on complète le contrat
     }
 
 
@@ -479,7 +491,7 @@ class ContratProcess implements ProcessInterface
             $contrat->tauxRemuMajoreId = $contrat->tauxRemuId;
         }
 
-        $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->anneeDateDebut;
+        $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->annee->getDateDebut();
         $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->tauxRemuDate);
         $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $contrat->tauxRemuDate);
     }
@@ -506,18 +518,21 @@ class ContratProcess implements ProcessInterface
     {
         //On connait deja les numéro d'avenant récuperé de la table contrat et on a pas besoin de le recalculer pour les contrat editer (on le fait cependant pour les projets)
         if ($contrat->id && $contrat->edite == 1) {
-            exit;
+            return;
         }
 
         //On cherche l'avenant au numéro le plus grand et on incrémente de 1 pour l'avenant suivant
         $contratNumero = 0;
-        foreach ($contrat->parent->avenants as $contratParser) {
-            //On ne s'interesse qu'au avenant étant deja créer
-            if ($contratParser->id && $contratParser->numeroAvenant > $contratNumero) {
-                $contratNumero = $contratParser->numeroAvenant;
+        if ($contrat->parent) {
+            foreach ($contrat->parent->avenants as $contratParser) {
+                //On ne s'interesse qu'au avenant étant deja créer
+                if ($contratParser->id && $contratParser->numeroAvenant > $contratNumero) {
+                    $contratNumero = $contratParser->numeroAvenant;
+                }
             }
+
+            $contrat->numeroAvenant = $contratNumero + 1;
         }
-        $contrat->numeroAvenant = $contratNumero + 1;
     }
 
 
@@ -561,26 +576,27 @@ class ContratProcess implements ProcessInterface
      * @param array|Contrat[] $contrats
      */
     public function calculTotalHETD(Contrat $contrat): void
-    {// ne pas prendre en compte les projets amont
-        if ($contrat->id && $contrat->edite == 1) {
+    {
+        // ne pas prendre en compte les projets amont
+        if ($contrat->id && $contrat->edite) {
             //Si le contrat existe on recupère le total hetd de la table contrat
-            exit;
+            return;
         }
 
         $total = 0;
         if ($contrat->parent == null) {
-            //s'il n'a pas de parent alors il est un contrat on n'a besoin d'ajouter que ses propres heures
+            //s'il n'a pas de parent alors il est un contrat sinon on n'a besoin d'ajouter que ses propres heures
             foreach ($contrat->volumesHoraires as $vh) {
                 $total += $vh->hetd;
             }
         } else {
-            //On ajoute les heures du contrat a contractualisé
+            //On ajoute les heures du contrat à contractualiser
             foreach ($contrat->volumesHoraires as $vh) {
                 $total += $vh->hetd;
             }
-            // On ajout les heures des autres avenants lié au meme contrat deja contractualisé
+            // On ajoute les heures des autres avenants liés au même contrat déjà contractualisé
             foreach ($contrat->parent->avenants as $contratParser) {
-                //On ne s'occupe que des avenants deja contractualisé
+                //On ne s'occupe que des avenants déjà contractualisés
                 if (!$contratParser->id) {
                     continue;
                 }
@@ -589,7 +605,7 @@ class ContratProcess implements ProcessInterface
                     $total += $vh->hetd;
                 }
             }
-            //On ajoutes les volumes horaire lié au contrat parent
+            //On ajoute les volumes horaires liés au contrat parent
             foreach ($contrat->parent->volumesHoraires as $vh) {
                 $total += $vh->hetd;
             }
@@ -662,11 +678,60 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function extractContratVolumeHoraire(int $intervenantId, Contrat $contrat, VolumeHoraire $vh): array
+    public function extractContrat(Contrat $contrat): array
     {
+        $typeServiceId = $contrat->isMission ? $this->getServiceTypeService()->getMission()->getId() : $this->getServiceTypeService()->getEnseignement()->getId();
+
         $data = [
-            'annee_id'                  => $contrat->anneeId,
-            'intervenant_id'            => $intervenantId,
+            'annee_id'                  => $contrat->annee->getId(),
+            'intervenant_id'            => $contrat->intervenantId,
+            'actif'                     => $contrat->actif,
+            'structure_id'              => $contrat->structureId,
+            'edite'                     => $contrat->edite,
+            'signe'                     => $contrat->signe,
+            'autre_libelle'             => null,
+            'autres'                    => 0,
+            'cm'                        => 0,
+            'contrat_id'                => $contrat->id,
+            'contrat_parent_id'         => $contrat->parent?->id,
+            'date_creation'             => $contrat->histoCreation,
+            'date_debut'                => $contrat->debutValidite,
+            'date_fin'                  => $contrat->finValidite,
+            'hetd'                      => 0,
+            'heures'                    => 0,
+            'mission_id'                => $contrat->getMissionId(),
+            'service_id'                => null,
+            'service_referentiel_id'    => null,
+            'taux_conges_payes'         => $contrat->tauxCongesPayes,
+            'taux_remu_date'            => $contrat->tauxRemuDate,
+            'taux_remu_id'              => $contrat->tauxRemuId,
+            'taux_remu_majore_date'     => $contrat->tauxRemuDate,
+            'taux_remu_majore_id'       => $contrat->tauxRemuMajoreId,
+            'taux_remu_majore_valeur'   => $contrat->tauxRemuMajoreValeur,
+            'taux_remu_valeur'          => $contrat->tauxRemuValeur,
+            'td'                        => 0,
+            'termine'                   => $contrat->termine,
+            'tp'                        => 0,
+            'type_contrat_id'           => $this->getTypeContrat($contrat)->getId(),
+            'type_service_id'           => $typeServiceId,
+            'uuid'                      => $contrat->uuid,
+            'volume_horaire_id'         => null,
+            'volume_horaire_mission_id' => null,
+            'volume_horaire_ref_id'     => null,
+        ];
+
+        return $data;
+    }
+
+
+
+    public function extractVolumeHoraire(VolumeHoraire $vh): array
+    {
+        $contrat = $vh->contrat;
+
+        $data = [
+            'annee_id'                  => $contrat->annee->getId(),
+            'intervenant_id'            => $contrat->intervenantId,
             'actif'                     => $contrat->actif,
             'structure_id'              => $contrat->structureId,
             'edite'                     => $contrat->edite,
@@ -676,18 +741,18 @@ class ContratProcess implements ProcessInterface
             'cm'                        => $vh->cm,
             'contrat_id'                => $contrat->id,
             'contrat_parent_id'         => $contrat->parent?->id,
-            'date_creation'             => $contrat->histoCreation?->format('Y-m-d'),
-            'date_debut'                => $contrat->debutValidite?->format('Y-m-d'),
-            'date_fin'                  => $contrat->finValidite?->format('Y-m-d'),
+            'date_creation'             => $contrat->histoCreation,
+            'date_debut'                => $contrat->debutValidite,
+            'date_fin'                  => $contrat->finValidite,
             'hetd'                      => $vh->hetd,
             'heures'                    => $vh->heures,
             'mission_id'                => $vh->missionId,
             'service_id'                => $vh->serviceId,
             'service_referentiel_id'    => $vh->serviceReferentielId,
             'taux_conges_payes'         => $contrat->tauxCongesPayes,
-            'taux_remu_date'            => $contrat->tauxRemuDate?->format('Y-m-d'),
+            'taux_remu_date'            => $contrat->tauxRemuDate,
             'taux_remu_id'              => $contrat->tauxRemuId,
-            'taux_remu_majore_date'     => $contrat->tauxRemuDate?->format('Y-m-d'),
+            'taux_remu_majore_date'     => $contrat->tauxRemuDate,
             'taux_remu_majore_id'       => $contrat->tauxRemuMajoreId,
             'taux_remu_majore_valeur'   => $contrat->tauxRemuMajoreValeur,
             'taux_remu_valeur'          => $contrat->tauxRemuValeur,
@@ -712,9 +777,14 @@ class ContratProcess implements ProcessInterface
         $this->tblData = [];
         foreach ($this->intervenants as $intervenantId => $contrats) {
             foreach ($contrats as $uuid => $contrat) {
-                foreach ($contrat->volumesHoraires as $volumeHoraire) {
-                    $ligne           = $this->extractContratVolumeHoraire($intervenantId, $contrat, $volumeHoraire);
-                    $this->tblData[] = array_change_key_case($ligne, CASE_UPPER);
+                if (empty($contrat->volumesHoraires)) {
+                    $ligne           = $this->extractContrat($contrat);
+                    $this->tblData[] = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
+                } else {
+                    foreach ($contrat->volumesHoraires as $volumeHoraire) {
+                        $ligne           = $this->extractVolumeHoraire($volumeHoraire);
+                        $this->tblData[] = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
+                    }
                 }
             }
         }

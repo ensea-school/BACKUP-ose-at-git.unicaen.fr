@@ -38,6 +38,7 @@
 * Bug sur l'onglet service avec un utilisateur ayant un rôle avec un périmètre composante (#60291)
 * Renforcement pour limiter la validation ou le refus d'une candidature à sa propre composante uniquement (#60566)
 * Le différentiel s'affiche correctement dans la page d'administration de l'import (#59394)
+* Correction pb aff mois sur OSE Missions (#61452)
 
 ## Notes de mise à jour
 

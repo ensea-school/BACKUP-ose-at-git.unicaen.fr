@@ -14,7 +14,7 @@ $tbl = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 $params = [
     //'INTERVENANT_ID' => 940962,
     //'INTERVENANT_ID' => 665114,
-    //'ANNEE_ID' => 2021,
+    'ANNEE_ID' => 2017,
 ];
 
 $progresBar = $io->createProgressBar(0);

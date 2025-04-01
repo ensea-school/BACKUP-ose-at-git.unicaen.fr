@@ -4,8 +4,8 @@
 
 return [
     'name'    => 'TBL_CONTRAT_UK',
-    'unique'  => TRUE,
     'table'   => 'TBL_CONTRAT',
+    'index'   => 'TBL_CONTRAT_UK',
     'columns' => [
         'ANNEE_ID',
         'INTERVENANT_ID',

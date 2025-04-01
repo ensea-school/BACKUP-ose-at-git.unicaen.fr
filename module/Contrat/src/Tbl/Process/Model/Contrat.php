@@ -10,6 +10,8 @@ class Contrat
 {
     public bool $actif = false;
 
+    public bool $historise = false;
+
     public ?int $id = null;
 
     public ?TypeService $typeService = null;
@@ -78,7 +80,7 @@ class Contrat
 
 
 
-    public function hasStructureId(int $structureId): bool
+    public function hasStructureId(?int $structureId): bool
     {
         if ($this->structureId){
             return $this->structureId == $structureId;

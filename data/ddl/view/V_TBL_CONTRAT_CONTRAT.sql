@@ -12,6 +12,7 @@ SELECT
     c.debut_validite,
     c.fin_validite,
     c.histo_creation,
+    c.histo_destruction,
     si.taux_remu_id,
 
     CASE WHEN v.id IS NULL THEN 0 ELSE 1 END edite,
@@ -22,7 +23,7 @@ FROM
     intervenant i
     JOIN statut si ON si.id = i.statut_id
     JOIN annee a ON a.id = i.annee_id
-    LEFT JOIN contrat c ON c.intervenant_id = i.id AND c.histo_destruction IS NULL
+    LEFT JOIN contrat c ON c.intervenant_id = i.id
     LEFT JOIN (
       SELECT DISTINCT cf.contrat_id
       FROM contrat_fichier cf JOIN fichier f ON f.id = cf.fichier_id AND f.histo_destruction IS NULL

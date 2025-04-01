@@ -127,8 +127,8 @@ class ContratProcess implements ProcessInterface
     public function contratHydrateFromDb(Contrat $contrat, array $data): void
     {
         $annee = $this->getServiceAnnee()->get((int)$data['annee_id']);
-
         $contrat->actif         = $data['actif'] === '1';
+        $contrat->historise     = !empty($data['histo_destruction']);
         $contrat->id            = (int)$data['contrat_id'] ?: null;
         $contrat->intervenantId = (int)$data['intervenant_id'];
         $contrat->annee         = $annee;
@@ -449,7 +449,8 @@ class ContratProcess implements ProcessInterface
                 case Parametre::CONTRAT_ENS_GLOBAL:
                     return true;
                 case Parametre::CONTRAT_ENS_COMPOSANTE:
-                    if (empty($contrat->structureId)) {
+                    // Les contrats sans heure n'ont pas de composante
+                    if (empty($contrat->structureId) && !empty($contrat->volumesHoraires)) {
                         throw new \Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
                     }
 
@@ -524,7 +525,9 @@ class ContratProcess implements ProcessInterface
         if (empty($contrat->tauxRemuMajoreId)) {
             $contrat->tauxRemuMajoreId = $contrat->tauxRemuId;
         }
-
+if (!$contrat->annee){
+    echo $contrat->intervenantId;
+}
         $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->annee->getDateDebut();
         $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->tauxRemuDate);
         $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $contrat->tauxRemuDate);
@@ -811,13 +814,15 @@ class ContratProcess implements ProcessInterface
         $this->tblData = [];
         foreach ($this->intervenants as $intervenantId => $contrats) {
             foreach ($contrats as $uuid => $contrat) {
-                if (empty($contrat->volumesHoraires)) {
-                    $ligne           = $this->extractContrat($contrat);
-                    $this->tblData[] = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
-                } else {
-                    foreach ($contrat->volumesHoraires as $volumeHoraire) {
-                        $ligne           = $this->extractVolumeHoraire($volumeHoraire);
+                if (!$contrat->historise) {
+                    if (empty($contrat->volumesHoraires)) {
+                        $ligne           = $this->extractContrat($contrat);
                         $this->tblData[] = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
+                    } else {
+                        foreach ($contrat->volumesHoraires as $volumeHoraire) {
+                            $ligne           = $this->extractVolumeHoraire($volumeHoraire);
+                            $this->tblData[] = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
+                        }
                     }
                 }
             }

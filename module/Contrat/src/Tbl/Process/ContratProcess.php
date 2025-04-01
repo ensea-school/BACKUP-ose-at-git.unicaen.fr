@@ -293,7 +293,6 @@ class ContratProcess implements ProcessInterface
         foreach ($contrats as $contratParcours) {
             /* @var Contrat $contratParcours */
             $test = $contratParcours->id;
-            $contratParcours->id = 1;
         }
     }
 

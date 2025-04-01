@@ -151,6 +151,39 @@ class ContratProcess implements ProcessInterface
 
 
 
+    public function contratHydrateFromVolumeHoraire(Contrat $contrat, VolumeHoraire $volumeHoraire): void
+    {
+        if ($volumeHoraire->volumeHoraireId){
+            $contrat->typeService = $this->getServiceTypeService()->getEnseignement();
+            $contrat->isMission    = false;
+        }elseif($volumeHoraire->volumeHoraireRefId){
+            $contrat->typeService = $this->getServiceTypeService()->getReferentiel();
+            $contrat->isMission    = false;
+        }elseif($volumeHoraire->volumeHoraireMissionId){
+            $contrat->typeService = $this->getServiceTypeService()->getMission();
+            $contrat->isMission    = true;
+        }
+
+        // calcul de la structure
+        if ($contrat->isMission) {
+            switch ($this->parametreMis) {
+                case Parametre::CONTRAT_MIS_GLOBAL:
+                    $contrat->structureId = null;
+                case Parametre::CONTRAT_MIS_COMPOSANTE:
+                case Parametre::CONTRAT_MIS_MISSION:
+                    $contrat->structureId = $volumeHoraire->structureId;
+            }
+        } else {
+            switch ($this->parametreEns) {
+                case Parametre::CONTRAT_ENS_GLOBAL:
+                    $contrat->structureId = null;
+                case Parametre::CONTRAT_ENS_COMPOSANTE:
+                    $contrat->structureId = $volumeHoraire->structureId;
+            }
+        }
+    }
+
+
     private function getContrat(int $intervenantId, string $uuid): Contrat
     {
         if (!array_key_exists($intervenantId, $this->intervenants)) {
@@ -194,6 +227,7 @@ class ContratProcess implements ProcessInterface
         if (empty($contrat->annee)) {
             $contrat->annee = $this->getServiceAnnee()->get((int)$data['annee_id']);
         }
+        $this->contratHydrateFromVolumeHoraire($contrat, $volumeHoraire);
         $volumeHoraire->setContrat($contrat);
 
         return $volumeHoraire;

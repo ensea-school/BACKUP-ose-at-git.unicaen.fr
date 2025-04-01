@@ -14,6 +14,7 @@ use Paiement\Service\TauxRemuServiceAwareTrait;
 use Service\Entity\Db\TypeService;
 use Service\Service\TypeServiceServiceAwareTrait;
 use Unicaen\BddAdmin\BddAwareTrait;
+use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -70,12 +71,19 @@ class ContratProcess implements ProcessInterface
             }
         } else {
             $this->init();
+            $tableauBord->onAction(Event::GET);
             $this->loadContrats($params);
             $this->loadVolumesHoraires($params);
+            $count = count($this->intervenants);
+            $index = 0;
+            $tableauBord->onAction(Event::PROCESS, 0, $count);
             foreach ($this->intervenants as $contrats) {
+                $index++;
+                $tableauBord->onAction(Event::PROGRESS, $index, $count);
                 $this->traitement($contrats);
             }
             $this->exporter();
+            $tableauBord->onAction(Event::SET, 0, $count);
             $this->enregistrement($tableauBord, $params);
         }
     }
@@ -845,6 +853,9 @@ if (!$contrat->annee){
             'where'              => $params,
             'return-insert-data' => false,
             'transaction'        => !isset($params['INTERVENANT_ID']),
+            'callback'           => function (string $action, int $progress, int $total, array $data = [], array $key = []) use ($tableauBord) {
+                $tableauBord->onAction(Event::PROGRESS, $progress, $total);
+            },
         ];
 
         $table->merge($this->tblData, $key, $options);

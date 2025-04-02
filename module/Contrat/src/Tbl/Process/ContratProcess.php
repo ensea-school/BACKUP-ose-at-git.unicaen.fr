@@ -65,7 +65,7 @@ class ContratProcess implements ProcessInterface
     public function run(TableauBord $tableauBord, array $params = []): void
     {
         if (empty($params)) {
-            $annees = $this->getServiceAnnee()->getActives();
+            $annees = $this->getServiceAnnee()->getActives(true);
             foreach ($annees as $annee) {
                 $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
             }
@@ -271,11 +271,15 @@ class ContratProcess implements ProcessInterface
         foreach ($contrats as $contrat) {
             $this->calculTypeService($contrat);
             $this->calculStructure($contrat);
+
+            //Inutile ?
             $this->completionContrat($contrat);
         }
         $this->calculParentsIds($contrats);
         // ajout d'avenants vides pour les missions avec des prolongations de dates
         $this->contratProlongationMission($contrats);
+
+        $this->calculNumerosAvenants($contrats);
 
         /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
         foreach ($contrats as $contrat) {
@@ -283,14 +287,23 @@ class ContratProcess implements ProcessInterface
             $this->calculTotalHETD($contrat);
             $this->calculTermine($contrat);
             $this->calculTauxCongesPayes($contrat);
+            $this->calculActif($contrat);
         }
 
-        $this->calculNumerosAvenants($contrats);
         // ajout de contrats vides d'enseignement si aucune
         // Activer les lignes où il y a besoin de contrats/avenants
     }
 
-
+    public function calculActif(Contrat $contrat): void
+    {
+        if(!$contrat->actif){
+            if($this->parametreAvenant == Parametre::AVENANT_AUTORISE){
+                $contrat->actif = 1;
+            }elseif(empty($contrat->parent)){
+                    $contrat->actif = 1;
+            }
+        }
+    }
 
     /**
      * @param array $contrats
@@ -421,6 +434,7 @@ class ContratProcess implements ProcessInterface
             if (!empty($parentsPotentiels)) {
                 // Si on a des parents potentiels, on lui donne le meilleur
                 $autre->setParent($this->meilleurParent($autre, $parentsPotentiels));
+                $test = 0;
             }
         }
     }
@@ -454,14 +468,10 @@ class ContratProcess implements ProcessInterface
         } else {
             switch ($this->parametreEns) {
                 case Parametre::CONTRAT_ENS_GLOBAL:
-                    return true;
                 case Parametre::CONTRAT_ENS_COMPOSANTE:
-                    // Les contrats sans heure n'ont pas de composante
-                    if (empty($contrat->structureId) && !empty($contrat->volumesHoraires)) {
-                        throw new \Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
-                    }
-
-                    return $candidat->hasStructureId($contrat->structureId);
+                    // En enseignement on a qu'un seul contrat donc un avenant peut s'attacher a un contrat d'une autre composante
+                    //Tant que c'est un contrat et pas un avenant il est un parent potentiel
+                    return true;
             }
         }
 

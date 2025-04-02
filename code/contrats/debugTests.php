@@ -124,7 +124,7 @@ foreach ($contrats as $contrat) {
     $props = $contrat;
     unset($props['volumesHoraires']);
 
-    $vhs = $contrat['volumesHoraires'];
+    $vhs = $contrat['volumesHoraires'] ?? [];
 
     ?>
     <div <?php if ($isAvenant) echo ' style="margin-left: 4em"'; ?>>
@@ -191,7 +191,7 @@ foreach ($contrats as $contrat) {
         $noDisplayVh[] = 'histo_destruction';
 
         $first = true;
-        foreach ($vhs as $vh) {
+        foreach ($volumesHoraires as $vh) {
             if ($first) {
                 $first = false;
                 echo '<tr>';
@@ -202,16 +202,14 @@ foreach ($contrats as $contrat) {
                 }
                 echo '</tr>';
             }
-            foreach ($volumesHoraires as $vh) {
-                if (!$vh['contrat_id'] && !$vh['histo_destruction']) {
-                    echo '<tr>';
-                    foreach ($vh as $prop => $value) {
-                        if (!in_array($prop, $noDisplayVh)) {
-                            echo '<td>' . ($value ?: '<i style="color: gray">null</i>') . '</td>';
-                        }
+            if (!$vh['contrat_id']) {
+                echo '<tr>';
+                foreach ($vh as $prop => $value) {
+                    if (!in_array($prop, $noDisplayVh)) {
+                        echo '<td>' . ($value ?: '<i style="color: gray">null</i>') . '</td>';
                     }
-                    echo '</tr>';
                 }
+                echo '</tr>';
             }
         }
 
@@ -308,92 +306,35 @@ foreach ($contrats as $cid => $contrat) {
         if ($volumesHoraire['date_fin_mission']) {
             $php .= "$" . $vnom . "->dateFinMission     = new \Datetime('" . substr($contrat['date_fin_mission'], 0, 10) . "');\n";
         }
-        if ($volumesHoraire['cm']){
+        if ($volumesHoraire['cm']) {
             $php .= "$" . $vnom . "->cm                 = " . $volumesHoraire['cm'] . ";\n";
         }
-        if ($volumesHoraire['td']){
+        if ($volumesHoraire['td']) {
             $php .= "$" . $vnom . "->td                 = " . $volumesHoraire['td'] . ";\n";
         }
-        if ($volumesHoraire['tp']){
+        if ($volumesHoraire['tp']) {
             $php .= "$" . $vnom . "->tp                 = " . $volumesHoraire['tp'] . ";\n";
         }
-        if ($volumesHoraire['autres']){
+        if ($volumesHoraire['autres']) {
             $php .= "$" . $vnom . "->autres             = " . $volumesHoraire['autres'] . ";\n";
         }
-        if ($volumesHoraire['heures']){
+        if ($volumesHoraire['heures']) {
             $php .= "$" . $vnom . "->heures             = " . $volumesHoraire['heures'] . ";\n";
         }
-        if ($volumesHoraire['hetd']){
+        if ($volumesHoraire['hetd']) {
             $php .= "$" . $vnom . "->hetd               = " . $volumesHoraire['hetd'] . ";\n";
         }
         $php .= "\n";
     }
 
     if (!empty($volumeHoraireVariables)) {
-        $php .= "$".$cnom."->volumesHoraires = [$".implode(', $', $volumeHoraireVariables)."];\n";
+        $php .= "$" . $cnom . "->volumesHoraires = [$" . implode(', $', $volumeHoraireVariables) . "];\n";
         $php .= "\n";
     }
 }
 
-echo '<pre>';
-phpDump($php);
-echo '</pre>';
+if (!empty($volumesHoraire)){
+    $php .= "// 1 ou plusieurs volumes horaires (".count($volumesHoraire).") ne sont pas contractualisés";
+}
 
-
-/* Jeu de données initial *
-//Contrat 1 global
-$contrat1              = new Contrat();
-$contrat1->id          = 1;
-$contrat1->uuid        = 'contrat_principal';
-$contrat1->isMission   = true;
-$contrat1->structureId = null;
-$contrat1->edite       = true;
-$contrat1->avenants    = [];
-// Création des objets VolumeHoraire
-$volumeHoraire1              = new VolumeHoraire();
-$volumeHoraire1->missionId   = 1;
-$volumeHoraire1->structureId = 1;
-$volumeHoraire2              = new VolumeHoraire();
-$volumeHoraire2->missionId   = 1;
-$volumeHoraire2->structureId = 1;
-$volumeHoraire3              = new VolumeHoraire();
-$volumeHoraire3->missionId   = 1;
-$volumeHoraire3->structureId = 2;
-// Ajout des objets dans l'array volumesHoraires
-
-$contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3];
-
-//Contrat 2 par composante
-$contrat2              = new Contrat();
-$contrat2->id          = 2;
-$contrat2->uuid        = 'avenant_edite';
-$contrat2->isMission   = true;
-$contrat2->setParent($contrat1);
-$contrat2->structureId = 1;
-$contrat2->avenants    = [];
-
-// Création des objets VolumeHoraire
-$volumeHoraire1              = new VolumeHoraire();
-$volumeHoraire1->missionId   = 1;
-$volumeHoraire1->structureId = 1;
-
-// Ajout des objets dans l'array volumesHoraires
-$contrat2->volumesHoraires = [$volumeHoraire1];
-
-
-//COntrat 3 par composante sur structure 2
-$contrat3              = new Contrat();
-$contrat3->id          = null;
-$contrat1->uuid        = 'avenant_a_calculer';
-$contrat3->isMission   = true;
-$contrat3->parent      = null;
-$contrat3->structureId = 2;
-$contrat3->avenants    = [];
-
-// Création des objets VolumeHoraire
-$volumeHoraire1            = new VolumeHoraire();
-$volumeHoraire1->missionId = 1;
-
-// Ajout des objets dans l'array volumesHoraires
-$contrat3->volumesHoraires = [$volumeHoraire1];
-*/
+\UnicaenCode\Util::highlight($php, 'php', true, ['show-line-numbers' => true]);

@@ -45,6 +45,55 @@ WHERE
   /*@ANNEE_ID=i.annee_id*/
   /*@STATUT_ID=i.statut_id*/
 
+
+UNION ALL
+
+
+SELECT
+  i.annee_id                                                                      annee_id,
+  i.structure_id                                                                  structure_id,
+  i.id                                                                            intervenant_id,
+  vh.contrat_id                                                                   contrat_id,
+
+  vh.service_id                                                                   service_id,
+  NULL                                                                            service_referentiel_id,
+  NULL                                                                            mission_id,
+
+  vh.id                                                                           volume_horaire_id,
+  NULL                                                                            volume_horaire_ref_id,
+  NULL                                                                            volume_horaire_mission_id,
+
+  NULL                                                                            taux_remu_id,
+  NULL                                                                            taux_remu_majore_id,
+
+  NULL                                                                            date_fin_mission,
+
+  CASE WHEN ti.code = 'CM' THEN vh.heures ELSE 0 END                              cm,
+  CASE WHEN ti.code = 'TD' THEN vh.heures ELSE 0 END                              td,
+  CASE WHEN ti.code = 'TP' THEN vh.heures ELSE 0 END                              tp,
+  CASE WHEN ti.code NOT IN ('CM','TD','TP') THEN vh.heures ELSE 0 END             autres,
+  vh.heures                                                                       heures,
+  frv.total                                                                       hetd,
+
+  CASE WHEN ti.code NOT IN ('CM', 'TD', 'TP') THEN ti.code ELSE NULL END          autre_libelle
+FROM
+            volume_horaire                   vh
+       JOIN service                           s ON s.id = vh.service_id AND s.element_pedagogique_id IS NULL
+       JOIN intervenant                       i ON i.id = s.intervenant_id
+       JOIN type_intervention                ti ON ti.id = vh.type_intervention_id
+
+       JOIN type_volume_horaire             tvh ON tvh.code = 'PREVU'
+       JOIN etat_volume_horaire             evh ON evh.code = 'valide'
+
+       JOIN formule_resultat_intervenant     fr ON  fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id AND fr.type_volume_horaire_id = tvh.id
+       JOIN formule_resultat_volume_horaire frv ON  frv.formule_resultat_intervenant_id = fr.id AND frv.volume_horaire_id = vh.id
+WHERE
+  vh.histo_destruction IS NULL
+  /*@INTERVENANT_ID=i.id*/
+  /*@ANNEE_ID=i.annee_id*/
+  /*@STATUT_ID=i.statut_id*/
+
+
 UNION ALL
 
 
@@ -95,7 +144,6 @@ WHERE
 
 
 UNION ALL
-
 
 
 SELECT

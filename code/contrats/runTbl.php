@@ -4,6 +4,7 @@
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $container  \Psr\Container\ContainerInterface
  * @var $io         \Symfony\Component\Console\Style\SymfonyStyle
+ * @var $input      \Symfony\Component\Console\Input\Input
  */
 
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -11,11 +12,21 @@ use UnicaenTbl\Event;
 
 $tbl = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 
-$params = [
-    //'INTERVENANT_ID' => 940962,
-    //'INTERVENANT_ID' => 665114,
-    //'ANNEE_ID' => 2021,
-];
+$arguments = $input->getArguments()['arguments'];
+unset($arguments[0]);
+
+if (isset($arguments[1]) && $arguments[1] == 'help') {
+    echo 'Arguments possibles'."\n";
+    echo '- annee_id <integer> : Calcule le TBL Contrat pour une année donnée'."\n";
+    echo '- statut_id <integer> : Calcule le TBL Contrat pour un statut donné'."\n";
+    echo '- intervenant_id <integer> : Calcule le TBL Contrat pour un intervenant donné'."\n";
+    echo 'Si pas d\'arguments, calcule l\'ensemble du TBL contrat sans filtre'."\n";
+}
+
+$params = [];
+if (isset($arguments[1]) && isset($arguments[2])){
+    $params[strtoupper($arguments[1])] = (int)$arguments[2];
+}
 
 $progresBar = $io->createProgressBar(0);
 

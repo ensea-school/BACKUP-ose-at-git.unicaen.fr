@@ -71,7 +71,7 @@ class DossierInseeFieldset extends AbstractFieldset
         $dossierIdentiteFieldset               = $this->getOption('dossierIdentiteFieldset');
         $departementDeNaissance                = $dossierIdentiteComplementaireFieldset->get('departementNaissance')->getValue();
         $paysDeNaissance                       = $dossierIdentiteComplementaireFieldset->get('paysNaissance')->getValue();
-        $dateDeNaissance                       = $dossierIdentiteComplementaireFieldset->get('dateNaissance')->getValue();
+        $dateDeNaissance                       = $dossierIdentiteFieldset->get('dateNaissance')->getValue();
         $civilite                              = $dossierIdentiteFieldset->get('civilite')->getValue();
 
 

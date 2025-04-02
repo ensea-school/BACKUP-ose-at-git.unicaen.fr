@@ -2,17 +2,15 @@
 
 namespace Dossier\Form;
 
-use Application\Constants;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Dossier\Entity\Db\IntervenantDossier;
-use Intervenant\Entity\Db\Statut;
 use Intervenant\Service\CiviliteServiceAwareTrait;
 use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Validator\Date as DateValidator;
 use Lieu\Service\DepartementServiceAwareTrait;
 use Lieu\Service\PaysServiceAwareTrait;
+use UnicaenApp\Util;
 
 /**
  * Description of DossierFieldset
@@ -101,47 +99,18 @@ class DossierIdentiteFieldset extends AbstractFieldset
                        'type'       => 'Select',
                    ]);
 
-        $this->get('civilite')
-            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceCivilite()->getList()));
+        $valuesCivilite =   Util::collectionAsOptions($this->getServiceCivilite()->getList());
+        $this->get('civilite')->setValueOptions($valuesCivilite);
+        $this->get('civilite')->setEmptyOption('- NON RENSEIGNÉE -');
 
 
         /**
-         * Situation matrimoniale
+         * Date de naissance
          */
         $this->add([
-                       'name'       => 'situationMatrimoniale',
+                       'name'       => 'dateNaissance',
                        'options'    => [
-                           'label'         => 'Situation matrimoniale',
-                           'label_options' => ['disable_html_escape' => true],
-                       ],
-                       'attributes' => [
-                           'class' => 'dossierElement',
-                           'id'    => 'situationMatrimoniale',
-                       ],
-                       'type'       => 'Select',
-                   ]);
-
-        $this->get('situationMatrimoniale')
-            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceSituationMatrimoniale()->getList()));
-
-        //Gestion des labels selon les règles du statut intervenant sur les données contact
-        $dossierIntervenant       = $this->getOption('dossierIntervenant');
-        $statutDossierIntervenant = $dossierIntervenant->getStatut();
-
-        /**
-         * @var $statutDossierIntervenant Statut
-         * @var $dossierIntervenant       IntervenantDossier
-         */
-
-        if ($statutDossierIntervenant->getDossierSituationMatrimoniale()) {
-            $this->get('situationMatrimoniale')->setLabel('Situation matrimoniale <span class="text-danger">*</span>');
-        }
-
-
-        $this->add([
-                       'name'       => 'dateSituationMatrimoniale',
-                       'options'    => [
-                           'label'         => 'depuis le',
+                           'label'         => 'Date de naissance <span class="text-danger">*</span>',
                            'label_options' => [
                                'disable_html_escape' => true,
                            ],
@@ -149,15 +118,11 @@ class DossierIdentiteFieldset extends AbstractFieldset
                        'attributes' => [
                            'placeholder' => "jj/mm/aaaa",
                            'class'       => 'dossierElement',
-                           'id'          => 'dateSituationMatrimoniale',
 
                        ],
                        'type'       => 'Date',
                    ]);
 
-        if ($statutDossierIntervenant->getDossierSituationMatrimoniale()) {
-            $this->get('dateSituationMatrimoniale')->setLabel('depuis le <span class="text-danger">*</span>');
-        }
 
 
         return $this;
@@ -165,10 +130,10 @@ class DossierIdentiteFieldset extends AbstractFieldset
 
 
 
-    public function getInputFilterSpecification()
+    public function getInputFilterSpecification(): array
     {
 
-        $spec = [
+        return [
             'nomUsuel'                  => [
                 'required' => false,
                 'readonly' => true,
@@ -182,19 +147,15 @@ class DossierIdentiteFieldset extends AbstractFieldset
             'civilite'                  => [
                 'required' => false,
             ],
-            'situationMatrimoniale'     => [
-                'required' => false,
-            ],
-            'dateSituationMatrimoniale' => [
+            'dateNaissance'        => [
                 'required'    => false,
                 'allow_empty' => true,
                 'validators'  => [
                     new DateValidator(),
                 ],
-            ],
-
+            ]
         ];
 
-        return $spec;
+
     }
 }

@@ -70,11 +70,15 @@ class IntervenantDossierForm extends AbstractForm
             'dossierIntervenant' => $dossierIntervenant,
         ];
 
-        $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite', $options);
+        $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
         $this->dossierIdentiteFieldset->init();
 
-        $this->dossierIdentiteComplementaireFieldset = new DossierIdentiteComplementaireFieldset('DossierIdentiteComplementaire');
+        $options['dossierIdentiteFieldset'] = $this->dossierIdentiteFieldset;
+
+        $this->dossierIdentiteComplementaireFieldset = new DossierIdentiteComplementaireFieldset('DossierIdentiteComplementaire', $options);
         $this->dossierIdentiteComplementaireFieldset->init();
+
+        $options['dossierIdentiteComplementaireFieldset'] = $this->dossierIdentiteComplementaireFieldset;
 
         $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
         $this->dossierAdresseFieldset->init();
@@ -82,10 +86,6 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact', $options);
         $this->dossierContactFiedlset->init();
 
-        $options                    = [
-            'dossierIdentiteComplementaireFieldset' => $this->dossierIdentiteComplementaireFieldset,
-            'dossierIdentiteFieldset'               => $this->dossierIdentiteFieldset,
-        ];
         $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee', $options);
         $this->dossierInseeFiedlset->init();
 

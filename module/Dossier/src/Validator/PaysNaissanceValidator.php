@@ -6,6 +6,7 @@ use Application\Filter\DateTimeFromString;
 use DateTime;
 use Laminas\Validator\AbstractValidator;
 use Lieu\Entity\Db\Pays as PaysEntity;
+use Lieu\Service\PaysService;
 use LogicException;
 
 class PaysNaissanceValidator extends AbstractValidator
@@ -16,10 +17,9 @@ class PaysNaissanceValidator extends AbstractValidator
         self::MSG_INVALID => "Le pays sélectionné n'existe pas à la date de naissance saisie",
     ];
 
-    /**
-     * @var PaysService
-     */
-    protected $service;
+    protected PaysService $service;
+
+    protected ?string $dateDeNaissance;
 
 
 
@@ -31,7 +31,9 @@ class PaysNaissanceValidator extends AbstractValidator
             throw new LogicException("Paramètre 'service' introuvable.");
         }
 
+
         $this->service = $options['service'];
+        $this->dateDeNaissance = $options['dateDeNaissance'];
     }
 
 
@@ -41,7 +43,7 @@ class PaysNaissanceValidator extends AbstractValidator
         $pays = $this->service->get($value);
         /* @var $pays PaysEntity */
 
-        $date              = DateTimeFromString::run($context['dateNaissance']);
+        $date              = DateTimeFromString::run($this->dateDeNaissance);
         $dateDebutValidite = $pays->getValiditeDebut();
         $dateFinValidite   = $pays->getValiditeFin() ?: new DateTime();
 

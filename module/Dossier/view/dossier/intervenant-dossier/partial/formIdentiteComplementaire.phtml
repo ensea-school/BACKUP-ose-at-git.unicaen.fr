@@ -33,12 +33,20 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
         <div class="card-body">
 
             <?php
-            echo $this->formControlGroup($dossierIdentiteComplementaire->get('dateNaissance'));
             echo $this->formControlGroup($dossierIdentiteComplementaire->get('paysNaissance'));
             echo $this->formControlGroup($dossierIdentiteComplementaire->get('paysNationalite'));
             echo $this->formControlGroup($dossierIdentiteComplementaire->get('departementNaissance'));
             echo $this->formControlGroup($dossierIdentiteComplementaire->get('villeNaissance'));
             ?>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $this->formControlGroup($dossierIdentiteComplementaire->get('situationMatrimoniale')); ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $this->formControlGroup($dossierIdentiteComplementaire->get('dateSituationMatrimoniale')); ?>
+                </div>
+            </div>
 
         </div>
     </div>

@@ -5,9 +5,12 @@ namespace Dossier\Form;
 use Application\Constants;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Dossier\Entity\Db\IntervenantDossier;
 use Dossier\Validator\DepartementNaissanceValidator;
 use Dossier\Validator\PaysNaissanceValidator;
+use Intervenant\Entity\Db\Statut;
 use Intervenant\Service\CiviliteServiceAwareTrait;
+use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Validator\Date as DateValidator;
 use Lieu\Service\DepartementServiceAwareTrait;
@@ -24,31 +27,15 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
     use PaysServiceAwareTrait;
     use DepartementServiceAwareTrait;
     use CiviliteServiceAwareTrait;
+    use SituationMatrimonialeServiceAwareTrait;
 
-    static private $franceId;
+    private static $franceId;
 
 
 
     public function init()
     {
-        /**
-         * Date de naissance
-         */
-        $this->add([
-            'name'       => 'dateNaissance',
-            'options'    => [
-                'label'         => 'Date de naissance <span class="text-danger">*</span>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
-                'class'       => 'dossierElement',
 
-            ],
-            'type'       => 'Date',
-        ]);
 
         /**
          * Pays de naissance
@@ -130,6 +117,60 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
             'type'       => 'Text',
         ]);
 
+        /**
+         * Situation matrimoniale
+         */
+        $this->add([
+                       'name'       => 'situationMatrimoniale',
+                       'options'    => [
+                           'label'         => 'Situation matrimoniale',
+                           'label_options' => ['disable_html_escape' => true],
+                       ],
+                       'attributes' => [
+                           'class' => 'dossierElement',
+                           'id'    => 'situationMatrimoniale',
+                       ],
+                       'type'       => 'Select',
+                   ]);
+
+        $this->get('situationMatrimoniale')
+            ->setValueOptions(['' => '- NON RENSEIGNÉ -'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceSituationMatrimoniale()->getList()));
+
+        //Gestion des labels selon les règles du statut intervenant sur les données contact
+        $dossierIntervenant       = $this->getOption('dossierIntervenant');
+        $statutDossierIntervenant = $dossierIntervenant->getStatut();
+
+        /**
+         * @var $statutDossierIntervenant Statut
+         * @var $dossierIntervenant       IntervenantDossier
+         */
+
+        if ($statutDossierIntervenant->getDossierSituationMatrimoniale()) {
+            $this->get('situationMatrimoniale')->setLabel('Situation matrimoniale <span class="text-danger">*</span>');
+        }
+
+
+        $this->add([
+                       'name'       => 'dateSituationMatrimoniale',
+                       'options'    => [
+                           'label'         => 'depuis le',
+                           'label_options' => [
+                               'disable_html_escape' => true,
+                           ],
+                       ],
+                       'attributes' => [
+                           'placeholder' => "jj/mm/aaaa",
+                           'class'       => 'dossierElement',
+                           'id'          => 'dateSituationMatrimoniale',
+
+                       ],
+                       'type'       => 'Date',
+                   ]);
+
+        if ($statutDossierIntervenant->getDossierSituationMatrimoniale()) {
+            $this->get('dateSituationMatrimoniale')->setLabel('depuis le <span class="text-danger">*</span>');
+        }
+
 
         return $this;
     }
@@ -139,24 +180,17 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
     public function getInputFilterSpecification()
     {
         $paysNaissanceId = (int)$this->get('paysNaissance')->getValue();
+        $dossierIdentiteFieldset               = $this->getOption('dossierIdentiteFieldset');
+        $dateDeNaissance                       = $dossierIdentiteFieldset->get('dateNaissance')->getValue();
 
-        // la sélection du département n'est obligatoire que si le pays sélectionné est la France
-        $departementRequired = (self::$franceId === $paysNaissanceId);
-        $spec                = [];
 
-        $spec = [
-            'dateNaissance'        => [
-                'required'    => false,
-                'allow_empty' => true,
-                'validators'  => [
-                    new DateValidator(),
-                ],
-            ],
+        return [
             'paysNaissance'        => [
                 'required'    => false,
                 'allow_empty' => true,
                 'validators'  => [
-                    new PaysNaissanceValidator(['service' => $this->getServicePays()]),
+                    new PaysNaissanceValidator(['service' => $this->getServicePays(),
+                                                'dateDeNaissance' => $dateDeNaissance]),
                 ],
             ],
             'paysNationalite'      => [
@@ -173,9 +207,18 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
             'villeNaissance'       => [
                 'required' => false,
             ],
+            'situationMatrimoniale'     => [
+                'required' => false,
+            ],
+            'dateSituationMatrimoniale' => [
+                'required'    => false,
+                'allow_empty' => true,
+                'validators'  => [
+                    new DateValidator(),
+                ],
+            ],
 
         ];
 
-        return $spec;
     }
 }

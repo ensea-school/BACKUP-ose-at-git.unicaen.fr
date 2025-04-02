@@ -14,17 +14,17 @@ SELECT
       d.civilite_id IS NOT NULL
       AND d.nom_usuel IS NOT NULL
       AND d.prenom IS NOT NULL
-      AND (CASE WHEN si.dossier_situation_matrimoniale = 1 THEN
-	            CASE WHEN d.situation_matrimoniale_id = (SELECT id FROM situation_matrimoniale WHERE code = 'CEL') THEN 1
-      				 WHEN d.situation_matrimoniale_id IS NOT NULL AND d.situation_matrimoniale_date IS NOT NULL THEN 1 ELSE 0 END
-      	   ELSE 1 END) = 1
+      AND d.date_naissance IS NOT NULL
+
     ) THEN 1 ELSE 0 END completude_identite,
    /*Complétude identité complémentaire*/
   CASE WHEN si.dossier_identite_comp = 0 THEN 1
   ELSE
         CASE WHEN
-        (
-           d.date_naissance IS NOT NULL
+        ((CASE WHEN si.dossier_situation_matrimoniale = 1 THEN
+         	            CASE WHEN d.situation_matrimoniale_id = (SELECT id FROM situation_matrimoniale WHERE code = 'CEL') THEN 1
+               				 WHEN d.situation_matrimoniale_id IS NOT NULL AND d.situation_matrimoniale_date IS NOT NULL THEN 1 ELSE 0 END
+               	   ELSE 1 END) = 1
        AND NOT (OSE_DIVERS.str_reduce(pn.LIBELLE) = 'france' AND d.departement_naissance_id IS NULL)
            AND d.pays_naissance_id IS NOT NULL
            AND d.pays_nationalite_id IS NOT NULL

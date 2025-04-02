@@ -7,7 +7,6 @@
  * @var $input      \Symfony\Component\Console\Input\Input
  */
 
-use Symfony\Component\Console\Style\SymfonyStyle;
 use UnicaenTbl\Event;
 
 $tbl = $container->get(\UnicaenTbl\Service\TableauBordService::class);

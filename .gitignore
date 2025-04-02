@@ -2,6 +2,7 @@ config.local.php
 config/autoload/*.local.php
 vendor/*
 public/vendor/*
+public/unicaen/*
 node_modules/*
 cache/*
 data/fichiers
@@ -12,3 +13,4 @@ VERSION
 composer.phar
 .phpunit.result.cache
 .idea
+/.php-cs-fixer.cache

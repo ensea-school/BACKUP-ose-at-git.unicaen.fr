@@ -91,10 +91,10 @@ final class ProlongationMissionTest extends TblContratTestCase
         $volumeHoraire2->missionId      = 1;
         $volumeHoraire2->dateFinMission = new DateTime('2020-02-20');
         $avenant->volumesHoraires[]     = $volumeHoraire2;
-        $contrat1->avenants = [$avenant];
+        $contrat1->avenants             = [$avenant];
 
 
-        $this->process->contratProlongationMission([$contrat1,$avenant]);
+        $this->process->contratProlongationMission([$contrat1, $avenant]);
 
         ProlongationMissionTest::assertCount(2, $contrat1->avenants);
         ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);

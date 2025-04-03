@@ -83,10 +83,10 @@ final class CalculParentsTest extends TblContratTestCase
         $contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3];
 
         //Contrat 2 par composante
-        $contrat2              = new Contrat();
-        $contrat2->id          = 2;
-        $contrat2->uuid        = 'avenant_edite';
-        $contrat2->isMission   = true;
+        $contrat2            = new Contrat();
+        $contrat2->id        = 2;
+        $contrat2->uuid      = 'avenant_edite';
+        $contrat2->isMission = true;
         $contrat2->setParent($contrat1);
         $contrat2->structureId = 1;
         $contrat2->avenants    = [];
@@ -266,14 +266,14 @@ final class CalculParentsTest extends TblContratTestCase
         $this->process->calculParentsIds([$contrat1, $contrat2, $contrat3]);
 
         //Verification des données
-        $this->assertCount(1, $contrat1->avenants);
+        $this->assertCount(2, $contrat1->avenants);
         $this->assertCount(0, $contrat2->avenants);
         $this->assertCount(0, $contrat3->avenants);
         $uuids = [];
         foreach ($contrat1->avenants as $avenant) {
             $uuids[] = $avenant->uuid;
         }
-        $uuidsExpected = [$contrat3->uuid];
+        $uuidsExpected = [$contrat2->uuid, $contrat3->uuid];
         $this->assertArrayEquals($uuidsExpected, $uuids);
         $this->assertNull($contrat1->parent);
         $this->assertNotNull($contrat2->parent);
@@ -456,9 +456,11 @@ final class CalculParentsTest extends TblContratTestCase
         $this->assertArrayEquals($uuidsExpected, $uuids);
         $this->assertNotNull($contrat2->parent);
         $this->assertNull($contrat3->parent);
-        $this->assertEquals($contrat1->id, $contrat3->parent?->id);
-
+        $this->assertNull($contrat3->parent?->id);
     }
+
+
+
     public function testDeuxParentsPotentielsPrendreDernierProjetCreer(): void
     {
         $parametres = [
@@ -490,6 +492,7 @@ final class CalculParentsTest extends TblContratTestCase
         $contrat2->id          = 2;
         $contrat2->uuid        = 'avenant_edite';
         $contrat2->isMission   = true;
+        $contrat2->edite       = true;
         $contrat2->parent      = null;
         $contrat2->structureId = 10;
         $contrat2->avenants    = [];

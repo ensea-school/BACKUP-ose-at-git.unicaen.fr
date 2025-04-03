@@ -72,34 +72,35 @@ $volumesHoraires = [];
 
 foreach ($cData as $contrat) {
     $contrat['volumesHoraires'] = [];
-    foreach ($vhData as $vh) {
-        if ($vh['volume_horaire_id']) {
-            $vh['type']  = 'ens';
-            $vh['vh_id'] = $vh['volume_horaire_id'];
-        } elseif ($vh['volume_horaire_ref_id']) {
-            $vh['type']  = 'ref';
-            $vh['vh_id'] = $vh['volume_horaire_ref_id'];
-        } elseif ($vh['volume_horaire_mission_id']) {
-            $vh['type']  = 'mis';
-            $vh['vh_id'] = $vh['volume_horaire_mission_id'];
-        }
-
-        if ($vh['service_id']) {
-            $vh['s_id'] = $vh['service_id'];
-        } elseif ($vh['service_referentiel_id']) {
-            $vh['s_id'] = $vh['service_referentiel_id'];
-        } elseif ($vh['mission_id']) {
-            $vh['s_id'] = $vh['mission_id'];
-        }
-
-        $volumesHoraires[] = $vh;
-        if ($vh['contrat_id'] == $contrat['id']) {
-            $contrat['volumesHoraires'][] = $vh;
-        }
-    }
     $contrats[$contrat['id']] = $contrat;
 }
 
+foreach ($vhData as $vh) {
+    if ($vh['volume_horaire_id']) {
+        $vh['type']  = 'ens';
+        $vh['vh_id'] = $vh['volume_horaire_id'];
+    } elseif ($vh['volume_horaire_ref_id']) {
+        $vh['type']  = 'ref';
+        $vh['vh_id'] = $vh['volume_horaire_ref_id'];
+    } elseif ($vh['volume_horaire_mission_id']) {
+        $vh['type']  = 'mis';
+        $vh['vh_id'] = $vh['volume_horaire_mission_id'];
+    }
+
+    if ($vh['service_id']) {
+        $vh['s_id'] = $vh['service_id'];
+    } elseif ($vh['service_referentiel_id']) {
+        $vh['s_id'] = $vh['service_referentiel_id'];
+    } elseif ($vh['mission_id']) {
+        $vh['s_id'] = $vh['mission_id'];
+    }
+
+    if (!empty($vh['contrat_id'])){
+        $contrats[$vh['contrat_id']]['volumesHoraires'][] = $vh;
+    }else{
+        $volumesHoraires[] = $vh;
+    }
+}
 
 // Affichage des données
 
@@ -220,6 +221,9 @@ foreach ($contrats as $contrat) {
 
 // Génération d'un jeu de tests unitaires pour le TBL Contrat
 echo "<h2>Génération d'un jeu de tests unitaires pour le TBL Contrat</h2>";
+
+echo '<a href="'.\UnicaenCode\Util::url('contrats/tblContratIntervenant', ['intervenantId' => $intervenantId]).'">Affichage des données en sortie du TBL_CONTRAT</a><br />';
+echo '<a href="'.$this->url('intervenant/contrat', ['intervenant' => $intervenantId]).'">Page contrat de l\'intervenant</a><br />';
 
 $contratIndex         = 0;
 $avenantIndex         = 0;

@@ -276,59 +276,13 @@ foreach ($contrats as $cid => $contrat) {
     $volumeHoraireVariables = [];
 
     $php .= "\n";
-    foreach ($contrat['volumesHoraires'] as $volumesHoraire) {
+    foreach ($contrat['volumesHoraires'] as $volumeHoraire) {
         $volumesHorairesIndex++;
         $vnom = 'volumeHoraire' . $volumesHorairesIndex;
 
         $volumeHoraireVariables[] = $vnom;
 
-        $php .= "$" . $vnom . " = new VolumeHoraire();\n";
-        if ($volumesHoraire['structure_id']) {
-            $php .= "$" . $vnom . "->structureId        = " . $volumesHoraire['structure_id'] . ";\n";
-        }
-        if ($volumesHoraire['service_id']) {
-            $php .= "$" . $vnom . "->serviceId          = " . $volumesHoraire['service_id'] . ";\n";
-        }
-        if ($volumesHoraire['service_referentiel_id']) {
-            $php .= "$" . $vnom . "->serviceReferentielId = " . $volumesHoraire['service_referentiel_id'] . ";\n";
-        }
-        if ($volumesHoraire['mission_id']) {
-            $php .= "$" . $vnom . "->missionId          = " . $volumesHoraire['mission_id'] . ";\n";
-        }
-        if ($volumesHoraire['volume_horaire_id']) {
-            $php .= "$" . $vnom . "->volumeHoraireId    = " . $volumesHoraire['volume_horaire_id'] . ";\n";
-        }
-        if ($volumesHoraire['volume_horaire_ref_id']) {
-            $php .= "$" . $vnom . "->volumeHoraireRefId = " . $volumesHoraire['volume_horaire_ref_id'] . ";\n";
-        }
-        if ($volumesHoraire['taux_remu_id']) {
-            $php .= "$" . $vnom . "->tauxRemuId         = " . $volumesHoraire['taux_remu_id'] . ";\n";
-        }
-        if ($volumesHoraire['taux_remu_majore_id']) {
-            $php .= "$" . $vnom . "->tauxRemuMajoreId   = " . $volumesHoraire['taux_remu_majore_id'] . ";\n";
-        }
-        if ($volumesHoraire['date_fin_mission']) {
-            $php .= "$" . $vnom . "->dateFinMission     = new \Datetime('" . substr($contrat['date_fin_mission'], 0, 10) . "');\n";
-        }
-        if ($volumesHoraire['cm']) {
-            $php .= "$" . $vnom . "->cm                 = " . $volumesHoraire['cm'] . ";\n";
-        }
-        if ($volumesHoraire['td']) {
-            $php .= "$" . $vnom . "->td                 = " . $volumesHoraire['td'] . ";\n";
-        }
-        if ($volumesHoraire['tp']) {
-            $php .= "$" . $vnom . "->tp                 = " . $volumesHoraire['tp'] . ";\n";
-        }
-        if ($volumesHoraire['autres']) {
-            $php .= "$" . $vnom . "->autres             = " . $volumesHoraire['autres'] . ";\n";
-        }
-        if ($volumesHoraire['heures']) {
-            $php .= "$" . $vnom . "->heures             = " . $volumesHoraire['heures'] . ";\n";
-        }
-        if ($volumesHoraire['hetd']) {
-            $php .= "$" . $vnom . "->hetd               = " . $volumesHoraire['hetd'] . ";\n";
-        }
-        $php .= "\n";
+        $php .= volumeHoraireToPhp($volumeHoraire, $vnom);
     }
 
     if (!empty($volumeHoraireVariables)) {
@@ -337,8 +291,71 @@ foreach ($contrats as $cid => $contrat) {
     }
 }
 
-if (!empty($volumesHoraire)){
-    $php .= "// 1 ou plusieurs volumes horaires (".count($volumesHoraire).") ne sont pas contractualisés";
+if (!empty($volumesHoraires)){
+    $php .= "\n";
+    foreach ($volumesHoraires as $volumeHoraire) {
+        $volumesHorairesIndex++;
+        $vnom = 'volumeHoraire' . $volumesHorairesIndex;
+
+        $volumeHoraireVariables[] = $vnom;
+
+        $php .= volumeHoraireToPhp($volumeHoraire, $vnom);
+    }
 }
 
 \UnicaenCode\Util::highlight($php, 'php', true, ['show-line-numbers' => true]);
+
+
+
+function volumeHoraireToPhp(array $volumesHoraire, string $vnom): string
+{
+    $php = "$" . $vnom . " = new VolumeHoraire();\n";
+    if ($volumesHoraire['structure_id']) {
+        $php .= "$" . $vnom . "->structureId        = " . $volumesHoraire['structure_id'] . ";\n";
+    }
+    if ($volumesHoraire['service_id']) {
+        $php .= "$" . $vnom . "->serviceId          = " . $volumesHoraire['service_id'] . ";\n";
+    }
+    if ($volumesHoraire['service_referentiel_id']) {
+        $php .= "$" . $vnom . "->serviceReferentielId = " . $volumesHoraire['service_referentiel_id'] . ";\n";
+    }
+    if ($volumesHoraire['mission_id']) {
+        $php .= "$" . $vnom . "->missionId          = " . $volumesHoraire['mission_id'] . ";\n";
+    }
+    if ($volumesHoraire['volume_horaire_id']) {
+        $php .= "$" . $vnom . "->volumeHoraireId    = " . $volumesHoraire['volume_horaire_id'] . ";\n";
+    }
+    if ($volumesHoraire['volume_horaire_ref_id']) {
+        $php .= "$" . $vnom . "->volumeHoraireRefId = " . $volumesHoraire['volume_horaire_ref_id'] . ";\n";
+    }
+    if ($volumesHoraire['taux_remu_id']) {
+        $php .= "$" . $vnom . "->tauxRemuId         = " . $volumesHoraire['taux_remu_id'] . ";\n";
+    }
+    if ($volumesHoraire['taux_remu_majore_id']) {
+        $php .= "$" . $vnom . "->tauxRemuMajoreId   = " . $volumesHoraire['taux_remu_majore_id'] . ";\n";
+    }
+    if ($volumesHoraire['date_fin_mission']) {
+        $php .= "$" . $vnom . "->dateFinMission     = new \Datetime('" . substr($contrat['date_fin_mission'], 0, 10) . "');\n";
+    }
+    if ($volumesHoraire['cm']) {
+        $php .= "$" . $vnom . "->cm                 = " . $volumesHoraire['cm'] . ";\n";
+    }
+    if ($volumesHoraire['td']) {
+        $php .= "$" . $vnom . "->td                 = " . $volumesHoraire['td'] . ";\n";
+    }
+    if ($volumesHoraire['tp']) {
+        $php .= "$" . $vnom . "->tp                 = " . $volumesHoraire['tp'] . ";\n";
+    }
+    if ($volumesHoraire['autres']) {
+        $php .= "$" . $vnom . "->autres             = " . $volumesHoraire['autres'] . ";\n";
+    }
+    if ($volumesHoraire['heures']) {
+        $php .= "$" . $vnom . "->heures             = " . $volumesHoraire['heures'] . ";\n";
+    }
+    if ($volumesHoraire['hetd']) {
+        $php .= "$" . $vnom . "->hetd               = " . $volumesHoraire['hetd'] . ";\n";
+    }
+    $php .= "\n";
+
+    return $php;
+}

@@ -309,8 +309,8 @@ $fieldsets = $form->getFieldsets();
 
             function manageSituationMatrimoniale()
             {
-                var selectSituationMatrimoniale = $("select[name='DossierIdentite[situationMatrimoniale]']");
-                var dateSituationMatrimoniale = $("input[name='DossierIdentite[dateSituationMatrimoniale]']").parent('div').parent('div');
+                var selectSituationMatrimoniale = $("select[name='DossierIdentiteComplementaire[situationMatrimoniale]']");
+                var dateSituationMatrimoniale = $("input[name='DossierIdentiteComplementaire[dateSituationMatrimoniale]']").parent('div').parent('div');
 
                 var situation = $("option:selected", selectSituationMatrimoniale).html();
 

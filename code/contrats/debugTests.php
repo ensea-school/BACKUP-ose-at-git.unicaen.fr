@@ -244,12 +244,12 @@ foreach ($contrats as $cid => $contrat) {
     $cnom                       = $contrat['variable'];
 
     $php .= "$" . $cnom . "                = new Contrat();\n";
-    $php .= "$" . $cnom . "->id            = " . $contrat['id'] . "\n";
+    $php .= "$" . $cnom . "->id            = " . $contrat['id'] . ";\n";
     if ($contrat['histo_destruction']) {
         $php .= "$" . $cnom . "->historise     = true;\n";
     }
     if ($contrat['structure_id']) {
-        $php .= "$" . $cnom . "->structure_id  = " . $contrat['structure_id'] . ";\n";
+        $php .= "$" . $cnom . "->structureId   = " . $contrat['structure_id'] . ";\n";
     }
     if ($contrat['contrat_id']) {
         $php .= "$" . $cnom . "->setParent($" . $contrats[(int)$contrat['contrat_id']]['variable'] . ");\n";
@@ -267,7 +267,7 @@ foreach ($contrats as $cid => $contrat) {
     //    $php .= "$" . $cnom . "->histoCreation = new \Datetime('" . substr($contrat['histo_creation'], 0, 10) . "');\n";
     //}
     if ($contrat['validation_id'] && null == $contrat['validation_histo_destruction']) {
-        $php .= "$" . $cnom . "->edite         = 1;\n";
+        $php .= "$" . $cnom . "->edite         = true;\n";
     }
     if ($contrat['total_hetd']) {
         $php .= "$" . $cnom . "->totalHetd     = " . $contrat['total_hetd'] . ";\n";
@@ -284,7 +284,7 @@ foreach ($contrats as $cid => $contrat) {
 
         $php .= "$" . $vnom . " = new VolumeHoraire();\n";
         if ($volumesHoraire['structure_id']) {
-            $php .= "$" . $vnom . "->structure_id       = " . $volumesHoraire['structure_id'] . ";\n";
+            $php .= "$" . $vnom . "->structureId        = " . $volumesHoraire['structure_id'] . ";\n";
         }
         if ($volumesHoraire['service_id']) {
             $php .= "$" . $vnom . "->serviceId          = " . $volumesHoraire['service_id'] . ";\n";

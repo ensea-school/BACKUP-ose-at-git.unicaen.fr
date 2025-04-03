@@ -359,7 +359,7 @@ class ContratProcess implements ProcessInterface
 
     public function calculStructure(Contrat $contrat): void
     {
-        if ($contrat->id && $contrat->edite == 1) {
+        if ($contrat->id) {
             // Si le contrat existe déjà et a été valider, on ne touche à rien et on remonte ce qui avait déjà été décidé avant, on recalcule pour un projet
             return;
         }

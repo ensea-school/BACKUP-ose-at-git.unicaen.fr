@@ -134,7 +134,7 @@ class ContratProcess implements ProcessInterface
 
     public function contratHydrateFromDb(Contrat $contrat, array $data): void
     {
-        $annee = $this->getServiceAnnee()->get((int)$data['annee_id']);
+        $annee                  = $this->getServiceAnnee()->get((int)$data['annee_id']);
         $contrat->actif         = $data['actif'] === '1';
         $contrat->historise     = !empty($data['histo_destruction']);
         $contrat->id            = (int)$data['contrat_id'] ?: null;
@@ -161,15 +161,15 @@ class ContratProcess implements ProcessInterface
 
     public function contratHydrateFromVolumeHoraire(Contrat $contrat, VolumeHoraire $volumeHoraire): void
     {
-        if ($volumeHoraire->volumeHoraireId){
+        if ($volumeHoraire->volumeHoraireId) {
             $contrat->typeService = $this->getServiceTypeService()->getEnseignement();
-            $contrat->isMission    = false;
-        }elseif($volumeHoraire->volumeHoraireRefId){
+            $contrat->isMission   = false;
+        } elseif ($volumeHoraire->volumeHoraireRefId) {
             $contrat->typeService = $this->getServiceTypeService()->getReferentiel();
-            $contrat->isMission    = false;
-        }elseif($volumeHoraire->volumeHoraireMissionId){
+            $contrat->isMission   = false;
+        } elseif ($volumeHoraire->volumeHoraireMissionId) {
             $contrat->typeService = $this->getServiceTypeService()->getMission();
-            $contrat->isMission    = true;
+            $contrat->isMission   = true;
         }
 
         // calcul de la structure
@@ -177,6 +177,7 @@ class ContratProcess implements ProcessInterface
             switch ($this->parametreMis) {
                 case Parametre::CONTRAT_MIS_GLOBAL:
                     $contrat->structureId = null;
+                    break;
                 case Parametre::CONTRAT_MIS_COMPOSANTE:
                 case Parametre::CONTRAT_MIS_MISSION:
                     $contrat->structureId = $volumeHoraire->structureId;
@@ -185,11 +186,13 @@ class ContratProcess implements ProcessInterface
             switch ($this->parametreEns) {
                 case Parametre::CONTRAT_ENS_GLOBAL:
                     $contrat->structureId = null;
+                    break;
                 case Parametre::CONTRAT_ENS_COMPOSANTE:
                     $contrat->structureId = $volumeHoraire->structureId;
             }
         }
     }
+
 
 
     private function getContrat(int $intervenantId, string $uuid): Contrat
@@ -294,16 +297,20 @@ class ContratProcess implements ProcessInterface
         // Activer les lignes où il y a besoin de contrats/avenants
     }
 
+
+
     public function calculActif(Contrat $contrat): void
     {
-        if(!$contrat->actif){
-            if($this->parametreAvenant == Parametre::AVENANT_AUTORISE){
+        if (!$contrat->actif) {
+            if ($this->parametreAvenant == Parametre::AVENANT_AUTORISE) {
                 $contrat->actif = 1;
-            }elseif(empty($contrat->parent)){
-                    $contrat->actif = 1;
+            } elseif (empty($contrat->parent)) {
+                $contrat->actif = 1;
             }
         }
     }
+
+
 
     /**
      * @param array $contrats
@@ -337,7 +344,7 @@ class ContratProcess implements ProcessInterface
             // aucun volume horaire
             if ($contrat->parent) {
                 // s'il a un parent, c'est qu'on est sur un avenant de modif de date de fin de mission
-                $contrat->isMission = true;
+                $contrat->isMission = $contrat->parent->isMission;
             } else {
                 // S'il n'a pas de parent, c'est qu'on est sur un contrat d'enseignement/référentiel sans prévisionnel
                 $contrat->isMission = false;
@@ -542,9 +549,9 @@ class ContratProcess implements ProcessInterface
         if (empty($contrat->tauxRemuMajoreId)) {
             $contrat->tauxRemuMajoreId = $contrat->tauxRemuId;
         }
-if (!$contrat->annee){
-    echo $contrat->intervenantId;
-}
+        if (!$contrat->annee) {
+            echo $contrat->intervenantId;
+        }
         $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->annee->getDateDebut();
         $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->tauxRemuDate);
         $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $contrat->tauxRemuDate);

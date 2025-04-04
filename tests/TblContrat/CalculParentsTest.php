@@ -543,4 +543,168 @@ final class CalculParentsTest extends TblContratTestCase
 
     }
 
+
+
+    public function testAvenantSurProjets()
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_MISSION,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_COMPOSANTE,
+        ];
+        $this->useParametres($parametres);
+
+        // on a un contrat sur une structure et on veut créer un second contrat sur une autre structure,
+        // Lorsqu'on a deux projets, ce sont 2 projets de contrat
+
+        $contrat1              = new Contrat();
+        $contrat1->id          = 39940;
+        $contrat1->structureId = 495;
+        $contrat1->totalHetd   = 8;
+
+        $volumeHoraire1                  = new VolumeHoraire();
+        $volumeHoraire1->structureId     = 495;
+        $volumeHoraire1->serviceId       = 316066;
+        $volumeHoraire1->volumeHoraireId = 748185;
+        $volumeHoraire1->cm              = 1;
+        $volumeHoraire1->heures          = 1;
+        $volumeHoraire1->hetd            = 1.5;
+
+        $volumeHoraire2                  = new VolumeHoraire();
+        $volumeHoraire2->structureId     = 495;
+        $volumeHoraire2->serviceId       = 316066;
+        $volumeHoraire2->volumeHoraireId = 748186;
+        $volumeHoraire2->tp              = 3;
+        $volumeHoraire2->heures          = 3;
+        $volumeHoraire2->hetd            = 2;
+
+        $volumeHoraire3                  = new VolumeHoraire();
+        $volumeHoraire3->structureId     = 495;
+        $volumeHoraire3->serviceId       = 316067;
+        $volumeHoraire3->volumeHoraireId = 748187;
+        $volumeHoraire3->cm              = 2;
+        $volumeHoraire3->heures          = 2;
+        $volumeHoraire3->hetd            = 3;
+
+        $volumeHoraire4                  = new VolumeHoraire();
+        $volumeHoraire4->structureId     = 495;
+        $volumeHoraire4->serviceId       = 316068;
+        $volumeHoraire4->volumeHoraireId = 748189;
+        $volumeHoraire4->cm              = 1;
+        $volumeHoraire4->heures          = 1;
+        $volumeHoraire4->hetd            = 1.5;
+
+        $contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3, $volumeHoraire4];
+
+
+        $contrat2              = new Contrat();
+        $contrat2->structureId = 594;
+
+        $volumeHoraire5                  = new VolumeHoraire();
+        $volumeHoraire5->structureId     = 594;
+        $volumeHoraire5->serviceId       = 316065;
+        $volumeHoraire5->volumeHoraireId = 748183;
+        $volumeHoraire5->cm              = 2;
+        $volumeHoraire5->heures          = 2;
+        $volumeHoraire5->hetd            = 3;
+
+        $volumeHoraire6                  = new VolumeHoraire();
+        $volumeHoraire6->structureId     = 594;
+        $volumeHoraire6->serviceId       = 316065;
+        $volumeHoraire6->volumeHoraireId = 748184;
+        $volumeHoraire6->td              = 2;
+        $volumeHoraire6->heures          = 2;
+        $volumeHoraire6->hetd            = 2;
+
+        $contrat2->volumesHoraires = [$volumeHoraire5, $volumeHoraire6];
+
+        $this->process->calculParentsIds([$contrat1, $contrat2]);
+
+
+        self::assertNull($contrat2->parent);
+        self::assertNull($contrat1->parent);
+    }
+
+
+
+    public function testProjetAvenantSurContrat()
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_MISSION,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_COMPOSANTE,
+        ];
+        $this->useParametres($parametres);
+
+        // on a un contrat sur une structure et on veut créer un second contrat sur une autre structure,
+        // Lorsqu'on a 1 contrat, le nouveau projet est un avenant
+
+        $contrat1              = new Contrat();
+        $contrat1->id          = 39940;
+        $contrat1->edite       = true;
+        $contrat1->structureId = 495;
+        $contrat1->totalHetd   = 8;
+
+        $volumeHoraire1                  = new VolumeHoraire();
+        $volumeHoraire1->structureId     = 495;
+        $volumeHoraire1->serviceId       = 316066;
+        $volumeHoraire1->volumeHoraireId = 748185;
+        $volumeHoraire1->cm              = 1;
+        $volumeHoraire1->heures          = 1;
+        $volumeHoraire1->hetd            = 1.5;
+
+        $volumeHoraire2                  = new VolumeHoraire();
+        $volumeHoraire2->structureId     = 495;
+        $volumeHoraire2->serviceId       = 316066;
+        $volumeHoraire2->volumeHoraireId = 748186;
+        $volumeHoraire2->tp              = 3;
+        $volumeHoraire2->heures          = 3;
+        $volumeHoraire2->hetd            = 2;
+
+        $volumeHoraire3                  = new VolumeHoraire();
+        $volumeHoraire3->structureId     = 495;
+        $volumeHoraire3->serviceId       = 316067;
+        $volumeHoraire3->volumeHoraireId = 748187;
+        $volumeHoraire3->cm              = 2;
+        $volumeHoraire3->heures          = 2;
+        $volumeHoraire3->hetd            = 3;
+
+        $volumeHoraire4                  = new VolumeHoraire();
+        $volumeHoraire4->structureId     = 495;
+        $volumeHoraire4->serviceId       = 316068;
+        $volumeHoraire4->volumeHoraireId = 748189;
+        $volumeHoraire4->cm              = 1;
+        $volumeHoraire4->heures          = 1;
+        $volumeHoraire4->hetd            = 1.5;
+
+        $contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3, $volumeHoraire4];
+
+
+        $contrat2              = new Contrat();
+        $contrat2->structureId = 594;
+
+        $volumeHoraire5                  = new VolumeHoraire();
+        $volumeHoraire5->structureId     = 594;
+        $volumeHoraire5->serviceId       = 316065;
+        $volumeHoraire5->volumeHoraireId = 748183;
+        $volumeHoraire5->cm              = 2;
+        $volumeHoraire5->heures          = 2;
+        $volumeHoraire5->hetd            = 3;
+
+        $volumeHoraire6                  = new VolumeHoraire();
+        $volumeHoraire6->structureId     = 594;
+        $volumeHoraire6->serviceId       = 316065;
+        $volumeHoraire6->volumeHoraireId = 748184;
+        $volumeHoraire6->td              = 2;
+        $volumeHoraire6->heures          = 2;
+        $volumeHoraire6->hetd            = 2;
+
+        $contrat2->volumesHoraires = [$volumeHoraire5, $volumeHoraire6];
+
+        $this->process->calculParentsIds([$contrat1, $contrat2]);
+
+
+        self::assertEquals($contrat1,$contrat2->parent);
+        self::assertNull($contrat1->parent);
+    }
 }

@@ -293,6 +293,8 @@ foreach ($contrats as $cid => $contrat) {
 
 if (!empty($volumesHoraires)){
     $php .= "\n";
+    $php .= "// Volumes horaires orphelins... \n";
+    $php .= "\n";
     foreach ($volumesHoraires as $volumeHoraire) {
         $volumesHorairesIndex++;
         $vnom = 'volumeHoraire' . $volumesHorairesIndex;

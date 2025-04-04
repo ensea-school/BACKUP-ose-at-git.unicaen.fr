@@ -611,7 +611,7 @@ class ContratProcess implements ProcessInterface
         if (!$contrat->annee) {
             echo $contrat->intervenantId;
         }
-        $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->annee->getDateDebut();
+        $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->histoCreation ?? $contrat->annee->getDateDebut();
         $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->tauxRemuDate);
         $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $contrat->tauxRemuDate);
     }
@@ -687,7 +687,7 @@ class ContratProcess implements ProcessInterface
         if ($contrat->isMission) {
             $contrat->tauxCongesPayes = $this->parametreTauxCongesPayes;
         } else {
-            $contrat->tauxCongesPayes = 1.0;
+            $contrat->tauxCongesPayes = 0;
         }
     }
 

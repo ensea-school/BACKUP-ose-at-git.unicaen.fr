@@ -46,7 +46,6 @@ class TblContrat
     private ?\DateTime                $tauxRemuDate         = null;
     private ?TauxRemu                 $tauxRemuMajore       = null;
     private ?float                    $tauxRemuMajoreValeur = null;
-    private ?\DateTime                $tauxRemuMajoreDate   = null;
     private ?float                    $tauxCongesPayes      = null;
     private ?VolumeHoraire            $volumeHoraire        = null;
     private ?VolumeHoraireMission     $volumeHoraireMission = null;
@@ -477,14 +476,7 @@ class TblContrat
 
     public function getTauxRemuMajoreDate(): ?\DateTime
     {
-        return $this->tauxRemuMajoreDate;
-    }
-
-
-
-    public function setTauxRemuMajoreDate(?\DateTime $tauxRemuMajoreDate): void
-    {
-        $this->tauxRemuMajoreDate = $tauxRemuMajoreDate;
+        return $this->tauxRemuDate;
     }
 
 
@@ -542,9 +534,6 @@ class TblContrat
     {
         $this->volumeHoraireRef = $volumeHoraireRef;
     }
-
-
-
 
 
 }

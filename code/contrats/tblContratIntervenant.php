@@ -46,7 +46,7 @@ $contratCols = [
     'edite', 'signe', 'termine',
     'contrat_id', 'contrat_parent_id',
     'date_creation', 'date_debut', 'date_fin',
-    'taux_conges_payes', 'taux_remu_date', 'taux_remu_id', 'taux_remu_majore_date', 'taux_remu_majore_id', 'taux_remu_majore_valeur',
+    'taux_conges_payes', 'taux_remu_date', 'taux_remu_id', 'taux_remu_majore_id', 'taux_remu_majore_valeur',
     'taux_remu_valeur',
 ];
 

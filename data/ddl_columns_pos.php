@@ -1518,7 +1518,6 @@ return [
         'TAUX_REMU_DATE',
         'TAUX_REMU_MAJORE_ID',
         'TAUX_REMU_MAJORE_VALEUR',
-        'TAUX_REMU_MAJORE_DATE',
         'TAUX_CONGES_PAYES',
         'VOLUME_HORAIRE_ID',
         'VOLUME_HORAIRE_MISSION_ID',

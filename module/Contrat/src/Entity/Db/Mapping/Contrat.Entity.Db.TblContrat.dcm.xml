@@ -83,7 +83,6 @@
             </join-columns>
         </many-to-one>
         <field name="tauxRemuMajoreValeur" type="float" column="TAUX_REMU_MAJORE_VALEUR" nullable="true"/>
-        <field name="tauxRemuMajoreDate" type="datetime" column="TAUX_REMU_MAJORE_DATE" nullable="true"/>
         <field name="tauxCongesPayes" type="float" column="TAUX_CONGES_PAYES" nullable="true"/>
         <many-to-one field="volumeHoraire" target-entity="Enseignement\Entity\Db\VolumeHoraire">
             <join-columns>

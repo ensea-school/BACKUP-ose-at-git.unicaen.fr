@@ -29,6 +29,7 @@ final class ProlongationMissionTest extends TblContratTestCase
 
         /* Jeu de données initial */
         $contrat1              = new Contrat();
+        $contrat1->intervenantId = 1;
         $contrat1->id          = 1;
         $contrat1->edite       = true;
         $contrat1->isMission   = true;
@@ -49,7 +50,7 @@ final class ProlongationMissionTest extends TblContratTestCase
     /* cas de test a dev :
         Parametre par mission
         contrat  1 éditer et signé sur 3 mission (1,2,3) (date fin 2020-02-20)
-        un nouveau volume horaire sur mission 1 (donc avenant d'heure)
+        un nouveau volume horaire sur mission 1 date fin 2020-03-20 (donc avenant d'heure)
         une prolongation de date sur mission 3 : date fin 2020-02-24 (donc avenant de prolongation)
 
         resultat attendu : creation de deux avenant, un d'heure sur mission 1 et un de prolongation sur mission 3 (avenant au contrat sans volume horaire)
@@ -59,15 +60,16 @@ final class ProlongationMissionTest extends TblContratTestCase
      */
     public function testDoubleAvenantAvecHeureEtProlongationMission()
     {
-        $contrat1              = new Contrat();
-        $contrat1->id          = 1;
-        $contrat1->edite       = true;
-        $contrat1->isMission   = true;
-        $contrat1->finValidite = new DateTime('2020-02-20');
+        $contrat1                = new Contrat();
+        $contrat1->intervenantId = 1;
+        $contrat1->id            = 1;
+        $contrat1->edite         = true;
+        $contrat1->isMission     = true;
+        $contrat1->finValidite   = new DateTime('2020-02-20');
 
         $volumeHoraireMission1                 = new VolumeHoraire();
         $volumeHoraireMission1->missionId      = 1;
-        $volumeHoraireMission1->dateFinMission = new DateTime('2020-02-20');
+        $volumeHoraireMission1->dateFinMission = new DateTime('2020-03-20');
 
         $volumeHoraireMission2                 = new VolumeHoraire();
         $volumeHoraireMission2->missionId      = 2;
@@ -80,16 +82,17 @@ final class ProlongationMissionTest extends TblContratTestCase
         $contrat1->volumesHoraires = [$volumeHoraireMission1, $volumeHoraireMission2, $volumeHoraireMission3];
 
 
-        $avenant              = new Contrat();
-        $avenant->id          = 1;
-        $avenant->edite       = true;
-        $avenant->isMission   = true;
-        $avenant->parent      = $contrat1;
-        $avenant->finValidite = new DateTime('2020-02-20');
+        $avenant                = new Contrat();
+        $avenant->id            = 1;
+        $avenant->edite         = false;
+        $avenant->isMission     = true;
+        $avenant->parent        = $contrat1;
+        $avenant->finValidite   = new DateTime('2020-03-20');
+        $avenant->intervenantId = 1;
 
         $volumeHoraire2                 = new VolumeHoraire();
         $volumeHoraire2->missionId      = 1;
-        $volumeHoraire2->dateFinMission = new DateTime('2020-02-20');
+        $volumeHoraire2->dateFinMission = new DateTime('2020-03-20');
         $avenant->volumesHoraires[]     = $volumeHoraire2;
         $contrat1->avenants             = [$avenant];
 
@@ -99,6 +102,7 @@ final class ProlongationMissionTest extends TblContratTestCase
         ProlongationMissionTest::assertCount(2, $contrat1->avenants);
         ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
         ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[1]->parent->id);
+        ProlongationMissionTest::assertCount(0, $contrat1->avenants[1]->volumesHoraires);
 
 
     }
@@ -119,7 +123,7 @@ final class ProlongationMissionTest extends TblContratTestCase
     un nouveau volume horaire sur mission 3 avec prolongation (donc avenant d'heure)
     une prolongation de date sur mission 1 (donc avenant de prolongation)
 
-    resultat attendu : creation d'un seul avenant d'heure et de prolongation
+    resultat attendu : creation de deux avenants d'heure et de prolongation
     */
 
     /* cas de test a dev :

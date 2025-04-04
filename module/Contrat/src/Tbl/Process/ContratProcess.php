@@ -235,10 +235,14 @@ class ContratProcess implements ProcessInterface
         $uuid = $this->generateUUID($intervenantId, $contratId, $volumeHoraire->structureId, $volumeHoraire->missionId);
 
         $contrat = $this->getContrat($intervenantId, $uuid);
-        if (empty($contrat->annee)) {
-            $contrat->annee = $this->getServiceAnnee()->get((int)$data['annee_id']);
+
+        if (!$contrat->id) {
+            if (empty($contrat->annee)) {
+                $contrat->annee = $this->getServiceAnnee()->get((int)$data['annee_id']);
+            }
+            $this->contratHydrateFromVolumeHoraire($contrat, $volumeHoraire);
         }
-        $this->contratHydrateFromVolumeHoraire($contrat, $volumeHoraire);
+
         $volumeHoraire->setContrat($contrat);
 
         return $volumeHoraire;
@@ -318,9 +322,64 @@ class ContratProcess implements ProcessInterface
      */
     public function contratProlongationMission(array $contrats): void
     {
-        foreach ($contrats as $contratParcours) {
-            /* @var Contrat $contratParcours */
-            $test = $contratParcours->id;
+
+        $contratPrincipaux = [];
+        foreach ($contrats as $contrat) {
+            /* @var Contrat $contrat */
+            if (empty($contrat->parent) && $contrat->isMission && $contrat->edite == 1) {
+                $contratPrincipaux[] = $contrat;
+                $intervenantId       = $contrat->intervenantId;
+            }
+        }
+
+
+        foreach ($contratPrincipaux as $contrat) {
+            /* @var Contrat $contrat */
+            $dateFinContrat   = $contrat->finValidite;
+            $dateDebutContrat = null;
+            $dateMission      = null;
+            $intervenantId    = $contrat->intervenantId;
+            foreach ($contrat->volumesHoraires as $volumeHoraire) {
+                if ($dateMission == null || $volumeHoraire->dateFinMission > $dateMission) {
+                    $dateDebutContrat = $contrat->debutValidite;
+                    $dateMission      = $volumeHoraire->dateFinMission;
+                }
+            }
+
+            foreach ($contrat->avenants as $avenant) {
+                if (!$avenant->edite) {
+                    continue;
+                }
+                if ($dateFinContrat == null || $avenant->finValidite > $dateFinContrat) {
+                    $dateFinContrat = $avenant->finValidite;
+                }
+                if ($dateDebutContrat == null || $avenant->debutValidite < $dateDebutContrat) {
+                    $dateFinContrat = $avenant->debutValidite;
+                }
+
+                foreach ($avenant->volumesHoraires as $volumeHoraire) {
+                    if ($dateMission == null || $volumeHoraire->dateFinMission > $dateMission) {
+                        $dateMission = $volumeHoraire->dateFinMission;
+                    }
+                }
+            }
+
+            if ($dateFinContrat != null && $dateMission != null && $dateFinContrat < $dateMission) {
+
+                $avenantProlongation                = new Contrat();
+                $avenantProlongation->parent        = $contrat;
+                $contrat->avenants[]                = $avenantProlongation;
+                $avenantProlongation->annee         = $contrat->annee;
+                $avenantProlongation->finValidite   = $dateMission;
+                $avenantProlongation->debutValidite = $dateDebutContrat;
+                $avenantProlongation->isMission     = true;
+                $avenantProlongation->intervenantId = $intervenantId;
+                $avenantProlongation->structureId   = $contrat->structureId;
+                $avenantProlongation->uuid          = $this->generateUUID($intervenantId, $avenantProlongation->id, $avenantProlongation->structureId, $avenantProlongation->getMissionId(), $avenantProlongation->parent->id);
+                $avenantProlongation->typeService   = $contrat->typeService;
+
+                $this->intervenants[$intervenantId][$avenantProlongation->uuid] = $avenantProlongation;
+            }
         }
     }
 
@@ -615,8 +674,9 @@ class ContratProcess implements ProcessInterface
         switch ($this->parametreFranchissement) {
             case Parametre::CONTRAT_FRANCHI_VALIDATION:
                 $contrat->termine = $contrat->edite;
+                break;
             case Parametre::CONTRAT_FRANCHI_DATE_RETOUR:
-                $contrat->termine = $contrat->edite && $contrat->retourne;
+                $contrat->termine = $contrat->edite && $contrat->signe;
         }
     }
 
@@ -676,10 +736,13 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function generateUUID(int $intervenant_id, ?int $contratId, ?int $structureId = null, ?int $missionId = null): string
+    public function generateUUID(int $intervenant_id, ?int $contratId, ?int $structureId = null, ?int $missionId = null, ?int $parentId = null): string
     {
         if ($contratId) {
             return 'contrat_id_' . $contratId;
+        }
+        if ($parentId) {
+            return 'prolongation_contrat_' . $parentId;
         }
 
         if ($missionId != null) {

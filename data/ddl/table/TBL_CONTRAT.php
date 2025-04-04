@@ -57,6 +57,18 @@ return [
             'position'    => 22,
             'commentaire' => NULL,
         ],
+        'AUTRES_LIBELLES'            => [
+            'name'        => 'AUTRES_LIBELLES',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 1000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 44,
+            'commentaire' => NULL,
+        ],
         'CM'                         => [
             'name'        => 'CM',
             'type'        => 'float',
@@ -364,9 +376,9 @@ return [
             'length'      => 0,
             'scale'       => NULL,
             'precision'   => 126,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 37,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 42,
             'commentaire' => NULL,
         ],
         'TOTAL_HETD'                 => [
@@ -405,7 +417,7 @@ return [
             'position'    => 40,
             'commentaire' => NULL,
         ],
-        'TOTAL_HEURES_PAYEES' => [
+        'TOTAL_HEURES_PAYEES'        => [
             'name'        => 'TOTAL_HEURES_PAYEES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -414,7 +426,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 39,
+            'position'    => 43,
             'commentaire' => NULL,
         ],
         'TOTAL_HEURES_PERIODE_ESSAI' => [

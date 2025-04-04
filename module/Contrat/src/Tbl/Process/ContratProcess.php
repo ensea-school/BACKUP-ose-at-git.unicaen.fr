@@ -904,9 +904,20 @@ class ContratProcess implements ProcessInterface
                         $ligne           = $this->extractContrat($contrat);
                         $this->tblData[] = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
                     } else {
-                        foreach ($contrat->volumesHoraires as $volumeHoraire) {
+                        $vhs = $contrat->volumesHoraires;
+
+                        usort($vhs, function (VolumeHoraire $a, VolumeHoraire $b) {
+                            $aid = $a->volumeHoraireId.'-'.$a->volumeHoraireRefId.'-'.$a->volumeHoraireMissionId;
+                            $bid = $b->volumeHoraireId.'-'.$b->volumeHoraireRefId.'-'.$b->volumeHoraireMissionId;
+
+                            return $aid > $bid ? 1 : -1;
+                        });
+                        $vhIndex = 0;
+                        foreach ($vhs as $volumeHoraire) {
                             $ligne           = $this->extractVolumeHoraire($volumeHoraire);
+                            $ligne['volume_horaire_index'] = $vhIndex;
                             $this->tblData[] = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
+                            $vhIndex++;
                         }
                     }
                 }

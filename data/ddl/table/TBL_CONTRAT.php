@@ -9,7 +9,7 @@ return [
     'commentaire' => 'Contrats de travail',
     'sequence'    => 'TBL_CONTRAT_ID_SEQ',
     'columns'     => [
-        'ACTIF'                     => [
+        'ACTIF'                      => [
             'name'        => 'ACTIF',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
         ],
-        'ANNEE_ID'                  => [
+        'ANNEE_ID'                   => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +33,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'AUTRE_LIBELLE'             => [
+        'AUTRE_LIBELLE'              => [
             'name'        => 'AUTRE_LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -45,7 +45,7 @@ return [
             'position'    => 23,
             'commentaire' => NULL,
         ],
-        'AUTRES'                    => [
+        'AUTRES'                     => [
             'name'        => 'AUTRES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -57,7 +57,7 @@ return [
             'position'    => 22,
             'commentaire' => NULL,
         ],
-        'CM'                        => [
+        'CM'                         => [
             'name'        => 'CM',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -69,7 +69,7 @@ return [
             'position'    => 19,
             'commentaire' => NULL,
         ],
-        'CONTRAT_ID'                => [
+        'CONTRAT_ID'                 => [
             'name'        => 'CONTRAT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -81,7 +81,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'CONTRAT_PARENT_ID'         => [
+        'CONTRAT_PARENT_ID'          => [
             'name'        => 'CONTRAT_PARENT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -93,7 +93,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'DATE_CREATION'             => [
+        'DATE_CREATION'              => [
             'name'        => 'DATE_CREATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -105,7 +105,7 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
-        'DATE_DEBUT'                => [
+        'DATE_DEBUT'                 => [
             'name'        => 'DATE_DEBUT',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -117,7 +117,7 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
-        'DATE_FIN'                  => [
+        'DATE_FIN'                   => [
             'name'        => 'DATE_FIN',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -129,7 +129,7 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
-        'EDITE'                     => [
+        'EDITE'                      => [
             'name'        => 'EDITE',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -141,7 +141,7 @@ return [
             'position'    => 10,
             'commentaire' => 'Nombre de volumes horaires contractualisés',
         ],
-        'HETD'                      => [
+        'HETD'                       => [
             'name'        => 'HETD',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -153,7 +153,7 @@ return [
             'position'    => 25,
             'commentaire' => NULL,
         ],
-        'HEURES'                    => [
+        'HEURES'                     => [
             'name'        => 'HEURES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -165,7 +165,7 @@ return [
             'position'    => 24,
             'commentaire' => NULL,
         ],
-        'ID'                        => [
+        'ID'                         => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -177,7 +177,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'            => [
+        'INTERVENANT_ID'             => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -189,7 +189,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'MISSION_ID'                => [
+        'MISSION_ID'                 => [
             'name'        => 'MISSION_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -201,7 +201,7 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
-        'SERVICE_ID'                => [
+        'SERVICE_ID'                 => [
             'name'        => 'SERVICE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -213,7 +213,7 @@ return [
             'position'    => 16,
             'commentaire' => NULL,
         ],
-        'SERVICE_REFERENTIEL_ID'    => [
+        'SERVICE_REFERENTIEL_ID'     => [
             'name'        => 'SERVICE_REFERENTIEL_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -225,7 +225,7 @@ return [
             'position'    => 17,
             'commentaire' => NULL,
         ],
-        'SIGNE'                     => [
+        'SIGNE'                      => [
             'name'        => 'SIGNE',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -237,7 +237,7 @@ return [
             'position'    => 11,
             'commentaire' => 'Nombre de volumes horaires signés',
         ],
-        'STRUCTURE_ID'              => [
+        'STRUCTURE_ID'               => [
             'name'        => 'STRUCTURE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -249,7 +249,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'TAUX_CONGES_PAYES'         => [
+        'TAUX_CONGES_PAYES'          => [
             'name'        => 'TAUX_CONGES_PAYES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -258,10 +258,10 @@ return [
             'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 32,
+            'position'    => 31,
             'commentaire' => NULL,
         ],
-        'TAUX_REMU_DATE'            => [
+        'TAUX_REMU_DATE'             => [
             'name'        => 'TAUX_REMU_DATE',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -273,7 +273,7 @@ return [
             'position'    => 28,
             'commentaire' => NULL,
         ],
-        'TAUX_REMU_ID'              => [
+        'TAUX_REMU_ID'               => [
             'name'        => 'TAUX_REMU_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -285,7 +285,19 @@ return [
             'position'    => 26,
             'commentaire' => NULL,
         ],
-        'TAUX_REMU_MAJORE_ID'       => [
+        'TAUX_REMU_MAJORE_DATE'      => [
+            'name'        => 'TAUX_REMU_MAJORE_DATE',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 36,
+            'commentaire' => NULL,
+        ],
+        'TAUX_REMU_MAJORE_ID'        => [
             'name'        => 'TAUX_REMU_MAJORE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -297,7 +309,7 @@ return [
             'position'    => 29,
             'commentaire' => NULL,
         ],
-        'TAUX_REMU_MAJORE_VALEUR'   => [
+        'TAUX_REMU_MAJORE_VALEUR'    => [
             'name'        => 'TAUX_REMU_MAJORE_VALEUR',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -309,7 +321,7 @@ return [
             'position'    => 30,
             'commentaire' => NULL,
         ],
-        'TAUX_REMU_VALEUR'          => [
+        'TAUX_REMU_VALEUR'           => [
             'name'        => 'TAUX_REMU_VALEUR',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -321,7 +333,7 @@ return [
             'position'    => 27,
             'commentaire' => NULL,
         ],
-        'TD'                        => [
+        'TD'                         => [
             'name'        => 'TD',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -333,7 +345,7 @@ return [
             'position'    => 20,
             'commentaire' => NULL,
         ],
-        'TERMINE'                   => [
+        'TERMINE'                    => [
             'name'        => 'TERMINE',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -342,10 +354,58 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 36,
+            'position'    => 35,
             'commentaire' => 'Nombre de volumes horaires signés',
         ],
-        'TP'                        => [
+        'TOTAL_HETD'                 => [
+            'name'        => 'TOTAL_HETD',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 37,
+            'commentaire' => NULL,
+        ],
+        'TOTAL_HEURES'               => [
+            'name'        => 'TOTAL_HEURES',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 38,
+            'commentaire' => NULL,
+        ],
+        'TOTAL_HEURES_FORMATION'     => [
+            'name'        => 'TOTAL_HEURES_FORMATION',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 40,
+            'commentaire' => NULL,
+        ],
+        'TOTAL_HEURES_PERIODE_ESSAI' => [
+            'name'        => 'TOTAL_HEURES_PERIODE_ESSAI',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 39,
+            'commentaire' => NULL,
+        ],
+        'TP'                         => [
             'name'        => 'TP',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -357,7 +417,7 @@ return [
             'position'    => 21,
             'commentaire' => NULL,
         ],
-        'TYPE_CONTRAT_ID'           => [
+        'TYPE_CONTRAT_ID'            => [
             'name'        => 'TYPE_CONTRAT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -369,7 +429,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'TYPE_SERVICE_ID'           => [
+        'TYPE_SERVICE_ID'            => [
             'name'        => 'TYPE_SERVICE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -381,7 +441,7 @@ return [
             'position'    => 18,
             'commentaire' => NULL,
         ],
-        'UUID'                      => [
+        'UUID'                       => [
             'name'        => 'UUID',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -393,8 +453,32 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'VOLUME_HORAIRE_ID'         => [
+        'VOLUME_HORAIRE_ID'          => [
             'name'        => 'VOLUME_HORAIRE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 32,
+            'commentaire' => NULL,
+        ],
+        'VOLUME_HORAIRE_INDEX'       => [
+            'name'        => 'VOLUME_HORAIRE_INDEX',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 41,
+            'commentaire' => NULL,
+        ],
+        'VOLUME_HORAIRE_MISSION_ID'  => [
+            'name'        => 'VOLUME_HORAIRE_MISSION_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -405,19 +489,7 @@ return [
             'position'    => 33,
             'commentaire' => NULL,
         ],
-        'VOLUME_HORAIRE_MISSION_ID' => [
-            'name'        => 'VOLUME_HORAIRE_MISSION_ID',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 34,
-            'commentaire' => NULL,
-        ],
-        'VOLUME_HORAIRE_REF_ID'     => [
+        'VOLUME_HORAIRE_REF_ID'      => [
             'name'        => 'VOLUME_HORAIRE_REF_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -426,7 +498,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 35,
+            'position'    => 34,
             'commentaire' => NULL,
         ],
     ],

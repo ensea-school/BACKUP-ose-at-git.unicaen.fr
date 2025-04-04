@@ -405,6 +405,18 @@ return [
             'position'    => 40,
             'commentaire' => NULL,
         ],
+        'TOTAL_HEURES_PAYEES' => [
+            'name'        => 'TOTAL_HEURES_PAYEES',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 39,
+            'commentaire' => NULL,
+        ],
         'TOTAL_HEURES_PERIODE_ESSAI' => [
             'name'        => 'TOTAL_HEURES_PERIODE_ESSAI',
             'type'        => 'float',

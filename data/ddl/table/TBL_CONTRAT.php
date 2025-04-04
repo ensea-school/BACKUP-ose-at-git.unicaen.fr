@@ -357,6 +357,18 @@ return [
             'position'    => 35,
             'commentaire' => 'Nombre de volumes horaires signés',
         ],
+        'TOTAL_GLOBAL_HETD'          => [
+            'name'        => 'TOTAL_GLOBAL_HETD',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 37,
+            'commentaire' => NULL,
+        ],
         'TOTAL_HETD'                 => [
             'name'        => 'TOTAL_HETD',
             'type'        => 'float',

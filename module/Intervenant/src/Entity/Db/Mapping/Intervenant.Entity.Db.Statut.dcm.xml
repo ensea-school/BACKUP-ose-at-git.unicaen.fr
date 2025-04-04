@@ -31,35 +31,35 @@
         <field name="dossierVisualisation" type="boolean" column="DOSSIER_VISUALISATION" nullable="false"/>
         <field name="dossierEdition" type="boolean" column="DOSSIER_EDITION" nullable="false"/>
         <field name="dossierSelectionnable" type="boolean" column="DOSSIER_SELECTIONNABLE" nullable="false"/>
-        <field name="dossierIdentiteComplementaire" type="boolean" column="DOSSIER_IDENTITE_COMP" nullable="false"/>
-        <field name="dossierContact" type="boolean" column="DOSSIER_CONTACT" nullable="false"/>
+        <field name="dossierIdentiteComplementaire" type="integer" column="DOSSIER_IDENTITE_COMP" nullable="false"/>
+        <field name="dossierContact" type="integer" column="DOSSIER_CONTACT" nullable="false"/>
         <field name="dossierTelPerso" type="boolean" column="DOSSIER_TEL_PERSO" nullable="false"/>
         <field name="dossierEmailPerso" type="boolean" column="DOSSIER_EMAIL_PERSO" nullable="false"/>
         <field name="dossierSituationMatrimoniale" type="boolean" column="DOSSIER_SITUATION_MATRIMONIALE"
                nullable="false"/>
         <field name="dossierEmployeurFacultatif" type="boolean" column="DOSSIER_EMPLOYEUR_FACULTATIF" nullable="false"/>
-        <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>
-        <field name="dossierBanque" type="boolean" column="DOSSIER_BANQUE" nullable="false"/>
-        <field name="dossierInsee" type="boolean" column="DOSSIER_INSEE" nullable="false"/>
-        <field name="dossierStatut" type="boolean" column="DOSSIER_STATUT" nullable="false"/>
-        <field name="dossierEmployeur" type="boolean" column="DOSSIER_EMPLOYEUR" nullable="false"/>
-        <field name="dossierAutre1" type="boolean" column="DOSSIER_AUTRE_1" nullable="false"/>
+        <field name="dossierAdresse" type="integer" column="DOSSIER_ADRESSE" nullable="false"/>
+        <field name="dossierBanque" type="integer" column="DOSSIER_BANQUE" nullable="false"/>
+        <field name="dossierInsee" type="integer" column="DOSSIER_INSEE" nullable="false"/>
+        <field name="dossierStatut" type="integer" column="DOSSIER_STATUT" nullable="false"/>
+        <field name="dossierEmployeur" type="integer" column="DOSSIER_EMPLOYEUR" nullable="false"/>
+        <field name="dossierAutre1" type="integer" column="DOSSIER_AUTRE_1" nullable="false"/>
         <field name="dossierAutre1Visualisation" type="boolean" column="DOSSIER_AUTRE_1_VISUALISATION"
                nullable="false"/>
         <field name="dossierAutre1Edition" type="boolean" column="DOSSIER_AUTRE_1_EDITION" nullable="false"/>
-        <field name="dossierAutre2" type="boolean" column="DOSSIER_AUTRE_2" nullable="false"/>
+        <field name="dossierAutre2" type="integer" column="DOSSIER_AUTRE_2" nullable="false"/>
         <field name="dossierAutre2Visualisation" type="boolean" column="DOSSIER_AUTRE_2_VISUALISATION"
                nullable="false"/>
         <field name="dossierAutre2Edition" type="boolean" column="DOSSIER_AUTRE_2_EDITION" nullable="false"/>
-        <field name="dossierAutre3" type="boolean" column="DOSSIER_AUTRE_3" nullable="false"/>
+        <field name="dossierAutre3" type="integer" column="DOSSIER_AUTRE_3" nullable="false"/>
         <field name="dossierAutre3Visualisation" type="boolean" column="DOSSIER_AUTRE_3_VISUALISATION"
                nullable="false"/>
         <field name="dossierAutre3Edition" type="boolean" column="DOSSIER_AUTRE_3_EDITION" nullable="false"/>
-        <field name="dossierAutre4" type="boolean" column="DOSSIER_AUTRE_4" nullable="false"/>
+        <field name="dossierAutre4" type="integer" column="DOSSIER_AUTRE_4" nullable="false"/>
         <field name="dossierAutre4Visualisation" type="boolean" column="DOSSIER_AUTRE_4_VISUALISATION"
                nullable="false"/>
         <field name="dossierAutre4Edition" type="boolean" column="DOSSIER_AUTRE_4_EDITION" nullable="false"/>
-        <field name="dossierAutre5" type="boolean" column="DOSSIER_AUTRE_5" nullable="false"/>
+        <field name="dossierAutre5" type="integer" column="DOSSIER_AUTRE_5" nullable="false"/>
         <field name="dossierAutre5Visualisation" type="boolean" column="DOSSIER_AUTRE_5_VISUALISATION"
                nullable="false"/>
         <field name="dossierAutre5Edition" type="boolean" column="DOSSIER_AUTRE_5_EDITION" nullable="false"/>

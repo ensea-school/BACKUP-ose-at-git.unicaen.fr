@@ -96,6 +96,16 @@ class StatutSaisieForm extends AbstractForm
             'paiement',
         ];
 
+        $dpElements = [
+            'dossierIdentiteComplementaire',
+            'dossierContact',
+            'dossierAdresse',
+            'dossierBanque',
+            'dossierInsee',
+            'dossierStatut',
+            'dossierEmployeur',
+        ];
+
         $ignored = [
             'id',
             'ordre',
@@ -110,22 +120,26 @@ class StatutSaisieForm extends AbstractForm
             'missionIndemnitees',
             'modeEnseignementPrevisionnel',
             'modeEnseignementRealise',
+            'dossierIdentiteComplementaire',
+            'dossierContact',
+            'dossierAdresse',
+            'dossierBanque',
+            'dossierInsee',
+            'dossierStatut',
+            'dossierEmployeur',
 
         ];
 
         for ($i = 1; $i <= 5; $i++) {
+            $champsAutresElements[] = 'dossierAutre' . $i;
             $champAutre = $this->getServiceDossierAutre()->get($i);
-            if ($champAutre->getLibelle()) {
-                $labels['dossierAutre' . $i] = $champAutre->getLibelle();
-                if ($champAutre->isObligatoire()) {
-                    $labels['dossierAutre' . $i] .= ' (Obligatoire)';
-                }
-                $dveElements[] = 'dossierAutre' . $i;
-            } else {
-                $ignored[] = 'dossierAutre' . $i;
-                $ignored[] = 'dossierAutre' . $i . 'Visualisation';
-                $ignored[] = 'dossierAutre' . $i . 'Edition';
+            $labels['dossierAutre' . $i] = $champAutre->getLibelle();
+            if ($champAutre->isObligatoire()) {
+                $labels['dossierAutre' . $i] .= ' (Obligatoire)';
             }
+            $ignored[] = 'dossierAutre' . $i;
+            $ignored[] = 'dossierAutre' . $i . 'Visualisation';
+            $ignored[] = 'dossierAutre' . $i . 'Edition';
         }
 
         foreach ($dveElements as $dveElement) {
@@ -261,6 +275,33 @@ class StatutSaisieForm extends AbstractForm
             'type'       => 'Textarea',
         ]]);
 
+        foreach ($dpElements as $dpElement) {
+            $valueOptions = [
+                0 => 'Non demandé(e)',
+                1 => 'Demandé(e) à l\'etape 1',
+                2 => 'Demandé(e) à l\'etape 2',
+            ];
+
+            $this->spec([$dpElement => [
+                'type'     => 'Select',
+                'name'     => $dpElement,
+                'options'  => [
+                    'value_options' => $valueOptions,
+                ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name) {
+                        $getter = 'get' . ucfirst($name);
+                        return $statut->{$getter}();
+                    },
+                    'setter' => function (Statut $statut, $value, string $name) {
+
+                        $setter = 'set' . ucfirst($name);
+                        $statut->{$setter}($value);
+                    },
+                ],
+            ]]);
+        }
+
         foreach ($dveElements as $dveElement) {
             $valueOptions = [
                 'desactive'     => 'Désactivé',
@@ -303,11 +344,78 @@ class StatutSaisieForm extends AbstractForm
                         switch ($value) {
                             case 'edition':
                                 $edit = true;
+                                // no break
                             case 'visualisation':
                                 $visu = true;
+                                // no break
                             case 'active':
                                 $access = true;
                         }
+                        $setter = 'set' . ucfirst($name);
+                        $statut->{$setter}($access);
+                        $statut->{$setter . 'Visualisation'}($visu);
+                        if (method_exists($statut, $setter . 'Edition')) {
+                            $statut->{$setter . 'Edition'}($edit);
+                        }
+                    },
+                ],
+            ]]);
+        }
+
+        //Gestion des champs autres
+
+        foreach ($champsAutresElements as $champsAutresElement) {
+            $valueOptions = [
+                'desactive'     => 'Désactivé',
+                'active1'        => 'Activé mais non visible par l\'intervenant à l\'étape 1',
+                'visualisation1' => 'Activé et visible par l\'intervenant à l\'étape 1',
+                'edition1'       => 'Activé et modifiable par l\'intervenant à l\'étape 1',
+                'active2'        => 'Activé mais non visible par l\'intervenant à l\'étape 2',
+                'visualisation2' => 'Activé et visible par l\'intervenant à l\'étape 2',
+                'edition2'       => 'Activé et modifiable par l\'intervenant à l\'étape 2',
+            ];
+
+
+            $this->spec([$champsAutresElement => [
+                'type'     => 'Select',
+                'name'     => $champsAutresElement,
+                'options'  => [
+                    'value_options' => $valueOptions,
+                ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name) {
+                        $getter = 'get' . ucfirst($name);
+
+                        $access = $statut->{$getter}();
+                        $visu   = $statut->{$getter . 'Visualisation'}();
+                        $edit   = method_exists($statut, $getter . 'Edition') ? $statut->{$getter . 'Edition'}() : false;
+
+                        if ($edit && $visu && $access != 0) {
+                            return ($access == 1) ? 'edition1' : 'edition2';
+                        } elseif ($visu && $access != 0) {
+                            return ($access == 1) ? 'visualisation1' : 'visualisation2';
+                        } elseif ($access != 0) {
+                            return ($access == 1) ? 'active1' : 'active2';
+                        } else {
+                            return 'desactive';
+                        }
+                    },
+                    'setter' => function (Statut $statut, $value, string $name) {
+                        $access = 0;
+                        $visu   = false;
+                        $edit   = false;
+
+                        if (str_contains($value, 'edition')) {
+                            $edit = true;
+                            $visu = true;
+                            $access = str_contains($value, '1')? 1 : 2;
+                        } elseif (str_contains($value, 'visualisation')) {
+                            $visu = true;
+                            $access = str_contains($value, '1')? 1 : 2;
+                        } elseif (str_contains($value, 'active')) {
+                            $access = str_contains($value, '1')? 1 : 2;
+                        }
+
                         $setter = 'set' . ucfirst($name);
                         $statut->{$setter}($access);
                         $statut->{$setter . 'Visualisation'}($visu);
@@ -349,6 +457,7 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'visualisation':
                                             $visu = true;
+                                            // no break
                                         case 'active':
                                             $access = true;
                                     }
@@ -386,6 +495,7 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'visualisation':
                                             $visu = true;
+                                            // no break
                                         case 'active':
                                             $access = true;
                                     }
@@ -433,10 +543,13 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'generation':
                                             $generation = true;
+                                            // no break
                                         case 'depot':
                                             $depot = true;
+                                            // no break
                                         case 'visualisation':
                                             $visu = true;
+                                            // no break
                                         case 'active':
                                             $access = true;
                                     }
@@ -493,6 +606,7 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'visualisation':
                                             $visu = true;
+                                            // no break
                                         case 'active':
                                             $access = true;
                                     }

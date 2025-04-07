@@ -65,10 +65,12 @@ class Contrat
     public float $tauxRemuMajoreValeur = 0.0;
 
     public float $tauxCongesPayes = 1.0;
-
+    public ?string $autreLibelles = null;
 
     /** @var VolumeHoraire[] */
-    public array $volumesHoraires = [];
+    public array     $volumesHoraires = [];
+    public float     $totalHeures = 0.0;
+    public ?float $totalHeuresPeriodeEssai = null;
 
 
 

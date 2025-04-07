@@ -292,8 +292,10 @@ class ContratProcess implements ProcessInterface
         foreach ($contrats as $contrat) {
             $this->calculTauxRemu($contrat);
             $this->calculTotalHETD($contrat);
+            $this->calculTotalHeures($contrat);
             $this->calculTermine($contrat);
             $this->calculTauxCongesPayes($contrat);
+            $this->calculAutreLibelles($contrat);
             $this->calculActif($contrat);
         }
 
@@ -688,6 +690,45 @@ class ContratProcess implements ProcessInterface
             $contrat->tauxCongesPayes = $this->parametreTauxCongesPayes;
         } else {
             $contrat->tauxCongesPayes = 0;
+        }
+    }
+
+
+
+    public function calculAutreLibelles(Contrat $contrat): string
+    {
+        $libelles = [];
+
+        foreach ($contrat->volumesHoraires as $vh) {
+            if (!empty($vh->autreLibelle)) {
+                // Todo : reflechir si pour les missions il faut afficher dans autreLibelles "Mission (Type Mission)"
+                $libelles[$vh->autreLibelle] = $vh->autreLibelle;
+            }
+        }
+
+        sort($libelles); // Tri alphabétique
+
+        $result                 = implode(', ', $libelles);
+        $contrat->autreLibelles = $result;
+        return $result;
+    }
+
+
+
+    public function calculTotalHeures(Contrat $contrat): void
+    {
+        $totalHeures = 0;
+
+
+        //On ajoute les heures du contrat pour lequel on cherche
+        foreach ($contrat->volumesHoraires as $vh) {
+            $totalHeures += $vh->heures;
+        }
+
+        $contrat->totalHeures = $totalHeures;
+        if ($contrat->parent == null) {
+            //total d'heure du contrat divisé par 10, n'est valable que sur les contrats et pas les avenants
+            $contrat->totalHeuresPeriodeEssai = $totalHeures / 10;
         }
     }
 

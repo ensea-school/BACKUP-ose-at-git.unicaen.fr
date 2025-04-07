@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace TblContrat;
+namespace tests\TblContrat;
 
 use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\ContratProcess;
@@ -50,18 +50,20 @@ abstract class TblContratTestCase extends OseTestCase
         $this->process->init();
     }
 
+
+
     protected function hydrateContrat(array $data): Contrat
     {
 
-        $hydrator = new ObjectPropertyHydrator();
-        $strategyDate = new DateTimeFormatterStrategy('Y-m-d');
+        $hydrator              = new ObjectPropertyHydrator();
+        $strategyDate          = new DateTimeFormatterStrategy('Y-m-d');
         $strategyVolumeHoraire = new VolumeHoraireStrategy();
-        $hydrator->addStrategy('anneeDateDebut',$strategyDate);
-        $hydrator->addStrategy('debutValidite',$strategyDate);
-        $hydrator->addStrategy('finValidite',$strategyDate);
-        $hydrator->addStrategy('histoCreation',$strategyDate);
-        $hydrator->addStrategy('tauxRemuDate',$strategyDate);
-        $hydrator->addStrategy('volumesHoraires',$strategyVolumeHoraire);
+        $hydrator->addStrategy('anneeDateDebut', $strategyDate);
+        $hydrator->addStrategy('debutValidite', $strategyDate);
+        $hydrator->addStrategy('finValidite', $strategyDate);
+        $hydrator->addStrategy('histoCreation', $strategyDate);
+        $hydrator->addStrategy('tauxRemuDate', $strategyDate);
+        $hydrator->addStrategy('volumesHoraires', $strategyVolumeHoraire);
 
         $contrat = new Contrat();
         $hydrator->hydrate($data, $contrat);
@@ -70,17 +72,19 @@ abstract class TblContratTestCase extends OseTestCase
 
     }
 
+
+
     protected function extractContrat(Contrat $contrat): array
     {
-        $hydrator = new ObjectPropertyHydrator();
-        $strategyDate = new DateTimeFormatterStrategy('Y-m-d');
+        $hydrator              = new ObjectPropertyHydrator();
+        $strategyDate          = new DateTimeFormatterStrategy('Y-m-d');
         $strategyVolumeHoraire = new VolumeHoraireStrategy();
-        $hydrator->addStrategy('anneeDateDebut',$strategyDate);
-        $hydrator->addStrategy('debutValidite',$strategyDate);
-        $hydrator->addStrategy('finValidite',$strategyDate);
-        $hydrator->addStrategy('histoCreation',$strategyDate);
-        $hydrator->addStrategy('tauxRemuDate',$strategyDate);
-        $hydrator->addStrategy('volumesHoraires',$strategyVolumeHoraire);
+        $hydrator->addStrategy('anneeDateDebut', $strategyDate);
+        $hydrator->addStrategy('debutValidite', $strategyDate);
+        $hydrator->addStrategy('finValidite', $strategyDate);
+        $hydrator->addStrategy('histoCreation', $strategyDate);
+        $hydrator->addStrategy('tauxRemuDate', $strategyDate);
+        $hydrator->addStrategy('volumesHoraires', $strategyVolumeHoraire);
 
         $data = $hydrator->extract($contrat);
 

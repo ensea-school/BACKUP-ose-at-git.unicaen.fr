@@ -3,7 +3,7 @@
 namespace tests\TblContrat;
 
 use Contrat\Tbl\Process\Model\Contrat;
-use tests\TblContrat\TblContratTestCase;
+
 final class CalculNumeroAvenantTest extends TblContratTestCase
 {
     /**

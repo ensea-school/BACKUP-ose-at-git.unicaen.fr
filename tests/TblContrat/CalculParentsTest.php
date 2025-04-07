@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace TblContrat;
+namespace tests\TblContrat;
 
 use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Model\VolumeHoraire;
+
 final class CalculParentsTest extends TblContratTestCase
 {
     public function testCasSimple(): void
@@ -688,7 +689,7 @@ final class CalculParentsTest extends TblContratTestCase
         $this->process->calculParentsIds([$contrat1, $contrat2]);
 
 
-        self::assertEquals($contrat1,$contrat2->parent);
+        self::assertEquals($contrat1, $contrat2->parent);
         self::assertNull($contrat1->parent);
     }
 }

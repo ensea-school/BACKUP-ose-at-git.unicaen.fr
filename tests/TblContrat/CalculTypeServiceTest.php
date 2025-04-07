@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace TblContrat;
+namespace tests\TblContrat;
 
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Model\VolumeHoraire;

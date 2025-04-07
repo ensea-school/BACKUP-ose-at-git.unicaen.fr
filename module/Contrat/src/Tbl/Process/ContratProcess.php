@@ -146,15 +146,15 @@ class ContratProcess implements ProcessInterface
             $uuid = $this->generateUUID($contrat->intervenantId, $parentId);
             $contrat->setParent($this->getContrat($contrat->intervenantId, $uuid));
         }
-        $contrat->numeroAvenant = (int)$data['numero_avenant'];
-        $contrat->totalHetd     = (int)$data['total_hetd'];
-        $contrat->debutValidite = $data['debut_validite'] ? new \DateTime($data['debut_validite']) : null;
-        $contrat->finValidite   = $data['fin_validite'] ? new \DateTime($data['fin_validite']) : null;
-        $contrat->histoCreation = $data['histo_creation'] ? new \DateTime($data['histo_creation']) : null;
-        $contrat->edite         = $data['edite'] === '1';
-        $contrat->envoye        = $data['envoye'] === '1';
-        $contrat->retourne      = $data['retourne'] === '1';
-        $contrat->signe         = $data['signe'] === '1';
+        $contrat->numeroAvenant   = (int)$data['numero_avenant'];
+        $contrat->totalGlobalHetd = (int)$data['total_global_hetd'];
+        $contrat->debutValidite   = $data['debut_validite'] ? new \DateTime($data['debut_validite']) : null;
+        $contrat->finValidite     = $data['fin_validite'] ? new \DateTime($data['fin_validite']) : null;
+        $contrat->histoCreation   = $data['histo_creation'] ? new \DateTime($data['histo_creation']) : null;
+        $contrat->edite           = $data['edite'] === '1';
+        $contrat->envoye          = $data['envoye'] === '1';
+        $contrat->retourne        = $data['retourne'] === '1';
+        $contrat->signe           = $data['signe'] === '1';
     }
 
 
@@ -701,37 +701,43 @@ class ContratProcess implements ProcessInterface
         // ne pas prendre en compte les projets amont
         if ($contrat->id && $contrat->edite) {
             //Si le contrat existe on recupère le total hetd de la table contrat
-            return;
+            if ($contrat->parent == NULL) {
+                $contrat->totalHetd = $contrat->totalGlobalHetd;
+                return;
+            }
+
         }
 
-        $total = 0;
-        if ($contrat->parent == null) {
-            //s'il n'a pas de parent alors il est un contrat sinon on n'a besoin d'ajouter que ses propres heures
-            foreach ($contrat->volumesHoraires as $vh) {
-                $total += $vh->hetd;
-            }
-        } else {
-            //On ajoute les heures du contrat à contractualiser
-            foreach ($contrat->volumesHoraires as $vh) {
-                $total += $vh->hetd;
-            }
-            // On ajoute les heures des autres avenants liés au même contrat déjà contractualisé
+        $totalGlobal  = 0;
+        $totalContrat = 0;
+
+
+        //On ajoute les heures du contrat pour lequel on cherche
+        foreach ($contrat->volumesHoraires as $vh) {
+            $totalGlobal  += $vh->hetd;
+            $totalContrat += $vh->hetd;
+        }
+
+        if ($contrat->parent != null) {
+
+            // On ajoute les heures des autres avenants liés au même contrat déjà contractualisé avec un numéro d'avenant infèrieur
             foreach ($contrat->parent->avenants as $contratParser) {
                 //On ne s'occupe que des avenants déjà contractualisés
-                if (!$contratParser->id) {
+                if (!$contratParser->id || !$contratParser->edite || $contratParser->numeroAvenant >= $contrat->numeroAvenant) {
                     continue;
                 }
 
                 foreach ($contratParser->volumesHoraires as $vh) {
-                    $total += $vh->hetd;
+                    $totalGlobal += $vh->hetd;
                 }
             }
             //On ajoute les volumes horaires liés au contrat parent
             foreach ($contrat->parent->volumesHoraires as $vh) {
-                $total += $vh->hetd;
+                $totalGlobal += $vh->hetd;
             }
         }
-        $contrat->totalHetd = $total;
+        $contrat->totalHetd       = $totalContrat;
+        $contrat->totalGlobalHetd = $totalGlobal;
     }
 
 
@@ -822,6 +828,8 @@ class ContratProcess implements ProcessInterface
             'date_debut'                => $contrat->debutValidite,
             'date_fin'                  => $contrat->finValidite,
             'hetd'                      => 0,
+            'total_hetd'                => $contrat->totalHetd,
+            'total_global_hetd'         => $contrat->totalGlobalHetd,
             'heures'                    => 0,
             'mission_id'                => $contrat->getMissionId(),
             'service_id'                => null,
@@ -907,16 +915,16 @@ class ContratProcess implements ProcessInterface
                         $vhs = $contrat->volumesHoraires;
 
                         usort($vhs, function (VolumeHoraire $a, VolumeHoraire $b) {
-                            $aid = $a->volumeHoraireId.'-'.$a->volumeHoraireRefId.'-'.$a->volumeHoraireMissionId;
-                            $bid = $b->volumeHoraireId.'-'.$b->volumeHoraireRefId.'-'.$b->volumeHoraireMissionId;
+                            $aid = $a->volumeHoraireId . '-' . $a->volumeHoraireRefId . '-' . $a->volumeHoraireMissionId;
+                            $bid = $b->volumeHoraireId . '-' . $b->volumeHoraireRefId . '-' . $b->volumeHoraireMissionId;
 
                             return $aid > $bid ? 1 : -1;
                         });
                         $vhIndex = 0;
                         foreach ($vhs as $volumeHoraire) {
-                            $ligne           = $this->extractVolumeHoraire($volumeHoraire);
+                            $ligne                         = $this->extractVolumeHoraire($volumeHoraire);
                             $ligne['volume_horaire_index'] = $vhIndex;
-                            $this->tblData[] = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
+                            $this->tblData[]               = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
                             $vhIndex++;
                         }
                     }

@@ -1,10 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace TblContrat;
+namespace tests\TblContrat;
 
 use Contrat\Tbl\Process\Model\Contrat;
 use tests\TblContrat\TblContratTestCase;
-
 final class CalculNumeroAvenantTest extends TblContratTestCase
 {
     /**
@@ -18,12 +17,12 @@ final class CalculNumeroAvenantTest extends TblContratTestCase
     {
 
         /* Contrat initial */
-        $contrat            = new Contrat();
-        $contrat->id        = 1;
-        $contrat->edite     = true;
-        $contrat->isMission = false;
+        $contrat                = new Contrat();
+        $contrat->id            = 1;
+        $contrat->edite         = true;
+        $contrat->isMission     = false;
         $contrat->numeroAvenant = 0;
-        $contrat->avenants = [];
+        $contrat->avenants      = [];
 
         /* Modification de contrat initial, avenant */
         $avenant            = new Contrat();
@@ -48,26 +47,26 @@ final class CalculNumeroAvenantTest extends TblContratTestCase
     {
 
         /* Contrat initial */
-        $contrat            = new Contrat();
-        $contrat->id        = 1;
-        $contrat->edite     = true;
-        $contrat->isMission = false;
+        $contrat                = new Contrat();
+        $contrat->id            = 1;
+        $contrat->edite         = true;
+        $contrat->isMission     = false;
         $contrat->numeroAvenant = 0;
-        $contrat->avenants = [];
+        $contrat->avenants      = [];
 
         /* Avenant n°1 */
-        $avenant1            = new Contrat();
-        $avenant1->id        = 2;
-        $avenant1->edite     = true;
-        $avenant1->isMission = false;
+        $avenant1                = new Contrat();
+        $avenant1->id            = 2;
+        $avenant1->edite         = true;
+        $avenant1->isMission     = false;
         $avenant1->numeroAvenant = 1;
         $avenant1->setParent($contrat);
 
         /* Avenant n°3 */
-        $avenant2            = new Contrat();
-        $avenant2->id        = 3;
-        $avenant2->edite     = true;
-        $avenant2->isMission = false;
+        $avenant2                = new Contrat();
+        $avenant2->id            = 3;
+        $avenant2->edite         = true;
+        $avenant2->isMission     = false;
         $avenant2->numeroAvenant = 2;
         $avenant2->setParent($contrat);
 
@@ -82,32 +81,34 @@ final class CalculNumeroAvenantTest extends TblContratTestCase
 
     }
 
+
+
     /* Contrat global initiale, avenant avec numéro 1 et 3 existant, numero 2 supprimer.
     Nouvelle avenant en place. Numéro attendu 4 */
     public function testNumeroAvenantContratGlobalAvecAvenantExistantEtSupprimé(): void
     {
 
         /* Contrat initial */
-        $contrat            = new Contrat();
-        $contrat->id        = 1;
-        $contrat->edite     = true;
-        $contrat->isMission = false;
+        $contrat                = new Contrat();
+        $contrat->id            = 1;
+        $contrat->edite         = true;
+        $contrat->isMission     = false;
         $contrat->numeroAvenant = 0;
-        $contrat->avenants = [];
+        $contrat->avenants      = [];
 
         /* Avenant n°1 */
-        $avenant1            = new Contrat();
-        $avenant1->id        = 2;
-        $avenant1->edite     = true;
-        $avenant1->isMission = false;
+        $avenant1                = new Contrat();
+        $avenant1->id            = 2;
+        $avenant1->edite         = true;
+        $avenant1->isMission     = false;
         $avenant1->numeroAvenant = 1;
         $avenant1->setParent($contrat);
 
         /* Avenant n°3 */
-        $avenant2            = new Contrat();
-        $avenant2->id        = 3;
-        $avenant2->edite     = true;
-        $avenant2->isMission = false;
+        $avenant2                = new Contrat();
+        $avenant2->id            = 3;
+        $avenant2->edite         = true;
+        $avenant2->isMission     = false;
         $avenant2->numeroAvenant = 3;
         $avenant2->setParent($contrat);
 
@@ -116,7 +117,7 @@ final class CalculNumeroAvenantTest extends TblContratTestCase
         $avenant3->isMission = false;
         $avenant3->edite     = false;
         $avenant3->setParent($contrat);
-        $contrat->avenants = [$avenant1,$avenant2,$avenant3];
+        $contrat->avenants = [$avenant1, $avenant2, $avenant3];
         $this->process->calculNumeroAvenant($avenant1);
         $this->process->calculNumeroAvenant($avenant3);
         $this->process->calculNumeroAvenant($avenant2);
@@ -128,16 +129,18 @@ final class CalculNumeroAvenantTest extends TblContratTestCase
 
     }
 
+
+
     public function testNumeroAvenantContratGlobalAvecDeuxAvenants(): void
     {
 
         /* Contrat initial */
-        $contrat            = new Contrat();
-        $contrat->id        = 1;
-        $contrat->edite     = true;
-        $contrat->isMission = false;
+        $contrat                = new Contrat();
+        $contrat->id            = 1;
+        $contrat->edite         = true;
+        $contrat->isMission     = false;
         $contrat->numeroAvenant = 0;
-        $contrat->avenants = [];
+        $contrat->avenants      = [];
 
         /* Avenant n°1 */
         $avenant2            = new Contrat();
@@ -154,7 +157,7 @@ final class CalculNumeroAvenantTest extends TblContratTestCase
         $avenant3->isMission = false;
         $avenant3->edite     = false;
         $avenant3->setParent($contrat);
-        $contrat->avenants = [$avenant2,$avenant3];
+        $contrat->avenants = [$avenant2, $avenant3];
         $this->process->calculNumeroAvenant($avenant2);
         $this->process->calculNumeroAvenant($avenant3);
         $this->assertEquals(1, $avenant3->numeroAvenant);

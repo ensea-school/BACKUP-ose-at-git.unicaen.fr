@@ -6,7 +6,6 @@ use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Model\VolumeHoraire;
 use DateTime;
-use tests\TblContrat\TblContratTestCase;
 
 /**
  *

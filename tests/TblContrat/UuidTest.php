@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace tests\TblContrat;
+namespace TblContrat;
 
 use Application\Entity\Db\Parametre;
 
 final class UuidTest extends TblContratTestCase
 {
-    public function assertUuidDataset(array $dataset)
+    public function assertUuidDataset(array $dataset): void
     {
         foreach ($dataset as $expected => $data) {
             extract($data);
@@ -18,7 +18,7 @@ final class UuidTest extends TblContratTestCase
                 missionId     : $missionId ?? null
             );
 
-            $this->assertEquals($expected, $uuid);
+            self::assertEquals($expected, $uuid);
         }
     }
 
@@ -34,21 +34,21 @@ final class UuidTest extends TblContratTestCase
         $this->useParametres($parametres);
 
         $dataset = [
-            "contrat_id_1"       => [
+            'contrat_id_1' => [
                 'contratId' => 1,    // int|null,
             ],
-            "ens_structure_18_2" => [
+            'ens_structure_18_2' => [
                 'intervenantId' => 18,      // int|null,
                 'contratId'     => null,    // int|null,
                 'structureId'   => 2,       // int|null,
             ],
-            "mis_mission_18_5"   => [
+            'mis_mission_18_5' => [
                 'intervenantId' => 18,      // int|null,
                 'contratId'     => null,    // int|null,
                 'structureId'   => 2,       // int|null,
                 'missionId'     => 5,       // int|null,
             ],
-            "contrat_id_8"       => [
+            'contrat_id_8' => [
                 'intervenantId' => 18,    // int|null,
                 'contratId'     => 8,     // int|null,
                 'structureId'   => 2,     // int|null,
@@ -71,24 +71,24 @@ final class UuidTest extends TblContratTestCase
         $this->useParametres($parametres);
 
         $dataset = [
-            "ens_global_1" => [                                                                                                                                         // à adapter...
+            'ens_global_1' => [                                                                                                                                           // à adapter...
                 'contratId'   => null,                                                                                                                                    // int|null,
                 'structureId' => 20,                                                                                                                                      // int|null,
             ],
-            "ens_global_18" => [           // à adapter...
+            'ens_global_18' => [            // à adapter...
                 'intervenantId' => 18,      // int|null,
                 'contratId'     => null,    // int|null,
                 'structureId'   => 20,      // int|null,
             ],
-            "mis_global_18" => [           // à adapter...
+            'mis_global_18' => [            // à adapter...
                 'intervenantId' => 18,      // int|null,
                 'contratId'     => null,    // int|null,
                 'structureId'   => 20,      // int|null,
                 'missionId'     => 15,      // int|null,
             ],
-            "contrat_id_2" => [           // à adapter...
+            'contrat_id_2' => [             // à adapter...
                 'intervenantId' => 18,      // int|null,
-                'contratId'     => 2,    // int|null,
+                'contratId'     => 2,       // int|null,
                 'structureId'   => 20,      // int|null,
                 'missionId'     => 15,      // int|null,
             ],

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace tests\TblContrat;
+namespace TblContrat;
 
 use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\ContratProcess;

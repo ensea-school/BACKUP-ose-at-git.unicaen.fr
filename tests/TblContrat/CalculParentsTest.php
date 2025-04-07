@@ -1,11 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace tests\TblContrat;
+namespace TblContrat;
 
 use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Model\VolumeHoraire;
-
 final class CalculParentsTest extends TblContratTestCase
 {
     public function testCasSimple(): void

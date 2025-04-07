@@ -4,7 +4,6 @@ namespace TblContrat;
 
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Model\VolumeHoraire;
-use tests\TblContrat\TblContratTestCase;
 
 final class CalculTypeServiceTest extends TblContratTestCase
 {

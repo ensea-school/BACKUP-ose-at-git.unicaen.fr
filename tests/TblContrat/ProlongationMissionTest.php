@@ -201,8 +201,8 @@ final class ProlongationMissionTest extends TblContratTestCase
         $volumeHoraireMission4                 = new VolumeHoraire();
         $volumeHoraireMission4->missionId      = 1;
         $volumeHoraireMission4->dateFinMission = new DateTime('2020-03-23');
-        $avenant->volumesHoraires[]     = $volumeHoraireMission4;
-        $contrat1->avenants             = [$avenant];
+        $avenant->volumesHoraires[]            = $volumeHoraireMission4;
+        $contrat1->avenants                    = [$avenant];
 
 
         $this->process->contratProlongationMission([$contrat1, $avenant]);
@@ -217,9 +217,9 @@ final class ProlongationMissionTest extends TblContratTestCase
 
     /* cas de test a dev :
     Parametre par mission
-    contrat  1 éditer et signé sur 3 mission (1,2,3) (date fin 2020-02-20)
-    une prolongation de date sur mission 3 : date fin 2020-02-24
-    une prolongation de date sur mission 1 : date fin 2020-02-23
+    contrat  1 éditer et signé sur 3 mission (1,2) (date fin 2020-02-20)
+    une prolongation de date sur mission 1 : date fin 2020-02-24
+    une prolongation de date sur mission 2 : date fin 2020-02-23
 
     resultat attendu : Création de un avenant avec date fin 2020-02-24
     */
@@ -235,38 +235,76 @@ final class ProlongationMissionTest extends TblContratTestCase
 
         $volumeHoraireMission1                 = new VolumeHoraire();
         $volumeHoraireMission1->missionId      = 1;
-        $volumeHoraireMission1->dateFinMission = new DateTime('2020-03-23');
+        $volumeHoraireMission1->dateFinMission = new DateTime('2020-02-24');
 
-        $volumeHoraireMission3                 = new VolumeHoraire();
-        $volumeHoraireMission3->missionId      = 2;
-        $volumeHoraireMission3->dateFinMission = new DateTime('2020-03-26');
+        $volumeHoraireMission2                 = new VolumeHoraire();
+        $volumeHoraireMission2->missionId      = 2;
+        $volumeHoraireMission2->dateFinMission = new DateTime('2020-02-23');
 
 
-        $contrat1->volumesHoraires             = [$volumeHoraireMission1, $volumeHoraireMission3];
-
+        $contrat1->volumesHoraires = [$volumeHoraireMission1, $volumeHoraireMission2];
 
 
         $this->process->contratProlongationMission([$contrat1]);
 
         ProlongationMissionTest::assertCount(1, $contrat1->avenants);
         ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
-        ProlongationMissionTest::assertEquals($contrat1->avenants[0]->finValidite, $volumeHoraireMission3->dateFinMission);
+        ProlongationMissionTest::assertEquals(new DateTime('2020-02-24'), $contrat1->avenants[0]->finValidite);
         ProlongationMissionTest::assertCount(0, $contrat1->avenants[0]->volumesHoraires);
 
     }
+
+
+
     /* cas de test a dev :
     Parametre par mission
-    Contrat 1 sur mission 10
-    Contrat 2 sur mission 12
-    Prolongation sur Mission 10
-    Prolongation sur Mission 12
+    Contrat 1 sur mission 10 au 2020-02-19
+    Contrat 2 sur mission 12 au 2020-02-20
+    Prolongation sur Mission 10 au 2020-02-24
+    Prolongation sur Mission 12 au 2020-02-26
 
     resultat attendu : Création de deux avenant de prolongation, un avenant au contrat 1 et un avenant au contrat 2
-    */
-    /**
-     * @return void
-     */
-//    public function testCasComplique(): void
-//    {
-//    }
+*/
+    public function testDoubleContrat(): void
+    {
+        $contrat1                = new Contrat();
+        $contrat1->intervenantId = 1;
+        $contrat1->id            = 1;
+        $contrat1->edite         = true;
+        $contrat1->signe         = true;
+        $contrat1->isMission     = true;
+        $contrat1->finValidite   = new DateTime('2020-02-19');
+
+        $volumeHoraireMission1                 = new VolumeHoraire();
+        $volumeHoraireMission1->missionId      = 10;
+        $volumeHoraireMission1->dateFinMission = new DateTime('2020-02-24');
+
+        $contrat1->volumesHoraires = [$volumeHoraireMission1];
+
+        $contrat2                = new Contrat();
+        $contrat2->intervenantId = 1;
+        $contrat2->id            = 2;
+        $contrat2->edite         = true;
+        $contrat2->signe         = true;
+        $contrat2->isMission     = true;
+        $contrat2->finValidite   = new DateTime('2020-02-20');
+
+        $volumeHoraireMission2                 = new VolumeHoraire();
+        $volumeHoraireMission2->missionId      = 12;
+        $volumeHoraireMission2->dateFinMission = new DateTime('2020-02-26');
+
+        $contrat2->volumesHoraires = [$volumeHoraireMission2];
+
+        $this->process->contratProlongationMission([$contrat1 , $contrat2]);
+
+        ProlongationMissionTest::assertCount(1, $contrat1->avenants);
+        ProlongationMissionTest::assertCount(1, $contrat2->avenants);
+        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
+        ProlongationMissionTest::assertEquals($contrat2->id, $contrat2->avenants[0]->parent->id);
+        ProlongationMissionTest::assertEquals(new DateTime('2020-02-24'), $contrat1->avenants[0]->finValidite);
+        ProlongationMissionTest::assertEquals(new DateTime('2020-02-26'), $contrat2->avenants[0]->finValidite);
+        ProlongationMissionTest::assertCount(0, $contrat1->avenants[0]->volumesHoraires);
+        ProlongationMissionTest::assertCount(0, $contrat2->avenants[0]->volumesHoraires);
+
+    }
 }

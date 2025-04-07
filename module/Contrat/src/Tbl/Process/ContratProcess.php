@@ -411,7 +411,7 @@ class ContratProcess implements ProcessInterface
                         $dateAvenant = $dateMission;
                     }
                 }
-                $avenantProlongation->finValidite   = $dateMission;
+                $avenantProlongation->finValidite   = $dateAvenant;
                 $avenantProlongation->debutValidite = $dateDebutContrat;
                 $avenantProlongation->isMission     = true;
                 $avenantProlongation->intervenantId = $intervenantId;

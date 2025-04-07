@@ -32,6 +32,8 @@ class TypePieceJointeStatut implements ParametreEntityInterface
 
     protected int $numRegle             = 1;
 
+    protected bool $postRecrutement     = false;
+
 
 
     public function getSeuilHetd(): float|int
@@ -183,6 +185,24 @@ class TypePieceJointeStatut implements ParametreEntityInterface
 
         return $this;
     }
+
+
+
+    public function isPostRecrutement(): bool
+    {
+        return $this->postRecrutement;
+    }
+
+
+
+    public function setPostRecrutement(bool $postRecrutement): typePieceJointeStatut
+    {
+        $this->postRecrutement = $postRecrutement;
+
+        return $this;
+    }
+
+
 
 
 

@@ -237,6 +237,18 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
+        'POST_RECRUTEMENT'       => [
+            'name'        => 'POST_RECRUTEMENT',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 1,
+            'nullable'    => TRUE,
+            'default'     => '0',
+            'position'    => 15,
+            'commentaire' => 'Piece jointe obligatoire même si les heures sont non payables',
+        ],
     ],
 ];
 

@@ -278,8 +278,8 @@ class StatutSaisieForm extends AbstractForm
         foreach ($dpElements as $dpElement) {
             $valueOptions = [
                 0 => 'Non demandé(e)',
-                1 => 'Demandé(e) à l\'etape 1',
-                2 => 'Demandé(e) à l\'etape 2',
+                1 => 'Demandé(e)',
+                2 => 'Demandé(e) aprés le recrutement',
             ];
 
             $this->spec([$dpElement => [
@@ -367,12 +367,12 @@ class StatutSaisieForm extends AbstractForm
         foreach ($champsAutresElements as $champsAutresElement) {
             $valueOptions = [
                 'desactive'     => 'Désactivé',
-                'active1'        => 'Activé mais non visible par l\'intervenant à l\'étape 1',
-                'visualisation1' => 'Activé et visible par l\'intervenant à l\'étape 1',
-                'edition1'       => 'Activé et modifiable par l\'intervenant à l\'étape 1',
-                'active2'        => 'Activé mais non visible par l\'intervenant à l\'étape 2',
-                'visualisation2' => 'Activé et visible par l\'intervenant à l\'étape 2',
-                'edition2'       => 'Activé et modifiable par l\'intervenant à l\'étape 2',
+                'active1'        => 'Activé mais non visible par l\'intervenant',
+                'visualisation1' => 'Activé et visible par l\'intervenant',
+                'edition1'       => 'Activé et modifiable par l\'intervenant',
+                'active2'        => 'Activé mais non visible par l\'intervenant après son recrutement',
+                'visualisation2' => 'Activé et visible par l\'intervenant après son recrutement',
+                'edition2'       => 'Activé et modifiable par l\'intervenant après son recrutement',
             ];
 
 

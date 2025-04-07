@@ -8,21 +8,6 @@ use Contrat\Tbl\Process\Model\VolumeHoraire;
 
 final class CalculParentsTest extends TblContratTestCase
 {
-    protected function assertContrats(array $contrats, array $expected): void
-    {
-        $contratsModels = [];
-        foreach ($contrats as $contrat) {
-            $contratsModels[] = $this->hydrateContrat($contrat);
-        }
-        $this->process->calculParentsIds($contratsModels);
-        foreach ($contratsModels as $index => $model) {
-            $contratsModels[$index] = $this->extractContrat($model);
-        }
-        $this->assertArrayEquals($expected, $contratsModels, false);
-    }
-
-
-
     public function testCasSimple(): void
     {
         $parametres = [

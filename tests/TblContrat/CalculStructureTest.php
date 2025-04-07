@@ -42,10 +42,11 @@ final class CalculStructureTest extends TblContratTestCase
         $avenant1->numeroAvenant = 1;
         $avenant1->totalHetd     = 2.1;
 
-        //$this->process->calculStructure($contrat1);
+        $this->process->calculStructure($contrat1);
         $this->process->calculStructure($avenant1);
 
         self::assertEquals(76, $avenant1->structureId);
+        self::assertEquals(477, $contrat1->structureId);
     }
 
 }

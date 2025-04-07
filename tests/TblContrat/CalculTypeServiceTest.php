@@ -2,112 +2,148 @@
 
 namespace TblContrat;
 
-use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\Model\Contrat;
+use Contrat\Tbl\Process\Model\VolumeHoraire;
 use tests\TblContrat\TblContratTestCase;
-use UnicaenTbl\Service\TableauBordService;
 
 final class CalculTypeServiceTest extends TblContratTestCase
 {
-    public function testTypeServiceEnseignementTest()
+    /**
+     * Test pour vérifier que pour un contrat global sans avenant existant,
+     * le numéro d'aveant sera bien 1
+     *
+     * @return void
+     */
+
+    public function testContratMission(): void
     {
 
-        $data = [
-            'id' => 1,
-            'structureId' => 2,
-            'isMission' => false,
-            'anneeDateDebut' => '2025-03-06',
-            'volumesHoraires' => [
-                [
-                  'structureId' => 2,
-                  'serviceId' => 10,
-                  //'serviceId' => 1,
-                  'volumeHoraireRefId' => 15,
-                  'tauxRemuId' => 1,
-                  'tauxRemuMajoreId' => 2,
-                  'cm' => 10.0,
-                  'td' => 10.0,
-                  'tp' => 20.0
-                ],
-            ]
-        ];
+        /* Contrat initial */
+        $contrat                = new Contrat();
+        $contrat->id            = 1;
+        $contrat->edite         = true;
+        $contrat->numeroAvenant = 0;
+        $contrat->avenants      = [];
 
-        $await = [
-            'id' => 1,
-            'structureId' => 2,
-            'isMission' => false,
-            'anneeDateDebut' => '2025-03-06',
-            'volumesHoraires' => [
-                [
-                    'structureId' => 2,
-                    'serviceId' => 10,
-                    'volumeHoraireRefId' => 15,
-                    'tauxRemuId' => 1,
-                    'tauxRemuMajoreId' => 2,
-                    'cm' => 10.0,
-                    'td' => 10.0,
-                    'tp' => 20.0
-                ],
-            ]
-        ];
+        $volumeHoraire            = new VolumeHoraire();
+        $volumeHoraire->missionId = 1;
+        $contrat->volumesHoraires = [$volumeHoraire];
 
-        $contrat = $this->hydrateContrat($data);
         $this->process->calculTypeService($contrat);
-        $calc = $this->extractContrat($contrat);
-        $this->assertArrayEquals($await, $calc, false);
-
-    }
-
-    public function testTypeServiceMissionTest()
-    {
-
-        $data = [
-            'id' => 1,
-            'structureId' => 2,
-            'isMission' => false,
-            'anneeDateDebut' => '2025-03-06',
-            'volumesHoraires' => [
-                [
-                    'structureId' => 2,
-                    'missionId' => 10,
-                    'volumeHoraireRefId' => 15,
-                    'tauxRemuId' => 1,
-                    'tauxRemuMajoreId' => 2,
-                    'cm' => 10.0,
-                    'td' => 10.0,
-                    'tp' => 20.0
-                ],
-            ]
-        ];
-
-        $await = [
-            'id' => 1,
-            'structureId' => 2,
-            'isMission' => true,
-            'anneeDateDebut' => '2025-03-06',
-            'volumesHoraires' => [
-                [
-                    'structureId' => 2,
-                    'missionId' => 10,
-                    'volumeHoraireRefId' => 15,
-                    'tauxRemuId' => 1,
-                    'tauxRemuMajoreId' => 2,
-                    'cm' => 10.0,
-                    'td' => 10.0,
-                    'tp' => 20.0
-                ],
-            ]
-        ];
-
-        $contrat = $this->hydrateContrat($data);
-        $this->process->calculTypeService($contrat);
-        $calc = $this->extractContrat($contrat);
-        $this->assertArrayEquals($await, $calc, false);
+        $this->assertEquals(true, $contrat->isMission);
 
     }
 
 
 
+    public function testContratEnseignement(): void
+    {
+
+        /* Contrat initial */
+        $contrat                = new Contrat();
+        $contrat->id            = 1;
+        $contrat->edite         = true;
+        $contrat->numeroAvenant = 0;
+        $contrat->avenants      = [];
+
+        $volumeHoraire            = new VolumeHoraire();
+        $volumeHoraire->serviceId = 1;
+        $contrat->volumesHoraires = [$volumeHoraire];
+
+        $this->process->calculTypeService($contrat);
+        $this->assertEquals(false, $contrat->isMission);
+
+    }
 
 
+
+    public function testContratReferentiel(): void
+    {
+
+        /* Contrat initial */
+        $contrat                = new Contrat();
+        $contrat->id            = 1;
+        $contrat->edite         = true;
+        $contrat->numeroAvenant = 0;
+        $contrat->avenants      = [];
+
+        $volumeHoraire                       = new VolumeHoraire();
+        $volumeHoraire->serviceReferentielId = 1;
+        $contrat->volumesHoraires            = [$volumeHoraire];
+
+        $this->process->calculTypeService($contrat);
+        $this->assertEquals(false, $contrat->isMission);
+
+    }
+
+
+
+    public function testContratSansHeure(): void
+    {
+
+        /* Contrat initial */
+        $contrat                = new Contrat();
+        $contrat->id            = 1;
+        $contrat->edite         = true;
+        $contrat->numeroAvenant = 0;
+        $contrat->avenants      = [];
+
+
+        $this->process->calculTypeService($contrat);
+        $this->assertEquals(false, $contrat->isMission);
+
+    }
+
+
+
+    public function testAvenantSansHeureSurMission(): void
+    {
+
+        /* Contrat initial */
+        $contrat     = new Contrat();
+        $contrat->id = 1;
+
+        $volumeHoraire            = new VolumeHoraire();
+        $volumeHoraire->missionId = 1;
+        $contrat->volumesHoraires = [$volumeHoraire];
+
+
+        $avenant                = new Contrat();
+        $avenant->edite         = true;
+        $avenant->parent        = $contrat;
+        $avenant->numeroAvenant = 1;
+        $avenant->avenants      = [];
+
+        $contrat->avenants[] = $avenant;
+
+        $this->process->calculTypeService($avenant);
+        $this->assertEquals(true, $avenant->isMission);
+
+    }
+
+
+
+    public function testAvenantSansHeureSurEnseignement(): void
+    {
+
+        /* Contrat initial */
+        $contrat = new Contrat();
+
+        $avenant                = new Contrat();
+        $avenant->id            = 1;
+        $avenant->edite         = true;
+        $avenant->parent        = $contrat;
+        $avenant->numeroAvenant = 1;
+        $avenant->avenants      = [];
+
+        $contrat->avenants[] = $avenant;
+
+        $volumeHoraire            = new VolumeHoraire();
+        $volumeHoraire->serviceId = 1;
+        $contrat->volumesHoraires = [$volumeHoraire];
+
+        $this->process->calculTypeService($avenant);
+        $this->assertEquals(false, $avenant->isMission);
+
+    }
 }

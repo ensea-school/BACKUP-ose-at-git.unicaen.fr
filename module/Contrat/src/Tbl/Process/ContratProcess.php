@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Contrat\Tbl\Process;
 
@@ -10,6 +11,8 @@ use Contrat\Entity\Db\TypeContrat;
 use Contrat\Service\TypeContratServiceAwareTrait;
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Model\VolumeHoraire;
+use DateTime;
+use Exception;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use Service\Entity\Db\TypeService;
 use Service\Service\TypeServiceServiceAwareTrait;
@@ -48,20 +51,9 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function getIntervenants(): array
-    {
-        return $this->intervenants;
-    }
-
-
-
-    public function getContrats(): array
-    {
-        return $this->contrats;
-    }
-
-
-
+    /**
+     * @throws Exception
+     */
     public function run(TableauBord $tableauBord, array $params = []): void
     {
         if (empty($params)) {
@@ -106,19 +98,25 @@ class ContratProcess implements ProcessInterface
 
 
 
+    /**
+     * @throws Exception
+     */
     protected function loadContrats(array $params): void
     {
         $sql    = $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT_CONTRAT');
         $sql    = $this->getServiceBdd()->injectKey($sql, $params);
         $parser = $this->getBdd()->selectEach($sql);
         while ($data = $parser->next()) {
-            $data = array_change_key_case($data, CASE_LOWER); // provisoire => migration postgres
+            $data = array_change_key_case($data); // provisoire => migration postgres
             $this->loadContrat($data);
         }
     }
 
 
 
+    /**
+     * @throws Exception
+     */
     public function loadContrat(array $data): Contrat
     {
         $intervenantId = (int)$data['intervenant_id'];
@@ -132,6 +130,9 @@ class ContratProcess implements ProcessInterface
 
 
 
+    /**
+     * @throws Exception
+     */
     public function contratHydrateFromDb(Contrat $contrat, array $data): void
     {
         $annee                  = $this->getServiceAnnee()->get((int)$data['annee_id']);
@@ -148,9 +149,9 @@ class ContratProcess implements ProcessInterface
         }
         $contrat->numeroAvenant   = (int)$data['numero_avenant'];
         $contrat->totalGlobalHetd = (int)$data['total_global_hetd'];
-        $contrat->debutValidite   = $data['debut_validite'] ? new \DateTime($data['debut_validite']) : null;
-        $contrat->finValidite     = $data['fin_validite'] ? new \DateTime($data['fin_validite']) : null;
-        $contrat->histoCreation   = $data['histo_creation'] ? new \DateTime($data['histo_creation']) : null;
+        $contrat->debutValidite   = $data['debut_validite'] ? new DateTime($data['debut_validite']) : null;
+        $contrat->finValidite     = $data['fin_validite'] ? new DateTime($data['fin_validite']) : null;
+        $contrat->histoCreation   = $data['histo_creation'] ? new DateTime($data['histo_creation']) : null;
         $contrat->edite           = $data['edite'] === '1';
         $contrat->envoye          = $data['envoye'] === '1';
         $contrat->retourne        = $data['retourne'] === '1';
@@ -212,19 +213,25 @@ class ContratProcess implements ProcessInterface
 
 
 
+    /**
+     * @throws Exception
+     */
     protected function loadVolumesHoraires(array $params): void
     {
         $sql    = $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT_VOLUME_HORAIRE');
         $sql    = $this->getServiceBdd()->injectKey($sql, $params);
         $parser = $this->getBdd()->selectEach($sql);
         while ($data = $parser->next()) {
-            $data = array_change_key_case($data, CASE_LOWER); // provisoire => migration postgres
+            $data = array_change_key_case($data); // provisoire => migration postgres
             $this->loadVolumeHoraire($data);
         }
     }
 
 
 
+    /**
+     * @throws Exception
+     */
     public function loadVolumeHoraire(array $data): VolumeHoraire
     {
         $intervenantId = (int)$data['intervenant_id'];
@@ -250,6 +257,9 @@ class ContratProcess implements ProcessInterface
 
 
 
+    /**
+     * @throws Exception
+     */
     public function volumeHoraireHydrateFromDb(VolumeHoraire $vh, array $data): void
     {
         $vh->structureId            = (int)$data['structure_id'];
@@ -261,7 +271,7 @@ class ContratProcess implements ProcessInterface
         $vh->volumeHoraireMissionId = (int)$data['volume_horaire_mission_id'] ?: null;
         $vh->tauxRemuId             = (int)$data['taux_remu_id'] ?: null;
         $vh->tauxRemuMajoreId       = (int)$data['taux_remu_majore_id'] ?: null;
-        $vh->dateFinMission         = $data['date_fin_mission'] ? new \DateTime($data['date_fin_mission']) : null;
+        $vh->dateFinMission         = $data['date_fin_mission'] ? new DateTime($data['date_fin_mission']) : null;
         $vh->cm                     = (float)$data['cm'];
         $vh->td                     = (float)$data['td'];
         $vh->tp                     = (float)$data['tp'];
@@ -273,14 +283,14 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function traitement(array &$contrats): void
+    /**
+     * @throws Exception
+     */
+    public function traitement(array $contrats): void
     {
         foreach ($contrats as $contrat) {
             $this->calculTypeService($contrat);
             $this->calculStructure($contrat);
-
-            //Inutile ?
-            $this->completionContrat($contrat);
         }
         $this->calculParentsIds($contrats);
         // ajout d'avenants vides pour les missions avec des prolongations de dates
@@ -309,9 +319,9 @@ class ContratProcess implements ProcessInterface
     {
         if (!$contrat->actif) {
             if ($this->parametreAvenant == Parametre::AVENANT_AUTORISE) {
-                $contrat->actif = 1;
+                $contrat->actif = true;
             } elseif (empty($contrat->parent)) {
-                $contrat->actif = 1;
+                $contrat->actif = true;
             }
         }
     }
@@ -340,34 +350,8 @@ class ContratProcess implements ProcessInterface
             $dateMissions     = [];
             $dateFinContrat   = $contrat->finValidite;
             $intervenantId    = $contrat->intervenantId;
-            foreach ($contrat->volumesHoraires as $volumeHoraire) {
-                if (empty($dateMissions[$volumeHoraire->missionId])
-                    || $volumeHoraire->dateFinMission > $dateMissions[$volumeHoraire->missionId]) {
-                    $dateMissions[$volumeHoraire->missionId] = $volumeHoraire->dateFinMission;
-                }
-            }
 
-            foreach ($contrat->avenants as $avenant) {
-                if (!$avenant->edite) {
-                    continue;
-                }
-
-                if (empty($dateFinContrat) || $avenant->finValidite > $dateFinContrat) {
-                    $dateFinContrat = $avenant->finValidite;
-                }
-                if ($dateDebutContrat == null || $avenant->debutValidite < $dateDebutContrat) {
-                    $dateDebutContrat = $avenant->debutValidite;
-                }
-
-                foreach ($avenant->volumesHoraires as $volumeHoraire) {
-                    if ($volumeHoraire->missionId == null) {
-                        continue;
-                    }
-                    if (empty($dateMissions[$volumeHoraire->missionId]) || $volumeHoraire->dateFinMission > $dateMissions[$volumeHoraire->missionId]) {
-                        $dateMissions[$volumeHoraire->missionId] = $volumeHoraire->dateFinMission;
-                    }
-                }
-            }
+            [$dateMissions, $dateFinContrat, $dateDebutContrat] = $this->CalculDateContratEdite($contrat, $dateMissions, $dateFinContrat, $dateDebutContrat);
             if (!empty($dateMissions)) {
                 foreach ($dateMissions as $key => $dateMission) {
                     if ($dateMission <= $dateFinContrat) {
@@ -376,107 +360,19 @@ class ContratProcess implements ProcessInterface
                 }
             }
             //Pour les missions qui dépassent on cherche si un avenant non édité existe avec des heures pour ces missions pour modifié la date de fin
-            if (!empty($dateMissions)) {
-                foreach ($contrat->avenants as $avenant) {
-                    if ($avenant->edite) {
-                        continue;
-                    }
-
-                    foreach ($avenant->volumesHoraires as $volumeHoraire) {
-                        if ($volumeHoraire->missionId == null) {
-                            continue;
-                        }
-
-                        if (!empty($dateMissions[$volumeHoraire->missionId]) && $avenant->finValidite >= $dateMissions[$volumeHoraire->missionId]) {
-                            unset($dateMissions[$volumeHoraire->missionId]);
-                        } elseif (!empty($dateMissions[$volumeHoraire->missionId]) && $avenant->finValidite < $dateMissions[$volumeHoraire->missionId]) {
-                            $avenant->finValidite = $dateMissions[$volumeHoraire->missionId];
-                            unset($dateMissions[$volumeHoraire->missionId]);
-                            if ($dateFinContrat < $avenant->finValidite) {
-                                $dateFinContrat = $avenant->finValidite;
-                            }
-                        }
-                    }
-                }
-            }
+            $dateMissions = $this->ChangementDateAvenantNonEdite($dateMissions, $contrat);
             //Si aucun avenant n'existe on créer un avenant sur la date la plus éloigné pour une prolongation de tous ceux qui n'ont pas d'avenant
             if (!empty($dateMissions)) {
-                $avenantProlongation         = new Contrat();
-                $avenantProlongation->parent = $contrat;
-                $contrat->avenants[]         = $avenantProlongation;
-                $avenantProlongation->annee  = $contrat->annee;
-                $dateAvenant                 = null;
-                foreach ($dateMissions as $dateMission) {
-                    if (empty($dateAvenant) || $dateAvenant < $dateMission) {
-                        $dateAvenant = $dateMission;
-                    }
-                }
-                $avenantProlongation->finValidite   = $dateAvenant;
-                $avenantProlongation->debutValidite = $dateDebutContrat;
-                $avenantProlongation->isMission     = true;
-                $avenantProlongation->intervenantId = $intervenantId;
-                $avenantProlongation->structureId   = $contrat->structureId;
-                $avenantProlongation->uuid          = $this->generateUUID($intervenantId, $avenantProlongation->id, $avenantProlongation->structureId, $avenantProlongation->getMissionId(), $avenantProlongation->parent->id);
-                $avenantProlongation->typeService   = $contrat->typeService;
-
-                $this->intervenants[$intervenantId][$avenantProlongation->uuid] = $avenantProlongation;
+                $this->CreationAvenantProlongation($contrat, $dateMissions, $dateDebutContrat, $intervenantId);
             }
         }
     }
 
 
 
-
-//            foreach ($contratPrincipaux as $contrat) {
-//                /* @var Contrat $contrat */
-//                $dateFinContrat   = ;
-//                $dateDebutContrat = [];
-//                $dateMission      = [];
-//                $intervenantId    = $contrat->intervenantId;
-//                foreach ($contrat->volumesHoraires as $volumeHoraire) {
-//                    if ($dateMission[$volumeHoraire->missionId] == null || $volumeHoraire->dateFinMission > $dateMission[$volumeHoraire->missionId]) {
-//                        $dateMission[$volumeHoraire->missionId] = $volumeHoraire->dateFinMission;
-//                    }
-//                }
-//
-//                foreach ($contrat->avenants as $avenant) {
-//                    if (!$avenant->edite) {
-//                        continue;
-//                    }
-//                    if ($dateFinContrat == null || $avenant->finValidite > $dateFinContrat) {
-//                        $dateFinContrat = $avenant->finValidite;
-//                    }
-//                    if ($dateDebutContrat == null || $avenant->debutValidite < $dateDebutContrat) {
-//                        $dateFinContrat = $avenant->debutValidite;
-//                    }
-//
-//                    foreach ($avenant->volumesHoraires as $volumeHoraire) {
-//                        if ($dateMission == null || $volumeHoraire->dateFinMission > $dateMission) {
-//                            $dateMission = $volumeHoraire->dateFinMission;
-//                        }
-//                    }
-//                }
-//
-//                if ($dateFinContrat != null && $dateMission != null && $dateFinContrat < $dateMission) {
-//
-//                    $avenantProlongation                = new Contrat();
-//                    $avenantProlongation->parent        = $contrat;
-//                    $contrat->avenants[]                = $avenantProlongation;
-//                    $avenantProlongation->annee         = $contrat->annee;
-//                    $avenantProlongation->finValidite   = $dateMission;
-//                    $avenantProlongation->debutValidite = $dateDebutContrat;
-//                    $avenantProlongation->isMission     = true;
-//                    $avenantProlongation->intervenantId = $intervenantId;
-//                    $avenantProlongation->structureId   = $contrat->structureId;
-//                    $avenantProlongation->uuid          = $this->generateUUID($intervenantId, $avenantProlongation->id, $avenantProlongation->structureId, $avenantProlongation->getMissionId(), $avenantProlongation->parent->id);
-//                    $avenantProlongation->typeService   = $contrat->typeService;
-//
-//                    $this->intervenants[$intervenantId][$avenantProlongation->uuid] = $avenantProlongation;
-//                }
-//            }
-//}
-
-
+    /**
+     * @throws Exception
+     */
     public function calculTypeService(Contrat $contrat): void
     {
         $hasMissions = false;
@@ -488,13 +384,15 @@ class ContratProcess implements ProcessInterface
         }
 
         if ($hasMissions && $hasEnsRef) {
-            throw new \Exception('Un même contrat ne peut pas mélanger des heures de missions avec des heures d\'enseignement et/ou de référentiel');
+            throw new Exception('Un même contrat ne peut pas mélanger des heures de missions avec des heures d\'enseignement et/ou de référentiel');
         }
 
         if (!$hasMissions && !$hasEnsRef) {
             // aucun volume horaire
             if ($contrat->parent) {
                 // s'il a un parent, c'est qu'on est sur un avenant de modif de date de fin de mission
+                //On calcul le type du parent au cas ou il ne serait pas encore calculé
+                $this->calculTypeService($contrat->parent);
                 $contrat->isMission = $contrat->parent->isMission;
             } else {
                 // S'il n'a pas de parent, c'est qu'on est sur un contrat d'enseignement/référentiel sans prévisionnel
@@ -508,8 +406,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function calculStructure(Contrat $contrat): void
+    public function calculStructure(Contrat $contrat): void
     {
         if ($contrat->id) {
             // Si le contrat existe déjà et a été valider, on ne touche à rien et on remonte ce qui avait déjà été décidé avant, on recalcule pour un projet
@@ -521,11 +418,9 @@ class ContratProcess implements ProcessInterface
                 $contrat->structureId = null;
                 return;
             }
-        } else {
-            if ($this->parametreEns == Parametre::CONTRAT_ENS_GLOBAL) {
-                $contrat->structureId = null;
-                return;
-            }
+        } elseif ($this->parametreEns == Parametre::CONTRAT_ENS_GLOBAL) {
+            $contrat->structureId = null;
+            return;
         }
 
         $structures = [];
@@ -542,19 +437,11 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function completionContrat(Contrat $contrat): void
-    {
-        // on complète le contrat
-    }
-
-
-
     /**
      * @param array|Contrat[] $contrats
+     * @throws Exception
      */
-    public
-    function calculParentsIds(array $contrats): void
+    public function calculParentsIds(array $contrats): void
     {
         if (count($contrats) < 2) {
             // On élague tous les cas simples où il n'y a qu'un document max => c'est forcément un contrat
@@ -567,10 +454,7 @@ class ContratProcess implements ProcessInterface
         $autres = [];
         foreach ($contrats as $contrat) {
             if ($contrat->id && $contrat->edite) {
-                if ($contrat->parent) {
-                    // On est sur un avenant, donc déjà associé à un contrat
-                    //$avenantsEdites[] = $contrat;
-                } else {
+                if (!$contrat->parent) {
                     $contratsEdites[] = $contrat;
                 }
             } else {
@@ -594,16 +478,17 @@ class ContratProcess implements ProcessInterface
 
             if (!empty($parentsPotentiels)) {
                 // Si on a des parents potentiels, on lui donne le meilleur
-                $autre->setParent($this->meilleurParent($autre, $parentsPotentiels));
-                $test = 0;
+                $autre->setParent($this->meilleurParent($parentsPotentiels));
             }
         }
     }
 
 
 
-    public
-    function isParentPotentiel(Contrat $contrat, Contrat $candidat): bool
+    /**
+     * @throws Exception
+     */
+    public function isParentPotentiel(Contrat $contrat, Contrat $candidat): bool
     {
         if ($candidat->isMission !== $contrat->isMission) {
             return false; // pas les mêmes types => pas de lien
@@ -615,14 +500,14 @@ class ContratProcess implements ProcessInterface
                     return true; // paramètre global => ce sera un avenant
                 case Parametre::CONTRAT_MIS_COMPOSANTE:
                     if (empty($contrat->structureId)) {
-                        throw new \Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
+                        throw new Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
                     }
 
                     return $candidat->hasStructureId($contrat->structureId);
                 case Parametre::CONTRAT_MIS_MISSION:
                     $contratMissionId = $contrat->getMissionId();
                     if (empty($contratMissionId)) {
-                        throw new \Exception('En paramétrage par mission, le nouveau contrat doit avoir une mission unique bien identifiée');
+                        throw new Exception('En paramétrage par mission, le nouveau contrat doit avoir une mission unique bien identifiée');
                     }
 
                     return $candidat->hasMissionId($contratMissionId);
@@ -637,18 +522,16 @@ class ContratProcess implements ProcessInterface
             }
         }
 
-        throw new \Exception('Une erreur est survenue : cas de détection de parent potentiel non géré');
+        throw new Exception('Une erreur est survenue : cas de détection de parent potentiel non géré');
     }
 
 
 
     /**
-     * @param Contrat         $contrat
      * @param array|Contrat[] $parents
      * @return Contrat
      */
-    public
-    function meilleurParent(Contrat $contrat, array $parents): Contrat
+    public function meilleurParent(array $parents): Contrat
     {
         // Cas facile : 1 parent => c'est lui
         if (count($parents) == 1) {
@@ -670,8 +553,10 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function calculTauxRemu(Contrat $contrat): void
+    /**
+     * @throws Exception
+     */
+    public function calculTauxRemu(Contrat $contrat): void
     {
         if ($contrat->isMission) {
             /* Dans le cas où le contrat n'a pas d'heures et que c'est une mission, on utilise les taux du parent */
@@ -719,8 +604,7 @@ class ContratProcess implements ProcessInterface
     /**
      * @param array|Contrat[] $contrats
      */
-    public
-    function calculNumerosAvenants(array $contrats): void
+    public function calculNumerosAvenants(array $contrats): void
     {
         foreach ($contrats as $contrat) {
             $this->calculNumeroAvenant($contrat);
@@ -728,13 +612,7 @@ class ContratProcess implements ProcessInterface
     }
 
 
-
-    /**
-     * @param Contrat         $contrat
-     * @param array|Contrat[] $contrats
-     */
-    public
-    function calculNumeroAvenant(Contrat $contrat): void
+    public function calculNumeroAvenant(Contrat $contrat): void
     {
         //On connait deja les numéro d'avenant récuperé de la table contrat et on a pas besoin de le recalculer pour les contrat editer (on le fait cependant pour les projets)
         if ($contrat->id && $contrat->edite == 1) {
@@ -755,23 +633,7 @@ class ContratProcess implements ProcessInterface
         }
     }
 
-
-
-    /**
-     * @param array|Contrat[] $contrats
-     */
-    public
-    function calculTotauxHETDs(array $contrats): void
-    {
-        foreach ($contrats as $contrat) {
-            $this->calculTotalHETD($contrat);
-        }
-    }
-
-
-
-    public
-    function calculTermine(Contrat $contrat): void
+    public function calculTermine(Contrat $contrat): void
     {
         switch ($this->parametreFranchissement) {
             case Parametre::CONTRAT_FRANCHI_VALIDATION:
@@ -784,8 +646,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function calculTauxCongesPayes(Contrat $contrat): void
+    public function calculTauxCongesPayes(Contrat $contrat): void
     {
         if ($contrat->isMission) {
             $contrat->tauxCongesPayes = $this->parametreTauxCongesPayes;
@@ -796,8 +657,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function calculAutreLibelles(Contrat $contrat): string
+    public function calculAutreLibelles(Contrat $contrat): string
     {
         $libelles = [];
 
@@ -817,8 +677,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function calculTotalHeures(Contrat $contrat): void
+    public function calculTotalHeures(Contrat $contrat): void
     {
         $totalHeures = 0;
 
@@ -837,11 +696,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    /**
-     * @param array|Contrat[] $contrats
-     */
-    public
-    function calculTotalHETD(Contrat $contrat): void
+    public function calculTotalHETD(Contrat $contrat): void
     {
         // ne pas prendre en compte les projets amont
         if ($contrat->id && $contrat->edite) {
@@ -887,8 +742,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function generateUUID(int $intervenant_id, ?int $contratId, ?int $structureId = null, ?int $missionId = null, ?int $parentId = null): string
+    public function generateUUID(int $intervenant_id, ?int $contratId, ?int $structureId = null, ?int $missionId = null, ?int $parentId = null): string
     {
         if ($contratId) {
             return 'contrat_id_' . $contratId;
@@ -898,28 +752,22 @@ class ContratProcess implements ProcessInterface
         }
 
         if ($missionId != null) {
-            switch ($this->parametreMis) {
-                case Parametre::CONTRAT_MIS_MISSION:
-                    return 'mis_mission_' . $intervenant_id . '_' . $missionId;
-                case Parametre::CONTRAT_MIS_COMPOSANTE:
-                    return 'mis_structure_' . $intervenant_id . '_' . $structureId;
-                default:
-                    return 'mis_global_' . $intervenant_id;
-            }
+            return match ($this->parametreMis) {
+                Parametre::CONTRAT_MIS_MISSION    => 'mis_mission_' . $intervenant_id . '_' . $missionId,
+                Parametre::CONTRAT_MIS_COMPOSANTE => 'mis_structure_' . $intervenant_id . '_' . $structureId,
+                default                           => 'mis_global_' . $intervenant_id,
+            };
         } else {
-            switch ($this->parametreEns) {
-                case Parametre::CONTRAT_ENS_COMPOSANTE:
-                    return 'ens_structure_' . $intervenant_id . '_' . $structureId;
-                default:
-                    return 'ens_global_' . $intervenant_id;
-            }
+            return match ($this->parametreEns) {
+                Parametre::CONTRAT_ENS_COMPOSANTE => 'ens_structure_' . $intervenant_id . '_' . $structureId,
+                default                           => 'ens_global_' . $intervenant_id,
+            };
         }
     }
 
 
 
-    public
-    function getTypeContrat(Contrat $contrat): TypeContrat
+    public function getTypeContrat(Contrat $contrat): TypeContrat
     {
         if (empty($contrat->parent)) {
             return $this->getServiceTypeContrat()->getContrat();
@@ -930,8 +778,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function getVolumeHoraireTypeService(VolumeHoraire $vh): TypeService
+    public function getVolumeHoraireTypeService(VolumeHoraire $vh): TypeService
     {
         if ($vh->serviceId) {
             return $this->getServiceTypeService()->getEnseignement();
@@ -956,8 +803,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function extractContrat(Contrat $contrat): array
+    public function extractContrat(Contrat $contrat): array
     {
         $typeServiceId = $contrat->isMission ? $this->getServiceTypeService()->getMission()->getId() : $this->getServiceTypeService()->getEnseignement()->getId();
 
@@ -1005,8 +851,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function extractVolumeHoraire(VolumeHoraire $vh): array
+    public function extractVolumeHoraire(VolumeHoraire $vh): array
     {
         $contrat = $vh->contrat;
 
@@ -1052,12 +897,11 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function exporter(): void
+    public function exporter(): void
     {
         $this->tblData = [];
-        foreach ($this->intervenants as $intervenantId => $contrats) {
-            foreach ($contrats as $uuid => $contrat) {
+        foreach ($this->intervenants as $contrats) {
+            foreach ($contrats as $contrat) {
                 if (!$contrat->historise) {
                     if (empty($contrat->volumesHoraires)) {
                         $ligne           = $this->extractContrat($contrat);
@@ -1086,8 +930,10 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public
-    function enregistrement(TableauBord $tableauBord, array $params): void
+    /**
+     * @throws Exception
+     */
+    public function enregistrement(TableauBord $tableauBord, array $params): void
     {
 
         // Enregistrement en BDD
@@ -1102,7 +948,7 @@ class ContratProcess implements ProcessInterface
             'where'              => $params,
             'return-insert-data' => false,
             'transaction'        => !isset($params['INTERVENANT_ID']),
-            'callback'           => function (string $action, int $progress, int $total, array $data = [], array $key = []) use ($tableauBord) {
+            'callback'           => function (int $progress, int $total) use ($tableauBord) {
                 $tableauBord->onAction(Event::PROGRESS, $progress, $total);
             },
         ];
@@ -1110,5 +956,107 @@ class ContratProcess implements ProcessInterface
         $table->merge($this->tblData, $key, $options);
         // on vide pour limiter la conso de RAM
         $this->tblData = [];
+    }/**
+ * @param Contrat       $contrat
+ * @param array         $dateMissions
+ * @param DateTime|null $dateFinContrat
+ * @param DateTime|null $dateDebutContrat
+ * @return array
+ */
+    public function CalculDateContratEdite(Contrat $contrat, array $dateMissions, ?DateTime $dateFinContrat, ?DateTime $dateDebutContrat): array
+    {
+        foreach ($contrat->volumesHoraires as $volumeHoraire) {
+            if (empty($dateMissions[$volumeHoraire->missionId])
+                || $volumeHoraire->dateFinMission > $dateMissions[$volumeHoraire->missionId]) {
+                $dateMissions[$volumeHoraire->missionId] = $volumeHoraire->dateFinMission;
+            }
+        }
+
+        foreach ($contrat->avenants as $avenant) {
+            if (!$avenant->edite) {
+                continue;
+            }
+
+            if (empty($dateFinContrat) || $avenant->finValidite > $dateFinContrat) {
+                $dateFinContrat = $avenant->finValidite;
+            }
+            if ($dateDebutContrat == null || $avenant->debutValidite < $dateDebutContrat) {
+                $dateDebutContrat = $avenant->debutValidite;
+            }
+
+            foreach ($avenant->volumesHoraires as $volumeHoraire) {
+                if ($volumeHoraire->missionId == null) {
+                    continue;
+                }
+                if (empty($dateMissions[$volumeHoraire->missionId]) || $volumeHoraire->dateFinMission > $dateMissions[$volumeHoraire->missionId]) {
+                    $dateMissions[$volumeHoraire->missionId] = $volumeHoraire->dateFinMission;
+                }
+            }
+        }
+        return [$dateMissions, $dateFinContrat, $dateDebutContrat];
+    }
+
+
+
+    /**
+     * @param mixed   $dateMissions
+     * @param Contrat $contrat
+     * @return array
+     */
+    public function ChangementDateAvenantNonEdite(array $dateMissions, Contrat $contrat): array
+    {
+        if (!empty($dateMissions)) {
+            foreach ($contrat->avenants as $avenant) {
+                if ($avenant->edite) {
+                    continue;
+                }
+
+                foreach ($avenant->volumesHoraires as $volumeHoraire) {
+                    if ($volumeHoraire->missionId == null) {
+                        continue;
+                    }
+
+                    if (!empty($dateMissions[$volumeHoraire->missionId]) && $avenant->finValidite >= $dateMissions[$volumeHoraire->missionId]) {
+                        unset($dateMissions[$volumeHoraire->missionId]);
+                    } elseif (!empty($dateMissions[$volumeHoraire->missionId]) && $avenant->finValidite < $dateMissions[$volumeHoraire->missionId]) {
+                        $avenant->finValidite = $dateMissions[$volumeHoraire->missionId];
+                        unset($dateMissions[$volumeHoraire->missionId]);
+                    }
+                }
+            }
+        }
+        return $dateMissions;
+    }
+
+
+
+    /**
+     * @param Contrat  $contrat
+     * @param array    $dateMissions
+     * @param mixed    $dateDebutContrat
+     * @param int|null $intervenantId
+     * @return void
+     */
+    public function CreationAvenantProlongation(Contrat $contrat, array $dateMissions, mixed $dateDebutContrat, ?int $intervenantId): void
+    {
+        $avenantProlongation         = new Contrat();
+        $avenantProlongation->parent = $contrat;
+        $contrat->avenants[]         = $avenantProlongation;
+        $avenantProlongation->annee  = $contrat->annee;
+        $dateAvenant                 = null;
+        foreach ($dateMissions as $dateMission) {
+            if (empty($dateAvenant) || $dateAvenant < $dateMission) {
+                $dateAvenant = $dateMission;
+            }
+        }
+        $avenantProlongation->finValidite   = $dateAvenant;
+        $avenantProlongation->debutValidite = $dateDebutContrat;
+        $avenantProlongation->isMission     = true;
+        $avenantProlongation->intervenantId = $intervenantId;
+        $avenantProlongation->structureId   = $contrat->structureId;
+        $avenantProlongation->uuid          = $this->generateUUID($intervenantId, $avenantProlongation->id, $avenantProlongation->structureId, $avenantProlongation->getMissionId(), $avenantProlongation->parent->id);
+        $avenantProlongation->typeService   = $contrat->typeService;
+
+        $this->intervenants[$intervenantId][$avenantProlongation->uuid] = $avenantProlongation;
     }
 }

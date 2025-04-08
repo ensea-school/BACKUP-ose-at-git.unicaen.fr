@@ -308,15 +308,15 @@ class ContratProcess implements ProcessInterface
             $this->calculAutreLibelles($contrat);
             $this->calculActif($contrat);
         }
-
-        // ajout de contrats vides d'enseignement si aucune
-        // Activer les lignes où il y a besoin de contrats/avenants
     }
 
 
 
     public function calculActif(Contrat $contrat): void
     {
+        if($contrat->id){
+            $contrat->actif = true;
+        }
         if (!$contrat->actif) {
             if ($this->parametreAvenant == Parametre::AVENANT_AUTORISE) {
                 $contrat->actif = true;

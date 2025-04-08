@@ -66,7 +66,8 @@
         "phpcompatibility/php-compatibility": "*",
         "phan/phan"                         : "^5.3",
         "phpmd/phpmd"                       : "*",
-        "phpunit/phpunit"                   : "^9"
+        "phpunit/phpunit"                   : "^9",
+        "friendsofphp/php-cs-fixer": "^3.74"
     },
     "prefer-stable"    : true,
     "config"           : {

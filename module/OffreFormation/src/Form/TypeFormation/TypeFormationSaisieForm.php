@@ -24,7 +24,7 @@ class TypeFormationSaisieForm extends AbstractForm
 
     public function init ()
     {
-        $ignore = ['autre', 'autre1', 'autre2', 'autre3', 'autre4', 'autre5'];
+        $ignore = ['autre', 'autre1', 'autre2', 'autre3', 'autre4', 'autre5','source'];
         $this->spec(TypeFormation::class, $ignore);
         $this->build();
 

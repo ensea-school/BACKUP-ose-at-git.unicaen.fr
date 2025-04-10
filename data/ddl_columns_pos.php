@@ -1905,6 +1905,7 @@ return [
         'ANNEE_ID',
         'NUM_REGLE',
         'NATIONALITE_ETRANGERE',
+        'POST_RECRUTEMENT',
     ],
     'TYPE_RESSOURCE'                      => [
         'ID',

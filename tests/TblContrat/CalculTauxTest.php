@@ -37,7 +37,7 @@ final class CalculTauxTest extends TblContratTestCase
         $volumeHoraire1->cm              = 1;
         $volumeHoraire1->heures          = 1;
         $volumeHoraire1->hetd            = 1.5;
-        $volumeHoraire1->tauxRemuId = 1;
+        $volumeHoraire1->tauxRemuId      = 1;
 
         $volumeHoraire2                  = new VolumeHoraire();
         $volumeHoraire2->structureId     = 495;
@@ -46,7 +46,7 @@ final class CalculTauxTest extends TblContratTestCase
         $volumeHoraire2->tp              = 3;
         $volumeHoraire2->heures          = 3;
         $volumeHoraire2->hetd            = 2;
-        $volumeHoraire2->tauxRemuId = 1;
+        $volumeHoraire2->tauxRemuId      = 1;
 
         $volumeHoraire3                  = new VolumeHoraire();
         $volumeHoraire3->structureId     = 495;
@@ -55,7 +55,7 @@ final class CalculTauxTest extends TblContratTestCase
         $volumeHoraire3->cm              = 2;
         $volumeHoraire3->heures          = 2;
         $volumeHoraire3->hetd            = 3;
-        $volumeHoraire3->tauxRemuId = 1;
+        $volumeHoraire3->tauxRemuId      = 1;
 
         $volumeHoraire4                  = new VolumeHoraire();
         $volumeHoraire4->structureId     = 495;
@@ -64,7 +64,7 @@ final class CalculTauxTest extends TblContratTestCase
         $volumeHoraire4->cm              = 1;
         $volumeHoraire4->heures          = 1;
         $volumeHoraire4->hetd            = 1.5;
-        $volumeHoraire4->tauxRemuId = 1;
+        $volumeHoraire4->tauxRemuId      = 1;
 
         $contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3, $volumeHoraire4];
 
@@ -75,9 +75,11 @@ final class CalculTauxTest extends TblContratTestCase
         }
 
         self::assertEquals(new DateTime('2023-09-01'), $contrat1->tauxRemuDate);
-        self::assertEquals(43.5,$contrat1->tauxRemuValeur);
-        self::assertEquals(43.5,$contrat1->tauxRemuMajoreValeur);
+        self::assertEquals(43.5, $contrat1->tauxRemuValeur);
+        self::assertEquals(43.5, $contrat1->tauxRemuMajoreValeur);
     }
+
+
 
     public function testTauxContratErreurAnnee()
     {
@@ -102,7 +104,7 @@ final class CalculTauxTest extends TblContratTestCase
         $volumeHoraire1->cm              = 1;
         $volumeHoraire1->heures          = 1;
         $volumeHoraire1->hetd            = 1.5;
-        $volumeHoraire1->tauxRemuId = 1;
+        $volumeHoraire1->tauxRemuId      = 1;
 
         $contrat1->volumesHoraires = [$volumeHoraire1];
 
@@ -111,9 +113,13 @@ final class CalculTauxTest extends TblContratTestCase
         } catch (\Exception $e) {
             //On doit renvoyé une erreur si l'année n'existe pas, ce test est la pour verifier que c'est bien le cas
             self::assertTrue(true);
+            return;
         }
+        self::fail();
 
     }
+
+
 
     public function testTauxContratErreurTauxDate()
     {
@@ -134,7 +140,6 @@ final class CalculTauxTest extends TblContratTestCase
         $contrat1->annee->setActive(true);
 
 
-
         $volumeHoraire1                  = new VolumeHoraire();
         $volumeHoraire1->structureId     = 495;
         $volumeHoraire1->serviceId       = 316066;
@@ -142,17 +147,65 @@ final class CalculTauxTest extends TblContratTestCase
         $volumeHoraire1->cm              = 1;
         $volumeHoraire1->heures          = 1;
         $volumeHoraire1->hetd            = 1.5;
-        $volumeHoraire1->tauxRemuId = 1;
+        $volumeHoraire1->tauxRemuId      = 1;
 
         $contrat1->volumesHoraires = [$volumeHoraire1];
 
         try {
             $this->process->calculTauxRemu($contrat1);
         } catch (\Exception $e) {
-            //On doit renvoyé une erreur si le taux n'existe pas sur cette année
-            self::assertTrue(true);
+            //On ne doit pas renvoyé une erreur si le taux n'existe pas sur cette année, on doit renvoyer 1.0
+            self::assertTrue(false);
         }
 
+        self::assertEquals(1.0, $contrat1->tauxRemuValeur);
+        self::assertEquals(1.0, $contrat1->tauxRemuMajoreValeur);
+        self::assertEquals(new DateTime('2008-09-01'), $contrat1->tauxRemuDate);
     }
 
+
+
+    public function testTauxContratMultiTaux()
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_MISSION,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBAL,
+            Parametre::TAUX_REMU   => 1,
+        ];
+        $this->useParametres($parametres);
+
+        //Contrat 1 global
+        $contrat1            = new Contrat();
+        $contrat1->id        = 1;
+        $contrat1->isMission = true;
+        $contrat1->annee     = new Annee();
+        $contrat1->annee->setDateDebut(new DateTime('2023-09-01'));
+        $contrat1->annee->setActive(true);
+
+        $volumeHoraire1             = new VolumeHoraire();
+        $volumeHoraire1->tauxRemuId = 1;
+
+        $volumeHoraire2             = new VolumeHoraire();
+        $volumeHoraire2->tauxRemuId = 2;
+
+        $volumeHoraire3             = new VolumeHoraire();
+        $volumeHoraire3->tauxRemuId = 1;
+
+        $volumeHoraire4             = new VolumeHoraire();
+        $volumeHoraire4->tauxRemuId = 1;
+
+        $contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3, $volumeHoraire4];
+
+        try {
+            $this->process->calculTauxRemu($contrat1);
+        } catch (\Exception $e) {
+            self::fail('Une exception ne devait pas être levée : ' . $e->getMessage());
+        }
+
+        self::assertEquals(new DateTime('2023-09-01'), $contrat1->tauxRemuDate);
+        self::assertEquals(43.5, $contrat1->tauxRemuValeur);
+        self::assertEquals(43.5, $contrat1->tauxRemuMajoreValeur);
+        self::assertEquals(1, $contrat1->tauxRemuId);
+    }
 }

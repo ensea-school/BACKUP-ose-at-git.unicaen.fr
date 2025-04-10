@@ -49,7 +49,7 @@ class Contrat
 
     public bool $termine = false;
 
-    public float $hetd = 0.0;
+//    public float $hetd = 0.0;
 
     public float $totalHetd = 0.0;
     public float $totalGlobalHetd = 0.0;

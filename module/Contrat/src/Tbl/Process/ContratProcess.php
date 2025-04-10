@@ -314,7 +314,7 @@ class ContratProcess implements ProcessInterface
 
     public function calculActif(Contrat $contrat): void
     {
-        if($contrat->id){
+        if ($contrat->id) {
             $contrat->actif = true;
         }
         if (!$contrat->actif) {
@@ -594,9 +594,11 @@ class ContratProcess implements ProcessInterface
         if (!$contrat->annee) {
             throw new \Exception('Le calcul du taux de rémunération ne peut être effectué sans année affecté au contrat');
         }
-        $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->histoCreation ?? $contrat->annee->getDateDebut();
-        $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->tauxRemuDate);
-        $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $contrat->tauxRemuDate);
+        if ($contrat->tauxRemuId) {
+            $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->histoCreation ?? $contrat->annee->getDateDebut();
+            $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->tauxRemuDate);
+            $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $contrat->tauxRemuDate);
+        }
     }
 
 
@@ -610,6 +612,7 @@ class ContratProcess implements ProcessInterface
             $this->calculNumeroAvenant($contrat);
         }
     }
+
 
 
     public function calculNumeroAvenant(Contrat $contrat): void
@@ -632,6 +635,8 @@ class ContratProcess implements ProcessInterface
             $contrat->numeroAvenant = $contratNumero + 1;
         }
     }
+
+
 
     public function calculTermine(Contrat $contrat): void
     {
@@ -956,13 +961,17 @@ class ContratProcess implements ProcessInterface
         $table->merge($this->tblData, $key, $options);
         // on vide pour limiter la conso de RAM
         $this->tblData = [];
-    }/**
- * @param Contrat       $contrat
- * @param array         $dateMissions
- * @param DateTime|null $dateFinContrat
- * @param DateTime|null $dateDebutContrat
- * @return array
- */
+    }
+
+
+
+    /**
+     * @param Contrat       $contrat
+     * @param array         $dateMissions
+     * @param DateTime|null $dateFinContrat
+     * @param DateTime|null $dateDebutContrat
+     * @return array
+     */
     public function CalculDateContratEdite(Contrat $contrat, array $dateMissions, ?DateTime $dateFinContrat, ?DateTime $dateDebutContrat): array
     {
         foreach ($contrat->volumesHoraires as $volumeHoraire) {

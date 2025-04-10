@@ -10,7 +10,7 @@ use DateTime;
 /**
  *
  */
-final class ProlongationMissionTest extends TblContratTestCase
+final class CalculProlongationMissionTest extends TblContratTestCase
 {
 
 
@@ -294,7 +294,7 @@ final class ProlongationMissionTest extends TblContratTestCase
 
         $contrat2->volumesHoraires = [$volumeHoraireMission2];
 
-        $this->process->contratProlongationMission([$contrat1 , $contrat2]);
+        $this->process->contratProlongationMission([$contrat1, $contrat2]);
 
         ProlongationMissionTest::assertCount(1, $contrat1->avenants);
         ProlongationMissionTest::assertCount(1, $contrat2->avenants);

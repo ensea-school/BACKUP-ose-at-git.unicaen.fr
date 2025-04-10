@@ -692,4 +692,194 @@ final class CalculParentsTest extends TblContratTestCase
         self::assertEquals($contrat1, $contrat2->parent);
         self::assertNull($contrat1->parent);
     }
+
+
+
+    public function testIsParentPotentiel(): void
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_MISSION,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_COMPOSANTE,
+        ];
+        $this->useParametres($parametres);
+
+        // on a un contrat sur une structure et on veut créer un second contrat sur une autre structure,
+        // Lorsqu'on a 1 contrat, le nouveau projet est un avenant
+
+        $contrat1              = new Contrat();
+        $contrat1->id          = 39940;
+        $contrat1->edite       = true;
+        $contrat1->structureId = 495;
+
+
+        $contrat2              = new Contrat();
+        $contrat2->structureId = 594;
+
+        $contrat3              = new Contrat();
+        $contrat3->id          = 39940;
+        $contrat3->edite       = true;
+        $contrat3->structureId = null;
+
+        $contrat4              = new Contrat();
+        $contrat4->id          = 39940;
+        $contrat4->edite       = false;
+        $contrat4->structureId = 495;
+        try {
+            $res1 = $this->process->isParentPotentiel($contrat2, $contrat1);
+            $res2 = $this->process->isParentPotentiel($contrat2, $contrat2);
+            $res3 = $this->process->isParentPotentiel($contrat2, $contrat3);
+            $res4 = $this->process->isParentPotentiel($contrat2, $contrat4);
+        } catch (\Exception $e) {
+            //Cela ne devrait pas planté ici
+            self::fail();
+        }
+
+
+        self::assertTrue($res1);
+        self::assertFalse($res2);
+        self::assertTrue($res3);
+        self::assertFalse($res4);
+    }
+
+
+
+    public function testIsParentPotentielEnseignementError(): void
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_MISSION,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_COMPOSANTE,
+        ];
+        $this->useParametres($parametres);
+
+        // on a un contrat sur une structure et on veut créer un second contrat sur une autre structure,
+        // Lorsqu'on a 1 contrat, le nouveau projet est un avenant
+
+        $contrat1              = new Contrat();
+        $contrat1->id          = 39940;
+        $contrat1->edite       = true;
+        $contrat1->structureId = 495;
+        $contrat1->isMission   = false;
+
+
+        $contrat2            = new Contrat();
+        $contrat2->isMission = false;
+
+        try {
+            $res1 = $this->process->isParentPotentiel($contrat2, $contrat1);
+        } catch (\Exception $e) {
+            //L'erreur est normal, pas de structure en mode par composante
+            self::assertTrue(true);
+            return;
+        }
+        self::fail();
+    }
+
+
+
+    public function testIsParentPotentielMissionError(): void
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_MISSION,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_COMPOSANTE,
+        ];
+        $this->useParametres($parametres);
+
+        // on a un contrat sur une structure et on veut créer un second contrat sur une autre structure,
+        // Lorsqu'on a 1 contrat, le nouveau projet est un avenant
+
+        $contrat1              = new Contrat();
+        $contrat1->id          = 39940;
+        $contrat1->edite       = true;
+        $contrat1->structureId = 495;
+        $contrat1->isMission   = true;
+
+
+        $contrat2            = new Contrat();
+        $contrat2->isMission = true;
+
+
+        try {
+            $res1 = $this->process->isParentPotentiel($contrat2, $contrat1);
+        } catch (\Exception $e) {
+            //L'erreur est normal, pas de structure en mode par composante
+            self::assertTrue(true);
+            return;
+        }
+        self::fail();
+
+    }
+
+
+
+    public function testIsParentPotentielMissionComposanteError(): void
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_COMPOSANTE,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_COMPOSANTE,
+        ];
+        $this->useParametres($parametres);
+
+        // on a un contrat sur une structure et on veut créer un second contrat sur une autre structure,
+        // Lorsqu'on a 1 contrat, le nouveau projet est un avenant
+
+        $contrat1              = new Contrat();
+        $contrat1->id          = 39940;
+        $contrat1->edite       = true;
+        $contrat1->structureId = 495;
+        $contrat1->isMission   = true;
+
+
+        $contrat2            = new Contrat();
+        $contrat2->isMission = true;
+
+
+        try {
+            $res1 = $this->process->isParentPotentiel($contrat2, $contrat1);
+        } catch (\Exception $e) {
+            //L'erreur est normal, pas de structure en mode par composante
+            self::assertTrue(true);
+            return;
+        }
+        self::fail();
+    }
+
+
+
+    public function testIsParentPotentielMission(): void
+    {
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_GLOBAL,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_COMPOSANTE,
+        ];
+        $this->useParametres($parametres);
+
+        // on a un contrat sur une structure et on veut créer un second contrat sur une autre structure,
+        // Lorsqu'on a 1 contrat, le nouveau projet est un avenant
+
+        $contrat1              = new Contrat();
+        $contrat1->id          = 39940;
+        $contrat1->edite       = true;
+        $contrat1->structureId = 495;
+        $contrat1->isMission   = true;
+
+
+        $contrat2            = new Contrat();
+        $contrat2->isMission = true;
+
+
+        try {
+            $res1 = $this->process->isParentPotentiel($contrat2, $contrat1);
+        } catch (\Exception $e) {
+            //en mode global pas d'erreur
+            self::fail();
+        }
+
+        self::assertTrue($res1);
+
+    }
 }

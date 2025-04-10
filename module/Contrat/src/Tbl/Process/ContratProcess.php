@@ -490,7 +490,7 @@ class ContratProcess implements ProcessInterface
      */
     public function isParentPotentiel(Contrat $contrat, Contrat $candidat): bool
     {
-        if ($candidat->isMission !== $contrat->isMission) {
+        if ($candidat->isMission !== $contrat->isMission || $contrat === $candidat || !$candidat->edite) {
             return false; // pas les mêmes types => pas de lien
         }
 
@@ -515,7 +515,11 @@ class ContratProcess implements ProcessInterface
         } else {
             switch ($this->parametreEns) {
                 case Parametre::CONTRAT_ENS_GLOBAL:
+                    return true;
                 case Parametre::CONTRAT_ENS_COMPOSANTE:
+                    if (empty($contrat->structureId)) {
+                        throw new Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
+                    }
                     // En enseignement on a qu'un seul contrat donc un avenant peut s'attacher a un contrat d'une autre composante
                     //Tant que c'est un contrat et pas un avenant il est un parent potentiel
                     return true;

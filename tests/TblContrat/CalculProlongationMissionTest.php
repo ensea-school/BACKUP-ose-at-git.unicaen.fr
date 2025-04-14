@@ -41,9 +41,8 @@ final class CalculProlongationMissionTest extends TblContratTestCase
 
         $this->process->contratProlongationMission([$contrat1]);
 
-        ProlongationMissionTest::assertCount(1, $contrat1->avenants);
-        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
-
+        self::assertCount(1, $contrat1->avenants);
+        self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
     }
 
     /* cas de test a dev :
@@ -98,10 +97,10 @@ final class CalculProlongationMissionTest extends TblContratTestCase
 
         $this->process->contratProlongationMission([$contrat1, $avenant]);
 
-        ProlongationMissionTest::assertCount(2, $contrat1->avenants);
-        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
-        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[1]->parent->id);
-        ProlongationMissionTest::assertCount(0, $contrat1->avenants[1]->volumesHoraires);
+        self::assertCount(2, $contrat1->avenants);
+        self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
+        self::assertEquals($contrat1->id, $contrat1->avenants[1]->parent->id);
+        self::assertCount(0, $contrat1->avenants[1]->volumesHoraires);
 
 
     }
@@ -149,10 +148,10 @@ final class CalculProlongationMissionTest extends TblContratTestCase
 
         $this->process->contratProlongationMission([$contrat1, $avenant]);
 
-        ProlongationMissionTest::assertCount(1, $contrat1->avenants);
-        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
-        ProlongationMissionTest::assertEquals($avenant->finValidite, $volumeHoraire2->dateFinMission);
-        ProlongationMissionTest::assertCount(1, $avenant->volumesHoraires);
+        self::assertCount(1, $contrat1->avenants);
+        self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
+        self::assertEquals($avenant->finValidite, $volumeHoraire2->dateFinMission);
+        self::assertCount(1, $avenant->volumesHoraires);
     }
 
 
@@ -206,10 +205,10 @@ final class CalculProlongationMissionTest extends TblContratTestCase
 
         $this->process->contratProlongationMission([$contrat1, $avenant]);
 
-        ProlongationMissionTest::assertCount(1, $contrat1->avenants);
-        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
-        ProlongationMissionTest::assertEquals($avenant->finValidite, $volumeHoraireMission4->dateFinMission);
-        ProlongationMissionTest::assertCount(1, $avenant->volumesHoraires);
+        self::assertCount(1, $contrat1->avenants);
+        self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
+        self::assertEquals($avenant->finValidite, $volumeHoraireMission4->dateFinMission);
+        self::assertCount(1, $avenant->volumesHoraires);
     }
 
 
@@ -246,10 +245,10 @@ final class CalculProlongationMissionTest extends TblContratTestCase
 
         $this->process->contratProlongationMission([$contrat1]);
 
-        ProlongationMissionTest::assertCount(1, $contrat1->avenants);
-        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
-        ProlongationMissionTest::assertEquals(new DateTime('2020-02-24'), $contrat1->avenants[0]->finValidite);
-        ProlongationMissionTest::assertCount(0, $contrat1->avenants[0]->volumesHoraires);
+        self::assertCount(1, $contrat1->avenants);
+        self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
+        self::assertEquals(new DateTime('2020-02-24'), $contrat1->avenants[0]->finValidite);
+        self::assertCount(0, $contrat1->avenants[0]->volumesHoraires);
 
     }
 
@@ -296,14 +295,14 @@ final class CalculProlongationMissionTest extends TblContratTestCase
 
         $this->process->contratProlongationMission([$contrat1, $contrat2]);
 
-        ProlongationMissionTest::assertCount(1, $contrat1->avenants);
-        ProlongationMissionTest::assertCount(1, $contrat2->avenants);
-        ProlongationMissionTest::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
-        ProlongationMissionTest::assertEquals($contrat2->id, $contrat2->avenants[0]->parent->id);
-        ProlongationMissionTest::assertEquals(new DateTime('2020-02-24'), $contrat1->avenants[0]->finValidite);
-        ProlongationMissionTest::assertEquals(new DateTime('2020-02-26'), $contrat2->avenants[0]->finValidite);
-        ProlongationMissionTest::assertCount(0, $contrat1->avenants[0]->volumesHoraires);
-        ProlongationMissionTest::assertCount(0, $contrat2->avenants[0]->volumesHoraires);
+        self::assertCount(1, $contrat1->avenants);
+        self::assertCount(1, $contrat2->avenants);
+        self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
+        self::assertEquals($contrat2->id, $contrat2->avenants[0]->parent->id);
+        self::assertEquals(new DateTime('2020-02-24'), $contrat1->avenants[0]->finValidite);
+        self::assertEquals(new DateTime('2020-02-26'), $contrat2->avenants[0]->finValidite);
+        self::assertCount(0, $contrat1->avenants[0]->volumesHoraires);
+        self::assertCount(0, $contrat2->avenants[0]->volumesHoraires);
 
     }
 }

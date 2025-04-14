@@ -1,13 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace TblContrat;
+namespace tests\TblContrat;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Model\VolumeHoraire;
 use DateTime;
-use tests\TblContrat\TblContratTestCase;
 
 final class CalculTauxTest extends TblContratTestCase
 {

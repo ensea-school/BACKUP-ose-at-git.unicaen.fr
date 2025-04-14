@@ -697,10 +697,6 @@ class ContratProcess implements ProcessInterface
         }
 
         $contrat->totalHeures = $totalHeures;
-        if ($contrat->parent == null) {
-            //total d'heure du contrat divisé par 10, n'est valable que sur les contrats et pas les avenants
-            $contrat->totalHeuresPeriodeEssai = $totalHeures / 10;
-        }
     }
 
 

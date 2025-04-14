@@ -48,11 +48,7 @@ final class CalculTotalHeuresTest extends TblContratTestCase
         $this->process->calculTotalHeures($contrat2);
 
         self::assertEquals(50.0, $contrat1->totalHeures);
-        self::assertEquals(5.0, $contrat1->totalHeuresPeriodeEssai);
-
-
         self::assertEquals(30.0, $contrat2->totalHeures);
-        self::assertEquals(0.0, $contrat2->totalHeuresPeriodeEssai);
     }
 
 
@@ -100,11 +96,7 @@ final class CalculTotalHeuresTest extends TblContratTestCase
         $this->process->calculTotalHeures($contrat2);
 
         self::assertEquals(40.0, $contrat1->totalHeures);
-        self::assertEquals(4.0, $contrat1->totalHeuresPeriodeEssai);
-
-
         self::assertEquals(30.0, $contrat2->totalHeures);
-        self::assertEquals(0.0, $contrat2->totalHeuresPeriodeEssai);
     }
 
 }

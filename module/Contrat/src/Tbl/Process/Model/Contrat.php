@@ -70,7 +70,6 @@ class Contrat
     /** @var VolumeHoraire[] */
     public array     $volumesHoraires = [];
     public float     $totalHeures = 0.0;
-    public ?float $totalHeuresPeriodeEssai = null;
 
 
 

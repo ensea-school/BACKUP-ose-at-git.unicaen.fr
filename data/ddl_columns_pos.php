@@ -1526,11 +1526,9 @@ return [
         'TAUX_REMU_MAJORE_DATE',
         'TOTAL_HETD',
         'TOTAL_HEURES',
-        'TOTAL_HEURES_PERIODE_ESSAI',
         'TOTAL_HEURES_FORMATION',
         'VOLUME_HORAIRE_INDEX',
         'TOTAL_GLOBAL_HETD',
-        'TOTAL_HEURES_PAYEES',
         'AUTRES_LIBELLES',
     ],
     'TBL_DMEP_LIQUIDATION'                => [

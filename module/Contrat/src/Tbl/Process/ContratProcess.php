@@ -140,22 +140,22 @@ class ContratProcess implements ProcessInterface
         $contrat->historise     = !empty($data['histo_destruction']);
         $contrat->id            = (int)$data['contrat_id'] ?: null;
         $contrat->intervenantId = (int)$data['intervenant_id'];
-        $contrat->validationId  = (int)$data['validation_id'] ?: null;
-        $contrat->annee         = $annee;
-        $contrat->structureId   = (int)$data['structure_id'] ?: null;
-        $parentId               = (int)$data['parent_id'] ?: null;
+//        $contrat->validationId  = (int)$data['validation_id'] ?: null;
+        $contrat->annee       = $annee;
+        $contrat->structureId = (int)$data['structure_id'] ?: null;
+        $parentId             = (int)$data['parent_id'] ?: null;
         if ($parentId) {
             $uuid = $this->generateUUID($contrat->intervenantId, $parentId);
             $contrat->setParent($this->getContrat($contrat->intervenantId, $uuid));
         }
-        $contrat->numeroAvenant   = (int)$data['numero_avenant'];
-        $contrat->debutValidite   = $data['debut_validite'] ? new DateTime($data['debut_validite']) : null;
-        $contrat->finValidite     = $data['fin_validite'] ? new DateTime($data['fin_validite']) : null;
-        $contrat->histoCreation   = $data['histo_creation'] ? new DateTime($data['histo_creation']) : null;
-        $contrat->edite           = $data['edite'] === '1';
-        $contrat->envoye          = $data['envoye'] === '1';
-        $contrat->retourne        = $data['retourne'] === '1';
-        $contrat->signe           = $data['signe'] === '1';
+        $contrat->numeroAvenant = (int)$data['numero_avenant'];
+        $contrat->debutValidite = $data['debut_validite'] ? new DateTime($data['debut_validite']) : null;
+        $contrat->finValidite   = $data['fin_validite'] ? new DateTime($data['fin_validite']) : null;
+        $contrat->histoCreation = $data['histo_creation'] ? new DateTime($data['histo_creation']) : null;
+        $contrat->edite         = $data['edite'] === '1';
+        $contrat->envoye        = $data['envoye'] === '1';
+        $contrat->retourne      = $data['retourne'] === '1';
+        $contrat->signe         = $data['signe'] === '1';
     }
 
 
@@ -670,10 +670,10 @@ class ContratProcess implements ProcessInterface
 
     public function calculLibelles(Contrat $contrat): void
     {
-        $this->calculAutresLibelles($contrat);
+        $contrat->autresLibelles = $this->calculAutresLibelles($contrat);
         if ($contrat->isMission) {
-            $this->calculMissionsLibelles($contrat);
-            $this->calculTypesMissionLibelles($contrat);
+            $contrat->missionsLibelles     = $this->calculMissionsLibelles($contrat);
+            $contrat->typesMissionLibelles = $this->calculTypesMissionLibelles($contrat);
         }
 
     }
@@ -692,7 +692,7 @@ class ContratProcess implements ProcessInterface
 
         sort($libelles); // Tri alphabétique
 
-        $result                 = implode(', ', $libelles);
+        $result                  = implode(', ', $libelles);
         $contrat->autresLibelles = $result;
         return $result;
     }
@@ -711,7 +711,7 @@ class ContratProcess implements ProcessInterface
 
         sort($libelles); // Tri alphabétique
 
-        $result                  = implode(', ', $libelles);
+        $result                    = implode(', ', $libelles);
         $contrat->missionsLibelles = $result;
         return $result;
     }
@@ -730,7 +730,7 @@ class ContratProcess implements ProcessInterface
 
         sort($libelles); // Tri alphabétique
 
-        $result                      = implode(', ', $libelles);
+        $result                        = implode(', ', $libelles);
         $contrat->typesMissionLibelles = $result;
         return $result;
     }
@@ -860,7 +860,9 @@ class ContratProcess implements ProcessInterface
             'validation_id'             => $contrat->validationId,
             'edite'                     => $contrat->edite,
             'signe'                     => $contrat->signe,
-            'autre_libelle'             => null,
+            'autres_libelles'           => $contrat->autresLibelles,
+            'missions_libelles'         => $contrat->missionsLibelles,
+            'types_mission_libelles'    => $contrat->typesMissionLibelles,
             'autres'                    => 0,
             'cm'                        => 0,
             'contrat_id'                => $contrat->id,

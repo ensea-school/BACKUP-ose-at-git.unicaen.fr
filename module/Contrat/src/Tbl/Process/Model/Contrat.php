@@ -71,6 +71,7 @@ class Contrat
     public array     $volumesHoraires = [];
     public float     $totalHeures = 0.0;
 
+    public ?int $validationId = null;
 
 
     public function __construct(?string $uuid = null)

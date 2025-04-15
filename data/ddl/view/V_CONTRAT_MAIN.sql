@@ -94,7 +94,7 @@ SELECT
   OSE_DIVERS.FORMAT_FLOAT(tc.total_heures / 10)                                         "heuresPrimePrecarite",
   OSE_DIVERS.FORMAT_FLOAT(tc.total_heures)                                              "serviceTotal",
   OSE_DIVERS.FORMAT_FLOAT(tc.total_hetd)                                                "hetdContrat",
-  OSE_DIVERS.FORMAT_FLOAT(tc.total_heures + tc.total_heures * tc.taux_conges_payes)     "serviceTotalPaye",
+  OSE_DIVERS.FORMAT_FLOAT(tc.total_heures * (1+tc.taux_conges_payes))                   "serviceTotalPaye",
   OSE_DIVERS.FORMAT_FLOAT(tc.total_heures_formation)                                    "heuresFormation",
 
 

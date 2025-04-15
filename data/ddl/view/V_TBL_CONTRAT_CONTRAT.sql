@@ -1,7 +1,7 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_CONTRAT_CONTRAT AS
 SELECT
     si.contrat actif,
-    a.date_debut annee_date_debut,
+    v.id validatinon_id,
     c.id contrat_id,
     i.id intervenant_id,
     a.id annee_id,

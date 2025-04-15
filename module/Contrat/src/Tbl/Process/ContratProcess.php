@@ -140,6 +140,7 @@ class ContratProcess implements ProcessInterface
         $contrat->historise     = !empty($data['histo_destruction']);
         $contrat->id            = (int)$data['contrat_id'] ?: null;
         $contrat->intervenantId = (int)$data['intervenant_id'];
+        $contrat->validationId  = (int)$data['validation_id'] ?: null;
         $contrat->annee         = $annee;
         $contrat->structureId   = (int)$data['structure_id'] ?: null;
         $parentId               = (int)$data['parent_id'] ?: null;
@@ -856,6 +857,7 @@ class ContratProcess implements ProcessInterface
             'intervenant_id'            => $contrat->intervenantId,
             'actif'                     => $contrat->actif,
             'structure_id'              => $contrat->structureId,
+            'validation_id'             => $contrat->validationId,
             'edite'                     => $contrat->edite,
             'signe'                     => $contrat->signe,
             'autre_libelle'             => null,
@@ -906,6 +908,7 @@ class ContratProcess implements ProcessInterface
             'intervenant_id'            => $contrat->intervenantId,
             'actif'                     => $contrat->actif,
             'structure_id'              => $contrat->structureId,
+            'validation_id'             => $contrat->validationId,
             'edite'                     => $contrat->edite,
             'signe'                     => $contrat->signe,
             'autre_libelle'             => $vh->autreLibelle,

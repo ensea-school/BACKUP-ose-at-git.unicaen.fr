@@ -4,7 +4,7 @@ SELECT
   a.id                                                                                  annee_id,
   s.id                                                                                  structure_id,
   i.id                                                                                  intervenant_id,
-  c.id                                                                                  contrat_id,
+  tc.contrat_id                                                                         contrat_id,
 
 
   -- Champs principaux du contrat
@@ -16,16 +16,16 @@ SELECT
   END                                                                                   "titre",
   CASE
     WHEN tc.edite = 0 AND tyc.code = 'CONTRAT' THEN 'Projet de contrat'
-    WHEN tc.edite = 1 AND tyc.code = 'CONTRAT' THEN 'Contrat n°' || c.id
+    WHEN tc.edite = 1 AND tyc.code = 'CONTRAT' THEN 'Contrat n°' || tc.contrat_id
     WHEN tc.edite = 0 AND tyc.code = 'AVENANT' THEN 'Projet d''avenant'
-    WHEN tc.edite = 1 AND tyc.code = 'AVENANT' THEN 'Avenant n°' || c.id || '.' || c.numero_avenant
+    WHEN tc.edite = 1 AND tyc.code = 'AVENANT' THEN 'Avenant n°' || tc.contrat_id || '.' || tc.numero_avenant
   END                                                                                   "titreCourt",
-  c.numero_avenant                                                                      "numeroAvenant",
+  tc.numero_avenant                                                                     "numeroAvenant",
   to_char(sysdate, 'dd/mm/YYYY - hh24:mi:ss')                                           "horodatage",
   a.libelle                                                                             "annee",
   s.libelle_court                                                                       "composante",
   CASE
-    WHEN c.structure_id <> COALESCE(cp.structure_id, 0) THEN 'modifié'
+    WHEN tc.structure_id <> COALESCE(cp.structure_id, 0) THEN 'modifié'
     ELSE 'complété'
   END                                                                                   "modifieComplete",
   CASE WHEN tyc.code = 'CONTRAT' THEN 1 ELSE NULL END                                   "contrat1",
@@ -46,12 +46,11 @@ SELECT
     ELSE ''
   END                                                                                   "exemplaire2",
   to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                       "dateSignature",
-  to_char(c.debut_validite, 'dd/mm/YYYY')                                               "debutValidite",
-  to_char(c.fin_validite, 'dd/mm/YYYY')                                                 "finValidite",
+  to_char(tc.date_debut, 'dd/mm/YYYY')                                                  "debutValidite",
+  to_char(tc.date_fin, 'dd/mm/YYYY')                                                    "finValidite",
   to_char(cp.fin_validite, 'dd/mm/YYYY')                                                "finValiditeParent",
   to_char(tc.date_creation, 'dd/mm/YYYY')                                               "date_creation",
   to_char(cp.date_retour_signe, 'dd/mm/YYYY')                                           "date_contrat_lie",
-  tc.autres_libelles                                                                    "autresLibelles",
   CASE
     WHEN tc.autre_libelle IS NOT NULL
       THEN '*Dont type(s) intervention(s) : ' || tc.autre_libelle
@@ -109,10 +108,9 @@ SELECT
 FROM
             tbl_contrat        tc
        JOIN type_contrat      tyc ON tyc.id = tc.type_contrat_id -- à garder ou non ? attention au changement de type de contrat pour les projets...
-       JOIN contrat             c ON c.id = tc.contrat_id
        JOIN annee               a ON a.id = tc.annee_id
-       JOIN structure           s ON s.id = c.structure_id
-       JOIN intervenant         i ON i.id = c.intervenant_id
+       JOIN structure           s ON s.id = tc.structure_id
+       JOIN intervenant         i ON i.id = tc.intervenant_id
        JOIN statut             si ON si.id = i.statut_id
        JOIN taux_remu          tr ON tr.id = tc.taux_remu_id
        JOIN taux_remu         trm ON trm.id = tc.taux_remu_majore_id
@@ -120,9 +118,7 @@ FROM
   LEFT JOIN civilite          civ ON civ.id = COALESCE(d.civilite_id,i.civilite_id)
   LEFT JOIN pays                p ON p.id = COALESCE(d.pays_nationalite_id, i.pays_nationalite_id)
   LEFT JOIN contrat            cp ON cp.id = tc.contrat_parent_id
-  LEFT JOIN validation          v ON v.id = c.validation_id AND v.histo_destruction IS NULL
-
-  LEFT JOIN mission             m ON m.id = tc.mission_id -- à supprimer une fois lm viré
+  LEFT JOIN validation          v ON v.id = tc.validation_id
 WHERE
-  c.histo_destruction IS NULL
+  tc.contrat_id IS NOT NULL
   AND tc.volume_horaire_index = 0

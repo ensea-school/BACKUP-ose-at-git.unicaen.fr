@@ -66,10 +66,12 @@ class Contrat
 
     public float $tauxCongesPayes = 1.0;
     public ?string $autreLibelles = null;
+    public ?string $missionLibelle = null;
+    public ?string $typeMissionLibelle = null;
 
     /** @var VolumeHoraire[] */
-    public array     $volumesHoraires = [];
-    public float     $totalHeures = 0.0;
+    public array  $volumesHoraires = [];
+    public float  $totalHeures = 0.0;
     public ?float $totalHeuresPeriodeEssai = null;
 
 

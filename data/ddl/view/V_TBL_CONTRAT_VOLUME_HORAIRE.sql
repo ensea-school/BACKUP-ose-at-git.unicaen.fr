@@ -25,7 +25,9 @@ SELECT
   vh.heures                                                                       heures,
   frv.total                                                                       hetd,
 
-  CASE WHEN ti.code NOT IN ('CM', 'TD', 'TP') THEN ti.code ELSE NULL END          autre_libelle
+  CASE WHEN ti.code NOT IN ('CM', 'TD', 'TP') THEN ti.code ELSE NULL END          autre_libelle,
+  null                                                                            type_mission_libelle,
+  null                                                                            mission_libelle
 FROM
             volume_horaire                   vh
        JOIN service                           s ON s.id = vh.service_id
@@ -75,7 +77,9 @@ SELECT
   vh.heures                                                                       heures,
   frv.total                                                                       hetd,
 
-  CASE WHEN ti.code NOT IN ('CM', 'TD', 'TP') THEN ti.code ELSE NULL END          autre_libelle
+  CASE WHEN ti.code NOT IN ('CM', 'TD', 'TP') THEN ti.code ELSE NULL END          autre_libelle,
+  null                                                                            type_mission_libelle,
+  null                                                                            mission_libelle
 FROM
             volume_horaire                   vh
        JOIN service                           s ON s.id = vh.service_id AND s.element_pedagogique_id IS NULL
@@ -123,7 +127,9 @@ SELECT
   vhr.heures                                                                      heures,
   frvr.total                                                                      hetd,
 
-  fon_ref.libelle_long                                                            autre_libelle
+  fon_ref.libelle_long                                                            autre_libelle,
+  null                                                                            type_mission_libelle,
+  null                                                                            mission_libelle
 FROM
             volume_horaire_ref          vhr
        JOIN service_referentiel         sr ON sr.id = vhr.service_referentiel_id
@@ -172,7 +178,9 @@ SELECT
   vhm.heures                                                                      heures,
   vhm.heures                                                                      hetd,
 
-  tm.libelle                                                                      autre_libelle
+  m.libelle_mission || ' (' || tm.libelle || ')'                                         autre_libelle,
+  tm.libelle                                                                     type_mission_libelle,
+  m.libelle_mission                                                                      mission_libelle
 FROM
        volume_horaire_mission            vhm
   JOIN mission                             m ON m.id = vhm.mission_id

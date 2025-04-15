@@ -279,6 +279,8 @@ class ContratProcess implements ProcessInterface
         $vh->heures                 = (float)$data['heures'];
         $vh->hetd                   = (float)$data['hetd'];
         $vh->autreLibelle           = $data['autre_libelle'];
+        $vh->missionLibelle         = $data['mission_libelle'];
+        $vh->typeMissionLibelle     = $data['type_mission_libelle'];
     }
 
 
@@ -305,7 +307,7 @@ class ContratProcess implements ProcessInterface
             $this->calculTotalHeures($contrat);
             $this->calculTermine($contrat);
             $this->calculTauxCongesPayes($contrat);
-            $this->calculAutreLibelles($contrat);
+            $this->calculLibelles($contrat);
             $this->calculActif($contrat);
         }
     }
@@ -666,13 +668,24 @@ class ContratProcess implements ProcessInterface
 
 
 
+    public function calculLibelles(Contrat $contrat): void
+    {
+        $this->calculAutreLibelles($contrat);
+        if ($contrat->isMission) {
+            $this->calculMissionLibelles($contrat);
+            $this->calculTypeMissionLibelles($contrat);
+        }
+
+    }
+
+
+
     public function calculAutreLibelles(Contrat $contrat): string
     {
         $libelles = [];
 
         foreach ($contrat->volumesHoraires as $vh) {
             if (!empty($vh->autreLibelle)) {
-                // Todo : reflechir si pour les missions il faut afficher dans autreLibelles "Mission (Type Mission)"
                 $libelles[$vh->autreLibelle] = $vh->autreLibelle;
             }
         }
@@ -681,6 +694,44 @@ class ContratProcess implements ProcessInterface
 
         $result                 = implode(', ', $libelles);
         $contrat->autreLibelles = $result;
+        return $result;
+    }
+
+
+
+    public function calculMissionLibelles(Contrat $contrat): string
+    {
+        $libelles = [];
+
+        foreach ($contrat->volumesHoraires as $vh) {
+            if (!empty($vh->missionLibelle)) {
+                $libelles[$vh->missionLibelle] = $vh->missionLibelle;
+            }
+        }
+
+        sort($libelles); // Tri alphabétique
+
+        $result                  = implode(', ', $libelles);
+        $contrat->missionLibelle = $result;
+        return $result;
+    }
+
+
+
+    public function calculTypeMissionLibelles(Contrat $contrat): string
+    {
+        $libelles = [];
+
+        foreach ($contrat->volumesHoraires as $vh) {
+            if (!empty($vh->typeMissionLibelle)) {
+                $libelles[$vh->typeMissionLibelle] = $vh->typeMissionLibelle;
+            }
+        }
+
+        sort($libelles); // Tri alphabétique
+
+        $result                      = implode(', ', $libelles);
+        $contrat->typeMissionLibelle = $result;
         return $result;
     }
 

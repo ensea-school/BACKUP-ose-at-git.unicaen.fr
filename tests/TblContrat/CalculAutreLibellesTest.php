@@ -26,22 +26,22 @@ final class CalculAutreLibellesTest extends TblContratTestCase
         $contrat1->parent    = null;
         // Création des objets VolumeHoraire
         $volumeHoraire1               = new VolumeHoraire();
-        $volumeHoraire1->autreLibelle = 'test2';
+        $volumeHoraire1->autreLibelle = 'test2 (mission2)';
 
         $volumeHoraire2               = new VolumeHoraire();
-        $volumeHoraire2->autreLibelle = 'test1';
+        $volumeHoraire2->autreLibelle = 'test1 (mission1)';
 
 
         $volumeHoraire3               = new VolumeHoraire();
-        $volumeHoraire3->autreLibelle = 'test2';
+        $volumeHoraire3->autreLibelle = 'test2 (mission2)';
 
         $contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3];
 
 
-        $this->process->calculAutreLibelles($contrat1);
+        $this->process->calculAutresLibelles($contrat1);
 
 
-        self::assertEquals('test1, test2', $contrat1->autresLibelles);
+        self::assertEquals('test1 (mission1), test2 (mission2)', $contrat1->autresLibelles);
 
     }
 
@@ -82,7 +82,7 @@ final class CalculAutreLibellesTest extends TblContratTestCase
         $contrat1->volumesHoraires    = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3, $volumeHoraire4, $volumeHoraire5];
 
 
-        $this->process->calculAutreLibelles($contrat1);
+        $this->process->calculAutresLibelles($contrat1);
 
 
         self::assertEquals('test1, test2', $contrat1->autresLibelles);

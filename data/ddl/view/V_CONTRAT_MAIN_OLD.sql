@@ -131,7 +131,7 @@ FROM (  SELECT c.*,
                )                                                                                                                                          "adresse",
                COALESCE(d.numero_insee, i.numero_insee)                                                                                                       "numInsee",
                si.libelle                                                                                                                                     "statut",
-               REPLACE(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',')                                                            "totalHETD",
+               OSE_DIVERS.FORMAT_FLOAT(COALESCE(c.total_hetd, fr.total, 0))                                                            "totalHETD",
                tblc.taux_Remu_Valeur                                                                                           "tauxHoraireValeur",
                to_char(tblc.taux_Remu_Date,'dd/mm/YYYY')                                                                                                    "tauxHoraireDate",
                tr.id                                                                                                                                        "tauxId",
@@ -155,15 +155,15 @@ FROM (  SELECT c.*,
                                                            s.adresse_pays_id
                                                        ), chr(13), ' - ')
                  ELSE '' END                                                                                                                                "exemplaire2",
-               REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')                                                                 "serviceTotal",
-               REPLACE(ltrim(to_char(COALESCE(hs."hetdContrat", 0), '999999.00')), '.', ',')                                                                 "hetdContrat",
+               OSE_DIVERS.FORMAT_FLOAT(COALESCE(hs."serviceTotal", 0))                                                                 "serviceTotal",
+               OSE_DIVERS.FORMAT_FLOAT(COALESCE(hs."hetdContrat", 0))                                                                 "hetdContrat",
 
                CASE
                  WHEN COALESCE(hs."serviceTotal"/10, 0) < 1
-                   THEN CONCAT('0', REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ','))
-                 ELSE REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ',')
+                   THEN OSE_DIVERS.FORMAT_FLOAT(COALESCE(hs."serviceTotal"/10, 0))
+                 ELSE OSE_DIVERS.FORMAT_FLOAT(COALESCE(hs."serviceTotal"/10, 0))
                  END                                                                                                                                         "totalDiviseParDix",
-               REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"+(hs."serviceTotal"/10), 0), '999999.00')), '.', ',')                                          "serviceTotalPaye",
+               OSE_DIVERS.FORMAT_FLOAT(COALESCE(hs."serviceTotal"+(hs."serviceTotal"/10), 0))                                          "serviceTotalPaye",
                CASE
                  WHEN la.autre_libelles IS NOT NULL
                    THEN '*Dont type(s) intervention(s) : ' || la.autre_libelles END                                                                       "legendeAutresHeures",

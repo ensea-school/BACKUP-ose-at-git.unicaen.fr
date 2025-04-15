@@ -1,10 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace TblContrat;
+namespace tests\TblContrat;
 
 use Application\Entity\Db\Parametre;
 use Contrat\Tbl\Process\Model\Contrat;
-use tests\TblContrat\TblContratTestCase;
 
 final class CalculTauxCongesPayesTest extends TblContratTestCase
 {

@@ -148,7 +148,6 @@ class ContratProcess implements ProcessInterface
             $contrat->setParent($this->getContrat($contrat->intervenantId, $uuid));
         }
         $contrat->numeroAvenant   = (int)$data['numero_avenant'];
-        $contrat->totalGlobalHetd = (int)$data['total_global_hetd'];
         $contrat->debutValidite   = $data['debut_validite'] ? new DateTime($data['debut_validite']) : null;
         $contrat->finValidite     = $data['fin_validite'] ? new DateTime($data['fin_validite']) : null;
         $contrat->histoCreation   = $data['histo_creation'] ? new DateTime($data['histo_creation']) : null;
@@ -338,7 +337,7 @@ class ContratProcess implements ProcessInterface
     {
 
         $contratPrincipaux = [];
-        //On ne recupere que les contrats pour les traité eux et leur avenants ensemble plus tard
+        // On ne récupère que les contrats pour les traiter eux et leurs avenants ensemble plus tard
         foreach ($contrats as $contrat) {
             /* @var Contrat $contrat */
             if (empty($contrat->parent) && $contrat->isMission && $contrat->id != null) {
@@ -346,7 +345,7 @@ class ContratProcess implements ProcessInterface
             }
         }
 
-        //On cherche les dates de missions les plus avancés et la date de contrat la plus avancé
+        // On cherche les dates de missions les plus avancés et la date de contrat la plus avancé
         foreach ($contratPrincipaux as $contrat) {
             $dateDebutContrat = $contrat->debutValidite;
             $dateMissions     = [];
@@ -361,9 +360,9 @@ class ContratProcess implements ProcessInterface
                     }
                 }
             }
-            //Pour les missions qui dépassent on cherche si un avenant non édité existe avec des heures pour ces missions pour modifié la date de fin
+            // Pour les missions qui dépassent on cherche si un avenant non édité existe avec des heures pour ces missions pour modifier la date de fin
             $dateMissions = $this->ChangementDateAvenantNonEdite($dateMissions, $contrat);
-            //Si aucun avenant n'existe on créer un avenant sur la date la plus éloigné pour une prolongation de tous ceux qui n'ont pas d'avenant
+            // Si aucun avenant n'existe on créer un avenant sur la date la plus éloignée pour une prolongation de tous ceux qui n'ont pas d'avenant
             if (!empty($dateMissions)) {
                 $this->CreationAvenantProlongation($contrat, $dateMissions, $dateDebutContrat, $intervenantId);
             }
@@ -523,7 +522,7 @@ class ContratProcess implements ProcessInterface
                         throw new Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
                     }
                     // En enseignement on a qu'un seul contrat donc un avenant peut s'attacher a un contrat d'une autre composante
-                    //Tant que c'est un contrat et pas un avenant il est un parent potentiel
+                    // Tant que c'est un contrat et pas un avenant il est un parent potentiel
                     return true;
             }
         }
@@ -632,7 +631,7 @@ class ContratProcess implements ProcessInterface
         $contratNumero = 0;
         if ($contrat->parent) {
             foreach ($contrat->parent->avenants as $contratParser) {
-                //On ne s'interesse qu'au avenant étant deja créer
+                // On ne s'intéresse qu'aux avenants étant deja créés
                 if ($contratParser->id && $contratParser->numeroAvenant > $contratNumero) {
                     $contratNumero = $contratParser->numeroAvenant;
                 }
@@ -748,29 +747,14 @@ class ContratProcess implements ProcessInterface
         }
 
         $contrat->totalHeures = $totalHeures;
-        if ($contrat->parent == null) {
-            //total d'heure du contrat divisé par 10, n'est valable que sur les contrats et pas les avenants
-            $contrat->totalHeuresPeriodeEssai = $totalHeures / 10;
-        }
     }
 
 
 
     public function calculTotalHETD(Contrat $contrat): void
     {
-        // ne pas prendre en compte les projets amont
-        if ($contrat->id && $contrat->edite) {
-            //Si le contrat existe on recupère le total hetd de la table contrat
-            if ($contrat->parent == NULL) {
-                $contrat->totalHetd = $contrat->totalGlobalHetd;
-                return;
-            }
-
-        }
-
         $totalGlobal  = 0;
         $totalContrat = 0;
-
 
         //On ajoute les heures du contrat pour lequel on cherche
         foreach ($contrat->volumesHoraires as $vh) {
@@ -886,6 +870,7 @@ class ContratProcess implements ProcessInterface
             'total_hetd'                => $contrat->totalHetd,
             'total_global_hetd'         => $contrat->totalGlobalHetd,
             'heures'                    => 0,
+            'total_heures'              => $contrat->totalHeures,
             'mission_id'                => $contrat->getMissionId(),
             'service_id'                => null,
             'service_referentiel_id'    => null,
@@ -931,7 +916,10 @@ class ContratProcess implements ProcessInterface
             'date_debut'                => $contrat->debutValidite,
             'date_fin'                  => $contrat->finValidite,
             'hetd'                      => $vh->hetd,
+            'total_hetd'                => $contrat->totalHetd,
+            'total_global_hetd'         => $contrat->totalGlobalHetd,
             'heures'                    => $vh->heures,
+            'total_heures'              => $contrat->totalHeures,
             'mission_id'                => $vh->missionId,
             'service_id'                => $vh->serviceId,
             'service_referentiel_id'    => $vh->serviceReferentielId,
@@ -1008,7 +996,7 @@ class ContratProcess implements ProcessInterface
             'where'              => $params,
             'return-insert-data' => false,
             'transaction'        => !isset($params['INTERVENANT_ID']),
-            'callback'           => function (int $progress, int $total) use ($tableauBord) {
+            'callback'           => function (string $action, int $progress, int $total) use ($tableauBord) {
                 $tableauBord->onAction(Event::PROGRESS, $progress, $total);
             },
         ];

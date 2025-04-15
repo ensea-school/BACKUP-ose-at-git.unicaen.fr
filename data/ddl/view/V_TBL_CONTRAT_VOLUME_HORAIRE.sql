@@ -175,9 +175,13 @@ SELECT
   vhm.heures                                                                      heures,
   vhm.heures                                                                      hetd,
 
-  m.libelle_mission || ' (' || tm.libelle || ')'                                         autre_libelle,
-  tm.libelle                                                                     type_mission_libelle,
-  m.libelle_mission                                                                      mission_libelle
+  CASE WHEN
+    m.libelle_mission IS NOT NULL
+    THEN m.libelle_mission || ' (' || tm.libelle || ')'
+    ELSE tm.libelle
+  END autre_libelle,
+  tm.libelle                                                                      type_mission_libelle,
+  COALESCE(m.libelle_mission, tm.libelle)                                         mission_libelle
 FROM
        volume_horaire_mission            vhm
   JOIN mission                             m ON m.id = vhm.mission_id

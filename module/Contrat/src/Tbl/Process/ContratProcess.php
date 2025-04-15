@@ -864,6 +864,8 @@ class ContratProcess implements ProcessInterface
             'date_debut'                => $contrat->debutValidite,
             'date_fin'                  => $contrat->finValidite,
             'hetd'                      => $vh->hetd,
+            'total_hetd'                => $contrat->totalHetd,
+            'total_global_hetd'         => $contrat->totalGlobalHetd,
             'heures'                    => $vh->heures,
             'mission_id'                => $vh->missionId,
             'service_id'                => $vh->serviceId,

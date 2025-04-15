@@ -669,17 +669,17 @@ class ContratProcess implements ProcessInterface
 
     public function calculLibelles(Contrat $contrat): void
     {
-        $this->calculAutreLibelles($contrat);
+        $this->calculAutresLibelles($contrat);
         if ($contrat->isMission) {
-            $this->calculMissionLibelles($contrat);
-            $this->calculTypeMissionLibelles($contrat);
+            $this->calculMissionsLibelles($contrat);
+            $this->calculTypesMissionLibelles($contrat);
         }
 
     }
 
 
 
-    public function calculAutreLibelles(Contrat $contrat): string
+    public function calculAutresLibelles(Contrat $contrat): string
     {
         $libelles = [];
 
@@ -692,13 +692,13 @@ class ContratProcess implements ProcessInterface
         sort($libelles); // Tri alphabétique
 
         $result                 = implode(', ', $libelles);
-        $contrat->autreLibelles = $result;
+        $contrat->autresLibelles = $result;
         return $result;
     }
 
 
 
-    public function calculMissionLibelles(Contrat $contrat): string
+    public function calculMissionsLibelles(Contrat $contrat): string
     {
         $libelles = [];
 
@@ -711,13 +711,13 @@ class ContratProcess implements ProcessInterface
         sort($libelles); // Tri alphabétique
 
         $result                  = implode(', ', $libelles);
-        $contrat->missionLibelle = $result;
+        $contrat->missionsLibelles = $result;
         return $result;
     }
 
 
 
-    public function calculTypeMissionLibelles(Contrat $contrat): string
+    public function calculTypesMissionLibelles(Contrat $contrat): string
     {
         $libelles = [];
 
@@ -730,7 +730,7 @@ class ContratProcess implements ProcessInterface
         sort($libelles); // Tri alphabétique
 
         $result                      = implode(', ', $libelles);
-        $contrat->typeMissionLibelle = $result;
+        $contrat->typesMissionLibelles = $result;
         return $result;
     }
 

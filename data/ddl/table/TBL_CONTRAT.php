@@ -225,6 +225,18 @@ return [
             'position'    => 43,
             'commentaire' => NULL,
         ],
+        'MISSIONS_LIBELLES'           => [
+            'name'        => 'MISSIONS_LIBELLES',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 1000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 42,
+            'commentaire' => NULL,
+        ],
         'SERVICE_ID'                => [
             'name'        => 'SERVICE_ID',
             'type'        => 'int',

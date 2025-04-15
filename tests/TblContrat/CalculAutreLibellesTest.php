@@ -41,7 +41,7 @@ final class CalculAutreLibellesTest extends TblContratTestCase
         $this->process->calculAutreLibelles($contrat1);
 
 
-        self::assertEquals('test1, test2', $contrat1->autreLibelles);
+        self::assertEquals('test1, test2', $contrat1->autresLibelles);
 
     }
 
@@ -85,7 +85,7 @@ final class CalculAutreLibellesTest extends TblContratTestCase
         $this->process->calculAutreLibelles($contrat1);
 
 
-        self::assertEquals('test1, test2', $contrat1->autreLibelles);
+        self::assertEquals('test1, test2', $contrat1->autresLibelles);
 
 
     }

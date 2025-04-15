@@ -213,6 +213,18 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
+        'NUMERO_AVENANT'            => [
+            'name'        => 'NUMERO_AVENANT',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 2,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 43,
+            'commentaire' => NULL,
+        ],
         'SERVICE_ID'                => [
             'name'        => 'SERVICE_ID',
             'type'        => 'int',

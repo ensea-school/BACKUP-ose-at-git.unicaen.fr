@@ -1530,6 +1530,7 @@ return [
         'VOLUME_HORAIRE_INDEX',
         'TOTAL_GLOBAL_HETD',
         'AUTRES_LIBELLES',
+        'NUMERO_AVENANT',
     ],
     'TBL_DMEP_LIQUIDATION'                => [
         'ID',

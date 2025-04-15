@@ -3,7 +3,6 @@
 namespace Intervenant\Form;
 
 use Application\Entity\Db\EtatSortie;
-use Application\Entity\Db\Parametre;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
@@ -11,10 +10,7 @@ use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
-use Signature\Service\SignatureFlowServiceAwareTrait;
-use UnicaenApp\Util;
-use UnicaenSignature\Entity\Data\LevelInfo;
-use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
+
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -131,8 +127,8 @@ class StatutSaisieForm extends AbstractForm
         ];
 
         for ($i = 1; $i <= 5; $i++) {
-            $champsAutresElements[] = 'dossierAutre' . $i;
-            $champAutre = $this->getServiceDossierAutre()->get($i);
+            $champsAutresElements[]      = 'dossierAutre' . $i;
+            $champAutre                  = $this->getServiceDossierAutre()->get($i);
             $labels['dossierAutre' . $i] = $champAutre->getLibelle();
             if ($champAutre->isObligatoire()) {
                 $labels['dossierAutre' . $i] .= ' (Obligatoire)';
@@ -277,9 +273,9 @@ class StatutSaisieForm extends AbstractForm
 
         foreach ($dpElements as $dpElement) {
             $valueOptions = [
-                0 => 'Non demandé(e)',
-                1 => 'Demandé(e)',
-                2 => 'Demandé(e) aprés le recrutement',
+                Statut::DONNEES_PERSONNELLES_NON_DEMANDEES              => 'Non demandé(e)',
+                Statut::DONNEES_PERSONNELLES_DEMANDEES                  => 'Demandé(e)',
+                Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT => 'Demandé(e) aprés le recrutement',
             ];
 
             $this->spec([$dpElement => [
@@ -325,7 +321,9 @@ class StatutSaisieForm extends AbstractForm
 
                         $access = $statut->{$getter}();
                         $visu   = $statut->{$getter . 'Visualisation'}();
-                        $edit   = method_exists($statut, $getter . 'Edition') ? $statut->{$getter . 'Edition'}() : false;
+                        $edit   = method_exists($statut, $getter . 'Edition')
+                            ? $statut->{$getter . 'Edition'}()
+                            : false;
 
                         if ($edit && $visu && $access) {
                             return 'edition';
@@ -344,10 +342,8 @@ class StatutSaisieForm extends AbstractForm
                         switch ($value) {
                             case 'edition':
                                 $edit = true;
-                                // no break
                             case 'visualisation':
                                 $visu = true;
-                                // no break
                             case 'active':
                                 $access = true;
                         }
@@ -366,7 +362,7 @@ class StatutSaisieForm extends AbstractForm
 
         foreach ($champsAutresElements as $champsAutresElement) {
             $valueOptions = [
-                'desactive'     => 'Désactivé',
+                'desactive'      => 'Désactivé',
                 'active1'        => 'Activé mais non visible par l\'intervenant',
                 'visualisation1' => 'Activé et visible par l\'intervenant',
                 'edition1'       => 'Activé et modifiable par l\'intervenant',
@@ -401,19 +397,25 @@ class StatutSaisieForm extends AbstractForm
                         }
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
-                        $access = 0;
+                        $access = Statut::DONNEES_PERSONNELLES_NON_DEMANDEES;
                         $visu   = false;
                         $edit   = false;
 
                         if (str_contains($value, 'edition')) {
-                            $edit = true;
-                            $visu = true;
-                            $access = str_contains($value, '1')? 1 : 2;
+                            $edit   = true;
+                            $visu   = true;
+                            $access = str_contains($value, '1')
+                                ? Statut::DONNEES_PERSONNELLES_DEMANDEES
+                                : Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT;
                         } elseif (str_contains($value, 'visualisation')) {
-                            $visu = true;
-                            $access = str_contains($value, '1')? 1 : 2;
-                        } elseif (str_contains($value, 'active')) {
-                            $access = str_contains($value, '1')? 1 : 2;
+                            $visu   = true;
+                            $access = str_contains($value, '1')
+                                ? Statut::DONNEES_PERSONNELLES_DEMANDEES
+                                : Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT;
+                        } elseif (str_contains($value, 'active') && !str_contains($value, 'desactive')) {
+                            $access = str_contains($value, '1')
+                                ? Statut::DONNEES_PERSONNELLES_DEMANDEES
+                                : Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT;
                         }
 
                         $setter = 'set' . ucfirst($name);
@@ -428,7 +430,7 @@ class StatutSaisieForm extends AbstractForm
         }
 
         $this->spec([
-                        'conseilRestreint'  => [
+                        'conseilRestreint'      => [
                             'type'     => 'Select',
                             'name'     => 'conseilRestreint',
                             'options'  => [
@@ -457,7 +459,6 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'visualisation':
                                             $visu = true;
-                                            // no break
                                         case 'active':
                                             $access = true;
                                     }
@@ -466,7 +467,7 @@ class StatutSaisieForm extends AbstractForm
                                 },
                             ],
                         ],
-                        'conseilAcademique' => [
+                        'conseilAcademique'     => [
                             'type'     => 'Select',
                             'name'     => 'conseilAcademique',
                             'options'  => [
@@ -495,7 +496,6 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'visualisation':
                                             $visu = true;
-                                            // no break
                                         case 'active':
                                             $access = true;
                                     }
@@ -504,7 +504,7 @@ class StatutSaisieForm extends AbstractForm
                                 },
                             ],
                         ],
-                        'contrat'           => [
+                        'contrat'               => [
                             'type'     => 'Select',
                             'name'     => 'contrat',
                             'options'  => [
@@ -543,13 +543,10 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'generation':
                                             $generation = true;
-                                            // no break
                                         case 'depot':
                                             $depot = true;
-                                            // no break
                                         case 'visualisation':
                                             $visu = true;
-                                            // no break
                                         case 'active':
                                             $access = true;
                                     }
@@ -561,22 +558,16 @@ class StatutSaisieForm extends AbstractForm
                             ],
                         ],
                         //TODO : Créer un validateur pour le rendre false que quand contrat desactivé
-                        'contratEtatSortie' => [
+                        'contratEtatSortie'     => [
                             'input' => [
                                 'required' => false,
                             ],
                         ],
-                        'avenantEtatSortie' => [
+                        'avenantEtatSortie'     => [
                             'input' => [
                                 'required' => false,
                             ],
                         ],
-                        'tauxRemu'          => [
-                            'input' => [
-                                'required' => false,
-                            ],
-                        ],
-
                         'modificationServiceDu' => [
                             'type'     => 'Select',
                             'name'     => 'modificationServiceDu',
@@ -606,7 +597,6 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'visualisation':
                                             $visu = true;
-                                            // no break
                                         case 'active':
                                             $access = true;
                                     }

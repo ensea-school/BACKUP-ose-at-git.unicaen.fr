@@ -32,6 +32,12 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     const ENSEIGNEMENT_MODALITE_SEMESTRIEL = 'semestriel';
 
+    const DONNEES_PERSONNELLES_NON_DEMANDEES              = 0;
+    const DONNEES_PERSONNELLES_DEMANDEES                  = 1;
+    const DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT = 2;
+
+    const CODE_SITUATION_MATRIMONIALE_CELIBATAIRE = 'CEL';
+
     use ParametreEntityTrait;
     use TypeIntervenantAwareTrait;
     use EntityManagerAwareTrait;

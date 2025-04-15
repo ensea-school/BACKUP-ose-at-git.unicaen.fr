@@ -25,6 +25,12 @@
         <field name="completudeInsee" type="boolean" column="COMPLETUDE_INSEE" nullable="false"/>
         <field name="completudeBanque" type="boolean" column="COMPLETUDE_BANQUE" nullable="false"/>
         <field name="completudeEmployeur" type="boolean" column="COMPLETUDE_EMPLOYEUR" nullable="false"/>
-        <field name="completudeAutres" type="boolean" column="COMPLETUDE_AUTRES" nullable="false"/>
+        <field name="completudeAutre1" type="boolean" column="COMPLETUDE_AUTRE_1" nullable="false"/>
+        <field name="completudeAutre2" type="boolean" column="COMPLETUDE_AUTRE_2" nullable="false"/>
+        <field name="completudeAutre3" type="boolean" column="COMPLETUDE_AUTRE_3" nullable="false"/>
+        <field name="completudeAutre4" type="boolean" column="COMPLETUDE_AUTRE_4" nullable="false"/>
+        <field name="completudeAutre5" type="boolean" column="COMPLETUDE_AUTRE_5" nullable="false"/>
+        <field name="completudeAvantRecrutement" type="boolean" column="COMPLETUDE_AVANT_RECRUTEMENT" nullable="false"/>
+        <field name="completudeApresRecrutement" type="boolean" column="COMPLETUDE_APRES_RECRUTEMENT" nullable="false"/>
     </entity>
 </doctrine-mapping>

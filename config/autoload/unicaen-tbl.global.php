@@ -269,18 +269,18 @@ return [
                     'VOLUME_HORAIRE_REF_ID',
                 ],
                 'key_values_if_null' => [
-                    'STRUCTURE_ID' => 0,
-                    'CONTRAT_ID' => 0,
+                    'STRUCTURE_ID'              => 0,
+                    'CONTRAT_ID'                => 0,
                     'CONTRAT_PARENT_ID',
                     'VOLUME_HORAIRE_MISSION_ID' => 0,
-                    'VOLUME_HORAIRE_ID' => 0,
-                    'VOLUME_HORAIRE_REF_ID' => 0,
+                    'VOLUME_HORAIRE_ID'         => 0,
+                    'VOLUME_HORAIRE_REF_ID'     => 0,
                 ],
             ],
 
             'dossier' => [
                 'order'   => 8,
-                'process' => 'DbDiff',
+                'process' => \Dossier\Tbl\Process\DossierProcess::class,
                 'cols'    => [
                     'ANNEE_ID',
                     'INTERVENANT_ID',
@@ -296,6 +296,8 @@ return [
                     'COMPLETUDE_BANQUE',
                     'COMPLETUDE_EMPLOYEUR',
                     'COMPLETUDE_AUTRES',
+                    'COMPLETUDE',
+                    'COMPLETUDE_POST_RECRUTEMENT',
                 ],
                 'key'     => [
                     'INTERVENANT_ID',

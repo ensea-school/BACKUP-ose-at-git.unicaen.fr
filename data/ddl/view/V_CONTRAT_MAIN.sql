@@ -49,8 +49,8 @@ SELECT
   to_char(tc.date_debut, 'dd/mm/YYYY')                                                  "debutValidite",
   to_char(tc.date_fin, 'dd/mm/YYYY')                                                    "finValidite",
   to_char(cp.fin_validite, 'dd/mm/YYYY')                                                "finValiditeParent",
-  to_char(tc.date_creation, 'dd/mm/YYYY')                                               "date_creation",
-  to_char(cp.date_retour_signe, 'dd/mm/YYYY')                                           "date_contrat_lie",
+  to_char(tc.date_creation, 'dd/mm/YYYY')                                               "dateCreation",
+  to_char(cp.date_retour_signe, 'dd/mm/YYYY')                                           "dateContratLie",
   CASE
     WHEN tc.autre_libelle IS NOT NULL
       THEN '*Dont type(s) intervention(s) : ' || tc.autre_libelle
@@ -84,7 +84,7 @@ SELECT
     )
   )                                                                                     "adresse",
   COALESCE(d.numero_insee, i.numero_insee)                                              "numInsee",
-  p.libelle                                                                             "pays_nationalite",
+  p.libelle                                                                             "paysNationalite",
 
 
   -- Données portant sur les heures

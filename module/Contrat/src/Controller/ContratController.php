@@ -175,8 +175,9 @@ class ContratController extends AbstractController
             throw new LogicException('L\'intervenant n\'est pas précisé');
         }
 
-        $volumeHorairesTotal = $this->getServiceTblContrat()->getVolumeTotalCreationContratByUuid($uuid);
-        $contrat = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal);
+        $volumeHorairesCreation = $this->getServiceTblContrat()->getVolumeContratByUuid($uuid);
+        $contrat = new Contrat();
+        $contrat = $this->getProcessusContrat()->creer($contrat, $volumeHorairesCreation);
 
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
@@ -262,12 +263,8 @@ class ContratController extends AbstractController
             return new MessengerViewModel;
         }
 
-        if ($this->getProcessusContrat()->doitEtreRequalifie($contrat)) {
-            $message = "<p><strong>NB :</strong> à l'issue de sa validation, " . lcfirst($contrat->toString(true)) .
-                " deviendra un avenant car un contrat a déjà été validé par une autre composante.</p>" .
-                "<p><strong>Vous devrez donc impérativement imprimer à nouveau le document !</strong></p>";
-            $this->flashMessenger()->addWarningMessage($message);
-        }
+        $volumeHorairesContrat = $this->getServiceTblContrat()->getVolumeContratByContratId($contrat->getId());
+        $contrat = $this->getProcessusContrat()->creer($contrat, $volumeHorairesContrat);
 
         if ($this->getRequest()->isPost()) {
             try {

@@ -69,22 +69,27 @@ class TblContratService extends AbstractEntityService
 
 
 
-    public function getVolumeTotalCreationContratByUuid(string $uuid): ?array
+    public function getVolumeContratByUuid(string $uuid): ?array
     {
         $em = $this->getEntityManager();
 
-        $dql = 'SELECT SUM(tblc.hetd) AS hetdTotal, tblc.uuid, i.id AS intervenantId, s.id AS structureId, MIN(tblc.dateDebut) AS dateDebut, MAX(tblc.dateFin) AS dateFin, cp.id AS contratParentId, tc.code AS typeContratCode
-        FROM ' . TblContrat::class . ' tblc
-        JOIN tblc.typeContrat tc
-        JOIN tblc.intervenant i
-        LEFT JOIN tblc.structure s
-        LEFT JOIN tblc.contratParent cp
-        WHERE tblc.uuid = :uuid
-        AND tblc.actif = 1
-        GROUP BY tblc.uuid, i.id, s.id, cp.id, tc.code';
+        $sql = 'SELECT uuid, 
+                       contrat_id,
+                       numero_avenant,
+                       intervenant_id,
+                       structure_id,
+                       validation_id,
+                       total_hetd,
+                       type_contrat_id,
+                       contrat_parent_id,
+                       date_debut,date_fin
+                FROM tbl_contrat tblc
+                WHERE tblc.uuid = :uuid
+                  AND tblc.actif = 1
+                  AND volume_horaire_index = 0';
 
 
-        $query = $em->createQuery($dql)
+        $query = $em->createQuery($sql)
             ->setParameter('uuid', $uuid);
 
         return $query->getOneOrNullResult();
@@ -126,5 +131,33 @@ class TblContratService extends AbstractEntityService
         return $query->getResult();
 
 
+    }
+
+
+
+    public function getVolumeContratByContratId(int $contratId)
+    {
+        $em = $this->getEntityManager();
+
+        $sql = 'SELECT uuid, 
+                       contrat_id,
+                       numero_avenant,
+                       intervenant_id,
+                       structure_id,
+                       validation_id,
+                       total_hetd,
+                       type_contrat_id,
+                       contrat_parent_id,
+                       date_debut,date_fin
+                FROM tbl_contrat tblc
+                WHERE tblc.uuid = :contratId
+                  AND tblc.actif = 1
+                  AND volume_horaire_index = 0';
+
+
+        $query = $em->createQuery($sql)
+            ->setParameter('contratId', $contratId);
+
+        return $query->getOneOrNullResult();
     }
 }

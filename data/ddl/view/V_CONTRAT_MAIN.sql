@@ -56,6 +56,8 @@ SELECT
       THEN '*Dont type(s) intervention(s) : ' || tc.autre_libelle
   END                                                                                   "legendeAutresHeures",
   'Autres heures' || CASE WHEN tc.autre_libelle IS NOT NULL THEN '*' ELSE '' END        "enteteAutresHeures",
+  tc.types_mission_libelles                                                             "typesMission",
+  tc.missions_libelles                                                                  "missions",
 
 
   -- Données concernant l'intervenant

@@ -220,7 +220,6 @@ return [
         'DATE_RETOUR_SIGNE',
         'NUMERO_AVENANT',
         'VALIDATION_ID',
-        'TOTAL_HETD',
         'DATE_ENVOI_EMAIL',
         'DEBUT_VALIDITE',
         'FIN_VALIDITE',

@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 15,
             'commentaire' => 'Date envoi du contrat par email',
         ],
         'DATE_RETOUR_SIGNE'     => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'FIN_VALIDITE'          => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'HISTO_CREATEUR_ID'     => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'          => [
@@ -200,18 +200,6 @@ return [
             'default'     => NULL,
             'position'    => 10,
             'commentaire' => NULL,
-        ],
-        'TOTAL_HETD'            => [
-            'name'        => 'TOTAL_HETD',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 15,
-            'commentaire' => 'Total HETD au moment de la création du contrat/avenant.',
         ],
         'TYPE_CONTRAT_ID'       => [
             'name'        => 'TYPE_CONTRAT_ID',

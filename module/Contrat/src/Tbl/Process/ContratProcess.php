@@ -140,7 +140,7 @@ class ContratProcess implements ProcessInterface
         $contrat->historise     = !empty($data['histo_destruction']);
         $contrat->id            = (int)$data['contrat_id'] ?: null;
         $contrat->intervenantId = (int)$data['intervenant_id'];
-//        $contrat->validationId  = (int)$data['validation_id'] ?: null;
+        $contrat->validationId  = (int)$data['validation_id'] ?: null;
         $contrat->annee       = $annee;
         $contrat->structureId = (int)$data['structure_id'] ?: null;
         $parentId             = (int)$data['parent_id'] ?: null;

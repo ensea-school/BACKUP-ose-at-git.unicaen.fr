@@ -222,7 +222,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 44,
+            'position'    => 45,
             'commentaire' => NULL,
         ],
         'NUMERO_AVENANT'            => [
@@ -235,18 +235,6 @@ return [
             'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 43,
-            'commentaire' => NULL,
-        ],
-        'MISSIONS_LIBELLES'           => [
-            'name'        => 'MISSIONS_LIBELLES',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 1000,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 42,
             'commentaire' => NULL,
         ],
         'SERVICE_ID'                => [
@@ -498,7 +486,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 45,
+            'position'    => 46,
             'commentaire' => NULL,
         ],
         'UUID'                      => [

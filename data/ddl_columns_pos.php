@@ -1532,6 +1532,8 @@ return [
         'AUTRES_LIBELLES',
         'NUMERO_AVENANT',
         'VALIDATION_ID',
+        'MISSIONS_LIBELLES',
+        'TYPES_MISSION_LIBELLES',
     ],
     'TBL_DMEP_LIQUIDATION'                => [
         'ID',

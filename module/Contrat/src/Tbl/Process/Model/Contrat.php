@@ -8,70 +8,45 @@ use Service\Entity\Db\TypeService;
 
 class Contrat
 {
-    public bool $actif = false;
+    public bool         $actif         = false;
+    public bool         $historise     = false;
+    public ?int         $id            = null;
+    public ?TypeService $typeService   = null;
+    public ?Annee       $annee         = null;
+    public bool         $isMission     = false;
+    public ?string      $uuid          = null;
+    public ?int         $intervenantId = null;
+    public ?int         $structureId   = null;
+    public ?int         $validationId  = null;
+    public ?Contrat     $parent        = null;
 
-    public bool $historise = false;
-
-    public ?int $id = null;
-
-    public ?TypeService $typeService = null;
-
-    public ?Annee $annee = null;
-
-    public bool $isMission = false;
-
-    public ?string $uuid = null;
-
-    public ?int $intervenantId = null;
-
-    public ?int $structureId = null;
-
-    public ?Contrat $parent = null;
-
-    /** @var Contrat[]  */
-    public array $avenants = [];
-
-    public int $numeroAvenant = 0;
-
-    public ?\DateTime $debutValidite = null;
-
-    public ?\DateTime $finValidite = null;
-
-    public ?\DateTime $histoCreation = null;
-
-    public bool $edite = false;
-
-    public bool $envoye = false;
-
-    public bool $retourne = false;
-
-    public bool $signe = false;
-
-    public bool $termine = false;
-
-    public float $totalHetd = 0.0;
-    public float $totalGlobalHetd = 0.0;
-
-    public ?int $tauxRemuId = null;
-
-    public ?\DateTime $tauxRemuDate = null;
-
-    public float $tauxRemuValeur = 0.0;
-
-    public ?int $tauxRemuMajoreId = null;
-
-    public float $tauxRemuMajoreValeur = 0.0;
-
-    public float $tauxCongesPayes = 0.0;
-    public ?string $autresLibelles = null;
-    public ?string $missionsLibelles = null;
-    public ?string $typesMissionLibelles = null;
+    /** @var Contrat[] */
+    public array      $avenants             = [];
+    public int        $numeroAvenant        = 0;
+    public ?\DateTime $debutValidite        = null;
+    public ?\DateTime $finValidite          = null;
+    public ?\DateTime $histoCreation        = null;
+    public bool       $edite                = false;
+    public bool       $envoye               = false;
+    public bool       $retourne             = false;
+    public bool       $signe                = false;
+    public bool       $termine              = false;
+    public float      $totalHetd            = 0.0;
+    public float      $totalGlobalHetd      = 0.0;
+    public ?int       $tauxRemuId           = null;
+    public ?\DateTime $tauxRemuDate         = null;
+    public float      $tauxRemuValeur       = 0.0;
+    public ?int       $tauxRemuMajoreId     = null;
+    public float      $tauxRemuMajoreValeur = 0.0;
+    public float      $tauxCongesPayes      = 0.0;
+    public ?string    $autresLibelles       = null;
+    public ?string    $missionsLibelles     = null;
+    public ?string    $typesMissionLibelles = null;
 
     /** @var VolumeHoraire[] */
-    public array     $volumesHoraires = [];
-    public float     $totalHeures = 0.0;
+    public array $volumesHoraires = [];
+    public float $totalHeures     = 0.0;
 
-    public ?int $validationId = null;
 
 
     public function __construct(?string $uuid = null)
@@ -85,7 +60,7 @@ class Contrat
 
     public function hasStructureId(?int $structureId): bool
     {
-        if ($this->structureId){
+        if ($this->structureId) {
             return $this->structureId == $structureId;
         }
 
@@ -94,8 +69,8 @@ class Contrat
             return $this->parent->hasStructureId($structureId);
         }
 
-        foreach($this->volumesHoraires as $vh){
-            if ($vh->structureId === $structureId){
+        foreach ($this->volumesHoraires as $vh) {
+            if ($vh->structureId === $structureId) {
                 return true;
             }
         }
@@ -107,7 +82,7 @@ class Contrat
 
     public function hasMissionId(int $missionId): bool
     {
-        if (!$this->isMission){
+        if (!$this->isMission) {
             return false;
         }
 
@@ -116,16 +91,14 @@ class Contrat
             return $this->parent->hasMissionId($missionId);
         }
 
-        foreach($this->volumesHoraires as $vh){
-            if ($vh->missionId === $missionId){
+        foreach ($this->volumesHoraires as $vh) {
+            if ($vh->missionId === $missionId) {
                 return true;
             }
         }
 
         return false;
     }
-
-
 
 
 
@@ -158,7 +131,7 @@ class Contrat
     public function setParent(Contrat $parent): void
     {
         if ($this->parent !== $parent) {
-            $this->parent = $parent;
+            $this->parent       = $parent;
             $parent->avenants[] = $this;
         }
     }

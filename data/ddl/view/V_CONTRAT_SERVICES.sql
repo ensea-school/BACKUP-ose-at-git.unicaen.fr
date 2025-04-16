@@ -12,15 +12,11 @@ SELECT
   t.type_service           "typeService",
   t.service_composante     "serviceComposante",
   t.periode                "periode",
-  t.service_code,
   t.service_code           "serviceCode",
-  t.service_libelle,
   t.service_libelle        "serviceLibelle",
-
-  t.service_heures,
   t.service_heures         "serviceHeures",
 
-  SUM(t.heures)            heures,
+  SUM(t.heures)            "heures",
   SUM(t.hetd)              "hetd",
 
   CASE WHEN SUM(t.cm) = 0 THEN '0' ELSE REPLACE(ltrim(to_char(SUM(t.cm), '999999.00')),'.',',') END "cm",
@@ -39,7 +35,7 @@ FROM
     m.id                                                 mission_id,
     tm.id                                                type_mission_id,
 
-    ts.code                                           type_service,
+    ts.code                                              type_service,
     str.libelle_court                                    service_composante,
     p.libelle_long                                       periode,
     COALESCE(tm.code, fr.code, ep.code)                  service_code,

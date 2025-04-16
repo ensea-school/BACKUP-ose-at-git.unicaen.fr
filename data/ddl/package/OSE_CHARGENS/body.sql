@@ -43,7 +43,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
         res := coef_choix * nb_choix * (coef_poids + (((1/nb_choix)-coef_poids)*correcteur));
       END IF;
 
-      ose_test.echo('choix_min= ' || cmin || ', choix_max= ' || cmax || ', poids = ' || poids || ', max_poids = ' || max_poids || ', total_poids = ' || total_poids || ', nb_choix = ' || nb_choix || ', RES = ' || res);
       RETURN res;
   END;
 
@@ -112,7 +111,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_CHARGENS" AS
 
       ) WHERE noeud_id = CALC_EFFECTIF.noeud_id
     ) LOOP
-      ose_test.echo('Calcul pour le noeud ' || p.noeud_id);
       effectif := OSE_CHARGENS.CALC_COEF(
           p.choix_minimum,
           p.choix_maximum,

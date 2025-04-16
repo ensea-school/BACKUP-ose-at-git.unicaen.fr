@@ -1531,6 +1531,7 @@ return [
         'TOTAL_GLOBAL_HETD',
         'AUTRES_LIBELLES',
         'NUMERO_AVENANT',
+        'VALIDATION_ID',
     ],
     'TBL_DMEP_LIQUIDATION'                => [
         'ID',

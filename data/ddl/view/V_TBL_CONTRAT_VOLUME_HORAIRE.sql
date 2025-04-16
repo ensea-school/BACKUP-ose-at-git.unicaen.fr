@@ -47,7 +47,9 @@ WHERE
   /*@ANNEE_ID=i.annee_id*/
   /*@STATUT_ID=i.statut_id*/
 
+
 UNION ALL
+
 
 SELECT
   i.annee_id                                                                      annee_id,
@@ -95,7 +97,9 @@ WHERE
   /*@ANNEE_ID=i.annee_id*/
   /*@STATUT_ID=i.statut_id*/
 
+
 UNION ALL
+
 
 SELECT
   i.annee_id                                                                      annee_id,
@@ -146,7 +150,6 @@ WHERE
 
 
 UNION ALL
-
 
 
 SELECT

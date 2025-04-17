@@ -101,4 +101,15 @@ class DossierProcess implements ProcessInterface
     }
 
 
+
+    public function getCalculateurCompletude(): CalculateurCompletude
+    {
+        return $this->calculateurCompletude;
+    }
+
+
+
+
+
+
 }

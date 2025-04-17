@@ -37,7 +37,6 @@ class CalculateurCompletude
      */
     public function completudeIdentite(array $dossier): bool
     {
-        return false;
         // 1. Champs obligatoires : civilite, nom_usuel, prénom et date de naissance
         $champsObligatoires = ['CIVILITE_ID', 'NOM_USUEL', 'PRENOM', 'DATE_NAISSANCE'];
         foreach ($champsObligatoires as $champs) {
@@ -58,7 +57,6 @@ class CalculateurCompletude
      */
     public function completudeIdentiteComplementaire(array $dossier): bool
     {
-
         //Uniquement si la partie données identités complémentaires est activée
         if ($dossier['DOSSIER_IDENTITE_COMP']) {
             // 1. Complétude de la situation matrimoniale
@@ -101,7 +99,7 @@ class CalculateurCompletude
      */
     public function completudeContact(array $dossier): bool
     {
-
+        $var = "";
         if ($dossier['DOSSIER_CONTACT']) {
             // 1. Vérification des emails
             if ($dossier['DOSSIER_EMAIL_PERSO'] && empty($dossier['EMAIL_PERSO'])) {
@@ -113,7 +111,7 @@ class CalculateurCompletude
             // 2. Vérification des téléphones
             if ($dossier['DOSSIER_TEL_PERSO'] && empty($dossier['TEL_PERSO'])) {
                 return false;
-            } elseif (empty($dossier['TEL_PERSO']) && empty($dossier['TEL_PRO'])) {
+            } elseif (empty($dossier['TEL_PRO'])) {
                 return false;
             }
 
@@ -247,9 +245,11 @@ class CalculateurCompletude
 
         // 2. Vérification de la complétude concernée avant le recrutement
         foreach ($dossierCompletudes as $value) {
-            if ($dossier['DOSSIER_' . $value] == 1) {
-                if (!$destination['COMPLETUDE_' . $value]) {
-                    return false;
+            if (array_key_exists('DOSSIER_'.$value, $dossier)) {
+                if ($dossier['DOSSIER_' . $value] == 1) {
+                    if (!$destination['COMPLETUDE_' . $value]) {
+                        return false;
+                    }
                 }
             }
         }
@@ -277,15 +277,21 @@ class CalculateurCompletude
 
         // 1. Vérification de la complétude concernée après le recrutement
         foreach ($dossierCompletudes as $value) {
-            if ($dossier['DOSSIER_' . $value] == 2) {
-                if (!$destination['COMPLETUDE_' . $value]) {
-                    return false;
+            if (array_key_exists('DOSSIER_'.$value, $dossier)) {
+                if ($dossier['DOSSIER_' . $value] == 2) {
+                    if (!$destination['COMPLETUDE_' . $value]) {
+                        return false;
+                    }
                 }
             }
         }
 
         return true;
     }
+
+
+
+
 
 
 }

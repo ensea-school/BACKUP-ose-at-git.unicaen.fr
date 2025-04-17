@@ -91,7 +91,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
         $role = $this->getRole();
 
         // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
+        if (!$role instanceof Role) {
+            return false;
+        }
 
         switch (true) {
             case $entity instanceof Intervenant:
@@ -149,7 +151,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
                     case self::PRIV_CAN_SUPPRIME:
                         return $this->assertCanSupprime($entity);
                 }
-            break;
+                break;
         }
     }
 
@@ -407,7 +409,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
         $isValidate         = $this->getServiceDossier()->getValidation($intervenant);
 
         return $this->asserts([
-            (!empty($intervenantDossier->getTblDossier())) ? $intervenantDossier->getTblDossier()->getCompletude() : false,
+            (!empty($intervenantDossier->getTblDossier())) ? $intervenantDossier->getTblDossier()->getCompletudeAvantRecrutement() : false,
             !$isValidate,
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION),
         ]);
@@ -469,12 +471,14 @@ class IntervenantDossierAssertion extends AbstractAssertion
             case IntervenantDossierController::class:
                 switch ($action) {
                     case 'index':
-                        if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;
+                        if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) {
+                            return false;
+                        }
 
                         return $this->assertDossierEdition($intervenant);
-                    break;
+                        break;
                 }
-            break;
+                break;
         }
 
         return true;
@@ -510,7 +514,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertPriv($privilege)
     {
         $role = $this->getRole();
-        if (!$role instanceof Role) return false;
+        if (!$role instanceof Role) {
+            return false;
+        }
 
         return $role->hasPrivilege($privilege);
     }

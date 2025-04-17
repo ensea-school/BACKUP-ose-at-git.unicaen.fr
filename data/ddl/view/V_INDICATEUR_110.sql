@@ -9,16 +9,8 @@ FROM
   JOIN INTERVENANT_DOSSIER ido ON ido.ID = d.DOSSIER_ID
 WHERE
   d.dossier_id IS NOT NULL
-  /*Complétude des différents bloc dossier*/
-  AND d.completude_identite = 1
-  AND d.completude_identite_comp = 1
-  AND d.completude_contact = 1
-  AND d.completude_adresse = 1
-  AND d.completude_insee = 1
-  AND d.completude_banque = 1
-  AND d.completude_employeur = 1
-  AND d.completude_autres = 1
-  AND d.completude_statut = 1
+  AND d.completude_avant_recrutement = 1
+  AND d.completude_apres_recrutement = 1
   AND d.validation_id IS NULL
   AND d.actif = 1
 GROUP BY (d.intervenant_id, i.STRUCTURE_ID)

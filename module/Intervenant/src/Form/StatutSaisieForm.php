@@ -11,7 +11,6 @@ use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
 
-
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
@@ -274,7 +273,7 @@ class StatutSaisieForm extends AbstractForm
         foreach ($dpElements as $dpElement) {
             $valueOptions = [
                 Statut::DONNEES_PERSONNELLES_NON_DEMANDEES              => 'Non demandé(e)',
-                Statut::DONNEES_PERSONNELLES_DEMANDEES                  => 'Demandé(e)',
+                Statut::DONNEES_PERSONNELLES_DEMANDEES                  => 'Demandé(e) avant le recrutement',
                 Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT => 'Demandé(e) aprés le recrutement',
             ];
 
@@ -342,8 +341,10 @@ class StatutSaisieForm extends AbstractForm
                         switch ($value) {
                             case 'edition':
                                 $edit = true;
+                                // no break
                             case 'visualisation':
                                 $visu = true;
+                                // no break
                             case 'active':
                                 $access = true;
                         }
@@ -362,13 +363,13 @@ class StatutSaisieForm extends AbstractForm
 
         foreach ($champsAutresElements as $champsAutresElement) {
             $valueOptions = [
-                'desactive'      => 'Désactivé',
-                'active1'        => 'Activé mais non visible par l\'intervenant',
-                'visualisation1' => 'Activé et visible par l\'intervenant',
-                'edition1'       => 'Activé et modifiable par l\'intervenant',
-                'active2'        => 'Activé mais non visible par l\'intervenant après son recrutement',
-                'visualisation2' => 'Activé et visible par l\'intervenant après son recrutement',
-                'edition2'       => 'Activé et modifiable par l\'intervenant après son recrutement',
+                'desactive'      => 'Non demandé(e)',
+                'active1'        => 'Activé(e) mais non visible par l\'intervenant avant son recrutement',
+                'visualisation1' => 'Activé(e) et visible par l\'intervenant avant son recrutement',
+                'edition1'       => 'Activé(e) et modifiable par l\'intervenant avant son recrutement',
+                'active2'        => 'Activé(e) mais non visible par l\'intervenant après son recrutement',
+                'visualisation2' => 'Activé(e) et visible par l\'intervenant après son recrutement',
+                'edition2'       => 'Activé(e) et modifiable par l\'intervenant après son recrutement',
             ];
 
 
@@ -459,6 +460,7 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'visualisation':
                                             $visu = true;
+                                            // no break
                                         case 'active':
                                             $access = true;
                                     }
@@ -496,6 +498,7 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'visualisation':
                                             $visu = true;
+                                            // no break
                                         case 'active':
                                             $access = true;
                                     }
@@ -543,10 +546,13 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'generation':
                                             $generation = true;
+                                            // no break
                                         case 'depot':
                                             $depot = true;
+                                            // no break
                                         case 'visualisation':
                                             $visu = true;
+                                            // no break
                                         case 'active':
                                             $access = true;
                                     }
@@ -597,6 +603,7 @@ class StatutSaisieForm extends AbstractForm
                                     switch ($value) {
                                         case 'visualisation':
                                             $visu = true;
+                                            // no break
                                         case 'active':
                                             $access = true;
                                     }

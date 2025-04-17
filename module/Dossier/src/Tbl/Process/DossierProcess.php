@@ -31,19 +31,11 @@ class DossierProcess implements ProcessInterface
     }
 
 
-
-    protected function init(): void
-    {
-
-    }
-
-
-
     public function run(TableauBord $tableauBord, array $params = []): void
     {
         $this->loadDossiers($params);
         $this->traitementDossiers();
-
+        $this->enregistrement($tableauBord, $params);
 
     }
 
@@ -51,8 +43,6 @@ class DossierProcess implements ProcessInterface
 
     protected function loadDossiers(array $params): void
     {
-        $connexion  = $this->getServiceBdd()->getEntityManager()->getConnection();
-        $params     = ['intervenant_id' => '1086999'];
         $sqlDossier = 'SELECT * FROM ('
             . $this->getServiceBdd()->injectKey($this->dossierSql(), $params)
             . ') t '
@@ -78,29 +68,42 @@ class DossierProcess implements ProcessInterface
      */
     protected function traitementDossiers(): void
     {
-        //Ici on va traiter les dossiers pour calculer les différentes complétude
-        $i = 0;
         foreach ($this->dossiers as $key => $dossier) {
             $dossierTbl                   = [];
             $dossierTbl['ANNEE_ID']       = $dossier['ANNEE_ID'];
+            $dossierTbl['DOSSIER_ID']     = $dossier['DOSSIER_ID'];
             $dossierTbl['INTERVENANT_ID'] = $dossier['INTERVENANT_ID'];
             $dossierTbl['ACTIF']          = $dossier['DOSSIER'];
             $dossierTbl['VALIDATION_ID']  = $dossier['VALIDATION_ID'];
             $this->calculateurCompletude->calculer($dossier, $dossierTbl);
-            $this->tblData[$i] = $dossierTbl;
-            $i++;
+            $this->tblData[$dossier['INTERVENANT_ID']] = $dossierTbl;
         }
-        dump($this->tblData);
     }
 
+    protected function enregistrement(TableauBord $tableauBord, array $params):void
+    {
+        try {
+            $key = $tableauBord->getOption('key');
+            $table = $this->getBdd()->getTable('TBL_DOSSIER');
 
+            $options = [
+                'where'       => $params,
+                'transaction' => !isset($params['INTERVENANT_ID']),
+            ];
+
+            $table->merge($this->tblData, $key, $options);
+
+            $this->tblData = [];
+        } catch (\Exception $e) {
+            error_log("Erreur attrapée : " . $e->getMessage());
+        }
+
+    }
 
     protected function dossierSql(): string
     {
         return $this->getServiceBdd()->getViewDefinition('V_TBL_DOSSIER');
     }
-
-
 
     public function getCalculateurCompletude(): CalculateurCompletude
     {

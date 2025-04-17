@@ -67,11 +67,11 @@ FROM
   LEFT JOIN validation       v ON v.intervenant_id = i.id
                               AND v.type_validation_id = tv.id
                               AND v.histo_destruction IS NULL
-  LEFT JOIN dossier_champ_autre dca1 ON dca1.id = 1 AND si.dossier_autre_1 = 1
-  LEFT JOIN dossier_champ_autre dca2 ON dca2.id = 2 AND si.dossier_autre_2 = 1
-  LEFT JOIN dossier_champ_autre dca3 ON dca3.id = 3 AND si.dossier_autre_3 = 1
-  LEFT JOIN dossier_champ_autre dca4 ON dca4.id = 4 AND si.dossier_autre_4 = 1
-  LEFT JOIN dossier_champ_autre dca5 ON dca5.id = 5 AND si.dossier_autre_5 = 1
+  LEFT JOIN dossier_champ_autre dca1 ON dca1.id = 1
+  LEFT JOIN dossier_champ_autre dca2 ON dca2.id = 2
+  LEFT JOIN dossier_champ_autre dca3 ON dca3.id = 3
+  LEFT JOIN dossier_champ_autre dca4 ON dca4.id = 4
+  LEFT JOIN dossier_champ_autre dca5 ON dca5.id = 5
 WHERE
   i.histo_destruction IS NULL
   /*@INTERVENANT_ID=i.id*/

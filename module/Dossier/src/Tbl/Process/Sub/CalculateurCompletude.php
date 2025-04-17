@@ -9,7 +9,7 @@ class CalculateurCompletude
 
     public function calculer(array $dossier, array &$destination): void
     {
-        $destination['COMPLETUDE_STATUT']            = isset($dossier['DOSSIER_ID']) ? $this->completudeIdentite($dossier) : false;
+        $destination['COMPLETUDE_STATUT']            = isset($dossier['DOSSIER_ID']) ? $this->completudeStatut($dossier) : false;
         $destination['COMPLETUDE_IDENTITE']          = isset($dossier['DOSSIER_ID']) ? $this->completudeIdentite($dossier) : false;
         $destination['COMPLETUDE_IDENTITE_COMP']     = isset($dossier['DOSSIER_ID']) ? $this->completudeIdentiteComplementaire($dossier) : false;
         $destination['COMPLETUDE_CONTACT']           = isset($dossier['DOSSIER_ID']) ? $this->completudeContact($dossier) : false;
@@ -26,6 +26,23 @@ class CalculateurCompletude
         $destination['COMPLETUDE_APRES_RECRUTEMENT'] = isset($dossier['DOSSIER_ID']) ? $this->completudeApresRecrutement($dossier, $destination) : false;
 
 
+    }
+
+
+
+    /**
+     * Méthode qui retour si la partie statut est compléte
+     * @param array $dossier
+     * @return bool
+     */
+    public function completudeStatut(array $dossier): bool
+    {
+        // 1. Si le statut est autre, le statut n'a pas été correctement choisi
+        if ($dossier['CODE_STATUT'] == Statut::CODE_AUTRES) {
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -239,7 +256,7 @@ class CalculateurCompletude
         ];
 
         // 1. Vérification de la complétude du bloc identite
-        if (!$destination['COMPLETUDE_IDENTITE']) {
+        if (!$destination['COMPLETUDE_IDENTITE'] || !$destination['COMPLETUDE_STATUT']) {
             return false;
         }
 

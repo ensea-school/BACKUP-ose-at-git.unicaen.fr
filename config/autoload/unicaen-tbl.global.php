@@ -107,8 +107,38 @@ return [
                 ],
             ],
 
-            'piece_jointe_demande' => [
+            'dossier' => [
                 'order'   => 2,
+                'process' => \Dossier\Tbl\Process\DossierProcess::class,
+                'cols'    => [
+                    'ANNEE_ID',
+                    'INTERVENANT_ID',
+                    'ACTIF',
+                    'DOSSIER_ID',
+                    'VALIDATION_ID',
+                    'COMPLETUDE_STATUT',
+                    'COMPLETUDE_IDENTITE',
+                    'COMPLETUDE_IDENTITE_COMP',
+                    'COMPLETUDE_CONTACT',
+                    'COMPLETUDE_ADRESSE',
+                    'COMPLETUDE_INSEE',
+                    'COMPLETUDE_BANQUE',
+                    'COMPLETUDE_EMPLOYEUR',
+                    'COMPLETUDE_AUTRES_1',
+                    'COMPLETUDE_AUTRES_2',
+                    'COMPLETUDE_AUTRES_3',
+                    'COMPLETUDE_AUTRES_4',
+                    'COMPLETUDE_AUTRES_5',
+                    'COMPLETUDE_AVANT_RECRUTEMENT',
+                    'COMPLETUDE_APRES_RECRUTEMENT',
+                ],
+                'key'     => [
+                    'INTERVENANT_ID',
+                ],
+            ],
+
+            'piece_jointe_demande' => [
+                'order'   => 3,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -127,7 +157,7 @@ return [
             ],
 
             'piece_jointe_fournie' => [
-                'order'              => 3,
+                'order'              => 4,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -154,7 +184,7 @@ return [
             ],
 
             'agrement' => [
-                'order'              => 4,
+                'order'              => 5,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -179,7 +209,7 @@ return [
             ],
 
             'cloture_realise' => [
-                'order'   => 5,
+                'order'   => 6,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -193,7 +223,7 @@ return [
             ],
 
             'mission' => [
-                'order'              => 6,
+                'order'              => 7,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -218,8 +248,9 @@ return [
                 ],
             ],
 
+
             'contrat' => [
-                'order'              => 7,
+                'order'              => 8,
                 'process'            => \Contrat\Tbl\Process\ContratProcess::class,
                 'cols'               => [
                     'ID',
@@ -275,32 +306,6 @@ return [
                     'VOLUME_HORAIRE_MISSION_ID' => 0,
                     'VOLUME_HORAIRE_ID'         => 0,
                     'VOLUME_HORAIRE_REF_ID'     => 0,
-                ],
-            ],
-
-            'dossier' => [
-                'order'   => 8,
-                'process' => \Dossier\Tbl\Process\DossierProcess::class,
-                'cols'    => [
-                    'ANNEE_ID',
-                    'INTERVENANT_ID',
-                    'ACTIF',
-                    'DOSSIER_ID',
-                    'VALIDATION_ID',
-                    'COMPLETUDE_STATUT',
-                    'COMPLETUDE_IDENTITE',
-                    'COMPLETUDE_IDENTITE_COMP',
-                    'COMPLETUDE_CONTACT',
-                    'COMPLETUDE_ADRESSE',
-                    'COMPLETUDE_INSEE',
-                    'COMPLETUDE_BANQUE',
-                    'COMPLETUDE_EMPLOYEUR',
-                    'COMPLETUDE_AUTRES',
-                    'COMPLETUDE',
-                    'COMPLETUDE_POST_RECRUTEMENT',
-                ],
-                'key'     => [
-                    'INTERVENANT_ID',
                 ],
             ],
 

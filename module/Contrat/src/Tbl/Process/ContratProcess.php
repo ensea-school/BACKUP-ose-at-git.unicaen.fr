@@ -141,9 +141,9 @@ class ContratProcess implements ProcessInterface
         $contrat->id            = (int)$data['contrat_id'] ?: null;
         $contrat->intervenantId = (int)$data['intervenant_id'];
         $contrat->validationId  = (int)$data['validation_id'] ?: null;
-        $contrat->annee       = $annee;
-        $contrat->structureId = (int)$data['structure_id'] ?: null;
-        $parentId             = (int)$data['parent_id'] ?: null;
+        $contrat->annee         = $annee;
+        $contrat->structureId   = (int)$data['structure_id'] ?: null;
+        $parentId               = (int)$data['parent_id'] ?: null;
         if ($parentId) {
             $uuid = $this->generateUUID($contrat->intervenantId, $parentId);
             $contrat->setParent($this->getContrat($contrat->intervenantId, $uuid));
@@ -493,7 +493,7 @@ class ContratProcess implements ProcessInterface
     public function isParentPotentiel(Contrat $contrat, Contrat $candidat): bool
     {
         if ($candidat->isMission !== $contrat->isMission || $contrat === $candidat || !$candidat->edite || $contrat->historise) {
-            return false; // pas les mêmes types => pas de lien
+            return false; // pas les mêmes types => pas de lien, pas edite ou supprimer, ou lui meme
         }
 
         if ($contrat->isMission) {
@@ -624,7 +624,7 @@ class ContratProcess implements ProcessInterface
     public function calculNumeroAvenant(Contrat $contrat): void
     {
         //On connait deja les numéro d'avenant récuperé de la table contrat et on a pas besoin de le recalculer pour les contrat editer (on le fait cependant pour les projets)
-        if ($contrat->id && $contrat->edite == 1) {
+        if (($contrat->id && $contrat->edite == 1) || $contrat->historise) {
             return;
         }
 
@@ -1122,4 +1122,6 @@ class ContratProcess implements ProcessInterface
 
         $this->intervenants[$intervenantId][$avenantProlongation->uuid] = $avenantProlongation;
     }
+
+
 }

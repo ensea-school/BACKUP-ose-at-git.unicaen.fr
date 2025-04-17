@@ -1,16 +1,28 @@
 <?php
 
+use Application\View\Renderer\PhpRenderer;
+use Service\Entity\Db\TypeService;
+use Contrat\Entity\Db\TblContrat;
+
 /**
  *
  * @var PhpRenderer    $this
- * @var TblContrat[][] $services
+ * @var TblContrat $tblContrat
  *
  */
 
 
-use Application\View\Renderer\PhpRenderer;
-use Contrat\Entity\Db\TblContrat;
-use Service\Entity\Db\TypeService;
+$enseignements = [];
+$enseiegnementsExterieur = [];
+$referentiels = [];
+$missions = [];
+
+$vhs = $tblContrat->getVolumesHoraires();
+foreach($vhs as $vh) {
+    /* @todo */
+}
+
+
 
 ?>
 

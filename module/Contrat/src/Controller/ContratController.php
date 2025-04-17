@@ -95,19 +95,16 @@ class ContratController extends AbstractController
         $title = "Contrat/avenants <small>{$intervenant}</small>";
 
 
-        $volumesHoraireIntervenant = $this->getServiceTblContrat()->getContratVolumeHoraireByIntervenant($intervenant, $structure);
-        $services                  = [];
-        foreach ($volumesHoraireIntervenant as $volumeHoraireIntervenant) {
-            /** @var TblContrat $volumesHoraireIntervenant */
+        $contrats = $this->getServiceTblContrat()->getContratsByIntervenant($intervenant, $structure);
 
-            if ($volumeHoraireIntervenant->getTypeService() != null) {
-                if ($volumeHoraireIntervenant->getContrat() == null) {
-                    $services['NoContrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
-                } else {
-                    $services['Contrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
-                }
+        $contratsNonContractualises = [];
+        $contratsContractualises = [];
+        foreach( $contrats as $contrat){
+            if (empty($contrat->getContrat())) {
+                $contratsNonContractualises[$contrat->getUuid()] = $contrat;
+            }else{
+                $contratsContractualises[$contrat->getUuid()] = $contrat;
             }
-
         }
 
         $contratDirectResult        = $this->getServiceParametres()->get('contrat_direct');
@@ -149,7 +146,8 @@ class ContratController extends AbstractController
         return compact(
             'title',
             'intervenant',
-            'services',
+            'contratsNonContractualises',
+            'contratsContractualises',
             'emailIntervenant',
             'contratDirect',
             'contratSignatureActivation',

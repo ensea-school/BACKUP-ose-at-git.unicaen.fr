@@ -3,95 +3,67 @@
 namespace Contrat\Entity\Db;
 
 use Application\Entity\Db\Annee;
-use Enseignement\Entity\Db\Service;
-use Enseignement\Entity\Db\VolumeHoraire;
+use Application\Entity\Db\Validation;
+use Doctrine\Common\Collections\Collection;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
-use Mission\Entity\Db\Mission;
-use Mission\Entity\Db\VolumeHoraireMission;
 use Paiement\Entity\Db\TauxRemu;
-use Referentiel\Entity\Db\ServiceReferentiel;
-use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Service\Entity\Db\TypeService;
 
 class TblContrat
 {
-    private int                       $id;
-    private int                       $actif                = 1;
-    private ?string                   $uuid                 = null;
-    private Annee                     $annee;
-    private ?Intervenant              $intervenant          = null;
-    private ?Structure                $structure            = null;
-    private ?Contrat                  $contrat              = null;
-    private ?Contrat                  $contratParent        = null;
-    private ?TypeContrat              $typeContrat          = null;
-    private float                     $edite;
-    private float                     $signe;
-    private ?\DateTime                $dateDebut            = null;
-    private ?\DateTime                $dateFin              = null;
-    private ?\DateTime                $dateCreation         = null;
-    private ?Mission                  $mission              = null;
-    private ?Service                  $service              = null;
-    private ?ServiceReferentiel       $serviceReferentiel   = null;
-    private ?TypeService              $typeService          = null;
-    private ?float                    $cm                   = null;
-    private ?float                    $td                   = null;
-    private ?float                    $tp                   = null;
-    private ?float                    $autres               = null;
-    private ?string                   $autreLibelle         = null;
-    private ?float                    $heures               = null;
-    private ?float                    $hetd                 = null;
-    private ?TauxRemu                 $tauxRemu             = null;
-    private ?float                    $tauxRemuValeur       = null;
-    private ?\DateTime                $tauxRemuDate         = null;
-    private ?TauxRemu                 $tauxRemuMajore       = null;
-    private ?float                    $tauxRemuMajoreValeur = null;
-    private ?float                    $tauxCongesPayes      = null;
-    private ?VolumeHoraire            $volumeHoraire        = null;
-    private ?VolumeHoraireMission     $volumeHoraireMission = null;
-    private ?VolumeHoraireReferentiel $volumeHoraireRef     = null;
+    private int         $id;
+    private Annee       $annee;
+    private Intervenant $intervenant;
+    private ?Structure  $structure;
+    private string      $uuid;
+    private bool        $actif;
+    private TypeService $typeService;
+    private TypeContrat $typeContrat;
+    private ?Contrat    $contrat;
+    private ?Contrat    $contratParent;
+    private ?int        $numeroAvenant;
+    private bool        $edite;
+    private bool        $signe;
+    private bool        $termine;
+    private ?\DateTime  $dateCreation;
+    private ?\DateTime  $dateDebut;
+    private ?\DateTime  $dateFin;
+    private TauxRemu    $tauxRemu;
+    private float       $tauxRemuValeur;
+    private \DateTime   $tauxRemuDate;
+    private TauxRemu    $tauxRemuMajore;
+    private float       $tauxRemuMajoreValeur;
+    private float       $tauxCongesPayes;
+    private ?Validation $validation;
+    private float       $totalHeures;
+    private float       $totalHeuresFormation;
+    private float       $totalHetd;
+    private float       $totalGlobalHetd;
+    private ?string     $autresLibelles;
+    private ?string     $missionsLibelles;
+    private ?string     $typesMissionLibelles;
+
+    private int $volumeHoraireIndex;
+
+    /** @var Collection|TblContratVolumeHoraire[] */
+    private Collection $volumesHoraires;
 
 
 
-    // Getters and Setters
+    /**
+     * @return Collection|TblContratVolumeHoraire[]
+     */
+    public function getVolumesHoraires(): Collection
+    {
+        return $this->volumesHoraires;
+    }
+
+
+
     public function getId(): int
     {
         return $this->id;
-    }
-
-
-
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-
-
-
-    public function getActif(): int
-    {
-        return $this->actif;
-    }
-
-
-
-    public function setActif(int $actif): void
-    {
-        $this->actif = $actif;
-    }
-
-
-
-    public function getUuid(): ?string
-    {
-        return $this->uuid;
-    }
-
-
-
-    public function setUuid(?string $uuid): void
-    {
-        $this->uuid = $uuid;
     }
 
 
@@ -103,23 +75,9 @@ class TblContrat
 
 
 
-    public function setAnnee(Annee $annee): void
-    {
-        $this->annee = $annee;
-    }
-
-
-
-    public function getIntervenant(): ?Intervenant
+    public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
-    }
-
-
-
-    public function setIntervenant(?Intervenant $intervenant): void
-    {
-        $this->intervenant = $intervenant;
     }
 
 
@@ -131,9 +89,30 @@ class TblContrat
 
 
 
-    public function setStructure(?Structure $structure): void
+    public function getUuid(): string
     {
-        $this->structure = $structure;
+        return $this->uuid;
+    }
+
+
+
+    public function isActif(): bool
+    {
+        return $this->actif;
+    }
+
+
+
+    public function getTypeService(): TypeService
+    {
+        return $this->typeService;
+    }
+
+
+
+    public function getTypeContrat(): TypeContrat
+    {
+        return $this->typeContrat;
     }
 
 
@@ -145,13 +124,6 @@ class TblContrat
 
 
 
-    public function setContrat(?Contrat $contrat): void
-    {
-        $this->contrat = $contrat;
-    }
-
-
-
     public function getContratParent(): ?Contrat
     {
         return $this->contratParent;
@@ -159,79 +131,30 @@ class TblContrat
 
 
 
-    public function setContratParent(?Contrat $contratParent): void
+    public function getNumeroAvenant(): ?int
     {
-        $this->contratParent = $contratParent;
+        return $this->numeroAvenant;
     }
 
 
 
-    public function getTypeContrat(): ?TypeContrat
-    {
-        return $this->typeContrat;
-    }
-
-
-
-    public function setTypeContrat(?TypeContrat $typeContrat): void
-    {
-        $this->typeContrat = $typeContrat;
-    }
-
-
-
-    public function getEdite(): float
+    public function isEdite(): bool
     {
         return $this->edite;
     }
 
 
 
-    public function setEdite(float $edite): void
-    {
-        $this->edite = $edite;
-    }
-
-
-
-    public function getSigne(): float
+    public function isSigne(): bool
     {
         return $this->signe;
     }
 
 
 
-    public function setSigne(float $signe): void
+    public function isTermine(): bool
     {
-        $this->signe = $signe;
-    }
-
-
-
-    public function getDateDebut(): ?\DateTime
-    {
-        return $this->dateDebut;
-    }
-
-
-
-    public function setDateDebut(?\DateTime $dateDebut): void
-    {
-        $this->dateDebut = $dateDebut;
-    }
-
-
-
-    public function getDateFin(): ?\DateTime
-    {
-        return $this->dateFin;
-    }
-
-
-
-    public function setDateFin(?\DateTime $dateFin): void
-    {
-        $this->dateFin = $dateFin;
+        return $this->termine;
     }
 
 
@@ -243,297 +166,121 @@ class TblContrat
 
 
 
-    public function setDateCreation(?\DateTime $dateCreation): void
+    public function getDateDebut(): ?\DateTime
     {
-        $this->dateCreation = $dateCreation;
+        return $this->dateDebut;
     }
 
 
 
-    public function getMission(): ?Mission
+    public function getDateFin(): ?\DateTime
     {
-        return $this->mission;
+        return $this->dateFin;
     }
 
 
 
-    public function setMission(?Mission $mission): void
-    {
-        $this->mission = $mission;
-    }
-
-
-
-    public function getService(): ?Service
-    {
-        return $this->service;
-    }
-
-
-
-    public function setService(?Service $service): void
-    {
-        $this->service = $service;
-    }
-
-
-
-    public function getServiceReferentiel(): ?ServiceReferentiel
-    {
-        return $this->serviceReferentiel;
-    }
-
-
-
-    public function setServiceReferentiel(?ServiceReferentiel $serviceReferentiel): void
-    {
-        $this->serviceReferentiel = $serviceReferentiel;
-    }
-
-
-
-    public function getTypeService(): ?TypeService
-    {
-        return $this->typeService;
-    }
-
-
-
-    public function setTypeService(?int $typeService): void
-    {
-        $this->typeService = $typeService;
-    }
-
-
-
-    public function getCm(): ?float
-    {
-        return $this->cm;
-    }
-
-
-
-    public function setCm(?float $cm): void
-    {
-        $this->cm = $cm;
-    }
-
-
-
-    public function getTd(): ?float
-    {
-        return $this->td;
-    }
-
-
-
-    public function setTd(?float $td): void
-    {
-        $this->td = $td;
-    }
-
-
-
-    public function getTp(): ?float
-    {
-        return $this->tp;
-    }
-
-
-
-    public function setTp(?float $tp): void
-    {
-        $this->tp = $tp;
-    }
-
-
-
-    public function getAutres(): ?float
-    {
-        return $this->autres;
-    }
-
-
-
-    public function setAutres(?float $autres): void
-    {
-        $this->autres = $autres;
-    }
-
-
-
-    public function getAutreLibelle(): ?string
-    {
-        return $this->autreLibelle;
-    }
-
-
-
-    public function setAutreLibelle(?string $autreLibelle): void
-    {
-        $this->autreLibelle = $autreLibelle;
-    }
-
-
-
-    public function getHeures(): ?float
-    {
-        return $this->heures;
-    }
-
-
-
-    public function setHeures(?float $heures): void
-    {
-        $this->heures = $heures;
-    }
-
-
-
-    public function getHetd(): ?float
-    {
-        return $this->hetd;
-    }
-
-
-
-    public function setHetd(?float $hetd): void
-    {
-        $this->hetd = $hetd;
-    }
-
-
-
-    public function getTauxRemu(): ?TauxRemu
+    public function getTauxRemu(): TauxRemu
     {
         return $this->tauxRemu;
     }
 
 
 
-    public function setTauxRemu(?TauxRemu $tauxRemu): void
-    {
-        $this->tauxRemu = $tauxRemu;
-    }
-
-
-
-    public function getTauxRemuValeur(): ?float
+    public function getTauxRemuValeur(): float
     {
         return $this->tauxRemuValeur;
     }
 
 
 
-    public function setTauxRemuValeur(?float $tauxRemuValeur): void
-    {
-        $this->tauxRemuValeur = $tauxRemuValeur;
-    }
-
-
-
-    public function getTauxRemuDate(): ?\DateTime
+    public function getTauxRemuDate(): \DateTime
     {
         return $this->tauxRemuDate;
     }
 
 
 
-    public function setTauxRemuDate(?\DateTime $tauxRemuDate): void
-    {
-        $this->tauxRemuDate = $tauxRemuDate;
-    }
-
-
-
-    public function getTauxRemuMajore(): ?TauxRemu
+    public function getTauxRemuMajore(): TauxRemu
     {
         return $this->tauxRemuMajore;
     }
 
 
 
-    public function setTauxRemuMajore(?TauxRemu $tauxRemuMajore): void
-    {
-        $this->tauxRemuMajore = $tauxRemuMajore;
-    }
-
-
-
-    public function getTauxRemuMajoreValeur(): ?float
+    public function getTauxRemuMajoreValeur(): float
     {
         return $this->tauxRemuMajoreValeur;
     }
 
 
 
-    public function setTauxRemuMajoreValeur(?float $tauxRemuMajoreValeur): void
-    {
-        $this->tauxRemuMajoreValeur = $tauxRemuMajoreValeur;
-    }
-
-
-
-    public function getTauxRemuMajoreDate(): ?\DateTime
-    {
-        return $this->tauxRemuDate;
-    }
-
-
-
-    public function getTauxCongesPayes(): ?float
+    public function getTauxCongesPayes(): float
     {
         return $this->tauxCongesPayes;
     }
 
 
 
-    public function setTauxCongesPayes(?float $tauxCongesPayes): void
+    public function getValidation(): ?Validation
     {
-        $this->tauxCongesPayes = $tauxCongesPayes;
+        return $this->validation;
     }
 
 
 
-    public function getVolumeHoraire(): ?VolumeHoraire
+    public function getTotalHeures(): float
     {
-        return $this->volumeHoraire;
+        return $this->totalHeures;
     }
 
 
 
-    public function setVolumeHoraire(?VolumeHoraireMission $volumeHoraire): void
+    public function getTotalHeuresFormation(): float
     {
-        $this->volumeHoraire = $volumeHoraire;
+        return $this->totalHeuresFormation;
     }
 
 
 
-    public function getVolumeHoraireMission(): ?VolumeHoraireMission
+    public function getTotalHetd(): float
     {
-        return $this->volumeHoraireMission;
+        return $this->totalHetd;
     }
 
 
 
-    public function setVolumeHoraireMission(?VolumeHoraireReferentiel $volumeHoraireMission): void
+    public function getTotalGlobalHetd(): float
     {
-        $this->volumeHoraireMission = $volumeHoraireMission;
+        return $this->totalGlobalHetd;
     }
 
 
 
-    public function getVolumeHoraireRef(): ?VolumeHoraireReferentiel
+    public function getAutresLibelles(): ?string
     {
-        return $this->volumeHoraireRef;
+        return $this->autresLibelles;
     }
 
 
 
-    public function setVolumeHoraireRef(?int $volumeHoraireRef): void
+    public function getMissionsLibelles(): ?string
     {
-        $this->volumeHoraireRef = $volumeHoraireRef;
+        return $this->missionsLibelles;
     }
 
+
+
+    public function getTypesMissionLibelles(): ?string
+    {
+        return $this->typesMissionLibelles;
+    }
+
+
+
+    public function getVolumeHoraireIndex(): int
+    {
+        return $this->volumeHoraireIndex;
+    }
 
 }

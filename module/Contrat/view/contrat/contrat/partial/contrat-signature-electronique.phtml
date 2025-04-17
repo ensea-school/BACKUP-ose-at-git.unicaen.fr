@@ -2,21 +2,17 @@
 
 use Application\Provider\Privilege\Privileges;
 use Contrat\Assertion\ContratAssertion;
+use Contrat\Entity\Db\TblContrat;
 
 /**
  * @var $this                       \Application\View\Renderer\PhpRenderer
- * @var $contrat                    \Contrat\Entity\Db\Contrat
- * @var $services                   array
- * @var $avenant_param              int
+ * @var $tblContrat                 TblContrat
  * @var $contratSignatureActivation boolean
+ * @var $libelleCircuitSignature    string
  * @var $infosSignature             array
  */
 
-
-foreach ($services as $typeCode => $volumesHoraireContrat):
-    $contrat = $volumesHoraireContrat[0]->getContrat();
-    break;
-endforeach;
+$contrat = $tblContrat->getContrat();
 
 $validation     = $contrat->getValidation();
 $retourSigne    = $contrat->getDateRetourSigne();
@@ -24,53 +20,53 @@ $dateEnvoiEmail = $contrat->getDateEnvoiEmail();
 $uploader       = $this->uploader();
 
 $urlExport = $this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)
-    ? $this->url('contrat/exporter', ['contrat' => $contrat->getId()]) // oui car on peut le voir!!
-    : null;
+        ? $this->url('contrat/exporter', ['contrat' => $contrat->getId()]) // oui car on peut le voir!!
+        : null;
 
 $urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
-    ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
-    : null;
+        ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
+        : null;
 
 $fichiers                    = $contrat->getFichier();
 $urlTelechargerContratSigned = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
-    ? (count($fichiers)) ? $this->url('contrat/telecharger-fichier', ['contrat' => $contrat->getId(), 'fichier' => $fichiers[0]->getId(), 'nomFichier' => $fichiers[0]->getNom()]) : null
-    : null;
+        ? (count($fichiers)) ? $this->url('contrat/telecharger-fichier', ['contrat' => $contrat->getId(), 'fichier' => $fichiers[0]->getId(), 'nomFichier' => $fichiers[0]->getNom()]) : null
+        : null;
 
 $urlEmail = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOI_EMAIL)
-    ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()], ['modal' => 1]) . '?modal=1'
-    : null;
+        ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()], ['modal' => 1]) . '?modal=1'
+        : null;
 
 $urlCreerProcessSignature = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
-    ? $this->url('contrat/creer-process-signature', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/creer-process-signature', ['contrat' => $contrat->getId()])
+        : null;
 
 $urlSupprimerProcessSignature = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
-    ? $this->url('contrat/supprimer-process-signature', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/supprimer-process-signature', ['contrat' => $contrat->getId()])
+        : null;
 
 $urlRafraichirProcessSignature = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOYER_SIGNATURE_ELECTRONIQUE)
-    ? $this->url('contrat/rafraichir-process-signature', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/rafraichir-process-signature', ['contrat' => $contrat->getId()])
+        : null;
 
 $urlValidation = $this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)
-    ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
+        : null;
 
 $urlDevalidation = $this->isAllowed($contrat, Privileges::CONTRAT_DEVALIDATION)
-    ? $this->url('contrat/devalider', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/devalider', ['contrat' => $contrat->getId()])
+        : null;
 
 $urlSaisieRetour = $this->isAllowed($contrat, Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE)
-    ? $this->url('contrat/saisir-retour', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/saisir-retour', ['contrat' => $contrat->getId()])
+        : null;
 
 $urlAjouter = $this->isAllowed($contrat, ContratAssertion::PRIV_AJOUTER_FICHIER)
-    ? $this->url('contrat/deposer-fichier', ['contrat' => $contrat->getId()], [], true)
-    : null;
+        ? $this->url('contrat/deposer-fichier', ['contrat' => $contrat->getId()], [], true)
+        : null;
 
 $urlSuppression = $this->isAllowed($contrat, Privileges::CONTRAT_SUPPRESSION)
-    ? $this->url('contrat/supprimer', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/supprimer', ['contrat' => $contrat->getId()])
+        : null;
 
 $disableEmail = (empty($emailIntervenant)) ? true : false;
 
@@ -169,7 +165,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <small>(cliquez pour afficher/cacher)</small>
             </a>
             <div class="collapse" id="details-enseignements-contrat-<?= $contrat->getId() ?>">
-                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $contrat, 'services' => $services, 'structure' => $contrat->getStructure(), 'mission' => null, 'contractualiser' => true]); ?>
+                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['tblContrat' => $tblContrat]); ?>
             </div>
         </div>
     </div>

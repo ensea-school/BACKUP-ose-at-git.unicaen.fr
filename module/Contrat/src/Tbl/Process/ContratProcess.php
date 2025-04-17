@@ -633,7 +633,7 @@ class ContratProcess implements ProcessInterface
         if ($contrat->parent) {
             foreach ($contrat->parent->avenants as $contratParser) {
                 // On ne s'intéresse qu'aux avenants étant deja créés
-                if ($contratParser->id && $contratParser->numeroAvenant > $contratNumero) {
+                if ($contratParser->id && $contratParser->numeroAvenant > $contratNumero && !$contratParser->historise) {
                     $contratNumero = $contratParser->numeroAvenant;
                 }
             }

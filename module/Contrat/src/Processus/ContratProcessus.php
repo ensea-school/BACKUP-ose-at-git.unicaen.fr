@@ -134,32 +134,24 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Contrat
      */
-    public function creer(Contrat $contrat, $volumeHoraire): Contrat
+    public function creer(Contrat $contrat, TblContrat $informationContrat): Contrat
     {
-        $intervenant = $this->getServiceIntervenant()->get($volumeHoraire['intervenant_id']);
-        $contrat->setIntervenant($intervenant);
 
-        $structure = $this->getServiceStructure()->get($volumeHoraire['structure_id']);
-        $contrat->setStructure($structure);
+        $contrat->setIntervenant($informationContrat->getIntervenant());
 
-        try {
-            $dateDebut = $volumeHoraire['date_debut'] ? new \DateTime($volumeHoraire['date_debut']) : null;
+        $contrat->setStructure($informationContrat->getStructure());
 
-        } catch (\Exception $e) {
-            $dateDebut = null;
-        }
+        $dateDebut = $informationContrat->getDateDebut();
+
         $contrat->setDebutValidite($dateDebut);
 
-        try {
-            $dateFin = $volumeHoraire['date_fin'] ? new \DateTime($volumeHoraire['date_fin']) : null;
-        } catch (\Exception $e) {
-            $dateFin = null;
-        }
+        $dateFin = $informationContrat->getDateFin();
+
         $contrat->setFinValidite($dateFin);
 
-        $contrat->setTypeContrat($this->getServiceTypeContrat()->get($volumeHoraire['type_contrat_id']));
-        $contrat->setNumeroAvenant($volumeHoraire['numero_avenant']);
-        $contratParent = $this->getServiceContrat()->get($volumeHoraire['contrat_parent_id']);
+        $contrat->setTypeContrat($informationContrat->getTypeContrat());
+        $contrat->setNumeroAvenant($informationContrat->getNumeroAvenant());
+        $contratParent = $informationContrat->getContratParent();
         $contrat->setContrat($contratParent);
 
         return $contrat;
@@ -330,6 +322,7 @@ class ContratProcessus extends AbstractProcessus
 
         return $this;
     }
+
 
 
     /**

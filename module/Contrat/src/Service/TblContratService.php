@@ -2,12 +2,10 @@
 
 namespace Contrat\Service;
 
-
 use Application\Service\AbstractEntityService;
 use Contrat\Entity\Db\TblContrat;
 use Intervenant\Entity\Db\Intervenant;
 use RuntimeException;
-
 
 /**
  * Description of TblContratService
@@ -69,51 +67,25 @@ class TblContratService extends AbstractEntityService
 
 
 
-    public function getVolumeContratByUuid(string $uuid): ?array
+    public function getVolumeTotalCreationContratByUuid(string $uuid): ?array
     {
         $em = $this->getEntityManager();
 
-        $sql = 'SELECT uuid, 
-                       contrat_id,
-                       numero_avenant,
-                       intervenant_id,
-                       structure_id,
-                       validation_id,
-                       total_hetd,
-                       type_contrat_id,
-                       contrat_parent_id,
-                       date_debut,date_fin
-                FROM tbl_contrat tblc
-                WHERE tblc.uuid = :uuid
-                  AND tblc.actif = 1
-                  AND volume_horaire_index = 0';
+        $dql = 'SELECT tblc.totalGlobalHetd, tblc.uuid, i.id AS intervenantId, s.id AS structureId, MIN(tblc.dateDebut) AS dateDebut, MAX(tblc.dateFin) AS dateFin, cp.id AS contratParentId, tc.code AS typeContratCode
+        FROM ' . TblContrat::class . ' tblc
+        JOIN tblc.typeContrat tc
+        JOIN tblc.intervenant i
+        LEFT JOIN tblc.structure s
+        LEFT JOIN tblc.contratParent cp
+        WHERE tblc.uuid = :uuid
+        AND tblc.actif = 1
+        GROUP BY tblc.uuid, i.id, s.id, cp.id, tc.code';
 
 
-        $query = $em->createQuery($sql)
+        $query = $em->createQuery($dql)
             ->setParameter('uuid', $uuid);
 
         return $query->getOneOrNullResult();
-    }
-
-
-
-    public function getTotalHetdIntervenant(string $uuid, ?string $contratParentId): ?array
-    {
-        $em = $this->getEntityManager();
-
-        $sql = 'SELECT SUM(hetd) as hetdTotal
-                FROM tbl_contrat tblc_all 
-                WHERE (tblc_all.contrat_id = :contratParentId 
-                OR tblc_all.contrat_parent_id = :contratParentId)
-                AND (tblc_all.contrat_id IS NOT NULL OR tblc_all.uuid = :uuid)';
-
-
-        $query = $em->createQuery($sql)
-            ->setParameter('uuid', $uuid);
-
-        $result = $query->getOneOrNullResult();
-        return $result['hetdTotal'];
-
     }
 
 
@@ -135,28 +107,47 @@ class TblContratService extends AbstractEntityService
 
 
 
-    public function getVolumeContratByContratId(int $contratId)
+    public function getInformationContratByUuid(mixed $uuid): TblContrat
     {
         $em = $this->getEntityManager();
 
-        $sql = 'SELECT uuid, 
-                       contrat_id,
-                       numero_avenant,
-                       intervenant_id,
-                       structure_id,
-                       validation_id,
-                       total_hetd,
-                       type_contrat_id,
-                       contrat_parent_id,
-                       date_debut,date_fin
-                FROM tbl_contrat tblc
-                WHERE tblc.uuid = :contratId
-                  AND tblc.actif = 1
-                  AND volume_horaire_index = 0';
+        $dql = 'SELECT tblc
+        FROM ' . TblContrat::class . ' tblc
+        JOIN tblc.typeContrat tc
+        JOIN tblc.intervenant i
+        LEFT JOIN tblc.structure s
+        LEFT JOIN tblc.contratParent cp
+        WHERE tblc.uuid = :uuid
+        AND tblc.actif = 1
+        AND tblc.volumeHoraireIndex = 0';
 
 
-        $query = $em->createQuery($sql)
-            ->setParameter('contratId', $contratId);
+        $query = $em->createQuery($dql)
+            ->setParameter('uuid', $uuid);
+
+        return $query->getOneOrNullResult();
+
+    }
+
+
+
+    public function getInformationContratById(int $id): TblContrat
+    {
+        $em = $this->getEntityManager();
+
+        $dql = 'SELECT tblc
+        FROM ' . TblContrat::class . ' tblc
+        JOIN tblc.typeContrat tc
+        JOIN tblc.intervenant i
+        LEFT JOIN tblc.structure s
+        LEFT JOIN tblc.contratParent cp
+        WHERE tblc.uuid = :uuid
+        AND tblc.actif = 1
+        AND tblc.volumeHoraireIndex = 0';
+
+
+        $query = $em->createQuery($dql)
+            ->setParameter('id', $id);
 
         return $query->getOneOrNullResult();
     }

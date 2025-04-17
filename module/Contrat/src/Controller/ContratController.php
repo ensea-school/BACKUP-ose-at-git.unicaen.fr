@@ -175,7 +175,7 @@ class ContratController extends AbstractController
             throw new LogicException('L\'intervenant n\'est pas précisé');
         }
 
-        $volumeHorairesCreation = $this->getServiceTblContrat()->getVolumeContratByUuid($uuid);
+        $volumeHorairesCreation = $this->getServiceTblContrat()->getInformationContratByUuid($uuid);
         $contrat = new Contrat();
         $contrat = $this->getProcessusContrat()->creer($contrat, $volumeHorairesCreation);
 
@@ -263,7 +263,7 @@ class ContratController extends AbstractController
             return new MessengerViewModel;
         }
 
-        $volumeHorairesContrat = $this->getServiceTblContrat()->getVolumeContratByContratId($contrat->getId());
+        $volumeHorairesContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
         $contrat = $this->getProcessusContrat()->creer($contrat, $volumeHorairesContrat);
 
         if ($this->getRequest()->isPost()) {

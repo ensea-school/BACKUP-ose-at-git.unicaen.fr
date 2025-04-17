@@ -9,7 +9,7 @@ class RIBValidator extends Iban
     /**
      * Sets validator options
      *
-     * @param array|Traversable $options OPTIONAL
+     * @param array|\Traversable $options OPTIONAL
      */
     public function __construct($options = [])
     {
@@ -26,10 +26,12 @@ class RIBValidator extends Iban
 
     public function isValid($value, $context = null)
     {
-        $horsSepa = isset($context['ribHorsSepa']) ? (bool)$context['ribHorsSepa'] : false;
+        $horsSepa = isset($context['ribHorsSepa']) && (bool)$context['ribHorsSepa'];
 
-        if ($horsSepa) return true; // pas de contrôle si hors SEPA!!
+        if ($horsSepa) {
+            return true;
+        }
 
-        return parent::isValid($value, $context);
+        return parent::isValid($value);
     }
 }

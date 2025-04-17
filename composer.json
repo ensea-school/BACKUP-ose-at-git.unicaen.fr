@@ -67,7 +67,8 @@
         "phan/phan"                         : "^5.3",
         "phpmd/phpmd"                       : "*",
         "phpunit/phpunit"                   : "^9",
-        "friendsofphp/php-cs-fixer": "^3.74"
+        "friendsofphp/php-cs-fixer": "^3.74",
+        "phpstan/phpstan": "^2.1"
     },
     "prefer-stable"    : true,
     "config"           : {

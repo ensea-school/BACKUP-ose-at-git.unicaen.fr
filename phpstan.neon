@@ -1,0 +1,10 @@
+parameters:
+    level: 5 # Niveau d’analyse (0 à 9, plus c’est haut, plus c’est strict)
+    paths:
+        - module/Dossier
+        - tests
+    excludePaths:
+        analyse:
+            - module/*/src/View/**
+    ignoreErrors:
+        - '#Call to static method container\(\)#'

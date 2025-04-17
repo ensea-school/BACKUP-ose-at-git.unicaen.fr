@@ -38,7 +38,7 @@ class CompletudeDossierTest extends OseTestCase
 
     /**
      * Test de la complétude identité pour un cas particulier : tous les champs
-     * obligatoire sont fournis
+     * obligatoires sont fournis
      *
      * @return void
      */
@@ -74,7 +74,7 @@ class CompletudeDossierTest extends OseTestCase
 
     /**
      * Test de la complétude identité complémentaire pour un cas particulier : les données d'identité
-     * complémentaire ne sont pas demandé donc on considere que c'est complet
+     * complémentaire ne sont pas demandé donc on considéra que c'est complet
      *
      * @return void
      */
@@ -161,7 +161,7 @@ class CompletudeDossierTest extends OseTestCase
 
     /**
      * Test de la complétude identité complémentaire pour un cas particulier : la situation matrimoniqle est
-     * obligatoire mais aucune valeur n'est fournie, sans date de situation matrimoniale
+     * obligatoire, mais aucune valeur n'est fournie, sans date de situation matrimoniale
      *
      * @return void
      */
@@ -248,7 +248,7 @@ class CompletudeDossierTest extends OseTestCase
 
     /**
      * Test de la complétude contact pour un cas particulier : le bloc contact n'est pas demandé
-     * donc on considére qu'il est complet
+     * donc on considéra qu'il est complet
      *
      * @return void
      */
@@ -263,7 +263,7 @@ class CompletudeDossierTest extends OseTestCase
 
 
     /**
-     * Test de la complétude contact pour un cas particulier : email perso obligatoire mais
+     * Test de la complétude contact pour un cas particulier : email perso obligatoire, mais
      * non renseigné
      *
      * @return void
@@ -305,7 +305,7 @@ class CompletudeDossierTest extends OseTestCase
     }
 
     /**
-     * Test de la complétude contact pour un cas particulier : Tel perso obligatoire
+     * Test de la complétude contact pour un cas particulier : Tel perso obligatoire,
      * mais non renseigné
      *
      * @return void
@@ -425,7 +425,7 @@ class CompletudeDossierTest extends OseTestCase
     }
 
     /**
-     * Test de la complétude adresse pour un cas particulier : adresse fourni
+     * Test de la complétude adresse pour un cas particulier : adresse fournie
      * sans commune ni code postal
      *
      * @return void
@@ -446,7 +446,7 @@ class CompletudeDossierTest extends OseTestCase
     }
 
     /**
-     * Test de la complétude adresse pour un cas particulier : adresse fourni complète avec
+     * Test de la complétude adresse pour un cas particulier : adresse fournie complète avec
      * commune et code postal
      *
      * @return void
@@ -531,7 +531,7 @@ class CompletudeDossierTest extends OseTestCase
 
     /**
      * Test de la complétude banque pour un cas particulier : informations bancaires non
-     * demandées donc on considére que c'est complet
+     * demandées donc on considère que c'est complet
      *
      * @return void
      */
@@ -610,7 +610,7 @@ class CompletudeDossierTest extends OseTestCase
 
     /**
      * Test de la complétude INSEE pour un cas particulier : INSEE non demandé
-     * donc on considére que c'est complet
+     * donc on considère que c'est complet
      *
      * @return void
      */
@@ -655,7 +655,7 @@ class CompletudeDossierTest extends OseTestCase
 
     /**
      * Test de la complétude Employeur pour un cas particulier : employeur non demandé
-     * donc on considére que c'est complet
+     * donc on considéra que c'est complet
      *
      * @return void
      */
@@ -686,7 +686,7 @@ class CompletudeDossierTest extends OseTestCase
     }
 
     /**
-     * Test de la complétude Employeur pour un cas particulier : employeur obligatoire
+     * Test de la complétude Employeur pour un cas particulier : employeur obligatoire,
      * mais non renseigné
      * @return void
      */
@@ -719,7 +719,7 @@ class CompletudeDossierTest extends OseTestCase
 
     /**
      * Test de la complétude champs autres pour un cas particulier : champs autres désactivés
-     * donc on considére que c'est complet
+     * donc on considéra que c'est complet
      *
      * @return void
      */
@@ -752,7 +752,7 @@ class CompletudeDossierTest extends OseTestCase
     }
 
     /**
-     * Test de la complétude champs autres pour un cas particulier : champs autres obligatoire
+     * Test de la complétude champs autres pour un cas particulier : champs autres obligatoires
      * mais non fourni
      *
      * @return void
@@ -864,7 +864,7 @@ class CompletudeDossierTest extends OseTestCase
     }
 
     /**
-     * Test du calcul complétude avant recrutement un cas particulier : des blocs sont complets
+     * Test du calcul complétude avant recrutement un cas particulier : des blocs sont complets,
      * mais non demandés
      *
      * @return void

@@ -2,12 +2,14 @@
 
 /**
  *
- * @var               $this             \Application\View\Renderer\PhpRenderer
- * @var array         $services
+ * @var PhpRenderer    $this
+ * @var TblContrat[][] $services
  *
  */
 
 
+use Application\View\Renderer\PhpRenderer;
+use Contrat\Entity\Db\TblContrat;
 use Service\Entity\Db\TypeService;
 
 ?>
@@ -30,29 +32,37 @@ if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
         <?php foreach ($services[TypeService::CODE_ENSEIGNEMENT] as $element): ?>
             <tr>
                 <td>
-                    <?php if ($element->getService()->getElementPedagogique()
-                        && $element->getService()->getElementPedagogique()->getCheminPedagogique()->count() > 1): ?>
+                    <?php if ($element->getService() && $element->getService()->getElementPedagogique()
+                            && $element->getService()->getElementPedagogique()->getCheminPedagogique()->count() > 1): ?>
                         <small class="badge bg-secondary" style="font-size:8pt"
                                title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement
                             mutualisé</small><br/>
                     <?php endif; ?>
+                    <?php if ($element->getService()): ?>
                     <?php $url = $this->url('of/etape/voir', ['etape' => $element->getService()->getElementPedagogique()->getEtape()->getId()]); ?>
+
+
                     <a href="<?php echo $url ?>"
                        class="ajax-modal"><?php echo $element->getService()->getElementPedagogique()->getEtape() ?>
                         (<?php echo $element->getService()->getElementPedagogique()->getEtape()->getCode() ?>)
                     </a>
+                    <?php endif; ?>
+
                 </td>
                 <td>
-                    <?php if ($element->getService()->getElementPedagogique()->getPeriode()) {
+                    <?php if ($element->getService() && $element->getService()->getElementPedagogique()->getPeriode()) {
                         echo $element->getService()->getElementPedagogique()->getPeriode()->getCode();
-                    } ?>
+                    }?>
                 </td>
                 <td>
+                    <?php if ($element->getService()): ?>
                     <?php $url = $this->url('of/element/voir', ['elementPedagogique' => $element->getService()->getElementPedagogique()->getId()]); ?>
                     <a href="<?php echo $url ?>"
                        class="ajax-modal"><?php echo $element->getService()->getElementPedagogique()->getLibelle() ?>
                         (<?php echo $element->getService()->getElementPedagogique()->getCode() ?>)
                     </a>
+                    <?php endif; ?>
+
                 </td>
                 <td>
                     <?php echo $element->getCm() ?>

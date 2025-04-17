@@ -237,10 +237,10 @@ final class CalculTauxTest extends TblContratTestCase
             self::fail('Une exception ne devait pas être levée : ' . $e->getMessage());
         }
 
-        self::assertEquals(new DateTime('2022-07-01'), $contrat1->tauxRemuDate);
+        self::assertEquals(new DateTime('2022-08-01'), $contrat1->tauxRemuDate);
         self::assertEquals(3, $contrat1->tauxRemuId);
-        self::assertEquals(42.86, $contrat1->tauxRemuValeur);
-        self::assertEquals(42.86, $contrat1->tauxRemuMajoreValeur);
+        self::assertEquals(11.07, $contrat1->tauxRemuValeur);
+        self::assertEquals(11.07, $contrat1->tauxRemuMajoreValeur);
     }
 
 }

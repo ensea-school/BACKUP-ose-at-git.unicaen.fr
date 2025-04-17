@@ -25,7 +25,7 @@ final class CalculTauxTest extends TblContratTestCase
         $contrat1->id        = 1;
         $contrat1->isMission = false;
         $contrat1->annee     = new Annee();
-        $contrat1->annee->setDateDebut(new DateTime('2023-09-01'));
+        $contrat1->annee->setDateDebut(new DateTime('2022-09-01'));
         $contrat1->annee->setActive(true);
 
 
@@ -73,9 +73,9 @@ final class CalculTauxTest extends TblContratTestCase
             self::fail('Une exception ne devait pas être levée : ' . $e->getMessage());
         }
 
-        self::assertEquals(new DateTime('2023-09-01'), $contrat1->tauxRemuDate);
-        self::assertEquals(43.5, $contrat1->tauxRemuValeur);
-        self::assertEquals(43.5, $contrat1->tauxRemuMajoreValeur);
+        self::assertEquals(new DateTime('2022-07-01'), $contrat1->tauxRemuDate);
+        self::assertEquals(42.86, $contrat1->tauxRemuValeur);
+        self::assertEquals(42.86, $contrat1->tauxRemuMajoreValeur);
     }
 
 
@@ -179,20 +179,20 @@ final class CalculTauxTest extends TblContratTestCase
         $contrat1->id        = 1;
         $contrat1->isMission = true;
         $contrat1->annee     = new Annee();
-        $contrat1->annee->setDateDebut(new DateTime('2023-09-01'));
+        $contrat1->annee->setDateDebut(new DateTime('2022-09-01'));
         $contrat1->annee->setActive(true);
 
         $volumeHoraire1             = new VolumeHoraire();
-        $volumeHoraire1->tauxRemuId = 1;
+        $volumeHoraire1->tauxRemuId = 3;
 
         $volumeHoraire2             = new VolumeHoraire();
         $volumeHoraire2->tauxRemuId = 2;
 
         $volumeHoraire3             = new VolumeHoraire();
-        $volumeHoraire3->tauxRemuId = 1;
+        $volumeHoraire3->tauxRemuId = 4;
 
         $volumeHoraire4             = new VolumeHoraire();
-        $volumeHoraire4->tauxRemuId = 1;
+        $volumeHoraire4->tauxRemuId = 3;
 
         $contrat1->volumesHoraires = [$volumeHoraire1, $volumeHoraire2, $volumeHoraire3, $volumeHoraire4];
 
@@ -202,9 +202,45 @@ final class CalculTauxTest extends TblContratTestCase
             self::fail('Une exception ne devait pas être levée : ' . $e->getMessage());
         }
 
-        self::assertEquals(new DateTime('2023-09-01'), $contrat1->tauxRemuDate);
-        self::assertEquals(43.5, $contrat1->tauxRemuValeur);
-        self::assertEquals(43.5, $contrat1->tauxRemuMajoreValeur);
+        self::assertEquals(new DateTime('2022-07-01'), $contrat1->tauxRemuDate);
         self::assertEquals(1, $contrat1->tauxRemuId);
+        self::assertEquals(42.86, $contrat1->tauxRemuValeur);
+        self::assertEquals(42.86, $contrat1->tauxRemuMajoreValeur);
     }
+
+
+    public function testTauxContratIndexe(){
+        $parametres = [
+            Parametre::AVENANT     => Parametre::AVENANT_AUTORISE,
+            Parametre::CONTRAT_MIS => Parametre::CONTRAT_MIS_MISSION,
+            Parametre::CONTRAT_ENS => Parametre::CONTRAT_ENS_GLOBAL,
+            Parametre::TAUX_REMU   => 1,
+        ];
+        $this->useParametres($parametres);
+
+        //Contrat 1 global
+        $contrat1            = new Contrat();
+        $contrat1->id        = 1;
+        $contrat1->isMission = true;
+        $contrat1->annee     = new Annee();
+        $contrat1->annee->setDateDebut(new DateTime('2022-09-01'));
+        $contrat1->annee->setActive(true);
+
+        $volumeHoraire1             = new VolumeHoraire();
+        $volumeHoraire1->tauxRemuId = 3;
+
+        $contrat1->volumesHoraires = [$volumeHoraire1];
+
+        try {
+            $this->process->calculTauxRemu($contrat1);
+        } catch (\Exception $e) {
+            self::fail('Une exception ne devait pas être levée : ' . $e->getMessage());
+        }
+
+        self::assertEquals(new DateTime('2022-07-01'), $contrat1->tauxRemuDate);
+        self::assertEquals(3, $contrat1->tauxRemuId);
+        self::assertEquals(42.86, $contrat1->tauxRemuValeur);
+        self::assertEquals(42.86, $contrat1->tauxRemuMajoreValeur);
+    }
+
 }

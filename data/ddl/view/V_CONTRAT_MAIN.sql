@@ -49,13 +49,15 @@ SELECT
   to_char(tc.date_debut, 'dd/mm/YYYY')                                                  "debutValidite",
   to_char(tc.date_fin, 'dd/mm/YYYY')                                                    "finValidite",
   to_char(cp.fin_validite, 'dd/mm/YYYY')                                                "finValiditeParent",
-  to_char(tc.date_creation, 'dd/mm/YYYY')                                               "date_creation",
-  to_char(cp.date_retour_signe, 'dd/mm/YYYY')                                           "date_contrat_lie",
+  to_char(tc.date_creation, 'dd/mm/YYYY')                                               "dateCreation",
+  to_char(cp.date_retour_signe, 'dd/mm/YYYY')                                           "dateContratLie",
   CASE
     WHEN tc.autre_libelle IS NOT NULL
       THEN '*Dont type(s) intervention(s) : ' || tc.autre_libelle
   END                                                                                   "legendeAutresHeures",
   'Autres heures' || CASE WHEN tc.autre_libelle IS NOT NULL THEN '*' ELSE '' END        "enteteAutresHeures",
+  tc.types_mission_libelles                                                             "typesMission",
+  tc.missions_libelles                                                                  "missions",
 
 
   -- Données concernant l'intervenant
@@ -84,7 +86,7 @@ SELECT
     )
   )                                                                                     "adresse",
   COALESCE(d.numero_insee, i.numero_insee)                                              "numInsee",
-  p.libelle                                                                             "pays_nationalite",
+  p.libelle                                                                             "paysNationalite",
 
 
   -- Données portant sur les heures
@@ -99,10 +101,10 @@ SELECT
 
   -- Données RH dec taux de rémunération
   tr.libelle                                                                            "tauxNom",
-  tc.taux_remu_valeur                                                                   "tauxHoraireValeur",
+  OSE_DIVERS.FORMAT_FLOAT(tc.taux_remu_valeur)                                          "tauxHoraireValeur",
   to_char(tc.taux_remu_date,'dd/mm/YYYY')                                               "tauxHoraireDate",
   trm.libelle                                                                           "tauxMajoreNom",
-  tc.taux_remu_majore_valeur                                                            "tauxMajoreHoraireValeur",
+  OSE_DIVERS.FORMAT_FLOAT(tc.taux_remu_majore_valeur)                                   "tauxMajoreHoraireValeur",
   to_char(tc.taux_remu_date, 'dd/mm/YYYY')                                              "tauxMajoreHoraireDate"
 
 FROM

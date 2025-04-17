@@ -11,6 +11,10 @@ $sql2 = "SELECT * FROM v_contrat_main";
 
 $keyCols = ['CONTRAT_ID'];
 
+//pays_nationalite => paysNationalite
+//date_creation => dateCreation
+//date_contrat_lie => dateContratLie
+
 $ignoreCols = [
     'FORMULE_RESULTAT_ID', // colonne supprimée
     'totalDiviseParDix',   // colonne supprimée
@@ -58,7 +62,7 @@ $comparator->setKeyColumns($keyCols);
 $comparator->setIgnoreColumns($ignoreCols);
 $comparator->setOnlyColumns($onlyCols);
 
-$comparator->setLimit(10000000);
+$comparator->setLimit(1000);
 
 $result = $comparator->run();
 

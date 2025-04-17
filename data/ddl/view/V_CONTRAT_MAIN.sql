@@ -101,10 +101,10 @@ SELECT
 
   -- Données RH dec taux de rémunération
   tr.libelle                                                                            "tauxNom",
-  tc.taux_remu_valeur                                                                   "tauxHoraireValeur",
+  OSE_DIVERS.FORMAT_FLOAT(tc.taux_remu_valeur)                                          "tauxHoraireValeur",
   to_char(tc.taux_remu_date,'dd/mm/YYYY')                                               "tauxHoraireDate",
   trm.libelle                                                                           "tauxMajoreNom",
-  tc.taux_remu_majore_valeur                                                            "tauxMajoreHoraireValeur",
+  OSE_DIVERS.FORMAT_FLOAT(tc.taux_remu_majore_valeur)                                   "tauxMajoreHoraireValeur",
   to_char(tc.taux_remu_date, 'dd/mm/YYYY')                                              "tauxMajoreHoraireDate"
 
 FROM

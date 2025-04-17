@@ -295,6 +295,9 @@ class ContratProcess implements ProcessInterface
             $this->calculStructure($contrat);
         }
         $this->calculParentsIds($contrats);
+
+        $this->purgerMauvaisContratsSansHeures($contrats);
+
         // ajout d'avenants vides pour les missions avec des prolongations de dates
         $this->contratProlongationMission($contrats);
 
@@ -481,6 +484,26 @@ class ContratProcess implements ProcessInterface
             if (!empty($parentsPotentiels)) {
                 // Si on a des parents potentiels, on lui donne le meilleur
                 $autre->setParent($this->meilleurParent($parentsPotentiels));
+            }
+        }
+    }
+
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     * @return void
+     */
+    public function purgerMauvaisContratsSansHeures(array &$contrats): void
+    {
+        if (count($contrats) == 1){
+            return;
+        }
+
+        foreach ($contrats as $uuid => $contrat){
+            if (count($contrat->volumesHoraires) == 0 && !$contrat->isMission && !$contrat->id){
+                unset($contrats[$uuid]);
+                unset($this->intervenants[$contrat->intervenantId][$uuid]);
             }
         }
     }

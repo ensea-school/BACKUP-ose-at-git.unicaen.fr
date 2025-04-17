@@ -601,9 +601,10 @@ class ContratProcess implements ProcessInterface
             throw new \Exception('Le calcul du taux de rémunération ne peut être effectué sans année affecté au contrat');
         }
         if ($contrat->tauxRemuId) {
-            $contrat->tauxRemuDate         = $contrat->debutValidite ?? $contrat->histoCreation ?? $contrat->annee->getDateDebut();
-            $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->tauxRemuDate);
-            $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $contrat->tauxRemuDate);
+            $dateRef = $contrat->debutValidite ?? $contrat->histoCreation ?? $contrat->annee->getDateDebut();
+            $contrat->tauxRemuDate         = $this->getServiceTauxRemu()->tauxDate($contrat->tauxRemuId, $dateRef);
+            $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $dateRef);
+            $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $dateRef);
         }
     }
 

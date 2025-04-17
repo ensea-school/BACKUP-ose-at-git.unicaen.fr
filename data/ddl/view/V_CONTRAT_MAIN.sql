@@ -18,7 +18,7 @@ SELECT
     WHEN tc.edite = 0 AND tyc.code = 'CONTRAT' THEN 'Projet de contrat'
     WHEN tc.edite = 1 AND tyc.code = 'CONTRAT' THEN 'Contrat n°' || tc.contrat_id
     WHEN tc.edite = 0 AND tyc.code = 'AVENANT' THEN 'Projet d''avenant'
-    WHEN tc.edite = 1 AND tyc.code = 'AVENANT' THEN 'Avenant n°' || tc.contrat_id || '.' || tc.numero_avenant
+    WHEN tc.edite = 1 AND tyc.code = 'AVENANT' THEN 'Avenant n°' || cp.id || '.' || tc.numero_avenant
   END                                                                                   "titreCourt",
   tc.numero_avenant                                                                     "numeroAvenant",
   to_char(sysdate, 'dd/mm/YYYY - hh24:mi:ss')                                           "horodatage",
@@ -52,12 +52,13 @@ SELECT
   to_char(tc.date_creation, 'dd/mm/YYYY')                                               "dateCreation",
   to_char(cp.date_retour_signe, 'dd/mm/YYYY')                                           "dateContratLie",
   CASE
-    WHEN tc.autre_libelle IS NOT NULL
+    WHEN tc.autre_libelle IS NOT NULL AND ts.code <> 'MIS'
       THEN '*Dont type(s) intervention(s) : ' || tc.autre_libelle
   END                                                                                   "legendeAutresHeures",
-  'Autres heures' || CASE WHEN tc.autre_libelle IS NOT NULL THEN '*' ELSE '' END        "enteteAutresHeures",
+  'Autres heures' || CASE WHEN tc.autre_libelle IS NOT NULL AND ts.code <> 'MIS' THEN '*' ELSE '' END "enteteAutresHeures",
   tc.types_mission_libelles                                                             "typesMission",
   tc.missions_libelles                                                                  "missions",
+  CASE WHEN ts.code = 'MIS' THEN tc.autre_libelle ELSE NULL END                         "missionsTypesMissions",
 
 
   -- Données concernant l'intervenant
@@ -116,6 +117,7 @@ FROM
        JOIN statut             si ON si.id = i.statut_id
        JOIN taux_remu          tr ON tr.id = tc.taux_remu_id
        JOIN taux_remu         trm ON trm.id = tc.taux_remu_majore_id
+       JOIN type_service       ts ON ts.id = tc.type_service_id
   LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
   LEFT JOIN civilite          civ ON civ.id = COALESCE(d.civilite_id,i.civilite_id)
   LEFT JOIN pays                p ON p.id = COALESCE(d.pays_nationalite_id, i.pays_nationalite_id)

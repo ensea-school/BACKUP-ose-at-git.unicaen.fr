@@ -269,9 +269,6 @@ foreach ($contrats as $cid => $contrat) {
     if ($contrat['validation_id'] && null == $contrat['validation_histo_destruction']) {
         $php .= "$" . $cnom . "->edite         = true;\n";
     }
-    if ($contrat['total_hetd']) {
-        $php .= "$" . $cnom . "->totalHetd     = " . $contrat['total_hetd'] . ";\n";
-    }
 
     $volumeHoraireVariables = [];
 
@@ -337,7 +334,7 @@ function volumeHoraireToPhp(array $volumesHoraire, string $vnom): string
         $php .= "$" . $vnom . "->tauxRemuMajoreId   = " . $volumesHoraire['taux_remu_majore_id'] . ";\n";
     }
     if ($volumesHoraire['date_fin_mission']) {
-        $php .= "$" . $vnom . "->dateFinMission     = new \Datetime('" . substr($contrat['date_fin_mission'], 0, 10) . "');\n";
+        $php .= "$" . $vnom . "->dateFinMission     = new \Datetime('" . substr($volumesHoraire['date_fin_mission'], 0, 10) . "');\n";
     }
     if ($volumesHoraire['cm']) {
         $php .= "$" . $vnom . "->cm                 = " . $volumesHoraire['cm'] . ";\n";

@@ -492,7 +492,7 @@ class ContratProcess implements ProcessInterface
      */
     public function isParentPotentiel(Contrat $contrat, Contrat $candidat): bool
     {
-        if ($candidat->isMission !== $contrat->isMission || $contrat === $candidat || !$candidat->edite) {
+        if ($candidat->isMission !== $contrat->isMission || $contrat === $candidat || !$candidat->edite || $contrat->historise) {
             return false; // pas les mêmes types => pas de lien
         }
 
@@ -633,7 +633,7 @@ class ContratProcess implements ProcessInterface
         if ($contrat->parent) {
             foreach ($contrat->parent->avenants as $contratParser) {
                 // On ne s'intéresse qu'aux avenants étant deja créés
-                if ($contratParser->id && $contratParser->numeroAvenant > $contratNumero && !$contratParser->historise) {
+                if ($contratParser->edite && $contratParser->numeroAvenant > $contratNumero && !$contratParser->historise) {
                     $contratNumero = $contratParser->numeroAvenant;
                 }
             }

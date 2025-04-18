@@ -68,8 +68,8 @@ echo $this->messenger() ?>
                     <td>
                         <?php if ($canCreer): ?>
                             <a class="btn btn-primary"
-                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'uuid' => $tblContrat->getUuid()]) ?>]); ?>">
-                                <i class="fas fa-file"></i> Créer
+                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'uuid' => $tblContrat->getUuid()]) ?>">
+                                <i class="fas fa-file"></i>Créer
                                 un
                                 <?php if ($contratDirect): ?>
                                     <?= $tblContrat->getTypeContrat()->getCode() == TypeContrat::CODE_CONTRAT ? 'contrat' : 'avenant' ?>

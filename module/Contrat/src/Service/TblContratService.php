@@ -119,11 +119,8 @@ class TblContratService extends AbstractEntityService
 
         $dql = 'SELECT tblc
         FROM ' . TblContrat::class . ' tblc
-        JOIN tblc.typeContrat tc
-        JOIN tblc.intervenant i
-        LEFT JOIN tblc.structure s
-        LEFT JOIN tblc.contratParent cp
-        WHERE tblc.uuid = :uuid
+        JOIN tblc.contrat c
+        WHERE c.id = :id
         AND tblc.actif = 1
         AND tblc.volumeHoraireIndex = 0';
 

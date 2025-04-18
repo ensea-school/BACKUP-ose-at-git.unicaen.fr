@@ -262,8 +262,8 @@ class ContratController extends AbstractController
             return new MessengerViewModel;
         }
 
-        $volumeHorairesContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
-        $contrat               = $this->getProcessusContrat()->creer($contrat, $volumeHorairesContrat);
+        $tblContratContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
+        $contrat               = $this->getProcessusContrat()->creer($contrat, $tblContratContrat);
 
         if ($this->getRequest()->isPost()) {
             try {

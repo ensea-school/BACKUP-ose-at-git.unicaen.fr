@@ -63,13 +63,12 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return TblContrat[]
      */
-    public function getVolumeHoraireTblContrat(string $uuid): array
+    public function getVolumesHorairesTblContrat(string $uuid): array
     {
-        $tblContrats = [];
-        $query       = $this->getEntityManager()->createQuery(
+        $query = $this->getEntityManager()->createQuery(
             'SELECT tblc, vh
                  FROM ' . TblContrat::class . ' tblc
-                 JOIN tblc.volumeHoraire vh
+                 left join tblc.volumesHoraires vhs WITH vhs.uuid = tblc.uuid
                  WHERE tblc.uuid = :uuid'
         );
         $query->setParameter('uuid', $uuid);
@@ -111,7 +110,7 @@ class ContratProcessus extends AbstractProcessus
         $query       = $this->getEntityManager()->createQuery(
             'SELECT tblc, vhm
                  FROM ' . TblContrat::class . ' tblc
-                 JOIN tblc.volumeHoraireMission vhm
+                left join tblc.volumesHoraires vhs WITH vhs.uuid = tblc.uuid
                  WHERE tblc.uuid = :uuid'
         );
         $query->setParameter('uuid', $uuid);
@@ -183,66 +182,6 @@ class ContratProcessus extends AbstractProcessus
 
 
     /**
-     * Enregistrement du contrat ET liaison aux volumes horaires correspondants
-     *
-     * @param Contrat $contrat
-     *
-     * @return $this
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function enregistrer(Contrat $contrat, string $uuid): self
-    {
-        if ($contrat->getId()) {
-            throw new LogicException('Le contrat existe déjà. Il ne peut pas être recréé');
-        }
-
-        // on sauvegarde le contrat
-        $this->getServiceContrat()->save($contrat);
-
-        // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
-        $tblContrats = $this->getVolumeHoraireTblContrat($uuid);
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-        foreach ($tblContrats as $tblContrat) {
-            $vh = $tblContrat->getVolumeHoraire();
-            if ($vh != null) {
-                $vh->setContrat($contrat);
-                $this->getEntityManager()->persist($vh);
-            }
-        }
-
-        // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
-        $tblContrats = $this->getVolumeHoraireRefTblContrat($uuid);
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-        foreach ($tblContrats as $tblContrat) {
-            $vhr = $tblContrat->getVolumeHoraireRef();
-            if ($vhr != null) {
-                $vhr->setContrat($contrat);
-                $this->getEntityManager()->persist($vhr);
-            }
-        }
-
-        // on récupère les heures de mission et on les places dans le contrat
-        $tblContrats = $this->getVolumeHoraireMissionTblContrat($uuid);
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-        foreach ($tblContrats as $tblContrat) {
-            $vhm = $tblContrat->getVolumeHoraireMission();
-            if ($vhm != null) {
-                $vhm->setContrat($contrat);
-                $this->getEntityManager()->persist($vhm);
-            }
-        }
-
-
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
-        $this->getEntityManager()->flush();
-
-        return $this;
-    }
-
-
-
-    /**
      * Suppression (historisation) d'un projet de contrat/avenant.
      *
      * @param Contrat $contrat
@@ -302,6 +241,7 @@ class ContratProcessus extends AbstractProcessus
             ->setStructure($contrat->getStructure());
 
         $this->getServiceValidation()->save($validation);
+        $contrat->setValidation($validation);
         $this->getServiceContrat()->save($contrat);
 
         return $validation;
@@ -319,6 +259,48 @@ class ContratProcessus extends AbstractProcessus
     {
         $contrat->setValidation();
         $this->getServiceContrat()->save($contrat);
+
+        return $this;
+    }
+
+
+
+    /**
+     * Enregistrement du contrat ET liaison aux volumes horaires correspondants
+     *
+     * @param Contrat $contrat
+     *
+     * @return $this
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function enregistrer(Contrat $contrat, ?string $uuid = null): self
+    {
+        if ($contrat->getId()) {
+            throw new LogicException('Le contrat existe déjà. Il ne peut pas être recréé');
+        }
+
+        // on sauvegarde le contrat
+        $this->getServiceContrat()->save($contrat);
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
+
+        $tblContrat = $this->getServiceTblContrat()->getInformationContratByUuid($uuid);
+
+        $volumesHoraires = $tblContrat->getVolumesHoraires();
+        foreach ($volumesHoraires as $tblContratVolumesHoraire) {
+            $volumeHoraire = $tblContratVolumesHoraire->getVolumeHoraire()
+                ?: $tblContratVolumesHoraire->getVolumeHoraireRef()
+                    ?: $tblContratVolumesHoraire->getVolumeHoraireMission();
+
+            if ($volumeHoraire !== null) {
+                $volumeHoraire->setContrat($contrat);
+                $this->getEntityManager()->persist($volumeHoraire);
+            }
+        }
+
+
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
+        $this->getEntityManager()->flush();
 
         return $this;
     }

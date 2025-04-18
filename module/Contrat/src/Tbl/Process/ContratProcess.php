@@ -771,7 +771,7 @@ class ContratProcess implements ProcessInterface
             $totalHeures += $vh->heures;
         }
 
-        $contrat->totalHeures = $totalHeures;
+        $contrat->totalHeures = round($totalHeures,2);
     }
 
 
@@ -805,8 +805,8 @@ class ContratProcess implements ProcessInterface
                 $totalGlobal += $vh->hetd;
             }
         }
-        $contrat->totalHetd       = $totalContrat;
-        $contrat->totalGlobalHetd = $totalGlobal;
+        $contrat->totalHetd       = round($totalContrat,2);
+        $contrat->totalGlobalHetd = round($totalGlobal,2);
     }
 
 

@@ -12,11 +12,11 @@ $fs = $container->get(\Formule\Service\FormuleService::class);
 $ts = $container->get(\Formule\Service\TestService::class);
 
 
-$intervenantId = 777000;
+$intervenantId = 201;
 //$intervenantId = 2032;
 $typeVolumeHoraireId = 1;
-$etatVolumeHoraireId = 1;
-$arrondir = \Formule\Entity\FormuleIntervenant::ARRONDISSEUR_FULL;
+$etatVolumeHoraireId = 2;
+$arrondir = \Formule\Entity\FormuleIntervenant::ARRONDISSEUR_MINIMAL;
 
 $fi = $fs->getFormuleServiceIntervenant($intervenantId, $typeVolumeHoraireId, $etatVolumeHoraireId);
 $fi->setArrondisseur($arrondir);

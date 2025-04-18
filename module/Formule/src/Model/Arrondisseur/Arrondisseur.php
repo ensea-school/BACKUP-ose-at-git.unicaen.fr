@@ -3,7 +3,6 @@
 namespace Formule\Model\Arrondisseur;
 
 use Enseignement\Entity\Db\Service;
-use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleServiceIntervenant;
 use Formule\Entity\FormuleVolumeHoraire;
@@ -30,9 +29,10 @@ class Arrondisseur
 
         $this->calculs = [];
 
-        if ($fi::ARRONDISSEUR_NO == $fi->getArrondisseur()) {
-            return; // Aucun arrondissage à effectuer
-        }
+        // Optimisation dangeureuse : on doit entrer dans l'arrondisseur même s'il n'est pas utilisé afin de pouvoir déboguer
+        //if ($fi::ARRONDISSEUR_NO == $fi->getArrondisseur()) {
+        //    return; // Aucun arrondissage à effectuer
+        //}
 
         $data = $this->makeData($fi);
 

@@ -44,6 +44,9 @@ class Arrondisseur
             case $fi::ARRONDISSEUR_MINIMAL:
                 $this->preparerCalculsMinimaux($data);
                 break;
+            case $fi::ARRONDISSEUR_CUSTOM:
+                $this->preparerCalculsCustom($data);
+                break;
         }
 
         foreach ($this->calculs as $ci => $calcul) {
@@ -75,6 +78,13 @@ class Arrondisseur
         foreach ($services as $service) {
             $this->preparationVerticale($service);
         }
+    }
+
+
+
+    protected function preparerCalculsCustom(Ligne $data): void
+    {
+
     }
 
 

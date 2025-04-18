@@ -84,20 +84,22 @@ echo $this->messenger() ?>
                                 echo "Ces heures ne peuvent pas être contractualisées";
                             }
                         endif; ?>
-                        <p>
-                            Services (validés) non contractualisés :<br/>
-                            <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
-                                      href="#details-enseignements-contrat-<?= $tblContrat->getUuid(); ?>"
-                                      role="button"
-                                      aria-expanded="true"
-                                      aria-controls="details-enseignements-contrat-<?= $tblContrat->getUuid(); ?>"
-                                      data-bs-toggle="collapse"
-                                >Afficher/masquer</a></small>
-                        </p>
-                        <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
-                             id="details-enseignements-contrat-<?= $tblContrat->getUuid(); ?>">
-                            <?= $this->partial('contrat/contrat/partial/contrat-heures', ['tblContrat' => $tblContrat]); ?>
-                        </div>
+                        <?php if (count($tblContrat->getVolumesHoraires()) > 0):?>
+                            <p>
+                                Services (validés) non contractualisés :<br/>
+                                <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
+                                          href="#details-enseignements-contrat-<?= $tblContrat->getUuid(); ?>"
+                                          role="button"
+                                          aria-expanded="true"
+                                          aria-controls="details-enseignements-contrat-<?= $tblContrat->getUuid(); ?>"
+                                          data-bs-toggle="collapse"
+                                    >Afficher/masquer</a></small>
+                            </p>
+                            <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
+                                 id="details-enseignements-contrat-<?= $tblContrat->getUuid(); ?>">
+                                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['tblContrat' => $tblContrat]); ?>
+                            </div>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

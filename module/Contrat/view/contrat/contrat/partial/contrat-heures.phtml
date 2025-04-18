@@ -1,33 +1,105 @@
 <?php
 
 use Application\View\Renderer\PhpRenderer;
-use Service\Entity\Db\TypeService;
 use Contrat\Entity\Db\TblContrat;
+use UnicaenApp\Util;
 
 /**
  *
- * @var PhpRenderer    $this
- * @var TblContrat $tblContrat
+ * @var PhpRenderer $this
+ * @var TblContrat  $tblContrat
  *
  */
 
 
-$enseignements = [];
-$enseiegnementsExterieur = [];
-$referentiels = [];
-$missions = [];
+$enseignements          = [];
+$enseignementsExterieur = [];
+$referentiels           = [];
+$missions               = [];
 
 $vhs = $tblContrat->getVolumesHoraires();
-foreach($vhs as $vh) {
-    /* @todo */
-}
 
+
+//On parcours les volumes horaires, on les ranges par type et trie par periode.
+foreach ($vhs as $vh) {
+    if (!empty($vh->getMission())) {
+        $sid = $vh->getMission()->getId();
+        if (!isset($missions[$sid])) {
+            $missions[$sid] = [
+                    'typeMission' => $vh->getMission()->getTypeMission(),
+                    'mission'     => $vh->getMission()->getLibelle(),
+                    'heures'      => 0.0];
+        }
+        $missions[$sid]['heures'] += $vh->getHeures();
+    }
+
+    if (!empty($vh->getServiceReferentiel())) {
+        if (!empty($vh->getServiceReferentiel()->getFonctionReferentiel())) {
+            $frId = $vh->getServiceReferentiel()->getFonctionReferentiel()->getId();
+            if (!isset($enseignements[$frId])) {
+                $referentiels[$frId]           = [
+                        'fonctionLibelle' => $vh->getServiceReferentiel()->getFonctionReferentiel()->getLibelleLong(),
+                        'fonctionCode'    => $vh->getServiceReferentiel()->getFonctionReferentiel()->getCode(),
+                        'heures'          => 0.0,
+                ];
+                $referentiels[$frId]['autres'] += $vh->getAutres();
+            }
+        }
+    }
+
+    if (!empty($vh->getService())) {
+        if (!empty($vh->getService()->getElementPedagogique())) {
+            $epId    = $vh->getService()->getElementPedagogique()->getId();
+            $periode = $vh->getVolumeHoraire()->getPeriode() ? $vh->getVolumeHoraire()->getPeriode()->getCode() : 'N/A';
+
+            if (!isset($enseignements[$periode][$epId])) {
+                $enseignements[$periode][$epId] = [
+                        'etapeId'                   => $vh->getService()->getElementPedagogique()->getEtape()->getId(),
+                        'etapeLibelle'              => $vh->getService()->getElementPedagogique()->getEtape()->getLibelle(),
+                        'etapeCode'                 => $vh->getService()->getElementPedagogique()->getEtape()->getCode(),
+                        'periode'                   => $periode,
+                        'elementPedagogiqueId'      => $vh->getService()->getElementPedagogique()->getId(),
+                        'elementPedagogiqueLibelle' => $vh->getService()->getElementPedagogique()->getLibelle(),
+                        'elementPedagogiqueCode'    => $vh->getService()->getElementPedagogique()->getCode(),
+                        'cm'                        => 0.0,
+                        'td'                        => 0.0,
+                        'tp'                        => 0.0,
+                        'autres'                    => 0.0,
+                ];
+            }
+            $enseignements[$periode][$epId]['cm']     += $vh->getCm();
+            $enseignements[$periode][$epId]['td']     += $vh->getTd();
+            $enseignements[$periode][$epId]['tp']     += $vh->getTp();
+            $enseignements[$periode][$epId]['autres'] += $vh->getAutres();
+        } else {
+            $ee      = $vh->getService()->getId();
+            $periode = $vh->getVolumeHoraire()->getPeriode()->getCode();
+            if (!isset($enseignementsExterieur[$periode][$ee])) {
+                $enseignementsExterieur[$periode][$ee] = [
+                        'periode'       => $periode,
+                        'etablissement' => $vh->getService()->getEtablissement()->getLibelle(),
+                        'description'   => $vh->getService()->getDescription(),
+                        'cm'            => 0.0,
+                        'td'            => 0.0,
+                        'tp'            => 0.0,
+                        'autres'        => 0.0,
+                ];
+            }
+
+            $enseignementsExterieur[$periode][$ee]['cm']     += $vh->getCm();
+            $enseignementsExterieur[$periode][$ee]['td']     += $vh->getTd();
+            $enseignementsExterieur[$periode][$ee]['tp']     += $vh->getTp();
+            $enseignementsExterieur[$periode][$ee]['autres'] += $vh->getAutres();
+        }
+    }
+}
 
 
 ?>
 
 <?php
-if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
+if (!empty($enseignements)):
+    ksort($enseignements); ?>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -37,63 +109,58 @@ if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
             <th>CM</th>
             <th>TD</th>
             <th>TP</th>
-            <th>Autre</th>
+            <th>Autres</th>
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($services[TypeService::CODE_ENSEIGNEMENT] as $element): ?>
-            <tr>
-                <td>
-                    <?php if ($element->getService() && $element->getService()->getElementPedagogique()
-                            && $element->getService()->getElementPedagogique()->getCheminPedagogique()->count() > 1): ?>
+        <?php foreach ($enseignements as $enseignementParPeriode): ?>
+            <?php foreach ($enseignementParPeriode as $enseignement): ?>
+                <tr>
+                    <td>
+
                         <small class="badge bg-secondary" style="font-size:8pt"
                                title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement
                             mutualisé</small><br/>
-                    <?php endif; ?>
-                    <?php if ($element->getService()): ?>
-                    <?php $url = $this->url('of/etape/voir', ['etape' => $element->getService()->getElementPedagogique()->getEtape()->getId()]); ?>
 
+                        <?php $url = $this->url('of/etape/voir', ['etape' => $enseignement['etapeId']]); ?>
+                        <a href="<?php echo $url ?>"
+                           class="ajax-modal"><?php echo $enseignement['etapeLibelle'] ?>
+                            (<?php echo $enseignement['etapeCode'] ?>
+                            )
+                        </a>
 
-                    <a href="<?php echo $url ?>"
-                       class="ajax-modal"><?php echo $element->getService()->getElementPedagogique()->getEtape() ?>
-                        (<?php echo $element->getService()->getElementPedagogique()->getEtape()->getCode() ?>)
-                    </a>
-                    <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php echo $enseignement['periode'] ?>
+                    </td>
+                    <td>
+                        <?php $url = $this->url('of/element/voir', ['elementPedagogique' => $enseignement['elementPedagogiqueId']]); ?>
+                        <a href="<?php echo $url ?>"
+                           class="ajax-modal"><?php echo $enseignement['elementPedagogiqueLibelle'] ?>
+                            (<?php echo $enseignement['elementPedagogiqueCode'] ?>)
+                        </a>
 
-                </td>
-                <td>
-                    <?php if ($element->getService() && $element->getService()->getElementPedagogique()->getPeriode()) {
-                        echo $element->getService()->getElementPedagogique()->getPeriode()->getCode();
-                    }?>
-                </td>
-                <td>
-                    <?php if ($element->getService()): ?>
-                    <?php $url = $this->url('of/element/voir', ['elementPedagogique' => $element->getService()->getElementPedagogique()->getId()]); ?>
-                    <a href="<?php echo $url ?>"
-                       class="ajax-modal"><?php echo $element->getService()->getElementPedagogique()->getLibelle() ?>
-                        (<?php echo $element->getService()->getElementPedagogique()->getCode() ?>)
-                    </a>
-                    <?php endif; ?>
-
-                </td>
-                <td>
-                    <?php echo $element->getCm() ?>
-                </td>
-                <td>
-                    <?php echo $element->getTd() ?>
-                </td>
-                <td>
-                    <?php echo $element->getTp() ?>
-                </td>
-                <td>
-                    <?php echo $element->getAutres() ?>
-                </td>
-            </tr>
+                    </td>
+                    <td>
+                        <?php echo Util::formattedFloat($enseignement['cm']) ?>
+                    </td>
+                    <td>
+                        <?php echo Util::formattedFloat($enseignement['td']) ?>
+                    </td>
+                    <td>
+                        <?php echo Util::formattedFloat($enseignement['tp']) ?>
+                    </td>
+                    <td>
+                        <?php echo Util::formattedFloat($enseignement['autres']) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         <?php endforeach; ?>
         </tbody>
     </table>
 <?php endif; ?>
-<?php if (isset($services[TypeService::CODE_REFERENTIEL])): ?>
+
+<?php if (!empty($referentiels)): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -102,14 +169,14 @@ if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL] as $element): ?>
+        <?php foreach ($referentiels as $referentiel): ?>
             <tr>
                 <td>
-                    <?php echo $element->getServiceReferentiel()->getFonctionReferentiel()->getLibelleLong() ?>
-                    (<?php echo $element->getServiceReferentiel()->getFonctionReferentiel()->getCode() ?>)
+                    <?php echo $referentiel['fonctionLibelle'] ?>
+                    (<?php echo $referentiel['fonctionCode'] ?>)
                 </td>
                 <td>
-                    <?php echo $element->getAutres() ?>
+                    <?php echo $referentiel['heures'] ?>
                 </td>
 
             </tr>
@@ -117,7 +184,7 @@ if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
         </tbody>
     </table>
 <?php endif; ?>
-<?php if (isset($services[TypeService::CODE_MISSION])): ?>
+<?php if (!empty($missions)): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -127,20 +194,63 @@ if (isset($services[TypeService::CODE_ENSEIGNEMENT])): ?>
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($services[TypeService::CODE_MISSION] as $element): ?>
+        <?php foreach ($missions as $mission): ?>
             <tr>
                 <td>
-                    <?php echo $element->getMission()->getTypeMission()->getLibelle() ?>
-                    (<?php echo $element->getMission()->getTypeMission()->getCode() ?>)
+                    <?php echo $mission['typeMission'] ?>
                 </td>
                 <td>
-                    <?php echo $element->getMission()->getLibelle() ?>
+                    <?php echo $mission['mission'] ?>
                 </td>
                 <td>
-                    <?php echo $element->getAutres() ?>
+                    <?php echo Util::formattedFloat($mission['heures']) ?>
                 </td>
-
             </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+<?php if (!empty($enseignementsExterieur)):
+    ksort($enseignementsExterieur); ?>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Etablissement</th>
+            <th>Description</th>
+            <th>Semestre</th>
+            <th>CM</th>
+            <th>TD</th>
+            <th>TP</th>
+            <th>Autres</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($enseignementsExterieur as $enseignementExterieurParPeriode): ?>
+            <?php foreach ($enseignementExterieurParPeriode as $enseignementExterieur): ?>
+                <tr>
+                    <td>
+                        <?= $enseignementExterieur['etablissement'] ?>
+                    </td>
+                    <td>
+                        <?= $enseignementExterieur['description'] ?>
+                    </td>
+                    <td>
+                        <?= $enseignementExterieur['periode'] ?>
+                    </td>
+                    <td>
+                        <?php echo Util::formattedFloat($enseignementExterieur['cm']) ?>
+                    </td>
+                    <td>
+                        <?php echo Util::formattedFloat($enseignementExterieur['td']) ?>
+                    </td>
+                    <td>
+                        <?php echo Util::formattedFloat($enseignementExterieur['tp']) ?>
+                    </td>
+                    <td>
+                        <?php echo Util::formattedFloat($enseignementExterieur['autres']) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         <?php endforeach; ?>
         </tbody>
     </table>

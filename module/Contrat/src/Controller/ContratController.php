@@ -97,12 +97,13 @@ class ContratController extends AbstractController
 
         $contrats = $this->getServiceTblContrat()->getContratsByIntervenant($intervenant, $structure);
 
+
         $contratsNonContractualises = [];
-        $contratsContractualises = [];
-        foreach( $contrats as $contrat){
+        $contratsContractualises    = [];
+        foreach ($contrats as $contrat) {
             if (empty($contrat->getContrat())) {
                 $contratsNonContractualises[$contrat->getUuid()] = $contrat;
-            }else{
+            } else {
                 $contratsContractualises[$contrat->getUuid()] = $contrat;
             }
         }
@@ -174,8 +175,8 @@ class ContratController extends AbstractController
         }
 
         $volumeHorairesCreation = $this->getServiceTblContrat()->getInformationContratByUuid($uuid);
-        $contrat = new Contrat();
-        $contrat = $this->getProcessusContrat()->creer($contrat, $volumeHorairesCreation);
+        $contrat                = new Contrat();
+        $contrat                = $this->getProcessusContrat()->creer($contrat, $volumeHorairesCreation);
 
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
@@ -262,7 +263,7 @@ class ContratController extends AbstractController
         }
 
         $volumeHorairesContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
-        $contrat = $this->getProcessusContrat()->creer($contrat, $volumeHorairesContrat);
+        $contrat               = $this->getProcessusContrat()->creer($contrat, $volumeHorairesContrat);
 
         if ($this->getRequest()->isPost()) {
             try {
@@ -431,7 +432,7 @@ class ContratController extends AbstractController
                     $to           = $this->getRequest()->getPost('destinataire-mail-hide');
                     $cci          = $this->getRequest()->getPost('destinataire-cc-mail');
                     $pieceJointe  = $this->getRequest()->getPost('contrat-piece-jointe');
-                    $mail      = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
+                    $mail         = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
                     /*Create Note from email for this intervenant*/
                     $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $html);
                     $this->getMailService()->send($mail);
@@ -509,7 +510,7 @@ class ContratController extends AbstractController
      */
     public function telechargerFichierAction()
     {
-        $contrat = $this->getEvent()->getParam('contrat');
+        $contrat         = $this->getEvent()->getParam('contrat');
         $fichierDemandee = $this->getEvent()->getParam('fichier');
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)) {

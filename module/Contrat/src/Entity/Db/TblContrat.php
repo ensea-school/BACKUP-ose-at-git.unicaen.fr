@@ -56,7 +56,13 @@ class TblContrat
      */
     public function getVolumesHoraires(): Collection
     {
-        return $this->volumesHoraires;
+        $filteredCollection = $this->volumesHoraires->filter(function ($element) {
+            return !empty($element->getService())
+                || !empty($element->getServiceReferentiel())
+                || !empty($element->getMission());
+        });
+
+        return $filteredCollection;
     }
 
 

@@ -134,21 +134,23 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
         <?php endif; ?>
 
         <!-- Liste des enseignements concernés -->
-        <div>
-            <hr/>
-            <a title="Cliquez pour afficher/masquer les enseignements concernés"
-               href="#details-enseignements-contrat-<?= $tblContrat->getUuid() ?>"
-               role="button"
-               aria-expanded="false"
-               aria-controls="details-enseignements-contrat-<?= $tblContrat->getUuid() ?>"
-               data-bs-toggle="collapse"
-            >Enseignements concernés
-                <small>(cliquez pour afficher/cacher)</small>
-            </a>
-            <div class="collapse" id="details-enseignements-contrat-<?= $tblContrat->getUuid() ?>">
-                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['tblContrat' => $tblContrat]); ?>
+        <?php if (count($tblContrat->getVolumesHoraires()) > 0):?>
+                <div>
+                <hr/>
+                <a title="Cliquez pour afficher/masquer les enseignements concernés"
+                   href="#details-enseignements-contrat-<?= $tblContrat->getUuid() ?>"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="details-enseignements-contrat-<?= $tblContrat->getUuid() ?>"
+                   data-bs-toggle="collapse"
+                >Enseignements concernés
+                    <small>(cliquez pour afficher/cacher)</small>
+                </a>
+                <div class="collapse" id="details-enseignements-contrat-<?= $tblContrat->getUuid() ?>">
+                    <?= $this->partial('contrat/contrat/partial/contrat-heures', ['tblContrat' => $tblContrat]); ?>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
 
     <?php if ($urlValidation || $urlSaisieRetour || $urlDevalidation || $urlSuppression): ?>

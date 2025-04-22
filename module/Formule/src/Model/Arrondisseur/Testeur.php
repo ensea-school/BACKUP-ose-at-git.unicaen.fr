@@ -8,6 +8,8 @@ class Testeur
     {
         $errors = 0;
 
+        $this->remonteeTotaux($data);
+
         $services = $data->getSubs();
         foreach ($services as $service) {
             $this->calcSommesLigne($service);
@@ -120,5 +122,36 @@ class Testeur
 
         $sommeTotale = round($sommeTotale, 2);
         $ligne->getValeur(Ligne::TOTAL)->setValue($sommeTotale);
+    }
+
+
+
+    protected function remonteeTotaux(Ligne $ligne)
+    {
+        $vns = [
+            Ligne::CAT_TYPE_PRIME,
+            Ligne::TOTAL,
+        ];
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $vns[] = $categorie;
+            $vns[] = $categorie . Ligne::TYPE_FI;
+            $vns[] = $categorie . Ligne::TYPE_FA;
+            $vns[] = $categorie . Ligne::TYPE_FC;
+            $vns[] = $categorie . Ligne::TYPE_REFERENTIEL;
+        }
+
+        foreach( $vns as $vn ) {
+            $iVal = $ligne->getValeur($vn);
+            $iVal->setValue(0);
+            foreach ($ligne->getSubs() as $service) {
+                $sVal = $service->getValeur($vn);
+                $sVal->setValue(0);
+                foreach ($service->getSubs() as $vh) {
+                    $vhValue = $vh->getValeur($vn)->getValueFinale();
+                    $iVal->setValue($iVal->getValue() + $vhValue);
+                    $sVal->setValue($sVal->getValue() + $vhValue);
+                }
+            }
+        }
     }
 }

@@ -810,6 +810,7 @@ class CompletudeDossierTest extends OseTestCase
         ];
 
         $destination = [
+            'COMPLETUDE_STATUT' => true,
             'COMPLETUDE_IDENTITE' => true,
             'COMPLETUDE_IDENTITE_COMP' => true,
             'COMPLETUDE_CONTACT' => true,
@@ -855,6 +856,7 @@ class CompletudeDossierTest extends OseTestCase
         ];
 
         $destination = [
+            'COMPLETUDE_STATUT' => true,
             'COMPLETUDE_IDENTITE' => true,
             'COMPLETUDE_IDENTITE_COMP' => true,
             'COMPLETUDE_CONTACT' => false, // bloc activé mais incomplet
@@ -877,6 +879,7 @@ class CompletudeDossierTest extends OseTestCase
         ];
 
         $destination = [
+            'COMPLETUDE_STATUT' => true,
             'COMPLETUDE_IDENTITE' => true,
             'COMPLETUDE_CONTACT' => false,
             'COMPLETUDE_AUTRE_1' => false,
@@ -908,6 +911,7 @@ class CompletudeDossierTest extends OseTestCase
         ];
 
         $destination = [
+            'COMPLETUDE_STATUT' => true,
             'COMPLETUDE_IDENTITE_COMP' => true,
             'COMPLETUDE_CONTACT' => true,
             'COMPLETUDE_ADRESSE' => true,

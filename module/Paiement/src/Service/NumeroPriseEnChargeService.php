@@ -48,7 +48,17 @@ class NumeroPriseEnChargeService extends AbstractService
             $em = $this->getEntityManager();
             $em->beginTransaction();
             foreach ($datas['result'] as $key => $value) {
-                $intervenant = $em->getRepository(Intervenant::class)->findOneBy(['numeroInsee' => $value['insee'], 'annee' => $this->getServiceContext()->getAnnee()]);
+                $repository = $em->getRepository(Intervenant::class);
+
+                $intervenant = $repository->createQueryBuilder('i')
+                    ->where('i.numeroInsee LIKE :val')
+                    ->andWhere('i.annee = :annee')
+                    ->setParameter('val', '%' . $value['insee'] . '%')
+                    ->setParameter('annee', $this->getServiceContext()->getAnnee())
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+
                 if ($intervenant) {
                     $intervenant->setNumeroPec($value['pec']);
                     $intervenant->setSyncPec(0);

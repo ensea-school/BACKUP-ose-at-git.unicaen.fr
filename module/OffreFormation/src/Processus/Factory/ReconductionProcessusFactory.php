@@ -10,6 +10,7 @@ use OffreFormation\Service\EtapeService;
 use OffreFormation\Service\VolumeHoraireEnsService;
 use OffreFormation\Processus\ReconductionProcessus;
 use Psr\Container\ContainerInterface;
+use Unicaen\BddAdmin\Bdd;
 
 /**
  *
@@ -34,6 +35,8 @@ class ReconductionProcessusFactory
             $volumeHoraireEnsService,
             $anneeService,
             $contextService);
+
+        $processus->setBdd($container->get(Bdd::class));
 
         return $processus;
     }

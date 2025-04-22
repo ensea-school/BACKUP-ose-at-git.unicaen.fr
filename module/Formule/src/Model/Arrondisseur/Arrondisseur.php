@@ -66,8 +66,8 @@ class Arrondisseur
 
     protected function preparerCalculs(Ligne $data): void
     {
-        $this->preparationHorizontale($data);
-        $this->preparationVerticale($data);
+        $this->preparationHorizontaleDescendante($data);
+        $this->preparationVerticaleDescendante($data);
     }
 
 
@@ -76,7 +76,7 @@ class Arrondisseur
     {
         $services = $data->getSubs();
         foreach ($services as $service) {
-            $this->preparationVerticale($service);
+            $this->preparationVerticaleDescendante($service);
         }
     }
 
@@ -84,12 +84,44 @@ class Arrondisseur
 
     protected function preparerCalculsCustom(Ligne $data): void
     {
-
+        $services = $data->getSubs();
+        foreach ($services as $service) {
+            $vhs = $service->getSubs();
+            foreach( $vhs as $vh ){
+                $this->preparationHorizontaleMontante($vh);
+            }
+        }
     }
 
 
 
-    protected function preparationHorizontale(Ligne $data): void
+    protected function preparationHorizontaleMontante(Ligne $data): void
+    {
+        // Sous-total par catégorie
+        foreach (Ligne::CATEGORIES as $categorie) {
+            // Sous-sous-total par enseignement FI/FA/FC
+            $ceth = $this->addCalcul($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            foreach (Ligne::TYPES_ENSEIGNEMENT as $type) {
+                $ceth->addValeur($data->getValeur($categorie . $type));
+            }
+
+            // calcul par catégorie
+            $cc = $this->addCalcul($data->getValeur($categorie));
+            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_REFERENTIEL));
+        }
+
+        /* le total général est recalculé */
+        $totalGeneral = $data->getValeur(Ligne::CAT_TYPE_PRIME)->getValueFinale();
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $totalGeneral += $data->getValeur($categorie)->getValueFinale();
+        }
+        $data->getValeur(Ligne::TOTAL)->setValue(round($totalGeneral, 2));
+    }
+
+
+
+    protected function preparationHorizontaleDescendante(Ligne $data): void
     {
         // Sous-total par catégorie
         foreach (Ligne::CATEGORIES as $categorie) {
@@ -114,7 +146,7 @@ class Arrondisseur
 
 
 
-    protected function preparationVerticale(Ligne $data): void
+    protected function preparationVerticaleDescendante(Ligne $data): void
     {
         $subs = $data->getSubs();
 
@@ -143,7 +175,7 @@ class Arrondisseur
                 if ($sv->getDiff() !== 0) {
                     $noDiff = false;
                 }
-                $this->preparationVerticale($sub);
+                $this->preparationVerticaleDescendante($sub);
             }
             if ($noDiff) {
                 $v->setDiff(0);

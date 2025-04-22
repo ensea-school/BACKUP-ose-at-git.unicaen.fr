@@ -47,11 +47,14 @@ class Testeur
             $pService = $vh->getTauxServiceDu() * $vh->getPonderationServiceDu();
             $pCompl = $vh->getTauxServiceCompl() * $vh->getPonderationServiceCompl();
 
-            if ($ligne->getValeur(Ligne::CAT_SERVICE)->getValue() != 0 && $ligne->getValeur(Ligne::CAT_COMPL)->getValue() == 0){
+            if ($ligne->getValeur(Ligne::CAT_SERVICE)->getValue() != 0 && $ligne->getValeur(Ligne::CAT_COMPL)->getValue() == 0 && $ligne->getValeur(Ligne::CAT_TYPE_PRIME)->getValue() == 0){
                 $ligne->getValeur(Ligne::TOTAL)->setControle($vh->getHeures() * $pService);
             }
-            if ($ligne->getValeur(Ligne::CAT_SERVICE)->getValue() == 0 && $ligne->getValeur(Ligne::CAT_COMPL)->getValue() != 0){
+            if ($ligne->getValeur(Ligne::CAT_SERVICE)->getValue() == 0 && $ligne->getValeur(Ligne::CAT_COMPL)->getValue() != 0 && $ligne->getValeur(Ligne::CAT_TYPE_PRIME)->getValue() == 0){
                 $ligne->getValeur(Ligne::TOTAL)->setControle($vh->getHeures() * $pCompl);
+            }
+            if ($ligne->getValeur(Ligne::CAT_SERVICE)->getValue() == 0 && $ligne->getValeur(Ligne::CAT_COMPL)->getValue() == 0 && $ligne->getValeur(Ligne::CAT_TYPE_PRIME)->getValue() != 0){
+                $ligne->getValeur(Ligne::TOTAL)->setControle($vh->getHeuresPrimes() * $pCompl);
             }
             if (abs($pService-$pCompl) < 0.001){ // taux service = taux compl
                 $ligne->getValeur(Ligne::TOTAL)->setControle($vh->getHeures() * $pCompl);

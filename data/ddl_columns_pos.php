@@ -1522,7 +1522,6 @@ return [
         'VOLUME_HORAIRE_MISSION_ID',
         'VOLUME_HORAIRE_REF_ID',
         'TERMINE',
-        'TAUX_REMU_MAJORE_DATE',
         'TOTAL_HETD',
         'TOTAL_HEURES',
         'TOTAL_HEURES_FORMATION',

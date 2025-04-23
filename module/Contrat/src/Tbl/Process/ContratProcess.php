@@ -337,7 +337,7 @@ class ContratProcess implements ProcessInterface
      * @param array $contrats
      * @return void
      */
-    public function contratProlongationMission(array $contrats): void
+    public function contratProlongationMission(array &$contrats): void
     {
 
         $contratPrincipaux = [];
@@ -366,9 +366,10 @@ class ContratProcess implements ProcessInterface
             }
             // Pour les missions qui dépassent on cherche si un avenant non édité existe avec des heures pour ces missions pour modifier la date de fin
             $dateMissions = $this->ChangementDateAvenantNonEdite($dateMissions, $contrat);
-            // Si aucun avenant n'existe on créer un avenant sur la date la plus éloignée pour une prolongation de tous ceux qui n'ont pas d'avenant
+            // Si aucun avenant n'existe on crée un avenant sur la date la plus éloignée pour une prolongation de tous ceux qui n'ont pas d'avenant
             if (!empty($dateMissions)) {
-                $this->CreationAvenantProlongation($contrat, $dateMissions, $dateDebutContrat, $intervenantId);
+                $avenantProlongation = $this->creationAvenantProlongation($contrat, $dateMissions, $dateDebutContrat, $intervenantId);
+                $contrats[$avenantProlongation->uuid] = $avenantProlongation;
             }
         }
     }
@@ -446,7 +447,7 @@ class ContratProcess implements ProcessInterface
      * @param array|Contrat[] $contrats
      * @throws Exception
      */
-    public function calculParentsIds(array $contrats): void
+    public function calculParentsIds(array &$contrats): void
     {
         if (count($contrats) < 2) {
             // On élague tous les cas simples où il n'y a qu'un document max => c'est forcément un contrat
@@ -636,7 +637,7 @@ class ContratProcess implements ProcessInterface
     /**
      * @param array|Contrat[] $contrats
      */
-    public function calculNumerosAvenants(array $contrats): void
+    public function calculNumerosAvenants(array &$contrats): void
     {
         foreach ($contrats as $contrat) {
             $this->calculNumeroAvenant($contrat);
@@ -875,7 +876,6 @@ class ContratProcess implements ProcessInterface
     public function extractContrat(Contrat $contrat): array
     {
         $typeServiceId = $contrat->isMission ? $this->getServiceTypeService()->getMission()->getId() : $this->getServiceTypeService()->getEnseignement()->getId();
-
         $data = [
             'annee_id'                  => $contrat->annee->getId(),
             'intervenant_id'            => $contrat->intervenantId,
@@ -929,7 +929,6 @@ class ContratProcess implements ProcessInterface
     public function extractVolumeHoraire(VolumeHoraire $vh): array
     {
         $contrat = $vh->contrat;
-
         $data = [
             'annee_id'                  => $contrat->annee->getId(),
             'intervenant_id'            => $contrat->intervenantId,
@@ -1122,9 +1121,9 @@ class ContratProcess implements ProcessInterface
      * @param array    $dateMissions
      * @param mixed    $dateDebutContrat
      * @param int|null $intervenantId
-     * @return void
+     * @return Contrat
      */
-    public function CreationAvenantProlongation(Contrat $contrat, array $dateMissions, mixed $dateDebutContrat, ?int $intervenantId): void
+    public function creationAvenantProlongation(Contrat $contrat, array $dateMissions, mixed $dateDebutContrat, ?int $intervenantId): Contrat
     {
         $avenantProlongation         = new Contrat();
         $avenantProlongation->parent = $contrat;
@@ -1145,6 +1144,8 @@ class ContratProcess implements ProcessInterface
         $avenantProlongation->typeService   = $contrat->typeService;
 
         $this->intervenants[$intervenantId][$avenantProlongation->uuid] = $avenantProlongation;
+
+        return $avenantProlongation;
     }
 
 

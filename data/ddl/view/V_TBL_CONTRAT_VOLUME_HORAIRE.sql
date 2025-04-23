@@ -43,6 +43,7 @@ FROM
 
 WHERE
   vh.histo_destruction IS NULL
+  AND vh.motif_non_paiement_id IS NULL
   /*@INTERVENANT_ID=i.id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@STATUT_ID=i.statut_id*/
@@ -93,6 +94,7 @@ FROM
        JOIN formule_resultat_volume_horaire frv ON  frv.formule_resultat_intervenant_id = fr.id AND frv.volume_horaire_id = vh.id
 WHERE
   vh.histo_destruction IS NULL
+  AND vh.motif_non_paiement_id IS NULL
   /*@INTERVENANT_ID=i.id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@STATUT_ID=i.statut_id*/
@@ -144,6 +146,7 @@ FROM
 
 WHERE
   vhr.histo_destruction IS NULL
+  AND sr.motif_non_paiement_id IS NULL
   /*@INTERVENANT_ID=i.id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@STATUT_ID=i.statut_id*/

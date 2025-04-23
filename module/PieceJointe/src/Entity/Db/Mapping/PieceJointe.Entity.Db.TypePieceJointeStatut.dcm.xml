@@ -24,7 +24,7 @@
         <field name="dureeVie" type="integer" column="DUREE_VIE" nullable="false"/>
         <field name="numRegle" type="integer" column="NUM_REGLE" nullable="false"/>
         <field name="obligatoireHNP" type="boolean" column="OBLIGATOIRE_HNP" nullable="false"/>
-        <field name="postRecrutement" type="boolean" column="POST_RECRUTEMENT" nullable="false"/>
+        <field name="demandeeApresRecrutement" type="boolean" column="DEMANDEE_APRES_RECRUTEMENT" nullable="false"/>
 
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-column name="ANNEE_ID" referenced-column-name="ID"/>

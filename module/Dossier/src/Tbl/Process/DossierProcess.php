@@ -9,9 +9,9 @@ use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
 
 /**
- * Description of PaiementProcess
+ * Description of DossierProcess
  *
- * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
+ * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
  */
 class DossierProcess implements ProcessInterface
 {

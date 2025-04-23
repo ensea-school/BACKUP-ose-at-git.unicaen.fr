@@ -7,32 +7,31 @@ use Application\Interfaces\ParametreEntityInterface;
 use Application\Traits\ParametreEntityTrait;
 use Intervenant\Entity\Db\StatutAwareTrait;
 
-
 class TypePieceJointeStatut implements ParametreEntityInterface
 {
     use ParametreEntityTrait;
     use StatutAwareTrait;
     use TypePieceJointeAwareTrait;
 
-    private float $seuilHetd            = 0;
+    private float $seuilHetd = 0;
 
-    private bool  $typeHeureHetd        = false;
+    private bool  $typeHeureHetd = false;
 
-    private bool  $fc                   = false;
+    private bool  $fc = false;
 
-    private bool  $changementRIB        = false;
+    private bool  $changementRIB = false;
 
     private bool  $nationaliteEtrangere = false;
 
-    private int   $dureeVie             = 1;
+    private int   $dureeVie = 1;
 
-    private bool  $obligatoireHNP       = false;
+    private bool  $obligatoireHNP = false;
 
-    private bool  $obligatoire          = true;
+    private bool  $obligatoire = true;
 
-    protected int $numRegle             = 1;
+    protected int $numRegle = 1;
 
-    protected bool $postRecrutement     = false;
+    protected bool $demandeeApresRecrutement = false;
 
 
 
@@ -188,16 +187,16 @@ class TypePieceJointeStatut implements ParametreEntityInterface
 
 
 
-    public function isPostRecrutement(): bool
+    public function isDemandeeApresRecrutement(): bool
     {
-        return $this->postRecrutement;
+        return $this->demandeeApresRecrutement;
     }
 
 
 
-    public function setPostRecrutement(bool $postRecrutement): typePieceJointeStatut
+    public function setDemandeeApresRecrutement(bool $demandeeApresRecrutement): typePieceJointeStatut
     {
-        $this->postRecrutement = $postRecrutement;
+        $this->demandeeApresRecrutement = $demandeeApresRecrutement;
 
         return $this;
     }
@@ -209,11 +208,21 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     public function __toString()
     {
         $txt = $this->getObligatoire() ? 'Obl' : 'Fac';
-        if ($this->getSeuilHetd()) $txt .= ' >' . $this->getSeuilHetd();
-        if ($this->getFc()) $txt .= ' FC ';
-        if ($this->getChangementRIB()) $txt .= ' RIB';
-        if ($this->isNationaliteEtrangere()) $txt .= ' Etr';
-        if ($this->getDureeVie() && $this->getDureeVie() > 1) $txt .= ' ' . $this->getDureeVie() . 'ans';
+        if ($this->getSeuilHetd()) {
+            $txt .= ' >' . $this->getSeuilHetd();
+        }
+        if ($this->getFc()) {
+            $txt .= ' FC ';
+        }
+        if ($this->getChangementRIB()) {
+            $txt .= ' RIB';
+        }
+        if ($this->isNationaliteEtrangere()) {
+            $txt .= ' Etr';
+        }
+        if ($this->getDureeVie() && $this->getDureeVie() > 1) {
+            $txt .= ' ' . $this->getDureeVie() . 'ans';
+        }
 
 
         return $txt;
@@ -228,11 +237,21 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     {
         $t   = [];
         $t[] = $this->getObligatoire() ? 'Pièce obligatoire' : 'Pièce facultative';
-        if ($this->getSeuilHetd()) $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
-        if ($this->getFc()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
-        if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
-        if ($this->isNationaliteEtrangere()) $t[] = 'Uniquement si nationalité étrangère';
-        if ($this->getDureeVie()) $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie() . ' an(s)';
+        if ($this->getSeuilHetd()) {
+            $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
+        }
+        if ($this->getFc()) {
+            $t[] = 'Uniquement avec des enseignements en Formation Continue';
+        }
+        if ($this->getChangementRIB()) {
+            $t[] = 'Uniquement si le RIB a changé';
+        }
+        if ($this->isNationaliteEtrangere()) {
+            $t[] = 'Uniquement si nationalité étrangère';
+        }
+        if ($this->getDureeVie()) {
+            $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie() . ' an(s)';
+        }
 
         return implode("\n", $t);
     }

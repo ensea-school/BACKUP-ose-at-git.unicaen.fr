@@ -24,19 +24,20 @@ if (count($fichiers) > 0): ?>
                 <?php
 
                 $paramsTelecharger = ['fichier' => $fichier->getId(), 'nomFichier' => $fichier->getNom()];
-                if ($canDownload) {
-                    $urlTelecharger = $this->url('piece-jointe/intervenant/fichier/telecharger', $paramsTelecharger, [], true);
-                } else {
-                    $urlTelecharger = null;
-                }
-                echo $this->uploader()->renderUploadedFile($fichier, $urlTelecharger);
+            if ($canDownload) {
+                $urlTelecharger = $this->url('piece-jointe/intervenant/fichier/telecharger', $paramsTelecharger, [], true);
+            } else {
+                $urlTelecharger = null;
+            }
+            echo $this->uploader()->renderUploadedFile($fichier, $urlTelecharger);
 
-                if ($canEdit && !$pj->getValidation()) {
-                    $paramsSupprimer = ['pieceJointe' => $pj->getId(), 'fichier' => $fichier->getId()];
-                    $urlSupprimer    = $this->url('piece-jointe/intervenant/fichier/supprimer', $paramsSupprimer, [], true);
-                    echo $this->uploader()->renderDeleteFile($fichier, $urlSupprimer);
-                }
-                ?>
+            if ($canEdit && !$pj->getValidation()) {
+                $paramsSupprimer = ['pieceJointe' => $pj->getId(), 'fichier' => $fichier->getId()];
+                $urlSupprimer    = $this->url('piece-jointe/intervenant/fichier/supprimer', $paramsSupprimer, [], true);
+                echo $this->uploader()->renderDeleteFile($fichier, $urlSupprimer);
+
+            }
+            ?>
             </li>
         <?php endforeach ?>
     </ul>

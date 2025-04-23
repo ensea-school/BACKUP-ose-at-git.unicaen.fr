@@ -6,6 +6,7 @@ use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\WfEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
@@ -28,7 +29,6 @@ use Symfony\Component\Mime\Email;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 
-
 /**
  * Description of UploadController
  *
@@ -47,6 +47,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
     use MailServiceAwareTrait;
     use NoteServiceAwareTrait;
     use MailerIntervenantFormAwareTrait;
+    use FichierServiceAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -140,7 +141,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_VALIDATION, $intervenant);
         $msgs                  = [];
 
-        if($workflowEtapePjSaisie != null){
+        if ($workflowEtapePjSaisie != null) {
             if ($workflowEtapePjSaisie->getFranchie() != 1) {
                 $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
             } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() == 1) {
@@ -149,7 +150,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
                 $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
                 $msgs['warning'][] = "Mais certaines doivent encore être validées par un gestionnaire.";
             }
-        }else{
+        } else {
             //Si aucune pièce n'est demandé mais que le workflow n'a pas été recalculé, on evite un message d'erreur
             $msgs['success'] = "";
         }
@@ -187,6 +188,22 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $viewModel->setVariable('pj', $pj);
 
         return $viewModel;
+    }
+
+    public function validerFichierAction()
+    {
+        $this->initFilters();
+
+        /** @var PieceJointe $pj */
+        $pj = $this->getEvent()->getParam('pieceJointe');
+        $fichier = $this->getEvent()->getParam('fichier');
+        $intervenant = $pj->getIntervenant();
+        $this->getServiceFichier()->valider($fichier, $intervenant);
+        $this->updateTableauxBord($pj->getIntervenant(), true);
+
+        $viewModel = new ViewModel();
+        $viewModel->setTemplate('piece-jointe/piece-jointe/validation');
+        $viewModel->setVariable('pj', $pj);
     }
 
 
@@ -552,8 +569,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
                      ->subject($subject)
                      ->html($content);
 
-                if(!empty($copy))
-                {
+                if (!empty($copy)) {
                     $mail->cc($copy);
                 }
                 

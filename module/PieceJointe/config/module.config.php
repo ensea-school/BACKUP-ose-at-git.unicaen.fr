@@ -61,6 +61,14 @@ return [
                             ],
                             'action'      => 'devalider',
                         ],
+                        'validerFichier'    => [
+                            'route'       => '/valider/:pieceJointe/:fichier',
+                            'constraints' => [
+                                'pieceJointe' => '[0-9]*',
+                                'fichier'     => '[0-9]*',
+                            ],
+                            'action'      => 'validerFichier',
+                        ],
                         'refuser'    => [
                             'route'       => '/refuser/:pieceJointe',
                             'constraints' => [

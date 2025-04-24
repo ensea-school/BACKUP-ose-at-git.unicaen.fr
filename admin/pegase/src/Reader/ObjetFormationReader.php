@@ -3,6 +3,7 @@
 namespace Reader;
 
 use Entity\ObjetFormation;
+use OseAdmin;
 use unicaen\BddAdmin\Bdd;
 use Entity\Odf;
 
@@ -12,6 +13,15 @@ class ObjetFormationReader implements ReaderInterface
     {
         $console = \OseAdmin::instance()->console();
         $console->println('Récupération de l\'arborescence en cours');
+
+        $config = OseAdmin::instance()->config()->get('pegase');
+
+        if (isset($config['codes_type_objet_formation_ignores'])) {
+            $codes_type_objet_formation_ignores = $config['codes_type_objet_formation_ignores'];
+        } else {
+            $codes_type_objet_formation_ignores = null;
+        }
+        $param = [];
 
         $sql = 'select
                     e.id,
@@ -30,7 +40,22 @@ class ObjetFormationReader implements ReaderInterface
                 JOIN schema_odf.enfant e ON e.id_objet_maquette = om.id
                 LEFT JOIN schema_odf.espace esp on esp.id = om.id_espace';
 
-        $arborescence    = $pegase->select($sql, [], ['fetch' => Bdd::FETCH_EACH]);
+        if (!empty($codes_type_objet_formation_ignores)) {
+            $sql .= ' WHERE om.code_type_objet_formation NOT IN (';
+            $i=0;
+            foreach ($codes_type_objet_formation_ignores as $code_type_objet_formation_ignore) {
+                $nameCode = 'code_type_objet_formation_ignores_' . $i;
+                if($i != 0){
+                    $sql .= ', ';
+                }
+                    $sql .= ':' . $nameCode;
+                $param[$nameCode] = $code_type_objet_formation_ignore;
+                $i++;
+            }
+            $sql .= ')';
+        }
+        dump($sql);
+        $arborescence    = $pegase->select($sql, $param, ['fetch' => Bdd::FETCH_EACH]);
         $enfants         = [];
         $objetsFormation = [];
         while ($element = $arborescence->next()) {
@@ -41,7 +66,7 @@ class ObjetFormationReader implements ReaderInterface
                 $objetFormation->setLibelle($element['libelle_long']);
                 if ($element['structures_porteuse'] != null) {
                     $objetFormation->setStructureId($element['structures_porteuse']);
-                }else{
+                } else {
                     $objetFormation->setStructureId($element['code_structure']);
                 }
 

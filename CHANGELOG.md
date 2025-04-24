@@ -58,6 +58,13 @@
 Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.
 
 
+# OSE 23.15 (24/04/2025)
+
+## Corrections
+
+* Correction import des numéros de prise en charge pour permettre de rechercher un intervenant sur les 13 premiers caractères de son numéro insee (#61528)
+* Modification connecteur pegase pour ignorer certains elements
+
 
 # OSE 23.14 (05/03/2025)
 

@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Contrat\Tbl\Process;
 
-
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Contrat\Entity\Db\TblContrat;
 use Contrat\Entity\Db\TypeContrat;
 use Contrat\Service\TypeContratServiceAwareTrait;
 use Contrat\Tbl\Process\Model\Contrat;
@@ -272,6 +273,7 @@ class ContratProcess implements ProcessInterface
         $vh->tauxRemuId             = (int)$data['taux_remu_id'] ?: null;
         $vh->tauxRemuMajoreId       = (int)$data['taux_remu_majore_id'] ?: null;
         $vh->dateFinMission         = $data['date_fin_mission'] ? new DateTime($data['date_fin_mission']) : null;
+        $vh->dateDebutMission       = $data['date_debut_mission'] ? new DateTime($data['date_debut_mission']) : null;
         $vh->cm                     = (float)$data['cm'];
         $vh->td                     = (float)$data['td'];
         $vh->tp                     = (float)$data['tp'];
@@ -297,6 +299,9 @@ class ContratProcess implements ProcessInterface
         $this->calculParentsIds($contrats);
 
         $this->purgerMauvaisContratsSansHeures($contrats);
+
+
+        $this->calculDateContrat($contrats);
 
         // ajout d'avenants vides pour les missions avec des prolongations de dates
         $this->contratProlongationMission($contrats);
@@ -361,7 +366,7 @@ class ContratProcess implements ProcessInterface
             if (!empty($dateMissions)) {
                 foreach ($dateMissions as $key => $dateMission) {
                     if ($dateMission <= $dateFinContrat) {
-                        unset ($dateMissions[$key]);
+                        unset($dateMissions[$key]);
                     }
                 }
             }
@@ -386,8 +391,12 @@ class ContratProcess implements ProcessInterface
         $hasEnsRef   = false;
 
         foreach ($contrat->volumesHoraires as $vh) {
-            if ($vh->missionId) $hasMissions = true;
-            if ($vh->serviceId || $vh->serviceReferentielId) $hasEnsRef = true;
+            if ($vh->missionId) {
+                $hasMissions = true;
+            }
+            if ($vh->serviceId || $vh->serviceReferentielId) {
+                $hasEnsRef = true;
+            }
         }
 
         if ($hasMissions && $hasEnsRef) {
@@ -638,6 +647,34 @@ class ContratProcess implements ProcessInterface
     /**
      * @param array|Contrat[] $contrats
      */
+    public function calculDateContrat(array $contrats): void
+    {
+        foreach ($contrats as $contrat) {
+            /** @var Contrat $contrat */
+            if ($contrat->finValidite != null && $contrat->debutValidite != null) {
+                continue;
+            }
+
+
+            if ($contrat->isMission) {
+                $this->calculDateContratMission($contrat);
+            } else {
+                if ($contrat->debutValidite == null) {
+                    $contrat->debutValidite = $contrat->annee->getDateDebut();
+                }
+                if ($contrat->finValidite == null) {
+                    $contrat->finValidite = $contrat->annee->getDateFin();
+                }
+            }
+
+        }
+    }
+
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     */
     public function calculNumerosAvenants(array &$contrats): void
     {
         foreach ($contrats as $contrat) {
@@ -815,7 +852,7 @@ class ContratProcess implements ProcessInterface
 
     public function calculIsProlongation(Contrat $contrat): void
     {
-        $maxDateFin  = null;
+        $maxDateFin = null;
         if ($contrat->parent != null) {
             $maxDateFin = $contrat->parent->finValidite;
 
@@ -825,7 +862,7 @@ class ContratProcess implements ProcessInterface
                     continue;
                 }
 
-                if($maxDateFin < $contratParser->finValidite) {
+                if ($maxDateFin < $contratParser->finValidite) {
                     $maxDateFin = $contratParser->finValidite;
                 }
             }
@@ -1051,8 +1088,8 @@ class ContratProcess implements ProcessInterface
 
         $table = $this->getBdd()->getTable('TBL_CONTRAT');
 
-//         on force la DDL pour éviter de faire des requêtes en plus
-//        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
+        //         on force la DDL pour éviter de faire des requêtes en plus
+        //        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
 
         $options = [
             'where'              => $params,
@@ -1174,6 +1211,68 @@ class ContratProcess implements ProcessInterface
         $this->intervenants[$intervenantId][$avenantProlongation->uuid] = $avenantProlongation;
 
         return $avenantProlongation;
+    }
+
+
+
+    public function calculDateContratMission(Contrat $contrat): void
+    {
+        $dateDebut = null;
+        $dateFin   = null;
+        foreach ($contrat->volumesHoraires as $vh) {
+            if ($contrat->debutValidite == null || $dateDebut > $vh->dateDebutMission) {
+                $dateDebut = $vh->dateDebutMission;
+            }
+
+            if ($contrat->finValidite == null || $dateFin > $vh->dateFinMission) {
+                $dateFin = $vh->dateFinMission;
+            }
+        }
+
+        if ($contrat->parent != null) {
+
+            // On ajoute les heures des autres avenants liés au même contrat déjà contractualisé avec un numéro d'avenant infèrieur
+            foreach ($contrat->parent->avenants as $contratParser) {
+                //On ne s'occupe que des avenants déjà contractualisés
+                if (!$contratParser->id || !$contratParser->edite || $contratParser->numeroAvenant >= $contrat->numeroAvenant) {
+                    continue;
+                }
+
+                foreach ($contratParser->volumesHoraires as $vh) {
+                    if ($contrat->debutValidite == null || $dateDebut > $vh->dateDebutMission) {
+                        $dateDebut = $vh->dateDebutMission;
+                    }
+
+                    if ($contrat->finValidite == null || $dateFin > $vh->dateFinMission) {
+                        $dateFin = $vh->dateFinMission;
+                    }
+                }
+            }
+            //On ajoute les volumes horaires liés au contrat parent
+            foreach ($contrat->parent->volumesHoraires as $vh) {
+                if ($contrat->debutValidite == null || $dateDebut > $vh->dateDebutMission) {
+                    $dateDebut = $vh->dateDebutMission;
+                }
+
+                if ($contrat->finValidite == null || $dateFin > $vh->dateFinMission) {
+                    $dateFin = $vh->dateFinMission;
+                }
+            }
+        }
+
+
+        if ($dateDebut == null) {
+            $dateDebut = $contrat->annee->getDateDebut();
+        }
+        if ($dateFin == null) {
+            $dateFin = $contrat->annee->getDateFin();
+        }
+        if ($contrat->debutValidite == null) {
+            $contrat->debutValidite = $dateDebut;
+        }
+        if ($contrat->finValidite == null) {
+            $contrat->finValidite = $dateFin;
+        }
     }
 
 

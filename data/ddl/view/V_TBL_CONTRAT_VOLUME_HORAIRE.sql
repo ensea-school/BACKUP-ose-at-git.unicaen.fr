@@ -173,7 +173,7 @@ SELECT
   tm.taux_remu_majore_id                                                          taux_remu_majore_id,
 
   m.date_fin                                                                      date_fin_mission,
-
+  m.date_debut                                                                    date_debut_mission,
   0                                                                               cm,
   0                                                                               td,
   0                                                                               tp,

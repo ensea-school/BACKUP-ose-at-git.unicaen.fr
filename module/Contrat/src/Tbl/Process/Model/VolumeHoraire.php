@@ -17,6 +17,7 @@ class VolumeHoraire
     public ?int       $tauxRemuId             = null;
     public ?int       $tauxRemuMajoreId       = null;
     public ?\DateTime $dateFinMission         = null;
+    public ?\DateTime $dateDebutMission         = null;
     public float      $cm                     = 0.0;
     public float      $td                     = 0.0;
     public float      $tp                     = 0.0;

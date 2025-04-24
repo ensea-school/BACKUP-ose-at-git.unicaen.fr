@@ -88,6 +88,11 @@ SELECT
   )                                                                                     "adresse",
   COALESCE(d.numero_insee, i.numero_insee)                                              "numInsee",
   p.libelle                                                                             "paysNationalite",
+  CASE WHEN
+    tc.volume_horaire_id IS NULL
+    AND tc.volume_horaire_ref_id IS NULL
+    AND tc.volume_horaire_mission_id IS NULL
+  THEN 1 ELSE 0 END                                                                     "sansHeure",
 
 
   -- Données portant sur les heures
@@ -112,12 +117,12 @@ FROM
             tbl_contrat        tc
        JOIN type_contrat      tyc ON tyc.id = tc.type_contrat_id -- à garder ou non ? attention au changement de type de contrat pour les projets...
        JOIN annee               a ON a.id = tc.annee_id
-       JOIN structure           s ON s.id = tc.structure_id
        JOIN intervenant         i ON i.id = tc.intervenant_id
        JOIN statut             si ON si.id = i.statut_id
        JOIN taux_remu          tr ON tr.id = tc.taux_remu_id
        JOIN taux_remu         trm ON trm.id = tc.taux_remu_majore_id
        JOIN type_service       ts ON ts.id = tc.type_service_id
+  LEFT JOIN structure           s ON s.id = tc.structure_id
   LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
   LEFT JOIN civilite          civ ON civ.id = COALESCE(d.civilite_id,i.civilite_id)
   LEFT JOIN pays                p ON p.id = COALESCE(d.pays_nationalite_id, i.pays_nationalite_id)

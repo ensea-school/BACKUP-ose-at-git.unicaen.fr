@@ -14,7 +14,7 @@ $tbl = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 $params = [
 //    'INTERVENANT_ID' => 36215,
 //    'INTERVENANT_ID' => 777477,
-//    'ANNEE_ID' => 2017,
+    'ANNEE_ID' => 2020,
 ];
 
 $tbl->calculer('contrat', $params);

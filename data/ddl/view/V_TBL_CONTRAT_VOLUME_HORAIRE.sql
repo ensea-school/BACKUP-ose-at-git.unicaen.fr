@@ -17,6 +17,7 @@ SELECT
   ep.taux_remu_id                                                                 taux_remu_majore_id,
 
   NULL                                                                            date_fin_mission,
+  NULL                                                                            date_debut_mission,
 
   CASE WHEN ti.code = 'CM' THEN vh.heures ELSE 0 END                              cm,
   CASE WHEN ti.code = 'TD' THEN vh.heures ELSE 0 END                              td,
@@ -70,6 +71,7 @@ SELECT
   NULL                                                                            taux_remu_majore_id,
 
   NULL                                                                            date_fin_mission,
+  NULL                                                                            date_debut_mission,
 
   CASE WHEN ti.code = 'CM' THEN vh.heures ELSE 0 END                              cm,
   CASE WHEN ti.code = 'TD' THEN vh.heures ELSE 0 END                              td,
@@ -121,6 +123,7 @@ SELECT
   NULL                                                                            taux_remu_majore_id,
 
   NULL                                                                            date_fin_mission,
+  NULL                                                                            date_debut_mission,
 
   0                                                                               cm,
   0                                                                               td,

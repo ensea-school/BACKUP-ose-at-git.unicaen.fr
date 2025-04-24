@@ -148,11 +148,6 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
 
         </ul>
 
-        <!-- Liste des enseignements concernés -->
-        <?php foreach ($volumesHoraireContrat as $vhTblContrat):
-            $uuid = $vhTblContrat->getUuid();
-            break;
-        endforeach; ?>
         <div>
             <hr/>
             <a title="Cliquez pour afficher/masquer les enseignements concernés"

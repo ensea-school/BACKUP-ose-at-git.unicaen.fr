@@ -54,7 +54,6 @@ class ObjetFormationReader implements ReaderInterface
             }
             $sql .= ')';
         }
-        dump($sql);
         $arborescence    = $pegase->select($sql, $param, ['fetch' => Bdd::FETCH_EACH]);
         $enfants         = [];
         $objetsFormation = [];

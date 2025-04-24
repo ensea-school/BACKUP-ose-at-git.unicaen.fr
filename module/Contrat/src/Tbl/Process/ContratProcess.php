@@ -515,7 +515,7 @@ class ContratProcess implements ProcessInterface
                         $hasContratSansHeures = true;
                     }
                 } else {
-                    $hasContrat = false;
+                    $hasContrat = true;
                 }
             }
         }

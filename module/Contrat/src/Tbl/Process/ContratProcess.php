@@ -537,16 +537,8 @@ class ContratProcess implements ProcessInterface
             $uuid          = $this->generateUUID($contratSource->intervenantId);
             $contrat       = $this->getContrat($contratSource->intervenantId, $uuid);
 
-            $contrat->actif                = true;
-            $contrat->typeService          = $this->getServiceTypeService()->getEnseignement();
-            $contrat->annee                = $contratSource->annee;
-            $contrat->debutValidite        = $contrat->annee->getDateDebut();
-            $contrat->finValidite          = $contrat->annee->getDateFin();
-            $contrat->tauxRemuId           = $this->parametreTauxRemuId;
-            $contrat->tauxRemuDate         = $this->getServiceTauxRemu()->tauxDate($contrat->tauxRemuId, $contrat->debutValidite);
-            $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->finValidite);
-            $contrat->tauxRemuMajoreId     = $contrat->tauxRemuId;
-            $contrat->tauxRemuMajoreValeur = $contrat->tauxRemuValeur;
+            $contrat->typeService = $this->getServiceTypeService()->getEnseignement();
+            $contrat->annee       = $contratSource->annee;
         }
 
     }

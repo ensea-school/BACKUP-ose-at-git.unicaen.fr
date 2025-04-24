@@ -137,13 +137,12 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
         <?php if (count($tblContrat->getVolumesHoraires()) > 0):?>
                 <div>
                 <hr/>
-                <a title="Cliquez pour afficher/masquer les enseignements concernés"
-                   href="#details-enseignements-contrat-<?= $tblContrat->getUuid() ?>"
+                <a href="#details-enseignements-contrat-<?= $tblContrat->getUuid() ?>"
                    role="button"
                    aria-expanded="false"
                    aria-controls="details-enseignements-contrat-<?= $tblContrat->getUuid() ?>"
                    data-bs-toggle="collapse"
-                >Enseignements concernés
+                >Détails
                     <small>(cliquez pour afficher/cacher)</small>
                 </a>
                 <div class="collapse" id="details-enseignements-contrat-<?= $tblContrat->getUuid() ?>">

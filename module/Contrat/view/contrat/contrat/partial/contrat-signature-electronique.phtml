@@ -150,13 +150,12 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
 
         <div>
             <hr/>
-            <a title="Cliquez pour afficher/masquer les enseignements concernés"
-               href="#details-enseignements-contrat-<?= $contrat->getId() ?>"
+            <a href="#details-enseignements-contrat-<?= $contrat->getId() ?>"
                role="button"
                aria-expanded="false"
                aria-controls="details-enseignements-contrat-<?= $contrat->getId() ?>"
                data-bs-toggle="collapse"
-            >Enseignements concernés
+            >Détails
                 <small>(cliquez pour afficher/cacher)</small>
             </a>
             <div class="collapse" id="details-enseignements-contrat-<?= $contrat->getId() ?>">

@@ -307,7 +307,7 @@ class ContratProcess implements ProcessInterface
         foreach ($contrats as $contrat) {
             $this->calculTauxRemu($contrat);
             $this->calculTotalHETD($contrat);
-            $this->calculProlongation($contrat);
+            $this->calculIsProlongation($contrat);
             $this->calculTotalHeures($contrat);
             $this->calculTermine($contrat);
             $this->calculTauxCongesPayes($contrat);
@@ -813,7 +813,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function calculProlongation(Contrat $contrat): void
+    public function calculIsProlongation(Contrat $contrat): void
     {
         $maxDateFin  = null;
         if ($contrat->parent != null) {

@@ -40,9 +40,11 @@ foreach ($vhs as $vh) {
                 $referentiels[$frId]           = [
                         'fonctionLibelle' => $vh->getServiceReferentiel()->getFonctionReferentiel()->getLibelleLong(),
                         'fonctionCode'    => $vh->getServiceReferentiel()->getFonctionReferentiel()->getCode(),
-                        'heures'          => 0.0,
+                        'heures'          => $vh->getHeures()
                 ];
-                $referentiels[$frId]['autres'] += $vh->getAutres();
+                if (array_key_exists('autres', $referentiels[$frId])) {
+                    $referentiels[$frId]['autres'] += $vh->getAutres();
+                }
             }
         }
     }

@@ -26,7 +26,8 @@ final class CalculParentsTest extends TblContratTestCase
         $contrat2            = new Contrat();
         $contrat2->isMission = false;
 
-        $this->process->calculParentsIds([$contrat1, $contrat2]);
+        $contrats = [$contrat1, $contrat2];
+        $this->process->calculParentsIds($contrats);
 
         $this->assertNotNull($contrat2->parent);
         $this->assertEquals(1, $contrat2->parent->id);
@@ -101,7 +102,8 @@ final class CalculParentsTest extends TblContratTestCase
         // Ajout des objets dans l'array volumesHoraires
         $contrat3->volumesHoraires = [$volumeHoraire1];
 
-        $this->process->calculParentsIds([$contrat1, $contrat2, $contrat3]);
+        $contrats = [$contrat1, $contrat2, $contrat3];
+        $this->process->calculParentsIds($contrats);
 
 
         /* Verification des calculs */
@@ -174,8 +176,8 @@ final class CalculParentsTest extends TblContratTestCase
         $volumeHoraire3->missionId = 1;
         $contrat3->volumesHoraires = [$volumeHoraire3];
 
-
-        $this->process->calculParentsIds([$contrat1, $contrat2, $contrat3]);
+        $contrats = [$contrat1, $contrat2, $contrat3];
+        $this->process->calculParentsIds($contrats);
 
         //Verification des données
         $this->assertCount(0, $contrat1->avenants);
@@ -247,8 +249,8 @@ final class CalculParentsTest extends TblContratTestCase
         $volumeHoraire3->missionId = 1;
         $contrat3->volumesHoraires = [$volumeHoraire3];
 
-
-        $this->process->calculParentsIds([$contrat1, $contrat2, $contrat3]);
+        $contrats = [$contrat1, $contrat2, $contrat3];
+        $this->process->calculParentsIds($contrats);
 
         //Verification des données
         $this->assertCount(2, $contrat1->avenants);
@@ -333,8 +335,8 @@ final class CalculParentsTest extends TblContratTestCase
         $volumeHoraire5->structureId = 4;
         $contrat3->volumesHoraires   = [$volumeHoraire5];
 
-
-        $this->process->calculParentsIds([$contrat1, $contrat2, $contrat3]);
+        $contrats = [$contrat1, $contrat2, $contrat3];
+        $this->process->calculParentsIds($contrats);
 
         //Verification des données
         //Verification des données
@@ -425,7 +427,8 @@ final class CalculParentsTest extends TblContratTestCase
         // Ajout des objets dans l'array volumesHoraires
         $contrat3->volumesHoraires = [$volumeHoraire1];
 
-        $this->process->calculParentsIds([$contrat1, $contrat2, $contrat3]);
+        $contrats = [$contrat1, $contrat2, $contrat3];
+        $this->process->calculParentsIds($contrats);
 
 
         /* Verification des calculs */
@@ -507,7 +510,8 @@ final class CalculParentsTest extends TblContratTestCase
         // Ajout des objets dans l'array volumesHoraires
         $contrat3->volumesHoraires = [$volumeHoraire1];
 
-        $this->process->calculParentsIds([$contrat1, $contrat2, $contrat3]);
+        $contrats = [$contrat1, $contrat2, $contrat3];
+        $this->process->calculParentsIds($contrats);
 
 
         /* Verification des calculs */
@@ -603,7 +607,8 @@ final class CalculParentsTest extends TblContratTestCase
 
         $contrat2->volumesHoraires = [$volumeHoraire5, $volumeHoraire6];
 
-        $this->process->calculParentsIds([$contrat1, $contrat2]);
+        $contrats = [$contrat1, $contrat2];
+        $this->process->calculParentsIds($contrats);
 
 
         self::assertNull($contrat2->parent);
@@ -686,7 +691,8 @@ final class CalculParentsTest extends TblContratTestCase
 
         $contrat2->volumesHoraires = [$volumeHoraire5, $volumeHoraire6];
 
-        $this->process->calculParentsIds([$contrat1, $contrat2]);
+        $contrats = [$contrat1, $contrat2];
+        $this->process->calculParentsIds($contrats);
 
 
         self::assertEquals($contrat1, $contrat2->parent);

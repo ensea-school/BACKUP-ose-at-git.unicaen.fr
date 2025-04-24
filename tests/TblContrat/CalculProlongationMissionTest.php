@@ -39,7 +39,8 @@ final class CalculProlongationMissionTest extends TblContratTestCase
         $volumeHoraire1->dateFinMission = new DateTime('2020-02-21');
         $contrat1->volumesHoraires      = [$volumeHoraire1];
 
-        $this->process->contratProlongationMission([$contrat1]);
+        $contrats = [$contrat1];
+        $this->process->contratProlongationMission($contrats);
 
         self::assertCount(1, $contrat1->avenants);
         self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
@@ -94,8 +95,8 @@ final class CalculProlongationMissionTest extends TblContratTestCase
         $avenant->volumesHoraires[]     = $volumeHoraire2;
         $contrat1->avenants             = [$avenant];
 
-
-        $this->process->contratProlongationMission([$contrat1, $avenant]);
+        $contrats = [$contrat1, $avenant];
+        $this->process->contratProlongationMission($contrats);
 
         self::assertCount(2, $contrat1->avenants);
         self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
@@ -145,8 +146,8 @@ final class CalculProlongationMissionTest extends TblContratTestCase
         $avenant->volumesHoraires[]     = $volumeHoraire2;
         $contrat1->avenants             = [$avenant];
 
-
-        $this->process->contratProlongationMission([$contrat1, $avenant]);
+        $contrats = [$contrat1, $avenant];
+        $this->process->contratProlongationMission($contrats);
 
         self::assertCount(1, $contrat1->avenants);
         self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
@@ -202,8 +203,8 @@ final class CalculProlongationMissionTest extends TblContratTestCase
         $avenant->volumesHoraires[]            = $volumeHoraireMission4;
         $contrat1->avenants                    = [$avenant];
 
-
-        $this->process->contratProlongationMission([$contrat1, $avenant]);
+        $contrats = [$contrat1, $avenant];
+        $this->process->contratProlongationMission($contrats);
 
         self::assertCount(1, $contrat1->avenants);
         self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
@@ -242,8 +243,8 @@ final class CalculProlongationMissionTest extends TblContratTestCase
 
         $contrat1->volumesHoraires = [$volumeHoraireMission1, $volumeHoraireMission2];
 
-
-        $this->process->contratProlongationMission([$contrat1]);
+        $contrats = [$contrat1];
+        $this->process->contratProlongationMission($contrats);
 
         self::assertCount(1, $contrat1->avenants);
         self::assertEquals($contrat1->id, $contrat1->avenants[0]->parent->id);
@@ -293,7 +294,8 @@ final class CalculProlongationMissionTest extends TblContratTestCase
 
         $contrat2->volumesHoraires = [$volumeHoraireMission2];
 
-        $this->process->contratProlongationMission([$contrat1, $contrat2]);
+        $contrats = [$contrat1, $contrat2];
+        $this->process->contratProlongationMission($contrats);
 
         self::assertCount(1, $contrat1->avenants);
         self::assertCount(1, $contrat2->avenants);

@@ -18,15 +18,18 @@ use Contrat\Entity\Db\TblContrat;
  * @var string             $libelleCircuitSignature
  * @var array              $infosSignature
  * @var bool               $contratSignatureActivation
+ * @var bool               $isMission
  */
 
 $this->intervenant($intervenant)->renderTitle("Contrat/avenant");
 $this->messenger()->setMessagesFromFlashMessengerWithNoNamespace();
+$libelleMessageHeures = (!$isMission)?'Des heures prévisionnelles d\'enseignement':'Des heures prévisionnelles de missions';
+$libelleMessage = (!$isMission)?'Tous les enseignements prévisionnels validés' : 'Toutes les missions validées';
 
 if (!empty($contratsNonContractualises)) {
-    $this->messenger()->addMessage('Des heures prévisionnelles d\'enseignement validées ne font l\'objet d\'aucun contrat ou avenant. En voici la liste ci-dessous :', 'info');
+    $this->messenger()->addMessage($libelleMessageHeures. ' validées ne font l\'objet d\'aucun contrat ou avenant. En voici la liste ci-dessous :', 'info');
 } else {
-    $this->messenger()->addMessage('Tous les enseignements prévisionnels validés ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
+    $this->messenger()->addMessage($libelleMessage .' ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
 }
 echo $this->messenger() ?>
 

@@ -100,12 +100,17 @@ class ContratController extends AbstractController
 
         $contratsNonContractualises = [];
         $contratsContractualises    = [];
+        $isMission = 0;
         foreach ($contrats as $contrat) {
             if (empty($contrat->getContrat())) {
                 $contratsNonContractualises[$contrat->getUuid()] = $contrat;
             } else {
                 $contratsContractualises[$contrat->getUuid()] = $contrat;
             }
+            if (!empty($contrat->getTypesMissionLibelles())) {
+                $isMission = 1;
+            }
+
         }
 
         $contratDirectResult        = $this->getServiceParametres()->get('contrat_direct');
@@ -153,7 +158,8 @@ class ContratController extends AbstractController
             'contratDirect',
             'contratSignatureActivation',
             'infosSignature',
-            'libelleCircuitSignature'
+            'libelleCircuitSignature',
+            'isMission',
         );
     }
 

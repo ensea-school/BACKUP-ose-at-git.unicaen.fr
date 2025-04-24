@@ -5,10 +5,6 @@ $ca->init();
 
 $c->begin('Synchronisation de OSE à partir des données de Pegase');
 
-$ca->read();
-
-
-
 $c->println('Lecture des données de la base source');
 $ca->read();
 $c->println('Transformation des données pour correspondre au formet de OSE');

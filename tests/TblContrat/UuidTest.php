@@ -12,10 +12,10 @@ final class UuidTest extends TblContratTestCase
             extract($data);
 
             $uuid = $this->process->generateUUID(
-                intervenant_id: $intervenantId ?? 1, // toujours 1 éventuellement
-                contratId     : $contratId ?? null,
-                structureId   : $structureId ?? null,
-                missionId     : $missionId ?? null
+                intervenantId: $intervenantId ?? 1, // toujours 1 éventuellement
+                contratId    : $contratId ?? null,
+                structureId  : $structureId ?? null,
+                missionId    : $missionId ?? null
             );
 
             self::assertEquals($expected, $uuid);

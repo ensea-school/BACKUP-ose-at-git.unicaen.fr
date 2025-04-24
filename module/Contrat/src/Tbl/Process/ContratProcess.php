@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace Contrat\Tbl\Process;
 
-use Application\Entity\Db\Annee;
 use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Contrat\Entity\Db\TblContrat;
 use Contrat\Entity\Db\TypeContrat;
 use Contrat\Service\TypeContratServiceAwareTrait;
 use Contrat\Tbl\Process\Model\Contrat;
@@ -197,6 +195,27 @@ class ContratProcess implements ProcessInterface
 
 
 
+    private function addContrat(Contrat $contrat): void
+    {
+        if (!$contrat->intervenantId) {
+            throw new \Exception("Impossible d'ajouter un contrat si l'intervenant n'est pas défini");
+        }
+
+        if (!$contrat->uuid) {
+            throw new \Exception("Impossible d'ajouter un contrat si l'uuid n'est pas défini");
+        }
+
+        if (!array_key_exists($contrat->intervenantId, $this->intervenants)) {
+            $this->intervenants[$contrat->intervenantId] = [];
+        }
+
+        if (!array_key_exists($contrat->uuid, $this->intervenants[$contrat->intervenantId])) {
+            $this->intervenants[$contrat->intervenantId][$contrat->uuid] = $contrat;
+        }
+    }
+
+
+
     private function getContrat(int $intervenantId, string $uuid): Contrat
     {
         if (!array_key_exists($intervenantId, $this->intervenants)) {
@@ -206,17 +225,13 @@ class ContratProcess implements ProcessInterface
         if (!array_key_exists($uuid, $this->intervenants[$intervenantId])) {
             $contrat                = new Contrat($uuid);
             $contrat->intervenantId = $intervenantId;
-
-            $this->intervenants[$intervenantId][$uuid] = $contrat;
+            $this->addContrat($contrat);
         }
         return $this->intervenants[$intervenantId][$uuid];
     }
 
 
 
-    /**
-     * @throws Exception
-     */
     protected function loadVolumesHoraires(array $params): void
     {
         $sql    = $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT_VOLUME_HORAIRE');
@@ -230,9 +245,6 @@ class ContratProcess implements ProcessInterface
 
 
 
-    /**
-     * @throws Exception
-     */
     public function loadVolumeHoraire(array $data): VolumeHoraire
     {
         $intervenantId = (int)$data['intervenant_id'];
@@ -258,9 +270,6 @@ class ContratProcess implements ProcessInterface
 
 
 
-    /**
-     * @throws Exception
-     */
     public function volumeHoraireHydrateFromDb(VolumeHoraire $vh, array $data): void
     {
         $vh->structureId            = (int)$data['structure_id'];
@@ -287,9 +296,6 @@ class ContratProcess implements ProcessInterface
 
 
 
-    /**
-     * @throws Exception
-     */
     public function traitement(array $contrats): void
     {
         foreach ($contrats as $contrat) {
@@ -298,7 +304,7 @@ class ContratProcess implements ProcessInterface
         }
         $this->calculParentsIds($contrats);
 
-        $this->purgerMauvaisContratsSansHeures($contrats);
+        $this->gestionContratsSansHeures($contrats);
 
 
         $this->calculDateContrat($contrats);
@@ -339,10 +345,6 @@ class ContratProcess implements ProcessInterface
 
 
 
-    /**
-     * @param array $contrats
-     * @return void
-     */
     public function contratProlongationMission(array &$contrats): void
     {
 
@@ -362,7 +364,7 @@ class ContratProcess implements ProcessInterface
             $dateFinContrat   = $contrat->finValidite;
             $intervenantId    = $contrat->intervenantId;
 
-            [$dateMissions, $dateFinContrat, $dateDebutContrat] = $this->CalculDateContratEdite($contrat, $dateMissions, $dateFinContrat, $dateDebutContrat);
+            [$dateMissions, $dateFinContrat, $dateDebutContrat] = $this->calculDateContratEdite($contrat, $dateMissions, $dateFinContrat, $dateDebutContrat);
             if (!empty($dateMissions)) {
                 foreach ($dateMissions as $key => $dateMission) {
                     if ($dateMission <= $dateFinContrat) {
@@ -371,7 +373,7 @@ class ContratProcess implements ProcessInterface
                 }
             }
             // Pour les missions qui dépassent on cherche si un avenant non édité existe avec des heures pour ces missions pour modifier la date de fin
-            $dateMissions = $this->ChangementDateAvenantNonEdite($dateMissions, $contrat);
+            $dateMissions = $this->changementDateAvenantNonEdite($dateMissions, $contrat);
             // Si aucun avenant n'existe on crée un avenant sur la date la plus éloignée pour une prolongation de tous ceux qui n'ont pas d'avenant
             if (!empty($dateMissions)) {
                 $avenantProlongation                  = $this->creationAvenantProlongation($contrat, $dateMissions, $dateDebutContrat, $intervenantId);
@@ -382,9 +384,6 @@ class ContratProcess implements ProcessInterface
 
 
 
-    /**
-     * @throws Exception
-     */
     public function calculTypeService(Contrat $contrat): void
     {
         $hasMissions = false;
@@ -505,25 +504,55 @@ class ContratProcess implements ProcessInterface
      * @param array|Contrat[] $contrats
      * @return void
      */
-    public function purgerMauvaisContratsSansHeures(array &$contrats): void
+    public function gestionContratsSansHeures(array &$contrats): void
     {
-        if (count($contrats) == 1) {
-            return;
-        }
-
-        foreach ($contrats as $uuid => $contrat) {
-            if (count($contrat->volumesHoraires) == 0 && !$contrat->isMission && !$contrat->id) {
-                unset($contrats[$uuid]);
-                unset($this->intervenants[$contrat->intervenantId][$uuid]);
+        $hasContrat           = false;
+        $hasContratSansHeures = false;
+        foreach ($contrats as $contrat) {
+            if (!$contrat->historise) {
+                if (empty($contrat->volumesHoraires)) {
+                    if (null == $contrat->parent) {
+                        $hasContratSansHeures = true;
+                    }
+                } else {
+                    $hasContrat = false;
+                }
             }
         }
+
+        if ($hasContrat && $hasContratSansHeures) {
+            // On supprime les contrats sans heures
+            foreach ($contrats as $uuid => $contrat) {
+                if (count($contrat->volumesHoraires) == 0 && !$contrat->isMission && !$contrat->id) {
+                    unset($contrats[$uuid]);
+                    unset($this->intervenants[$contrat->intervenantId][$uuid]);
+                }
+            }
+        } elseif (!$hasContrat && !$hasContratSansHeures) {
+            // Si rien, alors on crée un contrat sans heure
+
+            /** @var Contrat $contratSource */
+            // On récup le contrat source, pour en extraire l'année et l'intervenant
+            $contratSource = current($contrats);
+            $uuid          = $this->generateUUID($contratSource->intervenantId);
+            $contrat       = $this->getContrat($contratSource->intervenantId, $uuid);
+
+            $contrat->actif                = true;
+            $contrat->typeService          = $this->getServiceTypeService()->getEnseignement();
+            $contrat->annee                = $contratSource->annee;
+            $contrat->debutValidite        = $contrat->annee->getDateDebut();
+            $contrat->finValidite          = $contrat->annee->getDateFin();
+            $contrat->tauxRemuId           = $this->parametreTauxRemuId;
+            $contrat->tauxRemuDate         = $this->getServiceTauxRemu()->tauxDate($contrat->tauxRemuId, $contrat->debutValidite);
+            $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $contrat->finValidite);
+            $contrat->tauxRemuMajoreId     = $contrat->tauxRemuId;
+            $contrat->tauxRemuMajoreValeur = $contrat->tauxRemuValeur;
+        }
+
     }
 
 
 
-    /**
-     * @throws Exception
-     */
     public function isParentPotentiel(Contrat $contrat, Contrat $candidat): bool
     {
         if ($candidat->isMission !== $contrat->isMission || $contrat === $candidat || !$candidat->edite || $contrat->historise) {
@@ -593,9 +622,6 @@ class ContratProcess implements ProcessInterface
 
 
 
-    /**
-     * @throws Exception
-     */
     public function calculTauxRemu(Contrat $contrat): void
     {
         if ($contrat->isMission) {
@@ -875,7 +901,7 @@ class ContratProcess implements ProcessInterface
 
 
 
-    public function generateUUID(int $intervenant_id, ?int $contratId, ?int $structureId = null, ?int $missionId = null, ?int $parentId = null): string
+    public function generateUUID(int $intervenantId, ?int $contratId = null, ?int $structureId = null, ?int $missionId = null, ?int $parentId = null): string
     {
         if ($contratId) {
             return 'contrat_id_' . $contratId;
@@ -886,14 +912,14 @@ class ContratProcess implements ProcessInterface
 
         if ($missionId != null) {
             return match ($this->parametreMis) {
-                Parametre::CONTRAT_MIS_MISSION    => 'mis_mission_' . $intervenant_id . '_' . $missionId,
-                Parametre::CONTRAT_MIS_COMPOSANTE => 'mis_structure_' . $intervenant_id . '_' . $structureId,
-                default                           => 'mis_global_' . $intervenant_id,
+                Parametre::CONTRAT_MIS_MISSION    => 'mis_mission_' . $intervenantId . '_' . $missionId,
+                Parametre::CONTRAT_MIS_COMPOSANTE => 'mis_structure_' . $intervenantId . '_' . $structureId,
+                default                           => 'mis_global_' . $intervenantId,
             };
         } else {
             return match ($this->parametreEns) {
-                Parametre::CONTRAT_ENS_COMPOSANTE => 'ens_structure_' . $intervenant_id . '_' . $structureId,
-                default                           => 'ens_global_' . $intervenant_id,
+                Parametre::CONTRAT_ENS_COMPOSANTE => 'ens_structure_' . $intervenantId . '_' . $structureId,
+                default                           => 'ens_global_' . $intervenantId,
             };
         }
     }
@@ -1077,9 +1103,6 @@ class ContratProcess implements ProcessInterface
 
 
 
-    /**
-     * @throws Exception
-     */
     public function enregistrement(TableauBord $tableauBord, array $params): void
     {
 
@@ -1114,7 +1137,7 @@ class ContratProcess implements ProcessInterface
      * @param DateTime|null $dateDebutContrat
      * @return array
      */
-    public function CalculDateContratEdite(Contrat $contrat, array $dateMissions, ?DateTime $dateFinContrat, ?DateTime $dateDebutContrat): array
+    public function calculDateContratEdite(Contrat $contrat, array $dateMissions, ?DateTime $dateFinContrat, ?DateTime $dateDebutContrat): array
     {
         foreach ($contrat->volumesHoraires as $volumeHoraire) {
             if (empty($dateMissions[$volumeHoraire->missionId])
@@ -1154,7 +1177,7 @@ class ContratProcess implements ProcessInterface
      * @param Contrat $contrat
      * @return array
      */
-    public function ChangementDateAvenantNonEdite(array $dateMissions, Contrat $contrat): array
+    public function changementDateAvenantNonEdite(array $dateMissions, Contrat $contrat): array
     {
         if (!empty($dateMissions)) {
             foreach ($contrat->avenants as $avenant) {
@@ -1208,7 +1231,7 @@ class ContratProcess implements ProcessInterface
         $avenantProlongation->uuid          = $this->generateUUID($intervenantId, $avenantProlongation->id, $avenantProlongation->structureId, $avenantProlongation->getMissionId(), $avenantProlongation->parent->id);
         $avenantProlongation->typeService   = $contrat->typeService;
 
-        $this->intervenants[$intervenantId][$avenantProlongation->uuid] = $avenantProlongation;
+        $this->addContrat($avenantProlongation);
 
         return $avenantProlongation;
     }
@@ -1274,6 +1297,5 @@ class ContratProcess implements ProcessInterface
             $contrat->finValidite = $dateFin;
         }
     }
-
 
 }

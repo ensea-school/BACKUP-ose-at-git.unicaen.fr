@@ -307,6 +307,7 @@ class ContratProcess implements ProcessInterface
         foreach ($contrats as $contrat) {
             $this->calculTauxRemu($contrat);
             $this->calculTotalHETD($contrat);
+            $this->calculProlongation($contrat);
             $this->calculTotalHeures($contrat);
             $this->calculTermine($contrat);
             $this->calculTauxCongesPayes($contrat);
@@ -812,6 +813,13 @@ class ContratProcess implements ProcessInterface
 
 
 
+    public function calculProlongation(Contrat $contrat): void
+    {
+        // @todo comme calculTotalHETD
+    }
+
+
+
     public function generateUUID(int $intervenant_id, ?int $contratId, ?int $structureId = null, ?int $missionId = null, ?int $parentId = null): string
     {
         if ($contratId) {
@@ -893,6 +901,7 @@ class ContratProcess implements ProcessInterface
             'contrat_id'                => $contrat->id,
             'contrat_parent_id'         => $contrat->parent?->id,
             'numero_avenant'            => $contrat->numeroAvenant,
+            'prolongation'              => $contrat->prolongation,
             'date_creation'             => $contrat->histoCreation,
             'date_debut'                => $contrat->debutValidite,
             'date_fin'                  => $contrat->finValidite,
@@ -946,6 +955,7 @@ class ContratProcess implements ProcessInterface
             'contrat_id'                => $contrat->id,
             'contrat_parent_id'         => $contrat->parent?->id,
             'numero_avenant'            => $contrat->numeroAvenant,
+            'prolongation'              => $contrat->prolongation,
             'date_creation'             => $contrat->histoCreation,
             'date_debut'                => $contrat->debutValidite,
             'date_fin'                  => $contrat->finValidite,

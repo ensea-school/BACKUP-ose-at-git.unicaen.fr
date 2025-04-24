@@ -17,7 +17,7 @@ class v24Contrats extends MigrationAction
 
     public function utile(): bool
     {
-        return $this->manager()->hasNewColumn('TBL_CONTRAT', 'AUTRES_LIBELLES');
+        return $this->manager()->hasNewColumn('TBL_CONTRAT', 'PROLONGATION');
     }
 
 

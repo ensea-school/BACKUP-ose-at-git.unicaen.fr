@@ -28,6 +28,7 @@
             <join-column name="CONTRAT_PARENT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="numeroAvenant" type="integer" column="NUMERO_AVENANT" nullable="false"/>
+        <field name="prolongation" type="boolean" column="PROLONGATION" nullable="false"/>
         <field name="edite" type="boolean" column="EDITE" nullable="false"/>
         <field name="signe" type="boolean" column="SIGNE" nullable="false"/>
         <field name="termine" type="boolean" column="TERMINE" nullable="false"/>

@@ -1496,6 +1496,7 @@ return [
         'CONTRAT_ID',
         'CONTRAT_PARENT_ID',
         'TYPE_CONTRAT_ID',
+        'PROLONGATION',
         'EDITE',
         'SIGNE',
         'DATE_DEBUT',

@@ -93,6 +93,7 @@ SELECT
     AND tc.volume_horaire_ref_id IS NULL
     AND tc.volume_horaire_mission_id IS NULL
   THEN 1 ELSE 0 END                                                                     "sansHeure",
+  tc.prolongation                                                                       "prolongation",
 
 
   -- Données portant sur les heures

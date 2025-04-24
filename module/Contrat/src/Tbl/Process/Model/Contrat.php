@@ -19,6 +19,7 @@ class Contrat
     public ?int         $structureId   = null;
     public ?int         $validationId  = null;
     public ?Contrat     $parent        = null;
+    public bool         $prolongation  = false;
 
     /** @var Contrat[] */
     public array      $avenants             = [];

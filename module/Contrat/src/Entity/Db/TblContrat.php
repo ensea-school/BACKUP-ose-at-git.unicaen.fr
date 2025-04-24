@@ -23,6 +23,7 @@ class TblContrat
     private ?Contrat    $contrat;
     private ?Contrat    $contratParent;
     private ?int        $numeroAvenant;
+    private bool        $prolongation;
     private bool        $edite;
     private bool        $signe;
     private bool        $termine;
@@ -140,6 +141,13 @@ class TblContrat
     public function getNumeroAvenant(): ?int
     {
         return $this->numeroAvenant;
+    }
+
+
+
+    public function isProlongation(): bool
+    {
+        return $this->prolongation;
     }
 
 

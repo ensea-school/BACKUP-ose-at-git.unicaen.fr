@@ -88,6 +88,11 @@ SELECT
   )                                                                                     "adresse",
   COALESCE(d.numero_insee, i.numero_insee)                                              "numInsee",
   p.libelle                                                                             "paysNationalite",
+  CASE WHEN
+    tc.volume_horaire_id IS NULL
+    AND tc.volume_horaire_ref_id IS NULL
+    AND tc.volume_horaire_mission_id IS NULL
+  THEN 1 ELSE 0 END                                                                     "sansHeure",
 
 
   -- Données portant sur les heures

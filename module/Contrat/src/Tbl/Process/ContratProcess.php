@@ -539,6 +539,7 @@ class ContratProcess implements ProcessInterface
 
             $contrat->typeService = $this->getServiceTypeService()->getEnseignement();
             $contrat->annee       = $contratSource->annee;
+            $contrats[$uuid] = $contrat;
         }
 
     }

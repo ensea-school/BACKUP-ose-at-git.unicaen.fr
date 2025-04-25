@@ -23,6 +23,10 @@
   * Possibilité de contractualiser du référentiel sans heure d'enseignement (#38876)
   * Possibilité de créer un contrat de mission sur seule prolongation de fin de date de contrat
   * possibilité de créer des contrats multi-missions
+  * Possibilité de créer un contrat sans aucune heures
+* Les projets sont transformé en avenant dans l'interface et plus seulement après validation
+* Remise au propre de la table v_contrat_main :
+  * Uniformisation des différents nom de variable
 * [Possibilité de créer vos propres scripts PHP exploitant OSE](/doc/scripts.md) (#60691)
 
 ## Améliorations

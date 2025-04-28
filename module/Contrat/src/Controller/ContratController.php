@@ -95,17 +95,20 @@ class ContratController extends AbstractController
         $title = "Contrat/avenants <small>{$intervenant}</small>";
 
 
-        $volumesHoraireIntervenant = $this->getServiceTblContrat()->getContratVolumeHoraireByIntervenant($intervenant, $structure);
-        $services                  = [];
-        foreach ($volumesHoraireIntervenant as $volumeHoraireIntervenant) {
-            /** @var TblContrat $volumesHoraireIntervenant */
+        $contrats = $this->getServiceTblContrat()->getContratsByIntervenant($intervenant, $structure);
 
-            if ($volumeHoraireIntervenant->getTypeService() != null) {
-                if ($volumeHoraireIntervenant->getContrat() == null) {
-                    $services['NoContrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
-                } else {
-                    $services['Contrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
-                }
+
+        $contratsNonContractualises = [];
+        $contratsContractualises    = [];
+        $isMission = 0;
+        foreach ($contrats as $contrat) {
+            if (empty($contrat->getContrat())) {
+                $contratsNonContractualises[$contrat->getUuid()] = $contrat;
+            } else {
+                $contratsContractualises[$contrat->getUuid()] = $contrat;
+            }
+            if (!empty($contrat->getTypesMissionLibelles())) {
+                $isMission = 1;
             }
 
         }
@@ -149,12 +152,14 @@ class ContratController extends AbstractController
         return compact(
             'title',
             'intervenant',
-            'services',
+            'contratsNonContractualises',
+            'contratsContractualises',
             'emailIntervenant',
             'contratDirect',
             'contratSignatureActivation',
             'infosSignature',
-            'libelleCircuitSignature'
+            'libelleCircuitSignature',
+            'isMission',
         );
     }
 
@@ -175,8 +180,9 @@ class ContratController extends AbstractController
             throw new LogicException('L\'intervenant n\'est pas précisé');
         }
 
-        $volumeHorairesTotal = $this->getServiceTblContrat()->getVolumeTotalCreationContratByUuid($uuid);
-        $contrat = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal);
+        $volumeHorairesCreation = $this->getServiceTblContrat()->getInformationContratByUuid($uuid);
+        $contrat                = new Contrat();
+        $contrat                = $this->getProcessusContrat()->creer($contrat, $volumeHorairesCreation);
 
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
@@ -262,12 +268,8 @@ class ContratController extends AbstractController
             return new MessengerViewModel;
         }
 
-        if ($this->getProcessusContrat()->doitEtreRequalifie($contrat)) {
-            $message = "<p><strong>NB :</strong> à l'issue de sa validation, " . lcfirst($contrat->toString(true)) .
-                " deviendra un avenant car un contrat a déjà été validé par une autre composante.</p>" .
-                "<p><strong>Vous devrez donc impérativement imprimer à nouveau le document !</strong></p>";
-            $this->flashMessenger()->addWarningMessage($message);
-        }
+        $tblContratContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
+        $contrat               = $this->getProcessusContrat()->creer($contrat, $tblContratContrat);
 
         if ($this->getRequest()->isPost()) {
             try {
@@ -348,7 +350,7 @@ class ContratController extends AbstractController
         }
         $canSaisieDateSigne = true;
 
-        $contratDateSansFichierResult = $this->getServiceParametres()->get('contrat_date');
+        $contratDateSansFichierResult = $this->getServiceParametres()->get(Parametre::CONTRAT_DATE);
         $contratDateSansFichier       = ($contratDateSansFichierResult == Parametre::CONTRAT_DATE);
 
         if ($contrat->getDateRetourSigne() != null || $contrat->getFichier()->count() > 0 || $contratDateSansFichier) {
@@ -364,7 +366,7 @@ class ContratController extends AbstractController
             $canSaisieDateSigne = false;
         }
 
-        $contratDateResult = $this->getServiceParametres()->get('contrat_date');
+        $contratDateResult = $this->getServiceParametres()->get(Parametre::CONTRAT_DATE);
         $contratDate       = ($contratDateResult == Parametre::CONTRAT_DATE);
 
         return compact('form', 'done', 'title', 'canSaisieDateSigne', 'contratDate');
@@ -436,7 +438,7 @@ class ContratController extends AbstractController
                     $to           = $this->getRequest()->getPost('destinataire-mail-hide');
                     $cci          = $this->getRequest()->getPost('destinataire-cc-mail');
                     $pieceJointe  = $this->getRequest()->getPost('contrat-piece-jointe');
-                    $mail      = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
+                    $mail         = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
                     /*Create Note from email for this intervenant*/
                     $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $html);
                     $this->getMailService()->send($mail);
@@ -514,7 +516,7 @@ class ContratController extends AbstractController
      */
     public function telechargerFichierAction()
     {
-        $contrat = $this->getEvent()->getParam('contrat');
+        $contrat         = $this->getEvent()->getParam('contrat');
         $fichierDemandee = $this->getEvent()->getParam('fichier');
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)) {

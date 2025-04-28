@@ -138,7 +138,7 @@ return [
             ],
 
             'piece_jointe_demande' => [
-                'order'   => 3,
+                'order'   => 2,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -157,7 +157,7 @@ return [
             ],
 
             'piece_jointe_fournie' => [
-                'order'              => 4,
+                'order'              => 3,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -184,7 +184,7 @@ return [
             ],
 
             'agrement' => [
-                'order'              => 5,
+                'order'              => 4,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -209,7 +209,7 @@ return [
             ],
 
             'cloture_realise' => [
-                'order'   => 6,
+                'order'   => 5,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -223,7 +223,7 @@ return [
             ],
 
             'mission' => [
-                'order'              => 7,
+                'order'              => 6,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -250,7 +250,7 @@ return [
 
 
             'contrat' => [
-                'order'              => 8,
+                'order'              => 7,
                 'process'            => \Contrat\Tbl\Process\ContratProcess::class,
                 'cols'               => [
                     'ID',
@@ -286,7 +286,6 @@ return [
                     'TAUX_REMU_DATE',
                     'TAUX_REMU_MAJORE_ID',
                     'TAUX_REMU_MAJORE_VALEUR',
-                    'TAUX_REMU_MAJORE_DATE',
                     'TAUX_CONGES_PAYES',
                 ],
                 'key'                => [
@@ -300,12 +299,12 @@ return [
                     'VOLUME_HORAIRE_REF_ID',
                 ],
                 'key_values_if_null' => [
-                    'STRUCTURE_ID'              => 0,
-                    'CONTRAT_ID'                => 0,
-                    'CONTRAT_PARENT_ID',
+                    'STRUCTURE_ID' => 0,
+                    'CONTRAT_ID' => 0,
+                    'CONTRAT_PARENT_ID' => 0,
                     'VOLUME_HORAIRE_MISSION_ID' => 0,
-                    'VOLUME_HORAIRE_ID'         => 0,
-                    'VOLUME_HORAIRE_REF_ID'     => 0,
+                    'VOLUME_HORAIRE_ID' => 0,
+                    'VOLUME_HORAIRE_REF_ID' => 0,
                 ],
             ],
 

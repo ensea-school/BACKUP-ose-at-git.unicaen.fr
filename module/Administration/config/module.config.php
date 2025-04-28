@@ -21,6 +21,7 @@ return [
             Migration\v24Primes::class,
             Migration\v24Signature::class,
             Migration\v24ParametresContrat::class,
+            Migration\v24Contrats::class,
             Migration\v24FonctionReferentielParent::class,
         ],
     ],

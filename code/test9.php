@@ -3,25 +3,18 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $container  \Psr\Container\ContainerInterface
+ * @var $io         \Symfony\Component\Console\Style\SymfonyStyle
  */
 
-$bdd = $container->get(\Unicaen\BddAdmin\Bdd::class);
+use Symfony\Component\Console\Style\SymfonyStyle;
+use UnicaenTbl\Event;
 
-$ca = new ConnecteurPegase();
-$ca->init();
+$tbl = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 
+$params = [
+//    'INTERVENANT_ID' => 36215,
+//    'INTERVENANT_ID' => 777477,
+    'ANNEE_ID' => 2020,
+];
 
-$ddl = $ca->getDdl();
-//// On ne touche pas à autre chose que la partie pegase!!
-$filters = $ddl->filterOnlyDdl();
-//// Mise à jour de la BDD (structures)
-$bdd->alter($ddl, $filters);
-//
-$ca->read();
-$ca->adapt();
-$ca->extractOdf();
-
-
-echo $ca->afficherArbre();
-
-
+$tbl->calculer('contrat', $params);

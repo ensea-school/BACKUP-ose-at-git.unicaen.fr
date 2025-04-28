@@ -4,6 +4,7 @@ namespace OffreFormation\Controller\Factory;
 
 use Psr\Container\ContainerInterface;
 use OffreFormation\Controller\ModulateurController;
+use Unicaen\BddAdmin\Bdd;
 
 
 /**
@@ -25,7 +26,7 @@ class ModulateurControllerFactory
     {
         $controller = new ModulateurController;
 
-        /* Injectez vos dépendances ICI */
+        $controller->setBdd($container->get(Bdd::class));
 
         return $controller;
     }

@@ -22,7 +22,7 @@ class Afficheur
         $main = $ligne;
         echo '<table class="table table-bordered table-xs">';
         echo '<tr>';
-        echo '<th style="min-width:5em"></th><th>Total</th>';
+        echo '<th style="min-width:5em"></th><th>Vol. horaire</th><th>Total</th>';
         foreach (Ligne::CATEGORIES as $categorie) {
             if ($main->getValeur($categorie)->getValue() == 0) continue;
             echo '<th>' . $categorie . '</th>';
@@ -48,9 +48,8 @@ class Afficheur
             foreach ($sl->getSubs() as $vk => $vl) {
                 $this->affLigne($vl, $ligne, '&raquo; vol. h.', false);
             }
-            echo '<tr><td colspan="13">&nbsp;</td></tr>';
+            echo '<tr><td colspan="14">&nbsp;</td></tr>';
         }
-
 
         echo '</table>';
     }
@@ -66,6 +65,14 @@ class Afficheur
         }
 
         echo '<th>' . $name . '</th>';
+        echo "<td>";
+        if ($ligne->getVolumeHoraire()){
+            $vh = $ligne->getVolumeHoraire();
+            echo $vh->getHeures();
+            echo " sd*=".($vh->getTauxServiceDu() * $vh->getPonderationServiceDu());
+            echo " hc*=".($vh->getTauxServiceCompl() * $vh->getPonderationServiceCompl());
+        }
+        echo "</td>";
         $this->affValeur($ligne->getValeur(Ligne::TOTAL));
         foreach (Ligne::CATEGORIES as $categorie) {
             if ($main->getValeur($categorie)->getValue() == 0) continue;

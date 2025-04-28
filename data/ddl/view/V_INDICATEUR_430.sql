@@ -1,5 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_430 AS
-SELECT
+SELECT DISTINCT
   w.intervenant_id,
   CASE
     WHEN w.structure_id IS NOT NULL
@@ -9,7 +9,7 @@ SELECT
 FROM
   intervenant i
   JOIN tbl_workflow w ON w.intervenant_id = i.id
-  JOIN tbl_contrat tblc ON tblc.intervenant_id = i.id
+  JOIN tbl_contrat tblc ON tblc.intervenant_id = i.id AND tblc.volume_horaire_index = 0
   JOIN type_service ts ON tblc.type_service_id = ts.id
 WHERE
   w.atteignable = 1

@@ -1,13 +1,22 @@
 <?php
+declare(strict_types=1);
 
 namespace Contrat\Tbl\Process;
-
 
 use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Contrat\Entity\Db\TypeContrat;
+use Contrat\Service\TypeContratServiceAwareTrait;
+use Contrat\Tbl\Process\Model\Contrat;
+use Contrat\Tbl\Process\Model\VolumeHoraire;
+use DateTime;
+use Exception;
 use Paiement\Service\TauxRemuServiceAwareTrait;
+use Service\Entity\Db\TypeService;
+use Service\Service\TypeServiceServiceAwareTrait;
 use Unicaen\BddAdmin\BddAwareTrait;
+use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -16,522 +25,1095 @@ class ContratProcess implements ProcessInterface
 {
     use BddServiceAwareTrait;
     use BddAwareTrait;
+    use AnneeServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
-    use AnneeServiceAwareTrait;
+    use TypeContratServiceAwareTrait;
+    use TypeServiceServiceAwareTrait;
 
-    private string $codeEns = 'ENS';
+    private string $parametreAvenant;
 
-    private string $codeMis = 'MIS';
+    private string $parametreEns;
 
-    private array $tauxRemuUuid       = [];
-    private array $intervenantContrat = [];
+    private string $parametreMis;
 
-    protected array $services = [];
+    private string $parametreFranchissement;
 
-    protected array $tblData = [];
+    private int $parametreTauxRemuId;
 
-    //Regle sur les avenants des parametres generaux
-    private string $regleA;
-    private string $regleEns;
-    private string $regleMis;
-    private string $regleTermine;
+    private float $parametreTauxCongesPayes = 0.1;
 
+    /** @var array|Contrat[][] */
+    private array $intervenants = [];
 
-
-    public function __construct()
-    {
-        /* new process */
-    }
+    private array $tblData = [];
 
 
 
+    /**
+     * @throws Exception
+     */
     public function run(TableauBord $tableauBord, array $params = []): void
     {
-
         if (empty($params)) {
-            $annees = $this->getServiceAnnee()->getActives();
+            $annees = $this->getServiceAnnee()->getActives(true);
             foreach ($annees as $annee) {
                 $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
             }
         } else {
-            $this->init($params);
-            $this->loadAContractualiser($params);
-            $this->traitement($params);
+            $this->init();
+            $tableauBord->onAction(Event::GET);
+            $this->loadContrats($params);
+            $this->loadVolumesHoraires($params);
+            $count = count($this->intervenants);
+            $index = 0;
+            $tableauBord->onAction(Event::PROCESS, 0, $count);
+            foreach ($this->intervenants as $contrats) {
+                $index++;
+                $tableauBord->onAction(Event::PROGRESS, $index, $count);
+                $this->traitement($contrats);
+            }
             $this->exporter();
+            $tableauBord->onAction(Event::SET, 0, $count);
             $this->enregistrement($tableauBord, $params);
-            $this->clear();
         }
     }
 
 
 
-    public function debug(array $params = []): array
-    {
-        $this->init();
-        $this->heuresAContractualiserSql($params);
-        $this->traitement($params);
-
-        return $this->services;
-    }
-
-
-
-    public function init(array $params = []): void
+    public function init(): void
     {
         $parametres = $this->getServiceParametres();
 
+        $this->parametreAvenant         = $parametres->get(Parametre::AVENANT);
+        $this->parametreEns             = $parametres->get(Parametre::CONTRAT_ENS);
+        $this->parametreMis             = $parametres->get(Parametre::CONTRAT_MIS);
+        $this->parametreFranchissement  = $parametres->get(Parametre::CONTRAT_REGLE_FRANCHISSEMENT);
+        $this->parametreTauxRemuId      = (int)$parametres->get(Parametre::TAUX_REMU);
+        $this->parametreTauxCongesPayes = (float)$parametres->get(Parametre::TAUX_CONGES_PAYES);
 
-        $this->regleA       = $parametres->get('avenant');
-        $this->regleEns     = $parametres->get('contrat_ens');
-        $this->regleMis     = $parametres->get('contrat_mis');
-        $this->regleTermine = $parametres->get('contrat_regle_franchissement');
-
-        $this->services = [];
-        $this->tblData  = [];
+        $this->intervenants = [];
     }
 
 
 
-    protected function loadAContractualiser(array $params): void
+    /**
+     * @throws Exception
+     */
+    protected function loadContrats(array $params): void
     {
-        $conn = $this->getServiceBdd()->getEntityManager()->getConnection();
+        $sql    = $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT_CONTRAT');
+        $sql    = $this->getServiceBdd()->injectKey($sql, $params);
+        $parser = $this->getBdd()->selectEach($sql);
+        while ($data = $parser->next()) {
+            $data = array_change_key_case($data); // provisoire => migration postgres
+            $this->loadContrat($data);
+        }
+    }
 
-        $sql = 'SELECT * FROM ('
-            . $this->getServiceBdd()->injectKey($this->heuresAContractualiserSql(), $params)
-            . ') t '
-            . $this->getServiceBdd()->makeWhere($params)
-            . ' ORDER BY intervenant_id, contrat_id ASC';
 
-        $servicesContrat = $this->getBdd()->selectEach($sql);
 
-        $taux_remu_temp = 0;
-        $listeContrat   = [];
-        while ($serviceContrat = $servicesContrat->next()) {
-            $res            = $this->traitementQuery($serviceContrat, $listeContrat, $taux_remu_temp);
-            $listeContrat   = $res[0];
-            $taux_remu_temp = $res[1];
+    /**
+     * @throws Exception
+     */
+    public function loadContrat(array $data): Contrat
+    {
+        $intervenantId = (int)$data['intervenant_id'];
+        $contratId     = (int)$data['contrat_id'];
+        $uuid          = $this->generateUUID($intervenantId, $contratId);
+        $contrat       = $this->getContrat($intervenantId, $uuid);
+        $this->contratHydrateFromDb($contrat, $data);
+
+        return $contrat;
+    }
+
+
+
+    /**
+     * @throws Exception
+     */
+    public function contratHydrateFromDb(Contrat $contrat, array $data): void
+    {
+        $annee                  = $this->getServiceAnnee()->get((int)$data['annee_id']);
+        $contrat->actif         = $data['actif'] === '1';
+        $contrat->historise     = !empty($data['histo_destruction']);
+        $contrat->id            = (int)$data['contrat_id'] ?: null;
+        $contrat->intervenantId = (int)$data['intervenant_id'];
+        $contrat->validationId  = (int)$data['validation_id'] ?: null;
+        $contrat->annee         = $annee;
+        $contrat->structureId   = (int)$data['structure_id'] ?: null;
+        $parentId               = (int)$data['parent_id'] ?: null;
+        if ($parentId) {
+            $uuid = $this->generateUUID($contrat->intervenantId, $parentId);
+            $contrat->setParent($this->getContrat($contrat->intervenantId, $uuid));
+        }
+        $contrat->numeroAvenant = (int)$data['numero_avenant'];
+        $contrat->debutValidite = $data['debut_validite'] ? new DateTime($data['debut_validite']) : null;
+        $contrat->finValidite   = $data['fin_validite'] ? new DateTime($data['fin_validite']) : null;
+        $contrat->histoCreation = $data['histo_creation'] ? new DateTime($data['histo_creation']) : null;
+        $contrat->edite         = $data['edite'] === '1';
+        $contrat->envoye        = $data['envoye'] === '1';
+        $contrat->retourne      = $data['retourne'] === '1';
+        $contrat->signe         = $data['signe'] === '1';
+    }
+
+
+
+    public function contratHydrateFromVolumeHoraire(Contrat $contrat, VolumeHoraire $volumeHoraire): void
+    {
+        if ($volumeHoraire->volumeHoraireId) {
+            $contrat->typeService = $this->getServiceTypeService()->getEnseignement();
+            $contrat->isMission   = false;
+        } elseif ($volumeHoraire->volumeHoraireRefId) {
+            $contrat->typeService = $this->getServiceTypeService()->getReferentiel();
+            $contrat->isMission   = false;
+        } elseif ($volumeHoraire->volumeHoraireMissionId) {
+            $contrat->typeService = $this->getServiceTypeService()->getMission();
+            $contrat->isMission   = true;
         }
 
-        // on vide pour limiter la conso de RAM
-        unset($servicesContrat);
-        unset($listeContrat);
+        // calcul de la structure
+        if ($contrat->isMission) {
+            switch ($this->parametreMis) {
+                case Parametre::CONTRAT_MIS_GLOBAL:
+                    $contrat->structureId = null;
+                    break;
+                case Parametre::CONTRAT_MIS_COMPOSANTE:
+                case Parametre::CONTRAT_MIS_MISSION:
+                    $contrat->structureId = $volumeHoraire->structureId;
+            }
+        } else {
+            switch ($this->parametreEns) {
+                case Parametre::CONTRAT_ENS_GLOBAL:
+                    $contrat->structureId = null;
+                    break;
+                case Parametre::CONTRAT_ENS_COMPOSANTE:
+                    $contrat->structureId = $volumeHoraire->structureId;
+            }
+        }
     }
 
 
 
-    protected function heuresAContractualiserSql(): string
+    private function addContrat(Contrat $contrat): void
     {
-        return $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT');
+        if (!$contrat->intervenantId) {
+            throw new \Exception("Impossible d'ajouter un contrat si l'intervenant n'est pas défini");
+        }
+
+        if (!$contrat->uuid) {
+            throw new \Exception("Impossible d'ajouter un contrat si l'uuid n'est pas défini");
+        }
+
+        if (!array_key_exists($contrat->intervenantId, $this->intervenants)) {
+            $this->intervenants[$contrat->intervenantId] = [];
+        }
+
+        if (!array_key_exists($contrat->uuid, $this->intervenants[$contrat->intervenantId])) {
+            $this->intervenants[$contrat->intervenantId][$contrat->uuid] = $contrat;
+        }
     }
 
 
 
-    public function traitement(array $params): void
+    private function getContrat(int $intervenantId, string $uuid): Contrat
+    {
+        if (!array_key_exists($intervenantId, $this->intervenants)) {
+            $this->intervenants[$intervenantId] = [];
+        }
+
+        if (!array_key_exists($uuid, $this->intervenants[$intervenantId])) {
+            $contrat                = new Contrat($uuid);
+            $contrat->intervenantId = $intervenantId;
+            $this->addContrat($contrat);
+        }
+        return $this->intervenants[$intervenantId][$uuid];
+    }
+
+
+
+    protected function loadVolumesHoraires(array $params): void
+    {
+        $sql    = $this->getServiceBdd()->getViewDefinition('V_TBL_CONTRAT_VOLUME_HORAIRE');
+        $sql    = $this->getServiceBdd()->injectKey($sql, $params);
+        $parser = $this->getBdd()->selectEach($sql);
+        while ($data = $parser->next()) {
+            $data = array_change_key_case($data); // provisoire => migration postgres
+            $this->loadVolumeHoraire($data);
+        }
+    }
+
+
+
+    public function loadVolumeHoraire(array $data): VolumeHoraire
+    {
+        $intervenantId = (int)$data['intervenant_id'];
+        $contratId     = (int)$data['contrat_id'] ?: null;
+
+        $volumeHoraire = new VolumeHoraire();
+        $this->volumeHoraireHydrateFromDb($volumeHoraire, $data);
+        $uuid = $this->generateUUID($intervenantId, $contratId, $volumeHoraire->structureId, $volumeHoraire->missionId);
+
+        $contrat = $this->getContrat($intervenantId, $uuid);
+
+        if (!$contrat->id) {
+            if (empty($contrat->annee)) {
+                $contrat->annee = $this->getServiceAnnee()->get((int)$data['annee_id']);
+            }
+            $this->contratHydrateFromVolumeHoraire($contrat, $volumeHoraire);
+        }
+
+        $volumeHoraire->setContrat($contrat);
+
+        return $volumeHoraire;
+    }
+
+
+
+    public function volumeHoraireHydrateFromDb(VolumeHoraire $vh, array $data): void
+    {
+        $vh->structureId            = (int)$data['structure_id'];
+        $vh->serviceId              = (int)$data['service_id'] ?: null;
+        $vh->serviceReferentielId   = (int)$data['service_referentiel_id'] ?: null;
+        $vh->missionId              = (int)$data['mission_id'] ?: null;
+        $vh->volumeHoraireId        = (int)$data['volume_horaire_id'] ?: null;
+        $vh->volumeHoraireRefId     = (int)$data['volume_horaire_ref_id'] ?: null;
+        $vh->volumeHoraireMissionId = (int)$data['volume_horaire_mission_id'] ?: null;
+        $vh->tauxRemuId             = (int)$data['taux_remu_id'] ?: null;
+        $vh->tauxRemuMajoreId       = (int)$data['taux_remu_majore_id'] ?: null;
+        $vh->dateFinMission         = $data['date_fin_mission'] ? new DateTime($data['date_fin_mission']) : null;
+        $vh->dateDebutMission       = $data['date_debut_mission'] ? new DateTime($data['date_debut_mission']) : null;
+        $vh->cm                     = (float)$data['cm'];
+        $vh->td                     = (float)$data['td'];
+        $vh->tp                     = (float)$data['tp'];
+        $vh->autres                 = (float)$data['autres'];
+        $vh->heures                 = (float)$data['heures'];
+        $vh->hetd                   = (float)$data['hetd'];
+        $vh->autreLibelle           = $data['autre_libelle'];
+        $vh->missionLibelle         = $data['mission_libelle'];
+        $vh->typeMissionLibelle     = $data['type_mission_libelle'];
+    }
+
+
+
+    public function traitement(array $contrats): void
+    {
+        foreach ($contrats as $contrat) {
+            $this->calculTypeService($contrat);
+            $this->calculStructure($contrat);
+        }
+        $this->calculParentsIds($contrats);
+
+        $this->gestionContratsSansHeures($contrats);
+
+
+        $this->calculDateContrat($contrats);
+
+        // ajout d'avenants vides pour les missions avec des prolongations de dates
+        $this->contratProlongationMission($contrats);
+
+        $this->calculNumerosAvenants($contrats);
+
+        /* Double foreach pour calcul structure, déterminer parent_id d'abord, puis le reste après ? */
+        foreach ($contrats as $contrat) {
+            $this->calculTauxRemu($contrat);
+            $this->calculTotalHETD($contrat);
+            $this->calculIsProlongation($contrat);
+            $this->calculTotalHeures($contrat);
+            $this->calculTermine($contrat);
+            $this->calculTauxCongesPayes($contrat);
+            $this->calculLibelles($contrat);
+            $this->calculActif($contrat);
+        }
+    }
+
+
+
+    public function calculActif(Contrat $contrat): void
+    {
+        if ($contrat->id) {
+            $contrat->actif = true;
+        }
+        if (!$contrat->actif) {
+            if ($this->parametreAvenant == Parametre::AVENANT_AUTORISE) {
+                $contrat->actif = true;
+            } elseif (empty($contrat->parent)) {
+                $contrat->actif = true;
+            }
+        }
+    }
+
+
+
+    public function contratProlongationMission(array &$contrats): void
     {
 
+        $contratPrincipaux = [];
+        // On ne récupère que les contrats pour les traiter eux et leurs avenants ensemble plus tard
+        foreach ($contrats as $contrat) {
+            /* @var Contrat $contrat */
+            if (empty($contrat->parent) && $contrat->isMission && $contrat->id != null) {
+                $contratPrincipaux[] = $contrat;
+            }
+        }
 
-        foreach ($this->services as $id => $service) {
-            $uuid = $service['UUID'];
-            // Calcul du taux a afficher dans le contrat selon les services se retrouvant dans un même contrat
-            $service['TAUX_REMU_VALEUR']        = NULL;
-            $service['TAUX_REMU_DATE']          = NULL;
-            $service['TAUX_REMU_MAJORE_VALEUR'] = NULL;
-            $service['TAUX_REMU_MAJORE_DATE']   = NULL;
+        // On cherche les dates de missions les plus avancés et la date de contrat la plus avancé
+        foreach ($contratPrincipaux as $contrat) {
+            $dateDebutContrat = $contrat->debutValidite;
+            $dateMissions     = [];
+            $dateFinContrat   = $contrat->finValidite;
+            $intervenantId    = $contrat->intervenantId;
+
+            [$dateMissions, $dateFinContrat, $dateDebutContrat] = $this->calculDateContratEdite($contrat, $dateMissions, $dateFinContrat, $dateDebutContrat);
+            if (!empty($dateMissions)) {
+                foreach ($dateMissions as $key => $dateMission) {
+                    if ($dateMission <= $dateFinContrat) {
+                        unset($dateMissions[$key]);
+                    }
+                }
+            }
+            // Pour les missions qui dépassent on cherche si un avenant non édité existe avec des heures pour ces missions pour modifier la date de fin
+            $dateMissions = $this->changementDateAvenantNonEdite($dateMissions, $contrat);
+            // Si aucun avenant n'existe on crée un avenant sur la date la plus éloignée pour une prolongation de tous ceux qui n'ont pas d'avenant
+            if (!empty($dateMissions)) {
+                $avenantProlongation                  = $this->creationAvenantProlongation($contrat, $dateMissions, $dateDebutContrat, $intervenantId);
+                $contrats[$avenantProlongation->uuid] = $avenantProlongation;
+            }
+        }
+    }
 
 
-            if ($service['CONTRAT_ID'] != NULL) {
 
-                if (($this->regleTermine == Parametre::CONTRAT_FRANCHI_VALIDATION && $service['EDITE'] == 1)
-                    || ($this->regleTermine == Parametre::CONTRAT_FRANCHI_DATE_RETOUR && $service['SIGNE'] == 1)
-                ) {
-                    $service['TERMINE'] = 1;
-                } else {
-                    $service['TERMINE'] = 0;
+    public function calculTypeService(Contrat $contrat): void
+    {
+        $hasMissions = false;
+        $hasEnsRef   = false;
+
+        foreach ($contrat->volumesHoraires as $vh) {
+            if ($vh->missionId) {
+                $hasMissions = true;
+            }
+            if ($vh->serviceId || $vh->serviceReferentielId) {
+                $hasEnsRef = true;
+            }
+        }
+
+        if ($hasMissions && $hasEnsRef) {
+            throw new Exception('Un même contrat ne peut pas mélanger des heures de missions avec des heures d\'enseignement et/ou de référentiel');
+        }
+
+        if (!$hasMissions && !$hasEnsRef) {
+            // aucun volume horaire
+            if ($contrat->parent) {
+                // s'il a un parent, c'est qu'on est sur un avenant de modif de date de fin de mission
+                //On calcul le type du parent au cas ou il ne serait pas encore calculé
+                $this->calculTypeService($contrat->parent);
+                $contrat->isMission = $contrat->parent->isMission;
+            } else {
+                // S'il n'a pas de parent, c'est qu'on est sur un contrat d'enseignement/référentiel sans prévisionnel
+                $contrat->isMission = false;
+            }
+        } else {
+            // C'est forcément l'un des 2 selon les volumes horaires...
+            $contrat->isMission = $hasMissions;
+        }
+    }
+
+
+
+    public function calculStructure(Contrat $contrat): void
+    {
+        if ($contrat->id) {
+            // Si le contrat existe déjà et a été valider, on ne touche à rien et on remonte ce qui avait déjà été décidé avant, on recalcule pour un projet
+            return;
+        }
+
+        if ($contrat->isMission) {
+            if ($this->parametreMis == Parametre::CONTRAT_MIS_GLOBAL) {
+                $contrat->structureId = null;
+                return;
+            }
+        } elseif ($this->parametreEns == Parametre::CONTRAT_ENS_GLOBAL) {
+            $contrat->structureId = null;
+            return;
+        }
+
+        $structures = [];
+        foreach ($contrat->volumesHoraires as $vh) {
+            $structures[$vh->structureId] = $vh->structureId;
+        }
+
+        if (count($structures) == 1) {
+            $contrat->structureId = current($structures);
+        } else {
+            $contrat->structureId = null;
+        }
+    }
+
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     * @throws Exception
+     */
+    public function calculParentsIds(array &$contrats): void
+    {
+        if (count($contrats) < 2) {
+            // On élague tous les cas simples où il n'y a qu'un document max => c'est forcément un contrat
+            return;
+        }
+
+        // Calcul et tri par $contratsEdites / $avenantsEdites / $autres
+        $contratsEdites = [];
+        //$avenantsEdites = [];
+        $autres = [];
+        foreach ($contrats as $contrat) {
+            if ($contrat->id && $contrat->edite) {
+                if (!$contrat->parent) {
+                    $contratsEdites[] = $contrat;
                 }
             } else {
-                $service['TERMINE'] = 0;
+                $autres[] = $contrat;
+            }
+        }
 
-                if (($service['TYPE_SERVICE_CODE'] != 'MIS' && $this->regleEns == Parametre::CONTRAT_ENS_GLOBALE)
-                    ||
-                    ($service['TYPE_SERVICE_CODE'] == 'MIS' && $this->regleMis == Parametre::CONTRAT_MIS_GLOBALE)) {
-                    $service['STRUCTURE_ID'] = NULL;
+        if (empty($contratsEdites)) {
+            // on n'a trouvé aucun contrat déjà édité pour y associer des avenants
+            return;
+        }
+
+        // On traite tous les autres pour leur trouver un éventuel parent
+        foreach ($autres as $autre) {
+            $parentsPotentiels = [];
+            foreach ($contratsEdites as $candidat) {
+                if ($this->isParentPotentiel($autre, $candidat)) {
+                    $parentsPotentiels[] = $candidat;
                 }
             }
 
-            if ($this->tauxRemuUuid[$uuid]) {
-                //Calcul de la valeur et date du taux
-                $tauxRemuId       = $service['TAUX_REMU_ID'];
-                $tauxRemuMajoreId = isset($service['TAUX_REMU_MAJORE_ID']) ? $service['TAUX_REMU_MAJORE_ID'] : null;
-                if ($service['CONTRAT_ID'] != NULL) {
-                    $date                        = $service['DATE_DEBUT'] ?? $service['DATE_CREATION'];
-                    $tauxRemuValeur              = $this->getServiceTauxRemu()->tauxValeur($tauxRemuId, $date);
-                    $service['TAUX_REMU_VALEUR'] = $tauxRemuValeur;
-                    $service['TAUX_REMU_DATE']   = $date;
-
-                    if ($tauxRemuMajoreId != NULL) {
-                        $tauxRemuMajoreValeur               = $this->getServiceTauxRemu()->tauxValeur($tauxRemuMajoreId, $date);
-                        $service['TAUX_REMU_MAJORE_VALEUR'] = $tauxRemuMajoreValeur;
-                        $service['TAUX_REMU_MAJORE_DATE']   = $date;
-                    }
-                }
+            if (!empty($parentsPotentiels)) {
+                // Si on a des parents potentiels, on lui donne le meilleur
+                $autre->setParent($this->meilleurParent($parentsPotentiels));
             }
+        }
+    }
 
 
-            //Calcul pour savoir si le contrat devra être un avenant ou un contrat
-            if ($service['TYPE_CONTRAT_ID'] == NULL) {
-                if ($service['TYPE_SERVICE_CODE'] != 'MIS') {
 
-                    if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
-                        $service['TYPE_CONTRAT_ID']   = 2;
-                        $service['CONTRAT_PARENT_ID'] = $this->intervenantContrat[$service['INTERVENANT_ID']];
+    /**
+     * @param array|Contrat[] $contrats
+     * @return void
+     */
+    public function gestionContratsSansHeures(array &$contrats): void
+    {
+        $hasContrat           = false;
+        $hasContratSansHeures = false;
+        foreach ($contrats as $contrat) {
+            if (!$contrat->historise) {
+                if (empty($contrat->volumesHoraires)) {
+                    if (null == $contrat->parent) {
+                        $hasContratSansHeures = true;
                     }
-
-
-                }
-                if ($service['TYPE_SERVICE_CODE'] == 'MIS') {
-                    if ($this->regleMis == Parametre::CONTRAT_MIS_COMPOSANTE) {
-                        if (isset($this->intervenantContrat[$service['STRUCTURE_ID']])) {
-                            $service['TYPE_CONTRAT_ID']   = 2;
-                            $service['CONTRAT_PARENT_ID'] = $this->intervenantContrat[$service['STRUCTURE_ID']];
-
-                        }
-                    }
-                    if ($this->regleMis == Parametre::CONTRAT_MIS_MISSION) {
-                        if (isset($this->intervenantContrat[$service['MISSION_ID']])) {
-                            $service['TYPE_CONTRAT_ID']   = 2;
-                            $service['CONTRAT_PARENT_ID'] = $this->intervenantContrat[$service['MISSION_ID']];
-
-                        }
-
-                    }
-                    if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBALE) {
-                        if (isset($this->intervenantContrat[$service['INTERVENANT_ID']])) {
-                            $service['TYPE_CONTRAT_ID']   = 2;
-                            $service['CONTRAT_PARENT_ID'] = $this->intervenantContrat[$service['INTERVENANT_ID']];
-                        }
-                    }
-                }
-
-                if ($service['TYPE_CONTRAT_ID'] == NULL) {
-                    $service['TYPE_CONTRAT_ID'] = 1;
-                }
-                if ($service['TYPE_CONTRAT_ID'] == 2 && $this->regleA == Parametre::AVENANT_DESACTIVE) {
-                    $service['ACTIF'] = 0;
                 } else {
-                    $service['ACTIF'] = 1;
+                    $hasContrat = true;
                 }
             }
-
-            $this->services[$id] = $service;
         }
 
-        $serviceBdd     = $this->getServiceBdd();
-        $sqlVTblContrat = $serviceBdd->getViewDefinition('V_TBL_CONTRAT');
-
-        $sqlSansHeure = "SELECT 
-                    c.id contrat_id, 
-                    c.contrat_id contrat_parent_id,
-                    c.histo_creation date_creation,
-                    c.debut_validite date_debut,
-                    c.fin_validite date_fin,
-                    c.structure_id,
-                    vtblcp.mission_id,
-                    c.numero_avenant,
-                    c.process_signature_id,
-                    c.validation_id,
-                    vtblcp.taux_remu_id ,
-                    vtblcp.taux_remu_majore_id,
-                    vtblcp.autre_libelle,
-                    vtblcp.taux_conges_payes,
-                    vtblcp.type_service_id,
-                    i.id intervenant_id,
-                    i.annee_id,
-                    c.process_signature_id process_id
-                FROM contrat c
-                JOIN INTERVENANT i ON c.intervenant_id = i.id
-                LEFT JOIN ($sqlVTblContrat) vtbl ON c.id = vtbl.contrat_id
-                LEFT JOIN ($sqlVTblContrat) vtblcp ON c.contrat_id = vtblcp.contrat_id
-                WHERE vtbl.contrat_id IS NULL
-                  AND c.histo_destruction IS NULL
-                  /*@INTERVENANT_ID=c.intervenant_id*/
-                  /*@ANNEE_ID=i.annee_id*/
-                  ";
-
-
-        $sqlSansHeure      = $serviceBdd->injectKey($sqlSansHeure, $params);
-        $contratsSansHeure = $this->getBdd()->selectEach($sqlSansHeure);
-
-
-        while ($contratSansHeure = $contratsSansHeure->next()) {
-            $contratToTbl                      = [];
-            $contratToTbl['INTERVENANT_ID']    = $contratSansHeure['INTERVENANT_ID'];
-            $contratToTbl['ANNEE_ID']          = $contratSansHeure['ANNEE_ID'];
-            $contratToTbl['STRUCTURE_ID']      = $contratSansHeure['STRUCTURE_ID'];
-            $contratToTbl['CONTRAT_PARENT_ID'] = $contratSansHeure['CONTRAT_PARENT_ID'];
-
-            $contratToTbl['UUID'] = 'avenant_' . $contratSansHeure['INTERVENANT_ID'] . '_' . $contratSansHeure['CONTRAT_PARENT_ID'] . '_' . $contratSansHeure['CONTRAT_ID'];
-
-            $contratToTbl['EDITE']                  = 0;
-            $contratToTbl['SIGNE']                  = 0;
-            $contratToTbl['TERMINE']                = 0;
-            $contratToTbl['AUTRES']                 = 0;
-            $contratToTbl['AUTRE_LIBELLE']          = $contratSansHeure['AUTRE_LIBELLE'];
-            $contratToTbl['CM']                     = 0;
-            $contratToTbl['TD']                     = 0;
-            $contratToTbl['TP']                     = 0;
-            $contratToTbl['CONTRAT_ID']             = $contratSansHeure['CONTRAT_ID'];
-            $contratToTbl['TYPE_CONTRAT_ID']        = 2;
-            $contratToTbl['DATE_CREATION']          = $contratSansHeure['DATE_CREATION'];
-            $contratToTbl['DATE_DEBUT']             = $contratSansHeure['DATE_DEBUT'];
-            $contratToTbl['DATE_FIN']               = $contratSansHeure['DATE_FIN'];
-            $contratToTbl['HETD']                   = 0;
-            $contratToTbl['HEURES']                 = 0;
-            $contratToTbl['MISSION_ID']             = $contratSansHeure['MISSION_ID'];
-            $contratToTbl['SERVICE_ID']             = NULL;
-            $contratToTbl['SERVICE_REFERENTIEL_ID'] = NULL;
-            $contratToTbl['TAUX_CONGES_PAYES']      = $contratSansHeure['TAUX_CONGES_PAYES'];
-
-
-            $contratToTbl['TAUX_REMU_MAJORE_ID'] = $contratSansHeure['TAUX_REMU_MAJORE_ID'];
-            $contratToTbl['TAUX_REMU_ID']        = $contratSansHeure['TAUX_REMU_ID'];
-            $contratToTbl['TAUX_REMU_DATE']      = NULL;
-            $contratToTbl['TAUX_REMU_VALEUR']    = NULL;
-
-            $contratToTbl['TAUX_REMU_MAJORE_DATE']   = NULL;
-            $contratToTbl['TAUX_REMU_MAJORE_VALEUR'] = NULL;
-
-            if ($contratSansHeure['TAUX_REMU_ID'] != NULL) {
-                $date           = $contratSansHeure['DATE_DEBUT'] ?? $contratSansHeure['DATE_CREATION'];
-                $tauxRemuValeur = $this->getServiceTauxRemu()->tauxValeur($contratSansHeure['TAUX_REMU_ID'], $date);
-
-                $contratToTbl['TAUX_REMU_DATE']   = $date;
-                $contratToTbl['TAUX_REMU_VALEUR'] = $tauxRemuValeur;
-
-                if ($contratSansHeure['TAUX_REMU_MAJORE_ID'] != NULL) {
-                    $tauxRemuValeurMajore                    = $this->getServiceTauxRemu()->tauxValeur($contratSansHeure['TAUX_REMU_MAJORE_ID'], $date);
-                    $contratToTbl['TAUX_REMU_MAJORE_DATE']   = $date;
-                    $contratToTbl['TAUX_REMU_MAJORE_VALEUR'] = $tauxRemuValeurMajore;
-
+        if ($hasContrat && $hasContratSansHeures) {
+            // On supprime les contrats sans heures
+            foreach ($contrats as $uuid => $contrat) {
+                if (count($contrat->volumesHoraires) == 0 && !$contrat->isMission && !$contrat->id) {
+                    unset($contrats[$uuid]);
+                    unset($this->intervenants[$contrat->intervenantId][$uuid]);
                 }
-
-
             }
+        } elseif (!$hasContrat && !$hasContratSansHeures) {
+            // Si rien, alors on crée un contrat sans heure
 
-            $contratToTbl['VOLUME_HORAIRE_ID']         = NULL;
-            $contratToTbl['VOLUME_HORAIRE_REF_ID']     = NULL;
-            $contratToTbl['VOLUME_HORAIRE_MISSION_ID'] = NULL;
-            $contratToTbl['TYPE_SERVICE_ID']           = $contratSansHeure['TYPE_SERVICE_ID'];
-            $contratToTbl['PROCESS_ID']                = $contratSansHeure['PROCESS_ID'];
+            /** @var Contrat $contratSource */
+            // On récup le contrat source, pour en extraire l'année et l'intervenant
+            $contratSource = current($contrats);
+            $uuid          = $this->generateUUID($contratSource->intervenantId);
+            $contrat       = $this->getContrat($contratSource->intervenantId, $uuid);
 
-            $contratToTbl['ACTIF'] = 1;
-
-
-            $this->services[$contratToTbl['UUID']] = $contratToTbl;
+            $contrat->typeService = $this->getServiceTypeService()->getEnseignement();
+            $contrat->annee       = $contratSource->annee;
+            $contrats[$uuid] = $contrat;
         }
 
+    }
 
-        $sql = "WITH contrat_et_avenants AS (
-    SELECT 
-        c.id AS contrat_id_principal,
-        c.debut_validite AS date_debut,
-        c.fin_validite AS date_fin_contrat,
-        CASE pm.valeur
-            WHEN 'contrat_mis_mission'       
-            THEN c.structure_id 
-            ELSE NULL
-            END AS parent_structure_id,
-        vtblc.mission_id AS mission_id_principal,
-        ap.fin_validite AS date_fin_avenant,
-        i.id intervenant_id,
-        i.annee_id
-    FROM 
-        contrat c
-    JOIN INTERVENANT i ON c.intervenant_id = i.id
-    JOIN parametre pm ON pm.nom = 'contrat_mis'
-    JOIN type_contrat tc ON tc.code = 'CONTRAT'
-    LEFT JOIN 
-        contrat ap ON c.id = ap.contrat_id AND (ap.histo_destruction IS NULL)
-    LEFT JOIN
-        ($sqlVTblContrat) vtblc ON vtblc.contrat_id = c.id
-    WHERE 
-        c.histo_destruction IS NULL
-        AND c.type_contrat_id = tc.id        
-        /*@INTERVENANT_ID=c.intervenant_id*/
-        /*@ANNEE_ID=i.annee_id*/
-),
-contrats_max_dates AS (
-    SELECT 
-        contrat_id_principal,
-        date_debut,
-        parent_structure_id,
-        mission_id_principal,
-        intervenant_id,
-        annee_id,
-        MAX(GREATEST(date_fin_avenant, date_fin_contrat)) AS max_date_fin_contrat
-    FROM 
-        contrat_et_avenants
-    GROUP BY 
-        contrat_id_principal, date_debut, parent_structure_id, mission_id_principal, intervenant_id, annee_id
-),
-missions_dates AS (
-    SELECT 
-        vtblc.mission_id,
-        MAX(m.date_fin) AS max_date_fin_mission
-    FROM 
-        ($sqlVTblContrat) vtblc
-    JOIN 
-        mission m ON vtblc.mission_id = m.id
-    WHERE 
-        m.histo_destruction IS NULL
-    GROUP BY 
-        vtblc.mission_id
-)
-SELECT 
-    cma.contrat_id_principal AS contrat_parent_id,
-    cma.date_debut AS date_debut,
-    cma.parent_structure_id AS structure_id,
-    cma.intervenant_id,
-    vtblc.mission_id             mission_id,
-    cma.max_date_fin_contrat     date_fin_contrat,
-    md.max_date_fin_mission      max_date_fin_mission,
-    vtblc.type_service_id,
-    cma.annee_id
-FROM 
-    contrats_max_dates cma
-LEFT JOIN 
-    missions_dates md ON cma.mission_id_principal = md.mission_id
-LEFT JOIN 
-    ($sqlVTblContrat) vtblc ON vtblc.contrat_id = cma.contrat_id_principal
-WHERE 
-    cma.max_date_fin_contrat < md.max_date_fin_mission";
 
-        $sql = $serviceBdd->injectKey($sql, $params);
 
-        $avenantNecessaireDate = $this->getBdd()->select($sql);
+    public function isParentPotentiel(Contrat $contrat, Contrat $candidat): bool
+    {
+        if ($candidat->isMission !== $contrat->isMission || $contrat === $candidat || !$candidat->edite || $contrat->historise) {
+            return false; // pas les mêmes types => pas de lien, pas edite ou supprimer, ou lui meme
+        }
 
-        foreach ($avenantNecessaireDate as $avenant) {
+        if ($contrat->isMission) {
+            switch ($this->parametreMis) {
+                case Parametre::CONTRAT_MIS_GLOBAL:
+                    return true; // paramètre global => ce sera un avenant
+                case Parametre::CONTRAT_MIS_COMPOSANTE:
+                    if (empty($contrat->structureId)) {
+                        throw new Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
+                    }
 
-            $newAvenant                      = [];
-            $newAvenant['INTERVENANT_ID']    = $avenant['INTERVENANT_ID'] ? (int)$avenant['INTERVENANT_ID'] : NULL;
-            $newAvenant['ANNEE_ID']          = $avenant['ANNEE_ID'] ? (int)$avenant['ANNEE_ID'] : NULL;
-            $newAvenant['STRUCTURE_ID']      = $avenant['STRUCTURE_ID'] ? (int)$avenant['STRUCTURE_ID'] : NULL;
-            $newAvenant['CONTRAT_PARENT_ID'] = $avenant['CONTRAT_PARENT_ID'] ? (int)$avenant['CONTRAT_PARENT_ID'] : NULL;
+                    return $candidat->hasStructureId($contrat->structureId);
+                case Parametre::CONTRAT_MIS_MISSION:
+                    $contratMissionId = $contrat->getMissionId();
+                    if (empty($contratMissionId)) {
+                        throw new Exception('En paramétrage par mission, le nouveau contrat doit avoir une mission unique bien identifiée');
+                    }
 
-            $newAvenant['UUID'] = 'avenant_' . $newAvenant['INTERVENANT_ID'] . '_' . $newAvenant['CONTRAT_PARENT_ID'];
+                    return $candidat->hasMissionId($contratMissionId);
+            }
+        } else {
+            switch ($this->parametreEns) {
+                case Parametre::CONTRAT_ENS_GLOBAL:
+                    return true;
+                case Parametre::CONTRAT_ENS_COMPOSANTE:
+                    if (empty($contrat->structureId)) {
+                        throw new Exception('En paramétrage par composante, le nouveau contrat doit avoir une structure bien identifiée');
+                    }
+                    // En enseignement on a qu'un seul contrat donc un avenant peut s'attacher a un contrat d'une autre composante
+                    // Tant que c'est un contrat et pas un avenant il est un parent potentiel
+                    return true;
+            }
+        }
 
-            $newAvenant['EDITE']           = 0;
-            $newAvenant['SIGNE']           = 0;
-            $newAvenant['TERMINE']         = 0;
-            $newAvenant['TYPE_CONTRAT_ID'] = 2;
-            $newAvenant['MISSION_ID']      = $avenant['MISSION_ID'] ?  (int)$avenant['MISSION_ID'] :NULL;
-            $newAvenant['TYPE_SERVICE_ID'] = $avenant['TYPE_SERVICE_ID'] ? (int) $avenant['TYPE_SERVICE_ID'] : NULL;
-            $newAvenant['AUTRES']                    = 0;
-            $newAvenant['AUTRE_LIBELLE']             = NULL;
-            $newAvenant['CM']                        = 0;
-            $newAvenant['TD']                        = 0;
-            $newAvenant['TP']                        = 0;
-            $newAvenant['CONTRAT_ID']                = NULL;
-            $newAvenant['DATE_CREATION']             = NULL;
-            $newAvenant['DATE_DEBUT']                = $avenant['DATE_DEBUT'];
-            $newAvenant['DATE_FIN']                  = $avenant['MAX_DATE_FIN_MISSION'];
-            $newAvenant['HETD']                      = 0;
-            $newAvenant['HEURES']                    = 0;
-            $newAvenant['SERVICE_ID']                = NULL;
-            $newAvenant['SERVICE_REFERENTIEL_ID']    = NULL;
-            $newAvenant['TAUX_CONGES_PAYES']         = NULL;
-            $newAvenant['TAUX_REMU_DATE']            = NULL;
-            $newAvenant['TAUX_REMU_ID']              = NULL;
-            $newAvenant['TAUX_REMU_MAJORE_DATE']     = NULL;
-            $newAvenant['TAUX_REMU_MAJORE_ID']       = NULL;
-            $newAvenant['TAUX_REMU_MAJORE_VALEUR']   = NULL;
-            $newAvenant['TAUX_REMU_VALEUR']          = NULL;
-            $newAvenant['VOLUME_HORAIRE_ID']         = NULL;
-            $newAvenant['VOLUME_HORAIRE_REF_ID']     = NULL;
-            $newAvenant['VOLUME_HORAIRE_MISSION_ID'] = NULL;
-            $newAvenant['PROCESS_ID']                = NULL;
+        throw new Exception('Une erreur est survenue : cas de détection de parent potentiel non géré');
+    }
 
-            if ($this->regleA == Parametre::AVENANT_AUTORISE) {
-                $newAvenant['ACTIF'] = 1;
+
+
+    /**
+     * @param array|Contrat[] $parents
+     * @return Contrat
+     */
+    public function meilleurParent(array $parents): Contrat
+    {
+        // Cas facile : 1 parent => c'est lui
+        if (count($parents) == 1) {
+            return current($parents);
+        }
+
+        $idMax    = -1;
+        $meilleur = null;
+        foreach ($parents as $parent) {
+            if ($parent->id > $idMax) {
+                $meilleur = $parent;
+                $idMax    = $parent->id;
+            }
+        }
+        // on retourne le dernier projet créé, sans tenir compte des dates
+
+        return $meilleur;
+    }
+
+
+
+    public function calculTauxRemu(Contrat $contrat): void
+    {
+        if ($contrat->isMission) {
+            /* Dans le cas où le contrat n'a pas d'heures et que c'est une mission, on utilise les taux du parent */
+            if (empty($contrat->volumesHoraires) && $contrat->parent && $contrat->parent->isMission) {
+                $contrat->tauxRemuId       = $contrat->parent->tauxRemuId;
+                $contrat->tauxRemuMajoreId = $contrat->parent->tauxRemuMajoreId;
             } else {
-                $newAvenant['ACTIF'] = 0;
+                $listeTauxRemu       = [];
+                $listeTauxRemuMajore = [];
 
+                foreach ($contrat->volumesHoraires as $vh) {
+                    $listeTauxRemu[$vh->tauxRemuId]                  = $vh->tauxRemuId;
+                    $listeTauxRemuMajore[$vh->tauxRemuMajoreId ?? 0] = $vh->tauxRemuMajoreId;
+                }
+
+                $countTauxRemu       = count($listeTauxRemu);
+                $countTauxRemuMajore = count($listeTauxRemuMajore);
+
+                if ($countTauxRemu == 1) {
+                    $contrat->tauxRemuId = current($listeTauxRemu);
+                }
+                if ($countTauxRemuMajore == 1) {
+                    $contrat->tauxRemuMajoreId = current($listeTauxRemuMajore);
+                }
+            }
+        }
+
+        if (empty($contrat->tauxRemuId)) {
+            $contrat->tauxRemuId = $this->parametreTauxRemuId;
+        }
+
+        if (empty($contrat->tauxRemuMajoreId)) {
+            $contrat->tauxRemuMajoreId = $contrat->tauxRemuId;
+        }
+        if (!$contrat->annee) {
+            throw new \Exception('Le calcul du taux de rémunération ne peut être effectué sans année affecté au contrat');
+        }
+        if ($contrat->tauxRemuId) {
+            $dateRef                       = $contrat->debutValidite ?? $contrat->histoCreation ?? $contrat->annee->getDateDebut();
+            $contrat->tauxRemuDate         = $this->getServiceTauxRemu()->tauxDate($contrat->tauxRemuId, $dateRef);
+            $contrat->tauxRemuValeur       = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuId, $dateRef);
+            $contrat->tauxRemuMajoreValeur = $this->getServiceTauxRemu()->tauxValeur($contrat->tauxRemuMajoreId, $dateRef);
+        }
+    }
+
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     */
+    public function calculDateContrat(array $contrats): void
+    {
+        foreach ($contrats as $contrat) {
+            /** @var Contrat $contrat */
+            if ($contrat->finValidite != null && $contrat->debutValidite != null) {
+                continue;
             }
 
-            $this->services[$newAvenant['UUID']] = $newAvenant;
+
+            if ($contrat->isMission) {
+                $this->calculDateContratMission($contrat);
+            } else {
+                if ($contrat->debutValidite == null) {
+                    $contrat->debutValidite = $contrat->annee->getDateDebut();
+                }
+                if ($contrat->finValidite == null) {
+                    $contrat->finValidite = $contrat->annee->getDateFin();
+                }
+            }
 
         }
+    }
 
+
+
+    /**
+     * @param array|Contrat[] $contrats
+     */
+    public function calculNumerosAvenants(array &$contrats): void
+    {
+        foreach ($contrats as $contrat) {
+            $this->calculNumeroAvenant($contrat);
+        }
+    }
+
+
+
+    public function calculNumeroAvenant(Contrat $contrat): void
+    {
+        //On connait deja les numéro d'avenant récuperé de la table contrat et on a pas besoin de le recalculer pour les contrat editer (on le fait cependant pour les projets)
+        if (($contrat->id && $contrat->edite == 1) || $contrat->historise) {
+            return;
+        }
+
+        //On cherche l'avenant au numéro le plus grand et on incrémente de 1 pour l'avenant suivant
+        $contratNumero = 0;
+        if ($contrat->parent) {
+            foreach ($contrat->parent->avenants as $contratParser) {
+                // On ne s'intéresse qu'aux avenants étant deja créés
+                if ($contratParser->edite && $contratParser->numeroAvenant > $contratNumero && !$contratParser->historise) {
+                    $contratNumero = $contratParser->numeroAvenant;
+                }
+            }
+
+            $contrat->numeroAvenant = $contratNumero + 1;
+        }
+    }
+
+
+
+    public function calculTermine(Contrat $contrat): void
+    {
+        switch ($this->parametreFranchissement) {
+            case Parametre::CONTRAT_FRANCHI_VALIDATION:
+                $contrat->termine = $contrat->edite;
+                break;
+            case Parametre::CONTRAT_FRANCHI_DATE_RETOUR:
+                $contrat->termine = $contrat->edite && $contrat->signe;
+        }
+    }
+
+
+
+    public function calculTauxCongesPayes(Contrat $contrat): void
+    {
+        if ($contrat->isMission) {
+            $contrat->tauxCongesPayes = $this->parametreTauxCongesPayes;
+        } else {
+            $contrat->tauxCongesPayes = 0;
+        }
+    }
+
+
+
+    public function calculLibelles(Contrat $contrat): void
+    {
+        $contrat->autresLibelles = $this->calculAutresLibelles($contrat);
+        if ($contrat->isMission) {
+            $contrat->missionsLibelles     = $this->calculMissionsLibelles($contrat);
+            $contrat->typesMissionLibelles = $this->calculTypesMissionLibelles($contrat);
+        }
 
     }
 
 
 
-    private function exporter(): void
+    public function calculAutresLibelles(Contrat $contrat): string
     {
-        foreach ($this->services as $service) {
+        $libelles = [];
 
-            $ldata = [
-                'INTERVENANT_ID'            => $service['INTERVENANT_ID'],
-                'ANNEE_ID'                  => $service['ANNEE_ID'],
-                'STRUCTURE_ID'              => $service['STRUCTURE_ID'],
-                'EDITE'                     => $service['EDITE'],
-                'SIGNE'                     => $service['SIGNE'],
-                'TERMINE'                   => $service['TERMINE'],
-                'ACTIF'                     => $service['ACTIF'],
-                'AUTRES'                    => $service['AUTRES'],
-                'AUTRE_LIBELLE'             => $service['AUTRE_LIBELLE'],
-                'CM'                        => $service['CM'],
-                'TD'                        => $service['TD'],
-                'TP'                        => $service['TP'],
-                'CONTRAT_ID'                => $service['CONTRAT_ID'],
-                'CONTRAT_PARENT_ID'         => $service['CONTRAT_PARENT_ID'],
-                'TYPE_CONTRAT_ID'           => $service['TYPE_CONTRAT_ID'],
-                'DATE_CREATION'             => $service['DATE_CREATION'],
-                'DATE_DEBUT'                => $service['DATE_DEBUT'],
-                'DATE_FIN'                  => $service['DATE_FIN'],
-                'HETD'                      => $service['HETD'],
-                'HEURES'                    => $service['HEURES'],
-                'MISSION_ID'                => $service['MISSION_ID'],
-                'SERVICE_ID'                => $service['SERVICE_ID'],
-                'SERVICE_REFERENTIEL_ID'    => $service['SERVICE_REFERENTIEL_ID'],
-                'TAUX_CONGES_PAYES'         => $service['TAUX_CONGES_PAYES'],
-                'TAUX_REMU_DATE'            => $service['TAUX_REMU_DATE'],
-                'TAUX_REMU_ID'              => $service['TAUX_REMU_ID'],
-                'TAUX_REMU_MAJORE_DATE'     => $service['TAUX_REMU_MAJORE_DATE'],
-                'TAUX_REMU_MAJORE_ID'       => $service['TAUX_REMU_MAJORE_ID'],
-                'TAUX_REMU_MAJORE_VALEUR'   => $service['TAUX_REMU_MAJORE_VALEUR'],
-                'TAUX_REMU_VALEUR'          => $service['TAUX_REMU_VALEUR'],
-                'VOLUME_HORAIRE_ID'         => $service['VOLUME_HORAIRE_ID'],
-                'VOLUME_HORAIRE_REF_ID'     => $service['VOLUME_HORAIRE_REF_ID'],
-                'VOLUME_HORAIRE_MISSION_ID' => $service['VOLUME_HORAIRE_MISSION_ID'],
-                'UUID'                      => $service['UUID'],
-                'TYPE_SERVICE_ID'           => $service['TYPE_SERVICE_ID'],
-                'PROCESS_ID'                => $service['PROCESS_ID'],
-            ];
-
-            $this->tblData[] = $ldata;
+        foreach ($contrat->volumesHoraires as $vh) {
+            if (!empty($vh->autreLibelle)) {
+                $libelles[$vh->autreLibelle] = $vh->autreLibelle;
+            }
         }
 
+        sort($libelles); // Tri alphabétique
 
+        $result                  = implode(', ', $libelles);
+        $contrat->autresLibelles = $result;
+        return $result;
     }
 
 
 
-    protected function enregistrement(TableauBord $tableauBord, array $params): void
+    public function calculMissionsLibelles(Contrat $contrat): string
     {
+        $libelles = [];
+
+        foreach ($contrat->volumesHoraires as $vh) {
+            if (!empty($vh->missionLibelle)) {
+                $libelles[$vh->missionLibelle] = $vh->missionLibelle;
+            }
+        }
+
+        sort($libelles); // Tri alphabétique
+
+        $result                    = implode(', ', $libelles);
+        $contrat->missionsLibelles = $result;
+        return $result;
+    }
+
+
+
+    public function calculTypesMissionLibelles(Contrat $contrat): string
+    {
+        $libelles = [];
+
+        foreach ($contrat->volumesHoraires as $vh) {
+            if (!empty($vh->typeMissionLibelle)) {
+                $libelles[$vh->typeMissionLibelle] = $vh->typeMissionLibelle;
+            }
+        }
+
+        sort($libelles); // Tri alphabétique
+
+        $result                        = implode(', ', $libelles);
+        $contrat->typesMissionLibelles = $result;
+        return $result;
+    }
+
+
+
+    public function calculTotalHeures(Contrat $contrat): void
+    {
+        $totalHeures = 0;
+
+
+        //On ajoute les heures du contrat pour lequel on cherche
+        foreach ($contrat->volumesHoraires as $vh) {
+            $totalHeures += $vh->heures;
+        }
+
+        $contrat->totalHeures = round($totalHeures, 2);
+    }
+
+
+
+    public function calculTotalHETD(Contrat $contrat): void
+    {
+        $totalGlobal  = 0;
+        $totalContrat = 0;
+
+        //On ajoute les heures du contrat pour lequel on cherche
+        foreach ($contrat->volumesHoraires as $vh) {
+            $totalGlobal  += $vh->hetd;
+            $totalContrat += $vh->hetd;
+        }
+
+        if ($contrat->parent != null) {
+
+            // On ajoute les heures des autres avenants liés au même contrat déjà contractualisé avec un numéro d'avenant infèrieur
+            foreach ($contrat->parent->avenants as $contratParser) {
+                //On ne s'occupe que des avenants déjà contractualisés
+                if (!$contratParser->id || !$contratParser->edite || $contratParser->numeroAvenant >= $contrat->numeroAvenant) {
+                    continue;
+                }
+
+                foreach ($contratParser->volumesHoraires as $vh) {
+                    $totalGlobal += $vh->hetd;
+                }
+            }
+            //On ajoute les volumes horaires liés au contrat parent
+            foreach ($contrat->parent->volumesHoraires as $vh) {
+                $totalGlobal += $vh->hetd;
+            }
+        }
+        $contrat->totalHetd       = round($totalContrat, 2);
+        $contrat->totalGlobalHetd = round($totalGlobal, 2);
+    }
+
+
+
+    public function calculIsProlongation(Contrat $contrat): void
+    {
+        $maxDateFin = null;
+        if ($contrat->parent != null) {
+            $maxDateFin = $contrat->parent->finValidite;
+
+            foreach ($contrat->parent->avenants as $contratParser) {
+                //On ne s'occupe que des avenants déjà contractualisés
+                if (!$contratParser->id || !$contratParser->edite || $contratParser->numeroAvenant >= $contrat->numeroAvenant) {
+                    continue;
+                }
+
+                if ($maxDateFin < $contratParser->finValidite) {
+                    $maxDateFin = $contratParser->finValidite;
+                }
+            }
+        }
+
+        if ($maxDateFin != null && $maxDateFin < $contrat->finValidite) {
+            $contrat->prolongation = true;
+        }
+    }
+
+
+
+    public function generateUUID(int $intervenantId, ?int $contratId = null, ?int $structureId = null, ?int $missionId = null, ?int $parentId = null): string
+    {
+        if ($contratId) {
+            return 'contrat_id_' . $contratId;
+        }
+        if ($parentId) {
+            return 'prolongation_contrat_' . $parentId;
+        }
+
+        if ($missionId != null) {
+            return match ($this->parametreMis) {
+                Parametre::CONTRAT_MIS_MISSION    => 'mis_mission_' . $intervenantId . '_' . $missionId,
+                Parametre::CONTRAT_MIS_COMPOSANTE => 'mis_structure_' . $intervenantId . '_' . $structureId,
+                default                           => 'mis_global_' . $intervenantId,
+            };
+        } else {
+            return match ($this->parametreEns) {
+                Parametre::CONTRAT_ENS_COMPOSANTE => 'ens_structure_' . $intervenantId . '_' . $structureId,
+                default                           => 'ens_global_' . $intervenantId,
+            };
+        }
+    }
+
+
+
+    public function getTypeContrat(Contrat $contrat): TypeContrat
+    {
+        if (empty($contrat->parent)) {
+            return $this->getServiceTypeContrat()->getContrat();
+        } else {
+            return $this->getServiceTypeContrat()->getAvenant();
+        }
+    }
+
+
+
+    public function getVolumeHoraireTypeService(VolumeHoraire $vh): TypeService
+    {
+        if ($vh->serviceId) {
+            return $this->getServiceTypeService()->getEnseignement();
+        }
+
+        if ($vh->serviceReferentielId) {
+            return $this->getServiceTypeService()->getReferentiel();
+        }
+
+        if ($vh->missionId) {
+            return $this->getServiceTypeService()->getMission();
+        }
+
+        // si on est sur des contrats sans volumes horaires => enseignement
+        // si on est sur des avenants dans volumes horaires => mission
+        if (empty($vh->contrat->parent)) {
+            return $this->getServiceTypeService()->getEnseignement();
+        } else {
+            return $this->getServiceTypeService()->getMission();
+        }
+    }
+
+
+
+    public function extractContrat(Contrat $contrat): array
+    {
+        $typeServiceId = $contrat->isMission ? $this->getServiceTypeService()->getMission()->getId() : $this->getServiceTypeService()->getEnseignement()->getId();
+        $data          = [
+            'annee_id'                  => $contrat->annee->getId(),
+            'intervenant_id'            => $contrat->intervenantId,
+            'actif'                     => $contrat->actif,
+            'structure_id'              => $contrat->structureId,
+            'validation_id'             => $contrat->validationId,
+            'edite'                     => $contrat->edite,
+            'signe'                     => $contrat->signe,
+            'autre_libelle'             => null,
+            'autres'                    => 0,
+            'autres_libelles'           => $contrat->autresLibelles,
+            'missions_libelles'         => $contrat->missionsLibelles,
+            'types_mission_libelles'    => $contrat->typesMissionLibelles,
+            'cm'                        => 0,
+            'contrat_id'                => $contrat->id,
+            'contrat_parent_id'         => $contrat->parent?->id,
+            'numero_avenant'            => $contrat->numeroAvenant,
+            'prolongation'              => $contrat->prolongation,
+            'date_creation'             => $contrat->histoCreation,
+            'date_debut'                => $contrat->debutValidite,
+            'date_fin'                  => $contrat->finValidite,
+            'hetd'                      => 0,
+            'total_hetd'                => $contrat->totalHetd,
+            'total_global_hetd'         => $contrat->totalGlobalHetd,
+            'heures'                    => 0,
+            'total_heures'              => $contrat->totalHeures,
+            'mission_id'                => $contrat->getMissionId(),
+            'service_id'                => null,
+            'service_referentiel_id'    => null,
+            'taux_conges_payes'         => $contrat->tauxCongesPayes,
+            'taux_remu_date'            => $contrat->tauxRemuDate,
+            'taux_remu_id'              => $contrat->tauxRemuId,
+            'taux_remu_majore_id'       => $contrat->tauxRemuMajoreId,
+            'taux_remu_majore_valeur'   => $contrat->tauxRemuMajoreValeur,
+            'taux_remu_valeur'          => $contrat->tauxRemuValeur,
+            'td'                        => 0,
+            'termine'                   => $contrat->termine,
+            'tp'                        => 0,
+            'type_contrat_id'           => $this->getTypeContrat($contrat)->getId(),
+            'type_service_id'           => $typeServiceId,
+            'uuid'                      => $contrat->uuid,
+            'volume_horaire_id'         => null,
+            'volume_horaire_mission_id' => null,
+            'volume_horaire_ref_id'     => null,
+        ];
+
+        return $data;
+    }
+
+
+
+    public function extractVolumeHoraire(VolumeHoraire $vh): array
+    {
+        $contrat = $vh->contrat;
+        $data    = [
+            'annee_id'                  => $contrat->annee->getId(),
+            'intervenant_id'            => $contrat->intervenantId,
+            'actif'                     => $contrat->actif,
+            'structure_id'              => $contrat->structureId,
+            'validation_id'             => $contrat->validationId,
+            'edite'                     => $contrat->edite,
+            'signe'                     => $contrat->signe,
+            'autre_libelle'             => $vh->autreLibelle,
+            'autres'                    => $vh->autres,
+            'autres_libelles'           => $contrat->autresLibelles,
+            'missions_libelles'         => $contrat->missionsLibelles,
+            'types_mission_libelles'    => $contrat->typesMissionLibelles,
+            'cm'                        => $vh->cm,
+            'contrat_id'                => $contrat->id,
+            'contrat_parent_id'         => $contrat->parent?->id,
+            'numero_avenant'            => $contrat->numeroAvenant,
+            'prolongation'              => $contrat->prolongation,
+            'date_creation'             => $contrat->histoCreation,
+            'date_debut'                => $contrat->debutValidite,
+            'date_fin'                  => $contrat->finValidite,
+            'hetd'                      => $vh->hetd,
+            'total_hetd'                => $contrat->totalHetd,
+            'total_global_hetd'         => $contrat->totalGlobalHetd,
+            'heures'                    => $vh->heures,
+            'total_heures'              => $contrat->totalHeures,
+            'mission_id'                => $vh->missionId,
+            'service_id'                => $vh->serviceId,
+            'service_referentiel_id'    => $vh->serviceReferentielId,
+            'taux_conges_payes'         => $contrat->tauxCongesPayes,
+            'taux_remu_date'            => $contrat->tauxRemuDate,
+            'taux_remu_id'              => $contrat->tauxRemuId,
+            'taux_remu_majore_id'       => $contrat->tauxRemuMajoreId,
+            'taux_remu_majore_valeur'   => $contrat->tauxRemuMajoreValeur,
+            'taux_remu_valeur'          => $contrat->tauxRemuValeur,
+            'td'                        => $vh->td,
+            'termine'                   => $contrat->termine,
+            'tp'                        => $vh->tp,
+            'type_contrat_id'           => $this->getTypeContrat($contrat)->getId(),
+            'type_service_id'           => $this->getVolumeHoraireTypeService($vh)->getId(),
+            'uuid'                      => $contrat->uuid,
+            'volume_horaire_id'         => $vh->volumeHoraireId,
+            'volume_horaire_mission_id' => $vh->volumeHoraireMissionId,
+            'volume_horaire_ref_id'     => $vh->volumeHoraireRefId,
+        ];
+
+        return $data;
+    }
+
+
+
+    public function exporter(): void
+    {
+        $this->tblData = [];
+        foreach ($this->intervenants as $contrats) {
+            foreach ($contrats as $contrat) {
+                if (!$contrat->historise) {
+                    if (empty($contrat->volumesHoraires)) {
+                        $ligne           = $this->extractContrat($contrat);
+                        $this->tblData[] = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
+                    } else {
+                        $vhs = $contrat->volumesHoraires;
+
+                        usort($vhs, function (VolumeHoraire $a, VolumeHoraire $b) {
+                            $aid = $a->volumeHoraireId . '-' . $a->volumeHoraireRefId . '-' . $a->volumeHoraireMissionId;
+                            $bid = $b->volumeHoraireId . '-' . $b->volumeHoraireRefId . '-' . $b->volumeHoraireMissionId;
+
+                            return $aid > $bid ? 1 : -1;
+                        });
+                        $vhIndex = 0;
+                        foreach ($vhs as $volumeHoraire) {
+                            $ligne                         = $this->extractVolumeHoraire($volumeHoraire);
+                            $ligne['volume_horaire_index'] = $vhIndex;
+                            $this->tblData[]               = array_change_key_case($ligne, CASE_UPPER); // avant migration postgresql
+                            $vhIndex++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    public function enregistrement(TableauBord $tableauBord, array $params): void
+    {
+
         // Enregistrement en BDD
         $key = $tableauBord->getOption('key');
 
         $table = $this->getBdd()->getTable('TBL_CONTRAT');
 
-//         on force la DDL pour éviter de faire des requêtes en plus
-//        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
+        //         on force la DDL pour éviter de faire des requêtes en plus
+        //        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
 
         $options = [
             'where'              => $params,
             'return-insert-data' => false,
             'transaction'        => !isset($params['INTERVENANT_ID']),
+            'callback'           => function (string $action, int $progress, int $total) use ($tableauBord) {
+                $tableauBord->onAction(Event::PROGRESS, $progress, $total);
+            },
         ];
 
         $table->merge($this->tblData, $key, $options);
@@ -541,94 +1123,172 @@ WHERE
 
 
 
-    public function getServices(): array
+    /**
+     * @param Contrat       $contrat
+     * @param array         $dateMissions
+     * @param DateTime|null $dateFinContrat
+     * @param DateTime|null $dateDebutContrat
+     * @return array
+     */
+    public function calculDateContratEdite(Contrat $contrat, array $dateMissions, ?DateTime $dateFinContrat, ?DateTime $dateDebutContrat): array
     {
-        return $this->services;
-    }
+        foreach ($contrat->volumesHoraires as $volumeHoraire) {
+            if (empty($dateMissions[$volumeHoraire->missionId])
+                || $volumeHoraire->dateFinMission > $dateMissions[$volumeHoraire->missionId]) {
+                $dateMissions[$volumeHoraire->missionId] = $volumeHoraire->dateFinMission;
+            }
+        }
 
+        foreach ($contrat->avenants as $avenant) {
+            if (!$avenant->edite) {
+                continue;
+            }
 
+            if (empty($dateFinContrat) || $avenant->finValidite > $dateFinContrat) {
+                $dateFinContrat = $avenant->finValidite;
+            }
+            if ($dateDebutContrat == null || $avenant->debutValidite < $dateDebutContrat) {
+                $dateDebutContrat = $avenant->debutValidite;
+            }
 
-    private function clear(): void
-    {
-        unset($this->services);
-        unset($this->tblData);
-        unset($this->tauxRemuUuid);
+            foreach ($avenant->volumesHoraires as $volumeHoraire) {
+                if ($volumeHoraire->missionId == null) {
+                    continue;
+                }
+                if (empty($dateMissions[$volumeHoraire->missionId]) || $volumeHoraire->dateFinMission > $dateMissions[$volumeHoraire->missionId]) {
+                    $dateMissions[$volumeHoraire->missionId] = $volumeHoraire->dateFinMission;
+                }
+            }
+        }
+        return [$dateMissions, $dateFinContrat, $dateDebutContrat];
     }
 
 
 
     /**
-     * @param array $serviceContrat
-     * @param array $listeContrat
-     * @param mixed $taux_remu_temp
+     * @param mixed   $dateMissions
+     * @param Contrat $contrat
      * @return array
      */
-    public function traitementQuery(array $serviceContrat, array $listeContrat, mixed $taux_remu_temp): array
+    public function changementDateAvenantNonEdite(array $dateMissions, Contrat $contrat): array
     {
-        $uuid        = $serviceContrat['UUID'];
-        $taux_remu   = $serviceContrat['TAUX_REMU_ID'];
-        $typeContrat = $serviceContrat['TYPE_CONTRAT_ID'];
-        if ($typeContrat != null && $serviceContrat['TYPE_SERVICE_CODE'] != 'MIS') {
-            $listeContrat[$serviceContrat['INTERVENANT_ID']][0] = true;
-        } else if ($typeContrat != null && $serviceContrat['TYPE_SERVICE_CODE'] == 'MIS') {
-            $listeContrat[$serviceContrat['INTERVENANT_ID']][$serviceContrat['MISSION_ID']] = true;
-        }
-        if ($serviceContrat['CONTRAT_ID'] != null) {
-            if ($serviceContrat['TYPE_SERVICE_CODE'] != 'MIS') {
-                $this->intervenantContrat[$serviceContrat['INTERVENANT_ID']] = $serviceContrat['CONTRAT_ID'];
-            }
-            if ($serviceContrat['TYPE_SERVICE_CODE'] == 'MIS') {
-                if ($this->regleMis == Parametre::CONTRAT_MIS_COMPOSANTE) {
-                    $this->intervenantContrat[$serviceContrat['STRUCTURE_ID']] = $serviceContrat['CONTRAT_ID'];
-                }
-                if ($this->regleMis == Parametre::CONTRAT_MIS_MISSION) {
-                    $this->intervenantContrat[$serviceContrat['MISSION_ID']] = $serviceContrat['CONTRAT_ID'];
-                }
-                if ($this->regleMis == Parametre::CONTRAT_MIS_GLOBALE) {
-                    $this->intervenantContrat[$serviceContrat['INTERVENANT_ID']] = $serviceContrat['CONTRAT_ID'];
+        if (!empty($dateMissions)) {
+            foreach ($contrat->avenants as $avenant) {
+                if ($avenant->edite) {
+                    continue;
                 }
 
+                foreach ($avenant->volumesHoraires as $volumeHoraire) {
+                    if ($volumeHoraire->missionId == null) {
+                        continue;
+                    }
+
+                    if (!empty($dateMissions[$volumeHoraire->missionId]) && $avenant->finValidite >= $dateMissions[$volumeHoraire->missionId]) {
+                        unset($dateMissions[$volumeHoraire->missionId]);
+                    } elseif (!empty($dateMissions[$volumeHoraire->missionId]) && $avenant->finValidite < $dateMissions[$volumeHoraire->missionId]) {
+                        $avenant->finValidite = $dateMissions[$volumeHoraire->missionId];
+                        unset($dateMissions[$volumeHoraire->missionId]);
+                    }
+                }
             }
         }
+        return $dateMissions;
+    }
 
-        $this->services[] = $serviceContrat;
-        if (!isset($this->tauxRemuUuid[$uuid])) {
-            $this->tauxRemuUuid[$uuid] = true;
-            $taux_remu_temp            = null;
+
+
+    /**
+     * @param Contrat  $contrat
+     * @param array    $dateMissions
+     * @param mixed    $dateDebutContrat
+     * @param int|null $intervenantId
+     * @return Contrat
+     */
+    public function creationAvenantProlongation(Contrat $contrat, array $dateMissions, mixed $dateDebutContrat, ?int $intervenantId): Contrat
+    {
+        $avenantProlongation         = new Contrat();
+        $avenantProlongation->parent = $contrat;
+        $contrat->avenants[]         = $avenantProlongation;
+        $avenantProlongation->annee  = $contrat->annee;
+        $dateAvenant                 = null;
+        foreach ($dateMissions as $dateMission) {
+            if (empty($dateAvenant) || $dateAvenant < $dateMission) {
+                $dateAvenant = $dateMission;
+            }
         }
-        if ($taux_remu_temp == null) {
-            $taux_remu_temp = $taux_remu;
-        } elseif ($taux_remu_temp != $taux_remu && $this->tauxRemuUuid[$uuid]) {
-            $this->tauxRemuUuid[$uuid] = false;
+        $avenantProlongation->finValidite   = $dateAvenant;
+        $avenantProlongation->debutValidite = $dateDebutContrat;
+        $avenantProlongation->isMission     = true;
+        $avenantProlongation->intervenantId = $intervenantId;
+        $avenantProlongation->structureId   = $contrat->structureId;
+        $avenantProlongation->uuid          = $this->generateUUID($intervenantId, $avenantProlongation->id, $avenantProlongation->structureId, $avenantProlongation->getMissionId(), $avenantProlongation->parent->id);
+        $avenantProlongation->typeService   = $contrat->typeService;
+
+        $this->addContrat($avenantProlongation);
+
+        return $avenantProlongation;
+    }
+
+
+
+    public function calculDateContratMission(Contrat $contrat): void
+    {
+        $dateDebut = null;
+        $dateFin   = null;
+        foreach ($contrat->volumesHoraires as $vh) {
+            if ($contrat->debutValidite == null || $dateDebut > $vh->dateDebutMission) {
+                $dateDebut = $vh->dateDebutMission;
+            }
+
+            if ($contrat->finValidite == null || $dateFin > $vh->dateFinMission) {
+                $dateFin = $vh->dateFinMission;
+            }
+        }
+
+        if ($contrat->parent != null) {
+
+            // On ajoute les heures des autres avenants liés au même contrat déjà contractualisé avec un numéro d'avenant infèrieur
+            foreach ($contrat->parent->avenants as $contratParser) {
+                //On ne s'occupe que des avenants déjà contractualisés
+                if (!$contratParser->id || !$contratParser->edite || $contratParser->numeroAvenant >= $contrat->numeroAvenant) {
+                    continue;
+                }
+
+                foreach ($contratParser->volumesHoraires as $vh) {
+                    if ($contrat->debutValidite == null || $dateDebut > $vh->dateDebutMission) {
+                        $dateDebut = $vh->dateDebutMission;
+                    }
+
+                    if ($contrat->finValidite == null || $dateFin > $vh->dateFinMission) {
+                        $dateFin = $vh->dateFinMission;
+                    }
+                }
+            }
+            //On ajoute les volumes horaires liés au contrat parent
+            foreach ($contrat->parent->volumesHoraires as $vh) {
+                if ($contrat->debutValidite == null || $dateDebut > $vh->dateDebutMission) {
+                    $dateDebut = $vh->dateDebutMission;
+                }
+
+                if ($contrat->finValidite == null || $dateFin > $vh->dateFinMission) {
+                    $dateFin = $vh->dateFinMission;
+                }
+            }
         }
 
 
-        return [$listeContrat, $taux_remu_temp];
+        if ($dateDebut == null) {
+            $dateDebut = $contrat->annee->getDateDebut();
+        }
+        if ($dateFin == null) {
+            $dateFin = $contrat->annee->getDateFin();
+        }
+        if ($contrat->debutValidite == null) {
+            $contrat->debutValidite = $dateDebut;
+        }
+        if ($contrat->finValidite == null) {
+            $contrat->finValidite = $dateFin;
+        }
     }
 
-
-
-    public function getTauxRemuUuid(): array
-    {
-        return $this->tauxRemuUuid;
-    }
-
-
-
-    public function getIntervenantContrat(): array
-    {
-        return $this->intervenantContrat;
-    }
-
-
-
-    public function clearAfterTest()
-    {
-        // on vide pour limiter la conso de RAM
-        $this->regleA             = '';
-        $this->intervenantContrat = [];
-        $this->tauxRemuUuid       = [];
-        $this->services           = [];
-        $this->tblData            = [];
-    }
 }

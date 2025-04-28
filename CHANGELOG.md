@@ -23,6 +23,10 @@
   * Possibilité de contractualiser du référentiel sans heure d'enseignement (#38876)
   * Possibilité de créer un contrat de mission sur seule prolongation de fin de date de contrat
   * possibilité de créer des contrats multi-missions
+  * Possibilité de créer un contrat sans aucune heures
+* Les projets sont transformé en avenant dans l'interface et plus seulement après validation
+* Remise au propre de la table v_contrat_main :
+  * Uniformisation des différents nom de variable
 * [Possibilité de créer vos propres scripts PHP exploitant OSE](/doc/scripts.md) (#60691)
 
 ## Améliorations
@@ -57,6 +61,13 @@
 * L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.
 
+
+# OSE 23.15 (24/04/2025)
+
+## Corrections
+
+* Correction import des numéros de prise en charge pour permettre de rechercher un intervenant sur les 13 premiers caractères de son numéro insee (#61528)
+* Modification connecteur pegase pour ignorer certains elements
 
 
 # OSE 23.14 (05/03/2025)

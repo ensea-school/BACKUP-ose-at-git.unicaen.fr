@@ -8,6 +8,8 @@ class Testeur
     {
         $errors = 0;
 
+        $this->remonteeTotaux($data);
+
         $services = $data->getSubs();
         foreach ($services as $service) {
             $this->calcSommesLigne($service);
@@ -40,6 +42,24 @@ class Testeur
 
     protected function controleColonnes(Ligne $ligne): void
     {
+        if ($ligne->getVolumeHoraire()){
+            $vh = $ligne->getVolumeHoraire();
+            $pService = $vh->getTauxServiceDu() * $vh->getPonderationServiceDu();
+            $pCompl = $vh->getTauxServiceCompl() * $vh->getPonderationServiceCompl();
+
+            if ($ligne->getValeur(Ligne::CAT_SERVICE)->getValue() != 0 && $ligne->getValeur(Ligne::CAT_COMPL)->getValue() == 0 && $ligne->getValeur(Ligne::CAT_TYPE_PRIME)->getValue() == 0){
+                $ligne->getValeur(Ligne::TOTAL)->setControle($vh->getHeures() * $pService);
+            }
+            if ($ligne->getValeur(Ligne::CAT_SERVICE)->getValue() == 0 && $ligne->getValeur(Ligne::CAT_COMPL)->getValue() != 0 && $ligne->getValeur(Ligne::CAT_TYPE_PRIME)->getValue() == 0){
+                $ligne->getValeur(Ligne::TOTAL)->setControle($vh->getHeures() * $pCompl);
+            }
+            if ($ligne->getValeur(Ligne::CAT_SERVICE)->getValue() == 0 && $ligne->getValeur(Ligne::CAT_COMPL)->getValue() == 0 && $ligne->getValeur(Ligne::CAT_TYPE_PRIME)->getValue() != 0){
+                $ligne->getValeur(Ligne::TOTAL)->setControle($vh->getHeuresPrimes() * $pCompl);
+            }
+            if (abs($pService-$pCompl) < 0.001){ // taux service = taux compl
+                $ligne->getValeur(Ligne::TOTAL)->setControle($vh->getHeures() * $pCompl);
+            }
+        }
         foreach( $ligne->getValeurs() as $valeur ){
             $value = $valeur->getValueFinale();
 
@@ -105,5 +125,36 @@ class Testeur
 
         $sommeTotale = round($sommeTotale, 2);
         $ligne->getValeur(Ligne::TOTAL)->setValue($sommeTotale);
+    }
+
+
+
+    protected function remonteeTotaux(Ligne $ligne)
+    {
+        $vns = [
+            Ligne::CAT_TYPE_PRIME,
+            Ligne::TOTAL,
+        ];
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $vns[] = $categorie;
+            $vns[] = $categorie . Ligne::TYPE_FI;
+            $vns[] = $categorie . Ligne::TYPE_FA;
+            $vns[] = $categorie . Ligne::TYPE_FC;
+            $vns[] = $categorie . Ligne::TYPE_REFERENTIEL;
+        }
+
+        foreach( $vns as $vn ) {
+            $iVal = $ligne->getValeur($vn);
+            $iVal->setValue(0);
+            foreach ($ligne->getSubs() as $service) {
+                $sVal = $service->getValeur($vn);
+                $sVal->setValue(0);
+                foreach ($service->getSubs() as $vh) {
+                    $vhValue = $vh->getValeur($vn)->getValueFinale();
+                    $iVal->setValue($iVal->getValue() + $vhValue);
+                    $sVal->setValue($sVal->getValue() + $vhValue);
+                }
+            }
+        }
     }
 }

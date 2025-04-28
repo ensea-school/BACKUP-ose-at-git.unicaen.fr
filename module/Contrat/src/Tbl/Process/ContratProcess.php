@@ -1236,11 +1236,11 @@ class ContratProcess implements ProcessInterface
         $dateDebut = null;
         $dateFin   = null;
         foreach ($contrat->volumesHoraires as $vh) {
-            if ($contrat->debutValidite == null || $dateDebut > $vh->dateDebutMission) {
+            if ($dateDebut == null || $dateDebut > $vh->dateDebutMission) {
                 $dateDebut = $vh->dateDebutMission;
             }
 
-            if ($contrat->finValidite == null || $dateFin > $vh->dateFinMission) {
+            if ($dateFin == null || $dateFin < $vh->dateFinMission) {
                 $dateFin = $vh->dateFinMission;
             }
         }

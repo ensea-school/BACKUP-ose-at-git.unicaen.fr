@@ -3,7 +3,7 @@
 namespace Contrat\Entity\Db;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Validation;
+use Workflow\Entity\Db\Validation;
 use Doctrine\Common\Collections\Collection;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;

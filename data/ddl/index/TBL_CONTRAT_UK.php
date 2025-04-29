@@ -7,12 +7,14 @@ return [
     'unique'  => TRUE,
     'table'   => 'TBL_CONTRAT',
     'columns' => [
+        'ANNEE_ID',
+        'INTERVENANT_ID',
+        'STRUCTURE_ID',
         'CONTRAT_ID',
-        'VOLUME_HORAIRE_ID',
         'CONTRAT_PARENT_ID',
-        'VOLUME_HORAIRE_REF_ID',
+        'VOLUME_HORAIRE_ID',
         'VOLUME_HORAIRE_MISSION_ID',
-        'DATE_FIN',
+        'VOLUME_HORAIRE_REF_ID',
     ],
 ];
 

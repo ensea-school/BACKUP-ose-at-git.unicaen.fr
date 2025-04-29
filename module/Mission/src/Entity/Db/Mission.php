@@ -62,7 +62,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     public function __toString(): string
     {
-        return $this->getLibelleCourt() ?? '';
+        return $this->getLibelleMission() ? $this->getLibelleCourt() : '';
     }
 
 

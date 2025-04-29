@@ -1,12 +1,30 @@
 # Version stable
 
-[OSE 23.12](#ose-2312-26112024)
+[OSE 24.0](#ose-24-29042025)
 
 
-
-# OSE 24 (à venir)
+# OSE 25 (à venir fin juillet 2025)
 
 ## Nouveautés
+
+* Nouveau workflow plus souple et compréhensible
+  * Possibilité de personnaliser l'ordre des étapes, dans une certaine mesure
+  * Menus intervenant remaniés et plus cohérents
+
+* Données personnelles 
+  * Possibilité de collecter les données personnelles en deux étapes : en cours de recrutement et finalisation après recrutement 
+
+* Pièces justificatives
+  * Possibilité de collecter les pièces justificatives en deux étapes : en cours de recrutement et finalisation après recrutement
+
+* Saisie de service d'enseignement
+  * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
+
+
+# OSE 24 (29/04/2025)
+
+## Nouveautés
+
 * Nouvelle infrastructure de gestion des formules de calcul
   * Calcul plus rapide de l'ensemble des fiches, avec ajout de jauges pour le suivi d'exécution en ligne de commande
   * Les tableurs sont tous centralisés dans l'application et accessibles via le menu d'administration (#51993) 
@@ -23,9 +41,14 @@
   * Possibilité de contractualiser du référentiel sans heure d'enseignement (#38876)
   * Possibilité de créer un contrat de mission sur seule prolongation de fin de date de contrat
   * possibilité de créer des contrats multi-missions
+  * Possibilité de créer un contrat sans aucune heure
+* Les projets sont transformé en avenant dans l'interface et plus seulement après validation
+* Remise au propre des vues v_contrat_main et v_contrat_services:
+  * Uniformisation des différents noms de variables
 * [Possibilité de créer vos propres scripts PHP exploitant OSE](/doc/scripts.md) (#60691)
 
 ## Améliorations
+
 * Injection de la situation matrimoniale "Célibataire" par défaut pour l'export SIHAM si celle-ci n'est pas renseignée par l'intervenant (#60066)
 * Diverses optimisations rendant l'application plus réactive
 * Optimisation de la base de données : reconstruction des indexs systématique lors de chaque mise à jour
@@ -33,27 +56,67 @@
 * Nouveau mode en ligne de commande : ./bin/ose vous donne maintenant la liste de toutes commandes possibles
 
 ## Corrections 
+
 * Correction d'un bug lors de la suppression de référentiel fonction (#59691)
 * Correction d'un bug sur la gestion des fonctions référentiels parents (#59063) 
 * Bug sur l'onglet service avec un utilisateur ayant un rôle avec un périmètre composante (#60291)
 * Renforcement pour limiter la validation ou le refus d'une candidature à sa propre composante uniquement (#60566)
 * Le différentiel s'affiche correctement dans la page d'administration de l'import (#59394)
+* Correction pb aff mois sur OSE Missions (#61452)
 
 ## Notes de mise à jour
 
-Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuel rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
+* **ATTENTION : la version 24 ne peut être installée qu'à partir des versions 23.13 ou supérieures. Pour les versions antérieures, il vous faut préalablement monter en 23.13 minimum.**
 
+* L'opération de migration peut durer assez longtemps : prévoyez jusqu'à 2h de durée d'exécution pour le script de mise à jour.
+
+* Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuelle rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui-ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
 `
 #avant
 /usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
 `
-
 `#après
 /chemin_absolu_vers/bin/ose notifier-indicateurs`
 
-Note de mise à jour : penser à modifier l'état de sortie export des services, pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
+* Le calcul des heures complémentaires ayant complètement changé, il se peut que sur certaines fiches complexes avec des paiements déjà effectués vous ayez un différentiel qui apparaisse avec quelques centimes à mettre en paiement ou au contraire quelques centimes en trop payé
 
-# OSE 23.13 (à venir)
+* L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
+Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.
+
+* **ATTENTION à bien adapter vos contrats de travail** aux changements intervenus en particulier sur v_contrat_main. La liste des changements est la suivante :
+  * FORMULE_RESULTAT_ID colonne supprimée
+  * totalDiviseParDix   colonne supprimée
+  * tauxId              colonne supprimée
+  * tauxMajoreId        colonne supprimée
+
+  * heuresPeriodeEssai    nouvelle colonne : nombre d'heures concernées par une période d'essai (missions)
+  * heuresPrimePrecarite  nouvelle colonne : nombre d'heures relatives à la prime de précarité (missions)
+  * missions              nouvelle colonne : liste des libellés des missions, remplace libelleMission
+  * typesMission          nouvelle colonne : liste des libelles des types de missions, remplace missionNom
+  * missionsTypesMissions nouvelle colonne : liste des missions avec mention des types de missions
+  * date_creation         renommée en dateCreation
+  * date_contrat_lie      renommée en dateContratLie
+  * pays_nationalite      renommée en paysNationalite
+
+
+
+
+# OSE 23.15 (24/04/2025)
+
+## Corrections
+
+* Correction import des numéros de prise en charge pour permettre de rechercher un intervenant sur les 13 premiers caractères de son numéro insee (#61528)
+* Modification connecteur pegase pour ignorer certains elements
+
+
+# OSE 23.14 (05/03/2025)
+
+## Corrections
+
+* **Faille de sécurité importante corrigée** : un intervenant connecté ayant accès aux contrats téléversés pouvait télécharger les contrats d'autres intervenants
+
+
+# OSE 23.13 (17/02/2025)
 
 ## Corrections
 

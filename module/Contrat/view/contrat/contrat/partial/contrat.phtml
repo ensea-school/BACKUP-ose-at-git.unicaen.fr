@@ -6,50 +6,48 @@ use Contrat\Entity\Db\TblContrat;
 
 /**
  * @var              $this          \Application\View\Renderer\PhpRenderer
- * @var TblContrat[] $services
+ * @var TblContrat   $tblContrat
  */
 
-foreach ($services as $typeCode => $volumesHoraireContrat):
-    $contrat = $volumesHoraireContrat[0]->getContrat();
-    break;
-endforeach;
-$validation     = $contrat->getValidation();
+$contrat = $tblContrat->getContrat();
+
+$validation     = $tblContrat->getValidation();
 $retourSigne    = $contrat->getDateRetourSigne();
 $dateEnvoiEmail = $contrat->getDateEnvoiEmail();
 $uploader       = $this->uploader();
 
 $urlExport = $this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)
-    ? $this->url('contrat/exporter', ['contrat' => $contrat->getId()]) // oui car on peut le voir!!
-    : null;
+        ? $this->url('contrat/exporter', ['contrat' => $contrat->getId()]) // oui car on peut le voir!!
+        : null;
 
 $urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
-    ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
-    : null;
+        ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
+        : null;
 
 $urlEmail = $this->isAllowed($contrat, Privileges::CONTRAT_ENVOI_EMAIL)
-    ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()], ['modal' => 1]) . '?modal=1'
-    : null;
+        ? $this->url('contrat/envoyer-mail', ['contrat' => $contrat->getId()], ['modal' => 1]) . '?modal=1'
+        : null;
 
 
 $urlValidation = $this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)
-    ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
+        : null;
 
 $urlDevalidation = $this->isAllowed($contrat, Privileges::CONTRAT_DEVALIDATION)
-    ? $this->url('contrat/devalider', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/devalider', ['contrat' => $contrat->getId()])
+        : null;
 
 $urlSaisieRetour = $this->isAllowed($contrat, Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE)
-    ? $this->url('contrat/saisir-retour', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/saisir-retour', ['contrat' => $contrat->getId()])
+        : null;
 
 $urlAjouter = $this->isAllowed($contrat, ContratAssertion::PRIV_AJOUTER_FICHIER)
-    ? $this->url('contrat/deposer-fichier', ['contrat' => $contrat->getId()], [], true)
-    : null;
+        ? $this->url('contrat/deposer-fichier', ['contrat' => $contrat->getId()], [], true)
+        : null;
 
 $urlSuppression = $this->isAllowed($contrat, Privileges::CONTRAT_SUPPRESSION)
-    ? $this->url('contrat/supprimer', ['contrat' => $contrat->getId()])
-    : null;
+        ? $this->url('contrat/supprimer', ['contrat' => $contrat->getId()])
+        : null;
 
 $disableEmail = (empty($emailIntervenant)) ? true : false;
 
@@ -136,25 +134,22 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
         <?php endif; ?>
 
         <!-- Liste des enseignements concernés -->
-        <?php foreach ($volumesHoraireContrat as $vhTblContrat):
-            $uuid = $vhTblContrat->getUuid();
-            break;
-        endforeach; ?>
-        <div>
-            <hr/>
-            <a title="Cliquez pour afficher/masquer les enseignements concernés"
-               href="#details-enseignements-contrat-<?= $uuid ?>"
-               role="button"
-               aria-expanded="false"
-               aria-controls="details-enseignements-contrat-<?= $uuid ?>"
-               data-bs-toggle="collapse"
-            >Enseignements concernés
-                <small>(cliquez pour afficher/cacher)</small>
-            </a>
-            <div class="collapse" id="details-enseignements-contrat-<?= $uuid ?>">
-                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $contrat, 'services' => $services, 'structure' => $contrat->getStructure()]); ?>
+        <?php if (count($tblContrat->getVolumesHoraires()) > 0):?>
+                <div>
+                <hr/>
+                <a href="#details-enseignements-contrat-<?= $tblContrat->getUuid() ?>"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="details-enseignements-contrat-<?= $tblContrat->getUuid() ?>"
+                   data-bs-toggle="collapse"
+                >Détails
+                    <small>(cliquez pour afficher/cacher)</small>
+                </a>
+                <div class="collapse" id="details-enseignements-contrat-<?= $tblContrat->getUuid() ?>">
+                    <?= $this->partial('contrat/contrat/partial/contrat-heures', ['tblContrat' => $tblContrat]); ?>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
 
     <?php if ($urlValidation || $urlSaisieRetour || $urlDevalidation || $urlSuppression): ?>

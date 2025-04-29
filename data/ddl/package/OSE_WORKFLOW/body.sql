@@ -802,20 +802,16 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
               sum(c.realisation) over (partition by c.intervenant_id,c.structure_id)
             FROM (
                 SELECT
-                    ''CONTRAT''                          etape_code,
-                    intervenant_id                     intervenant_id,
-                    structure_id                       structure_id,
-                    c.heures                           objectif,
-                    c.termine,
-                    c.contrat_id,
-                    CASE WHEN c.termine > 0.0
-                        THEN c.heures
-                        ELSE 0
-                    END                                realisation
+                    ''CONTRAT''                            etape_code,
+                    intervenant_id                         intervenant_id,
+                    structure_id                           structure_id,
+                    greatest(c.total_heures,1)             objectif,
+                    c.termine * greatest(c.total_heures,1) realisation
                 FROM
                     tbl_contrat c
                 WHERE
-                ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'c') || '
+                  ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'c') || '
+                  AND c.volume_horaire_index = 0
             ) c';
 
 

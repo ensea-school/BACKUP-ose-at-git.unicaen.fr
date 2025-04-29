@@ -47,7 +47,9 @@ class MissionSuiviForm extends AbstractForm
             'options' => [
                 'label'         => 'Mission',
                 'empty_option'  => '- Non renseignée -',
-                'value_options' => Util::collectionAsOptions($missions),
+                'value_options' => Util::collectionAsOptions($missions, false, function ($m) {
+                    return $m->getLibelleMission() ?? $m->getLibelleCourt();
+                }),
             ],
             'attributes' => [
                 'data-besoin-formation' => json_encode($besoinFormation),

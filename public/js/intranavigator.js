@@ -1,6 +1,7 @@
 IntraNavigator = {
     _loadingTooltip: null,
     _loading: false,
+    _installed: false,
 
     install()
     {
@@ -25,6 +26,8 @@ IntraNavigator = {
         observer.observe(document.body, {
             childList: true, subtree: true
         });
+
+        this._installed = true;
     },
 
 
@@ -396,6 +399,10 @@ IntraNavigator = {
 
     loadBegin()
     {
+        if (!this._installed) {
+            this.install();
+        }
+
         IntraNavigator._loadingTooltip.style.display = 'block';
         this._loading = true;
     },
@@ -404,6 +411,10 @@ IntraNavigator = {
 
     loadEnd()
     {
+        if (!this._installed) {
+            this.install();
+        }
+
         IntraNavigator._loadingTooltip.style.display = 'none';
         this._loading = false;
     },

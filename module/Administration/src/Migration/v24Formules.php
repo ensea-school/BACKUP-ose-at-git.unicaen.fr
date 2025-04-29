@@ -30,6 +30,7 @@ class v24Formules extends MigrationAction
 
         // Sauvegarde des anciennes tables
         // afin de pouvoir faire des comparatifs au besoin
+        $this->manager()->sauvegarderTable('FORMULE_RESULTAT', 'SAVE_V24_FRES_INTERVENANT');
         $this->manager()->sauvegarderTable('FORMULE_RESULTAT_SERVICE', 'SAVE_V24_FRES_SERVICE');
         $this->manager()->sauvegarderTable('FORMULE_RESULTAT_SERVICE_REF', 'SAVE_V24_FRES_SERVICE_REF');
         $this->manager()->sauvegarderTable('FORMULE_RESULTAT_VH', 'SAVE_V24_FRES_VH');

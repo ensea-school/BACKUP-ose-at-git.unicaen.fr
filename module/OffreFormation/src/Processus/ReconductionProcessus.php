@@ -14,6 +14,7 @@ use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
+use Unicaen\BddAdmin\BddAwareTrait;
 
 /**
  * Description of ReconductionProcessus
@@ -32,6 +33,7 @@ class ReconductionProcessus extends AbstractProcessus
     use CentreCoutEpServiceAwareTrait;
     use ElementModulateurServiceAwareTrait;
     use SourceServiceAwareTrait;
+    use BddAwareTrait;
 
     protected $etapeService;
 
@@ -263,6 +265,8 @@ class ReconductionProcessus extends AbstractProcessus
                 ]);
             $nbMReconduit++;
         }
+
+        $this->getBdd()->materializedView()->refresh('MV_MODULATEUR');
 
         return $nbMReconduit;
     }

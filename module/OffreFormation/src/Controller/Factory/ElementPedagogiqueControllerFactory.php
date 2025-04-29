@@ -4,6 +4,7 @@ namespace OffreFormation\Controller\Factory;
 
 use OffreFormation\Controller\ElementPedagogiqueController;
 use Psr\Container\ContainerInterface;
+use Unicaen\BddAdmin\Bdd;
 use UnicaenImport\Service\SchemaService;
 
 
@@ -20,6 +21,7 @@ class ElementPedagogiqueControllerFactory
         $renderer   = $container->get('ViewRenderer');
         $controller = new ElementPedagogiqueController($renderer);
         $controller->setServiceSchema($container->get(SchemaService::class));
+        $controller->setBdd($container->get(Bdd::class));
 
         return $controller;
     }

@@ -255,7 +255,6 @@ return [
                     'TAUX_REMU_DATE',
                     'TAUX_REMU_MAJORE_ID',
                     'TAUX_REMU_MAJORE_VALEUR',
-                    'TAUX_REMU_MAJORE_DATE',
                     'TAUX_CONGES_PAYES',
                 ],
                 'key'                => [
@@ -271,7 +270,7 @@ return [
                 'key_values_if_null' => [
                     'STRUCTURE_ID' => 0,
                     'CONTRAT_ID' => 0,
-                    'CONTRAT_PARENT_ID',
+                    'CONTRAT_PARENT_ID' => 0,
                     'VOLUME_HORAIRE_MISSION_ID' => 0,
                     'VOLUME_HORAIRE_ID' => 0,
                     'VOLUME_HORAIRE_REF_ID' => 0,

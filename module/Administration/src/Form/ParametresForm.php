@@ -695,7 +695,7 @@ class ParametresForm extends AbstractForm
                            'label' => 'Pour les enseignements et le référentiel',
 
                            'value_options' => [
-                               PARAMETRE::CONTRAT_ENS_GLOBALE    => 'Un contrat global pour l\'établissement',
+                               PARAMETRE::CONTRAT_ENS_GLOBAL     => 'Un contrat global pour l\'établissement',
                                PARAMETRE::CONTRAT_ENS_COMPOSANTE => 'Un contrat ou un avenant par composante',
                            ],
                        ],
@@ -712,7 +712,7 @@ class ParametresForm extends AbstractForm
                            'label' => 'Pour les missions',
 
                            'value_options' => [
-                               PARAMETRE::CONTRAT_MIS_GLOBALE    => 'Un contrat global pour l\'établissement',
+                               PARAMETRE::CONTRAT_MIS_GLOBAL     => 'Un contrat global pour l\'établissement',
                                PARAMETRE::CONTRAT_MIS_COMPOSANTE => 'Un contrat ou un avenant par composante',
                                PARAMETRE::CONTRAT_MIS_MISSION    => 'Un contrat par mission',
                            ],
@@ -725,7 +725,7 @@ class ParametresForm extends AbstractForm
 
         $this->add([
                        'type'       => 'Select',
-                       'name'       => 'contrat_direct',
+                       'name'       => Parametre::CONTRAT_DIRECT,
                        'options'    => [
                            'label'         => 'Étape facultative de projet de contrat',
                            'value_options' => [
@@ -743,7 +743,7 @@ class ParametresForm extends AbstractForm
                        'type'       => 'Select',
                        'name'       => 'contrat_date',
                        'options'    => [
-                           'label'         => 'Possibilité de saisir la date de retour signé sans ajouté le contrat',
+                           'label'         => 'Possibilité de saisir la date de retour signé sans ajouter le contrat',
                            'value_options' => [
                                PARAMETRE::CONTRAT_DATE => 'La saisie est possible sans contrat',
                                'desactive'             => 'Le contrat est nécessaire pour pouvoir saisir',

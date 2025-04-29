@@ -15,6 +15,7 @@ class Testeur
     {
         $this->depassementServiceDuSansHC = $fi->isDepassementServiceDuSansHC();
         $this->arrondisseurMode           = $fi->getArrondisseur();
+        $this->arrondisseurMode = FormuleIntervenant::ARRONDISSEUR_FULL;
 
         $data = $fi->getArrondisseurTrace();
 
@@ -30,10 +31,14 @@ class Testeur
         $serviceDuCalcule = $data->getValeur(Ligne::CAT_SERVICE)->getValueFinale();
 
         if ($serviceDuCalcule != $fi->getServiceDu() && $this->arrondisseurMode == FormuleIntervenant::ARRONDISSEUR_FULL) {
-            $errors++;
-            $data->getValeur(Ligne::CAT_SERVICE)->addError(
-                'Le service calculé (' . $serviceDuCalcule . ') ne correspond pas au service dû (' . $fi->getServiceDu() . ')'
-            );
+            if ($data->getValeur(Ligne::TOTAL)->getValueFinale() < $fi->getServiceDu()) {
+                // Sous-service
+            }else {
+                $errors++;
+                $data->getValeur(Ligne::CAT_SERVICE)->addError(
+                    'Le service calculé (' . $serviceDuCalcule . ') ne correspond pas au service dû (' . $fi->getServiceDu() . ')'
+                );
+            }
         }
 
         return $errors;

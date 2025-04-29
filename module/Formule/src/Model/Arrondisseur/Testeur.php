@@ -190,9 +190,13 @@ class Testeur
 
 
         if ($this->depassementServiceDuSansHC) {
-            if ($sTotal > $hetd) {
+            if ($vh->getHeures() > 0 && $sTotal > $hetd) {
                 $erreurs++;
                 $total->addError('Le total HETD est trop important par rapport au nombre d\'heures saisies (' . $hetd . ')');
+            }
+            if ($vh->getHeures() < 0 && $sTotal < $hetd) {
+                $erreurs++;
+                $total->addError('Le total HETD est trop petit par rapport au nombre d\'heures saisies (' . $hetd . ')');
             }
         } else {
             if ($sTotal != $hetd) {

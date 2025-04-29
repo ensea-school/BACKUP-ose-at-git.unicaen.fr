@@ -8,7 +8,6 @@ use Formule\Model\FormuleDetailsExtractor;
 use Formule\Service\AfficheurServiceAwareTrait;
 use Formule\Service\FormuleServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;

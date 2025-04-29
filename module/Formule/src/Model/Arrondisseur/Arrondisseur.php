@@ -124,8 +124,14 @@ class Arrondisseur
 
     protected function preparationHorizontaleDescendante(Ligne $data): void
     {
+        /* le total général est recalculé */
+        $ct = $this->addCalcul($data->getValeur(Ligne::TOTAL));
+        $ct->addValeur($data->getValeur(Ligne::CAT_TYPE_PRIME));
+
         // Sous-total par catégorie
         foreach (Ligne::CATEGORIES as $categorie) {
+            $ct->addValeur($data->getValeur($categorie));
+
             $cc = $this->addCalcul($data->getValeur($categorie));
             $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
             $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_REFERENTIEL));
@@ -136,13 +142,6 @@ class Arrondisseur
                 $ceth->addValeur($data->getValeur($categorie . $type));
             }
         }
-
-        /* le total général est recalculé */
-        $totalGeneral = $data->getValeur(Ligne::CAT_TYPE_PRIME)->getValueFinale();
-        foreach (Ligne::CATEGORIES as $categorie) {
-            $totalGeneral += $data->getValeur($categorie)->getValueFinale();
-        }
-        $data->getValeur(Ligne::TOTAL)->setValue(round($totalGeneral, 2));
     }
 
 

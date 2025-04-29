@@ -14,9 +14,9 @@ class WfEtape
 
     const CODE_CLOTURE_REALISE                = 'CLOTURE_REALISE';
 
-const CODE_CONSEIL_ACADEMIQUE             = TypeAgrement::CODE_CONSEIL_ACADEMIQUE;
+    const CODE_CONSEIL_ACADEMIQUE             = TypeAgrement::CODE_CONSEIL_ACADEMIQUE;
 
-const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT;
+    const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT;
 
     const CODE_CONTRAT                        = 'CONTRAT';
 
@@ -114,7 +114,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
      *
      * @return integer
      */
-    public function getId ()
+    public function getId()
     {
         return $this->id;
     }
@@ -126,7 +126,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
      *
      * @return string
      */
-    public function getCode ()
+    public function getCode()
     {
         return $this->code;
     }
@@ -138,7 +138,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
      *
      * @return string
      */
-    public function getLibelle (\Application\Acl\Role $role)
+    public function getLibelle(\Application\Acl\Role $role)
     {
         if ($role->getIntervenant()) {
             return $this->getLibelleIntervenant();
@@ -154,7 +154,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
      *
      * @return string
      */
-    public function getLibelleIntervenant ()
+    public function getLibelleIntervenant()
     {
         return $this->libelleIntervenant;
     }
@@ -166,21 +166,21 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
      *
      * @return string
      */
-    public function getLibelleAutres ()
+    public function getLibelleAutres()
     {
         return $this->libelleAutres;
     }
 
 
 
-    public function getOrdre ()
+    public function getOrdre()
     {
         return $this->ordre;
     }
 
 
 
-    public function getRoute ()
+    public function getRoute()
     {
         return $this->route;
     }
@@ -190,7 +190,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
     /**
      * @param string $route
      */
-    public function setRoute ($route)
+    public function setRoute($route)
     {
         $this->route = $route;
     }
@@ -200,7 +200,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
     /**
      * @param string $routeIntervenant
      */
-    public function getRouteIntervenant ()
+    public function getRouteIntervenant()
     {
         return $this->routeIntervenant;
     }
@@ -210,7 +210,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
     /**
      * @return boolean
      */
-    public function getObligatoire ()
+    public function getObligatoire()
     {
         return $this->obligatoire;
     }
@@ -222,7 +222,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
      *
      * @return WfEtape
      */
-    public function setObligatoire ($obligatoire)
+    public function setObligatoire($obligatoire)
     {
         $this->obligatoire = $obligatoire;
 
@@ -234,7 +234,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
     /**
      * @return string
      */
-    public function getDescNonFranchie ()
+    public function getDescNonFranchie()
     {
         return $this->descNonFranchie;
     }
@@ -246,7 +246,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
      *
      * @return WfEtape
      */
-    public function setDescNonFranchie ($descNonFranchie)
+    public function setDescNonFranchie($descNonFranchie)
     {
         $this->descNonFranchie = $descNonFranchie;
 
@@ -258,7 +258,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
     /**
      * @return mixed
      */
-    public function getDescSansObjectif ()
+    public function getDescSansObjectif()
     {
         return $this->descSansObjectif;
     }
@@ -270,7 +270,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
      *
      * @return WfEtape
      */
-    public function setDescSansObjectif ($descSansObjectif)
+    public function setDescSansObjectif($descSansObjectif)
     {
         $this->descSansObjectif = $descSansObjectif;
 
@@ -279,7 +279,7 @@ const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT
 
 
 
-    public function __toString ()
+    public function __toString()
     {
         return $this->getLibelleAutres();
     }

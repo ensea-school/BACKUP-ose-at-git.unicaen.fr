@@ -3,16 +3,14 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\TypeValidation;
-use Application\Entity\Db\Validation;
+use Workflow\Entity\Db\TypeValidation;
+use Workflow\Entity\Db\Validation;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Intervenant\Entity\Db\Intervenant;
-use PieceJointe\Entity\Db\PieceJointe;
+use Workflow\Service\TypeValidationServiceAwareTrait;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 /**
  * Description of FichierService
@@ -27,8 +25,9 @@ use PieceJointe\Entity\Db\PieceJointe;
 class FichierService extends AbstractEntityService
 {
     use ContextServiceAwareTrait;
-    use typeValidationServiceAwareTrait;
-    use validationServiceAwareTrait;
+    use TypeValidationServiceAwareTrait;
+    use ValidationServiceAwareTrait;
+
 
 
     const STOCKAGE_BDD  = 'bdd';

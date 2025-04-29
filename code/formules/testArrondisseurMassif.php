@@ -28,7 +28,7 @@ if (!$bdd->table()->exists($testTablename)) {
       0 err_full, 
       0 err_custom_min, 
       0 err_custom_full 
-    from formule_resultat_intervenant fri JOIN intervenant i ON i.id = fri.intervenant_id";
+    from formule_resultat_intervenant fri JOIN intervenant i ON i.id = fri.intervenant_id AND fri.etat_volume_horaire_id = 1";
     $bdd->exec($sql);
 }
 
@@ -67,23 +67,19 @@ foreach ($data as $d) {
 
     $fi->setArrondisseur(FormuleIntervenant::ARRONDISSEUR_NO);
     $ts->getServiceFormule()->calculer($fi);
-    $trace               = $fi->getArrondisseurTrace();
-    $resData['ERR_NONE'] = $testeur->tester($trace);
+    $resData['ERR_NONE'] = $testeur->tester($fi);
 
     $fi->setArrondisseur(FormuleIntervenant::ARRONDISSEUR_MINIMAL);
     $ts->getServiceFormule()->calculer($fi);
-    $trace                  = $fi->getArrondisseurTrace();
-    $resData['ERR_MINIMAL'] = $testeur->tester($trace);
+    $resData['ERR_MINIMAL'] = $testeur->tester($fi);
 
     $fi->setArrondisseur(FormuleIntervenant::ARRONDISSEUR_FULL);
     $ts->getServiceFormule()->calculer($fi);
-    $trace               = $fi->getArrondisseurTrace();
-    $resData['ERR_FULL'] = $testeur->tester($trace);
+    $resData['ERR_FULL'] = $testeur->tester($fi);
 
     $fi->setArrondisseur(FormuleIntervenant::ARRONDISSEUR_CUSTOM);
     $ts->getServiceFormule()->calculer($fi);
-    $trace                      = $fi->getArrondisseurTrace();
-    $resData['ERR_CUSTOM_FULL'] = $testeur->tester($trace);
+    $resData['ERR_CUSTOM_FULL'] = $testeur->tester($fi);
 
     $bdd->getTable($testTablename)->update($resData, $resKey);
 }

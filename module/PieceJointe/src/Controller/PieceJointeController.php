@@ -5,7 +5,6 @@ namespace PieceJointe\Controller;
 use Application\Entity\Db\Fichier;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Entity\Db\TypeIntervenant;

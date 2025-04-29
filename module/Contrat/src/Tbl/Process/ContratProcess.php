@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Contrat\Tbl\Process;
 
-use Application\Entity\Db\Parametre;
+use Administration\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
+use Administration\Service\ParametresServiceAwareTrait;
 use Contrat\Entity\Db\TypeContrat;
 use Contrat\Service\TypeContratServiceAwareTrait;
 use Contrat\Tbl\Process\Model\Contrat;
@@ -1236,11 +1236,11 @@ class ContratProcess implements ProcessInterface
         $dateDebut = null;
         $dateFin   = null;
         foreach ($contrat->volumesHoraires as $vh) {
-            if ($contrat->debutValidite == null || $dateDebut > $vh->dateDebutMission) {
+            if ($dateDebut == null || $dateDebut > $vh->dateDebutMission) {
                 $dateDebut = $vh->dateDebutMission;
             }
 
-            if ($contrat->finValidite == null || $dateFin > $vh->dateFinMission) {
+            if ($dateFin == null || $dateFin < $vh->dateFinMission) {
                 $dateFin = $vh->dateFinMission;
             }
         }

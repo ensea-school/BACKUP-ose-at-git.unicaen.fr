@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $title string
+ * @var $form  \Workflow\Form\DependanceForm
+ */
+
+?>
+    <h1 class="page-header"><?= $title ?></h1>
+<?php
+
+echo $this->messenger()->setCurrentMessagesFromFlashMessenger();
+
+echo $this->form($form);

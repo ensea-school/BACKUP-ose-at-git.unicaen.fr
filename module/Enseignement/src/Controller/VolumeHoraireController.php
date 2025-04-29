@@ -6,7 +6,6 @@ use Application\Controller\AbstractController;
 use Application\Form\AbstractForm;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Entity\VolumeHoraireListe;
@@ -22,6 +21,7 @@ use Plafond\Processus\PlafondProcessusAwareTrait;
 use RuntimeException;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of VolumeHoraireController

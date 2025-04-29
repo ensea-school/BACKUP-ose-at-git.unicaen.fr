@@ -2,16 +2,16 @@
 
 namespace Referentiel\Entity;
 
-use Service\Entity\Db\EtatVolumeHoraire;
+use LogicException;
 use Referentiel\Entity\Db\ServiceReferentiel;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\Validation;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Referentiel\Hydrator\ListeFilterHydrator;
 use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
-use LogicException;
 use RuntimeException;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenImport\Entity\Db\Source;
+use Workflow\Entity\Db\Validation;
 
 /**
  *

@@ -13,7 +13,7 @@ class TblPieceJointeFournie
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Validation
+     * @var \Workflow\Entity\Db\Validation
      */
     private $validation;
 
@@ -79,7 +79,7 @@ class TblPieceJointeFournie
     /**
      * Get validation
      *
-     * @return \Application\Entity\Db\Validation
+     * @return \Workflow\Entity\Db\Validation
      */
     public function getValidation()
     {

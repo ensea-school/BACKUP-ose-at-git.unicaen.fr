@@ -3,7 +3,7 @@
 namespace Application\ORM\Event\Listeners;
 
 
-use Application\Interfaces\ParametreEntityInterface;
+use Administration\Interfaces\ParametreEntityInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Doctrine\Common\EventSubscriber;

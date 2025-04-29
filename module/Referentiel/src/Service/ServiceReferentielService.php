@@ -2,8 +2,8 @@
 
 namespace Referentiel\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\Intervenant;

@@ -2,6 +2,8 @@
 
 namespace Formule\Model\Arrondisseur;
 
+use Formule\Entity\FormuleIntervenant;
+
 class Afficheur
 {
     private Testeur $testeur;
@@ -15,9 +17,11 @@ class Afficheur
 
 
 
-    public function afficher(Ligne $ligne)
+    public function afficher(FormuleIntervenant $fi)
     {
-        $errors = $this->testeur->tester($ligne);
+        $ligne = $fi->getArrondisseurTrace();
+
+        $errors = $this->testeur->tester($fi);
         echo $errors . ' Erreurs';
         $main = $ligne;
         echo '<table class="table table-bordered table-xs">';
@@ -66,11 +70,11 @@ class Afficheur
 
         echo '<th>' . $name . '</th>';
         echo "<td>";
-        if ($ligne->getVolumeHoraire()){
+        if ($ligne->getVolumeHoraire()) {
             $vh = $ligne->getVolumeHoraire();
             echo $vh->getHeures();
-            echo " sd*=".($vh->getTauxServiceDu() * $vh->getPonderationServiceDu());
-            echo " hc*=".($vh->getTauxServiceCompl() * $vh->getPonderationServiceCompl());
+            echo " sd*=" . ($vh->getTauxServiceDu() * $vh->getPonderationServiceDu());
+            echo " hc*=" . ($vh->getTauxServiceCompl() * $vh->getPonderationServiceCompl());
         }
         echo "</td>";
         $this->affValeur($ligne->getValeur(Ligne::TOTAL));
@@ -100,12 +104,18 @@ class Afficheur
         ];
         $color = 'transparent';
 
-        if ($valeur->hasControle()) {
-            $title[] = 'Valeur de contrôle : ' . $valeur->getControle();
-            if ($valeur->isControleOk()) {
-                $color = '#C4FFC5';
-            } else {
-                $color = '#FFC4C4';
+        $errors = $valeur->getErrors();
+
+        if ($valeur->hasError()) {
+            $color = '#FFC4C4';
+        } else {
+            $color = '#C4FFC5';
+        }
+
+        if (!empty($errors)) {
+            $title[] = 'Erreurs :';
+            foreach ($errors as $error) {
+                $title[] = ' - '.$error;
             }
         }
 

@@ -2,11 +2,11 @@
 
 namespace Indicateur\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Annee;
 use Application\Service\AbstractService;
 use Application\Service\ContextService;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use DateTime;
 use Indicateur\Entity\Db\Indicateur;
 use Indicateur\Entity\Db\NotificationIndicateur;

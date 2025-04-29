@@ -3,8 +3,6 @@
 namespace Enseignement\Entity;
 
 use Application\Entity\Db\Periode;
-use Service\Entity\Db\Tag;
-use Application\Entity\Db\Validation;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
@@ -16,8 +14,10 @@ use OffreFormation\Entity\Db\TypeIntervention;
 use Paiement\Entity\Db\MotifNonPaiement;
 use RuntimeException;
 use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\Tag;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenImport\Entity\Db\Source;
+use Workflow\Entity\Db\Validation;
 
 /**
  * Description of VolumeHoraireList

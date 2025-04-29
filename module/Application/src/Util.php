@@ -3,7 +3,7 @@
 namespace Application;
 
 
-use Application\Interfaces\ParametreEntityInterface;
+use Administration\Interfaces\ParametreEntityInterface;
 use Doctrine\ORM\EntityManager;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenPrivilege\Guard\PrivilegeController;

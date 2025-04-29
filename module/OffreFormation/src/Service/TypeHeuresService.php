@@ -2,9 +2,9 @@
 
 namespace OffreFormation\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use OffreFormation\Entity\Db\TypeHeures;
 

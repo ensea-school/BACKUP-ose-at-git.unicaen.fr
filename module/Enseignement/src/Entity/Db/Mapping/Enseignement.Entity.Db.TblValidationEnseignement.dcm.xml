@@ -26,7 +26,7 @@
         <many-to-one field="volumeHoraire" target-entity="Enseignement\Entity\Db\VolumeHoraire" fetch="LAZY">
             <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation" fetch="LAZY">
+        <many-to-one field="validation" target-entity="Workflow\Entity\Db\Validation" fetch="LAZY">
             <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
         </many-to-one>
     </entity>

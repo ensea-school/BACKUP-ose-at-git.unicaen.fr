@@ -50,7 +50,7 @@
                 <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation">
+        <many-to-one field="validation" target-entity="Workflow\Entity\Db\Validation">
             <join-columns>
                 <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
             </join-columns>

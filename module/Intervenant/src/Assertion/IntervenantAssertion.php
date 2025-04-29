@@ -4,10 +4,10 @@ namespace Intervenant\Assertion;
 
 use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**

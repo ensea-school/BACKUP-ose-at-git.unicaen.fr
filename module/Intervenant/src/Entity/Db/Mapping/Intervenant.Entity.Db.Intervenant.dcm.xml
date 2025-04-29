@@ -140,7 +140,7 @@
                 <cascade-persist/>
             </cascade>
         </one-to-many>
-        <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant"/>
+        <one-to-many field="validation" target-entity="Workflow\Entity\Db\Validation" mapped-by="intervenant"/>
         <one-to-many field="indicModifDossier" target-entity="Indicateur\Entity\Db\IndicModifDossier"
                      mapped-by="intervenant"/>
         <one-to-many field="missions" target-entity="Mission\Entity\Db\Mission" mapped-by="intervenant">

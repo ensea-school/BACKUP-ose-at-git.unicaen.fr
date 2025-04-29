@@ -2,10 +2,10 @@
 
 namespace Dossier\View\Helper;
 
-use Application\Entity\Db\Traits\ValidationAwareTrait;
-use Application\Entity\Db\Validation;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Entity\Db\Structure;
+use Workflow\Entity\Db\Validation;
+use Workflow\Entity\Db\ValidationAwareTrait;
 
 /**
  * Description of ValidationViewHelper

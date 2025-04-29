@@ -2,7 +2,7 @@
 
 namespace TblPaiement;
 
-use Application\Service\ParametresService;
+use Administration\Service\ParametresService;
 use Paiement\Service\TauxRemuService;
 use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\Sub\Rapprocheur;

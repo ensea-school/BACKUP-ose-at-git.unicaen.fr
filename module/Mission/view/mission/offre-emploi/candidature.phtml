@@ -9,7 +9,7 @@ echo $this->vue('mission/liste-candidatures', [
     'renseignerDonneesPersonnelles' => $renseignerDonneesPersonnelles,
 ]);
 
-$nextEtape = \Application\Entity\Db\WfEtape::CANDIDATURE_VALIDATION;
+$nextEtape = \Workflow\Entity\Db\WfEtape::CANDIDATURE_VALIDATION;
 
 echo '<hr />';
 

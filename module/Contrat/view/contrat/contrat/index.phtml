@@ -82,7 +82,7 @@ echo $this->messenger() ?>
                             </a>
                         <?php else:
                             try {
-                                echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
+                                echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Workflow\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
                             } catch (\Exception $e) {
                                 echo "Ces heures ne peuvent pas être contractualisées";
                             }
@@ -128,7 +128,7 @@ echo $this->messenger() ?>
 <?php endif; ?>
 
 <hr/>
-<?= $this->feuilleDeRoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
+<?= $this->feuilleDeRoute($intervenant)->renderNav(\Workflow\Entity\Db\WfEtape::CODE_CONTRAT); ?>
 
 <script>
     $("body").on("envoi-mail-contrat", function (event, data) {

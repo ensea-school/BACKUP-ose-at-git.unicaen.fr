@@ -3,11 +3,11 @@
 namespace Intervenant\Entity\Db;
 
 
-use Dossier\Entity\Db\DossierAutre;
-use Application\Entity\Db\EtatSortie;
-use Application\Interfaces\ParametreEntityInterface;
+use Administration\Interfaces\ParametreEntityInterface;
+use Administration\Traits\ParametreEntityTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Traits\ParametreEntityTrait;
+use Dossier\Entity\Db\DossierAutre;
+use EtatSortie\Entity\Db\EtatSortie;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 use Paiement\Entity\Db\TauxRemu;

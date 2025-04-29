@@ -1,0 +1,400 @@
+<?php
+
+/**
+ * @var $this    \Application\View\Renderer\PhpRenderer
+ * @var $form    \Administration\Form\ParametresForm
+ * @var $canEdit boolean
+ */
+
+?>
+    <h1 class="page-header">Paramètres généraux</h1>
+
+<?= $this->form()->openTag($form); ?>
+
+    <div class="well">
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Années universitaires en cours</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('annee')); ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('annee_import')); ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('annee_minimale_import_odf')); ?>
+                        <div class="help-block">
+                            Ce paramètre concerne l'offre de formation et il ne fonctionnera que si vous mettez en place
+                            des
+                            <a
+                                    href="https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Connecteurs-Import/Connecteurs-IMPORT.md#d%C3%A9finition-de-lann%C3%A9e-minimale-dimport-des-donn%C3%A9es-doffre-de-formation">filtres</a>
+                            qui vont l'exploiter.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Services et référentiel</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('report_service')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('constatation_realise')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">États de sortie</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('es_services_pdf')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('es_services_csv')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('es_etat_paiement')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('es_extraction_paie')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('es_extraction_indemnites')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Indicateurs, notes, refus de pièces jointes</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('indicateur_email_expediteur')); ?>
+                        <div class="help-block">
+                            Si l'email expéditeur est vide alors l'email de l'utilisateur en cours sera utilisé.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Gestion des contrats de travail</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('contrat_mail_expediteur')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_modele_mail_objet')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_modele_mail')); ?>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('contrat_regle_franchissement')); ?>
+                        <p style="font-size:0.9em;">
+                            Dans le corps de l'email ci-contre, vous pouvez utiliser les variables dynamiques suivantes
+                            :
+                        <ul style="font-size:0.9em;">
+                            <li><strong>:intervenant :</strong> nom de l'intervenant</li>
+                            <li><strong>:utilisateur :</strong> nom de l'utilisateur qui envoie l'email</li>
+                            <li><strong>:annee :</strong> année universitaire du contrat (ex : 2019/2020)</li>
+                            <li><strong>:url :</strong> Lien html vers la page contrat de l'intervenant</li>
+                        </ul>
+                        </p>
+                        <?= $this->formControlGroup($form->get('contrat_ens')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_mis')); ?>
+                        <?= $this->formControlGroup($form->get('avenant')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_direct')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_date')); ?>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Gestion des mails de candidatures</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= $this->formControlGroup($form->get('candidature_mail_expediteur')); ?>
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('candidature_modele_acceptation_mail_objet')); ?>
+
+                        <?= $this->formControlGroup($form->get('candidature_modele_acceptation_mail')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('candidature_modele_refus_mail_objet')); ?>
+
+                        <?= $this->formControlGroup($form->get('candidature_modele_refus_mail')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Gestion export RH</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('export_rh_franchissement')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Signature électronique</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('signature_electronique_parapheur')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Gestion des disciplines</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('discipline_codes_corresp_1_libelle')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('discipline_codes_corresp_2_libelle')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('discipline_codes_corresp_3_libelle')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('discipline_codes_corresp_4_libelle')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Gestion des statuts des intervenants</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('statut_intervenant_codes_corresp_1_libelle')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('statut_intervenant_codes_corresp_2_libelle')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('statut_intervenant_codes_corresp_3_libelle')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('statut_intervenant_codes_corresp_4_libelle')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Formule / Paiement</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('formule')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('centres_couts_paye')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('regle_paiement_annee_civile')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('regle_repartition_annee_civile')); ?>
+                    </div>
+                </div>
+                <div class="row regle_paiement_annee_civile_details">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('pourc_s1_pour_annee_civile')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('pourc_aa_referentiel')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('distinction_fi_fa_fc')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('horaire_nocturne')); ?>
+                    </div>
+                    <div class="col-md-6">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('taux_conges_payes')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('taux-remu')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Personnalisation des messages d'accueil et de connexion</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('page_contact')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('page_accueil')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('connexion_non_autorise')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('connexion_sans_role_ni_statut')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Liens vers les documentations</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('doc-intervenant-vacataires')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('doc-intervenant-permanents')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('doc-intervenant-etudiants')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Divers</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('oseuser')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('structure_univ')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('etablissement')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('scenario_charges_services')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('domaine_fonctionnel_ens_ext')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $(function () {
+
+            var reglePaiementAnneeCivile = $('select[name="regle_paiement_annee_civile"]');
+
+            reglePaiementAnneeCivile.on("change", function (e, item) {
+                changementReglePaiementAnneeCivile(reglePaiementAnneeCivile);
+            });
+
+            changementReglePaiementAnneeCivile(reglePaiementAnneeCivile);
+        });
+
+        function changementReglePaiementAnneeCivile(reglePaiementAnneeCivile)
+        {
+            var val = reglePaiementAnneeCivile.val();
+
+            if ('semestre-date' == val) {
+                $('.regle_paiement_annee_civile_details').show();
+            } else {
+                $('.regle_paiement_annee_civile_details').hide();
+            }
+        }
+
+    </script>
+<?php
+if ($canEdit) echo $this->formsubmit($form->get('submit'));
+echo $this->form()->closeTag();

@@ -2,10 +2,10 @@
 
 namespace Paiement;
 
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Paiement\Assertion\PaiementAssertion;
 use UnicaenPrivilege\Guard\PrivilegeController;
+use Workflow\Entity\Db\WfEtape;
 
 return [
     'routes' => [

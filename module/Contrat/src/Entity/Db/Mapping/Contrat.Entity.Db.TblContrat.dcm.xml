@@ -45,7 +45,7 @@
         </many-to-one>
         <field name="tauxRemuMajoreValeur" type="float" column="TAUX_REMU_MAJORE_VALEUR" nullable="false"/>
         <field name="tauxCongesPayes" type="float" column="TAUX_CONGES_PAYES" nullable="false"/>
-        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation">
+        <many-to-one field="validation" target-entity="Workflow\Entity\Db\Validation">
             <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="totalHeures" type="float" column="TOTAL_HEURES" nullable="false"/>

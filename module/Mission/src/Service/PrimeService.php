@@ -7,13 +7,13 @@ use Application\Entity\Db\Fichier;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\TblContrat;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\Prime;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
+use Workflow\Service\TypeValidationServiceAwareTrait;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 /**
  * Description of PrimeService

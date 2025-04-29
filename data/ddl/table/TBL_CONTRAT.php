@@ -69,6 +69,18 @@ return [
             'position'    => 23,
             'commentaire' => NULL,
         ],
+        'AUTRE_LIBELLE'             => [
+            'name'        => 'AUTRE_LIBELLE',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 23,
+            'commentaire' => NULL,
+        ],
         'CM'                        => [
             'name'        => 'CM',
             'type'        => 'float',

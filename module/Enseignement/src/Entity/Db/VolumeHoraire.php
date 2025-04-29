@@ -3,8 +3,6 @@
 namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
-use Application\Entity\Db\TypeValidation;
-use Application\Entity\Db\Validation;
 use Contrat\Entity\Db\Contrat;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,6 +18,8 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use Workflow\Entity\Db\TypeValidation;
+use Workflow\Entity\Db\Validation;
 
 class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, PlafondDataInterface, PlafondPerimetreInterface
 {

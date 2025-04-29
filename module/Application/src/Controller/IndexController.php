@@ -2,11 +2,11 @@
 
 namespace Application\Controller;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 

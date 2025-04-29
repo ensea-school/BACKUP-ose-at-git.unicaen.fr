@@ -2,18 +2,18 @@
 
 namespace Contrat\Assertion;
 
+use Administration\Entity\Db\Parametre;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Acl\Role;
-use Application\Entity\Db\Parametre;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 

@@ -2,9 +2,9 @@
 
 namespace Referentiel\View\Helper;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\View\Helper\AbstractHtmlElement;

@@ -2,12 +2,12 @@
 
 namespace Intervenant\Form;
 
-use Application\Entity\Db\EtatSortie;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
+use EtatSortie\Entity\Db\EtatSortie;
 use Intervenant\Entity\Db\Statut;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
 

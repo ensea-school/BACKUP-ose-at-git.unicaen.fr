@@ -2,12 +2,12 @@
 
 namespace Enseignement;
 
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use UnicaenPrivilege\Assertion\AssertionFactory;
+use Workflow\Entity\Db\WfEtape;
 
 
 return [

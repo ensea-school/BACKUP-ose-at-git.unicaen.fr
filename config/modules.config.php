@@ -34,6 +34,8 @@ $modules = [
     'Agrement',
     'Intervenant',
     'Service',
+    'EtatSortie',
+    'Chargens',
     'Enseignement',
     'Referentiel',
     'Mission',
@@ -46,10 +48,10 @@ $modules = [
     'Dossier',
     'Contrat',
     'Lieu',
-    'Parametre',
     'Formule',
     'UnicaenSignature',
     'Signature',
+    'Workflow',
 ];
 
 if (AppAdmin::config()['actul']['host'] ?? null){

@@ -69,5 +69,5 @@ $fi->setArrondisseur((int)$params['arrondir']);
 if (isset($fi)) {
     $ts->getServiceFormule()->calculer($fi);
     $aff = new \Formule\Model\Arrondisseur\Afficheur();
-    $aff->afficher($fi->getArrondisseurTrace());
+    $aff->afficher($fi);
 }

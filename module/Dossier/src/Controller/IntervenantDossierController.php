@@ -4,11 +4,8 @@ namespace Dossier\Controller;
 
 use Application\Constants;
 use Application\Controller\AbstractController;
-use Application\Entity\Db\WfEtape;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use DoctrineORMModule\Proxy\__CG__\Intervenant\Entity\Db\Statut;
 use Dossier\Form\Traits\AutresFormAwareTrait;
 use Dossier\Form\Traits\IntervenantDossierFormAwareTrait;
@@ -22,6 +19,9 @@ use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\ValidationServiceAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 class IntervenantDossierController extends AbstractController
 {
@@ -45,7 +45,7 @@ class IntervenantDossierController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Intervenant\Entity\Db\Intervenant::class,
-            \Application\Entity\Db\Validation::class,
+            \Workflow\Entity\Db\Validation::class,
             \Dossier\Entity\Db\IntervenantDossier::class,
         ]);
     }

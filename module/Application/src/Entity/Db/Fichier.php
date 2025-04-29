@@ -4,12 +4,12 @@ namespace Application\Entity\Db;
 
 use Application\Service\Traits\FichierServiceAwareTrait;
 use DateTime;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use PieceJointe\Entity\Db\PieceJointe;
+use UnicaenApp\Controller\Plugin\Upload\UploadedFileInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Filter\BytesFormatter;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use UnicaenApp\Controller\Plugin\Upload\UploadedFileInterface;
 
 /**
  * Fichier
@@ -60,7 +60,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     protected $pieceJointe;
 
     /**
-     * @var \Application\Entity\Db\Validation
+     * @var \Workflow\Entity\Db\Validation
      */
     private $validation;
 
@@ -311,11 +311,11 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     /**
      * Set validation
      *
-     * @param \Application\Entity\Db\Validation $validation
+     * @param \Workflow\Entity\Db\Validation $validation
      *
      * @return Fichier
      */
-    public function setValidation(\Application\Entity\Db\Validation $validation = null)
+    public function setValidation(\Workflow\Entity\Db\Validation $validation = null)
     {
         $this->validation = $validation;
 
@@ -327,7 +327,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     /**
      * Get validation
      *
-     * @return \Application\Entity\Db\Validation
+     * @return \Workflow\Entity\Db\Validation
      */
     public function getValidation()
     {

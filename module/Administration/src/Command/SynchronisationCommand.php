@@ -2,7 +2,6 @@
 
 namespace Administration\Command;
 
-use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Doctrine\Common\Cache\FilesystemCache;
 use Symfony\Component\Console\Command\Command;

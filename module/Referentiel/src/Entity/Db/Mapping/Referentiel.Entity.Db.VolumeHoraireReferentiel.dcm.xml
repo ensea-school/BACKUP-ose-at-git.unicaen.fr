@@ -25,7 +25,7 @@
         <many-to-one field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel">
             <join-column name="SERVICE_REFERENTIEL_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-many field="validation" target-entity="Application\Entity\Db\Validation">
+        <many-to-many field="validation" target-entity="Workflow\Entity\Db\Validation">
             <join-table name="VALIDATION_VOL_HORAIRE_REF">
                 <join-columns>
                     <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID"/>

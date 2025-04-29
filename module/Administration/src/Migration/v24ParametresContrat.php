@@ -2,8 +2,7 @@
 
 namespace Administration\Migration;
 
-use Application\Entity\Db\Parametre;
-use Symfony\Component\Filesystem\Filesystem;
+use Administration\Entity\Db\Parametre;
 use Unicaen\BddAdmin\Migration\MigrationAction;
 
 class v24ParametresContrat extends MigrationAction

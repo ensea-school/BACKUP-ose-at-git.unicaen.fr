@@ -5,9 +5,9 @@ namespace Service\Controller;
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\DBAL\Exception;
 use Intervenant\Entity\Db\Intervenant;
+use Plafond\Processus\PlafondProcessusAwareTrait;
 use RuntimeException;
 use Service\Entity\Db\ModificationServiceDu;
 use Service\Entity\Db\MotifModificationServiceDu;
@@ -15,7 +15,7 @@ use Service\Form\ModificationServiceDuFormAwareTrait;
 use Service\Service\ModificationServiceDuServiceAwareTrait;
 use Service\Service\MotifModificationServiceDuServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
-use Plafond\Processus\PlafondProcessusAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 class ModificationServiceDuController extends AbstractController
 {

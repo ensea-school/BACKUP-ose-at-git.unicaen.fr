@@ -2,7 +2,6 @@
 
 namespace Mission\Entity\Db;
 
-use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\Collection;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
@@ -12,6 +11,7 @@ use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenVue\Axios\AxiosExtractorInterface;
+use Workflow\Entity\Db\Validation;
 
 class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractorInterface
 {

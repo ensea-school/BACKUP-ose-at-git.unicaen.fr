@@ -8,7 +8,6 @@ use Application\Entity\Db\Privilege;
 use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
-use Application\Provider\Role\RoleProvider;
 use Application\Service\PrivilegeService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;

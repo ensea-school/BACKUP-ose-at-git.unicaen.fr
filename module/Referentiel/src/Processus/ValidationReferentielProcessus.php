@@ -2,15 +2,15 @@
 
 namespace Referentiel\Processus;
 
-use Application\Entity\Db\Validation;
 use Application\Processus\AbstractProcessus;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\TblValidationReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
+use Workflow\Entity\Db\Validation;
+use Workflow\Service\TypeValidationServiceAwareTrait;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 
 /**

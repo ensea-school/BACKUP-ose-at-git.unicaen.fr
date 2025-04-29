@@ -43,9 +43,11 @@
             "Agrement\\"      : "module/Agrement/src/",
             "Application\\"   : "module/Application/src/",
             "Contrat\\"       : "module/Contrat/src/",
+            "Chargens\\"      : "module/Chargens/src/",
             "Dossier\\"       : "module/Dossier/src/",
             "Enseignement\\"  : "module/Enseignement/src/",
             "ExportRh\\"      : "module/ExportRh/src/",
+            "EtatSortie\\"    : "module/EtatSortie/src/",
             "Formule\\"       : "module/Formule/src/",
             "Indicateur\\"    : "module/Indicateur/src/",
             "Intervenant\\"   : "module/Intervenant/src/",
@@ -54,11 +56,11 @@
             "OffreFormation\\": "module/OffreFormation/src/",
             "Paiement\\"      : "module/Paiement/src/",
             "Signature\\"     : "module/Signature/src/",
-            "Parametre\\"     : "module/Parametre/src/",
             "PieceJointe\\"   : "module/PieceJointe/src/",
             "Plafond\\"       : "module/Plafond/src/",
             "Referentiel\\"   : "module/Referentiel/src/",
-            "Service\\"       : "module/Service/src/"
+            "Service\\"       : "module/Service/src/",
+            "Workflow\\"      : "module/Workflow/src/"
         }
     },
     "require-dev"      : {

@@ -2,22 +2,20 @@
 
 namespace Contrat\Service;
 
-use Application\Entity\Db\EtatSortie;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Role;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
-use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TblContrat;
 use Doctrine\ORM\QueryBuilder;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use EtatSortie\Entity\Db\EtatSortie;
+use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
@@ -28,8 +26,8 @@ use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
 use UnicaenSignature\Service\SignatureServiceAwareTrait;
-use UnicaenVue\Util;
-use UnicaenVue\View\Model\AxiosModel;
+use Workflow\Service\TypeValidationServiceAwareTrait;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 
 /**
@@ -109,9 +107,9 @@ class ContratService extends AbstractEntityService
     /**
      * Retourne la liste des services dont les volumes horaires sont validés ou non.
      *
-     * @param boolean|\Application\Entity\Db\Validation $validation <code>true</code>, <code>false</code> ou
+     * @param boolean|\Workflow\Entity\Db\Validation $validation    <code>true</code>, <code>false</code> ou
      *                                                              bien une Validation précise
-     * @param QueryBuilder|null                         $queryBuilder
+     * @param QueryBuilder|null                      $queryBuilder
      *
      * @return QueryBuilder
      */
@@ -119,7 +117,7 @@ class ContratService extends AbstractEntityService
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
-        if ($validation instanceof \Application\Entity\Db\Validation) {
+        if ($validation instanceof \Workflow\Entity\Db\Validation) {
             $qb
                 ->join("$alias.validation", "v")
                 ->andWhere("v = :validation")->setParameter('validation', $validation);

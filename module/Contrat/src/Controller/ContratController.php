@@ -2,13 +2,11 @@
 
 namespace Contrat\Controller;
 
+use Administration\Entity\Db\Parametre;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Parametre;
-use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
@@ -37,6 +35,8 @@ use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\ProcessStep;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
+use Workflow\Entity\Db\Validation;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of ContratController

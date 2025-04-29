@@ -2,12 +2,9 @@
 
 namespace Contrat\Processus;
 
-use Application\Entity\Db\Validation;
 use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;
 use Application\Processus\AbstractProcessus;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TblContrat;
 use Contrat\Service\ContratServiceAwareTrait;
@@ -15,8 +12,6 @@ use Contrat\Service\TblContratServiceAwareTrait;
 use Contrat\Service\TypeContratServiceAwareTrait;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\Persistence\Mapping\MappingException;
-use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Exception;
@@ -33,6 +28,9 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;
+use Workflow\Entity\Db\Validation;
+use Workflow\Service\TypeValidationServiceAwareTrait;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 /**
  * Description of ContratProcessus

@@ -3,6 +3,23 @@
 [OSE 24.0](#ose-24-29042025)
 
 
+# OSE 25 (à venir fin juillet 2025)
+
+## Nouveautés
+
+* Nouveau workflow plus souple et compréhensible
+  * Possibilité de personnaliser l'ordre des étapes, dans une certaine mesure
+  * Menus intervenant remaniés et plus cohérents
+
+* Données personnelles 
+  * Possibilité de collecter les données personnelles en deux étapes : en cours de recrutement et finalisation après recrutement 
+
+* Pièces justificatives
+  * Possibilité de collecter les pièces justificatives en deux étapes : en cours de recrutement et finalisation après recrutement
+
+* Saisie de service d'enseignement
+  * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
+
 
 # OSE 24 (29/04/2025)
 

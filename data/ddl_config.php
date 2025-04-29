@@ -22,6 +22,7 @@ return [
     'view'              => [
         'includes'    => [
             'V_HAS_DMEP_A_FAIRE',
+            'V_TBL_CONTRAT',
             'V_INDIC_ATT_VALID_ENS_AUTRE',
             'V_INDIC_ATT_VALID_REF_AUTRE',
             'V_INDIC_ATT_VALID_SERVICE',
@@ -41,6 +42,7 @@ return [
         'includes' => [
             'OSE_EVENT',
             'OSE_HISTO',
+            'OSE_PAIEMENT',
             'FORMULE_%',
             'OSE_FORMULE',
         ],

@@ -56,8 +56,9 @@ $hasCp = isset($etatPaiement['total']['conges-payes']) && $etatPaiement['total']
         <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedPourcentage($lep['total']['hetd-pourc']) : '' ?></th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
-        <?php if ($majFc): ?><th>&nbsp;</th><?php endif; ?>
+        <?php if ($hetdRem != 'hetd'): ?><th>&nbsp;</th><?php endif; ?>
         <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedEuros($lep['total']['hetd-montant']) : '' ?></th>
+        <?php if ($hetdRem == 'hetd'): ?><th>&nbsp;</th><?php endif; ?>
         <?php if ($hasCp): ?><th class="nombre"><?= $hetdRem == 'hetd' ? '' : \UnicaenApp\Util::formattedEuros($lep['total']['rem-fc-d714']) ?></th><?php endif; ?>
         <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['exercice-aa']) : \UnicaenApp\Util::formattedEuros($lep['total']['exercice-aa-montant']) ?></th>
         <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['exercice-ac']) : \UnicaenApp\Util::formattedEuros($lep['total']['exercice-ac-montant']) ?></th>

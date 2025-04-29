@@ -21,48 +21,23 @@ SELECT
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fc ELSE 0 END               taux_fc,
   COALESCE(tis.taux_hetd_service,ti.taux_hetd_service,1)               taux_service_du,
   COALESCE(tis.taux_hetd_complementaire,ti.taux_hetd_complementaire,1) taux_service_compl,
-  COALESCE(ep.ponderation_service_du,1)                                ponderation_service_du,
-  COALESCE(ep.ponderation_service_compl,1)                             ponderation_service_compl,
+  COALESCE(modu.ponderation_service_du,1)                              ponderation_service_du,
+  COALESCE(modu.ponderation_service_compl,1)                           ponderation_service_compl,
   vh.heures                                                            heures,
 
   vh.horaire_debut                                                     horaire_debut,
   vh.horaire_fin                                                       horaire_fin
 FROM
-            volume_horaire            vh
-       JOIN parametre                  p ON p.nom = 'structure_univ'
-       JOIN service                    s ON s.id = vh.service_id
-       JOIN intervenant                i ON i.id = s.intervenant_id
-       JOIN statut                    si ON si.id = i.statut_id
-       JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
-       JOIN v_vol_horaire_etat_multi vhe ON vhe.volume_horaire_id = vh.id
-       JOIN type_volume_horaire      tvh ON tvh.id = vh.type_volume_horaire_id
-
-  LEFT JOIN (
-    SELECT
-      ep.id,
-      ep.structure_id,
-      ep.etape_id,
-      ep.taux_fi,
-      ep.taux_fa,
-      ep.taux_fc,
-      MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
-      MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl
-    FROM
-                element_pedagogique   ep
-      LEFT JOIN element_modulateur    em ON em.element_id = ep.id
-                                        AND em.histo_destruction IS NULL
-      LEFT JOIN modulateur             m ON m.id = em.modulateur_id
-    WHERE
-      1=1
-      /*@ANNEE_ID=ep.annee_id*/
-    GROUP BY
-      ep.id,
-      ep.structure_id,
-      ep.etape_id,
-      ep.taux_fi,
-      ep.taux_fa,
-      ep.taux_fc
-  )                                       ep ON ep.id = s.element_pedagogique_id
+            volume_horaire                vh
+       JOIN parametre                      p ON p.nom = 'structure_univ'
+       JOIN service                        s ON s.id = vh.service_id
+       JOIN intervenant                    i ON i.id = s.intervenant_id
+       JOIN statut                        si ON si.id = i.statut_id
+       JOIN type_intervention             ti ON ti.id = vh.type_intervention_id
+       JOIN v_vol_horaire_etat_multi     vhe ON vhe.volume_horaire_id = vh.id
+       JOIN type_volume_horaire          tvh ON tvh.id = vh.type_volume_horaire_id
+  LEFT JOIN element_pedagogique           ep ON ep.id = s.element_pedagogique_id
+  LEFT JOIN mv_modulateur               modu ON modu.element_pedagogique_id = ep.id
   LEFT JOIN STRUCTURE                    str ON str.id = ep.structure_id
   LEFT JOIN etape                          e ON e.id = ep.etape_id
   LEFT JOIN type_formation                tf ON tf.id = e.type_formation_id

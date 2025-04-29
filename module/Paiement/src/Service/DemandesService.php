@@ -269,6 +269,7 @@ class DemandesService extends AbstractService
         GROUP BY
             tp.intervenant_id ,
             tp.structure_id,
+            tp.mission_id,
             e.code,
             ep.code,
             fr.code,
@@ -610,7 +611,7 @@ class DemandesService extends AbstractService
                         if ($budget['dotation']['ressourcePropre'] > 0) {
 
                             //4 - on regarde si il y a encore assez de budget pour demander les heures en paiement
-                            $total = $budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'];
+                            $total = round($budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'],2);
                             if ($total <= $budget['dotation']['ressourcePropre']) {
                                 $totalHeuresDemandees['ressourcePropre'] += $demande['heures'];
                             } else {
@@ -623,7 +624,7 @@ class DemandesService extends AbstractService
                         //Si la dotation est supérieur à 0, alors on vérifie s'il reste du budget disponible
                         if ($budget['dotation']['paieEtat'] > 0) {
                             //4bis - on regarde s'il y a encore assez de budget pour demander les heures en paiement
-                            $total = $budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'];
+                            $total = round($budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'],2);
                             if ($total <= $budget['dotation']['paieEtat']) {
                                 $totalHeuresDemandees['paieEtat'] += $demande['heures'];
                             } else {
@@ -676,8 +677,8 @@ class DemandesService extends AbstractService
             $totalHeuresDemandees += $dmep['TOTAL_HEURES_DEMANDEES'];
             $totalHeuresAPayer    += $dmep['TOTAL_HEURES_A_PAYER'];
             if ($serviceReferentielId === $dmep['SERVICE_REFERENTIEL_ID'] || $serviceId === $dmep['SERVICE_ID'] || $missionId === $dmep['MISSION_ID']) {
-                $soldeHeures = ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']);
-                if ($heuresDemandees > $soldeHeures) {
+                $soldeHeures = round($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES'],2);
+                if (bccomp((string)$heuresDemandees, (string)$soldeHeures,2) > 0) {
                     if ($soldeHeures >= 0) {
                         throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous pouvez demander maximum ' . ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']) . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
                     } else {
@@ -686,6 +687,8 @@ class DemandesService extends AbstractService
                 }
             }
         }
+        $totalHeuresAPayer = round($totalHeuresAPayer,2);
+        $totalHeuresDemandees = round($totalHeuresDemandees,2);
         //On  vérifie qu'il y a bien un centre de cout
         if (empty($data['centreCoutId'])) {
             throw new \Exception('Vous devez renseigner un centre de coûts pour demander ce paiement', self::EXCEPTION_DMEP_CENTRE_COUT);
@@ -696,8 +699,9 @@ class DemandesService extends AbstractService
                 throw new \Exception('Vous devez renseigner un domaine fonctionnel pour demander ce paiement', self::EXCEPTION_DMEP_DOMAINE_FONCTIONNEL);
             }
         }
+        $soldeTotalHeures = round($totalHeuresAPayer - $totalHeuresDemandees,2);
         //On vérifie en dernier si l'ensemble des heures déjà payé ne dépasse pas le nombre d'heures réalisées tout service confondu.
-        if (($totalHeuresAPayer - $totalHeuresDemandees) < $heuresDemandees) {
+        if (bccomp((string)($soldeTotalHeures), (string)$heuresDemandees, 2) < 0) {
             throw new \Exception('Demande de mise en paiement impossible, la somme des heures déjà demandée en paiement pour tous les services confondus ne permet plus de demander en paiement les ' . $heuresDemandees . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
         }
 

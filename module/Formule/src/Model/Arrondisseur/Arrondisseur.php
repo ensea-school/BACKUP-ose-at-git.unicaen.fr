@@ -3,7 +3,6 @@
 namespace Formule\Model\Arrondisseur;
 
 use Enseignement\Entity\Db\Service;
-use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleServiceIntervenant;
 use Formule\Entity\FormuleVolumeHoraire;
@@ -30,9 +29,10 @@ class Arrondisseur
 
         $this->calculs = [];
 
-        if ($fi::ARRONDISSEUR_NO == $fi->getArrondisseur()) {
-            return; // Aucun arrondissage à effectuer
-        }
+        // Optimisation dangeureuse : on doit entrer dans l'arrondisseur même s'il n'est pas utilisé afin de pouvoir déboguer
+        //if ($fi::ARRONDISSEUR_NO == $fi->getArrondisseur()) {
+        //    return; // Aucun arrondissage à effectuer
+        //}
 
         $data = $this->makeData($fi);
 
@@ -43,6 +43,9 @@ class Arrondisseur
                 break;
             case $fi::ARRONDISSEUR_MINIMAL:
                 $this->preparerCalculsMinimaux($data);
+                break;
+            case $fi::ARRONDISSEUR_CUSTOM:
+                $this->preparerCalculsCustom($data);
                 break;
         }
 
@@ -63,8 +66,8 @@ class Arrondisseur
 
     protected function preparerCalculs(Ligne $data): void
     {
-        $this->preparationHorizontale($data);
-        $this->preparationVerticale($data);
+        $this->preparationHorizontaleDescendante($data);
+        $this->preparationVerticaleDescendante($data);
     }
 
 
@@ -73,25 +76,44 @@ class Arrondisseur
     {
         $services = $data->getSubs();
         foreach ($services as $service) {
-            $this->preparationVerticale($service);
+            $vhs = $service->getSubs();
+            foreach ($vhs as $vh) {
+                //$this->preparationHorizontaleMontante($vh);
+                $this->preparationHorizontaleDescendante($vh);
+            }
         }
     }
 
 
 
-    protected function preparationHorizontale(Ligne $data): void
+    protected function preparerCalculsCustom(Ligne $data): void
+    {
+        $services = $data->getSubs();
+        foreach ($services as $service) {
+            $vhs = $service->getSubs();
+            foreach ($vhs as $vh) {
+                //$this->preparationHorizontaleMontante($vh);
+                $this->preparationHorizontaleDescendante($vh);
+            }
+        }
+    }
+
+
+
+    protected function preparationHorizontaleMontante(Ligne $data): void
     {
         // Sous-total par catégorie
         foreach (Ligne::CATEGORIES as $categorie) {
-            $cc = $this->addCalcul($data->getValeur($categorie));
-            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
-            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_REFERENTIEL));
-
             // Sous-sous-total par enseignement FI/FA/FC
             $ceth = $this->addCalcul($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
             foreach (Ligne::TYPES_ENSEIGNEMENT as $type) {
                 $ceth->addValeur($data->getValeur($categorie . $type));
             }
+
+            // calcul par catégorie
+            $cc = $this->addCalcul($data->getValeur($categorie));
+            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_REFERENTIEL));
         }
 
         /* le total général est recalculé */
@@ -104,7 +126,31 @@ class Arrondisseur
 
 
 
-    protected function preparationVerticale(Ligne $data): void
+    protected function preparationHorizontaleDescendante(Ligne $data): void
+    {
+        /* le total général est recalculé */
+        $ct = $this->addCalcul($data->getValeur(Ligne::TOTAL));
+        $ct->addValeur($data->getValeur(Ligne::CAT_TYPE_PRIME));
+
+        // Sous-total par catégorie
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $ct->addValeur($data->getValeur($categorie));
+
+            $cc = $this->addCalcul($data->getValeur($categorie));
+            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            $cc->addValeur($data->getValeur($categorie . Ligne::TYPE_REFERENTIEL));
+
+            // Sous-sous-total par enseignement FI/FA/FC
+            $ceth = $this->addCalcul($data->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT));
+            foreach (Ligne::TYPES_ENSEIGNEMENT as $type) {
+                $ceth->addValeur($data->getValeur($categorie . $type));
+            }
+        }
+    }
+
+
+
+    protected function preparationVerticaleDescendante(Ligne $data): void
     {
         $subs = $data->getSubs();
 
@@ -133,7 +179,7 @@ class Arrondisseur
                 if ($sv->getDiff() !== 0) {
                     $noDiff = false;
                 }
-                $this->preparationVerticale($sub);
+                $this->preparationVerticaleDescendante($sub);
             }
             if ($noDiff) {
                 $v->setDiff(0);

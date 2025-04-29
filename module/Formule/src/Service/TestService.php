@@ -30,6 +30,7 @@ use Service\Entity\Db\TypeVolumeHoraire;
 class TestService extends AbstractEntityService
 {
     use FormuleServiceAwareTrait;
+    use FormulatorServiceAwareTrait;
     use ParametresServiceAwareTrait;
 
 
@@ -89,7 +90,6 @@ class TestService extends AbstractEntityService
                     'serviceCompl' => $vh->getTauxServiceCompl(),
                 ];
             }
-            $vh->setNonPayable(true);
 
             $vhData = $vhHydrator->extract($vh);
             unset($vhData['id']);
@@ -148,8 +148,8 @@ class TestService extends AbstractEntityService
         }
 
         // On calcule la formule
-        $fsi->setArrondisseur(FormuleIntervenant::ARRONDISSEUR_NO);
-        $this->getServiceFormule()->calculer($fti);
+        $fti->setArrondisseur(FormuleIntervenant::ARRONDISSEUR_NO);
+        $this->getServiceFormulator()->calculer($fti);
 
         $this->save($fti);
 
@@ -232,7 +232,7 @@ class TestService extends AbstractEntityService
             unset($vh['tauxServiceDu']);
             unset($vh['tauxServiceCompl']);
 
-            $vh['tauxFi'] = round(1 - $vh['tauxFa'] - $vh['tauxFc'],2);
+            $vh['tauxFi'] = round(1 - $vh['tauxFa'] - $vh['tauxFc'],15);
 
             $vhOk = ($vh['structureCode'] ?? null) !== null && ($vh['heures'] ?? null) !== null;
 

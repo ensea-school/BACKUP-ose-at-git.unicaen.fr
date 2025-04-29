@@ -15,6 +15,7 @@ class FormuleIntervenant
     const ARRONDISSEUR_NO      = 0;
     const ARRONDISSEUR_MINIMAL = 1;
     const ARRONDISSEUR_FULL    = 2;
+    const ARRONDISSEUR_CUSTOM  = 3;
 
     // Identifiants
     protected ?int               $id                = null;

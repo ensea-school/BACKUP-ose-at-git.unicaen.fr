@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Contrat\Entity\Db\TblContratVolumeHoraire" table="TBL_CONTRAT">
+        <id name="id" type="integer" column="ID" />
+        <field name="uuid" type="string" column="UUID" length="120" nullable="false"/>
+        <field name="volumeHoraireIndex" type="integer" column="VOLUME_HORAIRE_INDEX" nullable="false"/>
+        <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
+            <join-column name="SERVICE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel">
+            <join-column name="SERVICE_REFERENTIEL_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
+            <join-column name="MISSION_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="volumeHoraire" target-entity="Enseignement\Entity\Db\VolumeHoraire">
+            <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="volumeHoraireRef" target-entity="Referentiel\Entity\Db\VolumeHoraireReferentiel">
+            <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="volumeHoraireMission" target-entity="Mission\Entity\Db\VolumeHoraireMission">
+            <join-column name="VOLUME_HORAIRE_MISSION_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="heures" type="float" column="HEURES" nullable="false"/>
+        <field name="cm" type="float" column="CM" nullable="false"/>
+        <field name="td" type="float" column="TD" nullable="false"/>
+        <field name="tp" type="float" column="TP" nullable="false"/>
+        <field name="autres" type="float" column="AUTRES" nullable="false"/>
+        <field name="hetd" type="float" column="HETD" nullable="false"/>
+        <field name="autreLibelle" type="string" column="AUTRE_LIBELLE" length="1000" nullable="true"/>
+    </entity>
+</doctrine-mapping>

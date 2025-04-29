@@ -17,6 +17,7 @@ use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
+use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 /**
@@ -37,6 +38,7 @@ class ElementPedagogiqueController extends AbstractController
     use StructureServiceAwareTrait;
     use SchemaServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
+    use BddAwareTrait;
 
     public function voirAction()
     {
@@ -96,6 +98,8 @@ class ElementPedagogiqueController extends AbstractController
         $form  = $this->makeFormSupprimer(function () use ($element) {
             $this->getServiceElementPedagogique()->delete($element);
         });
+
+        $this->getBdd()->materializedView()->refresh('MV_MODULATEUR');
 
         return compact('element', 'title', 'form');
     }
@@ -316,6 +320,9 @@ class ElementPedagogiqueController extends AbstractController
                     $element = $this->getServiceElementModulateur()->addElementModulateur($element, $datasPost[$name]);
                 }
             }
+
+            $this->getBdd()->materializedView()->refresh('MV_MODULATEUR');
+
             //Centres de coûts
             $centreCouts = [
                 'fi' => $datasPost['fi'],

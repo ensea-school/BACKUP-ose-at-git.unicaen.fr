@@ -9,7 +9,6 @@ use Application\Entity\Db\Annee;
 /**
  * Description of AnneeService
  *
- * @method Annee get($id)
  * @method Annee[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
  * @method Annee newEntity()
  *
@@ -18,6 +17,9 @@ use Application\Entity\Db\Annee;
 class AnneeService extends AbstractEntityService
 {
     use SessionContainerTrait;
+
+    /** @var Annee[] */
+    private array $cache = [];
 
 
     /**
@@ -41,6 +43,16 @@ class AnneeService extends AbstractEntityService
     public function getAlias()
     {
         return 'annee';
+    }
+
+
+
+    public function get($id, $autoClear = false)
+    {
+        if (!array_key_exists($id, $this->cache) || $autoClear) {
+            $this->cache[$id] = parent::get($id, $autoClear);
+        }
+        return $this->cache[$id];
     }
 
 

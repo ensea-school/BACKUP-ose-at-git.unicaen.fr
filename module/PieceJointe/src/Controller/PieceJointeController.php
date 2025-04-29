@@ -107,6 +107,47 @@ class PieceJointeController extends \Application\Controller\AbstractController
     }
 
 
+    /**
+     *
+     * @return ViewModel
+     * @throws \LogicException
+     */
+    public function indexNewAction()
+    {
+        //$this->initFilters();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $menu = new ViewModel();
+            $menu->setTemplate('intervenant/intervenant/menu');
+
+            return $menu;
+        }
+
+
+        $title = "Pièces justificatives <small>{$intervenant}</small>";
+
+        $heuresPourSeuil = $this->getServicePieceJointe()->getHeuresPourSeuil($intervenant);
+        $fournies        = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
+        $demandees       = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
+        $synthese        = $this->getServicePieceJointe()->getPiecesSynthese($intervenant);
+
+        $annee = $this->getServiceContext()->getAnnee();
+
+        $messages = $this->makeMessages($intervenant);
+
+        $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->getContrat();
+
+        return compact('intervenant', 'title', 'heuresPourSeuil', 'demandees', 'synthese', 'fournies', 'messages', 'alertContrat', 'annee');
+    }
+
+
 
     /**
      *
@@ -202,8 +243,9 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $this->updateTableauxBord($pj->getIntervenant(), true);
 
         $viewModel = new ViewModel();
-        $viewModel->setTemplate('piece-jointe/piece-jointe/validation');
-        $viewModel->setVariable('pj', $pj);
+
+
+        return $viewModel;
     }
 
 

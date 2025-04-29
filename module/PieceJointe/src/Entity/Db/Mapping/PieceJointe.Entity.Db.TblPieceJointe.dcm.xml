@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="PieceJointe\Entity\Db\TblPieceJointe" table="TBL_PIECE_JOINTE">
         <indexes>
@@ -16,23 +17,28 @@
         </id>
         <field name="demandee" type="boolean" column="DEMANDEE" nullable="false">
             <options>
-                <option name="default">false</option>
+                <option name="default">0</option>
             </options>
         </field>
         <field name="fournie" type="boolean" column="FOURNIE" nullable="false">
             <options>
-                <option name="default">false</option>
+                <option name="default">0</option>
             </options>
         </field>
         <field name="validee" type="boolean" column="VALIDEE" nullable="false">
             <options>
-                <option name="default">false</option>
+                <option name="default">0</option>
             </options>
         </field>
         <field name="heuresPourSeuil" type="float" column="HEURES_POUR_SEUIL" nullable="false"/>
         <many-to-one field="typePieceJointe" target-entity="PieceJointe\Entity\Db\TypePieceJointe" fetch="LAZY">
             <join-columns>
                 <join-column name="TYPE_PIECE_JOINTE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="pieceJointe" target-entity="PieceJointe\Entity\Db\PieceJointe" fetch="LAZY">
+            <join-columns>
+                <join-column name="PIECE_JOINTE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
         <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant" fetch="LAZY">
@@ -45,9 +51,14 @@
                 <join-column name="ANNEE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <field name="obligatoire" type="integer" column="OBLIGATOIRE" nullable="false">
+        <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false">
             <options>
                 <option name="default">1</option>
+            </options>
+        </field>
+        <field name="demandeApresRecrutement" type="boolean" column="DEMANDEE_APRES_RECRUTEMENT" nullable="false">
+            <options>
+                <option name="default">0</option>
             </options>
         </field>
     </entity>

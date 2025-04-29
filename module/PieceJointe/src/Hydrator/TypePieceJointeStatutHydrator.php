@@ -31,7 +31,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
         $object->setFC($data['fc']);
         $object->setDureeVie($data['duree-vie']);
         $object->setObligatoireHNP($data['obligatoire-hnp']);
-        $object->setPostRecrutement($data['post-recrutement']);
+        $object->setDemandeeApresRecrutement($data['post-recrutement']);
 
         return $object;
     }
@@ -57,7 +57,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
             'fc'                    => $object->getFc(),
             'duree-vie'             => $object->getDureeVie(),
             'obligatoire-hnp'       => $object->getObligatoireHNP(),
-            'post-recrutement'      => $object->isPostRecrutement(),
+            'post-recrutement'      => $object->isDemandeeApresRecrutement(),
         ];
 
         return $data;

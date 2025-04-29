@@ -16,7 +16,6 @@ use PieceJointe\Entity\Db\TblPieceJointeDemande;
 use PieceJointe\Entity\Db\TblPieceJointeFournie;
 use PieceJointe\Entity\Db\TypePieceJointe;
 
-
 /**
  * Description of PieceJointe
  *
@@ -223,8 +222,13 @@ class PieceJointeService extends AbstractEntityService
     {
         $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $role->getStructure() ? $role->getStructure() : $pj->getIntervenant()->getStructure();
+        $intervenant = $pj->getIntervenant();
 
         $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_PIECE_JOINTE);
+        //On valide également tous les fichiers
+        foreach ($pj->getFichier() as $fichier) {
+            $this->getServiceFichier()->valider($fichier, $intervenant);
+        }
 
         $validation = $this->getServiceValidation()->newEntity($typeValidation);
         $validation->setIntervenant($pj->getIntervenant());
@@ -270,6 +274,12 @@ class PieceJointeService extends AbstractEntityService
         $pj->setValidation(null);
 
         $this->getEntityManager()->flush($pj);
+        
+        //On devalide tous les fichiers liées à cette pièce jointe
+        foreach ($pj->getFichier() as $fichier) {
+            $this->getServiceFichier()->devalider($fichier);
+        }
+        
 
         return $validation;
     }

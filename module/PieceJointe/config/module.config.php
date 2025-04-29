@@ -18,6 +18,8 @@ use PieceJointe\Service\PieceJointeService;
 use PieceJointe\Service\TblPieceJointeService;
 use PieceJointe\Service\TypePieceJointeService;
 use PieceJointe\Service\TypePieceJointeStatutService;
+use PieceJointe\Tbl\Process\PieceJointeProcess;
+use PieceJointe\Tbl\Process\PieceJointeProcessFactory;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
@@ -60,14 +62,6 @@ return [
                                 'fichier'     => '[0-9]*',
                             ],
                             'action'      => 'devalider',
-                        ],
-                        'validerFichier'    => [
-                            'route'       => '/valider/:pieceJointe/:fichier',
-                            'constraints' => [
-                                'pieceJointe' => '[0-9]*',
-                                'fichier'     => '[0-9]*',
-                            ],
-                            'action'      => 'validerFichier',
                         ],
                         'refuser'    => [
                             'route'       => '/refuser/:pieceJointe',
@@ -122,10 +116,19 @@ return [
                                     ],
                                     'action'      => 'supprimer',
                                 ],
+                                'valider'    => [
+                                    'route'       => '/valider/:pieceJointe/:fichier',
+                                    'constraints' => [
+                                        'pieceJointe' => '[0-9]*',
+                                        'fichier'     => '[0-9]*',
+                                    ],
+                                    'action'      => 'validerFichier',
+                                ],
                             ],
                         ],
                     ],
                 ],
+
                 'configuration'                     => [
                     'route'  => '/configuration',
                     'action' => 'configuration',
@@ -238,7 +241,7 @@ return [
         /* Pièces jointes */
         [
             'controller' => PieceJointeController::class,
-            'action'     => ['index'],
+            'action'     => ['index','indexNew'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
             'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
@@ -266,7 +269,7 @@ return [
         ],
         [
             'controller' => PieceJointeController::class,
-            'action'     => ['valider'],
+            'action'     => ['valider','validerFichier'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_VALIDATION,
             'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
@@ -302,6 +305,7 @@ return [
         TypePieceJointeService::class       => TypePieceJointeServiceFactory::class,
         TypePieceJointeStatutService::class => TypePieceJointeStatutServiceFactory::class,
         PiecesJointesAssertion::class       => AssertionFactory::class,
+        PieceJointeProcess::class           => PieceJointeProcessFactory::class
 
     ],
 

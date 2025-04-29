@@ -280,4 +280,24 @@ class FichierService extends AbstractEntityService
     }
 
 
+    /**
+     * Validation d'un fichier
+     *
+     * @param Fichier $fichier
+     * @param Intervenant $intervenant
+     *
+     * @return Validation
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function devalider(Fichier $fichier): void
+    {
+        $this->getServiceValidation()->delete($fichier->getValidation(), true);
+        $fichier->setValidation(null);
+        $this->getEntityManager()->persist($fichier);
+        $this->getEntityManager()->flush();
+
+    }
+
+
 }

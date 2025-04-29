@@ -1,4 +1,4 @@
---CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_DEMANDE AS
+CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_DEMANDE AS
 WITH i_h AS (
 	SELECT
 		s.intervenant_id,
@@ -29,6 +29,7 @@ hetd AS (
 	JOIN etat_volume_horaire evh ON	evh.id = fr.etat_volume_horaire_id
 	WHERE
 		tvh.code = 'PREVU'
+	    /*@INTERVENANT_ID=fr.intervenant_id*/
 	GROUP BY
 		intervenant_id
 )
@@ -40,8 +41,10 @@ SELECT
 	MAX(COALESCE(i_h.heures, 0)) 			heures_pour_seuil,
 	MAX(tpjs.obligatoire) 					obligatoire,
 	MAX(COALESCE(hetd.total_hetd, 0)) 		heures_pour_seuil_hetd,
+    MAX(tpjs.seuil_hetd)       				seuil_hetd,
 	MIN(tpjs.duree_vie) 				 	duree_vie,
-	MAX(tpjs.demandee_apres_recrutement)	demandee_apres_recrutement
+	MAX(tpjs.demandee_apres_recrutement)	demandee_apres_recrutement,
+	tpj.code                                type_pj_code
 FROM
 	intervenant i
 LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id
@@ -101,4 +104,6 @@ GROUP BY
 	i.annee_id,
 	i.id,
 	i.code,
-	tpj.id
+	tpj.id,
+	tpj.code
+ORDER BY i.annee_id DESC;

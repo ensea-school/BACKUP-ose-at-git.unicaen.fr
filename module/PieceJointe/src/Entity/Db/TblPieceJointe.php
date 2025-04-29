@@ -2,159 +2,82 @@
 
 namespace PieceJointe\Entity\Db;
 
-/**
- * TblPieceJointe
- */
+use Application\Entity\Db\Annee;
+use Intervenant\Entity\Db\Intervenant;
+
 class TblPieceJointe
 {
-    /**
-     * @var boolean
-     */
-    private $demandee = false;
+    private int $id;
 
-    /**
-     * @var boolean
-     */
-    private $fournie = false;
+    private bool $demandee = false;
 
-    /**
-     * @var boolean
-     */
-    private $validee = false;
+    private bool $fournie = false;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private bool $validee = false;
 
-    /**
-     * @var \PieceJointe\Entity\Db\TypePieceJointe
-     */
-    private $typePieceJointe;
+    private TypePieceJointe $typePieceJointe;
 
-    /**
-     * @var \Intervenant\Entity\Db\Intervenant
-     */
-    private $intervenant;
+    private PieceJointe $pieceJointe;
 
-    /**
-     * @var float
-     */
-    private $heuresPourSeuil;
+    private Intervenant $intervenant;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
+    private float $heuresPourSeuil;
 
-    /**
-     * @var integer
-     */
-    private $obligatoire;
+    private Annee $annee;
+
+    private bool $obligatoire;
+
+    private bool $demandeApresRecrutement;
 
 
-
-    /**
-     * Get demandee
-     *
-     * @return boolean
-     */
-    public function getDemandee()
+    public function getDemandee(): bool
     {
         return $this->demandee;
     }
 
-
-
-    /**
-     * Get fournie
-     *
-     * @return boolean
-     */
-    public function getFournie()
+    public function getFournie(): bool
     {
         return $this->fournie;
     }
 
-
-
-    /**
-     * Get validee
-     *
-     * @return boolean
-     */
-    public function getValidee()
+    public function getValidee(): bool
     {
         return $this->validee;
     }
 
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-
-
-    /**
-     * Get typePieceJointe
-     *
-     * @return \PieceJointe\Entity\Db\TypePieceJointe
-     */
-    public function getTypePieceJointe()
+    public function getTypePieceJointe(): TypePieceJointe
     {
         return $this->typePieceJointe;
     }
 
-
-
-    /**
-     * Get intervenant
-     *
-     * @return \Intervenant\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
+    public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
     }
 
-
-
-    /**
-     * @return float
-     */
-    public function getHeuresPourSeuil()
+    public function getHeuresPourSeuil(): float
     {
         return $this->heuresPourSeuil;
     }
 
-
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
+    public function getAnnee(): Annee
     {
         return $this->annee;
     }
 
-
-
-    public function isObligatoire()
+    public function isObligatoire(): bool
     {
-        if ($this->obligatoire) {
-            return true;
-        }
-
-        return false;
+        return $this->obligatoire;
     }
-}
 
+    public function isDemandeApresRecrutement(): bool
+    {
+        return $this->demandeApresRecrutement;
+    }
+
+}

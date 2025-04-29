@@ -96,6 +96,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                     <?php
     //$uploader->getForm()->setAttribute('style', 'display:' . (($pj && $pj->getValidation()) ? 'none' : 'block'));
 echo $uploader->renderForm();
+echo "here";
 ?>
 
                 </div>
@@ -144,6 +145,7 @@ echo $uploader->renderForm();
                     <?= $uploader->renderUploadedFiles($this->url('piece-jointe/intervenant/fichier/lister', ['typePieceJointe' => $tpj->getId(), 'pieceJointe' => ''], [], true)) ?>
                 </div>
                 <div class="col-md-6">
+
                     <!-- formulaire éventuel de dépôt de PJ -->
                     <?php
         $uploader->getForm()->setAttribute('style', 'display:block');

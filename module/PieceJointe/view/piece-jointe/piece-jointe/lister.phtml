@@ -31,7 +31,12 @@ if (count($fichiers) > 0): ?>
             }
             echo $this->uploader()->renderUploadedFile($fichier, $urlTelecharger);
 
-            if ($canEdit && !$pj->getValidation()) {
+            if ($canEdit && !$fichier->getValidation()) {
+                //Lien de validation
+                $paramsValider = ['pieceJointe' => $pj->getId(), 'fichier' => $fichier->getId()];
+                $urlValider    = $this->url('piece-jointe/intervenant/fichier/valider', $paramsValider, [], true);
+                echo $this->partial('piece-jointe/piece-jointe/partial/fichier-valider', ['url' => $urlValider]);
+                //Lien de suppression
                 $paramsSupprimer = ['pieceJointe' => $pj->getId(), 'fichier' => $fichier->getId()];
                 $urlSupprimer    = $this->url('piece-jointe/intervenant/fichier/supprimer', $paramsSupprimer, [], true);
                 echo $this->uploader()->renderDeleteFile($fichier, $urlSupprimer);

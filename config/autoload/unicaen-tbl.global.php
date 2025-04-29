@@ -357,7 +357,7 @@ return [
 
             'piece_jointe' => [
                 'order'   => 10,
-                'process' => 'DbDiff',
+                'process' => \PieceJointe\Tbl\Process\PieceJointeProcess::class,
                 'cols'    => [
                     'ANNEE_ID',
                     'TYPE_PIECE_JOINTE_ID',
@@ -368,6 +368,7 @@ return [
                     'VALIDEE',
                     'HEURES_POUR_SEUIL',
                     'OBLIGATOIRE',
+                    'DEMANDEE_APRES_RECRUTEMENT',
                 ],
                 'key'     => [
                     'TYPE_PIECE_JOINTE_ID',

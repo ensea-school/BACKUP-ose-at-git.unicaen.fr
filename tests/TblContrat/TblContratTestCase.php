@@ -2,7 +2,7 @@
 
 namespace tests\TblContrat;
 
-use Application\Entity\Db\Parametre;
+use Administration\Entity\Db\Parametre;
 use Contrat\Tbl\Process\ContratProcess;
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Strategy\VolumeHoraireStrategy;

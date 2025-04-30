@@ -2,7 +2,7 @@
 
 namespace tests\TblContrat;
 
-use Application\Entity\Db\Parametre;
+use Administration\Entity\Db\Parametre;
 
 final class UuidTest extends TblContratTestCase
 {

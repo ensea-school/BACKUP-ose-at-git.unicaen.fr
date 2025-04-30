@@ -3122,6 +3122,15 @@ return [
         'tp',
         'autres',
     ],
+    'WORKFLOW_ETAPE'                      => [
+        'ID',
+        'CODE',
+        'LIBELLE_INTERVENANT',
+        'LIBELLE_AUTRES',
+        'ROUTE',
+        'DESC_NON_FRANCHIE',
+        'PERIMETRE_ID',
+    ],
 ];
 
 //@formatter:on

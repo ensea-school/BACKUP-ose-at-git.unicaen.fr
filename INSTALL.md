@@ -185,7 +185,7 @@ A adapter à vos besoins.
 
 	<Directory /var/www/ose/public>
 		Options Indexes MultiViews
-		AllowOverride None
+		AllowOverride All
 	</Directory>
 </VirtualHost>
 ```

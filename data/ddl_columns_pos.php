@@ -3130,6 +3130,8 @@ return [
         'ROUTE',
         'DESC_NON_FRANCHIE',
         'PERIMETRE_ID',
+        'DESC_SANS_OBJECTIF',
+        'ROUTE_INTERVENANT',
     ],
 ];
 

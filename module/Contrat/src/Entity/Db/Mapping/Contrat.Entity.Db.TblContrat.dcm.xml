@@ -24,6 +24,9 @@
         <many-to-one field="contrat" target-entity="Contrat\Entity\Db\Contrat">
             <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
+            <join-column name="MISSION_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <many-to-one field="contratParent" target-entity="Contrat\Entity\Db\Contrat">
             <join-column name="CONTRAT_PARENT_ID" referenced-column-name="ID"/>
         </many-to-one>

@@ -7,6 +7,7 @@ use Workflow\Entity\Db\Validation;
 use Doctrine\Common\Collections\Collection;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
+use Mission\Entity\Db\Mission;
 use Paiement\Entity\Db\TauxRemu;
 use Service\Entity\Db\TypeService;
 
@@ -22,6 +23,7 @@ class TblContrat
     private TypeContrat $typeContrat;
     private ?Contrat    $contrat;
     private ?Contrat    $contratParent;
+    private ?Mission    $mission;
     private ?int        $numeroAvenant;
     private bool        $prolongation;
     private bool        $edite;
@@ -127,6 +129,13 @@ class TblContrat
     public function getContrat(): ?Contrat
     {
         return $this->contrat;
+    }
+
+
+
+    public function getMission(): ?Mission
+    {
+        return $this->mission;
     }
 
 

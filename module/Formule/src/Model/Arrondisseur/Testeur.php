@@ -19,13 +19,7 @@ class Testeur
 
         $data = $fi->getArrondisseurTrace();
 
-        // première passe
-        $this->controleColonnes($data);
-
-        // on recalcule les totaux
-        $this->recalculTotaux($data);
-
-        // comptage d'erreurs en seconde passe
+        // comptage d'erreurs
         $errors = $this->controleColonnes($data);
 
         $serviceDuCalcule = $data->getValeur(Ligne::CAT_SERVICE)->getValueFinale();

@@ -10,6 +10,7 @@ class Valeur
     protected float  $value   = 0.0;
     protected int    $diff    = 0;
     protected int    $arrondi = 0;
+    protected ?float $forced = null;
     protected array  $errors  = [];
 
 
@@ -54,9 +55,13 @@ class Valeur
 
 
 
-    public function getValueFinale(): float
+    public function getValueFinale(bool $useForced = true): float
     {
-        return round($this->value + $this->arrondi / 100, 2);
+        if ($useForced && $this->forced !== null) {
+            return $this->forced;
+        }else {
+            return round($this->value + $this->arrondi / 100, 2);
+        }
     }
 
 
@@ -109,6 +114,34 @@ class Valeur
     public function addDiff(int $diff): void
     {
         $this->diff += $diff;
+    }
+
+
+
+    public function getForced(): ?float
+    {
+        return $this->forced;
+    }
+
+
+
+    public function setForced(?float $forced): Valeur
+    {
+        $this->forced = $forced;
+        return $this;
+    }
+
+
+
+    public function addForced(float $value, $round=true): Valeur
+    {
+        if ($round) {
+            $this->forced = round($this->forced + $value, 2);
+        }else{
+            $this->forced += $value;
+        }
+
+        return $this;
     }
 
 

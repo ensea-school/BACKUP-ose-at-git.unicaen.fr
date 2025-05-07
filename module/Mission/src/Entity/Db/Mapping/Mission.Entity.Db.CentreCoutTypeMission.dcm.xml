@@ -4,7 +4,7 @@
     <entity name="Mission\Entity\Db\CentreCoutTypeMission" table="CENTRE_COUT_TYPE_MISSION">
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
-            <sequence-generator sequence-name="CENTRE_COUT_TYPE_MISS_ID_SEQ" allocation-size="1" initial-value="1"/>
+            <sequence-generator sequence-name="CENTRE_COUT_TYPE_MISSION_ID_SEQ" allocation-size="1" initial-value="1"/>
         </id>
 
         <many-to-one field="centreCouts" target-entity="Paiement\Entity\Db\CentreCout">

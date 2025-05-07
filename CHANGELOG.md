@@ -21,6 +21,17 @@
   * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
 
 
+
+# OSE 24.1 (à venir 05/2025)
+
+## Corrections
+
+* L'état de sortie des paiements est de nouveau opérationnel avec des primes (#61568)
+* Meilleure présentation des résultats au niveau de l'arrondisseur de calcul HETD : les sommes sont toutes recalculées
+* Arrondisseur de règle de calcul HETD corrigé pour être le plus compatible possible aux résultats de l'ancienne infrastructure "formules"
+
+
+
 # OSE 24 (29/04/2025)
 
 ## Nouveautés

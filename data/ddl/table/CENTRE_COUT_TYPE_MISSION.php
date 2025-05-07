@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'CENTRE_COUT_TYPE_MISS_ID_SEQ',
     'columns'     => [
         'CENTRE_COUT_ID'        => [
             'name'        => 'CENTRE_COUT_ID',
@@ -76,7 +76,7 @@ return [
             'length'      => 0,
             'scale'       => NULL,
             'precision'   => NULL,
-            'nullable'    => FALSE,
+            'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 7,
             'commentaire' => NULL,

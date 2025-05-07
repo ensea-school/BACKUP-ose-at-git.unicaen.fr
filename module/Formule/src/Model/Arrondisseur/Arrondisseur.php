@@ -78,12 +78,16 @@ class Arrondisseur
     {
         $services = $data->getSubs();
         foreach ($services as $service) {
+            $this->preparationVerticaleDescendante($service);
+        }
+
+        /*$services = $data->getSubs();
+        foreach ($services as $service) {
             $vhs = $service->getSubs();
             foreach ($vhs as $vh) {
-                //$this->preparationHorizontaleMontante($vh);
                 $this->preparationHorizontaleDescendante($vh);
             }
-        }
+        }*/
     }
 
 

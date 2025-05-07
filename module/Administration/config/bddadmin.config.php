@@ -29,7 +29,4 @@ return [
         DataSource\DataSource::class                 => DataSource\DataSourceFactory::class,
     ],
 
-    'controllers' => [
-        Controller\AdministrationController::class => Controller\AdministrationControllerFactory::class,
-    ],
 ];

@@ -83,21 +83,17 @@
 
 * Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuelle rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui-ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
 
+  * #avant /usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
+` *`#après /chemin_absolu_vers/bin/ose notifier-indicateurs`
+
+* Le calcul des heures complémentaires ayant complètement changé, il se peut que sur certaines fiches complexes avec des paiements déjà effectués vous ayez un différentiel qui apparaisse avec quelques centimes à mettre en paiement ou au contraire quelques centimes en trop payé
+
 * Attention à bien vérifier que les requêtes de vos plafonds fonctionnent toujours.
 Exemples de modifications pouvant les impacter :
   * La table formule_resultat a été renommée en formule_resultat_intervenant
   * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
   * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
   * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
-`
-
-#avant
-/usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
-`
-`#après
-/chemin_absolu_vers/bin/ose notifier-indicateurs`
-
-* Le calcul des heures complémentaires ayant complètement changé, il se peut que sur certaines fiches complexes avec des paiements déjà effectués vous ayez un différentiel qui apparaisse avec quelques centimes à mettre en paiement ou au contraire quelques centimes en trop payé
 
 * L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.

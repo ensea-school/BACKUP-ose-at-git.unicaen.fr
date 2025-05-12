@@ -82,6 +82,13 @@
 * L'opération de migration peut durer assez longtemps : prévoyez jusqu'à 2h de durée d'exécution pour le script de mise à jour.
 
 * Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuelle rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui-ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
+
+* Attention à bien vérifier que les requêtes de vos plafonds fonctionnent toujours.
+Exemples de modifications pouvant les impacter :
+  * La table formule_resultat a été renommée en formule_resultat_intervenant
+  * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
+  * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
+  * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
 `
 #avant
 /usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs

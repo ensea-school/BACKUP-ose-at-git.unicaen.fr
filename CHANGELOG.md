@@ -94,6 +94,7 @@ Exemples de modifications pouvant les impacter :
   * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
   * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
   * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
+  * Les colonnes service_referentiel ont été renommées en service_referentiel
 
 * L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.

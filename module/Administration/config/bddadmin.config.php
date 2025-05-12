@@ -21,6 +21,7 @@ return [
             Migration\v24Signature::class,
             Migration\v24ParametresContrat::class,
             Migration\v24FonctionReferentielParent::class,
+            Migration\v25CentreCoutsTypeMission::class,
         ],
     ],
 
@@ -28,7 +29,4 @@ return [
         DataSource\DataSource::class                 => DataSource\DataSourceFactory::class,
     ],
 
-    'controllers' => [
-        Controller\AdministrationController::class => Controller\AdministrationControllerFactory::class,
-    ],
 ];

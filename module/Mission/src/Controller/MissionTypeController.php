@@ -2,6 +2,7 @@
 
 namespace Mission\Controller;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -29,15 +30,16 @@ class MissionTypeController extends AbstractController
     use ContextServiceAwareTrait;
     use MissionTypeFormAwareTrait;
     use MissionCentreCoutsTypeFormAwareTrait;
+    use ParametresServiceAwareTrait;
 
     public function indexAction()
     {
         $this->em()->getFilters()->enable('annee')->init([
-            TypeMission::class,
-        ]);
+                                                             TypeMission::class,
+                                                         ]);
         $this->em()->getFilters()->enable('historique')->init([
-            TypeMission::class,
-        ]);
+                                                                  TypeMission::class,
+                                                              ]);
         $missionsType = $this->getServiceMissionType()->getTypes();
 
         return compact('missionsType');
@@ -105,18 +107,11 @@ class MissionTypeController extends AbstractController
             $centreCoutsId = $this->getRequest()->getPost()->get('centreCouts');
             $structureId   = $this->getRequest()->getPost()->get('structure');
             if ($centreCoutsId != null) {
+                $centreCouts   = $this->getServiceCentreCout()->get($centreCoutsId);
+                $structureCC   = $this->getServiceStructure()->get($structureId);
+                $anneeCourante = (int)$this->getServiceParametres()->get('annee');
 
-                $centreCouts = $this->getServiceCentreCout()->get($centreCoutsId);
-                $structureCC = $this->getServiceStructure()->get($structureId);
-
-                $centreCoutTypeLinker = new CentreCoutTypeMission();
-                $centreCoutTypeLinker->setTypeMission($typeMission);
-                $centreCoutTypeLinker->setCentreCouts($centreCouts);
-                $centreCoutTypeLinker->setStructure($structureCC);
-                $this->getServiceMissionType()->saveCentreCoutTypeLinker($centreCoutTypeLinker);
-
-                $typeMission->addCentreCoutTypeMission($centreCoutTypeLinker);
-                $this->getServiceMissionType()->save($typeMission);
+                $this->getServiceMissionType()->addCentreCoutTypeMission($centreCouts, $structureCC, $typeMission, $anneeCourante);
             }
         }
 
@@ -134,10 +129,10 @@ class MissionTypeController extends AbstractController
             $form = $this->getFormMissionCentreCoutsType();
             $form->get('structure')->setValue($structure->getId());
 
-            if(empty($structure->getCentreCout()->toArray())){
-                $form->get('centreCouts')->setEmptyOption( 'Aucun centre de coûts disponible');
+            if (empty($structure->getCentreCout()->toArray())) {
+                $form->get('centreCouts')->setEmptyOption('Aucun centre de coûts disponible');
                 $form->remove('submit');
-            }else{
+            } else {
                 $form->setValueOptions('centreCouts', $structure->getCentreCout()->toArray());
             }
             $forms[$structure->getId()] = $form;
@@ -157,18 +152,21 @@ class MissionTypeController extends AbstractController
 
 
 
-    public
-    function CentreCoutsSupprimerAction(): \Laminas\Http\Response
+    public function CentreCoutsSupprimerAction(): \Laminas\Http\Response
     {
         /**
          * @var TypeMission $entity
          */
         $entity                = $this->getEvent()->getParam('typeMission');
         $centreCoutTypeMission = $this->getEvent()->getParam('centreCoutTypeMission');
-        $this->getServiceMissionType()->removeCentreCoutLinker($centreCoutTypeMission);
+        $anneeCourante = (int) $this->getServiceParametres()->get('annee');
+
+        $this->getServiceMissionType()->removeCentreCoutLinker($centreCoutTypeMission, $anneeCourante);
 
 
         return $this->redirect()->toRoute('missions-type/centre-couts', ['typeMission' => $entity->getId()]);
     }
+
+
 }
 

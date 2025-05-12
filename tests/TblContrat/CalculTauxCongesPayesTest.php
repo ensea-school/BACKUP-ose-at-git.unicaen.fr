@@ -2,7 +2,7 @@
 
 namespace tests\TblContrat;
 
-use Application\Entity\Db\Parametre;
+use Administration\Entity\Db\Parametre;
 use Contrat\Tbl\Process\Model\Contrat;
 
 final class CalculTauxCongesPayesTest extends TblContratTestCase

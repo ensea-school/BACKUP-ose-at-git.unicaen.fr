@@ -54,6 +54,8 @@ class Arrondisseur
             unset($this->calculs[$ci]);
         }
 
+        $this->remonteeTotaux($data);
+
 
         // On passe le résultat de l'arrondisseur pour débug éventuel
         $fi->setArrondisseurTrace($data);
@@ -76,12 +78,16 @@ class Arrondisseur
     {
         $services = $data->getSubs();
         foreach ($services as $service) {
+            $this->preparationVerticaleDescendante($service);
+        }
+
+        /*$services = $data->getSubs();
+        foreach ($services as $service) {
             $vhs = $service->getSubs();
             foreach ($vhs as $vh) {
-                //$this->preparationHorizontaleMontante($vh);
                 $this->preparationHorizontaleDescendante($vh);
             }
-        }
+        }*/
     }
 
 
@@ -242,6 +248,64 @@ class Arrondisseur
             }
 
         }
+    }
+
+
+
+    protected function remonteeTotaux(Ligne $ligne): void
+    {
+        $vns = [
+            Ligne::CAT_TYPE_PRIME,
+            Ligne::TOTAL,
+        ];
+        foreach (Ligne::CATEGORIES as $categorie) {
+            $vns[] = $categorie;
+            $vns[] = $categorie . Ligne::TYPE_FI;
+            $vns[] = $categorie . Ligne::TYPE_FA;
+            $vns[] = $categorie . Ligne::TYPE_FC;
+            $vns[] = $categorie . Ligne::TYPE_REFERENTIEL;
+        }
+
+        foreach ($vns as $vn) {
+            $iVal = $ligne->getValeur($vn);
+            $iVal->setForced(0);
+            foreach ($ligne->getSubs() as $service) {
+                $this->remonteeTotauxHoritontaux($service);
+                $sVal = $service->getValeur($vn);
+                $sVal->setForced(0);
+                foreach ($service->getSubs() as $vh) {
+                    $vhValue = $vh->getValeur($vn)->getValueFinale();
+                    $iVal->addForced($vhValue);
+                    $sVal->addForced($vhValue);
+                    $this->remonteeTotauxHoritontaux($vh);
+                }
+            }
+        }
+        $this->remonteeTotauxHoritontaux($ligne);
+    }
+
+
+
+    protected function remonteeTotauxHoritontaux(Ligne $ligne): void
+    {
+        $total = $ligne->getValeur(Ligne::CAT_TYPE_PRIME)->getValueFinale();
+        foreach (Ligne::CATEGORIES as $categorie) {
+            // ens = fi + fa + fc
+            $ens = $ligne->getValeur($categorie . Ligne::TYPE_FI)->getValueFinale();
+            $ens += $ligne->getValeur($categorie . Ligne::TYPE_FA)->getValueFinale();
+            $ens += $ligne->getValeur($categorie . Ligne::TYPE_FC)->getValueFinale();
+            $ens = round($ens, 2);
+            $ligne->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT)->setForced($ens);
+
+
+            //total categorie = ens + referentiel
+            $cat = $ligne->getValeur($categorie . Ligne::TYPE_ENSEIGNEMENT)->getValueFinale();
+            $cat += $ligne->getValeur($categorie . Ligne::TYPE_REFERENTIEL)->getValueFinale();
+            $ligne->getValeur($categorie)->setForced($cat);
+
+            $total += $cat;
+        }
+        $ligne->getValeur(Ligne::TOTAL)->setForced($total);
     }
 
 

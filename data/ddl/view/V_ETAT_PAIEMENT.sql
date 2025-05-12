@@ -83,6 +83,7 @@ FROM
         taux_conges_payes
     FROM (
       SELECT
+        is_primes,
         periode_id,
         structure_id,
         structure_ids,
@@ -177,6 +178,7 @@ FROM
           LEFT JOIN taux_remu                tr ON tr.id = mis.taux_remu_id
        ) dep
       GROUP BY
+        is_primes,
         periode_id,
         structure_id,
         structure_ids,

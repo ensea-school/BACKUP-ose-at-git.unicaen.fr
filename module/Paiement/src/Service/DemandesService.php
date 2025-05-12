@@ -9,6 +9,7 @@ use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
@@ -17,7 +18,6 @@ use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TblPaiement;
 use Referentiel\Entity\Db\ServiceReferentiel;
-use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * Description of DemandesService
@@ -170,13 +170,18 @@ class DemandesService extends AbstractService
         //Liste des demandes de mise en paiement
         $dmep = [];
         //Récupération du paramétrage des centres de cout pour les paiements
+        $intervenantStructure = $intervenant->getStructure();
         $parametreCentreCout = $this->getServiceParametres()->get('centres_couts_paye');
-        $intervenantStrucutre = $intervenant->getStructure();
-        if($intervenantStrucutre instanceof Structure && $structure instanceof Structure)
+        if ($intervenant->getStatut()->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR ||
+            $intervenant->getStatut()->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_ETUDIANT) {
+            $parametreCentreCout = 'enseignement';
+        }
+
+        if ($intervenantStructure instanceof Structure && $structure instanceof Structure)
         {
             if($parametreCentreCout == 'affectation')
             {   //Cas ou c'est la composante d'affectation qui fait les demandes de mises en paiement
-                if($intervenantStrucutre->getId() == $structure->getId())
+                if ($intervenantStructure->getId() == $structure->getId())
                 {
                     /*Si j'ai un role avec un périmètre composante et que ma structure d'affectation est la même que
                     celle de l'intervenant j'accède à toutes les demandes de mise en paiement peu importe la structure

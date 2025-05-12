@@ -90,6 +90,7 @@ Exemples de modifications pouvant les impacter :
   * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
   * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
 `
+
 #avant
 /usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
 `

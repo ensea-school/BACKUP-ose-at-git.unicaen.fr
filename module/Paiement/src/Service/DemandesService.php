@@ -2,11 +2,11 @@
 
 namespace Paiement\Service;
 
-
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Service\AbstractService;
 use Enseignement\Entity\Db\Service;
 use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
@@ -56,7 +56,8 @@ class DemandesService extends AbstractService
                 //On récupère les données nécessaires à la demande de mis en paiement
                 $data                   = [];
                 $data['heures']         = $heures->getHeuresAPayerAA() + $heures->getHeuresAPayerAC();
-                $data['centre-cout-id'] = ($heures->getCentreCout()) ? $heures->getCentreCout()->getId() : '';;
+                $data['centre-cout-id'] = ($heures->getCentreCout()) ? $heures->getCentreCout()->getId() : '';
+                ;
                 $data['domaine-fonctionnel-id'] = ($heures->getDomaineFonctionnel()) ? $heures->getDomaineFonctionnel()->getId() : '';
                 $data['service-id']             = ($heures->getService()) ? $heures->getService()->getId() : '';
                 $data['service-referentiel-id'] = ($heures->getServiceReferentiel()) ? $heures->getServiceReferentiel()->getId() : '';
@@ -169,20 +170,21 @@ class DemandesService extends AbstractService
         //Liste des demandes de mise en paiement
         $dmep = [];
         //Récupération du paramétrage des centres de cout pour les paiements
+        $intervenantStructure = $intervenant->getStructure();
         $parametreCentreCout = $this->getServiceParametres()->get('centres_couts_paye');
-        $intervenantStrucutre = $intervenant->getStructure();
-        if($intervenantStrucutre instanceof Structure && $structure instanceof Structure)
-        {
-            if($parametreCentreCout == 'affectation')
-            {   //Cas ou c'est la composante d'affectation qui fait les demandes de mises en paiement
-                if($intervenantStrucutre->getId() == $structure->getId())
-                {
+        if ($intervenant->getStatut()->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR ||
+            $intervenant->getStatut()->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_ETUDIANT) {
+            $parametreCentreCout = 'enseignement';
+        }
+
+        if ($intervenantStructure instanceof Structure && $structure instanceof Structure) {
+            if ($parametreCentreCout == 'affectation') {   //Cas ou c'est la composante d'affectation qui fait les demandes de mises en paiement
+                if ($intervenantStructure->getId() == $structure->getId()) {
                     /*Si j'ai un role avec un périmètre composante et que ma structure d'affectation est la même que
                     celle de l'intervenant j'accède à toutes les demandes de mise en paiement peu importe la structure
                     de l'enseignement réalisé de l'intervenant on ne filtre pas les dmep*/
                     $structure = null;
-                }
-                else{
+                } else {
                     //Sinon on ne doit voir aucune demande de mise en paiement
                     return $dmep;
                 }
@@ -611,7 +613,7 @@ class DemandesService extends AbstractService
                         if ($budget['dotation']['ressourcePropre'] > 0) {
 
                             //4 - on regarde si il y a encore assez de budget pour demander les heures en paiement
-                            $total = round($budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'],2);
+                            $total = round($budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'], 2);
                             if ($total <= $budget['dotation']['ressourcePropre']) {
                                 $totalHeuresDemandees['ressourcePropre'] += $demande['heures'];
                             } else {
@@ -624,7 +626,7 @@ class DemandesService extends AbstractService
                         //Si la dotation est supérieur à 0, alors on vérifie s'il reste du budget disponible
                         if ($budget['dotation']['paieEtat'] > 0) {
                             //4bis - on regarde s'il y a encore assez de budget pour demander les heures en paiement
-                            $total = round($budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'],2);
+                            $total = round($budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'], 2);
                             if ($total <= $budget['dotation']['paieEtat']) {
                                 $totalHeuresDemandees['paieEtat'] += $demande['heures'];
                             } else {
@@ -677,8 +679,8 @@ class DemandesService extends AbstractService
             $totalHeuresDemandees += $dmep['TOTAL_HEURES_DEMANDEES'];
             $totalHeuresAPayer    += $dmep['TOTAL_HEURES_A_PAYER'];
             if ($serviceReferentielId === $dmep['SERVICE_REFERENTIEL_ID'] || $serviceId === $dmep['SERVICE_ID'] || $missionId === $dmep['MISSION_ID']) {
-                $soldeHeures = round($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES'],2);
-                if (bccomp((string)$heuresDemandees, (string)$soldeHeures,2) > 0) {
+                $soldeHeures = round($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES'], 2);
+                if (bccomp((string)$heuresDemandees, (string)$soldeHeures, 2) > 0) {
                     if ($soldeHeures >= 0) {
                         throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous pouvez demander maximum ' . ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']) . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
                     } else {
@@ -687,8 +689,8 @@ class DemandesService extends AbstractService
                 }
             }
         }
-        $totalHeuresAPayer = round($totalHeuresAPayer,2);
-        $totalHeuresDemandees = round($totalHeuresDemandees,2);
+        $totalHeuresAPayer = round($totalHeuresAPayer, 2);
+        $totalHeuresDemandees = round($totalHeuresDemandees, 2);
         //On  vérifie qu'il y a bien un centre de cout
         if (empty($data['centreCoutId'])) {
             throw new \Exception('Vous devez renseigner un centre de coûts pour demander ce paiement', self::EXCEPTION_DMEP_CENTRE_COUT);
@@ -699,7 +701,7 @@ class DemandesService extends AbstractService
                 throw new \Exception('Vous devez renseigner un domaine fonctionnel pour demander ce paiement', self::EXCEPTION_DMEP_DOMAINE_FONCTIONNEL);
             }
         }
-        $soldeTotalHeures = round($totalHeuresAPayer - $totalHeuresDemandees,2);
+        $soldeTotalHeures = round($totalHeuresAPayer - $totalHeuresDemandees, 2);
         //On vérifie en dernier si l'ensemble des heures déjà payé ne dépasse pas le nombre d'heures réalisées tout service confondu.
         if (bccomp((string)($soldeTotalHeures), (string)$heuresDemandees, 2) < 0) {
             throw new \Exception('Demande de mise en paiement impossible, la somme des heures déjà demandée en paiement pour tous les services confondus ne permet plus de demander en paiement les ' . $heuresDemandees . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);

@@ -30,7 +30,7 @@
 * Meilleure présentation des résultats au niveau de l'arrondisseur de calcul HETD : les sommes sont toutes recalculées
 * Arrondisseur de règle de calcul HETD corrigé pour être le plus compatible possible aux résultats de l'ancienne infrastructure "formules"
 * Pour les demandes de mise en paiement, toujours proposer les centres de coûts de la composante d'enseignement pour les vacataires et les étudiants (#61780)
-
+* L'intégration de nouvelles formules de calcul plantait en affichant le code généré 
 
 
 # OSE 24 (29/04/2025)

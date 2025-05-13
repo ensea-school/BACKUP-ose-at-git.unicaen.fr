@@ -24,12 +24,19 @@
 
 # OSE 24.1 (à venir 05/2025)
 
+## Améliorations
+
+* La clôture des services d'enseignement est désormais possible pour les intervenants avec fiche de services en lecture seule (#61700)
+
 ## Corrections
 
 * L'état de sortie des paiements est de nouveau opérationnel avec des primes (#61568)
 * Meilleure présentation des résultats au niveau de l'arrondisseur de calcul HETD : les sommes sont toutes recalculées
 * Arrondisseur de règle de calcul HETD corrigé pour être le plus compatible possible aux résultats de l'ancienne infrastructure "formules"
-
+* Pour les demandes de mise en paiement, toujours proposer les centres de coûts de la composante d'enseignement pour les vacataires et les étudiants (#61780)
+* L'intégration de nouvelles formules de calcul plantait en affichant le code généré 
+* Correction apportée à la formule de calcul du Havre (#54003)
+* Les contrats s'affichent de nouveau avec Oracle23 (#61799)
 
 
 # OSE 24 (29/04/2025)
@@ -94,7 +101,7 @@ Exemples de modifications pouvant les impacter :
   * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
   * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
   * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
-  * Les colonnes service_referentiel ont été renommées en service_referentiel
+  * Les colonnes service_referentiel ont été renommées en heures_service_referentiel
 
 * L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.

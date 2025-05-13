@@ -24,11 +24,12 @@ $tid = uniqid('agrements-lot-');
         <?php if ($needAction): ?>
             <label>Cochez les intervenants à impacter :</label>
         <?php endif; ?>
-        <table id="<?= $tid ?>" class="table table-bordered table-hover" style="margin-bottom:1px">
+        <table id="<?= $tid ?>" class="table table-bordered table-hover table-sort" style="margin-bottom:1px">
             <thead>
             <tr>
                 <?php if ($needStructure): ?>
                     <th style="width: 100px">Composante</th><?php endif; ?>
+                <th>Discipline</th>
                 <th>Intervenant</th>
                 <?php if ($needAction): ?>
                     <th style="width:1px">Action</th>
@@ -41,6 +42,7 @@ $tid = uniqid('agrements-lot-');
                     <?php if ($needStructure): ?>
                         <td class="structure"><?= $wie->getStructure() ?></td>
                     <?php endif; ?>
+                    <td><?= $wie->getIntervenant()->getDiscipline() ?></td>
                     <td class="intervenant">
                         <a target="_blank"
                            href="<?= $this->url('intervenant/voir', ['intervenant' => 'code:' . $wie->getIntervenant()->getCode()]); ?>">

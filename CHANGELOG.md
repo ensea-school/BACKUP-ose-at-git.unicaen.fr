@@ -32,6 +32,7 @@
 * Pour les demandes de mise en paiement, toujours proposer les centres de coûts de la composante d'enseignement pour les vacataires et les étudiants (#61780)
 * L'intégration de nouvelles formules de calcul plantait en affichant le code généré 
 * Correction apportée à la formule de calcul du Havre (#54003)
+* Les contrats s'affichent de nouveau avec Oracle23 (#61799)
 
 # OSE 24 (29/04/2025)
 

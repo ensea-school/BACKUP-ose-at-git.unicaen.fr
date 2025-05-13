@@ -25,7 +25,7 @@
         "unicaen/authentification"         : "6.4.3",
         "unicaen/privilege"                : "6.2.1",
         "unicaen/utilisateur"              : "7.0.2",
-        "unicaen/code"                     : "6.4.0",
+        "unicaen/code"                     : "6.5.0",
         "unicaen/import"                   : "6.0.6",
         "unicaen/tbl"                      : "6.2.5",
         "unicaen/open-document"            : "6.0.10",

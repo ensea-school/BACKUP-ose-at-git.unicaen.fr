@@ -55,7 +55,7 @@
   * Meilleure lisibilité du résumé des heures HETD (#23421)
   * Nouveau dispositif de tests des formules, avec possibilité d'exporter en CSV les données, en plus du format JSON existant (#55389)
 * Nouvelle page de demandes de mise en paiement (#53922)
-* Signature électronique (support d'Esup Signature pour le moment) (#26825)
+* [Signature électronique (support d'Esup Signature pour le moment)](https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Signature-Electronique/configuration.md?ref_type=heads) (#26825)
 * Paramétrage affiné des codes situation pour l'export siham
 * Nouvelles possibilités de paramétrage des contrats (#51241)
   * Possibilité de contractualiser du référentiel sans heure d'enseignement (#38876)

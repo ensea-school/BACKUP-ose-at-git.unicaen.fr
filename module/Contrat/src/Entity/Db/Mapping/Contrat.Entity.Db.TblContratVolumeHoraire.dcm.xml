@@ -6,6 +6,9 @@
         <id name="id" type="integer" column="ID" />
         <field name="uuid" type="string" column="UUID" length="120" nullable="false"/>
         <field name="volumeHoraireIndex" type="integer" column="VOLUME_HORAIRE_INDEX" nullable="false"/>
+        <many-to-one field="tblContrat" target-entity="Contrat\Entity\Db\TblContrat">
+            <join-column name="UUID" referenced-column-name="UUID"/>
+        </many-to-one>
         <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
             <join-column name="SERVICE_ID" referenced-column-name="ID"/>
         </many-to-one>

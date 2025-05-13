@@ -25,7 +25,12 @@ class AdministrationService
         // Suppression des fichiers de cache
         $cachePath = getcwd() . '/cache';
         if ($filesystem->exists($cachePath)) {
-            $filesystem->remove($cachePath);
+            $content = scandir($cachePath);
+            foreach( $content as $toRemove) {
+                if ($toRemove != '.' && $toRemove != '..' ) {
+                    $filesystem->remove($cachePath . '/' . $toRemove);
+                }
+            }
         }
 
         // Nettoyage des proxies

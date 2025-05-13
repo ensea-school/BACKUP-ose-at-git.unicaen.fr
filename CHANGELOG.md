@@ -24,6 +24,11 @@
 
 # OSE 24.1 (à venir 05/2025)
 
+## Améliorations
+
+* La clôture des services d'enseignement est désormais possible pour les intervenants avec fiche de services en lecture seule (#61700)
+* Les agréments par lots sont maintenant triables, filtrables et les disciplines sont affichées (#61456)
+
 ## Corrections
 
 * L'état de sortie des paiements est de nouveau opérationnel avec des primes (#61568)
@@ -32,6 +37,9 @@
 * Pour les demandes de mise en paiement, toujours proposer les centres de coûts de la composante d'enseignement pour les vacataires et les étudiants (#61780)
 * L'intégration de nouvelles formules de calcul plantait en affichant le code généré 
 * Correction apportée à la formule de calcul du Havre (#54003)
+* Les contrats s'affichent de nouveau avec Oracle23 (#61799)
+* Le commande ./bin/ose clear-cache ne supprime plus le répertoire cache, elle se contente de le vider (#61810) 
+
 
 # OSE 24 (29/04/2025)
 
@@ -47,7 +55,7 @@
   * Meilleure lisibilité du résumé des heures HETD (#23421)
   * Nouveau dispositif de tests des formules, avec possibilité d'exporter en CSV les données, en plus du format JSON existant (#55389)
 * Nouvelle page de demandes de mise en paiement (#53922)
-* Signature électronique (support d'Esup Signature pour le moment) (#26825)
+* [Signature électronique (support d'Esup Signature pour le moment)](https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Signature-Electronique/configuration.md?ref_type=heads) (#26825)
 * Paramétrage affiné des codes situation pour l'export siham
 * Nouvelles possibilités de paramétrage des contrats (#51241)
   * Possibilité de contractualiser du référentiel sans heure d'enseignement (#38876)
@@ -95,7 +103,7 @@ Exemples de modifications pouvant les impacter :
   * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
   * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
   * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
-  * Les colonnes service_referentiel ont été renommées en service_referentiel
+  * Les colonnes service_referentiel ont été renommées en heures_service_referentiel
 
 * L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.

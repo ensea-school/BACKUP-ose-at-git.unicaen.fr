@@ -47,9 +47,8 @@ class TblContratService extends AbstractEntityService
     {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT tblc, vhs, s FROM " . TblContrat::class . " tblc ";
+        $dql = "SELECT tblc, vhs FROM " . TblContrat::class . " tblc ";
         $dql .= "left join tblc.volumesHoraires vhs WITH vhs.uuid = tblc.uuid ";
-        $dql .= "LEFT JOIN vhs.service s ";
 
         if ($structure != null) {
             $dql .= "LEFT JOIN tblc.structure structure ";

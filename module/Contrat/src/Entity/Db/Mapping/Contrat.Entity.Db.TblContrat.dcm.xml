@@ -59,16 +59,6 @@
         <field name="missionsLibelles" type="string" column="MISSIONS_LIBELLES" length="1000" nullable="true"/>
         <field name="typesMissionLibelles" type="string" column="TYPES_MISSION_LIBELLES" length="1000" nullable="true"/>
         <field name="volumeHoraireIndex" type="integer" column="VOLUME_HORAIRE_INDEX" nullable="false"/>
-
-        <many-to-many field="volumesHoraires" target-entity="Contrat\Entity\Db\TblContratVolumeHoraire">
-            <join-table name="TBL_CONTRAT">
-                <join-columns>
-                    <join-column name="UUID" referenced-column-name="UUID" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="UUID" referenced-column-name="UUID" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
+        <one-to-many field="volumesHoraires" target-entity="Contrat\Entity\Db\TblContratVolumeHoraire" mapped-by="tblContrat"/>
     </entity>
 </doctrine-mapping>

@@ -24,6 +24,10 @@
 
 # OSE 24.1 (à venir 05/2025)
 
+## Améliorations
+
+* La clôture des services d'enseignement est désormais possible pour les intervenants avec fiche de services en lecture seule (#61700)
+
 ## Corrections
 
 * L'état de sortie des paiements est de nouveau opérationnel avec des primes (#61568)
@@ -33,6 +37,7 @@
 * L'intégration de nouvelles formules de calcul plantait en affichant le code généré 
 * Correction apportée à la formule de calcul du Havre (#54003)
 * Les contrats s'affichent de nouveau avec Oracle23 (#61799)
+
 
 # OSE 24 (29/04/2025)
 

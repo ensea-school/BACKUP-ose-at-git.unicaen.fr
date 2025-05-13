@@ -1,91 +1,119 @@
-# Principe
+# 📝 Signature Électronique dans OSE (depuis la version 24)
 
-Depuis la version 24 de OSE, il est maintenant possible de paramétrer la signature électronique pour les contrats et
-avenant au sein de l'application.
+Depuis la **version 24** d'OSE, il est désormais possible d’activer la **signature électronique** pour les **contrats**
+et **avenants**, directement au sein de l’application.
 
-Actuellement, seul le parafeur numérique ESUP SIGNATURE est disponible dans l'application. L'objectif étant d'étendre
-cette fonctionnalité à d'autres outils de signature électronique utilisés par la communauté OSE.
+> **Actuellement**, seul le parafeur numérique **ESUP SIGNATURE** est disponible. Toutefois, l’objectif est d’étendre
+> cette fonctionnalité à d'autres outils de signature électronique adoptés par la communauté OSE.
 
-# Configuration de ESUP SIGNATURE
+---
 
-Il vous faut ajouter un certains nombres de nouveaux paramètres dans votre fichier de config.local.php. Vous trouverez
-un exemple des paramètres attendus dans le fichier config.local.php.dist version sur le gitlab.
+## ⚙️ Configuration de ESUP SIGNATURE
 
-Voici les paramètres à mettre en place  :
+Pour activer **ESUP SIGNATURE**, vous devez ajouter certains paramètres dans le fichier `config.local.php` de votre
+application.
+
+Un exemple de ces paramètres est fourni dans le fichier `config.local.php.dist` disponible sur GitLab.
+
+### 🔧 Exemple de configuration
 
 ```php
-   'unicaen-signature' => [
-        
-       'log' => true,
+'unicaen-signature' => [
 
-        /*Cette partie permet de surcharger les personnes à qui seront envoyées les signatures électroniques. 
-        L'envoi des emails étant géré directement par le parafeur cela permet de jouer des circuits de signature 
-        en pré-production sans que les emails partent aux personnes concernées*/
-        'hook_recipients' => [
-                ['firstname' => 'Jean',
-                 'lastname'  => 'Dupont',
-                 'email'     => 'jean.dupont@universite.fr',],
-                ['firstname' => 'Jean',
-                 'lastname'  => 'Dupont',
-                 'email'     => 'jean.dupont@universite.fr'],
-            ],
-        //Configuration du parafeur à utiliser, ici la configuration Esup uniquement disponible pour le moment.
-        'letterfiles' =>
-            [
-                [
+    'log' => true,
 
-                    'label'       => 'ESUP signature',
-                    'name'        => 'esup',
-                    'default'     => true,
-                    'class'       => \UnicaenSignature\Strategy\Letterfile\Esup\EsupLetterfileStrategy::class,
-                    'description' => 'Esup',
-                    //Les différents niveaux de signature à activer au sein de OSE, vous pouvez retirer les lignes que vous ne souhaitez pas utiliser avec ose
-                    'levels'      => [
-                        'visa_hidden' => 'hiddenVisa',
-                        'visa_visual' => 'visa',
-                        'sign_visual' => 'pdfImageStamp',
-                        'sign_certif' => 'certSign',
-                        'sign_eidas'  => 'nexuSign',
-
-                    ],
-                    
-                    'config'      => [
-                        // Url pour les webservices de esup
-                        'url'           => "https://signature.etablissement.fr",
-                        //L'utilisateur qui sera utiliser pour créer les demandes de signature dans esup
-                        'createdByEppn' => 'xxxxxxxxxxx',
-                    ],
-                ],
-            ],
-       
-
+    /*
+     * Permet de rediriger les destinataires des signatures électroniques.
+     * Pratique pour les environnements de pré-production où l’on ne souhaite pas envoyer d’emails réels.
+     */
+    'hook_recipients' => [
+        [
+            'firstname' => 'Jean',
+            'lastname'  => 'Dupont',
+            'email'     => 'jean.dupont@universite.fr',
+        ],
     ],
+
+    // Configuration du parafeur numérique (uniquement ESUP pour l'instant)
+    'letterfiles' => [
+        [
+            'label'       => 'ESUP signature',
+            'name'        => 'esup',
+            'default'     => true,
+            'class'       => \\UnicaenSignature\\Strategy\\Letterfile\\Esup\\EsupLetterfileStrategy::class,
+            'description' => 'Esup',
+
+            // Niveaux de signature activables dans OSE
+            'levels'      => [
+                'visa_hidden' => 'hiddenVisa',
+                'visa_visual' => 'visa',
+                'sign_visual' => 'pdfImageStamp',
+                'sign_certif' => 'certSign',
+                'sign_eidas'  => 'nexuSign',
+            ],
+
+            'config' => [
+                // URL des webservices ESUP
+                'url'           => "https://signature.etablissement.fr",
+                // Identifiant de l'utilisateur utilisé pour créer les demandes de signature
+                'createdByEppn' => 'xxxxxxxxxxx',
+            ],
+        ],
+    ],
+],
 ```
 
-# Activer la signature électronique dans OSE
+---
 
-Pour activer la signature dans OSE, il faut se rendre dans les paramètres généraux de ose, et activer la signature électronique en choisissant le parapheur voulu.
+## ✅ Activer la Signature Électronique dans OSE
+
+### 1. **Activer la fonctionnalité**
+
+Rendez-vous dans **Paramètres Généraux** de l'application OSE, puis **activez la signature électronique** en
+sélectionnant le parafeur souhaité.
 
 ![Activation parapheur électronique](param_generaux_signature.png)
 
-Il vous faudra ensuite définit un circuit de signature dans administration > signature électronique > Gestion des circuits de signatures :
+---
 
-![circuit Signature électronique](circuit_signature.png)
+### 2. **Définir un circuit de signature**
 
+Accédez à :  
+**Administration > Signature électronique > Gestion des circuits de signatures**
+
+Vous pouvez y créer et personnaliser des circuits de signature :
+
+![circuit Signature électronique](circuit_signature.png)  
 ![création circuit Signature électronique](gestion_circuit_signature.png)
 
-Un fois le circuit de signature paramétré, il faut paramètrer l'état de sortie du contrat pour qu'il utilise ce circuit de signature en remplacement du fonctionnement habituel de OSE : 
+---
+
+### 3. **Lier un circuit à un état de sortie**
+
+Une fois le circuit créé, vous devez **l'associer à un état de sortie** de contrat. Cela permet de remplacer le flux de
+gestion traditionnel d’OSE par le circuit de signature électronique.
 
 ![Paramètrage de l'état de sortie](parametrage_etat_sortie.png)
 
-Maintenant les statuts ayant ce modèle d'état de sortie comme contrat pourront bénéficier de la signature électronique du contrat : 
+---
+
+### 4. **Utilisation en production**
+
+Une fois ces paramétrages en place, **les contrats liés à cet état de sortie bénéficieront automatiquement de la
+signature électronique** :
 
 ![Signature électronique du contrat](contrat_signature.png)
 
+---
 
+## 📌 Résumé
 
-
-
+| Étape | Description                                                    |
+|-------|----------------------------------------------------------------|
+| 1️⃣   | Ajouter les paramètres dans `config.local.php`                 |
+| 2️⃣   | Activer la signature électronique dans les paramètres généraux |
+| 3️⃣   | Créer un circuit de signature                                  |
+| 4️⃣   | Associer ce circuit à un état de sortie de contrat             |
 
 
 

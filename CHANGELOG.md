@@ -38,6 +38,7 @@
 * L'intégration de nouvelles formules de calcul plantait en affichant le code généré 
 * Correction apportée à la formule de calcul du Havre (#54003)
 * Les contrats s'affichent de nouveau avec Oracle23 (#61799)
+* Le commande ./bin/ose clear-cache ne supprime plus le répertoire cache, elle se contente de le vider (#61810) 
 
 
 # OSE 24 (29/04/2025)

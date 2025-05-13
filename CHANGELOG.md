@@ -27,6 +27,7 @@
 ## Améliorations
 
 * La clôture des services d'enseignement est désormais possible pour les intervenants avec fiche de services en lecture seule (#61700)
+* Les agréments par lots sont maintenant triables, filtrables et les disciplines sont affichées (#61456)
 
 ## Corrections
 

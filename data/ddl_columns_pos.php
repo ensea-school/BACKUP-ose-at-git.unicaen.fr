@@ -3134,6 +3134,17 @@ return [
         'DESC_SANS_OBJECTIF',
         'ORDRE',
     ],
+    'WORKFLOW_ETAPE_DEPENDANCE'           => [
+        'ID',
+        'ETAPE_SUIVANTE_ID',
+        'ETAPE_PRECEDANTE_ID',
+        'ACTIVE',
+        'TYPE_INTERVENANT_ID',
+        'PERIMETRE_ID',
+        'DEBUTEE',
+        'TERMINEE_PARTIELLEMENT',
+        'TERMINEE_INTEGRALEMENT',
+    ],
 ];
 
 //@formatter:on

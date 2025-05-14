@@ -424,19 +424,19 @@ class DataSource
         $etapes = [];
         $ordre  = 1;
         foreach ($data as $code => $etape) {
-            $edata = [
+            $edata    = [
                 'ID'                  => $etape['id'],
                 'CODE'                => $code,
-                'ORDRE'               => $ordre++,
                 'PERIMETRE_ID'        => $perimetres[$etape['perimetre']],
-                'DESC_NON_FRANCHIE'   => $etape['desc_non_franchie'],
-                'DESC_SANS_OBJECTIF'  => $etape['desc_sans_objectif'] ?? null,
-                'LIBELLE_AUTRES'      => $etape['libelle_autres'],
-                'LIBELLE_INTERVENANT' => $etape['libelle_intervenant'],
                 'ROUTE'               => $etape['route'],
                 'ROUTE_INTERVENANT'   => $etape['route_intervenant'] ?? null,
+                'LIBELLE_INTERVENANT' => $etape['libelle_intervenant'],
+                'LIBELLE_AUTRES'      => $etape['libelle_autres'],
+                'DESC_NON_FRANCHIE'   => $etape['desc_non_franchie'],
+                'DESC_SANS_OBJECTIF'  => $etape['desc_sans_objectif'] ?? null,
+                'ORDRE'               => $ordre++,
             ];
-            $etapes[]              = $edata;
+            $etapes[] = $edata;
         }
 
         return $etapes;

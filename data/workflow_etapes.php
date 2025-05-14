@@ -29,7 +29,7 @@ return [
         'route'               => 'piece-jointe/intervenant',
         'desc_non_franchie'   => "Les pièces justificatives n'ont pas été fournies",
         'perimetre'           => Perimetre::ETABLISSEMENT,
-        'contraintes'         => [WorkflowEtape::DONNEES_PERSO_SAISIE],
+        'contraintes'         => [],
     ],
     WorkflowEtape::DONNEES_PERSO_VALIDATION        => [
         'id'                  => 6,

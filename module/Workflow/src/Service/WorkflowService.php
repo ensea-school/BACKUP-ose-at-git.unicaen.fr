@@ -13,7 +13,7 @@ use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 use Workflow\Entity\Db\TblWorkflow;
 use Workflow\Entity\Db\WfEtape;
-use Workflow\Entity\WorkflowEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 /**
  * Description of WorkflowService
@@ -42,13 +42,66 @@ class WorkflowService extends AbstractService
     public function getEtapes(): array
     {
         if (empty($this->workflowEtapes)) {
+            $this->workflowEtapes = [];
+
             $dql = 'SELECT we FROM ' . WorkflowEtape::class . ' we ORDER BY we.ordre';
 
             $query = $this->getEntityManager()->createQuery($dql);
+            $query->enableResultCache(true);
+            $query->setResultCacheId(__CLASS__ . '.' . __METHOD__);
+            $iterable = $query->toIterable();
+            foreach ($iterable as $we) {
+                $this->workflowEtapes[$we->getCode()] = $we;
+            }
 
-            $this->workflowEtapes = $query->getResult();
+            $dataFile = require getcwd() . '/data/workflow_etapes.php';
+            foreach ($dataFile as $weCode => $weData) {
+                if (isset($weData['contraintes']) && !empty($weData['contraintes'])) {
+                    foreach ($weData['contraintes'] as $contrainte) {
+                        $wec = $this->workflowEtapes[$contrainte];
+                        $this->workflowEtapes[$weCode]->__addContrainte($wec);
+                    }
+                }
+            }
         }
         return $this->workflowEtapes;
+    }
+
+
+
+    /**
+     * Le tableau sera une liste de codes d'étapes ordonnancée
+     *
+     * @param array $liste
+     * @return self
+     */
+    public function trier(array $liste): self
+    {
+        $em     = $this->getEntityManager();
+        $etapes = $this->getEtapes();
+        $order  = 1;
+        foreach ($liste as $code) {
+            if (!isset($etapes[$code])) {
+                throw new \Exception('L\'étape dont le code est "' . $code . '" n\'existe pas');
+            }
+            $etape = $etapes[$code];
+            $etape->setOrdre($order);
+            $em->persist($etape);
+            $em->flush($etape);
+            $order++;
+        }
+    }
+
+
+
+    public function updateEtape(WorkflowEtape $etape): self
+    {
+        $em = $this->getEntityManager();
+        $em->persist($etape);
+        $em->flush($etape);
+
+        $cache = $em->getConfiguration()->getResultCache();
+        $cache->deleteItem(__CLASS__ . '.getEtapes');
     }
 
 

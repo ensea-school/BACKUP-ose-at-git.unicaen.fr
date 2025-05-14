@@ -42,7 +42,7 @@ class WorkflowEtape
     const NEXT    = 'next-etape';
 
     private int       $id;
-    private int       $code;
+    private string    $code;
     private Perimetre $perimetre;
     private string    $route;
     private ?string   $routeIntervenant;
@@ -51,6 +51,11 @@ class WorkflowEtape
     private string    $descNonFranchie;
     private ?string   $descSansObjectif;
     private int       $ordre;
+
+    /**
+     * @var array|WorkflowEtape[]
+     */
+    private array $contraintes = [];
 
 
 
@@ -79,9 +84,26 @@ class WorkflowEtape
 
 
 
-    public function getCode(): int
+    public function getCode(): string
     {
         return $this->code;
+    }
+
+
+
+    /**
+     * @return array|WorkflowEtape[]
+     */
+    public function getContraintes(): array
+    {
+        return $this->contraintes;
+    }
+
+
+
+    public function __addContrainte(WorkflowEtape $etape): void
+    {
+        $this->contraintes[$etape->getCode()] = $etape;
     }
 
 

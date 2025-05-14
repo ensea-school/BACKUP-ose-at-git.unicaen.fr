@@ -39,6 +39,7 @@
 * Correction apportée à la formule de calcul du Havre (#54003)
 * Les contrats s'affichent de nouveau avec Oracle23 (#61799)
 * Le commande ./bin/ose clear-cache ne supprime plus le répertoire cache, elle se contente de le vider (#61810) 
+* Correction d'un bug d'affichage lors d'un changement d'onglet sur l'édition d'une structure (#61814)
 
 
 # OSE 24 (29/04/2025)

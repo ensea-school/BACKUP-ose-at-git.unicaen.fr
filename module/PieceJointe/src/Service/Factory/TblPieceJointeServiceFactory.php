@@ -2,7 +2,7 @@
 
 namespace PieceJointe\Service\Factory;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use PieceJointe\Service\TblPieceJointeService;
 use Psr\Container\ContainerInterface;
 
@@ -20,7 +20,7 @@ class TblPieceJointeServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): Tbl
     {
         $service = new TblPieceJointeService();
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

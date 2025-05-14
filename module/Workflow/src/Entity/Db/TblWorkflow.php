@@ -4,6 +4,7 @@ namespace Workflow\Entity\Db;
 
 /**
  * TblWorkflow
+ * @deprecated
  */
 class TblWorkflow
 {

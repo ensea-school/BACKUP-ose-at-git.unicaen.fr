@@ -2,7 +2,7 @@
 
 namespace Intervenant\Command;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 
@@ -24,7 +24,7 @@ class CalculFeuilleDeRouteCommandFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): CalculFeuilleDeRouteCommand
     {
         $command = new CalculFeuilleDeRouteCommand;
-        $command->setEntityManager($container->get(Constants::BDD));
+        $command->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

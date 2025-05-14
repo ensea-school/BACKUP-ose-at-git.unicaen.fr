@@ -5,14 +5,12 @@
  * @var $container  \Psr\Container\ContainerInterface
  */
 
-/** @var \Doctrine\ORM\EntityManager $em */
-$em = $container->get(\Doctrine\ORM\EntityManager::class);
 
-/** @var \Paiement\Service\BudgetService $bs */
-$bs = $container->get(\Paiement\Service\BudgetService::class);
+$ws = $container->get(\Workflow\Service\WorkflowService::class);
 
-$structure = $em->getRepository(\Lieu\Entity\Db\Structure::class)->find(372);
 
-$res = $bs->getTotalPrevisionnelValide($structure);
+$etapes = $ws->getEtapes();
 
-var_dump($res);
+foreach ($etapes as $etape) {
+    echo $etape->getCode().' => '.$etape."\n";
+}

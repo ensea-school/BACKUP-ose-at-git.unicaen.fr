@@ -1,62 +1,41 @@
 <?php
 
-
 namespace Workflow\Entity\Db;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Enseignement\Entity\Db\VolumeHoraire;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenVue\Axios\AxiosExtractorInterface;
 
-/**
- * Validation
- */
 class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractorInterface
 {
     use HistoriqueAwareTrait;
 
-    const RESOURCE_ID_VALIDATION_ENSEIGNEMENT = 'VALIDATION_ENSEIGNEMENT';
-    const RESOURCE_ID_VALIDATION_REFERENTIEL  = 'VALIDATION_REFERENTIEL';
-    const RESOURCE_ID_CLOTURE_REALISE         = 'CLOTURE_REALISE';
 
-    /**
-     * @var integer
-     */
-    private $id;
-
-    /**
-     * @var \Intervenant\Entity\Db\Intervenant
-     */
-    private $intervenant;
-
-    /**
-     * @var \Lieu\Entity\Db\Structure
-     */
-    private $structure;
-
-    /**
-     * @var \Workflow\Entity\Db\TypeValidation
-     */
-    private $typeValidation;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $volumeHoraire;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $volumeHoraireReferentiel;
+    private ?int            $id             = null;
+    private ?Intervenant    $intervenant    = null;
+    private ?Structure      $structure      = null;
+    private ?TypeValidation $typeValidation = null;
+    private Collection      $volumeHoraire;
+    private Collection      $volumeHoraireReferentiel;
 
 
 
-    /**
-     * Représentation littérale de cvet objet.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __construct()
+    {
+        $this->volumeHoraire            = new ArrayCollection();
+        $this->volumeHoraireReferentiel = new ArrayCollection();
+    }
+
+
+
+    public function __toString(): string
     {
         return sprintf("Validation du %s par %s",
                        $this->getHistoCreation()->format(\Application\Constants::DATETIME_FORMAT),
@@ -72,26 +51,14 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
 
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Set intervenant
-     *
-     * @param \Intervenant\Entity\Db\Intervenant $intervenant
-     *
-     * @return Validation
-     */
-    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(?Intervenant $intervenant = null): self
     {
         $this->intervenant = $intervenant;
 
@@ -100,26 +67,14 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
 
 
 
-    /**
-     * Get intervenant
-     *
-     * @return \Intervenant\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
+    public function getIntervenant(): ?Intervenant
     {
         return $this->intervenant;
     }
 
 
 
-    /**
-     * Set structure
-     *
-     * @param \Lieu\Entity\Db\Structure $structure
-     *
-     * @return Validation
-     */
-    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
+    public function setStructure(?Structure $structure = null): self
     {
         $this->structure = $structure;
 
@@ -128,26 +83,14 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
 
 
 
-    /**
-     * Get structure
-     *
-     * @return \Lieu\Entity\Db\Structure
-     */
-    public function getStructure()
+    public function getStructure(): ?Structure
     {
         return $this->structure;
     }
 
 
 
-    /**
-     * Set typeValidation
-     *
-     * @param \Workflow\Entity\Db\TypeValidation $typeValidation
-     *
-     * @return Validation
-     */
-    public function setTypeValidation(\Workflow\Entity\Db\TypeValidation $typeValidation = null)
+    public function setTypeValidation(TypeValidation $typeValidation): self
     {
         $this->typeValidation = $typeValidation;
 
@@ -156,26 +99,14 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
 
 
 
-    /**
-     * Get typeValidation
-     *
-     * @return \Workflow\Entity\Db\TypeValidation
-     */
-    public function getTypeValidation()
+    public function getTypeValidation(): TypeValidation
     {
         return $this->typeValidation;
     }
 
 
 
-    /**
-     * Add volumeHoraire
-     *
-     * @param \Enseignement\Entity\Db\VolumeHoraire $volumeHoraire
-     *
-     * @return self
-     */
-    public function addVolumeHoraire(\Enseignement\Entity\Db\VolumeHoraire $volumeHoraire)
+    public function addVolumeHoraire(VolumeHoraire $volumeHoraire): self
     {
         $this->volumeHoraire[] = $volumeHoraire;
 
@@ -184,12 +115,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
 
 
 
-    /**
-     * Remove volumeHoraire
-     *
-     * @param \Enseignement\Entity\Db\VolumeHoraire $volumeHoraire
-     */
-    public function removeVolumeHoraire(\Enseignement\Entity\Db\VolumeHoraire $volumeHoraire)
+    public function removeVolumeHoraire(VolumeHoraire $volumeHoraire): void
     {
         $this->volumeHoraire->removeElement($volumeHoraire);
     }
@@ -197,25 +123,16 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
 
 
     /**
-     * Get volumeHoraire
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection|VolumeHoraire[]
      */
-    public function getVolumeHoraire()
+    public function getVolumeHoraire(): Collection|array
     {
         return $this->volumeHoraire;
     }
 
 
 
-    /**
-     * Add volumeHoraireReferentiel
-     *
-     * @param \Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
-     *
-     * @return self
-     */
-    public function addVolumeHoraireReferentiel(\Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function addVolumeHoraireReferentiel(VolumeHoraireReferentiel $volumeHoraireReferentiel): self
     {
         $this->volumeHoraireReferentiel[] = $volumeHoraireReferentiel;
 
@@ -224,12 +141,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
 
 
 
-    /**
-     * Remove volumeHoraireReferentiel
-     *
-     * @param \Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
-     */
-    public function removeVolumeHoraireReferentiel(\Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function removeVolumeHoraireReferentiel(VolumeHoraireReferentiel $volumeHoraireReferentiel): void
     {
         $this->volumeHoraireReferentiel->removeElement($volumeHoraireReferentiel);
     }
@@ -237,24 +149,16 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
 
 
     /**
-     * Get volumeHoraireReferentiel
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection|VolumeHoraireReferentiel[]
      */
-    public function getVolumeHoraireReferentiel()
+    public function getVolumeHoraireReferentiel(): Collection|array
     {
         return $this->volumeHoraireReferentiel;
     }
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     * @see ResourceInterface
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
         return 'Validation';
     }

@@ -224,7 +224,7 @@ class PieceJointeService extends AbstractEntityService
         $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $role->getStructure() ? $role->getStructure() : $pj->getIntervenant()->getStructure();
 
-        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_PIECE_JOINTE);
+        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::PIECE_JOINTE);
 
         $validation = $this->getServiceValidation()->newEntity($typeValidation);
         $validation->setIntervenant($pj->getIntervenant());

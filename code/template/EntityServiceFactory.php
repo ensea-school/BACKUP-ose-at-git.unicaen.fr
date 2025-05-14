@@ -3,6 +3,7 @@
 namespace <namespace>;
 
 use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 <if subDir>use <targetClass>;
 <endif subDir>
@@ -27,7 +28,7 @@ class <classname>
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): <targetClassname>
     {
         $<variable> = new <targetClassname>;
-        $<variable>->setEntityManager($container->get(Constants::BDD));
+        $<variable>->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

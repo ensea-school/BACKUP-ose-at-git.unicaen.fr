@@ -6,6 +6,7 @@ use Agrement\Entity\Db\TypeAgrement;
 
 /**
  * WfEtape
+ * @deprecated
  */
 class WfEtape
 {

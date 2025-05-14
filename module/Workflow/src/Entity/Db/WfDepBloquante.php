@@ -3,7 +3,7 @@
 namespace Workflow\Entity\Db;
 
 /**
- * Grade
+ * @deprecated
  */
 class WfDepBloquante
 {

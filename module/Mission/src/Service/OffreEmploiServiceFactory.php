@@ -2,7 +2,7 @@
 
 namespace Mission\Service;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 
@@ -24,7 +24,7 @@ class OffreEmploiServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): OffreEmploiService
     {
         $service = new OffreEmploiService();
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

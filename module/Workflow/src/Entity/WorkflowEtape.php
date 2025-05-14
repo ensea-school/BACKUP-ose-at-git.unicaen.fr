@@ -12,6 +12,7 @@ use Workflow\Resource\WorkflowResource;
 
 /**
  * WorkflowEtape
+ * @deprecated
  */
 class WorkflowEtape implements ResourceInterface
 {

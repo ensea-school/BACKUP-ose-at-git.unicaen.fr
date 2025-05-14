@@ -3125,13 +3125,14 @@ return [
     'WORKFLOW_ETAPE'                      => [
         'ID',
         'CODE',
+        'PERIMETRE_ID',
+        'ROUTE',
+        'ROUTE_INTERVENANT',
         'LIBELLE_INTERVENANT',
         'LIBELLE_AUTRES',
-        'ROUTE',
         'DESC_NON_FRANCHIE',
-        'PERIMETRE_ID',
         'DESC_SANS_OBJECTIF',
-        'ROUTE_INTERVENANT',
+        'ORDRE',
     ],
 ];
 

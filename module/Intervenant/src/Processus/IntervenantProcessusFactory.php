@@ -3,6 +3,7 @@
 namespace Intervenant\Processus;
 
 
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -16,7 +17,7 @@ class IntervenantProcessusFactory
     {
         $processus = new IntervenantProcessus;
 
-        $processus->setEntityManager($container->get(\Application\Constants::BDD));
+        $processus->setEntityManager($container->get(EntityManager::class));
 
         return $processus;
     }

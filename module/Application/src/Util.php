@@ -244,7 +244,7 @@ class Util
         /* Si c'est une entité Doctrine, on récupère les infos du mapping */
         try {
             /** @var EntityManager $em */
-            $em = \AppAdmin::container()->get(Constants::BDD);
+            $em = \AppAdmin::container()->get(EntityManager::class);
             $cmd = $em->getClassMetadata($class);
         } catch (\Exception $e) {
             $cmd = null;

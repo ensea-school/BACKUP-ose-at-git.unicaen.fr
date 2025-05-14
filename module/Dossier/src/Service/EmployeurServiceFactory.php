@@ -2,7 +2,7 @@
 
 namespace Dossier\Service;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 use Unicaen\BddAdmin\Bdd;
 
@@ -20,7 +20,7 @@ class EmployeurServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): EmployeurService
     {
         $service = new EmployeurService();
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
         $service->setBdd($container->get(Bdd::class));
 
         /* Injectez vos dépendances ICI */

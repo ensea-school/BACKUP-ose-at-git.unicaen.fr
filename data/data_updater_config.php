@@ -59,7 +59,7 @@ return [
     'WORKFLOW_ETAPE'                   => [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',
-        'options' => ['update-ignore-cols' => ['LIBELLE_INTERVENANT', 'LIBELLE_AUTRES', 'ORDRE']],
+        'options' => ['update-ignore-cols' => ['LIBELLE_INTERVENANT', 'LIBELLE_AUTRES', 'DESC_NON_FRANCHIE', 'DESC_SANS_OBJECTIF', 'ORDRE']],
     ],
     'TYPE_AGREMENT'              => [
         'actions' => ['install', 'update'],

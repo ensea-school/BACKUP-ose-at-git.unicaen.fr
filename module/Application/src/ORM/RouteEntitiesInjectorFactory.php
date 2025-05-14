@@ -2,7 +2,7 @@
 
 namespace Application\ORM;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 
@@ -24,7 +24,7 @@ class RouteEntitiesInjectorFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): RouteEntitiesInjector
     {
         $service = new RouteEntitiesInjector;
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

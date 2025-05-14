@@ -2,95 +2,100 @@
 
 namespace Workflow\Entity\Db;
 
+use Application\Acl\Role;
 use Application\Entity\Db\Perimetre;
 
 class WorkflowEtape
 {
-    private ?int $id = null;
+    const CANDIDATURE_SAISIE              = 'candidature_saisie';
+    const DONNEES_PERSO_SAISIE            = 'donnees_perso_saisie';
+    const PJ_SAISIE                       = 'pj_saisie';
+    const DONNEES_PERSO_VALIDATION        = 'donnees_perso_validation';
+    const PJ_VALIDATION                   = 'pj_validation';
+    const CANDIDATURE_VALIDATION          = 'candidature_validation';
+    const DONNEES_PERSO_COMPL_SAISIE      = 'donnees_perso_compl_saisie';
+    const PJ_COMPL_SAISIE                 = 'pj_compl_saisie';
+    const DONNEES_PERSO_COMPL_VALIDATION  = 'donnees_perso_compl_validation';
+    const PJ_COMPL_VALIDATION             = 'pj_compl_validation';
+    const ENSEIGNEMENT_SAISIE             = 'enseignement_saisie';
+    const REFERENTIEL_SAISIE              = 'referentiel_saisie';
+    const MISSION_SAISIE                  = 'mission_saisie';
+    const ENSEIGNEMENT_VALIDATION         = 'enseignement_validation';
+    const REFERENTIEL_VALIDATION          = 'referentiel_validation';
+    const MISSION_VALIDATION              = 'mission_validation';
+    const CONSEIL_RESTREINT               = 'conseil_restreint';
+    const CONSEIL_ACADEMIQUE              = 'conseil_academique';
+    const CONTRAT                         = 'contrat';
+    const EXPORT_RH                       = 'export_rh';
+    const ENSEIGNEMENT_SAISIE_REALISE     = 'enseignement_saisie_realise';
+    const REFERENTIEL_SAISIE_REALISE      = 'referentiel_saisie_realise';
+    const MISSION_SAISIE_REALISE          = 'mission_saisie_realise';
+    const CLOTURE_REALISE                 = 'cloture_realise';
+    const ENSEIGNEMENT_VALIDATION_REALISE = 'enseignement_validation_realise';
+    const REFERENTIEL_VALIDATION_REALISE  = 'referentiel_validation_realise';
+    const MISSION_VALIDATION_REALISE      = 'mission_validation_realise';
+    const MISSION_PRIME                   = 'mission_prime';
+    const DEMANDE_MEP                     = 'demande_mep';
+    const SAISIE_MEP                      = 'saisie_mep';
 
-    private ?string $code = null;
+    const CURRENT = 'current-etape';
+    const NEXT    = 'next-etape';
 
-    private int $ordre = 1;
-
-    private ?Perimetre $perimetre = null;
-
-    private ?string $route = null;
-
-    private ?string $routeIntervenant = null;
-
-    private ?string $libelleIntervenant = null;
-
-    private ?string $libelleAutres = null;
-
-    private ?string $descNonFranchie = null;
-
-    private ?string $descSansObjectif = null;
+    private int       $id;
+    private int       $code;
+    private Perimetre $perimetre;
+    private string    $route;
+    private ?string   $routeIntervenant;
+    private string    $libelleIntervenant;
+    private string    $libelleAutres;
+    private string    $descNonFranchie;
+    private ?string   $descSansObjectif;
+    private int       $ordre;
 
 
 
-    public function getId(): ?int
+    public function getLibelle(Role $role)
+    {
+        if ($role->getIntervenant()) {
+            return $this->getLibelleIntervenant();
+        } else {
+            return $this->getLibelleAutres();
+        }
+    }
+
+
+
+    public function __toString()
+    {
+        return $this->getLibelleAutres();
+    }
+
+
+
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    public function getCode(): ?string
+    public function getCode(): int
     {
         return $this->code;
     }
 
 
 
-    public function setCode(?string $code): WorkflowEtape
-    {
-        $this->code = $code;
-        return $this;
-    }
-
-
-
-    public function getOrdre(): int
-    {
-        return $this->ordre;
-    }
-
-
-
-    public function setOrdre(int $ordre): WorkflowEtape
-    {
-        $this->ordre = $ordre;
-        return $this;
-    }
-
-
-
-    public function getPerimetre(): ?Perimetre
+    public function getPerimetre(): Perimetre
     {
         return $this->perimetre;
     }
 
 
 
-    public function setPerimetre(?Perimetre $perimetre): WorkflowEtape
-    {
-        $this->perimetre = $perimetre;
-        return $this;
-    }
-
-
-
-    public function getRoute(): ?string
+    public function getRoute(): string
     {
         return $this->route;
-    }
-
-
-
-    public function setRoute(?string $route): WorkflowEtape
-    {
-        $this->route = $route;
-        return $this;
     }
 
 
@@ -102,22 +107,14 @@ class WorkflowEtape
 
 
 
-    public function setRouteIntervenant(?string $routeIntervenant): WorkflowEtape
-    {
-        $this->routeIntervenant = $routeIntervenant;
-        return $this;
-    }
-
-
-
-    public function getLibelleIntervenant(): ?string
+    public function getLibelleIntervenant(): string
     {
         return $this->libelleIntervenant;
     }
 
 
 
-    public function setLibelleIntervenant(?string $libelleIntervenant): WorkflowEtape
+    public function setLibelleIntervenant(string $libelleIntervenant): WorkflowEtape
     {
         $this->libelleIntervenant = $libelleIntervenant;
         return $this;
@@ -125,14 +122,14 @@ class WorkflowEtape
 
 
 
-    public function getLibelleAutres(): ?string
+    public function getLibelleAutres(): string
     {
         return $this->libelleAutres;
     }
 
 
 
-    public function setLibelleAutres(?string $libelleAutres): WorkflowEtape
+    public function setLibelleAutres(string $libelleAutres): WorkflowEtape
     {
         $this->libelleAutres = $libelleAutres;
         return $this;
@@ -140,14 +137,14 @@ class WorkflowEtape
 
 
 
-    public function getDescNonFranchie(): ?string
+    public function getDescNonFranchie(): string
     {
         return $this->descNonFranchie;
     }
 
 
 
-    public function setDescNonFranchie(?string $descNonFranchie): WorkflowEtape
+    public function setDescNonFranchie(string $descNonFranchie): WorkflowEtape
     {
         $this->descNonFranchie = $descNonFranchie;
         return $this;
@@ -165,6 +162,21 @@ class WorkflowEtape
     public function setDescSansObjectif(?string $descSansObjectif): WorkflowEtape
     {
         $this->descSansObjectif = $descSansObjectif;
+        return $this;
+    }
+
+
+
+    public function getOrdre(): int
+    {
+        return $this->ordre;
+    }
+
+
+
+    public function setOrdre(int $ordre): WorkflowEtape
+    {
+        $this->ordre = $ordre;
         return $this;
     }
 

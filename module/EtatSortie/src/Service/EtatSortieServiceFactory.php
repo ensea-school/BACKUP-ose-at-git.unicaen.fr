@@ -2,7 +2,7 @@
 
 namespace EtatSortie\Service;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 
@@ -24,7 +24,7 @@ class EtatSortieServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $service = new EtatSortieService;
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         $config = $container->get('config');
 

@@ -2,7 +2,7 @@
 
 namespace Agrement\Service;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 
@@ -19,7 +19,7 @@ class TypeAgrementServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): TypeAgrementService
     {
         $service = new TypeAgrementService();
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

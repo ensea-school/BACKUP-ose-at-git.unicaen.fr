@@ -6,6 +6,8 @@ use Application\Entity\Db\TypeIntervenant;
 
 /**
  * WfEtapeDep
+ *
+ * @deprecated
  */
 class WfEtapeDep
 {

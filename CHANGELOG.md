@@ -47,7 +47,11 @@
 
 * Vous devez être en version 23.14 minimum afin de pouvoir migrer en 24.1
 * Veuillez vérifier vos requêtes liées au plafonds (cf. notes de mise à jour v24.0) : elle doivent être adaptées
-
+* Attention : Si vous étiez en 24.0, il vous faudra relancer le calcul des formules, puis des tableaux de bord avec les commandes suivantes :
+```
+./bin/ose formule-calcul
+./bin/ose calcul-tableaux-bord
+```
 
 
 # OSE 24 (29/04/2025)

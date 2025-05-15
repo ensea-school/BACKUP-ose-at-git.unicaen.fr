@@ -1,0 +1,22 @@
+CREATE OR REPLACE FORCE VIEW V_TBL_CONTRAT_DOCTRINE AS
+SELECT
+  vh.ID,
+  c.id tbl_contrat_id,
+  vh.UUID,
+  vh.VOLUME_HORAIRE_INDEX,
+  vh.SERVICE_ID,
+  vh.SERVICE_REFERENTIEL_ID,
+  vh.MISSION_ID,
+  vh.VOLUME_HORAIRE_ID,
+  vh.VOLUME_HORAIRE_REF_ID,
+  vh.VOLUME_HORAIRE_MISSION_ID,
+  vh.HEURES,
+  vh.CM,
+  vh.TD,
+  vh.TP,
+  vh.AUTRES,
+  vh.HETD,
+  vh.AUTRE_LIBELLE
+FROM
+  TBL_CONTRAT vh
+  JOIN TBL_CONTRAT c ON c.uuid = vh.uuid AND c.volume_horaire_index = 0

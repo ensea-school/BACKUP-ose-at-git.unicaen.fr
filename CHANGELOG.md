@@ -43,6 +43,12 @@
 * Correction d'un bug d'affichage lors d'un changement d'onglet sur l'édition d'une structure (#61814)
 * Correction d'une régression sur la prise en compte du paramétrage de l'état de sortie pour les indémnités de fin de contrat des missions
 
+## Notes de mise à jour
+
+* Vous devez être en version 23.14 minimum afin de pouvoir migrer en 24.1
+* Veuillez vérifier vos requêtes liées au plafonds (cf. notes de mise à jour v24.0) : elle doivent être adaptées
+
+
 
 # OSE 24 (29/04/2025)
 

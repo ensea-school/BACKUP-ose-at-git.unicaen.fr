@@ -42,7 +42,7 @@
 * Le commande ./bin/ose clear-cache ne supprime plus le répertoire cache, elle se contente de le vider (#61810) 
 * Correction d'un bug d'affichage lors d'un changement d'onglet sur l'édition d'une structure (#61814)
 * Correction d'une régression sur la prise en compte du paramétrage de l'état de sortie pour les indémnités de fin de contrat des missions
-
+* Pour les demandes de mise en paiement, alimenter la liste des centres de coût avec ceux de la composante d'enseignement dans le cas d'un vacataire (#61780)
 ## Notes de mise à jour
 
 * Vous devez être en version 23.14 minimum afin de pouvoir migrer en 24.1

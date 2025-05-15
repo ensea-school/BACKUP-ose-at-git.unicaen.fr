@@ -3,11 +3,14 @@
 namespace Workflow\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Exception\LogicException;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
+use UnicaenVue\View\Model\VueModel;
 use Workflow\Entity\Db\WfEtapeDep;
 use Workflow\Form\DependanceFormAwareTrait;
 use Workflow\Service\WfEtapeDepServiceAwareTrait;
@@ -15,13 +18,6 @@ use Workflow\Service\WfEtapeServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
-/**
- * Description of WorkflowController
- *
- * @method \Doctrine\ORM\EntityManager            em()
- * @method \Application\Controller\Plugin\Context context()
- *
- */
 class WorkflowController extends AbstractController
 {
     use ContextServiceAwareTrait;
@@ -30,11 +26,37 @@ class WorkflowController extends AbstractController
     use WorkflowServiceAwareTrait;
     use WfEtapeServiceAwareTrait;
     use TableauBordServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
-    public function indexAction()
+    public function administrationAction()
     {
-        return [];
+        $props = [
+            'canEdit' => $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_EDITION)),
+        ];
+
+        $vueModel = new VueModel();
+        $vueModel->setTemplate('workflow/administration');
+        $vueModel->setVariables($props);
+
+        return $vueModel;
+    }
+
+
+
+    public function administrationDataAction()
+    {
+        $etapes = array_values($this->getServiceWorkflow()->getEtapes());
+
+        $properties = [
+            'id',
+            'code',
+            ['perimetre', ['code', 'libelle']],
+            'libelleIntervenant',
+            'libelleAutres',
+        ];
+
+        return new AxiosModel($etapes, $properties);
     }
 
 

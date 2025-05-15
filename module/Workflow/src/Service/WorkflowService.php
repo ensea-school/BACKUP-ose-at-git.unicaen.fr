@@ -4,7 +4,7 @@ namespace Workflow\Service;
 
 use Application\Service\AbstractService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traversable;
+use Traversable;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -90,6 +90,8 @@ class WorkflowService extends AbstractService
             $em->flush($etape);
             $order++;
         }
+
+        return $this;
     }
 
 
@@ -102,6 +104,8 @@ class WorkflowService extends AbstractService
 
         $cache = $em->getConfiguration()->getResultCache();
         $cache->deleteItem(__CLASS__ . '.getEtapes');
+
+        return $this;
     }
 
 

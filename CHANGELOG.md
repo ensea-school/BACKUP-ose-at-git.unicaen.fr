@@ -29,6 +29,7 @@
 
 ## Notes de mise à jour
 
+* Veillez à retester le workflow au nouveau des règles d'accès au contrats
 * Bien lire celles de la 24.1
 * Si vous voulez monter en version depuis la version 23, lire celles de la 24.0
 

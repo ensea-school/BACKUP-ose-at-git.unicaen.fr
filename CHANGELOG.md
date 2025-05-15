@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 24.1](#ose-24-1-15052025)
+[OSE 24.2](#ose-242-15052025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -20,6 +20,17 @@
 * Saisie de service d'enseignement
   * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
 
+
+# OSE 24.2 (15/05/2025)
+
+## Corrections
+
+* Correction de plusieurs soucis bloquant la génération des contrats
+
+## Notes de mise à jour
+
+* Bien lire celles de la 24.1
+* Si vous voulez monter en version depuis la version 23, lire celles de la 24.0
 
 
 # OSE 24.1 (15/05/2025)

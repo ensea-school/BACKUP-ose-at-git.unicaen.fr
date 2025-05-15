@@ -20,9 +20,9 @@ use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\OffreFormationServiceAwareTrait;
 use Paiement\Entity\Db\TypeModulateur;
+use PHP_CodeSniffer\Reports\Csv;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
-
 
 /**
  * Description of OffreFormationController
@@ -69,9 +69,15 @@ class OffreFormationController extends AbstractController
         [$niveaux, $etapes, $elements] = $this->getServiceOffreFormation()->getNeep($structure, $niveau, $etape);
 
         $params = [];
-        if ($structure) $params['structure'] = $structure->getId();
-        if ($niveau) $params['niveau'] = ($niveau->getPertinence()) ? $niveau->getId() : $niveau->getLib();
-        if ($etape) $params['etape'] = $etape->getId();
+        if ($structure) {
+            $params['structure'] = $structure->getId();
+        }
+        if ($niveau) {
+            $params['niveau'] = ($niveau->getPertinence()) ? $niveau->getId() : $niveau->getLib();
+        }
+        if ($etape) {
+            $params['etape'] = $etape->getId();
+        }
 
 
         // élément pédagogique sélectionné dans le champ de recherche
@@ -95,96 +101,12 @@ class OffreFormationController extends AbstractController
 
 
 
-    public function exportAction()
+    public function exportAction(): CsvModel
     {
         $this->initFilters();
-
         [$structure, $niveau, $etape] = $this->getParams();
+        return $this->getServiceOffreFormation()->generateCsvExport($structure, $niveau, $etape);
 
-        $elements = $this->getServiceOffreFormation()->getNeep($structure, $niveau, $etape)[2];
-        /* @var $elements ElementPedagogique[] */
-
-        $csvModel = new CsvModel();
-        $csvModel->setHeader([
-            'Structure',
-            'Code formation',
-            'Libellé formation',
-            'Niveau',
-            'Code enseignement',
-            'Libellé enseignement',
-            'Code discipline',
-            'Libellé discipline',
-            'Période',
-            'FOAD',
-            'Taux FI / effectifs année préc.',
-            'Taux FA / effectifs année préc.',
-            'Taux FC / effectifs année préc.',
-            'Effectifs FI actuels',
-            'Effectifs FA actuels',
-            'Effectifs FC actuels',
-            'Nbr heures CM',
-            'Nbr groupes CM',
-            'Nbr heures TD',
-            'Nbr groupes TD',
-            'Nbr heures TP',
-            'Nbr groupes TP',
-        ]);
-
-
-        foreach ($elements as $element) {
-            $cm = '0';
-            $td = '0';
-            $tp = '0';
-            $cmGroupe = '0';
-            $tdGroupe = '0';
-            $tpGroupe = '0';
-
-            foreach ($element->getVolumeHoraireEns() as $vhe) {
-                if ($vhe->getTypeIntervention()->getCode() == 'CM') {
-                    $cm = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
-                    $cmGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
-                }
-                if ($vhe->getTypeIntervention()->getCode() == 'TD') {
-                    $td = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
-                    $tdGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
-                }
-                if ($vhe->getTypeIntervention()->getCode() == 'TP') {
-                    $tp = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
-                    $tpGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
-                }
-            }
-
-            $etape = $element->getEtape();
-            $effectifs = $element->getEffectifs();
-            $discipline = $element->getDiscipline();
-            $csvModel->addLine([
-                $etape->getStructure()->getLibelleCourt(),
-                $etape->getCode(),
-                $etape->getLibelle(),
-                $etape->getNiveauToString(),
-                $element->getCode(),
-                $element->getLibelle(),
-                $discipline ? $discipline->getSourceCode() : null,
-                $discipline ? $discipline->getLibelleLong() : null,
-                $element->getPeriode(),
-                $element->getTauxFoad(),
-                $element->getTauxFi(),
-                $element->getTauxFa(),
-                $element->getTauxFc(),
-                $effectifs ? $effectifs->getFi() : null,
-                $effectifs ? $effectifs->getFa() : null,
-                $effectifs ? $effectifs->getFc() : null,
-                $cm,
-                $cmGroupe,
-                $td,
-                $tdGroupe,
-                $tp,
-                $tpGroupe,
-            ]);
-        }
-        $csvModel->setFilename('offre-de-formation.csv');
-
-        return $csvModel;
     }
 
 
@@ -385,9 +307,15 @@ class OffreFormationController extends AbstractController
         $structure = $this->context()->structureFromQuery() ?: $this->getServiceContext()->getStructure();
         $niveau = $this->context()->niveauFromQuery();
         $etape = $this->context()->etapeFromQuery();
-        if ($etape) $etape = $this->getServiceEtape()->get($etape->getId()); // entité Niveau
-        if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
-        if ($structure && !$structure instanceof \Lieu\Entity\Db\Structure) $structure = $this->getServiceStructure()->get($structure);
+        if ($etape) {
+            $etape = $this->getServiceEtape()->get($etape->getId());
+        } // entité Niveau
+        if ($niveau) {
+            $niveau = $this->getServiceNiveauEtape()->get($niveau);
+        } // entité Niveau
+        if ($structure && !$structure instanceof \Lieu\Entity\Db\Structure) {
+            $structure = $this->getServiceStructure()->get($structure);
+        }
 
         return [$structure, $niveau, $etape];
     }

@@ -20,7 +20,6 @@ use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use LogicException;
-use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -147,7 +146,7 @@ class ContratProcessus extends AbstractProcessus
         $contrat->setFinValidite($dateFin);
 
         $contrat->setTypeContrat($informationContrat->getTypeContrat());
-        $contrat->setNumeroAvenant($informationContrat->getNumeroAvenant());
+        $contrat->setNumeroAvenant((int)$informationContrat->getNumeroAvenant());
         $contratParent = $informationContrat->getContratParent();
         $contrat->setContrat($contratParent);
 

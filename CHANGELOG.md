@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 24.0](#ose-24-29042025)
+[OSE 24.2](#ose-242-15052025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -21,13 +21,26 @@
   * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
 
 
+# OSE 24.2 (15/05/2025)
 
-# OSE 24.1 (à venir 05/2025)
+## Corrections
+
+* Correction de plusieurs soucis bloquant la génération des contrats
+
+## Notes de mise à jour
+
+* Veillez à retester le workflow au nouveau des règles d'accès au contrats
+* Bien lire celles de la 24.1
+* Si vous voulez monter en version depuis la version 23, lire celles de la 24.0
+
+
+# OSE 24.1 (15/05/2025)
 
 ## Améliorations
 
 * La clôture des services d'enseignement est désormais possible pour les intervenants avec fiche de services en lecture seule (#61700)
 * Les agréments par lots sont maintenant triables, filtrables et les disciplines sont affichées (#61456)
+* Prise en compte de tous les types d'intervention lors l'export des formations au format CSV(#61727)
 
 ## Corrections
 
@@ -39,6 +52,18 @@
 * Correction apportée à la formule de calcul du Havre (#54003)
 * Les contrats s'affichent de nouveau avec Oracle23 (#61799)
 * Le commande ./bin/ose clear-cache ne supprime plus le répertoire cache, elle se contente de le vider (#61810) 
+* Correction d'un bug d'affichage lors d'un changement d'onglet sur l'édition d'une structure (#61814)
+* Correction d'une régression sur la prise en compte du paramétrage de l'état de sortie pour les indémnités de fin de contrat des missions
+* Pour les demandes de mise en paiement, alimenter la liste des centres de coût avec ceux de la composante d'enseignement dans le cas d'un vacataire (#61780)
+## Notes de mise à jour
+
+* Vous devez être en version 23.14 minimum afin de pouvoir migrer en 24.1
+* Veuillez vérifier vos requêtes liées au plafonds (cf. notes de mise à jour v24.0) : elle doivent être adaptées
+* Attention : Si vous étiez en 24.0, il vous faudra relancer le calcul des formules, puis des tableaux de bord avec les commandes suivantes :
+```
+./bin/ose formule-calcul
+./bin/ose calcul-tableaux-bord
+```
 
 
 # OSE 24 (29/04/2025)

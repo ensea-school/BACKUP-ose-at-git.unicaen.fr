@@ -2,12 +2,12 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Contrat\Entity\Db\TblContratVolumeHoraire" table="TBL_CONTRAT">
+    <entity name="Contrat\Entity\Db\TblContratVolumeHoraire" table="V_TBL_CONTRAT_DOCTRINE">
         <id name="id" type="integer" column="ID" />
         <field name="uuid" type="string" column="UUID" length="120" nullable="false"/>
         <field name="volumeHoraireIndex" type="integer" column="VOLUME_HORAIRE_INDEX" nullable="false"/>
         <many-to-one field="tblContrat" target-entity="Contrat\Entity\Db\TblContrat">
-            <join-column name="UUID" referenced-column-name="UUID"/>
+            <join-column name="TBL_CONTRAT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
             <join-column name="SERVICE_ID" referenced-column-name="ID"/>

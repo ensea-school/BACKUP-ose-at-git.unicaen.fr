@@ -10,7 +10,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
-use Contrat\Entity\Db\TblContrat;
 use Contrat\Form\ContratRetourFormAwareTrait;
 use Contrat\Form\EnvoiMailContratFormAwareTrait;
 use Contrat\Processus\ContratProcessusAwareTrait;

@@ -28,6 +28,7 @@
 
 * La clôture des services d'enseignement est désormais possible pour les intervenants avec fiche de services en lecture seule (#61700)
 * Les agréments par lots sont maintenant triables, filtrables et les disciplines sont affichées (#61456)
+* Prise en compte de tous les types d'intervention lors l'export des formations au format CSV(#61727)
 
 ## Corrections
 
@@ -40,6 +41,7 @@
 * Les contrats s'affichent de nouveau avec Oracle23 (#61799)
 * Le commande ./bin/ose clear-cache ne supprime plus le répertoire cache, elle se contente de le vider (#61810) 
 * Correction d'un bug d'affichage lors d'un changement d'onglet sur l'édition d'une structure (#61814)
+* Correction d'une régression sur la prise en compte du paramétrage de l'état de sortie pour les indémnités de fin de contrat des missions
 
 
 # OSE 24 (29/04/2025)

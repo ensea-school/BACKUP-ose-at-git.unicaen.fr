@@ -13,9 +13,9 @@ $etapes = $ws->getEtapes();
 
 foreach ($etapes as $etape) {
     echo str_pad($etape->getCode(), 33, ' ').' => '.$etape."\n";
-    if ($etape->getContraintes()){
-        foreach( $etape->getContraintes() as $contrainte){
-            echo '    '.$contrainte->getDescNonFranchie()."\n";
+    if ($etape->getDependances()){
+        foreach( $etape->getDependances() as $dep){
+            echo '    '.$dep->getEtapePrecedante().' '.$dep->getPerimetre().' '.$dep->getAvancement()."\n";
         }
         echo "\n";
     }

@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'WORKFLOW_ETAPE_ID_SEQ',
+    'sequence'    => NULL,
     'columns'     => [
         'CODE'                => [
             'name'        => 'CODE',

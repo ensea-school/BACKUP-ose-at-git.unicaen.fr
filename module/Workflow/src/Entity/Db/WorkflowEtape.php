@@ -4,6 +4,8 @@ namespace Workflow\Entity\Db;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Perimetre;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class WorkflowEtape
 {
@@ -57,6 +59,22 @@ class WorkflowEtape
      */
     private array $contraintes = [];
 
+    private Collection $dependances;
+
+
+
+    public function __construct()
+    {
+        $this->dependances = new ArrayCollection();
+    }
+
+
+
+    public function __toString()
+    {
+        return $this->getLibelleAutres();
+    }
+
 
 
     public function getLibelle(Role $role)
@@ -66,13 +84,6 @@ class WorkflowEtape
         } else {
             return $this->getLibelleAutres();
         }
-    }
-
-
-
-    public function __toString()
-    {
-        return $this->getLibelleAutres();
     }
 
 
@@ -199,6 +210,32 @@ class WorkflowEtape
     public function setOrdre(int $ordre): WorkflowEtape
     {
         $this->ordre = $ordre;
+        return $this;
+    }
+
+
+
+    /**
+     * @return Collection|array|WorkflowEtapeDependance[]
+     */
+    public function getDependances(): Collection|array
+    {
+        return $this->dependances;
+    }
+
+
+
+    public function addDependance(WorkflowEtapeDependance $dependance): WorkflowEtape
+    {
+        $this->dependances->add($dependance);
+        return $this;
+    }
+
+
+
+    public function removeDependance(WorkflowEtapeDependance $dependance): WorkflowEtape
+    {
+        $this->dependances->remove($dependance);
         return $this;
     }
 

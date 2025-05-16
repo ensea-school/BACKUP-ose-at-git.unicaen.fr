@@ -185,7 +185,7 @@ return [
     'WF_DEP_BLOQUANTE_ID_SEQ',
     'WF_ETAPE_DEP_ID_SEQ',
     'WF_ETAPE_ID_SEQ',
-    'WORKFLOW_ETAPE_ID_SEQ',
+    'WORKFLOW_ETAPE_DEPENDANCE_ID_SEQ',
 ];
 
 //@formatter:on

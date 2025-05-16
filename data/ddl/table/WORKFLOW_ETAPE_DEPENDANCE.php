@@ -7,9 +7,9 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'WORKFLOW_ETAPE_DEPENDANCE_ID_SEQ',
     'columns'     => [
-        'ACTIVE'                 => [
+        'ACTIVE'              => [
             'name'        => 'ACTIVE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -21,19 +21,20 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'DEBUTEE'                => [
-            'name'        => 'DEBUTEE',
-            'type'        => 'bool',
+        'AVANCEMENT'          => [
+            'name'        => 'AVANCEMENT',
+            'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
             'scale'       => NULL,
-            'precision'   => 1,
+            'precision'   => 2,
             'nullable'    => FALSE,
-            'default'     => '0',
+            'default'     => NULL,
             'position'    => 7,
-            'commentaire' => 'L\'étape doit être franchie à plus de 0%',
+            'commentaire' => '
+',
         ],
-        'ETAPE_PRECEDANTE_ID'    => [
+        'ETAPE_PRECEDANTE_ID' => [
             'name'        => 'ETAPE_PRECEDANTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -45,7 +46,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'ETAPE_SUIVANTE_ID'      => [
+        'ETAPE_SUIVANTE_ID'   => [
             'name'        => 'ETAPE_SUIVANTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -57,7 +58,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'ID'                     => [
+        'ID'                  => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +70,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'PERIMETRE_ID'           => [
+        'PERIMETRE_ID'        => [
             'name'        => 'PERIMETRE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -79,33 +80,10 @@ return [
             'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 6,
-            'commentaire' => 'Périmètre de franchissement à l\'échelle d\'une composante ou bien de l\'établissement',
+            'commentaire' => '
+',
         ],
-        'TERMINEE_INTEGRALEMENT' => [
-            'name'        => 'TERMINEE_INTEGRALEMENT',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '1',
-            'position'    => 9,
-            'commentaire' => 'L\'ensemble des éléments de l\'étape doivent avoir été franchis',
-        ],
-        'TERMINEE_PARTIELLEMENT' => [
-            'name'        => 'TERMINEE_PARTIELLEMENT',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 8,
-            'commentaire' => 'L\'étape peut avoir été franchie à 100 sur au moins un élément',
-        ],
-        'TYPE_INTERVENANT_ID'    => [
+        'TYPE_INTERVENANT_ID' => [
             'name'        => 'TYPE_INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

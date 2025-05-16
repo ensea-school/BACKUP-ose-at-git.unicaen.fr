@@ -3141,9 +3141,7 @@ return [
         'ACTIVE',
         'TYPE_INTERVENANT_ID',
         'PERIMETRE_ID',
-        'DEBUTEE',
-        'TERMINEE_PARTIELLEMENT',
-        'TERMINEE_INTEGRALEMENT',
+        'AVANCEMENT',
     ],
 ];
 

@@ -17,5 +17,6 @@
         <field name="descNonFranchie" type="string" column="DESC_NON_FRANCHIE" length="256" nullable="false"/>
         <field name="descSansObjectif" type="string" column="DESC_SANS_OBJECTIF" length="256" nullable="true"/>
         <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
+        <one-to-many field="dependances" target-entity="Workflow\Entity\Db\WorkflowEtapeDependance" mapped-by="etapeSuivante"/>
     </entity>
 </doctrine-mapping>

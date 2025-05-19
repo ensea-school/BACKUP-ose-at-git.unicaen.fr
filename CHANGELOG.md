@@ -25,12 +25,19 @@
 ## Améliorations
 
 * Possibilité d'utiliser la signature électronique (esup signature) avec un wildcard token de paramétré
+* Traducteur de formules de calcul : gestion des SI embarqués dans des paramètres de fonctions
+
+## Corrections
+
 
 ## Notes de mise à jour
 
-* Veillez à retester le workflow au nouveau des règles d'accès au contrats
+* Veillez à retester le workflow au nouveau des règles d'accès aux contrats
 * Bien lire celles de la 24.1
 * Si vous voulez monter en version depuis la version 23, lire celles de la 24.0
+
+
+
 
 # OSE 24.2 (15/05/2025)
 
@@ -40,7 +47,7 @@
 
 ## Notes de mise à jour
 
-* Veillez à retester le workflow au nouveau des règles d'accès au contrats
+* Veillez à retester le workflow au nouveau des règles d'accès aux contrats
 * Bien lire celles de la 24.1
 * Si vous voulez monter en version depuis la version 23, lire celles de la 24.0
 

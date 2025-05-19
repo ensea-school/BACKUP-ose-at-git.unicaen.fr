@@ -29,6 +29,7 @@
 * Possibilité d'utiliser la signature électronique (esup signature) avec un wildcard token de paramétré
 * Traducteur de formules de calcul : gestion des SI embarqués dans des paramètres de fonctions
 * Nouvelle version de la formule de calcul de Paris Dauphine (#50652)
+* Formule de calcul "par défaut" disponible pour tous les établissement qui le souhaitent ou bien en attente de leur formule personnalisée
 
 ## Corrections
 

@@ -52,6 +52,9 @@ Un exemple de ces paramètres est fourni dans le fichier `config.local.php.dist`
                 'sign_eidas'  => 'nexuSign',
             ],
 
+            //A renseigner si vous utilisez la notion de token wildcard dans Esup signature
+            'token'       => 'xxxxxxxx-xxxxxxxx-xxxxxxx-xxxxxx',
+
             'config' => [
                 // URL des webservices ESUP
                 'url'           => "https://signature.etablissement.fr",

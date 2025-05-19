@@ -20,12 +20,15 @@
 * Saisie de service d'enseignement
   * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
 
-# OSE 24.3 (à venir)
+
+
+# OSE 24.3 (22/05/2025)
 
 ## Améliorations
 
 * Possibilité d'utiliser la signature électronique (esup signature) avec un wildcard token de paramétré
 * Traducteur de formules de calcul : gestion des SI embarqués dans des paramètres de fonctions
+* Nouvelle version de la formule de calcul de Paris Dauphine (#50652)
 
 ## Corrections
 

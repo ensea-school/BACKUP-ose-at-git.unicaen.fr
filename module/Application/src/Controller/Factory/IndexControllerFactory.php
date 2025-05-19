@@ -18,6 +18,7 @@ class IndexControllerFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $controller = new IndexController();
+        $controller->setServiceUserContext($container->get(UserContext::class));
 
         return $controller;
     }

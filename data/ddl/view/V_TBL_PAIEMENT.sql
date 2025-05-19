@@ -58,7 +58,7 @@ FROM
   LEFT JOIN etape                             e ON e.id = ep.etape_id
   LEFT JOIN centre_cout_ep                 ccep ON ccep.histo_destruction IS NULL
                                                AND ccep.element_pedagogique_id = ep.id
-                                               AND ccep.type_heures_id = th.id
+                                               AND ccep.type_heures_id = th.type_heures_element_id
 
   LEFT JOIN mise_en_paiement                mep ON mep.histo_destruction IS NULL
                                                AND mep.service_id = frvh.service_id

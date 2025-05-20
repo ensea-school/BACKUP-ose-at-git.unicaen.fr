@@ -26,6 +26,11 @@
         </tr>
         </tbody>
     </u-table-ajax>
+    <a class="btn btn-primary" @click.prevent="saisie"
+       :href="this.dataNewEmployeur"
+       title="Ajouter un employeur"><i
+        class="fas fa-plus"></i>
+        Ajout d'un employeur</a>
 </template>
 
 <script>
@@ -36,6 +41,7 @@ export default {
     {
         return {
             dataUrl: unicaenVue.url('employeur/get-data'),
+            dataNewEmployeur: unicaenVue.url('employeur/saisie'),
             lines: [],
         };
     },

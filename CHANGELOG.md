@@ -38,7 +38,7 @@
 * Prise en compte du paramétrage d'un centre de coût par défaut sur un élement pédagogique au niveau de la page de demande de mise en paiement
 * Ajout du bouton "Nouveau employeur" qui avait disparu dans administration > Nomenclatures > Employeurs
 * Correction pour aller chercher la bonne valeur du taux lors d'une prise en charge ou d'un renouvellement dans SIHAM (#61928)
-
+* Correction d'un problème qui empêchait la création d'un nouveau taux de rémunération
 ## Notes de mise à jour
 
 * Veillez à retester le workflow au nouveau des règles d'accès aux contrats

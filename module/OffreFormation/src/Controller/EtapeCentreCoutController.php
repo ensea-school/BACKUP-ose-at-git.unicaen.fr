@@ -27,11 +27,14 @@ class EtapeCentreCoutController extends AbstractController
      */
     protected function saisirAction()
     {
-        $this->em()->getFilters()->enable('historique')->init([
-            \OffreFormation\Entity\Db\ElementPedagogique::class,
-            \Paiement\Entity\Db\CentreCout::class,
-            \OffreFormation\Entity\Db\CentreCoutEp::class
-        ]);
+        $this->em()->getFilters()
+            ->enable('historique')
+            ->init([
+                       \OffreFormation\Entity\Db\ElementPedagogique::class,
+                       \Paiement\Entity\Db\CentreCout::class,
+                       \Paiement\Entity\Db\CentreCoutStructure::class,
+                       \OffreFormation\Entity\Db\CentreCoutEp::class,
+                   ]);
         $this->em()->getFilters()->enable('annee')->init([
             \OffreFormation\Entity\Db\ElementPedagogique::class,
         ]);

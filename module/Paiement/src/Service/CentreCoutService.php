@@ -3,6 +3,7 @@
 namespace Paiement\Service;
 
 use Application\Service\AbstractEntityService;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\QueryBuilder;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeHeures;
@@ -79,9 +80,20 @@ class CentreCoutService extends AbstractEntityService
         $result = [];
 
         foreach ($centresCouts as $cc) {
-            $id       = $cc->getId();
-            $ccp      = $cc->getParent() ?: null;
-            $idParent = $ccp ? $ccp->getId() : null;
+
+            try {
+                $id       = $cc->getId();
+                $ccp      = $cc->getParent() ?: null;
+                $idParent = null;
+                if ($ccp) {
+                    $ccp->estHistorise();
+                    $idParent = $ccp->getId();
+                }
+            } catch (EntityNotFoundException $e) {
+                //On catch l'exception dans le cas d'un centre de cout dont le parent a été historisé...
+                $idParent = null;
+            }
+
 
             if ($idParent) {
                 $result[$idParent]['label']        = (string)$ccp;

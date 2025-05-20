@@ -36,6 +36,7 @@
 
 * Correction d'un bug lorsqu'un vacataire change d'année universitaire via le menu année en haut à gauche
 * Prise en compte du paramétrage d'un centre de coût par défaut sur un élement pédagogique au niveau de la page de demande de mise en paiement
+* Ajout du bouton "Nouveau employeur" qui avait disparu dans administration > Nomenclatures > Employeurs
 
 ## Notes de mise à jour
 

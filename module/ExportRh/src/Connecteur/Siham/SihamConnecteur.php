@@ -11,6 +11,7 @@ use ExportRh\Service\ExportRhServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
 use Mission\Entity\Db\Mission;
+use Paiement\Entity\Db\TauxRemu;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Form\Fieldset;
@@ -459,11 +460,14 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
         } else {
             $infos['totalHeure'] = str_replace(',', '.', $mission->getHeures());
+            $infos['taux'] = 0;
             //On va chercher la valeur du taux de la mission
             $dateDebutMission = $mission->getDateDebut();
-            $idTauxRemu       = $mission->getTauxRemu()->getId();
-            $valeurTaux       = $this->getServiceTauxRemu()->getTauxRemuValeur($idTauxRemu)->getValeur();
-            $infos['taux']    = str_replace(',', '.', $valeurTaux);
+            $tauxRemu = $mission->getTauxRemu();
+            if ($tauxRemu instanceof TauxRemu) {
+                $valeurTaux    = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $dateDebutMission);
+                $infos['taux'] = str_replace(',', '.', $valeurTaux);
+            }
         }
 
         return $infos;

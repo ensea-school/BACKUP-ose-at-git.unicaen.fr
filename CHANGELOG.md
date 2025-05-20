@@ -30,6 +30,7 @@
 * Traducteur de formules de calcul : gestion des SI embarqués dans des paramètres de fonctions
 * Nouvelle version de la formule de calcul de Paris Dauphine (#50652)
 * Formule de calcul "par défaut" disponible pour tous les établissement qui le souhaitent ou bien en attente de leur formule personnalisée
+* Les mises à jour OSE ne pourront plus être bloquées par des modifications locales : elles seront écrasées
 
 ## Corrections
 

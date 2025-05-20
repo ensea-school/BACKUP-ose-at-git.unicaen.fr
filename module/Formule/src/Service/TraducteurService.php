@@ -38,6 +38,7 @@ class TraducteurService
         'transfoStructureAffectation',
         'transfoStructureUniv',
         'transfoIfPlus',
+        'transfoIfInFunction',
         'transfoSumIf',
         'transfoAbsRange',
         'transfoSimplify',
@@ -422,6 +423,40 @@ class TraducteurService
                     $expr[$ifi]['exprs'][2][] = $expr[$i];
                 }
                 unset($expr[$i]);
+            }
+        }
+    }
+
+
+
+    protected function transfoIfInFunction(array &$expr, int $i): void
+    {
+        if ($expr[$i]['type'] == 'function' && $expr[$i]['name'] != 'IF') {
+            $params = $expr[$i]['exprs'];
+            $if = null;
+            foreach( $params as $pi => $param ) {
+                foreach($param as $ppi => $pexpr){
+                    if ($pexpr && $pexpr['type'] == 'function' && $pexpr['name'] == 'IF') {
+                        if ($if != null) {
+                            throw new \Exception('Expression trop complexe et intraduisible en l\'état');
+                        }
+                        $if = $pexpr;
+                    }
+                }
+            }
+            if ($if){
+                foreach( $if['exprs'] as $eid => $ifRes){
+                    if ($eid > 0){
+                        $nexpr = $expr;
+                        if (count($ifRes) == 1 || count($nexpr) == 1){
+                            $nexpr[$i] = current($ifRes);
+                        }else{
+                            $nexpr[$i] = ['type' => 'expr', 'expr' => $ifRes];
+                        }
+                        $if['exprs'][$eid] = $nexpr;
+                    }
+                }
+                $expr = [0 => $if];
             }
         }
     }

@@ -176,8 +176,10 @@ class ContratService extends AbstractEntityService
                                 $contrat->getIntervenant()->getCode());
             //Récupération de la configuration de unicaen signature
             $content = $document->saveToData();
-            file_put_contents($this->unicaenSignatureConfig['documents_path'] . '/' . $fileName, $content);
             $contratFilePath = $this->unicaenSignatureConfig['documents_path'] . '/' . $fileName;
+            $filesystem = new Filesystem();
+            $filesystem->appendToFile($contratFilePath, $content);
+            $filesystem->chmod($contratFilePath, 0777);
             $filename        = basename($contratFilePath);
             //Récupération du circuit de signature si la signature est activé pour l'état de sortie de ce contrat
             $intervenant       = $contrat->getIntervenant();
@@ -351,11 +353,10 @@ class ContratService extends AbstractEntityService
         if ($save) {
             //On récupere le contenu du contrat pour le stocker temporairement afin de pouvoir l'envoyer dans le parapheur
             $content = $document->saveToData();
+            $file = $this->unicaenSignatureConfig['documents_path'] . '/' . $fileName;
             file_put_contents($this->unicaenSignatureConfig['documents_path'] . '/' . $fileName, $content);
-            /*            $var = exec('chmod 777 ' . $this->unicaenSignatureConfig['documents_path'] . '/copy.pdf');
-                        dump($var);
-                        die;
-            */
+            chmod($this->unicaenSignatureConfig['documents_path'] . '/' . $fileName, 0777);
+
             return $this->unicaenSignatureConfig['documents_path'] . '/' . $fileName;
         }
         if ($download) {

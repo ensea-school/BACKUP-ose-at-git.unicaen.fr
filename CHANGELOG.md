@@ -21,6 +21,28 @@
   * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
 
 
+
+# OSE 24.3 (22/05/2025)
+
+## Améliorations
+
+* Possibilité d'utiliser la signature électronique (esup signature) avec un wildcard token de paramétré
+* Traducteur de formules de calcul : gestion des SI embarqués dans des paramètres de fonctions
+* Nouvelle version de la formule de calcul de Paris Dauphine (#50652)
+* Formule de calcul "par défaut" disponible pour tous les établissement qui le souhaitent ou bien en attente de leur formule personnalisée
+
+## Corrections
+
+
+## Notes de mise à jour
+
+* Veillez à retester le workflow au nouveau des règles d'accès aux contrats
+* Bien lire celles de la 24.1
+* Si vous voulez monter en version depuis la version 23, lire celles de la 24.0
+
+
+
+
 # OSE 24.2 (15/05/2025)
 
 ## Corrections
@@ -29,7 +51,7 @@
 
 ## Notes de mise à jour
 
-* Veillez à retester le workflow au nouveau des règles d'accès au contrats
+* Veillez à retester le workflow au nouveau des règles d'accès aux contrats
 * Bien lire celles de la 24.1
 * Si vous voulez monter en version depuis la version 23, lire celles de la 24.0
 

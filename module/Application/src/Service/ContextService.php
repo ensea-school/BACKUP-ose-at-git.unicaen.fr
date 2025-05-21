@@ -17,6 +17,7 @@ use Lieu\Service\EtablissementServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
+use Administration\Service\ParametresServiceAwareTrait;
 
 /**
  * Service fournissant les différents contextes de fonctionnement de l'application.
@@ -27,7 +28,7 @@ class ContextService extends AbstractService
 {
     use EtablissementServiceAwareTrait;
     use Traits\AnneeServiceAwareTrait;
-    use \Administration\Service\ParametresServiceAwareTrait;
+    use ParametresServiceAwareTrait;
     use StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
@@ -53,6 +54,8 @@ class ContextService extends AbstractService
     protected ?Annee         $anneeSuivante        = null;
 
     protected ?Structure     $structure            = null;
+
+    protected ?Utilisateur   $utilisateur          = null;
 
     protected bool           $inInit               = false;
 
@@ -84,7 +87,10 @@ class ContextService extends AbstractService
 
     public function getUtilisateur(): ?Utilisateur
     {
-        return $this->getConnecteurLdap()->getUtilisateurCourant();
+        if (null === $this->utilisateur) {
+            $this->utilisateur = $this->getConnecteurLdap()->getUtilisateurCourant();
+        }
+        return $this->utilisateur;
     }
 
 

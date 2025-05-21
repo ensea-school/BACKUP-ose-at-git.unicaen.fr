@@ -14,6 +14,7 @@ use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 use Workflow\Entity\Db\TblWorkflow;
 use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
+use Workflow\Entity\Db\WorkflowEtapeDependance;
 
 /**
  * Description of WorkflowService
@@ -22,6 +23,8 @@ use Workflow\Entity\Db\WorkflowEtape;
  */
 class WorkflowService extends AbstractService
 {
+    const ETAPES_CACHE_ID = 'Workflow_Service_WorkflowService_getEtapes';
+
     use ContextServiceAwareTrait;
     use EntityManagerAwareTrait;
     use AuthorizeServiceAwareTrait;
@@ -44,12 +47,20 @@ class WorkflowService extends AbstractService
         if (empty($this->workflowEtapes)) {
             $this->workflowEtapes = [];
 
-            $dql = 'SELECT we FROM ' . WorkflowEtape::class . ' we ORDER BY we.ordre';
+            $dql = "
+            SELECT 
+                we, d, wep
+            FROM 
+                " . WorkflowEtape::class . " we
+                LEFT JOIN we.dependances d
+                LEFT JOIN d.etapePrecedante wep
+            ORDER BY 
+                we.ordre, wep.ordre";
 
             $query = $this->getEntityManager()->createQuery($dql);
             $query->enableResultCache(true);
-            $query->setResultCacheId(__CLASS__ . '.' . __METHOD__);
-            $iterable = $query->toIterable();
+            $query->setResultCacheId(self::ETAPES_CACHE_ID);
+            $iterable = $query->getResult();
             foreach ($iterable as $we) {
                 $this->workflowEtapes[$we->getCode()] = $we;
             }
@@ -65,6 +76,19 @@ class WorkflowService extends AbstractService
             }
         }
         return $this->workflowEtapes;
+    }
+
+
+
+    public function clearEtapesCache(): self
+    {
+        $em = $this->getEntityManager();
+
+        $cache = $em->getConfiguration()->getResultCache();
+        $cache->deleteItem(self::ETAPES_CACHE_ID);
+        $this->workflowEtapes = [];
+
+        return $this;
     }
 
 
@@ -96,14 +120,28 @@ class WorkflowService extends AbstractService
 
 
 
-    public function updateEtape(WorkflowEtape $etape): self
+    public function saveEtape(WorkflowEtape $etape): self
     {
         $em = $this->getEntityManager();
+
         $em->persist($etape);
         $em->flush($etape);
 
-        $cache = $em->getConfiguration()->getResultCache();
-        $cache->deleteItem(__CLASS__ . '.getEtapes');
+        $this->clearEtapesCache();
+
+        return $this;
+    }
+
+
+
+    public function saveEtapeDependance(WorkflowEtapeDependance $dependance): self
+    {
+        $em = $this->getEntityManager();
+
+        $em->persist($dependance);
+        $em->flush($dependance);
+
+        $this->saveEtape($dependance->getEtapeSuivante());
 
         return $this;
     }

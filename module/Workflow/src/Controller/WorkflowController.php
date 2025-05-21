@@ -12,6 +12,8 @@ use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
 use UnicaenVue\View\Model\VueModel;
 use Workflow\Entity\Db\WfEtapeDep;
+use Workflow\Entity\Db\WorkflowEtape;
+use Workflow\Entity\Db\WorkflowEtapeDependance;
 use Workflow\Form\DependanceFormAwareTrait;
 use Workflow\Service\WfEtapeDepServiceAwareTrait;
 use Workflow\Service\WfEtapeServiceAwareTrait;
@@ -21,15 +23,15 @@ use Workflow\Service\WorkflowServiceAwareTrait;
 class WorkflowController extends AbstractController
 {
     use ContextServiceAwareTrait;
-    use WfEtapeDepServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
     use DependanceFormAwareTrait;
-    use WorkflowServiceAwareTrait;
-    use WfEtapeServiceAwareTrait;
     use TableauBordServiceAwareTrait;
-    use WorkflowServiceAwareTrait;
+
+    use WfEtapeDepServiceAwareTrait;
+    use WfEtapeServiceAwareTrait;
 
 
-    public function administrationAction()
+    public function administrationAction(): VueModel
     {
         $props = [
             'canEdit' => $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_EDITION)),
@@ -44,19 +46,75 @@ class WorkflowController extends AbstractController
 
 
 
-    public function administrationDataAction()
+    public function administrationDataAction(): AxiosModel
     {
+        // Le cache est vidé systématiquement ici pour éviter tout problème
+        $this->getServiceWorkflow()->clearEtapesCache();
+
         $etapes = array_values($this->getServiceWorkflow()->getEtapes());
 
         $properties = [
             'id',
             'code',
-            ['perimetre', ['code', 'libelle']],
+            ['perimetre', [
+                'code',
+                'libelle',
+            ]],
             'libelleIntervenant',
             'libelleAutres',
+            ['dependances', [
+                'id',
+                ['etapePrecedante', [
+                    'code',
+                    'libelleAutres',
+                ]],
+                'active',
+                ['typeIntervenant', [
+                    'code',
+                    'libelle',
+                ]],
+                ['perimetre', [
+                    'code',
+                    'libelle',
+                ]],
+                'avancement',
+            ]],
         ];
 
         return new AxiosModel($etapes, $properties);
+    }
+
+
+
+    public function administrationSaisieDependanceAction(): array
+    {
+        /* @var $workflowEtapeDependance WorkflowEtapeDependance */
+        $workflowEtapeDependance = $this->getEvent()->getParam('workflowEtapeDependance');
+
+        /* @var $workflowEtape WorkflowEtape */
+        $workflowEtape = $this->getEvent()->getParam('workflowEtape');
+
+        if (!$workflowEtapeDependance) {
+            $workflowEtapeDependance = new WorkflowEtapeDependance();
+            $workflowEtapeDependance->setEtapeSuivante($workflowEtape);
+            $workflowEtape->addDependance($workflowEtapeDependance);
+
+            $title = 'Ajout d\'une dépendance';
+        } else {
+            $title = 'Modification d\'une dépendance';
+        }
+
+        $form = $this->getFormWorkflowDependance();
+        $form->init2($workflowEtape);
+        $form->bindRequestSave($workflowEtapeDependance, $this->getRequest(), function ($workflowEtapeDependance) {
+            try {
+                $this->getServiceWorkflow()->saveEtapeDependance($workflowEtapeDependance);
+            } catch (\Throwable $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        });
+
+        return compact('title', 'form');
     }
 
 
@@ -95,37 +153,6 @@ class WorkflowController extends AbstractController
         }
 
         return compact('etapes', 'deps');
-    }
-
-
-
-    public function saisieDepAction()
-    {
-        $wfEtapeDep = $this->getEvent()->getParam('wfEtapeDep');
-        /* @var $wfEtapeDep WfEtapeDep */
-
-        if (!$wfEtapeDep) {
-            $etapeSuivanteId = $this->params()->fromQuery('etapeSuivante');
-
-            $wfEtapeDep = $this->getServiceWfEtapeDep()->newEntity();
-            if ($etapeSuivanteId) {
-                $etapeSuivante = $this->getServiceWfEtape()->get($etapeSuivanteId);
-                $wfEtapeDep->setEtapeSuiv($etapeSuivante);
-            }
-        }
-
-        $title = "Saisie d'une dépendance";
-
-        $form = $this->getFormWorkflowDependance();
-        $form->bindRequestSave($wfEtapeDep, $this->getRequest(), function ($wfEtapeDep) {
-            try {
-                $this->getServiceWfEtapeDep()->save($wfEtapeDep);
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-        });
-
-        return compact('title', 'form');
     }
 
 

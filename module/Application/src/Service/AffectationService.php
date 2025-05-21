@@ -113,7 +113,7 @@ class AffectationService extends AbstractEntityService
         $em = $this->getEntityManager();
 
         $cache = $em->getConfiguration()->getResultCache();
-        $cache->deleteItem(str_replace('\\', '_', RoleProvider::class) . '_affectations');
+        $cache->deleteItem(RoleProvider::AFFECTATIONS_CACHE_ID);
     }
 
 }

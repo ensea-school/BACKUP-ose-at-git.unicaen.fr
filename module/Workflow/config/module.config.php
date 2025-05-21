@@ -9,10 +9,7 @@ use UnicaenPrivilege\Assertion\AssertionFactory;
 return [
     'routes' => [
         'workflow' => [
-            'type'          => 'Literal',
-            'options'       => [
-                'route' => '/workflow',
-            ],
+            'route'         => '/workflow',
             'may_terminate' => false,
             'child_routes'  => [
                 'administration' => [
@@ -22,23 +19,27 @@ return [
                     'privileges'    => [Privileges::WORKFLOW_DEPENDANCES_VISUALISATION],
                     'may_terminate' => true,
                     'child_routes'  => [
-                        'data'   => [
+                        'data'              => [
                             'route'      => '/data',
                             'controller' => Controller\WorkflowController::class,
                             'action'     => 'administration-data',
                             'privileges' => [Privileges::WORKFLOW_DEPENDANCES_VISUALISATION],
                         ],
-                        'tri'    => [
+                        'tri'               => [
                             'route'      => '/tri',
                             'controller' => Controller\WorkflowController::class,
                             'action'     => 'administration-tri',
                             'privileges' => [Privileges::WORKFLOW_DEPENDANCES_EDITION],
                         ],
-                        'update' => [
-                            'route'      => '/update',
-                            'controller' => Controller\WorkflowController::class,
-                            'action'     => 'administration-update',
-                            'privileges' => [Privileges::WORKFLOW_DEPENDANCES_EDITION],
+                        'saisie-dependance' => [
+                            'route'       => '/saisie-dependance/:workflowEtape[/:workflowEtapeDependance]',
+                            'controller'  => Controller\WorkflowController::class,
+                            'action'      => 'administration-saisie-dependance',
+                            'privileges'  => [Privileges::WORKFLOW_DEPENDANCES_EDITION],
+                            'constraints' => [
+                                'workflowEtape' => '[0-9]*',
+                                'workflowEtapeDependance' => '[0-9]*',
+                            ],
                         ],
                     ],
                 ],
@@ -50,14 +51,7 @@ return [
                     'action'        => 'dependances',
                     'may_terminate' => true,
                     'child_routes'  => [
-                        'saisie'      => [
-                            'route'       => '/saisie[/:wfEtapeDep]',
-                            'controller'  => Controller\WorkflowController::class,
-                            'action'      => 'saisieDep',
-                            'constraints' => [
-                                'wfEtapeDep' => '[0-9]*',
-                            ],
-                        ],
+
                         'suppression' => [
                             'route'       => '/suppression/:wfEtapeDep',
                             'controller'  => Controller\WorkflowController::class,

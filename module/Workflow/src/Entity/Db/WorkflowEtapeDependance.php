@@ -23,11 +23,11 @@ class WorkflowEtapeDependance
     const AVANCEMENT_TERMINE_INTEGRALEMENT = 3;
 
 
-    protected int $id;
+    protected ?int $id = null;
 
-    protected WorkflowEtape $etapeSuivante;
+    protected ?WorkflowEtape $etapeSuivante = null;
 
-    protected WorkflowEtape $etapePrecedante;
+    protected ?WorkflowEtape $etapePrecedante = null;
 
     protected bool $active = true;
 
@@ -39,14 +39,14 @@ class WorkflowEtapeDependance
 
 
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    public function getEtapeSuivante(): WorkflowEtape
+    public function getEtapeSuivante(): ?WorkflowEtape
     {
         return $this->etapeSuivante;
     }
@@ -61,7 +61,7 @@ class WorkflowEtapeDependance
 
 
 
-    public function getEtapePrecedante(): WorkflowEtape
+    public function getEtapePrecedante(): ?WorkflowEtape
     {
         return $this->etapePrecedante;
     }

@@ -105,7 +105,7 @@ return [
                 'namespace' => 'OSE__' . __NAMESPACE__,
             ],
             'filesystem' => [
-                'class'     => 'Doctrine\Common\Cache\FilesystemCache',
+                'class'     => 'Application\Cache\FilesystemCache',
                 'directory' => 'cache/Doctrine',
                 'namespace' => 'DoctrineModule',
             ],

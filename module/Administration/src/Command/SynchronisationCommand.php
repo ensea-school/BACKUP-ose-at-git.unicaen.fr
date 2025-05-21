@@ -3,7 +3,6 @@
 namespace Administration\Command;
 
 use Application\Service\Traits\AffectationServiceAwareTrait;
-use Doctrine\Common\Cache\FilesystemCache;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -58,16 +57,6 @@ class SynchronisationCommand extends Command
         }
 
         return Command::SUCCESS;
-    }
-
-    /**
-     * @param FilesystemCache $doctrineCache
-     */
-    public function setDoctrineCache(FilesystemCache $doctrineCache)
-    {
-        $this->doctrineCache = $doctrineCache;
-
-        return $this;
     }
 
 }

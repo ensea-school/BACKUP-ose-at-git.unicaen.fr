@@ -29,16 +29,18 @@
 * Possibilité d'utiliser la signature électronique (esup signature) avec un wildcard token de paramétré
 * Traducteur de formules de calcul : gestion des SI embarqués dans des paramètres de fonctions
 * Nouvelle version de la formule de calcul de Paris Dauphine (#50652)
-* Formule de calcul "par défaut" disponible pour tous les établissement qui le souhaitent ou bien en attente de leur formule personnalisée
+* Formule de calcul "par défaut" disponible pour tous les établissements qui le souhaitent ou bien en attente de leur formule personnalisée
 * Les mises à jour OSE ne pourront plus être bloquées par des modifications locales : elles seront écrasées
 
 ## Corrections
 
 * Correction d'un bug lorsqu'un vacataire change d'année universitaire via le menu année en haut à gauche
 * Prise en compte du paramétrage d'un centre de coût par défaut sur un élement pédagogique au niveau de la page de demande de mise en paiement
-* Ajout du bouton "Nouveau employeur" qui avait disparu dans administration > Nomenclatures > Employeurs
+* Ajout du bouton "Nouvel employeur" qui avait disparu dans Administration > Nomenclatures > Employeurs
 * Correction pour aller chercher la bonne valeur du taux lors d'une prise en charge ou d'un renouvellement dans SIHAM (#61928)
 * Correction d'un problème qui empêchait la création d'un nouveau taux de rémunération
+* La formule de calcul de Lyon 2 est de nouveau opérationnelle (#61925)
+
 ## Notes de mise à jour
 
 * Veillez à retester le workflow au nouveau des règles d'accès aux contrats

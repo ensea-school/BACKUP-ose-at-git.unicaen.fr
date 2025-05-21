@@ -17,9 +17,7 @@ class DroitsControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $doctrineCache = $container->get('doctrine.cache.filesystem');
-
-        $controller = new DroitsController($doctrineCache);
+        $controller = new DroitsController();
         $controller->setServicePrivilege($container->get(PrivilegeService::class));
 
         return $controller;

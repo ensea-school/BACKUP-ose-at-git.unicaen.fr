@@ -50,7 +50,8 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
     public function getIdentityRoles(): array
     {
         $session = $this->getSessionContainer();
-        if (!$session->offsetExists('identityRoles') || empty($session->identityRoles)) {
+        // pas de cache si on est que guest
+        if (!$session->offsetExists('identityRoles') || empty($session->identityRoles) || count($session->identityRoles) < 2) {
             $filter = $this->getEntityManager()->getFilters()->enable('historique');
             $filter->init([
                               Role::class,
@@ -60,6 +61,8 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
             $identityRoles = ['guest' => 'guest'];
 
             $inEtablissement = $this->getHostLocalization()->inEtablissement();
+
+            $this->getServiceContext()->getServiceUserContext()->clearIdentityRoles();
 
             /**
              * Rôles que possède l'utilisateur dans la base de données.

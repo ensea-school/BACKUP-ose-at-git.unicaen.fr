@@ -610,6 +610,11 @@ class TraducteurService
                 }
             }
         }
+
+        /* On supprime les parenthèses inutiles */
+        if (isset($expr[$i]['type']) && $expr[$i]['type'] == 'expr' && count($expr) == 1){
+            $expr = $expr[$i]['expr'];
+        }
     }
 
 

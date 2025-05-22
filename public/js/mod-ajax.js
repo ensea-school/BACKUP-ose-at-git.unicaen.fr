@@ -150,7 +150,7 @@ $.widget("unicaen.modAjax", {
         this.setTitle(this.options.loadingTitle);
         this.setContent(this.options.loadingContent, true);
         $.ajax({
-            url: this.options.url,
+            url: that.options.url,
             success: (response) => {
                 that.setContent(response);
 
@@ -374,7 +374,9 @@ function modAjax(element, onSubmit)
         widget.show();
     }
     widget.element = $(element);
-    widget.options.url = element.dataset.url;
+    if (element.dataset.url) {
+        widget.options.url = element.dataset.url;
+    }
 
     return widget;
 }

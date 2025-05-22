@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 24.2](#ose-242-15052025)
+[OSE 24.3](#ose-243-22052025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -31,6 +31,7 @@
 * Nouvelle version de la formule de calcul de Paris Dauphine (#50652)
 * Formule de calcul "par défaut" disponible pour tous les établissements qui le souhaitent ou bien en attente de leur formule personnalisée
 * Les mises à jour OSE ne pourront plus être bloquées par des modifications locales : elles seront écrasées
+* Nouvelle formule de calcul pour Lyon 3 (#38136)
 
 ## Corrections
 

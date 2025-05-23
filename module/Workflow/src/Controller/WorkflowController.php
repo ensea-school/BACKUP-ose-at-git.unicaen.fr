@@ -11,7 +11,6 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
 use UnicaenVue\View\Model\VueModel;
-use Workflow\Entity\Db\WfEtapeDep;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Entity\Db\WorkflowEtapeDependance;
 use Workflow\Form\DependanceFormAwareTrait;

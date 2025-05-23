@@ -145,6 +145,7 @@ return [
         Service\ValidationService::class     => Service\ValidationServiceFactory::class,
         Service\WorkflowService::class       => Service\WorkflowServiceFactory::class,
         Assertion\WorkflowAssertion::class   => AssertionFactory::class,
+        Command\WorkflowResetCommand::class  => Command\WorflowResetCommandFactory::class,
     ],
 
     'forms' => [
@@ -153,5 +154,11 @@ return [
 
     'view_helpers' => [
         'feuilleDeRoute' => View\Helper\FeuilleDeRouteViewHelperFactory::class,
+    ],
+
+    'laminas-cli' => [
+        'commands' => [
+            'workflow-reset' => Command\WorkflowResetCommand::class,
+        ],
     ],
 ];

@@ -31,8 +31,7 @@ return [
             'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 7,
-            'commentaire' => '
-',
+            'commentaire' => NULL,
         ],
         'ETAPE_PRECEDANTE_ID' => [
             'name'        => 'ETAPE_PRECEDANTE_ID',
@@ -80,8 +79,7 @@ return [
             'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 6,
-            'commentaire' => '
-',
+            'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID' => [
             'name'        => 'TYPE_INTERVENANT_ID',

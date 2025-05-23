@@ -1,7 +1,10 @@
 <?php
 
-use Workflow\Entity\Db\WorkflowEtape;
 use Application\Entity\Db\Perimetre;
+use Intervenant\Entity\Db\TypeIntervenant;
+use Workflow\Entity\Db\WorkflowEtape;
+use Workflow\Entity\Db\WorkflowEtapeDependance;
+
 
 return [
     WorkflowEtape::CANDIDATURE_SAISIE              => [
@@ -12,6 +15,7 @@ return [
         'desc_non_franchie'   => "Aucune candidature n'a été faite",
         'perimetre'           => Perimetre::COMPOSANTE,
         'contraintes'         => [],
+        'dependances'         => [],
     ],
     WorkflowEtape::DONNEES_PERSO_SAISIE            => [
         'id'                  => 2,
@@ -21,6 +25,7 @@ return [
         'desc_non_franchie'   => "Les données personnelles n'ont pas été saisies",
         'perimetre'           => Perimetre::ETABLISSEMENT,
         'contraintes'         => [],
+        'dependances'         => [],
     ],
     WorkflowEtape::PJ_SAISIE                       => [
         'id'                  => 3,
@@ -30,6 +35,12 @@ return [
         'desc_non_franchie'   => "Les pièces justificatives n'ont pas été fournies",
         'perimetre'           => Perimetre::ETABLISSEMENT,
         'contraintes'         => [],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::DONNEES_PERSO_VALIDATION        => [
         'id'                  => 6,
@@ -39,6 +50,12 @@ return [
         "desc_non_franchie"   => "Les données personnelles n'ont pas été validées",
         "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::DONNEES_PERSO_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::PJ_VALIDATION                   => [
         'id'                  => 7,
@@ -48,6 +65,12 @@ return [
         "desc_non_franchie"   => "Les pièces justificatives n'ont pas été validées",
         "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::PJ_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::PJ_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::CANDIDATURE_VALIDATION          => [
         'id'                  => 8,
@@ -57,6 +80,12 @@ return [
         "desc_non_franchie"   => "Certaines candidatures attendent une réponse",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::CANDIDATURE_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::CANDIDATURE_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE      => [
         'id'                  => 9,
@@ -66,6 +95,12 @@ return [
         "desc_non_franchie"   => "Les données personnelles complémentaires n'ont pas été saisies",
         "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::CANDIDATURE_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::CANDIDATURE_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+        ],
     ],
     WorkflowEtape::PJ_COMPL_SAISIE                 => [
         'id'                  => 10,
@@ -75,6 +110,12 @@ return [
         "desc_non_franchie"   => "Les pièces justificatives complémentaires n'ont pas été fournies",
         "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::CANDIDATURE_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::CANDIDATURE_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+        ],
     ],
     WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION  => [
         'id'                  => 11,
@@ -84,6 +125,12 @@ return [
         "desc_non_franchie"   => "Les données personnelles complémentaires n'ont pas été validées",
         "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::PJ_COMPL_VALIDATION             => [
         'id'                  => 12,
@@ -93,6 +140,12 @@ return [
         "desc_non_franchie"   => "Les pièces justificatives complémentaires n'ont pas été validées",
         "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::PJ_COMPL_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::PJ_COMPL_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::ENSEIGNEMENT_SAISIE             => [
         'id'                  => 4,
@@ -102,15 +155,29 @@ return [
         "desc_non_franchie"   => "Aucun enseignement prévisionnel n'a été saisi",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_SAISIE => [
+                'perimetre'        => Perimetre::ETABLISSEMENT,
+                'type_intervenant' => TypeIntervenant::CODE_EXTERIEUR,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::REFERENTIEL_SAISIE              => [
         'id'                  => 5,
         'libelle_intervenant' => "Je saisis mon référentiel prévisionnel",
-        "libelle_autres"      => "J'accède aux référentiel prévisionnel",
+        "libelle_autres"      => "J'accède au référentiel prévisionnel",
         "route"               => "intervenant/services-prevus",
         "desc_non_franchie"   => "Aucun référentiel prévisionnel n'a été saisi",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_SAISIE => [
+                'perimetre'        => Perimetre::ETABLISSEMENT,
+                'type_intervenant' => TypeIntervenant::CODE_EXTERIEUR,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::MISSION_SAISIE                  => [
         'id'                  => 13,
@@ -120,6 +187,12 @@ return [
         "desc_non_franchie"   => "Aucune mission attribuée",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::CANDIDATURE_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::CANDIDATURE_VALIDATION => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+        ],
     ],
     WorkflowEtape::ENSEIGNEMENT_VALIDATION         => [
         'id'                  => 15,
@@ -129,6 +202,12 @@ return [
         "desc_non_franchie"   => "Les enseignements prévisionnels n'ont pas été validés",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::ENSEIGNEMENT_SAISIE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::REFERENTIEL_VALIDATION          => [
         'id'                  => 16,
@@ -138,6 +217,12 @@ return [
         "desc_non_franchie"   => "Le référentiel prévisionnel n'a pas été validé",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::REFERENTIEL_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::REFERENTIEL_SAISIE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::MISSION_VALIDATION              => [
         'id'                  => 14,
@@ -147,15 +232,39 @@ return [
         "desc_non_franchie"   => "Certaines missions n'ont pas été validées",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::MISSION_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::MISSION_SAISIE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::CONSEIL_RESTREINT               => [
         'id'                  => 17,
         'libelle_intervenant' => "Je visualise l'agrément 'Conseil restreint'",
         "libelle_autres"      => "Je visualise l'agrément 'Conseil restreint'",
         "route"               => "intervenant/agrement/conseil-restreint",
-        "desc_non_franchie"   => "L'agrément du Conseil Restreint n'a pas été saisi",
+        "desc_non_franchie"   => "L'agrément du Conseil restreint n'a pas été saisi",
         "perimetre"           => Perimetre::COMPOSANTE, // par défaut, adaptable selon paramétrage...
         "contraintes"         => [],
+        'dependances'         => [
+            WorkflowEtape::PJ_SAISIE                => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+            WorkflowEtape::PJ_VALIDATION            => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+            WorkflowEtape::DONNEES_PERSO_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::ENSEIGNEMENT_VALIDATION  => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::CONSEIL_ACADEMIQUE              => [
         'id'                  => 18,
@@ -164,7 +273,13 @@ return [
         "route"               => "intervenant/agrement/conseil-academique",
         "desc_non_franchie"   => "L'agrément du Conseil académique n'a pas été saisi",
         "perimetre"           => Perimetre::ETABLISSEMENT, // par défaut, adaptable selon paramétrage...
-        "contraintes"         => [],
+        "contraintes"         => [WorkflowEtape::CONSEIL_RESTREINT],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT,
+            ],
+        ],
     ],
     WorkflowEtape::CONTRAT                         => [
         'id'                  => 19,
@@ -173,7 +288,25 @@ return [
         "route"               => "intervenant/contrat",
         "desc_non_franchie"   => "Le contrat n'a pas été établi",
         "perimetre"           => Perimetre::COMPOSANTE,
-        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_VALIDATION],
+        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_VALIDATION, WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_VALIDATION       => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::CONSEIL_RESTREINT              => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::CONSEIL_ACADEMIQUE             => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+        ],
     ],
     WorkflowEtape::EXPORT_RH                       => [
         'id'                  => 20,
@@ -183,6 +316,20 @@ return [
         "desc_non_franchie"   => "L'export vers le logiciel RH n'a pas été fait",
         "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::DONNEES_PERSO_VALIDATION, WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_VALIDATION       => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::CONTRAT                        => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT,
+            ],
+        ],
     ],
     WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE     => [
         'id'                  => 21,
@@ -192,6 +339,13 @@ return [
         "desc_non_franchie"   => "Aucun enseignement réalisé n'a été saisi",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::CONTRAT],
+        'dependances'         => [
+            WorkflowEtape::CONTRAT => [
+                'type_intervenant' => TypeIntervenant::CODE_EXTERIEUR,
+                'perimetre'        => Perimetre::COMPOSANTE,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT,
+            ],
+        ],
     ],
     WorkflowEtape::REFERENTIEL_SAISIE_REALISE      => [
         'id'                  => 22,
@@ -201,6 +355,7 @@ return [
         "desc_non_franchie"   => "Aucun enseignement réalisé n'a été saisi",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::CONTRAT],
+        'dependances'         => [],
     ],
     WorkflowEtape::MISSION_SAISIE_REALISE          => [
         'id'                  => 23,
@@ -210,6 +365,12 @@ return [
         "desc_non_franchie"   => "Aucune heure de mission réalisée n'a été renseignée",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::CONTRAT],
+        'dependances'         => [
+            WorkflowEtape::CONTRAT => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT,
+            ],
+        ],
     ],
     WorkflowEtape::CLOTURE_REALISE                 => [
         'id'                  => 24,
@@ -219,6 +380,13 @@ return [
         "desc_non_franchie"   => "La clôture de saisie des services réalisés n'a pas été effectuée",
         "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE, WorkflowEtape::REFERENTIEL_SAISIE_REALISE, WorkflowEtape::MISSION_SAISIE_REALISE],
+        'dependances'         => [
+            WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE => [
+                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
+                'perimetre'        => Perimetre::ETABLISSEMENT,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE => [
         'id'                  => 25,
@@ -228,6 +396,12 @@ return [
         "desc_non_franchie"   => "Le service réalisé n'a été intégralement validé",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE],
+        'dependances'         => [
+            WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::REFERENTIEL_VALIDATION_REALISE  => [
         'id'                  => 28,
@@ -237,6 +411,12 @@ return [
         "desc_non_franchie"   => "Le référentiel réalisé n'a pas été intégralement validé",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::REFERENTIEL_SAISIE_REALISE],
+        'dependances'         => [
+            WorkflowEtape::REFERENTIEL_SAISIE_REALISE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::MISSION_VALIDATION_REALISE      => [
         'id'                  => 26,
@@ -246,6 +426,12 @@ return [
         "desc_non_franchie"   => "Des heures de mission réalisées n'ont pas été validées",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::MISSION_SAISIE_REALISE],
+        'dependances'         => [
+            WorkflowEtape::MISSION_SAISIE_REALISE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::MISSION_PRIME                   => [
         'id'                  => 27,
@@ -255,6 +441,12 @@ return [
         "desc_non_franchie"   => "Aucune indemnité de fin de contrat à gérer",
         "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::MISSION_VALIDATION_REALISE],
+        'dependances'         => [
+            WorkflowEtape::MISSION_VALIDATION_REALISE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::DEMANDE_MEP                     => [
         'id'                  => 29,
@@ -266,6 +458,23 @@ return [
         "desc_sans_objectif"  => "Le nombre d'heures de service réalisées ET validées n'est pas suffisant pour déclencher le paiement d'heures complémentaires.",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::CLOTURE_REALISE, WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE, WorkflowEtape::REFERENTIEL_VALIDATION_REALISE, WorkflowEtape::MISSION_VALIDATION_REALISE],
+        'dependances'         => [
+            WorkflowEtape::CLOTURE_REALISE                 => [
+                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
+                'perimetre'        => Perimetre::ETABLISSEMENT,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE => [
+                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
+                'perimetre'        => Perimetre::COMPOSANTE,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+            WorkflowEtape::REFERENTIEL_VALIDATION_REALISE  => [
+                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
+                'perimetre'        => Perimetre::COMPOSANTE,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
     WorkflowEtape::SAISIE_MEP                      => [
         'id'                  => 30,
@@ -275,5 +484,11 @@ return [
         "desc_non_franchie"   => "Aucune mise en paiement n'a été faite",
         "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::DEMANDE_MEP],
+        'dependances'         => [
+            WorkflowEtape::DEMANDE_MEP => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
 ];

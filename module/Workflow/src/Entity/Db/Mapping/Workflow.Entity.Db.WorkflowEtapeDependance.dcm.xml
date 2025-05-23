@@ -5,6 +5,7 @@
     <entity name="Workflow\Entity\Db\WorkflowEtapeDependance" table="WORKFLOW_ETAPE_DEPENDANCE">
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
+            <sequence-generator sequence-name="WORKFLOW_ETAPE_DEPENDANCE_ID_SEQ" allocation-size="1"/>
         </id>
         <many-to-one field="etapeSuivante" target-entity="Workflow\Entity\Db\WorkflowEtape">
             <join-column name="ETAPE_SUIVANTE_ID" referenced-column-name="ID"/>

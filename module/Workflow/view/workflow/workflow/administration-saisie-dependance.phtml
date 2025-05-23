@@ -6,9 +6,82 @@
  * @var $form  Workflow\Form\DependanceForm
  */
 
+?>
 
-echo $this->tag('h1', ['class' => 'page-header'])->html($title);
+<h1 class="page-header"><?= $title ?></h1>
 
-echo $this->messenger()->setCurrentMessagesFromFlashMessenger();
+<?= $this->messenger()->setCurrentMessagesFromFlashMessenger() ?>
 
-echo $this->form($form);
+<?= $this->form()->openTag($form) ?>
+<?= $this->formControlGroup($form->get('etapePrecedante')) ?>
+<div class="row">
+    <div class="col-md-4">
+        <br/>
+        <?= $this->formControlGroup($form->get('active')) ?>
+        <?= $this->formControlGroup($form->get('typeIntervenant')) ?>
+        <?= $this->formControlGroup($form->get('perimetre')) ?>
+        <?= $this->formControlGroup($form->get('avancement')) ?>
+    </div>
+    <div class="col-md-8">
+        <div class="alert alert-info">
+            <ul><h4>Avancement</h4>
+                <li>Si désactivé, alors aucun test n'est effectué</li>
+
+                <li>Si débuté alors l'étape précédente devra être franchie à plus de 0%.
+                    Par exemple au moins 1h de service devra être saisie
+                </li>
+
+                <li>Si partiel: l'étape précédente peut avoir été franchie à 100 sur au moins un élément.
+                    Par exemple si on a plusieurs contrats ou avenants, si l'un d'entre eux est terminé alors ça
+                    passe
+                </li>
+
+                <li>Si intégral: l'ensemble des éléments de l'étape précédente doivent avoir été franchis.
+                    Par exemple si on a plusieurs contrat et avenants, tous doivent être terminés
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<?= $this->formControlGroup($form->get('security')) ?>
+<?= $this->formSubmit($form->get('submit')) ?>
+<?= $this->form()->closeTag($form) ?>
+
+<script type="text/javascript">
+
+    if (affWFDepPerimetre == undefined) {
+
+        function affWFDepPerimetre(etapePrecedanteSelect)
+        {
+            // Récupérer le formulaire
+            const form = etapePrecedanteSelect.form;
+
+            // Récupérer la liste des étapes d'établissement
+            const etablissementEtapes = JSON.parse(form.getAttribute('data-etablissement-etapes'));
+
+            // Récupérer la div contenant le select perimetre
+            const perimetreDiv = form.querySelector('div.mb-2:has(select[name="perimetre"])');
+
+            // Fonction pour masquer ou afficher la div perimetre en fonction de la valeur de etapePrecedante
+            const etapePrecedanteValue = etapePrecedanteSelect.value;
+
+            if (etablissementEtapes.includes(parseInt(etapePrecedanteValue))) {
+                perimetreDiv.style.display = 'none';
+            } else {
+                perimetreDiv.style.display = 'block';
+            }
+        }
+    }
+
+    function affWFDepPerimetreInit()
+    {
+        let elements = document.querySelectorAll('.wf-dep-etape-precedante');
+
+        // Parcourir chaque élément et déclencher l'événement onchange
+        elements.forEach(function (element) {
+            affWFDepPerimetre(element);
+        });
+    }
+
+    affWFDepPerimetreInit();
+</script>

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "sass": "1.72.0",
-    "unicaen-vue": "file:./vendor/unicaen/vue"
+    "unicaen-vue": "file:./vendor/unicaen/vue",
+    "vue-draggable-plus": "0.6.0"
   }
 }

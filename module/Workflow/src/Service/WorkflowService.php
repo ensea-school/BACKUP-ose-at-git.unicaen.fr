@@ -245,7 +245,7 @@ class WorkflowService extends AbstractService
      * @return WorkflowEtape[]
      */
     public function getFeuilleDeRoute(Intervenant $intervenant = null, Structure $structure = null)
-    {
+    {return null;
         if (!$intervenant || !$structure) {
             /* Filtrage en fonction du contexte */
             if (!$role = $this->getServiceContext()->getSelectedIdentityRole()) return null;

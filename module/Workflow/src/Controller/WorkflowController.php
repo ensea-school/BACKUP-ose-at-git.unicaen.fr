@@ -105,7 +105,7 @@ class WorkflowController extends AbstractController
         }
 
         $form = $this->getFormWorkflowDependance();
-        $form->init2($workflowEtape);
+        $form->init2($workflowEtapeDependance);
         $form->bindRequestSave($workflowEtapeDependance, $this->getRequest(), function ($workflowEtapeDependance) {
             try {
                 $this->getServiceWorkflow()->saveEtapeDependance($workflowEtapeDependance);

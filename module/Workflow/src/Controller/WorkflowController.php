@@ -119,55 +119,41 @@ class WorkflowController extends AbstractController
 
 
 
-    public function dependancesAction()
+    public function administrationSuppressionDependanceAction(): AxiosModel
     {
-        $dql    = '
-        SELECT
-          we
-        FROM
-          Workflow\Entity\Db\WfEtape we
-        ORDER BY
-          we.ordre
-        ';
-        $etapes = $this->em()->createQuery($dql)->getResult();
+        /* @var $workflowEtapeDependance WorkflowEtapeDependance */
+        $workflowEtapeDependance = $this->getEvent()->getParam('workflowEtapeDependance');
 
-
-        $dql = '
-        SELECT
-          wed, es, ep
-        FROM
-          Workflow\Entity\Db\WfEtapeDep wed
-          JOIN wed.etapeSuiv es
-          JOIN wed.etapePrec ep
-        ORDER BY
-          es.ordre, ep.ordre
-        ';
-
-        $query = $this->em()->createQuery($dql);
-
-        $d = $query->getResult();
-        /* @var $d WfEtapeDep[] */
-        $deps = [];
-        foreach ($d as $dep) {
-            $deps[$dep->getEtapeSuiv()->getId()][$dep->getEtapePrec()->getId()] = $dep;
+        if (!$workflowEtapeDependance) {
+            throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
 
-        return compact('etapes', 'deps');
+        try {
+            $this->getServiceWorkflow()->deleteEtapeDependance($workflowEtapeDependance);
+
+            $this->flashMessenger()->addSuccessMessage("Dépendance supprimée avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new AxiosModel([]);
     }
 
 
 
-    public function suppressionDepAction()
+    public function administrationTriAction(): AxiosModel
     {
-        if (!($wfEtapeDep = $this->getEvent()->getParam('wfEtapeDep'))) {
-            throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
+        /** @var array $etapes */
+        $etapes = $this->axios()->fromPost('etapes');
+
+        try {
+            $this->getServiceWorkflow()->trier($etapes);
+            $this->flashMessenger()->addSuccessMessage('Nouvel ordonnancement du workflow bien pris en compte');
+        }catch (\Throwable $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
-        $form = $this->makeFormSupprimer(function () use ($wfEtapeDep) {
-            $this->getServiceWfEtapeDep()->delete($wfEtapeDep);
-        });
-
-        return compact('wfEtapeDep', 'form');
+        return $this->administrationDataAction();
     }
 
 

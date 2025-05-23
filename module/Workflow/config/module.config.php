@@ -19,25 +19,34 @@ return [
                     'privileges'    => [Privileges::WORKFLOW_DEPENDANCES_VISUALISATION],
                     'may_terminate' => true,
                     'child_routes'  => [
-                        'data'              => [
+                        'data'                   => [
                             'route'      => '/data',
                             'controller' => Controller\WorkflowController::class,
                             'action'     => 'administration-data',
                             'privileges' => [Privileges::WORKFLOW_DEPENDANCES_VISUALISATION],
                         ],
-                        'tri'               => [
+                        'tri'                    => [
                             'route'      => '/tri',
                             'controller' => Controller\WorkflowController::class,
                             'action'     => 'administration-tri',
                             'privileges' => [Privileges::WORKFLOW_DEPENDANCES_EDITION],
                         ],
-                        'saisie-dependance' => [
+                        'saisie-dependance'      => [
                             'route'       => '/saisie-dependance/:workflowEtape[/:workflowEtapeDependance]',
                             'controller'  => Controller\WorkflowController::class,
                             'action'      => 'administration-saisie-dependance',
                             'privileges'  => [Privileges::WORKFLOW_DEPENDANCES_EDITION],
                             'constraints' => [
-                                'workflowEtape' => '[0-9]*',
+                                'workflowEtape'           => '[0-9]*',
+                                'workflowEtapeDependance' => '[0-9]*',
+                            ],
+                        ],
+                        'suppression-dependance' => [
+                            'route'       => '/suppression-dependance/:workflowEtapeDependance',
+                            'controller'  => Controller\WorkflowController::class,
+                            'action'      => 'administration-suppression-dependance',
+                            'privileges'  => [Privileges::WORKFLOW_DEPENDANCES_EDITION],
+                            'constraints' => [
                                 'workflowEtapeDependance' => '[0-9]*',
                             ],
                         ],
@@ -45,23 +54,6 @@ return [
                 ],
 
 
-                'dependances'               => [
-                    'route'         => '/dependances',
-                    'controller'    => Controller\WorkflowController::class,
-                    'action'        => 'dependances',
-                    'may_terminate' => true,
-                    'child_routes'  => [
-
-                        'suppression' => [
-                            'route'       => '/suppression/:wfEtapeDep',
-                            'controller'  => Controller\WorkflowController::class,
-                            'action'      => 'suppressionDep',
-                            'constraints' => [
-                                'wfEtapeDep' => '[0-9]*',
-                            ],
-                        ],
-                    ],
-                ],
                 'calculer-tout'             => [
                     'route'      => '/calculer-tout',
                     'controller' => Controller\WorkflowController::class,

@@ -95,6 +95,7 @@ class WorkflowService extends AbstractService
 
     /**
      * Le tableau sera une liste de codes d'étapes ordonnancée
+     * $liste est une liste des codes d'étapes
      *
      * @param array $liste
      * @return self
@@ -103,7 +104,20 @@ class WorkflowService extends AbstractService
     {
         $em     = $this->getEntityManager();
         $etapes = $this->getEtapes();
-        $order  = 1;
+
+        /* Tests de faisabilité */
+        $precedantes = [];
+        foreach ($liste as $code) {
+            if (!isset($etapes[$code])) {
+                throw new \Exception('L\'étape de workflow au code ' . $code . ' n\'existe pas');
+            }
+            foreach ($precedantes as $precedante) {
+                $this->triCheckEtape($precedante, $etapes[$code]);
+            }
+            $precedantes[] = $etapes[$code];
+        }
+
+        $order = 1;
         foreach ($liste as $code) {
             if (!isset($etapes[$code])) {
                 throw new \Exception('L\'étape dont le code est "' . $code . '" n\'existe pas');
@@ -114,8 +128,27 @@ class WorkflowService extends AbstractService
             $em->flush($etape);
             $order++;
         }
+        $this->clearEtapesCache();
 
         return $this;
+    }
+
+
+
+    private function triCheckEtape(WorkflowEtape $etapePrecedante, WorkflowEtape $etapeSuivante): void
+    {
+        $plib = '"'.$etapePrecedante->getLibelleAutres().'"';
+        $slib = '"'.$etapeSuivante->getLibelleAutres().'"';
+
+        if (in_array($etapeSuivante, $etapePrecedante->getContraintes())) {
+            throw new \Exception("Par conception, l'étape $plib ne peut pas être positionnée avant $slib");
+        }
+
+        foreach( $etapePrecedante->getDependances() as $dependance) {
+            if ($dependance->getEtapePrecedante() === $etapeSuivante) {
+                throw new \Exception("Une dépendance empêche de positionner l'étape $plib avant $slib");
+            }
+        }
     }
 
 
@@ -142,6 +175,18 @@ class WorkflowService extends AbstractService
         $em->flush($dependance);
 
         $this->saveEtape($dependance->getEtapeSuivante());
+
+        return $this;
+    }
+
+
+
+    public function deleteEtapeDependance(WorkflowEtapeDependance $dependance): self
+    {
+        $this->getEntityManager()->remove($dependance);
+        $this->getEntityManager()->flush($dependance);
+
+        $this->clearEtapesCache();
 
         return $this;
     }
@@ -245,7 +290,8 @@ class WorkflowService extends AbstractService
      * @return WorkflowEtape[]
      */
     public function getFeuilleDeRoute(Intervenant $intervenant = null, Structure $structure = null)
-    {return null;
+    {
+        return null;
         if (!$intervenant || !$structure) {
             /* Filtrage en fonction du contexte */
             if (!$role = $this->getServiceContext()->getSelectedIdentityRole()) return null;

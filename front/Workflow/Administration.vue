@@ -7,6 +7,7 @@
                    title="Vous pouvez ordonnancer les étapes du workflow, sous condition qu'il n'y ai pas de blocage ou de dépendance bloquante"><i
                 class="fas fa-arrows-up-down ui-sortable-handle"></i></a>
                 <a v-if="canEdit" class="perso-btn"
+                   title="Personnalisation des libellés & messages"
                    :href="personnalisationUrl + '/' + etape.id"
                    @click.prevent="saisie"><i class="fas fa-pen-to-square"></i></a>
                 {{ etape.libelleAutres }}</h3>
@@ -39,10 +40,12 @@ Par exemple si on a plusieurs contrat et avenants, tous doivent être terminés"
                         <td>
                             <a v-if="canEdit"
                                :href="saisieUrl + '/' + etape.id + '/' + d.id"
+                               title="Modification de la dépendance"
                                @click.prevent="saisie"><i class="fas fa-pen-to-square"></i></a>
                             <a v-if="canEdit" :href="suppressionUrl + '/' + d.id"
                                data-content="Êtes-vous sur de vouloir supprimer la règle de dépendance ?"
                                data-title="Suppression de la dépendance"
+                               title="Suppression de la dépendance"
                                @click.prevent="suppression"><i class="fas fa-trash-can"></i></a>
 
                             {{ d.etapePrecedante.libelleAutres }}

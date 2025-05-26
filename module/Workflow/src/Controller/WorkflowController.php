@@ -14,6 +14,7 @@ use UnicaenVue\View\Model\VueModel;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Entity\Db\WorkflowEtapeDependance;
 use Workflow\Form\DependanceFormAwareTrait;
+use Workflow\Form\EtapeFormAwareTrait;
 use Workflow\Service\WfEtapeDepServiceAwareTrait;
 use Workflow\Service\WfEtapeServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
@@ -24,6 +25,7 @@ class WorkflowController extends AbstractController
     use ContextServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use DependanceFormAwareTrait;
+    use EtapeFormAwareTrait;
     use TableauBordServiceAwareTrait;
 
     use WfEtapeDepServiceAwareTrait;
@@ -83,6 +85,26 @@ class WorkflowController extends AbstractController
         return new AxiosModel($etapes, $properties);
     }
 
+
+
+    public function administrationModificationEtapeAction()
+    {
+        /* @var $workflowEtape WorkflowEtape */
+        $workflowEtape = $this->getEvent()->getParam('workflowEtape');
+
+        $title = "Personnalisation des libellés de l'étape";
+
+        $form = $this->getFormEtape();
+        $form->bindRequestSave($workflowEtape, $this->getRequest(), function ($workflowEtape) {
+            try {
+                $this->getServiceWorkflow()->saveEtape($workflowEtape);
+            } catch (\Throwable $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        });
+
+        return compact('title', 'form');
+    }
 
 
     public function administrationSaisieDependanceAction(): array

@@ -31,6 +31,15 @@ return [
                             'action'     => 'administration-tri',
                             'privileges' => [Privileges::WORKFLOW_DEPENDANCES_EDITION],
                         ],
+                        'modification-etape' => [
+                            'route'       => '/modification-etape/:workflowEtape',
+                            'controller'  => Controller\WorkflowController::class,
+                            'action'      => 'administration-modification-etape',
+                            'privileges'  => [Privileges::WORKFLOW_DEPENDANCES_EDITION],
+                            'constraints' => [
+                                'workflowEtape'           => '[0-9]*',
+                            ],
+                        ],
                         'saisie-dependance'      => [
                             'route'       => '/saisie-dependance/:workflowEtape[/:workflowEtapeDependance]',
                             'controller'  => Controller\WorkflowController::class,

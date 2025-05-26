@@ -82,7 +82,7 @@ return [
         "contraintes"         => [WorkflowEtape::CANDIDATURE_SAISIE],
         'dependances'         => [
             WorkflowEtape::CANDIDATURE_SAISIE => [
-                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'perimetre'  => Perimetre::COMPOSANTE,
                 'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
             ],
         ],

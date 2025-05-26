@@ -5,7 +5,11 @@
         <div v-for="(etape,index) in etapes">
             <h3><a v-if="canEdit" class="drag-handle" href="#"
                    title="Vous pouvez ordonnancer les étapes du workflow, sous condition qu'il n'y ai pas de blocage ou de dépendance bloquante"><i
-                class="fas fa-arrows-up-down ui-sortable-handle"></i></a> {{ etape.libelleAutres }}</h3>
+                class="fas fa-arrows-up-down ui-sortable-handle"></i></a>
+                <a v-if="canEdit" class="perso-btn"
+                   :href="personnalisationUrl + '/' + etape.id"
+                   @click.prevent="saisie"><i class="fas fa-pen-to-square"></i></a>
+                {{ etape.libelleAutres }}</h3>
             <div class="dependances">
                 <table v-if="etape.dependances.length" class="table table-bordered">
                     <tr>
@@ -85,6 +89,7 @@ const load = () => {
 
 const saisieUrl = unicaenVue.url('workflow/administration/saisie-dependance');
 const suppressionUrl = unicaenVue.url('workflow/administration/suppression-dependance');
+const personnalisationUrl = unicaenVue.url('workflow/administration/modification-etape');
 
 const saisie = (event) => {
     modAjax(event.currentTarget, (widget) => {
@@ -195,6 +200,15 @@ td {
 .dependances tr.inactive {
     opacity: .3;
     background-color: #eee;
+}
+
+.drag-handle {
+    font-size: 12pt;
+}
+
+.perso-btn {
+    margin-left: 5px;
+    font-size: 12pt;
 }
 
 </style>

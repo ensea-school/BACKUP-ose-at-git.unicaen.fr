@@ -5,7 +5,6 @@ namespace Workflow\Form;
 use Application\Entity\Db\Perimetre;
 use Application\Form\AbstractForm;
 use Intervenant\Entity\Db\TypeIntervenant;
-use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Entity\Db\WorkflowEtapeDependance;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -18,7 +17,7 @@ class DependanceForm extends AbstractForm
 
 
 
-    public function init2(WorkflowEtapeDependance $dependance)
+    public function init2(WorkflowEtapeDependance $dependance): self
     {
         $this->dependance = $dependance;
 

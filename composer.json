@@ -33,7 +33,7 @@
         "unicaen/mail"                     : "7.1.2",
         "unicaen/vue"                      : "6.3.3",
         "unicaen/bddadmin"                 : "1.4.1",
-        "unicaen/signature": "1.0.6",
+        "unicaen/signature"                : "1.0.6",
         "connecteur-ose/actul"             : "dev-master",
         "connecteur-ose/pegase"            : "dev-master"
     },

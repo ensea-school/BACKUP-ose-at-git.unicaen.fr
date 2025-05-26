@@ -75,13 +75,15 @@ class MissionForm extends AbstractForm
         ]);
         $this->build();
 
-        $this->setValueOptions('typeMission', Util::collectionAsOptions($typesMissions));
+        $valueOptions = ['' => '- Sélectionner un type de mission -'] + Util::collectionAsOptions($typesMissions);
+        $this->setValueOptions('typeMission', $valueOptions);
         $this->get('typeMission')->setAttribute('data-tm', json_encode($tmData));
 
         $trDql = "SELECT mtr FROM " . TauxRemu::class . " mtr WHERE mtr.histoDestruction IS NULL";
         $this->setValueOptions('tauxRemu', $trDql);
         $this->setValueOptions('tauxRemuMajore', $trDql);
         $this->get('tauxRemuMajore')->setEmptyOption('- Aucune majoration -');
+        $this->get('tauxRemu')->setEmptyOption('- Aucun -');
 
 
         $this->setLabels([

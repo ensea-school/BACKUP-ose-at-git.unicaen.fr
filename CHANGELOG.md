@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 24.2](#ose-242-15052025)
+[OSE 24.3](#ose-243-22052025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -20,6 +20,10 @@
 * Saisie de service d'enseignement
   * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
 
+## Corrections
+
+* Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
+
 
 
 # OSE 24.3 (22/05/2025)
@@ -29,10 +33,18 @@
 * Possibilité d'utiliser la signature électronique (esup signature) avec un wildcard token de paramétré
 * Traducteur de formules de calcul : gestion des SI embarqués dans des paramètres de fonctions
 * Nouvelle version de la formule de calcul de Paris Dauphine (#50652)
-* Formule de calcul "par défaut" disponible pour tous les établissement qui le souhaitent ou bien en attente de leur formule personnalisée
+* Formule de calcul "par défaut" disponible pour tous les établissements qui le souhaitent ou bien en attente de leur formule personnalisée
+* Les mises à jour OSE ne pourront plus être bloquées par des modifications locales : elles seront écrasées
+* Nouvelle formule de calcul pour Lyon 3 (#38136)
 
 ## Corrections
 
+* Correction d'un bug lorsqu'un vacataire change d'année universitaire via le menu année en haut à gauche
+* Prise en compte du paramétrage d'un centre de coût par défaut sur un élement pédagogique au niveau de la page de demande de mise en paiement
+* Ajout du bouton "Nouvel employeur" qui avait disparu dans Administration > Nomenclatures > Employeurs
+* Correction pour aller chercher la bonne valeur du taux lors d'une prise en charge ou d'un renouvellement dans SIHAM (#61928)
+* Correction d'un problème qui empêchait la création d'un nouveau taux de rémunération
+* La formule de calcul de Lyon 2 est de nouveau opérationnelle (#61925)
 
 ## Notes de mise à jour
 

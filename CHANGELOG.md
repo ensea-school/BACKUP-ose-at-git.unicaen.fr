@@ -20,6 +20,10 @@
 * Saisie de service d'enseignement
   * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
 
+## Corrections
+
+* Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
+
 
 
 # OSE 24.1 (à venir 05/2025)

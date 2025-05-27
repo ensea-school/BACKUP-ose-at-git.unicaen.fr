@@ -2,11 +2,11 @@
 
 namespace Paiement\Service;
 
-
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Service\AbstractService;
 use Enseignement\Entity\Db\Service;
 use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
@@ -169,20 +169,24 @@ class DemandesService extends AbstractService
         //Liste des demandes de mise en paiement
         $dmep = [];
         //Récupération du paramétrage des centres de cout pour les paiements
+        $intervenantStructure = $intervenant->getStructure();
         $parametreCentreCout = $this->getServiceParametres()->get('centres_couts_paye');
-        $intervenantStrucutre = $intervenant->getStructure();
-        if($intervenantStrucutre instanceof Structure && $structure instanceof Structure)
+        if ($intervenant->getStatut()->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR ||
+            $intervenant->getStatut()->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_ETUDIANT) {
+            $parametreCentreCout = 'enseignement';
+        }
+
+        if ($intervenantStructure instanceof Structure && $structure instanceof Structure)
         {
             if($parametreCentreCout == 'affectation')
             {   //Cas ou c'est la composante d'affectation qui fait les demandes de mises en paiement
-                if($intervenantStrucutre->getId() == $structure->getId())
+                if ($intervenantStructure->getId() == $structure->getId())
                 {
                     /*Si j'ai un role avec un périmètre composante et que ma structure d'affectation est la même que
                     celle de l'intervenant j'accède à toutes les demandes de mise en paiement peu importe la structure
                     de l'enseignement réalisé de l'intervenant on ne filtre pas les dmep*/
                     $structure = null;
-                }
-                else{
+                } else {
                     //Sinon on ne doit voir aucune demande de mise en paiement
                     return $dmep;
                 }
@@ -591,8 +595,7 @@ class DemandesService extends AbstractService
     public function verifierBudgetDemandeMiseEnPaiement(array $demandes): array
     {
         $demandesApprouvees                      = [];
-        $totalHeuresDemandees['ressourcePropre'] = 0;
-        $totalHeuresDemandees['paieEtat']        = 0;
+        $totalHeuresDemandees = [];
 
         //1 - On récupère le budget de la structure pour laquelle on a des heures à demander
         foreach ($demandes as $demande) {
@@ -601,36 +604,30 @@ class DemandesService extends AbstractService
             if ($structure instanceof Structure) {
 
                 $budget = $this->getServiceBudget()->getBudgetPaiement($structure);
+
                 //2 - On récupère le centre de cout que nous souhaitons utiliser pour la demande de mise en paiement
 
                 $centreCout = $this->getEntityManager()->getRepository(CentreCout::class)->find($demande['centreCoutId']);
                 $centreCout = $this->getServiceCentreCout()->get($demande['centreCoutId']);
                 if ($centreCout instanceof CentreCout) {
                     //3 - on vérifier si il y a du budget dans le type de ressource auquel est rattaché ce centre de cout
-                    if ($centreCout->getTypeRessource()->getCode() == 'ressources-propres') {
-                        if ($budget['dotation']['ressourcePropre'] > 0) {
+                    if (array_key_exists($centreCout->getTypeRessource()->getCode(), $budget['dotation'])) {
+                        if (!array_key_exists($centreCout->getTypeRessource()->getCode(), $totalHeuresDemandees)) {
+                            $totalHeuresDemandees[$centreCout->getTypeRessource()->getCode()] = 0;
+                        }
+                        if ($budget['dotation'][$centreCout->getTypeRessource()->getCode()]['heures'] > 0) {
 
                             //4 - on regarde si il y a encore assez de budget pour demander les heures en paiement
-                            $total = round($budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'],2);
-                            if ($total <= $budget['dotation']['ressourcePropre']) {
-                                $totalHeuresDemandees['ressourcePropre'] += $demande['heures'];
+                            $total = round($budget['consommation'][$centreCout->getTypeRessource()->getCode()]['heures'] + $demande['heures'] + $totalHeuresDemandees[$centreCout->getTypeRessource()->getCode()], 2);
+                            if ($total <= $budget['dotation'][$centreCout->getTypeRessource()->getCode()]['heures']) {
+                                $totalHeuresDemandees[$centreCout->getTypeRessource()->getCode()] += $demande['heures'];
                             } else {
                                 continue;
                             }
                         }
                         $demandesApprouvees[] = $demande;
-                    }
-                    if ($centreCout->getTypeRessource()->getCode() == 'paie-etat') {
-                        //Si la dotation est supérieur à 0, alors on vérifie s'il reste du budget disponible
-                        if ($budget['dotation']['paieEtat'] > 0) {
-                            //4bis - on regarde s'il y a encore assez de budget pour demander les heures en paiement
-                            $total = round($budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'],2);
-                            if ($total <= $budget['dotation']['paieEtat']) {
-                                $totalHeuresDemandees['paieEtat'] += $demande['heures'];
-                            } else {
-                                continue;
-                            }
-                        }
+                    } else {
+                        //Si pas de dotation dans ce type de ressources alors on autorise obligatoirement la demande
                         $demandesApprouvees[] = $demande;
                     }
                 } else {

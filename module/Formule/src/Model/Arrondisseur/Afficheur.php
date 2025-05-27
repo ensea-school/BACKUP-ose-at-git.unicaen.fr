@@ -109,7 +109,15 @@ class Afficheur
         if ($valeur->hasError()) {
             $color = '#FFC4C4';
         } else {
-            $color = '#C4FFC5';
+            if ($valeur->getValueFinale(true) != $valeur->getValueFinale(false)) {
+                $color = '#fff06c';
+            }else{
+                $color = '#C4FFC5';
+            }
+        }
+
+        if ($valeur->getValueFinale(true) != $valeur->getValueFinale(false)) {
+            $title[] = 'Valeur finale non forcée : ' . $valeur->getValueFinale(false);
         }
 
         if (!empty($errors)) {

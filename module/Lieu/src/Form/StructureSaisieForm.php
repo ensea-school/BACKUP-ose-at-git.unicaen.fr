@@ -29,7 +29,7 @@ class StructureSaisieForm extends AbstractForm
     use StructureAwareTrait;
 
 
-    public function init ()
+    public function init()
     {
         $ignore = ['autre', 'autre1', 'autre2', 'autre3', 'autre4', 'autre5','source'];
 
@@ -93,7 +93,7 @@ class StructureSaisieForm extends AbstractForm
 
 
 
-    public function initCentreCout ()
+    public function initCentreCout()
     {
         $qb = $this->getServiceCentreCout()->finderByHistorique();
         //Si on a une structure précise on filtre les centres de coût disponibles pour cette structure
@@ -107,8 +107,24 @@ class StructureSaisieForm extends AbstractForm
     }
 
 
+    public function excludeStructure(): void
+    {
+        $structure = $this->getStructure();
 
-    public function bind ($object, $flags = FormInterface::VALUES_NORMALIZED)
+        if (!$structure) {
+            return;
+        }
+
+        $structureElement = $this->get('structure');
+        $structureOptions = $structureElement->getValueOptions();
+        unset($structureOptions[$structure->getId()]);
+        $structureElement->setValueOptions($structureOptions);
+
+    }
+
+
+
+    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
         /* @var $object Structure */
         parent::bind($object, $flags);

@@ -1911,7 +1911,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::CONTRAT_VISUALISATION                      => $this->contrat && $this->contratVisualisation,
             Privileges::CONTRAT_DEPOT_RETOUR_SIGNE                 => $this->contrat && $this->contratDepot,
             Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT => $this->paiementVisualisation,
-            Privileges::CLOTURE_CLOTURE                            => $this->cloture && ($this->serviceRealiseEdition || $this->referentielRealiseEdition),
+            Privileges::CLOTURE_CLOTURE                            => $this->cloture && ($this->serviceRealiseVisualisation || $this->referentielRealiseVisualisation),
             Privileges::CONTRAT_CONTRAT_GENERATION                 => $this->contrat && $this->contratGeneration,
             Privileges::MISSION_VISUALISATION                      => $this->mission && $this->missionVisualisation,
             Privileges::MISSION_PRIME_VISUALISATION                => $this->mission,

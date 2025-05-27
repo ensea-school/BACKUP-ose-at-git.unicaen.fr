@@ -34,8 +34,9 @@ if ($structureId && $canEdit) {
         'label' => '<i class="fas fa-signal"></i> Plafonds',
         'url'   => $this->url('plafond/structure', ['structure' => $structureId]),
     ];
-
+    echo '<div class="no-intranavigation">';
     echo $this->tabajax($tabs, $tab);
+    echo '</div>';
 } else {
     echo $visu;
 }

@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 24.0](#ose-24-29042025)
+[OSE 24.3](#ose-243-22052025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -20,6 +20,98 @@
 * Saisie de service d'enseignement
   * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
 
+## Corrections
+
+* Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
+
+
+
+# OSE 24.4 (à venir)
+
+## Améliorations
+
+* Possibilité de lancer la commande [calcul-tableaux-bord](doc/ligne-de-commande.md) en précisant un tableau de bord en particulier à actualiser et une année ou un intervenant précis
+
+## Corrections
+
+* Traducteur de formules de calcul : résolution de problème au niveau des SI embarqués dans des paramètres de fonctions (#50652) 
+* Correction des demandes de mise en paiement pour pouvoir gérer la notion de budget sur des types de ressources autres que de la "paie état" ou des "ressources propres" (#61953)
+
+
+
+# OSE 24.3 (22/05/2025)
+
+## Améliorations
+
+* Possibilité d'utiliser la signature électronique (esup signature) avec un wildcard token de paramétré
+* Traducteur de formules de calcul : gestion des SI embarqués dans des paramètres de fonctions
+* Nouvelle version de la formule de calcul de Paris Dauphine (#50652)
+* Formule de calcul "par défaut" disponible pour tous les établissements qui le souhaitent ou bien en attente de leur formule personnalisée
+* Les mises à jour OSE ne pourront plus être bloquées par des modifications locales : elles seront écrasées
+* Nouvelle formule de calcul pour Lyon 3 (#38136)
+
+## Corrections
+
+* Correction d'un bug lorsqu'un vacataire change d'année universitaire via le menu année en haut à gauche
+* Prise en compte du paramétrage d'un centre de coût par défaut sur un élement pédagogique au niveau de la page de demande de mise en paiement
+* Ajout du bouton "Nouvel employeur" qui avait disparu dans Administration > Nomenclatures > Employeurs
+* Correction pour aller chercher la bonne valeur du taux lors d'une prise en charge ou d'un renouvellement dans SIHAM (#61928)
+* Correction d'un problème qui empêchait la création d'un nouveau taux de rémunération
+* La formule de calcul de Lyon 2 est de nouveau opérationnelle (#61925)
+
+## Notes de mise à jour
+
+* Veillez à retester le workflow au nouveau des règles d'accès aux contrats
+* Bien lire celles de la 24.1
+* Si vous voulez monter en version depuis la version 23, lire celles de la 24.0
+
+
+
+
+# OSE 24.2 (15/05/2025)
+
+## Corrections
+
+* Correction de plusieurs soucis bloquant la génération des contrats
+
+## Notes de mise à jour
+
+* Veillez à retester le workflow au nouveau des règles d'accès aux contrats
+* Bien lire celles de la 24.1
+* Si vous voulez monter en version depuis la version 23, lire celles de la 24.0
+
+
+# OSE 24.1 (15/05/2025)
+
+## Améliorations
+
+* La clôture des services d'enseignement est désormais possible pour les intervenants avec fiche de services en lecture seule (#61700)
+* Les agréments par lots sont maintenant triables, filtrables et les disciplines sont affichées (#61456)
+* Prise en compte de tous les types d'intervention lors l'export des formations au format CSV(#61727)
+
+## Corrections
+
+* L'état de sortie des paiements est de nouveau opérationnel avec des primes (#61568)
+* Meilleure présentation des résultats au niveau de l'arrondisseur de calcul HETD : les sommes sont toutes recalculées
+* Arrondisseur de règle de calcul HETD corrigé pour être le plus compatible possible aux résultats de l'ancienne infrastructure "formules"
+* Pour les demandes de mise en paiement, toujours proposer les centres de coûts de la composante d'enseignement pour les vacataires et les étudiants (#61780)
+* L'intégration de nouvelles formules de calcul plantait en affichant le code généré 
+* Correction apportée à la formule de calcul du Havre (#54003)
+* Les contrats s'affichent de nouveau avec Oracle23 (#61799)
+* Le commande ./bin/ose clear-cache ne supprime plus le répertoire cache, elle se contente de le vider (#61810) 
+* Correction d'un bug d'affichage lors d'un changement d'onglet sur l'édition d'une structure (#61814)
+* Correction d'une régression sur la prise en compte du paramétrage de l'état de sortie pour les indémnités de fin de contrat des missions
+* Pour les demandes de mise en paiement, alimenter la liste des centres de coût avec ceux de la composante d'enseignement dans le cas d'un vacataire (#61780)
+## Notes de mise à jour
+
+* Vous devez être en version 23.14 minimum afin de pouvoir migrer en 24.1
+* Veuillez vérifier vos requêtes liées au plafonds (cf. notes de mise à jour v24.0) : elle doivent être adaptées
+* Attention : Si vous étiez en 24.0, il vous faudra relancer le calcul des formules, puis des tableaux de bord avec les commandes suivantes :
+```
+./bin/ose formule-calcul
+./bin/ose calcul-tableaux-bord
+```
+
 
 # OSE 24 (29/04/2025)
 
@@ -35,7 +127,7 @@
   * Meilleure lisibilité du résumé des heures HETD (#23421)
   * Nouveau dispositif de tests des formules, avec possibilité d'exporter en CSV les données, en plus du format JSON existant (#55389)
 * Nouvelle page de demandes de mise en paiement (#53922)
-* Signature électronique (support d'Esup Signature pour le moment) (#26825)
+* [Signature électronique (support d'Esup Signature pour le moment)](https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Signature-Electronique/configuration.md?ref_type=heads) (#26825)
 * Paramétrage affiné des codes situation pour l'export siham
 * Nouvelles possibilités de paramétrage des contrats (#51241)
   * Possibilité de contractualiser du référentiel sans heure d'enseignement (#38876)
@@ -71,14 +163,19 @@
 * L'opération de migration peut durer assez longtemps : prévoyez jusqu'à 2h de durée d'exécution pour le script de mise à jour.
 
 * Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuelle rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui-ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
-`
-#avant
-/usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
-`
-`#après
-/chemin_absolu_vers/bin/ose notifier-indicateurs`
+
+  * #avant /usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
+` *`#après /chemin_absolu_vers/bin/ose notifier-indicateurs`
 
 * Le calcul des heures complémentaires ayant complètement changé, il se peut que sur certaines fiches complexes avec des paiements déjà effectués vous ayez un différentiel qui apparaisse avec quelques centimes à mettre en paiement ou au contraire quelques centimes en trop payé
+
+* Attention à bien vérifier que les requêtes de vos plafonds fonctionnent toujours.
+Exemples de modifications pouvant les impacter :
+  * La table formule_resultat a été renommée en formule_resultat_intervenant
+  * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
+  * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
+  * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
+  * Les colonnes service_referentiel ont été renommées en heures_service_referentiel
 
 * L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
 Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.

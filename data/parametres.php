@@ -1,6 +1,6 @@
 <?php
 
-use Application\Entity\Db\Parametre;
+use Administration\Entity\Db\Parametre;
 
 return [
     /* Années */

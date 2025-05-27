@@ -30,7 +30,13 @@ class TauxForm extends AbstractForm
         $this->setValueOptions('tauxRemu', $this->getServiceTauxRemu()->getTauxRemusIndexable());
         $this->get('tauxRemu')->setEmptyOption("");
         $this->get('tauxRemu')->setLabel('Taux de référence');
-
+        $this->add([
+                       'name'    => 'valeur',
+                       'type'    => 'Number',
+                       'options' => [
+                           'label' => 'Valeur a la date d\'effet',
+                       ],
+                   ]);
         $this->add([
             'name'    => 'date',
             'type'    => 'Date',

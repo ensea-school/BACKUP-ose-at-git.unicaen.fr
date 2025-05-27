@@ -26,6 +26,14 @@
 
 
 
+# OSE 24.4 (à venir)
+
+## Corrections
+
+* Traducteur de formules de calcul : résolution de problème au niveau des SI embarqués dans des paramètres de fonctions (#50652) 
+
+
+
 # OSE 24.3 (22/05/2025)
 
 ## Améliorations

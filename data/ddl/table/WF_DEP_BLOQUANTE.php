@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'WF_DEP_BLOQUANTE_ID_SEQ',
+    'sequence'    => NULL,
     'columns'     => [
         'ID'              => [
             'name'        => 'ID',

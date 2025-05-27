@@ -43,13 +43,13 @@ Vous pouvez lancer la commande pour un tableau de bord en particuler :
 Et également, pour un tableau de bord donné, recalculer pour un intervenant donné (ID à fournir) :
 
 ```
-./bin/ose calcul-tableaux-bord workflow intervenant=517
+./bin/ose calcul-tableaux-bord workflow --intervenant=517
 ```
 
 Ou même pour une année donnée :
 
 ```
-./bin/ose calcul-tableaux-bord workflow annee=2024
+./bin/ose calcul-tableaux-bord workflow --annee=2024
 ```
 
 ### ```calcul-feuille-de-route <id>``` : Recalcule la feuille de route de l'intervenant dont l'ID est <id>

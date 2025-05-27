@@ -597,8 +597,7 @@ class DemandesService extends AbstractService
     public function verifierBudgetDemandeMiseEnPaiement(array $demandes): array
     {
         $demandesApprouvees                      = [];
-        $totalHeuresDemandees['ressourcePropre'] = 0;
-        $totalHeuresDemandees['paieEtat']        = 0;
+        $totalHeuresDemandees = [];
 
         //1 - On récupère le budget de la structure pour laquelle on a des heures à demander
         foreach ($demandes as $demande) {
@@ -607,36 +606,30 @@ class DemandesService extends AbstractService
             if ($structure instanceof Structure) {
 
                 $budget = $this->getServiceBudget()->getBudgetPaiement($structure);
+
                 //2 - On récupère le centre de cout que nous souhaitons utiliser pour la demande de mise en paiement
 
                 $centreCout = $this->getEntityManager()->getRepository(CentreCout::class)->find($demande['centreCoutId']);
                 $centreCout = $this->getServiceCentreCout()->get($demande['centreCoutId']);
                 if ($centreCout instanceof CentreCout) {
                     //3 - on vérifier si il y a du budget dans le type de ressource auquel est rattaché ce centre de cout
-                    if ($centreCout->getTypeRessource()->getCode() == 'ressources-propres') {
-                        if ($budget['dotation']['ressourcePropre'] > 0) {
+                    if (array_key_exists($centreCout->getTypeRessource()->getCode(), $budget['dotation'])) {
+                        if (!array_key_exists($centreCout->getTypeRessource()->getCode(), $totalHeuresDemandees)) {
+                            $totalHeuresDemandees[$centreCout->getTypeRessource()->getCode()] = 0;
+                        }
+                        if ($budget['dotation'][$centreCout->getTypeRessource()->getCode()]['heures'] > 0) {
 
                             //4 - on regarde si il y a encore assez de budget pour demander les heures en paiement
-                            $total = round($budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'],2);
-                            if ($total <= $budget['dotation']['ressourcePropre']) {
-                                $totalHeuresDemandees['ressourcePropre'] += $demande['heures'];
+                            $total = round($budget['consommation'][$centreCout->getTypeRessource()->getCode()]['heures'] + $demande['heures'] + $totalHeuresDemandees[$centreCout->getTypeRessource()->getCode()], 2);
+                            if ($total <= $budget['dotation'][$centreCout->getTypeRessource()->getCode()]['heures']) {
+                                $totalHeuresDemandees[$centreCout->getTypeRessource()->getCode()] += $demande['heures'];
                             } else {
                                 continue;
                             }
                         }
                         $demandesApprouvees[] = $demande;
-                    }
-                    if ($centreCout->getTypeRessource()->getCode() == 'paie-etat') {
-                        //Si la dotation est supérieur à 0, alors on vérifie s'il reste du budget disponible
-                        if ($budget['dotation']['paieEtat'] > 0) {
-                            //4bis - on regarde s'il y a encore assez de budget pour demander les heures en paiement
-                            $total = round($budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'],2);
-                            if ($total <= $budget['dotation']['paieEtat']) {
-                                $totalHeuresDemandees['paieEtat'] += $demande['heures'];
-                            } else {
-                                continue;
-                            }
-                        }
+                    } else {
+                        //Si pas de dotation dans ce type de ressources alors on autorise obligatoirement la demande
                         $demandesApprouvees[] = $demande;
                     }
                 } else {

@@ -64,7 +64,8 @@ class DemandesController extends AbstractController
             $demandes                         = $this->axios()->fromPost();
             $demandesApprouveesBudgetairement = $this->getServiceDemandes()->verifierBudgetDemandeMiseEnPaiement($demandes);
             $error                            = 0;
-            $errorBudget                      = count($demandes) - count($demandesApprouveesBudgetairement);
+            $errorBudget = round(count($demandes) - count($demandesApprouveesBudgetairement));
+
             $success                          = 0;
             foreach ($demandesApprouveesBudgetairement as $demande) {
                 try {

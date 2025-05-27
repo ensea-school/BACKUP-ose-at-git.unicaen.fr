@@ -441,18 +441,16 @@ class TraducteurService
                             throw new \Exception('Expression trop complexe et intraduisible en l\'état');
                         }
                         $if = $pexpr;
+                        $ifIndex = $pi;
                     }
                 }
             }
             if ($if){
                 foreach( $if['exprs'] as $eid => $ifRes){
+                    // on parse le retour si true et le retour si false, pas la condition
                     if ($eid > 0){
                         $nexpr = $expr;
-                        if (count($ifRes) == 1 || count($nexpr) == 1){
-                            $nexpr[$i] = current($ifRes);
-                        }else{
-                            $nexpr[$i] = ['type' => 'expr', 'expr' => $ifRes];
-                        }
+                        $nexpr[$i]['exprs'][$ifIndex] = $ifRes;
                         $if['exprs'][$eid] = $nexpr;
                     }
                 }

@@ -28,6 +28,10 @@
 
 # OSE 24.4 (à venir)
 
+## Améliorations
+
+* Possibilité de lancer la commande [calcul-tableaux-bord](doc/ligne-de-commande.md) en précisant un tableau de bord en particulier à actualiser et une année ou un intervenant précis
+
 ## Corrections
 
 * Traducteur de formules de calcul : résolution de problème au niveau des SI embarqués dans des paramètres de fonctions (#50652) 

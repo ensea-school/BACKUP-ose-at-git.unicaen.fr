@@ -36,6 +36,7 @@
 
 * Traducteur de formules de calcul : résolution de problème au niveau des SI embarqués dans des paramètres de fonctions (#50652) 
 * Correction des demandes de mise en paiement pour pouvoir gérer la notion de budget sur des types de ressources autres que de la "paie état" ou des "ressources propres" (#61953)
+* Correction sur les demandes de mise en paiement pour prendre en compte le paiement d'heures faites dans un établissement extérieur.
 
 
 

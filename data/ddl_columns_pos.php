@@ -3149,6 +3149,17 @@ return [
         'PERIMETRE_ID',
         'AVANCEMENT',
     ],
+    'TBL_SERVICE_DU'                      => [
+        'ID',
+        'ACTIF',
+        'ANNEE_ID',
+        'INTERVENANT_ID',
+        'STATUT_ID',
+        'SERVICE_STATUTAIRE',
+        'SERVICE_DU',
+        'DEPASSEMENT_SERVICE_DU_SANS_HC',
+        'SERVICE_MODIFIE',
+    ],
 ];
 
 //@formatter:on

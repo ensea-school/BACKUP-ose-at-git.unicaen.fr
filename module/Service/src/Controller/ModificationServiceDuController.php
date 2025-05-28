@@ -140,7 +140,7 @@ class ModificationServiceDuController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            TblProvider::FORMULE,
+            TblProvider::SERVICE_DU,
             TblProvider::PLAFOND_INTERVENANT,
             TblProvider::PLAFOND_VOLUME_HORAIRE,
         ], $intervenant);

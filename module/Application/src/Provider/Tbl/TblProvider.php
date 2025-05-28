@@ -7,6 +7,7 @@ class TblProvider
 
     const CHARGENS_SEUILS_DEF     = 'chargens_seuils_def';
     const CHARGENS                = 'chargens';
+    const SERVICE_DU              = 'service_du';
     const FORMULE                 = 'formule';
     const DMEP_LIQUIDATION        = 'dmep_liquidation';
     const CANDIDATURE             = 'candidature';

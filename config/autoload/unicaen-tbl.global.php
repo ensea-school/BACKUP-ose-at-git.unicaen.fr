@@ -26,7 +26,7 @@ return [
             ],
 
             TblProvider::CHARGENS => [
-                'order'   => 1,
+                'order'   => 2,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -62,13 +62,31 @@ return [
                 ],
             ],
 
+            TblProvider::SERVICE_DU => [
+                'order'   => 3,
+                'process' => 'DbDiff',
+                'cols'    => [
+                    'ACTIF',
+                    'ANNEE_ID',
+                    'STATUT_ID',
+                    'INTERVENANT_ID',
+                    'SERVICE_STATUTAIRE',
+                    'SERVICE_MODIFIE',
+                    'SERVICE_DU',
+                    'DEPASSEMENT_SERVICE_DU_SANS_HC',
+                ],
+                'key'     => [
+                    'INTERVENANT_ID',
+                ],
+            ],
+
             TblProvider::FORMULE => [
-                'order'   => 1,
+                'order'   => 4,
                 'process' => \Formule\Tbl\Process\FormuleProcess::class,
             ],
 
             TblProvider::DMEP_LIQUIDATION => [
-                'order'   => 1,
+                'order'   => 5,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -85,7 +103,7 @@ return [
             ],
 
             TblProvider::CANDIDATURE => [
-                'order'              => 1,
+                'order'              => 6,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -100,7 +118,6 @@ return [
                     'REFUSEE',
                 ],
                 'key'                => [
-                    'ANNEE_ID',
                     'INTERVENANT_ID',
                     'OFFRE_EMPLOI_ID',
                 ],
@@ -110,7 +127,7 @@ return [
             ],
 
             TblProvider::PIECE_JOINTE_DEMANDE => [
-                'order'   => 2,
+                'order'   => 7,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -129,7 +146,7 @@ return [
             ],
 
             TblProvider::PIECE_JOINTE_FOURNIE => [
-                'order'              => 3,
+                'order'              => 8,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -156,7 +173,7 @@ return [
             ],
 
             TblProvider::AGREMENT => [
-                'order'              => 4,
+                'order'              => 9,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -181,7 +198,7 @@ return [
             ],
 
             TblProvider::CLOTURE_REALISE => [
-                'order'   => 5,
+                'order'   => 10,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -195,7 +212,7 @@ return [
             ],
 
             TblProvider::MISSION => [
-                'order'              => 6,
+                'order'              => 11,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -221,7 +238,7 @@ return [
             ],
 
             TblProvider::CONTRAT => [
-                'order'              => 7,
+                'order'              => 12,
                 'process'            => \Contrat\Tbl\Process\ContratProcess::class,
                 'cols'               => [
                     'ID',
@@ -280,7 +297,7 @@ return [
             ],
 
             TblProvider::DOSSIER => [
-                'order'   => 8,
+                'order'   => 13,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -304,7 +321,7 @@ return [
             ],
 
             TblProvider::PAIEMENT => [
-                'order'              => 9,
+                'order'              => 14,
                 'process'            => \Paiement\Tbl\Process\PaiementProcess::class,
                 'cols'               => [
                     'ANNEE_ID',
@@ -351,7 +368,7 @@ return [
             ],
 
             TblProvider::PIECE_JOINTE => [
-                'order'   => 10,
+                'order'   => 15,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -371,7 +388,7 @@ return [
             ],
 
             TblProvider::REFERENTIEL => [
-                'order'   => 11,
+                'order'   => 16,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -398,7 +415,7 @@ return [
             ],
 
             TblProvider::VALIDATION_ENSEIGNEMENT => [
-                'order'   => 12,
+                'order'   => 17,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -422,9 +439,9 @@ return [
             ],
 
             TblProvider::VALIDATION_REFERENTIEL => [
-                'order'              => 13,
-                'process'            => 'DbDiff',
-                'cols'               => [
+                'order'   => 18,
+                'process' => 'DbDiff',
+                'cols'    => [
                     'ANNEE_ID',
                     'INTERVENANT_ID',
                     'STRUCTURE_ID',
@@ -437,7 +454,7 @@ return [
                     'VALIDATION_ID',
                     'VALIDE',
                 ],
-                'key'                => [
+                'key'     => [
                     'INTERVENANT_ID',
                     'STRUCTURE_ID',
                     'SERVICE_REFERENTIEL_ID',
@@ -446,7 +463,7 @@ return [
             ],
 
             TblProvider::SERVICE => [
-                'order'   => 14,
+                'order'   => 19,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -476,7 +493,7 @@ return [
             ],
 
             TblProvider::MISSION_PRIME => [
-                'order'   => 15,
+                'order'   => 20,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -495,7 +512,7 @@ return [
             ],
 
             TblProvider::WORKFLOW => [
-                'order'              => 16,
+                'order'              => 21,
                 'process'            => \Workflow\Tbl\Process\WorkflowProcess::class,
                 'cols'               => [
                     'ID',
@@ -513,7 +530,7 @@ return [
             ],
 
             TblProvider::PLAFOND_STRUCTURE => [
-                'order'              => 17,
+                'order'              => 22,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'PLAFOND_ID',
@@ -542,7 +559,7 @@ return [
             ],
 
             TblProvider::PLAFOND_INTERVENANT => [
-                'order'              => 18,
+                'order'              => 23,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'PLAFOND_ID',
@@ -568,7 +585,7 @@ return [
             ],
 
             TblProvider::PLAFOND_ELEMENT => [
-                'order'              => 19,
+                'order'              => 24,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'PLAFOND_ID',
@@ -596,7 +613,7 @@ return [
             ],
 
             TblProvider::PLAFOND_VOLUME_HORAIRE => [
-                'order'              => 20,
+                'order'              => 25,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'PLAFOND_ID',
@@ -627,7 +644,7 @@ return [
             ],
 
             TblProvider::PLAFOND_REFERENTIEL => [
-                'order'              => 21,
+                'order'              => 26,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'PLAFOND_ID',
@@ -655,7 +672,7 @@ return [
             ],
 
             TblProvider::PLAFOND_MISSION => [
-                'order'              => 22,
+                'order'              => 27,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'PLAFOND_ID',

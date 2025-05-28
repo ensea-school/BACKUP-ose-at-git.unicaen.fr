@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46e54dfbf592b207e248e8e2be323309",
+    "content-hash": "3904c5ccb8c0bbfd89243c7e9a6b8a9d",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7541,11 +7541,11 @@
         },
         {
             "name": "unicaen/bddadmin",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
-                "reference": "74ba7e9e0eaddea4d84958aef0f6d3c4ed6f4e84"
+                "reference": "1e328ca8519f9cc0d39e48707eafd94159503651"
             },
             "require": {
                 "php": ">=8.2"
@@ -7558,7 +7558,7 @@
                 }
             },
             "description": "Module pour administrer des bases de données Postgresql et Oracle",
-            "time": "2025-05-23T14:19:48+00:00"
+            "time": "2025-05-28T14:19:39+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",

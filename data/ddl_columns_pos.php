@@ -1695,10 +1695,13 @@ return [
         'INTERVENANT_ID',
         'STRUCTURE_ID',
         'TYPE_VOLUME_HORAIRE_ID',
+        'ETAT_VOLUME_HORAIRE_ID',
+        'ETAT_VOLUME_HORAIRE_ORDRE',
         'SERVICE_REFERENTIEL_ID',
         'VOLUME_HORAIRE_REF_ID',
         'AUTO_VALIDATION',
         'VALIDATION_ID',
+        'VALIDE',
     ],
     'TBL_WORKFLOW'                        => [
         'ID',

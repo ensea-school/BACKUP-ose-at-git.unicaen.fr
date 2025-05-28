@@ -17,7 +17,7 @@ SELECT DISTINCT
   CASE WHEN vh.auto_validation = 1 OR v.id IS NOT NULL THEN 1 ELSE 0 END valide
 FROM
   service s
-  JOIN volume_horaire vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL
+  JOIN volume_horaire vh ON vh.service_id = s.id
   JOIN intervenant i ON i.id = s.intervenant_id
   JOIN statut si ON si.id = i.statut_id
   LEFT JOIN regle_structure_validation rsv ON rsv.type_intervenant_id = si.type_intervenant_id AND rsv.type_volume_horaire_id = vh.type_volume_horaire_id
@@ -33,8 +33,7 @@ FROM
     ELSE 'saisi'
   END
 WHERE
-  s.histo_destruction IS NULL
-  AND NOT (vvh.validation_id IS NOT NULL AND v.id IS NULL)
+  NOT (vvh.validation_id IS NOT NULL AND v.id IS NULL)
   /*@INTERVENANT_ID=i.id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@STATUT_ID=si.id*/

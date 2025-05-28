@@ -3,6 +3,7 @@
 namespace PieceJointe\Controller;
 
 use Application\Entity\Db\Fichier;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
@@ -503,9 +504,9 @@ class PieceJointeController extends \Application\Controller\AbstractController
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'piece_jointe_fournie',
-            'agrement',
-            'contrat',
+            TblProvider::PIECE_JOINTE_FOURNIE,
+            TblProvider::AGREMENT,
+            TblProvider::CONTRAT,
         ], $intervenant);
 
         //Récupérer tous les intervenants avec le même code intervenant
@@ -514,7 +515,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         //On recalcule le tbl piece_jointe pour tous les intervenants ayant le même code intervenant que l'intervenant de l'année en cours
         foreach ($intervenants as $objectIntervenant) {
             $this->getServiceWorkflow()->calculerTableauxBord([
-                'piece_jointe',
+                TblProvider::PIECE_JOINTE,
             ], $objectIntervenant);
         }
     }

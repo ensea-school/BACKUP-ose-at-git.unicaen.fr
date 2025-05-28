@@ -5,6 +5,7 @@ namespace Formule\Service;
 
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Annee;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\AbstractService;
 use Doctrine\ORM\EntityRepository;
 use Formule\Entity\Db\Formule;
@@ -138,7 +139,7 @@ class FormuleService extends AbstractService
             'INTERVENANT_ID' => $intervenant->getId(),
             'ANNEE_ID'       => $intervenant->getAnnee()->getId(),
         ];
-        $this->getServiceTableauBord()->calculer('formule', $params);
+        $this->getServiceTableauBord()->calculer(TblProvider::FORMULE, $params);
     }
 
 
@@ -149,7 +150,7 @@ class FormuleService extends AbstractService
             'STATUT_ID' => $statut->getId(),
             'ANNEE_ID'  => $statut->getAnnee()->getId(),
         ];
-        $this->getServiceTableauBord()->calculer('formule', $params);
+        $this->getServiceTableauBord()->calculer(TblProvider::FORMULE, $params);
     }
 
 
@@ -171,7 +172,7 @@ class FormuleService extends AbstractService
         }
 
         /** @var FormuleProcess $process */
-        $process = $this->getServiceTableauBord()->getTableauBord('formule')->getProcess();
+        $process = $this->getServiceTableauBord()->getTableauBord(TblProvider::FORMULE)->getProcess();
 
         return $process->getFormuleServiceIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire, $annee);
     }

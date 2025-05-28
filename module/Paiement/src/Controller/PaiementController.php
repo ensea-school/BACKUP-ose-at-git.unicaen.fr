@@ -4,6 +4,7 @@ namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Enseignement\Entity\Db\VolumeHoraire;
@@ -78,7 +79,7 @@ class PaiementController extends AbstractController
     private function updateTableauxBord($intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-                                                              'paiement',
+                                                              TblProvider::PAIEMENT,
                                                           ], $intervenant);
     }
 
@@ -489,7 +490,7 @@ class PaiementController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
-        $tblPaiement = $this->getServiceTableauBord()->getTableauBord('paiement');
+        $tblPaiement = $this->getServiceTableauBord()->getTableauBord(TblProvider::PAIEMENT);
         $debugger    = new PaiementDebugger($tblPaiement->getProcess());
         $debugger->run($intervenant);
 

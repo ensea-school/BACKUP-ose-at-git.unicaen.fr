@@ -3,6 +3,7 @@
 namespace tests\TblContrat;
 
 use Administration\Entity\Db\Parametre;
+use Application\Provider\Tbl\TblProvider;
 use Contrat\Tbl\Process\ContratProcess;
 use Contrat\Tbl\Process\Model\Contrat;
 use Contrat\Tbl\Process\Strategy\VolumeHoraireStrategy;
@@ -36,7 +37,7 @@ abstract class TblContratTestCase extends OseTestCase
 
         $c = \AppAdmin::container()->get(TableauBordService::class);
 
-        $ptbl          = $c->getTableauBord('contrat');
+        $ptbl          = $c->getTableauBord(TblProvider::CONTRAT);
         $this->process = $ptbl->getProcess();
         $this->process->setServiceTauxRemu(TauxRemuMock::create($this));
         $this->process->setServiceParametres(new ParametreMock($defaultParametres));

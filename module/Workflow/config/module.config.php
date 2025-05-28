@@ -70,11 +70,13 @@ return [
     ],
 
     'services' => [
+        Service\WorkflowService::class       => Service\WorkflowServiceFactory::class,
+        Tbl\Process\WorkflowProcess::class => Tbl\Process\WorkflowProcessFactory::class,
+
         Service\WfEtapeDepService::class     => Service\WfEtapeDepServiceFactory::class,
         Service\WfEtapeService::class        => Service\WfEtapeServiceFactory::class,
         Service\TypeValidationService::class => Service\TypeValidationServiceFactory::class,
         Service\ValidationService::class     => Service\ValidationServiceFactory::class,
-        Service\WorkflowService::class       => Service\WorkflowServiceFactory::class,
         Assertion\WorkflowAssertion::class   => AssertionFactory::class,
     ],
 

@@ -5,6 +5,7 @@ namespace Enseignement\Controller;
 use Application\Controller\AbstractController;
 use Application\Form\AbstractForm;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
@@ -194,7 +195,7 @@ class VolumeHoraireController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule', 'validation_enseignement', 'service', 'piece_jointe_fournie',
+            TblProvider::FORMULE, TblProvider::VALIDATION_ENSEIGNEMENT, TblProvider::SERVICE, TblProvider::PIECE_JOINTE_FOURNIE,
         ], $intervenant);
     }
 

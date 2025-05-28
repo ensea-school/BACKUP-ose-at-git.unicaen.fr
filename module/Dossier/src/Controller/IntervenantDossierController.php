@@ -4,6 +4,7 @@ namespace Dossier\Controller;
 
 use Application\Constants;
 use Application\Controller\AbstractController;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use DoctrineORMModule\Proxy\__CG__\Intervenant\Entity\Db\Statut;
@@ -330,8 +331,8 @@ class IntervenantDossierController extends AbstractController
     function updateTableauxBord (Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'dossier',
-            'piece_jointe_demande',
+            TblProvider::DOSSIER,
+            TblProvider::PIECE_JOINTE_DEMANDE,
         ], $intervenant);
     }
 }

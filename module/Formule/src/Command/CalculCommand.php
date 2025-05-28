@@ -2,6 +2,7 @@
 
 namespace Formule\Command;
 
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -50,7 +51,7 @@ class CalculCommand extends Command
             if ($annee->getId() == $anneeId || $anneeId === null) {
                 $io->comment('Calcul pour l\'année '.$annee->getLibelle());
                 $params = ['ANNEE_ID' => $annee->getId()];
-                $this->getServiceTableauBord()->calculer('formule', $params);
+                $this->getServiceTableauBord()->calculer(TblProvider::FORMULE, $params);
             }
         }
 

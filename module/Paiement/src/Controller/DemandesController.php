@@ -5,6 +5,7 @@ namespace Paiement\Controller;
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Intervenant\Entity\Db\Intervenant;
@@ -238,7 +239,7 @@ class DemandesController extends AbstractController
 
     private function updateTableauxBord(Intervenant $intervenant): void
     {
-        $this->getServiceWorkflow()->calculerTableauxBord('paiement', $intervenant);
+        $this->getServiceWorkflow()->calculerTableauxBord(TblProvider::PAIEMENT, $intervenant);
     }
 
 }

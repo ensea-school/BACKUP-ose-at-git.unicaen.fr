@@ -1,9 +1,11 @@
 <?php
 
+use Application\Provider\Tbl\TblProvider;
+
 return [
     'unicaen-tbl' => [
         'tableaux_bord' => [
-            'chargens_seuils_def' => [
+            TblProvider::CHARGENS_SEUILS_DEF => [
                 'order'   => 1,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -23,7 +25,7 @@ return [
                 ],
             ],
 
-            'chargens' => [
+            TblProvider::CHARGENS => [
                 'order'   => 1,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -60,12 +62,12 @@ return [
                 ],
             ],
 
-            'formule' => [
+            TblProvider::FORMULE => [
                 'order'   => 1,
                 'process' => \Formule\Tbl\Process\FormuleProcess::class,
             ],
 
-            'dmep_liquidation' => [
+            TblProvider::DMEP_LIQUIDATION => [
                 'order'   => 1,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -82,7 +84,7 @@ return [
                 ],
             ],
 
-            'candidature' => [
+            TblProvider::CANDIDATURE => [
                 'order'              => 1,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -107,7 +109,7 @@ return [
                 ],
             ],
 
-            'piece_jointe_demande' => [
+            TblProvider::PIECE_JOINTE_DEMANDE => [
                 'order'   => 2,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -126,7 +128,7 @@ return [
                 ],
             ],
 
-            'piece_jointe_fournie' => [
+            TblProvider::PIECE_JOINTE_FOURNIE => [
                 'order'              => 3,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -153,7 +155,7 @@ return [
                 ],
             ],
 
-            'agrement' => [
+            TblProvider::AGREMENT => [
                 'order'              => 4,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -178,7 +180,7 @@ return [
                 ],
             ],
 
-            'cloture_realise' => [
+            TblProvider::CLOTURE_REALISE => [
                 'order'   => 5,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -192,7 +194,7 @@ return [
                 ],
             ],
 
-            'mission' => [
+            TblProvider::MISSION => [
                 'order'              => 6,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -218,7 +220,7 @@ return [
                 ],
             ],
 
-            'contrat' => [
+            TblProvider::CONTRAT => [
                 'order'              => 7,
                 'process'            => \Contrat\Tbl\Process\ContratProcess::class,
                 'cols'               => [
@@ -268,16 +270,16 @@ return [
                     'VOLUME_HORAIRE_REF_ID',
                 ],
                 'key_values_if_null' => [
-                    'STRUCTURE_ID' => 0,
-                    'CONTRAT_ID' => 0,
-                    'CONTRAT_PARENT_ID' => 0,
+                    'STRUCTURE_ID'              => 0,
+                    'CONTRAT_ID'                => 0,
+                    'CONTRAT_PARENT_ID'         => 0,
                     'VOLUME_HORAIRE_MISSION_ID' => 0,
-                    'VOLUME_HORAIRE_ID' => 0,
-                    'VOLUME_HORAIRE_REF_ID' => 0,
+                    'VOLUME_HORAIRE_ID'         => 0,
+                    'VOLUME_HORAIRE_REF_ID'     => 0,
                 ],
             ],
 
-            'dossier' => [
+            TblProvider::DOSSIER => [
                 'order'   => 8,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -301,7 +303,7 @@ return [
                 ],
             ],
 
-            'paiement' => [
+            TblProvider::PAIEMENT => [
                 'order'              => 9,
                 'process'            => \Paiement\Tbl\Process\PaiementProcess::class,
                 'cols'               => [
@@ -348,7 +350,7 @@ return [
                 ],
             ],
 
-            'piece_jointe' => [
+            TblProvider::PIECE_JOINTE => [
                 'order'   => 10,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -368,7 +370,7 @@ return [
                 ],
             ],
 
-            'referentiel' => [
+            TblProvider::REFERENTIEL => [
                 'order'   => 11,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -395,7 +397,7 @@ return [
                 ],
             ],
 
-            'validation_enseignement' => [
+            TblProvider::VALIDATION_ENSEIGNEMENT => [
                 'order'              => 12,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -421,7 +423,7 @@ return [
                 ],
             ],
 
-            'validation_referentiel' => [
+            TblProvider::VALIDATION_REFERENTIEL => [
                 'order'              => 13,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -447,7 +449,7 @@ return [
                 ],
             ],
 
-            'service' => [
+            TblProvider::SERVICE => [
                 'order'   => 14,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -477,7 +479,7 @@ return [
                 ],
             ],
 
-            'mission_prime' => [
+            TblProvider::MISSION_PRIME => [
                 'order'   => 15,
                 'process' => 'DbDiff',
                 'cols'    => [
@@ -496,13 +498,25 @@ return [
 
             ],
 
-            'workflow' => [
-                'order'   => 16,
-                'process' => 'Plsql',
-                'command' => 'OSE_WORKFLOW.CALCULER_TBL',
+            TblProvider::WORKFLOW => [
+                'order'              => 16,
+                'process'            => \Workflow\Tbl\Process\WorkflowProcess::class,
+                'cols'               => [
+                    'ID',
+                    'ANNEE_ID',
+                    'INTERVENANT_ID',
+                ],
+                'key'                => [
+                    'ANNEE_ID',
+                    'INTERVENANT_ID',
+                    'STRUCTURE_ID',
+                ],
+                'key_values_if_null' => [
+
+                ],
             ],
 
-            'plafond_structure' => [
+            TblProvider::PLAFOND_STRUCTURE => [
                 'order'              => 17,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -531,7 +545,7 @@ return [
                 ],
             ],
 
-            'plafond_intervenant' => [
+            TblProvider::PLAFOND_INTERVENANT => [
                 'order'              => 18,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -557,7 +571,7 @@ return [
                 ],
             ],
 
-            'plafond_element' => [
+            TblProvider::PLAFOND_ELEMENT => [
                 'order'              => 19,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -585,7 +599,7 @@ return [
                 ],
             ],
 
-            'plafond_volume_horaire' => [
+            TblProvider::PLAFOND_VOLUME_HORAIRE => [
                 'order'              => 20,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -616,7 +630,7 @@ return [
                 ],
             ],
 
-            'plafond_referentiel' => [
+            TblProvider::PLAFOND_REFERENTIEL => [
                 'order'              => 21,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -644,7 +658,7 @@ return [
                 ],
             ],
 
-            'plafond_mission' => [
+            TblProvider::PLAFOND_MISSION => [
                 'order'              => 22,
                 'process'            => 'DbDiff',
                 'cols'               => [

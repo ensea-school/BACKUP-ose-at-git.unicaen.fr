@@ -5,6 +5,7 @@ namespace Enseignement\Controller;
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
@@ -227,14 +228,14 @@ class EnseignementController extends AbstractController
     private function updateTableauxBord (Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule',
-            'validation_enseignement',
-            'contrat',
-            'service',
+            TblProvider::FORMULE,
+            TblProvider::VALIDATION_ENSEIGNEMENT,
+            TblProvider::CONTRAT,
+            TblProvider::SERVICE,
         ], $intervenant);
 
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord([TblProvider::PIECE_JOINTE_DEMANDE, TblProvider::PIECE_JOINTE_FOURNIE], $intervenant);
         }
     }
 

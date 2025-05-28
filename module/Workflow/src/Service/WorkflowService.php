@@ -2,6 +2,7 @@
 
 namespace Workflow\Service;
 
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\AbstractService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Traversable;
@@ -137,14 +138,14 @@ class WorkflowService extends AbstractService
 
     private function triCheckEtape(WorkflowEtape $etapePrecedante, WorkflowEtape $etapeSuivante): void
     {
-        $plib = '"'.$etapePrecedante->getLibelleAutres().'"';
-        $slib = '"'.$etapeSuivante->getLibelleAutres().'"';
+        $plib = '"' . $etapePrecedante->getLibelleAutres() . '"';
+        $slib = '"' . $etapeSuivante->getLibelleAutres() . '"';
 
         if (in_array($etapeSuivante, $etapePrecedante->getContraintes())) {
             throw new \Exception("Par conception, l'étape $plib ne peut pas être positionnée avant $slib");
         }
 
-        foreach( $etapePrecedante->getDependances() as $dependance) {
+        foreach ($etapePrecedante->getDependances() as $dependance) {
             if ($dependance->getEtapePrecedante() === $etapeSuivante) {
                 throw new \Exception("Une dépendance empêche de positionner l'étape $plib avant $slib");
             }
@@ -399,28 +400,28 @@ class WorkflowService extends AbstractService
         $errors = [];
 
         $deps = [
-            'formule'                 => ['agrement', 'paiement'],
-            'piece_jointe_demande'    => ['piece_jointe'],
-            'piece_jointe_fournie'    => ['piece_jointe'],
-            'candidature'             => ['workflow'],
-            'agrement'                => ['workflow'],
-            'cloture_realise'         => ['workflow'],
-            'contrat'                 => ['workflow'],
-            'dossier'                 => ['workflow'],
-            'paiement'                => ['workflow'],
-            'piece_jointe'            => ['workflow'],
-            'service'                 => ['workflow'],
-            'mission'                 => ['workflow'],
-            'mission_prime'           => ['workflow'],
-            'referentiel'             => ['workflow'],
-            'validation_enseignement' => ['workflow'],
-            'validation_referentiel'  => ['workflow'],
-            'workflow'                => [],
-            'plafond_intervenant'     => [],
-            'plafond_structure'       => [],
-            'plafond_referentiel'     => [],
-            'plafond_element'         => [],
-            'plafond_volume_horaire'  => [],
+            TblProvider::FORMULE                 => [TblProvider::AGREMENT, TblProvider::PAIEMENT],
+            TblProvider::PIECE_JOINTE_DEMANDE    => [TblProvider::PIECE_JOINTE],
+            TblProvider::PIECE_JOINTE_FOURNIE    => [TblProvider::PIECE_JOINTE],
+            TblProvider::CANDIDATURE             => [TblProvider::WORKFLOW],
+            TblProvider::AGREMENT                => [TblProvider::WORKFLOW],
+            TblProvider::CLOTURE_REALISE         => [TblProvider::WORKFLOW],
+            TblProvider::CONTRAT                 => [TblProvider::WORKFLOW],
+            TblProvider::DOSSIER                 => [TblProvider::WORKFLOW],
+            TblProvider::PAIEMENT                => [TblProvider::WORKFLOW],
+            TblProvider::PIECE_JOINTE            => [TblProvider::WORKFLOW],
+            TblProvider::SERVICE                 => [TblProvider::WORKFLOW],
+            TblProvider::MISSION                 => [TblProvider::WORKFLOW],
+            TblProvider::MISSION_PRIME           => [TblProvider::WORKFLOW],
+            TblProvider::REFERENTIEL             => [TblProvider::WORKFLOW],
+            TblProvider::VALIDATION_ENSEIGNEMENT => [TblProvider::WORKFLOW],
+            TblProvider::VALIDATION_REFERENTIEL  => [TblProvider::WORKFLOW],
+            TblProvider::WORKFLOW                => [],
+            TblProvider::PLAFOND_INTERVENANT     => [],
+            TblProvider::PLAFOND_STRUCTURE       => [],
+            TblProvider::PLAFOND_REFERENTIEL     => [],
+            TblProvider::PLAFOND_ELEMENT         => [],
+            TblProvider::PLAFOND_VOLUME_HORAIRE  => [],
 
         ];
 
@@ -639,7 +640,7 @@ class WorkflowService extends AbstractService
      */
     public function calculerTout()
     {
-        $this->getServiceTableauBord()->calculer('workflow');
+        $this->getServiceTableauBord()->calculer(TblProvider::WORKFLOW);
 
         return $this;
     }

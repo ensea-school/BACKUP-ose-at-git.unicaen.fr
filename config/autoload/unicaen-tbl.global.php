@@ -398,28 +398,26 @@ return [
             ],
 
             TblProvider::VALIDATION_ENSEIGNEMENT => [
-                'order'              => 12,
-                'process'            => 'DbDiff',
-                'cols'               => [
+                'order'   => 12,
+                'process' => 'DbDiff',
+                'cols'    => [
                     'ANNEE_ID',
                     'INTERVENANT_ID',
                     'STRUCTURE_ID',
                     'TYPE_VOLUME_HORAIRE_ID',
+                    'ETAT_VOLUME_HORAIRE_ID',
+                    'ETAT_VOLUME_HORAIRE_ORDRE',
                     'SERVICE_ID',
                     'VOLUME_HORAIRE_ID',
                     'AUTO_VALIDATION',
                     'VALIDATION_ID',
+                    'VALIDE',
                 ],
-                'key'                => [
+                'key'     => [
                     'INTERVENANT_ID',
                     'STRUCTURE_ID',
-                    'TYPE_VOLUME_HORAIRE_ID',
                     'SERVICE_ID',
                     'VOLUME_HORAIRE_ID',
-                    'VALIDATION_ID',
-                ],
-                'key_values_if_null' => [
-                    'VALIDATION_ID' => 0,
                 ],
             ],
 

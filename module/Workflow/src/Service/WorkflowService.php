@@ -406,7 +406,7 @@ class WorkflowService extends AbstractService
             TblProvider::CANDIDATURE             => [TblProvider::WORKFLOW],
             TblProvider::AGREMENT                => [TblProvider::WORKFLOW],
             TblProvider::CLOTURE_REALISE         => [TblProvider::WORKFLOW],
-            TblProvider::CONTRAT                 => [TblProvider::WORKFLOW],
+            TblProvider::CONTRAT                 => [TblProvider::VALIDATION_ENSEIGNEMENT, TblProvider::VALIDATION_REFERENTIEL],
             TblProvider::DOSSIER                 => [TblProvider::WORKFLOW],
             TblProvider::PAIEMENT                => [TblProvider::WORKFLOW],
             TblProvider::PIECE_JOINTE            => [TblProvider::WORKFLOW],

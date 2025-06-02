@@ -11,7 +11,6 @@ use RuntimeException;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\Db\FormuleTestVolumeHoraire;
-use Formule\Model\FormuleCalcul;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;

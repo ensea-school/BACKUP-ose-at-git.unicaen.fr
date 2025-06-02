@@ -203,7 +203,8 @@ class DemandesService extends AbstractService
             MAX(s.libelle_long)   			    structure_libelle,
             MAX(s.libelle_court)   			    structure_libelle_court,
             CASE
-                WHEN MAX(tp.service_id) IS NOT NULL THEN 'enseignement'
+                WHEN MAX(tp.service_id) IS NOT NULL AND MAX(s.element_pedagogique_id) IS NOT NULL THEN 'enseignement'
+                WHEN MAX(tp.service_id) IS NOT NULL AND MAX(s.element_pedagogique_id) IS NULL THEN 'enseignement-exterieur'
                 WHEN MAX(tp.service_referentiel_id) IS NOT NULL THEN 'referentiel'
                 ELSE 'mission'
             END 							    typage,
@@ -213,6 +214,9 @@ class DemandesService extends AbstractService
             MAX(ep.id)   					    element_id,
             ep.code 						    element_code,
             MAX(ep.libelle) 				    element_libelle,
+            MAX(etab.libelle) 				    etab_libelle,
+            MAX(etab.source_code) 				etab_code,
+            MAX(s.description)                  enseignement_ext_libelle,
             MAX(fr.id)      				    fonction_id,
             fr.code    						    fonction_code,
             MAX(fr.libelle_long)  			    fonction_libelle,
@@ -261,6 +265,7 @@ class DemandesService extends AbstractService
         LEFT JOIN periode p ON p.id = tp.periode_paiement_id
         LEFT JOIN mission m ON m.id = tp.mission_id
         LEFT JOIN type_mission tm ON tm.id = m.type_mission_id
+        LEFT JOIN etablissement etab ON etab.id = s.etablissement_id
         WHERE
             tp.intervenant_id = :intervenant ";
 
@@ -327,25 +332,25 @@ class DemandesService extends AbstractService
                 //Heure déjà mise en paiement
                 if (!empty($value['MEP_ID'])) {
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
-                        'mepId'                  => $value['MEP_ID'],
-                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
-                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
-                        'serviceId'              => $value['SERVICE_ID'],
-                        'serviceReferentielId'   => $value['SERVICE_REFERENTIEL_ID'],
-                        'missionId'              => $value['MISSION_ID'],
-                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
-                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
-                        'heuresPayees'           => $value['HEURES_PAYEES'],
-                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
-                        'periodeCode'            => $value['PERIODE_CODE'],
-                        'datePaiement'           => $value['DATE_PAIEMENT'],
-                        'dateDemande'            => $value['DATE_DEMANDE'],
-                        'domaineFonctionnel'     => [
+                        'mepId'                => $value['MEP_ID'],
+                        'typeHeureId'          => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'        => $value['TYPE_HEURE_CODE'],
+                        'serviceId'            => $value['SERVICE_ID'],
+                        'serviceReferentielId' => $value['SERVICE_REFERENTIEL_ID'],
+                        'missionId'            => $value['MISSION_ID'],
+                        'heuresAPayer'         => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'      => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'         => $value['HEURES_PAYEES'],
+                        'periodeLibelle'       => $value['PERIODE_LIBELLE'],
+                        'periodeCode'          => $value['PERIODE_CODE'],
+                        'datePaiement'         => $value['DATE_PAIEMENT'],
+                        'dateDemande'          => $value['DATE_DEMANDE'],
+                        'domaineFonctionnel'   => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
                             'code'                 => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
                         ],
-                        'centreCout'             => [
+                        'centreCout'           => [
                             'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
                             'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
@@ -355,25 +360,25 @@ class DemandesService extends AbstractService
                     ];
                 } else {
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['a_demander'] = [
-                        'mepId'                  => '',
-                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
-                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
-                        'serviceId'              => $value['SERVICE_ID'],
-                        'serviceReferentielId'   => $value['SERVICE_REFERENTIEL_ID'],
-                        'missionId'              => $value['MISSION_ID'],
-                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
-                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
-                        'heuresPayees'           => $value['HEURES_PAYEES'],
-                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
-                        'periodeCode'            => $value['PERIODE_CODE'],
-                        'datePaiement'           => $value['DATE_PAIEMENT'],
-                        'dateDemande'            => $value['DATE_DEMANDE'],
-                        'domaineFonctionnel'     => [
+                        'mepId'                => '',
+                        'typeHeureId'          => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'        => $value['TYPE_HEURE_CODE'],
+                        'serviceId'            => $value['SERVICE_ID'],
+                        'serviceReferentielId' => $value['SERVICE_REFERENTIEL_ID'],
+                        'missionId'            => $value['MISSION_ID'],
+                        'heuresAPayer'         => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'      => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'         => $value['HEURES_PAYEES'],
+                        'periodeLibelle'       => $value['PERIODE_LIBELLE'],
+                        'periodeCode'          => $value['PERIODE_CODE'],
+                        'datePaiement'         => $value['DATE_PAIEMENT'],
+                        'dateDemande'          => $value['DATE_DEMANDE'],
+                        'domaineFonctionnel'   => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
                             'code'                 => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
                         ],
-                        'centreCout'             => [
+                        'centreCout'           => [
                             'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
                             'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
@@ -382,6 +387,78 @@ class DemandesService extends AbstractService
                         ],
                     ];
                 }
+            } elseif ($value['TYPAGE'] == "enseignement-exterieur") {
+                $ensCode = 1;
+                //Partie enseignements exterieurs
+                $dmep[$value['STRUCTURE_CODE']]['code']                                                                                                      = $value['STRUCTURE_CODE'];
+                $dmep[$value['STRUCTURE_CODE']]['id']                                                                                                        = $value['STRUCTURE_ID'];
+                $dmep[$value['STRUCTURE_CODE']]['libelle']                                                                                                   = $value['STRUCTURE_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['libelleCourt']                                                                                              = $value['STRUCTURE_LIBELLE_COURT'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['libelle']                                                                    = $value['ETAB_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['libelle']                                         = $value['ENSEIGNEMENT_EXT_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']]['libelle'] = $value['TYPE_HEURE_LIBELLE'];
+                if (!array_key_exists('heures', $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']])) {
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures'] = [];
+                }
+                //Heure déjà mise en paiement
+                if (!empty($value['MEP_ID'])) {
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
+                        'mepId'                => $value['MEP_ID'],
+                        'typeHeureId'          => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'        => $value['TYPE_HEURE_CODE'],
+                        'serviceId'            => $value['SERVICE_ID'],
+                        'serviceReferentielId' => $value['SERVICE_REFERENTIEL_ID'],
+                        'missionId'            => $value['MISSION_ID'],
+                        'heuresAPayer'         => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'      => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'         => $value['HEURES_PAYEES'],
+                        'periodeLibelle'       => $value['PERIODE_LIBELLE'],
+                        'periodeCode'          => $value['PERIODE_CODE'],
+                        'datePaiement'         => $value['DATE_PAIEMENT'],
+                        'dateDemande'          => $value['DATE_DEMANDE'],
+                        'domaineFonctionnel'   => [
+                            'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
+                            'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
+                            'code'                 => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
+                        ],
+                        'centreCout'           => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
+                            'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
+                            'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                        ],
+                    ];
+                } else {
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['a_demander'] = [
+                        'mepId'                => '',
+                        'typeHeureId'          => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'        => $value['TYPE_HEURE_CODE'],
+                        'serviceId'            => $value['SERVICE_ID'],
+                        'serviceReferentielId' => $value['SERVICE_REFERENTIEL_ID'],
+                        'missionId'            => $value['MISSION_ID'],
+                        'heuresAPayer'         => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'      => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'         => $value['HEURES_PAYEES'],
+                        'periodeLibelle'       => $value['PERIODE_LIBELLE'],
+                        'periodeCode'          => $value['PERIODE_CODE'],
+                        'datePaiement'         => $value['DATE_PAIEMENT'],
+                        'dateDemande'          => $value['DATE_DEMANDE'],
+                        'domaineFonctionnel'   => [
+                            'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
+                            'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
+                            'code'                 => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
+                        ],
+                        'centreCout'           => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
+                            'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
+                            'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                        ],
+                    ];
+                }
+                $ensCode++;
             } elseif ($value['TYPAGE'] == "referentiel") {
                 //Partie référentiel
                 $dmep[$value['STRUCTURE_CODE']]['code']                                                      = $value['STRUCTURE_CODE'];

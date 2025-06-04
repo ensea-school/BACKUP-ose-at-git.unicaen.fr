@@ -30,6 +30,7 @@ class FichierService extends AbstractEntityService
 
 
 
+
     const STOCKAGE_BDD  = 'bdd';
     const STOCKAGE_FILE = 'file';
 
@@ -291,6 +292,7 @@ class FichierService extends AbstractEntityService
      */
     public function devalider(Fichier $fichier): void
     {
+        $validation = $fichier->getValidation();
         $this->getServiceValidation()->delete($fichier->getValidation(), true);
         $fichier->setValidation(null);
         $this->getEntityManager()->persist($fichier);

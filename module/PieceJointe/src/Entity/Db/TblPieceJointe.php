@@ -21,7 +21,7 @@ class TblPieceJointe
 
     private Intervenant $intervenant;
 
-    private float $heuresPourSeuil;
+    private float $seuilHetd;
 
     private Annee $annee;
 
@@ -60,9 +60,9 @@ class TblPieceJointe
         return $this->intervenant;
     }
 
-    public function getHeuresPourSeuil(): float
+    public function getSeuilHetd(): float
     {
-        return $this->heuresPourSeuil;
+        return $this->seuilHetd;
     }
 
     public function getAnnee(): Annee

@@ -106,4 +106,4 @@ GROUP BY
 	i.code,
 	tpj.id,
 	tpj.code
-ORDER BY i.annee_id DESC;
+ORDER BY i.annee_id DESC

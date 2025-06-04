@@ -34,34 +34,7 @@ services:
 
 
 
-  ose-test:
-    container_name: ose-test
-
-    environment:
-      APPLICATION_ENV: test
-      APPLICATION_HOSTNAME: ose-test.localhost.unicaen.fr
-      XDEBUG_CONFIG: "remote_host=172.21.0.15"
-      PHP_IDE_CONFIG: "serverName=ose-test.localhost.unicaen.fr"
-      IGNORE_MV_EXT_SERVICE: "true"
-
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        PHP_VERSION: 8.2
-        APPLICATION_ENV: test
-
-    volumes:
-      - .:/app
-
-    working_dir: /app
-
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-    networks:
-      devnet:
-        ipv4_address: 172.21.0.15
+  
 
 
 

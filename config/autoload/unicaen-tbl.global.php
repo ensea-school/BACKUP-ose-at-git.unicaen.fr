@@ -137,51 +137,8 @@ return [
                 ],
             ],
 
-            'piece_jointe_demande' => [
-                'order'   => 2,
-                'process' => 'DbDiff',
-                'cols'    => [
-                    'ANNEE_ID',
-                    'CODE_INTERVENANT',
-                    'INTERVENANT_ID',
-                    'TYPE_PIECE_JOINTE_ID',
-                    'HEURES_POUR_SEUIL',
-                    'OBLIGATOIRE',
-                    'HEURES_POUR_SEUIL_HETD',
-                    'DUREE_VIE',
-                ],
-                'key'     => [
-                    'INTERVENANT_ID',
-                    'TYPE_PIECE_JOINTE_ID',
-                ],
-            ],
 
-            'piece_jointe_fournie' => [
-                'order'              => 3,
-                'process'            => 'DbDiff',
-                'cols'               => [
-                    'ANNEE_ID',
-                    'CODE_INTERVENANT',
-                    'TYPE_PIECE_JOINTE_ID',
-                    'INTERVENANT_ID',
-                    'PIECE_JOINTE_ID',
-                    'VALIDATION_ID',
-                    'FICHIER_ID',
-                    'DUREE_VIE',
-                    'DATE_VALIDITE',
-                    'DATE_ARCHIVE',
-                ],
-                'key'                => [
-                    'TYPE_PIECE_JOINTE_ID',
-                    'INTERVENANT_ID',
-                    'VALIDATION_ID',
-                    'FICHIER_ID',
-                ],
-                'key_values_if_null' => [
-                    'VALIDATION_ID' => 0,
-                    'FICHIER_ID'    => 0,
-                ],
-            ],
+
 
             'agrement' => [
                 'order'              => 4,
@@ -369,6 +326,10 @@ return [
                     'HEURES_POUR_SEUIL',
                     'OBLIGATOIRE',
                     'DEMANDEE_APRES_RECRUTEMENT',
+                    'DATE_ORIGINE',
+                    'DATE_VALIDITEE',
+                    'SEUIL_HETD',
+
                 ],
                 'key'     => [
                     'TYPE_PIECE_JOINTE_ID',

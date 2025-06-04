@@ -4,6 +4,7 @@ namespace PieceJointe\Tbl\Process;
 
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Unicaen\BddAdmin\BddAwareTrait;
+use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -35,10 +36,17 @@ class PieceJointeProcess implements ProcessInterface
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
-
-        $this->getPiecesJointesDemandees($params);
-        $this->getPiecesJointesFournies($params);
-        $this->traitementPiecesJointes($params);
+        if (empty($params)) {
+            $annees = $this->getServiceAnnee()->getActives(true);
+            foreach ($annees as $annee) {
+                $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
+            }
+        } else {
+            $this->getPiecesJointesDemandees($params);
+            $this->getPiecesJointesFournies($params);
+            $this->traitementPiecesJointes($params);
+            $this->enregistrement($tableauBord, $params);
+        }
     }
 
 
@@ -62,7 +70,7 @@ class PieceJointeProcess implements ProcessInterface
 
         unset($piecesJointesDemandees);
 
-
+        //dump($this->piecesJointesDemandees);
         return $this->piecesJointesDemandees;
     }
 
@@ -90,6 +98,7 @@ class PieceJointeProcess implements ProcessInterface
         }
 
         unset($piecesJointesFournies);
+        //dump($this->piecesJointesFournies);
         return $this->piecesJointesFournies;
 
 
@@ -138,7 +147,7 @@ class PieceJointeProcess implements ProcessInterface
             $this->tblData[$uuid]['INTERVENANT_ID']             = $pieceJointeDemandee['INTERVENANT_ID'];
             $this->tblData[$uuid]['FOURNIE']                    = 0;
             $this->tblData[$uuid]['DEMANDEE']                   = 1;
-            $this->tblData[$uuid]['VALIDEE']                    = null;
+            $this->tblData[$uuid]['VALIDEE']                    = 0;
             $this->tblData[$uuid]['DATE_ORIGINE']               = null;
             $this->tblData[$uuid]['DATE_VALIDITEE']             = null;
             $this->tblData[$uuid]['SEUIL_HETD']          = $pieceJointeDemandee['SEUIL_HETD'];
@@ -147,7 +156,7 @@ class PieceJointeProcess implements ProcessInterface
             $this->sortDatas($this->tblData[$uuid]);
         }
 
-        //On parcours maintenants les pièces jointes fournies qui sont forcément fournies l'année de leurs dépot
+        //On parcourt maintenants les pièces jointes fournies qui sont forcément fournies l'année de leurs dépot
         foreach ($this->piecesJointesFournies as $codeIntervenant => $datas) {
             foreach ($datas as $typePieceJointeId => $piecesJointesFournies) {
                 foreach ($piecesJointesFournies as $pieceJointeFournie) {
@@ -204,7 +213,32 @@ class PieceJointeProcess implements ProcessInterface
             $this->sortDatas($this->tblData[$uuid]);
         }
         ksort($this->tblData);
+        //dd($this->tblData);
 
+    }
+
+
+
+    public function enregistrement(TableauBord $tableauBord, array $params): void
+    {
+
+
+        $key = $tableauBord->getOption('key');
+
+        $table = $this->getBdd()->getTable('TBL_PIECE_JOINTE');
+
+
+        $options = [
+            'where'              => $params,
+            'return-insert-data' => false,
+            'transaction'        => !isset($params['INTERVENANT_ID']),
+            'callback'           => function (string $action, int $progress, int $total) use ($tableauBord) {
+                $tableauBord->onAction(Event::PROGRESS, $progress, $total);
+            },
+        ];
+
+        $table->merge($this->tblData, $key, $options);
+        $this->tblData = [];
     }
 
     private function sortDatas(array &$datas): void

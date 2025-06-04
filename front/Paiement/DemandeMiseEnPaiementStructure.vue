@@ -63,7 +63,7 @@
                     <div v-for="(enseignement,codeEnseignement) in etape.enseignements">
                         <div class="cartridge gray bordered" style="padding-bottom: 5px">
                             <span>Enseignement</span>
-                            <span v-html="codeEtape +  ' - ' + shorten(etape.libelle, 50)"></span>
+                            <span v-html="codeEtape +  ' - ' + shorten(etape.libelle, 40)"></span>
                             <span>{{ codeEnseignement + ' - ' + enseignement.libelle }}</span>
                         </div>
                         <div class="container">
@@ -794,6 +794,10 @@ export default {
         },
         shorten(chaine, length = 20)
         {
+            if (chaine === null) {
+                return chaine;
+            }
+
             if (chaine.length > length) {
 
                 var centreCout = '<span title="' + chaine + '"';

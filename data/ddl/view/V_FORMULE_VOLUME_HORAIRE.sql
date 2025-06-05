@@ -3,7 +3,7 @@ SELECT
   fri.id                                                               formule_resultat_intervenant_id,
   s.intervenant_id                                                     intervenant_id,
   vh.type_volume_horaire_id                                            type_volume_horaire_id,
-  vhe.etat_volume_horaire_id                                           etat_volume_horaire_id,
+  evh.id                                                               etat_volume_horaire_id,
   vh.id                                                                volume_horaire_id,
   NULL                                                                 volume_horaire_ref_id,
   s.id                                                                 service_id,
@@ -34,7 +34,8 @@ FROM
        JOIN intervenant                    i ON i.id = s.intervenant_id
        JOIN statut                        si ON si.id = i.statut_id
        JOIN type_intervention             ti ON ti.id = vh.type_intervention_id
-       JOIN v_vol_horaire_etat_multi     vhe ON vhe.volume_horaire_id = vh.id
+       JOIN tbl_validation_enseignement  tve ON tve.volume_horaire_id = vh.id
+       JOIN etat_volume_horaire          evh ON evh.ordre <= tve.etat_volume_horaire_ordre
        JOIN type_volume_horaire          tvh ON tvh.id = vh.type_volume_horaire_id
   LEFT JOIN element_pedagogique           ep ON ep.id = s.element_pedagogique_id
   LEFT JOIN mv_modulateur               modu ON modu.element_pedagogique_id = ep.id
@@ -44,7 +45,7 @@ FROM
   LEFT JOIN type_intervention_statut     tis ON tis.type_intervention_id = ti.id AND tis.statut_id = i.statut_id
   LEFT JOIN formule_resultat_intervenant fri ON fri.intervenant_id = s.intervenant_id
                                             AND fri.type_volume_horaire_id = vh.type_volume_horaire_id
-                                            AND fri.etat_volume_horaire_id = vhe.etat_volume_horaire_id
+                                            AND fri.etat_volume_horaire_id = evh.id
 WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
@@ -92,8 +93,8 @@ FROM
        JOIN service_referentiel            sr ON sr.id = vhr.service_referentiel_id
        JOIN intervenant                     i ON i.id = sr.intervenant_id
        JOIN statut                         si ON si.id = i.statut_id
-       JOIN v_vol_horaire_ref_etat_multi vher ON vher.volume_horaire_ref_id = vhr.id
-       JOIN etat_volume_horaire           evh ON evh.id = vher.etat_volume_horaire_id
+       JOIN tbl_validation_referentiel    tvr ON tvr.volume_horaire_ref_id = vhr.id
+       JOIN etat_volume_horaire           evh ON evh.ordre <= tvr.etat_volume_horaire_ordre
        JOIN fonction_referentiel           fr ON fr.id = sr.fonction_id
        JOIN type_volume_horaire           tvh ON tvh.id = vhr.type_volume_horaire_id
   LEFT JOIN STRUCTURE                       s ON s.id = sr.structure_id

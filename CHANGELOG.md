@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 24.3](#ose-243-22052025)
+[OSE 24.3](#ose-245-05062025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -24,6 +24,31 @@
 
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
 
+
+# OSE 24.5 (05/06/2025)
+
+## Amélioration
+
+* Nouvelle formule pour La Rochelle
+
+## Correction
+
+* La version 24 ne comptabilisait pas tous les volumes horaires de référentiel pour les paiements dans certaines situations
+
+
+# OSE 24.4 (04/06/2025)
+
+## Améliorations
+
+* Possibilité de lancer la commande [calcul-tableaux-bord](doc/ligne-de-commande.md) en précisant un tableau de bord en particulier à actualiser et une année ou un intervenant précis
+
+## Corrections
+
+* Traducteur de formules de calcul : résolution de problème au niveau des SI embarqués dans des paramètres de fonctions (#50652) 
+* Correction des demandes de mise en paiement pour pouvoir gérer la notion de budget sur des types de ressources autres que de la "paie état" ou des "ressources propres" (#61953)
+* Correction sur les demandes de mise en paiement pour prendre en compte le paiement d'heures faites dans un établissement extérieur.
+* Formules de calcul : correction d'un problème important prenant en compte des heures non payables dans des calculs intermédiaires (#61947).
+* Formules de calcul : correction d'un problème qui empêchait de prendre en compte les paramètres personnalisés (#60719)
 
 
 # OSE 24.3 (22/05/2025)

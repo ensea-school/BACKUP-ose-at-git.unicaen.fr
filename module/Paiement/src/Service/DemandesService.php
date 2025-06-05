@@ -56,8 +56,7 @@ class DemandesService extends AbstractService
                 //On récupère les données nécessaires à la demande de mis en paiement
                 $data                   = [];
                 $data['heures']         = $heures->getHeuresAPayerAA() + $heures->getHeuresAPayerAC();
-                $data['centre-cout-id'] = ($heures->getCentreCout()) ? $heures->getCentreCout()->getId() : '';
-                ;
+                $data['centre-cout-id'] = ($heures->getCentreCout()) ? $heures->getCentreCout()->getId() : '';;
                 $data['domaine-fonctionnel-id'] = ($heures->getDomaineFonctionnel()) ? $heures->getDomaineFonctionnel()->getId() : '';
                 $data['service-id']             = ($heures->getService()) ? $heures->getService()->getId() : '';
                 $data['service-referentiel-id'] = ($heures->getServiceReferentiel()) ? $heures->getServiceReferentiel()->getId() : '';
@@ -177,9 +176,12 @@ class DemandesService extends AbstractService
             $parametreCentreCout = 'enseignement';
         }
 
-        if ($intervenantStructure instanceof Structure && $structure instanceof Structure) {
-            if ($parametreCentreCout == 'affectation') {   //Cas ou c'est la composante d'affectation qui fait les demandes de mises en paiement
-                if ($intervenantStructure->getId() == $structure->getId()) {
+        if ($intervenantStructure instanceof Structure && $structure instanceof Structure)
+        {
+            if($parametreCentreCout == 'affectation')
+            {   //Cas ou c'est la composante d'affectation qui fait les demandes de mises en paiement
+                if ($intervenantStructure->getId() == $structure->getId())
+                {
                     /*Si j'ai un role avec un périmètre composante et que ma structure d'affectation est la même que
                     celle de l'intervenant j'accède à toutes les demandes de mise en paiement peu importe la structure
                     de l'enseignement réalisé de l'intervenant on ne filtre pas les dmep*/
@@ -201,7 +203,8 @@ class DemandesService extends AbstractService
             MAX(s.libelle_long)   			    structure_libelle,
             MAX(s.libelle_court)   			    structure_libelle_court,
             CASE
-                WHEN MAX(tp.service_id) IS NOT NULL THEN 'enseignement'
+                WHEN MAX(tp.service_id) IS NOT NULL AND MAX(s.element_pedagogique_id) IS NOT NULL THEN 'enseignement'
+                WHEN MAX(tp.service_id) IS NOT NULL AND MAX(s.element_pedagogique_id) IS NULL THEN 'enseignement-exterieur'
                 WHEN MAX(tp.service_referentiel_id) IS NOT NULL THEN 'referentiel'
                 ELSE 'mission'
             END 							    typage,
@@ -211,6 +214,9 @@ class DemandesService extends AbstractService
             MAX(ep.id)   					    element_id,
             ep.code 						    element_code,
             MAX(ep.libelle) 				    element_libelle,
+            MAX(etab.libelle) 				    etab_libelle,
+            MAX(etab.source_code) 				etab_code,
+            MAX(s.description)                  enseignement_ext_libelle,
             MAX(fr.id)      				    fonction_id,
             fr.code    						    fonction_code,
             MAX(fr.libelle_long)  			    fonction_libelle,
@@ -259,6 +265,7 @@ class DemandesService extends AbstractService
         LEFT JOIN periode p ON p.id = tp.periode_paiement_id
         LEFT JOIN mission m ON m.id = tp.mission_id
         LEFT JOIN type_mission tm ON tm.id = m.type_mission_id
+        LEFT JOIN etablissement etab ON etab.id = s.etablissement_id
         WHERE
             tp.intervenant_id = :intervenant ";
 
@@ -325,25 +332,25 @@ class DemandesService extends AbstractService
                 //Heure déjà mise en paiement
                 if (!empty($value['MEP_ID'])) {
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
-                        'mepId'                  => $value['MEP_ID'],
-                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
-                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
-                        'serviceId'              => $value['SERVICE_ID'],
-                        'serviceReferentielId'   => $value['SERVICE_REFERENTIEL_ID'],
-                        'missionId'              => $value['MISSION_ID'],
-                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
-                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
-                        'heuresPayees'           => $value['HEURES_PAYEES'],
-                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
-                        'periodeCode'            => $value['PERIODE_CODE'],
-                        'datePaiement'           => $value['DATE_PAIEMENT'],
-                        'dateDemande'            => $value['DATE_DEMANDE'],
-                        'domaineFonctionnel'     => [
+                        'mepId'                => $value['MEP_ID'],
+                        'typeHeureId'          => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'        => $value['TYPE_HEURE_CODE'],
+                        'serviceId'            => $value['SERVICE_ID'],
+                        'serviceReferentielId' => $value['SERVICE_REFERENTIEL_ID'],
+                        'missionId'            => $value['MISSION_ID'],
+                        'heuresAPayer'         => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'      => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'         => $value['HEURES_PAYEES'],
+                        'periodeLibelle'       => $value['PERIODE_LIBELLE'],
+                        'periodeCode'          => $value['PERIODE_CODE'],
+                        'datePaiement'         => $value['DATE_PAIEMENT'],
+                        'dateDemande'          => $value['DATE_DEMANDE'],
+                        'domaineFonctionnel'   => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
                             'code'                 => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
                         ],
-                        'centreCout'             => [
+                        'centreCout'           => [
                             'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
                             'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
@@ -353,25 +360,25 @@ class DemandesService extends AbstractService
                     ];
                 } else {
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['a_demander'] = [
-                        'mepId'                  => '',
-                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
-                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
-                        'serviceId'              => $value['SERVICE_ID'],
-                        'serviceReferentielId'   => $value['SERVICE_REFERENTIEL_ID'],
-                        'missionId'              => $value['MISSION_ID'],
-                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
-                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
-                        'heuresPayees'           => $value['HEURES_PAYEES'],
-                        'periodeLibelle'         => $value['PERIODE_LIBELLE'],
-                        'periodeCode'            => $value['PERIODE_CODE'],
-                        'datePaiement'           => $value['DATE_PAIEMENT'],
-                        'dateDemande'            => $value['DATE_DEMANDE'],
-                        'domaineFonctionnel'     => [
+                        'mepId'                => '',
+                        'typeHeureId'          => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'        => $value['TYPE_HEURE_CODE'],
+                        'serviceId'            => $value['SERVICE_ID'],
+                        'serviceReferentielId' => $value['SERVICE_REFERENTIEL_ID'],
+                        'missionId'            => $value['MISSION_ID'],
+                        'heuresAPayer'         => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'      => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'         => $value['HEURES_PAYEES'],
+                        'periodeLibelle'       => $value['PERIODE_LIBELLE'],
+                        'periodeCode'          => $value['PERIODE_CODE'],
+                        'datePaiement'         => $value['DATE_PAIEMENT'],
+                        'dateDemande'          => $value['DATE_DEMANDE'],
+                        'domaineFonctionnel'   => [
                             'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
                             'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
                             'code'                 => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
                         ],
-                        'centreCout'             => [
+                        'centreCout'           => [
                             'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
                             'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
@@ -380,6 +387,78 @@ class DemandesService extends AbstractService
                         ],
                     ];
                 }
+            } elseif ($value['TYPAGE'] == "enseignement-exterieur") {
+                $ensCode = 1;
+                //Partie enseignements exterieurs
+                $dmep[$value['STRUCTURE_CODE']]['code']                                                                                                      = $value['STRUCTURE_CODE'];
+                $dmep[$value['STRUCTURE_CODE']]['id']                                                                                                        = $value['STRUCTURE_ID'];
+                $dmep[$value['STRUCTURE_CODE']]['libelle']                                                                                                   = $value['STRUCTURE_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['libelleCourt']                                                                                              = $value['STRUCTURE_LIBELLE_COURT'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['libelle']                                                                    = $value['ETAB_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['libelle']                                         = $value['ENSEIGNEMENT_EXT_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']]['libelle'] = $value['TYPE_HEURE_LIBELLE'];
+                if (!array_key_exists('heures', $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']])) {
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures'] = [];
+                }
+                //Heure déjà mise en paiement
+                if (!empty($value['MEP_ID'])) {
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
+                        'mepId'                => $value['MEP_ID'],
+                        'typeHeureId'          => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'        => $value['TYPE_HEURE_CODE'],
+                        'serviceId'            => $value['SERVICE_ID'],
+                        'serviceReferentielId' => $value['SERVICE_REFERENTIEL_ID'],
+                        'missionId'            => $value['MISSION_ID'],
+                        'heuresAPayer'         => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'      => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'         => $value['HEURES_PAYEES'],
+                        'periodeLibelle'       => $value['PERIODE_LIBELLE'],
+                        'periodeCode'          => $value['PERIODE_CODE'],
+                        'datePaiement'         => $value['DATE_PAIEMENT'],
+                        'dateDemande'          => $value['DATE_DEMANDE'],
+                        'domaineFonctionnel'   => [
+                            'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
+                            'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
+                            'code'                 => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
+                        ],
+                        'centreCout'           => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
+                            'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
+                            'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                        ],
+                    ];
+                } else {
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['a_demander'] = [
+                        'mepId'                => '',
+                        'typeHeureId'          => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'        => $value['TYPE_HEURE_CODE'],
+                        'serviceId'            => $value['SERVICE_ID'],
+                        'serviceReferentielId' => $value['SERVICE_REFERENTIEL_ID'],
+                        'missionId'            => $value['MISSION_ID'],
+                        'heuresAPayer'         => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'      => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'         => $value['HEURES_PAYEES'],
+                        'periodeLibelle'       => $value['PERIODE_LIBELLE'],
+                        'periodeCode'          => $value['PERIODE_CODE'],
+                        'datePaiement'         => $value['DATE_PAIEMENT'],
+                        'dateDemande'          => $value['DATE_DEMANDE'],
+                        'domaineFonctionnel'   => [
+                            'domaineFonctionnelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
+                            'libelle'              => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
+                            'code'                 => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
+                        ],
+                        'centreCout'           => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
+                            'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
+                            'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                        ],
+                    ];
+                }
+                $ensCode++;
             } elseif ($value['TYPAGE'] == "referentiel") {
                 //Partie référentiel
                 $dmep[$value['STRUCTURE_CODE']]['code']                                                      = $value['STRUCTURE_CODE'];
@@ -593,8 +672,7 @@ class DemandesService extends AbstractService
     public function verifierBudgetDemandeMiseEnPaiement(array $demandes): array
     {
         $demandesApprouvees                      = [];
-        $totalHeuresDemandees['ressourcePropre'] = 0;
-        $totalHeuresDemandees['paieEtat']        = 0;
+        $totalHeuresDemandees = [];
 
         //1 - On récupère le budget de la structure pour laquelle on a des heures à demander
         foreach ($demandes as $demande) {
@@ -603,36 +681,30 @@ class DemandesService extends AbstractService
             if ($structure instanceof Structure) {
 
                 $budget = $this->getServiceBudget()->getBudgetPaiement($structure);
+
                 //2 - On récupère le centre de cout que nous souhaitons utiliser pour la demande de mise en paiement
 
                 $centreCout = $this->getEntityManager()->getRepository(CentreCout::class)->find($demande['centreCoutId']);
                 $centreCout = $this->getServiceCentreCout()->get($demande['centreCoutId']);
                 if ($centreCout instanceof CentreCout) {
                     //3 - on vérifier si il y a du budget dans le type de ressource auquel est rattaché ce centre de cout
-                    if ($centreCout->getTypeRessource()->getCode() == 'ressources-propres') {
-                        if ($budget['dotation']['ressourcePropre'] > 0) {
+                    if (array_key_exists($centreCout->getTypeRessource()->getCode(), $budget['dotation'])) {
+                        if (!array_key_exists($centreCout->getTypeRessource()->getCode(), $totalHeuresDemandees)) {
+                            $totalHeuresDemandees[$centreCout->getTypeRessource()->getCode()] = 0;
+                        }
+                        if ($budget['dotation'][$centreCout->getTypeRessource()->getCode()]['heures'] > 0) {
 
                             //4 - on regarde si il y a encore assez de budget pour demander les heures en paiement
-                            $total = round($budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'], 2);
-                            if ($total <= $budget['dotation']['ressourcePropre']) {
-                                $totalHeuresDemandees['ressourcePropre'] += $demande['heures'];
+                            $total = round($budget['consommation'][$centreCout->getTypeRessource()->getCode()]['heures'] + $demande['heures'] + $totalHeuresDemandees[$centreCout->getTypeRessource()->getCode()], 2);
+                            if ($total <= $budget['dotation'][$centreCout->getTypeRessource()->getCode()]['heures']) {
+                                $totalHeuresDemandees[$centreCout->getTypeRessource()->getCode()] += $demande['heures'];
                             } else {
                                 continue;
                             }
                         }
                         $demandesApprouvees[] = $demande;
-                    }
-                    if ($centreCout->getTypeRessource()->getCode() == 'paie-etat') {
-                        //Si la dotation est supérieur à 0, alors on vérifie s'il reste du budget disponible
-                        if ($budget['dotation']['paieEtat'] > 0) {
-                            //4bis - on regarde s'il y a encore assez de budget pour demander les heures en paiement
-                            $total = round($budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'], 2);
-                            if ($total <= $budget['dotation']['paieEtat']) {
-                                $totalHeuresDemandees['paieEtat'] += $demande['heures'];
-                            } else {
-                                continue;
-                            }
-                        }
+                    } else {
+                        //Si pas de dotation dans ce type de ressources alors on autorise obligatoirement la demande
                         $demandesApprouvees[] = $demande;
                     }
                 } else {
@@ -679,8 +751,8 @@ class DemandesService extends AbstractService
             $totalHeuresDemandees += $dmep['TOTAL_HEURES_DEMANDEES'];
             $totalHeuresAPayer    += $dmep['TOTAL_HEURES_A_PAYER'];
             if ($serviceReferentielId === $dmep['SERVICE_REFERENTIEL_ID'] || $serviceId === $dmep['SERVICE_ID'] || $missionId === $dmep['MISSION_ID']) {
-                $soldeHeures = round($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES'], 2);
-                if (bccomp((string)$heuresDemandees, (string)$soldeHeures, 2) > 0) {
+                $soldeHeures = round($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES'],2);
+                if (bccomp((string)$heuresDemandees, (string)$soldeHeures,2) > 0) {
                     if ($soldeHeures >= 0) {
                         throw new \Exception('Demande de mise en paiement impossible, vous demandez ' . $heuresDemandees . ' hetd(s) alors que vous pouvez demander maximum ' . ($dmep['TOTAL_HEURES_A_PAYER'] - $dmep['TOTAL_HEURES_DEMANDEES']) . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);
                     } else {
@@ -689,8 +761,8 @@ class DemandesService extends AbstractService
                 }
             }
         }
-        $totalHeuresAPayer = round($totalHeuresAPayer, 2);
-        $totalHeuresDemandees = round($totalHeuresDemandees, 2);
+        $totalHeuresAPayer = round($totalHeuresAPayer,2);
+        $totalHeuresDemandees = round($totalHeuresDemandees,2);
         //On  vérifie qu'il y a bien un centre de cout
         if (empty($data['centreCoutId'])) {
             throw new \Exception('Vous devez renseigner un centre de coûts pour demander ce paiement', self::EXCEPTION_DMEP_CENTRE_COUT);
@@ -701,7 +773,7 @@ class DemandesService extends AbstractService
                 throw new \Exception('Vous devez renseigner un domaine fonctionnel pour demander ce paiement', self::EXCEPTION_DMEP_DOMAINE_FONCTIONNEL);
             }
         }
-        $soldeTotalHeures = round($totalHeuresAPayer - $totalHeuresDemandees, 2);
+        $soldeTotalHeures = round($totalHeuresAPayer - $totalHeuresDemandees,2);
         //On vérifie en dernier si l'ensemble des heures déjà payé ne dépasse pas le nombre d'heures réalisées tout service confondu.
         if (bccomp((string)($soldeTotalHeures), (string)$heuresDemandees, 2) < 0) {
             throw new \Exception('Demande de mise en paiement impossible, la somme des heures déjà demandée en paiement pour tous les services confondus ne permet plus de demander en paiement les ' . $heuresDemandees . ' hetd(s)', self::EXCEPTION_DMEP_INVALIDE);

@@ -32,6 +32,26 @@ Pas de paramètre pour cette commande.
 Pas de paramètre pour cette commande.
 Attention : le temps de traitement peut être long!
 
+Paramètres supplémentaires :
+
+Vous pouvez lancer la commande pour un tableau de bord en particuler :
+
+```
+./bin/ose calcul-tableaux-bord workflow
+```
+
+Et également, pour un tableau de bord donné, recalculer pour un intervenant donné (ID à fournir) :
+
+```
+./bin/ose calcul-tableaux-bord workflow --intervenant=517
+```
+
+Ou même pour une année donnée :
+
+```
+./bin/ose calcul-tableaux-bord workflow --annee=2024
+```
+
 ### ```calcul-feuille-de-route <id>``` : Recalcule la feuille de route de l'intervenant dont l'ID est <id>
 
 <id> doit être un nombre entier correspondant à l'ID d'un intervenant.

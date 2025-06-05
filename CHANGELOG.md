@@ -25,6 +25,16 @@
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
 
 
+# OSE 24.5 (05/06/2025)
+
+## Amélioration
+
+* Nouvelle formule pour La Rochelle
+
+## Correction
+
+* La version 24 ne comptabilisait pas tous les volumes horaires de référentiel pour les paiements dans certaines situations
+
 
 # OSE 24.4 (04/06/2025)
 

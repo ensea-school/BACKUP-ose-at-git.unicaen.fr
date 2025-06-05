@@ -2,6 +2,7 @@
 
 namespace PieceJointe\Tbl\Process;
 
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenTbl\Event;
@@ -19,6 +20,7 @@ class PieceJointeProcess implements ProcessInterface
     use BddServiceAwareTrait;
     use BddAwareTrait;
     use IntervenantServiceAwareTrait;
+    use AnneeServiceAwareTrait;
 
 
     protected array $piecesJointesDemandees = [];
@@ -36,25 +38,16 @@ class PieceJointeProcess implements ProcessInterface
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
-        if (empty($params)) {
-            $annees = $this->getServiceAnnee()->getActives(true);
-            foreach ($annees as $annee) {
-                $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
-            }
-        } else {
-            $this->getPiecesJointesDemandees($params);
-            $this->getPiecesJointesFournies($params);
-            $this->traitementPiecesJointes($params);
-            $this->enregistrement($tableauBord, $params);
-        }
+        $this->getPiecesJointesDemandees($params);
+        $this->getPiecesJointesFournies($params);
+        $this->traitementPiecesJointes($params);
+        $this->enregistrement($tableauBord, $params);
     }
 
 
 
     protected function getPiecesJointesDemandees(array $params): array
     {
-        $params = $this->replaceIntervenantIdbyCodeIntervenantParam($params);
-
         $definition                = $this->getServiceBdd()->getViewDefinition('V_TBL_PIECE_JOINTE_DEMANDE');
         $sqlPiecesJointesDemandees = 'SELECT * FROM ('
             . $this->getServiceBdd()->injectKey($definition, $params)
@@ -70,7 +63,6 @@ class PieceJointeProcess implements ProcessInterface
 
         unset($piecesJointesDemandees);
 
-        //dump($this->piecesJointesDemandees);
         return $this->piecesJointesDemandees;
     }
 
@@ -80,6 +72,7 @@ class PieceJointeProcess implements ProcessInterface
     {
 
         $params = $this->replaceIntervenantIdbyCodeIntervenantParam($params);
+
         $definition               = $this->getServiceBdd()->getViewDefinition('V_TBL_PIECE_JOINTE_FOURNIE');
         $sqlPiecesJointesFournies = 'SELECT * FROM ('
             . $this->getServiceBdd()->injectKey($definition, $params)
@@ -98,7 +91,6 @@ class PieceJointeProcess implements ProcessInterface
         }
 
         unset($piecesJointesFournies);
-        //dump($this->piecesJointesFournies);
         return $this->piecesJointesFournies;
 
 
@@ -120,13 +112,17 @@ class PieceJointeProcess implements ProcessInterface
 
     protected function replaceIntervenantIdbyCodeIntervenantParam(array $params): array
     {
-        if (isset($params['intervenant_id'])) {
-            $intervenant = $this->getServiceIntervenant()->get($params['intervenant_id']);
+        if (isset($params['INTERVENANT_ID'])) {
+            $intervenant = $this->getServiceIntervenant()->get($params['INTERVENANT_ID']);
             $codeIntervenant = $intervenant->getCode();
-            unset($params['intervenant_id']);
-            $params['code_intervenant'] = $codeIntervenant;
+            unset($params['INTERVENANT_ID']);
+            $params['CODE_INTERVENANT'] = $codeIntervenant;
 
         }
+        if (isset($params['ANNEE_ID'])) {
+            unset($params['ANNEE_ID']);
+        }
+
         return $params;
     }
 
@@ -156,7 +152,7 @@ class PieceJointeProcess implements ProcessInterface
             $this->sortDatas($this->tblData[$uuid]);
         }
 
-        //On parcourt maintenants les pièces jointes fournies qui sont forcément fournies l'année de leurs dépot
+        //On parcourt maintenant les pièces jointes fournies qui sont forcément fournies l'année de leurs dépot
         foreach ($this->piecesJointesFournies as $codeIntervenant => $datas) {
             foreach ($datas as $typePieceJointeId => $piecesJointesFournies) {
                 foreach ($piecesJointesFournies as $pieceJointeFournie) {
@@ -181,21 +177,27 @@ class PieceJointeProcess implements ProcessInterface
                 }
             }
         }
-        //Ensuite on cherche les pièces jointes fournis sur une potentielle année postérieurs (durée de vie)
+        //Ensuite on cherche les pièces jointes fournies sur une potentielle année postérieure (durée de vie)
         foreach ($this->piecesJointesDemandees as $pieceJointeDemandee) {
             $piecesJointesFournies = $this->extractPiecesJointesFournies($pieceJointeDemandee['CODE_INTERVENANT'], $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID']);
             $uuid = $pieceJointeDemandee['ANNEE_ID'] . '_' . $pieceJointeDemandee['INTERVENANT_ID'] . "_" . $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
+            //Piece jointe demandée déjà fournie donc on passe
+            if ($this->tblData[$uuid]['FOURNIE'] == 1) {
+                continue;
+            }
 
             if (!empty($piecesJointesFournies)) {
                 foreach ($piecesJointesFournies as $pieceJointeFournie) {
                     if ((int)$pieceJointeDemandee['ANNEE_ID'] > (int)$pieceJointeFournie['ANNEE_ID']) {
-                        if (//1 - Si la pièce jointe est validée
+                        if (//0 - c'est le même type de piece jointe
+                            $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'] == $pieceJointeFournie['TYPE_PIECE_JOINTE_ID'] &&
+                            //1 - Si la pièce jointe est validée
                             !empty($pieceJointeFournie['VALIDATION_ID']) &&
                             //2 -Si la date de validité de la pièce jointe est strictement supérieure à l'année où elle est demandée
                             (int)$pieceJointeFournie['DATE_VALIDITEE'] > (int)$pieceJointeDemandee['ANNEE_ID'] &&
                             //3 - Si l'année de la pièce fournie est strictement supérieure au maximum de l'ancienneté
                             //de la pièce possible par rapport à la durée de vie paramétrée sur l'année où elle est demandée
-                            (int)$pieceJointeFournie['ANNEE_ID'] > ((int)$pieceJointeDemandee['ANNEE_ID']-(int)$pieceJointeDemandee['DUREE_VIE']) &&
+                            (int)$pieceJointeFournie['ANNEE_ID'] > round((int)$pieceJointeDemandee['ANNEE_ID']-(int)$pieceJointeDemandee['DUREE_VIE']) &&
                             //4 - Si la date d'archive de la pièce fournie est strictement supérieure à l'année où elle est demandée
                             ((int)$pieceJointeFournie['DATE_ARCHIVE'] > (int)$pieceJointeDemandee['ANNEE_ID'] ||
                                 empty($pieceJointeFournie['DATE_ARCHIVE']))) {
@@ -207,13 +209,13 @@ class PieceJointeProcess implements ProcessInterface
 
                         }
                     }
-
                 }
+
             }
-            $this->sortDatas($this->tblData[$uuid]);
         }
+        $this->sortDatas($this->tblData[$uuid]);
+        
         ksort($this->tblData);
-        //dd($this->tblData);
 
     }
 
@@ -226,6 +228,8 @@ class PieceJointeProcess implements ProcessInterface
         $key = $tableauBord->getOption('key');
 
         $table = $this->getBdd()->getTable('TBL_PIECE_JOINTE');
+
+        //dd($this->tblData);
 
 
         $options = [

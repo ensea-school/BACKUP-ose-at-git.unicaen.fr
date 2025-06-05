@@ -332,8 +332,8 @@ return [
 
                 ],
                 'key'     => [
-                    'TYPE_PIECE_JOINTE_ID',
                     'INTERVENANT_ID',
+                    'TYPE_PIECE_JOINTE_ID',
                 ],
             ],
 

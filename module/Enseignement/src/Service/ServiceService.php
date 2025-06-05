@@ -2,14 +2,13 @@
 
 namespace Enseignement\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Periode;
 use Application\Service\AbstractEntityService;
 use Application\Service\PeriodeService;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\VolumeHoraireListe;
@@ -35,6 +34,7 @@ use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 /**
  * Description of Service
@@ -153,7 +153,7 @@ class ServiceService extends AbstractEntityService
         $this->leftJoin($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
         $serviceElementPedagogique->leftJoin($serviceStructure, $qb, 'structure', false, null, 's_ens');
 
-        $filter = "(($sAlias.typeIntervenant = :typeIntervenantPermanent AND i_ens.ids LIKE :composante) OR s_ens.ids LIKE = :composante)";
+        $filter = "(($sAlias.typeIntervenant = :typeIntervenantPermanent AND i_ens.ids LIKE :composante) OR s_ens.ids LIKE :composante)";
         $qb->andWhere($filter)->setParameter('composante', $structure->idsFilter());
         $qb->setParameter('typeIntervenantPermanent', $this->getServiceTypeIntervenant()->getPermanent());
 

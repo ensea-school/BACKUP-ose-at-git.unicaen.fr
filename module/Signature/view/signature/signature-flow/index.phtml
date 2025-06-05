@@ -3,7 +3,7 @@
 /**
  * @var Array $letterFileLevelsInfos
  */
-
+echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNamespace('error');
 ?>
 
 
@@ -14,16 +14,19 @@
             <section class="row">
                 <article class="signature-flow">
                     <h3 class="card-title">
-                        <a class="btn btn-danger pop-ajax"
-                           href="<?= $this->url("signature-flow/supprimer-circuit", ['signatureFlow' => $flow['id']]) ?>"
-                           title="Supprimer un circuit"
-                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression de circuit ?</p>"
-                           data-confirm="true"
-                           data-confirm-button="Oui"
-                           data-cancel-button="Non"
-                           data-submit-reload="true">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                        <?php if (empty($flow['steps'])): ?>
+                            <a class="btn btn-danger pop-ajax"
+                               href="<?= $this->url("signature-flow/supprimer-circuit", ['signatureFlow' => $flow['id']]) ?>"
+                               title="Supprimer un circuit"
+                               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression de circuit ?</p>"
+                               data-confirm="true"
+                               data-confirm-button="Oui"
+                               data-cancel-button="Non"
+                               data-submit-reload="true">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        <?php endif; ?>
+
                         <a class="btn btn-primary mod-ajax" data-event="type-edition" data-submit-reload="true"
                            href="<?= $this->url("signature-flow/saisir-circuit", ['signatureFlow' => $flow['id']]) ?>"
                            title="Modifier le circuit de signature">

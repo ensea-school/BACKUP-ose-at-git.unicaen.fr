@@ -2,7 +2,6 @@
 
 namespace Mission\Entity\Db;
 
-use Application\Entity\Db\Validation;
 use Application\Interfaces\AxiosExtractor;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\ContratAwareTrait;
@@ -15,6 +14,7 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use Workflow\Entity\Db\Validation;
 
 class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInterface, ResourceInterface, PlafondDataInterface
 {

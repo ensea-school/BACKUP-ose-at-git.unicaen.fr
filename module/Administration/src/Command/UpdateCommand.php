@@ -3,7 +3,6 @@
 namespace Administration\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,7 +20,7 @@ class UpdateCommand extends Command
         $this
             ->setDescription('Mise à jour de l\'application')
             ->addOption(
-                'maintenance-msg',
+                'maintenance',
                 'm',
                 InputOption::VALUE_OPTIONAL,
                 'Indique si un message de maintenance doit être affiché (y ou n)',
@@ -43,7 +42,7 @@ class UpdateCommand extends Command
 
         $io->title($this->getDescription());
 
-        $maintenanceMsg = $input->getOption('maintenance-msg');
+        $maintenanceMsg = $input->getOption('maintenance');
 
         if ($maintenanceMsg === 'yes') {
             // Affichage du message de confirmation
@@ -58,18 +57,17 @@ class UpdateCommand extends Command
 
         // Mise à jour du code source
         $version = $input->getOption('cible');
+
         if (!empty($version)){
-            $options = ['--cible' => $version];
+            $args = "--cible=$version";
         }else{
-            $options = [];
+            $args = "";
         }
-        $this->runCommand($output, 'update-code', $options);
 
-        // Mise à jour de la base de données à partir d'un nouveau processus
-        $this->runCommand($output, 'update-bdd');
+        $bin = getcwd()."/bin/ose";
 
-        // Recalcul des formules
-        $this->runCommand($output, 'build-formules');
+        passthru("$bin update-code $args");
+        passthru("$bin update-bdd");
 
         //Conclusion
         $io->success("Fin de la mise à jour.");
@@ -80,13 +78,4 @@ class UpdateCommand extends Command
         return Command::SUCCESS;
     }
 
-
-
-    private function runCommand(OutputInterface $output, string $commandName, array $options = []): int
-    {
-        $command = $this->getApplication()->get($commandName);
-        $input   = new ArrayInput($options);
-
-        return $command->run($input, $output);
-    }
 }

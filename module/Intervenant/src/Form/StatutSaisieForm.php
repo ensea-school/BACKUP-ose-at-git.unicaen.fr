@@ -2,19 +2,14 @@
 
 namespace Intervenant\Form;
 
-use Application\Entity\Db\EtatSortie;
-use Application\Entity\Db\Parametre;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
+use EtatSortie\Entity\Db\EtatSortie;
 use Intervenant\Entity\Db\Statut;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
-use Signature\Service\SignatureFlowServiceAwareTrait;
-use UnicaenApp\Util;
-use UnicaenSignature\Entity\Data\LevelInfo;
-use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -24,9 +19,8 @@ class StatutSaisieForm extends AbstractForm
     use TypeIntervenantServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use DossierAutreServiceAwareTrait;
-    use SignatureConfigurationServiceAwareTrait;
     use RoleServiceAwareTrait;
-    use SignatureFlowServiceAwareTrait;
+
 
     public function init()
     {
@@ -61,8 +55,6 @@ class StatutSaisieForm extends AbstractForm
             'conseilAcademiqueDureeVie'     => 'Durée de vie du CAC',
             'contrat'                       => '',
             'contratEtatSortie'             => 'État de sortie à utiliser pour générer le contrat',
-            'contratSignatureActivation'    => 'Activer la signature électornique pour ce statut',
-            'contratSignatureCircuit'       => 'Circuit de signature du contrat',
             'avenantEtatSortie'             => 'État de sortie à utiliser pour générer d\'éventuels avenants aux contrats',
             'serviceExterieur'              => 'L\'intervenant pourra assurer des services dans d\'autres établissements',
             'cloture'                       => 'Le service réalisé devra être clôturé avant d\'accéder aux demandes de mise en paiement',
@@ -149,46 +141,6 @@ class StatutSaisieForm extends AbstractForm
 
 
         $this->spec(Statut::class, $ignored);
-        //Activation de la signature electronique pour ce statut
-        $paramLetterFile = $this->getServiceParametres()->get("signature_electronique_parapheur");
-
-        //1- On récupére le parapheur activé sur OSE
-        $this->spec(['contratSignatureActivation' => [
-            'type'    => 'Select',
-            'name'    => 'contratSignatureActivation',
-            'options' => [
-                'value_options' => [
-                    1 => 'Activé',
-                    0 => 'Désactivé',
-                ],
-            ],
-        ]]);
-
-        $this->spec(['contratSignatureCircuit' => [
-            'type'    => 'Select',
-            'name'    => 'contratSignatureCircuit',
-            'options' => [
-                'value_options' => Util::collectionAsOptions($this->getServiceSignatureFlow()->getList()),
-
-            ],
-        ]]);
-
-
-        $levelLetterFiles = $this->getSignatureConfigurationService()->getLevels();
-
-        $listeSignatureTypes['none'] = 'aucun';
-        if (!empty($paramLetterFile)) {
-
-            /**
-             * @var LevelInfo $value
-             */
-            foreach ($levelLetterFiles as $key => $value) {
-                if ($value->isUsed()) {
-                    $listeSignatureTypes[$value->getKey()] = $value->getLabel();
-                }
-            }
-        }
-
 
         $this->spec(['modeEnseignementPrevisionnel' => [
             'type'     => 'Select',

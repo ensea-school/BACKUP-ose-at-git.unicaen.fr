@@ -165,14 +165,14 @@ class IntervenantDossierHydrator implements HydratorInterface
             $object->setSituationMatrimoniale($situationMatrimoniale);
             //Date de la situation matrimoniale
             $dateSituationMatrimoniale = (!empty($data['DossierIdentite']['dateSituationMatrimoniale'])) ?
-                \DateTime::createFromFormat('d/m/Y', $data['DossierIdentite']['dateSituationMatrimoniale']) : null;
+                \DateTime::createFromFormat('Y-m-d', $data['DossierIdentite']['dateSituationMatrimoniale']) : null;
             $object->setDateSituationMatrimoniale($dateSituationMatrimoniale);
         }
         //hydratation de l'identité complémentaire
         if (isset($data['DossierIdentiteComplementaire'])) {
             //Date de naissance
             $dateNaissance = (!empty($data['DossierIdentiteComplementaire']['dateNaissance'])) ?
-                \DateTime::createFromFormat('d/m/Y', $data['DossierIdentiteComplementaire']['dateNaissance']) : null;
+                \DateTime::createFromFormat('Y-m-d', $data['DossierIdentiteComplementaire']['dateNaissance']) : null;
             $object->setDateNaissance($dateNaissance);
             //Pays de naissance
             $paysNaissance = (!empty($data['DossierIdentiteComplementaire']['paysNaissance'])) ?

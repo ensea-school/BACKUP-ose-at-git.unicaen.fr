@@ -170,42 +170,6 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function getServiceAPayer(): ?ServiceAPayerInterface
-    {
-        if ($this->formuleResultatService) return $this->formuleResultatService;
-        if ($this->formuleResultatServiceReferentiel) return $this->formuleResultatServiceReferentiel;
-        if ($this->mission) return $this->mission;
-
-        return null;
-    }
-
-
-
-    public function setServiceAPayer(ServiceAPayerInterface $serviceAPayer = null): self
-    {
-        if ($serviceAPayer instanceof FormuleResultatService) {
-            $this->setFormuleResultatService($serviceAPayer);
-            $this->setFormuleResultatServiceReferentiel();
-            $this->setMission();
-        } elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel) {
-            $this->setFormuleResultatService();
-            $this->setFormuleResultatServiceReferentiel($serviceAPayer);
-            $this->setMission();
-        } elseif ($serviceAPayer instanceof Mission) {
-            $this->setFormuleResultatService();
-            $this->setFormuleResultatServiceReferentiel();
-            $this->setMission($serviceAPayer);
-        } else {
-            $this->setFormuleResultatService();
-            $this->setFormuleResultatServiceReferentiel();
-            $this->setMission();
-        }
-
-        return $this;
-    }
-
-
-
     public function getServiceReferentiel(): ?ServiceReferentiel
     {
         return $this->serviceReferentiel;

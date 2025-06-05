@@ -2,10 +2,10 @@
 
 namespace Agrement\Entity\Db;
 
-use Application\Resource\WorkflowResource;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Workflow\Resource\WorkflowResource;
 
 /**
  * AgrementService

@@ -252,7 +252,20 @@ class FormulatorService
             $first = false;
         }
 
-        $template = file_get_contents(getcwd() . '/module/Formule/src/Model/FormuleCalculTemplate.phptemplate');
+        $template = "<?php
+
+use Formule\Model\AbstractFormuleCalcul;
+
+class FormuleCalculTemplate extends AbstractFormuleCalcul
+{
+
+    protected int \$mainLine = 20/* MAIN_LINE*/;
+
+
+
+/* TRAITEMENT */
+
+}";
         $template = str_replace('FormuleCalculTemplate', $this->formuleClassName($tableur->formule()), $template);
         $php      = str_replace("/* TRAITEMENT */\n\n", $php, $template);
         $php      = str_replace('20/* MAIN_LINE*/', $tableur->mainLine(), $php);

@@ -1,19 +1,15 @@
 $(function ()
 {
-    WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function () {
-        WidgetInitializer.includeJs(unicaenVue.url('js/intervenant-recherche.js'));
-    });
-
     WidgetInitializer.add('jstree', 'jstree', function ()
     {
-        WidgetInitializer.includeJs(unicaenVue.url('vendor/vakata-jstree-3.3.8/dist/jstree.min.js'));
-        WidgetInitializer.includeCss(unicaenVue.url('vendor/vakata-jstree-3.3.8/dist/themes/default/style.min.css'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/jstree/jstree.min.js'));
+        WidgetInitializer.includeCss(unicaenVue.url('vendor/jstree/themes/default/style.min.css'));
     });
 
     WidgetInitializer.add('table-sort', 'tableSort', function ()
     {
-        WidgetInitializer.includeJs(unicaenVue.url('vendor/DataTables-1.12.1/js/jquery.dataTables.min.js'));
-        WidgetInitializer.includeJs(unicaenVue.url('vendor/DataTables-1.12.1/js/dataTables.bootstrap5.min.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/datatables/js/dataTables.min.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/datatables/js/dataTables.bootstrap5.min.js'));
         WidgetInitializer.includeJs(unicaenVue.url('js/table-sort.js'));
 
         (function () {
@@ -88,16 +84,6 @@ $(function ()
     });
     WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie', function () {
         WidgetInitializer.includeJs(unicaenVue.url('js/offre-formation.js'));
-    });
-
-
-    /* Charges d'enseignement */
-    WidgetInitializer.add('chargens', 'chargens', function () {
-        WidgetInitializer.includeJs(unicaenVue.url('vendor/go.js'));
-        //   WidgetInitializer.includeJs(unicaenVue.url('js/chargens.js'));
-    });
-    WidgetInitializer.add('chargens-filtre', 'chargensFiltre', function () {
-        //     WidgetInitializer.includeJs(unicaenVue.url('js/chargens.js'));
     });
 
 

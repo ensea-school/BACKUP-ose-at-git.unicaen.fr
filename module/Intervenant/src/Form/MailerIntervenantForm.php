@@ -2,9 +2,9 @@
 
 namespace Intervenant\Form;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 

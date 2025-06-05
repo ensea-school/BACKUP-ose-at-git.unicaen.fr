@@ -2,7 +2,9 @@
 
 namespace Administration\DataSource;
 
+use Application\Entity\Db\Perimetre;
 use Unicaen\BddAdmin\BddAwareTrait;
+use Workflow\Entity\Db\WorkflowEtapeDependance;
 
 class DataSource
 {
@@ -22,7 +24,7 @@ class DataSource
 
 
 
-    public function ANNEE()
+    public function ANNEE(): array
     {
         $annees = [];
         for ($a = 1950; $a < 2100; $a++) {
@@ -47,7 +49,7 @@ class DataSource
 
 
 
-    public function DEPARTEMENT()
+    public function DEPARTEMENT(): array
     {
         $departements = [];
 
@@ -75,7 +77,7 @@ class DataSource
 
 
 
-    public function IMPORT_TABLES()
+    public function IMPORT_TABLES(): array
     {
         $data = require 'data/import_tables.php';
 
@@ -93,7 +95,7 @@ class DataSource
 
 
 
-    public function JOUR_FERIE()
+    public function JOUR_FERIE(): array
     {
         $joursFeries = require 'data/jours_feries.php';
 
@@ -122,14 +124,14 @@ class DataSource
 
 
 
-    public function ETAT_SORTIE()
+    public function ETAT_SORTIE(): array
     {
         return require 'data/etats_sortie.php';
     }
 
 
 
-    public function CATEGORIE_PRIVILEGE()
+    public function CATEGORIE_PRIVILEGE(): array
     {
         $data       = require 'data/privileges.php';
         $categories = [];
@@ -146,7 +148,7 @@ class DataSource
 
 
 
-    public function PRIVILEGE()
+    public function PRIVILEGE(): array
     {
         $data       = require 'data/privileges.php';
         $privileges = [];
@@ -168,7 +170,7 @@ class DataSource
 
 
 
-    public function STATUT()
+    public function STATUT(): array
     {
         $donneesParDefaut = require 'data/donnees_par_defaut.php';
         $data             = $donneesParDefaut['STATUT'];
@@ -187,7 +189,7 @@ class DataSource
 
 
 
-    public function FONCTION_REFERENTIEL()
+    public function FONCTION_REFERENTIEL(): array
     {
         $donneesParDefaut = require 'data/donnees_par_defaut.php';
         $data             = $donneesParDefaut['FONCTION_REFERENTIEL'];
@@ -206,7 +208,7 @@ class DataSource
 
 
 
-    public function TYPE_PIECE_JOINTE_STATUT()
+    public function TYPE_PIECE_JOINTE_STATUT(): array
     {
         $donneesParDefaut = require 'data/donnees_par_defaut.php';
         $data             = $donneesParDefaut['TYPE_PIECE_JOINTE_STATUT'];
@@ -225,7 +227,7 @@ class DataSource
 
 
 
-    public function PLAFOND()
+    public function PLAFOND(): array
     {
         $data     = require 'data/plafonds.php';
         $plafonds = [];
@@ -248,7 +250,7 @@ class DataSource
 
 
 
-    public function PLAFOND_ETAT()
+    public function PLAFOND_ETAT(): array
     {
         $data     = require 'data/plafonds.php';
         $plafonds = [];
@@ -269,7 +271,7 @@ class DataSource
 
 
 
-    public function PLAFOND_PERIMETRE()
+    public function PLAFOND_PERIMETRE(): array
     {
         $data     = require 'data/plafonds.php';
         $plafonds = [];
@@ -289,7 +291,7 @@ class DataSource
 
 
 
-    public function TAUX_REMU(string $action)
+    public function TAUX_REMU(string $action): array
     {
         $data = require 'data/taux_remu.php';
 
@@ -313,7 +315,7 @@ class DataSource
 
 
 
-    public function TAUX_REMU_VALEUR(string $action)
+    public function TAUX_REMU_VALEUR(string $action): array
     {
         $data = require 'data/taux_remu.php';
 
@@ -339,7 +341,7 @@ class DataSource
 
 
 
-    public function TYPE_MISSION()
+    public function TYPE_MISSION(): array
     {
         $data = require 'data/type_mission.php';
 
@@ -364,7 +366,7 @@ class DataSource
 
 
 
-    public function TYPE_INDICATEUR()
+    public function TYPE_INDICATEUR(): array
     {
         $data        = require 'data/indicateurs.php';
         $indicateurs = [];
@@ -383,7 +385,7 @@ class DataSource
 
 
 
-    public function INDICATEUR()
+    public function INDICATEUR(): array
     {
         $data        = require 'data/indicateurs.php';
         $indicateurs = [];
@@ -412,15 +414,25 @@ class DataSource
 
 
 
-    public function WF_ETAPE()
+    public function WORKFLOW_ETAPE(): array
     {
         $data   = require 'data/workflow_etapes.php';
         $etapes = [];
         $ordre  = 1;
         foreach ($data as $code => $etape) {
-            $etape['CODE']  = $code;
-            $etape['ORDRE'] = $ordre++ * 10;
-            $etapes[]       = $etape;
+            $edata    = [
+                'ID'                  => $etape['id'],
+                'CODE'                => $code,
+                'PERIMETRE_ID'        => $etape['perimetre'],
+                'ROUTE'               => $etape['route'],
+                'ROUTE_INTERVENANT'   => $etape['route_intervenant'] ?? null,
+                'LIBELLE_INTERVENANT' => $etape['libelle_intervenant'],
+                'LIBELLE_AUTRES'      => $etape['libelle_autres'],
+                'DESC_NON_FRANCHIE'   => $etape['desc_non_franchie'],
+                'DESC_SANS_OBJECTIF'  => $etape['desc_sans_objectif'] ?? null,
+                'ORDRE'               => $ordre++,
+            ];
+            $etapes[] = $edata;
         }
 
         return $etapes;
@@ -428,7 +440,33 @@ class DataSource
 
 
 
-    public function PARAMETRE()
+    public function WORKFLOW_ETAPE_DEPENDANCE(): array
+    {
+        $data = require 'data/workflow_etapes.php';
+
+        $deps = [];
+        foreach ($data as $etapeSuivCode => $etape) {
+            if (isset($etape['dependances'])) {
+                foreach ($etape['dependances'] as $etapePrecCode => $dependance) {
+                    $dep = [
+                        'ETAPE_SUIVANTE_ID'   => $etapeSuivCode,
+                        'ETAPE_PRECEDANTE_ID' => $etapePrecCode,
+                        'ACTIVE'              => true,
+                        'TYPE_INTERVENANT_ID' => $dependance['type_intervenant'] ?? null,
+                        'PERIMETRE_ID'        => $dependance['perimetre'] ?? Perimetre::ETABLISSEMENT,
+                        'AVANCEMENT'          => $dependance['avancement'] ?? WorkflowEtapeDependance::AVANCEMENT_DESACTIVE,
+                    ];
+                    $deps[] = $dep;
+                }
+            }
+        }
+
+        return $deps;
+    }
+
+
+
+    public function PARAMETRE(): array
     {
         $bdd = $this->getBdd();
 

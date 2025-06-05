@@ -3,12 +3,9 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\WfEtape;
-use Application\Entity\WorkflowEtape;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Candidature;
@@ -21,6 +18,10 @@ use Mission\Service\OffreEmploiServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\WorkflowEtape;
+use Workflow\Service\ValidationServiceAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**
@@ -288,8 +289,8 @@ class  OffreEmploiController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-                                                              'candidature',
-                                                              'mission',
+                                                              TblProvider::CANDIDATURE,
+                                                              TblProvider::MISSION,
                                                           ], $intervenant);
     }
 
@@ -319,10 +320,14 @@ class  OffreEmploiController extends AbstractController
          * @var WorkflowEtape $etapeDonneesPersos
          */
         $intervenant                   = $this->getEvent()->getParam('intervenant');
+        $renseignerDonneesPersonnelles = false;
         $canValiderCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
         $canRefuserCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_REFUSER);
         $etapeDonneesPersos            = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
-        $renseignerDonneesPersonnelles = ($etapeDonneesPersos->getFranchie() == 1) ? false : true;
+        if(!empty($etapeDonneesPersos))
+        {
+            $renseignerDonneesPersonnelles = ($etapeDonneesPersos->getFranchie() == 1) ? false : true;
+        }
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');

@@ -13,7 +13,6 @@ use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Validator\Date as DateValidator;
 use Lieu\Service\DepartementServiceAwareTrait;
 use Lieu\Service\PaysServiceAwareTrait;
-use UnicaenApp\Form\Element\Date;
 
 /**
  * Description of DossierFieldset
@@ -142,7 +141,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
         $this->add([
                        'name'       => 'dateSituationMatrimoniale',
                        'options'    => [
-                           'label'         => 'depuis le : ',
+                           'label'         => 'depuis le',
                            'label_options' => [
                                'disable_html_escape' => true,
                            ],
@@ -153,15 +152,11 @@ class DossierIdentiteFieldset extends AbstractFieldset
                            'id'          => 'dateSituationMatrimoniale',
 
                        ],
-                       'type'       => 'UnicaenApp\Form\Element\Date',
+                       'type'       => 'Date',
                    ]);
-        /**
-         * @var Date $date
-         */
-
 
         if ($statutDossierIntervenant->getDossierSituationMatrimoniale()) {
-            $this->get('dateSituationMatrimoniale')->setLabel('depuis le : <span class="text-danger">*</span>');
+            $this->get('dateSituationMatrimoniale')->setLabel('depuis le <span class="text-danger">*</span>');
         }
 
 
@@ -194,7 +189,7 @@ class DossierIdentiteFieldset extends AbstractFieldset
                 'required'    => false,
                 'allow_empty' => true,
                 'validators'  => [
-                    new DateValidator(['format' => Constants::DATE_FORMAT]),
+                    new DateValidator(),
                 ],
             ],
 

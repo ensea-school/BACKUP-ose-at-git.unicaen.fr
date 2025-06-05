@@ -6,13 +6,14 @@ use Agrement\Entity\Db\Agrement;
 use Agrement\Entity\Db\TblAgrement;
 use Agrement\Entity\Db\TypeAgrement;
 use Application\Acl\Role;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Application\Resource\WorkflowResource;
+use Contrat\Service\TblContratServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Resource\WorkflowResource;
 
 
 /**
@@ -22,7 +23,7 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
  */
 class AgrementAssertion extends AbstractAssertion
 {
-
+    use TblContratServiceAwareTrait;
 
     /* ---- Routage général ---- */
     public function __invoke(array $page) // gestion des visibilités de menus
@@ -47,20 +48,23 @@ class AgrementAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION:
+                        return $this->assertTblAgrementSaisie($role, $entity);
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION:
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
-                        return $this->assertTblAgrementSaisie($role, $entity);
+                        return $this->assertTblAgrementSuppression($role, $entity);
+
                 }
-            break;
+                break;
             case $entity instanceof Agrement:
                 switch ($privilege) {
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION:
+                        return $this->assertAgrementSaisie($role, $entity);
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION:
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
-                        return $this->assertAgrementSaisie($role, $entity);
+                        return $this->assertAgrementSuppression($role, $entity);
                 }
-            break;
+                break;
             case $entity instanceof Structure:
                 switch ($privilege) {
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
@@ -69,7 +73,7 @@ class AgrementAssertion extends AbstractAssertion
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
                         return $this->assertStructureSaisie($role, $entity);
                 }
-            break;
+                break;
         }
 
         return true;
@@ -98,7 +102,7 @@ class AgrementAssertion extends AbstractAssertion
                     if (!$this->isAllowed($resource)) return false;
                     if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
                 }
-            break;
+                break;
 
             case 'ajouter':
             case 'modifier':
@@ -107,7 +111,7 @@ class AgrementAssertion extends AbstractAssertion
                     if (!$this->isAllowed($resource)) return false;
                     if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
                 }
-            break;
+                break;
 
             case 'index':
             case 'saisir-lot':
@@ -117,7 +121,7 @@ class AgrementAssertion extends AbstractAssertion
                     if (!$this->isAllowed($resource)) return false;
                     if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
                 }
-            break;
+                break;
 
             case 'supprimer':
                 if ($typeAgrement) {
@@ -125,7 +129,7 @@ class AgrementAssertion extends AbstractAssertion
                     if (!$this->isAllowed($resource)) return false;
                     if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
                 }
-            break;
+                break;
         }
 
         return true;
@@ -169,10 +173,10 @@ class AgrementAssertion extends AbstractAssertion
             return false;
         }
 
+
         if ($structure = $entity->getStructure()) {
             return $this->assertStructureSaisie($role, $structure);
         }
-
         return true;
     }
 
@@ -204,6 +208,55 @@ class AgrementAssertion extends AbstractAssertion
     {
         if ($roleStructure = $role->getStructure()) {
             if (!$entity->inStructure($roleStructure)) return false; // pas d'édition pour les copains
+        }
+
+        return true;
+    }
+
+
+
+    private function assertTblAgrementSuppression(Role $role, TblAgrement $entity)
+    {
+
+        /* Si c'est pour agréer et que le workflow l'interdit alors non! */
+        if (!$entity->getAgrement() && !$this->isAllowed($entity->getResourceWorkflow())) {
+            return false;
+        }
+
+        $tblContrat              = $this->getServiceTblContrat();
+        $structureContractualise = $tblContrat->getStructureContractualise($entity->getIntervenant());
+        $ids                     = array_column($structureContractualise, 'id');
+
+        if ($entity->getStructure() != NULL && in_array($entity->getStructure()->getId(), $ids)) {
+            return false;
+        } else {
+            if ($structure = $entity->getStructure()) {
+                return $this->assertStructureSaisie($role, $structure);
+            }
+        }
+
+        return true;
+    }
+
+
+
+    private function assertAgrementSuppression(Role $role, Agrement $entity)
+    {
+
+        if (!$this->isAllowed($entity->getResourceWorkflow())) {
+            return false;
+        }
+
+        $tblContrat              = $this->getServiceTblContrat();
+        $structureContractualise = $tblContrat->getStructureContractualise($entity->getIntervenant());
+        $ids                     = array_column($structureContractualise, 'id');
+
+        if ($entity->getStructure() != NULL && in_array($entity->getStructure()->getId(), $ids)) {
+            return false;
+        } else {
+            if ($structure = $entity->getStructure()) {
+                return $this->assertStructureSaisie($role, $structure);
+            }
         }
 
         return true;

@@ -8,11 +8,9 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Indicateur\Service\IndicateurServiceAwareTrait;
 use Indicateur\Service\NotificationIndicateurServiceAwareTrait;
 use Laminas\View\Renderer\PhpRenderer;
-use UnicaenApp\Controller\Plugin\Mail;
-use Laminas\Mime\Part as MimePart;
-use Laminas\Mime\Mime;
-use Laminas\Mail\Message as MailMessage;
-use Laminas\Mime\Message as MimeMessage;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 
 
 /**
@@ -25,23 +23,21 @@ class IndicateurProcessus extends AbstractProcessus
     use NotificationIndicateurServiceAwareTrait;
     use ContextServiceAwareTrait;
     use IndicateurServiceAwareTrait;
+    use MailServiceAwareTrait;
 
     /**
      * @var PhpRenderer
      */
     private $renderer;
 
-    /**
-     * @var Mail
-     */
-    private $mail;
+    private $host;
 
 
-
-    public function __construct(PhpRenderer $renderer, Mail $mail)
+    public function __construct(PhpRenderer $renderer, string $host)
     {
         $this->renderer = $renderer;
-        $this->mail     = $mail;
+        $this->host = $host;
+
     }
 
 
@@ -51,10 +47,11 @@ class IndicateurProcessus extends AbstractProcessus
         $nis = $this->getServiceNotificationIndicateur()->getNotifications($force);
 
         foreach ($nis as $ni) {
-            $message = $this->creerMailNotification($ni);
+            $mail = $this->creerMailNotification($ni);
 
-            if ($message) {
-                $this->mail->send($message);
+            if ($mail) {
+
+                $this->getMailService()->send($mail);
 
                 if (!$force) {
                     // enregistrement de la date de dernière notification
@@ -72,7 +69,7 @@ class IndicateurProcessus extends AbstractProcessus
 
 
 
-    protected function creerMailNotification(NotificationIndicateur $notification): ?MailMessage
+    protected function creerMailNotification(NotificationIndicateur $notification): ?Email
     {
         $result = $this->getServiceIndicateur()->getResult($notification);
         $count  = count($result);
@@ -82,27 +79,28 @@ class IndicateurProcessus extends AbstractProcessus
         $html          = $this->renderer->render('indicateur/indicateur/mail/notification', [
             'notification' => $notification,
             'result'       => $result,
+            'host'         => $this->host,
         ]);
-        $part          = new MimePart($html);
-        $part->type    = Mime::TYPE_HTML;
-        $part->charset = 'UTF-8';
-        $body          = new MimeMessage();
-        $body->addPart($part);
 
-        // init
-        $message = new MailMessage();
-        $message->setEncoding('UTF-8')
-            ->setFrom(\AppAdmin::config()['mail']['from'] ?? null, "Application OSE")
-            ->setSubject(sprintf(
-                "[OSE %s, n°%s: Notif %s] %s",
-                $this->getServiceContext()->getAnnee(),
-                $notification->getIndicateur()->getNumero(),
-                $notification->getFrequenceToString(),
-                strip_tags($notification->getIndicateur()->getLibelle($count))
-            ))
-            ->setBody($body)
-            ->addTo($notification->getAffectation()->getUtilisateur()->getEmail(), (string)$notification->getAffectation()->getUtilisateur());
+        $subject = sprintf(
+            "[OSE %s, n°%s: Notif %s] %s",
+            $this->getServiceContext()->getAnnee(),
+            $notification->getIndicateur()->getNumero(),
+            $notification->getFrequenceToString(),
+            strip_tags($notification->getIndicateur()->getLibelle($count))
+        );
 
-        return $message;
+        $from = \AppAdmin::config()['mail']['from'] ?? null;
+
+        $to = $notification->getAffectation()->getUtilisateur()->getEmail();
+        $toName = (string)$notification->getAffectation()->getUtilisateur();
+        
+        $email = new Email();
+        $email->from(new Address($from, 'Application OSE'))
+             ->to(new Address($to, $toName))
+             ->subject($subject)
+             ->html($html);
+
+        return $email;
     }
 }

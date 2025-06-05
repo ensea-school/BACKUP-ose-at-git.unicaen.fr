@@ -2,8 +2,8 @@
 
 namespace Referentiel\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\Intervenant;
@@ -277,7 +277,7 @@ class ServiceReferentielService extends AbstractEntityService
             $entity = $serviceAllreadyExists;
         }
 
-        $this->getEntityManager()->persist($entity);
+        $entity = parent::save($entity);
         foreach ($entity->getVolumeHoraireReferentiel() as $volumeHoraire) {
             if ($volumeHoraire->getRemove()) {
                 $this->getServiceVolumeHoraireReferentiel()->delete($volumeHoraire);

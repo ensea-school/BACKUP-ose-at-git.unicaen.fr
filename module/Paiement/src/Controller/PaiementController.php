@@ -3,13 +3,12 @@
 namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\VolumeHoraire;
+use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
@@ -26,6 +25,8 @@ use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
+use Workflow\Entity\Db\Validation;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -78,7 +79,7 @@ class PaiementController extends AbstractController
     private function updateTableauxBord($intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-                                                              'paiement',
+                                                              TblProvider::PAIEMENT,
                                                           ], $intervenant);
     }
 
@@ -343,7 +344,7 @@ class PaiementController extends AbstractController
             $recherche->setPeriode($periode);
             $filters = $recherche->getFilters();
 
-            $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'winpaie-indemnites']);
+            $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_extraction_indemnites');
             $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
             $csvModel->setFilename(str_replace(' ', '_', 'ose-export-indemnite-' . strtolower($periode->getLibelleAnnuel($annee)) . '.csv'));
 
@@ -413,7 +414,7 @@ class PaiementController extends AbstractController
 
             $dateMiseEnPaiementValue = $this->params()->fromPost('date-mise-en-paiement');
             if ($dateMiseEnPaiementValue) {
-                $dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiementValue);
+                $dateMiseEnPaiement = \DateTime::createFromFormat('Y-m-d', $dateMiseEnPaiementValue);
             } else {
                 $dateMiseEnPaiement = $periode->getDatePaiement($this->getServiceContext()->getAnnee()); // à défaut
             }
@@ -489,7 +490,7 @@ class PaiementController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
-        $tblPaiement = $this->getServiceTableauBord()->getTableauBord('paiement');
+        $tblPaiement = $this->getServiceTableauBord()->getTableauBord(TblProvider::PAIEMENT);
         $debugger    = new PaiementDebugger($tblPaiement->getProcess());
         $debugger->run($intervenant);
 

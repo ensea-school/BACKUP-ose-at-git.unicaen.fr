@@ -2,6 +2,7 @@
 
 namespace Administration\Command;
 
+use Application\Service\Traits\AffectationServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,10 +18,11 @@ use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 class SynchronisationCommand extends Command
 {
     use ImportProcessusAwareTrait;
+    use AffectationServiceAwareTrait;
 
     protected function configure(): void
     {
-        $this->setName('calcul-feuille-de-route')
+        $this->setName('synchronisation')
             ->setDescription('Lancement les jobs de synchronisation de OSE')
             ->addArgument('job', InputArgument::REQUIRED, 'Nom du job que vous souhaitez lancer');
 
@@ -49,6 +51,10 @@ class SynchronisationCommand extends Command
             $io->writeln("Lancement du job '" . $job . "'");
             $this->getProcessusImport()->syncJob($job);
             $io->writeln("Fin du job '" . $job . "'");
+            //Suppresion du cache des affectations
+            $io->writeln("Suppression du cache doctrine des affectations");
+            RoleService::clearSession();
+            $this->getServiceAffectation()->deleteCacheAffectation();
         }
 
         return Command::SUCCESS;

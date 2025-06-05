@@ -14,6 +14,7 @@ use Lieu\Entity\Db\Structure;
 class BudgetService extends AbstractService
 {
     use DotationServiceAwareTrait;
+    use TypeRessourceServiceAwareTrait;
 
 
     /**
@@ -102,32 +103,37 @@ class BudgetService extends AbstractService
     {
         $budget = [
             'dotation'    => [
-                'paieEtat'        => 0,
-                'ressourcePropre' => 0,
                 'total'           => 0,
             ],
-            'liquidation' => [
-                'paieEtat'        => 0,
-                'ressourcePropre' => 0,
+            'consommation' => [
                 'total'           => 0,
             ],
 
         ];
-        if ($structure instanceof Structure) {
+        $dotation = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
+        $liquidation = $this->getTblLiquidation($structure);
+
+        if (!empty($dotation)) {
             $dotation    = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
             $liquidation = $this->getTblLiquidation($structure);
-            foreach ($dotation as $key => $value) {
+            foreach ($dotation as $key => $values) {
                 if ($key == $structure->getId()) {
-                    $budget['dotation']['paieEtat']        = (key_exists(1, $value)) ? $value['1'] : 0;
-                    $budget['dotation']['ressourcePropre'] = (key_exists(2, $value)) ? $value['2'] : 0;
-                    $budget['dotation']['total']           = $value['total'];
+                    foreach ($values as $k => $v) {
+                        if ($k != 'total') {
+                            $typeRessources                                                = $this->getServiceTypeRessource()->get($k);
+                            $budget['dotation'][$typeRessources->getCode()]['heures']      = $v;
+                            $budget['dotation'][$typeRessources->getCode()]['libelle']     = $typeRessources->getLibelle();
+                            $budget['consommation'][$typeRessources->getCode()]['heures']  = (key_exists($k, $liquidation)) ? $liquidation[$k] : 0;
+                            $budget['consommation'][$typeRessources->getCode()]['libelle'] = $typeRessources->getLibelle();
+                        } else {
+                            $budget['dotation']['total'] = $values['total'];
+                        }
+                    }
                     break;
                 }
             }
-            //liquidation
-            $budget['liquidation']['paieEtat']        = (key_exists('1', $liquidation)) ? $liquidation['1'] : 0;
-            $budget['liquidation']['ressourcePropre'] = (key_exists('2', $liquidation)) ? $liquidation['2'] : 0;
-            $budget['liquidation']['total']           = $liquidation['total'];
+            $budget['consommation']['total'] = $liquidation['total'];
+
         }
 
         return $budget;

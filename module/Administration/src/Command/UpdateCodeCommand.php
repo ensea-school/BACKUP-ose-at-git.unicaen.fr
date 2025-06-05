@@ -69,6 +69,7 @@ class UpdateCodeCommand extends Command
 
         // Récupération des sources
         $io->section("Mise à jour des fichiers à partir de GIT");
+        $this->exec("git reset --hard"); // purge des modifs locales
         $tbr = $repo->tagIsValid($version) ? 'tags/' : '';
         if ($version == $repo->getCurrentBranche()) {
             $updcmd = 'git pull';
@@ -92,7 +93,7 @@ class UpdateCodeCommand extends Command
             $composerCmd = 'composer';
         }
 
-        $this->exec($composerCmd . ' install --quiet --optimize-autoloader', $env);
+        $this->exec($composerCmd . ' install --optimize-autoloader', $env);
 
         return Command::SUCCESS;
     }
@@ -112,5 +113,6 @@ class UpdateCodeCommand extends Command
         } catch (ProcessFailedException $exception) {
             throw new \RuntimeException('Erreur lors de l\'exécution de la commande : ' . $exception->getMessage());
         }
+        
     }
 }

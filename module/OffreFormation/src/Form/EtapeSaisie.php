@@ -2,10 +2,10 @@
 
 namespace OffreFormation\Form;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\Form\FormInterface;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Form\Element\Structure;
@@ -229,7 +229,13 @@ class EtapeSaisie extends AbstractForm
         $pertinencesNiveau = [];
         foreach ($this->getTypesFormation() as $tf) {
             /* @var $tf \OffreFormation\Entity\Db\TypeFormation */
-            $pertinencesNiveau[$tf->getId()] = (bool)$tf->getGroupe()->getPertinenceNiveau();
+            $groupe = $tf->getGroupe();
+            if($groupe){
+                $pertinencesNiveau[$tf->getId()] = (bool)$tf->getGroupe()->getPertinenceNiveau();
+            }
+            else{
+                $pertinencesNiveau[$tf->getId()] = false;
+            }
         }
 
         return $pertinencesNiveau;

@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'UNICAEN_SIGNATURE_PROCESS_STEP_ID_SEQ',
     'columns'     => [
-        'ID'                   => [
+        'ID'           => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,19 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'PROCESS_ID'           => [
+        'LABEL'        => [
+            'name'        => 'LABEL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 2000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 4,
+            'commentaire' => NULL,
+        ],
+        'PROCESS_ID'   => [
             'name'        => 'PROCESS_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -33,19 +45,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'SIGNATUREFLOWSTEP_ID' => [
-            'name'        => 'SIGNATUREFLOWSTEP_ID',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 4,
-            'commentaire' => NULL,
-        ],
-        'SIGNATURE_ID'         => [
+        'SIGNATURE_ID' => [
             'name'        => 'SIGNATURE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

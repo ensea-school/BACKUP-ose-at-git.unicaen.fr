@@ -4,7 +4,6 @@ namespace Paiement\Service;
 
 use Application\Entity\Db\Periode;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
@@ -24,7 +23,7 @@ class MiseEnPaiementService extends AbstractEntityService
     use CentreCoutServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;
     use TblPaiementServiceAwareTrait;
-    use Traits\WorkflowServiceAwareTrait;
+    use \Workflow\Service\WorkflowServiceAwareTrait;
 
 
     /**

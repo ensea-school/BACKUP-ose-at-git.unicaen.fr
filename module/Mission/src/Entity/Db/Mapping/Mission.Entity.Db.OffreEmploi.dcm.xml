@@ -23,7 +23,7 @@
 
 
         <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>
-        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation">
+        <many-to-one field="validation" target-entity="Workflow\Entity\Db\Validation">
             <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>

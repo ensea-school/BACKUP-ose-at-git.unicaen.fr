@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Unicaen\BddAdmin\BddAwareTrait;
-use Unicaen\BddAdmin\Data\DataManager;
+use UnicaenCode\Util;
 
 /**
  * Description of UpdateBddPrivilegesCommand
@@ -36,8 +36,7 @@ class UpdateBddPrivilegesCommand extends Command
         try {
             $bdd->data()->run('privileges');
 
-            $args = 'UnicaenCode GeneratePrivileges write=true';
-            passthru("php " . getcwd() . "/public/index.php " . $args);
+            Util::codeGenerator()->generer('privileges');
 
             $this->getServiceAdministration()->clearCache();
             $io->success('Privilèges à jour');

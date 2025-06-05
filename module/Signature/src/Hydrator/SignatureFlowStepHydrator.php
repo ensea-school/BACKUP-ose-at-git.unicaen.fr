@@ -3,7 +3,7 @@
 namespace Signature\Hydrator;
 
 
-use Application\Service\Traits\ParametresServiceAwareTrait;
+use Administration\Service\ParametresServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 use Signature\Service\SignatureFlowStepServiceAwareTrait;
 use UnicaenSignature\Entity\Db\SignatureFlowStep;

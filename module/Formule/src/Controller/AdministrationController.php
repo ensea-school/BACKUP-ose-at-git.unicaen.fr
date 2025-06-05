@@ -104,9 +104,7 @@ class AdministrationController extends AbstractController
         $variables = [];
         try{
             $formule = $this->getServiceFormulator()->implanter($file);
-            ob_start();
-            phpDump($formule->getPhpClass());
-            $variables['phpClass'] = ob_get_clean();
+            $variables['phpClass'] = null;
         }catch(\Exception $e){
             $variables['error'] = $e->getMessage();
         }

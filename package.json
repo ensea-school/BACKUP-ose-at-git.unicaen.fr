@@ -7,10 +7,12 @@
   "private": true,
   "scripts": {
     "dev": "APP_ENV=development vite dev",
-    "build": "vite build"
+    "build": "vite build",
+    "build-css": "sass --style=compressed public/css/app.scss public/css/app.css"
   },
   "dependencies": {
     "sass": "1.72.0",
-    "unicaen-vue": "file:./vendor/unicaen/vue"
+    "unicaen-vue": "file:./vendor/unicaen/vue",
+    "vue-draggable-plus": "0.6.0"
   }
 }

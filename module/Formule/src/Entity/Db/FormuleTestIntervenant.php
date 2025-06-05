@@ -17,7 +17,7 @@ class FormuleTestIntervenant extends FormuleIntervenant
     protected ?Formule $formule = null;
 
     // pas d'arrondisseur sur les tests
-    protected bool $arrondisseur = false;
+    protected int $arrondisseur = FormuleIntervenant::ARRONDISSEUR_NO;
 
     protected float $tauxCmServiceDu = 1.5;
     protected float $tauxCmServiceCompl = 1.5;

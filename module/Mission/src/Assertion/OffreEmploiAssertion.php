@@ -3,16 +3,17 @@
 namespace Mission\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
+use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**
@@ -37,11 +38,10 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     {
         switch ($page['route']) {
             case 'offre-emploi':
-                $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL AND validation_id IS NOT NULL';
-                $conn  = $this->getEntityManager()->getConnection();
-
-                if (false === $conn->executeQuery($query)->fetchOne()) {
-                    // Aucune offre => pas de lien
+            case 'candidature':
+                //Si il n'y a pas d'offre d'emploi alors il ne peut pas y avoir des candidatures
+                if(!$this->canHaveCandidature())
+                {
                     return false;
                 }
 
@@ -87,9 +87,10 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
                         return $this->assertOffreEmploiSupprimer($role, $entity);
                 }
             break;
-            case $entity instanceof Intervenant:
+            case $entity instanceof Candidature:
                 switch ($privilege) {
                     case Privileges::MISSION_CANDIDATURE_VALIDER:
+                    case Privileges::MISSION_CANDIDATURE_REFUSER:
                         return $this->assertCandidatureValider($role, $entity);
                 }
             break;
@@ -122,16 +123,22 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             $entity = $this->getMvcEvent()->getParam('volumeHoraireMission');
         }
         if (!$entity) {
+            $entity = $this->getMvcEvent()->getParam('candidature');
+        }
+        if (!$entity) {
             return false;
         }
 
         switch ($action) {
-            case 'candidature':
-                if ($entity instanceof Intervenant){
-                    // à revoir : réorganiser l'assertion
-                    // intégrer le workflow
-                    return $entity->getStatut()->getOffreEmploiPostuler();
+            case 'accepter-candidature':
+            case 'refuser-candidature':
+                if ($entity instanceof Candidature){
+                    $assert = $this->assertCandidatureValider($role, $entity);
+                    return $assert;
                 }
+                break;
+            case 'candidature':
+                return $this->canHaveCandidature();
                 break;
         }
         return true;
@@ -256,16 +263,28 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
         ]);
     }
 
+    protected function canHaveCandidature()
+    {
+        $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL AND validation_id IS NOT NULL';
+        $conn  = $this->getEntityManager()->getConnection();
+        if (false === $conn->executeQuery($query)->fetchOne()) {
+            return false;
+        }
+        return true;
+    }
 
 
-    protected function assertCandidatureValider (Role $role, Intervenant $intervenant)
+
+    protected function assertCandidatureValider (Role $role, Candidature $candidature)
     {
         $codeEtape = WfEtape::CANDIDATURE_VALIDATION;
+        $intervenant = $candidature->getIntervenant();
         $wfEtape   = $this->getServiceWorkflow()->getEtape($codeEtape, $intervenant);
+        $structureOffre = $candidature->getOffre()->getStructure();
 
         return $this->asserts([
             $wfEtape && $wfEtape->isAtteignable(),
-            $this->haveRole(),
+            $this->assertStructure($role, $structureOffre),
         ]);
     }
 

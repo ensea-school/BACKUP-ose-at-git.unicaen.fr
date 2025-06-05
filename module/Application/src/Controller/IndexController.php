@@ -2,13 +2,14 @@
 
 namespace Application\Controller;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
+use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
 
 /**
  *
@@ -19,6 +20,7 @@ class IndexController extends AbstractController
     use AnneeServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use ParametresServiceAwareTrait;
+    use UserContextServiceAwareTrait;
 
 
     public function indexAction()
@@ -80,8 +82,8 @@ class IndexController extends AbstractController
             $role = $this->getServiceContext()->getSelectedIdentityRole();
             if ($role instanceof Role && $role->getIntervenant()) {
                 $intervenant = $this->getServiceIntervenant()->getByCode($role->getIntervenant()->getCode());
+                //Correction mauvais refresh du role lors du changement d'année
                 if ($intervenant) {
-                    //Correction mauvais refresh du role lors du changement d'année
                     $this->serviceUserContext->setSelectedIdentityRole($intervenant->getStatut()->getRoleId());
                     //$this->serviceUserContext->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
                 }

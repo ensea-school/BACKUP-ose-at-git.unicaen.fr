@@ -1,41 +1,43 @@
 <?php
 
+use Administration\Entity\Db\Parametre;
+
 return [
     /* Années */
-    "annee"                                      => [
+    Parametre::ANNEE                                      => [
         "DESCRIPTION" => "Année universitaire en cours pour la saisie des services",
     ],
-    "annee_import"                               => [
+    Parametre::ANNEE_IMPORT                               => [
         "DESCRIPTION" => "Année courante pour l'import",
     ],
-    "annee_minimale_import_odf"                  => [
+    Parametre::ANNEE_MINIMALE_IMPORT_ODF                  => [
         "DESCRIPTION" => "Année minimale pour l'import de l'offre de formation (Paramètre éventuellement exploitable pour les filtres d'import)",
     ],
 
 
     /* IDS */
-    "etablissement"                              => [
+    Parametre::ETABLISSEMENT                              => [
         "VALEUR"      => "0141408E",
         "DESCRIPTION" => "Identifiant de l'établissement courant",
         "QUERY"       => 'SELECT id valeur FROM etablissement WHERE source_code = :valeur AND histo_destruction IS NULL',
     ],
-    "structure_univ"                             => [
+    Parametre::STRUCTURE_UNIV                             => [
         "DESCRIPTION" => "Composante représentant l'université (utile éventuellement pour la formule de calcul)",
     ],
-    "oseuser"                                    => [
+    Parametre::OSEUSER                                    => [
         "DESCRIPTION" => "Utilisateur OSE",
     ],
-    "formule"                                    => [
+    Parametre::FORMULE                                    => [
         "VALEUR"      => "FORMULE_UNICAEN",
         "DESCRIPTION" => "Formule de calcul",
         "QUERY"       => 'SELECT id valeur FROM formule WHERE code = :valeur',
     ],
-    "domaine_fonctionnel_ens_ext"                => [
+    Parametre::DOMAINE_FONCTIONNEL_ENS_EXT                => [
         "VALEUR"      => "D102",
         "DESCRIPTION" => "Domaine fonctionnel à privilégier pour les enseignements pris à l'extérieur",
         "QUERY"       => 'SELECT id valeur FROM domaine_fonctionnel WHERE source_code = :valeur AND histo_destruction IS NULL',
     ],
-    "scenario_charges_services"                  => [
+    Parametre::SCENARIO_CHARGES_SERVICES                  => [
         "VALEUR"      => "Initial",
         "DESCRIPTION" => "Scénario utilisé pour confronter les charges d'enseignement aux services des intervenants",
         "QUERY"       => 'SELECT id valeur FROM scenario WHERE libelle = :valeur AND histo_destruction IS NULL',
@@ -43,138 +45,141 @@ return [
 
 
     /* Etats de sortie */
-    "es_extraction_paie"                         => [
+    Parametre::ES_EXTRACTION_PAIE                         => [
         "VALEUR"      => "winpaie",
         "DESCRIPTION" => "État de sortie pour l'extraction de paie",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
-    "es_extraction_indemnites"                   => [
+    Parametre::ES_EXTRACTION_INDEMNITES                   => [
         "VALEUR"      => "siham-indemnites",
         "DESCRIPTION" => "État de sortie pour l'extraction des indemnites de fin de mission",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
-    "es_services_pdf"                            => [
+    Parametre::ES_SERVICES_PDF                            => [
         "VALEUR"      => "export_services",
         "DESCRIPTION" => "État de sortie pour l'édition PDF des services",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
-    "es_services_csv"                            => [
+    Parametre::ES_SERVICES_CSV                            => [
         "VALEUR"      => "export_services",
         "DESCRIPTION" => "État de sortie pour l'édition CSV des services",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
-    "es_etat_paiement"                           => [
+    Parametre::ES_ETAT_PAIEMENT                           => [
         "VALEUR"      => "etat_paiement",
         "DESCRIPTION" => "État de sortie pour les états de paiement",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
 
+
     /* Divers */
-    "report_service"                             => [
+    Parametre::REPORT_SERVICE                             => [
         "VALEUR"      => "PREVU",
         "DESCRIPTION" => "Report du service de l'année précédente",
     ],
-    "constatation_realise"                       => [
+    Parametre::CONSTATATION_REALISE                       => [
         "VALEUR"      => "PREVU",
         "DESCRIPTION" => "Constatation du service fait",
     ],
 
+
     /* Paiement */
-    "centres_couts_paye"                         => [
+    Parametre::CENTRES_COUTS_PAYE                         => [
         "VALEUR"      => "enseignement",
         "DESCRIPTION" => "Centres de coûts utilisés pour la paye",
     ],
-    "regle_paiement_annee_civile"                => [
+    Parametre::REGLE_PAIEMENT_ANNEE_CIVILE                => [
         "VALEUR"      => "4-6sur10",
         "DESCRIPTION" => "Règle de répartition années civiles antérieure / en cours pour les paiements",
     ],
-    "regle_repartition_annee_civile"             => [
+    Parametre::REGLE_REPARTITION_ANNEE_CIVILE             => [
         "VALEUR"      => "prorata",
         "DESCRIPTION" => "Ventilation des heures AA/AC",
     ],
-    "pourc_aa_referentiel"                       => [
+    Parametre::POURC_AA_REFERENTIEL                       => [
         "VALEUR"      => '0.4',
         "DESCRIPTION" => "Pourcentage AA pour les heures de référentiel",
     ],
-    "pourc_s1_pour_annee_civile"                 => [
+    Parametre::POURC_S1_POUR_ANNEE_CIVILE                 => [
         "VALEUR"      => "0.67",
         "DESCRIPTION" => "Taux de répartition en année civile pour les heures du premire semestre",
     ],
-    "horaire_nocturne"                           => [
+    Parametre::HORAIRE_NOCTURNE                           => [
         "VALEUR"      => "22:00",
         "DESCRIPTION" => "Horaire à partir duquel les heures faites sont considérées comme nocturnes",
     ],
-    "taux-remu"                                  => [
+    Parametre::TAUX_REMU                                  => [
         "VALEUR"      => "TLD",
         "DESCRIPTION" => "taux de rémuneration utilisé par défaut",
         "QUERY"       => 'SELECT id valeur FROM taux_remu WHERE code = :valeur AND histo_destruction IS NULL',
 
     ],
-    "taux_conges_payes"                          => [
+    Parametre::TAUX_CONGES_PAYES                          => [
         "VALEUR"      => 0.1,
         "DESCRIPTION" => "Taux de majoration des heures pour prise en compte des congés payés",
     ],
-    "distinction_fi_fa_fc"                       => [
+    Parametre::DISTINCTION_FI_FA_FC                       => [
         "VALEUR"      => 1,
         "DESCRIPTION" => "Distinction FI/FA/FC des heures à payer",
     ],
 
+
     /* Documentations */
-    "doc-intervenant-vacataires"                 => [
+    Parametre::DOC_INTERVENANT_VACATAIRES                 => [
         "DESCRIPTION" => "URL de la documentation OSE pour les vacataires",
     ],
-    "doc-intervenant-permanents"                 => [
+    Parametre::DOC_INTERVENANT_PERMANENTS                 => [
         "DESCRIPTION" => "URL de la documentation OSE pour les permanents",
     ],
-    "doc-intervenant-etudiants"                  => [
+    Parametre::DOC_INTERVENANT_ETUDIANTS                  => [
         "DESCRIPTION" => "URL de la documentation OSE pour les étudiants",
     ],
 
 
     /* Disciplines */
-    "discipline_codes_corresp_1_libelle"         => [
+    Parametre::DISCIPLINE_CODES_CORRESP_1_LIBELLE         => [
         "VALEUR"      => "Section(s) CNU Apogée",
         "DESCRIPTION" => "Libellé de la liste 1 des correspondances de codes des disciplines",
     ],
-    "discipline_codes_corresp_2_libelle"         => [
+    Parametre::DISCIPLINE_CODES_CORRESP_2_LIBELLE         => [
         "VALEUR"      => "Section(s) CNU Harpège",
         "DESCRIPTION" => "Libellé de la liste 2 des correspondances de codes des disciplines",
     ],
-    "discipline_codes_corresp_3_libelle"         => [
+    Parametre::DISCIPLINE_CODES_CORRESP_3_LIBELLE         => [
         "VALEUR"      => "Spécialité Harpège",
         "DESCRIPTION" => "Libellé de la liste 3 des correspondances de codes des disciplines",
     ],
-    "discipline_codes_corresp_4_libelle"         => [
+    Parametre::DISCIPLINE_CODES_CORRESP_4_LIBELLE         => [
         "VALEUR"      => "Discipline du 2nd degré",
         "DESCRIPTION" => "Libellé de la liste 4 des correspondances de codes des disciplines",
     ],
 
 
     /* Statuts */
-    "statut_intervenant_codes_corresp_1_libelle" => [
+    Parametre::STATUT_INTERVENANT_CODES_CORRESP_1_LIBELLE => [
         "VALEUR"      => "Code Siham",
         "DESCRIPTION" => "Code équivalent au statut SIHAM",
     ],
-    "statut_intervenant_codes_corresp_2_libelle" => [
+    Parametre::STATUT_INTERVENANT_CODES_CORRESP_2_LIBELLE => [
         "VALEUR"      => "Est ATV (oui ou non)",
         "DESCRIPTION" => "Témoin précisant si le statut correspond à des intervenants ATV (saisir oui ou non)",
     ],
-    "statut_intervenant_codes_corresp_3_libelle" => [
+    Parametre::STATUT_INTERVENANT_CODES_CORRESP_3_LIBELLE => [
         "VALEUR"      => "Est VA (oui ou non)",
         "DESCRIPTION" => "Libellé de la liste 3 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
     ],
-    "statut_intervenant_codes_corresp_4_libelle" => [
+    Parametre::STATUT_INTERVENANT_CODES_CORRESP_4_LIBELLE => [
         "VALEUR"      => null,
         "DESCRIPTION" => "Libellé de la liste 4 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
     ],
 
 
     /* Contrat */
-    "contrat_regle_franchissement"               => [
+    Parametre::CONTRAT_REGLE_FRANCHISSEMENT               => [
         "VALEUR"      => "validation",
         "DESCRIPTION" => "Règle de franchissement du contrat (comment considérer que l'étape \"Contrat\" est franchie dans le workflow)",
     ],
-    "contrat_modele_mail"                        => [
+    Parametre::CONTRAT_MODELE_MAIL                        => [
         "VALEUR"      => "Bonjour :intervenant
 
 Veuillez trouver en pièce jointe votre contrat à jour.
@@ -183,18 +188,41 @@ Cordialement,
 :utilisateur",
         "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
     ],
-    "contrat_modele_mail_objet"                  => [
+    Parametre::CONTRAT_MODELE_MAIL_OBJET                  => [
         "VALEUR"      => "Contrat :intervenant",
         "DESCRIPTION" => "Modèle de mail pour l'envoi du contrat",
     ],
-    "contrat_mail_expediteur"                    => [
+    Parametre::CONTRAT_MAIL_EXPEDITEUR                    => [
         "VALEUR"      => "",
         "DESCRIPTION" => "Email souhaité pour l'expéditeur du contrat",
     ],
+    Parametre::AVENANT                                    => [
+        "VALEUR"      => "avenant_autorise",
+        "DESCRIPTION" => "Permettre la création d'avenants au contrat",
+    ],
+
+    Parametre::CONTRAT_DIRECT => [
+        "VALEUR"      => "desactive",
+        "DESCRIPTION" => "Permettre la création d'un contrat sans passé par le projet",
+    ],
+
+    Parametre::CONTRAT_MIS => [
+        "VALEUR"      => "contrat_mis_mission",
+        "DESCRIPTION" => "Paramètre sur quelles missions un contrat porte",
+    ],
+
+    Parametre::CONTRAT_ENS                               => [
+        "VALEUR"      => "contrat_ens_composante",
+        "DESCRIPTION" => "Paramètre sur quels enseignements un contrat porte",
+    ],
+    Parametre::CONTRAT_DATE                              => [
+        "VALEUR"      => "desactive",
+        "DESCRIPTION" => "Permettre de saisir une date de retour signé pour un contrat sans ajouter de fichier",
+    ],
+
 
     /* Candidature mission */
-
-    "candidature_modele_acceptation_mail"       => [
+    Parametre::CANDIDATURE_MODELE_ACCEPTATION_MAIL       => [
         "VALEUR"      => "Bonjour :intervenant
 
 Vous avez récement postulé à une offre d'emploi étudiant. c'est acceptée
@@ -203,11 +231,11 @@ Cordialement,
 :utilisateur",
         "DESCRIPTION" => "Modèle de mail acceptation d'une candidature",
     ],
-    "candidature_modele_acceptation_mail_objet" => [
+    Parametre::CANDIDATURE_MODELE_ACCEPTATION_MAIL_OBJET => [
         "VALEUR"      => "Acceptation candidature :intervenant",
         "DESCRIPTION" => "Sujet pour le mail d'acceptation de candidature",
     ],
-    "candidature_modele_refus_mail"             => [
+    Parametre::CANDIDATURE_MODELE_REFUS_MAIL             => [
         "VALEUR"      => "Bonjour :intervenant
 
 Vous avez récement postulé à une offre d'emploi étudiant. Mais c'est refusé
@@ -216,27 +244,32 @@ Cordialement,
 :utilisateur",
         "DESCRIPTION" => "Modèle de mail de refus d'une candidature",
     ],
-    "candidature_modele_refus_mail_objet"       => [
+    Parametre::CANDIDATURE_MODELE_REFUS_MAIL_OBJET       => [
         "VALEUR"      => "Refus candidature :intervenant",
         "DESCRIPTION" => "Sujet pour le mail de refus de candidature",
     ],
-    "candidature_mail_expediteur"               => [
+    Parametre::CANDIDATURE_MAIL_EXPEDITEUR               => [
         "VALEUR"      => "",
         "DESCRIPTION" => "Email souhaité pour l'expéditeur du mail candidature",
     ],
-    "signature_electronique_parapheur"          => [
+
+
+    /* Signature électronique */
+    Parametre::SIGNATURE_ELECTRONIQUE_PARAPHEUR          => [
         "VALEUR"      => "",
         "DESCRIPTION" => "Choix du parpaheur électronique pour l'application",
     ],
+
+
     /* Export RH*/
-    "export_rh_franchissement"                  => [
+    Parametre::EXPORT_RH_FRANCHISSEMENT                  => [
         "VALEUR"      => "",
         "DESCRIPTION" => "Etape de la feuille de route à franchir pour autoriser un export vers le SIRH",
     ],
 
 
     /* Messages informatifs */
-    "page_contact"                              => [
+    Parametre::PAGE_CONTACT                              => [
         "VALEUR"      => "<h3>Intervenants</h3>
     Contactez votre composante ou bien écrivez à :
         <ul>
@@ -252,48 +285,25 @@ Cordialement,
         "DESCRIPTION" => "Contenu de la page \"Contact\"",
     ],
 
-    "page_accueil" => [
+    Parametre::PAGE_ACCUEIL => [
         "VALEUR"      => "Bienvenue dans l'application de saisie des enseignements de l'université de Caen Normandie.",
         "DESCRIPTION" => "Message de la page d'accueil une fois connecté",
     ],
 
-    "connexion_non_autorise" => [
+    Parametre::CONNEXION_NON_AUTORISE => [
         "VALEUR"      => "Votre statut ne vous permet pas de vous connecter à OSE.",
         "DESCRIPTION" => "Message informatif si l'intervenant n'est pas autorisé à se connecter",
     ],
 
-    "connexion_sans_role_ni_statut" => [
+    Parametre::CONNEXION_SANS_ROLE_NI_STATUT => [
         "VALEUR"      => "Vous n'êtes pas autorisé(e) à vous connecter à OSE avec ce compte. Nous vous prions de vous rapprocher de votre composante pour en obtenir un valide.",
         "DESCRIPTION" => "Message informatif si l'utilisateur n'est pas intervenant et n'a aucune affectation",
     ],
 
+
     /* Indicateur */
-    "indicateur_email_expediteur"   => [
+    Parametre::INDICATEUR_EMAIL_EXPEDITEUR   => [
         "DESCRIPTION" => "Adresse email d'expéditeur des mails via les indicateur, si vide alors l'email de l'utilisateur sera utilisé",
     ],
 
-    /* Contrat */
-    "avenant"                       => [
-        "VALEUR"      => "avenant_autorise",
-        "DESCRIPTION" => "Permettre la création d'avenants au contrat",
-    ],
-
-    "contrat_direct" => [
-        "VALEUR"      => "desactive",
-        "DESCRIPTION" => "Permettre la création d'un contrat sans passé par le projet",
-    ],
-
-    "contrat_mis" => [
-        "VALEUR"      => "contrat_mis_mission",
-        "DESCRIPTION" => "Paramètre sur quelles missions un contrat porte",
-    ],
-
-    "contrat_ens" => [
-        "VALEUR"      => "contrat_ens_composante",
-        "DESCRIPTION" => "Paramètre sur quels enseignements un contrat porte",
-    ],
-    "contrat_date" => [
-        "VALEUR"      => "desactive",
-        "DESCRIPTION" => "Permettre de saisir une date de retour signé pour un contrat sans ajouter de fichier",
-    ],
 ];

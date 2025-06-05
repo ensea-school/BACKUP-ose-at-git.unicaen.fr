@@ -4,9 +4,8 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
@@ -18,6 +17,8 @@ use Mission\Service\MissionServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
+use Workflow\Service\ValidationServiceAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**
@@ -162,12 +163,11 @@ class SaisieController extends AbstractController
             try {
                 $this->getServiceMission()->save($mission);
                 $hFin = $mission->getHeures();
-                $this->updateTableauxBord($mission);
-                if (!$this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, $hFin < $hDeb)) {
-                    $this->updateTableauxBord($mission);
-                }else{
+                if ($this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, $hFin <= $hDeb)) {
                     $this->flashMessenger()->addSuccessMessage('Mission bien enregistrée');
                 }
+                $this->updateTableauxBord($mission);
+
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
                 $this->em()->rollback();
@@ -322,8 +322,8 @@ class SaisieController extends AbstractController
     private function updateTableauxBord(Mission $mission)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'mission',
-            'contrat',
+            TblProvider::MISSION,
+            TblProvider::CONTRAT,
         ], $mission->getIntervenant());
     }
 }

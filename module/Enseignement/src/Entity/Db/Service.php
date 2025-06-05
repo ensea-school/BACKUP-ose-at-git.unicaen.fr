@@ -3,7 +3,6 @@
 namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Enseignement\Entity\VolumeHoraireListe;
@@ -19,6 +18,7 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use Workflow\Entity\Db\Validation;
 
 class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, PlafondDataInterface
 {

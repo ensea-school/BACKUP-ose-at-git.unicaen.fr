@@ -2,8 +2,7 @@
 
 namespace Administration\Migration;
 
-use Application\Entity\Db\Parametre;
-use Symfony\Component\Filesystem\Filesystem;
+use Administration\Entity\Db\Parametre;
 use Unicaen\BddAdmin\Migration\MigrationAction;
 
 class v24ParametresContrat extends MigrationAction
@@ -40,7 +39,7 @@ class v24ParametresContrat extends MigrationAction
         } else {
             exit;
         }
-
+        $this->logMsg("valeur de l'ancien avenant".$oldAvenant);
 
         $this->logMsg("Mise en place des nouveau paramètres de contrat");
         if ($oldAvenant != NULL && $oldAvenant != '') {
@@ -48,34 +47,39 @@ class v24ParametresContrat extends MigrationAction
             $valeurMis     = '';
             $valeurEns     = '';
             switch ($oldAvenant) {
-                case Parametre::OLD_AVENANT_AUTORISE:
+                case 'avenant_autorise':
                     $valeurMis     = Parametre::CONTRAT_MIS_MISSION;
                     $valeurAvenant = Parametre::AVENANT_AUTORISE;
                     $valeurEns     = Parametre::CONTRAT_ENS_COMPOSANTE;
                     break;
-                case Parametre::OLD_AVENANT_STRUCT:
+                case 'avenant_struct':
                     $valeurMis     = Parametre::CONTRAT_MIS_COMPOSANTE;
                     $valeurAvenant = Parametre::AVENANT_AUTORISE;
                     $valeurEns     = Parametre::CONTRAT_ENS_COMPOSANTE;
                     break;
-                case Parametre::OLD_AVENANT_DESACTIVE:
-                    $valeurMis     = Parametre::CONTRAT_MIS_GLOBALE;
+                case 'avenant_desactive':
+                    $valeurMis     = Parametre::CONTRAT_MIS_GLOBAL;
                     $valeurAvenant = Parametre::AVENANT_DESACTIVE;
-                    $valeurEns     = Parametre::CONTRAT_ENS_GLOBALE;
+                    $valeurEns     = Parametre::CONTRAT_ENS_GLOBAL;
                     break;
                 default:
                     break;
             }
+
+            $this->logMsg("valeur du param avenant ".$valeurAvenant);
+            $this->logMsg("valeur du param mission ".$valeurMis);
+            $this->logMsg("valeur du param enseignement ".$valeurEns);
+
             if ($valeurAvenant != '') {
                 $data = ['valeur' => $valeurAvenant];
                 $this->getBdd()->getTable('PARAMETRE')->update($data, ['nom' => 'avenant']);
             }
-            if ($valeurMis != '') {
-                $data = ['nom' => 'contrat_ens', 'valeur' => $valeurMis];
+            if ($valeurEns != '') {
+                $data = ['nom' => 'contrat_ens', 'valeur' => $valeurEns];
                 $this->getBdd()->getTable('PARAMETRE')->insert($data);
             }
-            if ($valeurEns != '') {
-                $data = ['nom' => 'contrat_mis', 'valeur' => $valeurEns];
+            if ($valeurMis != '') {
+                $data = ['nom' => 'contrat_mis', 'valeur' => $valeurMis];
                 $this->getBdd()->getTable('PARAMETRE')->insert($data);
             }
         }

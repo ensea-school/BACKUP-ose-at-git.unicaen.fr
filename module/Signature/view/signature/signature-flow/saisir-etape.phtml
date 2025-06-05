@@ -1,31 +1,15 @@
 <?php
 echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNamespace('error');
 
-
+echo '<h2 class="title">Ajouter/modifier un étape de signature</h2>';
 echo $this->form()->openTag($form);
-echo '<div class="row">';
-echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('label'));
-echo '</div>';
-echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('level'));
-echo '</div>';
-echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('recipientMethod'));
-echo '</div>';
-echo '<div class="col-md-12" id="roleEtablissement">';
 echo $this->formControlGroup($form->get('roles'));
-echo '</div>';
-echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('order'));
-echo '</div>';
-echo '<div class="col-md-12">';
 echo $this->formControlGroup($form->get('allRecipientsSign'));
-echo '</div>';
-echo '<div class="col-md-12">';
 echo $this->formSubmit($form->get('submit'));
-echo '</div>';
-echo '</div>';
 echo $this->form()->closeTag($form);
 
 ?>
@@ -33,32 +17,24 @@ echo $this->form()->closeTag($form);
 
 <script>
 
-    function formElement()
+    toggleViewElements = function ()
     {
-        return $('#<?= $form->getAttribute('id') ?>');
+        document.querySelectorAll('[name="recipientMethod"]').forEach(element => {
+            // Vérifier la valeur de chaque élément
+            element.removeEventListener("change", toggleViewElements);
+            element.addEventListener("change", toggleViewElements);
+            let method = element.value
+            let elementRole = element.parentElement.nextSibling;
+
+            if (method == 'by_etablissement' || method == 'by_etablissement_and_intervenant') {
+                elementRole.style.display = "block";
+
+            } else {
+                elementRole.style.display = "none";
+            }
+        });
     }
+    toggleViewElements();
 
-    function toggleViewElements(init)
-    {
-        var method = formElement().find('[name=recipientMethod]').val();
-
-        if(method == 'by_etablissement' || method == 'by_etablissement_and_intervenant') {
-            console.log('show');
-            $('#roleEtablissement').show();
-        } else {
-            console.log('hide')
-            $('#roleEtablissement').hide();
-        }
-        console.log(init);
-        if (init !== true) {
-            console.log(init);
-            $('#roleEablissement').hide();
-        }
-    }
-
-    $(function () {
-        formElement().find('[name=recipientMethod]').on('change', toggleViewElements);
-        toggleViewElements(true);
-    });
 
 </script>

@@ -3,15 +3,15 @@
 namespace Formule\Controller;
 
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Annee;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Formule\Entity\Db\Formule;
-use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Model\FormuleCalcul;
 use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Service\TestServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -57,7 +57,7 @@ class TestController extends AbstractController
           lower(fti.libelle || ' ' || f.libelle || ' ' || a.libelle) like :search
         ";
 
-        return Util::tableAjaxData($this->em(), $this->axios()->fromPOst(), $sql);
+        return Util::tableAjaxData($this->em(), $this->axios()->fromPost(), $sql);
     }
 
 
@@ -137,7 +137,6 @@ class TestController extends AbstractController
 
             if (!$simpleCalcul) {
                 $this->getServiceTest()->save($formuleTestIntervenant);
-                $this->getServiceTest()->calculerAttendu($formuleTestIntervenant);
             }
             $data = $this->getServiceTest()->toJson($formuleTestIntervenant);
             $data['debug'] = $debug;
@@ -153,8 +152,8 @@ class TestController extends AbstractController
 
     public function supprimerAction()
     {
-        /* @var $formuleTestIntervenant FormuleTestIntervenant */
-        $formuleTestIntervenant = $this->getEvent()->getParam('formuleTestIntervenant');
+        $formuleTestIntervenantId = (int)$this->params()->fromRoute('formuleTestIntervenant');
+        $formuleTestIntervenant = $this->getServiceTest()->get($formuleTestIntervenantId);
 
         try {
             $this->getServiceTest()->delete($formuleTestIntervenant);
@@ -193,8 +192,14 @@ class TestController extends AbstractController
     public function creerFromReelAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
+        /** @var $intervenant Intervenant */
+
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+        /** @var $typeVolumeHoraire TypeVolumeHoraire */
+
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
+        /** @var $etatVolumeHoraire EtatVolumeHoraire */
+
 
         $formuleTestIntervenant = $this->getServiceTest()->creerDepuisIntervenant($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
 

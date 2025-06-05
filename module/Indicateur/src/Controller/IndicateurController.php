@@ -24,8 +24,8 @@ use Laminas\Router\Http\TreeRouteStack;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Renderer\PhpRenderer;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Unicaen\Console\Console;
 use UnicaenApp\View\Model\CsvModel;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 
 
 class IndicateurController extends AbstractController
@@ -38,6 +38,7 @@ class IndicateurController extends AbstractController
     use TypeVolumeHoraireServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use NoteServiceAwareTrait;
+    use MailServiceAwareTrait;
 
     /**
      * @var TreeRouteStack
@@ -287,10 +288,17 @@ class IndicateurController extends AbstractController
                 $intervenantsWithNoEmail[$intervenantId] = $indicRes;
             }
         }
-        $mailer  = new IndicateurIntervenantsMailer($this, $indicateur, $this->renderer);
-        $from    = $mailer->getFrom();
-        $subject = $mailer->getDefaultSubject();
-        $body    = $mailer->getDefaultBody();
+
+
+        $from    = $this->getServiceIndicateur()->getFrom();
+        $fromName = "Contact Application " . $this->appInfos()->getNom();
+        $subject = sprintf("%s %s : %s",
+                           $this->appInfos()->getNom(),
+                           $this->getServiceContext()->getAnnee(),
+                           strip_tags($indicateur->getTypeIndicateur())
+        );
+
+        $body    = $this->getServiceIndicateur()->getDefaultBody();
 
         $form = new Form();
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
@@ -314,7 +322,10 @@ class IndicateurController extends AbstractController
                 } else {
                     $emailsList = $emails;
                 }
-                $mailer->send($emailsList, $post);
+                $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName);
+                $this->getMailService()->send($email);
+
+                //$mailer->send($emailsList, $post);
                 //Création d'une note email pour chaque intervenant concerné
                 foreach ($intervenantsIds as $id) {
                     $intervenant = $this->getServiceIntervenant()->get($id);
@@ -324,17 +335,15 @@ class IndicateurController extends AbstractController
                 }
                 if ($post['copy']) {
                     //envoi une copie du mail à l'utilisateur s'il l'a demandé
-                    $utilisateur                                = $this->getServiceContext()->getUtilisateur();
-                    $emailUtilisateur[$utilisateur->getEmail()] = $utilisateur->getDisplayName();
-                    $mailer->sendCopyEmail($emailUtilisateur, $emailsList, $post);
+                    $emailUtilisateur = [$this->getServiceContext()->getUtilisateur()->getEmail()];
+                    $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName,$emailUtilisateur);
+                    $this->getMailService()->send($email);
                 }
                 if ($post['cci'] && !empty($post['cci'])) {
                     $emailsCci = explode(';', $post['cci']);
-                    foreach ($emailsCci as $emailCci) {
-                        $listEmailsCci            = [];
-                        $listEmailsCci[$emailCci] = $emailCci;
-                        $mailer->sendCopyEmail($listEmailsCci, $emailsList, $post);
-                    }
+                    $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName,$emailsCci);
+                    $this->getMailService()->send($email);
+
                 }
                 $count   = count($emailsList);
                 $pluriel = $count > 1 ? 's' : '';
@@ -349,48 +358,6 @@ class IndicateurController extends AbstractController
             'sansMail' => $intervenantsWithNoEmail,
             'form'     => $form,
         ];
-    }
-
-
-
-    /**
-     * Notifications par mail des personnes abonnées à des indicateurs.
-     *
-     * Accessible en ligne de commande, par exemple (on suppose que l'on est situé dans le répertoire de l'appli) :
-     *      php public/index.php notifier indicateurs --force
-     * Arguments de la ligne de commande :
-     * - <code>force</code> (facultatif)
-     */
-    public function envoiNotificationsAction()
-    {
-        // S'il s'agit d'une requête de type Console (CLI), le plugin de contrôleur Url utilisé par les indicateurs
-        // n'est pas en mesure de construire des URL (car le ConsoleRouter ne sait pas ce qu'est une URL!).
-        // On injecte donc provisoirement un HttpRouter dans le circuit.
-        $event  = $this->getEvent();
-        $router = $event->getRouter();
-        $event->setRouter($this->httpRouter);
-
-        // De plus, pour fonctionner, le HttpRouter a besoin du "prefixe" à utiliser pour assembler les URL
-        // (ex: "http://localhost/ose"). Ce prefixe est fourni via un HttpUri initialisé à partir de 2 arguments
-        // de la ligne de commande : "requestUriHost" (obligatoire) et "requestUriScheme" (facultatif, "http" par défaut).
-        $httpUri = (new \Laminas\Uri\Http())
-            ->setHost($this->cliConfig['domain'])// ex: "/localhost/ose", "ose.unicaen.fr"
-            ->setScheme($this->cliConfig['scheme']);
-        $this->httpRouter->setRequestUri($httpUri);
-
-
-        $request = $this->getRequest();
-
-        $force = (bool)$request->getParam('force');
-
-        $this->getProcessusIndicateur()->envoiNotifications($force);
-
-        // S'il s'agit d'une requête de type Console (CLI), rétablissement du router initial (cf. commentaires plus haut).
-        if (Console::isConsole()) {
-            $event->setRouter($router);
-        }
-
-        exit;
     }
 
 

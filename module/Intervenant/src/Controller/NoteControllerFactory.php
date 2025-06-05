@@ -3,6 +3,8 @@
 namespace Intervenant\Controller;
 
 use Psr\Container\ContainerInterface;
+use UnicaenMail\Service\Mail\MailService;
+
 
 
 /**
@@ -15,9 +17,9 @@ class NoteControllerFactory
 
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): NoteController
     {
-        $controller = new NoteController();
+        $noteController = new NoteController();
+        $noteController->setMailService($container->get(MailService::class));
 
-
-        return $controller;
+        return $noteController;
     }
 }

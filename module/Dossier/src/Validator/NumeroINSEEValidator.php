@@ -2,13 +2,13 @@
 
 namespace Dossier\Validator;
 
+use Application\Constants;
 use Intervenant\Entity\Db\Civilite;
 use Intervenant\Service\CiviliteServiceAwareTrait;
 use Lieu\Entity\Db\Departement;
 use Lieu\Entity\Db\Pays;
 use Lieu\Service\DepartementServiceAwareTrait;
 use Lieu\Service\PaysServiceAwareTrait;
-use UnicaenApp\Form\Element\Date;
 use UnicaenApp\Validator\NumeroINSEE;
 
 /**
@@ -21,7 +21,7 @@ use UnicaenApp\Validator\NumeroINSEE;
  *
  * @see http://fr.wikipedia.org/wiki/Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France
  */
-class NumeroINSEEValidator extends NumeroINSEE
+final class NumeroINSEEValidator extends NumeroINSEE
 {
     use DepartementServiceAwareTrait;
     use CiviliteServiceAwareTrait;
@@ -32,35 +32,31 @@ class NumeroINSEEValidator extends NumeroINSEE
     const MSG_MOIS     = 'msgMois';
     const MSG_DEPT     = 'msgDepartement';
 
-    /**
-     * @var string
-     */
-    protected $value;
 
     /**
      * @var bool
      */
-    protected $provisoire = false;
+    private $provisoire = false;
 
     /**
      * @var Civilite|null
      */
-    protected $civilite;
+    private $civilite;
 
     /**
      * @var \DateTime|null
      */
-    protected $dateNaissance;
+    private $dateNaissance;
 
     /**
      * @var Pays|null
      */
-    protected $pays;
+    private $pays;
 
     /**
      * @var Departement|null
      */
-    protected $departement;
+    private $departement;
 
 
 
@@ -72,6 +68,11 @@ class NumeroINSEEValidator extends NumeroINSEE
             self::MSG_MOIS     => "Le numéro n'est pas cohérent avec le mois de naissance saisi",
             self::MSG_DEPT     => "Le numéro n'est pas cohérent avec le pays et l'éventuel département de naissance saisi",
         ]);
+        $this->pays = $options['paysDeNaissance'] ?? false;
+        $this->dateNaissance = $options['dateDeNaissance'] ?? false;
+        $this->departement = $options['departementDeNaissance'] ?? false;
+        $this->civilite = $options['civilite'] ?? false;
+        $this->provisoire = $options['provisoire'] ?? false;
 
         parent::__construct($options);
     }
@@ -85,10 +86,10 @@ class NumeroINSEEValidator extends NumeroINSEE
         }
 
         $this->value            = $value;
-        $departementDeNaissance = $this->getOption('departementDeNaissance');
-        $dateDeNaissance        = $this->getOption('dateDeNaissance');
-        $paysDeNaissance        = $this->getOption('paysDeNaissance');
-        $civilite               = $this->getOption('civilite');
+        $departementDeNaissance = $this->departement;
+        $dateDeNaissance        = $this->dateNaissance;
+        $paysDeNaissance        = $this->pays;
+        $civilite               = $this->civilite;
 
         $this->provisoire = $this->getProvisoire();
 
@@ -96,13 +97,7 @@ class NumeroINSEEValidator extends NumeroINSEE
             return !empty($value);
         }
 
-        //Désactivation du test civilité sur l'insee (cas personnes changeant de sexe)
-        /*$this->civilite = (!empty($civilite)) ?
-            $this->getServiceCivilite()->get((int)$civilite) : null;
-
-        if ($this->civilite && !$this->isValidCivilite()) return false;*/
-
-        $this->dateNaissance = (!empty($dateDeNaissance)) ? \DateTime::createFromFormat(Date::DATE_FORMAT_PHP, $dateDeNaissance) : null;
+        $this->dateNaissance = (!empty($dateDeNaissance)) ? \DateTime::createFromFormat('Y-m-d', $dateDeNaissance) : null;
 
         if ($this->dateNaissance && !$this->isValidDateNaissance()) return false;
 
@@ -323,11 +318,7 @@ class NumeroINSEEValidator extends NumeroINSEE
             return 99; // étranger
         }
 
-        /* if ($iDepartement == '97' || $iDepartement == '98') {
-             $iDepartement = substr(strtoupper($this->value), 5, 3);
 
-             return (int)$iDepartement;
-         }*/
 
         return (int)$iDepartement;
     }

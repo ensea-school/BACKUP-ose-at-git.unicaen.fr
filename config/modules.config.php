@@ -7,8 +7,6 @@ $modules = [
     'Laminas\Hydrator',
     'Laminas\I18n',
     'Laminas\InputFilter',
-    'Laminas\Log',
-    'Laminas\Mail',
     'Laminas\Mvc\I18n',
     'Laminas\Mvc\Plugin\FlashMessenger',
     'Laminas\Mvc\Plugin\Prg',
@@ -36,6 +34,8 @@ $modules = [
     'Agrement',
     'Intervenant',
     'Service',
+    'EtatSortie',
+    'Chargens',
     'Enseignement',
     'Referentiel',
     'Mission',
@@ -48,10 +48,10 @@ $modules = [
     'Dossier',
     'Contrat',
     'Lieu',
-    'Parametre',
     'Formule',
     'UnicaenSignature',
     'Signature',
+    'Workflow',
 ];
 
 if (AppAdmin::config()['actul']['host'] ?? null){

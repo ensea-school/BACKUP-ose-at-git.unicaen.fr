@@ -32,7 +32,11 @@ class AbstractFormuleCalcul
 
     /** @var FormuleVolumeHoraire[] */
     protected array $volumesHoraires = [];
-    protected array $cache           = [];
+
+    /** @var FormuleVolumeHoraire[] */
+    protected array $nonPayables = [];
+
+    protected array $cache = [];
 
     protected int $mainLine = 20;
 
@@ -154,7 +158,16 @@ class AbstractFormuleCalcul
     public function calculer(FormuleIntervenant $intervenant, Formule $formule): void
     {
         $this->intervenant     = $intervenant;
-        $this->volumesHoraires = $intervenant->getVolumesHoraires()->toArray();
+        $this->volumesHoraires = [];
+        $this->nonPayables     = [];
+        foreach ($intervenant->getVolumesHoraires() as $volumesHoraire) {
+            if ($volumesHoraire->isNonPayable()) {
+                $this->nonPayables[] = $volumesHoraire;
+            } else {
+                $this->volumesHoraires[] = $volumesHoraire;
+            }
+        }
+
         $this->formule         = $formule;
         $this->cache           = [
             'vh'     => [],
@@ -162,15 +175,14 @@ class AbstractFormuleCalcul
         ];
 
         foreach ($this->volumesHoraires as $l => $volumeHoraire) {
-            foreach (self::RESCOLS as $resCol) {
-                $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
-                if ($cellColPos) {
-                    $val = $this->c($cellColPos, $l);
-                } else {
-                    $val = 0.0;
-                }
-                $volumeHoraire->{'set' . $resCol}($val);
+            $this->calculPayable($l, $volumeHoraire);
+            if ($intervenant->isDepassementServiceDuSansHC()) {
+                $this->interdictionHC($l, $volumeHoraire);
             }
+        }
+
+        foreach ($this->nonPayables as $l => $volumeHoraire) {
+            $this->calculNonPayable($l, $volumeHoraire);
         }
 
         if ($this->intervenant instanceof FormuleTestIntervenant) {
@@ -192,6 +204,75 @@ class AbstractFormuleCalcul
             });
 
             $this->intervenant->setDebugTrace($this->cache);
+        }
+    }
+
+
+
+    protected function calculNonPayable(int $l, FormuleVolumeHoraire $volumeHoraire): void
+    {
+        $volumeHoraire->setHeuresPrimes(0);
+        if ($volumeHoraire->getVolumeHoraire()) {
+            $hetd = $volumeHoraire->getHeures() * $volumeHoraire->getPonderationServiceCompl() * $volumeHoraire->getTauxServiceCompl();
+
+            $volumeHoraire->setHeuresServiceFi(0);
+            $volumeHoraire->setHeuresServiceFa(0);
+            $volumeHoraire->setHeuresServiceFc(0);
+
+            $volumeHoraire->setHeuresComplFi(0);
+            $volumeHoraire->setHeuresComplFa(0);
+            $volumeHoraire->setHeuresComplFc(0);
+
+            $volumeHoraire->setHeuresNonPayableFi($hetd * $volumeHoraire->getTauxFi());
+            $volumeHoraire->setHeuresNonPayableFa($hetd * $volumeHoraire->getTauxFa());
+            $volumeHoraire->setHeuresNonPayableFc($hetd * $volumeHoraire->getTauxFc());
+        } else {
+            $hetd = $volumeHoraire->getHeures() * $volumeHoraire->getPonderationServiceCompl();
+
+            $volumeHoraire->setHeuresServiceReferentiel(0);
+            $volumeHoraire->setHeuresComplReferentiel(0);
+            $volumeHoraire->setHeuresNonPayableReferentiel($hetd);
+        }
+    }
+
+
+
+    protected function calculPayable(int $l, FormuleVolumeHoraire $volumeHoraire): void
+    {
+        foreach (self::RESCOLS as $resCol) {
+            $cellColPos = $this->formule->{'get' . $resCol . 'Col'}();
+            if ($cellColPos) {
+                $val = $this->c($cellColPos, $l);
+            } else {
+                $val = 0.0;
+            }
+            $volumeHoraire->{'set' . $resCol}($val);
+        }
+    }
+
+
+
+    protected function interdictionHC(int $l, FormuleVolumeHoraire $volumeHoraire): void
+    {
+        if ($volumeHoraire->getHeuresComplFi() !== 0.0) {
+            $volumeHoraire->setHeuresNonPayableFi($volumeHoraire->getHeuresComplFi());
+            $volumeHoraire->setHeuresComplFi(0);
+        }
+        if ($volumeHoraire->getHeuresComplFa() !== 0.0) {
+            $volumeHoraire->setHeuresNonPayableFa($volumeHoraire->getHeuresComplFa());
+            $volumeHoraire->setHeuresComplFa(0);
+        }
+        if ($volumeHoraire->getHeuresComplFc() !== 0.0) {
+            $volumeHoraire->setHeuresNonPayableFc($volumeHoraire->getHeuresComplFc());
+            $volumeHoraire->setHeuresComplFc(0);
+        }
+        if ($volumeHoraire->getHeuresComplReferentiel() !== 0.0) {
+            $volumeHoraire->setHeuresNonPayableReferentiel($volumeHoraire->getHeuresComplReferentiel());
+            $volumeHoraire->setHeuresComplReferentiel(0);
+        }
+        if ($volumeHoraire->getHeuresPrimes() !== 0.0) {
+            /* Aucun endroit prévu pour stocker le non payable des primes */
+            $volumeHoraire->setHeuresPrimes(0);
         }
     }
 }

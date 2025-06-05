@@ -25,8 +25,6 @@ class StatutSaisieFormFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): StatutSaisieForm
     {
         $form = new StatutSaisieForm();
-        $form->setSignatureConfigurationService($container->get(SignatureConfigurationService::class));
-        $form->setServiceSignatureFlow($container->get(SignatureFlowService::class));
 
         return $form;
     }

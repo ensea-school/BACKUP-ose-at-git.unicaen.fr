@@ -14,61 +14,44 @@
         <div :id="'dmep-collapse-' + datas.code" :aria-labelledby="'dmep-heading-' + datas.code"
              class="accordion-collapse collapse show">
             <div class="accordion-body">
-                <div v-if="this.dotationPaieEtat + dotationRessourcesPropres > 0">
+                <div v-if="this.datas.budget.dotation.total > 0">
                     <!--Budget-->
                     <div class="cartridge gray bordered" style="padding-bottom: 5px;margin-bottom:20px;">
                         <span>Budget</span>
                     </div>
                     <div class="container">
-                        <table class="table table-bordered caption-top">
+                        <table class="table table-bordered caption-top" style="table-layout: fixed;width:100%">
                             <thead class="table-light">
                             <tr>
-                                <th class="fw-bold" scope="col">Paie état</th>
-                                <th class="fw-bold" scope="col">Ressources propres</th>
+
+                                <th v-for="(value, index) in datasBudget"
+                                    :key="index"
+                                    class="fw-bold"
+                                    scope="col">{{ value.libelle }}
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-
-                                <td style="width:50%;">
-                                    <div v-if="this.dotationPaieEtat > 0"
+                                <td v-for="(value, index) in datasBudget">
+                                    <div v-if="value.dotation > 0"
                                          class="text-center progress position-relative bg-secondary"
                                          style="height: 30px;">
                                         <span class="position-absolute top-50 start-50 translate-middle"
                                               style="color:white;">{{
-                                                this.consommationPaieEtat + ' sur ' + this.dotationPaieEtat
+                                                value.consommation + ' sur ' + value.dotation
                                             }} HETD</span>
-                                        <div :aria-valuemax="this.dotationPaieEtat"
-                                             :aria-valuenow="this.consommationPaieEtat"
-                                             :class="'progress-bar progress-bar-striped '+ this.bgPaieEtat"
-                                             :style="'width:' + this.pourcentagePaieEtat + '%;'"
-                                             :title="this.pourcentagePaieEtat + '%'"
+                                        <div :aria-valuemax="value.dotation"
+                                             :aria-valuenow="value.consommation"
+                                             :class="'progress-bar progress-bar-striped '+ bgBudget(value)"
+                                             :style="'width:' + pourcentageBudget(value) + '%;'"
+                                             :title="this.pourcentageBudget(value) + '%'"
                                              aria-valuemin="0"
                                              role="progressbar">
                                         </div>
                                     </div>
-                                    <div v-if="this.dotationPaieEtat == 0" class="text-center">
-                                        Aucune dotation paie état
-                                    </div>
-                                </td>
-                                <td style="width:50%;">
-                                    <div v-if="this.dotationRessourcesPropres > 0"
-                                         class="progress position-relative bg-secondary" style="height: 30px;">
-                                        <span class="position-absolute top-50 start-50 translate-middle"
-                                              style="color:white;">{{
-                                                this.consommationRessourcesPropres + ' sur ' + this.dotationRessourcesPropres
-                                            }} HETD</span>
-                                        <div :aria-valuemax="this.dotationRessourcesPropres"
-                                             :aria-valuenow="this.consommationRessourcesPropres"
-                                             :class="'progress-bar progress-bar-striped '+ this.bgRessourcesPropres"
-                                             :style="'width:' + this.pourcentageRessourcePropre + '%;'"
-                                             :title="this.pourcentageRessourcePropre + '%'"
-                                             aria-valuemin="0"
-                                             role="progressbar">
-                                        </div>
-                                    </div>
-                                    <div v-if="this.dotationRessourcesPropres == 0" class="text-center">
-                                        Aucune dotation ressources propres
+                                    <div v-if="value.dotation == 0" class="text-center">
+                                        Aucune dotation {{ value.libelle }}
                                     </div>
                                 </td>
                             </tr>
@@ -80,8 +63,8 @@
                     <div v-for="(enseignement,codeEnseignement) in etape.enseignements">
                         <div class="cartridge gray bordered" style="padding-bottom: 5px">
                             <span>Enseignement</span>
-                            <span v-html="shorten(etape.libelle, 50)"></span>
-                            <span>{{ enseignement.libelle }}</span>
+                            <span v-html="codeEtape +  ' - ' + shorten(etape.libelle, 40)"></span>
+                            <span>{{ codeEnseignement + ' - ' + enseignement.libelle }}</span>
                         </div>
                         <div class="container">
                             <div class="row">
@@ -159,8 +142,6 @@
                                                                         <option
                                                                             v-for="item in group.child"
                                                                             :key="item.value"
-                                                                            :data-paie-etat="item.paieEtat"
-                                                                            :data-ressources-propres="item.ressourcesPropres"
                                                                             :selected="item.centreCoutId==value.centreCout.centreCoutId"
                                                                             :value="item.centreCoutId">
                                                                             {{
@@ -231,7 +212,7 @@
                 <div v-for="(fonction, codeFonction) in datas.fonctionsReferentiels">
                     <div class="cartridge gray bordered" style="padding-bottom: 5px">
                         <span>Référentiel</span>
-                        <span>{{ fonction.libelle }}</span>
+                        <span>{{codeFonction + ' - ' + fonction.libelle }}</span>
                     </div>
                     <div class="container">
                         <div class="row">
@@ -303,8 +284,6 @@
                                                                 :label="group.group">
                                                                 <option v-for="item in group.child"
                                                                         :key="item.value"
-                                                                        :data-paie-etat="item.paieEtat"
-                                                                        :data-ressources-propres="item.ressourcesPropres"
                                                                         :selected="item.centreCoutId == value.centreCout.centreCoutId"
                                                                         :value="item.centreCoutId">
                                                                     {{
@@ -463,8 +442,6 @@
                                                                 :label="group.group">
                                                                 <option v-for="item in group.child"
                                                                         :key="item.value"
-                                                                        :data-paie-etat="item.paieEtat"
-                                                                        :data-ressources-propres="item.ressourcesPropres"
                                                                         :selected="item.centreCoutId == value.centreCout.centreCoutId"
                                                                         :value="item.centreCoutId"
                                                                 >
@@ -570,59 +547,39 @@
 
 export default {
 
+
     name: "DemandeMiseEnPaiementStructure",
     props: {
         datas: {required: true},
         intervenant: {required: true},
     },
-    data()
-    {
-
-        return {
-            dotationPaieEtat: this.datas.budget.dotation.paieEtat,
-            dotationRessourcesPropres: this.datas.budget.dotation.ressourcePropre,
-            consommationPaieEtat: this.datas.budget.liquidation.paieEtat,
-            consommationRessourcesPropres: this.datas.budget.liquidation.ressourcePropre,
-
-        }
-    },
-    watch: {
-        datas: function () {
-            this.dotationPaieEtat = this.datas.budget.dotation.paieEtat;
-            this.dotationRessourcesPropres = this.datas.budget.dotation.ressourcePropre;
-            this.consommationPaieEtat = this.datas.budget.liquidation.paieEtat;
-            this.consommationRessourcesPropres = this.datas.budget.liquidation.ressourcePropre;
-        },
-
-    },
     computed:
         {
-            pourcentagePaieEtat()
+            datasBudget()
             {
-                return Math.round((this.consommationPaieEtat / this.dotationPaieEtat) * 100);
-            },
-            pourcentageRessourcePropre()
-            {
-                return Math.round((this.consommationRessourcesPropres / this.dotationRessourcesPropres) * 100);
-            },
-            bgPaieEtat()
-            {
-                if (Math.round((this.consommationPaieEtat / this.dotationPaieEtat) * 100) > 100) {
-                    return 'bg-warning';
-                } else {
-                    return 'bg-success';
-                }
-            },
-            bgRessourcesPropres()
-            {
-                if (Math.round((this.consommationRessourcesPropres / this.dotationRessourcesPropres) * 100) > 100) {
-                    return 'bg-warning';
-                } else {
-                    return 'bg-success';
-                }
+                let datasBudget = {};
+                Object.entries(this.datas.budget.dotation).forEach(([key, value]) => {
+                    if (key != 'total') {
+                        datasBudget[key] = {};
+                        datasBudget[key]['libelle'] = value.libelle;
+                        datasBudget[key]['dotation'] = value.heures;
+                        datasBudget[key]['consommation'] = 1001;
+                    }
+                });
+
+                Object.entries(this.datas.budget.consommation).forEach(([key, value]) => {
+                    if (key != 'total') {
+                        if (key in datasBudget) {
+                            datasBudget[key]['consommation'] = value.heures;
+                        }
+
+                    }
+                });
+                return datasBudget;
             }
 
         },
+
     methods: {
         heuresStatutToString(value)
         {
@@ -707,39 +664,18 @@ export default {
             let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
 
             let centreCoutId = inputCentreCout.value;
-            let ressourcesPropres = inputCentreCout.options[inputCentreCout.selectedIndex].getAttribute('data-ressources-propres');
-            let paieEtat = inputCentreCout.options[inputCentreCout.selectedIndex].getAttribute('data-paie-etat');
             //Si centre de cout non sélectionné
             if (centreCoutId == '') {
                 unicaenVue.flashMessenger.toast("Vous devez sélectionner un centre de coût pour demander la mise en paiement de ces heures", 'error', options)
-                this.btnResetState();
+                this.$emit('refresh-btn-state');
                 return false;
             }
             //Si le nombre d'heure demandées est supérieur au nombre d'heures maximum pour cette ligne
             if (heureADemander > 0 && heureADemander > heureADemanderMax) {
                 unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible, vous demandez " + heureADemander + " hetd(s) alors que vous pouvez demander maximum " + heureADemanderMax + " hetd(s)", 'error', options);
-                this.btnResetState();
+                this.$emit('refresh-btn-state');;
                 return false;
             }
-            //Si je suis sur une demande de mise en paiement avec des fonds paie etat
-            if (paieEtat == 1 && this.dotationPaieEtat > 0) {
-                let solde = this.dotationPaieEtat - (this.consommationPaieEtat + heureADemander);
-                if (solde <= 0) {
-                    unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'paie etat' pour ces heures", 'error', options)
-                    this.btnResetState();
-                    return false;
-                }
-            }
-            //Si je suis sur une demande de mise en paiement avec des fonds ressources propres
-            if (ressourcesPropres == 1 && this.dotationRessourcesPropres > 0) {
-                let solde = this.dotationRessourcesPropres - (this.consommationRessourcesPropres + heureADemander);
-                if (solde <= 0) {
-                    unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'ressources propres' pour ces heures", 'error', options)
-                    this.btnResetState();
-                    return false;
-                }
-            }
-
 
             var datas = [];
             let demande = {
@@ -842,9 +778,9 @@ export default {
         {
             let values = this.filtrerCentresCouts(centresCouts, typeHeures)
             if (values.length != 0) {
-                return "Choisir un centre de coût";
+                return "Choisir un centre de coûts";
             } else {
-                return "Aucun centre de coût disponible demande de paiement impossible";
+                return "Aucun centre de coûts disponible: demande de paiement impossible";
             }
 
         },
@@ -858,6 +794,10 @@ export default {
         },
         shorten(chaine, length = 20)
         {
+            if (chaine === null) {
+                return chaine;
+            }
+
             if (chaine.length > length) {
 
                 var centreCout = '<span title="' + chaine + '"';
@@ -893,6 +833,18 @@ export default {
         {
             return Util.dateToString(val);
 
+        },
+        pourcentageBudget(value)
+        {
+            return Math.round((value.consommation / value.dotation) * 100);
+        },
+        bgBudget(value)
+        {
+            if (Math.round((value.consommation / value.dotation) * 100) > 100) {
+                return 'bg-danger';
+            } else {
+                return 'bg-success';
+            }
         }
 
 

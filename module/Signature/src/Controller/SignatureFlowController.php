@@ -78,7 +78,17 @@ class SignatureFlowController extends AbstractController
     {
         $signatureFlow = $this->getEvent()->getParam('signatureFlow');
         if ($signatureFlow instanceof SignatureFlow) {
-            $this->getServiceSignatureFlow()->delete($signatureFlow);
+            try{
+                $this->getServiceSignatureFlow()->delete($signatureFlow);
+            }catch (\Exception $e){
+                if(str_contains($e->getMessage(), 'ORA-02292'))
+                {
+                    $this->flashMessenger()->addErrorMessage('Vous ne pouvez pas supprimer ce circuit de signature, car vous avez déjà des signatures électroniques qui l\'utilisent');
+                }
+                else{
+                    $this->flashMessenger()->addErrorMessage($e->getMessage());
+                }
+            }
         }
 
         return true;

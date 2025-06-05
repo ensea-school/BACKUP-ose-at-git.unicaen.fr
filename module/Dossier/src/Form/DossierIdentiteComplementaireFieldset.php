@@ -47,7 +47,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
                 'class'       => 'dossierElement',
 
             ],
-            'type'       => 'UnicaenApp\Form\Element\Date',
+            'type'       => 'Date',
         ]);
 
         /**
@@ -149,7 +149,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
                 'required'    => false,
                 'allow_empty' => true,
                 'validators'  => [
-                    new DateValidator(['format' => Constants::DATE_FORMAT]),
+                    new DateValidator(),
                 ],
             ],
             'paysNaissance'        => [

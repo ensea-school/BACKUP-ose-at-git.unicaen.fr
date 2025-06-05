@@ -3,11 +3,8 @@
 namespace PieceJointe\Service;
 
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\TypeValidation;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\FichierServiceAwareTrait;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Intervenant\Entity\Db\Intervenant;
 use PieceJointe\Entity\Db\PieceJointe;
@@ -15,6 +12,9 @@ use PieceJointe\Entity\Db\TblPieceJointe;
 use PieceJointe\Entity\Db\TblPieceJointeDemande;
 use PieceJointe\Entity\Db\TblPieceJointeFournie;
 use PieceJointe\Entity\Db\TypePieceJointe;
+use Workflow\Entity\Db\TypeValidation;
+use Workflow\Service\TypeValidationServiceAwareTrait;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 
 /**
@@ -216,7 +216,7 @@ class PieceJointeService extends AbstractEntityService
      *
      * @param \PieceJointe\Entity\Db\PieceJointe $pj
      *
-     * @return \Application\Entity\Db\Validation
+     * @return \Workflow\Entity\Db\Validation
      * @throws UnAuthorizedException
      */
     public function valider(PieceJointe $pj)
@@ -224,7 +224,7 @@ class PieceJointeService extends AbstractEntityService
         $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $role->getStructure() ? $role->getStructure() : $pj->getIntervenant()->getStructure();
 
-        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_PIECE_JOINTE);
+        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::PIECE_JOINTE);
 
         $validation = $this->getServiceValidation()->newEntity($typeValidation);
         $validation->setIntervenant($pj->getIntervenant());
@@ -258,7 +258,7 @@ class PieceJointeService extends AbstractEntityService
      *
      * @param \PieceJointe\Entity\Db\PieceJointe $pj
      *
-     * @return \Application\Entity\Db\Validation Validation historisée
+     * @return \Workflow\Entity\Db\Validation Validation historisée
      * @throws UnAuthorizedException
      */
     public function devalider(PieceJointe $pj)

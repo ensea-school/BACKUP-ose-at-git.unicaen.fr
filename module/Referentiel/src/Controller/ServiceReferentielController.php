@@ -4,9 +4,9 @@ namespace Referentiel\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
 use Lieu\Entity\Db\Structure;
@@ -24,6 +24,7 @@ use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\RechercheServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of ServiceReferentielController
@@ -81,7 +82,7 @@ class ServiceReferentielController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             \Referentiel\Entity\Db\ServiceReferentiel::class,
             \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
-            \Application\Entity\Db\Validation::class,
+            \Workflow\Entity\Db\Validation::class,
         ]);
     }
 
@@ -198,16 +199,16 @@ class ServiceReferentielController extends AbstractController
 
     private function updateTableauxBord (Intervenant $intervenant, ?TypeVolumeHoraire $typeVolumeHoraire=null, bool $validation = false)
     {
-        $tbls = ['formule', 'validation_referentiel', 'referentiel'];
+        $tbls = [TblProvider::FORMULE, TblProvider::VALIDATION_REFERENTIEL, TblProvider::REFERENTIEL];
         if ($typeVolumeHoraire && $typeVolumeHoraire->isRealise()){
             if ($validation){
-                $tbls[] = 'paiement';
+                $tbls[] = TblProvider::PAIEMENT;
             }
         }else{
             if ($validation) {
-                $tbls[] = 'contrat';
+                $tbls[] = TblProvider::CONTRAT;
             }else{
-                $tbls[] = 'piece_jointe_fournie';
+                $tbls[] = TblProvider::PIECE_JOINTE_FOURNIE;
             }
         }
 

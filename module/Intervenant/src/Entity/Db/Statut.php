@@ -3,11 +3,11 @@
 namespace Intervenant\Entity\Db;
 
 
-use Dossier\Entity\Db\DossierAutre;
-use Application\Entity\Db\EtatSortie;
-use Application\Interfaces\ParametreEntityInterface;
+use Administration\Interfaces\ParametreEntityInterface;
+use Administration\Traits\ParametreEntityTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Traits\ParametreEntityTrait;
+use Dossier\Entity\Db\DossierAutre;
+use EtatSortie\Entity\Db\EtatSortie;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 use Paiement\Entity\Db\TauxRemu;
@@ -1905,7 +1905,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::CONTRAT_VISUALISATION                      => $this->contrat && $this->contratVisualisation,
             Privileges::CONTRAT_DEPOT_RETOUR_SIGNE                 => $this->contrat && $this->contratDepot,
             Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT => $this->paiementVisualisation,
-            Privileges::CLOTURE_CLOTURE                            => $this->cloture && ($this->serviceRealiseEdition || $this->referentielRealiseEdition),
+            Privileges::CLOTURE_CLOTURE                            => $this->cloture && ($this->serviceRealiseVisualisation || $this->referentielRealiseVisualisation),
             Privileges::CONTRAT_CONTRAT_GENERATION                 => $this->contrat && $this->contratGeneration,
             Privileges::MISSION_VISUALISATION                      => $this->mission && $this->missionVisualisation,
             Privileges::MISSION_PRIME_VISUALISATION                => $this->mission,

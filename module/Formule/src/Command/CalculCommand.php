@@ -2,9 +2,11 @@
 
 namespace Formule\Command;
 
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -25,7 +27,8 @@ class CalculCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Recalcul de toutes les formules');
+        $this->setDescription('Recalcul de toutes les formules')
+            ->addArgument('anneeId', InputArgument::OPTIONAL, 'Id de l\'année pour laquelle seront lancées les formules');;
     }
 
 
@@ -35,17 +38,21 @@ class CalculCommand extends Command
         $io  = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
 
+        $anneeId = $input->getArgument('anneeId');
+
         $io->warning("Ce traitement peut prendre plusieurs minutes");
 
         $this->getServiceTableauBord()->setOnAction(function(Event $event) use ($io){
             $this->onEvent($event, $io);
         });
 
-        $annees = $this->getServiceAnnee()->getActives();
+        $annees = $this->getServiceAnnee()->getActives(true);
         foreach ($annees as $annee) {
-            $io->comment('Calcul pour l\'année '.$annee->getLibelle());
-            $params = ['ANNEE_ID' => $annee->getId()];
-            $this->getServiceTableauBord()->calculer('formule', $params);
+            if ($annee->getId() == $anneeId || $anneeId === null) {
+                $io->comment('Calcul pour l\'année '.$annee->getLibelle());
+                $params = ['ANNEE_ID' => $annee->getId()];
+                $this->getServiceTableauBord()->calculer(TblProvider::FORMULE, $params);
+            }
         }
 
         return Command::SUCCESS;

@@ -123,7 +123,7 @@ return [
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
             'scale'       => NULL,
-            'precision'   => 2,
+            'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
             'position'    => 10,

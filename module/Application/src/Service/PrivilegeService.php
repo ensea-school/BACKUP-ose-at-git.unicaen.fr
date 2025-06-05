@@ -2,7 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Privilege;
 use Application\Entity\Db\Role;
 use Application\Provider\Privilege\Privileges;
@@ -24,7 +23,6 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
     use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
     use StatutServiceAwareTrait;
-    use CacheContainerTrait;
 
 
     private array $privilegesCache       = [];
@@ -75,12 +73,14 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
      *
      * @return string[][]
      */
-    public function getPrivilegesRoles()
+    public function getPrivilegesRoles(): array
     {
-        if (empty($this->privilegesCache)) {
-            $this->privilegesCache = $this->getCacheContainer()->privilegesRoles('makePrivilegesRoles');
+        $session = RoleService::getSession();
+
+        if (!$session->offsetExists('privilegesRoles') || empty($session->privilegesRoles)) {
+            $session->privilegesRoles = $this->makePrivilegesRoles();
         }
-        return $this->privilegesCache;
+        return $session->privilegesRoles;
     }
 
 

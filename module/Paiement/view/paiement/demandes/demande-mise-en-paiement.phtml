@@ -7,5 +7,6 @@ $this->intervenant($intervenant)->renderTitle("Demande de mise en paiement");
 
 echo $this->vue('paiement/demande-mise-en-paiement', [
     'intervenant' => $intervenant->getId(),
+    'intervenantStructure' => $intervenantStructure,
 ]);
 

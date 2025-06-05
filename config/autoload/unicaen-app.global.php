@@ -74,10 +74,4 @@ return [
             ],
         ],
     ],
-
-    'view_helpers' => [
-        'invokables' => [
-            'formSearchAndSelect' => 'Application\Form\View\Helper\FormSearchAndSelect',
-        ],
-    ],
 ];

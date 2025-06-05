@@ -57,6 +57,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'LABEL'            => [
+            'name'        => 'LABEL',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 2000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 8,
+            'commentaire' => NULL,
+        ],
         'LASTUPDATE'       => [
             'name'        => 'LASTUPDATE',
             'type'        => 'date',

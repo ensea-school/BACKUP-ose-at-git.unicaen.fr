@@ -119,6 +119,46 @@ class TauxRemuService extends AbstractEntityService
 
 
 
+    public function tauxDate(TauxRemu|int $tauxRemu, \DateTime|string $date): \DateTime
+    {
+        $tauxValeur = $this->getTauxMap();
+
+        if ($tauxRemu instanceof TauxRemu) {
+            $tauxRemu = $tauxRemu->getId();
+        }
+
+        if (!isset($tauxValeur[$tauxRemu])){
+            throw new \Exception('Taux de rémunération invalide : ID '.$tauxRemu.' inconnu');
+        }
+
+
+        if ($date instanceof \DateTime) {
+            $date = $date->format('Y-m-d');
+        }
+        $valeur = $date; // pas de taux => date de référence
+
+        foreach($tauxValeur[$tauxRemu]['valeurs'] as $d => $v ){
+            if ($d <= $date){
+                $valeur = $d;
+            }else{
+                break;
+            }
+        }
+
+        if (!empty($tauxValeur[$tauxRemu]['parent'])){
+            $dateParent = $this->tauxDate($tauxValeur[$tauxRemu]['parent'], $date);
+            if ($dateParent->format('Y-m-d') > $valeur){
+                return $dateParent;
+            }else{
+                return new \DateTime($valeur);
+            }
+        }else{
+            return new \DateTime($valeur);
+        }
+    }
+
+
+
     public function clearCache(): self
     {
         $session = $this->getSessionContainer();

@@ -2,7 +2,6 @@
 
 namespace Application\Traits;
 
-use Application\Constants;
 use Application\Filter\FloatFromString;
 use Application\Hydrator\GenericHydrator;
 use Doctrine\ORM\EntityManager;
@@ -27,7 +26,7 @@ trait FormFieldsetTrait
     protected function getEntityManager(): EntityManager
     {
         if (!$this->entityManager) {
-            $this->entityManager = \AppAdmin::container()->get(Constants::BDD);
+            $this->entityManager = \AppAdmin::container()->get(EntityManager::class);
         }
 
         return $this->entityManager;

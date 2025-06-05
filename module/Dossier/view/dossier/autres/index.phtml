@@ -9,7 +9,7 @@ use Application\Provider\Privilege\Privileges;
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AUTRES_EDITION));
-echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-master/src-min/ace.js');
+echo $this->inlinescript()->appendFile($this->basePath() . '/ext/ace-builds-master/src-min/ace.js');
 
 
 ?>

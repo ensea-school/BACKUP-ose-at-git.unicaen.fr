@@ -64,9 +64,10 @@ $.widget("unicaen.modAjax", {
 
             }
         });*/
-        that.contentDiv.on('intranavigator-refresh', (event, args) => {
+
+        that.contentDiv[0].addEventListener('intranavigator.refresh', (event) => {
             that.setContent(that.contentDiv.html());
-            if (args.isSubmit) {
+            if (event.detail.isSubmit) {
                 that.contentSubmit(that.contentDiv);
             }
         });
@@ -149,7 +150,7 @@ $.widget("unicaen.modAjax", {
         this.setTitle(this.options.loadingTitle);
         this.setContent(this.options.loadingContent, true);
         $.ajax({
-            url: this.options.url,
+            url: that.options.url,
             success: (response) => {
                 that.setContent(response);
 
@@ -360,6 +361,10 @@ function modAjax(element, onSubmit)
 {
     var widget = $(element).data('unicaenModAjax');
 
+    if (!element.classList.contains('no-intranavigation')) {
+        element.classList.add('no-intranavigation');
+    }
+
     if (!widget) {
         $(element).modAjax();
         widget = $(element).data('unicaenModAjax');
@@ -369,7 +374,9 @@ function modAjax(element, onSubmit)
         widget.show();
     }
     widget.element = $(element);
-    widget.options.url = element.dataset.url;
+    if (element.dataset.url) {
+        widget.options.url = element.dataset.url;
+    }
 
     return widget;
 }

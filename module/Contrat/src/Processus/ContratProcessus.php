@@ -2,39 +2,34 @@
 
 namespace Contrat\Processus;
 
-use Application\Entity\Db\Validation;
 use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;
 use Application\Processus\AbstractProcessus;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TblContrat;
 use Contrat\Service\ContratServiceAwareTrait;
+use Contrat\Service\TblContratServiceAwareTrait;
 use Contrat\Service\TypeContratServiceAwareTrait;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\Persistence\Mapping\MappingException;
-use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Exception;
 use Intervenant\Entity\Db\Intervenant;
-use Laminas\Mail\Message as MailMessage;
-use Laminas\Mime\Message;
-use Laminas\Mime\Mime;
-use Laminas\Mime\Part;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use LogicException;
-use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
-use Service\Entity\Db\EtatVolumeHoraire;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
+use Workflow\Entity\Db\Validation;
+use Workflow\Service\TypeValidationServiceAwareTrait;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 /**
  * Description of ContratProcessus
@@ -53,6 +48,9 @@ class ContratProcessus extends AbstractProcessus
     use ValidationServiceAwareTrait;
     use HistoriqueListenerAwareTrait;
     use StructureServiceAwareTrait;
+    use MailServiceAwareTrait;
+    use TblContratServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
 
     /**
      * @param Intervenant    $intervenant
@@ -62,13 +60,12 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return TblContrat[]
      */
-    public function getVolumeHoraireTblContrat(string $uuid): array
+    public function getVolumesHorairesTblContrat(string $uuid): array
     {
-        $tblContrats = [];
-        $query       = $this->getEntityManager()->createQuery(
+        $query = $this->getEntityManager()->createQuery(
             'SELECT tblc, vh
                  FROM ' . TblContrat::class . ' tblc
-                 JOIN tblc.volumeHoraire vh
+                 left join tblc.volumesHoraires vhs WITH vhs.uuid = tblc.uuid
                  WHERE tblc.uuid = :uuid'
         );
         $query->setParameter('uuid', $uuid);
@@ -87,9 +84,9 @@ class ContratProcessus extends AbstractProcessus
     {
         $tblContrats = [];
         $query       = $this->getEntityManager()->createQuery(
-            'SELECT tblc, vh
+            'SELECT tblc, vhr
                  FROM ' . TblContrat::class . ' tblc
-                 JOIN tblc.volumeHoraireRef vh
+                 JOIN tblc.volumeHoraireRef vhr
                  WHERE tblc.uuid = :uuid'
         );
         $query->setParameter('uuid', $uuid);
@@ -108,9 +105,9 @@ class ContratProcessus extends AbstractProcessus
     {
         $tblContrats = [];
         $query       = $this->getEntityManager()->createQuery(
-            'SELECT tblc, vh
+            'SELECT tblc, vhm
                  FROM ' . TblContrat::class . ' tblc
-                 JOIN tblc.volumeHoraireMission vh
+                left join tblc.volumesHoraires vhs WITH vhs.uuid = tblc.uuid
                  WHERE tblc.uuid = :uuid'
         );
         $query->setParameter('uuid', $uuid);
@@ -133,30 +130,25 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Contrat
      */
-    public function creer(Intervenant $intervenant, $volumeHoraire): Contrat
+    public function creer(Contrat $contrat, TblContrat $informationContrat): Contrat
     {
-        $contrat = $this->getServiceContrat()->newEntity();
-        /* @var $contrat Contrat */
 
-        $contrat->setIntervenant($intervenant);
+        $contrat->setIntervenant($informationContrat->getIntervenant());
 
-        $structure = $this->getServiceStructure()->get($volumeHoraire['structureId']);
-        $contrat->setStructure($structure);
+        $contrat->setStructure($informationContrat->getStructure());
 
-        $contrat->setTotalHetd($volumeHoraire['hetdTotal']);
-        $contrat->setDebutValidite($volumeHoraire['dateDebut']);
-        $contrat->setFinValidite($volumeHoraire['dateFin']);
-        $contrat->setTypeContrat($this->getServiceTypeContrat()->getByCode($volumeHoraire['typeContratCode']));
-        if ($volumeHoraire['contratParentId'] == NULL) {
-            $contrat->setNumeroAvenant(0);
-        } else {
-            $this->getServiceContrat()->get($volumeHoraire['contratParentId']);
-            $contratParent = $this->getServiceContrat()->get($volumeHoraire['contratParentId']);
+        $dateDebut = $informationContrat->getDateDebut();
 
-            $contrat->setContrat($contratParent);
-            $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant()));
-        }
+        $contrat->setDebutValidite($dateDebut);
 
+        $dateFin = $informationContrat->getDateFin();
+
+        $contrat->setFinValidite($dateFin);
+
+        $contrat->setTypeContrat($informationContrat->getTypeContrat());
+        $contrat->setNumeroAvenant((int)$informationContrat->getNumeroAvenant());
+        $contratParent = $informationContrat->getContratParent();
+        $contrat->setContrat($contratParent);
 
         return $contrat;
     }
@@ -164,55 +156,24 @@ class ContratProcessus extends AbstractProcessus
 
 
     /**
-     * Enregistrement du contrat ET liaison aux volumes horaires correspondants
+     * @param Intervenant $intervenant
      *
-     * @param Contrat $contrat
-     *
-     * @return $this
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @return float
      */
-    public function enregistrer(Contrat $contrat, string $uuid): self
+    public function getIntervenantTotalHetd(Intervenant $intervenant): float
     {
-        if ($contrat->getId()) {
-            throw new LogicException('Le contrat existe déjà. Il ne peut pas être recréé');
-        }
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
 
-        // on sauvegarde le contrat
-        $this->getServiceContrat()->save($contrat);
+        $sql    = "SELECT total FROM formule_resultat_intervenant WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :tvh AND etat_volume_horaire_id = :evh";
+        $params = [
+            'intervenant' => $intervenant->getId(),
+            'tvh'         => $typeVolumeHoraire->getId(),
+            'evh'         => $etatVolumeHoraire->getId(),
+        ];
+        $hetd   = (float)$this->getEntityManager()->getConnection()->fetchOne($sql, $params);
 
-        // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
-        $tblContrats = $this->getVolumeHoraireTblContrat($uuid);
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-        foreach ($tblContrats as $tblContrat) {
-            $vh = $tblContrat->getVolumeHoraire();
-            $vh->setContrat($contrat);
-            $this->getEntityManager()->persist($vh);
-        }
-
-        // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
-        $tblContrats = $this->getVolumeHoraireRefTblContrat($uuid);
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-        foreach ($tblContrats as $tblContrat) {
-            $vhr = $tblContrat->getVolumeHoraireRef();
-            $vhr->setContrat($contrat);
-            $this->getEntityManager()->persist($vhr);
-        }
-
-//        // on récupère les heures de mission et on les places dans le contrat
-        $tblContrats = $this->getVolumeHoraireMissionTblContrat($uuid);
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-        foreach ($tblContrats as $tblContrat) {
-            $vhr = $tblContrat->getVolumeHoraireRef();
-            $vhr->setContrat($contrat);
-            $this->getEntityManager()->persist($vhr);
-        }
-
-
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
-        $this->getEntityManager()->flush();
-
-        return $this;
+        return $hetd;
     }
 
 
@@ -276,15 +237,8 @@ class ContratProcessus extends AbstractProcessus
             ->setIntervenant($contrat->getIntervenant())
             ->setStructure($contrat->getStructure());
 
-        $this->requalification($contrat); // requalifie le contrat en avenant si nécessaire!!
-        $contrat->setValidation($validation);
-
-        if ($contrat->estUnAvenant()) {
-            // On recalcule l'index, car il peut avoir changé... ? ? ?
-            $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant()));
-        }
-
         $this->getServiceValidation()->save($validation);
+        $contrat->setValidation($validation);
         $this->getServiceContrat()->save($contrat);
 
         return $validation;
@@ -309,52 +263,41 @@ class ContratProcessus extends AbstractProcessus
 
 
     /**
-     * Détermine si le contrat doit être requalifié ou non
-     *
-     * @param Contrat $contrat
-     *
-     * @return bool
-     */
-    public function doitEtreRequalifie(Contrat $contrat): bool
-    {
-        if (!$contrat->getTypeContrat()) return true; // pas de type alors oui, on qualifie!!
-
-        $contratInitial = $contrat->getIntervenant()->getContratInitial();
-        if ($contratInitial && (!$contratInitial->getValidation()) || $contratInitial === $contrat) {
-            $contratInitial = null; //projet ou lui-même seulement donc on oublie
-        }
-        return $contrat->estUnAvenant() === !$contratInitial;
-    }
-
-
-
-    /**
-     * Qualification d'un nouveau contrat en avenant ou en contrat
+     * Enregistrement du contrat ET liaison aux volumes horaires correspondants
      *
      * @param Contrat $contrat
      *
      * @return $this
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function qualification(Contrat $contrat, Mission $mission = null): self
+    public function enregistrer(Contrat $contrat, ?string $uuid = null): self
     {
-        if (null !== $contrat->getTypeContrat()) return $this;
-
-        $contratInitial = $contrat->getIntervenant()->getContratInitial();
-
-        if (($contratInitial && !$contratInitial->getValidation()) || $contrat === $contratInitial) {
-            $contratInitial = null; //projet ou lui-même seulement donc on oublie
+        if ($contrat->getId()) {
+            throw new LogicException('Le contrat existe déjà. Il ne peut pas être recréé');
         }
 
+        // on sauvegarde le contrat
+        $this->getServiceContrat()->save($contrat);
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
 
-        if ($contratInitial) {
-            if ($mission == null) {
-                $this->qualificationEnAvenant($contrat);
-            } else {
-                $this->qualificationEnAvenant($contrat, $mission);
+        $tblContrat = $this->getServiceTblContrat()->getInformationContratByUuid($uuid);
+
+        $volumesHoraires = $tblContrat->getVolumesHoraires();
+        foreach ($volumesHoraires as $tblContratVolumesHoraire) {
+            $volumeHoraire = $tblContratVolumesHoraire->getVolumeHoraire()
+                ?: $tblContratVolumesHoraire->getVolumeHoraireRef()
+                    ?: $tblContratVolumesHoraire->getVolumeHoraireMission();
+
+            if ($volumeHoraire !== null) {
+                $volumeHoraire->setContrat($contrat);
+                $this->getEntityManager()->persist($volumeHoraire);
             }
-        } else {
-            $this->qualificationEnContrat($contrat);
         }
+
+
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
+        $this->getEntityManager()->flush();
 
         return $this;
     }
@@ -370,42 +313,11 @@ class ContratProcessus extends AbstractProcessus
      */
     public function requalification(Contrat $contrat): self
     {
-        if (!$this->doitEtreRequalifie($contrat)) return $this; // pas besoin
-
-        if ($contrat->estUnAvenant()) {
-            $this->qualificationEnContrat($contrat);
-        } else {
-            $this->qualificationEnAvenant($contrat);
-        }
-
-        return $this;
-    }
+        //On recupere les informations de la tbl_contrat pour s'assurer que le contrat a les bonne données a l'enregistrement
+        //Utile si un contrat a été créer depuis la création du projet par exemple
 
 
-
-    protected function qualificationEnAvenant(Contrat $contrat, Mission $mission = null): self
-    {
-        $contratInitial = $contrat->getIntervenant()->getContratInitial();
-
-        $contrat->setContrat($contratInitial);
-        $contrat->setTypeContrat($this->getServiceTypeContrat()->getAvenant());
-        $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant()));
-
-        return $this;
-    }
-
-
-
-    protected function qualificationEnContrat(Contrat $contrat, Mission $mission = null): self
-    {
-        if ($mission != null) {
-            $contrat->setMission($mission);
-        }
-        $contrat->setContrat();
-        $contrat->setTypeContrat($this->getServiceTypeContrat()->getContrat());
-        $contrat->setNumeroAvenant(0);
-
-        return $this;
+        return $contrat;
     }
 
 
@@ -413,14 +325,13 @@ class ContratProcessus extends AbstractProcessus
     /**
      * @throws Exception
      */
-    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null, $pieceJointe = true): MailMessage
+    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null, $pieceJointe = true): Email
     {
 
 
-       if (empty($subject)) {
+        if (empty($subject)) {
             $subject = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
         }
-
 
         if (empty($to)) {
             throw new Exception("Aucun email disponible pour le destinataire / Envoi du contrat impossible");
@@ -433,97 +344,31 @@ class ContratProcessus extends AbstractProcessus
             $bcc = explode(';', $cci);
         }
 
-        $body = new Message();
+        $mail = new Email();
+        $mail->from(new Address($from, 'Application OSE'))
+            ->subject($subject)
+            ->to($to)
+            ->html($htmlContent);
 
-        $text          = new Part($htmlContent);
-        $text->type    = Mime::TYPE_HTML;
-        $text->charset = 'utf-8';
-        $body->addPart($text);
-        $nameFrom    = "Application OSE";
-        $messageType = Mime::TYPE_HTML;
-        //Contrat en pièce jointe
+        foreach ($bcc as $address) {
+            $mail->addBcc($address);
+        }
+
         if ($pieceJointe) {
-            $messageType = Mime::MULTIPART_RELATED;
-            $fileName    = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-                                   $contrat->getStructure()?->getCode(),
-                                   $contrat->getIntervenant()->getNomUsuel(),
-                                   $contrat->getIntervenant()->getCode());
-
-            $document                = $this->getServiceContrat()->generer($contrat, false);
-            $content                 = $document->saveToData();
-            $attachment              = new Part($content);
-            $attachment->type        = 'application/pdf';
-            $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-            $attachment->encoding    = Mime::ENCODING_BASE64;
-            $attachment->filename    = $fileName;
-            $body->addPart($attachment);
+            //Nom du fichier
+            $fileName = sprintf(
+                ($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+                $contrat->getStructure()?->getCode(),
+                $contrat->getIntervenant()->getNomUsuel(),
+                $contrat->getIntervenant()->getCode()
+            );
+            //Contenu du fichier
+            $document = $this->getServiceContrat()->generer($contrat, false);
+            $content  = $document->saveToData();
+            $mail->attach($content, $fileName, 'application/pdf');
         }
 
-        $message = new MailMessage();
-        $message->setEncoding('UTF-8')
-            ->setFrom($from, $nameFrom)
-            ->setSubject($subject)
-            ->addTo($to)
-            ->addBcc($bcc)
-            ->setBody($body)
-            ->getHeaders()->get('content-type')->setType($messageType);
-
-        return $message;
-    }
-
-
-
-    private function getServicesMission(Intervenant $intervenant, Contrat $contrat = null, Mission $mission = null, bool $detach = true)
-    {
-        $services = [];
-
-        $fContrat    = "vhm.contrat = :contrat";
-        $fNonContrat = "vhm.contrat IS NULL "
-            . "AND tvm.code = '" . TypeVolumeHoraire::CODE_PREVU . "' "
-            . "AND evm.code = '" . EtatVolumeHoraire::CODE_VALIDE . "' ";
-
-        if ($mission) {
-            $fMission = "AND m.id = :mission";
-        } else {
-            $fMission = '';
-        }
-
-        $dql   = "
-        SELECT
-          m, tm, str, i, vhm, evm, tvm
-        FROM
-          Mission\Entity\Db\Mission m
-          JOIN m.volumesHoraires      vhm
-          JOIN m.typeMission tm
-          JOIN m.structure         str
-          JOIN m.intervenant        i
-          JOIN vhm.etatVolumeHoraire evm
-          JOIN vhm.typeVolumeHoraire tvm
-        WHERE
-          i = :intervenant
-          AND m.histoDestruction IS NULL
-          AND vhm.histoDestruction IS NULL
-          AND " . ($contrat ? $fContrat : $fNonContrat) . "
-          $fMission
-        ";
-        $query = $this->getEntityManager()->createQuery($dql);
-        $query->setParameter('intervenant', $intervenant);
-        if ($contrat) {
-            $query->setParameter('contrat', $contrat);
-        }
-        if ($fMission) {
-            $query->setParameter('mission', $mission->getId());
-        }
-
-        foreach ($query->execute() as $service) {
-            /* @var $service Service */
-            if ($detach) {
-                $this->getEntityManager()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
-            }
-            $services[$service->getId()] = $service;
-        }
-
-        return $services;
+        return $mail;
     }
 
 

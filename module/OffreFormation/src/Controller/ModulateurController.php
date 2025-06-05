@@ -5,6 +5,7 @@ namespace OffreFormation\Controller;
 use Application\Controller\AbstractController;
 use OffreFormation\Form\Traits\EtapeModulateursSaisieAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
+use Unicaen\BddAdmin\BddAwareTrait;
 
 /**
  * Description of ModulateurController
@@ -15,6 +16,7 @@ class ModulateurController extends AbstractController
 {
     use EtapeServiceAwareTrait;
     use EtapeModulateursSaisieAwareTrait;
+    use BddAwareTrait;
 
 
 
@@ -54,6 +56,8 @@ class ModulateurController extends AbstractController
             }
         }
         $title = "Saisie des modulateurs <br /><small>$etape</small>";
+
+        $this->getBdd()->materializedView()->refresh('MV_MODULATEUR');
 
         return compact('title', 'form', 'errors');
     }

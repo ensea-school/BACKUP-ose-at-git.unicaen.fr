@@ -5,7 +5,6 @@ namespace Intervenant\Form;
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
-use Application\Form\Intervenant\Dossier;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;

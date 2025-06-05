@@ -5,25 +5,31 @@ use Application\View\Renderer\PhpRenderer;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TypeContrat;
 use Intervenant\Entity\Db\Intervenant;
+use Contrat\Entity\Db\TblContrat;
 
 /**
- * @var PhpRenderer $this
- * @var string      $title
- * @var Intervenant $intervenant
- * @var bool        $contratDirect
- * @var string      $emailIntervenant
- * @var array       $services
- * @var string      $libelleCircuitSignature
- * @var array       $infosSignature
- * @var $contratSignatureActivation     boolean
-*/
+ * @var PhpRenderer        $this
+ * @var string             $title
+ * @var Intervenant        $intervenant
+ * @var bool               $contratDirect
+ * @var string             $emailIntervenant
+ * @var array|TblContrat[] $contratsNonContractualises
+ * @var array|TblContrat[] $contratsContractualises
+ * @var string             $libelleCircuitSignature
+ * @var array              $infosSignature
+ * @var bool               $contratSignatureActivation
+ * @var bool               $isMission
+ */
 
 $this->intervenant($intervenant)->renderTitle("Contrat/avenant");
 $this->messenger()->setMessagesFromFlashMessengerWithNoNamespace();
-if (!empty($services['NoContrat'])) {
-    $this->messenger()->addMessage('Des heures prévisionnelles d\'enseignement validées ne font l\'objet d\'aucun contrat ou avenant. En voici la liste ci-dessous :', 'danger');
+$libelleMessageHeures = (!$isMission)?'Des heures prévisionnelles d\'enseignement':'Des heures prévisionnelles de missions';
+$libelleMessage = (!$isMission)?'Tous les enseignements prévisionnels validés' : 'Toutes les missions validées';
+
+if (!empty($contratsNonContractualises)) {
+    $this->messenger()->addMessage($libelleMessageHeures. ' validées ne font l\'objet d\'aucun contrat ou avenant. En voici la liste ci-dessous :', 'info');
 } else {
-    $this->messenger()->addMessage('Tous les enseignements prévisionnels validés ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
+    $this->messenger()->addMessage($libelleMessage .' ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
 }
 echo $this->messenger() ?>
 
@@ -32,35 +38,24 @@ echo $this->messenger() ?>
         width: 10%;
     }
 
-    .ui-datepicker {
-        z-index: 1151 !important;
-    }
-
     td .card {
         margin-bottom: 0px;
     }
 </style>
 
-<?php if (!empty($services['Contrat']) || !empty($services['NoContrat'])) : ?>
-    <?php if (isset($services['NoContrat'])): ?>
+<?php if (!empty($contratsContractualises) || !empty($contratsNonContractualises)) : ?>
+    <?php if ($contratsNonContractualises): ?>
         <table class="table table-bordered table-hover">
             <tr>
                 <th class="structure">Composante</th>
                 <th>heure(s) non contractualisé(s)</th>
             </tr>
-            <?php foreach ($services['NoContrat'] as $uuid => $typeCodeArray): ?>
-                <?php foreach ($typeCodeArray as $typeCode => $volumesHoraireToContrat):
-                    $tblContratVh = $volumesHoraireToContrat[0];
-                    break;
-                endforeach;
+            <?php foreach ($contratsNonContractualises as $tblContrat):
+                $structure = $tblContrat->getStructure();
 
-                /** @var \Contrat\Entity\Db\TblContrat $tblContratVh */
-                $structure   = $tblContratVh->getStructure();
-                $structureId = ($structure) ? $structure->getId() : null;
-                $contrat     = new Contrat();
+                $contrat = new Contrat();
                 $contrat->setIntervenant($intervenant);
                 $contrat->setStructure($structure);
-
                 $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
                 ?>
 
@@ -76,62 +71,55 @@ echo $this->messenger() ?>
                     <td>
                         <?php if ($canCreer): ?>
                             <a class="btn btn-primary"
-                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'uuid' => $uuid]); ?>">
-                                <i class="fas fa-file"></i> Créer
+                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'uuid' => $tblContrat->getUuid()]) ?>">
+                                <i class="fas fa-file"></i>Créer
                                 un
                                 <?php if ($contratDirect): ?>
-                                    <?= $tblContratVh->getTypeContrat()->getCode() == TypeContrat::CODE_CONTRAT ? 'contrat' : 'avenant' ?>
+                                    <?= $tblContrat->getTypeContrat()->getCode() == TypeContrat::CODE_CONTRAT ? 'contrat' : 'avenant' ?>
                                 <?php else: ?>
-                                    projet <?= $tblContratVh->getTypeContrat()->getCode() == TypeContrat::CODE_CONTRAT ? 'de contrat' : 'd\'avenant' ?>
+                                    projet <?= $tblContrat->getTypeContrat()->getCode() == TypeContrat::CODE_CONTRAT ? 'de contrat' : 'd\'avenant' ?>
                                 <?php endif; ?>
                             </a>
                         <?php else:
                             try {
-                                echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
+                                echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Workflow\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
                             } catch (\Exception $e) {
                                 echo "Ces heures ne peuvent pas être contractualisées";
                             }
                         endif; ?>
-                        <p>
-                            Services (validés) non contractualisés :<br/>
-                            <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
-                                      href="#details-enseignements-contrat-<?= $tblContratVh->getUuid(); ?>"
-                                      role="button"
-                                      aria-expanded="true"
-                                      aria-controls="details-enseignements-contrat-<?= $tblContratVh->getUuid(); ?>"
-                                      data-bs-toggle="collapse"
-                                >Afficher/masquer</a></small>
-                        </p>
-                        <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
-                             id="details-enseignements-contrat-<?= $tblContratVh->getUuid(); ?>">
-                            <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['NoContrat'][$tblContratVh->getUuid()]]); ?>
-                        </div>
+                        <?php if (count($tblContrat->getVolumesHoraires()) > 0):?>
+                            <p>
+                                Services (validés) non contractualisés :<br/>
+                                <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
+                                          href="#details-enseignements-contrat-<?= $tblContrat->getUuid(); ?>"
+                                          role="button"
+                                          aria-expanded="true"
+                                          aria-controls="details-enseignements-contrat-<?= $tblContrat->getUuid(); ?>"
+                                          data-bs-toggle="collapse"
+                                    >Afficher/masquer</a></small>
+                            </p>
+                            <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
+                                 id="details-enseignements-contrat-<?= $tblContrat->getUuid(); ?>">
+                                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['tblContrat' => $tblContrat]); ?>
+                            </div>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </table>
     <?php endif; ?>
-    <?php if (isset($services['Contrat'])): ?>
+    <?php if (isset($contratsContractualises)): ?>
         <div class="well">
             <h2>Contrats et avenants</h2>
 
-            <?php foreach ($services['Contrat'] as $key => $tblContrat): ?>
-
-                <?php
-                foreach ($tblContrat as $typeCode => $volumesHoraireToContrat):
-                    $tblContratVh = $volumesHoraireToContrat[0];
-                    break;
-                endforeach; ?>
-
-                <?php if ($tblContratVh): ?>
-                    <?php if ($contratSignatureActivation && !(!empty($tblContratVh->getContrat()->getDateRetourSigne() && empty($tblContratVh->getContrat()->getProcessSignature())))): ?>
-                        <?php echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'contratSignatureActivation' => $contratSignatureActivation, 'libelleCircuitSignature' => $libelleCircuitSignature, 'infosSignature' => $infosSignature]); ?>
-                    <?php else: ?>
-                        <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $tblContratVh->getContrat(), 'services' => $services['Contrat'][$tblContratVh->getUuid()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]); ?>
-                    <?php endif; ?>
-                <?php endif; ?>
-
-            <?php endforeach; ?>
+            <?php foreach ($contratsContractualises as $tblContrat) {
+                $contrat = $tblContrat->getContrat();
+                if ($contratSignatureActivation && !((!empty($contrat->getDateRetourSigne() || !$contrat->getFichier()->isEmpty()) && empty($contrat->getProcessSignature())))):
+                    echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['tblContrat' => $tblContrat, 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'contratSignatureActivation' => $contratSignatureActivation, 'libelleCircuitSignature' => $libelleCircuitSignature, 'infosSignature' => $infosSignature]);
+                else:
+                    echo $this->partial('contrat/contrat/partial/contrat', ['tblContrat' => $tblContrat, 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]);
+                endif;
+            } ?>
         </div>
 
     <?php endif; ?>
@@ -140,11 +128,10 @@ echo $this->messenger() ?>
 <?php endif; ?>
 
 <hr/>
-<?= $this->feuilleDeRoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
+<?= $this->feuilleDeRoute($intervenant)->renderNav(\Workflow\Entity\Db\WfEtape::CODE_CONTRAT); ?>
 
 <script>
     $("body").on("envoi-mail-contrat", function (event, data) {
-        console.log('event envoyé et affiché');
         event.div.modal('hide'); // ferme la fenêtre modale
         window.location.reload();
     });

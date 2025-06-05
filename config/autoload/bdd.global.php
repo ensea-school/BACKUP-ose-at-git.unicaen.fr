@@ -33,6 +33,7 @@ return [
                     'MV_EXT_DOTATION_LIQUIDATION',
                     'MV_EXT_ETAT_PAIEMENT',
                     'MV_LIEN',
+                    'MV_MODULATEUR',
                 ]],
                 'package'            => ['excludes' => ['UCBN_LDAP', 'UNICAEN_IMPORT_AUTOGEN_PROCS__', 'OSE_ACTUL']],
             ],
@@ -104,7 +105,7 @@ return [
                 'namespace' => 'OSE__' . __NAMESPACE__,
             ],
             'filesystem' => [
-                'class'     => 'Doctrine\Common\Cache\FilesystemCache',
+                'class'     => 'Application\Cache\FilesystemCache',
                 'directory' => 'cache/Doctrine',
                 'namespace' => 'DoctrineModule',
             ],

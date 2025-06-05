@@ -2,8 +2,8 @@
 
 namespace Contrat\Entity\Db;
 
-use Application\Entity\Db\Parametre;
-use Application\Service\Traits\ParametresServiceAwareTrait;
+use Administration\Entity\Db\Parametre;
+use Administration\Service\ParametresServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -45,7 +45,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $structure;
 
     /**
-     * @var \Application\Entity\Db\Validation
+     * @var \Workflow\Entity\Db\Validation
      */
     private $validation;
 
@@ -78,11 +78,6 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      * @var \Doctrine\Common\Collections\Collection
      */
     private $fichier;
-
-    /**
-     * @var float
-     */
-    private $totalHetd;
 
     /**
      * @var ?Process
@@ -215,7 +210,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get validation
      *
-     * @return \Application\Entity\Db\Validation
+     * @return \Workflow\Entity\Db\Validation
      */
     public function getValidation()
     {
@@ -227,11 +222,11 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set validation
      *
-     * @param \Application\Entity\Db\Validation $validation
+     * @param \Workflow\Entity\Db\Validation $validation
      *
      * @return Contrat
      */
-    public function setValidation(\Application\Entity\Db\Validation $validation = null)
+    public function setValidation(\Workflow\Entity\Db\Validation $validation = null)
     {
         $this->validation = $validation;
 
@@ -521,38 +516,6 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     public function getFichier()
     {
         return $this->fichier;
-    }
-
-
-
-    /**
-     * Retourne le total Hetd enregistré au moment de la création de ce contrat/avenant.
-     *
-     * Attention: il est null pour ceux créés avant l'ajout de cette colonne dans la table CONTRAT.
-     *
-     * @return float|null
-     * @since 1.5
-     */
-    public function getTotalHetd()
-    {
-        return $this->totalHetd;
-    }
-
-
-
-    /**
-     * Spécifie le total Hetd à enregistrer au moment de la création de ce contrat/avenant.
-     *
-     * @param float $totalHetd
-     *
-     * @return self
-     * @since 1.5
-     */
-    public function setTotalHetd($totalHetd)
-    {
-        $this->totalHetd = $totalHetd;
-
-        return $this;
     }
 
 

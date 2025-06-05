@@ -3,7 +3,7 @@
 namespace Paiement\Tbl\Process;
 
 
-use Application\Service\Traits\ParametresServiceAwareTrait;
+use Administration\Service\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use Paiement\Tbl\Process\Sub\Consolidateur;
 use Paiement\Tbl\Process\Sub\Exporteur;
@@ -179,6 +179,13 @@ class PaiementProcess implements ProcessInterface
         while ($lap = $aPayerStmt->fetchAssociative()) {
             $this->loadLigneAPayer($lap);
         }
+
+        foreach($this->services as $sk => $serviceAPayer) {
+            $serviceAPayer->heures = 0;
+            foreach( $serviceAPayer->lignesAPayer as $lap ){
+                $serviceAPayer->heures += $lap->heuresAA + $lap->heuresAC;
+            }
+        }
     }
 
 
@@ -195,14 +202,19 @@ class PaiementProcess implements ProcessInterface
             $this->services[$key] = $sap;
         }
 
+        $lap             = new LigneAPayer();
+        $tauxRemu        = (int)$data['TAUX_REMU_ID'];
+        $horaireDebut    = (string)$data['HORAIRE_DEBUT'];
+        $lap->tauxValeur = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $horaireDebut);
+        $lap->pourcAA    = $this->repartiteur->fromBdd($data);
+        $lap->fromBdd($data);
         if (!array_key_exists($lapKey, $this->services[$key]->lignesAPayer)) {
-            $lap             = new LigneAPayer();
-            $tauxRemu        = (int)$data['TAUX_REMU_ID'];
-            $horaireDebut    = (string)$data['HORAIRE_DEBUT'];
-            $lap->tauxValeur = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $horaireDebut);
-            $lap->pourcAA    = $this->repartiteur->fromBdd($data);
-            $lap->fromBdd($data);
             $this->services[$key]->lignesAPayer[$lapKey] = $lap;
+        }else{
+            $oldLap = $this->services[$key]->lignesAPayer[$lapKey];
+
+            $oldLap->heuresAA = round($oldLap->heuresAA + $lap->heuresAA,2);
+            $oldLap->heuresAC = round($oldLap->heuresAC + $lap->heuresAC,2);
         }
 
         if ($mepKey > 0 && !array_key_exists($mepKey, $this->services[$key]->misesEnPaiement)) {

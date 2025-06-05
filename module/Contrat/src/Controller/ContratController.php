@@ -2,17 +2,15 @@
 
 namespace Contrat\Controller;
 
+use Administration\Entity\Db\Parametre;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Parametre;
-use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
-use Contrat\Entity\Db\TblContrat;
 use Contrat\Form\ContratRetourFormAwareTrait;
 use Contrat\Form\EnvoiMailContratFormAwareTrait;
 use Contrat\Processus\ContratProcessusAwareTrait;
@@ -33,9 +31,12 @@ use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\ProcessStep;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
+use Workflow\Entity\Db\Validation;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of ContratController
@@ -60,6 +61,7 @@ class ContratController extends AbstractController
     use ContratServiceListeServiceAwareTrait;
     use TblContratServiceAwareTrait;
     use ProcessServiceAwareTrait;
+    use MailServiceAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -93,17 +95,20 @@ class ContratController extends AbstractController
         $title = "Contrat/avenants <small>{$intervenant}</small>";
 
 
-        $volumesHoraireIntervenant = $this->getServiceTblContrat()->getContratVolumeHoraireByIntervenant($intervenant, $structure);
-        $services                  = [];
-        foreach ($volumesHoraireIntervenant as $volumeHoraireIntervenant) {
-            /** @var TblContrat $volumesHoraireIntervenant */
+        $contrats = $this->getServiceTblContrat()->getContratsByIntervenant($intervenant, $structure);
 
-            if ($volumeHoraireIntervenant->getTypeService() != null) {
-                if ($volumeHoraireIntervenant->getContrat() == null) {
-                    $services['NoContrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
-                } else {
-                    $services['Contrat'][$volumeHoraireIntervenant->getUuid()][$volumeHoraireIntervenant->getTypeService()->getCode()][] = $volumeHoraireIntervenant;
-                }
+
+        $contratsNonContractualises = [];
+        $contratsContractualises    = [];
+        $isMission = 0;
+        foreach ($contrats as $contrat) {
+            if (empty($contrat->getContrat())) {
+                $contratsNonContractualises[$contrat->getUuid()] = $contrat;
+            } else {
+                $contratsContractualises[$contrat->getUuid()] = $contrat;
+            }
+            if (!empty($contrat->getTypesMissionLibelles())) {
+                $isMission = 1;
             }
 
         }
@@ -147,12 +152,14 @@ class ContratController extends AbstractController
         return compact(
             'title',
             'intervenant',
-            'services',
+            'contratsNonContractualises',
+            'contratsContractualises',
             'emailIntervenant',
             'contratDirect',
             'contratSignatureActivation',
             'infosSignature',
-            'libelleCircuitSignature'
+            'libelleCircuitSignature',
+            'isMission',
         );
     }
 
@@ -173,12 +180,9 @@ class ContratController extends AbstractController
             throw new LogicException('L\'intervenant n\'est pas précisé');
         }
 
-        $volumeHorairesTotal = $this->getServiceTblContrat()->getVolumeTotalCreationContratByUuid($uuid);
-        if ($volumeHorairesTotal == null) {
-            $volumeHorairesTotal = 0;
-        }
-
-        $contrat = $this->getProcessusContrat()->creer($intervenant, $volumeHorairesTotal);
+        $volumeHorairesCreation = $this->getServiceTblContrat()->getInformationContratByUuid($uuid);
+        $contrat                = new Contrat();
+        $contrat                = $this->getProcessusContrat()->creer($contrat, $volumeHorairesCreation);
 
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
@@ -264,12 +268,8 @@ class ContratController extends AbstractController
             return new MessengerViewModel;
         }
 
-        if ($this->getProcessusContrat()->doitEtreRequalifie($contrat)) {
-            $message = "<p><strong>NB :</strong> à l'issue de sa validation, " . lcfirst($contrat->toString(true)) .
-                " deviendra un avenant car un contrat a déjà été validé par une autre composante.</p>" .
-                "<p><strong>Vous devrez donc impérativement imprimer à nouveau le document !</strong></p>";
-            $this->flashMessenger()->addWarningMessage($message);
-        }
+        $tblContratContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
+        $contrat               = $this->getProcessusContrat()->creer($contrat, $tblContratContrat);
 
         if ($this->getRequest()->isPost()) {
             try {
@@ -350,7 +350,7 @@ class ContratController extends AbstractController
         }
         $canSaisieDateSigne = true;
 
-        $contratDateSansFichierResult = $this->getServiceParametres()->get('contrat_date');
+        $contratDateSansFichierResult = $this->getServiceParametres()->get(Parametre::CONTRAT_DATE);
         $contratDateSansFichier       = ($contratDateSansFichierResult == Parametre::CONTRAT_DATE);
 
         if ($contrat->getDateRetourSigne() != null || $contrat->getFichier()->count() > 0 || $contratDateSansFichier) {
@@ -366,7 +366,7 @@ class ContratController extends AbstractController
             $canSaisieDateSigne = false;
         }
 
-        $contratDateResult = $this->getServiceParametres()->get('contrat_date');
+        $contratDateResult = $this->getServiceParametres()->get(Parametre::CONTRAT_DATE);
         $contratDate       = ($contratDateResult == Parametre::CONTRAT_DATE);
 
         return compact('form', 'done', 'title', 'canSaisieDateSigne', 'contratDate');
@@ -438,10 +438,10 @@ class ContratController extends AbstractController
                     $to           = $this->getRequest()->getPost('destinataire-mail-hide');
                     $cci          = $this->getRequest()->getPost('destinataire-cc-mail');
                     $pieceJointe  = $this->getRequest()->getPost('contrat-piece-jointe');
-                    $message      = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
+                    $mail         = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject, $pieceJointe);
                     /*Create Note from email for this intervenant*/
                     $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $html);
-                    $mail           = $this->mail()->send($message);
+                    $this->getMailService()->send($mail);
                     $dateEnvoiEmail = new DateTime();
                     $contrat->setDateEnvoiEmail($dateEnvoiEmail);
                     $this->getServiceContrat()->save($contrat);
@@ -516,16 +516,22 @@ class ContratController extends AbstractController
      */
     public function telechargerFichierAction()
     {
-        $contrat = $this->getEvent()->getParam('contrat');
-        /* @var $contrat Contrat */
+        $contrat         = $this->getEvent()->getParam('contrat');
+        $fichierDemandee = $this->getEvent()->getParam('fichier');
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)) {
             throw new UnAuthorizedException('Vous n\'avez pas de droit de télécharger ce fichier');
         }
 
-        $fichier = $this->getEvent()->getParam('fichier');
+        $fichiersContrat = $contrat->getFichier();
+        foreach ($fichiersContrat as $fichier) {
+            if ($fichier->getId() == $fichierDemandee->getId()) {
+                $this->uploader()->download($fichier);
+            }
+        }
 
-        $this->uploader()->download($fichier);
+        throw new \Exception('Le fichier n\'existe pas ou bien il appartient à un autre intervenant');
+
     }
 
 
@@ -631,8 +637,8 @@ class ContratController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $errors = $this->getServiceWorkflow()->calculerTableauxBord([
-                                                                        'formule',
-                                                                        'contrat',
+                                                                        TblProvider::FORMULE,
+                                                                        TblProvider::CONTRAT,
                                                                     ], $intervenant);
         if (!empty($errors)) {
             foreach ($errors as $error) {

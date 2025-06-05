@@ -88,14 +88,10 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
 
         ?>
     </div>
+    <script type="text/javascript" src="<?= $this->basePath('/js/piece-jointe.js') ?>"></script>
     <script>
 
         $(function () {
-
-            //WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){
-            //    WidgetInitializer.includeJs(unicaenVue.url('js/piece_jointe.js'));
-            //    WidgetInitializer.includeCss(unicaenVue.url('css/piece_jointe.css'));
-            //});
 
             $('.piece-jointe').pieceJointe({
                 'validation-change': function ()
@@ -121,4 +117,4 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
     </script>
 <?php
 
-echo $this->feuilleDeRoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_PJ_VALIDATION);
+echo $this->feuilleDeRoute($intervenant)->renderNav(\Workflow\Entity\Db\WfEtape::CODE_PJ_VALIDATION);

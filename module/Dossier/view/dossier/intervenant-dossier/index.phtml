@@ -4,15 +4,15 @@
  * @var $role                         \Application\Entity\Db\Role
  * @var $intervenant                  \Intervenant\Entity\Db\Intervenant
  * @var $intervenantDossier           \Dossier\Entity\Db\IntervenantDossier
- * @var $intervenantDossierValidation \Application\Entity\Db\Validation
+ * @var $intervenantDossierValidation \Workflow\Entity\Db\Validation
  * @var $intervenantDossierStatut     \Intervenant\Entity\Db\Statut
  * @var $fieldsetRules                Array
  * @var $champsAutres                 \Application\Entity\Collection
  */
 
 
-use Application\Entity\Db\WfEtape;
 use Dossier\Assertion\IntervenantDossierAssertion;
+use Workflow\Entity\Db\WfEtape;
 
 $editIdentite  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IDENTITE);
 $editAdresse   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE);
@@ -234,6 +234,7 @@ $fieldsets = $form->getFieldsets();
                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
                        data-confirm="true"
                        data-confirm-button="Oui"
+                       data-submit-reload="true"
                        data-cancel-button="Non"
                        data-submit-event="devalide-donnees"
                     >
@@ -270,14 +271,6 @@ $fieldsets = $form->getFieldsets();
 
 
     <script type="text/javascript">
-        //Permettre la sélection des 100 dernières années
-        $("#dateSituationMatrimoniale").datepicker({
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            yearRange: "-100:+0",
-            dateFormat: 'dd/mm/yy'
-        });
 
 
         $(function () {
@@ -318,17 +311,17 @@ $fieldsets = $form->getFieldsets();
             {
                 var selectSituationMatrimoniale = $("select[name='DossierIdentite[situationMatrimoniale]']");
                 var dateSituationMatrimoniale = $("input[name='DossierIdentite[dateSituationMatrimoniale]']").parent('div').parent('div');
-                console.log(dateSituationMatrimoniale);
 
                 var situation = $("option:selected", selectSituationMatrimoniale).html();
 
-                if (situation == 'Célibataire') {
+                if (situation == 'Célibataire' || situation == '- NON RENSEIGNÉ') {
                     dateSituationMatrimoniale.hide();
                 }
 
                 selectSituationMatrimoniale.change(function () {
                     var situation = $("option:selected", selectSituationMatrimoniale).html();
-                    if (situation == 'Célibataire') {
+                    console.log(situation);
+                    if (situation == 'Célibataire' || situation == '- NON RENSEIGNÉ -') {
                         dateSituationMatrimoniale.hide();
                     } else {
                         dateSituationMatrimoniale.show();

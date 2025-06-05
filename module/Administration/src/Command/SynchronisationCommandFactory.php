@@ -23,9 +23,10 @@ class SynchronisationCommandFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): SynchronisationCommand
     {
+
         $command = new SynchronisationCommand;
         $command->setProcessusImport($container->get(ImportProcessus::class));
-        
+
         /* Injectez vos dépendances ICI */
 
         return $command;

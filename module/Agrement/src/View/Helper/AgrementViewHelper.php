@@ -116,7 +116,7 @@ class AgrementViewHelper extends AbstractHtmlElement
         $html .= $this->getView()->historique($entity);
 
         if ($this->box) {
-            $html = '<div class="agrement agrement-box alert alert-success"><i class="fas fa-circle-check"></i>' . $html . '</div>';
+            $html = '<div class="agrement agrement-box alert alert-success"><div class="float-end fs-1"><i class="fas fa-circle-check"></i></div>' . $html . '</div>';
         }
 
         $this->short = false;

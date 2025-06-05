@@ -3,9 +3,9 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Role;
+use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Entity\Db\Affectation;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
@@ -104,6 +104,16 @@ class AffectationService extends AbstractEntityService
         $qb->andWhere("$structureAlias = :structure")->setParameter('structure', $structure);
 
         return $qb;
+    }
+
+
+
+    public function deleteCacheAffectation():void
+    {
+        $em = $this->getEntityManager();
+
+        $cache = $em->getConfiguration()->getResultCache();
+        $cache->deleteItem(RoleProvider::AFFECTATIONS_CACHE_ID);
     }
 
 }

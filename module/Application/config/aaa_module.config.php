@@ -2,14 +2,10 @@
 
 namespace Application;
 
-use Application\Mouchard\MouchardCompleterContextFactory;
 use Application\Service\OseBddAdminFactory;
 use Application\View\Helper\LocalConnectViewHelperFactory;
-use Application\View\Helper\UserProfileSelectRadioItem;
-use Application\View\Helper\UserProfileSelectRadioItemFactory;
 use Unicaen\BddAdmin\Bdd;
 use UnicaenAuthentification\View\Helper\LocalConnectViewHelper;
-use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 $config = [
     'doctrine'   => [
@@ -125,15 +121,12 @@ $config = [
     ],
     'service_manager'    => [
         'invokables' => [
-            Service\AnneeService::class          => Service\AnneeService::class,
-            Service\LocalContextService::class   => Service\LocalContextService::class,
-            Service\ParametresService::class     => Service\ParametresService::class,
-            Service\SourceService::class         => Service\SourceService::class,
-            Service\AffectationService::class    => Service\AffectationService::class,
-            Service\RoleService::class           => Service\RoleService::class,
-            Service\FichierService::class        => Service\FichierService::class,
-            Service\TypeValidationService::class => Service\TypeValidationService::class,
-            Service\ValidationService::class     => Service\ValidationService::class,
+            Service\AnneeService::class                    => Service\AnneeService::class,
+            Service\LocalContextService::class             => Service\LocalContextService::class,
+            Service\SourceService::class                   => Service\SourceService::class,
+            Service\AffectationService::class              => Service\AffectationService::class,
+            Service\RoleService::class                     => Service\RoleService::class,
+            Service\FichierService::class                  => Service\FichierService::class,
         ],
         'factories'  => [
             \Laminas\Navigation\Navigation::class                       => Navigation\NavigationFactory::class,
@@ -141,7 +134,6 @@ $config = [
             Provider\Resource\ResourceProvider::class                   => Provider\Resource\ResourceProviderFactory::class,
             Provider\Identity\IdentityProvider::class                   => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class                               => Service\Factory\ContextServiceFactory::class,
-            'MouchardCompleterContext'                                  => MouchardCompleterContextFactory::class,
             \UnicaenPrivilege\Service\Privilege\PrivilegeService::class => Service\Factory\PrivilegeServiceFactory::class,
             Connecteur\LdapConnecteur::class                            => Connecteur\Factory\LdapConnecteurFactory::class,
             Cache\CacheService::class                                   => Cache\Factory\CacheServiceFactory::class,
@@ -150,6 +142,7 @@ $config = [
             ORM\RouteEntitiesInjector::class                            => ORM\RouteEntitiesInjectorFactory::class,
             ORM\Event\Listeners\HistoriqueListener::class               => ORM\Event\Listeners\HistoriqueListenerFactory::class,
             Bdd::class                                                  => OseBddAdminFactory::class,
+            \UnicaenMail\Service\Mail\MailService::class                => Service\MailServiceFactory::class
         ],
         'aliases'    => [
             'HostLocalization' => HostLocalization\HostLocalizationOse::class,
@@ -162,13 +155,12 @@ $config = [
             'headLink'                   => \Laminas\View\Helper\HeadLink::class,
             'headScript'                 => \Laminas\View\Helper\HeadScript::class,
             'inlineScript'               => \Laminas\View\Helper\InlineScript::class,
-            'userProfileSelectRadioItem' => UserProfileSelectRadioItem::class,
         ],
         'factories'  => [
-            UserProfileSelectRadioItem::class      => UserProfileSelectRadioItemFactory::class,
             \UnicaenApp\View\Helper\AppLink::class => View\Helper\AppLinkFactory::class,
             LocalConnectViewHelper::class          => LocalConnectViewHelperFactory::class,
             'tab'                                  => View\Helper\TabViewHelperFactory::class,
+            'appLayout'                            => View\Helper\LayoutViewHelperFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,

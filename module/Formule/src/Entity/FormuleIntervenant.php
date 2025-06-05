@@ -12,18 +12,23 @@ use Service\Entity\Db\TypeVolumeHoraire;
 
 class FormuleIntervenant
 {
+    const ARRONDISSEUR_NO      = 0;
+    const ARRONDISSEUR_MINIMAL = 1;
+    const ARRONDISSEUR_FULL    = 2;
+    const ARRONDISSEUR_CUSTOM  = 3;
+
     // Identifiants
-    protected ?int $id = null;
-    protected ?Annee $annee = null;
+    protected ?int               $id                = null;
+    protected ?Annee             $annee             = null;
     protected ?TypeVolumeHoraire $typeVolumeHoraire = null;
     protected ?EtatVolumeHoraire $etatVolumeHoraire = null;
 
     // Paramètres globaux
-    protected ?TypeIntervenant $typeIntervenant = null;
-    protected ?string $structureCode = null;
-    protected float $heuresServiceStatutaire = 0.0;
-    protected float $heuresServiceModifie = 0.0;
-    protected bool $depassementServiceDuSansHC = false;
+    protected ?TypeIntervenant $typeIntervenant            = null;
+    protected ?string          $structureCode              = null;
+    protected float            $heuresServiceStatutaire    = 0.0;
+    protected float            $heuresServiceModifie       = 0.0;
+    protected bool             $depassementServiceDuSansHC = false;
 
     // Paramètres spécifiques
     protected ?string $param1 = null;
@@ -35,7 +40,7 @@ class FormuleIntervenant
     // Résultats
     protected float $serviceDu = 0.0;
 
-    protected bool $arrondisseur = true;
+    protected int   $arrondisseur      = self::ARRONDISSEUR_FULL;
     protected ?Ligne $arrondisseurTrace = null;
 
     /**
@@ -493,14 +498,14 @@ class FormuleIntervenant
 
 
 
-    public function isArrondisseur(): bool
+    public function getArrondisseur(): int
     {
         return $this->arrondisseur;
     }
 
 
 
-    public function setArrondisseur(bool $arrondisseur): FormuleIntervenant
+    public function setArrondisseur(int $arrondisseur): FormuleIntervenant
     {
         $this->arrondisseur = $arrondisseur;
         return $this;

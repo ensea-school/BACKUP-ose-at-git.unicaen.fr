@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="EtatSortie\Entity\Db\EtatSortie" table="ETAT_SORTIE">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <field name="code" type="string" column="CODE" nullable="false"/>
+        <field name="libelle" type="string" column="LIBELLE" nullable="false"/>
+        <field name="cle" type="string" column="CLE" nullable="true"/>
+        <field name="csvParams" type="string" column="CSV_PARAMS" nullable="true"/>
+        <field name="pdfTraitement" type="string" column="PDF_TRAITEMENT" nullable="true"/>
+        <field name="csvTraitement" type="string" column="CSV_TRAITEMENT" nullable="true"/>
+        <field name="autoBreak" type="boolean" column="AUTO_BREAK" nullable="false"/>
+        <field name="fichier" type="blob" column="FICHIER" nullable="false"/>
+        <field name="requete" type="string" column="REQUETE" nullable="false"/>
+
+        <field name="bloc1Nom" type="string" column="BLOC1_NOM" nullable="true"/>
+        <field name="bloc1Zone" type="string" column="BLOC1_ZONE" nullable="true"/>
+        <field name="bloc1Requete" type="string" column="BLOC1_REQUETE" nullable="true"/>
+
+        <field name="bloc2Nom" type="string" column="BLOC2_NOM" nullable="true"/>
+        <field name="bloc2Zone" type="string" column="BLOC2_ZONE" nullable="true"/>
+        <field name="bloc2Requete" type="string" column="BLOC2_REQUETE" nullable="true"/>
+
+        <field name="bloc3Nom" type="string" column="BLOC3_NOM" nullable="true"/>
+        <field name="bloc3Zone" type="string" column="BLOC3_ZONE" nullable="true"/>
+        <field name="bloc3Requete" type="string" column="BLOC3_REQUETE" nullable="true"/>
+
+        <field name="bloc4Nom" type="string" column="BLOC4_NOM" nullable="true"/>
+        <field name="bloc4Zone" type="string" column="BLOC4_ZONE" nullable="true"/>
+        <field name="bloc4Requete" type="string" column="BLOC4_REQUETE" nullable="true"/>
+
+        <field name="bloc5Nom" type="string" column="BLOC5_NOM" nullable="true"/>
+        <field name="bloc5Zone" type="string" column="BLOC5_ZONE" nullable="true"/>
+        <field name="bloc5Requete" type="string" column="BLOC5_REQUETE" nullable="true"/>
+
+        <field name="bloc6Nom" type="string" column="BLOC6_NOM" nullable="true"/>
+        <field name="bloc6Zone" type="string" column="BLOC6_ZONE" nullable="true"/>
+        <field name="bloc6Requete" type="string" column="BLOC6_REQUETE" nullable="true"/>
+
+        <field name="bloc7Nom" type="string" column="BLOC7_NOM" nullable="true"/>
+        <field name="bloc7Zone" type="string" column="BLOC7_ZONE" nullable="true"/>
+        <field name="bloc7Requete" type="string" column="BLOC7_REQUETE" nullable="true"/>
+
+        <field name="bloc8Nom" type="string" column="BLOC8_NOM" nullable="true"/>
+        <field name="bloc8Zone" type="string" column="BLOC8_ZONE" nullable="true"/>
+        <field name="bloc8Requete" type="string" column="BLOC8_REQUETE" nullable="true"/>
+
+        <field name="bloc9Nom" type="string" column="BLOC9_NOM" nullable="true"/>
+        <field name="bloc9Zone" type="string" column="BLOC9_ZONE" nullable="true"/>
+        <field name="bloc9Requete" type="string" column="BLOC9_REQUETE" nullable="true"/>
+
+        <field name="bloc10Nom" type="string" column="BLOC10_NOM" nullable="true"/>
+        <field name="bloc10Zone" type="string" column="BLOC10_ZONE" nullable="true"/>
+        <field name="bloc10Requete" type="string" column="BLOC10_REQUETE" nullable="true"/>
+
+        <field name="signatureActivation" type="boolean" column="SIGNATURE_ACTIVATIOn" nullable="false"/>
+        <many-to-one field="signatureCircuit" target-entity="UnicaenSignature\Entity\Db\SignatureFlow">
+            <join-column name="SIGNATURE_CIRCUIT_ID" referenced-column-name="id"/>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

@@ -2,7 +2,8 @@
 
 namespace TblPaiement;
 
-use Application\Service\ParametresService;
+use Administration\Service\ParametresService;
+use Application\Provider\Tbl\TblProvider;
 use Paiement\Service\TauxRemuService;
 use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\Sub\Rapprocheur;
@@ -73,7 +74,7 @@ final class ProcessTest extends OseTestCase
             ],
         ]);
 
-        $ptbl = $c->getTableauBord('paiement');
+        $ptbl = $c->getTableauBord(TblProvider::PAIEMENT);
         $this->pp = $ptbl->getProcess();
         $this->pp->setServiceTauxRemu($tauxRemuMock);
 

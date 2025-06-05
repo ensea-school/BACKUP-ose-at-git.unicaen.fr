@@ -98,7 +98,7 @@ $.fn.autocompleteUnicaen = function (options)
         markup = '<a id="autocomplete-item-' + item.id + '">' + markup + "</a>";
         var li = $("<li></li>").data("item.autocomplete", item).append(markup).appendTo(ul);
         // mise en évidence du motif dans chaque résultat de recherche
-        highlight(element.val(), li, 'sas-highlight');
+        element.val().split(' ').filter(v => v).forEach(v => highlight(v, li, 'sas-highlight'));
         // si l'item ne possède pas d'id, on fait en sorte qu'il ne soit pas sélectionnable
         if (!item.id) {
             li.on("click", function () { return false; });
@@ -289,10 +289,12 @@ function AjaxModalListener(dialogDivId)
             this.modalEventName = anchor.data('event');
 
             // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
+            IntraNavigator.loadBegin();
             $.get(url, {modal: 1}, $.proxy(function (data)
             {
                 // remplacement du contenu de la fenêtre modale
                 $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
+                IntraNavigator.loadEnd();
 
             }, this));
         }

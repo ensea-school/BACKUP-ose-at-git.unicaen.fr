@@ -55,11 +55,10 @@ class MiseEnPaiementForm extends AbstractForm
 
         $defaultDateMiseEnPaiement = $defaultPeriode ? $defaultPeriode->getDatePaiement($annee) : null;
         $this->add([
-            'type'       => 'UnicaenApp\Form\Element\Date',
+            'type'       => 'Date',
             'name'       => 'date-mise-en-paiement',
             'options'    => [
                 'label'  => 'Date de mise en paiement',
-                'format' => 'd/m/Y',
             ],
             'attributes' => [
                 'step'     => '1',

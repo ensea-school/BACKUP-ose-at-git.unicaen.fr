@@ -49,7 +49,7 @@ class DotationService extends AbstractEntityService
     /**
      * Retourne, dans un tableau, le nombre d'heures abondées budgétairement par structure et par type de ressource
      */
-    public function getTableauBord( array $structures = [] )
+    public function getTableauBord(array $structures = []): array
     {
         $sql = "
         SELECT
@@ -78,6 +78,10 @@ class DotationService extends AbstractEntityService
             if (!isset($res[$structureId]['total'])) $res[$structureId]['total'] = 0;
             $res[$structureId]['total'] += $heures;
             $res['total'] += $heures;
+        }
+
+        if ($res['total'] == 0) {
+            return [];
         }
 
         return $res;

@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'WF_ETAPE_DEP_ID_SEQ',
+    'sequence'    => NULL,
     'columns'     => [
         'ACTIVE'              => [
             'name'        => 'ACTIVE',

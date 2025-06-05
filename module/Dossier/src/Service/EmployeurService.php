@@ -126,6 +126,7 @@ class EmployeurService extends AbstractEntityService
                 JOIN source s ON e.source_id = s.id
                 WHERE
                   lower(e.critere_recherche) like :search
+                ORDER BY raison_sociale ASC
                 ";
 
         $em = $this->getEntityManager();

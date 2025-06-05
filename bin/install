@@ -37,7 +37,25 @@ $composerCommand = 'composer';
 $cacheDir = 'cache';
 
 // Commande à lancer après l'installation de l'application
-$postInstallCommand = './vendor/bin/laminas install';
+$postInstallFnc = function (Console $c, string $dir) {
+    $piFile = $dir . "/vendor/bin/laminas";
+    if (file_exists($piFile)) {
+        $c->passthru(["cd $dir", "./vendor/bin/laminas install"]);
+    } else {
+        $c->writeln("\nGénération des proxies pour l'ORM Doctrine", $c::COLOR_LIGHT_CYAN);
+        $c->exec(["cd $dir", "php bin/ose clear-cache"]);
+
+        $c->writeln("\nFin du script d'installation des fichiers", $c::COLOR_LIGHT_GREEN);
+        $c->writeln("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
+        $c->writeln(" 1 - Configurez votre serveur Apache si ce n'est déjà fait");
+        $c->writeln(" 2 - Veuillez personnaliser le fichier de configuration de OSE config.local.php, si ce n'est déjà le cas");
+        $c->writeln(" 3 - La base de données devra au besoin être initialisée à l'aide de la commande ./bin/ose install-bdd. Si votre base était déjà initialisée, alors la commande ./bin/ose update-bdd sera privilégiée");
+        $c->writeln(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
+        $c->writeln('');
+        $c->writeln("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
+        $c->writeln('');
+    }
+};
 
 // Liste des commandes systèmes qui doivent être installées
 $depCommands = [
@@ -220,13 +238,11 @@ if ($composerInstall) {
 
 // Chargement des dépendances à l'aide de Composer
 $c->section('Chargement des dépendances à l\'aide de Composer');
-$c->passthru("cd $dir;COMPOSER_ALLOW_SUPERUSER=1 $composerCommand install --quiet --optimize-autoloader");
+$c->passthru("cd $dir;COMPOSER_ALLOW_SUPERUSER=1 $composerCommand install --optimize-autoloader");
 
 
 // Poursuite de la procédure d'installation en passant la main
-if ($postInstallCommand){
-    $c->passthru(["cd $dir;$postInstallCommand"]);
-}
+$postInstallFnc($c, $dir);
 
 
 /************************************************************

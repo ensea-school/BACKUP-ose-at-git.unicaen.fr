@@ -9,10 +9,8 @@ return [
     'columns' => [
         'INTERVENANT_ID',
         'STRUCTURE_ID',
-        'TYPE_VOLUME_HORAIRE_ID',
         'SERVICE_ID',
         'VOLUME_HORAIRE_ID',
-        'VALIDATION_ID',
     ],
 ];
 

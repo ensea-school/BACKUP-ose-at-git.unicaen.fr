@@ -5,13 +5,18 @@
         </div>
         Chargement des demandes de mise en paiement en cours...
     </div>
-    <div id="accordionPanelsStayOpenExample" class="accordion">
 
-        <demande-mise-en-paiement-structure v-for="(structure, code) in datasDemandesMiseEnPaiement"
+    <div v-if="this.datasDemandesMiseEnPaiement" id="accordionPanelsStayOpenExample" class="accordion">
+
+        <demande-mise-en-paiement-structure @refresh-btn-state="btnResetState" v-for="(structure, code) in datasDemandesMiseEnPaiement"
                                             :datas="structure"
                                             :intervenant="intervenant"
                                             @refresh="getDemandesMiseEnPaiement"/>
     </div>
+    <div v-if="!haveDemandeMiseEnPaiement && this.datasDemandesMiseEnPaiement"  class="text-center alert alert-secondary" role="alert">
+        Les demandes de mises en paiement sont effectuées par la composante : {{ this.intervenantStructure}}
+    </div>
+
 </template>
 
 <script>
@@ -25,6 +30,7 @@ export default {
     components: {DemandeMiseEnPaiementStructure},
     props: {
         intervenant: {required: false},
+        intervenantStructure : {required: false}
     },
     data()
     {
@@ -75,6 +81,16 @@ export default {
 
 
         },
+
+    },
+    computed: {
+      haveDemandeMiseEnPaiement: function() {
+          if(this.datasDemandesMiseEnPaiement)
+          {
+              return Object.keys(this.datasDemandesMiseEnPaiement).length > 0;
+          }
+          return false;
+      }
 
     },
     mounted()

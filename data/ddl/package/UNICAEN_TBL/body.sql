@@ -190,49 +190,28 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
   PROCEDURE CALCULER(TBL_NAME VARCHAR2, param VARCHAR2, VALUE VARCHAR2) IS
-    calcul_proc varchar2(30);
     params t_params;
   BEGIN
     IF NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN; END IF;
-
-    calcul_proc := CASE TBL_NAME
-    WHEN 'formule' THEN 'OSE_FORMULE.CALCULER_TBL'
-    ELSE NULL END;
 
     params.p1 := param;
     params.v1 := VALUE;
 
     unicaen_tbl.calcul_proc_params := params;
 
-    IF calcul_proc IS NOT NULL THEN
-      EXECUTE IMMEDIATE
-        'BEGIN ' || calcul_proc || '(UNICAEN_TBL.CALCUL_PROC_PARAMS.p1, UNICAEN_TBL.CALCUL_PROC_PARAMS.v1); END;';
-    ELSE
-      EXECUTE IMMEDIATE
-        'BEGIN UNICAEN_TBL.C_' || TBL_NAME || '(TRUE); END;';
-    END IF;
+    EXECUTE IMMEDIATE 'BEGIN UNICAEN_TBL.C_' || TBL_NAME || '(TRUE); END;';
+
   END;
 
 
 
   PROCEDURE CALCULER(TBL_NAME VARCHAR2, params t_params) IS
-    calcul_proc varchar2(30);
   BEGIN
     IF NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN; END IF;
 
-    calcul_proc := CASE TBL_NAME
-    WHEN 'formule' THEN 'OSE_FORMULE.CALCULER_TBL'
-    ELSE NULL END;
-
     unicaen_tbl.calcul_proc_params := params;
 
-    IF calcul_proc IS NOT NULL THEN
-      EXECUTE IMMEDIATE
-              'BEGIN ' || calcul_proc || '(UNICAEN_TBL.CALCUL_PROC_PARAMS.p1, UNICAEN_TBL.CALCUL_PROC_PARAMS.v1); END;';
-    ELSE
-      EXECUTE IMMEDIATE
-              'BEGIN UNICAEN_TBL.C_' || TBL_NAME || '(TRUE); END;';
-    END IF;
+      EXECUTE IMMEDIATE 'BEGIN UNICAEN_TBL.C_' || TBL_NAME || '(TRUE); END;';
   END;
 
 

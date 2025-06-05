@@ -7,6 +7,7 @@ use Application\Entity\Db\Annee;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Formule\Entity\Db\Formule;
+use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleServiceIntervenant;
 use Formule\Entity\FormuleServiceVolumeHoraire;
 use Formule\Model\Arrondisseur\Testeur;
@@ -152,7 +153,7 @@ class FormuleProcess implements ProcessInterface
 
         $vVolumeHoraire = $sb->injectKey($sb->getViewDefinition('V_FORMULE_VOLUME_HORAIRE'), $params);
 
-        $sql = $formule->getSqlVolumeHoraire();
+        $sql = $formule->getSqlVolumeHoraire() ?? "";
         $sql = str_replace('V_FORMULE_VOLUME_HORAIRE', '(' . $vVolumeHoraire . ')', $sql);
 
         return $sql;
@@ -171,7 +172,14 @@ class FormuleProcess implements ProcessInterface
         $intervenant->setHeuresServiceStatutaire((float)$data['HEURES_SERVICE_STATUTAIRE']);
         $intervenant->setHeuresServiceModifie((float)$data['HEURES_SERVICE_MODIFIE']);
         $intervenant->setDepassementServiceDuSansHC($data['DEPASSEMENT_SERVICE_DU_SANS_HC'] == '1');
-        $intervenant->setArrondisseur($data['ARRONDISSEUR'] == '1');
+
+        $intervenant->setParam1($data['PARAM_1']);
+        $intervenant->setParam2($data['PARAM_2']);
+        $intervenant->setParam3($data['PARAM_3']);
+        $intervenant->setParam4($data['PARAM_4']);
+        $intervenant->setParam5($data['PARAM_5']);
+
+        $intervenant->setArrondisseur(($data['ARRONDISSEUR'] == '1') ? FormuleIntervenant::ARRONDISSEUR_FULL : FormuleIntervenant::ARRONDISSEUR_MINIMAL);
     }
 
 
@@ -198,6 +206,13 @@ class FormuleProcess implements ProcessInterface
         $volumeHoraire->setTauxServiceCompl((float)$data['TAUX_SERVICE_COMPL']);
         $volumeHoraire->setPonderationServiceDu((float)$data['PONDERATION_SERVICE_DU']);
         $volumeHoraire->setPonderationServiceCompl((float)$data['PONDERATION_SERVICE_COMPL']);
+
+        $volumeHoraire->setParam1($data['PARAM_1']);
+        $volumeHoraire->setParam2($data['PARAM_2']);
+        $volumeHoraire->setParam3($data['PARAM_3']);
+        $volumeHoraire->setParam4($data['PARAM_4']);
+        $volumeHoraire->setParam5($data['PARAM_5']);
+
         $volumeHoraire->setHeures((float)$data['HEURES']);
     }
 

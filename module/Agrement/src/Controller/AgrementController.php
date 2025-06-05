@@ -9,16 +9,17 @@ use Agrement\Service\AgrementService;
 use Agrement\Service\Traits\AgrementServiceAwareTrait;
 use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Controller\AbstractController;
-use Application\Entity\Db\TblWorkflow;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtatSortieServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
+use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\Form\Element\Checkbox;
 use Laminas\View\Model\ViewModel;
 use Lieu\Service\StructureServiceAwareTrait;
+use Workflow\Entity\Db\TblWorkflow;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Opérations sur les agréments.
@@ -311,8 +312,8 @@ class AgrementController extends AbstractController
         $listeIntervenants = $this->getServiceIntervenant()->getIntervenants($intervenant);
         foreach ($listeIntervenants as $objectIntervenant) {
             $this->getServiceWorkflow()->calculerTableauxBord([
-                'agrement',
-                'contrat',
+                TblProvider::AGREMENT,
+                TblProvider::CONTRAT,
             ], $objectIntervenant);
         }
     }

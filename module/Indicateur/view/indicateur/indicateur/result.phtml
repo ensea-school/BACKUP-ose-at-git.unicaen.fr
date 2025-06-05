@@ -52,7 +52,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                     $dt = DateTime::createFromFormat('Y-m-d H:i:s', $value);
                     if ($dt && $dt->format('Y-m-d H:i:s') === $value) {
                         // C'est une date
-                        $dtOrder = $dt->format(\Application\Constants::DATE_SORT);
+                        $dtOrder = $dt->format('ymd');
                         echo '<td data-order="' . $dtOrder . '">';
                         echo $dt->format(\Application\Constants::DATE_FORMAT);
                         echo '</td>';

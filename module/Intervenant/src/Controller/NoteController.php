@@ -9,9 +9,10 @@ use Intervenant\Assertion\NoteAssertion;
 use Intervenant\Entity\Db\Note;
 use Intervenant\Form\MailerIntervenantFormAwareTrait;
 use Intervenant\Form\NoteSaisieFormAwareTrait;
-use Intervenant\Service\MailServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
+use Symfony\Component\Mime\Email;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 
 
 class NoteController extends AbstractController
@@ -134,7 +135,18 @@ class NoteController extends AbstractController
                 $subject = $data['subject'];
                 $content = $data['content'];
                 $copy    = $data['copy'];
-                $this->getServiceMail()->envoyerMail($from, $to, $subject, $content, $copy);
+
+                $mail = new Email();
+                $mail->from($from);
+                $mail->to($to);
+                $mail->subject($subject);
+                $mail->text($content);
+                $mail->html($content);
+                if(!empty($copy))
+                {
+                    $mail->cc($copy);
+                }
+                $this->getMailService()->send($mail);
                 //Création d'une trace de l'envoi dans les notes de l'intervenant
                 $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $content);
                 $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');

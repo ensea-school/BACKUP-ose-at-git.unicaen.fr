@@ -11,6 +11,7 @@ use ExportRh\Service\ExportRhServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\SituationMatrimonialeServiceAwareTrait;
 use Mission\Entity\Db\Mission;
+use Paiement\Entity\Db\TauxRemu;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Form\Fieldset;
@@ -210,9 +211,9 @@ class SihamConnecteur implements ConnecteurRhInterface
             /*Recherche de la date d'effet à passer selon enseignement ou mission, si mission on prend la première mission de l'année universitaire
             sinon on prend les dates de début et de fin de l'année universitaire*/
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
+            $dateMission = ($this->siham->getConfig()['contrat']['missionDate'])??'MISSION';
 
-
-            if (!empty($firstMission)) {
+            if (!empty($firstMission) && $dateMission == 'MISSION') {
                 $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
                 $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
             } else {
@@ -236,6 +237,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                  'position'          => $datas['connecteurForm']['position'],
                  'temoinValidite'    => 1,
                 ];
+
 
             /*CONTRAT*/
             //On récupére le nombre d'heures du contrat et le taux horaire appliqué
@@ -281,8 +283,8 @@ class SihamConnecteur implements ConnecteurRhInterface
             /*SITUATION FAMILIALE*/
             $situationFamiliale = [];
             if ($dossierIntervenant->getSituationMatrimoniale()) {
-                $dateEffetSituationFamilliale = ($dossierIntervenant->getDateSituationMatrimoniale()) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : $dateEffet;
-                $codeSituationFamilliale      = ($dossierIntervenant->getSituationMatrimoniale()) ? $dossierIntervenant->getSituationMatrimoniale()->getCode() : '';
+                $dateEffetSituationFamilliale = (!empty($dossierIntervenant->getDateSituationMatrimoniale())) ? $dossierIntervenant->getDateSituationMatrimoniale()->format('Y-m-d') : $dateEffet;
+                $codeSituationFamilliale      = (!empty($dossierIntervenant->getSituationMatrimoniale())) ? $dossierIntervenant->getSituationMatrimoniale()->getCode() : 'CEL';
                 $situationFamiliale[]         =
                     ['dateEffetSituFam' => $dateEffetSituationFamilliale,
                      'situFam'          => $codeSituationFamilliale,
@@ -458,11 +460,14 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
         } else {
             $infos['totalHeure'] = str_replace(',', '.', $mission->getHeures());
+            $infos['taux'] = 0;
             //On va chercher la valeur du taux de la mission
             $dateDebutMission = $mission->getDateDebut();
-            $idTauxRemu       = $mission->getTauxRemu()->getId();
-            $valeurTaux       = $this->getServiceTauxRemu()->getTauxRemuValeur($idTauxRemu)->getValeur();
-            $infos['taux']    = str_replace(',', '.', $valeurTaux);
+            $tauxRemu = $mission->getTauxRemu();
+            if ($tauxRemu instanceof TauxRemu) {
+                $valeurTaux    = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $dateDebutMission);
+                $infos['taux'] = str_replace(',', '.', $valeurTaux);
+            }
         }
 
         return $infos;
@@ -524,7 +529,9 @@ class SihamConnecteur implements ConnecteurRhInterface
             sinon on prend les dates de début et de fin de l'année universitaire*/
 
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
-            if (!empty($firstMission)) {
+            $dateMission = ($this->siham->getConfig()['contrat']['missionDate'])??'MISSION';
+
+            if (!empty($firstMission) && $dateMission == 'MISSION') {
                 $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
                 $dateFin   = $firstMission->getDateFin()->format('Y-m-d');
             } else {
@@ -534,8 +541,6 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
 
             /*Formatage du matricule*/
-
-            $matricule = '';
             //On récupére le code RH par le INSEE
             $matricule = $this->trouverCodeRhByInsee($intervenant);
 

@@ -221,6 +221,10 @@ return [
     'service_manager' => [
         'invokables' => [
             Service\PerimetreService::class => Service\PerimetreService::class,
+
+        ],
+        'factories' => [
+            Service\AffectationService::class => Service\Factory\AffectationServiceFactory::class,
         ],
     ],
     'form_elements'   => [

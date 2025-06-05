@@ -3,16 +3,13 @@
 namespace PieceJointe\Controller;
 
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Validation;
-use Application\Entity\Db\WfEtape;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Form\MailerIntervenantFormAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
-use Intervenant\Service\MailServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
@@ -25,7 +22,12 @@ use PieceJointe\Form\Traits\TypePieceJointeSaisieFormAwareTrait;
 use PieceJointe\Service\Traits\PieceJointeServiceAwareTrait;
 use PieceJointe\Service\Traits\TypePieceJointeServiceAwareTrait;
 use PieceJointe\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
+use Symfony\Component\Mime\Email;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
+use Workflow\Entity\Db\Validation;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**
@@ -502,9 +504,9 @@ class PieceJointeController extends \Application\Controller\AbstractController
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'piece_jointe_fournie',
-            'agrement',
-            'contrat',
+            TblProvider::PIECE_JOINTE_FOURNIE,
+            TblProvider::AGREMENT,
+            TblProvider::CONTRAT,
         ], $intervenant);
 
         //Récupérer tous les intervenants avec le même code intervenant
@@ -513,7 +515,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         //On recalcule le tbl piece_jointe pour tous les intervenants ayant le même code intervenant que l'intervenant de l'année en cours
         foreach ($intervenants as $objectIntervenant) {
             $this->getServiceWorkflow()->calculerTableauxBord([
-                'piece_jointe',
+                TblProvider::PIECE_JOINTE,
             ], $objectIntervenant);
         }
     }
@@ -544,7 +546,20 @@ class PieceJointeController extends \Application\Controller\AbstractController
                 $subject = $data['subject'];
                 $content = $data['content'];
                 $copy    = $data['copy'];
-                $this->getServiceMail()->envoyerMail($from, $to, $subject, $content, $copy);
+
+                $mail = new Email();
+                $mail->to($to)
+                     ->from($from)
+                     ->subject($subject)
+                     ->html($content);
+
+                if(!empty($copy))
+                {
+                    $mail->cc($copy);
+                }
+                
+                $this->getMailService()->send($mail);
+
                 //Création d'une trace de l'envoi dans les notes de l'intervenant
                 $this->getServiceNote()->createNoteFromEmail($pj->getIntervenant(), $subject, $content);
                 $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');

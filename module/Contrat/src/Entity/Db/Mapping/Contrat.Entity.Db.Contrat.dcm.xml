@@ -17,7 +17,6 @@
         <field name="debutValidite" type="datetime" column="DEBUT_VALIDITE" nullable="true"/>
         <field name="finValidite" type="datetime" column="FIN_VALIDITE" nullable="true"/>
         <field name="dateEnvoiEmail" type="datetime" column="DATE_ENVOI_EMAIL" nullable="true"/>
-        <field name="totalHetd" type="float" column="TOTAL_HETD" precision="126" scale="0" nullable="true"/>
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
@@ -51,7 +50,7 @@
                 <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation">
+        <many-to-one field="validation" target-entity="Workflow\Entity\Db\Validation">
             <join-columns>
                 <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
             </join-columns>

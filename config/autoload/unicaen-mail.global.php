@@ -5,26 +5,6 @@ use UnicaenMail\Entity\Db\Mail;
 $conf = AppAdmin::config();
 
 return [
-    'unicaen-app' => [
-
-        /**
-         * Options concernant l'envoi de mail par l'application
-         */
-        'mail' => [
-            // transport des mails
-            'transport_options' => [
-                'host' => $conf['mail']['smtpHost'] ?? 'localhost',
-                'port' => $conf['mail']['smtpPort'] ?? null,
-            ],
-            // adresses à substituer à celles des destinataires originaux ('CURRENT_USER' équivaut à l'utilisateur connecté)
-            'redirect_to'       => $conf['mail']['redirection'] ?? null,
-            // adresse d'expéditeur par défaut
-            'from'              => $conf['mail']['from'] ?? null,
-            // désactivation totale de l'envoi de mail par l'application
-            'do_not_send'       => $conf['mail']['envoiDesactive'] ?? true,
-        ],
-    ],
-
     'unicaen-mail' => [
         /**
          * Classe de entité

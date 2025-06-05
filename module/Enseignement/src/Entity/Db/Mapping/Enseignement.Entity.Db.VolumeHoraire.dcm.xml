@@ -44,7 +44,7 @@
         <many-to-one field="typeIntervention" target-entity="OffreFormation\Entity\Db\TypeIntervention">
             <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-many field="validation" target-entity="Application\Entity\Db\Validation">
+        <many-to-many field="validation" target-entity="Workflow\Entity\Db\Validation">
             <join-table name="VALIDATION_VOL_HORAIRE">
                 <join-columns>
                     <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID"/>

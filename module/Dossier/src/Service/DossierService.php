@@ -2,18 +2,18 @@
 
 namespace Dossier\Service;
 
-use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Utilisateur;
-use Application\Entity\Db\Validation;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
 use Dossier\Entity\Db\IntervenantDossier;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
+use Workflow\Entity\Db\TypeValidation;
+use Workflow\Entity\Db\Validation;
+use Workflow\Service\ValidationServiceAwareTrait;
 
 /**
  * Description of Intervenant Dossier
@@ -173,7 +173,7 @@ class DossierService extends AbstractEntityService
     {
         $validation        = null;
         $serviceValidation = $this->getServiceValidation();
-        $qb                = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
+        $qb                = $serviceValidation->finderByType(TypeValidation::DONNEES_PERSO);
         $serviceValidation->finderByHistorique($qb);
         $serviceValidation->finderByIntervenant($intervenant, $qb);
         $validations = $serviceValidation->getList($qb);
@@ -258,7 +258,7 @@ class DossierService extends AbstractEntityService
         $newDatas['RIB']           = $rib;
         $intervenantDossierAdresse = $intervenantDossier->getAdresse();
         /*Normalisation et nettoyage de l'adresse pour comparaison*/
-        $intervenantDossierAdresse = trim(strtolower($intervenantDossierAdresse));
+        $intervenantDossierAdresse = trim(strtolower($intervenantDossierAdresse ?? ""));
         $intervenantDossierAdresse = str_replace(["\r\n", "\n", "\r", ",", "'"], ' ', $intervenantDossierAdresse);
         $intervenantDossierAdresse = preg_replace('/\s\s+/', ' ', $intervenantDossierAdresse);
         $newDatas['ADRESSE']       = (!empty($intervenantDossierAdresse)) ? $intervenantDossierAdresse : '(aucun)';

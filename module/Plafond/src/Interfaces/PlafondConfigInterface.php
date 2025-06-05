@@ -2,7 +2,7 @@
 
 namespace Plafond\Interfaces;
 
-use Application\Interfaces\ParametreEntityInterface;
+use Administration\Interfaces\ParametreEntityInterface;
 use Plafond\Entity\Db\PlafondAwareInterface;
 use Plafond\Entity\Db\PlafondEtat;
 

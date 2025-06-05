@@ -38,6 +38,7 @@ class TraducteurService
         'transfoStructureAffectation',
         'transfoStructureUniv',
         'transfoIfPlus',
+        'transfoIfInFunction',
         'transfoSumIf',
         'transfoAbsRange',
         'transfoSimplify',
@@ -428,6 +429,38 @@ class TraducteurService
 
 
 
+    protected function transfoIfInFunction(array &$expr, int $i): void
+    {
+        if ($expr[$i]['type'] == 'function' && $expr[$i]['name'] != 'IF') {
+            $params = $expr[$i]['exprs'];
+            $if = null;
+            foreach( $params as $pi => $param ) {
+                foreach($param as $ppi => $pexpr){
+                    if ($pexpr && $pexpr['type'] == 'function' && $pexpr['name'] == 'IF') {
+                        if ($if != null) {
+                            throw new \Exception('Expression trop complexe et intraduisible en l\'état');
+                        }
+                        $if = $pexpr;
+                        $ifIndex = $pi;
+                    }
+                }
+            }
+            if ($if){
+                foreach( $if['exprs'] as $eid => $ifRes){
+                    // on parse le retour si true et le retour si false, pas la condition
+                    if ($eid > 0){
+                        $nexpr = $expr;
+                        $nexpr[$i]['exprs'][$ifIndex] = $ifRes;
+                        $if['exprs'][$eid] = $nexpr;
+                    }
+                }
+                $expr = [0 => $if];
+            }
+        }
+    }
+
+
+
     protected function transfoSumIf(array &$expr, int $i): void
     {
         $term = $expr[$i];
@@ -574,6 +607,11 @@ class TraducteurService
                     unset($expr[$i + 1]);
                 }
             }
+        }
+
+        /* On supprime les parenthèses inutiles */
+        if (isset($expr[$i]['type']) && $expr[$i]['type'] == 'expr' && count($expr) == 1){
+            $expr = $expr[$i]['expr'];
         }
     }
 

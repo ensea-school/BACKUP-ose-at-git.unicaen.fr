@@ -5,8 +5,6 @@ namespace Intervenant\Entity\Db;
 use Agrement\Entity\Db\Agrement;
 use Agrement\Entity\Db\TypeAgrement;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
-use Application\Entity\Db\TypeValidation;
-use Application\Entity\Db\Validation;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TypeContrat;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,6 +36,8 @@ use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use Workflow\Entity\Db\TypeValidation;
+use Workflow\Entity\Db\Validation;
 
 /**
  * Intervenant
@@ -1414,6 +1414,23 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         return $contrats;
     }
 
+    public function getAvenantEnfant (Contrat $contratParent)
+    {
+        if (null === $this->contrat) {
+            return null;
+        }
+
+        $filter   = function (Contrat $contrat) use ($contratParent) {
+            if($contrat->getContrat() != $contratParent){
+                return false;
+            }
+
+            return true;
+        };
+        $contrats = $this->contrat->filter($filter);
+
+        return $contrats;
+    }
 
 
     /**
@@ -1664,7 +1681,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get validation
      *
-     * @param \Application\Entity\Db\TypeValidation $type
+     * @param \Workflow\Entity\Db\TypeValidation $type
      *
      * @return Collection
      */

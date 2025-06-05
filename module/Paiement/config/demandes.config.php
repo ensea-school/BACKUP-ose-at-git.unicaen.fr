@@ -2,10 +2,10 @@
 
 namespace Paiement;
 
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Paiement\Assertion\PaiementAssertion;
 use UnicaenPrivilege\Guard\PrivilegeController;
+use Workflow\Entity\Db\WfEtape;
 
 return [
     'routes' => [
@@ -107,14 +107,6 @@ return [
             'privileges' => [
                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
             ],
-            'assertion'  => Assertion\PaiementAssertion::class,
-        ],
-    ],
-
-    'rules' => [
-        [
-            'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-            'resources'  => 'MiseEnPaiement',
             'assertion'  => Assertion\PaiementAssertion::class,
         ],
     ],

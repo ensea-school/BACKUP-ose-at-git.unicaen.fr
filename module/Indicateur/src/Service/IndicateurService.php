@@ -2,14 +2,20 @@
 
 namespace Indicateur\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Annee;
 use Application\Service\AbstractService;
+use Application\Service\ContextService;
 use DateTime;
 use Indicateur\Entity\Db\Indicateur;
 use Indicateur\Entity\Db\NotificationIndicateur;
+use Laminas\View\Renderer\PhpRenderer;
+use Laminas\View\Renderer\RendererInterface;
 use Lieu\Entity\Db\Structure;
 use Plafond\Service\IndicateurServiceAwareTrait as PlafondIndicateurServiceAwareTrait;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 
 /**
@@ -25,6 +31,13 @@ class IndicateurService extends AbstractService
 {
     use CacheContainerTrait;
     use PlafondIndicateurServiceAwareTrait;
+    use ParametresServiceAwareTrait;
+
+
+    /**
+     * @var PhpRenderer
+     */
+    private $renderer;
 
 
     protected function getViewDef(int $numero, Annee $annee): string
@@ -227,5 +240,89 @@ class IndicateurService extends AbstractService
 
         return $result;
     }
+
+    public function createMessage($data,$emails,$subject, $fromName, array $emailCopy = []):Email
+    {
+        $email = new Email();
+        $from = (isset($data['from'])) ? $data['from'] : $this->getFrom();
+        $email->from(new Address($from,$fromName));
+        $html = $data['body'];
+        if(!empty($emailCopy))
+        {
+            //on envoie une copie du mail
+            $htmlLog = "<br/><br/>------------------------------------------------ <br/><br/>";
+            $htmlLog = "<p>Email envoyé au(x) destinataire(s) suivant(s) : <br/>";
+
+            foreach ($emails as $value => $name) {
+                $htmlLog .= $name . " / " . $value . "<br/>";
+            }
+            $htmlLog .= "</p>";
+            $html    .= $htmlLog;
+            $email->subject('COPIE | ' . $data['subject']);
+            //Contexte utilisateur
+            $utilisateur = $this->getServiceContext()->getUtilisateur();
+            foreach($emailCopy as $value)
+            {
+                $email->addBcc($value);
+
+            }
+        }
+        else{
+            $email->subject($data['subject']);
+            foreach ($emails as $value => $name) {
+                $email->addBcc(new Address($value, $name));
+            }
+        }
+        $email->html($html);
+
+
+
+        return $email;
+    }
+
+
+
+    public function getFrom()
+    {
+        /** @var ContextService $context */
+        $context   = $this->getServiceContext();
+        $parametre = $this->getServiceParametres();
+
+        $from = trim($parametre->get('indicateur_email_expediteur') ?? '');
+        if (!empty($from)) {
+            return $from;
+        }
+
+        $from = $context->getUtilisateur()->getEmail();
+
+        return $from;
+    }
+
+
+
+
+
+    public function getDefaultBody()
+    {
+        /** @var ContextService $context */
+        $context = $this->getServiceContext();
+
+        // corps au format HTML
+        $html = $this->renderer->render('indicateur/indicateur/mail/intervenants', [
+            'phrase'    => '',
+            'signature' => $context->getUtilisateur(),
+            'structure' => $context->getStructure(),
+        ]);
+
+        return $html;
+    }
+
+    public function setRenderer(RendererInterface $renderer)
+    {
+        $this->renderer = $renderer;
+
+        return $this;
+    }
+
 
 }

@@ -2,10 +2,10 @@
 
 namespace PieceJointe\Entity\Db;
 
-use PieceJointe\Entity\Db\Traits\TypePieceJointeAwareTrait;
-use Application\Interfaces\ParametreEntityInterface;
-use Application\Traits\ParametreEntityTrait;
+use Administration\Interfaces\ParametreEntityInterface;
+use Administration\Traits\ParametreEntityTrait;
 use Intervenant\Entity\Db\StatutAwareTrait;
+use PieceJointe\Entity\Db\Traits\TypePieceJointeAwareTrait;
 
 
 class TypePieceJointeStatut implements ParametreEntityInterface

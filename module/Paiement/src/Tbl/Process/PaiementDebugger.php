@@ -19,6 +19,8 @@ use Paiement\Entity\Db\TauxRemu;
 use Paiement\Tbl\Process\Sub\ServiceAPayer;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 
 /**
@@ -176,6 +178,8 @@ class PaiementDebugger
                 'parametres' => [],
             ];
 
+            $inutile = $service->heures == null;
+
             if ($service->service) {
                 $s['type'] = 'Enseignement';
 
@@ -190,7 +194,7 @@ class PaiementDebugger
             }
             if ($service->serviceReferentiel) {
                 $s['type'] = 'Référentiel';
-                $s['libelle'] = (string)$this->getEntity(ServiceReferentiel::class, $service->referentiel)->getFonctionReferentiel();
+                $s['libelle'] = (string)$this->getEntity(ServiceReferentiel::class, $service->serviceReferentiel)->getFonctionReferentiel();
             }
             if ($service->mission) {
                 $s['type'] = 'Mission';
@@ -215,6 +219,10 @@ class PaiementDebugger
             $s['laps'] = [];
 
             foreach ($service->lignesAPayer as $lap) {
+                if ($lap->heuresAA + $lap->heuresAC !== 0){
+                    $inutile = false;
+                }
+
                 $l = $lap->toArray();
                 if (!isset($l['misesEnPaiement'])) {
                     $l['misesEnPaiement'] = [];
@@ -234,8 +242,8 @@ class PaiementDebugger
                         /** @var $entity HistoriqueAwareInterface */
                         $l['volumeHoraireHisto'] = 'Dernière modification par '.$entity->getHistoModificateur().' le '.$entity->getHistoModification()->format('d/m/Y');
                     }
-                }elseif($service->referentiel){
-                    $l['volumeHoraireId'] = $this->getReferentielVhs($service->formuleResServiceRef);
+                }elseif($service->serviceReferentiel){
+                    $l['volumeHoraireId'] = $this->getReferentielVhs($service->serviceReferentiel);
                 }
                 $l['tauxRemu'] = (string)$this->getEntity(TauxRemu::class, $l['tauxRemu']);
                 $l['tauxValeur'] = $this->fts($l['tauxValeur']);
@@ -268,6 +276,7 @@ class PaiementDebugger
             $s['misesEnPaiement'] = [];
 
             foreach ($service->misesEnPaiement as $mep) {
+                $inutile = false;
                 $m = $mep->toArray();
 
                 /** @var CentreCout $centreCouts */
@@ -283,7 +292,9 @@ class PaiementDebugger
                 $s['misesEnPaiement'][] = $m;
             }
 
-            $saps[] = $s;
+            if (!$inutile) {
+                $saps[] = $s;
+            }
         }
 
         return $saps;
@@ -356,12 +367,15 @@ class PaiementDebugger
           'Dernière modification par ' || u.display_name || ' le ' || to_char(vhr.histo_modification,'dd/mm/YYYY') histo
         FROM
           formule_resultat_volume_horaire frvh
+          JOIN formule_resultat_intervenant fri ON fri.id = frvh.formule_resultat_intervenant_id
+          JOIN type_volume_horaire tvh ON tvh.id = fri.type_volume_horaire_id AND tvh.code = '".TypeVolumeHoraire::CODE_REALISE."'
+          JOIN etat_volume_horaire evh ON evh.id = fri.etat_volume_horaire_id AND evh.code = '".EtatVolumeHoraire::CODE_VALIDE."'
           JOIN volume_horaire_ref vhr ON vhr.id = frvh.volume_horaire_ref_id
           JOIN utilisateur u ON u.id = vhr.histo_modificateur_id
         WHERE
-          frvh.id = :frsr
+          frvh.service_referentiel_id = :frsr
         ORDER BY
-          frvhr.id
+          frvh.id
         ";
 
         return $conn->fetchAllAssociative($sql, ['frsr' => $formuleResultatServiceRefId]);

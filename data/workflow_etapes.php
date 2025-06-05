@@ -1,167 +1,494 @@
 <?php
 
+use Application\Entity\Db\Perimetre;
+use Intervenant\Entity\Db\TypeIntervenant;
+use Workflow\Entity\Db\WorkflowEtape;
+use Workflow\Entity\Db\WorkflowEtapeDependance;
+
+
 return [
-    "CANDIDATURE_SAISIE"             => [
-        "LIBELLE_INTERVENANT" => "Je postule à une ou plusieurs offres d'emploi",
-        "LIBELLE_AUTRES"      => "J'accède aux candidatures",
-        "ROUTE"               => "intervenant/candidature",
-        "DESC_NON_FRANCHIE"   => "Aucune candidature n'a été faite",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::CANDIDATURE_SAISIE              => [
+        'id'                  => 1,
+        'libelle_intervenant' => "Je postule à une ou plusieurs offres d'emploi",
+        'libelle_autres'      => "J'accède aux candidatures",
+        'route'               => 'intervenant/candidature',
+        'desc_non_franchie'   => "Aucune candidature n'a été faite",
+        'perimetre'           => Perimetre::COMPOSANTE,
+        'contraintes'         => [],
+        'dependances'         => [],
     ],
-    "DONNEES_PERSO_SAISIE"           => [
-        "LIBELLE_INTERVENANT" => "Je saisis mes données personnelles",
-        "LIBELLE_AUTRES"      => "J'accède aux données personnelles",
-        "ROUTE"               => "intervenant/dossier",
-        "DESC_NON_FRANCHIE"   => "Les données personnelles n'ont pas été saisies",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::DONNEES_PERSO_SAISIE            => [
+        'id'                  => 2,
+        'libelle_intervenant' => "Je saisis mes données personnelles",
+        'libelle_autres'      => "J'accède aux données personnelles",
+        'route'               => 'intervenant/dossier',
+        'desc_non_franchie'   => "Les données personnelles n'ont pas été saisies",
+        'perimetre'           => Perimetre::ETABLISSEMENT,
+        'contraintes'         => [],
+        'dependances'         => [],
     ],
-    "SERVICE_SAISIE"                 => [
-        "LIBELLE_INTERVENANT" => "Je saisis mes enseignements prévisionnels",
-        "LIBELLE_AUTRES"      => "J'accède aux enseignements prévisionnels",
-        "ROUTE"               => "intervenant/services-prevus",
-        "DESC_NON_FRANCHIE"   => "Aucun enseignement prévisionnel n'a été saisi",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::PJ_SAISIE                       => [
+        'id'                  => 3,
+        'libelle_intervenant' => "Je fournis les pièces justificatives",
+        'libelle_autres'      => "J'accède aux pièces justificatives",
+        'route'               => 'piece-jointe/intervenant',
+        'desc_non_franchie'   => "Les pièces justificatives n'ont pas été fournies",
+        'perimetre'           => Perimetre::ETABLISSEMENT,
+        'contraintes'         => [],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "PJ_SAISIE"                      => [
-        "LIBELLE_INTERVENANT" => "Je fournis les pièces justificatives",
-        "LIBELLE_AUTRES"      => "J'accède aux pièces justificatives",
-        "ROUTE"               => "piece-jointe/intervenant",
-        "DESC_NON_FRANCHIE"   => "Les pièces justificatives n'ont pas été fournies",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::DONNEES_PERSO_VALIDATION        => [
+        'id'                  => 6,
+        'libelle_intervenant' => "Je visualise la validation de mes données personnelles",
+        "libelle_autres"      => "Je visualise la validation des données personnelles",
+        "route"               => "intervenant/dossier",
+        "desc_non_franchie"   => "Les données personnelles n'ont pas été validées",
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "PJ_VALIDATION"                  => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation des pièces justificatives",
-        "LIBELLE_AUTRES"      => "Je visualise la validation des pièces justificatives",
-        "ROUTE"               => "piece-jointe/intervenant",
-        "DESC_NON_FRANCHIE"   => "Les pièces justificatives n'ont pas été validées",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::PJ_VALIDATION                   => [
+        'id'                  => 7,
+        'libelle_intervenant' => "Je visualise la validation des pièces justificatives",
+        "libelle_autres"      => "Je visualise la validation des pièces justificatives",
+        "route"               => "piece-jointe/intervenant",
+        "desc_non_franchie"   => "Les pièces justificatives n'ont pas été validées",
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "contraintes"         => [WorkflowEtape::PJ_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::PJ_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "DONNEES_PERSO_VALIDATION"       => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes données personnelles",
-        "LIBELLE_AUTRES"      => "Je visualise la validation des données personnelles",
-        "ROUTE"               => "intervenant/dossier",
-        "DESC_NON_FRANCHIE"   => "Les données personnelles n'ont pas été validées",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::CANDIDATURE_VALIDATION          => [
+        'id'                  => 8,
+        'libelle_intervenant' => "Je visualise la validation de mes candidatures",
+        "libelle_autres"      => "J'accède à la validation des candidatures",
+        "route"               => "intervenant/candidature",
+        "desc_non_franchie"   => "Certaines candidatures attendent une réponse",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::CANDIDATURE_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::CANDIDATURE_SAISIE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "CANDIDATURE_VALIDATION"         => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes candidatures",
-        "LIBELLE_AUTRES"      => "J'accède à la validation des candidatures",
-        "ROUTE"               => "intervenant/candidature",
-        "DESC_NON_FRANCHIE"   => "Certaines candidatures attendent une réponse",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE      => [
+        'id'                  => 9,
+        'libelle_intervenant' => "Je saisis mes données personnelles complémentaires",
+        "libelle_autres"      => "J'accède aux données personnelles complémentaires",
+        "route"               => "intervenant/dossier",
+        "desc_non_franchie"   => "Les données personnelles complémentaires n'ont pas été saisies",
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "contraintes"         => [WorkflowEtape::CANDIDATURE_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::CANDIDATURE_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+        ],
     ],
-    "MISSION_SAISIE"                 => [
-        "LIBELLE_INTERVENANT" => "Je visualise mes missions",
-        "LIBELLE_AUTRES"      => "J'accède aux missions",
-        "ROUTE"               => "intervenant/missions",
-        "DESC_NON_FRANCHIE"   => "Aucune mission attibuée",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::PJ_COMPL_SAISIE                 => [
+        'id'                  => 10,
+        'libelle_intervenant' => "Je fournis les pièces justificatives complémentaires",
+        "libelle_autres"      => "J'accède aux pièces justificatives complémentaires",
+        "route"               => "piece-jointe/intervenant",
+        "desc_non_franchie"   => "Les pièces justificatives complémentaires n'ont pas été fournies",
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "contraintes"         => [WorkflowEtape::CANDIDATURE_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::CANDIDATURE_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+        ],
     ],
-    "MISSION_VALIDATION"             => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes missions",
-        "LIBELLE_AUTRES"      => "Je valide les missions saisies",
-        "ROUTE"               => "intervenant/missions",
-        "DESC_NON_FRANCHIE"   => "Certaines missions n'ont pas été validées",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION  => [
+        'id'                  => 11,
+        'libelle_intervenant' => "Je visualise la validation de mes données personnelles complémentaires",
+        "libelle_autres"      => "Je visualise la validation des données personnelles complémentaires",
+        "route"               => "intervenant/dossier",
+        "desc_non_franchie"   => "Les données personnelles complémentaires n'ont pas été validées",
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "SERVICE_VALIDATION"             => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes services prévisionnels",
-        "LIBELLE_AUTRES"      => "Je visualise la validation des enseignements prévisionnels",
-        "ROUTE"               => "intervenant/validation/enseignement/prevu",
-        "DESC_NON_FRANCHIE"   => "Les enseignements prévisionnels n'ont pas été validés",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::PJ_COMPL_VALIDATION             => [
+        'id'                  => 12,
+        'libelle_intervenant' => "Je visualise la validation des pièces justificatives complémentaires",
+        "libelle_autres"      => "Je visualise la validation des pièces justificatives complémentaires",
+        "route"               => "piece-jointe/intervenant",
+        "desc_non_franchie"   => "Les pièces justificatives complémentaires n'ont pas été validées",
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "contraintes"         => [WorkflowEtape::PJ_COMPL_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::PJ_COMPL_SAISIE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "REFERENTIEL_VALIDATION"         => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mon référentiel prévisionnel",
-        "LIBELLE_AUTRES"      => "Je visualise la validation du référentiel prévisionnel",
-        "ROUTE"               => "intervenant/validation/referentiel/prevu",
-        "DESC_NON_FRANCHIE"   => "Le référentiel prévisionnel n'a pas été validé",
-        "OBLIGATOIRE"         => false,
+    WorkflowEtape::ENSEIGNEMENT_SAISIE             => [
+        'id'                  => 4,
+        'libelle_intervenant' => "Je saisis mes enseignements prévisionnels",
+        "libelle_autres"      => "J'accède aux enseignements prévisionnels",
+        "route"               => "intervenant/services-prevus",
+        "desc_non_franchie"   => "Aucun enseignement prévisionnel n'a été saisi",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_SAISIE => [
+                'perimetre'        => Perimetre::ETABLISSEMENT,
+                'type_intervenant' => TypeIntervenant::CODE_EXTERIEUR,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "CONSEIL_RESTREINT"              => [
-        "LIBELLE_INTERVENANT" => "Je visualise l'agrément 'Conseil restreint'",
-        "LIBELLE_AUTRES"      => "Je visualise l'agrément 'Conseil restreint'",
-        "ROUTE"               => "intervenant/agrement/conseil-restreint",
-        "DESC_NON_FRANCHIE"   => "L'agrément du Conseil Restreint n'a pas été saisi",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::REFERENTIEL_SAISIE              => [
+        'id'                  => 5,
+        'libelle_intervenant' => "Je saisis mon référentiel prévisionnel",
+        "libelle_autres"      => "J'accède au référentiel prévisionnel",
+        "route"               => "intervenant/services-prevus",
+        "desc_non_franchie"   => "Aucun référentiel prévisionnel n'a été saisi",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_SAISIE => [
+                'perimetre'        => Perimetre::ETABLISSEMENT,
+                'type_intervenant' => TypeIntervenant::CODE_EXTERIEUR,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "CONSEIL_ACADEMIQUE"             => [
-        "LIBELLE_INTERVENANT" => "Je visualise l'agrément 'Conseil académique'",
-        "LIBELLE_AUTRES"      => "Je visualise l'agrément 'Conseil académique'",
-        "ROUTE"               => "intervenant/agrement/conseil-academique",
-        "DESC_NON_FRANCHIE"   => "L'agrément du Conseil académique n'a pas été saisi",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::MISSION_SAISIE                  => [
+        'id'                  => 13,
+        'libelle_intervenant' => "Je visualise mes missions",
+        "libelle_autres"      => "J'accède aux missions",
+        "route"               => "intervenant/missions",
+        "desc_non_franchie"   => "Aucune mission attribuée",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::CANDIDATURE_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::CANDIDATURE_VALIDATION => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+        ],
     ],
-    "CONTRAT"                        => [
-        "LIBELLE_INTERVENANT" => "Je visualise mes contrat/avenants",
-        "LIBELLE_AUTRES"      => "Je visualise le contrat et les avenants",
-        "ROUTE"               => "intervenant/contrat",
-        "DESC_NON_FRANCHIE"   => "Le contrat n'a pas été établi",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::ENSEIGNEMENT_VALIDATION         => [
+        'id'                  => 15,
+        'libelle_intervenant' => "Je visualise la validation de mes enseignements prévisionnels",
+        "libelle_autres"      => "Je visualise la validation des enseignements prévisionnels",
+        "route"               => "intervenant/validation/enseignement/prevu",
+        "desc_non_franchie"   => "Les enseignements prévisionnels n'ont pas été validés",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::ENSEIGNEMENT_SAISIE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "SERVICE_SAISIE_REALISE"         => [
-        "LIBELLE_INTERVENANT" => "Je saisis mes enseignements réalisés",
-        "LIBELLE_AUTRES"      => "J'accède aux enseignements réalisés",
-        "ROUTE"               => "intervenant/services-realises",
-        "DESC_NON_FRANCHIE"   => "Aucun enseignement réalisé n'a été saisi",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::REFERENTIEL_VALIDATION          => [
+        'id'                  => 16,
+        'libelle_intervenant' => "Je visualise la validation de mon référentiel prévisionnel",
+        "libelle_autres"      => "Je visualise la validation du référentiel prévisionnel",
+        "route"               => "intervenant/validation/referentiel/prevu",
+        "desc_non_franchie"   => "Le référentiel prévisionnel n'a pas été validé",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::REFERENTIEL_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::REFERENTIEL_SAISIE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "MISSION_SAISIE_REALISE"         => [
-        "LIBELLE_INTERVENANT" => "Je renseigne mon suivi de mission",
-        "LIBELLE_AUTRES"      => "J'accède au suivi de mission",
-        "ROUTE"               => "intervenant/missions-suivi",
-        "DESC_NON_FRANCHIE"   => "Aucune heure de mission réalisée n'a été renseignée",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::MISSION_VALIDATION              => [
+        'id'                  => 14,
+        'libelle_intervenant' => "Je visualise la validation de mes missions",
+        "libelle_autres"      => "Je valide les missions saisies",
+        "route"               => "intervenant/missions",
+        "desc_non_franchie"   => "Certaines missions n'ont pas été validées",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::MISSION_SAISIE],
+        'dependances'         => [
+            WorkflowEtape::MISSION_SAISIE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "CLOTURE_REALISE"                => [
-        "LIBELLE_INTERVENANT" => "Je visualise la clôture de la saisie de mes services réalisés",
-        "LIBELLE_AUTRES"      => "Je visualise la clôture de la saisie des services réalisés",
-        "ROUTE"               => "intervenant/services-realises",
-        "DESC_NON_FRANCHIE"   => "La clôture de saisie des services réalisés n'a pas été effectuée",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::CONSEIL_RESTREINT               => [
+        'id'                  => 17,
+        'libelle_intervenant' => "Je visualise l'agrément 'Conseil restreint'",
+        "libelle_autres"      => "Je visualise l'agrément 'Conseil restreint'",
+        "route"               => "intervenant/agrement/conseil-restreint",
+        "desc_non_franchie"   => "L'agrément du Conseil restreint n'a pas été saisi",
+        "perimetre"           => Perimetre::COMPOSANTE, // par défaut, adaptable selon paramétrage...
+        "contraintes"         => [],
+        'dependances'         => [
+            WorkflowEtape::PJ_SAISIE                => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+            WorkflowEtape::PJ_VALIDATION            => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+            WorkflowEtape::DONNEES_PERSO_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::ENSEIGNEMENT_VALIDATION  => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
-    "SERVICE_VALIDATION_REALISE"     => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes services réalisés",
-        "LIBELLE_AUTRES"      => "Je visualise la validation des enseignements réalisés",
-        "ROUTE"               => "intervenant/validation/enseignement/realise",
-        "DESC_NON_FRANCHIE"   => "Le service réalisé n'a été intégralement validé",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::CONSEIL_ACADEMIQUE              => [
+        'id'                  => 18,
+        'libelle_intervenant' => "Je visualise l'agrément 'Conseil académique'",
+        "libelle_autres"      => "Je visualise l'agrément 'Conseil académique'",
+        "route"               => "intervenant/agrement/conseil-academique",
+        "desc_non_franchie"   => "L'agrément du Conseil académique n'a pas été saisi",
+        "perimetre"           => Perimetre::ETABLISSEMENT, // par défaut, adaptable selon paramétrage...
+        "contraintes"         => [WorkflowEtape::CONSEIL_RESTREINT],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT,
+            ],
+        ],
     ],
-    "MISSION_VALIDATION_REALISE"     => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mon suivi de mission",
-        "LIBELLE_AUTRES"      => "J'accède à la validation du suivi de mission",
-        "ROUTE"               => "intervenant/missions-suivi",
-        "DESC_NON_FRANCHIE"   => "Des heures de mission réalisées n'ont pas été validées",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::CONTRAT                         => [
+        'id'                  => 19,
+        'libelle_intervenant' => "Je visualise mes contrat/avenants",
+        "libelle_autres"      => "Je visualise le contrat et les avenants",
+        "route"               => "intervenant/contrat",
+        "desc_non_franchie"   => "Le contrat n'a pas été établi",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_VALIDATION, WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_VALIDATION       => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::CONSEIL_RESTREINT              => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::CONSEIL_ACADEMIQUE             => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+        ],
     ],
-    "MISSION_PRIME"                  => [
-        "LIBELLE_INTERVENANT" => "Je visualise mes indemnités de fin de contrat",
-        "LIBELLE_AUTRES"      => "Je visualise mes indemnités de fin de contrat",
-        "ROUTE"               => "intervenant/prime-mission",
-        "DESC_NON_FRANCHIE"   => "Aucune indemnité de fin de contrat à gérer",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::EXPORT_RH                       => [
+        'id'                  => 20,
+        'libelle_intervenant' => "Je visualise mes données RH",
+        "libelle_autres"      => "Je visualise les données RH",
+        "route"               => "intervenant/exporter",
+        "desc_non_franchie"   => "L'export vers le logiciel RH n'a pas été fait",
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_VALIDATION, WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
+        'dependances'         => [
+            WorkflowEtape::DONNEES_PERSO_VALIDATION       => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::CONTRAT                        => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT,
+            ],
+        ],
     ],
-    "REFERENTIEL_VALIDATION_REALISE" => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mon référentiel réalisé",
-        "LIBELLE_AUTRES"      => "Je visualise la validation du référentiel réalisé",
-        "ROUTE"               => "intervenant/validation/referentiel/realise",
-        "DESC_NON_FRANCHIE"   => "Le référentiel réalisé n'a pas été intégralement validé",
-        "OBLIGATOIRE"         => false,
+    WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE     => [
+        'id'                  => 21,
+        'libelle_intervenant' => "Je saisis mes enseignements réalisés",
+        "libelle_autres"      => "J'accède aux enseignements réalisés",
+        "route"               => "intervenant/services-realises",
+        "desc_non_franchie"   => "Aucun enseignement réalisé n'a été saisi",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::CONTRAT],
+        'dependances'         => [
+            WorkflowEtape::CONTRAT => [
+                'type_intervenant' => TypeIntervenant::CODE_EXTERIEUR,
+                'perimetre'        => Perimetre::COMPOSANTE,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT,
+            ],
+        ],
     ],
-    "DEMANDE_MEP"                    => [
-        "LIBELLE_INTERVENANT" => "Je visualise les demandes de mise en paiement me concernant",
-        "LIBELLE_AUTRES"      => "J'accède aux demandes de mise en paiement",
-        "ROUTE"               => "intervenant/mise-en-paiement/demande",
-        "DESC_NON_FRANCHIE"   => "Aucune demande de mise en paiement n'a été faite",
-        "OBLIGATOIRE"         => true,
-        "DESC_SANS_OBJECTIF"  => "Le nombre d'heures de service réalisées ET validées n'est pas suffisant pour déclencher le paiement d'heures complémentaires.",
-        "ROUTE_INTERVENANT"   => "intervenant/mise-en-paiement/visualisation",
+    WorkflowEtape::REFERENTIEL_SAISIE_REALISE      => [
+        'id'                  => 22,
+        'libelle_intervenant' => "Je saisis mon référentiel réalisé",
+        "libelle_autres"      => "J'accède au référentiel réalisé",
+        "route"               => "intervenant/services-realises",
+        "desc_non_franchie"   => "Aucun enseignement réalisé n'a été saisi",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::CONTRAT],
+        'dependances'         => [],
     ],
-    "SAISIE_MEP"                     => [
-        "LIBELLE_INTERVENANT" => "Je visualise les mises en paiement me concernant",
-        "LIBELLE_AUTRES"      => "J'accède aux mises en paiement",
-        "ROUTE"               => "intervenant/mise-en-paiement/visualisation",
-        "DESC_NON_FRANCHIE"   => "Aucune mise en paiement n'a été faite",
-        "OBLIGATOIRE"         => true,
+    WorkflowEtape::MISSION_SAISIE_REALISE          => [
+        'id'                  => 23,
+        'libelle_intervenant' => "Je renseigne mon suivi de mission",
+        "libelle_autres"      => "J'accède au suivi de mission",
+        "route"               => "intervenant/missions-suivi",
+        "desc_non_franchie"   => "Aucune heure de mission réalisée n'a été renseignée",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::CONTRAT],
+        'dependances'         => [
+            WorkflowEtape::CONTRAT => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT,
+            ],
+        ],
+    ],
+    WorkflowEtape::CLOTURE_REALISE                 => [
+        'id'                  => 24,
+        'libelle_intervenant' => "Je visualise la clôture de la saisie de mes services réalisés",
+        "libelle_autres"      => "Je visualise la clôture de la saisie des services réalisés",
+        "route"               => "intervenant/services-realises",
+        "desc_non_franchie"   => "La clôture de saisie des services réalisés n'a pas été effectuée",
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE, WorkflowEtape::REFERENTIEL_SAISIE_REALISE, WorkflowEtape::MISSION_SAISIE_REALISE],
+        'dependances'         => [
+            WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE => [
+                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
+                'perimetre'        => Perimetre::ETABLISSEMENT,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
+    ],
+    WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE => [
+        'id'                  => 25,
+        'libelle_intervenant' => "Je visualise la validation de mes enseignements réalisés",
+        "libelle_autres"      => "Je visualise la validation des enseignements réalisés",
+        "route"               => "intervenant/validation/enseignement/realise",
+        "desc_non_franchie"   => "Le service réalisé n'a été intégralement validé",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE],
+        'dependances'         => [
+            WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
+    ],
+    WorkflowEtape::REFERENTIEL_VALIDATION_REALISE  => [
+        'id'                  => 28,
+        'libelle_intervenant' => "Je visualise la validation de mon référentiel réalisé",
+        "libelle_autres"      => "Je visualise la validation du référentiel réalisé",
+        "route"               => "intervenant/validation/referentiel/realise",
+        "desc_non_franchie"   => "Le référentiel réalisé n'a pas été intégralement validé",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::REFERENTIEL_SAISIE_REALISE],
+        'dependances'         => [
+            WorkflowEtape::REFERENTIEL_SAISIE_REALISE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
+    ],
+    WorkflowEtape::MISSION_VALIDATION_REALISE      => [
+        'id'                  => 26,
+        'libelle_intervenant' => "Je visualise la validation de mon suivi de mission",
+        "libelle_autres"      => "J'accède à la validation du suivi de mission",
+        "route"               => "intervenant/missions-suivi",
+        "desc_non_franchie"   => "Des heures de mission réalisées n'ont pas été validées",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::MISSION_SAISIE_REALISE],
+        'dependances'         => [
+            WorkflowEtape::MISSION_SAISIE_REALISE => [
+                'perimetre'  => Perimetre::COMPOSANTE,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
+    ],
+    WorkflowEtape::MISSION_PRIME                   => [
+        'id'                  => 27,
+        'libelle_intervenant' => "Je visualise mes indemnités de fin de contrat",
+        "libelle_autres"      => "Je visualise mes indemnités de fin de contrat",
+        "route"               => "intervenant/prime-mission",
+        "desc_non_franchie"   => "Aucune indemnité de fin de contrat à gérer",
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "contraintes"         => [WorkflowEtape::MISSION_VALIDATION_REALISE],
+        'dependances'         => [
+            WorkflowEtape::MISSION_VALIDATION_REALISE => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
+    ],
+    WorkflowEtape::DEMANDE_MEP                     => [
+        'id'                  => 29,
+        'libelle_intervenant' => "Je visualise les demandes de mise en paiement me concernant",
+        "libelle_autres"      => "J'accède aux demandes de mise en paiement",
+        "route"               => "intervenant/mise-en-paiement/demande",
+        "route_intervenant"   => "intervenant/mise-en-paiement/visualisation",
+        "desc_non_franchie"   => "Aucune demande de mise en paiement n'a été faite",
+        "desc_sans_objectif"  => "Le nombre d'heures de service réalisées ET validées n'est pas suffisant pour déclencher le paiement d'heures complémentaires.",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::CLOTURE_REALISE, WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE, WorkflowEtape::REFERENTIEL_VALIDATION_REALISE, WorkflowEtape::MISSION_VALIDATION_REALISE],
+        'dependances'         => [
+            WorkflowEtape::CLOTURE_REALISE                 => [
+                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
+                'perimetre'        => Perimetre::ETABLISSEMENT,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+            ],
+            WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE => [
+                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
+                'perimetre'        => Perimetre::COMPOSANTE,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+            WorkflowEtape::REFERENTIEL_VALIDATION_REALISE  => [
+                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
+                'perimetre'        => Perimetre::COMPOSANTE,
+                'avancement'       => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
+    ],
+    WorkflowEtape::SAISIE_MEP                      => [
+        'id'                  => 30,
+        'libelle_intervenant' => "Je visualise les mises en paiement me concernant",
+        "libelle_autres"      => "J'accède aux mises en paiement",
+        "route"               => "intervenant/mise-en-paiement/visualisation",
+        "desc_non_franchie"   => "Aucune mise en paiement n'a été faite",
+        "perimetre"           => Perimetre::COMPOSANTE,
+        "contraintes"         => [WorkflowEtape::DEMANDE_MEP],
+        'dependances'         => [
+            WorkflowEtape::DEMANDE_MEP => [
+                'perimetre'  => Perimetre::ETABLISSEMENT,
+                'avancement' => WorkflowEtapeDependance::AVANCEMENT_DEBUTE,
+            ],
+        ],
     ],
 ];

@@ -2,10 +2,11 @@
 
 namespace Mission\Service;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Acl\Role;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Mission\Entity\Db\Candidature;
@@ -108,13 +109,22 @@ class CandidatureService extends AbstractEntityService
         $query  = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
         $result = $query->getResult();
 
-        $triggers = [];
+        $triggers = [
+            '/'                      => function (Candidature $original, array $extracted) {
+                $extracted['canValider']    = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_CANDIDATURE_VALIDER);
+                $extracted['canRefuser'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_CANDIDATURE_REFUSER);
+
+                return $extracted;
+            },
+        ];
 
         $properties = [
             'id',
             'motif',
             'validation',
             'dateCommission',
+            'canValider',
+            'canRefuser',
             ['offre', ['id', 'typeMission', 'titre', ['structure', ['libelleCourt']]]],
             ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]],
         ];

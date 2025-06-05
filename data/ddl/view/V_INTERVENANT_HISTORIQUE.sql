@@ -548,6 +548,28 @@ FROM
   WHERE
   mep.histo_destruction IS NULL
 
+UNION ALL
+--Demande de mise en paiement des missions
+SELECT
+	m.intervenant_id intervenant_id,
+	'7 - Demande de mise en paiement' categorie,
+	CASE
+		WHEN mep.heures < 1
+       		THEN REPLACE(TO_CHAR(mep.heures, 'FM0.00'), '.', ',') || 'h ' || m.libelle_mission
+		ELSE mep.heures || 'h ' || m.libelle_mission || ' (' || s.libelle_court || ')'
+	END label,
+	mep.histo_creation histo_date,
+	mep.histo_createur_id histo_createur_id,
+	u.display_name histo_user,
+	'glyphicon glyphicon-ok' icon,
+	7 ordre
+FROM mise_en_paiement mep
+JOIN mission m ON mep.mission_id = m.id
+JOIN type_mission tm ON	m.type_mission_id = tm.id
+JOIN STRUCTURE s ON m.structure_id = s.id
+JOIN utilisateur u ON	u.id = mep.histo_createur_id
+LEFT JOIN periode p ON	p.id = mep.periode_paiement_id
+WHERE mep.histo_destruction IS NULL
 
 UNION ALL
 --Mise en paiement
@@ -570,6 +592,29 @@ FROM
   LEFT JOIN periode p ON p.id = mep.periode_paiement_id
   WHERE
   mep.histo_destruction IS NULL AND mep.date_mise_en_paiement IS NOT NULL
+
+UNION ALL
+-- Mise en paiement des missions
+SELECT
+	m.intervenant_id intervenant_id,
+	 '8 - Mise en paiement'                                                                         categorie,
+	CASE
+		WHEN mep.heures < 1
+       		THEN REPLACE(TO_CHAR(mep.heures, 'FM0.00'), '.', ',') || 'h ' || m.libelle_mission
+		ELSE mep.heures || 'h ' || m.libelle_mission || ' (' || s.libelle_court || ')'
+	END                                                                                             label,
+	mep.histo_modification                                                                          histo_date,
+	mep.histo_modificateur_id                                                                       histo_createur_id,
+	u.display_name                                                                                  histo_user,
+	'glyphicon glyphicon-ok'                                                                        icon,
+	7                                                                                               ordre
+FROM mise_en_paiement mep
+JOIN mission m ON mep.mission_id = m.id
+JOIN type_mission tm ON	m.type_mission_id = tm.id
+JOIN STRUCTURE s ON m.structure_id = s.id
+JOIN utilisateur u ON	u.id = mep.histo_modificateur_id
+LEFT JOIN periode p ON	p.id = mep.periode_paiement_id
+WHERE mep.histo_destruction IS NULL and mep.date_mise_en_paiement IS NOT NULL
 
 )
 SELECT rownum id,

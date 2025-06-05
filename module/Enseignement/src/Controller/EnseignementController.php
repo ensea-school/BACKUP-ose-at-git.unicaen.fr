@@ -2,21 +2,20 @@
 
 namespace Enseignement\Controller;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Form\EnseignementSaisieFormAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Enseignement\Processus\ValidationEnseignementProcessusAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
@@ -37,6 +36,8 @@ use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Workflow\Entity\Db\Validation;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of EnseignementController
@@ -122,7 +123,7 @@ class EnseignementController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             \Enseignement\Entity\Db\Service::class,
             \Enseignement\Entity\Db\VolumeHoraire::class,
-            \Application\Entity\Db\Validation::class,
+            \Workflow\Entity\Db\Validation::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
             ElementPedagogique::class,
@@ -227,14 +228,14 @@ class EnseignementController extends AbstractController
     private function updateTableauxBord (Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule',
-            'validation_enseignement',
-            'contrat',
-            'service',
+            TblProvider::FORMULE,
+            TblProvider::VALIDATION_ENSEIGNEMENT,
+            TblProvider::CONTRAT,
+            TblProvider::SERVICE,
         ], $intervenant);
 
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord([TblProvider::PIECE_JOINTE_DEMANDE, TblProvider::PIECE_JOINTE_FOURNIE], $intervenant);
         }
     }
 

@@ -29,11 +29,6 @@ $settings = [
     'role_entity_class'            => 'Application\Entity\Db\Role',
 
     /**
-     * Attribut LDAP utilisé pour le username des utilisateurs
-     */
-    'ldap_username'                => strtolower($conf['ldap']['loginAttribute'] ?? ''),
-
-    /**
      * Gestion des autorisations d'usurpation
      */
     'usurpation_allowed_usernames' => $conf['ldap']['autorisationsUrsurpation'] ?? [],
@@ -126,6 +121,6 @@ return [
     'unicaen-auth' => $settings,
 
     'zfcuser' => [
-        $k = 'enable_registration' => isset($settings[$k]) ? $settings[$k] : false,
+        'enable_registration' => $settings['enable_registration'],
     ],
 ];

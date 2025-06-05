@@ -1,8 +1,6 @@
-version: '3'
-
 # Ne pas oublier d'ajouter au fichier /etc/hosts :
-# 172.21.0.10 ose-dev.pc-local
-# 172.21.0.15 ose-test.pc-local
+# 172.21.0.10 ose-dev.localhost.unicaen.fr
+# 172.21.0.15 ose-test.localhost.unicaen.fr
 
 services:
   ose-dev:
@@ -10,9 +8,9 @@ services:
 
     environment:
       APPLICATION_ENV: dev
-      APPLICATION_HOSTNAME: ose-dev.pc-local
+      APPLICATION_HOSTNAME: ose-dev.localhost.unicaen.fr
       XDEBUG_CONFIG: "remote_host=172.21.0.10"
-      PHP_IDE_CONFIG: "serverName=ose-dev.pc-local"
+      PHP_IDE_CONFIG: "serverName=ose-dev.localhost.unicaen.fr"
       IGNORE_MV_EXT_SERVICE: "true"
 
     build:
@@ -41,9 +39,9 @@ services:
 
     environment:
       APPLICATION_ENV: test
-      APPLICATION_HOSTNAME: ose-test.pc-local
+      APPLICATION_HOSTNAME: ose-test.localhost.unicaen.fr
       XDEBUG_CONFIG: "remote_host=172.21.0.15"
-      PHP_IDE_CONFIG: "serverName=ose-test.pc-local"
+      PHP_IDE_CONFIG: "serverName=ose-test.localhost.unicaen.fr"
       IGNORE_MV_EXT_SERVICE: "true"
 
     build:
@@ -69,5 +67,5 @@ services:
 
 networks:
   devnet:
-    external:
-      name: laures
+    name: laures
+    external: true

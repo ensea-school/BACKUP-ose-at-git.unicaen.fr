@@ -58,7 +58,7 @@ FROM
   LEFT JOIN etape                             e ON e.id = ep.etape_id
   LEFT JOIN centre_cout_ep                 ccep ON ccep.histo_destruction IS NULL
                                                AND ccep.element_pedagogique_id = ep.id
-                                               AND ccep.type_heures_id = th.id
+                                               AND ccep.type_heures_id = th.type_heures_element_id
 
   LEFT JOIN mise_en_paiement                mep ON mep.histo_destruction IS NULL
                                                AND mep.service_id = frvh.service_id
@@ -192,8 +192,8 @@ SELECT
   CASE WHEN si.mode_enseignement_realise = 'semestriel' THEN 1 ELSE 0 END calcul_semestriel,
   mep.id                                      a_payer_id,
   i.annee_id                                  annee_id,
-  sr.id                                       service_id,
-  NULL                                        service_referentiel_id,
+  NULL                                        service_id,
+  sr.id                                       service_referentiel_id,
   NULL                                        mission_id,
   NULL                                        volume_horaire_id,
   si.type_intervenant_id                      type_intervenant_id,

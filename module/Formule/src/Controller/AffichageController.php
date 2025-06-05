@@ -3,6 +3,7 @@
 namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Provider\Privilege\Privileges;
 use Formule\Model\FormuleDetailsExtractor;
 use Formule\Service\AfficheurServiceAwareTrait;
 use Formule\Service\FormuleServiceAwareTrait;
@@ -60,7 +61,9 @@ class  AffichageController extends AbstractController
             $typesVolumesHoraires[$tvhId]['etats'][$evhId] = $evhLib;
         }
 
-        return compact('intervenant', 'typesVolumesHoraires');
+        $canReporter = $this->isAllowed(Privileges::getResourceId(Privileges::FORMULE_TESTS));
+
+        return compact('intervenant', 'typesVolumesHoraires', 'canReporter');
     }
 
 

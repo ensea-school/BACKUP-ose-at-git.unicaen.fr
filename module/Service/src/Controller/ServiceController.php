@@ -3,14 +3,12 @@
 namespace Service\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
+use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Http\Request;
 use Laminas\View\Model\ViewModel;
@@ -26,6 +24,9 @@ use Service\Service\RechercheServiceAwareTrait;
 use Service\Service\ResumeServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Workflow\Entity\Db\Validation;
+use Workflow\Service\ValidationServiceAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of ServiceController
@@ -62,7 +63,7 @@ class ServiceController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
                                                                   \Enseignement\Entity\Db\Service::class,
                                                                   \Enseignement\Entity\Db\VolumeHoraire::class,
-                                                                  \Application\Entity\Db\Validation::class,
+                                                                  \Workflow\Entity\Db\Validation::class,
                                                               ]);
         $this->em()->getFilters()->enable('annee')->init([
                                                              ElementPedagogique::class,
@@ -199,7 +200,7 @@ class ServiceController extends AbstractController
                                                                   \OffreFormation\Entity\Db\CheminPedagogique::class,
                                                                   \Referentiel\Entity\Db\ServiceReferentiel::class,
                                                                   \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
-                                                                  \Application\Entity\Db\Validation::class,
+                                                                  \Workflow\Entity\Db\Validation::class,
                                                               ]);
         $this->em()->getFilters()->enable('annee')->init([
                                                              \OffreFormation\Entity\Db\ElementPedagogique::class,
@@ -293,7 +294,7 @@ class ServiceController extends AbstractController
                 }
                 try {
                     $this->getServiceValidation()->delete($validation);
-                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
+                    $this->getServiceWorkflow()->calculerTableauxBord(TblProvider::CLOTURE_REALISE, $intervenant);
                     $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été réouverte", 'success');
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -304,7 +305,7 @@ class ServiceController extends AbstractController
                 }
                 try {
                     $this->getServiceValidation()->save($validation);
-                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
+                    $this->getServiceWorkflow()->calculerTableauxBord(TblProvider::CLOTURE_REALISE, $intervenant);
                     $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été clôturée", 'success');
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));

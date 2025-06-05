@@ -36,7 +36,8 @@ SELECT
 	'1' 															                                  code_origine,
 	i.id 																                                intervenant_id,
 	i.nom_usuel || ',' || i.prenom 										                  nom,
-	t.prime_id 															                            prime_id
+	t.prime_id 															                            prime_id,
+	t.date_declaration                                                  date_declaration
 FROM
 	(
 	SELECT
@@ -50,7 +51,8 @@ FROM
 		SUM(hpm.total_paie) 					        paie_mission,
 		SUM(hpm.total_heures_a_payer) 		  	total_heures_a_payer,
 		SUM(hpm.total_heures_payees) 			    total_heures_payees,
-		SUM(round(hpm.total_paie * 0.1, 2)) 	montant_prime
+		SUM(round(hpm.total_paie * 0.1, 2)) 	montant_prime,
+  	MAX(f.histo_creation)                 date_declaration
 	FROM
 		mission_prime mp
 	JOIN mission m ON
@@ -68,6 +70,7 @@ FROM
 	JOIN periode p ON
 		p.ecart_mois = ROUND(MONTHS_BETWEEN(m.date_fin, a.date_debut)+ 0.5)
 			AND p.enseignement = 0
+  JOIN fichier f ON f.id = mp.declaration_id and f.histo_destruction IS NULL
 		WHERE
 			--Il faut impérativement une prime validée
 			mp.declaration_id IS NOT NULL

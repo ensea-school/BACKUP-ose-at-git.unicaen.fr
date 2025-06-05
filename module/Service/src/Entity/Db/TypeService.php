@@ -2,9 +2,6 @@
 
 namespace Service\Entity\Db;
 
-use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges;
-
 class TypeService
 {
 

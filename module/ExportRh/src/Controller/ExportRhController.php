@@ -3,12 +3,9 @@
 namespace ExportRh\Controller;
 
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
-use Application\Entity\Db\WfEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\WfEtapeServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
@@ -16,6 +13,9 @@ use ExportRh\Service\ExportRhServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use UnicaenSiham\Exception\SihamException;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WfEtapeServiceAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 class ExportRhController extends AbstractController
 {
@@ -98,6 +98,7 @@ class ExportRhController extends AbstractController
                 }
 
                 $matricule = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
+
                 if ($matricule !== false) {
                     $this->exportRhService->cloreDossier($intervenant, $codeStatut);
                     $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');
@@ -110,22 +111,23 @@ class ExportRhController extends AbstractController
                     if ($this->exportRhService->haveToSyncCodeRh()) {
                         $this->getServiceIntervenant()->updateCodeRh($intervenant, $matricule);
                     }
-                    //On met à jour le source code lors de la synchronisauot
+                    //On met à jour le source code lors de la synchronisation
                     if ($this->exportRhService->haveToSyncSource()) {
                         $this->getServiceIntervenant()->updateSource($intervenant);
                     }
                 } else {
-                    $this->flashMessenger()->addErrorMessage('Probleme prise en charge');
+                    $this->flashMessenger()->addErrorMessage('Problème prise en charge');
                 }
             }
         } catch (\Exception $e) {
 
             $this->flashMessenger()->addErrorMessage($e->getMessage());
-            return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()]);
+            return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
 
         }
 
-        return $this->exporterAction();
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+
     }
 
 
@@ -283,11 +285,11 @@ class ExportRhController extends AbstractController
             }
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
-            return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()]);
+            return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+
 
         }
-
-        return $this->exporterAction();
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
     }
 
 
@@ -295,8 +297,8 @@ class ExportRhController extends AbstractController
     public function synchroniserAction()
     {
         try {
+            $intervenant = $this->getEvent()->getParam('intervenant');
             if ($this->getRequest()->isPost()) {
-                $intervenant = $this->getEvent()->getParam('intervenant');
                 if (!$intervenant) {
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
@@ -313,7 +315,8 @@ class ExportRhController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-        return $this->exporterAction();
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+
     }
 
 }

@@ -1,11 +1,11 @@
 /* Générique */
 // importing core styling file
-@import "../vendor/MDB5-STANDARD-UI-KIT-Free-6.0.0/src/scss/mdb.free";
+@import "../ext/MDB5-STANDARD-UI-KIT-Free-6.0.0/src/scss/mdb.free";
 @import "bootstrap";
 @import "../vendor/bootstrap-select/sass/bootstrap-select";
 @import "../vendor/bootstrap-select/sass/variables";
-@import "../vendor/jquery-ui-1.12.1/jquery-ui.min.css";
-@import "../vendor/DataTables-1.12.1/css/dataTables.bootstrap5.min.css";
+@import "../ext/jquery-ui-1.14.1/jquery-ui.min";
+@import "../vendor/datatables/css/dataTables.bootstrap5.min";
 
 
 @import "unicaen-icon";
@@ -17,11 +17,9 @@
 /* Parties applicatives */
 
 @import "budget";
-@import "paiement";
 @import "agrement";
 @import "acceuil";
 @import "piece-jointe";
-@import "intervenant-recherche";
 @import "service";
 @import "chargens";
 @import "droits";

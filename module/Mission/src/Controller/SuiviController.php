@@ -4,8 +4,7 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Application\Provider\Tbl\TblProvider;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
@@ -17,6 +16,8 @@ use Plafond\Processus\PlafondProcessusAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
+use Workflow\Service\ValidationServiceAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**
@@ -74,7 +75,7 @@ class SuiviController extends AbstractController
 
         $properties = [
             'id',
-            ['mission', ['id', 'libelleCourt']],
+            ['mission', ['id', 'libelleCourt', 'libelleMission']],
             'date',
             'heureDebut',
             'heureFin',
@@ -250,8 +251,8 @@ class SuiviController extends AbstractController
     private function updateTableauxBord (Mission $mission)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'mission',
-            'paiement'
+            TblProvider::MISSION,
+            TblProvider::PAIEMENT
         ], $mission->getIntervenant());
     }
 

@@ -1,0 +1,11 @@
+dependency_scanning:
+  variables:
+    HTTPS_PROXY: http://10.14.128.99:3128
+include:
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+stages:
+- test
+sast:
+  stage: test

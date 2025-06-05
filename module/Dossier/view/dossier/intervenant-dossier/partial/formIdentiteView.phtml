@@ -99,7 +99,9 @@ $dossierIdentite = $form->get('DossierIdentite');
                         <div class="input-group cold-md-6 readonly">
                             <?php
                             if (!empty($dossierIdentite->get('dateSituationMatrimoniale')->getValue())) {
-                                echo ($viewIdentite) ? $dossierIdentite->get('dateSituationMatrimoniale')->getValue() : '**/**/****';
+                                $dateMatrimoniale = $dossierIdentite->get('dateSituationMatrimoniale')->getValue();
+                                $dateMatrimonialeFormatted = DateTime::createFromFormat('Y-m-d',$dateMatrimoniale)->format('d/m/Y');
+                                echo ($viewIdentite) ? $dateMatrimonialeFormatted : '**/**/****';
                             }
                             ?>
                         </div>

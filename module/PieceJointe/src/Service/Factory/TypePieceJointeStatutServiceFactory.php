@@ -2,7 +2,7 @@
 
 namespace PieceJointe\Service\Factory;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use PieceJointe\Service\TypePieceJointeStatutService;
 use Psr\Container\ContainerInterface;
 
@@ -20,7 +20,7 @@ class TypePieceJointeStatutServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): TypePieceJointeStatutService
     {
         $service = new TypePieceJointeStatutService();
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

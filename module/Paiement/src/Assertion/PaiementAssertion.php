@@ -3,15 +3,11 @@
 namespace Paiement\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
-use Paiement\Entity\Db\MiseEnPaiement;
-use Paiement\Entity\Db\ServiceAPayerInterface;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Workflow\Entity\Db\WfEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of PaiementAssertion
@@ -28,40 +24,6 @@ class PaiementAssertion extends AbstractAssertion
         return $this->assertPage($page);
     }
 
-
-    /**
-     * @param ResourceInterface $entity
-     * @param string            $privilege
-     *
-     * @return boolean
-     */
-    protected function assertEntity (ResourceInterface $entity, $privilege = null)
-    {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
-
-        // Si c'est bon alors on affine...
-        switch (true) {
-            case $entity instanceof MiseEnPaiement:
-                switch ($privilege) {
-                    case Privileges::MISE_EN_PAIEMENT_DEMANDE:
-                        return $this->assertMiseEnPaiementDemande($role, $entity);
-                }
-            break;
-            case $entity instanceof ServiceAPayerInterface:
-                switch ($privilege) {
-                    case Privileges::MISE_EN_PAIEMENT_DEMANDE:
-                        return $this->assertServiceAPayerDemande($role, $entity);
-                }
-            break;
-        }
-
-        return true;
-    }
 
 
     /**
@@ -123,33 +85,6 @@ class PaiementAssertion extends AbstractAssertion
         return true;
     }
 
-
-    protected function assertMiseEnPaiementDemande (Role $role, MiseEnPaiement $miseEnPaiement)
-    {
-        if (!$this->asserts([
-            !$miseEnPaiement->getValidation(),
-        ])) {
-            return false;
-        }
-
-        if ($serviceAPayer = $miseEnPaiement->getServiceAPayer()) {
-            return $this->assertServiceAPayerDemande($role, $serviceAPayer);
-        } else {
-            return true; // pas assez d'éléments pour statuer
-        }
-    }
-
-
-    protected function assertServiceAPayerDemande (Role $role, ServiceAPayerInterface $serviceAPayer)
-    {
-        $oriStructure  = $role->getStructure();
-        $destStructure = $serviceAPayer->getStructure();
-
-        return $this->asserts([
-            $this->assertEtapeAtteignable(WfEtape::CODE_DEMANDE_MEP, $serviceAPayer->getIntervenant(), $destStructure),
-            empty($oriStructure) || empty($destStructure) || $destStructure->inStructure($oriStructure),
-        ]);
-    }
 
 
     protected function assertEtapeAtteignable ($etape, Intervenant $intervenant = null, Structure $structure = null)

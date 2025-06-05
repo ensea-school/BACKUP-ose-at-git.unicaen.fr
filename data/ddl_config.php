@@ -37,9 +37,9 @@ return [
             'V_FR_SERVICE_CENTRE_COUT',
             'V_FR_SERVICE_REF_CENTRE_COUT',
             'V_VOLUME_HORAIRE_ETAT',
-            'V_VOLUME_HORAIRE_ETAT_MULTI',
+            'V_VOL_HORAIRE_ETAT_MULTI',
             'V_VOLUME_HORAIRE_REF_ETAT',
-            'V_VOLUME_HORAIRE_REF_ETAT_MULTI',
+            'V_VOL_HORAIRE_REF_ETAT_MULTI',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],

@@ -50,7 +50,7 @@ SELECT
   NULL                              service_referentiel_id,
   s.intervenant_id                  intervenant_id,
   vh.type_volume_horaire_id         type_volume_horaire_id,
-  vhe.etat_volume_horaire_id        etat_volume_horaire_id,
+  evh.id                            etat_volume_horaire_id,
   s.element_pedagogique_id          element_pedagogique_id,
   s.etablissement_id                etablissement_id,
   NULL                              structure_aff_id,
@@ -81,12 +81,13 @@ SELECT
   NULL                              service_ref_formation,
   NULL                              commentaires
 FROM
-  volume_horaire                  vh
-  JOIN service                     s ON s.id = vh.service_id
-  JOIN v_vol_horaire_etat_multi  vhe ON vhe.volume_horaire_id = vh.id
-  JOIN motif_non_paiement        mnp ON mnp.id = vh.motif_non_paiement_id
-  LEFT JOIN tag                         t ON t.id = vh.tag_id
-  LEFT JOIN formule_resultat_intervenant fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
+            volume_horaire               vh
+       JOIN service                       s ON s.id = vh.service_id
+       JOIN tbl_validation_enseignement tve ON tve.id = vh.id
+       JOIN etat_volume_horaire         evh ON evh.ordre <= tve.etat_volume_horaire_ordre
+       JOIN motif_non_paiement          mnp ON mnp.id = vh.motif_non_paiement_id
+  LEFT JOIN tag                           t ON t.id = vh.tag_id
+  LEFT JOIN formule_resultat_intervenant fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = evh.id
 WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
@@ -280,7 +281,7 @@ SELECT
   t.motif_non_paiement              motif_non_paiement,
   t.tag                             tag,
   si.service_statutaire             service_statutaire,
-  fi.heures_service_modifie         service_du_modifie,
+  tsd.service_modifie               service_du_modifie,
   t.service_fi                      service_fi,
   t.service_fa                      service_fa,
   t.service_fc                      service_fc,
@@ -314,7 +315,7 @@ FROM
   LEFT JOIN etape                       etp ON etp.id   = ep.etape_id
   LEFT JOIN type_formation               tf ON tf.id    = etp.type_formation_id AND tf.histo_destruction IS NULL
   LEFT JOIN groupe_type_formation       gtf ON gtf.id   = tf.groupe_id AND gtf.histo_destruction IS NULL
-  LEFT JOIN v_formule_intervenant        fi ON fi.intervenant_id = i.id
+  LEFT JOIN tbl_service_du              tsd ON tsd.intervenant_id = i.id
   LEFT JOIN ponds                     ponds ON ponds.element_pedagogique_id = ep.id
   LEFT JOIN fonction_referentiel         fr ON fr.id    = t.fonction_referentiel_id
   LEFT JOIN type_validation              tv ON tvh.code = 'REALISE' AND tv.code = 'CLOTURE_REALISE'

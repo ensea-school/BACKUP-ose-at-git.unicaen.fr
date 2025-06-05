@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 24.3](#ose-245-05062025)
+[OSE 24.4](#ose-244-04062025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -25,7 +25,7 @@
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
 
 
-# OSE 24.5 (05/06/2025)
+# OSE 24.5 (SORTIE ANNULEE)
 
 ## Amélioration
 
@@ -34,6 +34,8 @@
 ## Correction
 
 * La version 24 ne comptabilisait pas tous les volumes horaires de référentiel pour les paiements dans certaines situations
+
+** Attention ** La version 24.5 a été annulée, le correctif entraine des régressions pouvant conduire à faire trop de demandes de mise en paiement
 
 
 # OSE 24.4 (04/06/2025)

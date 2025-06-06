@@ -5,7 +5,7 @@ SELECT
   CASE WHEN si.mode_enseignement_realise = 'semestriel' THEN 1 ELSE 0 END calcul_semestriel,
   vh.id                                       a_payer_id,
   i.annee_id                                  annee_id,
-  frvh.service_id                              service_id,
+  frvh.service_id                             service_id,
   NULL                                        service_referentiel_id,
   NULL                                        mission_id,
   vh.id                                       volume_horaire_id,
@@ -23,7 +23,7 @@ SELECT
     WHEN 'fc' THEN frvh.heures_compl_fc
     WHEN 'primes' THEN frvh.heures_primes
     WHEN 'enseignement' THEN frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_primes
-END                                         heures,
+  END                                         heures,
   prd.id                                      periode_ens_id,
   prd.code                                    periode_ens_code,
   COALESCE(vh.horaire_debut, add_months(a.date_debut, prd.ecart_mois)) horaire_debut,
@@ -131,12 +131,12 @@ SELECT
   -- paiements sur des heures de référentiel
   'r' || '-' || sr.id || '-' || th.id         KEY,
   1                                           calcul_semestriel,
-  sr.id                                       a_payer_id,
+  frvh.volume_horaire_ref_id                  a_payer_id,
   i.annee_id                                  annee_id,
   NULL                                        service_id,
   frvh.service_referentiel_id                 service_referentiel_id,
   NULL                                        mission_id,
-  NULL                                        volume_horaire_id,
+  frvh.volume_horaire_ref_id                  volume_horaire_id,
   si.type_intervenant_id                      type_intervenant_id,
   i.id                                        intervenant_id,
   sr.structure_id                             structure_id,

@@ -48,18 +48,12 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td v-if="sap.type!='Référentiel'"><abbr class="badge bg-secondary"
+                                <td><abbr class="badge bg-secondary"
                                                                          :title="lap.volumeHoraireHisto">{{
                                         lap.volumeHoraireId
                                     }}</abbr> {{
                                         lap.volumeHoraire
                                     }}
-                                </td>
-                                <td v-else>
-                                    <div v-for="vhr in lap.volumeHoraireId">
-                                        <abbr class="badge bg-secondary" :title="vhr.HISTO">{{ vhr.ID }}</abbr>
-                                        {{ vhr.HEURES }}h
-                                    </div>
                                 </td>
                                 <td>{{ lap.tauxRemu }}</td>
                                 <td>{{ lap.tauxValeur }}€</td>

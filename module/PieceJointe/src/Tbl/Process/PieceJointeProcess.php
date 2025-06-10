@@ -40,6 +40,7 @@ class PieceJointeProcess implements ProcessInterface
     {
         $this->getPiecesJointesDemandees($params);
         $this->getPiecesJointesFournies($params);
+        //dd($this->piecesJointesDemandees, $this->piecesJointesFournies);
         $this->traitementPiecesJointes($params);
         $this->enregistrement($tableauBord, $params);
     }
@@ -92,6 +93,7 @@ class PieceJointeProcess implements ProcessInterface
 
         unset($piecesJointesFournies);
         return $this->piecesJointesFournies;
+
 
 
     }
@@ -182,7 +184,7 @@ class PieceJointeProcess implements ProcessInterface
             $piecesJointesFournies = $this->extractPiecesJointesFournies($pieceJointeDemandee['CODE_INTERVENANT'], $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID']);
             $uuid = $pieceJointeDemandee['ANNEE_ID'] . '_' . $pieceJointeDemandee['INTERVENANT_ID'] . "_" . $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
             //Piece jointe demandée déjà fournie donc on passe
-            if ($this->tblData[$uuid]['FOURNIE'] == 1) {
+            if ($this->tblData[$uuid]['DATE_ORIGINE'] == $this->tblData[$uuid]['ANNEE_ID']) {
                 continue;
             }
 

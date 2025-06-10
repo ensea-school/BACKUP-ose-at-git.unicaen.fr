@@ -32,6 +32,7 @@
 
 * Nouvelle formule pour La Rochelle
 * En cas de saisie calendaire d'une heure débutant à 00:00, seule la date est affichée, l'heure étant considérée comme non saisie
+* En mode calendaire, la saisie des dates de début et de fin sont obligatoires
 
 ## Correction
 

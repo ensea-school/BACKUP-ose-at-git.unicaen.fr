@@ -25,6 +25,23 @@
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
 
 
+
+# OSE 24.6 (16/06/2025)
+
+## Amélioration
+
+* Nouvelle formule pour La Rochelle
+* En cas de saisie calendaire d'une heure débutant à 00:00, seule la date est affichée, l'heure étant considérée comme non saisie
+
+## Correction
+
+* La version 24 ne comptabilisait pas tous les volumes horaires de référentiel pour les paiements dans certaines situations
+* Les fenêtres à bulles ("popvers") s'affichent maintenant tojours à l'intérieur de l'écran
+
+
+
+
+
 # OSE 24.5 (SORTIE ANNULEE)
 
 ## Amélioration

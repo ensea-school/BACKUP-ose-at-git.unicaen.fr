@@ -35,7 +35,7 @@
 
 * La version 24 ne comptabilisait pas tous les volumes horaires de référentiel pour les paiements dans certaines situations
 
-** Attention ** La version 24.5 a été annulée, le correctif entraine des régressions pouvant conduire à faire trop de demandes de mise en paiement
+**Attention** La version 24.5 a été annulée, le correctif entraine des régressions pouvant conduire à faire trop de demandes de mise en paiement
 
 
 # OSE 24.4 (04/06/2025)

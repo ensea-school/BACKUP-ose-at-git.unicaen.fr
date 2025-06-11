@@ -145,7 +145,7 @@ class ChargensViewHelper extends AbstractHtmlElement
      *
      * @return ChargensViewHelper
      */
-    public function setFormFiltre(FiltreForm $formFiltre = null)
+    public function setFormFiltre(?FiltreForm $formFiltre = null)
     {
         $this->formFiltre = $formFiltre;
 

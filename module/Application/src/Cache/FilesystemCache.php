@@ -20,19 +20,25 @@ class FilesystemCache extends CacheProvider
     /** @var int */
     private int $umask = 0000;
 
+    private string $extension = self::EXTENSION;
+
+    private string $cacheDir;
+
     /**
      * {@inheritdoc}
      */
-    public function __construct($directory = 'cache/Doctrine', $extension = self::EXTENSION, $umask = 0000)
+    public function __construct($cacheDir = 'cache/Doctrine', $extension = self::EXTENSION, $umask = 0000)
     {
-
+        $this->cacheDir = $cacheDir;
+        $this->extension = $extension;
+        $this->umask = $umask;
     }
 
 
 
     public function getFilename(string $id): string
     {
-        return base64_encode($id);
+        return $this->cacheDir.'/'.base64_encode($id);
     }
 
 

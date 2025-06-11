@@ -111,6 +111,10 @@ class AppAdmin
 
         require_once('module/Application/src/functions.php');
 
+        if (!is_dir(getcwd().'/cache/Doctrine')){
+            mkdir(getcwd().'/cache/Doctrine', 0777, true);
+        }
+
         /* Définition de la config globale, éventuellement à partir du fichier de config général */
         if (self::config()['global']['affichageErreurs'] ?? true) {
             error_reporting(E_ALL);

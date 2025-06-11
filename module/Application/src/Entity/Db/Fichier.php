@@ -313,7 +313,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
      *
      * @return Fichier
      */
-    public function setValidation(\Workflow\Entity\Db\Validation $validation = null)
+    public function setValidation(?\Workflow\Entity\Db\Validation $validation = null)
     {
         $this->validation = $validation;
 

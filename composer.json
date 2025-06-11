@@ -11,7 +11,7 @@
     "require"          : {
         "php"                              : ">=8.4",
         "laminas/laminas-cli"              : "1.11.0",
-        "laminas/laminas-cache-storage-adapter-filesystem": 2.5.0,
+        "laminas/laminas-cache-storage-adapter-filesystem": "2.5.0",
         "symfony/process"                  : "7.2.0",
 
         "twbs/bootstrap"                   : "5.0.2",

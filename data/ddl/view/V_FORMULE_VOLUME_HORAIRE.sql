@@ -55,7 +55,7 @@ WHERE
   /*@TYPE_INTERVENANT_ID=si.type_intervenant_id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@TYPE_VOLUME_HORAIRE_ID=vh.type_volume_horaire_id*/
-  /*@ETAT_VOLUME_HORAIRE_ID<=vhe.etat_volume_horaire_id*/
+  /*@ETAT_VOLUME_HORAIRE_ID<=evh.id*/
 
 UNION ALL
 

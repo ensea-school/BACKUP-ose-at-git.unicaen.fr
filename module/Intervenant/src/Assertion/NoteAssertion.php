@@ -22,7 +22,7 @@ class NoteAssertion extends AbstractAssertion
     const PRIV_SUPPRIMER_NOTE = 'intervenant-supprimer-note';
     const PRIV_EDITER_NOTE = 'intervenant-editer-note';
 
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
 
         $localPrivs = [
@@ -63,7 +63,7 @@ class NoteAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
 
 
@@ -87,7 +87,7 @@ class NoteAssertion extends AbstractAssertion
     }
 
 
-    protected function assertSuppressionNote(Note $note = null)
+    protected function assertSuppressionNote(?Note $note = null): bool
     {
         if (empty($note)) {
             return false;
@@ -109,7 +109,7 @@ class NoteAssertion extends AbstractAssertion
         return false;
     }
 
-    protected function assertEditionNote(Note $note = null): bool
+    protected function assertEditionNote(?Note $note = null): bool
     {
         if (empty($note)) return false;
 

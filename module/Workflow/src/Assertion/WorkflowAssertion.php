@@ -27,7 +27,7 @@ class WorkflowAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertOther(ResourceInterface $resource = null, $privilege = null)
+    protected function assertOther(ResourceInterface|string|null $resource = null, $privilege = null): bool
     {
         switch (true) {
             case $resource instanceof WorkflowEtape:
@@ -42,7 +42,7 @@ class WorkflowAssertion extends AbstractAssertion
 
 
 
-    protected function assertWorkflowResource(WorkflowResource $resource)
+    protected function assertWorkflowResource(WorkflowResource $resource): bool
     {
         if ($resource->getEtape() instanceof WorkflowEtape) {
             return $this->assertWorkflowEtape($resource->getEtape(), $resource->getStructure());
@@ -56,7 +56,7 @@ class WorkflowAssertion extends AbstractAssertion
 
 
 
-    protected function assertWorkflowEtape(WorkflowEtape $etape, Structure $structure = null)
+    protected function assertWorkflowEtape(WorkflowEtape $etape, ?Structure $structure = null): bool
     {
         if (!$etape->getStructure() && $structure && $se = $etape->getStructureEtape($structure)) {
             return $se->getAtteignable();

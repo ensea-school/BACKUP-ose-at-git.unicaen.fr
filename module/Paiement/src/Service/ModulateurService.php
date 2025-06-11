@@ -55,7 +55,7 @@ class ModulateurService extends AbstractEntityService
 
 
 
-    public function finderByElementPedagogique(ElementPedagogique $element, QueryBuilder $qb = null, $alias = null)
+    public function finderByElementPedagogique(ElementPedagogique $element, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -80,7 +80,7 @@ class ModulateurService extends AbstractEntityService
      *
      * @return Modulateur[]
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

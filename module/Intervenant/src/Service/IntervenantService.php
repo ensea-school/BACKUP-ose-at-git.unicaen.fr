@@ -23,7 +23,7 @@ use Workflow\Service\WorkflowServiceAwareTrait;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
  * @method Intervenant get($id)
- * @method Intervenant[] getList(QueryBuilder $qb = null, $alias = null)
+ * @method Intervenant[] getList(?QueryBuilder $qb = null, $alias = null)
  */
 class IntervenantService extends AbstractEntityService
 {
@@ -375,7 +375,7 @@ class IntervenantService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy (QueryBuilder $qb = null, $alias = null)
+    public function orderBy (?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -395,7 +395,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByType (TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
+    public function finderByType (TypeIntervenant $typeIntervenant, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $sStatut = $this->getServiceStatut();

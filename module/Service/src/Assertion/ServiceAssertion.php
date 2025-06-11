@@ -34,14 +34,14 @@ class ServiceAssertion extends AbstractAssertion
 
 
     /* ---- Routage général ---- */
-    public function __invoke(array $page) // gestion des visibilités de menus
+    public function __invoke(array $page): bool // gestion des visibilités de menus
     {
         return $this->assertPage($page);
     }
 
 
 
-    protected function assertPage(array $page)
+    protected function assertPage(array $page): bool
     {
         $role = $this->getRole();
         /* @var $role Role */
@@ -89,7 +89,7 @@ class ServiceAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
@@ -118,7 +118,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertPageServices(Role $role, Intervenant $intervenant = null, string $typeVolumeHoraireCode)
+    protected function assertPageServices(Role $role, ?Intervenant $intervenant, string $typeVolumeHoraireCode): bool
     {
         if (!$intervenant) return true;
 
@@ -142,7 +142,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertResume(Role $role)
+    protected function assertResume(Role $role): bool
     {
         return $this->asserts([
             (
@@ -157,7 +157,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertHasServices(Intervenant $intervenant, Structure $structure, string $etape, Role $role)
+    protected function assertHasServices(Intervenant $intervenant, Structure $structure, string $etape, Role $role): bool
     {
         $services        = $intervenant->getService();
         $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
@@ -204,7 +204,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertCampagneSaisie(Role $role, TypeVolumeHoraire $typeVolumeHoraire)
+    public function assertCampagneSaisie(Role $role, TypeVolumeHoraire $typeVolumeHoraire): bool
     {
         if ($typeVolumeHoraire && $role->getIntervenant()) {
             $campagneSaisie = $this->getServiceCampagneSaisie()->getBy(
@@ -219,7 +219,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertCloture(Role $role, Intervenant $intervenant)
+    public function assertCloture(Role $role, Intervenant $intervenant): bool
     {
         if ($intervenant->getStatut()->getCloture()) {
             $hardPassCloture = $role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES_AVEC_MEP);
@@ -241,7 +241,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertMotifNonPaiement(Role $role, Intervenant $intervenant)
+    public function assertMotifNonPaiement(Role $role, Intervenant $intervenant): bool
     {
         // filtrer pour la structure ? ?
         return $this->asserts([
@@ -252,7 +252,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertIntervenant(Role $role, Intervenant $intervenant = null)
+    public function assertIntervenant(Role $role, ?Intervenant $intervenant = null): bool
     {
         if ($intervenant) {
             if ($ri = $role->getIntervenant()) {
@@ -267,7 +267,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertStructure(Role $role, ?Structure $structure = null)
+    public function assertStructure(Role $role, ?Structure $structure = null): bool
     {
         if ($structure) {
             if ($ri = $role->getStructure()) {
@@ -282,7 +282,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
+    public function assertEtapeAtteignable($etape, ?Intervenant $intervenant = null): bool
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);

@@ -24,7 +24,7 @@ class SuiviAssertion extends AbstractAssertion
     use WorkflowServiceAwareTrait;
 
 
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         /* @var $role Role */
         $role = $this->getRole();
@@ -50,7 +50,7 @@ class SuiviAssertion extends AbstractAssertion
 
 
 
-    protected function assertWorkflow(Mission|Intervenant|VolumeHoraireMission $entity)
+    protected function assertWorkflow(Mission|Intervenant|VolumeHoraireMission $entity): bool
     {
         $codeEtape = WfEtape::CODE_MISSION_SAISIE_REALISE;
 
@@ -77,7 +77,7 @@ class SuiviAssertion extends AbstractAssertion
 
 
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
         /** @var Role $role */
         $role = $this->getRole();
@@ -112,7 +112,7 @@ class SuiviAssertion extends AbstractAssertion
 
 
 
-    protected function assertVolumeHoraireEdition(Role $role, VolumeHoraireMission $vhm)
+    protected function assertVolumeHoraireEdition(Role $role, VolumeHoraireMission $vhm): bool
     {
         return $this->asserts([
             $vhm->canEdit(),
@@ -122,7 +122,7 @@ class SuiviAssertion extends AbstractAssertion
 
 
 
-    protected function assertVolumeHoraireValidation(Role $role, VolumeHoraireMission $vhm)
+    protected function assertVolumeHoraireValidation(Role $role, VolumeHoraireMission $vhm): bool
     {
         return $this->asserts([
             $vhm->canValider(),
@@ -132,7 +132,7 @@ class SuiviAssertion extends AbstractAssertion
 
 
 
-    protected function assertVolumeHoraireDevalidation(Role $role, VolumeHoraireMission $vhm)
+    protected function assertVolumeHoraireDevalidation(Role $role, VolumeHoraireMission $vhm): bool
     {
         return $this->asserts([
             $vhm->canDevalider(),
@@ -142,7 +142,7 @@ class SuiviAssertion extends AbstractAssertion
 
 
 
-    protected function assertVolumeHoraire(Role $role, VolumeHoraireMission $vhm)
+    protected function assertVolumeHoraire(Role $role, VolumeHoraireMission $vhm): bool
     {
         return $this->asserts([
             $this->assertMission($role, $vhm->getMission())
@@ -151,7 +151,7 @@ class SuiviAssertion extends AbstractAssertion
 
 
 
-    protected function assertMissionEditionRealise(Mission $mission)
+    protected function assertMissionEditionRealise(Mission $mission): bool
     {
         $besoinContrat = $mission->getIntervenant()->getStatut()->getContrat();
 
@@ -164,7 +164,7 @@ class SuiviAssertion extends AbstractAssertion
 
 
 
-    protected function assertMission(Role $role, Mission $mission)
+    protected function assertMission(Role $role, Mission $mission): bool
     {
         return $this->asserts([
             $this->assertStructure($role, $mission->getStructure())
@@ -173,7 +173,7 @@ class SuiviAssertion extends AbstractAssertion
 
 
 
-    protected function assertStructure(Role $role, ?Structure $structure)
+    protected function assertStructure(Role $role, ?Structure $structure): bool
     {
         // Pas de structure => mission en cours de saisie => OK
         if (!$structure) {

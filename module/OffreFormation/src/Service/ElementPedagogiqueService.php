@@ -59,7 +59,7 @@ class ElementPedagogiqueService extends AbstractEntityService
      *
      * @return array
      */
-    public function getSearchResultByTerm (array $filters = [], $order = "gtf.ordre, e.niveau, ep.libelle")
+    public function getSearchResultByTerm (array $filters = [], string $order = "gtf.ordre, e.niveau, ep.libelle")
     {
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -161,7 +161,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return ElementPedagogique
      */
-    public function getByCode ($code, Annee $annee = null)
+    public function getByCode ($code, ?Annee $annee = null)
     {
         if (null == $code) return null;
 
@@ -230,7 +230,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return QueryBuilder
      */
-    public function finderByContext (QueryBuilder $qb = null, $alias = null)
+    public function finderByContext (?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -453,7 +453,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return QueryBuilder|null
      */
-    public function orderBy (QueryBuilder $qb = null, $alias = null)
+    public function orderBy (?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy($this->getAlias() . '.libelle');

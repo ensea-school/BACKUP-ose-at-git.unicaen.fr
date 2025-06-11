@@ -71,7 +71,7 @@ class AgrementService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");

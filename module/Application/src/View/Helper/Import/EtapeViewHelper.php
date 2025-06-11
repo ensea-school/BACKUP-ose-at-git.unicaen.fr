@@ -1,5 +1,7 @@
 <?php
 namespace Application\View\Helper\Import;
+
+use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenImport\View\Helper\DifferentielLigne\DifferentielLigne;
 
 /**
@@ -9,7 +11,7 @@ use UnicaenImport\View\Helper\DifferentielLigne\DifferentielLigne;
  */
 class EtapeViewHelper extends DifferentielLigne
 {
-    use \Lieu\Service\StructureServiceAwareTrait;
+    use StructureServiceAwareTrait;
 
     public function getColumnDetails($column, $value)
     {

@@ -17,7 +17,7 @@ class FormuleAssertion extends AbstractAssertion
 
 
 
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
@@ -40,7 +40,7 @@ class FormuleAssertion extends AbstractAssertion
 
 
 
-    protected function assertVisuHC(?Intervenant $intervenant)
+    protected function assertVisuHC(?Intervenant $intervenant): bool
     {
         if (!$intervenant) return true;
 

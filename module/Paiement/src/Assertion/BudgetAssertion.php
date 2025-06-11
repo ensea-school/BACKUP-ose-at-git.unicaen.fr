@@ -21,7 +21,7 @@ class BudgetAssertion extends AbstractAssertion
     /**
      * Exemple
      */
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
 
         $role = $this->getRole();
@@ -54,7 +54,7 @@ class BudgetAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -68,7 +68,7 @@ class BudgetAssertion extends AbstractAssertion
 
 
 
-    protected function assertStructure(Structure $structure)
+    protected function assertStructure(Structure $structure): bool
     {
         $rs = $this->getRole()->getStructure();
 

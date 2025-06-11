@@ -33,7 +33,7 @@ class TblPaiementService extends AbstractEntityService
 
 
 
-    public function finderByHeuresAPayer (QueryBuilder $qb = null, $alias = null): QueryBuilder
+    public function finderByHeuresAPayer (?QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->where("$alias.heuresAPayerAA > $alias.heuresDemandeesAA OR  $alias.heuresAPayerAC > $alias.heuresDemandeesAC");
@@ -43,7 +43,7 @@ class TblPaiementService extends AbstractEntityService
 
 
 
-    public function finderByIntervenant (Intervenant $intervenant, QueryBuilder $qb = null, $alias = null): QueryBuilder
+    public function finderByIntervenant (Intervenant $intervenant, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

@@ -36,7 +36,7 @@ class EtablissementService extends AbstractEntityService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByLibelle($term, QueryBuilder $qb=null, $alias=null)
+    public function finderByLibelle($term, ?QueryBuilder $qb = null, $alias=null)
     {
         $terms = explode( ' ', $term );
 

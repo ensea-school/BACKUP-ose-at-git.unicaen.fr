@@ -40,14 +40,14 @@ class EnseignementAssertion extends AbstractAssertion
 
 
     /* ---- Routage général ---- */
-    public function __invoke (array $page) // gestion des visibilités de menus
+    public function __invoke (array $page): bool // gestion des visibilités de menus
     {
         return $this->assertPage($page);
     }
 
 
 
-    protected function assertPage (array $page)
+    protected function assertPage (array $page): bool
     {
         $role = $this->getRole();
         /* @var $role Role */
@@ -98,7 +98,7 @@ class EnseignementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity (ResourceInterface $entity, $privilege = null)
+    protected function assertEntity (ResourceInterface $entity, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -172,7 +172,7 @@ class EnseignementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController ($controller, $action = null, $privilege = null)
+    protected function assertController ($controller, $action = null, $privilege = null): bool
     {
         $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
@@ -206,7 +206,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertPageEnseignements (Role $role, Intervenant $intervenant = null, string $typeVolumeHoraireCode)
+    protected function assertPageEnseignements (Role $role, ?Intervenant $intervenant, string $typeVolumeHoraireCode): bool
     {
         if (!$intervenant) return true;
 
@@ -230,7 +230,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignements (Role $role)
+    protected function assertEnseignements (Role $role): bool
     {
         return $this->asserts([
             (
@@ -245,7 +245,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertImportAgenda (Role $role)
+    protected function assertImportAgenda (Role $role): bool
     {
         return true;
         //return $this->getAssertionService()->assertEtapeAtteignable(WfEtape::CODE_SERVICE_SAISIE);
@@ -253,7 +253,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementVisualisation (Role $role, Service $service)
+    protected function assertEnseignementVisualisation (Role $role, Service $service): bool
     {
         $typeVolumeHoraire = $service->getTypeVolumeHoraire();
         $intervenant       = $service->getIntervenant();
@@ -275,7 +275,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementEdition (Role $role, Service $service)
+    protected function assertEnseignementEdition (Role $role, Service $service): bool
     {
         $structure = $role->getStructure();
 
@@ -308,7 +308,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertHasEnseignements (Intervenant $intervenant, Structure $structure, string $etape, Role $role)
+    protected function assertHasEnseignements (Intervenant $intervenant, Structure $structure, string $etape, Role $role): bool
     {
         $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
         switch ($etape) {
@@ -367,7 +367,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertVolumeHoraireValidation (Role $role, VolumeHoraire $volumeHoraire)
+    protected function assertVolumeHoraireValidation (Role $role, VolumeHoraire $volumeHoraire): bool
     {
         $service = $volumeHoraire->getService();
 
@@ -376,14 +376,14 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementValidation (Role $role, Service $service)
+    protected function assertEnseignementValidation (Role $role, Service $service): bool
     {
         return $this->assertValidation($role, $service->getIntervenant(), $service->getStructure());
     }
 
 
 
-    protected function assertValidationValidation (Role $role, Validation $validation)
+    protected function assertValidationValidation (Role $role, Validation $validation): bool
     {
         return $this->asserts([
             !$validation->getId(),
@@ -393,7 +393,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertValidation (Role $role, Intervenant $intervenant, ?Structure $structure)
+    protected function assertValidation (Role $role, Intervenant $intervenant, ?Structure $structure): bool
     {
         return $this->asserts([
             $this->getAssertionService()->assertIntervenant($role, $intervenant),
@@ -403,7 +403,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertValidationDevalidation (Role $role, Validation $validation)
+    protected function assertValidationDevalidation (Role $role, Validation $validation): bool
     {
         return $this->asserts([
             $validation->getId(),
@@ -415,7 +415,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementExterieur (Role $role, Service $service)
+    protected function assertEnseignementExterieur (Role $role, Service $service): bool
     {
         return $this->asserts([
             $this->assertIntervenantEnseignementExterieur($role, $service->getIntervenant()),
@@ -424,7 +424,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertIntervenantEnseignementExterieur (Role $role, Intervenant $intervenant)
+    protected function assertIntervenantEnseignementExterieur (Role $role, Intervenant $intervenant): bool
     {
 
         return $this->asserts([
@@ -440,7 +440,7 @@ class EnseignementAssertion extends AbstractAssertion
         Intervenant $intervenant,
         string $typeVolumeHoraireCode,
         bool $edition = false
-    )
+    ): bool
     {
         if (!$this->getAssertionService()->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!
 

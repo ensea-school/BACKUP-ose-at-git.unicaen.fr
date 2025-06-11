@@ -34,7 +34,7 @@ class TypeFormationService extends AbstractEntityService
         return 'typefor';
     }
     
-    public function finderByNiveau(\OffreFormation\Entity\NiveauEtape $niveau, QueryBuilder $qb = null, $alias = null)
+    public function finderByNiveau(\OffreFormation\Entity\NiveauEtape $niveau, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         
@@ -53,7 +53,7 @@ class TypeFormationService extends AbstractEntityService
      *
      * @return \OffreFormation\Entity\Db\TypeFormation[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function getList( ?QueryBuilder $qb = null, $alias=null )
     {
         [$qb,$alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelleLong");

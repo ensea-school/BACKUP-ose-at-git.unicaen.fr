@@ -351,7 +351,7 @@ class SeuilChargeService extends AbstractEntityService
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

@@ -23,7 +23,7 @@ class CentreCoutAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
         $role = $this->getRole();
 

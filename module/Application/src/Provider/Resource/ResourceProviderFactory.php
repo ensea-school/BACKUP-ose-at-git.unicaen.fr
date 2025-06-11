@@ -13,7 +13,7 @@ use Psr\Container\ContainerInterface;
 class ResourceProviderFactory
 {
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $em = $container->get(EntityManager::class);
         /* @var $em \Doctrine\ORM\EntityManager */

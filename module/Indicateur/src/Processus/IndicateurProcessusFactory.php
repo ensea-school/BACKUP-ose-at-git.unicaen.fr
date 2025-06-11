@@ -12,7 +12,7 @@ use UnicaenMail\Service\Mail\MailService;
  */
 class IndicateurProcessusFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $renderer = $container->get('ViewHelperManager')->getRenderer();
 

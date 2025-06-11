@@ -28,7 +28,7 @@ class ClotureAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(ResourceInterface $entity, ?string $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -60,7 +60,7 @@ class ClotureAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(array $page)
+    protected function assertPage(array $page): bool
     {
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
@@ -76,7 +76,7 @@ class ClotureAssertion extends AbstractAssertion
 
 
 
-    protected function assertCloture(Intervenant $intervenant = null)
+    protected function assertCloture(?Intervenant $intervenant = null): bool
     {
         return $this->asserts([
             $intervenant,
@@ -86,7 +86,7 @@ class ClotureAssertion extends AbstractAssertion
 
 
 
-    protected function assertReouverture(Intervenant $intervenant = null)
+    protected function assertReouverture(?Intervenant $intervenant = null): bool
     {
         $hasNoDMEP = false;
         if ($intervenant) {

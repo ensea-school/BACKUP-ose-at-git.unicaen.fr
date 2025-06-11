@@ -119,7 +119,7 @@ class TypeModulateurService extends AbstractEntityService
      * @param type $alias
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderByElementPedagogique(ElementPedagogique $element, QueryBuilder $qb=null, $alias=null)
+    public function finderByElementPedagogique(ElementPedagogique $element, ?QueryBuilder $qb=null, $alias=null)
     {
         [$qb,$alias] = $this->initQuery($qb, $alias);
 
@@ -129,7 +129,7 @@ class TypeModulateurService extends AbstractEntityService
         return $qb;
     }
 
-    public function finderByEtape(\OffreFormation\Entity\Db\Etape $etape, QueryBuilder $qb=null, $alias=null )
+    public function finderByEtape(\OffreFormation\Entity\Db\Etape $etape, ?QueryBuilder $qb = null, $alias=null )
     {
         [$qb,$alias] = $this->initQuery($qb, $alias);
 
@@ -146,7 +146,7 @@ class TypeModulateurService extends AbstractEntityService
      * @param string|null $alias
      * @return TypeModulateur[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function getList( ?QueryBuilder $qb = null, $alias=null )
     {
         [$qb,$alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");

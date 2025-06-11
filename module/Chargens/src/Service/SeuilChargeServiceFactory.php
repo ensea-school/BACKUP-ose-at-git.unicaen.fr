@@ -7,7 +7,7 @@ use UnicaenTbl\Service\TableauBordService;
 
 class SeuilChargeServiceFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $service = new SeuilChargeService();
 

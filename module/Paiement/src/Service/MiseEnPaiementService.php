@@ -53,7 +53,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEtat($etat, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtat($etat, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -71,7 +71,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, ?QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -102,7 +102,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function finderByIntervenants($intervenants, QueryBuilder $qb = null, $alias = null)
+    public function finderByIntervenants($intervenants, ?QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 

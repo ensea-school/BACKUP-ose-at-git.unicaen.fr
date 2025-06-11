@@ -27,7 +27,7 @@ class EtapeViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke(Entity $etape = null)
+    public function __invoke(?Entity $etape = null)
     {
         if ($etape) $this->setEtape($etape);
 

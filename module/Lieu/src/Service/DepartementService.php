@@ -43,7 +43,7 @@ class DepartementService extends AbstractEntityService
      *
      * @return PaysService[]
      */
-    public function getList(QueryBuilder $qb = null, $alias = null)
+    public function getList(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.code");

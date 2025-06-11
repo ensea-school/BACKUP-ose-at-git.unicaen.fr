@@ -13,7 +13,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Antony LE COURTES <antony.lecourtes at unicaen.fr>
  * @method DossierAutre get($id)
- * @method DossierAutre[] getList(QueryBuilder $qb = null, $alias = null)
+ * @method DossierAutre[] getList(?QueryBuilder $qb = null, $alias = null)
  */
 class DossierAutreService extends AbstractEntityService
 {

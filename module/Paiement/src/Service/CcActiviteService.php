@@ -35,7 +35,7 @@ class CcActiviteService extends AbstractEntityService
         return 'ca';
     }
 
-    public function getList(QueryBuilder $qb = null, $alias = null)
+    public function getList(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery();
 

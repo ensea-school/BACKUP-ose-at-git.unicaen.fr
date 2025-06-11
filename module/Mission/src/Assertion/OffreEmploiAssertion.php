@@ -27,14 +27,14 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     use WorkflowServiceAwareTrait;
 
     /* ---- Routage général ---- */
-    public function __invoke (array $page) // gestion des visibilités de menus
+    public function __invoke (array $page): bool // gestion des visibilités de menus
     {
         return $this->assertPage($page);
     }
 
 
 
-    protected function assertPage (array $page)
+    protected function assertPage (array $page): bool
     {
         switch ($page['route']) {
             case 'offre-emploi':
@@ -63,7 +63,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertEntity (ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity (?ResourceInterface $entity = null, $privilege = null): bool
     {
         /** @var Role $role */
         $role = $this->getRole();
@@ -101,7 +101,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertController ($controller, $action = null, $privilege = null)
+    protected function assertController ($controller, $action = null, $privilege = null): bool
     {
         /* @var $role Role */
         $role = $this->getRole();
@@ -146,7 +146,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertOffreEmploiVisualisation (Role $role, OffreEmploi $offre)
+    protected function assertOffreEmploiVisualisation (Role $role, OffreEmploi $offre): bool
     {
         return $this->asserts(
             $this->assertStructure($role, $offre->getStructure()),
@@ -171,7 +171,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertOffreEmploiEdition (Role $role, OffreEmploi $offre)
+    protected function assertOffreEmploiEdition (Role $role, OffreEmploi $offre): bool
     {
 
 
@@ -184,7 +184,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function haveRole ()
+    protected function haveRole (): bool
     {
         $role = $this->getRole();
 
@@ -197,7 +197,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertOffreEmploi (Role $role, OffreEmploi $offre)
+    protected function assertOffreEmploi (Role $role, OffreEmploi $offre): bool
     {
         return $this->asserts([
             $this->assertStructure($role, $offre->getStructure()),
@@ -206,7 +206,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertOffreEmploiValidation (Role $role, OffreEmploi $offre)
+    protected function assertOffreEmploiValidation (Role $role, OffreEmploi $offre): bool
     {
 
         return $this->asserts([
@@ -217,7 +217,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertOffreEmploiPostuler (Role $role, OffreEmploi $offre)
+    protected function assertOffreEmploiPostuler (Role $role, OffreEmploi $offre): bool
     {
 
         //On vérifier que l'on a bien un contexte avec un intervenant
@@ -231,7 +231,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function haveIntervenant ()
+    protected function haveIntervenant (): bool
     {
         $role = $this->getRole();
         if ($role instanceof Role) {
@@ -245,7 +245,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertCandidatureVisualisation (Role $role, OffreEmploi $offre)
+    protected function assertCandidatureVisualisation (Role $role, OffreEmploi $offre): bool
     {
         return $this->asserts([
             $this->haveRole(),
@@ -254,7 +254,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertOffreEmploiSupprimer (Role $role, OffreEmploi $offre)
+    protected function assertOffreEmploiSupprimer (Role $role, OffreEmploi $offre): bool
     {
         return $this->asserts([
             !$offre->isValide(),
@@ -263,7 +263,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
         ]);
     }
 
-    protected function canHaveCandidature()
+    protected function canHaveCandidature(): bool
     {
         $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL AND validation_id IS NOT NULL';
         $conn  = $this->getEntityManager()->getConnection();
@@ -275,7 +275,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertCandidatureValider (Role $role, Candidature $candidature)
+    protected function assertCandidatureValider (Role $role, Candidature $candidature): bool
     {
         $codeEtape = WfEtape::CANDIDATURE_VALIDATION;
         $intervenant = $candidature->getIntervenant();

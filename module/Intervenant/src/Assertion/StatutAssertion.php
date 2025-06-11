@@ -17,7 +17,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 class StatutAssertion extends AbstractAssertion
 {
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -41,7 +41,7 @@ class StatutAssertion extends AbstractAssertion
 
     /* Vos autres tests */
 
-    function assertStatutEdition(Statut $statut)
+    function assertStatutEdition(Statut $statut): bool
     {
         if ($statut->isAutres() || $statut->isNonAutorise()) {
             return false;

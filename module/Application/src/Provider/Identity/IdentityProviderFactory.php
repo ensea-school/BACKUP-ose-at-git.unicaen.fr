@@ -21,7 +21,7 @@ class IdentityProviderFactory
      *
      * @return object
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $identityProvider = new IdentityProvider;
 

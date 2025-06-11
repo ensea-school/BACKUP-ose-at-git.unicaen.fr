@@ -57,7 +57,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
         $localPrivs = [
             self::PRIV_VIEW_IDENTITE,
@@ -155,7 +155,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditIdentite(Intervenant $intervenant)
+    protected function assertEditIdentite(Intervenant $intervenant): bool
     {
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
@@ -167,7 +167,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewIdentite()
+    protected function assertViewIdentite(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -177,7 +177,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditAdresse(Intervenant $intervenant)
+    protected function assertEditAdresse(Intervenant $intervenant): bool
     {
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
@@ -189,7 +189,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAdresse()
+    protected function assertViewAdresse(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -199,7 +199,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditContact(Intervenant $intervenant)
+    protected function assertEditContact(Intervenant $intervenant): bool
     {
 
         return $this->asserts([
@@ -212,7 +212,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewContact()
+    protected function assertViewContact(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -222,7 +222,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditInsee(Intervenant $intervenant)
+    protected function assertEditInsee(Intervenant $intervenant): bool
     {
 
         return $this->asserts([
@@ -235,7 +235,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewInsee()
+    protected function assertViewInsee(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -246,7 +246,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditIban(Intervenant $intervenant)
+    protected function assertEditIban(Intervenant $intervenant): bool
     {
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
@@ -258,7 +258,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewIban()
+    protected function assertViewIban(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -268,7 +268,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditEmployeur(Intervenant $intervenant)
+    protected function assertEditEmployeur(Intervenant $intervenant): bool
     {
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
@@ -280,7 +280,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewEmployeur()
+    protected function assertViewEmployeur(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -290,7 +290,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditAutre1(Intervenant $intervenant)
+    protected function assertEditAutre1(Intervenant $intervenant): bool
     {
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
@@ -302,7 +302,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre1()
+    protected function assertViewAutre1(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -312,7 +312,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditAutre2(Intervenant $intervenant)
+    protected function assertEditAutre2(Intervenant $intervenant): bool
     {
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
@@ -324,7 +324,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre2()
+    protected function assertViewAutre2(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -334,7 +334,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditAutre3(Intervenant $intervenant)
+    protected function assertEditAutre3(Intervenant $intervenant): bool
     {
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
@@ -346,7 +346,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre3()
+    protected function assertViewAutre3(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -356,7 +356,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditAutre4(Intervenant $intervenant)
+    protected function assertEditAutre4(Intervenant $intervenant): bool
     {
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
@@ -368,7 +368,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre4()
+    protected function assertViewAutre4(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -378,7 +378,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditAutre5(Intervenant $intervenant)
+    protected function assertEditAutre5(Intervenant $intervenant): bool
     {
         return $this->asserts([
             !$this->getServiceDossier()->getValidation($intervenant),
@@ -390,7 +390,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertViewAutre5()
+    protected function assertViewAutre5(): bool
     {
         return $this->asserts([
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
@@ -400,7 +400,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertCanValidate(Intervenant $intervenant)
+    protected function assertCanValidate(Intervenant $intervenant): bool
     {
 
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
@@ -415,7 +415,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertCanDevalidate(Intervenant $intervenant)
+    protected function assertCanDevalidate(Intervenant $intervenant): bool
     {
 
         $isValidate = $this->getServiceDossier()->getValidation($intervenant);
@@ -428,7 +428,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertCanEdit(Intervenant $intervenant)
+    protected function assertCanEdit(Intervenant $intervenant): bool
     {
 
         $isValidate = $this->getServiceDossier()->getValidation($intervenant);
@@ -441,7 +441,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertCanSupprime(Intervenant $intervenant)
+    protected function assertCanSupprime(Intervenant $intervenant): bool
     {
 
         $isValidate = $this->getServiceDossier()->getValidation($intervenant);
@@ -461,7 +461,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
@@ -482,7 +482,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertDossierEdition(Intervenant $intervenant = null)
+    protected function assertDossierEdition(?Intervenant $intervenant = null): bool
     {
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant)) {
             return false;
@@ -493,7 +493,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
+    protected function assertEtapeAtteignable($etape, ?Intervenant $intervenant = null): bool
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
@@ -507,7 +507,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertPriv($privilege)
+    protected function assertPriv($privilege): bool
     {
         $role = $this->getRole();
         if (!$role instanceof Role) return false;

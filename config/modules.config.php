@@ -2,6 +2,8 @@
 
 $modules = [
     'Laminas\Cache',
+    'Laminas\Cache\Storage\Adapter\Memory',
+    'Laminas\Cache\Storage\Adapter\Filesystem',
     'Laminas\Filter',
     'Laminas\Form',
     'Laminas\Hydrator',
@@ -9,7 +11,6 @@ $modules = [
     'Laminas\InputFilter',
     'Laminas\Mvc\I18n',
     'Laminas\Mvc\Plugin\FlashMessenger',
-    'Laminas\Mvc\Plugin\Prg',
     'Laminas\Navigation',
     'Laminas\Paginator',
     'Laminas\Router',

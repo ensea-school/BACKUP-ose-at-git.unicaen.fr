@@ -42,7 +42,7 @@ class ContratAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
         $localPrivs = [
             self::PRIV_LISTER_FICHIERS,
@@ -111,7 +111,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertGeneration(Contrat $contrat)
+    protected function assertGeneration(Contrat $contrat): bool
     {
         /**
          * @var Role    $role
@@ -135,7 +135,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertListerFichiers(Contrat $contrat)
+    protected function assertListerFichiers(Contrat $contrat): bool
     {
         return $this->asserts([
                                   $this->getRole()->hasPrivilege(Privileges::CONTRAT_VISUALISATION),
@@ -146,14 +146,14 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertVisualisation(Contrat $contrat)
+    protected function assertVisualisation(Contrat $contrat): bool
     {
         return $this->assertRole($contrat);
     }
 
 
 
-    protected function assertRole(Contrat $contrat, $checkStructure = true)
+    protected function assertRole(Contrat $contrat, $checkStructure = true): bool
     {
         if ($intervenant = $this->getRole()->getIntervenant()) {
             if (!$this->assertIntervenant($contrat, $intervenant)) return false;
@@ -168,21 +168,21 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertIntervenant(Contrat $contrat, Intervenant $intervenant)
+    protected function assertIntervenant(Contrat $contrat, Intervenant $intervenant): bool
     {
         return $contrat->getIntervenant() == $intervenant;
     }
 
 
 
-    protected function assertStructure(Contrat $contrat, Structure $structure)
+    protected function assertStructure(Contrat $contrat, Structure $structure): bool
     {
         return $contrat->getStructure() == null || $contrat->getStructure()->inStructure($structure);
     }
 
 
 
-    protected function assertModifierFichier(Contrat $contrat)
+    protected function assertModifierFichier(Contrat $contrat): bool
     {
         return $this->asserts([
                                   $this->getRole()->hasPrivilege(Privileges::CONTRAT_DEPOT_RETOUR_SIGNE),
@@ -193,7 +193,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertDepotRetourSigne(Contrat $contrat)
+    protected function assertDepotRetourSigne(Contrat $contrat): bool
     {
         return $this->asserts([
                                   $this->assertRole($contrat),
@@ -203,7 +203,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertCreation(Contrat $contrat)
+    protected function assertCreation(Contrat $contrat): bool
     {
         return $this->asserts([
                                   $this->assertRole($contrat),
@@ -213,7 +213,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertWorkflow(Contrat $contrat)
+    protected function assertWorkflow(Contrat $contrat): bool
     {
         $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $contrat->getIntervenant(), $contrat->getStructure());
 
@@ -224,7 +224,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertValidation(Contrat $contrat)
+    protected function assertValidation(Contrat $contrat): bool
     {
         return $this->asserts([
                                   $this->assertRole($contrat),
@@ -234,7 +234,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnvoyerSignatureElectronique(Contrat $contrat)
+    protected function assertEnvoyerSignatureElectronique(Contrat $contrat): bool
     {
 
 
@@ -247,7 +247,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertSaisieDateRetour(Contrat $contrat)
+    protected function assertSaisieDateRetour(Contrat $contrat): bool
     {
         return $this->asserts([
                                   $this->assertRole($contrat),
@@ -258,7 +258,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertDevalidation(Contrat $contrat)
+    protected function assertDevalidation(Contrat $contrat): bool
     {
         //Si j'ai un signature electronique sur le contrat je ne peux plus le dévalider
         if ($contrat->getProcessSignature()) {
@@ -285,7 +285,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    protected function assertSuppression(Contrat $contrat)
+    protected function assertSuppression(Contrat $contrat): bool
     {
         if (!$contrat->estUnAvenant()) {
             $devalid = $contrat->getIntervenant()->getAvenantEnfant($contrat)->count() < 1; // on ne peut supprimer un contrat que si aucun avenant n'existe
@@ -313,7 +313,7 @@ class ContratAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 

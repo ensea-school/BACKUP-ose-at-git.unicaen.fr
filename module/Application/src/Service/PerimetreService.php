@@ -38,7 +38,7 @@ class PerimetreService extends AbstractEntityService
      * @param QueryBuilder|null $queryBuilder
      * @return Application\Entity\Db\Perimetre[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function getList( ?QueryBuilder $qb = null, $alias=null )
     {
         return parent::getList($qb, $alias);
     }

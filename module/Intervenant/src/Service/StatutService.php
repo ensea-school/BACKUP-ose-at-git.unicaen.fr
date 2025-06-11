@@ -26,7 +26,7 @@ class StatutService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return Statut::class;
     }
@@ -37,7 +37,7 @@ class StatutService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'statut';
     }
@@ -50,7 +50,7 @@ class StatutService extends AbstractEntityService
      *
      * @return ?Statut
      */
-    public function getByCode(string $code, Annee $annee = null): ?Statut
+    public function getByCode(string $code, ?Annee $annee = null): ?Statut
     {
         if (!$annee instanceof Annee) {
             $annee = $this->getServiceContext()->getAnnee();
@@ -88,7 +88,7 @@ class StatutService extends AbstractEntityService
     }
 
 
-    public function getStatutSelectable(Statut $statut, QueryBuilder $qb = null, $alias = null)
+    public function getStatutSelectable(Statut $statut, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         // $qb->andWhere("$alias.dossierSelectionnable = 1");
@@ -117,7 +117,7 @@ class StatutService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.ordre");

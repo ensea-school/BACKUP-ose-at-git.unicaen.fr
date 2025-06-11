@@ -20,7 +20,7 @@ class PrimeAssertion extends AbstractAssertion implements EntityManagerAwareInte
     use WorkflowServiceAwareTrait;
 
 
-    protected function assertController ($controller, $action = null, $privilege = null)
+    protected function assertController ($controller, $action = null, $privilege = null): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 

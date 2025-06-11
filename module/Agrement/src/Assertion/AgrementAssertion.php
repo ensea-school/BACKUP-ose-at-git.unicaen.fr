@@ -33,7 +33,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -81,7 +81,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
@@ -137,7 +137,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(array $page)
+    protected function assertPage(array $page): bool
     {
         $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
@@ -166,7 +166,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertTblAgrementSaisie(Role $role, TblAgrement $entity)
+    protected function assertTblAgrementSaisie(Role $role, TblAgrement $entity): bool
     {
         /* Si c'est pour agréer et que le workflow l'interdit alors non! */
         if (!$entity->getAgrement() && !$this->isAllowed($entity->getResourceWorkflow())) {
@@ -182,14 +182,14 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertTypeAgrementVisualisation(TypeAgrement $typeAgrement, Intervenant $intervenant)
+    protected function assertTypeAgrementVisualisation(TypeAgrement $typeAgrement, Intervenant $intervenant): bool
     {
         return $this->isAllowed(WorkflowResource::create($typeAgrement->getCode(), $intervenant));
     }
 
 
 
-    protected function assertAgrementSaisie(Role $role, Agrement $entity)
+    protected function assertAgrementSaisie(Role $role, Agrement $entity): bool
     {
         if (!$this->isAllowed($entity->getResourceWorkflow())) {
             return false;
@@ -204,7 +204,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertStructureSaisie(Role $role, Structure $entity)
+    protected function assertStructureSaisie(Role $role, Structure $entity): bool
     {
         if ($roleStructure = $role->getStructure()) {
             if (!$entity->inStructure($roleStructure)) return false; // pas d'édition pour les copains
@@ -215,7 +215,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    private function assertTblAgrementSuppression(Role $role, TblAgrement $entity)
+    private function assertTblAgrementSuppression(Role $role, TblAgrement $entity): bool
     {
 
         /* Si c'est pour agréer et que le workflow l'interdit alors non! */
@@ -240,7 +240,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    private function assertAgrementSuppression(Role $role, Agrement $entity)
+    private function assertAgrementSuppression(Role $role, Agrement $entity): bool
     {
 
         if (!$this->isAllowed($entity->getResourceWorkflow())) {

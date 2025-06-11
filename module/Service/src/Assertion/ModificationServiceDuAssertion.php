@@ -18,7 +18,7 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
 class ModificationServiceDuAssertion extends AbstractAssertion
 {
 
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
         $role = $this->getRole();
         if (!$role instanceof Role) return false;
@@ -37,7 +37,7 @@ class ModificationServiceDuAssertion extends AbstractAssertion
 
 
 
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController(string $controller, ?string $action = null, ?string $privilege = null): bool
     {
         if ($controller == ModificationServiceDuController::class && $action == 'saisir') {
             $intervenant = $this->getMvcEvent()->getParam('intervenant');

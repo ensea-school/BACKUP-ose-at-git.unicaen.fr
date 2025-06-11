@@ -75,7 +75,7 @@ class ServiceReferentielService extends AbstractEntityService
      *
      * @return array
      */
-    public function initQuery(QueryBuilder $qb = null, $alias = null, array $fields = []): array
+    public function initQuery(?QueryBuilder $qb = null, $alias = null, array $fields = []): array
     {
         [$qb, $alias] = parent::initQuery($qb, $alias, $fields);
 
@@ -97,7 +97,7 @@ class ServiceReferentielService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -123,7 +123,7 @@ class ServiceReferentielService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($typeVolumeHoraire) {
@@ -187,7 +187,7 @@ class ServiceReferentielService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

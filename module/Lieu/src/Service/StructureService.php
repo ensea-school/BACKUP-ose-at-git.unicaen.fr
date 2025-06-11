@@ -20,7 +20,7 @@ use Paiement\Service\TblPaiementServiceAwareTrait;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
  * @method Structure get($id)
- * @method Structure[] getList(QueryBuilder $qb = null, $alias = null)
+ * @method Structure[] getList(?QueryBuilder $qb = null, $alias = null)
  * @method Structure newEntity()
  */
 class StructureService extends AbstractEntityService
@@ -185,7 +185,7 @@ class StructureService extends AbstractEntityService
      *
      * @param Role|true $role
      */
-    public function finderByRole($role, QueryBuilder $qb = null, $alias = null)
+    public function finderByRole($role, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -235,7 +235,7 @@ class StructureService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEnseignement(QueryBuilder $qb = null, $alias = null)
+    public function finderByEnseignement(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere('(' . $alias . '.enseignement = 1 OR EXISTS (SELECT ep FROM OffreFormation\Entity\Db\ElementPedagogique ep WHERE ep.structure = ' . $alias . '))');
@@ -245,7 +245,7 @@ class StructureService extends AbstractEntityService
 
 
 
-    public function finderByDemandeMiseEnPaiement(QueryBuilder $qb = null, $alias = null)
+    public function finderByDemandeMiseEnPaiement(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $serviceTblPaiement = $this->getServiceTblPaiement();
@@ -333,7 +333,7 @@ class StructureService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libellesCourts");

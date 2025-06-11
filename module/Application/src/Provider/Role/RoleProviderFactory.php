@@ -19,7 +19,7 @@ class RoleProviderFactory
     use ContextServiceAwareTrait;
 
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $roleProvider = new RoleProvider();
         $roleProvider

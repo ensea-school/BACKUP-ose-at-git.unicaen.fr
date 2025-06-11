@@ -39,7 +39,7 @@ class TagService extends AbstractEntityService
 
 
 
-    public function getListByDate (QueryBuilder $qb = null, $alias = null)
+    public function getListByDate (?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.histoDestruction is Null");
@@ -58,7 +58,7 @@ class TagService extends AbstractEntityService
      *
      * @return Tag[]
      */
-    public function getList (QueryBuilder $qb = null, $alias = null)
+    public function getList (?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.histoDestruction is Null");

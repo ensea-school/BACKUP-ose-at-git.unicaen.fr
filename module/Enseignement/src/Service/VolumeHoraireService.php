@@ -125,7 +125,7 @@ class VolumeHoraireService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByIntervenant(Intervenant $intervenant, QueryBuilder $qb = null, $alias = null)
+    public function finderByIntervenant(Intervenant $intervenant, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -148,7 +148,7 @@ class VolumeHoraireService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire = null, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
@@ -172,7 +172,7 @@ class VolumeHoraireService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByStrictEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByStrictEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire = null, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
@@ -197,7 +197,7 @@ class VolumeHoraireService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByContrat($contrat, QueryBuilder $qb = null, $alias = null)
+    public function finderByContrat($contrat, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -222,7 +222,7 @@ class VolumeHoraireService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.horaireDebut");

@@ -19,7 +19,7 @@ class PaiementAssertion extends AbstractAssertion
     use WorkflowServiceAwareTrait;
 
     /* ---- Routage général ---- */
-    public function __invoke (array $page) // gestion des visibilités de menus
+    public function __invoke (array $page): bool // gestion des visibilités de menus
     {
         return $this->assertPage($page);
     }
@@ -33,7 +33,7 @@ class PaiementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController ($controller, $action = null, $privilege = null)
+    protected function assertController ($controller, $action = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -71,7 +71,7 @@ class PaiementAssertion extends AbstractAssertion
     }
 
 
-    protected function assertPage (array $page)
+    protected function assertPage (array $page): bool
     {
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
@@ -87,7 +87,7 @@ class PaiementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable ($etape, Intervenant $intervenant = null, Structure $structure = null)
+    protected function assertEtapeAtteignable ($etape, ?Intervenant $intervenant, ?Structure $structure = null): bool
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant, $structure);

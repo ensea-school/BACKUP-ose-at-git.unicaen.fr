@@ -22,7 +22,7 @@ class TauxRemuAssertion extends AbstractAssertion
     /**
      * Exemple
      */
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
 
         $role = $this->getRole();

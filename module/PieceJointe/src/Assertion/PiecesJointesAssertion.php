@@ -31,7 +31,7 @@ class PiecesJointesAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
@@ -74,7 +74,7 @@ class PiecesJointesAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity, $privilege = null): bool
     {
         return true;
     }
@@ -83,7 +83,7 @@ class PiecesJointesAssertion extends AbstractAssertion
 
     /*assertion refonte dossier*/
 
-    protected function assertPrivilege($privilege, $subPrivilege = null)
+    protected function assertPrivilege($privilege, $subPrivilege = null): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
@@ -96,14 +96,14 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertEditionDossierContact(Intervenant $intervenant)
+    protected function assertEditionDossierContact(Intervenant $intervenant): bool
     {
         return true;
     }
 
 
 
-    protected function assertDossierEdition(Intervenant $intervenant = null)
+    protected function assertDossierEdition(Intervenant $intervenant): bool
     {
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant)) {
             return false;
@@ -114,7 +114,7 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertPieceJointeAction(Intervenant $intervenant = null)
+    protected function assertPieceJointeAction(?Intervenant $intervenant): bool
     {
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_PJ_SAISIE, $intervenant)) {
             return false;
@@ -125,7 +125,7 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
+    protected function assertEtapeAtteignable($etape, ?Intervenant $intervenant): bool
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
@@ -139,7 +139,7 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertPriv($privilege)
+    protected function assertPriv($privilege): bool
     {
         $role = $this->getRole();
         if (!$role instanceof Role) return false;

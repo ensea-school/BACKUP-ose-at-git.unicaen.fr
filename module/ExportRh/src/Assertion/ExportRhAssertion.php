@@ -31,7 +31,7 @@ class ExportRhAssertion extends AbstractAssertion
     }
 
 
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
 
         $role = $this->getRole();
@@ -61,7 +61,7 @@ class ExportRhAssertion extends AbstractAssertion
     }
 
 
-    protected function assertIntervenantExportRh(Intervenant $intervenant)
+    protected function assertIntervenantExportRh(Intervenant $intervenant): bool
     {
         if (!$this->getRole()->hasPrivilege(Privileges::INTERVENANT_EXPORTER)) {
             return false;

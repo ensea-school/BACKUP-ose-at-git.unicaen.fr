@@ -5,11 +5,18 @@
  * @var $container  \Psr\Container\ContainerInterface
  */
 
-$sql1 = "SELECT * FROM tbl_piece_jointe";
+$sql1 = "SELECT tbj.* FROM tbl_piece_jointe tbj 
+         --where intervenant_id = 633563
+        --JOIN intervenant i ON i.id = tbj.intervenant_id
+        --JOIN piece_jointe pj ON pj.id = tbj.piece_jointe_id";
 
-$sql2 = "SELECT * FROM v_tbl_piece_jointe";
+$sql2 = "SELECT  tbjo.* FROM tbl_piece_jointe_old2 tbjo
+        --where intervenant_id = 633563
+       -- JOIN intervenant i ON i.id = tbjo.intervenant_id
+        --JOIN piece_jointe pj ON pj.id = tbjo.piece_jointe_id";
 
-$keyCols = ['TYPE_PIECE_JOINTE_ID', 'INTERVENANT_ID'];
+
+$keyCols = ['TYPE_PIECE_JOINTE_ID', 'INTERVENANT_ID', 'ANNEE_ID'];
 
 //pays_nationalite => paysNationalite
 //date_creation => dateCreation
@@ -22,6 +29,7 @@ $ignoreCols = [
     'SEUIL_HETD',
     'HEURES_POUR_SEUIL',
     'ID',
+    'PIECE_JOINTE_ID'
 
     // colonne supprimée
 ];
@@ -42,7 +50,7 @@ $comparator->setKeyColumns($keyCols);
 $comparator->setIgnoreColumns($ignoreCols);
 $comparator->setOnlyColumns($onlyCols);
 
-$comparator->setLimit(5000);
+$comparator->setLimit(100);
 
 $result = $comparator->run();
 

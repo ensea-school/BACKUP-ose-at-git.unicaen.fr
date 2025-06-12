@@ -4,6 +4,7 @@ namespace PieceJointe\Tbl\Process;
 
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
+use PieceJointe\Tbl\Process\Model\PieceJointe;
 use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
@@ -25,7 +26,9 @@ class PieceJointeProcess implements ProcessInterface
 
     protected array $piecesJointesDemandees = [];
     protected array $piecesJointesFournies  = [];
-    protected array $tblData                = [];
+    /** @var array|PieceJointe[][] */
+    private array   $piecesJointes = [];
+    protected array $tblData       = [];
 
 
 
@@ -40,8 +43,8 @@ class PieceJointeProcess implements ProcessInterface
     {
         $this->getPiecesJointesDemandees($params);
         $this->getPiecesJointesFournies($params);
-        //dd($this->piecesJointesDemandees, $this->piecesJointesFournies);
         $this->traitementPiecesJointes($params);
+        $this->exporterPiecesJointes($params);
         $this->enregistrement($tableauBord, $params);
     }
 
@@ -51,9 +54,9 @@ class PieceJointeProcess implements ProcessInterface
     {
         $definition                = $this->getServiceBdd()->getViewDefinition('V_TBL_PIECE_JOINTE_DEMANDE');
         $sqlPiecesJointesDemandees = 'SELECT * FROM ('
-            . $this->getServiceBdd()->injectKey($definition, $params)
-            . ') t '
-            . $this->getServiceBdd()->makeWhere($params);
+                                     . $this->getServiceBdd()->injectKey($definition, $params)
+                                     . ') t '
+                                     . $this->getServiceBdd()->makeWhere($params);
 
 
         $piecesJointesDemandees = $this->getBdd()->selectEach($sqlPiecesJointesDemandees);
@@ -76,24 +79,23 @@ class PieceJointeProcess implements ProcessInterface
 
         $definition               = $this->getServiceBdd()->getViewDefinition('V_TBL_PIECE_JOINTE_FOURNIE');
         $sqlPiecesJointesFournies = 'SELECT * FROM ('
-            . $this->getServiceBdd()->injectKey($definition, $params)
-            . ') t '
-            . $this->getServiceBdd()->makeWhere($params);
+                                    . $this->getServiceBdd()->injectKey($definition, $params)
+                                    . ') t '
+                                    . $this->getServiceBdd()->makeWhere($params);
 
 
         $piecesJointesFournies = $this->getBdd()->selectEach($sqlPiecesJointesFournies);
 
         while ($pieceJointe = $piecesJointesFournies->next()) {
-            $codeIntervenant                                                   = $pieceJointe['CODE_INTERVENANT'];
-            $typePieceJointe                                                   = $pieceJointe['TYPE_PIECE_JOINTE_ID'];
-            $annee                                                             = $pieceJointe['ANNEE_ID'];
+            $codeIntervenant                                                         = $pieceJointe['CODE_INTERVENANT'];
+            $typePieceJointe                                                         = $pieceJointe['TYPE_PIECE_JOINTE_ID'];
+            $annee                                                                   = $pieceJointe['ANNEE_ID'];
             $this->piecesJointesFournies[$codeIntervenant][$typePieceJointe][$annee] = $pieceJointe;
             ksort($this->piecesJointesFournies[$codeIntervenant][$typePieceJointe]);
         }
 
         unset($piecesJointesFournies);
         return $this->piecesJointesFournies;
-
 
 
     }
@@ -112,10 +114,12 @@ class PieceJointeProcess implements ProcessInterface
         return $piecesJointesFournies;
     }
 
+
+
     protected function replaceIntervenantIdbyCodeIntervenantParam(array $params): array
     {
         if (isset($params['INTERVENANT_ID'])) {
-            $intervenant = $this->getServiceIntervenant()->get($params['INTERVENANT_ID']);
+            $intervenant     = $this->getServiceIntervenant()->get($params['INTERVENANT_ID']);
             $codeIntervenant = $intervenant->getCode();
             unset($params['INTERVENANT_ID']);
             $params['CODE_INTERVENANT'] = $codeIntervenant;
@@ -132,82 +136,63 @@ class PieceJointeProcess implements ProcessInterface
 
     protected function traitementPiecesJointes(array $params): void
     {
-
-
         //On commence par traiter toutes les pièces jointes demandées
         foreach ($this->piecesJointesDemandees as $pieceJointeDemandee) {
-            $uuid                                               = $pieceJointeDemandee['ANNEE_ID'] . '_' . $pieceJointeDemandee['INTERVENANT_ID'] . '_' . $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
-
-            $this->tblData[$uuid]['ANNEE_ID']                   = $pieceJointeDemandee['ANNEE_ID'];
-            $this->tblData[$uuid]['TYPE_PIECE_JOINTE_ID']       = $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
-            $this->tblData[$uuid]['TYPE_PIECE_JOINTE_CODE']     = $pieceJointeDemandee['TYPE_PJ_CODE'];
-            $this->tblData[$uuid]['PIECE_JOINTE_ID']     = null;
-            $this->tblData[$uuid]['INTERVENANT_ID']             = $pieceJointeDemandee['INTERVENANT_ID'];
-            $this->tblData[$uuid]['FOURNIE']                    = 0;
-            $this->tblData[$uuid]['DEMANDEE']                   = 1;
-            $this->tblData[$uuid]['VALIDEE']                    = 0;
-            $this->tblData[$uuid]['DATE_ORIGINE']               = null;
-            $this->tblData[$uuid]['DATE_VALIDITEE']             = null;
-            $this->tblData[$uuid]['SEUIL_HETD']          = $pieceJointeDemandee['SEUIL_HETD'];
-            $this->tblData[$uuid]['OBLIGATOIRE']                = $pieceJointeDemandee['OBLIGATOIRE'];
-            $this->tblData[$uuid]['DEMANDEE_APRES_RECRUTEMENT'] = $pieceJointeDemandee['DEMANDEE_APRES_RECRUTEMENT'];
-            $this->sortDatas($this->tblData[$uuid]);
+            $uuid                                 = $pieceJointeDemandee['ANNEE_ID'] . '_' . $pieceJointeDemandee['INTERVENANT_ID'] . '_' . $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
+            $pieceJointe                          = new PieceJointe();
+            $pieceJointe->uuid                    = $uuid;
+            $pieceJointe->annee                   = $pieceJointeDemandee['ANNEE_ID'];
+            $pieceJointe->typePieceJointeId       = $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
+            $pieceJointe->intervenantId           = $pieceJointeDemandee['INTERVENANT_ID'];
+            $pieceJointe->demandee                = true;
+            $pieceJointeFournie                   = false;
+            $pieceJointe->seuilHetd               = $pieceJointeDemandee['SEUIL_HETD'];
+            $pieceJointe->obligatoire             = $pieceJointeDemandee['OBLIGATOIRE'];
+            $pieceJointe->demandeApresRecrutement = $pieceJointeDemandee['DEMANDEE_APRES_RECRUTEMENT'];
+            $this->piecesJointes[$uuid]           = $pieceJointe;
         }
-
-        //On parcourt maintenant les pièces jointes fournies qui sont forcément fournies l'année de leurs dépot
+        //On parcourt maintenant les pièces jointes fournies pour voir si elles ont été fourni sur l'année demandée
         foreach ($this->piecesJointesFournies as $codeIntervenant => $datas) {
             foreach ($datas as $typePieceJointeId => $piecesJointesFournies) {
                 foreach ($piecesJointesFournies as $pieceJointeFournie) {
-                    $uuid                                           = $pieceJointeFournie['ANNEE_ID'] . '_' . $pieceJointeFournie['INTERVENANT_ID'] . '_' . $pieceJointeFournie['TYPE_PIECE_JOINTE_ID'];
-                    if (!array_key_exists($uuid, $this->tblData)) {
-                        $this->tblData[$uuid]['DEMANDEE']                = 0;
-                        $this->tblData[$uuid]['OBLIGATOIRE']                = 0;
-
+                    $uuid = $pieceJointeFournie['ANNEE_ID'] . '_' . $pieceJointeFournie['INTERVENANT_ID'] . '_' . $pieceJointeFournie['TYPE_PIECE_JOINTE_ID'];
+                    if (array_key_exists($uuid, $this->piecesJointes)) {
+                        $this->piecesJointes[$uuid]->pieceJointeId = $pieceJointeFournie['PIECE_JOINTE_ID'];
+                        $this->piecesJointes[$uuid]->fournie       = 1;
+                        $this->piecesJointes[$uuid]->dateOrigine   = $pieceJointeFournie['ANNEE_ID'];
+                        $this->piecesJointes[$uuid]->validee       = !empty($pieceJointeFournie['VALIDATION_ID']);
+                        $this->piecesJointes[$uuid]->dateValiditee = $pieceJointeFournie['DATE_VALIDITEE'];
                     }
-                    $this->tblData[$uuid]['ANNEE_ID']               = $pieceJointeFournie['ANNEE_ID'];
-                    $this->tblData[$uuid]['TYPE_PIECE_JOINTE_ID']   = $pieceJointeFournie['TYPE_PIECE_JOINTE_ID'];
-                    $this->tblData[$uuid]['TYPE_PIECE_JOINTE_CODE'] = $pieceJointeFournie['TYPE_PJ_CODE'];
-                    $this->tblData[$uuid]['PIECE_JOINTE_ID'] = $pieceJointeFournie['PIECE_JOINTE_ID'];
-                    $this->tblData[$uuid]['INTERVENANT_ID']         = $pieceJointeFournie['INTERVENANT_ID'];
-                    $this->tblData[$uuid]['FOURNIE']                = 1;
-                    $this->tblData[$uuid]['DATE_ORIGINE']           = $pieceJointeFournie['ANNEE_ID'];
-                    $this->tblData[$uuid]['VALIDEE'] = (!empty($pieceJointeFournie['VALIDATION_ID']))?1:0;
-                    $this->tblData[$uuid]['DATE_VALIDITEE']   = $pieceJointeFournie['DATE_VALIDITEE'];
-                    $this->tblData[$uuid]['SEUIL_HETD']          = $pieceJointeFournie['SEUIL_HETD'];
-                    $this->tblData[$uuid]['DEMANDEE_APRES_RECRUTEMENT']          = $pieceJointeFournie['DEMANDEE_APRES_RECRUTEMENT'];
-                    $this->sortDatas($this->tblData[$uuid]);
                 }
             }
         }
         //Ensuite on cherche les pièces jointes fournies sur une potentielle année postérieure (durée de vie)
         foreach ($this->piecesJointesDemandees as $pieceJointeDemandee) {
-            $piecesJointesFournies = $this->extractPiecesJointesFournies($pieceJointeDemandee['CODE_INTERVENANT'], $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID']);
-            $uuid = $pieceJointeDemandee['ANNEE_ID'] . '_' . $pieceJointeDemandee['INTERVENANT_ID'] . "_" . $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
+            $codeIntervenant   = $pieceJointeDemandee['CODE_INTERVENANT'];
+            $typePieceJointeId = $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
+            $uuid              = $pieceJointeDemandee['ANNEE_ID'] . '_' . $pieceJointeDemandee['INTERVENANT_ID'] . "_" . $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
             //Piece jointe demandée déjà fournie donc on passe
-            if ($this->tblData[$uuid]['DATE_ORIGINE'] == $this->tblData[$uuid]['ANNEE_ID']) {
+            if ($this->piecesJointes[$uuid]->fournie == 1) {
                 continue;
             }
-
+            $piecesJointesFournies = $this->extractPiecesJointesFournies($codeIntervenant, $typePieceJointeId);
+            //J'ai des pieces fournies antérieurement
             if (!empty($piecesJointesFournies)) {
                 foreach ($piecesJointesFournies as $pieceJointeFournie) {
+                    //L'année de la pièce jointe fournie est postérieur à l'année de la pièce jointe demandée
                     if ((int)$pieceJointeDemandee['ANNEE_ID'] > (int)$pieceJointeFournie['ANNEE_ID']) {
-                        if (//0 - c'est le même type de piece jointe
-                            $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'] == $pieceJointeFournie['TYPE_PIECE_JOINTE_ID'] &&
-                            //1 - Si la pièce jointe est validée
-                            !empty($pieceJointeFournie['VALIDATION_ID']) &&
-                            //2 -Si la date de validité de la pièce jointe est strictement supérieure à l'année où elle est demandée
+                        if (//1 -Si la date de validité de la pièce jointe est strictement supérieure à l'année où elle est demandée
                             (int)$pieceJointeFournie['DATE_VALIDITEE'] > (int)$pieceJointeDemandee['ANNEE_ID'] &&
-                            //3 - Si l'année de la pièce fournie est strictement supérieure au maximum de l'ancienneté
-                            //de la pièce possible par rapport à la durée de vie paramétrée sur l'année où elle est demandée
-                            (int)$pieceJointeFournie['ANNEE_ID'] > round((int)$pieceJointeDemandee['ANNEE_ID']-(int)$pieceJointeDemandee['DUREE_VIE']) &&
-                            //4 - Si la date d'archive de la pièce fournie est strictement supérieure à l'année où elle est demandée
+                            //2 - L'année de la pièce jointe fournie correspond au critère de durée de vie de la pièce jointe demandée
+                            (int)$pieceJointeFournie['ANNEE_ID'] > round((int)$pieceJointeDemandee['ANNEE_ID'] - (int)$pieceJointeDemandee['DUREE_VIE']) &&
+                            //3 - Si la date d'archive de la pièce fournie est strictement supérieure à l'année où elle est demandée
                             ((int)$pieceJointeFournie['DATE_ARCHIVE'] > (int)$pieceJointeDemandee['ANNEE_ID'] ||
-                                empty($pieceJointeFournie['DATE_ARCHIVE']))) {
-                            $this->tblData[$uuid]['PIECE_JOINTE_ID'] = $pieceJointeFournie['PIECE_JOINTE_ID'];
-                            $this->tblData[$uuid]['DATE_ORIGINE']    = $pieceJointeFournie['ANNEE_ID'];
-                            $this->tblData[$uuid]['DATE_VALIDITEE']   = $pieceJointeFournie['DATE_VALIDITEE'];
-                            $this->tblData[$uuid]['FOURNIE']         = 1;
-                            $this->tblData[$uuid]['VALIDEE'] = 1;
+                             empty($pieceJointeFournie['DATE_ARCHIVE']))) {
+                            $this->piecesJointes[$uuid]->pieceJointeId = $pieceJointeFournie['PIECE_JOINTE_ID'];
+                            $this->piecesJointes[$uuid]->dateOrigine   = $pieceJointeFournie['ANNEE_ID'];
+                            $this->piecesJointes[$uuid]->dateValiditee = $pieceJointeFournie['DATE_VALIDITEE'];
+                            $this->piecesJointes[$uuid]->fournie       = 1;
+                            $this->piecesJointes[$uuid]->validee       = !empty($pieceJointeFournie['VALIDATION_ID']);
 
                         }
                     }
@@ -215,9 +200,30 @@ class PieceJointeProcess implements ProcessInterface
 
             }
         }
-        $this->sortDatas($this->tblData[$uuid]);
-        
-        ksort($this->tblData);
+        ksort($this->piecesJointes);
+
+    }
+
+
+
+    public function exporterPiecesJointes(array $params): void
+    {
+        foreach ($this->piecesJointes as $uuid => $piecesJointe) {
+            $this->tblData[] = [
+                'ANNEE_ID'                   => $piecesJointe->annee,
+                'TYPE_PIECE_JOINTE_ID'       => $piecesJointe->typePieceJointeId,
+                'PIECE_JOINTE_ID'            => $piecesJointe->pieceJointeId,
+                'INTERVENANT_ID'             => $piecesJointe->intervenantId,
+                'DEMANDEE'                   => $piecesJointe->demandee,
+                'FOURNIE'                    => $piecesJointe->fournie,
+                'VALIDEE'                    => $piecesJointe->validee,
+                'OBLIGATOIRE'                => $piecesJointe->obligatoire,
+                'DATE_ORIGINE'               => $piecesJointe->dateOrigine,
+                'DATE_VALIDITEE'             => $piecesJointe->dateValiditee,
+                'SEUIL_HETD'                 => $piecesJointe->seuilHetd,
+                'DEMANDEE_APRES_RECRUTEMENT' => $piecesJointe->demandeApresRecrutement,
+            ];
+        }
 
     }
 
@@ -231,9 +237,6 @@ class PieceJointeProcess implements ProcessInterface
 
         $table = $this->getBdd()->getTable('TBL_PIECE_JOINTE');
 
-        //dd($this->tblData);
-
-
         $options = [
             'where'              => $params,
             'return-insert-data' => false,
@@ -242,34 +245,12 @@ class PieceJointeProcess implements ProcessInterface
                 $tableauBord->onAction(Event::PROGRESS, $progress, $total);
             },
         ];
-
-        $table->merge($this->tblData, $key, $options);
+        try {
+            $table->merge($this->tblData, $key, $options);
+        } catch (\Exception $e) {
+            dump($e->getMessage());
+        }
         $this->tblData = [];
     }
 
-    private function sortDatas(array &$datas): void
-    {
-
-        uksort($datas, function ($a, $b) {
-            $ordre = [
-                'ANNEE_ID',
-                'TYPE_PIECE_JOINTE_ID',
-                'TYPE_PIECE_JOINTE_CODE',
-                'PIECE_JOINTE_ID',
-                'INTERVENANT_ID',
-                'DEMANDEE',
-                'FOURNIE',
-                'VALIDEE',
-                'OBLIGATOIRE',
-                'DATE_ORIGINE',
-                'DATE_VALIDITEE',
-                'SEUIL_HETD',
-                'DEMANDEE_APRES_RECRUTEMENT'
-            ];
-            $posA  = array_search($a, $ordre);
-            $posB  = array_search($b, $ordre);
-            return $posA - $posB;
-        });
-
-    }
 }

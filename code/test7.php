@@ -9,7 +9,10 @@
 
 $stbl = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 
-$data = ['INTERVENANT_ID' => 1000171];
-//$data=[];
+$data = [//'INTERVENANT_ID' => '9290',
+         'INTERVENANT_ID' => 9290,
+         //'ANNEE_ID' => 2015,
+];
+//$data = [];
 
 $stbl->calculer('piece_jointe', $data);

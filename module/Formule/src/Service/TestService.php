@@ -4,14 +4,13 @@ namespace Formule\Service;
 
 use Application\Hydrator\GenericHydrator;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\ParametresServiceAwareTrait;
+use Administration\Service\ParametresServiceAwareTrait;
 use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleVolumeHoraire;
 use RuntimeException;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\Db\FormuleTestVolumeHoraire;
-use Formule\Model\FormuleCalcul;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;

@@ -4,6 +4,16 @@ declare(strict_types=1);
 
 use Laminas\Mvc\Application;
 
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+    if ($errno === E_DEPRECATED) {
+        // Afficher uniquement le message d'erreur sans la trace
+        echo "Deprecated: $errstr in $errfile on line $errline\n";
+    } else {
+        // Utiliser le gestionnaire d'erreurs interne pour les autres types d'erreurs
+        return false;
+    }
+});
+
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.

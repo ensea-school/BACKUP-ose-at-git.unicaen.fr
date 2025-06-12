@@ -98,7 +98,7 @@ class TypeInterventionStructure implements HistoriqueAwareInterface, ResourceInt
      *
      * @return TypeInterventionStructure
      */
-    public function setAnneeDebut(Annee $anneeDebut = null)
+    public function setAnneeDebut(?Annee $anneeDebut = null)
     {
         $this->anneeDebut = $anneeDebut;
 
@@ -122,7 +122,7 @@ class TypeInterventionStructure implements HistoriqueAwareInterface, ResourceInt
      *
      * @return TypeInterventionStructure
      */
-    public function setAnneeFin(Annee $anneeFin = null)
+    public function setAnneeFin(?Annee $anneeFin = null)
     {
         $this->anneeFin = $anneeFin;
 

@@ -121,7 +121,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Agrement
      */
-    public function setType(\Agrement\Entity\Db\TypeAgrement $type = null)
+    public function setType(?\Agrement\Entity\Db\TypeAgrement $type = null)
     {
         $this->type = $type;
 
@@ -149,7 +149,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Agrement
      */
-    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(?\Intervenant\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -177,7 +177,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Intervenant
      */
-    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
+    public function setStructure(?\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 

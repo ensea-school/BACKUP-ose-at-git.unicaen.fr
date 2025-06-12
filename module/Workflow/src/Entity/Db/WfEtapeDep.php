@@ -237,7 +237,7 @@ class WfEtapeDep
      *
      * @return WfEtapeDep
      */
-    public function setEtapeSuiv(\Workflow\Entity\Db\WfEtape $etapeSuiv = null)
+    public function setEtapeSuiv(?\Workflow\Entity\Db\WfEtape $etapeSuiv = null)
     {
         $this->etapeSuiv = $etapeSuiv;
 
@@ -265,7 +265,7 @@ class WfEtapeDep
      *
      * @return WfEtapeDep
      */
-    public function setEtapePrec(\Workflow\Entity\Db\WfEtape $etapePrec = null)
+    public function setEtapePrec(?\Workflow\Entity\Db\WfEtape $etapePrec = null)
     {
         $this->etapePrec = $etapePrec;
 

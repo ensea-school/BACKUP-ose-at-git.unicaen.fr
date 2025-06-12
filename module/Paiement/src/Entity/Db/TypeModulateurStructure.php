@@ -66,7 +66,7 @@ class TypeModulateurStructure implements HistoriqueAwareInterface, ResourceInter
      *
      * @return TypeModulateurStructure
      */
-    public function setTypeModulateur(\Paiement\Entity\Db\TypeModulateur $typeModulateur = null)
+    public function setTypeModulateur(?\Paiement\Entity\Db\TypeModulateur $typeModulateur = null)
     {
         $this->typeModulateur = $typeModulateur;
 
@@ -94,7 +94,7 @@ class TypeModulateurStructure implements HistoriqueAwareInterface, ResourceInter
      *
      * @return TypeModulateurStructure
      */
-    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
+    public function setStructure(?\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -128,7 +128,7 @@ class TypeModulateurStructure implements HistoriqueAwareInterface, ResourceInter
      *
      * @return TypeInterventionStructure
      */
-    public function setAnneeDebut(Annee $anneeDebut = null)
+    public function setAnneeDebut(?Annee $anneeDebut = null)
     {
         $this->anneeDebut = $anneeDebut;
 
@@ -152,7 +152,7 @@ class TypeModulateurStructure implements HistoriqueAwareInterface, ResourceInter
      *
      * @return TypeInterventionStructure
      */
-    public function setAnneeFin(Annee $anneeFin = null)
+    public function setAnneeFin(?Annee $anneeFin = null)
     {
         $this->anneeFin = $anneeFin;
 

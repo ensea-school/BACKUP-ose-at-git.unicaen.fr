@@ -213,7 +213,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
      *
      * @return IntervenantDossier
      */
-    public function setStatut(Statut $statut = null)
+    public function setStatut(?Statut $statut = null)
     {
         $this->statut = $statut;
 

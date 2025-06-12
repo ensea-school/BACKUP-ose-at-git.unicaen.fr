@@ -188,7 +188,7 @@ class Modulateur implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Modulateur
      */
-    public function setTypeModulateur(\Paiement\Entity\Db\TypeModulateur $typeModulateur = null)
+    public function setTypeModulateur(?\Paiement\Entity\Db\TypeModulateur $typeModulateur = null)
     {
         $this->typeModulateur = $typeModulateur;
 

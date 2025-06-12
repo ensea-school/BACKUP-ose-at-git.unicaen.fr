@@ -75,7 +75,7 @@ class ElementModulateur implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return ElementModulateur
      */
-    public function setModulateur(\Paiement\Entity\Db\Modulateur $modulateur = null)
+    public function setModulateur(?\Paiement\Entity\Db\Modulateur $modulateur = null)
     {
         $this->modulateur = $modulateur;
 
@@ -103,7 +103,7 @@ class ElementModulateur implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return ElementModulateur
      */
-    public function setElement(\OffreFormation\Entity\Db\ElementPedagogique $element = null)
+    public function setElement(?\OffreFormation\Entity\Db\ElementPedagogique $element = null)
     {
         $this->element = $element;
 

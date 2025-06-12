@@ -4,79 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "18fe1322e6314a4f307db360ae1f9f41",
+    "content-hash": "ced1ba2795f99a7b1fe10374500728bc",
     "packages": [
-        {
-            "name": "apereo/phpcas",
-            "version": "1.6.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/apereo/phpCAS.git",
-                "reference": "c129708154852656aabb13d8606cd5b12dbbabac"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/c129708154852656aabb13d8606cd5b12dbbabac",
-                "reference": "c129708154852656aabb13d8606cd5b12dbbabac",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-dom": "*",
-                "php": ">=7.1.0",
-                "psr/log": "^1.0 || ^2.0 || ^3.0"
-            },
-            "require-dev": {
-                "monolog/monolog": "^1.0.0 || ^2.0.0",
-                "phpstan/phpstan": "^1.5",
-                "phpunit/phpunit": ">=7.5"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3.x-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "source/CAS.php"
-                ],
-                "classmap": [
-                    "source/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Joachim Fritschi",
-                    "email": "jfritschi@freenet.de",
-                    "homepage": "https://github.com/jfritschi"
-                },
-                {
-                    "name": "Adam Franco",
-                    "homepage": "https://github.com/adamfranco"
-                },
-                {
-                    "name": "Henry Pan",
-                    "homepage": "https://github.com/phy25"
-                }
-            ],
-            "description": "Provides a simple API for authenticating users against a CAS server",
-            "homepage": "https://wiki.jasig.org/display/CASC/phpCAS",
-            "keywords": [
-                "apereo",
-                "cas",
-                "jasig"
-            ],
-            "support": {
-                "issues": "https://github.com/apereo/phpCAS/issues",
-                "source": "https://github.com/apereo/phpCAS/tree/1.6.1"
-            },
-            "time": "2023-02-19T19:52:35+00:00"
-        },
         {
             "name": "beberlei/assert",
             "version": "v3.3.3",
@@ -4627,16 +4556,16 @@
         },
         {
             "name": "laminas/laminas-validator",
-            "version": "2.64.2",
+            "version": "2.64.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "771e504760448ac7af660710237ceb93be602e08"
+                "reference": "b3ec5865e7aa60a0fbce211500f4a5c6a6e11a30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/771e504760448ac7af660710237ceb93be602e08",
-                "reference": "771e504760448ac7af660710237ceb93be602e08",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/b3ec5865e7aa60a0fbce211500f4a5c6a6e11a30",
+                "reference": "b3ec5865e7aa60a0fbce211500f4a5c6a6e11a30",
                 "shasum": ""
             },
             "require": {
@@ -4707,7 +4636,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-11-26T21:29:17+00:00"
+            "time": "2025-06-11T10:23:09+00:00"
         },
         {
             "name": "laminas/laminas-view",
@@ -7435,7 +7364,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "59ea239fde570a0c3dcf82e8b6209096716bd88c"
+                "reference": "eb945e8f021442aed8a44822df935d923eea47b6"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -7486,7 +7415,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2025-06-10T12:47:28+00:00"
+            "time": "2025-06-11T12:50:32+00:00"
         },
         {
             "name": "unicaen/authentification",
@@ -7494,13 +7423,13 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/authentification.git",
-                "reference": "63ab8306e2fccef1023e59905a668a9f22f65966"
+                "reference": "a5742b1d978acefd7a3f60f360058297af1058d7"
             },
             "require": {
-                "apereo/phpcas": "1.6.*",
                 "ramsey/uuid": "^3.7",
                 "unicaen/app": "^6.0|^7.0|dev-php84",
                 "unicaen/bjy-authorize": "^6.0|dev-php84",
+                "unicaen/cas": "dev-master",
                 "unicaen/utilisateur": "^6.3|^7.0|dev-php84",
                 "unicaen/zfc-user": "^6.1|dev-php84"
             },
@@ -7517,7 +7446,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen - Version Laminas",
-            "time": "2025-06-05T12:08:46+00:00"
+            "time": "2025-06-12T08:03:28+00:00"
         },
         {
             "name": "unicaen/bddadmin",
@@ -7525,7 +7454,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
-                "reference": "b427f797afa7187783ed65bec6dcfb74c7769252"
+                "reference": "1e38de55576746c2b9a7470ed93e9e01fb265d69"
             },
             "require": {
                 "php": ">=8.2"
@@ -7538,7 +7467,7 @@
                 }
             },
             "description": "Module pour administrer des bases de données Postgresql et Oracle",
-            "time": "2025-05-28T14:19:39+00:00"
+            "time": "2025-06-11T12:27:15+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
@@ -7546,7 +7475,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bjy-authorize.git",
-                "reference": "b16ac4f1d895e83268b838047050a5cacc7b3db7"
+                "reference": "a4d594d854618bfdd445fa2dfea838971ec393ba"
             },
             "require": {
                 "doctrine/common": "^3.2",
@@ -7601,7 +7530,75 @@
                 "zf2",
                 "zfc-user"
             ],
-            "time": "2025-06-06T15:31:28+00:00"
+            "time": "2025-06-11T12:27:09+00:00"
+        },
+        {
+            "name": "unicaen/cas",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/cas.git",
+                "reference": "c71dfb30162164d1ef5df2739d5f9656b3312140"
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "php": ">=7.1.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0"
+            },
+            "require-dev": {
+                "monolog/monolog": "^1.0.0 || ^2.0.0",
+                "phpstan/phpstan": "^1.5",
+                "phpunit/phpunit": ">=7.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "source/CAS.php"
+                ],
+                "classmap": [
+                    "source/"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "PhpCas\\": "test/CAS/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ],
+                "phpstan": [
+                    "phpstan"
+                ]
+            },
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joachim Fritschi",
+                    "homepage": "https://github.com/jfritschi",
+                    "email": "jfritschi@freenet.de"
+                },
+                {
+                    "name": "Adam Franco",
+                    "homepage": "https://github.com/adamfranco"
+                },
+                {
+                    "name": "Henry Pan",
+                    "homepage": "https://github.com/phy25"
+                }
+            ],
+            "description": "Provides a simple API for authenticating users against a CAS server",
+            "homepage": "https://wiki.jasig.org/display/CASC/phpCAS",
+            "keywords": [
+                "apereo",
+                "cas",
+                "jasig"
+            ],
+            "time": "2025-06-12T08:02:58+00:00"
         },
         {
             "name": "unicaen/code",
@@ -7609,7 +7606,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "9c6c02f656d1d492e1442a7b34f65333401d8b0c"
+                "reference": "3f02fa341843988c32aae6dd9b3f17ed1a20ba9c"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7626,7 +7623,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2025-05-13T08:05:03+00:00"
+            "time": "2025-06-11T12:27:01+00:00"
         },
         {
             "name": "unicaen/import",
@@ -7634,7 +7631,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "4d0839096943d7322a6570ed36ae82dc97cdac7b"
+                "reference": "c201eb99cbfd2c0affd47db607dab371ccdd31d2"
             },
             "require": {
                 "symfony/console": "^4.4|^5.4|^6.0|^7.0",
@@ -7653,7 +7650,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2025-06-05T12:17:07+00:00"
+            "time": "2025-06-11T13:20:07+00:00"
         },
         {
             "name": "unicaen/mail",
@@ -7705,7 +7702,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/privilege.git",
-                "reference": "c88ffecbef87a11af2c86cd8e3760f472dadb606"
+                "reference": "eac1393a0402f6db2b734673ad1e589b54acce6f"
             },
             "require": {
                 "unicaen/app": ">=5.0|dev-php84",
@@ -7724,7 +7721,7 @@
                 ]
             },
             "description": "Module reprenant la gestion des privileges  - Version laminas",
-            "time": "2025-06-05T12:13:58+00:00"
+            "time": "2025-06-11T12:26:35+00:00"
         },
         {
             "name": "unicaen/signature",
@@ -7732,7 +7729,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/signature.git",
-                "reference": "6ec5a17654547df370ea59f8f38a811b2d3ae015"
+                "reference": "ca0972f3884fd7c43e6d93b74ebf186066282a7c"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -7762,7 +7759,7 @@
                 }
             },
             "description": "Module de signature électronique",
-            "time": "2025-05-20T10:08:12+00:00"
+            "time": "2025-06-11T12:38:46+00:00"
         },
         {
             "name": "unicaen/siham",
@@ -7799,7 +7796,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "af03c8f80989aada7cd010bf22dba6a56fad9d0b"
+                "reference": "b3564fe938efa59752fc18d904f9f11a9b01c83a"
             },
             "require": {
                 "unicaen/app": ">=6.0|dev-php84"
@@ -7811,7 +7808,7 @@
                 }
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2025-06-10T12:52:21+00:00"
+            "time": "2025-06-11T12:26:11+00:00"
         },
         {
             "name": "unicaen/utilisateur",
@@ -7819,7 +7816,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/utilisateur.git",
-                "reference": "933bdaa49d2c58ed005fbb3ec1a886e6e36de245"
+                "reference": "9195746364b6f443960a828e0a8d99bdac2b04c4"
             },
             "require": {
                 "unicaen/app": "^7.0|dev-php84",
@@ -7843,7 +7840,7 @@
                 ]
             },
             "description": "Module reprenant la gestion des utilisateurs, privileges et roles - Version laminas",
-            "time": "2025-06-05T12:16:20+00:00"
+            "time": "2025-06-11T12:26:06+00:00"
         },
         {
             "name": "unicaen/vue",
@@ -7871,7 +7868,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/zfc-user.git",
-                "reference": "9c9c4f7080b6061c3d51c787ed2f181fa5b13a0d"
+                "reference": "068ca159a7856b902c15bb0e7d67ccc098810feb"
             },
             "require": {
                 "laminas/laminas-authentication": "^2.18",
@@ -7911,7 +7908,7 @@
                 ]
             },
             "description": "A generic user registration and authentication module for ZF2. Supports Laminas\\Db and Doctrine2.",
-            "time": "2025-06-10T12:40:37+00:00"
+            "time": "2025-06-11T12:25:56+00:00"
         },
         {
             "name": "vakata/jstree",

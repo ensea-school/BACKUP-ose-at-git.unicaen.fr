@@ -31,7 +31,7 @@ class WorkflowResource implements ResourceInterface
      * @param Intervenant|null                         $intervenant
      * @param Structure|null                           $structure
      */
-    public function __construct($etape, Intervenant $intervenant = null, Structure $structure = null)
+    public function __construct($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         if ($etape) $this->setEtape($etape);
         if ($intervenant) $this->setIntervenant($intervenant);
@@ -49,7 +49,7 @@ class WorkflowResource implements ResourceInterface
      *
      * @return self
      */
-    public static function create($etape, Intervenant $intervenant = null, Structure $structure = null)
+    public static function create($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         $wr = new self($etape, $intervenant, $structure);
 

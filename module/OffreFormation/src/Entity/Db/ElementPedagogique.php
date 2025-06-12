@@ -170,7 +170,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
      *
      * @return array
      */
-    public function getEtapes($principaleIncluse = true)
+    public function getEtapes(bool $principaleIncluse = true)
     {
         $etapePrincipale = $this->getEtape();
         $etapes          = [];
@@ -793,7 +793,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCentreCoutEp(TypeHeures $th = null): \Doctrine\Common\Collections\Collection
+    public function getCentreCoutEp(?TypeHeures $th = null): \Doctrine\Common\Collections\Collection
     {
         if (!$th) {
             return $this->centreCoutEp;

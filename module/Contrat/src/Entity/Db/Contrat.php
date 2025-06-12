@@ -198,7 +198,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Contrat
      */
-    public function setTypeContrat(\Contrat\Entity\Db\TypeContrat $typeContrat = null)
+    public function setTypeContrat(?\Contrat\Entity\Db\TypeContrat $typeContrat = null)
     {
         $this->typeContrat = $typeContrat;
 
@@ -226,7 +226,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Contrat
      */
-    public function setValidation(\Workflow\Entity\Db\Validation $validation = null)
+    public function setValidation(?\Workflow\Entity\Db\Validation $validation = null)
     {
         $this->validation = $validation;
 
@@ -274,7 +274,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Contrat
      */
-    public function setContrat(\Contrat\Entity\Db\Contrat $contrat = null)
+    public function setContrat(?\Contrat\Entity\Db\Contrat $contrat = null)
     {
         $this->contrat = $contrat;
 
@@ -387,7 +387,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return self
      */
-    public function setIntervenant(Intervenant $intervenant = null)
+    public function setIntervenant(?Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -415,7 +415,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Contrat
      */
-    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
+    public function setStructure(?\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 

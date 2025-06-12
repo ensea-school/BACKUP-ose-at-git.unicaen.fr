@@ -238,12 +238,14 @@ class PaiementDebugger
                         $entity = $this->getEntity(VolumeHoraireMission::class, $l['volumeHoraireId']);
                         $l['volumeHoraire'] = $this->vhLibelle($entity);
                     }
+                    if ($service->serviceReferentiel){
+                        $entity = $this->getEntity(VolumeHoraireReferentiel::class, $l['volumeHoraireId']);
+                        $l['volumeHoraire'] = $this->vhLibelle($entity);
+                    }
                     if ($entity){
                         /** @var $entity HistoriqueAwareInterface */
                         $l['volumeHoraireHisto'] = 'Dernière modification par '.$entity->getHistoModificateur().' le '.$entity->getHistoModification()->format('d/m/Y');
                     }
-                }elseif($service->serviceReferentiel){
-                    $l['volumeHoraireId'] = $this->getReferentielVhs($service->serviceReferentiel);
                 }
                 $l['tauxRemu'] = (string)$this->getEntity(TauxRemu::class, $l['tauxRemu']);
                 $l['tauxValeur'] = $this->fts($l['tauxValeur']);
@@ -352,33 +354,6 @@ class PaiementDebugger
         }
 
         return '';
-    }
-
-
-
-    protected function getReferentielVhs(int $formuleResultatServiceRefId)
-    {
-        $conn = $this->process->getServiceBdd()->getEntityManager()->getConnection();
-
-        $sql = "
-        SELECT
-          vhr.id,
-          vhr.heures,
-          'Dernière modification par ' || u.display_name || ' le ' || to_char(vhr.histo_modification,'dd/mm/YYYY') histo
-        FROM
-          formule_resultat_volume_horaire frvh
-          JOIN formule_resultat_intervenant fri ON fri.id = frvh.formule_resultat_intervenant_id
-          JOIN type_volume_horaire tvh ON tvh.id = fri.type_volume_horaire_id AND tvh.code = '".TypeVolumeHoraire::CODE_REALISE."'
-          JOIN etat_volume_horaire evh ON evh.id = fri.etat_volume_horaire_id AND evh.code = '".EtatVolumeHoraire::CODE_VALIDE."'
-          JOIN volume_horaire_ref vhr ON vhr.id = frvh.volume_horaire_ref_id
-          JOIN utilisateur u ON u.id = vhr.histo_modificateur_id
-        WHERE
-          frvh.service_referentiel_id = :frsr
-        ORDER BY
-          frvh.id
-        ";
-
-        return $conn->fetchAllAssociative($sql, ['frsr' => $formuleResultatServiceRefId]);
     }
 
 

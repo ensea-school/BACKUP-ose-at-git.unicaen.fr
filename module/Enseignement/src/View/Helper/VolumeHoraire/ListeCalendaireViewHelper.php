@@ -274,7 +274,13 @@ class ListeCalendaireViewHelper extends AbstractHtmlElement
     {
         if (!$horaire instanceof \DateTime) return null;
 
-        return $horaire->format(Constants::DATETIME_FORMAT);
+        $horaire = $horaire->format(Constants::DATETIME_FORMAT);
+
+        if (str_ends_with($horaire, '00:00')){
+            $horaire = substr($horaire, 0,-6);
+        }
+
+        return $horaire;
     }
 
 

@@ -7729,7 +7729,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/signature.git",
-                "reference": "ca0972f3884fd7c43e6d93b74ebf186066282a7c"
+                "reference": "a9a5647ed6acd6d0f80dee87aeb2447650de87fe"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -7759,7 +7759,7 @@
                 }
             },
             "description": "Module de signature électronique",
-            "time": "2025-06-11T12:38:46+00:00"
+            "time": "2025-06-12T10:14:10+00:00"
         },
         {
             "name": "unicaen/siham",

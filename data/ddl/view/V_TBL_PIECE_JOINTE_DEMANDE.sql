@@ -38,13 +38,12 @@ SELECT
 	i.code 									code_intervenant,
 	i.id 									intervenant_id,
 	tpj.id 									type_piece_jointe_id,
-	MAX(COALESCE(i_h.heures, 0)) 			heures_pour_seuil,
+	CASE WHEN
 	MAX(tpjs.obligatoire) 					obligatoire,
-	MAX(COALESCE(hetd.total_hetd, 0)) 		heures_pour_seuil_hetd,
-    MAX(tpjs.seuil_hetd)       				seuil_hetd,
 	MIN(tpjs.duree_vie) 				 	duree_vie,
 	MAX(tpjs.demandee_apres_recrutement)	demandee_apres_recrutement,
-	tpj.code                                type_pj_code
+	tpj.code                               type_pj_code,
+  tpj.fc                fc
 FROM
 	intervenant i
 LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id

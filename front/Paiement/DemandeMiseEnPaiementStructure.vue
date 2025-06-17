@@ -551,7 +551,10 @@ export default {
 
 
     name: "DemandeMiseEnPaiementStructure",
-    props: {},
+    props: {
+        datas: {required: true},
+        intervenant: {required: true},
+    },
     computed:
         {
             datasBudget()

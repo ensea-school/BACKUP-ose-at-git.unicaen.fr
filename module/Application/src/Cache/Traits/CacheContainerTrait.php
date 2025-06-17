@@ -17,7 +17,7 @@ trait CacheContainerTrait
      *
      * @return CacheContainer
      */
-    public function getCacheContainer($class = null)
+    public function getCacheContainer(?string $class = null)
     {
         if (!isset($this->__cacheContainer)) {
             /** @var CacheService $cacheService */

@@ -7,15 +7,15 @@ class CacheContainer
 
     private CacheService $cacheService;
 
-    private              $object     = null;
+    private ?object $object = null;
 
-    private string       $class;
+    private string $class;
 
-    private array        $localCache = [];
+    private array $localCache = [];
 
 
 
-    public function __construct(CacheService $cacheService, $class)
+    public function __construct(CacheService $cacheService, string|object $class)
     {
         $this->cacheService = $cacheService;
         if (is_object($class)) $this->object = $class;
@@ -24,15 +24,7 @@ class CacheContainer
 
 
 
-    /**
-     * is utilized for reading data from inaccessible members.
-     *
-     * @param $name string
-     *
-     * @return mixed
-     * @link https://php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members
-     */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
         if (!array_key_exists($name, $this->localCache)) {
             $this->localCache[$name] = $this->cacheService->get($this->class, $name);
@@ -43,16 +35,7 @@ class CacheContainer
 
 
 
-    /**
-     * run when writing data to inaccessible members.
-     *
-     * @param $name  string
-     * @param $value mixed
-     *
-     * @return void
-     * @link https://php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members
-     */
-    public function __set($name, $value)
+    public function __set(string $name, mixed $value): void
     {
         $this->localCache[$name] = $value;
         $this->cacheService->set($this->class, $name, $value);
@@ -60,15 +43,7 @@ class CacheContainer
 
 
 
-    /**
-     * is triggered by calling isset() or empty() on inaccessible members.
-     *
-     * @param $name string
-     *
-     * @return bool
-     * @link https://php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members
-     */
-    public function __isset($name)
+    public function __isset(string $name): bool
     {
         if (array_key_exists($name, $this->localCache)) {
             return true;
@@ -79,15 +54,7 @@ class CacheContainer
 
 
 
-    /**
-     * is invoked when unset() is used on inaccessible members.
-     *
-     * @param $name string
-     *
-     * @return void
-     * @link https://php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members
-     */
-    public function __unset($name)
+    public function __unset(string $name): void
     {
         unset($this->localCache[$name]);
         $this->cacheService->remove($this->class, $name);
@@ -95,7 +62,7 @@ class CacheContainer
 
 
 
-    public function __call(string $name, $arguments)
+    public function __call(string $name, array $arguments): mixed
     {
         if ($this->__isset($name)) {
             return $this->__get($name);

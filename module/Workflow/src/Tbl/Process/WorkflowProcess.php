@@ -4,14 +4,13 @@ namespace Workflow\Tbl\Process;
 
 
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Exception;
 use Unicaen\BddAdmin\BddAwareTrait;
-use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
+use Workflow\Tbl\Process\Model\WfEtape;
 
 /**
  * Description of WorkflowProcess
@@ -37,7 +36,37 @@ class WorkflowProcess implements ProcessInterface
                 $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
             }
         } else {
-            echo $this->sqlActivationEtapes();
+            $this->load($params);
+        }
+    }
+
+
+
+    public function load(array $params = []): void
+    {
+        $sql = $this->makeSql();
+        $sql = $this->getServiceBdd()->injectKey($sql, $params);
+
+        $etapes = $this->getServiceWorkflow()->getEtapes();
+
+        $stmt = $this->bdd->selectEach($sql);
+        while( $d = $stmt->next()){
+            $wfEtape = new WfEtape();
+            $wfEtape->annee = (int)$d['ANNEE_ID'];
+            $wfEtape->intervenant = (int)$d['INTERVENANT_ID'];
+            $wfEtape->etape = $etapes[$d['ETAPE_CODE']];
+            $wfEtape->structure = (int)$d['STRUCTURE_ID'];
+
+            $wfEtape->atteignable = (bool)$d['ATTEIGNABLE'];
+
+            $wfEtape->objectif = (float)$d['OBJECTIF'];
+            $wfEtape->partiel = (float)$d['PARTIEL'];
+            $wfEtape->realisation = (float)$d['REALISATION'];
+
+            if (!array_key_exists($wfEtape->intervenant, $this->tblData)) {
+                $this->tblData[$wfEtape->intervenant] = [];
+            }
+            $this->tblData[$wfEtape->intervenant][] = $wfEtape;
         }
     }
 
@@ -45,7 +74,34 @@ class WorkflowProcess implements ProcessInterface
 
     private function makeSql(): string
     {
-        return "";
+        $dems = "\n".$this->sqlActivationEtapes();
+        $subQueries = "\n".$this->sqlAlimentation()."\n";
+
+        return "
+        SELECT
+          i.annee_id                                           annee_id,
+          i.id                                                 intervenant_id,
+          e.code                                               etape_code,
+          w.structure_id                                       structure_id,
+          COALESCE(w.objectif,0)                               objectif,
+          COALESCE(w.partiel,0)                                partiel,
+          CASE WHEN w.intervenant_id IS NULL THEN 0 ELSE 1 END atteignable,
+          ROUND(COALESCE(w.realisation,0),2)                   realisation,
+          i.statut_id                                          statut_id,
+          ti.id                                                type_intervenant_id,
+          ti.code                                              type_intervenant_code
+        FROM
+          intervenant                   i
+          JOIN statut                  si ON si.id = i.statut_id
+          JOIN type_intervenant        ti ON ti.id = si.type_intervenant_id
+          JOIN workflow_etape           e ON 1 = CASE $dems END
+          LEFT JOIN ($subQueries) w ON w.intervenant_id = i.id AND w.etape_code = e.code
+        WHERE
+          w.intervenant_id IS NOT NULL
+          /*@INTERVENANT_ID=i.id*/
+          /*@ANNEE_ID=i.annee_id*/
+          /*@STATUT_ID=i.statut_id*/
+        ";
     }
 
 
@@ -163,5 +219,22 @@ class WorkflowProcess implements ProcessInterface
         }
 
         return $result;
+    }
+
+
+
+    protected function sqlAlimentation(): string
+    {
+        $views = $this->bdd->view()->get('V_TBL_WORKFLOW_%');
+        $sql = "";
+        foreach( $views as $view ) {
+            if ($sql != "") {
+                $sql .= "\n\nUNION ALL\n\n";
+            }
+
+            $vdef = substr($view['definition'], strpos($view['definition'], "SELECT"));
+            $sql .= $vdef;
+        }
+        return $sql;
     }
 }

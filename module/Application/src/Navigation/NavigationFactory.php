@@ -150,7 +150,7 @@ class NavigationFactory extends DefaultNavigationFactory
      * @return boolean
      * @throws \LogicException
      */
-    protected function handleVisibility(&$page, RouteMatch $routeMatch = null)
+    protected function handleVisibility(&$page, ?RouteMatch $routeMatch = null)
     {
         // l'attribut 'visible' d'une page peut être le nom d'un service
         if (isset($page['visible']) && is_string($page['visible'])) {
@@ -185,7 +185,7 @@ class NavigationFactory extends DefaultNavigationFactory
      *
      * @return self
      */
-    protected function handleParamsInjection(array &$page, RouteMatch $routeMatch = null)
+    protected function handleParamsInjection(array &$page, ?RouteMatch $routeMatch = null)
     {
         if (!$routeMatch || !isset($page['withtarget']) || !isset($page['paramsInject'])) {
             return $this;

@@ -200,7 +200,7 @@ class WorkflowService extends AbstractService
      * @param Structure|null                                  $structure
      * @return WorkflowEtape
      */
-    public function getPreviousAccessibleEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
+    public function getPreviousAccessibleEtape($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
@@ -220,7 +220,7 @@ class WorkflowService extends AbstractService
 
 
 
-    protected function prepareEtapeParams($etape, Intervenant $intervenant = null, Structure $structure = null)
+    protected function prepareEtapeParams($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         switch (true) {
             case $etape === WfEtape::CURRENT || empty($etape):
@@ -270,7 +270,7 @@ class WorkflowService extends AbstractService
      *
      * @return WorkflowEtape|null
      */
-    public function getEtapeCourante(Intervenant $intervenant = null, Structure $structure = null)
+    public function getEtapeCourante(?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
 
@@ -290,7 +290,7 @@ class WorkflowService extends AbstractService
      *
      * @return WorkflowEtape[]
      */
-    public function getFeuilleDeRoute(Intervenant $intervenant = null, Structure $structure = null)
+    public function getFeuilleDeRoute(?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         return null;
         if (!$intervenant || !$structure) {
@@ -488,7 +488,7 @@ class WorkflowService extends AbstractService
      *
      * @return WorkflowEtape
      */
-    public function getEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
+    public function getEtape($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
@@ -572,7 +572,7 @@ class WorkflowService extends AbstractService
      *
      * @return WorkflowEtape
      */
-    public function getNextEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
+    public function getNextEtape($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
@@ -615,7 +615,7 @@ class WorkflowService extends AbstractService
      *
      * @return WorkflowEtape
      */
-    public function getNextAccessibleEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
+    public function getNextAccessibleEtape($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 

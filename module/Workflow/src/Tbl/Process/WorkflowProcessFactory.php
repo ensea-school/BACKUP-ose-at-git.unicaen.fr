@@ -3,7 +3,8 @@
 namespace Workflow\Tbl\Process;
 
 use Psr\Container\ContainerInterface;
-
+use Unicaen\BddAdmin\Bdd;
+use UnicaenTbl\Service\BddService;
 
 
 /**
@@ -25,7 +26,8 @@ class WorkflowProcessFactory
     {
         $service = new WorkflowProcess;
 
-        /* Injectez vos dépendances ICI */
+        $service->setServiceBdd($container->get(BddService::class));
+        $service->setBdd($container->get(Bdd::class));
 
         return $service;
     }

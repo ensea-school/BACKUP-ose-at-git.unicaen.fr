@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 24.4](#ose-244-04062025)
+OSE 24.6](#ose-246-17062025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -26,7 +26,7 @@
 
 
 
-# OSE 24.6 (16/06/2025)
+# OSE 24.6 (17/06/2025)
 
 ## Amélioration
 

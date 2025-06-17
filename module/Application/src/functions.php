@@ -128,8 +128,8 @@ function dqlAndWhere(array $filters, array $parameters): string
             } elseif ($value == 'IS NOT NULL') {
                 $dqlFilters .= "\nAND " . $filters[$name] . ' IS NOT NULL';
             } else {
-                $op = str_contains($value, '%') ? 'LIKE' : '=';
-                $dqlFilters .= "\nAND " . $filters[$name] . ' '.$op.' :' . $name;
+                $op         = str_contains($value, '%') ? 'LIKE' : '=';
+                $dqlFilters .= "\nAND " . $filters[$name] . ' ' . $op . ' :' . $name;
             }
         }
     }
@@ -147,4 +147,21 @@ function vhlDump(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe): \
     $dumper->dumpBegin($volumeHoraireListe);
 
     return $dumper;
+}
+
+
+function pg_lower(mixed &$data): void
+{
+    if (is_string($data)) {
+        $data = strtolower($data);
+        return;
+    }
+    if (is_array($data)) {
+        $data = array_change_key_case($data, CASE_LOWER);
+        foreach ($data as $k => $v) {
+            if (is_array($v)) {
+                pg_lower($data[$k]);
+            }
+        }
+    }
 }

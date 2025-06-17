@@ -7,6 +7,7 @@ SELECT
   tvr.intervenant_id                                       intervenant_id,
   tvr.structure_id                                         structure_id,
   SUM(vhr.heures)                                          objectif,
+  SUM(vhr.heures)                                          partiel,
   SUM(CASE WHEN tvr.valide = 1 THEN vhr.heures ELSE 0 END) realisation
 FROM
   tbl_validation_referentiel tvr
@@ -15,8 +16,8 @@ FROM
 WHERE
   tvr.auto_validation = 0
   AND vhr.histo_destruction IS NULL
-  /*@INTERVENANT_ID=tvr.intervenant_id*/
-  /*@ANNEE_ID=tvr.annee_id*/
+  /*@intervenant_id=tvr.intervenant_id*/
+  /*@annee_id=tvr.annee_id*/
 GROUP BY
   tvr.intervenant_id,
   tvr.structure_id,

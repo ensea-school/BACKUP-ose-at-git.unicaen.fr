@@ -10,12 +10,12 @@ FROM
             tbl_service_du tsd
        JOIN intervenant      i ON i.id = tsd.intervenant_id
        JOIN statut          si ON si.id = i.statut_id
-  LEFT JOIN tbl_service     ts ON ts.intervenant_id = tsd.intervenant_id AND ts.type_volume_horaire_code = 'PREVU'
+  LEFT JOIN tbl_service     ts ON ts.intervenant_id = tsd.intervenant_id AND ts.type_volume_horaire_code = 'PREVU' AND ts.heures > 0
 WHERE
   si.service_prevu = 1
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@STATUT_ID=si.id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
+  /*@statut_id=si.id*/
 GROUP BY
   tsd.intervenant_id,
   ts.structure_id,

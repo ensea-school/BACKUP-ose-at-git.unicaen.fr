@@ -4,6 +4,7 @@ SELECT
   tsd.intervenant_id           intervenant_id,
   ts.structure_id              structure_id,
   1                            objectif,
+  1                            partiel,
   COALESCE(SUM(ts.heures),0)   realisation
 FROM
             tbl_service_du tsd
@@ -12,9 +13,9 @@ FROM
   LEFT JOIN tbl_referentiel ts ON ts.intervenant_id = tsd.intervenant_id AND ts.type_volume_horaire_code = 'REALISE' AND ts.heures > 0
 WHERE
   si.referentiel_prevu = 1
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@STATUT_ID=si.id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
+  /*@statut_id=si.id*/
 GROUP BY
   tsd.intervenant_id,
   ts.structure_id,

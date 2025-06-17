@@ -7,6 +7,7 @@ SELECT
   tve.intervenant_id                                      intervenant_id,
   tve.structure_id                                        structure_id,
   SUM(vh.heures)                                          objectif,
+  SUM(vh.heures)                                          partiel,
   SUM(CASE WHEN tve.valide = 1 THEN vh.heures ELSE 0 END) realisation
 FROM
   tbl_validation_enseignement tve
@@ -15,8 +16,8 @@ FROM
 WHERE
   tve.auto_validation = 0
   AND vh.histo_destruction IS NULL
-  /*@INTERVENANT_ID=tve.intervenant_id*/
-  /*@ANNEE_ID=tve.annee_id*/
+  /*@intervenant_id=tve.intervenant_id*/
+  /*@annee_id=tve.annee_id*/
 GROUP BY
   tve.intervenant_id,
   tve.structure_id,

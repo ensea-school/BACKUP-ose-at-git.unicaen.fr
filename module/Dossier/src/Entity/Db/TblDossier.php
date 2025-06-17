@@ -254,4 +254,18 @@ class TblDossier
         return $this->completudeApresRecrutement;
     }
 
+
+
+    public function getCompletude(): bool
+    {
+        return $this->getCompletudeIdentite() &&
+               $this->getCompletudeIdentiteComp() &&
+               $this->getCompletudeAdresse() &&
+               $this->getCompletudeContact() &&
+               $this->getCompletudeInsee() &&
+               $this->getCompletudeBanque() &&
+               $this->getCompletudeEmployeur() &&
+               $this->getCompletudeStatut();
+    }
+
 }

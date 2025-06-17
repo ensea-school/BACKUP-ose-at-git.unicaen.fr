@@ -1,38 +1,46 @@
 <template>
     <div>
         <h1>Liste pieces jointes</h1>
-        <piece-jointe/>
+        <pieceJointe v-for="(pieceJointe, key) in datasPiecesJointes"
+                     :datas="pieceJointe"
+                     :intervenant="intervenant"></pieceJointe>
 
     </div>
 </template>
 
 <script>
 
-import taux from './PieceJointe.vue';
-import PieceJointe from "@/PieceJointe/PieceJointe.vue";
+import pieceJointe from './PieceJointe.vue';
+
 
 export default {
-    components: {PieceJointe},
-    props: {},
+    components: {
+        pieceJointe
+    },
+    props: {
+        intervenant: {required: true},
+    },
     data()
     {
         return {
-            listePiecesJointes: [],
-        };
+            datasPiecesJointes: null,
+            urlGetPiecesJointes: unicaenVue.url('piece-jointe/intervenant/:intervenant/get-pieces-jointes', {intervenant: this.intervenant}),
+        }
+
     },
     mounted()
     {
-        this.reload();
+        this.getPiecesJointes();
     },
     methods: {
-
-        reload()
+        getPiecesJointes()
         {
-            /*    unicaenVue.axios.get(
-                    unicaenVue.url("taux/liste-taux")
-                ).then(response => {
-                    this.listeTaux = response.data;
-                });*/
+            unicaenVue.axios.get(this.urlGetPiecesJointes).then(response => {
+                this.datasPiecesJointes = response.data;
+            }).catch(error => {
+                console.error(error);
+            })
+
         },
     }
 }

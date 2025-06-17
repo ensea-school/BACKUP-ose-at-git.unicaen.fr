@@ -6,12 +6,12 @@
  */
 
 $sql1 = "SELECT tbj.* FROM tbl_piece_jointe tbj 
-         --where intervenant_id = 633563
+         --where intervenant_id = 825820
         --JOIN intervenant i ON i.id = tbj.intervenant_id
         --JOIN piece_jointe pj ON pj.id = tbj.piece_jointe_id";
 
 $sql2 = "SELECT  tbjo.* FROM tbl_piece_jointe_old2 tbjo
-        --where intervenant_id = 633563
+        --where intervenant_id = 825820
        -- JOIN intervenant i ON i.id = tbjo.intervenant_id
         --JOIN piece_jointe pj ON pj.id = tbjo.piece_jointe_id";
 
@@ -26,10 +26,9 @@ $ignoreCols = [
     'DEMANDEE_APRES_RECRUTEMENT',
     'DATE_ORIGINE',
     'DATE_VALIDITEE',
-    'SEUIL_HETD',
-    'HEURES_POUR_SEUIL',
     'ID',
-    'PIECE_JOINTE_ID'
+    'PIECE_JOINTE_ID',
+    'HEURES_POUR_SEUIL',
 
     // colonne supprimée
 ];
@@ -50,7 +49,7 @@ $comparator->setKeyColumns($keyCols);
 $comparator->setIgnoreColumns($ignoreCols);
 $comparator->setOnlyColumns($onlyCols);
 
-$comparator->setLimit(100);
+//$comparator->setLimit(100);
 
 $result = $comparator->run();
 

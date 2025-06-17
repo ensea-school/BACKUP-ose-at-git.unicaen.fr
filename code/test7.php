@@ -10,7 +10,7 @@
 $stbl = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 
 $data = [//'INTERVENANT_ID' => '9290',
-         'INTERVENANT_ID' => 9290,
+         'INTERVENANT_ID' => 194861,
          //'ANNEE_ID' => 2015,
 ];
 //$data = [];

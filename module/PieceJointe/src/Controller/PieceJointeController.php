@@ -20,11 +20,13 @@ use PieceJointe\Entity\Db\TypePieceJointeStatut;
 use PieceJointe\Form\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
 use PieceJointe\Form\Traits\TypePieceJointeSaisieFormAwareTrait;
 use PieceJointe\Service\Traits\PieceJointeServiceAwareTrait;
+use PieceJointe\Service\Traits\TblPieceJointeServiceAwareTrait;
 use PieceJointe\Service\Traits\TypePieceJointeServiceAwareTrait;
 use PieceJointe\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Symfony\Component\Mime\Email;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WfEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
@@ -48,6 +50,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
     use NoteServiceAwareTrait;
     use MailerIntervenantFormAwareTrait;
     use FichierServiceAwareTrait;
+    use TblPieceJointeServiceAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -58,10 +61,10 @@ class PieceJointeController extends \Application\Controller\AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            PieceJointe::class,
-            Fichier::class,
-            Validation::class,
-        ]);
+                                                                  PieceJointe::class,
+                                                                  Fichier::class,
+                                                                  Validation::class,
+                                                              ]);
     }
 
 
@@ -107,6 +110,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
     }
 
 
+
     /**
      *
      * @return ViewModel
@@ -130,21 +134,32 @@ class PieceJointeController extends \Application\Controller\AbstractController
             return $menu;
         }
 
+        return compact('intervenant');
 
-        $title = "Pièces justificatives <small>{$intervenant}</small>";
 
-        $heuresPourSeuil = $this->getServicePieceJointe()->getHeuresPourSeuil($intervenant);
-        $fournies        = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
-        $demandees       = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
-        $synthese        = $this->getServicePieceJointe()->getPiecesSynthese($intervenant);
+    }
 
-        $annee = $this->getServiceContext()->getAnnee();
 
-        $messages = $this->makeMessages($intervenant);
 
-        $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->getContrat();
+    public function getPiecesJointesAction(): AxiosModel
+    {
+        //$this->initFilters();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        return compact('intervenant', 'title', 'heuresPourSeuil', 'demandees', 'synthese', 'fournies', 'messages', 'alertContrat', 'annee');
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $menu = new ViewModel();
+            $menu->setTemplate('intervenant/intervenant/menu');
+
+            return $menu;
+        }
+
+        return $this->getServiceTblPieceJointe()->data($intervenant);
     }
 
 
@@ -231,13 +246,15 @@ class PieceJointeController extends \Application\Controller\AbstractController
         return $viewModel;
     }
 
+
+
     public function validerFichierAction()
     {
         $this->initFilters();
 
         /** @var PieceJointe $pj */
-        $pj = $this->getEvent()->getParam('pieceJointe');
-        $fichier = $this->getEvent()->getParam('fichier');
+        $pj          = $this->getEvent()->getParam('pieceJointe');
+        $fichier     = $this->getEvent()->getParam('fichier');
         $intervenant = $pj->getIntervenant();
         $this->getServiceFichier()->valider($fichier, $intervenant);
         $this->updateTableauxBord($pj->getIntervenant(), true);
@@ -396,14 +413,14 @@ class PieceJointeController extends \Application\Controller\AbstractController
     {
         $codeIntervenant = $this->params()->fromRoute('codeTypeIntervenant', TypeIntervenant::CODE_EXTERIEUR);
         $this->em()->getFilters()->enable('historique')->init(entity: [
-            TypePieceJointe::class,
-            Statut::class,
-            TypePieceJointeStatut::class,
-        ]);
+                                                                          TypePieceJointe::class,
+                                                                          Statut::class,
+                                                                          TypePieceJointeStatut::class,
+                                                                      ]);
 
         $this->em()->getFilters()->enable('annee')->init([
-            Statut::class,
-        ]);
+                                                             Statut::class,
+                                                         ]);
 
         $anneeId = $this->getServiceContext()->getAnnee()->getId();
 
@@ -562,10 +579,10 @@ class PieceJointeController extends \Application\Controller\AbstractController
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'piece_jointe_fournie',
-            'agrement',
-            'contrat',
-        ], $intervenant);
+                                                              'piece_jointe_fournie',
+                                                              'agrement',
+                                                              'contrat',
+                                                          ], $intervenant);
 
         //Récupérer tous les intervenants avec le même code intervenant
         $intervenants = $this->getServiceIntervenant()->getIntervenants($intervenant);
@@ -573,8 +590,8 @@ class PieceJointeController extends \Application\Controller\AbstractController
         //On recalcule le tbl piece_jointe pour tous les intervenants ayant le même code intervenant que l'intervenant de l'année en cours
         foreach ($intervenants as $objectIntervenant) {
             $this->getServiceWorkflow()->calculerTableauxBord([
-                'piece_jointe',
-            ], $objectIntervenant);
+                                                                  'piece_jointe',
+                                                              ], $objectIntervenant);
         }
     }
 
@@ -607,14 +624,14 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
                 $mail = new Email();
                 $mail->to($to)
-                     ->from($from)
-                     ->subject($subject)
-                     ->html($content);
+                    ->from($from)
+                    ->subject($subject)
+                    ->html($content);
 
                 if (!empty($copy)) {
                     $mail->cc($copy);
                 }
-                
+
                 $this->getMailService()->send($mail);
 
                 //Création d'une trace de l'envoi dans les notes de l'intervenant

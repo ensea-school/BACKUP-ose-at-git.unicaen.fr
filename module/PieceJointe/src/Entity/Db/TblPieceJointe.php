@@ -2,6 +2,7 @@
 
 namespace PieceJointe\Entity\Db;
 
+
 use Application\Entity\Db\Annee;
 use Intervenant\Entity\Db\Intervenant;
 
@@ -15,19 +16,18 @@ class TblPieceJointe
 
     private bool $validee = false;
 
-    private TypePieceJointe $typePieceJointe;
+    private ?TypePieceJointe $typePieceJointe = null;
 
-    private PieceJointe $pieceJointe;
+    private ?PieceJointe $pieceJointe = null;
 
-    private Intervenant $intervenant;
+    private ?Intervenant $intervenant = null;
 
-    private float $seuilHetd;
+    private ?Annee $annee = null;
 
-    private Annee $annee;
+    private bool $obligatoire = false;
 
-    private bool $obligatoire;
+    private bool $demandeApresRecrutement = false;
 
-    private bool $demandeApresRecrutement;
 
 
     public function getDemandee(): bool
@@ -35,49 +35,67 @@ class TblPieceJointe
         return $this->demandee;
     }
 
+
+
     public function getFournie(): bool
     {
         return $this->fournie;
     }
+
+
 
     public function getValidee(): bool
     {
         return $this->validee;
     }
 
+
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function getTypePieceJointe(): TypePieceJointe
+
+
+    public function getTypePieceJointe(): ?TypePieceJointe
     {
         return $this->typePieceJointe;
     }
 
-    public function getIntervenant(): Intervenant
+
+
+    public function getIntervenant(): ?Intervenant
     {
         return $this->intervenant;
     }
 
-    public function getSeuilHetd(): float
-    {
-        return $this->seuilHetd;
-    }
 
-    public function getAnnee(): Annee
+
+    public function getAnnee(): ?Annee
     {
         return $this->annee;
     }
+
+
 
     public function isObligatoire(): bool
     {
         return $this->obligatoire;
     }
 
+
+
     public function isDemandeApresRecrutement(): bool
     {
         return $this->demandeApresRecrutement;
+    }
+
+
+
+    public function getPieceJointe(): ?PieceJointe
+    {
+        return $this->pieceJointe;
     }
 
 }

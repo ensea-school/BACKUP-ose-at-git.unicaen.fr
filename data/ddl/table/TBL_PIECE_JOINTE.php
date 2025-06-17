@@ -141,18 +141,6 @@ return [
             'position'    => 11,
             'commentaire' => '',
         ],
-        'SEUIL_HETD'    => [
-            'name'        => 'SEUIL_HETD',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => null,
-            'precision'   => 126,
-            'nullable'    => false,
-            'default'     => '0',
-            'position'    => 12,
-            'commentaire' => 'NB d\'heures de seuil pour la demande',
-        ],
         'DEMANDEE_APRES_RECRUTEMENT' => [
             'name'        => 'DEMANDEE_APRES_RECRUTEMENT',
             'type'        => 'int',

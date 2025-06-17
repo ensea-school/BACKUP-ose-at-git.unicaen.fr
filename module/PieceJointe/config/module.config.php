@@ -30,16 +30,16 @@ return [
             'controller'    => PieceJointeController::class,
             'may_terminate' => true,
             'child_routes'  => [
-                'intervenant'                       => [
+                'intervenant' => [
                     'route'         => '/intervenant/:intervenant',
-                    'action'        => 'index',
+                    'action'        => 'indexNew',
                     'may_terminate' => true,
                     'child_routes'  => [
-                        'infos'      => [
+                        'infos'              => [
                             'route'  => '/infos',
                             'action' => 'infos',
                         ],
-                        'validation' => [
+                        'validation'         => [
                             'route'       => '/validation/:typePieceJointe',
                             'constraints' => [
                                 'typePieceJointe' => '[0-9]*',
@@ -47,7 +47,7 @@ return [
                             'action'      => 'validation',
 
                         ],
-                        'valider'    => [
+                        'valider'            => [
                             'route'       => '/valider/:pieceJointe',
                             'constraints' => [
                                 'pieceJointe' => '[0-9]*',
@@ -55,7 +55,7 @@ return [
                             ],
                             'action'      => 'valider',
                         ],
-                        'devalider'  => [
+                        'devalider'          => [
                             'route'       => '/devalider/:pieceJointe',
                             'constraints' => [
                                 'pieceJointe' => '[0-9]*',
@@ -63,7 +63,7 @@ return [
                             ],
                             'action'      => 'devalider',
                         ],
-                        'refuser'    => [
+                        'refuser'            => [
                             'route'       => '/refuser/:pieceJointe',
                             'constraints' => [
                                 'pieceJointe' => '[0-9]*',
@@ -71,14 +71,20 @@ return [
                             ],
                             'action'      => 'refuser',
                         ],
-                        'archiver'   => [
+                        'archiver'           => [
                             'route'       => '/archiver/:pieceJointe',
                             'constraints' => [
                                 'pieceJointe' => '[0-9]*',
                             ],
                             'action'      => 'archiver',
                         ],
-                        'fichier'    => [
+                        'get-pieces-jointes' => [
+                            'route'      => '/get-pieces-jointes',
+                            'action'     => 'getPiecesJointes',
+                            'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
+
+                        ],
+                        'fichier'            => [
                             'route'         => '/fichier',
                             'may_terminate' => false,
                             'child_routes'  => [
@@ -116,7 +122,7 @@ return [
                                     ],
                                     'action'      => 'supprimer',
                                 ],
-                                'valider'    => [
+                                'valider'     => [
                                     'route'       => '/valider/:pieceJointe/:fichier',
                                     'constraints' => [
                                         'pieceJointe' => '[0-9]*',
@@ -241,7 +247,7 @@ return [
         /* Pièces jointes */
         [
             'controller' => PieceJointeController::class,
-            'action'     => ['index','indexNew'],
+            'action'     => ['index', 'indexNew', 'getPiecesJointes'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
             'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
@@ -269,7 +275,7 @@ return [
         ],
         [
             'controller' => PieceJointeController::class,
-            'action'     => ['valider','validerFichier'],
+            'action'     => ['valider', 'validerFichier'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_VALIDATION,
             'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
@@ -305,7 +311,7 @@ return [
         TypePieceJointeService::class       => TypePieceJointeServiceFactory::class,
         TypePieceJointeStatutService::class => TypePieceJointeStatutServiceFactory::class,
         PiecesJointesAssertion::class       => AssertionFactory::class,
-        PieceJointeProcess::class           => PieceJointeProcessFactory::class
+        PieceJointeProcess::class           => PieceJointeProcessFactory::class,
 
     ],
 

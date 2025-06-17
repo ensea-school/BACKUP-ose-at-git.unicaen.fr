@@ -30,7 +30,6 @@
                 <option name="default">0</option>
             </options>
         </field>
-        <field name="seuilHetd" type="float" column="SEUIL_HETD" nullable="false"/>
         <many-to-one field="typePieceJointe" target-entity="PieceJointe\Entity\Db\TypePieceJointe" fetch="LAZY">
             <join-columns>
                 <join-column name="TYPE_PIECE_JOINTE_ID" referenced-column-name="ID"/>

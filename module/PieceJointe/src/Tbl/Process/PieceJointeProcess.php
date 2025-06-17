@@ -44,6 +44,7 @@ class PieceJointeProcess implements ProcessInterface
         $this->getPiecesJointesDemandees($params);
         $this->getPiecesJointesFournies($params);
         $this->traitementPiecesJointes($params);
+        //dump($this->piecesJointesDemandees, $this->piecesJointesFournies, $this->piecesJointes);
         $this->exporterPiecesJointes($params);
         $this->enregistrement($tableauBord, $params);
     }
@@ -146,7 +147,6 @@ class PieceJointeProcess implements ProcessInterface
             $pieceJointe->intervenantId           = $pieceJointeDemandee['INTERVENANT_ID'];
             $pieceJointe->demandee                = true;
             $pieceJointeFournie                   = false;
-            $pieceJointe->seuilHetd               = $pieceJointeDemandee['SEUIL_HETD'];
             $pieceJointe->obligatoire             = $pieceJointeDemandee['OBLIGATOIRE'];
             $pieceJointe->demandeApresRecrutement = $pieceJointeDemandee['DEMANDEE_APRES_RECRUTEMENT'];
             $this->piecesJointes[$uuid]           = $pieceJointe;
@@ -180,7 +180,7 @@ class PieceJointeProcess implements ProcessInterface
             if (!empty($piecesJointesFournies)) {
                 foreach ($piecesJointesFournies as $pieceJointeFournie) {
                     //L'année de la pièce jointe fournie est postérieur à l'année de la pièce jointe demandée
-                    if ((int)$pieceJointeDemandee['ANNEE_ID'] > (int)$pieceJointeFournie['ANNEE_ID']) {
+                    if ((int)$pieceJointeDemandee['ANNEE_ID'] >= (int)$pieceJointeFournie['ANNEE_ID']) {
                         if (//1 -Si la date de validité de la pièce jointe est strictement supérieure à l'année où elle est demandée
                             (int)$pieceJointeFournie['DATE_VALIDITEE'] > (int)$pieceJointeDemandee['ANNEE_ID'] &&
                             //2 - L'année de la pièce jointe fournie correspond au critère de durée de vie de la pièce jointe demandée
@@ -220,7 +220,6 @@ class PieceJointeProcess implements ProcessInterface
                 'OBLIGATOIRE'                => $piecesJointe->obligatoire,
                 'DATE_ORIGINE'               => $piecesJointe->dateOrigine,
                 'DATE_VALIDITEE'             => $piecesJointe->dateValiditee,
-                'SEUIL_HETD'                 => $piecesJointe->seuilHetd,
                 'DEMANDEE_APRES_RECRUTEMENT' => $piecesJointe->demandeApresRecrutement,
             ];
         }

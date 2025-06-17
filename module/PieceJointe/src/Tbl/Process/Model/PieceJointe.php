@@ -16,7 +16,6 @@ class PieceJointe
     public bool    $obligatoire             = false;
     public ?int    $dateOrigine             = null;
     public ?int    $dateValiditee           = null;
-    public float   $seuilHetd               = 0;
     public bool    $demandeApresRecrutement = false;
 
 }

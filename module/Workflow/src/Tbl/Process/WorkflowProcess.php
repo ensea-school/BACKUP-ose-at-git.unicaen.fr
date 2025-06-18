@@ -3,14 +3,17 @@
 namespace Workflow\Tbl\Process;
 
 
+use Application\Cache\Traits\CacheContainerTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Unicaen\BddAdmin\BddAwareTrait;
+use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
-use Workflow\Tbl\Process\Model\WfEtape;
+use Workflow\Tbl\Process\Model\IntervenantEtape;
+use Workflow\Tbl\Process\Model\IntervenantEtapeStructure;
 
 /**
  * Description of WorkflowProcess
@@ -23,59 +26,156 @@ class WorkflowProcess implements ProcessInterface
     use BddAwareTrait;
     use AnneeServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use CacheContainerTrait;
 
-    private array $tblData = [];
+    /**
+     * @var array|IntervenantEtape[][]
+     */
+    private array $workflows = [];
 
 
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
+        mpg_lower($params);
+
         if (empty($params)) {
             $annees = $this->getServiceAnnee()->getActives(true);
             foreach ($annees as $annee) {
-                $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
+                $this->run($tableauBord, ['annee_id' => $annee->getId()]);
             }
         } else {
             $this->load($params);
+            foreach ($this->workflows as $intervenantId => $wf) {
+                $this->traitement($this->workflows[$intervenantId]);
+            }
+            $this->save($tableauBord, $params);
         }
     }
 
 
 
-    public function load(array $params = []): void
+    protected function load(array $params = []): void
     {
-        $sql = $this->makeSql();
-        $sql = $this->getServiceBdd()->injectKey($sql, $params);
+        $cache = $this->getCacheContainer();
+
+        //if (empty($cache->alimentationSql)) {
+        $cache->alimentationSql = $this->makeSql();
+        //}
 
         $etapes = $this->getServiceWorkflow()->getEtapes();
 
+        $sql  = $this->getServiceBdd()->injectKey($cache->alimentationSql, $params);
         $stmt = $this->bdd->selectEach($sql);
-        while( $d = $stmt->next()){
-            $wfEtape = new WfEtape();
-            $wfEtape->annee = (int)$d['ANNEE_ID'];
-            $wfEtape->intervenant = (int)$d['INTERVENANT_ID'];
-            $wfEtape->etape = $etapes[$d['ETAPE_CODE']];
-            $wfEtape->structure = (int)$d['STRUCTURE_ID'];
+        while ($d = $stmt->next()) {
+            mpg_lower($d);
 
-            $wfEtape->atteignable = (bool)$d['ATTEIGNABLE'];
+            $intevenant = (int)$d['intervenant_id'];
+            $structure  = (int)$d['structure_id'];
+            $etape      = $etapes[$d['etape_code']];
 
-            $wfEtape->objectif = (float)$d['OBJECTIF'];
-            $wfEtape->partiel = (float)$d['PARTIEL'];
-            $wfEtape->realisation = (float)$d['REALISATION'];
-
-            if (!array_key_exists($wfEtape->intervenant, $this->tblData)) {
-                $this->tblData[$wfEtape->intervenant] = [];
+            if (!array_key_exists($intevenant, $this->workflows)) {
+                $this->workflows[$intevenant] = [];
             }
-            $this->tblData[$wfEtape->intervenant][] = $wfEtape;
+
+            if (!array_key_exists($etape->getId(), $this->workflows[$intevenant])) {
+                $ie                      = new IntervenantEtape();
+                $ie->annee               = (int)$d['annee_id'];
+                $ie->typeIntervenantId   = (int)$d['type_intervenant_id'];
+                $ie->typeIntervenantCode = $d['type_intervenant_code'];
+                $ie->statut              = (int)$d['statut_id'];
+                $ie->intervenant         = $intevenant;
+                $ie->etape               = $etape;
+
+                $this->workflows[$intevenant][$etape->getId()] = $ie;
+            } else {
+                $ie = $this->workflows[$intevenant][$etape->getId()];
+            }
+
+            if (array_key_exists($structure, $ie->structures)) {
+                throw new \Exception('Erreur workflow pour l\'intervenant ID=' . $intevenant . ' : la structure ID=' . $structure . ' est référencée en double');
+            }
+
+            $ies              = new IntervenantEtapeStructure();
+            $ies->structure   = $structure;
+            $ies->atteignable = (bool)$d['atteignable'];
+            $ies->objectif    = (float)$d['objectif'];
+            $ies->partiel     = (float)$d['partiel'];
+            $ies->realisation = (float)$d['realisation'];
+
+            $ie->structures[$structure] = $ies;
         }
+    }
+
+
+
+    protected function save(TableauBord $tableauBord, array $params): void
+    {
+        $data = [];
+
+        foreach ($this->workflows as $workflow) {
+            foreach ($workflow as $etape) {
+                foreach ($etape->structures as $etapeStructure) {
+                    $d = [
+                        'annee_id'              => $etape->annee,
+                        'type_intervenant_id'   => $etape->typeIntervenantId,
+                        'type_intervenant_code' => $etape->typeIntervenantCode,
+                        'statut_id'             => $etape->statut,
+                        'intervenant_id'        => $etape->intervenant,
+                        'etape_id'              => $etape->etape->getId(),
+                        'etape_code'            => $etape->etape->getCode(),
+                        'structure_id'          => $etapeStructure->structure ?: null,
+                        'atteignable'           => $etapeStructure->atteignable,
+                        'objectif'              => $etapeStructure->objectif,
+                        'partiel'               => $etapeStructure->partiel,
+                        'realisation'           => $etapeStructure->realisation,
+                    ];
+                    mpg_upper($d);
+                    $data[] = $d;
+                }
+            }
+        }
+//dd($data);
+        $tableName = 'tbl_workflow';
+        mpg_upper($tableName);
+
+        // Enregistrement en BDD
+        $key = $tableauBord->getOption('key');
+
+        $table = $this->getBdd()->getTable($tableName);
+
+        //         on force la DDL pour éviter de faire des requêtes en plus
+        //        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
+
+        $options = [
+            'where'              => $params,
+            'return-insert-data' => false,
+            'transaction'        => !isset($params['intervenant_id']),
+            'callback'           => function (string $action, int $progress, int $total) use ($tableauBord) {
+                $tableauBord->onAction(Event::PROGRESS, $progress, $total);
+            },
+        ];
+
+        $table->merge($data, $key, $options);
+    }
+
+
+
+    /**
+     * @param array|IntervenantEtape[] $wf
+     * @return void
+     */
+    protected function traitement(array $wf): void
+    {
+       // dd($wf);
     }
 
 
 
     private function makeSql(): string
     {
-        $dems = "\n".$this->sqlActivationEtapes();
-        $subQueries = "\n".$this->sqlAlimentation()."\n";
+        $dems       = "\n" . $this->sqlActivationEtapes();
+        $subQueries = "\n" . $this->sqlAlimentation() . "\n";
 
         return "
         SELECT
@@ -98,9 +198,11 @@ class WorkflowProcess implements ProcessInterface
           LEFT JOIN ($subQueries) w ON w.intervenant_id = i.id AND w.etape_code = e.code
         WHERE
           w.intervenant_id IS NOT NULL
-          /*@INTERVENANT_ID=i.id*/
-          /*@ANNEE_ID=i.annee_id*/
-          /*@STATUT_ID=i.statut_id*/
+          /*@intervenant_id=i.id*/
+          /*@annee_id=i.annee_id*/
+          /*@statut_id=i.statut_id*/
+        ORDER BY
+          e.ordre
         ";
     }
 
@@ -225,15 +327,18 @@ class WorkflowProcess implements ProcessInterface
 
     protected function sqlAlimentation(): string
     {
-        $views = $this->bdd->view()->get('V_TBL_WORKFLOW_%');
-        $sql = "";
-        foreach( $views as $view ) {
+        $filter = 'v_tbl_workflow_%';
+        mpg_upper($filter);
+
+        $views = $this->bdd->view()->get($filter);
+        $sql   = "";
+        foreach ($views as $view) {
             if ($sql != "") {
                 $sql .= "\n\nUNION ALL\n\n";
             }
 
             $vdef = substr($view['definition'], strpos($view['definition'], "SELECT"));
-            $sql .= $vdef;
+            $sql  .= $vdef;
         }
         return $sql;
     }

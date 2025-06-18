@@ -50,11 +50,12 @@ class WorkflowService extends AbstractService
 
             $dql = "
             SELECT 
-                we, d, wep
+                we, d, wep, weperimetre
             FROM 
                 " . WorkflowEtape::class . " we
                 LEFT JOIN we.dependances d
                 LEFT JOIN d.etapePrecedante wep
+                LEFT JOIN we.perimetre weperimetre
             ORDER BY 
                 we.ordre, wep.ordre";
 

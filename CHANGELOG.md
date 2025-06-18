@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 24.4](#ose-244-04062025)
+OSE 24.6](#ose-246-17062025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -20,21 +20,27 @@
 * Saisie de service d'enseignement
   * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
 
+* Possibilité d'exploiter 2 états de sortie différents via le menu "Services"
+
 ## Corrections
 
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
 
+## Notes de mise à jour
+
+Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
 
 
-# OSE 24.6 (16/06/2025)
 
-## Amélioration
+# OSE 24.6 (17/06/2025)
+
+## Améliorations
 
 * Nouvelle formule pour La Rochelle
 * En cas de saisie calendaire d'une heure débutant à 00:00, seule la date est affichée, l'heure étant considérée comme non saisie
 * En mode calendaire, la saisie des dates de début et de fin sont obligatoires
 
-## Correction
+## Corrections
 
 * La version 24 ne comptabilisait pas tous les volumes horaires de référentiel pour les paiements dans certaines situations
 * Les fenêtres à bulles ("popvers") s'affichent maintenant tojours à l'intérieur de l'écran

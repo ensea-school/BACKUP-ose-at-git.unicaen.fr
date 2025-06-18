@@ -5,7 +5,7 @@
 return [
     'name'        => 'TBL_WORKFLOW_ETAPE_FK',
     'table'       => 'TBL_WORKFLOW',
-    'rtable'      => 'WF_ETAPE',
+    'rtable'      => 'WORKFLOW_ETAPE',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [

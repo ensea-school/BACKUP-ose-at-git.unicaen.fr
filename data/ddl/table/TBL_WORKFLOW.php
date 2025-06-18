@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 6,
+            'position'    => 10,
             'commentaire' => 'Témoin indiquant si l\'étape est atteignable ou non',
         ],
         'ETAPE_CODE'            => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 8,
             'commentaire' => 'Code de l\'étape du workflow concernée',
         ],
         'ETAPE_ID'              => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 7,
             'commentaire' => 'Identifiant de l\'étape concernée',
         ],
         'ID'                    => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 6,
             'commentaire' => 'Identifiant de l\'intervenant concerné',
         ],
         'OBJECTIF'              => [
@@ -90,8 +90,20 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 8,
+            'position'    => 11,
             'commentaire' => 'Objectif de réalisation de l\'étape de Workflow (entre 0 et 1)',
+        ],
+        'PARTIEL'               => [
+            'name'        => 'PARTIEL',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 13,
+            'commentaire' => NULL,
         ],
         'REALISATION'           => [
             'name'        => 'REALISATION',
@@ -102,7 +114,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 7,
+            'position'    => 12,
             'commentaire' => 'Pourcentage de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ],
         'STATUT_ID'             => [
@@ -114,7 +126,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'          => [
@@ -126,7 +138,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => 'null',
-            'position'    => 5,
+            'position'    => 9,
             'commentaire' => 'Eventuelle structure concernée',
         ],
         'TYPE_INTERVENANT_CODE' => [
@@ -138,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 4,
             'commentaire' => 'Code du type d\'intevention (CM / TD / TP, etc)',
         ],
         'TYPE_INTERVENANT_ID'   => [
@@ -150,7 +162,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
     ],

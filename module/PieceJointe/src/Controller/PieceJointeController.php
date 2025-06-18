@@ -239,11 +239,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $this->getServicePieceJointe()->valider($pj);
         $this->updateTableauxBord($pj->getIntervenant(), true);
 
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('piece-jointe/piece-jointe/validation');
-        $viewModel->setVariable('pj', $pj);
-
-        return $viewModel;
+        return true;
     }
 
 

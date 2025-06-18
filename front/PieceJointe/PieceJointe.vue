@@ -1,23 +1,49 @@
 <template>
-    <div class="tpj tpj-obligatoire tpj-1 card bg-default upload-container">
-        <div class="card-header card-header-h3">
+    <div class="tpj tpj-obligatoire tpj-1 card bg-success  upload-container">
+        <div class="card-header card-header-h3 ">
             <h5>
                 <div class="validation-bar float-end" data-url="">
+                    <div v-if="this.datas.pieceJointe">
+                        <!-- actions de validation de la pièce jointe entière -->
+                        <button v-if="!this.datas.pieceJointe.validation" :id="'valider-' + this.datas.pieceJointe.id"
+                                class="btn btn-success"
+                                type="button"
+                                :title="'Valider la pièce justificative \'' +  this.datas.typePieceJointe.libelle + '\''"
+                                @click="actionPieceJointe($event)"
+                                :data-url="this.urlValiderPiecesJointes">
 
-                    <!-- actions de validation de la pièce jointe entière -->
-                    <a class="valider-pj btn btn-success" href=""
-                       :title="'Valider la pièce justificative \'' +  datas.typePieceJointe.libelle + '\''">
-                        <i class="fas fa-thumbs-up"></i> Valider
-                    </a>
+                            <u-icon id="action" name="thumbs-up"
+                                    style="color:black;"/>
+                            Valider
+                            <!--                        <u-icon id="waiting" name="spin" rotate="right"
+                                                            style="color:white;display:none;"/>-->
+                        </button>
+                        <button v-if="!this.datas.pieceJointe.validation" :id="'refuser-' + this.datas.pieceJointe.id"
+                                class="btn btn-danger"
+                                type="button"
+                                :title="'Refuser la pièce justificative \'' +  this.datas.typePieceJointe.libelle + '\''"
+                                @click="actionPieceJointe($event, true)" title="Refuser la pièce jointe"
+                                :data-url="this.urlRefuserPiecesJointes">
+                            <u-icon id="action" name="trash"
+                                    style="color:black;"/>
+                            Refuser
+                            <!--                        <u-icon id="waiting" name="spin" rotate="right"
+                                                            style="color:white;display:none;"/>-->
+                        </button>
+                        <button v-if="this.datas.pieceJointe.validation" :id="'devalider-' + this.datas.pieceJointe.id"
+                                class="btn btn-danger"
+                                type="button"
+                                :title="'Dévalider la pièce justificative \'' +  this.datas.typePieceJointe.libelle + '\''"
+                                @click="actionPieceJointe($event)"
+                                :data-url="this.urlDevaliderPiecesJointes">
+                            <u-icon id="action" name="thumbs-up"
+                                    style="color:black;"/>
+                            Dévalider
+                            <!--                        <u-icon id="waiting" name="spin" rotate="right"
+                                                            style="color:white;display:none;"/>-->
+                        </button>
+                    </div>
 
-                    <!--    data-loading-text="Patientez..."-->
-
-                    <a class="refuser-pj btn btn-danger ajax-modal"
-                       href=""
-                       title="Refuser la pièce justificative  '{{ datas.typePieceJointe.libelle}}'"
-                    >
-                        <i class="fas fa-trash-can"></i> Refuser
-                    </a>
                 </div>
                 {{ datas.typePieceJointe.libelle }}
                 <br>
@@ -69,9 +95,49 @@ export default {
     },
     data()
     {
-        return {};
+        return {
+            urlValiderPiecesJointes: unicaenVue.url('piece-jointe/intervenant/:intervenant/valider/:pieceJointe', {
+                intervenant: this.intervenant,
+                pieceJointe: this.datas.pieceJointe ? this.datas.pieceJointe.id : 0
+            }),
+            urlDevaliderPiecesJointes: unicaenVue.url('piece-jointe/intervenant/:intervenant/devalider/:pieceJointe', {
+                intervenant: this.intervenant,
+                pieceJointe: this.datas.pieceJointe ? this.datas.pieceJointe.id : 0
+            }),
+            urlRefuserPiecesJointes: unicaenVue.url('piece-jointe/intervenant/:intervenant/refuser/:pieceJointe', {
+                intervenant: this.intervenant,
+                pieceJointe: this.datas.pieceJointe ? this.datas.pieceJointe.id : 0
+            }),
+
+
+        };
     },
-    methods: {}
+    methods: {
+
+        refuserPieceJointe(event)
+        {
+
+        },
+        actionPieceJointe(event, ajax = false)
+        {
+            if (ajax) {
+                modAjax(event.currentTarget, (widget) => {
+                    this.$emit('refresh');
+                });
+            } else {
+                var url = event.currentTarget.dataset.url;
+
+                unicaenVue.axios.get(url).then(response => {
+                    this.$emit('refresh');
+
+                }).catch(error => {
+                    this.$emit('refresh');
+                })
+            }
+
+        }
+
+    }
 }
 </script>
 

@@ -78,12 +78,12 @@ class TblPieceJointeService extends AbstractEntityService
             'validee',
             ['typePieceJointe', ['libelle']],
             ['pieceJointe',
-             [
-                 ['validation', ['id', 'histoCreation']],
-                 ['fichier',
-                  ['nom',
-                   ['validation', ['id']],
-                  ]],
+             ['id',
+              ['validation', ['id', 'histoCreation']],
+              ['fichier',
+               ['nom',
+                ['validation', ['id']],
+               ]],
              ],
             ],
         ];

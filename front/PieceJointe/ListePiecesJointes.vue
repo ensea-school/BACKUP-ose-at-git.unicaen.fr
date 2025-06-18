@@ -3,7 +3,8 @@
         <h1>Liste pieces jointes</h1>
         <pieceJointe v-for="(pieceJointe, key) in datasPiecesJointes"
                      :datas="pieceJointe"
-                     :intervenant="intervenant"></pieceJointe>
+                     :intervenant="intervenant"
+                     @refresh="getPiecesJointes"></pieceJointe>
 
     </div>
 </template>
@@ -25,6 +26,7 @@ export default {
         return {
             datasPiecesJointes: null,
             urlGetPiecesJointes: unicaenVue.url('piece-jointe/intervenant/:intervenant/get-pieces-jointes', {intervenant: this.intervenant}),
+
         }
 
     },

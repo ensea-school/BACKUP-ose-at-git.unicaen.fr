@@ -150,8 +150,17 @@ function vhlDump(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe): \
 }
 
 
-function pg_lower(mixed &$data): void
+function mpg_oracle(): bool
 {
+    return AppAdmin::config()['bdd']['driver'] === 'Oracle';
+}
+
+
+function mpg_lower(mixed &$data): void
+{
+    if (!mpg_oracle()) {
+        return;
+    }
     if (is_string($data)) {
         $data = strtolower($data);
         return;
@@ -160,7 +169,27 @@ function pg_lower(mixed &$data): void
         $data = array_change_key_case($data, CASE_LOWER);
         foreach ($data as $k => $v) {
             if (is_array($v)) {
-                pg_lower($data[$k]);
+                mpg_lower($data[$k]);
+            }
+        }
+    }
+}
+
+
+function mpg_upper(mixed &$data): void
+{
+    if (!mpg_oracle()) {
+        return;
+    }
+    if (is_string($data)) {
+        $data = strtoupper($data);
+        return;
+    }
+    if (is_array($data)) {
+        $data = array_change_key_case($data, CASE_UPPER);
+        foreach ($data as $k => $v) {
+            if (is_array($v)) {
+                mpg_upper($data[$k]);
             }
         }
     }

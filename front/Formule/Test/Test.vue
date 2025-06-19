@@ -859,6 +859,9 @@ export default {
             reader.onload = (e) => {
                 try {
                     const jsonContent = JSON.parse(e.target.result);
+
+                    jsonContent.intervenant.id = this.intervenant.id;
+
                     this.intervenant = jsonContent.intervenant;
                     this.volumesHoraires = jsonContent.volumesHoraires;
                     this.updateStructures();

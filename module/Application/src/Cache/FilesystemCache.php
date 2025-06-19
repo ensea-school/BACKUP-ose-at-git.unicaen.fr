@@ -17,9 +17,6 @@ class FilesystemCache extends CacheProvider
 {
     public const EXTENSION = '.doctrinecache.data';
 
-    /** @var int */
-    private int $umask = 0000;
-
     private string $extension = self::EXTENSION;
 
     private string $cacheDir;
@@ -27,18 +24,19 @@ class FilesystemCache extends CacheProvider
     /**
      * {@inheritdoc}
      */
-    public function __construct($cacheDir = 'cache/Doctrine', $extension = self::EXTENSION, $umask = 0000)
+    public function __construct($cacheDir = 'cache/Doctrine', $extension = self::EXTENSION)
     {
         $this->cacheDir = $cacheDir;
         $this->extension = $extension;
-        $this->umask = $umask;
     }
 
 
 
     public function getFilename(string $id): string
     {
-        return $this->cacheDir.'/'.base64_encode($id);
+        $id = str_replace(['[',']'], ['_',''], $id);
+
+        return $this->cacheDir.'/'.$id;
     }
 
 
@@ -49,7 +47,9 @@ class FilesystemCache extends CacheProvider
     {
         $filename = $this->getFilename($id);
 
-        unset($filename);
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
 
         return true;
     }
@@ -172,10 +172,10 @@ class FilesystemCache extends CacheProvider
         }
 
         $tmpFile = tempnam($filepath, 'swap');
-        @chmod($tmpFile, 0666 & (~$this->umask));
+        @chmod($tmpFile, 0777);
 
         if (file_put_contents($tmpFile, $content) !== false) {
-            @chmod($tmpFile, 0666 & (~$this->umask));
+            @chmod($tmpFile, 0777);
             if (@rename($tmpFile, $filename)) {
                 return true;
             }
@@ -196,7 +196,7 @@ class FilesystemCache extends CacheProvider
     private function createPathIfNeeded(string $path): bool
     {
         if (! is_dir($path)) {
-            if (@mkdir($path, 0777 & (~$this->umask), true) === false && ! is_dir($path)) {
+            if (@mkdir($path, 0777, true) === false && ! is_dir($path)) {
                 return false;
             }
         }

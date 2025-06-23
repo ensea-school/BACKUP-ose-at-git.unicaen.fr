@@ -6,7 +6,7 @@
     </div>
 
     <div v-if="error">
-        <div class="alert alert-danger">{{ error }}</div>
+        <pre class="alert alert-danger">{{ error }}</pre>
     </div>
     <div v-else>
         <div class="alert alert-success">Formule bien intégrée</div>
@@ -16,9 +16,6 @@
         <h3>Code généré :</h3>
         <div v-html="phpClass"></div>
     </div>
-
-    {{ error }}
-
 
 </template>
 <script>

@@ -76,12 +76,13 @@ class TblPieceJointeService extends AbstractEntityService
             'demandee',
             'fournie',
             'validee',
-            ['typePieceJointe', ['libelle']],
+            ['typePieceJointe', ['id', 'libelle']],
             ['pieceJointe',
              ['id',
               ['validation', ['id', 'histoCreation']],
               ['fichier',
-               ['nom',
+               ['id',
+                'nom',
                 ['validation', ['id']],
                ]],
              ],
@@ -100,7 +101,7 @@ class TblPieceJointeService extends AbstractEntityService
                 if (!empty($fichier)) {
                     $extracted['poids']       = round($fichier->getTaille() / 1024) . ' Ko';
                     $extracted['type']        = $fichier->getTypeMime();
-                    $extracted['date']        = $fichier->getDate()->format('d-m-Y H:i:s');
+                    $extracted['date']        = $fichier->getDate()->format('d-m-Y à H:i:s');
                     $extracted['utilisateur'] = $fichier->getHistoCreateur()->getDisplayName();
                 }
                 return $extracted;
@@ -108,7 +109,7 @@ class TblPieceJointeService extends AbstractEntityService
             '/pieceJointe/fichier/validation' => function (?Validation $validation, $extracted) {
                 if (!empty($validation)) {
                     $extracted['utilisateur'] = $validation->getHistoCreateur()->getDisplayName();
-                    $extracted['date']        = $validation->getHistoCreation()->format('d-m-Y H:i:s');
+                    $extracted['date']        = $validation->getHistoCreation()->format('d-m-Y à H:i:s');
 
                 }
                 return $extracted;

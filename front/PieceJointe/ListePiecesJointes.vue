@@ -1,12 +1,11 @@
 <template>
-    <div>
-        <h1>Liste pieces jointes</h1>
-        <pieceJointe v-for="(pieceJointe, key) in datasPiecesJointes"
-                     :datas="pieceJointe"
-                     :intervenant="intervenant"
-                     @refresh="getPiecesJointes"></pieceJointe>
 
-    </div>
+    <pieceJointe v-for="(pieceJointe, key) in datasPiecesJointes"
+                 :datas="pieceJointe"
+                 :intervenant="intervenant"
+                 @refresh="getPiecesJointes"></pieceJointe>
+
+
 </template>
 
 <script>

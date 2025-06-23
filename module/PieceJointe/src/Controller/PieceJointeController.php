@@ -244,21 +244,18 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
 
 
-    public function validerFichierAction()
+    public function validerFichierAction(): bool
     {
         $this->initFilters();
 
-        /** @var PieceJointe $pj */
+
         $pj          = $this->getEvent()->getParam('pieceJointe');
         $fichier     = $this->getEvent()->getParam('fichier');
         $intervenant = $pj->getIntervenant();
         $this->getServiceFichier()->valider($fichier, $intervenant);
         $this->updateTableauxBord($pj->getIntervenant(), true);
 
-        $viewModel = new ViewModel();
-
-
-        return $viewModel;
+        return true;
     }
 
 
@@ -324,26 +321,22 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
 
 
-    public function televerserAction()
+    public function televerserAction(): AxiosModel
     {
         $intervenant     = $this->getEvent()->getParam('intervenant');
         $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
+        $errors          = [];
 
-        $result = $this->uploader()->upload();
-
-        if ($result instanceof JsonModel) {
-            return $result;
-        }
-        if (is_array($result)) {
-            $errors = $this->getServicePieceJointe()->ajouterFichiers($result['files'], $intervenant, $typePieceJointe);
-            if (!empty($errors)) {
-                return new JsonModel(['errors' => $errors]);
-            }
+        if ($this->getRequest()->isPost()) {
+            $files  = $this->getRequest()->getFiles()->toArray();
+            $errors = $this->getServicePieceJointe()->ajouterFichiers($files, $intervenant, $typePieceJointe);
         }
 
-        $this->updateTableauxBord($intervenant);
+        $this->updateTableauxBord($intervenant, true);
 
-        return new JsonModel();
+
+        return new AxiosModel($errors);
+
     }
 
 
@@ -371,11 +364,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
     public function supprimerAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->redirect()->toRoute('home');
-        }
 
-        /** @var PieceJointe $pj */
         $pj      = $this->getEvent()->getParam('pieceJointe');
         $fichier = $this->getEvent()->getParam('fichier');
 
@@ -391,7 +380,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
         $this->updateTableauxBord($pj->getIntervenant());
 
-        return new JsonModel();
+        return true;
     }
 
 

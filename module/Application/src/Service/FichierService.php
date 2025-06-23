@@ -29,8 +29,6 @@ class FichierService extends AbstractEntityService
     use ValidationServiceAwareTrait;
 
 
-
-
     const STOCKAGE_BDD  = 'bdd';
     const STOCKAGE_FILE = 'file';
 
@@ -104,12 +102,11 @@ class FichierService extends AbstractEntityService
 
         $id       = $fichier->getId();
         $filename = 'd' . (str_pad((string)floor($id / 1000), 4, '0', STR_PAD_LEFT))
-            . '/f'
-            . str_pad((string)($id % 1000), 3, '0', STR_PAD_LEFT);
+                    . '/f'
+                    . str_pad((string)($id % 1000), 3, '0', STR_PAD_LEFT);
 
         return $this->getConfigDir() . $filename;
     }
-
 
 
 
@@ -252,7 +249,7 @@ class FichierService extends AbstractEntityService
     /**
      * Validation d'un fichier
      *
-     * @param Fichier $fichier
+     * @param Fichier     $fichier
      * @param Intervenant $intervenant
      *
      * @return Validation
@@ -261,7 +258,7 @@ class FichierService extends AbstractEntityService
      */
     public function valider(Fichier $fichier, Intervenant $intervenant): Validation
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $role->getStructure() ? $role->getStructure() : $intervenant->getStructure();
 
         $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_FICHIER);
@@ -280,10 +277,11 @@ class FichierService extends AbstractEntityService
     }
 
 
+
     /**
      * Validation d'un fichier
      *
-     * @param Fichier $fichier
+     * @param Fichier     $fichier
      * @param Intervenant $intervenant
      *
      * @return Validation
@@ -293,10 +291,13 @@ class FichierService extends AbstractEntityService
     public function devalider(Fichier $fichier): void
     {
         $validation = $fichier->getValidation();
-        $this->getServiceValidation()->delete($fichier->getValidation(), true);
-        $fichier->setValidation(null);
-        $this->getEntityManager()->persist($fichier);
-        $this->getEntityManager()->flush();
+        if ($validation instanceof Validation) {
+            $this->getServiceValidation()->delete($validation, true);
+            $fichier->setValidation(null);
+            $this->getEntityManager()->persist($fichier);
+            $this->getEntityManager()->flush();
+        }
+
 
     }
 

@@ -32,19 +32,7 @@ return [
             'default'     => null,
             'position'    => 1,
             'commentaire' => null,
-        ],
-        'VALIDATION_ID'         => [
-            'name'        => 'VALIDATION_ID',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => null,
-            'precision'   => null,
-            'nullable'    => true,
-            'default'     => null,
-            'position'    => 9,
-            'commentaire' => null,
-        ],
+        ]
     ],
 ];
 

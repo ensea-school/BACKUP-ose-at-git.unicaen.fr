@@ -212,7 +212,8 @@
                 <div v-for="(fonction, codeFonction) in datas.fonctionsReferentiels">
                     <div class="cartridge gray bordered" style="padding-bottom: 5px">
                         <span>Référentiel</span>
-                        <span>{{codeFonction + ' - ' + fonction.libelle }}</span>
+                        <span>{{ fonction.libelle }}</span>
+                        <span>{{ this.substr(fonction.commentaires, 40) }}</span>
                     </div>
                     <div class="container">
                         <div class="row">
@@ -805,6 +806,21 @@ export default {
                 centreCout += chaine.substring(0, length) + "...";
                 centreCout += '</span>'
                 return centreCout;
+            } else {
+                return chaine;
+            }
+        },
+        substr(chaine, length = 20)
+        {
+            if (chaine === null) {
+                return chaine;
+            }
+
+            if (chaine.length > length) {
+
+                var substrChaine = chaine.substring(0, length) + "...";
+
+                return substrChaine;
             } else {
                 return chaine;
             }

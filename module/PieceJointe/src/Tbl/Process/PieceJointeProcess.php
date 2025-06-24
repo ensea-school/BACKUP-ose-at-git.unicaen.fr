@@ -41,10 +41,10 @@ class PieceJointeProcess implements ProcessInterface
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
+        mpg_lower($params);
         $this->getPiecesJointesDemandees($params);
         $this->getPiecesJointesFournies($params);
         $this->traitementPiecesJointes($params);
-        //dump($this->piecesJointesDemandees, $this->piecesJointesFournies, $this->piecesJointes);
         $this->exporterPiecesJointes($params);
         $this->enregistrement($tableauBord, $params);
     }
@@ -53,6 +53,7 @@ class PieceJointeProcess implements ProcessInterface
 
     protected function getPiecesJointesDemandees(array $params): array
     {
+        mpg_lower($params);
         $definition                = $this->getServiceBdd()->getViewDefinition('V_TBL_PIECE_JOINTE_DEMANDE');
         $sqlPiecesJointesDemandees = 'SELECT * FROM ('
                                      . $this->getServiceBdd()->injectKey($definition, $params)
@@ -75,7 +76,7 @@ class PieceJointeProcess implements ProcessInterface
 
     protected function getPiecesJointesFournies(array $params): array
     {
-
+        mpg_lower($params);
         $params = $this->replaceIntervenantIdbyCodeIntervenantParam($params);
 
         $definition               = $this->getServiceBdd()->getViewDefinition('V_TBL_PIECE_JOINTE_FOURNIE');
@@ -119,15 +120,16 @@ class PieceJointeProcess implements ProcessInterface
 
     protected function replaceIntervenantIdbyCodeIntervenantParam(array $params): array
     {
-        if (isset($params['INTERVENANT_ID'])) {
-            $intervenant     = $this->getServiceIntervenant()->get($params['INTERVENANT_ID']);
+        mpg_lower($params);
+        if (isset($params['intervenant_id'])) {
+            $intervenant     = $this->getServiceIntervenant()->get($params['intervenant_id']);
             $codeIntervenant = $intervenant->getCode();
-            unset($params['INTERVENANT_ID']);
-            $params['CODE_INTERVENANT'] = $codeIntervenant;
+            unset($params['intervenant_id']);
+            $params['code_intervenant'] = $codeIntervenant;
 
         }
-        if (isset($params['ANNEE_ID'])) {
-            unset($params['ANNEE_ID']);
+        if (isset($params['annee_id'])) {
+            unset($params['annee_id']);
         }
 
         return $params;
@@ -228,7 +230,7 @@ class PieceJointeProcess implements ProcessInterface
 
     public function enregistrement(TableauBord $tableauBord, array $params): void
     {
-
+        mpg_lower($params);
 
         $key = $tableauBord->getOption('key');
 
@@ -237,7 +239,7 @@ class PieceJointeProcess implements ProcessInterface
         $options = [
             'where'              => $params,
             'return-insert-data' => false,
-            'transaction'        => !isset($params['INTERVENANT_ID']),
+            'transaction'        => !isset($params['intervenant_id']),
             'callback'           => function (string $action, int $progress, int $total) use ($tableauBord) {
                 $tableauBord->onAction(Event::PROGRESS, $progress, $total);
             },

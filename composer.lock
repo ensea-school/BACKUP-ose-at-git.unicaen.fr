@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d6e46d8213e28b4b77e2544df9cb296",
+    "content-hash": "f494f402d8a61de88b80d393e7003d02",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7872,11 +7872,11 @@
         },
         {
             "name": "unicaen/vue",
-            "version": "6.3.3",
+            "version": "6.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/vue.git",
-                "reference": "0a6a964de9049cc4b8032088bdf03809f90dc358"
+                "reference": "832b621f890b0bb9e5155ba6732fc607f49b8d77"
             },
             "type": "library",
             "autoload": {
@@ -7888,7 +7888,7 @@
                 ]
             },
             "description": "Module pour utiliser Vue.js",
-            "time": "2025-03-31T13:26:31+00:00"
+            "time": "2025-06-24T09:43:56+00:00"
         },
         {
             "name": "unicaen/zfc-user",

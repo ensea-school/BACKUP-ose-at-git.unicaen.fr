@@ -31,6 +31,14 @@ OSE 24.6](#ose-246-17062025)
 Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
 
 
+# OSE 24.7 (à venir)
+
+## Corrections
+
+* Lors de l'ajout d'une première heure d'enseignement depuis l'application, les formules se recalculent de nouveau correctement 
+
+
+
 
 # OSE 24.6 (17/06/2025)
 

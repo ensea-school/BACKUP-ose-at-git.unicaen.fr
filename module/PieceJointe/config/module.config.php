@@ -32,7 +32,7 @@ return [
             'child_routes'  => [
                 'intervenant' => [
                     'route'         => '/intervenant/:intervenant',
-                    'action'        => 'indexNew',
+                    'action'        => 'index',
                     'may_terminate' => true,
                     'child_routes'  => [
                         'infos'              => [
@@ -70,13 +70,6 @@ return [
                                 'fichier'     => '[0-9]*',
                             ],
                             'action'      => 'refuser',
-                        ],
-                        'archiver'           => [
-                            'route'       => '/archiver/:pieceJointe',
-                            'constraints' => [
-                                'pieceJointe' => '[0-9]*',
-                            ],
-                            'action'      => 'archiver',
                         ],
                         'get-pieces-jointes' => [
                             'route'      => '/get-pieces-jointes',

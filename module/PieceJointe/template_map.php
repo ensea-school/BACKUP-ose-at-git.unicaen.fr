@@ -16,6 +16,6 @@ return [
     'piece-jointe/piece-jointe/partial/tpjs-cell'                 => __DIR__ . '/view/piece-jointe/piece-jointe/partial/tpjs-cell.phtml',
     'piece-jointe/piece-jointe/partial/tpjs-ligne'                => __DIR__ . '/view/piece-jointe/piece-jointe/partial/tpjs-ligne.phtml',
     'piece-jointe/piece-jointe/refuser'                           => __DIR__ . '/view/piece-jointe/piece-jointe/refuser.phtml',
-    'piece-jointe/piece-jointe/index'                             => __DIR__ . '/view/piece-jointe/piece-jointe/index-new.phtml',
+    'piece-jointe/piece-jointe/index'                             => __DIR__ . '/view/piece-jointe/piece-jointe/index.phtml',
     'piece-jointe/piece-jointe/type-piece-jointe-statut'          => __DIR__ . '/view/piece-jointe/piece-jointe/type-piece-jointe-statut.phtml',
 ];

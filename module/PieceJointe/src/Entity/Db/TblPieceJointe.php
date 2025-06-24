@@ -8,7 +8,7 @@ use Intervenant\Entity\Db\Intervenant;
 
 class TblPieceJointe
 {
-    private int $id;
+    private int $id = 0;
 
     private bool $demandee = false;
 

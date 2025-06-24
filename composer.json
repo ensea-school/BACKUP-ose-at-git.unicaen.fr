@@ -1,109 +1,106 @@
 {
-    "name"             : "unicaen/ose",
-    "version"          : "1.0.0",
-    "description"      : "Organisation des Services d'Enseignement (OSE)",
-    "repositories"     : [
-        {
-            "type": "composer",
-            "url" : "https://gest.unicaen.fr/packagist"
-        }
+  "name": "unicaen/ose",
+  "version": "1.0.0",
+  "description": "Organisation des Services d'Enseignement (OSE)",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://gest.unicaen.fr/packagist"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "laminas/laminas-cli": "1.11.0",
+    "symfony/process": "7.2.0",
+    "twbs/bootstrap": "5.0.2",
+    "components/jquery": "3.7.1",
+    "components/font-awesome": "6.5.2",
+    "tinymce/tinymce": "7.6.0",
+    "snapappointments/bootstrap-select": "1.14.0-beta3",
+    "datatables.net/datatables.net-bs5": "2.1.8",
+    "vakata/jstree": "3.3.17",
+    "unicaen/app": "7.1.0",
+    "unicaen/authentification": "6.4.3",
+    "unicaen/privilege": "6.2.1",
+    "unicaen/utilisateur": "7.0.2",
+    "unicaen/code": "6.5.0",
+    "unicaen/import": "6.0.6",
+    "unicaen/tbl": "6.2.5",
+    "unicaen/open-document": "6.0.10",
+    "unicaen/siham": "6.2.0",
+    "unicaen/mail": "7.1.2",
+    "unicaen/vue": "6.4.0",
+    "unicaen/bddadmin": "1.4.0",
+    "unicaen/signature": "1.0.6",
+    "connecteur-ose/actul": "dev-master",
+    "connecteur-ose/pegase": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Administration\\": "module/Administration/src/",
+      "Agrement\\": "module/Agrement/src/",
+      "Application\\": "module/Application/src/",
+      "Contrat\\": "module/Contrat/src/",
+      "Chargens\\": "module/Chargens/src/",
+      "Dossier\\": "module/Dossier/src/",
+      "Enseignement\\": "module/Enseignement/src/",
+      "ExportRh\\": "module/ExportRh/src/",
+      "EtatSortie\\": "module/EtatSortie/src/",
+      "Formule\\": "module/Formule/src/",
+      "Indicateur\\": "module/Indicateur/src/",
+      "Intervenant\\": "module/Intervenant/src/",
+      "Lieu\\": "module/Lieu/src/",
+      "Mission\\": "module/Mission/src/",
+      "OffreFormation\\": "module/OffreFormation/src/",
+      "Paiement\\": "module/Paiement/src/",
+      "Signature\\": "module/Signature/src/",
+      "PieceJointe\\": "module/PieceJointe/src/",
+      "Plafond\\": "module/Plafond/src/",
+      "Referentiel\\": "module/Referentiel/src/",
+      "Service\\": "module/Service/src/",
+      "Workflow\\": "module/Workflow/src/"
+    }
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "*",
+    "phpcompatibility/php-compatibility": "*",
+    "phan/phan": "^5.3",
+    "phpmd/phpmd": "*",
+    "phpunit/phpunit": "^9",
+    "friendsofphp/php-cs-fixer": "^3.74",
+    "phpstan/phpstan": "^2.1"
+  },
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "laminas/laminas-dependency-plugin": true,
+      "composer/package-versions-deprecated": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "laminas-api-tools/api-tools-asset-manager": true
+    }
+  },
+  "scripts": {
+    "sniffer:php8": "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
+    "phpcs": "./vendor/bin/phpcs -p ./module --standard=PSR12",
+    "update-public-vendor": [
+      "rm -rf public/vendor",
+      "mkdir public/vendor",
+      "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
+      "cp -R vendor/components/jquery public/vendor/jquery",
+      "cp -R vendor/components/font-awesome public/vendor/font-awesome",
+      "cp -R vendor/tinymce/tinymce public/vendor/tinymce",
+      "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select",
+      "cp -R vendor/datatables.net/datatables.net public/vendor/datatables",
+      "cp -R vendor/datatables.net/datatables.net-bs5/* public/vendor/datatables/",
+      "cp -R vendor/vakata/jstree/dist public/vendor/jstree",
+      "cp public/vendor/datatables/css/dataTables.bootstrap5.min.css public/vendor/datatables/css/dataTables.bootstrap5.min.scss"
     ],
-    "require"          : {
-        "php"                              : ">=8.2",
-        "laminas/laminas-cli"              : "1.11.0",
-        "symfony/process"                  : "7.2.0",
-
-        "twbs/bootstrap"                   : "5.0.2",
-        "components/jquery"                : "3.7.1",
-        "components/font-awesome"          : "6.5.2",
-        "tinymce/tinymce"                  : "7.6.0",
-        "snapappointments/bootstrap-select": "1.14.0-beta3",
-        "datatables.net/datatables.net-bs5": "2.1.8",
-        "vakata/jstree"                    : "3.3.17",
-
-        "unicaen/app"                      : "7.1.0",
-        "unicaen/authentification"         : "6.4.3",
-        "unicaen/privilege"                : "6.2.1",
-        "unicaen/utilisateur"              : "7.0.2",
-        "unicaen/code"                     : "6.5.0",
-        "unicaen/import"                   : "6.0.6",
-        "unicaen/tbl"                      : "6.2.5",
-        "unicaen/open-document"            : "6.0.10",
-        "unicaen/siham"                    : "6.2.0",
-        "unicaen/mail"                     : "7.1.2",
-        "unicaen/vue"                      : "6.3.3",
-        "unicaen/bddadmin"                 : "1.4.0",
-        "unicaen/signature"                : "1.0.6",
-        "connecteur-ose/actul"             : "dev-master",
-        "connecteur-ose/pegase"            : "dev-master"
-    },
-    "autoload"         : {
-        "psr-4": {
-            "Administration\\": "module/Administration/src/",
-            "Agrement\\"      : "module/Agrement/src/",
-            "Application\\"   : "module/Application/src/",
-            "Contrat\\"       : "module/Contrat/src/",
-            "Chargens\\"      : "module/Chargens/src/",
-            "Dossier\\"       : "module/Dossier/src/",
-            "Enseignement\\"  : "module/Enseignement/src/",
-            "ExportRh\\"      : "module/ExportRh/src/",
-            "EtatSortie\\"    : "module/EtatSortie/src/",
-            "Formule\\"       : "module/Formule/src/",
-            "Indicateur\\"    : "module/Indicateur/src/",
-            "Intervenant\\"   : "module/Intervenant/src/",
-            "Lieu\\"          : "module/Lieu/src/",
-            "Mission\\"       : "module/Mission/src/",
-            "OffreFormation\\": "module/OffreFormation/src/",
-            "Paiement\\"      : "module/Paiement/src/",
-            "Signature\\"     : "module/Signature/src/",
-            "PieceJointe\\"   : "module/PieceJointe/src/",
-            "Plafond\\"       : "module/Plafond/src/",
-            "Referentiel\\"   : "module/Referentiel/src/",
-            "Service\\"       : "module/Service/src/",
-            "Workflow\\"      : "module/Workflow/src/"
-        }
-    },
-    "require-dev"      : {
-        "squizlabs/php_codesniffer"         : "*",
-        "phpcompatibility/php-compatibility": "*",
-        "phan/phan"                         : "^5.3",
-        "phpmd/phpmd"                       : "*",
-        "phpunit/phpunit"                   : "^9",
-        "friendsofphp/php-cs-fixer": "^3.74",
-        "phpstan/phpstan": "^2.1"
-    },
-    "prefer-stable"    : true,
-    "config"           : {
-        "allow-plugins": {
-            "laminas/laminas-dependency-plugin"             : true,
-            "composer/package-versions-deprecated"          : true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "laminas-api-tools/api-tools-asset-manager"     : true
-        }
-    },
-    "scripts"          : {
-        "sniffer:php8"        : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
-        "phpcs"               : "./vendor/bin/phpcs -p ./module --standard=PSR12",
-        "update-public-vendor": [
-            "rm -rf public/vendor",
-            "mkdir public/vendor",
-
-            "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
-            "cp -R vendor/components/jquery public/vendor/jquery",
-            "cp -R vendor/components/font-awesome public/vendor/font-awesome",
-            "cp -R vendor/tinymce/tinymce public/vendor/tinymce",
-            "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select",
-            "cp -R vendor/datatables.net/datatables.net public/vendor/datatables",
-            "cp -R vendor/datatables.net/datatables.net-bs5/* public/vendor/datatables/",
-            "cp -R vendor/vakata/jstree/dist public/vendor/jstree",
-            "cp public/vendor/datatables/css/dataTables.bootstrap5.min.css public/vendor/datatables/css/dataTables.bootstrap5.min.scss"
-        ],
-        "post-install-cmd"    : [
-            "@update-public-vendor"
-        ],
-        "post-update-cmd"     : [
-            "@update-public-vendor"
-        ]
-    },
-    "minimum-stability": "dev"
+    "post-install-cmd": [
+      "@update-public-vendor"
+    ],
+    "post-update-cmd": [
+      "@update-public-vendor"
+    ]
+  },
+  "minimum-stability": "dev"
 }

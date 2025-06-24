@@ -11,7 +11,8 @@
                 <div class="validation-bar float-end" data-url="">
                     <div v-if="datas.pieceJointe">
                         <!-- actions de validation de la pièce jointe entière -->
-                        <button v-if="!datas.pieceJointe.validation" :id="'valider-' + datas.pieceJointe.id"
+                        <button v-if="!datas.pieceJointe.validation && privileges.canValider"
+                                :id="'valider-' + datas.pieceJointe?.id"
                                 class="btn btn-success me-2"
                                 type="button"
                                 :title="'Valider la pièce justificative \'' +  datas.typePieceJointe.libelle + '\''"
@@ -20,9 +21,10 @@
 
                             <u-icon id="action" name="thumbs-up"
                                     style="color:black;"/>
-                            Valider
+                            VALIDER
                         </button>
-                        <button v-if="!datas.pieceJointe.validation" :id="'refuser-' + datas.pieceJointe.id"
+                        <button v-if="!datas.pieceJointe.validation && privileges.canRefuser"
+                                :id="'refuser-' + datas.pieceJointe?.id"
                                 class="btn btn-danger"
                                 type="button"
                                 :title="'Refuser la pièce justificative \'' +  datas.typePieceJointe.libelle + '\''"
@@ -30,22 +32,28 @@
                                 :data-url="urlRefuserPiecesJointes">
                             <u-icon id="action" name="trash"
                                     style="color:black;"/>
-                            Refuser
+                            REFUSER
                         </button>
-                        <button v-if="this.datas.pieceJointe.validation" :id="'devalider-' + datas.pieceJointe.id"
-                                class="btn btn-danger"
-                                type="button"
-                                :title="'Dévalider la pièce justificative \'' +  datas.typePieceJointe.libelle + '\''"
-                                @click="actionPieceJointe($event)"
-                                :data-url="urlDevaliderPiecesJointes">
+                        <button
+                            v-if="this.datas.pieceJointe.validation &&
+                                  (datas.annee == datas.pieceJointe?.anneeOrigine??false) &&
+                                  privileges.canValider"
+                            :id="'devalider-' + datas.pieceJointe?.id"
+                            class="btn btn-danger"
+                            type="button"
+                            :title="'Dévalider la pièce justificative \'' +  datas.typePieceJointe.libelle + '\''"
+                            @click="actionPieceJointe($event)"
+                            :data-url="urlDevaliderPiecesJointes">
                             <u-icon id="action" name="thumbs-up"
                                     style="color:black;"/>
-                            Dévalider
+                            DÉVALIDER
                         </button>
                     </div>
 
                 </div>
                 {{ datas.typePieceJointe.libelle }}
+                <span v-if="datas.annee != (datas.pieceJointe?.anneeOrigine??datas.annee)"
+                      style="font-size:0.6em;">Fourni(e) en {{ datas.pieceJointe?.anneeOrigine }}</span>
                 <br>
             </h5>
         </div>
@@ -60,9 +68,17 @@
                             <li v-for="(fichier, key) in datas.pieceJointe?.fichier" class="fichier-pj">
                                 <div class="d-flex">
                                     <div>
-                                        <a class="download-file"
+                                        <a v-if="privileges.canTelecharger" class="download-file"
                                            :href="'/piece-jointe/intervenant/' + intervenant + '/fichier/telecharger/' + fichier.id + '/' + fichier.nom"
                                            :title="'Télécharger le fichier déposé \'' + fichier.nom + '\''">
+                                            <span class="icon icon-file"></span> {{ truncate(fichier.nom, 15) }} (<abbr
+                                            :title="fichier.poids">{{ fichier.poids }}</abbr>)</a>
+                                        <a v-if="!privileges.canTelecharger"
+                                           class="disabled download-file"
+                                           tabindex="-1"
+                                           aria-disabled="true"
+                                           onclick="return false;"
+                                           :title="'Vous n\'avez pas les droits pour télécharge le fichier déposé \'' + fichier.nom + '\''">
                                             <span class="icon icon-file"></span> {{ truncate(fichier.nom, 15) }} (<abbr
                                             :title="fichier.poids">{{ fichier.poids }}</abbr>)</a>
 
@@ -78,7 +94,7 @@
                                     </div>
                                     <div>
                                         <!-- lien de suppression du fichier -->
-                                        <button v-if="!fichier.validation"
+                                        <button v-if="!fichier.validation && privileges.canEditer"
                                                 :id="'supprimer-fichier-' + fichier.id"
                                                 class="delete-file btn btn-sm btn-danger ms-2 p-1 py-0"
                                                 type="button"
@@ -90,13 +106,16 @@
                                                     style="color:black;"/>
                                         </button>
                                         <!-- lien de validation du fichier -->
-                                        <button v-if="!fichier.validation"
-                                                :id="'valider-fichier-' + fichier.id"
-                                                class="validate-file btn btn-sm btn-success ms-2 p-1 py-0"
-                                                type="button"
-                                                :title="'Valider le fichier déposé \'' + fichier.nom + '\''"
-                                                @click="actionPieceJointe($event)"
-                                                :data-url="'/piece-jointe/intervenant/' + intervenant + '/fichier/valider/' + datas.pieceJointe.id + '/' + fichier.id">
+                                        <button
+                                            v-if="!fichier.validation &&
+                                                  datas.pieceJointe?.validation &&
+                                                  privileges.canValider"
+                                            :id="'valider-fichier-' + fichier.id"
+                                            class="validate-file btn btn-sm btn-success ms-2 p-1 py-0"
+                                            type="button"
+                                            :title="'Valider le fichier déposé \'' + fichier.nom + '\''"
+                                            @click="actionPieceJointe($event)"
+                                            :data-url="'/piece-jointe/intervenant/' + intervenant + '/fichier/valider/' + datas.pieceJointe.id + '/' + fichier.id">
 
                                             <u-icon id="action" name="thumbs-up"
                                                     style="color:black;"/>
@@ -108,14 +127,14 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div v-if="privileges.canEditer" class="col-md-6">
                     <div class="row">
                         <!-- Formulaire sur 4 colonnes -->
                         <div class="col-md-8">
                             <form :id="formId" action=""
                                   enctype="multipart/form-data" method="post">
                                 <div>
-                                    <label class="form-label" for="importFile">Choisissez le fichier à déposer :</label>
+                                    <label class="form-label small" for="importFile">{{ labelUpload }}</label>
                                     <input class="form-control form-control-sm" name="importFile" type="file"
                                            @change="handleFileUpload" multiple>
                                 </div>
@@ -143,7 +162,7 @@
 
 import {ref, computed} from 'vue'
 
-const props = defineProps(['intervenant', 'datas']);
+const props = defineProps(['intervenant', 'datas', 'privileges']);
 
 // Emits
 const emit = defineEmits(['refresh'])
@@ -155,30 +174,31 @@ const selectedFiles = ref(null)
 const urlValiderPiecesJointes = computed(() =>
     unicaenVue.url('piece-jointe/intervenant/:intervenant/valider/:pieceJointe', {
         intervenant: props.intervenant,
-        pieceJointe: props.datas.pieceJointe ? props.datas.pieceJointe.id : 0
+        pieceJointe: props.datas.pieceJointe?.id ?? 0,
     })
 )
 
 const urlDevaliderPiecesJointes = computed(() =>
     unicaenVue.url('piece-jointe/intervenant/:intervenant/devalider/:pieceJointe', {
         intervenant: props.intervenant,
-        pieceJointe: props.datas.pieceJointe ? props.datas.pieceJointe.id : 0
+        pieceJointe: props.datas.pieceJointe?.id ?? 0,
     })
 )
 
 const urlRefuserPiecesJointes = computed(() =>
     unicaenVue.url('piece-jointe/intervenant/:intervenant/refuser/:pieceJointe', {
         intervenant: props.intervenant,
-        pieceJointe: props.datas.pieceJointe ? props.datas.pieceJointe.id : 0
+        pieceJointe: props.datas.pieceJointe?.id ?? 0,
     })
 )
 
 const urlDeposerFichier = computed(() =>
     unicaenVue.url('piece-jointe/intervenant/:intervenant/fichier/televerser/:typePieceJointe', {
         intervenant: props.intervenant,
-        typePieceJointe: props.datas.typePieceJointe ? props.datas.typePieceJointe.id : 0
+        typePieceJointe: props.datas.typePieceJointe?.id ?? 0,
     })
 )
+
 
 // Computed pour les IDs dynamiques
 const formId = computed(() => {
@@ -188,6 +208,15 @@ const formId = computed(() => {
 const buttonId = computed(() => {
     const id = props.datas.typePieceJointe?.id ?? 'unknown';
     return `btn-import-${id}`;
+});
+
+const labelUpload = computed(() => {
+    if (props.datas.pieceJointe?.validation && (props.datas.annee != props.datas.pieceJointe?.anneeOrigine ?? false)) {
+        return 'Déposez un document pour le mettre à jour :'
+    } else {
+        return 'Déposez un document : '
+    }
+
 });
 
 // Méthodes

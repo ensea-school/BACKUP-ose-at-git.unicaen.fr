@@ -146,10 +146,11 @@ class PieceJointeProcess implements ProcessInterface
             $pieceJointe->typePieceJointeId       = $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
             $pieceJointe->intervenantId           = $pieceJointeDemandee['INTERVENANT_ID'];
             $pieceJointe->demandee                = true;
-            $pieceJointeFournie                   = false;
-            $pieceJointe->obligatoire             = $pieceJointeDemandee['OBLIGATOIRE'];
+            $pieceJointe->fournie                 = false;
+            $pieceJointe->obligatoire             = true;
             $pieceJointe->demandeApresRecrutement = $pieceJointeDemandee['DEMANDEE_APRES_RECRUTEMENT'];
             $this->piecesJointes[$uuid]           = $pieceJointe;
+
         }
         //On parcourt maintenant les pièces jointes fournies pour voir si elles ont été fourni sur l'année demandée
         foreach ($this->piecesJointesFournies as $codeIntervenant => $datas) {
@@ -159,7 +160,6 @@ class PieceJointeProcess implements ProcessInterface
                     if (array_key_exists($uuid, $this->piecesJointes)) {
                         $this->piecesJointes[$uuid]->pieceJointeId = $pieceJointeFournie['PIECE_JOINTE_ID'];
                         $this->piecesJointes[$uuid]->fournie       = 1;
-                        $this->piecesJointes[$uuid]->dateOrigine   = $pieceJointeFournie['ANNEE_ID'];
                         $this->piecesJointes[$uuid]->validee       = !empty($pieceJointeFournie['VALIDATION_ID']);
                         $this->piecesJointes[$uuid]->dateValiditee = $pieceJointeFournie['DATE_VALIDITEE'];
                     }
@@ -189,7 +189,6 @@ class PieceJointeProcess implements ProcessInterface
                             ((int)$pieceJointeFournie['DATE_ARCHIVE'] > (int)$pieceJointeDemandee['ANNEE_ID'] ||
                              empty($pieceJointeFournie['DATE_ARCHIVE']))) {
                             $this->piecesJointes[$uuid]->pieceJointeId = $pieceJointeFournie['PIECE_JOINTE_ID'];
-                            $this->piecesJointes[$uuid]->dateOrigine   = $pieceJointeFournie['ANNEE_ID'];
                             $this->piecesJointes[$uuid]->dateValiditee = $pieceJointeFournie['DATE_VALIDITEE'];
                             $this->piecesJointes[$uuid]->fournie       = 1;
                             $this->piecesJointes[$uuid]->validee       = !empty($pieceJointeFournie['VALIDATION_ID']);
@@ -218,7 +217,6 @@ class PieceJointeProcess implements ProcessInterface
                 'FOURNIE'                    => $piecesJointe->fournie,
                 'VALIDEE'                    => $piecesJointe->validee,
                 'OBLIGATOIRE'                => $piecesJointe->obligatoire,
-                'DATE_ORIGINE'               => $piecesJointe->dateOrigine,
                 'DATE_VALIDITEE'             => $piecesJointe->dateValiditee,
                 'DEMANDEE_APRES_RECRUTEMENT' => $piecesJointe->demandeApresRecrutement,
             ];

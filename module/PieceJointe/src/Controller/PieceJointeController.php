@@ -3,6 +3,7 @@
 namespace PieceJointe\Controller;
 
 use Application\Entity\Db\Fichier;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
@@ -52,12 +53,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
     use FichierServiceAwareTrait;
     use TblPieceJointeServiceAwareTrait;
 
-    /**
-     * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
-     * éventuelles
-     * (services sur des enseignements fermés, etc.)
-     */
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -69,11 +64,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
 
 
-    /**
-     *
-     * @return ViewModel
-     * @throws \LogicException
-     */
     public function indexAction()
     {
         //$this->initFilters();
@@ -93,47 +83,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
         }
 
 
-        $title = "Pièces justificatives <small>{$intervenant}</small>";
-
-        $heuresPourSeuil = $this->getServicePieceJointe()->getHeuresPourSeuil($intervenant);
-        $fournies        = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
-        $demandees       = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
-        $synthese        = $this->getServicePieceJointe()->getPiecesSynthese($intervenant);
-
-        $annee = $this->getServiceContext()->getAnnee();
-
-        $messages = $this->makeMessages($intervenant);
-
-        $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->getContrat();
-
-        return compact('intervenant', 'title', 'heuresPourSeuil', 'demandees', 'synthese', 'fournies', 'messages', 'alertContrat', 'annee');
-    }
-
-
-
-    /**
-     *
-     * @return ViewModel
-     * @throws \LogicException
-     */
-    public function indexNewAction()
-    {
-        //$this->initFilters();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-
-        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
-            $menu = new ViewModel();
-            $menu->setTemplate('intervenant/intervenant/menu');
-
-            return $menu;
-        }
-
         return compact('intervenant');
 
 
@@ -152,12 +101,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
-        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
-            $menu = new ViewModel();
-            $menu->setTemplate('intervenant/intervenant/menu');
-
-            return $menu;
-        }
 
         return $this->getServiceTblPieceJointe()->data($intervenant);
     }
@@ -190,35 +133,11 @@ class PieceJointeController extends \Application\Controller\AbstractController
      *
      * @return array
      */
-    protected function makeMessages(Intervenant $intervenant)
-    {
-
-        $workflowEtapePjSaisie = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_SAISIE, $intervenant);
-        $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_VALIDATION, $intervenant);
-        $msgs                  = [];
-
-        if ($workflowEtapePjSaisie != null) {
-            if ($workflowEtapePjSaisie->getFranchie() != 1) {
-                $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
-            } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() == 1) {
-                $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
-            } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() != 1) {
-                $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
-                $msgs['warning'][] = "Mais certaines doivent encore être validées par un gestionnaire.";
-            }
-        } else {
-            //Si aucune pièce n'est demandé mais que le workflow n'a pas été recalculé, on evite un message d'erreur
-            $msgs['success'] = "";
-        }
-
-
-        return $msgs;
-    }
-
 
 
     public function validationAction()
     {
+
         $this->initFilters();
 
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -230,9 +149,13 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
 
 
-    public function validerAction()
+    public function validerAction(): bool
     {
         $this->initFilters();
+
+        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION))) {
+            return false;
+        }
 
         /** @var PieceJointe $pj */
         $pj = $this->getEvent()->getParam('pieceJointe');
@@ -248,6 +171,9 @@ class PieceJointeController extends \Application\Controller\AbstractController
     {
         $this->initFilters();
 
+        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION))) {
+            return false;
+        }
 
         $pj          = $this->getEvent()->getParam('pieceJointe');
         $fichier     = $this->getEvent()->getParam('fichier');
@@ -260,30 +186,11 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
 
 
-    public function archiverAction()
+    public function devaliderAction(): bool
     {
-        $this->initFilters();
-        /** @var PieceJointe $pj */
-        $pj = $this->getEvent()->getParam('pieceJointe');
-
-        $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
-        if ($intervenant && $pj->getIntervenant() != $intervenant) {
-            // un intervenant tente d'archiver la PJ d'un autre intervenant
-            throw new \Exception('Vous ne pouvez pas archiver la pièce justificative d\'un autre intervenant');
+        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION))) {
+            return false;
         }
-
-        $pj = $this->getServicePieceJointe()->archiver($pj);
-        $this->updateTableauxBord($pj->getIntervenant(), true);
-        $viewModel = new ViewModel();
-
-
-        return $viewModel;
-    }
-
-
-
-    public function devaliderAction()
-    {
         $this->initFilters();
 
         /** @var PieceJointe $pj */
@@ -291,38 +198,17 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $this->getServicePieceJointe()->devalider($pj);
         $this->updateTableauxBord($pj->getIntervenant(), true);
 
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('piece-jointe/piece-jointe/validation');
-        $viewModel->setVariable('pj', $pj);
+        return true;
 
-        return $viewModel;
-    }
-
-
-
-    public function listerAction()
-    {
-        $this->initFilters();
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        $pj          = $this->getEvent()->getParam('pieceJointe');
-
-        if (empty($pj) || $pj->estHistorise()) {
-            $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
-            $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
-        } else {
-            if ($pj->getIntervenant()->getCode() != $intervenant->getCode()) {
-                // un intervenant tente d'archiver la PJ d'un autre intervenant
-                throw new \Exception('Vous ne pouvez pas visualiser la liste des pièces jointes d\'un autre intervenant');
-            }
-        }
-
-        return compact('pj');
     }
 
 
 
     public function televerserAction(): AxiosModel
     {
+        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION))) {
+            $errors[] = "Vous n'avez pas le droit de téléverser des pièces jointes.";
+        }
         $intervenant     = $this->getEvent()->getParam('intervenant');
         $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
         $errors          = [];
@@ -343,6 +229,9 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
     public function telechargerAction()
     {
+        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT))) {
+            throw new \Exception("Vous n'avez pas le droit de télécharger cette pièce jointes.");
+        }
         /** @var Fichier $fichier */
         $fichier = $this->getEvent()->getParam('fichier');
 
@@ -362,8 +251,12 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
 
 
-    public function supprimerAction()
+    public function supprimerAction(): bool
     {
+
+        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION))) {
+            return false;
+        }
 
         $pj      = $this->getEvent()->getParam('pieceJointe');
         $fichier = $this->getEvent()->getParam('fichier');
@@ -381,6 +274,62 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $this->updateTableauxBord($pj->getIntervenant());
 
         return true;
+    }
+
+
+
+    public function refuserAction()
+    {
+        /** @var PieceJointe $pj */
+
+        $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
+        if ($intervenant && $pj->getIntervenant() != $intervenant) {
+            // un intervenant tente de supprimer la PJ d'un autre intervenant
+            throw new \Exception('Vous ne pouvez pas supprimer la pièce jointe d\'un autre intervenant');
+        }
+
+        $pj = $this->getEvent()->getParam('pieceJointe');
+
+        $title = 'Rédiger un email à l\'intervenant pour le refus de pièce';
+
+        $form = $this->getFormMailerIntervenant()->setIntervenant($pj->getIntervenant())->initForm();
+
+        if ($this->getRequest()->isPost() && $this->getRequest()->getPost()->count() > 0) {
+            try {
+                $data    = $this->getRequest()->getPost();
+                $from    = $data['from'];
+                $to      = $data['to'];
+                $subject = $data['subject'];
+                $content = $data['content'];
+                $copy    = $data['copy'];
+
+                $mail = new Email();
+                $mail->to($to)
+                    ->from($from)
+                    ->subject($subject)
+                    ->html($content);
+
+                if (!empty($copy)) {
+                    $mail->cc($copy);
+                }
+
+                $this->getMailService()->send($mail);
+
+                //Création d'une trace de l'envoi dans les notes de l'intervenant
+                $this->getServiceNote()->createNoteFromEmail($pj->getIntervenant(), $subject, $content);
+                $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');
+
+                foreach ($pj->getFichier() as $fichier) {
+                    $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
+                }
+
+                $this->updateTableauxBord($pj->getIntervenant());
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        }
+
+        return compact('pj', 'title', 'form');
     }
 
 
@@ -580,60 +529,5 @@ class PieceJointeController extends \Application\Controller\AbstractController
         }
     }
 
-
-
-    public function refuserAction()
-    {
-        /** @var PieceJointe $pj */
-
-        $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
-        if ($intervenant && $pj->getIntervenant() != $intervenant) {
-            // un intervenant tente de supprimer la PJ d'un autre intervenant
-            throw new \Exception('Vous ne pouvez pas supprimer la pièce jointe d\'un autre intervenant');
-        }
-
-        $pj = $this->getEvent()->getParam('pieceJointe');
-
-        $title = 'Rédiger un email à l\'intervenant pour le refus de pièce';
-
-        $form = $this->getFormMailerIntervenant()->setIntervenant($pj->getIntervenant())->initForm();
-
-        if ($this->getRequest()->isPost() && $this->getRequest()->getPost()->count() > 0) {
-            try {
-                $data    = $this->getRequest()->getPost();
-                $from    = $data['from'];
-                $to      = $data['to'];
-                $subject = $data['subject'];
-                $content = $data['content'];
-                $copy    = $data['copy'];
-
-                $mail = new Email();
-                $mail->to($to)
-                    ->from($from)
-                    ->subject($subject)
-                    ->html($content);
-
-                if (!empty($copy)) {
-                    $mail->cc($copy);
-                }
-
-                $this->getMailService()->send($mail);
-
-                //Création d'une trace de l'envoi dans les notes de l'intervenant
-                $this->getServiceNote()->createNoteFromEmail($pj->getIntervenant(), $subject, $content);
-                $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');
-
-                foreach ($pj->getFichier() as $fichier) {
-                    $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
-                }
-
-                $this->updateTableauxBord($pj->getIntervenant());
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-        }
-
-        return compact('pj', 'title', 'form');
-    }
 
 }

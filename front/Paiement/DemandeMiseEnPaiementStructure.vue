@@ -82,9 +82,7 @@
                                                     <table class="table table-sm ">
                                                         <thead>
                                                         <th scope="col" style="width:20%;font-size:12px;">Heures</th>
-                                                        <th scope="col" style="width:40%;font-size:12px;">Centre de
-                                                            coûts
-                                                        </th>
+                                                        <th scope="col" style="width:40%;font-size:12px;">Centre de coûts</th>
                                                         <th scope="col" style="width:25%;font-size:12px;">État</th>
                                                         <th style="width:15%;font-size:12px;"></th>
                                                         </thead>
@@ -214,7 +212,8 @@
                 <div v-for="(fonction, codeFonction) in datas.fonctionsReferentiels">
                     <div class="cartridge gray bordered" style="padding-bottom: 5px">
                         <span>Référentiel</span>
-                        <span>{{ codeFonction + ' - ' + fonction.libelle }}</span>
+                        <span>{{ fonction.libelle }}</span>
+                        <span>{{ this.substr(fonction.commentaires, 40) }}</span>
                     </div>
                     <div class="container">
                         <div class="row">
@@ -675,8 +674,7 @@ export default {
             //Si le nombre d'heure demandées est supérieur au nombre d'heures maximum pour cette ligne
             if (heureADemander > 0 && heureADemander > heureADemanderMax) {
                 unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible, vous demandez " + heureADemander + " hetd(s) alors que vous pouvez demander maximum " + heureADemanderMax + " hetd(s)", 'error', options);
-                this.$emit('refresh-btn-state');
-                ;
+                this.$emit('refresh-btn-state');;
                 return false;
             }
 
@@ -808,6 +806,21 @@ export default {
                 centreCout += chaine.substring(0, length) + "...";
                 centreCout += '</span>'
                 return centreCout;
+            } else {
+                return chaine;
+            }
+        },
+        substr(chaine, length = 20)
+        {
+            if (chaine === null) {
+                return chaine;
+            }
+
+            if (chaine.length > length) {
+
+                var substrChaine = chaine.substring(0, length) + "...";
+
+                return substrChaine;
             } else {
                 return chaine;
             }

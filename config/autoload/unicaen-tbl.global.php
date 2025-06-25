@@ -522,6 +522,7 @@ return [
                 'key'                => [
                     'ANNEE_ID',
                     'INTERVENANT_ID',
+                    'ETAPE_ID',
                     'STRUCTURE_ID',
                 ],
                 'key_values_if_null' => [

@@ -140,13 +140,19 @@ class ParametreEntityListener implements EventSubscriber
 
     protected function saveNextEntities(): void
     {
-        $data = $this->extract($this->entity);
+        if ($this->args instanceof PreUpdateEventArgs) {
+            $changeSet = $this->args->getEntityChangeSet();
+        }else{
+            $changeSet = [];
+        }
+
+        $data = $this->extract($this->entity, $changeSet);
         unset($data['data']['histoModificateur']);
         unset($data['data']['histoDestruction']);
         unset($data['data']['histoDestructeur']);
         $classname = get_class($this->entity);
 
-        $next = $this->nextEntities($this->entity);
+        $next = $this->nextEntities($this->entity, $changeSet);
         foreach ($next as $anneeId => $entity) {
             if (null === $entity) {
                 $entity = new $classname;
@@ -165,11 +171,6 @@ class ParametreEntityListener implements EventSubscriber
                 }
             }
             $this->hydrate($entityData, $entity);
-//            } else {
-//                $entityData        = $data;
-//                $entityData['key'] = [];
-//                $this->hydrate($entityData, $entity);
-//            }
 
             $this->em->persist($entity);
             $this->em->flush($entity);
@@ -250,9 +251,9 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function nextEntities(ParametreEntityInterface $entity, bool $stopManuel = true): array
+    protected function nextEntities(ParametreEntityInterface $entity, array $changeSet = []): array
     {
-        $key = $this->extract($entity)['key'];
+        $key = $this->extract($entity, $changeSet)['key'];
         unset($key['annee']);
 
         $qb = $this->em->createQueryBuilder();
@@ -301,7 +302,7 @@ class ParametreEntityListener implements EventSubscriber
 
             if (isset($nexts[$a])) {
                 // si une modif manuelle a été apportée, alors ce n'est plus la suite d'un même entité, mais une autre suite donc on stoppe
-                if ($stopManuel && $this->isManuel($nexts[$a])) {
+                if ($this->isManuel($nexts[$a])) {
                     break;
                 }
 
@@ -318,7 +319,13 @@ class ParametreEntityListener implements EventSubscriber
 
     protected function nextEntity(): ?ParametreEntityInterface
     {
-        $params          = $this->extract($this->entity)['key'];
+        if ($this->args instanceof PreUpdateEventArgs) {
+            $changeSet = $this->args->getEntityChangeSet();
+        }else{
+            $changeSet = [];
+        }
+
+        $params          = $this->extract($this->entity, $changeSet)['key'];
         $params['annee'] = $this->em->getRepository(Annee::class)->find($this->entity->getAnnee()->getId() + 1);
 
         return $this->repo()->findOneBy($params);
@@ -326,7 +333,7 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function extract(ParametreEntityInterface $entity): array
+    protected function extract(ParametreEntityInterface $entity, array $changeSet =  []): array
     {
         $metadata = $this->em->getClassMetadata(get_class($entity));
 
@@ -382,7 +389,12 @@ class ParametreEntityListener implements EventSubscriber
             'data' => [],
         ];
         foreach ($keyFields as $keyField) {
-            if (method_exists($entity, $method = 'get' . ucfirst($keyField))) {
+            if (array_key_exists($keyField, $changeSet) && array_key_exists(0, $changeSet[$keyField])) {
+                $res['key'][$keyField] =  $changeSet[$keyField][0];
+                if ($changeSet[$keyField][0] !== $changeSet[$keyField][1]){
+                    $res['data'][$keyField] = $changeSet[$keyField][1]; // on force la date pour la MAJ
+                }
+            }elseif (method_exists($entity, $method = 'get' . ucfirst($keyField))) {
                 $res['key'][$keyField] = $entity->$method();
             } elseif (method_exists($entity, $method = 'is' . ucfirst($keyField))) {
                 $res['key'][$keyField] = $entity->$method();

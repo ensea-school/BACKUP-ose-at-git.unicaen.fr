@@ -10,16 +10,20 @@ use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 class ParametreEntityListener implements EventSubscriber
 {
     use ContextServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
     use ParametresServiceAwareTrait;
+
+    const string REMOVE_DATE = '1066-10-14';
 
 
     protected LifecycleEventArgs $args;
@@ -32,21 +36,21 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    public function setEntityManager(EntityManager $entityManager)
+    public function setEntityManager(EntityManager $entityManager): void
     {
         $this->em = $entityManager;
     }
 
 
 
-    protected function save(LifecycleEventArgs $args)
+    protected function save(LifecycleEventArgs $args): void
     {
         if ($this->isSaving) return;
 
         /* Initialisation */
         $this->args   = $args;
-        $this->em     = $args->getEntityManager();
-        $this->entity = $args->getEntity();
+        $this->em     = $args->getObjectManager();
+        $this->entity = $args->getObject();
 
         $disabledFilters = $this->disableFilters();
 
@@ -94,7 +98,7 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function saveNextEntity()
+    protected function saveNextEntity(): void
     {
         $nextEntity = $this->nextEntity();
         if ($nextEntity && !$this->isManuel($nextEntity)) {
@@ -108,7 +112,7 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function deleteHisto()
+    protected function deleteHisto(): void
     {
         $key          = $this->extract($this->entity)['key'];
         $key['annee'] = $this->entity->getAnnee();
@@ -122,7 +126,7 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function deleteNextEntity()
+    protected function deleteNextEntity(): void
     {
         $nextEntity = $this->nextEntity();
         if ($nextEntity && !$this->isManuel($nextEntity)) {
@@ -134,7 +138,7 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function saveNextEntities()
+    protected function saveNextEntities(): void
     {
         $data = $this->extract($this->entity);
         unset($data['data']['histoModificateur']);
@@ -174,7 +178,7 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function deleteNextEntities()
+    protected function deleteNextEntities(): void
     {
         $next = $this->nextEntities($this->entity);
         foreach ($next as $entity) {
@@ -189,7 +193,7 @@ class ParametreEntityListener implements EventSubscriber
 
     public function entityAutreAnnee(ParametreEntityInterface $entity, Annee $annee): ?ParametreEntityInterface
     {
-        if ($entity->getAnnee() == $annee) {
+        if ($entity->getAnnee() === $annee) {
             return $entity;
         }
 
@@ -227,19 +231,27 @@ class ParametreEntityListener implements EventSubscriber
 
     protected function deleting(): bool
     {
-        if (!$this->args instanceof PreUpdateEventArgs) return false;
+        if ($this->args instanceof PreUpdateEventArgs) {
 
-        $ecs = $this->args->getEntityChangeSet();
+            $ecs = $this->args->getEntityChangeSet();
 
-        return isset($ecs['histoDestruction']) && $ecs['histoDestruction'][0] === null && $ecs['histoDestruction'][1] instanceof \DateTime;
+            return isset($ecs['histoDestruction']) && $ecs['histoDestruction'][0] === null && $ecs['histoDestruction'][1] instanceof \DateTime;
+        }
+
+        if ($this->args instanceof PreRemoveEventArgs) {
+            /** @var ParametreEntityInterface $object */
+            $object = $this->args->getObject();
+
+            return $object->getHistoDestruction() && $object->getHistoDestruction()->format('Y-m-d') == self::REMOVE_DATE;
+        }
+
+        return false;
     }
 
 
 
     protected function nextEntities(ParametreEntityInterface $entity, bool $stopManuel = true): array
     {
-        $repo = $this->em->getRepository(get_class($entity));
-
         $key = $this->extract($entity)['key'];
         unset($key['annee']);
 
@@ -260,12 +272,16 @@ class ParametreEntityListener implements EventSubscriber
                     $pi++;
                 }
             } else {
-                $qb->andWhere('e.' . $k . ' = :p' . $pi)->setParameter('p' . $pi, $v);
+                if ($v === null){
+                    $qb->andWhere('e.' . $k . ' IS NULL');
+                }else{
+                    $qb->andWhere('e.' . $k . ' = :p' . $pi)->setParameter('p' . $pi, $v);
+                }
+
                 $pi++;
             }
         }
         $query = $qb->getQuery();
-        //sqlDump($query);die();
 
         /** @var ParametreEntityInterface[] $nexts */
         /** @var ParametreEntityInterface[] $buff */
@@ -317,13 +333,18 @@ class ParametreEntityListener implements EventSubscriber
         /* Récupération de la liste des champs de la clé de l'entité */
         $keyFields = [];
         $tableName = $metadata->table['name'];
-        if (!isset($metadata->table['uniqueConstraints'][$tableName . '_UN'])) {
+        $uniqueConstraintName = $tableName . '_un';
+        mpg_upper($uniqueConstraintName);
+        if (!isset($metadata->table['uniqueConstraints'][$uniqueConstraintName])) {
             throw new \Exception('Contrainte d\'unicité "' . $tableName . '_UN" non trouvée dans le mapping Doctrine pour la classe ' . get_class($entity));
         }
-        $cols = $metadata->table['uniqueConstraints'][$tableName . '_UN']['columns'];
+        $cols = $metadata->table['uniqueConstraints'][$uniqueConstraintName]['columns'];
 
         foreach ($cols as $consCol) {
-            if (!in_array($consCol, ['HISTO_DESTRUCTION'])) {
+            $histoDestructionCol = 'histo_destruction';
+            mpg_upper($histoDestructionCol);
+
+            if (!in_array($consCol, [$histoDestructionCol])) {
                 if (isset($metadata->fieldNames[$consCol])) {
                     $keyFields[] = $metadata->fieldNames[$consCol];
                 } else {
@@ -388,10 +409,16 @@ class ParametreEntityListener implements EventSubscriber
     protected function hydrate(array $data, ParametreEntityInterface $entity)
     {
         foreach ($data['key'] as $field => $value) {
-            $entity->{'set' . ucfirst($field)}($value);
+            $method = 'set' . ucfirst($field);
+            if (method_exists($entity, $method)) {
+                $entity->$method($value);
+            }
         }
         foreach ($data['data'] as $field => $value) {
-            $entity->{'set' . ucfirst($field)}($value);
+            $method = 'set' . ucfirst($field);
+            if (method_exists($entity, $method)) {
+                $entity->$method($value);
+            }
         }
     }
 
@@ -417,7 +444,7 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function enableFilters(array $filters)
+    protected function enableFilters(array $filters): void
     {
         foreach ($filters as $name => $filter) {
             $this->em->getFilters()->enable($name);
@@ -426,46 +453,35 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(PrePersistEventArgs $args): void
     {
-        if ($args->getEntity() instanceof ParametreEntityInterface) {
+        if ($args->getObject() instanceof ParametreEntityInterface) {
             $this->save($args);
         }
     }
 
 
 
-    /**
-     * @param PreUpdateEventArgs $args
-     */
-    public function preUpdate(PreUpdateEventArgs $args)
+    public function preUpdate(PreUpdateEventArgs $args): void
     {
-        if ($args->getEntity() instanceof ParametreEntityInterface) {
+        if ($args->getObject() instanceof ParametreEntityInterface) {
             $this->save($args);
         }
     }
 
 
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function preRemove(LifecycleEventArgs $args)
+    public function preRemove(PreRemoveEventArgs $args): void
     {
-        if ($args->getEntity() instanceof ParametreEntityInterface) {
+        if ($args->getObject() instanceof ParametreEntityInterface) {
+            $args->getObject()->setHistoDestruction(new \DateTime(self::REMOVE_DATE));
             $this->save($args);
         }
     }
 
 
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [Events::prePersist, Events::preUpdate, Events::preRemove];
     }

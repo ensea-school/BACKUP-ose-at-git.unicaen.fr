@@ -14,6 +14,7 @@ use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 use Workflow\Tbl\Process\Model\IntervenantEtape;
 use Workflow\Tbl\Process\Model\IntervenantEtapeStructure;
+use Workflow\Tbl\Process\Sub\Calculateur;
 
 /**
  * Description of WorkflowProcess
@@ -33,6 +34,15 @@ class WorkflowProcess implements ProcessInterface
      */
     private array $workflows = [];
 
+    private Calculateur $calculateur;
+
+
+
+    public function __construct()
+    {
+        $this->calculateur = new Calculateur();
+    }
+
 
 
     public function run(TableauBord $tableauBord, array $params = []): void
@@ -47,7 +57,7 @@ class WorkflowProcess implements ProcessInterface
         } else {
             $this->load($params);
             foreach ($this->workflows as $intervenantId => $wf) {
-                $this->traitement($this->workflows[$intervenantId]);
+                $this->calculateur->run($this->workflows[$intervenantId]);
             }
             $this->save($tableauBord, $params);
         }
@@ -135,7 +145,7 @@ class WorkflowProcess implements ProcessInterface
                 }
             }
         }
-//dd($data);
+
         $tableName = 'tbl_workflow';
         mpg_upper($tableName);
 
@@ -157,17 +167,11 @@ class WorkflowProcess implements ProcessInterface
         ];
 
         $table->merge($data, $key, $options);
-    }
 
-
-
-    /**
-     * @param array|IntervenantEtape[] $wf
-     * @return void
-     */
-    protected function traitement(array $wf): void
-    {
-       // dd($wf);
+        // on force le refresh des feuilles de route déjà chargées
+        foreach ($this->workflows as $intervenant => $workflow) {
+            $this->getServiceWorkflow()->refreshFeuilleDeRoute($intervenant);
+        }
     }
 
 

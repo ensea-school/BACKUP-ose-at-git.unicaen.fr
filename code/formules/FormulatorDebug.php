@@ -168,7 +168,7 @@ if (!empty($cache)) {
     echo '<br />';
     echo '<br />';
 }else{
-    $calc .= '<div class="alert alert-danger">Le calcul de la formule n\'a pas pu être déclanché</div>';
+    $calc .= '<div class="alert alert-danger">Le calcul de la formule n\'a pas pu être déclenché</div>';
 }
 echo '<a href="'.$this->url('formule/administration/telecharger-tableur', ['formule' =>$tableur->formule()->getId()]).'">Télécharger le tableur</a>';
 

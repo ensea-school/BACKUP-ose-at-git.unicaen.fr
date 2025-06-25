@@ -42,7 +42,7 @@ class AdministrationController extends AbstractController
     public function dataAction(): AxiosModel
     {
         // Le cache est vidé systématiquement ici pour éviter tout problème
-        $this->getServiceWorkflow()->clearEtapesCache();
+        //$this->getServiceWorkflow()->clearEtapesCache();
 
         $etapes = array_values($this->getServiceWorkflow()->getEtapes());
 

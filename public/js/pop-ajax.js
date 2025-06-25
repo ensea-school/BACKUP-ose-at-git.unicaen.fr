@@ -360,8 +360,8 @@ function popConfirm(element, options)
             let popDivId = $(eventShown.target).attr('aria-describedby');
             $("#" + popDivId).find("button#go").click(() => {
                 popConfirm.hide();
+                $("#" + popDivId).remove();
                 goFunc();
-                goFunc = null;
             });
 
             $("#" + popDivId).find("button#nogo").click(() => {

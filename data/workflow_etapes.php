@@ -8,7 +8,6 @@ use Workflow\Entity\Db\WorkflowEtapeDependance;
 
 return [
     WorkflowEtape::CANDIDATURE_SAISIE              => [
-        'id'                  => 1,
         'libelle_intervenant' => "Je postule à une ou plusieurs offres d'emploi",
         'libelle_autres'      => "J'accède aux candidatures",
         'route'               => 'intervenant/candidature',
@@ -18,7 +17,6 @@ return [
         'dependances'         => [],
     ],
     WorkflowEtape::DONNEES_PERSO_SAISIE            => [
-        'id'                  => 2,
         'libelle_intervenant' => "Je saisis mes données personnelles",
         'libelle_autres'      => "J'accède aux données personnelles",
         'route'               => 'intervenant/dossier',
@@ -28,7 +26,6 @@ return [
         'dependances'         => [],
     ],
     WorkflowEtape::PJ_SAISIE                       => [
-        'id'                  => 3,
         'libelle_intervenant' => "Je fournis les pièces justificatives",
         'libelle_autres'      => "J'accède aux pièces justificatives",
         'route'               => 'piece-jointe/intervenant',
@@ -43,7 +40,6 @@ return [
         ],
     ],
     WorkflowEtape::DONNEES_PERSO_VALIDATION        => [
-        'id'                  => 6,
         'libelle_intervenant' => "Je visualise la validation de mes données personnelles",
         "libelle_autres"      => "Je visualise la validation des données personnelles",
         "route"               => "intervenant/dossier",
@@ -58,7 +54,6 @@ return [
         ],
     ],
     WorkflowEtape::PJ_VALIDATION                   => [
-        'id'                  => 7,
         'libelle_intervenant' => "Je visualise la validation des pièces justificatives",
         "libelle_autres"      => "Je visualise la validation des pièces justificatives",
         "route"               => "piece-jointe/intervenant",
@@ -73,7 +68,6 @@ return [
         ],
     ],
     WorkflowEtape::CANDIDATURE_VALIDATION          => [
-        'id'                  => 8,
         'libelle_intervenant' => "Je visualise la validation de mes candidatures",
         "libelle_autres"      => "J'accède à la validation des candidatures",
         "route"               => "intervenant/candidature",
@@ -88,7 +82,6 @@ return [
         ],
     ],
     WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE      => [
-        'id'                  => 9,
         'libelle_intervenant' => "Je saisis mes données personnelles complémentaires",
         "libelle_autres"      => "J'accède aux données personnelles complémentaires",
         "route"               => "intervenant/dossier",
@@ -103,7 +96,6 @@ return [
         ],
     ],
     WorkflowEtape::PJ_COMPL_SAISIE                 => [
-        'id'                  => 10,
         'libelle_intervenant' => "Je fournis les pièces justificatives complémentaires",
         "libelle_autres"      => "J'accède aux pièces justificatives complémentaires",
         "route"               => "piece-jointe/intervenant",
@@ -118,7 +110,6 @@ return [
         ],
     ],
     WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION  => [
-        'id'                  => 11,
         'libelle_intervenant' => "Je visualise la validation de mes données personnelles complémentaires",
         "libelle_autres"      => "Je visualise la validation des données personnelles complémentaires",
         "route"               => "intervenant/dossier",
@@ -133,7 +124,6 @@ return [
         ],
     ],
     WorkflowEtape::PJ_COMPL_VALIDATION             => [
-        'id'                  => 12,
         'libelle_intervenant' => "Je visualise la validation des pièces justificatives complémentaires",
         "libelle_autres"      => "Je visualise la validation des pièces justificatives complémentaires",
         "route"               => "piece-jointe/intervenant",
@@ -148,7 +138,6 @@ return [
         ],
     ],
     WorkflowEtape::ENSEIGNEMENT_SAISIE             => [
-        'id'                  => 4,
         'libelle_intervenant' => "Je saisis mes enseignements prévisionnels",
         "libelle_autres"      => "J'accède aux enseignements prévisionnels",
         "route"               => "intervenant/services-prevus",
@@ -164,7 +153,6 @@ return [
         ],
     ],
     WorkflowEtape::REFERENTIEL_SAISIE              => [
-        'id'                  => 5,
         'libelle_intervenant' => "Je saisis mon référentiel prévisionnel",
         "libelle_autres"      => "J'accède au référentiel prévisionnel",
         "route"               => "intervenant/services-prevus",
@@ -180,7 +168,6 @@ return [
         ],
     ],
     WorkflowEtape::MISSION_SAISIE                  => [
-        'id'                  => 13,
         'libelle_intervenant' => "Je visualise mes missions",
         "libelle_autres"      => "J'accède aux missions",
         "route"               => "intervenant/missions",
@@ -195,7 +182,6 @@ return [
         ],
     ],
     WorkflowEtape::ENSEIGNEMENT_VALIDATION         => [
-        'id'                  => 15,
         'libelle_intervenant' => "Je visualise la validation de mes enseignements prévisionnels",
         "libelle_autres"      => "Je visualise la validation des enseignements prévisionnels",
         "route"               => "intervenant/validation/enseignement/prevu",
@@ -210,7 +196,6 @@ return [
         ],
     ],
     WorkflowEtape::REFERENTIEL_VALIDATION          => [
-        'id'                  => 16,
         'libelle_intervenant' => "Je visualise la validation de mon référentiel prévisionnel",
         "libelle_autres"      => "Je visualise la validation du référentiel prévisionnel",
         "route"               => "intervenant/validation/referentiel/prevu",
@@ -225,7 +210,6 @@ return [
         ],
     ],
     WorkflowEtape::MISSION_VALIDATION              => [
-        'id'                  => 14,
         'libelle_intervenant' => "Je visualise la validation de mes missions",
         "libelle_autres"      => "Je valide les missions saisies",
         "route"               => "intervenant/missions",
@@ -240,7 +224,6 @@ return [
         ],
     ],
     WorkflowEtape::CONSEIL_RESTREINT               => [
-        'id'                  => 17,
         'libelle_intervenant' => "Je visualise l'agrément 'Conseil restreint'",
         "libelle_autres"      => "Je visualise l'agrément 'Conseil restreint'",
         "route"               => "intervenant/agrement/conseil-restreint",
@@ -267,7 +250,6 @@ return [
         ],
     ],
     WorkflowEtape::CONSEIL_ACADEMIQUE              => [
-        'id'                  => 18,
         'libelle_intervenant' => "Je visualise l'agrément 'Conseil académique'",
         "libelle_autres"      => "Je visualise l'agrément 'Conseil académique'",
         "route"               => "intervenant/agrement/conseil-academique",
@@ -282,7 +264,6 @@ return [
         ],
     ],
     WorkflowEtape::CONTRAT                         => [
-        'id'                  => 19,
         'libelle_intervenant' => "Je visualise mes contrat/avenants",
         "libelle_autres"      => "Je visualise le contrat et les avenants",
         "route"               => "intervenant/contrat",
@@ -309,7 +290,6 @@ return [
         ],
     ],
     WorkflowEtape::EXPORT_RH                       => [
-        'id'                  => 20,
         'libelle_intervenant' => "Je visualise mes données RH",
         "libelle_autres"      => "Je visualise les données RH",
         "route"               => "intervenant/exporter",
@@ -332,7 +312,6 @@ return [
         ],
     ],
     WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE     => [
-        'id'                  => 21,
         'libelle_intervenant' => "Je saisis mes enseignements réalisés",
         "libelle_autres"      => "J'accède aux enseignements réalisés",
         "route"               => "intervenant/services-realises",
@@ -348,7 +327,6 @@ return [
         ],
     ],
     WorkflowEtape::REFERENTIEL_SAISIE_REALISE      => [
-        'id'                  => 22,
         'libelle_intervenant' => "Je saisis mon référentiel réalisé",
         "libelle_autres"      => "J'accède au référentiel réalisé",
         "route"               => "intervenant/services-realises",
@@ -358,7 +336,6 @@ return [
         'dependances'         => [],
     ],
     WorkflowEtape::MISSION_SAISIE_REALISE          => [
-        'id'                  => 23,
         'libelle_intervenant' => "Je renseigne mon suivi de mission",
         "libelle_autres"      => "J'accède au suivi de mission",
         "route"               => "intervenant/missions-suivi",
@@ -373,7 +350,6 @@ return [
         ],
     ],
     WorkflowEtape::CLOTURE_REALISE                 => [
-        'id'                  => 24,
         'libelle_intervenant' => "Je visualise la clôture de la saisie de mes services réalisés",
         "libelle_autres"      => "Je visualise la clôture de la saisie des services réalisés",
         "route"               => "intervenant/services-realises",
@@ -389,7 +365,6 @@ return [
         ],
     ],
     WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE => [
-        'id'                  => 25,
         'libelle_intervenant' => "Je visualise la validation de mes enseignements réalisés",
         "libelle_autres"      => "Je visualise la validation des enseignements réalisés",
         "route"               => "intervenant/validation/enseignement/realise",
@@ -404,7 +379,6 @@ return [
         ],
     ],
     WorkflowEtape::REFERENTIEL_VALIDATION_REALISE  => [
-        'id'                  => 28,
         'libelle_intervenant' => "Je visualise la validation de mon référentiel réalisé",
         "libelle_autres"      => "Je visualise la validation du référentiel réalisé",
         "route"               => "intervenant/validation/referentiel/realise",
@@ -419,7 +393,6 @@ return [
         ],
     ],
     WorkflowEtape::MISSION_VALIDATION_REALISE      => [
-        'id'                  => 26,
         'libelle_intervenant' => "Je visualise la validation de mon suivi de mission",
         "libelle_autres"      => "J'accède à la validation du suivi de mission",
         "route"               => "intervenant/missions-suivi",
@@ -434,7 +407,6 @@ return [
         ],
     ],
     WorkflowEtape::MISSION_PRIME                   => [
-        'id'                  => 27,
         'libelle_intervenant' => "Je visualise mes indemnités de fin de contrat",
         "libelle_autres"      => "Je visualise mes indemnités de fin de contrat",
         "route"               => "intervenant/prime-mission",
@@ -449,7 +421,6 @@ return [
         ],
     ],
     WorkflowEtape::DEMANDE_MEP                     => [
-        'id'                  => 29,
         'libelle_intervenant' => "Je visualise les demandes de mise en paiement me concernant",
         "libelle_autres"      => "J'accède aux demandes de mise en paiement",
         "route"               => "intervenant/mise-en-paiement/demande",
@@ -477,7 +448,6 @@ return [
         ],
     ],
     WorkflowEtape::SAISIE_MEP                      => [
-        'id'                  => 30,
         'libelle_intervenant' => "Je visualise les mises en paiement me concernant",
         "libelle_autres"      => "J'accède aux mises en paiement",
         "route"               => "intervenant/mise-en-paiement/visualisation",

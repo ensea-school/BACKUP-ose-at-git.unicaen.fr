@@ -3,13 +3,13 @@
 //@formatter:off
 
 return [
-    'name'        => 'WORKFLOW_ETAPE_DEPENDANCE_PERIMETRE_FK',
+    'name'        => 'WORKFLOW_ETAPE_DEPENDANCE_HCFK',
     'table'       => 'WORKFLOW_ETAPE_DEPENDANCE',
-    'rtable'      => 'PERIMETRE',
-    'delete_rule' => 'CASCADE',
+    'rtable'      => 'UTILISATEUR',
+    'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [
-        'PERIMETRE_ID' => 'ID',
+        'HISTO_CREATEUR_ID' => 'ID',
     ],
 ];
 

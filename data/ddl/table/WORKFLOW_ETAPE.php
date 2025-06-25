@@ -7,9 +7,21 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'WORKFLOW_ETAPE_ID_SEQ',
     'columns'     => [
-        'CODE'                => [
+        'ANNEE_ID'              => [
+            'name'        => 'ANNEE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 17,
+            'commentaire' => NULL,
+        ],
+        'CODE'                  => [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -21,7 +33,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'DESC_NON_FRANCHIE'   => [
+        'DESC_NON_FRANCHIE'     => [
             'name'        => 'DESC_NON_FRANCHIE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -33,7 +45,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'DESC_SANS_OBJECTIF'  => [
+        'DESC_SANS_OBJECTIF'    => [
             'name'        => 'DESC_SANS_OBJECTIF',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -45,7 +57,79 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'ID'                  => [
+        'HISTO_CREATEUR_ID'     => [
+            'name'        => 'HISTO_CREATEUR_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 12,
+            'commentaire' => NULL,
+        ],
+        'HISTO_CREATION'        => [
+            'name'        => 'HISTO_CREATION',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 11,
+            'commentaire' => NULL,
+        ],
+        'HISTO_DESTRUCTEUR_ID'  => [
+            'name'        => 'HISTO_DESTRUCTEUR_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 16,
+            'commentaire' => NULL,
+        ],
+        'HISTO_DESTRUCTION'     => [
+            'name'        => 'HISTO_DESTRUCTION',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 15,
+            'commentaire' => NULL,
+        ],
+        'HISTO_MODIFICATEUR_ID' => [
+            'name'        => 'HISTO_MODIFICATEUR_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 14,
+            'commentaire' => NULL,
+        ],
+        'HISTO_MODIFICATION'    => [
+            'name'        => 'HISTO_MODIFICATION',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 13,
+            'commentaire' => NULL,
+        ],
+        'ID'                    => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -57,7 +141,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'LIBELLE_AUTRES'      => [
+        'LIBELLE_AUTRES'        => [
             'name'        => 'LIBELLE_AUTRES',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -69,7 +153,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'LIBELLE_INTERVENANT' => [
+        'LIBELLE_INTERVENANT'   => [
             'name'        => 'LIBELLE_INTERVENANT',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -81,7 +165,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'ORDRE'               => [
+        'ORDRE'                 => [
             'name'        => 'ORDRE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -93,7 +177,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'PERIMETRE_ID'        => [
+        'PERIMETRE_ID'          => [
             'name'        => 'PERIMETRE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -105,7 +189,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'ROUTE'               => [
+        'ROUTE'                 => [
             'name'        => 'ROUTE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -117,7 +201,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'ROUTE_INTERVENANT'   => [
+        'ROUTE_INTERVENANT'     => [
             'name'        => 'ROUTE_INTERVENANT',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',

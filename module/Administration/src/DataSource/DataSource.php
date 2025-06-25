@@ -420,19 +420,24 @@ class DataSource
         $etapes = [];
         $ordre  = 1;
         foreach ($data as $code => $etape) {
-            $edata    = [
-                'ID'                  => $etape['id'],
-                'CODE'                => $code,
-                'PERIMETRE_ID'        => $etape['perimetre'],
-                'ROUTE'               => $etape['route'],
-                'ROUTE_INTERVENANT'   => $etape['route_intervenant'] ?? null,
-                'LIBELLE_INTERVENANT' => $etape['libelle_intervenant'],
-                'LIBELLE_AUTRES'      => $etape['libelle_autres'],
-                'DESC_NON_FRANCHIE'   => $etape['desc_non_franchie'],
-                'DESC_SANS_OBJECTIF'  => $etape['desc_sans_objectif'] ?? null,
-                'ORDRE'               => $ordre++,
+            $edata = [
+                'code'                  => $code,
+                'perimetre_id'          => $etape['perimetre'],
+                'route'                 => $etape['route'],
+                'route_intervenant'     => $etape['route_intervenant'] ?? null,
+                'libelle_intervenant'   => $etape['libelle_intervenant'],
+                'libelle_autres'        => $etape['libelle_autres'],
+                'desc_non_franchie'     => $etape['desc_non_franchie'],
+                'desc_sans_objectif'    => $etape['desc_sans_objectif'] ?? null,
+                'ordre'                 => $ordre++,
+                'histo_modificateur_id' => null,
             ];
-            $etapes[] = $edata;
+
+            for ($a = 2010; $a <= 2099; $a++) {
+                $edata['annee_id'] = $a;
+                mpg_upper($edata);
+                $etapes[] = $edata;
+            }
         }
 
         return $etapes;
@@ -448,15 +453,24 @@ class DataSource
         foreach ($data as $etapeSuivCode => $etape) {
             if (isset($etape['dependances'])) {
                 foreach ($etape['dependances'] as $etapePrecCode => $dependance) {
-                    $dep = [
-                        'ETAPE_SUIVANTE_ID'   => $etapeSuivCode,
-                        'ETAPE_PRECEDANTE_ID' => $etapePrecCode,
-                        'ACTIVE'              => true,
-                        'TYPE_INTERVENANT_ID' => $dependance['type_intervenant'] ?? null,
-                        'PERIMETRE_ID'        => $dependance['perimetre'] ?? Perimetre::ETABLISSEMENT,
-                        'AVANCEMENT'          => $dependance['avancement'] ?? WorkflowEtapeDependance::AVANCEMENT_DESACTIVE,
+                    $dep    = [
+                        'etape_suivante_id'     => $etapeSuivCode,
+                        'etape_precedante_id'   => $etapePrecCode,
+                        'active'                => true,
+                        'type_intervenant_id'   => $dependance['type_intervenant'] ?? null,
+                        'perimetre_id'          => $dependance['perimetre'] ?? Perimetre::ETABLISSEMENT,
+                        'avancement'            => $dependance['avancement'] ?? WorkflowEtapeDependance::AVANCEMENT_DESACTIVE,
+                        'histo_modificateur_id' => null,
                     ];
-                    $deps[] = $dep;
+
+                    for ($a = 2010; $a <= 2099; $a++) {
+                        $ndep = $dep;
+                        $ndep['etape_suivante_id'] .= '-'.(string)$a;
+                        $ndep['etape_precedante_id'] .= '-'.(string)$a;
+                        $ndep['annee_id'] = $a;
+                        mpg_upper($ndep);
+                        $deps[] = $ndep;
+                    }
                 }
             }
         }

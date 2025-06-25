@@ -2,13 +2,17 @@
 
 namespace Workflow\Entity\Db;
 
+use Administration\Interfaces\ParametreEntityInterface;
+use Administration\Traits\ParametreEntityTrait;
 use Application\Acl\Role;
 use Application\Entity\Db\Perimetre;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class WorkflowEtape
+class WorkflowEtape implements ParametreEntityInterface
 {
+    use ParametreEntityTrait;
+
     const CANDIDATURE_SAISIE              = 'candidature_saisie';
     const DONNEES_PERSO_SAISIE            = 'donnees_perso_saisie';
     const PJ_SAISIE                       = 'pj_saisie';
@@ -43,7 +47,6 @@ class WorkflowEtape
     const CURRENT = 'current-etape';
     const NEXT    = 'next-etape';
 
-    private int       $id;
     private string    $code;
     private Perimetre $perimetre;
     private string    $route;
@@ -84,13 +87,6 @@ class WorkflowEtape
         } else {
             return $this->getLibelleAutres();
         }
-    }
-
-
-
-    public function getId(): int
-    {
-        return $this->id;
     }
 
 

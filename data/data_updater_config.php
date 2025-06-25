@@ -58,8 +58,9 @@ return [
     ],
     'WORKFLOW_ETAPE'             => [
         'actions' => ['install', 'update', 'workflow-reset'],
-        'key'     => 'CODE',
+        'key'     => ['CODE', 'ANNEE_ID'],
         'options' => [
+            'soft-delete' => false,
             'columns'            => [
                 'PERIMETRE_ID' => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s'],
             ],
@@ -310,12 +311,15 @@ return [
     'WORKFLOW_ETAPE_DEPENDANCE'  => [
         'actions' => ['install', 'workflow-reset'],
         'key'     => ['ETAPE_SUIVANTE_ID', 'ETAPE_PRECEDANTE_ID', 'ACTIVE'],
-        'options' => ['columns' => [
-            'ETAPE_PRECEDANTE_ID' => ['transformer' => 'SELECT id FROM workflow_etape WHERE code = %s'],
-            'ETAPE_SUIVANTE_ID'   => ['transformer' => 'SELECT id FROM workflow_etape WHERE code = %s'],
-            'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s'],
-            'PERIMETRE_ID'        => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s'],
-        ],],
+        'options' => [
+            'soft-delete' => false,
+            'columns' => [
+                'ETAPE_PRECEDANTE_ID' => ['transformer' => 'SELECT id FROM workflow_etape WHERE code || \'-\' || annee_id = %s'],
+                'ETAPE_SUIVANTE_ID'   => ['transformer' => 'SELECT id FROM workflow_etape WHERE code || \'-\' || annee_id = %s'],
+                'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s'],
+                'PERIMETRE_ID'        => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s'],
+            ],
+        ],
     ],
 
     /* Paramètres par défaut, en fonction des nomenclatures ci-dessus */

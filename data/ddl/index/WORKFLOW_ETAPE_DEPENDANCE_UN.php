@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'name'    => 'WORKFLOW_ETAPE_DEPENDANCE_UK',
+    'name'    => 'WORKFLOW_ETAPE_DEPENDANCE_UN',
     'unique'  => TRUE,
     'table'   => 'WORKFLOW_ETAPE_DEPENDANCE',
     'columns' => [
@@ -11,6 +11,8 @@ return [
         'ETAPE_PRECEDANTE_ID',
         'TYPE_INTERVENANT_ID',
         'ACTIVE',
+        'ANNEE_ID',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

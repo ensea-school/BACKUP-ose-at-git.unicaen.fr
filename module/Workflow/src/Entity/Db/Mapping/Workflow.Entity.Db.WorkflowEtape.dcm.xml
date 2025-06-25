@@ -6,7 +6,13 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
+        <unique-constraints>
+            <unique-constraint name="WORKFLOW_ETAPE_UN" columns="CODE,ANNEE_ID,HISTO_DESTRUCTION"/>
+        </unique-constraints>
         <field name="code" type="string" column="CODE" length="64" nullable="false"/>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <many-to-one field="perimetre" target-entity="Application\Entity\Db\Perimetre">
             <join-column name="PERIMETRE_ID" referenced-column-name="ID"/>
         </many-to-one>
@@ -18,5 +24,18 @@
         <field name="descSansObjectif" type="string" column="DESC_SANS_OBJECTIF" length="256" nullable="true"/>
         <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
         <one-to-many field="dependances" target-entity="Workflow\Entity\Db\WorkflowEtapeDependance" mapped-by="etapeSuivante"/>
+
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'WORKFLOW_ETAPE_DEPENDANCE_ID_SEQ',
     'columns'     => [
-        'ACTIVE'              => [
+        'ACTIVE'                => [
             'name'        => 'ACTIVE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,19 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'AVANCEMENT'          => [
+        'ANNEE_ID'              => [
+            'name'        => 'ANNEE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 14,
+            'commentaire' => NULL,
+        ],
+        'AVANCEMENT'            => [
             'name'        => 'AVANCEMENT',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +45,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'ETAPE_PRECEDANTE_ID' => [
+        'ETAPE_PRECEDANTE_ID'   => [
             'name'        => 'ETAPE_PRECEDANTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -45,7 +57,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'ETAPE_SUIVANTE_ID'   => [
+        'ETAPE_SUIVANTE_ID'     => [
             'name'        => 'ETAPE_SUIVANTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -57,7 +69,79 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'ID'                  => [
+        'HISTO_CREATEUR_ID'     => [
+            'name'        => 'HISTO_CREATEUR_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 9,
+            'commentaire' => NULL,
+        ],
+        'HISTO_CREATION'        => [
+            'name'        => 'HISTO_CREATION',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 8,
+            'commentaire' => NULL,
+        ],
+        'HISTO_DESTRUCTEUR_ID'  => [
+            'name'        => 'HISTO_DESTRUCTEUR_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 13,
+            'commentaire' => NULL,
+        ],
+        'HISTO_DESTRUCTION'     => [
+            'name'        => 'HISTO_DESTRUCTION',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 12,
+            'commentaire' => NULL,
+        ],
+        'HISTO_MODIFICATEUR_ID' => [
+            'name'        => 'HISTO_MODIFICATEUR_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 11,
+            'commentaire' => NULL,
+        ],
+        'HISTO_MODIFICATION'    => [
+            'name'        => 'HISTO_MODIFICATION',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
+        'ID'                    => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +153,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'PERIMETRE_ID'        => [
+        'PERIMETRE_ID'          => [
             'name'        => 'PERIMETRE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -81,7 +165,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'TYPE_INTERVENANT_ID' => [
+        'TYPE_INTERVENANT_ID'   => [
             'name'        => 'TYPE_INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

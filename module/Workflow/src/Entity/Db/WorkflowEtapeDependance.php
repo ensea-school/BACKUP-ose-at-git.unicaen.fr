@@ -2,11 +2,15 @@
 
 namespace Workflow\Entity\Db;
 
+use Administration\Interfaces\ParametreEntityInterface;
+use Administration\Traits\ParametreEntityTrait;
 use Application\Entity\Db\Perimetre;
 use Intervenant\Entity\Db\TypeIntervenant;
 
-class WorkflowEtapeDependance
+class WorkflowEtapeDependance implements ParametreEntityInterface
 {
+    use ParametreEntityTrait;
+
     // Aucun contrôle d'avancement
     const AVANCEMENT_DESACTIVE = 0;
 
@@ -23,8 +27,6 @@ class WorkflowEtapeDependance
     const AVANCEMENT_TERMINE_INTEGRALEMENT = 3;
 
 
-    protected ?int $id = null;
-
     protected ?WorkflowEtape $etapeSuivante = null;
 
     protected ?WorkflowEtape $etapePrecedante = null;
@@ -36,13 +38,6 @@ class WorkflowEtapeDependance
     protected ?Perimetre $perimetre = null;
 
     protected int $avancement = 0;
-
-
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
 
 

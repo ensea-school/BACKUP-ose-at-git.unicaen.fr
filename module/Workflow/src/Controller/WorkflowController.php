@@ -6,8 +6,8 @@ use Application\Controller\AbstractController;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Exception\LogicException;
-use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 use Workflow\Service\WfEtapeDepServiceAwareTrait;
 use Workflow\Service\WfEtapeServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
@@ -21,7 +21,6 @@ class WorkflowController extends AbstractController
 
     use WfEtapeDepServiceAwareTrait;
     use WfEtapeServiceAwareTrait;
-
 
 
     public function calculerToutAction()
@@ -43,6 +42,40 @@ class WorkflowController extends AbstractController
 
 
 
+    public function feuilleDeRouteDataAction()
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+
+        $properties = [
+            'code',
+            'numero',
+            'libelle',
+            'url',
+            'atteignable',
+            'courante',
+            'allowed',
+            'realisationPourc',
+            'objectif',
+            'realisation',
+            ['structures', [
+                'libelle',
+                'atteignable',
+                'courante',
+                'allowed',
+                'realisationPourc',
+                'objectif',
+                'realisation',
+            ]],
+        ];
+
+        return new AxiosModel(array_values($feuilleDeRoute->getEtapes()), $properties);
+    }
+
+
+
     public function feuilleDeRouteRefreshAction()
     {
         /** @var Intervenant $intervenant */
@@ -60,7 +93,7 @@ class WorkflowController extends AbstractController
             }
         }
 
-        return new MessengerViewModel();
+        return $this->feuilleDeRouteDataAction();
     }
 
 

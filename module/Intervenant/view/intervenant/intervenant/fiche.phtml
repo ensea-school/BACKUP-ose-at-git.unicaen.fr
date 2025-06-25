@@ -6,39 +6,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 echo $this->intervenant($intervenant);
 
+echo '<hr />';
+
 $urlRefresh = $this->url('workflow/feuille-de-route-refresh', ['intervenant' => $intervenant->getId()]);
 
-?>
-    <hr/>
-    <h2>Feuille de route
-        <a href="<?= $urlRefresh ?>"
-           id="feuille-de-route-refresh"
-           class="pop-ajax"
-           data-loading-title="Mise à jour de la feuille de route..."
-           data-forced="true"
-           data-submit-reload="true"
-           style="font-size:12pt"
-           title="Mettre à jour la feuille de route"
-        >
-            <i class="fas fa-arrows-rotate"></i>
-        </a>
-    </h2>
-    <script>
-        $(function () {
-            $('#feuille-de-route-refresh').popAjax({
-                error: (event, popAjax) => {
-                    var errBtn = '<button onclick="window.location.reload();" type="button" class="btn btn-primary">J\'ai lu, recharger la page</button>';
-
-                    popAjax.setContent(popAjax.getContent() + errBtn);
-                },
-                change: function (event, popAjax) {
-                    if (!popAjax.hasErrors()) {
-                        window.location.reload();
-                        
-                    }
-                }
-            });
-        });
-    </script>
-<?php
-echo $this->feuilleDeRoute($intervenant)->render();
+echo $this->vue('workflow/feuille-de-route', ['intervenant' => $intervenant->getId(), 'urlRefresh' => $urlRefresh]);

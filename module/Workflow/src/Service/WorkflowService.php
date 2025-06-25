@@ -2,13 +2,15 @@
 
 namespace Workflow\Service;
 
+use Application\Entity\Db\Annee;
 use Application\Provider\Tbl\TblProvider;
 use Application\Service\AbstractService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Traversable;
+use Laminas\View\Helper\Url;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Service\Entity\Db\TypeVolumeHoraire;
+use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
@@ -16,6 +18,7 @@ use Workflow\Entity\Db\TblWorkflow;
 use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Entity\Db\WorkflowEtapeDependance;
+use Workflow\Model\FeuilleDeRoute;
 
 /**
  * Description of WorkflowService
@@ -30,13 +33,24 @@ class WorkflowService extends AbstractService
     use EntityManagerAwareTrait;
     use AuthorizeServiceAwareTrait;
     use TableauBordServiceAwareTrait;
+    use BddAwareTrait;
+
+    private Url $urlManager;
 
     /**
-     * @var array Feuilles de route
+     * @var array|FeuilleDeRoute[]
      */
     private array $feuillesDeRoute = [];
 
+    /** @var array|WorkflowEtape[] */
     private array $workflowEtapes = [];
+
+
+
+    public function __construct(Url $urlManager)
+    {
+        $this->urlManager = $urlManager;
+    }
 
 
 
@@ -45,26 +59,37 @@ class WorkflowService extends AbstractService
      */
     public function getEtapes(): array
     {
+        $anneeId = $this->getServiceContext()->getAnnee()->getId();
+
         if (empty($this->workflowEtapes)) {
             $this->workflowEtapes = [];
 
             $dql = "
             SELECT 
-                we, d, wep, weperimetre
+                we, partial a.{id}, d, wep, weperimetre
             FROM 
                 " . WorkflowEtape::class . " we
-                LEFT JOIN we.dependances d
+                JOIN we.annee a
+                LEFT JOIN we.dependances d WITH d.histoDestruction IS NULL
                 LEFT JOIN d.etapePrecedante wep
                 LEFT JOIN we.perimetre weperimetre
+            WHERE
+                a.id = :annee
+                AND we.histoDestruction IS NULL
             ORDER BY 
                 we.ordre, wep.ordre";
 
             $query = $this->getEntityManager()->createQuery($dql);
+            $query->setParameter('annee', $anneeId);
             $query->enableResultCache(true);
-            $query->setResultCacheId(self::ETAPES_CACHE_ID);
+            $query->setResultCacheId(self::ETAPES_CACHE_ID.'_'.$anneeId);
+
+            /** @var WorkflowEtape[] $iterable */
             $iterable = $query->getResult();
             foreach ($iterable as $we) {
-                $this->workflowEtapes[$we->getCode()] = $we;
+                if ($we->getAnnee()->getId() == $anneeId) {
+                    $this->workflowEtapes[$we->getCode()] = $we;
+                }
             }
 
             $dataFile = require getcwd() . '/data/workflow_etapes.php';
@@ -87,7 +112,11 @@ class WorkflowService extends AbstractService
         $em = $this->getEntityManager();
 
         $cache = $em->getConfiguration()->getResultCache();
-        $cache->deleteItem(self::ETAPES_CACHE_ID);
+        $items = [];
+        for( $a=2010;$a<=Annee::MAX;$a++){
+            $items[] = self::ETAPES_CACHE_ID.'_'.$a;
+        }
+        $cache->deleteItems($items);
         $this->workflowEtapes = [];
 
         return $this;
@@ -127,9 +156,9 @@ class WorkflowService extends AbstractService
             $etape = $etapes[$code];
             $etape->setOrdre($order);
             $em->persist($etape);
-            $em->flush($etape);
             $order++;
         }
+        $em->flush();
         $this->clearEtapesCache();
 
         return $this;
@@ -191,6 +220,39 @@ class WorkflowService extends AbstractService
         $this->clearEtapesCache();
 
         return $this;
+    }
+
+
+
+    public function getFeuilleDeRoute(Intervenant $intervenant, ?Structure $structure = null): FeuilleDeRoute
+    {
+        // Si la feuille de route n'existe pas, on la crée
+        if (!array_key_exists($intervenant->getId(), $this->feuillesDeRoute)) {
+            $this->feuillesDeRoute[$intervenant->getId()] =
+                new FeuilleDeRoute($this, $intervenant, $this->getEtapes());
+        }
+
+        // On lui injecte la structure au besoin
+        if (!$structure) {
+            // Si la structure n'est pas précisée, alors on utilise la structure du contexte
+            $structure = $this->getServiceContext()->getStructure();
+        }
+        $this->feuillesDeRoute[$intervenant->getId()]->setStructure($structure);
+
+        return $this->feuillesDeRoute[$intervenant->getId()];
+    }
+
+
+
+    public function refreshFeuilleDeRoute(Intervenant|int $intervenant): void
+    {
+        if ($intervenant instanceof Intervenant) {
+            $intervenant = $intervenant->getId();
+        }
+
+        if (array_key_exists($intervenant, $this->feuillesDeRoute)) {
+            $this->feuillesDeRoute[$intervenant]->refresh();
+        }
     }
 
 
@@ -291,7 +353,7 @@ class WorkflowService extends AbstractService
      *
      * @return WorkflowEtape[]
      */
-    public function getFeuilleDeRoute(?Intervenant $intervenant = null, ?Structure $structure = null)
+    public function getFeuilleDeRouteOld(?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         return null;
         if (!$intervenant || !$structure) {
@@ -392,10 +454,6 @@ class WorkflowService extends AbstractService
 
 
 
-    /**
-     * @param array|string    $tableauxBords
-     * @param Intervenant|int $intervenant
-     */
     public function calculerTableauxBord(array|string|null $tableauxBords, Intervenant|int $intervenant): array
     {
         $errors = [];
@@ -439,7 +497,7 @@ class WorkflowService extends AbstractService
 
         foreach ($deps as $dep => $null) {
             if (isset($tbls[$dep])) {
-                if ($intervenant instanceof \Intervenant\Entity\Db\Intervenant) {
+                if ($intervenant instanceof Intervenant) {
                     $value = $intervenant->getId();
                 } else {
                     $value = $intervenant;
@@ -507,24 +565,9 @@ class WorkflowService extends AbstractService
 
 
 
-    /**
-     * Generates a url given the name of a route.
-     *
-     * @param string            $name               Name of the route
-     * @param array             $params             Parameters for the link
-     * @param array|Traversable $options            Options for the route
-     * @param bool              $reuseMatchedParams Whether to reuse matched parameters
-     *
-     * @return string Url                         For the link href attribute
-     * @see    \Laminas\Mvc\Router\RouteInterface::assemble()
-     *
-     */
-    protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
+    public function getUrl(?string $name = null, array $params = [], array $options = [], bool $reuseMatchedParams = false): string
     {
-        $url = \AppAdmin::container()->get('ViewHelperManager')->get('url');
-
-        /* @var $url \Laminas\View\Helper\Url */
-        return $url->__invoke($name, $params, $options, $reuseMatchedParams);
+        return $this->urlManager->__invoke($name, $params, $options, $reuseMatchedParams);
     }
 
 

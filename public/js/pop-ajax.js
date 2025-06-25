@@ -327,7 +327,7 @@ function popConfirm(element, options)
         }
 
         if (!options.confirm) {
-            options.confirm = function () {};
+            options.confirm = () => {};
         }
         if (!options.url) {
             options.url = element.href;
@@ -337,15 +337,15 @@ function popConfirm(element, options)
         }
 
         if (options.url) {
-            goFunc = function () {
+            goFunc = () => {
                 unicaenVue.axios.get(options.url).then(response => {
                     options.confirm(response, element);
                 });
             };
         } else {
-            goFunc = function () {
+            goFunc = () => {
                 options.confirm(element);
-            }
+            };
         }
 
         let popoptions = {
@@ -361,6 +361,7 @@ function popConfirm(element, options)
             $("#" + popDivId).find("button#go").click(() => {
                 popConfirm.hide();
                 goFunc();
+                goFunc = null;
             });
 
             $("#" + popDivId).find("button#nogo").click(() => {

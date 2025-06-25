@@ -60,7 +60,7 @@ return [
         'actions' => ['install', 'update', 'workflow-reset'],
         'key'     => ['CODE', 'ANNEE_ID'],
         'options' => [
-            'soft-delete' => false,
+            'hard-delete' => true,
             'columns'            => [
                 'PERIMETRE_ID' => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s'],
             ],
@@ -310,9 +310,9 @@ return [
     ],
     'WORKFLOW_ETAPE_DEPENDANCE'  => [
         'actions' => ['install', 'workflow-reset'],
-        'key'     => ['ETAPE_SUIVANTE_ID', 'ETAPE_PRECEDANTE_ID', 'ACTIVE'],
+        'key'     => ['ETAPE_SUIVANTE_ID', 'ETAPE_PRECEDANTE_ID', 'TYPE_INTERVENANT_ID'],
         'options' => [
-            'soft-delete' => false,
+            'hard-delete' => true,
             'columns' => [
                 'ETAPE_PRECEDANTE_ID' => ['transformer' => 'SELECT id FROM workflow_etape WHERE code || \'-\' || annee_id = %s'],
                 'ETAPE_SUIVANTE_ID'   => ['transformer' => 'SELECT id FROM workflow_etape WHERE code || \'-\' || annee_id = %s'],

@@ -43,7 +43,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 * Lors de l'ajout d'une première heure d'enseignement depuis l'application, les formules se recalculent de nouveau correctement 
 * [Problème sur 27 tableurs de formules de calcul : lé détection de structure université ne fonctionnait pas. Impact limité au téléversement de feuilles de calcul sur l'IHM de test.](https://git.unicaen.fr/open-source/OSE/-/commit/2c458ff613f295e2399ea053b83f11b4c3820ccc)
-
+* Correction de la formule de calcul du Havre
 
 
 

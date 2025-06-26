@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ced1ba2795f99a7b1fe10374500728bc",
+    "content-hash": "21745f1bf5826ad10fcd5e0f84d45fed",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -759,16 +759,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.9.4",
+            "version": "3.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "ec16c82f20be1a7224e65ac67144a29199f87959"
+                "reference": "4a4e2eed3134036ee36a147ee0dac037dfa17868"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/ec16c82f20be1a7224e65ac67144a29199f87959",
-                "reference": "ec16c82f20be1a7224e65ac67144a29199f87959",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/4a4e2eed3134036ee36a147ee0dac037dfa17868",
+                "reference": "4a4e2eed3134036ee36a147ee0dac037dfa17868",
                 "shasum": ""
             },
             "require": {
@@ -781,14 +781,14 @@
                 "psr/log": "^1|^2|^3"
             },
             "require-dev": {
-                "doctrine/coding-standard": "12.0.0",
+                "doctrine/coding-standard": "13.0.0",
                 "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2023.1",
-                "phpstan/phpstan": "2.1.1",
+                "phpstan/phpstan": "2.1.17",
                 "phpstan/phpstan-strict-rules": "^2",
-                "phpunit/phpunit": "9.6.22",
-                "slevomat/coding-standard": "8.13.1",
-                "squizlabs/php_codesniffer": "3.10.2",
+                "phpunit/phpunit": "9.6.23",
+                "slevomat/coding-standard": "8.16.2",
+                "squizlabs/php_codesniffer": "3.13.1",
                 "symfony/cache": "^5.4|^6.0|^7.0",
                 "symfony/console": "^4.4|^5.4|^6.0|^7.0"
             },
@@ -850,7 +850,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.9.4"
+                "source": "https://github.com/doctrine/dbal/tree/3.9.5"
             },
             "funding": [
                 {
@@ -866,7 +866,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-16T08:28:55+00:00"
+            "time": "2025-06-15T22:40:05+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1520,16 +1520,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.20.3",
+            "version": "2.20.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "17d28b5c4cac212ca92730d9a26e32a0b1516126"
+                "reference": "71550106d491c3f888636b731c805473de3c8583"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/17d28b5c4cac212ca92730d9a26e32a0b1516126",
-                "reference": "17d28b5c4cac212ca92730d9a26e32a0b1516126",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/71550106d491c3f888636b731c805473de3c8583",
+                "reference": "71550106d491c3f888636b731c805473de3c8583",
                 "shasum": ""
             },
             "require": {
@@ -1616,9 +1616,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.20.3"
+                "source": "https://github.com/doctrine/orm/tree/2.20.4"
             },
-            "time": "2025-05-02T17:07:53+00:00"
+            "time": "2025-06-09T20:24:12+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -4556,16 +4556,16 @@
         },
         {
             "name": "laminas/laminas-validator",
-            "version": "2.64.3",
+            "version": "2.64.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "b3ec5865e7aa60a0fbce211500f4a5c6a6e11a30"
+                "reference": "e2e6631f599a9b0db1e23adb633c09a2f0c68bed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/b3ec5865e7aa60a0fbce211500f4a5c6a6e11a30",
-                "reference": "b3ec5865e7aa60a0fbce211500f4a5c6a6e11a30",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/e2e6631f599a9b0db1e23adb633c09a2f0c68bed",
+                "reference": "e2e6631f599a9b0db1e23adb633c09a2f0c68bed",
                 "shasum": ""
             },
             "require": {
@@ -4636,7 +4636,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2025-06-11T10:23:09+00:00"
+            "time": "2025-06-16T14:38:00+00:00"
         },
         {
             "name": "laminas/laminas-view",
@@ -7059,7 +7059,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "cd3fe6172a1d992f2bcff46ca5b77afaab730bdf"
+                "reference": "8e26d118c825250c57075829dc999121131f7f1f"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -7111,7 +7111,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2025-06-12T14:27:32+00:00"
+            "time": "2025-06-17T07:08:07+00:00"
         },
         {
             "name": "unicaen/authentification",
@@ -7119,7 +7119,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/authentification.git",
-                "reference": "8b340b15ca8cc7b0c07a1ca9b2518917be331df0"
+                "reference": "20d8b259b7e4047a6a37211d47d5226194801d1d"
             },
             "require": {
                 "ramsey/uuid": "^3.7",
@@ -7142,15 +7142,15 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen - Version Laminas",
-            "time": "2025-06-12T10:00:38+00:00"
+            "time": "2025-06-17T07:08:07+00:00"
         },
         {
             "name": "unicaen/bddadmin",
-            "version": "dev-main",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
-                "reference": "1e38de55576746c2b9a7470ed93e9e01fb265d69"
+                "reference": "26404d23f8f99dca7ef74437a2e0821812be1c72"
             },
             "require": {
                 "php": ">=8.2"
@@ -7163,7 +7163,7 @@
                 }
             },
             "description": "Module pour administrer des bases de données Postgresql et Oracle",
-            "time": "2025-06-11T12:27:15+00:00"
+            "time": "2025-06-26T11:31:19+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
@@ -7298,11 +7298,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "dev-master",
+            "version": "6.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "3f02fa341843988c32aae6dd9b3f17ed1a20ba9c"
+                "reference": "d40f4bb3aca55c1abaae1261f6e86d96bf1090eb"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7374,11 +7374,11 @@
         },
         {
             "name": "unicaen/open-document",
-            "version": "6.0.10",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "c22969532d293706d2d34f2153c8af0cfcbf769d"
+                "reference": "cbb1fe3fdf999ad77f7c8abe7af2426c127840ec"
             },
             "type": "library",
             "autoload": {
@@ -7390,7 +7390,7 @@
                 ]
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2024-07-19T09:59:33+00:00"
+            "time": "2025-06-17T12:11:16+00:00"
         },
         {
             "name": "unicaen/privilege",
@@ -7540,11 +7540,11 @@
         },
         {
             "name": "unicaen/vue",
-            "version": "6.3.3",
+            "version": "6.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/vue.git",
-                "reference": "0a6a964de9049cc4b8032088bdf03809f90dc358"
+                "reference": "832b621f890b0bb9e5155ba6732fc607f49b8d77"
             },
             "type": "library",
             "autoload": {
@@ -7556,7 +7556,7 @@
                 ]
             },
             "description": "Module pour utiliser Vue.js",
-            "time": "2025-03-31T13:26:31+00:00"
+            "time": "2025-06-24T09:43:56+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -11030,16 +11030,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.13.0",
+            "version": "3.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "65ff2489553b83b4597e89c3b8b721487011d186"
+                "reference": "5b5e3821314f947dd040c70f7992a64eac89025c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/65ff2489553b83b4597e89c3b8b721487011d186",
-                "reference": "65ff2489553b83b4597e89c3b8b721487011d186",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/5b5e3821314f947dd040c70f7992a64eac89025c",
+                "reference": "5b5e3821314f947dd040c70f7992a64eac89025c",
                 "shasum": ""
             },
             "require": {
@@ -11110,7 +11110,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-05-11T03:36:00+00:00"
+            "time": "2025-06-17T22:17:01+00:00"
         },
         {
             "name": "symfony/config",
@@ -11733,10 +11733,9 @@
         "connecteur-ose/pegase": 20,
         "unicaen/app": 20,
         "unicaen/authentification": 20,
-        "unicaen/bddadmin": 20,
-        "unicaen/code": 20,
         "unicaen/import": 20,
         "unicaen/mail": 20,
+        "unicaen/open-document": 20,
         "unicaen/privilege": 20,
         "unicaen/signature": 20,
         "unicaen/tbl": 20,

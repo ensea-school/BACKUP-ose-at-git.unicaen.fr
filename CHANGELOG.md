@@ -37,6 +37,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 * Nouvelle formule de calcul pour Savoie Mont Blanc
 * Nouvelle version de la formule de Dauphine
+* Nouvelle version de la formule de Brest
 
 ## Corrections
 

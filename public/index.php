@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 use Laminas\Mvc\Application;
-use Symfony\Component\HttpKernel\Kernel as BaseKernel;
-use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+//use App\Kernel;
 
 /**
  * This makes our life easier when dealing with paths. Everything is relative
@@ -28,22 +27,28 @@ if (php_sapi_name() === 'cli-server') {
     unset($path);
 }
 
-// Composer autoloading
-include __DIR__ . '/../vendor/autoload.php';
-
-if (! class_exists(Application::class)) {
-    throw new RuntimeException(
-        "Unable to load application.\n"
-        . "- Type `composer install` if you are developing locally.\n"
-        . "- Type `docker-compose run laminas composer install` if you are using Docker.\n"
-    );
-}
-
-$container = require __DIR__ . '/../config/container.php';
-
 if (str_starts_with($_SERVER['REQUEST_URI'],'/api')){
-    require dirname(__DIR__) . '/api/start.php';
+//    require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+
+//    return function (array $context) {
+//        return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+//    };
+    die('Aucune API n\'existe pour le moment');
 }else {
+    // Composer autoloading
+    include __DIR__ . '/../vendor/autoload.php';
+
+
+    if (! class_exists(Application::class)) {
+        throw new RuntimeException(
+            "Unable to load application.\n"
+            . "- Type `composer install` if you are developing locally.\n"
+            . "- Type `docker-compose run laminas composer install` if you are using Docker.\n"
+        );
+    }
+
+    $container = require __DIR__ . '/../config/container.php';
+
     // Run the application!
     /** @var Application $app */
     $app = $container->get('Application');

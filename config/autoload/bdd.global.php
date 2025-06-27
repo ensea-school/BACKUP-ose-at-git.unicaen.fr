@@ -117,14 +117,5 @@ return [
                 'cache_dir' => 'cache/Doctrine',
             ],
         ],
-        /*'filesystem' => [
-            'class'   => Laminas\Cache\Storage\Adapter\Filesystem::class,
-            //'options' => [
-
-            //],
-            //'cache_dir' => 'cache/Doctrine',
-            'directory' => 'cache/Doctrine',
-            'namespace' => 'DoctrineModule',
-        ],*/
     ],
 ];

@@ -4,14 +4,14 @@ namespace Workflow\Tbl\Process;
 
 
 use Application\Cache\Traits\CacheContainerTrait;
-use Application\Service\Traits\AnneeServiceAwareTrait;
-use Unicaen\BddAdmin\BddAwareTrait;
+use Application\Service\AnneeService;
+use Unicaen\BddAdmin\Bdd;
 use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
-use UnicaenTbl\Service\BddServiceAwareTrait;
+use UnicaenTbl\Service\BddService;
 use UnicaenTbl\TableauBord;
 use Workflow\Entity\Db\WorkflowEtape;
-use Workflow\Service\WorkflowServiceAwareTrait;
+use Workflow\Service\WorkflowService;
 use Workflow\Tbl\Process\Model\IntervenantEtape;
 use Workflow\Tbl\Process\Model\IntervenantEtapeStructure;
 use Workflow\Tbl\Process\Sub\Calculateur;
@@ -23,10 +23,6 @@ use Workflow\Tbl\Process\Sub\Calculateur;
  */
 class WorkflowProcess implements ProcessInterface
 {
-    use BddServiceAwareTrait;
-    use BddAwareTrait;
-    use AnneeServiceAwareTrait;
-    use WorkflowServiceAwareTrait;
     use CacheContainerTrait;
 
     /**
@@ -38,9 +34,23 @@ class WorkflowProcess implements ProcessInterface
 
 
 
-    public function __construct()
+    public function __construct(
+        private readonly BddService      $bddService,
+        private readonly Bdd             $bdd,
+        private readonly AnneeService    $anneeService,
+        private readonly WorkflowService $workflowService,
+    )
     {
         $this->calculateur = new Calculateur();
+    }
+
+
+
+    public function test()
+    {
+        $bdd = $this->bdd;
+
+        dd($this->bdd->select('select * from annee where id = 2024'));
     }
 
 
@@ -50,7 +60,7 @@ class WorkflowProcess implements ProcessInterface
         mpg_lower($params);
 
         if (empty($params)) {
-            $annees = $this->getServiceAnnee()->getActives(true);
+            $annees = $this->anneeService->getActives(true);
             foreach ($annees as $annee) {
                 $this->run($tableauBord, ['annee_id' => $annee->getId()]);
             }
@@ -73,9 +83,9 @@ class WorkflowProcess implements ProcessInterface
         $cache->alimentationSql = $this->makeSql();
         //}
 
-        $etapes = $this->getServiceWorkflow()->getEtapes();
+        $etapes = $this->workflowService->getEtapes();
 
-        $sql  = $this->getServiceBdd()->injectKey($cache->alimentationSql, $params);
+        $sql  = $this->bddService->injectKey($cache->alimentationSql, $params);
         $stmt = $this->bdd->selectEach($sql);
         while ($d = $stmt->next()) {
             mpg_lower($d);
@@ -152,7 +162,7 @@ class WorkflowProcess implements ProcessInterface
         // Enregistrement en BDD
         $key = $tableauBord->getOption('key');
 
-        $table = $this->getBdd()->getTable($tableName);
+        $table = $this->bdd->getTable($tableName);
 
         //         on force la DDL pour éviter de faire des requêtes en plus
         //        $table->setDdl(['sequence' => $tableauBord->getOption('sequence'), 'columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
@@ -170,7 +180,7 @@ class WorkflowProcess implements ProcessInterface
 
         // on force le refresh des feuilles de route déjà chargées
         foreach ($this->workflows as $intervenant => $workflow) {
-            $this->getServiceWorkflow()->refreshFeuilleDeRoute($intervenant);
+            $this->workflowService->refreshFeuilleDeRoute($intervenant);
         }
     }
 

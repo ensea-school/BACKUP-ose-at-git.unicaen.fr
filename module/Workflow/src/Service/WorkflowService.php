@@ -27,7 +27,7 @@ use Workflow\Model\FeuilleDeRoute;
  */
 class WorkflowService extends AbstractService
 {
-    const ETAPES_CACHE_ID = 'Workflow_Service_WorkflowService_getEtapes';
+    const string ETAPES_CACHE_ID = 'Workflow_Service_getEtapes';
 
     use ContextServiceAwareTrait;
     use EntityManagerAwareTrait;
@@ -57,9 +57,15 @@ class WorkflowService extends AbstractService
     /**
      * @return array|WorkflowEtape[]
      */
-    public function getEtapes(): array
+    public function getEtapes(Annee|int|null $annee = null): array
     {
-        $anneeId = $this->getServiceContext()->getAnnee()->getId();
+        if ($annee instanceof Annee) {
+            $anneeId = $annee->getId();
+        } elseif (isset($annee)) {
+            $anneeId = $annee;
+        } else {
+            $anneeId = $this->getServiceContext()->getAnnee()->getId();
+        }
 
         if (empty($this->workflowEtapes)) {
             $this->workflowEtapes = [];
@@ -82,7 +88,7 @@ class WorkflowService extends AbstractService
             $query = $this->getEntityManager()->createQuery($dql);
             $query->setParameter('annee', $anneeId);
             $query->enableResultCache(true);
-            $query->setResultCacheId(self::ETAPES_CACHE_ID.'_'.$anneeId);
+            $query->setResultCacheId(self::ETAPES_CACHE_ID . '_' . $anneeId);
 
             /** @var WorkflowEtape[] $iterable */
             $iterable = $query->getResult();
@@ -113,8 +119,8 @@ class WorkflowService extends AbstractService
 
         $cache = $em->getConfiguration()->getResultCache();
         $items = [];
-        for( $a=2010;$a<=Annee::MAX;$a++){
-            $items[] = self::ETAPES_CACHE_ID.'_'.$a;
+        for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
+            $items[] = self::ETAPES_CACHE_ID . '_' . $a;
         }
         $cache->deleteItems($items);
         $this->workflowEtapes = [];
@@ -262,6 +268,7 @@ class WorkflowService extends AbstractService
      * @param Intervenant|null                                $intervenant
      * @param Structure|null                                  $structure
      * @return WorkflowEtape
+     * @deprecated
      */
     public function getPreviousAccessibleEtape($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
@@ -283,6 +290,13 @@ class WorkflowService extends AbstractService
 
 
 
+    /**
+     * @param                  $etape
+     * @param Intervenant|null $intervenant
+     * @param Structure|null   $structure
+     * @return array
+     * @deprecated
+     */
     protected function prepareEtapeParams($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         switch (true) {
@@ -332,6 +346,7 @@ class WorkflowService extends AbstractService
      * @param Structure|null   $structure
      *
      * @return WorkflowEtape|null
+     * @deprecated
      */
     public function getEtapeCourante(?Intervenant $intervenant = null, ?Structure $structure = null)
     {
@@ -352,6 +367,7 @@ class WorkflowService extends AbstractService
      * @param Structure|null   $structure
      *
      * @return WorkflowEtape[]
+     * @deprecated
      */
     public function getFeuilleDeRouteOld(?Intervenant $intervenant = null, ?Structure $structure = null)
     {
@@ -408,6 +424,7 @@ class WorkflowService extends AbstractService
      * @param Intervenant|null $intervenant
      *
      * @return TblWorkflow[]
+     * @deprecated
      */
     protected function getEtapesOld(Intervenant $intervenant, ?Structure $structure = null, bool $calcIfEmpty = true)
     {
@@ -546,6 +563,7 @@ class WorkflowService extends AbstractService
      * @param Structure|null                                  $structure
      *
      * @return WorkflowEtape
+     * @deprecated
      */
     public function getEtape($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
@@ -574,6 +592,7 @@ class WorkflowService extends AbstractService
 
     /**
      * @param $data WorkflowEtape[]
+     * @deprecated
      */
     protected function calculEtats($data)
     {
@@ -615,6 +634,7 @@ class WorkflowService extends AbstractService
      * @param Structure|null                                  $structure
      *
      * @return WorkflowEtape
+     * @deprecated
      */
     public function getNextEtape($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
@@ -636,6 +656,12 @@ class WorkflowService extends AbstractService
 
 
 
+    /**
+     * @param $etape
+     * @return bool
+     * @throws \Exception
+     * @deprecated
+     */
     public function isAllowed($etape)
     {
         if ($etape instanceof WorkflowEtape) {
@@ -658,6 +684,7 @@ class WorkflowService extends AbstractService
      * @param Structure|null                                  $structure
      *
      * @return WorkflowEtape
+     * @deprecated
      */
     public function getNextAccessibleEtape($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {

@@ -30,24 +30,30 @@ class WorkflowResetCommand extends Command
     {
         $io  = new SymfonyStyle($input, $output);
         $bdd = $this->getBdd()->setLogger($io);
-
         $io->title($this->getDescription());
-        try {
-            $bdd->data()->addAction('workflow-reset', 'Réinitialisation du workflow');
 
-            $config = $bdd->data()->getOption('config');
-            // ignore plus ces colonnes en cas d'update afin de tout remettre à l'état initial
-            unset($config['WORKFLOW_ETAPE']['options']['update-ignore-cols']);
-            $bdd->data()->setOption('config', $config);
+        $confirmed = $io->confirm('Êtes-vous sûr de vouloir réinitialiser le workflow ?', false);
 
-            $bdd->data()->run('workflow-reset');
-            $this->getServiceWorkflow()->clearEtapesCache();
-            $io->success('Workflow réinitialisé');
-        } catch (\Exception $e) {
-            $io->error($e->getMessage());
+        if ($confirmed) {
+            try {
+                $bdd->data()->addAction('workflow-reset', 'Réinitialisation du workflow');
+
+                $config = $bdd->data()->getOption('config');
+                // ignore plus ces colonnes en cas d'update afin de tout remettre à l'état initial
+                unset($config['WORKFLOW_ETAPE']['options']['update-ignore-cols']);
+                $bdd->data()->setOption('config', $config);
+
+                $bdd->data()->run('workflow-reset');
+                $this->getServiceWorkflow()->clearEtapesCache();
+                $io->success('Workflow réinitialisé');
+            } catch (\Exception $e) {
+                $io->error($e->getMessage());
+                return Command::FAILURE;
+            }
+            return Command::SUCCESS;
+        } else {
+            $io->warning('Opération annulée.');
             return Command::FAILURE;
         }
-
-        return Command::SUCCESS;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Administration\DataSource;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Perimetre;
 use Unicaen\BddAdmin\BddAwareTrait;
 use Workflow\Entity\Db\WorkflowEtapeDependance;
@@ -176,7 +177,7 @@ class DataSource
         $data             = $donneesParDefaut['STATUT'];
 
         $statuts = [];
-        for ($a = 2010; $a <= 2099; $a++) {
+        for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
             foreach ($data as $d) {
                 $d['ANNEE_ID']              = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
@@ -195,7 +196,7 @@ class DataSource
         $data             = $donneesParDefaut['FONCTION_REFERENTIEL'];
 
         $fonctions = [];
-        for ($a = 2010; $a <= 2099; $a++) {
+        for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
             foreach ($data as $d) {
                 $d['ANNEE_ID']              = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
@@ -214,7 +215,7 @@ class DataSource
         $data             = $donneesParDefaut['TYPE_PIECE_JOINTE_STATUT'];
 
         $statuts = [];
-        for ($a = 2010; $a <= 2099; $a++) {
+        for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
             foreach ($data as $d) {
                 $d['ANNEE_ID']              = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
@@ -347,7 +348,7 @@ class DataSource
 
         $tms = [];
 
-        for ($a = 2010; $a <= 2099; $a++) {
+        for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
             foreach ($data as $code => $tm) {
                 $tms[] = [
                     'CODE'                     => $code,
@@ -433,7 +434,7 @@ class DataSource
                 'histo_modificateur_id' => null,
             ];
 
-            for ($a = 2010; $a <= 2099; $a++) {
+            for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
                 $edata['annee_id'] = $a;
                 mpg_upper($edata);
                 $etapes[] = $edata;
@@ -463,7 +464,7 @@ class DataSource
                         'histo_modificateur_id' => null,
                     ];
 
-                    for ($a = 2010; $a <= 2099; $a++) {
+                    for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
                         $ndep = $dep;
                         $ndep['etape_suivante_id'] .= '-'.(string)$a;
                         $ndep['etape_precedante_id'] .= '-'.(string)$a;

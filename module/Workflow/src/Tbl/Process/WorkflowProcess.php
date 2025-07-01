@@ -83,12 +83,12 @@ class WorkflowProcess implements ProcessInterface
         $cache->alimentationSql = $this->makeSql();
         //}
 
-        $etapes = $this->workflowService->getEtapes();
-
         $sql  = $this->bddService->injectKey($cache->alimentationSql, $params);
         $stmt = $this->bdd->selectEach($sql);
         while ($d = $stmt->next()) {
             mpg_lower($d);
+
+            $etapes = $this->workflowService->getEtapes((int)$d['annee_id']);
 
             $intevenant = (int)$d['intervenant_id'];
             $structure  = (int)$d['structure_id'];
@@ -208,7 +208,7 @@ class WorkflowProcess implements ProcessInterface
           intervenant                   i
           JOIN statut                  si ON si.id = i.statut_id
           JOIN type_intervenant        ti ON ti.id = si.type_intervenant_id
-          JOIN workflow_etape           e ON 1 = CASE $dems END
+          JOIN workflow_etape           e ON e.annee_id = i.annee_id AND 1 = CASE $dems END
           LEFT JOIN ($subQueries) w ON w.intervenant_id = i.id AND w.etape_code = e.code
         WHERE
           w.intervenant_id IS NOT NULL

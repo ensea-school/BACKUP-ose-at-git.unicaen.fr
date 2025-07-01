@@ -42,7 +42,7 @@ class WorkflowService extends AbstractService
      */
     private array $feuillesDeRoute = [];
 
-    /** @var array|WorkflowEtape[] */
+    /** @var array|WorkflowEtape[][] */
     private array $workflowEtapes = [];
 
 
@@ -67,8 +67,8 @@ class WorkflowService extends AbstractService
             $anneeId = $this->getServiceContext()->getAnnee()->getId();
         }
 
-        if (empty($this->workflowEtapes)) {
-            $this->workflowEtapes = [];
+        if (empty($this->workflowEtapes[$anneeId])) {
+            $this->workflowEtapes[$anneeId] = [];
 
             $dql = "
             SELECT 
@@ -94,7 +94,7 @@ class WorkflowService extends AbstractService
             $iterable = $query->getResult();
             foreach ($iterable as $we) {
                 if ($we->getAnnee()->getId() == $anneeId) {
-                    $this->workflowEtapes[$we->getCode()] = $we;
+                    $this->workflowEtapes[$anneeId][$we->getCode()] = $we;
                 }
             }
 
@@ -102,13 +102,13 @@ class WorkflowService extends AbstractService
             foreach ($dataFile as $weCode => $weData) {
                 if (isset($weData['contraintes']) && !empty($weData['contraintes'])) {
                     foreach ($weData['contraintes'] as $contrainte) {
-                        $wec = $this->workflowEtapes[$contrainte];
-                        $this->workflowEtapes[$weCode]->__addContrainte($wec);
+                        $wec = $this->workflowEtapes[$anneeId][$contrainte];
+                        $this->workflowEtapes[$anneeId][$weCode]->__addContrainte($wec);
                     }
                 }
             }
         }
-        return $this->workflowEtapes;
+        return $this->workflowEtapes[$anneeId];
     }
 
 

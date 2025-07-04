@@ -10,7 +10,6 @@ return [
         'ETAPE_SUIVANTE_ID',
         'ETAPE_PRECEDANTE_ID',
         'TYPE_INTERVENANT_ID',
-        'ACTIVE',
         'ANNEE_ID',
         'HISTO_DESTRUCTION',
     ],

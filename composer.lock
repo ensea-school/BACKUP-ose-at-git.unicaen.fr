@@ -1520,16 +1520,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.20.4",
+            "version": "2.20.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "71550106d491c3f888636b731c805473de3c8583"
+                "reference": "6307b4fa7d7e3845a756106977e3b48907622098"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/71550106d491c3f888636b731c805473de3c8583",
-                "reference": "71550106d491c3f888636b731c805473de3c8583",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/6307b4fa7d7e3845a756106977e3b48907622098",
+                "reference": "6307b4fa7d7e3845a756106977e3b48907622098",
                 "shasum": ""
             },
             "require": {
@@ -1616,9 +1616,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.20.4"
+                "source": "https://github.com/doctrine/orm/tree/2.20.5"
             },
-            "time": "2025-06-09T20:24:12+00:00"
+            "time": "2025-06-24T17:50:46+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -7492,7 +7492,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "b3564fe938efa59752fc18d904f9f11a9b01c83a"
+                "reference": "b184de597e86cf6de395d4f928b3ba3c44ffa04d"
             },
             "require": {
                 "unicaen/app": ">=6.0|dev-php84"
@@ -7504,7 +7504,7 @@
                 }
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2025-06-11T12:26:11+00:00"
+            "time": "2025-06-27T15:12:26+00:00"
         },
         {
             "name": "unicaen/utilisateur",

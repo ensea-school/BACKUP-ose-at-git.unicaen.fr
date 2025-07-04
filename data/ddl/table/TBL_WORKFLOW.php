@@ -165,6 +165,18 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
+        'WHY_NON_ATTEIGNABLE'   => [
+            'name'        => 'WHY_NON_ATTEIGNABLE',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 14,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

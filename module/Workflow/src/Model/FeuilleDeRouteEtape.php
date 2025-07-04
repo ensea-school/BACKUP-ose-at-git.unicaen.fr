@@ -24,6 +24,7 @@ class FeuilleDeRouteEtape
     public bool          $atteignable = true;
     public float         $objectif    = 1.0;
     public float         $realisation = 0.0;
+    public array         $whyNonAtteignable = [];
 
 
 

@@ -55,6 +55,7 @@ class WorkflowController extends AbstractController
             'libelle',
             'url',
             'atteignable',
+            'whyNonAtteignable',
             'courante',
             'allowed',
             'realisationPourc',
@@ -63,6 +64,7 @@ class WorkflowController extends AbstractController
             ['structures', [
                 'libelle',
                 'atteignable',
+                'whyNonAtteignable',
                 'courante',
                 'allowed',
                 'realisationPourc',

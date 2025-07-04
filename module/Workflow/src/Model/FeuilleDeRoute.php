@@ -120,7 +120,8 @@ class FeuilleDeRoute
           w.atteignable,
           w.objectif,
           w.partiel,
-          w.realisation
+          w.realisation,
+          w.why_non_atteignable
         FROM
           tbl_workflow w
           JOIN workflow_etape we ON we.id = w.etape_id
@@ -147,15 +148,16 @@ class FeuilleDeRoute
             $objectif          = (float)$d['objectif'];
             $partiel           = (float)$d['partiel'];
             $realisation       = (float)$d['realisation'];
+            $whyNonAtteignable = $d['why_non_atteignable'];
 
             $etape = $this->workflowEtapes[$etapeCode];
 
-            $this->buildEtape($etape, $structureId, $structureLiblelle, $atteignable, $objectif, $partiel, $realisation);
+            $this->buildEtape($etape, $structureId, $structureLiblelle, $atteignable, $objectif, $partiel, $realisation, $whyNonAtteignable);
         }
 
         foreach ($this->fdr as $fdre) {
             if (count($fdre->structures) == 1) {
-            //    $fdre->structures = []; // Pas de détail par structures s'il n'y en a qu'une
+                //    $fdre->structures = []; // Pas de détail par structures s'il n'y en a qu'une
             }
         }
 
@@ -164,7 +166,7 @@ class FeuilleDeRoute
 
 
 
-    private function buildEtape(WorkflowEtape $etape, int $structureId, ?string $structureLibelle, bool $atteignable, float $objectif, float $partiel, float $realisation): void
+    private function buildEtape(WorkflowEtape $etape, int $structureId, ?string $structureLibelle, bool $atteignable, float $objectif, float $partiel, float $realisation, ?string $whyNonAtteignable): void
     {
         $role        = $this->service->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $this->service->getServiceContext()->getIntervenant();
@@ -179,9 +181,10 @@ class FeuilleDeRoute
             } else {
                 $fdre->url = $this->service->getUrl($etape->getRoute(), ['intervenant' => $this->getIntervenant()->getId()]);
             }
-            $fdre->atteignable = $atteignable;
-            $fdre->objectif    = $objectif;
-            $fdre->realisation = $realisation;
+            $fdre->atteignable       = $atteignable;
+            $fdre->objectif          = $objectif;
+            $fdre->realisation       = $realisation;
+            $fdre->whyNonAtteignable = $this->makeWhyNonAtteignable($whyNonAtteignable);
 
             $this->fdr[$etape->getCode()] = $fdre;
         } else {
@@ -201,5 +204,27 @@ class FeuilleDeRoute
                 $fdre->structures[$structureId] = $fdres;
             }
         }
+    }
+
+
+
+    private function makeWhyNonAtteignable(?string $whyNonAtteignable): array
+    {
+        if (!isset($whyNonAtteignable)) {
+            return [];
+        }
+
+        $raisons = [];
+
+        $whyNonAtteignable = json_decode($whyNonAtteignable);
+        foreach ($whyNonAtteignable as $whyNonAtteignableItem) {
+            if (isset($this->workflowEtapes[$whyNonAtteignableItem])) {
+                $raisons[] = $this->workflowEtapes[$whyNonAtteignableItem]->getDescNonFranchie();
+            } elseif (isset($whyNonAtteignableItem)) {
+                $raisons[] = $whyNonAtteignableItem;
+            }
+        }
+
+        return $raisons;
     }
 }

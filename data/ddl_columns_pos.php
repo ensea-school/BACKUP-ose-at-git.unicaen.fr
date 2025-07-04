@@ -1717,6 +1717,7 @@ return [
         'OBJECTIF',
         'REALISATION',
         'PARTIEL',
+        'WHY_NON_ATTEIGNABLE',
     ],
     'TEST_BUFFER'                         => [
         'ID',

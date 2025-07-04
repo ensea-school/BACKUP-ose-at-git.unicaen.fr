@@ -52,7 +52,7 @@ class CacheService
             mkdir(dirname($filename), 0777, true);
         }
         file_put_contents($filename, $content);
-        chmod($filename, 0777);
+        @chmod($filename, 0666);
 
         return $this;
     }

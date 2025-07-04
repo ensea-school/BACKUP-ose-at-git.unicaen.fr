@@ -48,31 +48,27 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     public function clearRoles(): void
     {
         $session = RoleService::getSession();
-        if ($session->offsetExists('roles')){
+        if ($session->offsetExists('roles')) {
             $session->offsetUnset('roles');
         }
     }
 
 
 
-    protected function getRolesPrivileges()
+    protected function getRolesPrivileges(): array
     {
-        $session = RoleService::getSession();
-        if (!$session->offsetExists('rolesPrivileges') || empty($session->rolesPrivileges)) {
-            $rolesPrivileges = [];
-            $pr              = $this->getPrivilegeProvider()->getPrivilegesRoles();
-            foreach ($pr as $priv => $roles) {
-                foreach ($roles as $role) {
-                    if (!isset($this->rolesPrivileges[$role])) {
-                        $rolesPrivileges[$role] = [];
-                    }
-                    $rolesPrivileges[$role][] = $priv;
+        $rolesPrivileges = [];
+        $pr              = $this->getPrivilegeProvider()->getPrivilegesRoles();
+        foreach ($pr as $priv => $roles) {
+            foreach ($roles as $role) {
+                if (!isset($rolesPrivileges[$role])) {
+                    $rolesPrivileges[$role] = [];
                 }
+                $rolesPrivileges[$role][] = $priv;
             }
-            $session->rolesPrivileges = $rolesPrivileges;
         }
 
-        return $session->rolesPrivileges;
+        return $rolesPrivileges;
     }
 
 

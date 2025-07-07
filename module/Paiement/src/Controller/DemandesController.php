@@ -64,9 +64,9 @@ class DemandesController extends AbstractController
             $demandes                         = $this->axios()->fromPost();
             $demandesApprouveesBudgetairement = $this->getServiceDemandes()->verifierBudgetDemandeMiseEnPaiement($demandes);
             $error                            = 0;
-            $errorBudget = round(count($demandes) - count($demandesApprouveesBudgetairement));
+            $errorBudget                      = round(count($demandes) - count($demandesApprouveesBudgetairement));
 
-            $success                          = 0;
+            $success = 0;
             foreach ($demandesApprouveesBudgetairement as $demande) {
                 try {
                     $this->getServiceDemandes()->verifierValiditeDemandeMiseEnPaiement($intervenant, $demande);
@@ -124,7 +124,7 @@ class DemandesController extends AbstractController
     public function getDemandesMiseEnPaiementAction()
     {
         $structureRole = null;
-        $role      = $this->getServiceContext()->getSelectedIdentityRole();
+        $role          = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         /**
          * @var Intervenant $intervenant
@@ -156,7 +156,7 @@ class DemandesController extends AbstractController
             //On redirige vers la visualisation des mises en paiement
             $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
         }
-        $intervenantStructure = ($intervenant->getStructure())?$intervenant->getStructure()->getLibelleCourt():'';
+        $intervenantStructure = ($intervenant->getStructure()) ? $intervenant->getStructure()->getLibelleCourt() : '';
 
         return compact('intervenant', 'intervenantStructure');
     }
@@ -190,7 +190,7 @@ class DemandesController extends AbstractController
 
 
 
-    function demandeMiseEnPaiementLotAction()
+    public function demandeMiseEnPaiementLotAction()
     {
         $structures        = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
         $canMiseEnPaiement = $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT));

@@ -136,7 +136,7 @@ WITH i AS (
 				MAX(indc.ldap_uid) KEEP (DENSE_RANK  FIRST ORDER BY CASE WHEN regexp_like(ldap_uid, 'e[0-9]{8}') THEN 1 ELSE 0 END, indc.histo_creation)  ldap_uid,
 				MAX(indc.email) KEEP (DENSE_RANK  FIRST ORDER BY CASE WHEN regexp_like(ldap_uid, 'e[0-9]{8}') THEN 1 ELSE 0 END,indc.histo_creation)  email,
 				MAX(indc.histo_creation) KEEP (DENSE_RANK  FIRST ORDER BY CASE WHEN regexp_like(ldap_uid, 'e[0-9]{8}') THEN 1 ELSE 0 END,indc.histo_creation)  histo_creation,
-				MAX(vindcvc.date_fin) KEEP (DENSE_RANK FIRST ORDER BY vindcvc.date_fin DESC)   date_fin
+				MAX(vindcvc.date_desactivation) KEEP (DENSE_RANK FIRST ORDER BY vindcvc.date_desactivation DESC)   date_fin
 			 FROM  octo.individu_compte@octoprod indc
 			 JOIN  octo.v_individu_cycle_vie_compte@octoprod vindcvc ON vindcvc.individu_id = indc.individu_id
 			 WHERE indc.statut_id = 1

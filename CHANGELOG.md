@@ -1,6 +1,6 @@
 # Version stable
 
-OSE 24.6](#ose-246-17062025)
+OSE 24.7](#ose-247-08072025)
 
 
 # OSE 25 (à venir fin juillet 2025)
@@ -31,12 +31,15 @@ OSE 24.6](#ose-246-17062025)
 Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
 
 
-# OSE 24.7 (à venir)
+
+# OSE 24.7 (08/07/2025)
 
 ## Améliorations
 
 * Nouvelle formule de calcul pour Savoie Mont Blanc
 * Nouvelle version de la formule de Dauphine
+* Nouvelle version de la formule de Paris 8
+* Nouvelle version de la formule de La Rochelle
 * Nouvelle version de la formule de Brest
 
 ## Corrections
@@ -46,8 +49,20 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * Correction de la formule de calcul du Havre
 * Correction privilege visualisation des candidatures d'une offre d'emploi (#59099) 
 * Pouvoir refuser une candidature même si l'étudiant n'a pas renseigné à 100% ses données persos et ses pièces justificatives (#62327)
+* En mode "utiliser les centres de coûts de la composante d'affectation" pour les paiements, dans le cas des vacataires, la composante d'enseignement reste celle utilisée (#62447)
+* Le report de paramétrages sur les années suivantes fonctionne de nouveau pour les statuts & les taux
 
+## Notes de mise à jour
 
+Note à destination des administrateurs fonctionnels.
+En ce qui concerne le souci de report de paramétrages sur les années suivantes pour les statuts & les taux,
+ce denier ne concerne que les établissements ayant installé OSE durant les deux dernières années (à partir d'une base de données vide, donc).
+Pour vous, il se peut que les paramétrages faits pour l'année 2024/2025 n'aient pas été répertutés sur les années suivantes.
+Nous vous invitons :
+ - à migrer en version 24.7 si vous êtes en version 23 ou 24 ;
+ - à vous positionner sur l'année 2025/2026 ;
+ - à bien vérifier que vos paramétrages sont corrects, au niveau des statuts & des taux ;
+ - à modifier vos paramétrages s'ils ne sont pas bons : la résolution du problème fait que vos actions seront bien répercutées sur les années à venir.
 
 
 # OSE 24.6 (17/06/2025)

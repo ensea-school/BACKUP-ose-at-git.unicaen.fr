@@ -90,8 +90,9 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             case $entity instanceof Candidature:
                 switch ($privilege) {
                     case Privileges::MISSION_CANDIDATURE_VALIDER:
-                    case Privileges::MISSION_CANDIDATURE_REFUSER:
                         return $this->assertCandidatureValider($role, $entity);
+                    case Privileges::MISSION_CANDIDATURE_REFUSER:
+                        return $this->assertCandidatureRefuser($role, $entity);
                 }
             break;
         }
@@ -286,6 +287,14 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             $wfEtape && $wfEtape->isAtteignable(),
             $this->assertStructure($role, $structureOffre),
         ]);
+    }
+
+
+
+    protected function assertCandidatureRefuser(Role $role, Candidature $candidature): bool
+    {
+        $structureOffre = $candidature->getOffre()->getStructure();
+        return $this->assertStructure($role, $structureOffre);
     }
 
 }

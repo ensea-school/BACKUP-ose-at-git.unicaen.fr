@@ -23,6 +23,7 @@ return [
             Migration\v24ParametresContrat::class,
             Migration\v24Contrats::class,
             Migration\v24FonctionReferentielParent::class,
+            Migration\v24ParametresAnnualises::class,
         ],
     ],
 

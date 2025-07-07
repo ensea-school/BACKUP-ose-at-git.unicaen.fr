@@ -49,7 +49,7 @@ class TblPieceJointeService extends AbstractEntityService
     {
         return 'tblpj';
     }
-    
+
 
 
     public function data(Intervenant $intervenant): AxiosModel
@@ -90,6 +90,7 @@ class TblPieceJointeService extends AbstractEntityService
                             'demandee',
                             'fournie',
                             'validee',
+                            'demandeApresRecrutement',
                             ['typePieceJointe', ['id', 'libelle', 'urlModeleDoc']],
                             ['pieceJointe',
                              ['id',

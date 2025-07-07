@@ -60,6 +60,15 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
+                    <!--Modele de document à  télécharger-->
+                    <div v-if="datas.typePieceJointe.urlModeleDoc">
+                        <label>Documents à télécharger et à remplir :</label><br>
+                        <ul>
+                            <li><a class="modele-doc" title="Cliquez pour télécharger le document à remplir"
+                                   :href="urlModeleDoc"><span class="fas fa-file"></span> {{ nameModeleDoc }}
+                            </a></li>
+                        </ul>
+                    </div>
                     <!-- fichier déposé -->
                     <label>Fichiers déposés :</label>
                     <p v-if="!this.datas.pieceJointe">Aucun</p>
@@ -86,15 +95,17 @@
                                         <!-- date de dépôt éventuelle du fichier -->
                                         <span class="d-block small upload-date"><i>Déposé le {{
                                                 fichier.date
-                                            }}</i></span>
+                                            }}</i> par {{ fichier.utilisateur }}</span>
 
                                         <span class="d-block small" v-if="fichier.validation"><i>Validé le {{
                                                 fichier.validation?.date
-                                            }}</i></span>
+                                            }}</i> par {{ fichier.validation?.utilisateur }}</span>
                                     </div>
                                     <div>
                                         <!-- lien de suppression du fichier -->
-                                        <button v-if="!fichier.validation && privileges.canEditer"
+                                        <button v-if="!fichier.validation &&
+                                                      privileges.canEditer &&
+                                                      (datas.annee == datas.pieceJointe?.anneeOrigine??false)"
                                                 :id="'supprimer-fichier-' + fichier.id"
                                                 class="delete-file btn btn-sm btn-danger ms-2 p-1 py-0"
                                                 type="button"
@@ -109,7 +120,8 @@
                                         <button
                                             v-if="!fichier.validation &&
                                                   datas.pieceJointe?.validation &&
-                                                  privileges.canValider"
+                                                  privileges.canValider &&
+                                                  (datas.annee == datas.pieceJointe?.anneeOrigine??false)"
                                             :id="'valider-fichier-' + fichier.id"
                                             class="validate-file btn btn-sm btn-success ms-2 p-1 py-0"
                                             type="button"
@@ -208,6 +220,28 @@ const formId = computed(() => {
 const buttonId = computed(() => {
     const id = props.datas.typePieceJointe?.id ?? 'unknown';
     return `btn-import-${id}`;
+});
+
+const urlModeleDoc = computed(() => {
+    const url = props.datas.typePieceJointe?.urlModeleDoc ?? null;
+    const annee = props.datas.annee ?? '0000';
+
+    if (url) {
+        return url.replace(":annee", annee);
+    } else {
+        return null;
+    }
+
+});
+
+const nameModeleDoc = computed(() => {
+    const url = props.datas.typePieceJointe?.urlModeleDoc ?? null;
+
+    if (url) {
+        return url.split('/').pop();
+    } else {
+        return null;
+    }
 });
 
 const labelUpload = computed(() => {

@@ -49,7 +49,7 @@ class TblPieceJointeService extends AbstractEntityService
     {
         return 'tblpj';
     }
-
+    
 
 
     public function data(Intervenant $intervenant): AxiosModel
@@ -64,7 +64,7 @@ class TblPieceJointeService extends AbstractEntityService
            LEFT JOIN pj.validation pjv
            LEFT JOIN pjv.histoCreateur uv
            LEFT JOIN pj.fichier f
-           LEFT JOIn f.histoCreateur uf
+           LEFT JOIN f.histoCreateur uf
            LEFT JOIN f.validation vf
         WHERE 
            tpj.intervenant =  :intervenant
@@ -83,13 +83,14 @@ class TblPieceJointeService extends AbstractEntityService
             'canTelecharger' => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT)),
         ];
 
+
         $properties = [['piecesJointes',
                         [
                             'id',
                             'demandee',
                             'fournie',
                             'validee',
-                            ['typePieceJointe', ['id', 'libelle']],
+                            ['typePieceJointe', ['id', 'libelle', 'urlModeleDoc']],
                             ['pieceJointe',
                              ['id',
                               ['validation', ['id', 'histoCreation']],
@@ -110,14 +111,7 @@ class TblPieceJointeService extends AbstractEntityService
         $triggers = [
             '/piecesJointes'                                => function (?TblPieceJointe $tblPieceJointe, $extracted) {
 
-                $extracted['annee']          = $tblPieceJointe->getAnnee()->getId();
-                $extracted['canEditer']      = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
-                $extracted['canValider']     = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
-                $extracted['canDevalider']   = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION));
-                $extracted['canArchiver']    = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_ARCHIVAGE));
-                $extracted['canTelecharger'] = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT));
-
-
+                $extracted['annee'] = $tblPieceJointe->getAnnee()->getId();
                 return $extracted;
             },
             '/piecesJointes/pieceJointe'                    => function (?PieceJointe $pieceJointe, $extracted) {
@@ -137,7 +131,7 @@ class TblPieceJointeService extends AbstractEntityService
                 if (!empty($fichier)) {
                     $extracted['poids']       = round($fichier->getTaille() / 1024) . ' Ko';
                     $extracted['type']        = $fichier->getTypeMime();
-                    $extracted['date']        = $fichier->getDate()->format('d-m-Y à H:i:s');
+                    $extracted['date']        = $fichier->getHistoCreation()->format('d-m-Y à H:i:s');
                     $extracted['utilisateur'] = $fichier->getHistoCreateur()->getDisplayName();
                 }
                 return $extracted;

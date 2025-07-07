@@ -52,6 +52,7 @@ FROM
        JOIN intervenant                       i ON i.id = fr.intervenant_id
        JOIN annee                             a ON a.id = i.annee_id
        JOIN statut                           si ON si.id = i.statut_id
+       JOIN type_intervenant                 ti ON ti.id = si.type_intervenant_id
        JOIN service                           s ON s.id = frvh.service_id
   LEFT JOIN type_heures                   thens ON thens.code = 'enseignement' AND p.valeur = '0'
   LEFT JOIN element_pedagogique              ep ON ep.id = s.element_pedagogique_id
@@ -64,7 +65,7 @@ FROM
                                                AND mep.service_id = frvh.service_id
                                                AND COALESCE(thens.id,mep.type_heures_id) = COALESCE(thens.id,th.id)
 
-  LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
+  LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' OR ti.code = 'E' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
 WHERE
   1=1
   /*@INTERVENANT_ID=fr.intervenant_id*/
@@ -108,10 +109,11 @@ FROM
        JOIN intervenant                        i ON i.id = s.intervenant_id
        JOIN annee                              a ON a.id = i.annee_id
        JOIN statut                            si ON si.id = i.statut_id
+       JOIN type_intervenant                  ti ON ti.id = si.type_intervenant_id
        JOIN parametre                        ccp ON ccp.nom = 'centres_couts_paye'
        JOIN type_volume_horaire              tvh ON tvh.code = 'REALISE'
        JOIN etat_volume_horaire              evh ON tvh.code = 'valide'
-  LEFT JOIN element_pedagogique               ep ON ep.id = s.element_pedagogique_id AND ccp.valeur = 'enseignement'
+  LEFT JOIN element_pedagogique               ep ON ep.id = s.element_pedagogique_id AND ccp.valeur = 'enseignement' OR ti.code = 'E'
   LEFT JOIN STRUCTURE                        str ON str.id = COALESCE( ep.structure_id, i.structure_id )
   LEFT JOIN formule_resultat_intervenant     fri ON fri.type_volume_horaire_id = tvh.id
                                                 AND fri.etat_volume_horaire_id = evh.id
@@ -170,6 +172,7 @@ FROM
   JOIN intervenant                        i ON i.id = fri.intervenant_id
   JOIN annee                              a ON a.id = i.annee_id
   JOIN statut                            si ON si.id = i.statut_id
+  JOIN type_intervenant                  ti ON ti.id = si.type_intervenant_id
   JOIN service_referentiel               sr ON sr.id = frvh.service_referentiel_id
   JOIN fonction_referentiel              fr ON fr.id = sr.fonction_id
 
@@ -177,7 +180,7 @@ FROM
   AND mep.service_referentiel_id = frvh.service_referentiel_id
   AND mep.type_heures_id = th.id
 
-  LEFT JOIN STRUCTURE                        str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN sr.structure_id ELSE i.structure_id END
+  LEFT JOIN STRUCTURE                        str ON str.id = CASE WHEN ccp.valeur = 'enseignement' OR ti.code = 'E' THEN sr.structure_id ELSE i.structure_id END
 WHERE
    1=1
    /*@INTERVENANT_ID=i.id*/
@@ -221,10 +224,11 @@ FROM
        JOIN intervenant                        i ON i.id = sr.intervenant_id
        JOIN annee                              a ON a.id = i.annee_id
        JOIN statut                            si ON si.id = i.statut_id
+       JOIN type_intervenant                  ti ON ti.id = si.type_intervenant_id
        JOIN parametre                        ccp ON ccp.nom = 'centres_couts_paye'
        JOIN type_volume_horaire              tvh ON tvh.code = 'REALISE'
        JOIN etat_volume_horaire              evh ON tvh.code = 'valide'
-  LEFT JOIN STRUCTURE                        str ON str.id = COALESCE( CASE WHEN ccp.valeur = 'enseignement' THEN sr.structure_id ELSE NULL END, i.structure_id )
+  LEFT JOIN STRUCTURE                        str ON str.id = CASE WHEN ccp.valeur = 'enseignement' OR ti.code = 'E' THEN COALESCE( sr.structure_id, i.structure_id ) ELSE i.structure_id END
   LEFT JOIN formule_resultat_intervenant     fri ON fri.type_volume_horaire_id = tvh.id
                                                 AND fri.etat_volume_horaire_id = evh.id
                                                 AND fri.intervenant_id = i.id
@@ -282,6 +286,7 @@ FROM
        JOIN mission                        m ON m.id = tm.mission_id
        JOIN intervenant                    i ON i.id = m.intervenant_id
        JOIN statut                        si ON si.id = i.statut_id
+       JOIN type_intervenant              ti ON ti.id = si.type_intervenant_id
        JOIN volume_horaire_mission       vhm ON vhm.histo_destruction IS NULL AND vhm.mission_id = tm.mission_id
        JOIN type_volume_horaire          tvh ON tvh.id = vhm.type_volume_horaire_id AND tvh.code ='REALISE'
        JOIN type_heures                   th ON th.code = 'mission'
@@ -294,7 +299,7 @@ FROM
                                                AND mep.mission_id = m.id
                                                AND mep.type_heures_id = th.id
 
-  LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN m.structure_id ELSE i.structure_id END
+  LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' OR ti.code = 'E' THEN COALESCE( m.structure_id, i.structure_id ) ELSE i.structure_id END
 WHERE
   tm.valide = 1
   /*@ANNEE_ID=tm.annee_id*/

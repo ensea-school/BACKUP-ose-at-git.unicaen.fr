@@ -20,6 +20,7 @@ export default unicaenVue.defineConfig({
     server: {
         // port par défaut utilisé par Node pour communiquer les éléments en "hot-loading"
         // utile uniquement en mode dev, donc
+        host: '0.0.0.0',
         port: 5133
     },
     resolvers: [

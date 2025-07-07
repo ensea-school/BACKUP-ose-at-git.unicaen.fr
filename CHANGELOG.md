@@ -45,6 +45,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * [Problème sur 27 tableurs de formules de calcul : lé détection de structure université ne fonctionnait pas. Impact limité au téléversement de feuilles de calcul sur l'IHM de test.](https://git.unicaen.fr/open-source/OSE/-/commit/2c458ff613f295e2399ea053b83f11b4c3820ccc)
 * Correction de la formule de calcul du Havre
 * Correction privilege visualisation des candidatures d'une offre d'emploi (#59099) 
+* Pouvoir refuser une candidature même si l'étudiant n'a pas renseigné à 100% ses données persos et ses pièces justificatives (#62327)
 
 
 

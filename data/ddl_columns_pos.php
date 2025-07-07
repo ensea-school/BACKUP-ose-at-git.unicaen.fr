@@ -1240,6 +1240,7 @@ return [
         'SOURCE_ID',
         'SOURCE_CODE',
         'DESCRIPTION',
+        'ETAPE_ID',
     ],
     'SERVICE_REFERENTIEL'                 => [
         'ID',

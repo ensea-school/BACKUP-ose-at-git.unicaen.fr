@@ -45,6 +45,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'ETAPE_ID'               => [
+            'name'        => 'ETAPE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 14,
+            'commentaire' => NULL,
+        ],
         'HISTO_CREATEUR_ID'      => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',

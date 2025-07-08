@@ -13,3 +13,5 @@ composer.phar
 .phpunit.result.cache
 .idea
 /.php-cs-fixer.cache
+deployments/*
+Makefile

@@ -37,6 +37,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 ## Améliorations
 
 * Nouvelle formule de calcul pour Savoie Mont Blanc
+* Nouvelle version de la formule de calcul du Havre
 * Nouvelle version de la formule de Dauphine
 * Nouvelle version de la formule de Paris 8
 * Nouvelle version de la formule de La Rochelle
@@ -46,7 +47,6 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 * Lors de l'ajout d'une première heure d'enseignement depuis l'application, les formules se recalculent de nouveau correctement : le problème empêchait les feuilles de route de se mettre à jour. 
 * [Problème sur 27 tableurs de formules de calcul : la détection de structure université ne fonctionnait pas. Impact limité au téléversement de feuilles de calcul sur l'IHM de test.](https://git.unicaen.fr/open-source/OSE/-/commit/2c458ff613f295e2399ea053b83f11b4c3820ccc)
-* Correction de la formule de calcul du Havre
 * Correction privilege visualisation des candidatures d'une offre d'emploi (#59099) 
 * Pouvoir refuser une candidature même si l'étudiant n'a pas renseigné à 100% ses données persos et ses pièces justificatives (#62327)
 * En mode "utiliser les centres de coûts de la composante d'affectation" pour les paiements, dans le cas des vacataires, la composante d'enseignement reste celle utilisée (#62447)

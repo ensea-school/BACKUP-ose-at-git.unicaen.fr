@@ -70,7 +70,7 @@
                         </ul>
                     </div>
                     <!-- fichier déposé -->
-                    <label>Fichiers déposés :</label>
+                    <label>Fichier(s) déposé(s) :</label>
                     <p v-if="!this.datas.pieceJointe">Aucun</p>
                     <div class="uploaded-files-div" id="uploaded-files-div-6851831280ff7">
                         <ul>

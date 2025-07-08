@@ -7,6 +7,7 @@ WITH t AS ( SELECT
   vh.type_volume_horaire_id         type_volume_horaire_id,
   fr.etat_volume_horaire_id         etat_volume_horaire_id,
   s.element_pedagogique_id          element_pedagogique_id,
+  s.etape_id                        etape_id,
   s.etablissement_id                etablissement_id,
   NULL                              structure_aff_id,
   NULL                              structure_ens_id,
@@ -52,6 +53,7 @@ SELECT
   vh.type_volume_horaire_id         type_volume_horaire_id,
   vhe.etat_volume_horaire_id        etat_volume_horaire_id,
   s.element_pedagogique_id          element_pedagogique_id,
+  s.etape_id                        etape_id,
   s.etablissement_id                etablissement_id,
   NULL                              structure_aff_id,
   NULL                              structure_ens_id,
@@ -311,7 +313,7 @@ FROM
   LEFT JOIN STRUCTURE                  sens ON sens.id  = NVL(t.structure_ens_id, ep.structure_id)
   LEFT JOIN periode                       p ON p.id     = t.periode_id
   LEFT JOIN SOURCE                      src ON src.id   = ep.source_id OR (ep.source_id IS NULL AND src.code = 'OSE')
-  LEFT JOIN etape                       etp ON etp.id   = ep.etape_id
+  LEFT JOIN etape                       etp ON etp.id   = CASE WHEN t.etape_id IS NOT NULL THEN t.etape_id ELSE ep.etape_id
   LEFT JOIN type_formation               tf ON tf.id    = etp.type_formation_id AND tf.histo_destruction IS NULL
   LEFT JOIN groupe_type_formation       gtf ON gtf.id   = tf.groupe_id AND gtf.histo_destruction IS NULL
   LEFT JOIN v_formule_intervenant        fi ON fi.intervenant_id = i.id

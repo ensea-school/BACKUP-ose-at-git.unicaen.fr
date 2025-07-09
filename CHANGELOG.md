@@ -32,6 +32,14 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 
 
+# OSE 24.8 (fin juillet 2025)
+
+## Nouveautés
+
+* Enregistrement de l'étape en plus de l'élément pédagogique lors de la saisie de service d'enseignement (#53620)
+
+
+
 # OSE 24.7 (08/07/2025)
 
 ## Améliorations

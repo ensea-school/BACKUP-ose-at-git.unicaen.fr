@@ -34,7 +34,7 @@ class WorkflowEtapeDependance implements ParametreEntityInterface
 
     protected ?Perimetre $perimetre = null;
 
-    protected int $avancement = 0;
+    protected int $avancement = self::AVANCEMENT_TERMINE_INTEGRALEMENT;
 
 
 
@@ -124,6 +124,20 @@ class WorkflowEtapeDependance implements ParametreEntityInterface
     {
         $this->avancement = $avancement;
         return $this;
+    }
+
+
+
+    public function getAvancementLibelle(): string
+    {
+        $avancements = $this->etapePrecedante?->getAvancements() ?: [];
+
+        return $avancements[$this->avancement] ?? match ($this->avancement) {
+            self::AVANCEMENT_DEBUTE                => 'Débuté',
+            self::AVANCEMENT_TERMINE_PARTIELLEMENT => 'Partiel',
+            self::AVANCEMENT_TERMINE_INTEGRALEMENT => 'Intégral',
+            default                                => 'Aucune règle fixée',
+        };
     }
 
 

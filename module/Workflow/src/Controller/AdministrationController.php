@@ -70,7 +70,7 @@ class AdministrationController extends AbstractController
                     'code',
                     'libelle',
                 ]],
-                'avancement',
+                'avancementLibelle',
             ]],
         ];
 

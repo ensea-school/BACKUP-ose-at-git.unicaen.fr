@@ -14,24 +14,17 @@
             <div class="dependances">
                 <table v-if="etape.dependances.length" class="table table-bordered">
                     <tr>
-                        <th style="width:60%">Étape{{ etape.dependances.length > 1 ? 's' : '' }}
+                        <th style="width:45%">Étape{{ etape.dependances.length > 1 ? 's' : '' }}
                             antérieure{{ etape.dependances.length > 1 ? 's' : '' }}
                         </th>
-                        <th style="width:20%"><abbr
+                        <th style="width:15%"><abbr
                             title="Périmètre de franchissement à l'échelle d'une composante ou bien de l'établissement
 Si composante, on se fiche de ce qui se passe chez les autres
 Si établissement, tout compte">Périmètre</abbr>
                         </th>
-                        <th style="width:20%"><abbr title="Si débuté alors l'étape devra être franchie à plus de 0%
-Par exemple au moins 1h de service devra être saisie
-
-Si terminé partiellement: l'étape peut avoir été franchie à 100 sur au moins un élément
-Par exemple si on a plusieurs contrats ou avenants, si l'un d'entre eux est terminé alors ça passe
-
-Si terminé intégralement: l'ensemble des éléments de l'étape doivent avoir été franchis
-Par exemple si on a plusieurs contrat et avenants, tous doivent être terminés">Avancement</abbr>
-                        </th>
-                        <th style="width:20%"><abbr title="Filtrage éventuel par type d'intervenant">Intervenant</abbr>
+                        <th style="width:45%">Règle de franchissement</th>
+                        <th style="width:15%">
+                            <abbr title="Filtrage éventuel par type d'intervenant">Intervenant</abbr>
                         </th>
                     </tr>
                     <tr v-for="d in etape.dependances" :class="{ 'inactive': !d.active }">
@@ -48,12 +41,10 @@ Par exemple si on a plusieurs contrat et avenants, tous doivent être terminés"
 
                             {{ d.etapePrecedante.libelleAutres }}
                         </td>
-                        <td class="attrib"><abbr :title="perimetreDescription(d.perimetre.code)">{{
-                                d.perimetre.libelle
-                            }}</abbr></td>
-                        <td class="attrib"><abbr
-                            :title="avancementDescription(d.avancement)">{{ avancementLibelle(d.avancement) }}</abbr>
-                        </td>
+                        <td class="attrib"><abbr :title="perimetreDescription(d.perimetre.code)">
+                            {{ d.perimetre.libelle }}
+                        </abbr></td>
+                        <td>{{ d.avancementLibelle }}</td>
                         <td class="attrib" v-if="d.typeIntervenant">{{ d.typeIntervenant.libelle }}</td>
                         <td class="attrib" v-else><abbr title="Aucun filtre par type d'intervenant"
                                                         class="type_intervenant_tous">Tous</abbr></td>
@@ -128,34 +119,6 @@ const perimetreDescription = (perimetre) => {
 }
 
 
-const avancementDescription = (avancement) => {
-    switch (avancement) {
-        case 0:
-            return 'Aucun contrôle de franchissement ne sera effectué, l\'étape précédante doit juste être accessible pour que la règle soit validée';
-        case 1:
-            return 'L\'étape précédante doit être accessible et franchie à plus de 0%';
-        case 2:
-            return 'L\'étape précédante doit avoir un de ses items au moins franchi à 100% (un contrat par exemple)';
-        case 3:
-            return 'L\'étape précédante doit être franchie à 100%';
-    }
-}
-
-
-const avancementLibelle = (avancement) => {
-    switch (avancement) {
-        case 0:
-            return 'Aucun contrôle';
-        case 1:
-            return 'Débuté';
-        case 2:
-            return 'Partiel';
-        case 3:
-            return 'Intégral';
-    }
-}
-
-
 onMounted(() => {
     load();
 });
@@ -183,13 +146,12 @@ td {
 }
 
 .dependances {
-    width: 60em;
     margin-left: 5em;
 }
 
 .dependances .attrib {
     text-align: center;
-    width: 7em;
+
 }
 
 .dependances .actions {

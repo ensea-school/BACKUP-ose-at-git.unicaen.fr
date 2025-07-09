@@ -3,7 +3,7 @@
 OSE 24.7](#ose-247-08072025)
 
 
-# OSE 25 (à venir fin juillet 2025)
+# OSE 25 (à venir)
 
 ## Nouveautés
 
@@ -17,9 +17,6 @@ OSE 24.7](#ose-247-08072025)
 * Pièces justificatives
   * Possibilité de collecter les pièces justificatives en deux étapes : en cours de recrutement et finalisation après recrutement
 
-* Saisie de service d'enseignement
-  * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
-
 * Possibilité d'exploiter 2 états de sortie différents via le menu "Services"
 
 ## Corrections
@@ -32,11 +29,12 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 
 
-# OSE 24.8 (fin juillet 2025)
+# OSE 24.8 (à venir fin juillet 2025)
 
 ## Nouveautés
 
-* Enregistrement de l'étape en plus de l'élément pédagogique lors de la saisie de service d'enseignement (#53620)
+* Saisie de service d'enseignement
+    * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé (#53620)
 
 
 

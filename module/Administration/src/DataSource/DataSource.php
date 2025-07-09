@@ -460,7 +460,7 @@ class DataSource
                         'active'                => true,
                         'type_intervenant_id'   => $dependance['type_intervenant'] ?? null,
                         'perimetre_id'          => $dependance['perimetre'] ?? Perimetre::ETABLISSEMENT,
-                        'avancement'            => $dependance['avancement'] ?? WorkflowEtapeDependance::AVANCEMENT_DESACTIVE,
+                        'avancement'            => $dependance['avancement'] ?? WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
                         'histo_modificateur_id' => null,
                     ];
 

@@ -11,9 +11,6 @@ class WorkflowEtapeDependance implements ParametreEntityInterface
 {
     use ParametreEntityTrait;
 
-    // Aucun contrôle d'avancement
-    const AVANCEMENT_DESACTIVE = 0;
-
     // Si débutée alors l'étape devra être franchie à plus de 0%
     // Par exemple au moins 1h de service devra être saisie.
     const AVANCEMENT_DEBUTE = 1;
@@ -129,4 +126,24 @@ class WorkflowEtapeDependance implements ParametreEntityInterface
         return $this;
     }
 
+
+
+    public function isAvancementDebute(): bool
+    {
+        return $this->avancement == self::AVANCEMENT_DEBUTE;
+    }
+
+
+
+    public function isAvancementPartiel(): bool
+    {
+        return $this->avancement == self::AVANCEMENT_TERMINE_PARTIELLEMENT;
+    }
+
+
+
+    public function isAvancementIntegral(): bool
+    {
+        return $this->avancement == self::AVANCEMENT_TERMINE_INTEGRALEMENT;
+    }
 }

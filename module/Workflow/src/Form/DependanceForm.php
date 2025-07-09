@@ -40,7 +40,6 @@ class DependanceForm extends AbstractForm
         $this->setValueOptions('typeIntervenant', 'SELECT ti FROM ' . TypeIntervenant::class . ' ti ORDER BY ti.code DESC');
 
         $this->setValueOptions('avancement', [
-            WorkflowEtapeDependance::AVANCEMENT_DESACTIVE             => 'Désactivé',
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => 'Débuté',
             WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT => 'Terminé partiellement',
             WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT => 'Terminé intégralement',

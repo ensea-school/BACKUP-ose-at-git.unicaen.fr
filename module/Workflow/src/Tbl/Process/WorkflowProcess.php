@@ -98,7 +98,7 @@ class WorkflowProcess implements ProcessInterface
                 $this->workflows[$intevenant] = [];
             }
 
-            if (!array_key_exists($etape->getId(), $this->workflows[$intevenant])) {
+            if (!array_key_exists($etape->getCode(), $this->workflows[$intevenant])) {
                 $ie                      = new IntervenantEtape();
                 $ie->annee               = (int)$d['annee_id'];
                 $ie->typeIntervenantId   = (int)$d['type_intervenant_id'];
@@ -107,9 +107,9 @@ class WorkflowProcess implements ProcessInterface
                 $ie->intervenant         = $intevenant;
                 $ie->etape               = $etape;
 
-                $this->workflows[$intevenant][$etape->getId()] = $ie;
+                $this->workflows[$intevenant][$etape->getCode()] = $ie;
             } else {
-                $ie = $this->workflows[$intevenant][$etape->getId()];
+                $ie = $this->workflows[$intevenant][$etape->getCode()];
             }
 
             if (array_key_exists($structure, $ie->structures)) {
@@ -149,6 +149,7 @@ class WorkflowProcess implements ProcessInterface
                         'objectif'              => $etapeStructure->objectif,
                         'partiel'               => $etapeStructure->partiel,
                         'realisation'           => $etapeStructure->realisation,
+                        'why_non_atteignable'   => empty($etapeStructure->whyNonAtteignable) ? null : json_encode($etapeStructure->whyNonAtteignable),
                     ];
                     mpg_upper($d);
                     $data[] = $d;

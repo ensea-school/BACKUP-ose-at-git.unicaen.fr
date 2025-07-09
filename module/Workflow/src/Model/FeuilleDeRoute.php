@@ -108,6 +108,34 @@ class FeuilleDeRoute
 
 
 
+    public function getNext(string|WorkflowEtape|FeuilleDeRouteEtape $etape): ?FeuilleDeRouteEtape
+    {
+        if ($etape instanceof WorkflowEtape) {
+            $etape = $etape->getCode();
+        }
+        if ($etape instanceof FeuilleDeRouteEtape) {
+            $etape = $etape->workflowEtape->getCode();
+        }
+
+        return null;
+    }
+
+
+
+    public function getPrevious(string|WorkflowEtape|FeuilleDeRouteEtape $etape): ?FeuilleDeRouteEtape
+    {
+        if ($etape instanceof WorkflowEtape) {
+            $etape = $etape->getCode();
+        }
+        if ($etape instanceof FeuilleDeRouteEtape) {
+            $etape = $etape->workflowEtape->getCode();
+        }
+
+        return null;
+    }
+
+
+
     private function build(): void
     {
         $this->refresh();
@@ -132,10 +160,6 @@ class FeuilleDeRoute
           we.ordre
         ";
         $sqlParams = ['intervenant' => $this->intervenant->getId()];
-        if ($this->structure) {
-            $sql                    .= ' AND (w.structure_id = :structure OR w.structure_id IS NULL)';
-            $sqlParams['structure'] = $this->structure->getId();
-        }
         $stmt = $this->service->getBdd()->selectEach($sql, $sqlParams);
 
         while ($d = $stmt->next()) {
@@ -157,7 +181,7 @@ class FeuilleDeRoute
 
         foreach ($this->fdr as $fdre) {
             if (count($fdre->structures) == 1) {
-                //    $fdre->structures = []; // Pas de détail par structures s'il n'y en a qu'une
+                //$fdre->structures = []; // Pas de détail par structures s'il n'y en a qu'une
             }
         }
 
@@ -182,8 +206,8 @@ class FeuilleDeRoute
                 $fdre->url = $this->service->getUrl($etape->getRoute(), ['intervenant' => $this->getIntervenant()->getId()]);
             }
             $fdre->atteignable       = $atteignable;
-            $fdre->objectif          = $objectif;
-            $fdre->realisation       = $realisation;
+            $fdre->objectif          = 0;
+            $fdre->realisation       = 0;
             $fdre->whyNonAtteignable = $this->makeWhyNonAtteignable($whyNonAtteignable);
 
             $this->fdr[$etape->getCode()] = $fdre;
@@ -202,6 +226,9 @@ class FeuilleDeRoute
                 $fdres->objectif                = $objectif;
                 $fdres->realisation             = $realisation;
                 $fdre->structures[$structureId] = $fdres;
+
+                $fdre->objectif          += $fdres->objectif;
+                $fdre->realisation       += $fdres->realisation;
             }
         }
     }

@@ -38,7 +38,9 @@ class FeuilleDeRouteEtape
 
     public function getRealisationPourc(): int
     {
-        return round(($this->realisation / $this->objectif) * 100, 0);
+        $objectif = max($this->objectif, $this->realisation, 1);
+
+        return round(($this->realisation / $objectif) * 100, 0);
     }
 
 

@@ -14,7 +14,7 @@
 
                 <li v-for="etape in feuilleDeRoute"
                     :class="{'list-group-item': true, 'after-courante': !etape.atteignable, 'list-group-item-warning': etape.courante }"
-                    title="$this->getWhyNonAtteignable($etape)">
+                    :title="formatWhyNonAtteignable(etape)">
 
                     <!-- Numéro d'étape -->
                     <span class="label label-primary">{{ etape.numero }}</span>
@@ -32,29 +32,57 @@
                             }}</abbr><span v-else>{{ etape.libelle }}</span>
                     </span>
 
+
                     <!-- Indicateur -->
-                    <span v-if="etape.realisationPourc == 0" title="À faire" class="text-danger float-end">
-                        <span class="number number-positif">0%</span>
+                    <span class="float-end">
+                        <a v-if="etapeHasStructures(etape)" data-bs-toggle="collapse"
+                           :href="'#fdr-structures-'+etape.code" title="Afficher le détail par composantes">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fas fa-eye"></span>&nbsp;
+                        </a>
+
+                        <span v-if="etape.realisationPourc == 0 && etape.atteignable"
+                              class="number number-positif text-danger"
+                              title="À faire">0%</span>
+
+                        <span v-if="etape.realisationPourc == 0 && !etape.atteignable"
+                              class="number number-positif text-danger fas fa-xmark"
+                              title="Non fait"></span>
+
+                        <span v-if="etape.realisationPourc > 0 && etape.realisationPourc < 100"
+                              class="number number-positif text-warning"
+                              title="En cours">{{ etape.realisationPourc }}%</span>
+
+                        <span v-if="etape.realisationPourc == 100"
+                              class="number number-positif text-success fas fa-check"
+                              title="Fait"></span>
                     </span>
 
-                    <span v-if="etape.realisationPourc == 100" title="Fait" class="text-success float-end">
-                        <span class="text-success fas fa-check"></span>
-                    </span>
-
-                    <span v-if="etape.realisationPourc > 0 && etape.realisationPourc < 100"
-                          title="En cours, cliquez pour afficher le détail par composante"
-                          class="text-warning float-end"><a data-bs-toggle="collapse"
-                                                            :href="'#collapse-'+etape.code+'-'+187"><span
-                        class="fas fa-eye"></span> <span class="number number-positif">50%</span></a></span>
-                    <div class="row collapse" :id="'collapse-'+etape.code+'-'+187">
+                    <div v-if="etapeHasStructures(etape)" class="row collapse" :id="'fdr-structures-'+etape.code">
                         <div class="col-md-4 col-md-offset-8">
                             <ul class="list-group">
-                                <li class="list-group-item"><span title="">Carré International</span><span
-                                    title="à faire" class="text-danger float-end"><span
-                                    class="number number-positif">0%</span></span></li>
-                                <li class="list-group-item"><span title="">IAE Caen</span><span title="Fait"
-                                                                                                class="text-success float-end"><span
-                                    class="text-success fas fa-check"></span></span></li>
+                                <li v-for="etapeStructure in etape.structures" class="list-group-item">
+                                    <span>{{ etapeStructure.libelle }}</span>
+                                    <span class="float-end">
+                                        <span v-if="etapeStructure.realisationPourc == 0 && etape.atteignable"
+                                              class="number number-positif text-danger"
+                                              title="À faire">0%</span>
+
+                                        <span v-if="etapeStructure.realisationPourc == 0 && !etape.atteignable"
+                                              class="number number-positif text-danger fas fa-xmark"
+                                              title="Non fait"></span>
+
+                                        <span
+                                            v-if="etapeStructure.realisationPourc > 0 && etapeStructure.realisationPourc < 100"
+                                            class="number number-positif text-warning"
+                                            title="En cours">{{
+                                                etapeStructure.realisationPourc
+                                            }}%</span>
+
+                                        <span v-if="etapeStructure.realisationPourc == 100"
+                                              class="number number-positif text-success fas fa-check"
+                                              title="Fait"></span>
+                                    </span>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -64,7 +92,6 @@
                 La feuille de route ne comporte aucune étape
             </div>
         </div>
-
     </div>
 </template>
 <script setup>
@@ -94,17 +121,28 @@ const refresh = () => {
 };
 
 const formatWhyNonAtteignable = (etape) => {
-    if (etape.atteignable || etape.whyNonAtteignable.length == 0){
+    if (etape.atteignable || etape.whyNonAtteignable.length == 0) {
         return "";
     }
 
     let explication = "Non atteignable :";
 
-    for( const index in etape.whyNonAtteignable){
+    for (const index in etape.whyNonAtteignable) {
         explication += "\n    - " + etape.whyNonAtteignable[index];
     }
 
     return explication;
+}
+
+const etapeHasStructures = (etape) => {
+    let count = 0;
+    for (const i in etape.structures) {
+        count++;
+        if (count > 1){
+            return true;
+        }
+    }
+    return false;
 }
 
 onMounted(() => {

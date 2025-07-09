@@ -22,15 +22,13 @@
 Si composante, on se fiche de ce qui se passe chez les autres
 Si établissement, tout compte">Périmètre</abbr>
                         </th>
-                        <th style="width:20%"><abbr title="Si désactivé, alors aucun test n'est effectué
-
-Si débuté alors l'étape devra être franchie à plus de 0%
+                        <th style="width:20%"><abbr title="Si débuté alors l'étape devra être franchie à plus de 0%
 Par exemple au moins 1h de service devra être saisie
 
-Si partiel: l'étape peut avoir été franchie à 100 sur au moins un élément
+Si terminé partiellement: l'étape peut avoir été franchie à 100 sur au moins un élément
 Par exemple si on a plusieurs contrats ou avenants, si l'un d'entre eux est terminé alors ça passe
 
-Si intégral: l'ensemble des éléments de l'étape doivent avoir été franchis
+Si terminé intégralement: l'ensemble des éléments de l'étape doivent avoir été franchis
 Par exemple si on a plusieurs contrat et avenants, tous doivent être terminés">Avancement</abbr>
                         </th>
                         <th style="width:20%"><abbr title="Filtrage éventuel par type d'intervenant">Intervenant</abbr>

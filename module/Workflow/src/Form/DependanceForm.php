@@ -22,6 +22,7 @@ class DependanceForm extends AbstractForm
         $this->dependance = $dependance;
 
         $this->setAttribute('data-etablissement-etapes', json_encode($this->getEtablissementEtapes()));
+        $this->setAttribute('data-avancements', json_encode($this->getAvancements()));
         $ignore = ["etapeSuivante"];
         $this->spec(WorkflowEtapeDependance::class, $ignore);
         $this->spec(['avancement' => ['type' => 'Select'], 'typeIntervenant' => ['input' => ['required' => false]]]);
@@ -30,7 +31,7 @@ class DependanceForm extends AbstractForm
         $this->addSecurity();
         $this->addSubmit();
 
-        $this->get('etapePrecedante')->setAttribute('onchange', 'affWFDepPerimetre(this)');
+        $this->get('etapePrecedante')->setAttribute('onchange', 'affWFDepChange(this)');
         $this->get('etapePrecedante')->setAttribute('class', 'wf-dep-etape-precedante');
 
         $this->setValueOptions('etapePrecedante', $this->getEtapesPrecedantes());
@@ -49,6 +50,7 @@ class DependanceForm extends AbstractForm
             'etapePrecedante' => 'Étape Précédente',
             'typeIntervenant' => 'Type d\'intervenant',
             'perimetre'       => 'Périmètre',
+            'avancement'      => 'Règle de franchissement',
         ];
         $this->setLabels($labels);
 
@@ -88,6 +90,18 @@ class DependanceForm extends AbstractForm
             if ($etape->getPerimetre()->isEtablissement()) {
                 $res[] = $etape->getId();
             }
+        }
+        return $res;
+    }
+
+
+
+    protected function getAvancements(): array
+    {
+        $res    = [];
+        $etapes = $this->getServiceWorkflow()->getEtapes();
+        foreach ($etapes as $etape) {
+            $res[$etape->getId()] = $etape->getAvancements();
         }
         return $res;
     }

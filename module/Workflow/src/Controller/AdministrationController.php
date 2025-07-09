@@ -112,11 +112,8 @@ class AdministrationController extends AbstractController
             $workflowEtapeDependance = new WorkflowEtapeDependance();
             $workflowEtapeDependance->setEtapeSuivante($workflowEtape);
             $workflowEtape->addDependance($workflowEtapeDependance);
-
-            $title = 'Ajout d\'une dépendance';
-        } else {
-            $title = 'Modification d\'une dépendance';
         }
+        $title = $workflowEtape->getLibelleAutres();
 
         $form = $this->getFormWorkflowDependance();
         $form->init2($workflowEtapeDependance);

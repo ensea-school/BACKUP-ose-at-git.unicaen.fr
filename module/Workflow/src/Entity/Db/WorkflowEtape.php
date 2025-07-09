@@ -62,6 +62,11 @@ class WorkflowEtape implements ParametreEntityInterface
      */
     private array $contraintes = [];
 
+    /**
+     * @var array|string[]
+     */
+    private array $avancements = [];
+
     private Collection $dependances;
 
 
@@ -111,6 +116,20 @@ class WorkflowEtape implements ParametreEntityInterface
     public function __addContrainte(WorkflowEtape $etape): void
     {
         $this->contraintes[$etape->getCode()] = $etape;
+    }
+
+
+
+    public function __addAvancement(string $avancement, string $description): void
+    {
+        $this->avancements[$avancement] = $description;
+    }
+
+
+
+    public function getAvancements(): array
+    {
+        return $this->avancements;
     }
 
 

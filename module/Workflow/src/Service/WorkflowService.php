@@ -106,6 +106,11 @@ class WorkflowService extends AbstractService
                         $this->workflowEtapes[$anneeId][$weCode]->__addContrainte($wec);
                     }
                 }
+                foreach( $weData['avancements'] as $avancement => $description){
+                    if ($description){
+                        $this->workflowEtapes[$anneeId][$weCode]->__addAvancement($avancement, $description);
+                    }
+                }
             }
         }
         return $this->workflowEtapes[$anneeId];

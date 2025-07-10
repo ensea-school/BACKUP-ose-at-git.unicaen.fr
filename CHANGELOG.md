@@ -29,14 +29,17 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 
 
-# OSE 24.8 (à venir fin juillet 2025)
+# OSE 24.8 (à venir juillet 2025)
 
 ## Nouveautés
 
 * Saisie de service d'enseignement
     * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé (#53620)
 
+## Corrections
 
+* Le report de paramétrages sur les années suivantes fonctionne de nouveau pour les statuts & les taux
+* Les taux personnalisés par mission sont maintenant correctement exploités dans les contrats de travail
 
 # OSE 24.7 (08/07/2025)
 
@@ -56,7 +59,6 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * Correction privilege visualisation des candidatures d'une offre d'emploi (#59099) 
 * Pouvoir refuser une candidature même si l'étudiant n'a pas renseigné à 100% ses données persos et ses pièces justificatives (#62327)
 * En mode "utiliser les centres de coûts de la composante d'affectation" pour les paiements, dans le cas des vacataires, la composante d'enseignement reste celle utilisée (#62447)
-* Le report de paramétrages sur les années suivantes fonctionne de nouveau pour les statuts & les taux
 
 ## Notes de mise à jour
 

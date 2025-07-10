@@ -17,7 +17,7 @@ class v24ParametresAnnualises extends MigrationAction
 
     public function utile(): bool
     {
-        $param = $this->getBdd()->select($this->sql());
+        $param = $this->getBdd()->selectOne($this->sql());
         if (empty($param)) {
             return false;
         } else {
@@ -38,7 +38,7 @@ class v24ParametresAnnualises extends MigrationAction
             while ($d = $stmt->next()) {
 
                 $tableName = $d['TABLE_NAME'];
-                $data      = ['HISTO_MODIFICATION' => null];
+                $data      = ['HISTO_MODIFICATEUR_ID' => null];
                 $key       = ['ID' => (int)$d['ID']];
 
                 $this->getBdd()->getTable($tableName)->update($data, $key);

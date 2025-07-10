@@ -72,6 +72,7 @@ class LigneEnseignementViewHelper extends AbstractHtmlElement
         $liste   = $this->enseignements;
         $service = $this->getService();
         $element = $service->getElementPedagogique();
+        $etape = ($service->getEtape()) ? $service->getEtape() : $element->getEtape();
 
         $vhl = $service->getVolumeHoraireListe()->setTypeVolumeHoraire($liste->getTypeVolumeHoraire());
 
@@ -97,7 +98,7 @@ class LigneEnseignementViewHelper extends AbstractHtmlElement
                 if ($element && $element->getCheminPedagogique()->count() > 1) {
                     $out .= '<small class="badge bg-secondary" style="font-size:8pt" title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement mutualisé</small><br />';
                 }
-                $out .= $this->renderEtape($element ? $element->getEtape() : null) . "</td>\n";
+                $out .= $this->renderEtape($etape) . "</td>\n";
             }
             if ($liste->getColumnVisibility('periode')) {
                 $out .= '<td style="text-align:center">' . $this->renderPeriode($element ? $element->getPeriode() : null) . "</td>\n";

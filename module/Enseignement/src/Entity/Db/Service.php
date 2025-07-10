@@ -11,6 +11,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Etablissement;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Entity\Db\TypeIntervention;
 use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -34,6 +35,8 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
     protected ?Etablissement      $etablissement      = null;
 
     protected ?ElementPedagogique $elementPedagogique = null;
+
+    protected ?Etape $etape = null;
 
     protected ?string             $description        = null;
 
@@ -202,6 +205,22 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
     public function getElementPedagogique(): ?ElementPedagogique
     {
         return $this->elementPedagogique;
+    }
+
+
+
+    public function getEtape(): ?Etape
+    {
+        return $this->etape;
+    }
+
+
+
+    public function setEtape(?Etape $etape): Service
+    {
+        $this->etape = $etape;
+
+        return $this;
     }
 
 

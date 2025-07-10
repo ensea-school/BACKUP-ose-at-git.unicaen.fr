@@ -53,20 +53,22 @@ foreach ($vhs as $vh) {
         if (!empty($vh->getService()->getElementPedagogique())) {
             $epId    = $vh->getService()->getElementPedagogique()->getId();
             $periode = $vh->getVolumeHoraire()->getPeriode() ? $vh->getVolumeHoraire()->getPeriode()->getCode() : 'N/A';
+            $service = $vh->getService();
+            $etape = ($service->getEtape()) ?? $service->getElementPedagogique()->getEtape();
 
             if (!isset($enseignements[$periode][$epId])) {
                 $enseignements[$periode][$epId] = [
-                        'etapeId'                   => $vh->getService()->getElementPedagogique()->getEtape()->getId(),
-                        'etapeLibelle'              => $vh->getService()->getElementPedagogique()->getEtape()->getLibelle(),
-                        'etapeCode'                 => $vh->getService()->getElementPedagogique()->getEtape()->getCode(),
-                        'periode'                   => $periode,
-                        'elementPedagogiqueId'      => $vh->getService()->getElementPedagogique()->getId(),
-                        'elementPedagogiqueLibelle' => $vh->getService()->getElementPedagogique()->getLibelle(),
-                        'elementPedagogiqueCode'    => $vh->getService()->getElementPedagogique()->getCode(),
-                        'cm'                        => 0.0,
-                        'td'                        => 0.0,
-                        'tp'                        => 0.0,
-                        'autres'                    => 0.0,
+                    'etapeId'                   => $etape->getId(),
+                    'etapeLibelle'              => $etape->getLibelle(),
+                    'etapeCode'                 => $etape->getCode(),
+                    'periode'                   => $periode,
+                    'elementPedagogiqueId'      => $vh->getService()->getElementPedagogique()->getId(),
+                    'elementPedagogiqueLibelle' => $vh->getService()->getElementPedagogique()->getLibelle(),
+                    'elementPedagogiqueCode'    => $vh->getService()->getElementPedagogique()->getCode(),
+                    'cm'                        => 0.0,
+                    'td'                        => 0.0,
+                    'tp'                        => 0.0,
+                    'autres'                    => 0.0,
                 ];
             }
             $enseignements[$periode][$epId]['cm']     += $vh->getCm();

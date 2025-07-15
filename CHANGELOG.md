@@ -40,6 +40,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 * Le report de paramétrages sur les années suivantes fonctionne de nouveau pour les statuts & les taux
 * Les taux personnalisés par mission sont maintenant correctement exploités dans les contrats de travail
+* Dans la page de demande de mise en paiement, tenir compte de l'historisation de la table centre_cout_structure, pour filtrer les centres de coûts proposés (#62665)
 
 # OSE 24.7 (08/07/2025)
 

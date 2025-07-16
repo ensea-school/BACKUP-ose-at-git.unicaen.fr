@@ -83,7 +83,7 @@ class PeriodeService extends AbstractEntityService
      *
      * @return Periode
      */
-    public function getPeriodePaiement(\DateTime $date = null)
+    public function getPeriodePaiement(?\DateTime $date = null)
     {
         $anneeDateDebut = $this->getServiceContext()->getAnnee()->getDateDebut();
         $aY             = (int)$anneeDateDebut->format('Y');
@@ -119,7 +119,7 @@ class PeriodeService extends AbstractEntityService
 
 
 
-    public function finderByMiseEnPaiement(Structure $structure = null, ?QueryBuilder $qb = null, $alias = null)
+    public function finderByMiseEnPaiement(?Structure $structure = null, ?QueryBuilder $qb = null, ?string $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 

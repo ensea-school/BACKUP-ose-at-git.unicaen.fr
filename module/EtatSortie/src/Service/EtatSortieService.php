@@ -4,6 +4,7 @@ namespace EtatSortie\Service;
 
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Constants;
+use Application\Service\AbstractEntityService;
 use EtatSortie\Entity\Db\EtatSortie;
 use Unicaen\OpenDocument\Document;
 use UnicaenApp\View\Model\CsvModel;
@@ -18,7 +19,7 @@ use UnicaenApp\View\Model\CsvModel;
  * @method EtatSortie newEntity()
  *
  */
-class EtatSortieService extends \Application\Service\AbstractEntityService
+class EtatSortieService extends AbstractEntityService
 {
     use ParametresServiceAwareTrait;
 
@@ -29,25 +30,14 @@ class EtatSortieService extends \Application\Service\AbstractEntityService
 
 
 
-    /**
-     * Retourne la classe des entités
-     *
-     * @return string
-     * @throws \Application\Service\RuntimeException
-     */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return EtatSortie::class;
     }
 
 
 
-    /**
-     * Retourne l'alias d'entité courante
-     *
-     * @return string
-     */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'etatsortie';
     }
@@ -86,6 +76,12 @@ class EtatSortieService extends \Application\Service\AbstractEntityService
         $document = new Document();
         if (isset($this->config['host'])) {
             $document->setHost($this->config['host']);
+        }
+        if (isset($this->config['port'])) {
+            $document->setPort((int)$this->config['port']);
+        }
+        if (isset($this->config['command'])) {
+            $document->setConvCommand($this->config['command']);
         }
         if (isset($this->config['tmp-dir'])) {
             $document->setTmpDir($this->config['tmp-dir']);

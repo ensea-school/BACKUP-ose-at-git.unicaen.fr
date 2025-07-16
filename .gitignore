@@ -12,4 +12,6 @@ VERSION
 composer.phar
 .phpunit.result.cache
 .idea
+.env
 /.php-cs-fixer.cache
+supervisord.*

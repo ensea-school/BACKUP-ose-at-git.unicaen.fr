@@ -347,7 +347,7 @@ class ChargensProvider
      *
      * @return ChargeProvider
      */
-    public function setScenario(Scenario $scenario = null)
+    public function setScenario(?Scenario $scenario = null)
     {
         $this->scenario = $scenario;
 
@@ -366,7 +366,7 @@ class ChargensProvider
 
 
 
-    public function getHeuresFi(Structure $structure = null)
+    public function getHeuresFi(?Structure $structure = null)
     {
         $res = [
             0 => [

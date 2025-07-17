@@ -1,3 +1,4 @@
+.env
 config.local.php
 config/autoload/*.local.php
 vendor/*
@@ -13,5 +14,3 @@ composer.phar
 .phpunit.result.cache
 .idea
 /.php-cs-fixer.cache
-deployments/*
-Makefile

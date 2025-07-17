@@ -1,0 +1,10 @@
+services:
+  odconv:
+    build:
+      context: .
+    container_name: ${APP_NAME:-ose}-odconv
+    environment:
+      - WORKERS=4  # Nombre de workers pour gérer la charge (ajustez pour plus de concurrency)
+      - TIMEOUT=300  # Timeout en secondes pour les requêtes (long pour les conversions lentes)
+    mem_limit: 1g  # Limite mémoire pour éviter abus (ajustez selon vos besoins)
+    cpus: 2.0  # Limite CPU pour scaler (ajustez selon le hardware)

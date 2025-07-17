@@ -26,6 +26,9 @@
         <many-to-one field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
             <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <many-to-one field="etape" target-entity="OffreFormation\Entity\Db\Etape">
+            <join-column name="ETAPE_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <many-to-one field="etablissement" target-entity="Lieu\Entity\Db\Etablissement">
             <join-column name="ETABLISSEMENT_ID" referenced-column-name="ID"/>
         </many-to-one>

@@ -32,7 +32,7 @@ return [
     'application'     => [
         'etats-sortie' => [
             'host'    => AppAdmin::config()['etats-sortie']['host'] ?? '127.0.0.1',
-            'port'    => AppAdmin::config()['etats-sortie']['port'] ?? 8000,
+            'port'    => AppAdmin::config()['etats-sortie']['port'] ?? 80,
             'command' => AppAdmin::config()['etats-sortie']['command'] ?? \Unicaen\OpenDocument\Document::CONV_COMMAND_UNOCONV,
             'tmp-dir' => AppAdmin::config()['etats-sortie']['tmp-dir'] ?? 'cache/',
         ],

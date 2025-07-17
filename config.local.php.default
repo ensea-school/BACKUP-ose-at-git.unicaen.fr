@@ -275,7 +275,7 @@ return [
         'host'    => '127.0.0.1', // par défaut sur la même machine que OSE
 
         /* Port utilisé par odconv, si vous utilisez odconv */
-        'port'    => 8000, // par défaut sur la même machine que OSE
+        'port'    => 80, // par défaut sur la même machine que OSE
 
         /* Si vous souhaitez utiliser odconv, décommentez la ligne ci-dessous */
         //'command' => 'odconv',

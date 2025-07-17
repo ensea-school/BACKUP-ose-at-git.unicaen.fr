@@ -210,11 +210,6 @@ class PaiementProcess implements ProcessInterface
         $lap->fromBdd($data);
         if (!array_key_exists($lapKey, $this->services[$key]->lignesAPayer)) {
             $this->services[$key]->lignesAPayer[$lapKey] = $lap;
-        }else{
-            $oldLap = $this->services[$key]->lignesAPayer[$lapKey];
-
-            $oldLap->heuresAA = round($oldLap->heuresAA + $lap->heuresAA,2);
-            $oldLap->heuresAC = round($oldLap->heuresAC + $lap->heuresAC,2);
         }
 
         if ($mepKey > 0 && !array_key_exists($mepKey, $this->services[$key]->misesEnPaiement)) {

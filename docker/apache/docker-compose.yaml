@@ -1,0 +1,18 @@
+services:
+  apache:
+    build:
+      context: .
+      args:
+        APP_TZ: ${APP_TZ:-Europe/Paris}
+
+    container_name: ${APP_NAME:-ose}-apache
+    hostname: ${APP_HOST:-localhost}
+    volumes:
+      - ../../:/var/www/html
+    working_dir: /var/www/html
+    environment:
+      APPLICATION_ENV: ${APP_ENV:-dev}
+      APP_NAME: ${APP_NAME:-ose}
+      APP_ENV: ${APP_ENV:-dev}
+      APP_HOST: ${APP_HOST:-localhost}
+      APP_FRONT_PORT: ${APP_FRONT_PORT:-80}

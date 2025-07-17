@@ -185,8 +185,14 @@ class EnseignementController extends AbstractController
 
         $form->get('service')->setIntervenant($intervenant);
         $form->get('service')->removeUnusedElements();
+        //On set l'étape du service si elle a été renseigné sinon par défaut cela prendra
+        //l'étape porteuse de l'élément pédagogique
+        if ($service->getEtape()) {
+            $form->get('service')->get('element-pedagogique')->get('etape')->setValue($service->getEtape()->getId());
+        }
         $hDeb    = $service->getVolumeHoraireListe()->getHeures();
         $request = $this->getRequest();
+
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
@@ -197,6 +203,15 @@ class EnseignementController extends AbstractController
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
                         $this->em()->getConnection()->setAutoCommit(true);
+                        //Récupération de l'id de l'étape qui a été selectionné pour la recherche de la formation
+                        $etapeId = $form->get('service')
+                            ->get('element-pedagogique')
+                            ->get('etape')
+                            ->getValue();
+
+                        $etape   = $etapeId ? $this->getServiceEtape()->get($etapeId) : null;
+                        $service = $service->setEtape($etape);
+
                         $service = $this->getServiceService()->save($service);
                         $this->em()->getConnection()->setAutoCommit(false);
                         $saved   = $service;

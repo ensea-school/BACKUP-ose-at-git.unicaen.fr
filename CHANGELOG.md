@@ -1,9 +1,9 @@
 # Version stable
 
-[OSE 24.3](#ose-245-05062025)
+OSE 24.7](#ose-247-08072025)
 
 
-# OSE 25 (à venir fin juillet 2025)
+# OSE 25 (à venir)
 
 ## Nouveautés
 
@@ -17,15 +17,81 @@
 * Pièces justificatives
   * Possibilité de collecter les pièces justificatives en deux étapes : en cours de recrutement et finalisation après recrutement
 
-* Saisie de service d'enseignement
-  * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé 
+* Possibilité d'exploiter 2 états de sortie différents via le menu "Services"
 
 ## Corrections
 
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
 
+## Notes de mise à jour
 
-# OSE 24.5 (05/06/2025)
+Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
+
+
+
+# OSE 24.8 (à venir juillet 2025)
+
+## Nouveautés
+
+* Saisie de service d'enseignement
+    * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé (#53620)
+
+## Corrections
+
+* Le report de paramétrages sur les années suivantes fonctionne de nouveau pour les statuts & les taux
+* Les taux personnalisés par mission sont maintenant correctement exploités dans les contrats de travail
+* Dans la page de demande de mise en paiement, tenir compte de l'historisation de la table centre_cout_structure, pour filtrer les centres de coûts proposés (#62665)
+
+# OSE 24.7 (08/07/2025)
+
+## Améliorations
+
+* Nouvelle formule de calcul pour Savoie Mont Blanc
+* Nouvelle version de la formule de calcul du Havre
+* Nouvelle version de la formule de Dauphine
+* Nouvelle version de la formule de Paris 8
+* Nouvelle version de la formule de La Rochelle
+* Nouvelle version de la formule de Brest
+
+## Corrections
+
+* Lors de l'ajout d'une première heure d'enseignement depuis l'application, les formules se recalculent de nouveau correctement : le problème empêchait les feuilles de route de se mettre à jour. 
+* [Problème sur 27 tableurs de formules de calcul : la détection de structure université ne fonctionnait pas. Impact limité au téléversement de feuilles de calcul sur l'IHM de test.](https://git.unicaen.fr/open-source/OSE/-/commit/2c458ff613f295e2399ea053b83f11b4c3820ccc)
+* Correction privilege visualisation des candidatures d'une offre d'emploi (#59099) 
+* Pouvoir refuser une candidature même si l'étudiant n'a pas renseigné à 100% ses données persos et ses pièces justificatives (#62327)
+* En mode "utiliser les centres de coûts de la composante d'affectation" pour les paiements, dans le cas des vacataires, la composante d'enseignement reste celle utilisée (#62447)
+
+## Notes de mise à jour
+
+Note à destination des administrateurs fonctionnels.
+En ce qui concerne le souci de report de paramétrages sur les années suivantes pour les statuts & les taux,
+ce denier ne concerne que les établissements ayant installé OSE durant les deux dernières années (à partir d'une base de données vide, donc).
+Pour vous, il se peut que les paramétrages faits pour l'année 2024/2025 n'aient pas été répertutés sur les années suivantes.
+Nous vous invitons :
+ - à migrer en version 24.7 si vous êtes en version 23 ou 24 ;
+ - à vous positionner sur l'année 2025/2026 ;
+ - à bien vérifier que vos paramétrages sont corrects, au niveau des statuts & des taux ;
+ - à modifier vos paramétrages s'ils ne sont pas bons : la résolution du problème fait que vos actions seront bien répercutées sur les années à venir.
+
+
+# OSE 24.6 (17/06/2025)
+
+## Améliorations
+
+* Nouvelle formule pour La Rochelle
+* En cas de saisie calendaire d'une heure débutant à 00:00, seule la date est affichée, l'heure étant considérée comme non saisie
+* En mode calendaire, la saisie des dates de début et de fin sont obligatoires
+
+## Corrections
+
+* La version 24 ne comptabilisait pas tous les volumes horaires de référentiel pour les paiements dans certaines situations
+* Les fenêtres à bulles ("popvers") s'affichent maintenant tojours à l'intérieur de l'écran
+
+
+
+
+
+# OSE 24.5 (SORTIE ANNULEE)
 
 ## Amélioration
 
@@ -34,6 +100,8 @@
 ## Correction
 
 * La version 24 ne comptabilisait pas tous les volumes horaires de référentiel pour les paiements dans certaines situations
+
+**Attention** La version 24.5 a été annulée, le correctif entraine des régressions pouvant conduire à faire trop de demandes de mise en paiement
 
 
 # OSE 24.4 (04/06/2025)

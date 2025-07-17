@@ -130,6 +130,7 @@ $.widget("unicaen.popAjax", {
 
         this.popInstance._config.content = ct.content;
         this.popInstance.setContent();
+        this.popInstance.update();
 
         if (ct.title) {
             this.setTitle(ct.title);

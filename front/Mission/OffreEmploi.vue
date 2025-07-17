@@ -95,7 +95,7 @@
 
         </p>
         <br/>
-        <div v-if="this.canValiderCandidature">
+        <div v-if="this.canVoirCandidature">
             <h5><strong>Liste des candidats :</strong></h5>
 
             <table class="table table-bordered ">

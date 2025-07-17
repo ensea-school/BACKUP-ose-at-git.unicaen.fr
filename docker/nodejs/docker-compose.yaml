@@ -1,0 +1,18 @@
+services:
+  nodejs:
+    image: node:24.4-alpine
+    working_dir: /home/node/app
+    container_name: ${APP_NAME:-ose}-nodejs
+    volumes:
+      - '../../:/home/node/app:rw'
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY:-}
+      HTTPS_PROXY: ${HTTPS_PROXY:-}
+      NO_PROXY: ${NO_PROXY:-}
+      VITE_APP_NAME: ${APP_NAME:-ose}
+      VITE_APP_LABEL: ${APP_LABEL:-OSE}
+      VITE_APP_HOST: ${APP_HOST:-localhost}
+    command:
+      - /bin/sh
+      - '-c'
+      - 'npm install && npx vite dev'

@@ -1,0 +1,66 @@
+services:
+
+  php:
+    extends:
+      file: docker/php/docker-compose.yaml
+      service: php
+    profiles:
+      - dev
+      - prod
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app-network
+      - laures
+
+  nodejs:
+    extends:
+      file: docker/nodejs/docker-compose.yaml
+      service: nodejs
+    profiles:
+      - dev
+    ports:
+      - ${APP_VITE_PORT:-5133}:5133
+    networks:
+      - app-network
+
+  apache:
+    extends:
+      file: docker/apache/docker-compose.yaml
+      service: apache
+    profiles:
+      - dev
+      - prod
+    ports:
+      - ${APP_FRONT_PORT:-80}:80
+    networks:
+      - app-network
+
+  maildev:
+    extends:
+      file: docker/maildev/docker-compose.yaml
+      service: maildev
+    profiles:
+      - mail
+    ports:
+      - ${MAIL_MAILDEV_PORT:-1080}:80
+    networks:
+      - app-network
+
+  odconv:
+    extends:
+      file: docker/odconv/docker-compose.yaml
+      service: odconv
+    profiles:
+      - dev
+      - prod
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: ${APP_NAME:-ose}-network
+    driver: bridge
+
+  laures:
+    external: true

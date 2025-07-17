@@ -172,8 +172,8 @@ SELECT
   NULL                                                                            volume_horaire_ref_id,
   vhm.id                                                                          volume_horaire_mission_id,
 
-  tm.taux_remu_id                                                                 taux_remu_id,
-  tm.taux_remu_majore_id                                                          taux_remu_majore_id,
+  m.taux_remu_id                                                                 taux_remu_id,
+  m.taux_remu_majore_id                                                          taux_remu_majore_id,
 
   m.date_fin                                                                      date_fin_mission,
   m.date_debut                                                                    date_debut_mission,

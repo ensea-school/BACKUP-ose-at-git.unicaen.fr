@@ -32,9 +32,12 @@ return [
     'application'     => [
         'etats-sortie' => [
             'host'    => AppAdmin::config()['etats-sortie']['host'] ?? '127.0.0.1',
+            'port'    => AppAdmin::config()['etats-sortie']['port'] ?? 80,
+            'command' => AppAdmin::config()['etats-sortie']['command'] ?? \Unicaen\OpenDocument\Document::CONV_COMMAND_UNOCONV,
             'tmp-dir' => AppAdmin::config()['etats-sortie']['tmp-dir'] ?? 'cache/',
         ],
     ],
+
 
     'view_manager'    => [
         'display_not_found_reason' => AppAdmin::config()['global']['affichageErreurs'] ?? true, // display 404 reason in template

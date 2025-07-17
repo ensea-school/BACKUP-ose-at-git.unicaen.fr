@@ -407,6 +407,7 @@ class FormuleTableur
 
     private function parserFormuleCell(Calc\Cell $cell): void
     {
+        $name = $cell->getName();
         $deps = $cell->getDeps();
         $depsFound = [];
 
@@ -453,7 +454,15 @@ class FormuleTableur
                 $d = str_replace('$', '', $dep);
                 $depsFound[$d] = $d;
             } elseif (is_array($dep) && 'range' == $dep['type']) { // on est sur un range
-                $allRow = $dep['rowEnd'] >= 500 && $dep['rowBegin'] <= $this->mainLine;
+                $allRow = false;
+                if ($dep['rowEnd'] >= 500 && $dep['rowBegin'] <= $this->mainLine){
+                    // Le range correspond aux lignes de données de volumes horaires : on prend tout
+                    $allRow = true;
+                }
+                if (!$allRow && $dep['rowEnd'] == 0 && $dep['rowBegin'] == 0){
+                    // Dans ce cas, le range n'est pas précisé : on prend tout aussi
+                    $allRow = true;
+                }
                 if ($allRow) { // Si c'est toute la colonne , on ne prend en compte que la ligne principale, pas les autres
                     $dep['rowBegin'] = $this->mainLine;
                     $dep['rowEnd'] = $this->mainLine;

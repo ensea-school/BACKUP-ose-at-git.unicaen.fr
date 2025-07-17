@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfb741d6d4b6c18dfea1aadcf8d93ae6",
+    "content-hash": "e60d42bbad95d461341ad4bf0b65ed3c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7538,7 +7538,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "8e26d118c825250c57075829dc999121131f7f1f"
+                "reference": "71f5a3ae9d0e848ba31def27ee3ce29042923ced"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -7590,7 +7590,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2025-06-17T07:08:07+00:00"
+            "time": "2025-07-16T12:41:56+00:00"
         },
         {
             "name": "unicaen/authentification",
@@ -7853,23 +7853,23 @@
         },
         {
             "name": "unicaen/open-document",
-            "version": "dev-master",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "4f23a7e9638b0c938cece0ba64bc8d555b003009"
+                "reference": "d4ede47a6797225083e9f19f9fe1391b458d68e1"
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.9"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Unicaen\\OpenDocument\\": "src/"
-                },
-                "classmap": [
-                    "./Module.php"
-                ]
+                }
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2025-07-15T12:45:59+00:00"
+            "time": "2025-07-17T10:02:26+00:00"
         },
         {
             "name": "unicaen/privilege",
@@ -12215,7 +12215,6 @@
         "unicaen/authentification": 20,
         "unicaen/import": 20,
         "unicaen/mail": 20,
-        "unicaen/open-document": 20,
         "unicaen/privilege": 20,
         "unicaen/signature": 20,
         "unicaen/tbl": 20,

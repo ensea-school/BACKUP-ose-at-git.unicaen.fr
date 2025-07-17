@@ -29,7 +29,7 @@
         "unicaen/code"                     : "6.6.0",
         "unicaen/import"                   : "dev-php84",
         "unicaen/tbl"                      : "dev-php84",
-        "unicaen/open-document"            : "dev-master",
+        "unicaen/open-document"            : "6.1.2",
         "unicaen/siham"                    : "6.2.0",
         "unicaen/mail"                     : "dev-php84",
         "unicaen/vue"                      : "6.4.0",

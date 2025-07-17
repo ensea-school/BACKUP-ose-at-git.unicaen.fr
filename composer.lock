@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e60d42bbad95d461341ad4bf0b65ed3c",
+    "content-hash": "695764275b82447311ae8bdc0a2d43aa",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7802,11 +7802,11 @@
         },
         {
             "name": "unicaen/import",
-            "version": "dev-php84",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "c201eb99cbfd2c0affd47db607dab371ccdd31d2"
+                "reference": "8794be881b2b47f897eabe32171d3e38707d3fc3"
             },
             "require": {
                 "symfony/console": "^4.4|^5.4|^6.0|^7.0",
@@ -7825,7 +7825,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2025-06-11T13:20:07+00:00"
+            "time": "2025-07-17T13:24:54+00:00"
         },
         {
             "name": "unicaen/mail",
@@ -7853,11 +7853,11 @@
         },
         {
             "name": "unicaen/open-document",
-            "version": "6.1.1",
+            "version": "6.1.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "d4ede47a6797225083e9f19f9fe1391b458d68e1"
+                "reference": "0728cfbe2ddeb5f8d5256835cb8c45d43b414223"
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.9"
@@ -7869,7 +7869,7 @@
                 }
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2025-07-17T10:02:26+00:00"
+            "time": "2025-07-17T13:40:47+00:00"
         },
         {
             "name": "unicaen/privilege",
@@ -7900,11 +7900,11 @@
         },
         {
             "name": "unicaen/signature",
-            "version": "dev-master",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/signature.git",
-                "reference": "a9a5647ed6acd6d0f80dee87aeb2447650de87fe"
+                "reference": "c80ac4fbdb59fb2b2439511ae8e291fcd12d12f5"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -7934,7 +7934,7 @@
                 }
             },
             "description": "Module de signature électronique",
-            "time": "2025-06-12T10:14:10+00:00"
+            "time": "2025-07-17T13:33:58+00:00"
         },
         {
             "name": "unicaen/siham",
@@ -7967,11 +7967,11 @@
         },
         {
             "name": "unicaen/tbl",
-            "version": "dev-php84",
+            "version": "6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "b184de597e86cf6de395d4f928b3ba3c44ffa04d"
+                "reference": "9a1f8118d1d0e6f2efe767694240ea6bddb4eed5"
             },
             "require": {
                 "unicaen/app": ">=6.0|dev-php84"
@@ -7983,7 +7983,7 @@
                 }
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2025-06-27T15:12:26+00:00"
+            "time": "2025-07-17T13:29:27+00:00"
         },
         {
             "name": "unicaen/utilisateur",
@@ -12213,11 +12213,8 @@
         "connecteur-ose/pegase": 20,
         "unicaen/app": 20,
         "unicaen/authentification": 20,
-        "unicaen/import": 20,
         "unicaen/mail": 20,
         "unicaen/privilege": 20,
-        "unicaen/signature": 20,
-        "unicaen/tbl": 20,
         "unicaen/utilisateur": 20,
         "unicaen/zfc-user": 20
     },

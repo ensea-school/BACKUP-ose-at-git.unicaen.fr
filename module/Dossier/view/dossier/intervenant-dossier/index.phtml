@@ -121,12 +121,22 @@ Debut du formulaire
     <h1>Etape 1 des données personnelles</h1>
     <!--Identité-->
     <?php
+
     if ($editIdentite) {
         echo $this->partial('dossier/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
     } else {
         echo $this->partial('dossier/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
     }
+    if ($fieldsetRules['fieldset-identite-complementaire'] == 1) {
+        if ($editIdentite) {
+            echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        } else {
+            echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        }
+    }
+
     ?>
+
 
 </div>
 <!--Etape 2-->

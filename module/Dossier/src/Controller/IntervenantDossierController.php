@@ -44,10 +44,10 @@ class IntervenantDossierController extends AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Intervenant\Entity\Db\Intervenant::class,
-            \Workflow\Entity\Db\Validation::class,
-            \Dossier\Entity\Db\IntervenantDossier::class,
-        ]);
+                                                                  \Intervenant\Entity\Db\Intervenant::class,
+                                                                  \Workflow\Entity\Db\Validation::class,
+                                                                  \Dossier\Entity\Db\IntervenantDossier::class,
+                                                              ]);
     }
 
 
@@ -71,7 +71,10 @@ class IntervenantDossierController extends AbstractController
             //$this->em()->refresh($intervenantDossier);
             $tblDossier = $intervenantDossier->getTblDossier();
         }
+
+        //Ici on récupére le workflo pour savoir à quelle étape des données personnelles on se trouve
         $lastCompleted = (!empty($tblDossier)) ? $tblDossier->getCompletudeAvantRecrutement() : '';
+
 
         /* Initialisation du formulaire */
         $form = $this->getFormIntervenantIntervenantDossier()->setIntervenant($intervenant)->initForm();
@@ -305,9 +308,9 @@ class IntervenantDossierController extends AbstractController
                 $this->getServiceDossier()->purgerDonneesPersoModif($intervenant, $utilisateur);
 
                 $this->flashMessenger()->addSuccessMessage(sprintf(
-                    "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
-                    $intervenant
-                ));
+                                                               "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
+                                                               $intervenant
+                                                           ));
 
                 $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
             } catch (\Exception $e) {
@@ -325,8 +328,8 @@ class IntervenantDossierController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'dossier',
-            'piece_jointe_demande',
-        ], $intervenant);
+                                                              'dossier',
+                                                              'piece_jointe_demande',
+                                                          ], $intervenant);
     }
 }

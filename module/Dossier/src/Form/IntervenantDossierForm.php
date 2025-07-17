@@ -25,30 +25,31 @@ class IntervenantDossierForm extends AbstractForm
     use ServiceServiceAwareTrait;
     use DossierServiceAwareTrait;
 
-    protected AbstractFieldset $dossierIdentiteFieldset;
+    protected ?AbstractFieldset $dossierIdentiteFieldset = null;
 
-    protected AbstractFieldset $dossierIdentiteComplementaireFieldset;
+    protected ?AbstractFieldset $dossierIdentiteComplementaireFieldset = null;
 
-    protected AbstractFieldset $dossierAdresseFieldset;
+    protected ?AbstractFieldset $dossierAdresseFieldset = null;
 
-    protected AbstractFieldset $dossierStatutFieldset;
+    protected ?AbstractFieldset $dossierStatutFieldset = null;
 
-    protected AbstractFieldset $dossierContactFiedlset;
+    protected ?AbstractFieldset $dossierContactFieldset = null;
 
-    protected AbstractFieldset $dossierInseeFiedlset;
+    protected ?AbstractFieldset $dossierInseeFiedlset = null;
 
-    protected AbstractFieldset $dossierBancaireFieldset;
+    protected ?AbstractFieldset $dossierBancaireFieldset = null;
 
-    protected AbstractFieldset $dossierEmployeurFieldset;
+    protected ?AbstractFieldset $dossierEmployeurFieldset = null;
 
-    protected AbstractFieldset $dossierAutresFiedlset;
+    protected ?AbstractFieldset $dossierAutresFiedlset = null;
 
-    protected Intervenant      $intervenant;
+    protected Intervenant $intervenant;
 
 
 
     public function initForm()
     {
+
 
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($this->intervenant);
         $statut             = $this->intervenant->getStatut();
@@ -59,61 +60,46 @@ class IntervenantDossierForm extends AbstractForm
         $hydrator = new IntervenantDossierHydrator();
         $this->setHydrator($hydrator);
 
-
-        $this->dossierStatutFieldset = new DossierStatutFieldset('DossierStatut', [
-            'statut'      => $statut,
-            'intervenant' => $intervenant,
-        ]);
-        $this->dossierStatutFieldset->init();
-
         $options = [
-            'dossierIntervenant' => $dossierIntervenant,
+            'dossierIntervenant'      => $dossierIntervenant,
+            'dossierIdentiteFieldset' => &$this->dossierIdentiteFieldset,
         ];
 
-        $this->dossierIdentiteFieldset = new DossierIdentiteFieldset('DossierIdentite');
-        $this->dossierIdentiteFieldset->init();
 
-        $options['dossierIdentiteFieldset'] = $this->dossierIdentiteFieldset;
+        $blocDonneesPersonnelles = [
+            'dossierStatut'                 => 1,
+            'dossierIdentite'               => 1,
+            'dossierIdentiteComplementaire' => $statut->getDossierIdentiteComplementaire(),
+            'dossierContact'                => $statut->getDossierContact(),
+            'dossierAdresse'                => $statut->getDossierAdresse(),
+            'dossierInsee'                  => $statut->getDossierInsee(),
+            'dossierBancaire'               => $statut->getDossierBanque(),
+            'dossierEmployeur'              => $statut->getDossierEmployeur(),
+        ];
 
-        $this->dossierIdentiteComplementaireFieldset = new DossierIdentiteComplementaireFieldset('DossierIdentiteComplementaire', $options);
-        $this->dossierIdentiteComplementaireFieldset->init();
+        foreach ($blocDonneesPersonnelles as $blocName => $blocStep) {
+            if ($blocStep === 1) {
+                $propertyName            = $blocName . 'Fieldset';
+                $fieldsetConstructorName = '\\Dossier\\Form\\' . ucfirst($blocName) . 'Fieldset';
+                $fieldsetName            = ucfirst($blocName);
+                if ($blocName == 'dossierStatut') {
+                    $this->$propertyName = new $fieldsetConstructorName($fieldsetName, [
+                        'intervenant' => $intervenant,
+                        'statut'      => $statut,
+                    ]);
+                } elseif ($blocName == "dossierAdresse") {
+                    $fieldsetConstructorName = '\\Lieu\\Form\\AdresseFieldset';
+                    $this->$propertyName     = new $fieldsetConstructorName($fieldsetName, $options);
 
-        $options['dossierIdentiteComplementaireFieldset'] = $this->dossierIdentiteComplementaireFieldset;
-
-        $this->dossierAdresseFieldset = new AdresseFieldset('DossierAdresse');
-        $this->dossierAdresseFieldset->init();
-
-        $this->dossierContactFiedlset = new DossierContactFieldset('DossierContact', $options);
-        $this->dossierContactFiedlset->init();
-
-        $this->dossierInseeFiedlset = new DossierInseeFieldset('DossierInsee', $options);
-        $this->dossierInseeFiedlset->init();
-
-        $this->dossierBancaireFieldset = new DossierBancaireFieldset('DossierBancaire');
-        $this->dossierBancaireFieldset->init();
-
-        $this->dossierEmployeurFieldset = new EmployeurFieldset('DossierEmployeur');
-        $this->dossierEmployeurFieldset->init();
-
-        if ($statut->getDossierEmployeurFacultatif()) {
-            $this->dossierEmployeurFieldset->get('employeur')->setLabel('Employeurs :');
+                } else {
+                    $this->$propertyName = new $fieldsetConstructorName($fieldsetName, $options);
+                }
+                $this->$propertyName->init();
+                $this->add($this->$propertyName);
+            }
         }
-
-        $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => $dossierIntervenant->getStatut()->getChampsAutres()]);
-        $this->dossierAutresFiedlset->init();
-
-
+       
         $this->setAttribute('id', 'dossier');
-
-        $this->add($this->dossierStatutFieldset);
-        $this->add($this->dossierIdentiteFieldset);
-        $this->add($this->dossierIdentiteComplementaireFieldset);
-        $this->add($this->dossierAdresseFieldset);
-        $this->add($this->dossierContactFiedlset);
-        $this->add($this->dossierInseeFiedlset);
-        $this->add($this->dossierBancaireFieldset);
-        $this->add($this->dossierEmployeurFieldset);
-        $this->add($this->dossierAutresFiedlset);
 
 
         /**
@@ -125,13 +111,13 @@ class IntervenantDossierForm extends AbstractForm
          * Submit
          */
         $this->add([
-            'name'       => 'submit-button',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => "Enregistrer",
-                'class' => 'btn btn-primary',
-            ],
-        ]);
+                       'name'       => 'submit-button',
+                       'type'       => 'Submit',
+                       'attributes' => [
+                           'value' => "Enregistrer",
+                           'class' => 'btn btn-primary',
+                       ],
+                   ]);
 
         return $this;
     }

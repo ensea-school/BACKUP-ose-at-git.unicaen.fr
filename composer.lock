@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9832576d78df4f084b631fabeeb3d9aa",
+    "content-hash": "46914e5e093f819f1c297819693a8747",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -8182,11 +8182,11 @@
         },
         {
             "name": "unicaen/open-document",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "8c9e8d49b31a1d5b97fe7f028d7860bfcbf746fc"
+                "reference": "d4ede47a6797225083e9f19f9fe1391b458d68e1"
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.9"
@@ -8198,7 +8198,7 @@
                 }
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2025-07-17T08:51:08+00:00"
+            "time": "2025-07-17T10:02:26+00:00"
         },
         {
             "name": "unicaen/privilege",

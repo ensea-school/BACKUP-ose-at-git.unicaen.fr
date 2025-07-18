@@ -13,6 +13,8 @@
         "laminas/laminas-cli"              : "1.11.0",
         "laminas/laminas-cache-storage-adapter-filesystem": "2.5.0",
         "symfony/process"                  : "7.2.0",
+        "doctrine/doctrine-orm-module"     : "^6.3",
+        "doctrine/dbal"                    : "^3.9",
 
         "twbs/bootstrap"                   : "5.0.2",
         "components/jquery"                : "3.7.1",

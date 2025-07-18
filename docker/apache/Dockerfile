@@ -1,15 +1,15 @@
 FROM httpd:2.4-alpine
 
-ARG APP_TZ
+ARG TZ
 
 # Met à jour la liste des paquets
 RUN apk update
 
 # Configuration du fuseau horaire sur Paris
-ENV TZ=$APP_TZ
+ENV TZ=$TZ
 RUN apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/$APP_TZ /etc/localtime && \
-    echo $APP_TZ > /etc/timezone
+    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone
 
 # Installation de supervisor et apache2-utils
 RUN apk add --no-cache supervisor

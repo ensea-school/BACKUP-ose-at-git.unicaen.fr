@@ -3,7 +3,7 @@ services:
     build:
       context: .
       args:
-        APP_TZ: ${APP_TZ:-Europe/Paris}
+        TZ: ${TZ:-Europe/Paris}
 
     container_name: ${APP_NAME:-ose}-apache
     hostname: ${APP_HOST:-localhost}

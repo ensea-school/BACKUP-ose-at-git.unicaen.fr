@@ -1,12 +1,12 @@
 FROM php:8.4-fpm-alpine
 
-ARG APP_TZ
+ARG TZ
 ARG APP_ENV
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
 ARG NO_PROXY
 
-ENV APP_TZ=$APP_TZ
+ENV TZ=$TZ
 ENV HTTP_PROXY=$HTTP_PROXY
 ENV HTTPS_PROXY=$HTTPS_PROXY
 ENV NO_PROXY=$NO_PROXY
@@ -17,10 +17,9 @@ RUN apk update
 RUN apk add --no-cache bash git
 
 # Configuration du fuseau horaire sur Paris
-ENV TZ=$APP_TZ
 RUN apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/$APP_TZ /etc/localtime && \
-    echo $APP_TZ > /etc/timezone
+    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone
 
 # Lien pour l'exécutable interne de OSE
 RUN ln -sf /var/www/html/bin/ose /usr/local/bin/ose

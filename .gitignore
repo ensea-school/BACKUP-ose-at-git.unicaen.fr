@@ -16,4 +16,4 @@ composer.phar
 .env
 /.php-cs-fixer.cache
 supervisord.*
-docker-compose.override.yaml
+docker-compose.yaml

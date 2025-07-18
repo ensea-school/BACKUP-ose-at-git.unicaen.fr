@@ -15,4 +15,3 @@ services:
       APP_NAME: ${APP_NAME:-ose}
       APP_ENV: ${APP_ENV:-dev}
       APP_HOST: ${APP_HOST:-localhost}
-      APP_FRONT_PORT: ${APP_FRONT_PORT:-80}

@@ -3,7 +3,11 @@
 $hostUrl = $_ENV['DEV_VITE_URL'] ?? null;
 
 if (!$hostUrl) {
-    $hostUrl = ($_ENV['HTTP_X_FORWARDED_PROTO'] ?? $_ENV['REQUEST_SCHEME'] ?? 'http').'://'.($_ENV['APP_HOST'] ?? 'localhost').':'.($_ENV['DEV_VITE_PORT'] ?? 5133);
+    $sheme = $_ENV['HTTP_X_FORWARDED_PROTO'] ?? $_ENV['REQUEST_SCHEME'] ?? 'http';
+    $host = $_ENV['APP_HOST'] ?: 'localhost';
+    $port = $_ENV['DEV_VITE_PORT'] ?: 5133;
+
+    $hostUrl = $sheme.'://'.$host.':'.$port;
 }
 
 

@@ -44,6 +44,8 @@ class Contrat
     public ?string    $missionsLibelles     = null;
     public ?string    $typesMissionLibelles = null;
 
+    public array      $heuresFormation = [];
+
     /** @var VolumeHoraire[] */
     public array $volumesHoraires = [];
     public float $totalHeures     = 0.0;

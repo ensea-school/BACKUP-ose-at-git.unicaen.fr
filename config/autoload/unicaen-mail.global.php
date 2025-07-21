@@ -17,6 +17,7 @@ return [
         'transport_options' => [
             'host' => $conf['mail']['smtpHost'] ?? 'localhost',
             'port' => $conf['mail']['smtpPort'] ?? null,
+            'tls' => $conf['mail']['tls'] ?? true,
         ],
 
         'redirect_to' => $conf['mail']['redirection'] ?? null,

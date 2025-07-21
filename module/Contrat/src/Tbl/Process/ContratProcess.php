@@ -292,6 +292,7 @@ class ContratProcess implements ProcessInterface
         $vh->autreLibelle           = $data['autre_libelle'];
         $vh->missionLibelle         = $data['mission_libelle'];
         $vh->typeMissionLibelle     = $data['type_mission_libelle'];
+        $vh->heuresFormation        = (float)$data['heures_formation'];
     }
 
 
@@ -539,7 +540,7 @@ class ContratProcess implements ProcessInterface
 
             $contrat->typeService = $this->getServiceTypeService()->getEnseignement();
             $contrat->annee       = $contratSource->annee;
-            $contrats[$uuid] = $contrat;
+            $contrats[$uuid]      = $contrat;
         }
 
     }
@@ -826,6 +827,7 @@ class ContratProcess implements ProcessInterface
 
         //On ajoute les heures du contrat pour lequel on cherche
         foreach ($contrat->volumesHoraires as $vh) {
+            $contrat->heuresFormation[$vh->missionId] = $vh->heuresFormation;
             $totalHeures += $vh->heures;
         }
 
@@ -1056,6 +1058,7 @@ class ContratProcess implements ProcessInterface
             'volume_horaire_id'         => $vh->volumeHoraireId,
             'volume_horaire_mission_id' => $vh->volumeHoraireMissionId,
             'volume_horaire_ref_id'     => $vh->volumeHoraireRefId,
+            'total_heures_formation'    => array_sum($contrat->heuresFormation),
         ];
 
         return $data;

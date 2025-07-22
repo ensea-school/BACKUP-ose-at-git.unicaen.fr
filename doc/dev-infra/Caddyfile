@@ -1,0 +1,9 @@
+ose-dev.localhost.unicaen.fr {
+    tls /certs/localhost.unicaen.fr.crt /certs/localhost.unicaen.fr.key
+    reverse_proxy ose-dev-apache:80
+}
+
+ose-dev.localhost.unicaen.fr:5133 {
+    tls /certs/localhost.unicaen.fr.crt /certs/localhost.unicaen.fr.key
+    reverse_proxy ose-dev-nodejs:5133
+}

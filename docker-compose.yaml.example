@@ -1,0 +1,50 @@
+services:
+
+  php:
+    extends:
+      file: docker/php/docker-compose.yaml
+      service: php
+    # si besoin utiliser xdebug sur machine hôte
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app-network
+
+  nodejs:
+    extends:
+      file: docker/nodejs/docker-compose.yaml
+      service: nodejs
+    ports:
+      - 5133:5133
+    networks:
+      - app-network
+
+  apache:
+    extends:
+      file: docker/apache/docker-compose.yaml
+      service: apache
+    ports:
+      - 8080:80
+    networks:
+      - app-network
+
+  maildev:
+    extends:
+      file: docker/maildev/docker-compose.yaml
+      service: maildev
+    ports:
+      - 1080:80
+    networks:
+      - app-network
+
+  odconv:
+    extends:
+      file: docker/odconv/docker-compose.yaml
+      service: odconv
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: ${APP_NAME:-ose}-network
+    driver: bridge

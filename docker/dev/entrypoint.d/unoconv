@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-# ON le kill au cas ou il serait déjà lancé
-killall /usr/lib/libreoffice/program/soffice.bin
-
-# on le redémarre
-unoconv --listener &

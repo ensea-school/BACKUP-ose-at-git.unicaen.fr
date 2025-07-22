@@ -18,8 +18,5 @@ RUN apk add --no-cache supervisor
 RUN echo "Include conf/extra/docker.conf" >> /usr/local/apache2/conf/httpd.conf
 
 # Configuration de l'application
-COPY supervisord.conf /usr/local/supervisord.conf
 COPY httpd.conf /usr/local/apache2/conf/extra/docker.conf
 
-# Entrée de l'application vers le superviseur
-CMD ["supervisord", "-c", "/usr/local/supervisord.conf"]

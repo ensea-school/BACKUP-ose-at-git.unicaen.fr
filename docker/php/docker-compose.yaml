@@ -1,0 +1,26 @@
+services:
+  php:
+    build:
+      context: .
+      args:
+        TZ: ${TZ:-Europe/Paris}
+        APP_ENV: ${APP_ENV:-dev}
+        HTTP_PROXY: ${HTTP_PROXY:-}
+        HTTPS_PROXY: ${HTTPS_PROXY:-}
+        NO_PROXY: ${NO_PROXY:-}
+
+    container_name: ${APP_NAME:-ose}-php
+    user: root
+    environment:
+      - TRUSTED_HOSTS=^${APP_HOST:-localhost}$
+      - TRUSTED_PROXIES=^apache$
+      - CORS_ALLOW_ORIGIN=^${APP_HOST:-localhost}$
+      - APP_ENV=${APP_ENV:-dev}
+      - APP_NAME=${APP_NAME:-ose}
+      - APP_LABEL=${APP_LABEL:-OSE}
+      - APP_HOST=${APP_HOST:-localhost}
+      - DEV_VITE_PORT=${DEV_VITE_PORT:-}
+      - DEV_VITE_URL=${DEV_VITE_URL:-}
+    working_dir: /var/www/html
+    volumes:
+      - ../../:/var/www/html

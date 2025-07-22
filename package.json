@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "sass": "1.72.0",
-    "unicaen-vue": "file:./vendor/unicaen/vue"
+    "unicaen-vue": "file:./vendor/unicaen/vue",
+    "dotenv": "16.4.7"
+
   }
 }

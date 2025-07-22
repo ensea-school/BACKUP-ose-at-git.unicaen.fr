@@ -1,5 +1,11 @@
 import unicaenVue from 'unicaen-vue';
 import path from 'path';
+import * as dotenv from 'dotenv';
+
+// env vars load
+dotenv.config();
+
+const APP_HOST = process.env.VITE_APP_HOST ?? 'localhost';
 
 /**
  * @see https://vitejs.dev/config/
@@ -18,9 +24,9 @@ export default unicaenVue.defineConfig({
         outDir: path.resolve(__dirname, 'public/dist'),
     },
     server: {
-        // port par défaut utilisé par Node pour communiquer les éléments en "hot-loading"
-        // utile uniquement en mode dev, donc
-        port: 5133
+        host: '0.0.0.0',
+        port: 5133,
+        allowedHosts: [APP_HOST, 'nodejs'],
     },
     resolvers: [
         // Liste de resolvers pour faire de l'auto-import

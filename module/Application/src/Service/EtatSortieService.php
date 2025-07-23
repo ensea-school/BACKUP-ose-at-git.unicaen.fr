@@ -87,6 +87,12 @@ class EtatSortieService extends AbstractEntityService
         if (isset($this->config['host'])) {
             $document->setHost($this->config['host']);
         }
+        if (isset($this->config['port'])) {
+            $document->setPort((int)$this->config['port']);
+        }
+        if (isset($this->config['command'])) {
+            $document->setConvCommand($this->config['command']);
+        }
         if (isset($this->config['tmp-dir'])) {
             $document->setTmpDir($this->config['tmp-dir']);
         }

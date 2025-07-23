@@ -26,7 +26,7 @@ export default unicaenVue.defineConfig({
     server: {
         host: '0.0.0.0',
         port: 5133,
-        allowedHosts: [APP_HOST, 'nodejs'],
+        allowedHosts: [APP_HOST],
     },
     resolvers: [
         // Liste de resolvers pour faire de l'auto-import

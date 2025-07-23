@@ -16,7 +16,9 @@ RUN apk add --no-cache supervisor
 
 # Ajout de notre propre config Apache
 RUN echo "Include conf/extra/docker.conf" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "Include conf/extra/security.conf" >> /usr/local/apache2/conf/security.conf
 
 # Configuration de l'application
 COPY httpd.conf /usr/local/apache2/conf/extra/docker.conf
+COPY security.conf /usr/local/apache2/conf/extra/security.conf
 

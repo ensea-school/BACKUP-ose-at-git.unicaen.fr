@@ -88,4 +88,4 @@ jobs:
           done
 
           # Pousser les tags
-          git push --tags origin
+          git push --tags --force origin

@@ -1,0 +1,52 @@
+services:
+
+  php:
+    extends:
+      file: docker/php/docker-compose.yaml
+      service: php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - dev-network
+      # php a besoin d'accéder à Oracle
+      - laures
+
+  nodejs:
+    extends:
+      file: docker/nodejs/docker-compose.yaml
+      service: nodejs
+    networks:
+      - dev-network
+
+  apache:
+    extends:
+      file: docker/apache/docker-compose.yaml
+      service: apache
+    networks:
+      - dev-network
+
+  odconv:
+    extends:
+      file: docker/odconv/docker-compose.yaml
+      service: odconv
+    networks:
+      - dev-network
+
+# à décommenter si besoin
+#  maildev:
+#    extends:
+#      file: docker/maildev/docker-compose.yaml
+#      service: maildev
+#    ports:
+#      # 1080 port d'accès : à personnaliser
+#      - "1080:80"
+#    networks:
+#      - dev-network
+
+networks:
+  dev-network:
+    external: true
+
+  # réseau où se trouve la bdd Oracle (à modifier ultérieurement)
+  laures:
+    external: true

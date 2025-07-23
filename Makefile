@@ -81,6 +81,12 @@ clear-cache: ## Vide le cache de l'application
 
 
 
+restart: ## Redémarre l'application
+	docker compose restart
+.PHONY: restart
+
+
+
 rebuild: ## Reconstruit tous les conteneurs
 	docker compose down -v
 	docker compose build --no-cache

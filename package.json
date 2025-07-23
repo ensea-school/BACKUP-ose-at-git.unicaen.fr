@@ -1,18 +1,19 @@
 {
-    "name"        : "ose",
-    "version"     : "21.0.0",
-    "author"      : "Université de Caen Normandie",
-    "description" : "Organisation des Services d'Enseignement",
-    "license"     : "ISC",
-    "private"     : true,
-    "scripts"     : {
-        "dev"      : "APP_ENV=development vite dev",
-        "build"    : "vite build",
-        "build-css": "sass --style=compressed public/css/app.scss public/css/app.css"
-    },
-    "dependencies": {
-        "sass"       : "1.72.0",
-        "unicaen-vue": "file:./vendor/unicaen/vue",
-        "dotenv"     : "16.4.7"
-    }
+  "name": "ose",
+  "version": "21.0.0",
+  "author": "Université de Caen Normandie",
+  "description": "Organisation des Services d'Enseignement",
+  "license": "ISC",
+  "private": true,
+  "scripts": {
+    "dev": "APP_ENV=development vite dev",
+    "build": "vite build",
+    "build-css": "sass --style=compressed public/css/app.scss public/css/app.css"
+  },
+  "dependencies": {
+    "sass": "1.72.0",
+    "unicaen-vue": "file:./vendor/unicaen/vue",
+    "dotenv": "16.4.7"
+
+  }
 }

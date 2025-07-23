@@ -49,14 +49,20 @@ RUN install-php-extensions \
         iconv \
 	;
 
-# Xdebug optionnel
+# Copier configs PHP
+COPY php.dev.ini /usr/local/etc/php/php.dev.ini
+COPY php.prod.ini /usr/local/etc/php/php.prod.ini
+COPY fpm.conf /usr/local/etc/php-fpm.d/www.conf
+
+# Switch dev/prod
 RUN if [ "$APP_ENV" = "dev" ]; then \
       install-php-extensions xdebug; \
+      rm /usr/local/etc/php/php.prod.ini; \
+      mv /usr/local/etc/php/php.dev.ini /usr/local/etc/php/php.ini; \
+else \
+      rm /usr/local/etc/php/php.dev.ini; \
+      mv /usr/local/etc/php/php.prod.ini /usr/local/etc/php/php.ini; \
 fi
-
-# Copier configs PHP
-COPY php.ini /usr/local/etc/php/php.ini
-COPY fpm.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Fournit un script d'entrée pour lancer PHP-FPM
 COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint

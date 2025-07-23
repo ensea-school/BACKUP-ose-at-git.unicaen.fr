@@ -1,6 +1,6 @@
 # Version stable
 
-OSE 24.7](#ose-247-08072025)
+OSE 24.7](#ose-248-23072025)
 
 
 # OSE 25 (à venir)
@@ -29,7 +29,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 
 
-# OSE 24.8 (à venir juillet 2025)
+# OSE 24.8 (23/07/2025)
 
 ## Nouveautés
 

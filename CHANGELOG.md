@@ -36,6 +36,8 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * Saisie de service d'enseignement
     * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé (#53620)
 
+* Nouvelle infrastructure de déploiement Docker pour le dév et la prod (pas d'impact sur les procédures actuelles)
+
 ## Corrections
 
 * Le report de paramétrages sur les années suivantes fonctionne de nouveau pour les statuts & les taux

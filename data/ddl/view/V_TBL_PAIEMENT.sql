@@ -11,7 +11,7 @@ SELECT
   vh.id                                       volume_horaire_id,
   si.type_intervenant_id                      type_intervenant_id,
   i.id                                        intervenant_id,
-  COALESCE( ep.structure_id, i.structure_id ) structure_id,
+  str.id                                      structure_id,
   COALESCE(thens.id,th.id)                    type_heures_id,
   COALESCE(e.domaine_fonctionnel_id, str.domaine_fonctionnel_id, ose_parametre.get_domaine_fonc_ens_ext) def_domaine_fonctionnel_id,
   COALESCE(ccep.centre_cout_id,str.centre_cout_id) def_centre_cout_id,

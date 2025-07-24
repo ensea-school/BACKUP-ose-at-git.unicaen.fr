@@ -29,11 +29,14 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 
 
-# OSE 24.9 (à venir)
+# OSE 24.9 (début septembre)
 
 ## Corrections
 
 * Correction demande de mise en paiement avec paiement par la composante d'affectation (#62759)
+* L'affichage de la saisie de services fonctionne à nouveau avec des enseignements pris sur l'extérieur (pb arrivé en 24.8)
+
+
 
 # OSE 24.8 (23/07/2025)
 

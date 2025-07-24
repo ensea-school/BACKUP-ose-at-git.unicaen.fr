@@ -272,10 +272,16 @@ return [
     ],
 
 
-    /* Génération d'états de sortie avec Unoconv */
+/* Génération d'états de sortie avec Unoconv */
     'etats-sortie'       => [
-        /* Serveur où se situe le service Unoconv */
+        /* Serveur où se situe le service Unoconv ou odconv */
         'host'    => '127.0.0.1', // par défaut sur la même machine que OSE
+
+        /* Port utilisé par odconv, si vous utilisez odconv */
+        'port'    => 80, // par défaut sur la même machine que OSE
+
+        /* Si vous souhaitez utiliser odconv, décommentez la ligne ci-dessous */
+        //'command' => 'odconv',
 
         /* Répertoire de travail utilisé à la fois par OSE et par le service Unoconv */
         'tmp-dir' => __DIR__ . '/cache/', // par défaut dans le répertoire cache de OSE

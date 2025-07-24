@@ -29,6 +29,12 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 
 
+# OSE 24.9 (à venir)
+
+## Corrections
+
+* Correction demande de mise en paiement avec paiement par la composante d'affectation (#62759)
+
 # OSE 24.8 (23/07/2025)
 
 ## Nouveautés

@@ -15,7 +15,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 $navigationHelper = $this->navigation('navigation');
 $pages            = $navigationHelper->getContainer();
 
-$version = $this->appInfos()->getConfig()->get('version');
+$version   = $this->appInfos()->getConfig()->get('version');
 $appLayout = $this->appLayout();
 
 echo $this->doctype();
@@ -76,7 +76,7 @@ echo $this->doctype();
 
 </head>
 
-<body class="<?= AppAdmin::env() ?> p-0" data-base-url="<?= $this->url('home') ?>">
+<body class="<?= AppAdmin::env() ?> p-0">
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
@@ -89,16 +89,14 @@ echo $this->doctype();
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <?= $navigationHelper
-                ->menu($pages)
-                ->setUlClass('navbar-nav me-auto mb-2 mb-lg-0')
-                ->setPartial('layout/menu-principal.phtml'); ?>
+                    ->menu($pages)
+                    ->setPartial('layout/menu-principal.phtml'); ?>
             <?= $this->vue('application/connexion', ['data' => $appLayout->connexionData()]); ?>
         </div>
     </div>
 </nav>
 
-
-    <div id="contenu-principal" class="container">
+<div id="contenu-principal" class="container">
     <!--<div id="contenu-principal" class="container intranavigator intranavigator-page">-->
     <?php $pages->rewind();
     if ($menuSecondaire = $navigationHelper->menuSecondaire($pages)->render()): ?>

@@ -72,7 +72,7 @@ class LigneEnseignementViewHelper extends AbstractHtmlElement
         $liste   = $this->enseignements;
         $service = $this->getService();
         $element = $service->getElementPedagogique();
-        $etape = ($service->getEtape()) ? $service->getEtape() : $element->getEtape();
+        $etape = ($service->getEtape()) ? $service->getEtape() : $element?->getEtape();
 
         $vhl = $service->getVolumeHoraireListe()->setTypeVolumeHoraire($liste->getTypeVolumeHoraire());
 

@@ -1,7 +1,7 @@
 # Connecteur Apogée
 
 Le connecteur Apogée permet de synchroniser en import :
-  * les étapes (formations) réparties en types de formation et en groupes de types de formation
+  * les étapes (formations) réparties en types de formation
   * les éléments pédagogiques ainsi que les chemins pédagogiques (liens étapes / éléments)
   * les volumes horaires d'enseignement, c'est-à-dire les charges d'enseignements renseignées dans Apogée
   * Les effectifs, par élément pédagogique et bientôt par étape
@@ -13,6 +13,19 @@ retrouviez dans OSE les données dont vous avez besoin.
 Le connecteur Apogée est découpé en deux parties.
 La première s'installe directement sur Apogée.
 La seconde exploite la partie Apogée du connecteur et fournie les vues sources nécessaires pour les opérations de synchronisation. 
+
+
+## Dernières modifications intervenues
+
+### 22/07/2025
+
+- Modifications du connecteur côté Apogée
+  - Suppression des tables tampon ose_groupe_type_formation et ose_type_formation
+  - modification requête alimentation de ose_etape
+- Suppression de la vue source src_groupe_type_formation : les groupes de type de formation sont maintenant gérés directement dans OSE
+- Modification de src_type_formation : la vue va puiser ses données dans la table Apogée `typ_diplome`
+- Modification de src_etape : la vue puise dans la table OSE des groupes de type de formation pour détecter si le niveau est pertinent ou non
+
 
 ## Première partie : installation de la partie Apogée du connecteur
 [Partie Apogée du connecteur](Apogee-OSE-lisezMoi.md)
@@ -63,11 +76,6 @@ Créez ensuite la vue [SRC_ETABLISSEMENT](SRC_ETABLISSEMENT.sql).
 
 [Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
-## Récupération des groupes de types de formation
-
-Créez la vue [SRC_GROUPE_TYPE_FORMATION](SRC_GROUPE_TYPE_FORMATION.sql).
-
-[Activez-là, puis tentez une synchronisation](../activer-synchroniser.md).
 
 ## Récupération des types de formation
 

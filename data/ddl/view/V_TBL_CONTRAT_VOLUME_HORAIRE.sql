@@ -25,6 +25,7 @@ SELECT
   CASE WHEN ti.code NOT IN ('CM','TD','TP') THEN vh.heures ELSE 0 END             autres,
   vh.heures                                                                       heures,
   frv.total                                                                       hetd,
+  0.0                                                                             heures_formation,
 
   CASE WHEN ti.code NOT IN ('CM', 'TD', 'TP') THEN ti.code ELSE NULL END          autre_libelle,
   null                                                                            type_mission_libelle,
@@ -79,6 +80,7 @@ SELECT
   CASE WHEN ti.code NOT IN ('CM','TD','TP') THEN vh.heures ELSE 0 END             autres,
   vh.heures                                                                       heures,
   frv.total                                                                       hetd,
+  0.0                                                                             heures_formation,
 
   CASE WHEN ti.code NOT IN ('CM', 'TD', 'TP') THEN ti.code ELSE NULL END          autre_libelle,
   null                                                                            type_mission_libelle,
@@ -131,6 +133,7 @@ SELECT
   vhr.heures                                                                      autres,
   vhr.heures                                                                      heures,
   frvr.total                                                                      hetd,
+  0.0                                                                             heures_formation,
 
   fon_ref.libelle_long                                                            autre_libelle,
   null                                                                            type_mission_libelle,
@@ -183,6 +186,7 @@ SELECT
   vhm.heures                                                                      autres,
   vhm.heures                                                                      heures,
   vhm.heures                                                                      hetd,
+  m.heures_formation                                                              heures_formation,
 
   CASE WHEN
     m.libelle_mission IS NOT NULL

@@ -176,29 +176,21 @@ class DemandesService extends AbstractService
             $parametreCentreCout = 'enseignement';
         }
 
-        if ($intervenantStructure instanceof Structure && $structure instanceof Structure) {
-            if ($parametreCentreCout == 'affectation') {   //Cas ou c'est la composante d'affectation qui fait les demandes de mises en paiement
-                if ($intervenantStructure->getId() == $structure->getId()) {
-                    /*Si j'ai un role avec un périmètre composante et que ma structure d'affectation est la même que
-                    celle de l'intervenant j'accède à toutes les demandes de mise en paiement peu importe la structure
-                    de l'enseignement réalisé de l'intervenant on ne filtre pas les dmep*/
-                    $structure = null;
-                } else {
-                    //Sinon on ne doit voir aucune demande de mise en paiement
-                    return $dmep;
-                }
-            }
-        }
-
 
         $sql = "
         
         SELECT
             tp.intervenant_id 				    intervenant_id,
             tp.structure_id                     structure_id,
-            MAX(s.code)                         structure_code,
-            MAX(s.libelle_long)   			    structure_libelle,
-            MAX(s.libelle_court)   			    structure_libelle_court,
+            COALESCE(MAX(se.code), 
+                     MAX(ssr.code),
+                     MAX(sm.code))              structure_code,
+            COALESCE(MAX(se.libelle_long), 
+                     MAX(ssr.libelle_long),
+                     MAX(sm.libelle_long))      structure_libelle,
+            COALESCE(MAX(se.libelle_court), 
+                     MAX(ssr.libelle_court),
+                     MAX(sm.libelle_court))   	structure_libelle_court,
             CASE
                 WHEN MAX(tp.service_id) IS NOT NULL AND MAX(s.element_pedagogique_id) IS NOT NULL THEN 'enseignement'
                 WHEN MAX(tp.service_id) IS NOT NULL AND MAX(s.element_pedagogique_id) IS NULL THEN 'enseignement-exterieur'
@@ -247,13 +239,13 @@ class DemandesService extends AbstractService
             MAX(mep.date_mise_en_paiement)      date_paiement,
             MAX(mep.histo_creation)             date_demande
             
-            
         FROM
             tbl_paiement tp
-        LEFT JOIN structure s ON s.id = tp.structure_id 
         LEFT JOIN service s ON	s.id = tp.service_id
         LEFT JOIN service_referentiel sr ON	sr.id = tp.service_referentiel_id
+        LEFT JOIN structure ssr ON ssr.id = sr.structure_id
         LEFT JOIN element_pedagogique ep ON	ep.id = s.element_pedagogique_id
+        LEFT JOIN structure se on ep.structure_id = se.id
         LEFT JOIN etape e ON e.id = ep.etape_id
         LEFT JOIN fonction_referentiel fr ON fr.id = sr.fonction_id 
         LEFT JOIN type_heures th ON th.id = tp.type_heures_id 
@@ -262,6 +254,7 @@ class DemandesService extends AbstractService
         LEFT JOIN domaine_fonctionnel df ON df.id = tp.domaine_fonctionnel_id
         LEFT JOIN periode p ON p.id = tp.periode_paiement_id
         LEFT JOIN mission m ON m.id = tp.mission_id
+        LEFT JOIN structure sm ON sm.id = m.structure_id
         LEFT JOIN type_mission tm ON tm.id = m.type_mission_id
         LEFT JOIN etablissement etab ON etab.id = s.etablissement_id
         WHERE

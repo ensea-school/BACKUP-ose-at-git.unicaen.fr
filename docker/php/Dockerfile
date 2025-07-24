@@ -1,12 +1,12 @@
 FROM php:8.2-fpm-alpine
 
-ARG APP_TZ
+ARG TZ
 ARG APP_ENV
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
 ARG NO_PROXY
 
-ENV APP_TZ=$APP_TZ
+ENV TZ=$TZ
 ENV HTTP_PROXY=$HTTP_PROXY
 ENV HTTPS_PROXY=$HTTPS_PROXY
 ENV NO_PROXY=$NO_PROXY
@@ -17,10 +17,9 @@ RUN apk update
 RUN apk add --no-cache bash git
 
 # Configuration du fuseau horaire sur Paris
-ENV TZ=$APP_TZ
 RUN apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/$APP_TZ /etc/localtime && \
-    echo $APP_TZ > /etc/timezone
+    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone
 
 # Lien pour l'exécutable interne de OSE
 RUN ln -sf /var/www/html/bin/ose /usr/local/bin/ose
@@ -50,14 +49,20 @@ RUN install-php-extensions \
         iconv \
 	;
 
-# Xdebug optionnel
+# Copier configs PHP
+COPY php.dev.ini /usr/local/etc/php/php.dev.ini
+COPY php.prod.ini /usr/local/etc/php/php.prod.ini
+COPY fpm.conf /usr/local/etc/php-fpm.d/www.conf
+
+# Switch dev/prod
 RUN if [ "$APP_ENV" = "dev" ]; then \
       install-php-extensions xdebug; \
+      rm /usr/local/etc/php/php.prod.ini; \
+      mv /usr/local/etc/php/php.dev.ini /usr/local/etc/php/php.ini; \
+else \
+      rm /usr/local/etc/php/php.dev.ini; \
+      mv /usr/local/etc/php/php.prod.ini /usr/local/etc/php/php.ini; \
 fi
-
-# Copier configs PHP
-COPY php.ini /usr/local/etc/php/php.ini
-COPY fpm.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Fournit un script d'entrée pour lancer PHP-FPM
 COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint

@@ -1,23 +1,6 @@
 # On s'appuie sur le .env
 include .env
 
-ifeq ($(APP_ENV),dev)
-    PROFILS := --profile dev
-else
-    PROFILS := --profile prod
-endif
-
-ifeq ($(MAIL_ENABLED),true)
-    ifeq ($(MAIL_SMTP_HOST),)
-        # Si le MAIL_SMTP_HOST n'est pas renseigné, alors on va utiliser un mailer local pour récupérer les mails
-        # S'il est renseigné, alors on considère qu'on va utiliser un serveur SMTP externe
-        PROFILS += --profile mail
-    endif
-endif
-
-ALL_PROFILS := --profile dev --profile prod --profile bdd --profile mail
-
-
 
 # Commandes
 help:
@@ -31,26 +14,26 @@ help:
 
 
 install: ## Build des conteneurs de l'application
-	docker compose $(PROFILS) up -d
+	docker compose up -d
 .PHONY: install
 
 
 
 uninstall: ## Désinstallation
-	docker compose $(ALL_PROFILS) down --rmi all --volumes --remove-orphans
+	docker compose down --rmi all --volumes --remove-orphans
 	docker network rm $(APP_NAME)-network -f
 .PHONY: uninstall
 
 
 
 start: ## Démarre les conteneurs de l'application
-	docker compose $(PROFILS) start
+	docker compose start
 .PHONY: start
 
 
 
 stop: ## Stoppe les conteneurs de l'application
-	docker compose $(PROFILS) stop
+	docker compose stop
 .PHONY: stop
 
 
@@ -74,7 +57,7 @@ bash-node: ## Entrer dans le container Node.js
 
 
 logs: ## Afficher les logs des containers docker
-	docker compose $(PROFILS) logs -f --tail=100
+	docker compose logs -f --tail=100
 .PHONY: logs
 
 
@@ -98,10 +81,16 @@ clear-cache: ## Vide le cache de l'application
 
 
 
+restart: ## Redémarre l'application
+	docker compose restart
+.PHONY: restart
+
+
+
 rebuild: ## Reconstruit tous les conteneurs
-	docker compose $(ALL_PROFILS) down -v
-	docker compose $(PROFILS) build --no-cache
-	docker compose $(PROFILS) up -d
+	docker compose down -v
+	docker compose build --no-cache
+	docker compose up -d
 .PHONY: rebuild
 
 
@@ -121,7 +110,7 @@ clean: ## Vide les caches Docker
 	@echo ""
 	@read -p "Confirmez-vous ce nettoyage complet ? [o/N] " confirm; \
 	if [ "$$confirm" = "o" ] || [ "$$confirm" = "O" ]; then \
-		docker compose $(PROFILS) down -v; \
+		docker compose down -v; \
 		docker system prune -af --volumes; \
 		echo "Ménage fait"; \
 	else \

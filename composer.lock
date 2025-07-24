@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46914e5e093f819f1c297819693a8747",
+    "content-hash": "8a083d9330a1a4ba5066517943dc9bdc",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -8158,11 +8158,11 @@
         },
         {
             "name": "unicaen/mail",
-            "version": "7.1.2",
+            "version": "7.2.8",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/mail.git",
-                "reference": "12c1c629d3d498e7aec8721f2b73ddc8cfda304a"
+                "reference": "9083200ef1f206b7444254491f5c83126eaa2f44"
             },
             "require": {
                 "symfony/mailer": "^7",
@@ -8178,15 +8178,15 @@
                 ]
             },
             "description": "Module d'envoi de mail",
-            "time": "2025-02-06T09:50:32+00:00"
+            "time": "2025-07-21T14:29:46+00:00"
         },
         {
             "name": "unicaen/open-document",
-            "version": "6.1.1",
+            "version": "6.1.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "d4ede47a6797225083e9f19f9fe1391b458d68e1"
+                "reference": "0728cfbe2ddeb5f8d5256835cb8c45d43b414223"
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.9"
@@ -8198,7 +8198,7 @@
                 }
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2025-07-17T10:02:26+00:00"
+            "time": "2025-07-17T13:40:47+00:00"
         },
         {
             "name": "unicaen/privilege",

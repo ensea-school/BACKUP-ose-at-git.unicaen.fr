@@ -18,6 +18,9 @@ $pages            = $navigationHelper->getContainer();
 $version   = $this->appInfos()->getConfig()->get('version');
 $appLayout = $this->appLayout();
 
+$navigation = AppAdmin::container()->get(\Framework\Navigation\Navigation::class);
+$mainMenu = $navigation->getHome()->getVisiblePages();
+
 echo $this->doctype();
 ?>
 
@@ -88,9 +91,15 @@ echo $this->doctype();
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <?= $navigationHelper
-                    ->menu($pages)
-                    ->setPartial('layout/menu-principal.phtml'); ?>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <?php foreach ($mainMenu as $page): ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?php if ($page->isActive()) echo ' active' ?>" href="<?php echo $page->getUri() ?>">
+                            <?php echo $this->escapeHtml($page->getLabel()) ?>
+                        </a>
+                    </li>
+                <?php endforeach ?>
+            </ul>
             <?= $this->vue('application/connexion', ['data' => $appLayout->connexionData()]); ?>
         </div>
     </div>
@@ -98,8 +107,8 @@ echo $this->doctype();
 
 <div id="contenu-principal" class="container">
     <!--<div id="contenu-principal" class="container intranavigator intranavigator-page">-->
-    <?php $pages->rewind();
-    if ($menuSecondaire = $navigationHelper->menuSecondaire($pages)->render()): ?>
+    <?php
+    if ($menuSecondaire = null): //$navigationHelper->menuSecondaire($pages)->render()): ?>
         <div class="row">
             <div id="sidebar" data-url="<?= $this->intervenant()->menuUrl() ?>" class="col-xs-6 col-md-2"
                  role="navigation">

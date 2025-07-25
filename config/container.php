@@ -1,8 +1,8 @@
 <?php
 
 use Laminas\Mvc\Service\ServiceManagerConfig;
-use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
+use Framework\Container\Container;
 use Psr\Container\ContainerInterface;
 
 class AppAdmin
@@ -140,7 +140,7 @@ class AppAdmin
         // Prepare the service manager
         $smConfig = new ServiceManagerConfig($appConfig['service_manager'] ?? []);
 
-        self::$container = new ServiceManager();
+        self::$container = new Container();
         $smConfig->configureServiceManager(self::$container);
         self::$container->setService('ApplicationConfig', $appConfig);
 

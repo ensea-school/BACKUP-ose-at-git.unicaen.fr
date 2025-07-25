@@ -2,8 +2,8 @@
 
 namespace Workflow;
 
-use Application\Factory\AutowireFactory;
 use Application\Provider\Privilege\Privileges;
+use Framework\Container\AutowireFactory;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 
 
@@ -67,7 +67,6 @@ return [
 
     'services' => [
         Service\WorkflowService::class       => Service\WorkflowServiceFactory::class,
-        Tbl\Process\WorkflowProcess::class   => AutowireFactory::class,
         Service\WfEtapeDepService::class     => Service\WfEtapeDepServiceFactory::class,
         Service\WfEtapeService::class        => Service\WfEtapeServiceFactory::class,
         Service\TypeValidationService::class => Service\TypeValidationServiceFactory::class,

@@ -45,6 +45,7 @@
     },
     "autoload"         : {
         "psr-4": {
+            "Framework\\"     : "module/Framework/src/",
             "Administration\\": "module/Administration/src/",
             "Agrement\\"      : "module/Agrement/src/",
             "Application\\"   : "module/Application/src/",
@@ -66,7 +67,8 @@
             "Plafond\\"       : "module/Plafond/src/",
             "Referentiel\\"   : "module/Referentiel/src/",
             "Service\\"       : "module/Service/src/",
-            "Workflow\\"      : "module/Workflow/src/"
+            "Workflow\\"      : "module/Workflow/src/",
+            "Utilisateur\\"   : "module/Utilisateur/src/"
         }
     },
     "require-dev"      : {

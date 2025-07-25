@@ -59,21 +59,21 @@ class TraducteurService
     public function traduire(FormuleTableur $tableur, Calc\Cell $cell): string
     {
         $this->tableur = $tableur;
-        $this->cell = $cell;
+        $this->cell    = $cell;
 
-        if ($cell->getRow() == $this->tableur->lastLine()){
-             // la dernière ligne n'a pas à être traduite : c'est la fonction "derniere"
+        if ($cell->getRow() == $this->tableur->lastLine()) {
+            // la dernière ligne n'a pas à être traduite : c'est la fonction "derniere"
             return '';
         }
 
-        $mls = (string)$this->tableur->mainLine();
+        $mls        = (string)$this->tableur->mainLine();
         $this->name = $this->cell->getName();
         if (str_ends_with($this->name, $mls)) {
             $this->name = substr($this->name, 0, -strlen($mls));
         }
 
         $this->tableurExpr = substr($this->cell->getFormule() ?? '', 3) ?? $this->cell->getValue();
-        $expr = $this->cell->getFormuleExpr();
+        $expr              = $this->cell->getFormuleExpr();
         if ($expr) {
             $this->expr = $expr;
         } else {
@@ -146,10 +146,10 @@ class TraducteurService
     {
         $php = "// $this->name" . $this->tableurExpr . "\n";
         if ($this->name == $this->cell->getName()) {
-            $php .= "protected function c_$this->name(): float\n";
+            $php           .= "protected function c_$this->name(): float\n";
             $this->absCell = true;
         } else {
-            $php .= "protected function c_$this->name(int \$l): float\n";
+            $php           .= "protected function c_$this->name(int \$l): float\n";
             $this->absCell = false;
         }
         $php .= "{\n";
@@ -164,7 +164,7 @@ class TraducteurService
     public function indent(string $php, int $levels = 1): string
     {
 
-        $lines = explode("\n", $php);
+        $lines  = explode("\n", $php);
         $result = '';
         foreach ($lines as $line) {
             for ($i = 0; $i < $levels; $i++) {
@@ -212,7 +212,7 @@ class TraducteurService
             $mlMoins = (string)($this->tableur->mainLine() - 1);
             if (str_ends_with($expr[$i]['name'], $mlMoins) && !str_ends_with($expr[$i]['name'], '$' . $mlMoins)) {
                 $expr[$i]['name'] = substr($expr[$i]['name'], 0, -strlen($mlMoins));
-                $expr[$i]['rel'] = -1;
+                $expr[$i]['rel']  = -1;
             }
         }
 
@@ -233,7 +233,7 @@ class TraducteurService
         $variable = $this->tableur->variableFromName($expr[$i]['name']);
 
         if ($variable) {
-            $expr[$i]['name'] = $variable;
+            $expr[$i]['name']     = $variable;
             $expr[$i]['dataType'] = $this->tableur->variableType($variable);
         }
     }
@@ -249,8 +249,8 @@ class TraducteurService
         $variable = $this->tableur->variableFromCell($expr[$i]['name']);
 
         if ($variable) {
-            $expr[$i]['type'] = 'variable';
-            $expr[$i]['name'] = $variable;
+            $expr[$i]['type']     = 'variable';
+            $expr[$i]['name']     = $variable;
             $expr[$i]['dataType'] = $this->tableur->variableType($variable);
         }
     }
@@ -301,7 +301,7 @@ class TraducteurService
                         unset($expr[$i + 2]);
                     } else {
                         $expr[$i + 1] = $expr[$i];
-                        $expr[$i] = ['type' => 'php', 'code' => '!'];
+                        $expr[$i]     = ['type' => 'php', 'code' => '!'];
                         unset($expr[$i + 2]);
                     }
                 }
@@ -369,9 +369,9 @@ class TraducteurService
                 unset($expr[$i + 1]);
                 unset($expr[$i + 2]);
             } else {
-                $expr[$i + 1] = $expr[$i];
+                $expr[$i + 1]         = $expr[$i];
                 $expr[$i + 1]['name'] = 'vh.structureUniv';
-                $expr[$i] = ['type' => 'php', 'code' => '!'];
+                $expr[$i]             = ['type' => 'php', 'code' => '!'];
                 unset($expr[$i + 2]);
             }
         }
@@ -382,7 +382,7 @@ class TraducteurService
     protected function transfoIfPlus(array &$expr, int $i): void
     {
         $transfoBefore = false;
-        $transfoAfter = false;
+        $transfoAfter  = false;
 
         if ($expr[$i]['type'] == 'function' && $expr[$i]['name'] == 'IF') {
             $ifi = $i;
@@ -433,25 +433,25 @@ class TraducteurService
     {
         if ($expr[$i]['type'] == 'function' && $expr[$i]['name'] != 'IF') {
             $params = $expr[$i]['exprs'];
-            $if = null;
-            foreach( $params as $pi => $param ) {
-                foreach($param as $ppi => $pexpr){
+            $if     = null;
+            foreach ($params as $pi => $param) {
+                foreach ($param as $ppi => $pexpr) {
                     if ($pexpr && $pexpr['type'] == 'function' && $pexpr['name'] == 'IF') {
                         if ($if != null) {
                             throw new \Exception('Expression trop complexe et intraduisible en l\'état');
                         }
-                        $if = $pexpr;
+                        $if      = $pexpr;
                         $ifIndex = $pi;
                     }
                 }
             }
-            if ($if){
-                foreach( $if['exprs'] as $eid => $ifRes){
+            if ($if) {
+                foreach ($if['exprs'] as $eid => $ifRes) {
                     // on parse le retour si true et le retour si false, pas la condition
-                    if ($eid > 0){
-                        $nexpr = $expr;
+                    if ($eid > 0) {
+                        $nexpr                        = $expr;
                         $nexpr[$i]['exprs'][$ifIndex] = $ifRes;
-                        $if['exprs'][$eid] = $nexpr;
+                        $if['exprs'][$eid]            = $nexpr;
                     }
                 }
                 $expr = [0 => $if];
@@ -466,15 +466,15 @@ class TraducteurService
         $term = $expr[$i];
 
         $transfoCritere = false;
-        $transfoBefore = false;
-        $transfoAfter = false;
+        $transfoBefore  = false;
+        $transfoAfter   = false;
 
         $ifi = $i;
 
         if ($term['type'] == 'function' && $term['name'] == 'SUMIF') {
             if (isset($term['exprs'][1])) {
                 $transfoCritere = true;
-                $critere = $term['exprs'][1];
+                $critere        = $term['exprs'][1];
             }
 
             if (isset($expr[$i - 1])) {
@@ -487,7 +487,7 @@ class TraducteurService
             $expr[$i]['returnExpr'] = [
                 [
                     'type' => 'php',
-                    'code' => '$val'
+                    'code' => '$val',
                 ],
             ];
         }
@@ -531,7 +531,7 @@ class TraducteurService
             }
 
             if ($critere[0]['type'] != 'op') { // ajout du =, valeur par défaut
-                $cc = $critere;
+                $cc      = $critere;
                 $critere = [['type' => 'op', 'name' => '=']];
                 foreach ($cc as $c) {
                     $critere[] = $c;
@@ -610,7 +610,7 @@ class TraducteurService
         }
 
         /* On supprime les parenthèses inutiles */
-        if (isset($expr[$i]['type']) && $expr[$i]['type'] == 'expr' && count($expr) == 1){
+        if (isset($expr[$i]['type']) && $expr[$i]['type'] == 'expr' && count($expr) == 1) {
             $expr = $expr[$i]['expr'];
         }
     }
@@ -644,7 +644,7 @@ class TraducteurService
                     $php .= $this->{$methods[$term['type']]}($expr, $i);
                 } elseif ($term['type'] === 'php') {
                     $php .= $term['code'];
-                } elseif ($term['type'] === 'space'){
+                } elseif ($term['type'] === 'space') {
                     // ne rien faire
                 } else {
                     $php .= '[PB TRADUCTION PHP]';
@@ -759,7 +759,7 @@ class TraducteurService
             return "\$this->c('$col',\$l$rel)";
         } elseif ($row < $ml) {
             return "\$this->cg('$col$row')";
-        } elseif($row == $this->tableur->lastLine()) {
+        } elseif ($row == $this->tableur->lastLine()) {
             return "\$this->derniere('$col')";
         } else {
             $rowDiff = $row - $ml;
@@ -771,7 +771,7 @@ class TraducteurService
 
     protected function traductionVariable(array &$expr, int $i): string
     {
-        $name = $expr[$i]['name'];
+        $name       = $expr[$i]['name'];
         $accesseurs = ['get', 'has', 'is'];
 
         if (str_starts_with($name, 'i.')) {
@@ -792,7 +792,7 @@ class TraducteurService
             $variable = '$this->intervenant()->getServiceDu()';
         } else {
             $targetExpr = [$this->tableur->tableur()->getAliasTarget($name)];
-            $variable = $this->traductionExpr($targetExpr);
+            $variable   = $this->traductionExpr($targetExpr);
         }
 
         if ($name == 'i.typeIntervenant') {
@@ -809,13 +809,14 @@ class TraducteurService
 
     protected function traductionFunction(array &$expr, int $i): string
     {
-        $term = $expr[$i];
+        $term      = $expr[$i];
         $functions = [
             'IF'                => 'traductionFunctionIf',
             'AND'               => 'traductionFunctionAnd',
             'OR'                => 'traductionFunctionOr',
             'ISBLANK'           => 'traductionFunctionIsBlank',
             'SUMIF'             => 'traductionFunctionSumIf',
+            'SUMIFS'            => 'traductionFunctionSumIfs',
             'MID'               => 'traductionFunctionMid',
             'COM.MICROSOFT.IFS' => 'traductionFunctionIfs',
             'LEFT'              => 'traductionFunctionLeft',
@@ -862,17 +863,17 @@ class TraducteurService
             'SUM' => 'somme',
         ];
 
-        $term = $expr[$i];
+        $term  = $expr[$i];
         $range = $term['exprs'][0][0];
 
         $name = $functions[$term['name']] ?? $term['name'];
 
         $begin = Calc::cellNameToCoords($range['begin']);
-        $end = Calc::cellNameToCoords($range['end']);
+        $end   = Calc::cellNameToCoords($range['end']);
 
-        if ($begin['row'] == 0 && $end['row'] == 0){ // range infini
+        if ($begin['row'] == 0 && $end['row'] == 0) { // range infini
             $begin['row'] = $this->tableur->mainLine();
-            $end['row'] = 99999999999;
+            $end['row']   = 99999999999;
         }
 
         if ($begin['col'] === $end['col'] && $begin['row'] <= $this->tableur->mainLine() && $end['row'] >= 500) {
@@ -913,22 +914,22 @@ class TraducteurService
     protected function traductionFunctionIfs(array &$expr, int $i): string
     {
         $term = $expr[$i];
-        $php = '';
+        $php  = '';
 
         $exprs = $term['exprs'];
 
         $index = 0;
         while (array_key_exists($index, $exprs)) {
             $test = $exprs[$index];
-            $val = $exprs[$index + 1];
+            $val  = $exprs[$index + 1];
 
-            if ($php != ''){
+            if ($php != '') {
                 $php .= 'else';
             }
 
-            $php .= 'if (' . $this->traductionExpr($test) . "){\n";
-            $php .= $this->indent($this->returnPhp($this->traductionExpr($val)));
-            $php .= '}';
+            $php   .= 'if (' . $this->traductionExpr($test) . "){\n";
+            $php   .= $this->indent($this->returnPhp($this->traductionExpr($val)));
+            $php   .= '}';
             $index += 2;
         }
 
@@ -940,12 +941,12 @@ class TraducteurService
     protected function traductionFunctionAnd(array &$expr, int $i): string
     {
         $term = $expr[$i];
-        $php = '';
+        $php  = '';
 
         if (!empty($term['exprs'])) {
             $plExprs = [];
             foreach ($term['exprs'] as $e => $fExpr) {
-                $fExpr[] = null;
+                $fExpr[]     = null;
                 $plExprs[$e] = $this->traductionExpr($fExpr);
             }
             $php .= implode(' && ', $plExprs);
@@ -963,12 +964,12 @@ class TraducteurService
     protected function traductionFunctionOr(array &$expr, int $i): string
     {
         $term = $expr[$i];
-        $php = '';
+        $php  = '';
 
         if (!empty($term['exprs'])) {
             $plExprs = [];
             foreach ($term['exprs'] as $e => $fExpr) {
-                $fExpr[] = null;
+                $fExpr[]     = null;
                 $plExprs[$e] = $this->traductionExpr($fExpr);
             }
             $php .= implode(' || ', $plExprs);
@@ -1003,7 +1004,7 @@ class TraducteurService
     {
         $term = $expr[$i];
 
-        $plage = $term['exprs'][0][0];
+        $plage   = $term['exprs'][0][0];
         $critere = $term['exprs'][1];
         if (isset($term['exprs'][2][0])) {
             $plageSomme = $term['exprs'][2][0];
@@ -1014,7 +1015,7 @@ class TraducteurService
 
         $php = "\$val = 0;\n";
         for ($c = 0; $c <= ($plage['colEnd'] - $plage['colBegin']); $c++) {
-            $col = Calc::numberToLetter($plage['colBegin'] + $c);
+            $col     = Calc::numberToLetter($plage['colBegin'] + $c);
             $colDest = Calc::numberToLetter($plageSomme['colBegin'] + $c);
 
             $iftest = $critere;
@@ -1031,7 +1032,71 @@ class TraducteurService
 
             $php .= 'foreach ($this->volumesHoraires as $l => $volumesHoraire) {' . "\n";
             $php .= "  if ($iftest){\n";
-            $php .= "    \$val += ".$this->traductionExpr($sumExpr).";\n";
+            $php .= "    \$val += " . $this->traductionExpr($sumExpr) . ";\n";
+            $php .= "  }\n";
+            $php .= "}\n";
+        }
+
+        $php .= 'return ' . $this->traductionExpr($term['returnExpr']);
+
+//        echo '<pre>' . htmlentities($php) . '</pre>';
+
+        return $php;
+    }
+
+
+
+    protected function traductionFunctionSumIfs(array &$expr, int $i): string
+    {
+        $term = $expr[$i];
+
+        $plage = $term['exprs'][0][0];
+
+        $index = 1;
+        $tests = [];
+        while (array_key_exists($index, $term['exprs'])) {
+            $critere = $term['exprs'][$index];
+            $index++;
+            $test    = $term['exprs'][$index][0] ?? null;
+            $tests[] = [
+                'critere' => $critere,
+                'test'    => $test,
+            ];
+            $index++;
+        }
+
+        $ifTestBase = [
+            'type' => 'function',
+            'name' => 'AND',
+            'exprs' => [],
+        ];
+
+        $php = "\$val = 0;\n";
+        for ($c = 0; $c <= ($plage['colEnd'] - $plage['colBegin']); $c++) {
+            $col     = Calc::numberToLetter($plage['colBegin'] + $c);
+            $colDest = Calc::numberToLetter($plage['colBegin'] + $c);
+
+            $ifTest = $ifTestBase;
+            foreach( $tests as $test ) {
+
+            }
+
+
+            $iftest = $critere;
+            array_unshift($iftest, ['type' => 'cell', 'name' => $col . $this->tableur->mainLine()]);
+
+            $this->transformer($iftest);
+            $iftest = $this->traductionExpr($iftest);
+
+            $sumExpr = [[
+                'type' => 'cell',
+                'name' => $colDest,
+            ]];
+            $this->transformer($sumExpr);
+
+            $php .= 'foreach ($this->volumesHoraires as $l => $volumesHoraire) {' . "\n";
+            $php .= "  if ($iftest){\n";
+            $php .= "    \$val += " . $this->traductionExpr($sumExpr) . ";\n";
             $php .= "  }\n";
             $php .= "}\n";
         }
@@ -1048,11 +1113,11 @@ class TraducteurService
     protected function traductionFunctionMid(array &$expr, int $i): string
     {
         $term = $expr[$i];
-        $php = 'substr(';
+        $php  = 'substr(';
 
         $phpExprs = [];
         foreach ($term['exprs'] as $e => $fExpr) {
-            $fExpr[] = null;
+            $fExpr[]      = null;
             $phpExprs[$e] = $this->traductionExpr($fExpr);
         }
 
@@ -1095,7 +1160,7 @@ class TraducteurService
 
         $expr = $this->traductionExpr($term['exprs'][0]);
 
-        $php = "!(".$expr.')';
+        $php = "!(" . $expr . ')';
 
         return $php;
     }

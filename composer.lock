@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "695764275b82447311ae8bdc0a2d43aa",
+    "content-hash": "c25c64876ecbc2e1d1cf961277c0efa4",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7538,12 +7538,10 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "71f5a3ae9d0e848ba31def27ee3ce29042923ced"
+                "reference": "202046e1a962d15d0b5cc753d7586dd8d0de1685"
             },
             "require": {
                 "beberlei/assert": "^3.3",
-                "doctrine/dbal": "^3.9",
-                "doctrine/doctrine-orm-module": "^6.3",
                 "ext-bcmath": "*",
                 "ext-intl": "*",
                 "ext-ldap": "*",
@@ -7571,6 +7569,8 @@
                 "laminas/laminas-test": "^4.12"
             },
             "suggest": {
+                "doctrine/dbal": "^3.9",
+                "doctrine/doctrine-orm-module": "^6.3",
                 "laminas/laminas-mvc-plugin-fileprg": "^1.7",
                 "laminas/laminas-mvc-plugin-prg": "^1.8",
                 "mpdf/mpdf": "^8.0"
@@ -7590,7 +7590,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2025-07-16T12:41:56+00:00"
+            "time": "2025-07-18T15:25:26+00:00"
         },
         {
             "name": "unicaen/authentification",

@@ -1,0 +1,182 @@
+<?php
+
+namespace Framework\Navigation;
+
+use Framework\Authorize\Authorize;
+use Framework\Router\Router;
+use Psr\Container\ContainerInterface;
+
+class Page
+{
+
+    /** @var array|Page[] */
+    private array $pages = [];
+
+    private Router $router;
+    private Authorize $authorize;
+
+
+
+    public function __construct(
+        private readonly Navigation         $navigation,
+        private readonly ContainerInterface $container,
+        private readonly array              $data,
+        private ?Page                       $parent = null,
+    )
+    {
+        $this->authorize = $this->container->get(Authorize::class);
+        $this->router = $this->container->get(Router::class);
+
+        if (array_key_exists('pages', $data)) {
+            // tri direct
+            uasort($data['pages'], function (array $p1, array $p2) {
+                return ($p1['order'] ?? 0) <=> ($p2['order'] ?? 0);
+            });
+            foreach ($data['pages'] as $pageName => $pageData) {
+                $this->pages[$pageName] = new Page($this->navigation, $this->container, $pageData, $this);
+            }
+        }
+    }
+
+
+
+    public function isFooter(): bool
+    {
+        return $this->data['footer'] ?? false;
+    }
+
+
+
+    public function isVisible(): bool
+    {
+        $visible = $this->data['visible'] ?? true;
+
+        if (false === $visible) {
+            return false;
+        }
+
+        $ressource = $this->data['resource'] ?? null;
+
+
+        if (is_string($ressource)) {
+            $visible = $this->authorize->isAllowedResource($ressource);
+        }
+
+        if (is_string($visible) && $this->container->has($visible)) {
+            $assertion = $this->container->get($visible);
+            $visible   = $assertion->__invoke($this->data);
+        }
+
+        return $visible;
+    }
+
+
+
+    public function isActive(): bool
+    {
+        if (array_key_exists('uri', $this->data)) {
+            $uri = $this->router->uriFromUrl($this->data['uri']);
+
+            return str_starts_with($this->router->getCurrentUri(), $uri);
+        }
+        if (array_key_exists('route', $this->data)) {
+            $route = $this->router->getRoute($this->data['route'] ?? null);
+
+            $currentRoute = $this->router->getCurrentRoute();
+
+            if (!$currentRoute){
+                return false;
+            }
+
+            return $route->isParentOf($currentRoute);
+        }
+
+        return false;
+    }
+
+
+
+    public function isParentOf(Page $page): bool
+    {
+        do {
+            if ($this === $page) {
+                return true;
+            }
+        } while ($page = $page->getParent());
+
+        return false;
+    }
+
+
+
+    public function getLabel(): string
+    {
+        return $this->data['label'] ?? '';
+    }
+
+
+
+    public function getTitle(): string
+    {
+        return $this->data['title'] ?? '';
+    }
+
+
+
+    public function getRoute(): ?string
+    {
+        return $this->data['route'] ?? null;
+    }
+
+
+
+    public function getParent(): ?Page
+    {
+        return $this->parent;
+    }
+
+
+
+    public function getPage(string $name): ?Page
+    {
+        return $this->pages[$name] ?? null;
+    }
+
+
+
+    /**
+     * @return array|Page[]
+     */
+    public function getPages(): array
+    {
+        return $this->pages;
+    }
+
+
+
+    public function getVisiblePages(): array
+    {
+        $pages = $this->pages;
+        foreach ($pages as $pname => $page) {
+            if (!$page->isVisible()) {
+                unset($pages[$pname]);
+            }
+        }
+        return $pages;
+    }
+
+
+
+    public function getUri(array $params = []): string
+    {
+        if (array_key_exists('uri', $this->data)) {
+            return $this->data['uri'];
+        }
+
+        if (array_key_exists('route', $this->data)) {
+            return $this->router->url($this->data['route'], $params);
+        }
+
+        throw new \Exception('La route ou l\'uri n\'ont pas été définies');
+    }
+}

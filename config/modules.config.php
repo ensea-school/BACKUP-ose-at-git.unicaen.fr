@@ -30,6 +30,7 @@ $modules = [
     'UnicaenSiham',
     'UnicaenVue',
     'Unicaen\BddAdmin',
+    'Framework',
     'Application',
     'Administration',
     'Agrement',
@@ -53,6 +54,7 @@ $modules = [
     'UnicaenSignature',
     'Signature',
     'Workflow',
+    'Utilisateur',
 ];
 
 if (AppAdmin::config()['actul']['host'] ?? null){

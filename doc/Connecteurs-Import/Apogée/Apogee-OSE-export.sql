@@ -3,11 +3,12 @@
 -- Auteur : Bruno Bernard bruno.bernard@unicaen.fr
 --
 -- Evolutions
--- 04/10/2019 Plafonnement de la charge d enseignement liee a l'encadrement individuel (decision d etablissement unicaen) : 1 heure maxi par etudiant
--- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : s il existe une charge EAD alors a_distance = Oui sinon a_distance = Non
--- 31/03/2021 Exclusion des ELP fictifs en testant le temoin TEM_FICTIF de leur nature et non plus leur code nature
--- 01/06/2021 Alimentation nouvelle table des effectifs par etape par annee et par regime d inscription
+-- 04/10/2019 Plafonnement de la charge d'enseignement liee a l'encadrement individuel (decision d'établissement unicaen) : 1 heure maxi par étudiant
+-- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : s'il existe une charge EAD alors a_distance = Oui sinon a_distance = Non
+-- 31/03/2021 Exclusion des ELP fictifs en testant le témoin TEM_FICTIF de leur nature et non plus leur code nature
+-- 01/06/2021 Alimentation nouvelle table des effectifs par étape par année et par regime d'inscription
 -- 22/07/2025 Suppression des tables tampon ose_groupe_type_formation et ose_type_formation, modification requête alimentation de ose_etape
+-- 01/09/2025 Les formations sont en FI par défaut, et sinon selon les régimes d'inscription en FA ou FC
 
 --
 -- Reinitialisation des tables
@@ -96,7 +97,7 @@ select
   least ( tmp.specifique_echanges, 1 )                                 as specifique_echanges,
   min ( tmp.domaine_fonctionnel )                                      as domaine_fonctionnel,
   -- Determiner en fonction des regimes d inscription si la VET est ouverte en FI, en FC et/ou en apprentissage
-  max ( case when rve.cod_rgi in ( '1', '3', '7' ) then 1 else 0 end ) as FI,
+  max ( case when rve.cod_rgi not in ( '4', '2', '5', '6' ) then 1 else 0 end ) as FI,
   max ( case when rve.cod_rgi in ( '4' )           then 1 else 0 end ) as FA,
   max ( case when rve.cod_rgi in ( '2', '5', '6' ) then 1 else 0 end ) as FC,
   tmp.cod_etp,
@@ -123,7 +124,7 @@ insert into ose_etape_effectifs
 select
   source_code      as z_etape_id,
   cod_anu          as annee_id,
-  sum( case when iae.cod_rge in ('1', '3', '7') then 1 else 0 end ) as effectif_FI,
+  sum( case when iae.cod_rge not in ('4', '2', '5', '6') then 1 else 0 end ) as effectif_FI,
   sum( case when iae.cod_rge in ('4')           then 1 else 0 end ) as effectif_FA,
   sum( case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end ) as effectif_FC
 from ose_etape   etp
@@ -460,7 +461,7 @@ with tmp_element_effectifs as (
   select
     elp.source_code,
     ice.cod_anu,
-    case when iae.cod_rge in ('1', '3', '7') then 1 else 0 end as effectif_FI,
+    case when iae.cod_rge not in ('4', '2', '5', '6') then 1 else 0 end as effectif_FI,
     case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
     case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
   from ose_element_pedagogique elp
@@ -479,7 +480,7 @@ with tmp_element_effectifs as (
   select
     elp.source_code,
     ice.cod_anu,
-    case when iae.cod_rge in ('1', '3', '7') then 1 else 0 end as effectif_FI,
+    case when iae.cod_rge not in ('4', '2', '5', '6') then 1 else 0 end as effectif_FI,
     case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
     case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
   from ose_element_pedagogique elp

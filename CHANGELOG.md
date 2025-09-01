@@ -31,6 +31,10 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 # OSE 24.9 (début septembre)
 
+## Nouveautés
+
+* Ajout d'indicateurs (231 et 241) pour les permanents et les vacataires pour gérer les pièces justificatives facultatives (#62574)
+
 ## Corrections
 
 * Correction demande de mise en paiement avec paiement par la composante d'affectation (#62759)

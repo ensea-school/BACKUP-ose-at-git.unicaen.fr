@@ -287,23 +287,11 @@ class WorkflowService extends AbstractService
                 }
             }
         }
-        //New EntityManager if closed
-        if (!$this->entityManager->isOpen()) {
-            $connection = $this->entityManager->getConnection();
-            $config     = $this->entityManager->getConfiguration();
-
-            $this->entityManager = new EntityManager(
-                $connection,
-                $config
-            );
-        }
-
         if (array_key_exists($intervenant->getId(), $this->feuillesDeRoute)) {
             foreach ($this->feuillesDeRoute[$intervenant->getId()] as $fdr) {
                 foreach ($fdr as $etp) {
                     /** @var $etp WorkflowEtape */
                     foreach ($etp->getEtapes() as $etape) {
-                        $etape = $this->entityManager->find(TblWorkflow::class, $etape->getId());
                         $this->getEntityManager()->refresh($etape);
                     }
                 }

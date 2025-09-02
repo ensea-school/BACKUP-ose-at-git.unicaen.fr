@@ -6,6 +6,7 @@ use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Doctrine\ORM\EntityManager;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -286,13 +287,23 @@ class WorkflowService extends AbstractService
                 }
             }
         }
+        //New EntityManager if closed
+        if (!$this->entityManager->isOpen()) {
+            $connection = $this->entityManager->getConnection();
+            $config     = $this->entityManager->getConfiguration();
 
-        /* Mise à jour des entités */
+            $this->entityManager = new EntityManager(
+                $connection,
+                $config
+            );
+        }
+
         if (array_key_exists($intervenant->getId(), $this->feuillesDeRoute)) {
             foreach ($this->feuillesDeRoute[$intervenant->getId()] as $fdr) {
                 foreach ($fdr as $etp) {
                     /** @var $etp WorkflowEtape */
                     foreach ($etp->getEtapes() as $etape) {
+                        $etape = $this->entityManager->find(TblWorkflow::class, $etape->getId());
                         $this->getEntityManager()->refresh($etape);
                     }
                 }

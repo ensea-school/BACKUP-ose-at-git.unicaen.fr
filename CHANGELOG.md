@@ -39,6 +39,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 * Correction demande de mise en paiement avec paiement par la composante d'affectation (#62759)
 * L'affichage de la saisie de services fonctionne à nouveau avec des enseignements pris sur l'extérieur (pb arrivé en 24.8)
+* Correction d'un problème sur le refus d'une candidature dans le cadre des missions (#63060)
 
 
 

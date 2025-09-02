@@ -85,9 +85,9 @@ class WorkflowEtape implements ParametreEntityInterface
 
 
 
-    public function getLibelle(Role $role)
+    public function getLibelle(?Role $role = null): string
     {
-        if ($role->getIntervenant()) {
+        if ($role && $role->getIntervenant()) {
             return $this->getLibelleIntervenant();
         } else {
             return $this->getLibelleAutres();

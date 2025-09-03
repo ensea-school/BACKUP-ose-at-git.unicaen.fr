@@ -141,6 +141,18 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
+        'REPLY_TO'                  => [
+            'name'        => 'REPLY_TO',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 500,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 12,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

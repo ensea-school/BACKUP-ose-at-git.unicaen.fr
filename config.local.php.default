@@ -272,7 +272,7 @@ return [
     ],
 
 
-    /* Génération d'états de sortie avec Unoconv */
+/* Génération d'états de sortie avec Unoconv */
     'etats-sortie'       => [
         /* Serveur où se situe le service Unoconv ou odconv */
         'host'    => '127.0.0.1', // par défaut sur la même machine que OSE

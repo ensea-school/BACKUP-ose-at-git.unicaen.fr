@@ -349,7 +349,7 @@ return [
             'name'        => 'LIBELLE_COURT',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 25,
+            'length'      => 50,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,

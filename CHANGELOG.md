@@ -35,6 +35,10 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 * Ajout d'indicateurs (231 et 241) pour les permanents et les vacataires pour gérer les pièces justificatives facultatives (#62574)
 
+## Améliorations
+
+* Passage de 25 à 50 caractères autorisés pour les libellés courts des structures
+
 ## Corrections
 
 * Correction demande de mise en paiement avec paiement par la composante d'affectation (#62759)

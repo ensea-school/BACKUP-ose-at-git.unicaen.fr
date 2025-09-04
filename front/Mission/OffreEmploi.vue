@@ -284,13 +284,13 @@ export default {
         },
         supprimer(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('supprimer', this.offre);
             });
         },
         postuler(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('postuler', this.offre);
             });
         },

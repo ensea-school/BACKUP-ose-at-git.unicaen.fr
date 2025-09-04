@@ -43,6 +43,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 </div>
 <div class="row">
     <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('fa')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
         <?= $this->formControlGroup($form->get('obligatoire-hnp')); ?>
     </div>
 </div>

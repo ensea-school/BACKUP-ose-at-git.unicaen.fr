@@ -4,8 +4,8 @@ WITH i_h AS (
     s.intervenant_id,
     SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NULL THEN vh.heures ELSE 0 END) heures,
     SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NOT NULL THEN vh.heures ELSE 0 END) heures_non_payables,
-    --SUM(ep.taux_fc) fc
-    SUM(CASE WHEN ep.taux_fc > 0 THEN vh.heures ELSE 0 END) fc
+    SUM(CASE WHEN ep.taux_fc > 0 THEN vh.heures ELSE 0 END) fc,
+    SUM(CASE WHEN ep.taux_fa > 0 THEN vh.heures ELSE 0 END) fa
   FROM
          service               s
     JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
@@ -82,6 +82,8 @@ WHERE i.histo_destruction IS NULL
       END = 1
   -- Filtre FC
   AND (tpjs.fc = 0 OR i_h.fc > 0)
+-- Filtre FA
+  AND (tpjs.fa = 0 OR i_h.fa > 0)
 GROUP BY i.annee_id,
          i.id,
          i.code,

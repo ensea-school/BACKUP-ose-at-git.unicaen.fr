@@ -29,6 +29,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
         $object->setSeuilHetd((empty($data['seuil-hetd']) ? 0 : $data['seuil-hetd']));
         $object->setTypeHeureHetd($data['type-heure-hetd']);
         $object->setFC($data['fc']);
+        $object->setFA($data['fa'] ?? false);
         $object->setDureeVie($data['duree-vie']);
         $object->setObligatoireHNP($data['obligatoire-hnp']);
 
@@ -54,6 +55,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
             'changement-rib'        => $object->getChangementRIB(),
             'nationalite-etrangere' => $object->isNationaliteEtrangere(),
             'fc'                    => $object->getFc(),
+            'fa' => $object->getFa(),
             'duree-vie'             => $object->getDureeVie(),
             'obligatoire-hnp'       => $object->getObligatoireHNP(),
         ];

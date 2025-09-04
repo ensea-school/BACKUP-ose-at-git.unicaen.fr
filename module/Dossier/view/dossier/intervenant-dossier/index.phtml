@@ -134,6 +134,13 @@ Debut du formulaire
             echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
         }
     }
+    if ($fieldsetRules['fieldset-adresse'] == 1) {
+        if ($editAdresse) {
+            echo $this->partial('dossier/intervenant-dossier/partial/formAdresse', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        } else {
+            echo $this->partial('dossier/intervenant-dossier/partial/formAdresseView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        }
+    }
 
     ?>
 

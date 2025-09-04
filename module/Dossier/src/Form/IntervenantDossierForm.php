@@ -35,7 +35,7 @@ class IntervenantDossierForm extends AbstractForm
 
     protected ?AbstractFieldset $dossierContactFieldset = null;
 
-    protected ?AbstractFieldset $dossierInseeFiedlset = null;
+    protected ?AbstractFieldset $dossierInseeFieldset = null;
 
     protected ?AbstractFieldset $dossierBancaireFieldset = null;
 
@@ -61,8 +61,9 @@ class IntervenantDossierForm extends AbstractForm
         $this->setHydrator($hydrator);
 
         $options = [
-            'dossierIntervenant'      => $dossierIntervenant,
-            'dossierIdentiteFieldset' => &$this->dossierIdentiteFieldset,
+            'dossierIntervenant'                    => $dossierIntervenant,
+            'dossierIdentiteFieldset'               => &$this->dossierIdentiteFieldset,
+            'dossierIdentiteComplementaireFieldset' => &$this->dossierIdentiteComplementaireFieldset,
         ];
 
 
@@ -98,7 +99,7 @@ class IntervenantDossierForm extends AbstractForm
                 $this->add($this->$propertyName);
             }
         }
-       
+
         $this->setAttribute('id', 'dossier');
 
 

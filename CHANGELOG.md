@@ -37,7 +37,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * Possibilité de filtrer les demandes de pièces jointes par rapport à de la FA (#63083)
 * Nouvelle formule pour La Rochelle
 * Nouvelle formule pour Lyon 1
-
+* Nouvelle formule pour Picardie
 
 ## Améliorations
 

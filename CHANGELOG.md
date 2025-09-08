@@ -34,6 +34,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 ## Nouveautés
 
 * Ajout d'indicateurs (231 et 241) pour les permanents et les vacataires pour gérer les pièces justificatives facultatives (#62574)
+* Possibilité de filtrer les demandes de pièces jointes par rapport à de la FA (#63083)
 
 ## Améliorations
 

@@ -46,7 +46,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * L'affichage de la saisie de services fonctionne à nouveau avec des enseignements pris sur l'extérieur (pb arrivé en 24.8)
 * Correction d'un problème sur le refus d'une candidature dans le cadre des missions (#63060)
 * Correction sur la saisie d'enseignement hors établissement (#63120)
-
+* Remontée de la composante d'affectation si celle du contrat est null dans l'indicateur des contrats 
 
 
 # OSE 24.8 (23/07/2025)

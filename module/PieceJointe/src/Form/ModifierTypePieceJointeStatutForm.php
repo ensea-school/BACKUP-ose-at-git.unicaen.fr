@@ -80,6 +80,13 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
         ]);
 
         $this->add([
+                       'name'    => 'fa',
+                       'options' => [
+                           'label' => 'Limité aux actions de formation apprentissage',
+                       ],
+                       'type'    => 'Checkbox',
+                   ]);
+        $this->add([
             'type'       => 'Number',
             'name'       => 'duree-vie',
             'options'    => [
@@ -145,6 +152,9 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
                 'required' => true,
             ],
             'fc'              => [
+                'required' => true,
+            ],
+            'fa' => [
                 'required' => true,
             ],
             'obligatoire-hnp' => [

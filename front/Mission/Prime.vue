@@ -231,19 +231,19 @@ export default {
 
         supprimer(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('reload');
             });
         },
         valider(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('reload');
             });
         },
         devalider(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('reload');
             });
         },
@@ -267,7 +267,7 @@ export default {
         },
         supprimerPrime(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('reload');
             });
 

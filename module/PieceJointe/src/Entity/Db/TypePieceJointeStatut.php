@@ -14,23 +14,25 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     use StatutAwareTrait;
     use TypePieceJointeAwareTrait;
 
-    private float $seuilHetd            = 0;
+    private float $seuilHetd = 0;
 
-    private bool  $typeHeureHetd        = false;
+    private bool $typeHeureHetd = false;
 
-    private bool  $fc                   = false;
+    private bool $fc = false;
 
-    private bool  $changementRIB        = false;
+    private bool $fa = false;
 
-    private bool  $nationaliteEtrangere = false;
+    private bool $changementRIB = false;
 
-    private int   $dureeVie             = 1;
+    private bool $nationaliteEtrangere = false;
 
-    private bool  $obligatoireHNP       = false;
+    private int $dureeVie = 1;
 
-    private bool  $obligatoire          = true;
+    private bool $obligatoireHNP = false;
 
-    protected int $numRegle             = 1;
+    private bool $obligatoire = true;
+
+    protected int $numRegle = 1;
 
 
 
@@ -80,6 +82,21 @@ class TypePieceJointeStatut implements ParametreEntityInterface
         return $this;
     }
 
+
+
+    public function getFa(): bool
+    {
+        return $this->fa;
+    }
+
+
+
+    public function setFa(bool $fa): TypePieceJointeStatut
+    {
+        $this->fa = $fa;
+
+        return $this;
+    }
 
 
     public function getChangementRIB(): bool
@@ -191,6 +208,7 @@ class TypePieceJointeStatut implements ParametreEntityInterface
         $txt = $this->getObligatoire() ? 'Obl' : 'Fac';
         if ($this->getSeuilHetd()) $txt .= ' >' . $this->getSeuilHetd();
         if ($this->getFc()) $txt .= ' FC ';
+        if ($this->getFa()) $txt .= ' FA ';
         if ($this->getChangementRIB()) $txt .= ' RIB';
         if ($this->isNationaliteEtrangere()) $txt .= ' Etr';
         if ($this->getDureeVie() && $this->getDureeVie() > 1) $txt .= ' ' . $this->getDureeVie() . 'ans';
@@ -210,6 +228,7 @@ class TypePieceJointeStatut implements ParametreEntityInterface
         $t[] = $this->getObligatoire() ? 'Pièce obligatoire' : 'Pièce facultative';
         if ($this->getSeuilHetd()) $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
         if ($this->getFc()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
+        if ($this->getFa()) $t[] = 'Uniquement avec des enseignements en Formation Apprentissage';
         if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
         if ($this->isNationaliteEtrangere()) $t[] = 'Uniquement si nationalité étrangère';
         if ($this->getDureeVie()) $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie() . ' an(s)';

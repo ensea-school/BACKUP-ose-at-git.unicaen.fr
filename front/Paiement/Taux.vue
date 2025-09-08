@@ -168,7 +168,7 @@ export default {
         },
         supprimer(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refreshListe');
             });
         },

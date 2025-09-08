@@ -1,6 +1,6 @@
 # Version stable
 
-OSE 24.7](#ose-247-08072025)
+OSE 24.8](#ose-248-23072025)
 
 
 # OSE 25 (à venir)
@@ -29,12 +29,34 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 
 
-# OSE 24.8 (à venir juillet 2025)
+# OSE 24.9 (début septembre)
+
+## Nouveautés
+
+* Ajout d'indicateurs (231 et 241) pour les permanents et les vacataires pour gérer les pièces justificatives facultatives (#62574)
+* Possibilité de filtrer les demandes de pièces jointes par rapport à de la FA (#63083)
+
+## Améliorations
+
+* Passage de 25 à 50 caractères autorisés pour les libellés courts des structures
+
+## Corrections
+
+* Correction demande de mise en paiement avec paiement par la composante d'affectation (#62759)
+* L'affichage de la saisie de services fonctionne à nouveau avec des enseignements pris sur l'extérieur (pb arrivé en 24.8)
+* Correction d'un problème sur le refus d'une candidature dans le cadre des missions (#63060)
+* Correction sur la saisie d'enseignement hors établissement (#63120)
+* Remontée de la composante d'affectation si celle du contrat est null dans l'indicateur des contrats
+
+
+# OSE 24.8 (23/07/2025)
 
 ## Nouveautés
 
 * Saisie de service d'enseignement
     * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé (#53620)
+
+* Nouvelle infrastructure de déploiement Docker pour le dév et la prod (pas d'impact sur les procédures actuelles)
 
 ## Corrections
 

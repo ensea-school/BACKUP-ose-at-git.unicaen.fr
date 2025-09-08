@@ -123,7 +123,7 @@ export default {
         },
         refuserCandidature(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.reload();
             });
         },

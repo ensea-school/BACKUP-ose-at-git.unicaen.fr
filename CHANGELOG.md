@@ -29,12 +29,15 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 
 
-# OSE 24.9 (début septembre)
+# OSE 24.9 (09/09/2025)
 
 ## Nouveautés
 
 * Ajout d'indicateurs (231 et 241) pour les permanents et les vacataires pour gérer les pièces justificatives facultatives (#62574)
 * Possibilité de filtrer les demandes de pièces jointes par rapport à de la FA (#63083)
+* Nouvelle formule pour La Rochelle
+* Nouvelle formule pour Lyon 1
+
 
 ## Améliorations
 
@@ -47,6 +50,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * Correction d'un problème sur le refus d'une candidature dans le cadre des missions (#63060)
 * Correction sur la saisie d'enseignement hors établissement (#63120)
 * Remontée de la composante d'affectation si celle du contrat est null dans l'indicateur des contrats 
+* Correction de la formule du Havre (sur les anciennes années)
 
 
 # OSE 24.8 (23/07/2025)

@@ -120,7 +120,7 @@ class WorkflowEtape implements ParametreEntityInterface
 
 
 
-    public function __addAvancement(string $avancement, string $description): void
+    public function __addAvancement(int $avancement, string $description): void
     {
         $this->avancements[$avancement] = $description;
     }

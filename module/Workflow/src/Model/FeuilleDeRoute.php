@@ -201,9 +201,9 @@ class FeuilleDeRoute
             $fdre->numero        = count($this->fdr) + 1;
             $fdre->libelle       = $etape->getLibelle($role);
             if ($intervenant && !$role) {
-                $fdre->url = $this->service->getUrl($etape->getRouteIntervenant() ?: $etape->getRoute(), ['intervenant' => $this->getIntervenant()->getId()]);
+                $fdre->url = $this->service->getUrl($etape->getRouteIntervenant() ?: $etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
             } else {
-                $fdre->url = $this->service->getUrl($etape->getRoute(), ['intervenant' => $this->getIntervenant()->getId()]);
+                $fdre->url = $this->service->getUrl($etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
             }
             $fdre->atteignable       = $atteignable;
             $fdre->objectif          = 0;
@@ -214,6 +214,9 @@ class FeuilleDeRoute
         } else {
             $fdre = $this->fdr[$etape->getCode()];
         }
+
+        $fdre->objectif += $objectif;
+        $fdre->realisation += $realisation;
 
         if ($structureId) {
             if (!$this->getStructure() || $this->getStructure()->getId() == $structureId) {

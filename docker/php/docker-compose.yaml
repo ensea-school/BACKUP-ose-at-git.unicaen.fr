@@ -21,6 +21,7 @@ services:
       - APP_HOST=${APP_HOST:-localhost}
       - DEV_VITE_PORT=${DEV_VITE_PORT:-}
       - DEV_VITE_URL=${DEV_VITE_URL:-}
+      - PHP_IDE_CONFIG=serverName=${APP_HOST:-localhost}
     working_dir: /var/www/html
     volumes:
       - ../../:/var/www/html

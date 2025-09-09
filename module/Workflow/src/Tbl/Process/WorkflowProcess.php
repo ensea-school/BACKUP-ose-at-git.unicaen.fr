@@ -4,17 +4,19 @@ namespace Workflow\Tbl\Process;
 
 
 use Application\Cache\Traits\CacheContainerTrait;
+use Application\Entity\Db\Perimetre;
 use Application\Service\AnneeService;
+use Intervenant\Entity\Db\Intervenant;
 use Unicaen\BddAdmin\Bdd;
 use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddService;
 use UnicaenTbl\TableauBord;
 use Workflow\Entity\Db\WorkflowEtape;
+use Workflow\Entity\Db\WorkflowEtapeDependance;
 use Workflow\Service\WorkflowService;
 use Workflow\Tbl\Process\Model\IntervenantEtape;
 use Workflow\Tbl\Process\Model\IntervenantEtapeStructure;
-use Workflow\Tbl\Process\Sub\Calculateur;
 
 /**
  * Description of WorkflowProcess
@@ -30,8 +32,6 @@ class WorkflowProcess implements ProcessInterface
      */
     private array $workflows = [];
 
-    private Calculateur $calculateur;
-
 
 
     public function __construct(
@@ -41,16 +41,21 @@ class WorkflowProcess implements ProcessInterface
         private readonly WorkflowService $workflowService,
     )
     {
-        $this->calculateur = new Calculateur();
     }
 
 
 
-    public function test()
+    /**
+     * @param Intervenant $intervenant
+     * @return IntervenantEtape[]
+     * @throws \Exception
+     */
+    public function debugTrace(Intervenant $intervenant): array
     {
-        $bdd = $this->bdd;
+        $this->load(['intervenant_id' => $intervenant->getId()]);
+        $this->calculDependances($this->workflows[$intervenant->getId()]);
 
-        dd($this->bdd->select('select * from annee where id = 2024'));
+        return $this->workflows[$intervenant->getId()];
     }
 
 
@@ -67,9 +72,104 @@ class WorkflowProcess implements ProcessInterface
         } else {
             $this->load($params);
             foreach ($this->workflows as $intervenantId => $wf) {
-                $this->calculateur->run($this->workflows[$intervenantId]);
+                $this->calculDependances($this->workflows[$intervenantId]);
             }
             $this->save($tableauBord, $params);
+        }
+    }
+
+
+
+    protected function calculDependances(array &$workflow)
+    {
+        foreach ($workflow as $etapeCode => $etape) {
+            $dependances = $etape->etape->getDependances();
+            foreach ($dependances as $dependance) {
+                if (!$dependance->isActive()) {
+                    // La dépendance est inactive => on passe
+                    continue;
+                }
+                if ($dependance->getTypeIntervenant() && $etape->typeIntervenantId !== $dependance->getTypeIntervenant()->getId()) {
+                    // La dépendance est relative à un autre type d'intervenant
+                    continue;
+                }
+                $etapePrec = $workflow[$dependance->getEtapePrecedante()->getCode()] ?? null;
+                if (!$etapePrec) {
+                    // Le test n'est pas pertinent => l'étape précédente n'existe pas
+                    continue;
+                }
+                foreach ($etape->structures as $structure) {
+                    $precStructures = $etapePrec->structures;
+                    foreach ($precStructures as $strId => $precStructure) {
+                        if (!$this->inPerimetre($dependance->getPerimetre()->getCode(), $structure->structure, $strId)) {
+                            unset($precStructures[$strId]);
+                        }
+                    }
+
+                    $isOk = $this->isDependanceOk($dependance->getAvancement(), $precStructures);
+                    if (!$isOk) {
+                        $structure->atteignable         = false;
+                        $structure->whyNonAtteignable[] = $etapePrec->etape->getDescNonFranchie();
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    /**
+     * @param int                               $avancement
+     * @param array|IntervenantEtapeStructure[] $precs
+     * @return bool
+     */
+    public function isDependanceOk(int $avancement, array $precs): bool
+    {
+        $debute   = false;
+        $partiel  = false;
+        $integral = true;
+
+        foreach ($precs as $prec) {
+            if ($prec->realisation > 0 || $prec->partiel > 0) {
+                $debute = true;
+            }
+            if ($prec->partiel > 0) {
+                $partiel = true;
+            }
+            if ($prec->realisation >= $prec->objectif) {
+                $partiel = true;
+            } else {
+                $integral = false;
+            }
+        }
+
+        switch ($avancement) {
+            case WorkflowEtapeDependance::AVANCEMENT_DEBUTE:
+                if ($debute) {
+                    return true;
+                }
+            case WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT:
+                if ($partiel) {
+                    return true;
+                }
+            case WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT:
+                if ($integral) {
+                    return true;
+                }
+        }
+
+        return false;
+    }
+
+
+
+    private function inPerimetre(string $perimetre, int $structure, int $precStructure)
+    {
+        switch ($perimetre) {
+            case Perimetre::ETABLISSEMENT:
+                return true;
+            case Perimetre::COMPOSANTE:
+                return $structure == $precStructure || 0 === $precStructure;
         }
     }
 
@@ -82,6 +182,8 @@ class WorkflowProcess implements ProcessInterface
         //if (empty($cache->alimentationSql)) {
         $cache->alimentationSql = $this->makeSql();
         //}
+
+        $this->workflows = [];
 
         $sql  = $this->bddService->injectKey($cache->alimentationSql, $params);
         $stmt = $this->bdd->selectEach($sql);
@@ -99,13 +201,12 @@ class WorkflowProcess implements ProcessInterface
             }
 
             if (!array_key_exists($etape->getCode(), $this->workflows[$intevenant])) {
-                $ie                      = new IntervenantEtape();
+                $ie                      = new IntervenantEtape($etape);
                 $ie->annee               = (int)$d['annee_id'];
                 $ie->typeIntervenantId   = (int)$d['type_intervenant_id'];
                 $ie->typeIntervenantCode = $d['type_intervenant_code'];
                 $ie->statut              = (int)$d['statut_id'];
                 $ie->intervenant         = $intevenant;
-                $ie->etape               = $etape;
 
                 $this->workflows[$intevenant][$etape->getCode()] = $ie;
             } else {

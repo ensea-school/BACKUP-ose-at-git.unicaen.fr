@@ -19,4 +19,25 @@ class IntervenantEtapeStructure
     {
         return round($this->realisation,2) >= round($this->objectif,2);
     }
+
+
+
+    public function createfromArray(array $data): void
+    {
+        if (isset($data['structure'])){
+            $this->structure = $data['structure'];
+        }
+        if (isset($data['atteignable'])){
+            $this->atteignable = $data['atteignable'];
+        }
+        if (isset($data['objectif'])){
+            $this->objectif = $data['objectif'];
+        }
+        if (isset($data['partiel'])){
+            $this->partiel = $data['partiel'];
+        }
+        if (isset($data['realisation'])){
+            $this->realisation = $data['realisation'];
+        }
+    }
 }

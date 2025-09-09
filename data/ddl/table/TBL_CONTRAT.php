@@ -55,6 +55,19 @@ return [
             'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 42,
+            'position'    => 42,
+            'commentaire' => NULL,
+        ],
+        'AUTRE_LIBELLE'             => [
+            'name'        => 'AUTRE_LIBELLE',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 1000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'AUTRE_LIBELLE'             => [
@@ -138,7 +151,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'EDITE'                     => [

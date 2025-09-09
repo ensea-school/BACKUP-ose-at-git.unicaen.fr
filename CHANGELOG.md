@@ -1,6 +1,6 @@
 # Version stable
 
-OSE 24.7](#ose-247-08072025)
+OSE 24.9](#ose-249-09092025)
 
 
 # OSE 25 (à venir)
@@ -8,14 +8,14 @@ OSE 24.7](#ose-247-08072025)
 ## Nouveautés
 
 * Nouveau workflow plus souple et compréhensible
-  * Possibilité de personnaliser l'ordre des étapes, dans une certaine mesure
-  * Menus intervenant remaniés et plus cohérents
+    * Possibilité de personnaliser l'ordre des étapes, dans une certaine mesure
+    * Menus intervenant remaniés et plus cohérents
 
-* Données personnelles 
-  * Possibilité de collecter les données personnelles en deux étapes : en cours de recrutement et finalisation après recrutement 
+* Données personnelles
+    * Possibilité de collecter les données personnelles en deux étapes : en cours de recrutement et finalisation après recrutement
 
 * Pièces justificatives
-  * Possibilité de collecter les pièces justificatives en deux étapes : en cours de recrutement et finalisation après recrutement
+    * Possibilité de collecter les pièces justificatives en deux étapes : en cours de recrutement et finalisation après recrutement
 
 * Possibilité d'exploiter 2 états de sortie différents via le menu "Services"
 
@@ -29,18 +29,48 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 
 
-# OSE 24.8 (à venir juillet 2025)
+# OSE 24.9 (09/09/2025)
+
+## Nouveautés
+
+* Ajout d'indicateurs (231 et 241) pour les permanents et les vacataires pour gérer les pièces justificatives facultatives (#62574)
+* Possibilité de filtrer les demandes de pièces jointes par rapport à de la FA (#63083)
+* Nouvelle formule pour La Rochelle (#61573)
+* Nouvelle formule pour Lyon 1 (#56775)
+* Nouvelle formule pour Picardie (#60997)
+* Nouvelle formule pour Paris 8 (#48203)
+
+## Améliorations
+
+* Passage de 25 à 50 caractères autorisés pour les libellés courts des structures
+
+## Corrections
+
+* Correction demande de mise en paiement avec paiement par la composante d'affectation (#62759)
+* L'affichage de la saisie de services fonctionne à nouveau avec des enseignements pris sur l'extérieur (pb arrivé en 24.8)
+* Correction d'un problème sur le refus d'une candidature dans le cadre des missions (#63060)
+* Correction sur la saisie d'enseignement hors établissement (#63120)
+* Remontée de la composante d'affectation si celle du contrat est null dans l'indicateur des contrats 
+* Correction de la formule du Havre (sur les anciennes années) (#62443)
+* Correction de la requête d'alimentation de la formule de Lyon 3 (#38136)
+
+
+# OSE 24.8 (23/07/2025)
 
 ## Nouveautés
 
 * Saisie de service d'enseignement
     * Possibilité de renseigner précisément l'étape d'enseignement en cas d'élément pédagogique mutualisé (#53620)
 
+* Nouvelle infrastructure de déploiement Docker pour le dév et la prod (pas d'impact sur les procédures actuelles)
+
 ## Corrections
 
 * Le report de paramétrages sur les années suivantes fonctionne de nouveau pour les statuts & les taux
 * Les taux personnalisés par mission sont maintenant correctement exploités dans les contrats de travail
 * Dans la page de demande de mise en paiement, tenir compte de l'historisation de la table centre_cout_structure, pour filtrer les centres de coûts proposés (#62665)
+* Les heures de formation des missions remontent correctement dans v_contrat_main pour être affichées dans le contrat.
+
 
 # OSE 24.7 (08/07/2025)
 
@@ -55,9 +85,9 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 ## Corrections
 
-* Lors de l'ajout d'une première heure d'enseignement depuis l'application, les formules se recalculent de nouveau correctement : le problème empêchait les feuilles de route de se mettre à jour. 
+* Lors de l'ajout d'une première heure d'enseignement depuis l'application, les formules se recalculent de nouveau correctement : le problème empêchait les feuilles de route de se mettre à jour.
 * [Problème sur 27 tableurs de formules de calcul : la détection de structure université ne fonctionnait pas. Impact limité au téléversement de feuilles de calcul sur l'IHM de test.](https://git.unicaen.fr/open-source/OSE/-/commit/2c458ff613f295e2399ea053b83f11b4c3820ccc)
-* Correction privilege visualisation des candidatures d'une offre d'emploi (#59099) 
+* Correction privilege visualisation des candidatures d'une offre d'emploi (#59099)
 * Pouvoir refuser une candidature même si l'étudiant n'a pas renseigné à 100% ses données persos et ses pièces justificatives (#62327)
 * En mode "utiliser les centres de coûts de la composante d'affectation" pour les paiements, dans le cas des vacataires, la composante d'enseignement reste celle utilisée (#62447)
 
@@ -68,10 +98,10 @@ En ce qui concerne le souci de report de paramétrages sur les années suivantes
 ce denier ne concerne que les établissements ayant installé OSE durant les deux dernières années (à partir d'une base de données vide, donc).
 Pour vous, il se peut que les paramétrages faits pour l'année 2024/2025 n'aient pas été répertutés sur les années suivantes.
 Nous vous invitons :
- - à migrer en version 24.7 si vous êtes en version 23 ou 24 ;
- - à vous positionner sur l'année 2025/2026 ;
- - à bien vérifier que vos paramétrages sont corrects, au niveau des statuts & des taux ;
- - à modifier vos paramétrages s'ils ne sont pas bons : la résolution du problème fait que vos actions seront bien répercutées sur les années à venir.
+- à migrer en version 24.7 si vous êtes en version 23 ou 24 ;
+- à vous positionner sur l'année 2025/2026 ;
+- à bien vérifier que vos paramétrages sont corrects, au niveau des statuts & des taux ;
+- à modifier vos paramétrages s'ils ne sont pas bons : la résolution du problème fait que vos actions seront bien répercutées sur les années à venir.
 
 
 # OSE 24.6 (17/06/2025)
@@ -112,7 +142,7 @@ Nous vous invitons :
 
 ## Corrections
 
-* Traducteur de formules de calcul : résolution de problème au niveau des SI embarqués dans des paramètres de fonctions (#50652) 
+* Traducteur de formules de calcul : résolution de problème au niveau des SI embarqués dans des paramètres de fonctions (#50652)
 * Correction des demandes de mise en paiement pour pouvoir gérer la notion de budget sur des types de ressources autres que de la "paie état" ou des "ressources propres" (#61953)
 * Correction sur les demandes de mise en paiement pour prendre en compte le paiement d'heures faites dans un établissement extérieur.
 * Formules de calcul : correction d'un problème important prenant en compte des heures non payables dans des calculs intermédiaires (#61947).
@@ -175,10 +205,10 @@ Nous vous invitons :
 * Meilleure présentation des résultats au niveau de l'arrondisseur de calcul HETD : les sommes sont toutes recalculées
 * Arrondisseur de règle de calcul HETD corrigé pour être le plus compatible possible aux résultats de l'ancienne infrastructure "formules"
 * Pour les demandes de mise en paiement, toujours proposer les centres de coûts de la composante d'enseignement pour les vacataires et les étudiants (#61780)
-* L'intégration de nouvelles formules de calcul plantait en affichant le code généré 
+* L'intégration de nouvelles formules de calcul plantait en affichant le code généré
 * Correction apportée à la formule de calcul du Havre (#54003)
 * Les contrats s'affichent de nouveau avec Oracle23 (#61799)
-* Le commande ./bin/ose clear-cache ne supprime plus le répertoire cache, elle se contente de le vider (#61810) 
+* Le commande ./bin/ose clear-cache ne supprime plus le répertoire cache, elle se contente de le vider (#61810)
 * Correction d'un bug d'affichage lors d'un changement d'onglet sur l'édition d'une structure (#61814)
 * Correction d'une régression sur la prise en compte du paramétrage de l'état de sortie pour les indémnités de fin de contrat des missions
 * Pour les demandes de mise en paiement, alimenter la liste des centres de coût avec ceux de la composante d'enseignement dans le cas d'un vacataire (#61780)
@@ -198,25 +228,25 @@ Nous vous invitons :
 ## Nouveautés
 
 * Nouvelle infrastructure de gestion des formules de calcul
-  * Calcul plus rapide de l'ensemble des fiches, avec ajout de jauges pour le suivi d'exécution en ligne de commande
-  * Les tableurs sont tous centralisés dans l'application et accessibles via le menu d'administration (#51993) 
-  * Possibilité de téléverser par vous-mêmes vos fichiers tableurs (#51994)
-  * Les requêtes d'alimentation en données ainsi que les règles de délégation sont maintenant paramétrables directement dans le fichier tableur (#51553)
-  * Prise en compte des heures non payables (#23420)
-  * Nouvelle page de détail des calculs plus complète (#23421)
-  * Meilleure lisibilité du résumé des heures HETD (#23421)
-  * Nouveau dispositif de tests des formules, avec possibilité d'exporter en CSV les données, en plus du format JSON existant (#55389)
+    * Calcul plus rapide de l'ensemble des fiches, avec ajout de jauges pour le suivi d'exécution en ligne de commande
+    * Les tableurs sont tous centralisés dans l'application et accessibles via le menu d'administration (#51993)
+    * Possibilité de téléverser par vous-mêmes vos fichiers tableurs (#51994)
+    * Les requêtes d'alimentation en données ainsi que les règles de délégation sont maintenant paramétrables directement dans le fichier tableur (#51553)
+    * Prise en compte des heures non payables (#23420)
+    * Nouvelle page de détail des calculs plus complète (#23421)
+    * Meilleure lisibilité du résumé des heures HETD (#23421)
+    * Nouveau dispositif de tests des formules, avec possibilité d'exporter en CSV les données, en plus du format JSON existant (#55389)
 * Nouvelle page de demandes de mise en paiement (#53922)
 * [Signature électronique (support d'Esup Signature pour le moment)](https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Signature-Electronique/configuration.md?ref_type=heads) (#26825)
 * Paramétrage affiné des codes situation pour l'export siham
 * Nouvelles possibilités de paramétrage des contrats (#51241)
-  * Possibilité de contractualiser du référentiel sans heure d'enseignement (#38876)
-  * Possibilité de créer un contrat de mission sur seule prolongation de fin de date de contrat
-  * possibilité de créer des contrats multi-missions
-  * Possibilité de créer un contrat sans aucune heure
+    * Possibilité de contractualiser du référentiel sans heure d'enseignement (#38876)
+    * Possibilité de créer un contrat de mission sur seule prolongation de fin de date de contrat
+    * possibilité de créer des contrats multi-missions
+    * Possibilité de créer un contrat sans aucune heure
 * Les projets sont transformé en avenant dans l'interface et plus seulement après validation
 * Remise au propre des vues v_contrat_main et v_contrat_services:
-  * Uniformisation des différents noms de variables
+    * Uniformisation des différents noms de variables
 * [Possibilité de créer vos propres scripts PHP exploitant OSE](/doc/scripts.md) (#60691)
 
 ## Améliorations
@@ -227,10 +257,10 @@ Nous vous invitons :
 * Renforcement de la sécurité avec la mise à jour de plusieurs dépendances du projet
 * Nouveau mode en ligne de commande : ./bin/ose vous donne maintenant la liste de toutes commandes possibles
 
-## Corrections 
+## Corrections
 
 * Correction d'un bug lors de la suppression de référentiel fonction (#59691)
-* Correction d'un bug sur la gestion des fonctions référentiels parents (#59063) 
+* Correction d'un bug sur la gestion des fonctions référentiels parents (#59063)
 * Bug sur l'onglet service avec un utilisateur ayant un rôle avec un périmètre composante (#60291)
 * Renforcement pour limiter la validation ou le refus d'une candidature à sa propre composante uniquement (#60566)
 * Le différentiel s'affiche correctement dans la page d'administration de l'import (#59394)
@@ -242,38 +272,38 @@ Nous vous invitons :
 
 * L'opération de migration peut durer assez longtemps : prévoyez jusqu'à 2h de durée d'exécution pour le script de mise à jour.
 
-* Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuelle rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui-ci pour executer **bin/ose** comme une commande bash et non comme un script php : 
+* Dans cette nouvelle version la commande **bin/ose** a évolué et est maintenant en bash et non en php. Pour son utilisation ponctuelle rien ne change, par contre si vous avez planifié des tâches via crontab, il faudra ajuster celui-ci pour executer **bin/ose** comme une commande bash et non comme un script php :
 
-  * #avant /usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
-` *`#après /chemin_absolu_vers/bin/ose notifier-indicateurs`
+    * #avant /usr/bin/php /chemin_absolu_vers/bin/ose notifier-indicateurs
+      ` *`#après /chemin_absolu_vers/bin/ose notifier-indicateurs`
 
 * Le calcul des heures complémentaires ayant complètement changé, il se peut que sur certaines fiches complexes avec des paiements déjà effectués vous ayez un différentiel qui apparaisse avec quelques centimes à mettre en paiement ou au contraire quelques centimes en trop payé
 
 * Attention à bien vérifier que les requêtes de vos plafonds fonctionnent toujours.
-Exemples de modifications pouvant les impacter :
-  * La table formule_resultat a été renommée en formule_resultat_intervenant
-  * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
-  * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
-  * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
-  * Les colonnes service_referentiel ont été renommées en heures_service_referentiel
+  Exemples de modifications pouvant les impacter :
+    * La table formule_resultat a été renommée en formule_resultat_intervenant
+    * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
+    * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
+    * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
+    * Les colonnes service_referentiel ont été renommées en heures_service_referentiel
 
 * L'état de sortie export des services devra être adapté dans certains cas pour ne plus faire référence à HEURES_COMPL_FC_MAJOREES dans le traitement php de la partie export pdf, mais faire maintenant référence à HEURES_PRIMES.
-Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.
+  Un script de migration est chargé de faire ce travail, mais il ne pourra pas le faire dans tous les cas de figure.
 
 * **ATTENTION à bien adapter vos contrats de travail** aux changements intervenus en particulier sur v_contrat_main. La liste des changements est la suivante :
-  * FORMULE_RESULTAT_ID colonne supprimée
-  * totalDiviseParDix   colonne supprimée
-  * tauxId              colonne supprimée
-  * tauxMajoreId        colonne supprimée
+    * FORMULE_RESULTAT_ID colonne supprimée
+    * totalDiviseParDix   colonne supprimée
+    * tauxId              colonne supprimée
+    * tauxMajoreId        colonne supprimée
 
-  * heuresPeriodeEssai    nouvelle colonne : nombre d'heures concernées par une période d'essai (missions)
-  * heuresPrimePrecarite  nouvelle colonne : nombre d'heures relatives à la prime de précarité (missions)
-  * missions              nouvelle colonne : liste des libellés des missions, remplace libelleMission
-  * typesMission          nouvelle colonne : liste des libelles des types de missions, remplace missionNom
-  * missionsTypesMissions nouvelle colonne : liste des missions avec mention des types de missions
-  * date_creation         renommée en dateCreation
-  * date_contrat_lie      renommée en dateContratLie
-  * pays_nationalite      renommée en paysNationalite
+    * heuresPeriodeEssai    nouvelle colonne : nombre d'heures concernées par une période d'essai (missions)
+    * heuresPrimePrecarite  nouvelle colonne : nombre d'heures relatives à la prime de précarité (missions)
+    * missions              nouvelle colonne : liste des libellés des missions, remplace libelleMission
+    * typesMission          nouvelle colonne : liste des libelles des types de missions, remplace missionNom
+    * missionsTypesMissions nouvelle colonne : liste des missions avec mention des types de missions
+    * date_creation         renommée en dateCreation
+    * date_contrat_lie      renommée en dateContratLie
+    * pays_nationalite      renommée en paysNationalite
 
 
 
@@ -663,10 +693,10 @@ Attention : la version 23.0 introduit deux régressions corrigées en 23.1. Il e
 ## Nouveautés
 
 * Nouveau mode de calcul des heures à payer
-  * Paiements : Gestion fine des changements de valeurs de taux horaires en cours d'année
-  * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées (#45564)
-  * Possibilité de personnaliser le ratio AA/AC pour le référentiel (#47972)
-  * Mises en paiement possibles pour les missions (emplois étudiants) (#51156)
+    * Paiements : Gestion fine des changements de valeurs de taux horaires en cours d'année
+    * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées (#45564)
+    * Possibilité de personnaliser le ratio AA/AC pour le référentiel (#47972)
+    * Mises en paiement possibles pour les missions (emplois étudiants) (#51156)
 * Gestion des indemnités de fin de contrat pour les missions étudiantes (#47519)
 * Extraction du fichier de paie des indemnités de fin de contrat pour les missions étudiantes
 * Nouveau mode de calcul des tableaux de bord de calcul intermédiaires. commande ose build-tableaux-bord supprimée et non remplacée (#51555)
@@ -745,33 +775,33 @@ Attention : la version 23.0 introduit deux régressions corrigées en 23.1. Il e
 ## Nouveautés
 
 * Nouvelle notion de mission, permettant de [gérer les contrats étudiants](https://redmine.unicaen.fr/Etablissement/dmsf/files/71233/view)
-  * Référentiel de missions avec par défaut 8 types de mission proposés et personnalisables via une interface d'administration
-  * Gestion des offres d'emploi & des candidatures
-  * Nouvelle interface de gestion des missions
-  * Nouvelle interface de saisie des suivis de missions
-  * Adaptation de la partie paiement pour gérer les heures nocturnes/dimanches/jours fériés
-  * Plafonds applicables aux missions avec un nouveau périmètre par type de mission
+    * Référentiel de missions avec par défaut 8 types de mission proposés et personnalisables via une interface d'administration
+    * Gestion des offres d'emploi & des candidatures
+    * Nouvelle interface de gestion des missions
+    * Nouvelle interface de saisie des suivis de missions
+    * Adaptation de la partie paiement pour gérer les heures nocturnes/dimanches/jours fériés
+    * Plafonds applicables aux missions avec un nouveau périmètre par type de mission
 
 * Gestion renforcée des taux de paiement
-  * Possibilité de gérer de nouveaux taux différents du taux HETD de 42,86€
-  * Prise en compte du nouveau taux HETD de 43,50€ pour 2023/2024
-  * Nouvelle interface d'administration des taux de paiement
-  * Les taux peuvent être indexés sur d'autres taux (le SMIC par exemple)
-  * Les taux peuvent être appliqués globalement, par mission, par statut, par élément pédagogique, selon le contexte
+    * Possibilité de gérer de nouveaux taux différents du taux HETD de 42,86€
+    * Prise en compte du nouveau taux HETD de 43,50€ pour 2023/2024
+    * Nouvelle interface d'administration des taux de paiement
+    * Les taux peuvent être indexés sur d'autres taux (le SMIC par exemple)
+    * Les taux peuvent être appliqués globalement, par mission, par statut, par élément pédagogique, selon le contexte
 
 * Pièces justificatives
-  * Nouveau filtre permettant de ne demander des pièces que pour les étrangers
+    * Nouveau filtre permettant de ne demander des pièces que pour les étrangers
 
 * Contrats de travail
-  * Possibilité de contractualiser des heures de référentiel
-  * Possibilité de contractualiser des heures de mission
-  * Possibilité d'avoir des états de sortie distincts pour les contrats et pour les avenants, par statut
+    * Possibilité de contractualiser des heures de référentiel
+    * Possibilité de contractualiser des heures de mission
+    * Possibilité d'avoir des états de sortie distincts pour les contrats et pour les avenants, par statut
 
 * Tag
-  * Possibilité de mettre des dates de début et de fin d'utilisation pour les tags
+    * Possibilité de mettre des dates de début et de fin d'utilisation pour les tags
 
 * Extraction paie
-  * Nouveaux paramétrages par statut permettant de spécifier par statut le code indémnité attendu, le mode de calcul et le type de carte
+    * Nouveaux paramétrages par statut permettant de spécifier par statut le code indémnité attendu, le mode de calcul et le type de carte
 
   **IMPORTANT** : Si aucun de ces paramètres n'est spécifié au niveau des statuts, ce sont les valeurs par défaut habituelles qui seront fournies dans
   l'extraction Winpaie et la préliquidation SIHAM. N'hésitez pas à tester vos extractions de paie.
@@ -1196,90 +1226,90 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 ## Nouveautés
 
 * Nouvelle infrastructure de gestion des plafonds
-  * Les plafonds sont maintenant personnalisables : vous pouvez les modifier en retirer ou en créer
-  * [Une nouvelle documentation pour les plafonds](doc/Plafonds/Plafonds.md)
-  * Les plafonds pourront être personnalisés le cas échéant :
-    * par composante
-    * par statut d'intervenant
-    * par fonction référentielle
-    * par élément pédagogique
-    * par volume horaire (par élément pédagogique et par type d'intervention, exemple: nombre de CM en Maths)
-  * Les paramétrages liés aux plafonds sont annualisés
-  * Les plafonds pourront être utilisés comme de simples indicateurs
-  * Des jauges relatives aux plafonds s'affichent dans la page de saisie de service
-  * Des dérogations aux plafonds sont possibles par intervenant via un nouvel onglet dédié
+    * Les plafonds sont maintenant personnalisables : vous pouvez les modifier en retirer ou en créer
+    * [Une nouvelle documentation pour les plafonds](doc/Plafonds/Plafonds.md)
+    * Les plafonds pourront être personnalisés le cas échéant :
+        * par composante
+        * par statut d'intervenant
+        * par fonction référentielle
+        * par élément pédagogique
+        * par volume horaire (par élément pédagogique et par type d'intervention, exemple: nombre de CM en Maths)
+    * Les paramétrages liés aux plafonds sont annualisés
+    * Les plafonds pourront être utilisés comme de simples indicateurs
+    * Des jauges relatives aux plafonds s'affichent dans la page de saisie de service
+    * Des dérogations aux plafonds sont possibles par intervenant via un nouvel onglet dédié
 
 * Indicateurs
-  * Optimisation du chargement de la page des indicateurs
-  * Gestion des dossiers irrecevables (#18307)
-  * Extraction CSV des indicateurs (#19405)
-  * Certains statuts pourront être affichés de manière prioritaire pour être traités en premier (#20808)
-  * Possibilité d'envoyer en cci l'email des indicateurs (#40999)
-  * Pour plus de cohérence, réorganisation et **changemenent de numéro des indicateurs**
+    * Optimisation du chargement de la page des indicateurs
+    * Gestion des dossiers irrecevables (#18307)
+    * Extraction CSV des indicateurs (#19405)
+    * Certains statuts pourront être affichés de manière prioritaire pour être traités en premier (#20808)
+    * Possibilité d'envoyer en cci l'email des indicateurs (#40999)
+    * Pour plus de cohérence, réorganisation et **changemenent de numéro des indicateurs**
 
 * Saisie de service & référentiel
-  * Par statut, vous pouvez maintenant choisir d'activer le prévisionnel et le réalisé de manière indépendante
-  * Vous avez maintenant des privilèges distincts pour la saisie du service : un pour le prévisionnel et un pour le
-    réalisé
-  * Idem pour le référentiel
-  * Idem pour les validations des services
-  * Idem pour les validations du référentiel
-  * Vous pouvez maintenant désactiver la possibilité de reporter le prévisionnel n-1 vers l'année en cours ou du
-    prévisionnel vers le réalisé
+    * Par statut, vous pouvez maintenant choisir d'activer le prévisionnel et le réalisé de manière indépendante
+    * Vous avez maintenant des privilèges distincts pour la saisie du service : un pour le prévisionnel et un pour le
+      réalisé
+    * Idem pour le référentiel
+    * Idem pour les validations des services
+    * Idem pour les validations du référentiel
+    * Vous pouvez maintenant désactiver la possibilité de reporter le prévisionnel n-1 vers l'année en cours ou du
+      prévisionnel vers le réalisé
 
 * Contrats
-  * Un nouveau modèle de contrat sera possible avec la ventilation des heures de services par types d'intervention (
-    CM/TD/TP)
-  * Paramétrage du mail expéditeur du contrat (Tâche #41014)
-  * Vérification de la présence d'au moins un fichier avant de permettre l'enregistrement d'une date de retour signé
+    * Un nouveau modèle de contrat sera possible avec la ventilation des heures de services par types d'intervention (
+      CM/TD/TP)
+    * Paramétrage du mail expéditeur du contrat (Tâche #41014)
+    * Vérification de la présence d'au moins un fichier avant de permettre l'enregistrement d'une date de retour signé
 
 * Fiche Intervenant
-  * Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
-  * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le
-    code intervenant et la source de l'intervenant
-  * Le code de l'intervenant peut devenir cliquable pour vous rediriger vers une page de gestion des comptes d'accès
-    au SI ou autre (cf. notes de mise à jour, paramètre ldap>systemeInformationUrl)
+    * Le grade devient modifiable dans la fiche pour les anciens intervenants #40369
+    * Ajout d'un privilège 'Edition avancée' au niveau de l'intervenant pour donner le droit de modifier manuellement le
+      code intervenant et la source de l'intervenant
+    * Le code de l'intervenant peut devenir cliquable pour vous rediriger vers une page de gestion des comptes d'accès
+      au SI ou autre (cf. notes de mise à jour, paramètre ldap>systemeInformationUrl)
 
 * Export des intervenants vers Siham
-  * Possiblité de récupérer plusieurs typeUO pour alimenter la liste des structures pour la PEC et la REN (#41454)
-  * Nouveau paramètre dans administration > paramètres généraux permettant de choisir l'étape de la feuille de route à
-    franchir pour pouvoir exporter un intervenant vers le SIRH
-  * Meilleure gestion du pays de naissance lors de la PEC ou REN
+    * Possiblité de récupérer plusieurs typeUO pour alimenter la liste des structures pour la PEC et la REN (#41454)
+    * Nouveau paramètre dans administration > paramètres généraux permettant de choisir l'étape de la feuille de route à
+      franchir pour pouvoir exporter un intervenant vers le SIRH
+    * Meilleure gestion du pays de naissance lors de la PEC ou REN
 
 * Ajout d'un module de gestion des Notes sur l'intervenant
-  * Possibilité de rajouter une note écrite (informations, message important etc...) sur une fiche intervenant (Tâche
-    #25565)
-  * Possibilité d'envoyer un email à intervenant avec historisation de l'email directement depuis la fiche
-    intervenant (Tâche #26546)
-  * Historique des emails envoyés à l'intervenant (contrat, indicateur etc...)
+    * Possibilité de rajouter une note écrite (informations, message important etc...) sur une fiche intervenant (Tâche
+      #25565)
+    * Possibilité d'envoyer un email à intervenant avec historisation de l'email directement depuis la fiche
+      intervenant (Tâche #26546)
+    * Historique des emails envoyés à l'intervenant (contrat, indicateur etc...)
 
 * Interfaces d'administration
-  * Les types de formations et les groupes les contenant pourront être ajoutés, supprimés ou modifiés depuis
-    l'administration des types de formations.
-  * Des périodes pourront être ajoutés, supprimés ou modifiés depuis l'administration des périodes.
-  * Des établissements pourront être ajoutés, supprimés ou modifiés depuis l'administration des établissements.
-  * Des pays pourront être ajoutés, supprimés ou modifiés depuis l'administration des pays.
-  * Des départements pourront être ajoutés, supprimés ou modifiés depuis l'administration des départements.
-  * Des corps pourront être ajoutés, supprimés ou modifiés depuis l'administration des corps présent dans le bloc d'
-    administration des nomenclatures RH.
-  * Améliorations ergonomiques de la "matrice" des privilèges
-  * La page d'administration des statuts a été réécrite pour plus de clarté et de souplesse
-    * Il n'est plus nécessaire de paramétrer les privilèges par statut, tout se passe désormais dans l'IHM d'
-      administration des statuts
-    * Les paramétrages de statuts sont maintenant annualisés
+    * Les types de formations et les groupes les contenant pourront être ajoutés, supprimés ou modifiés depuis
+      l'administration des types de formations.
+    * Des périodes pourront être ajoutés, supprimés ou modifiés depuis l'administration des périodes.
+    * Des établissements pourront être ajoutés, supprimés ou modifiés depuis l'administration des établissements.
+    * Des pays pourront être ajoutés, supprimés ou modifiés depuis l'administration des pays.
+    * Des départements pourront être ajoutés, supprimés ou modifiés depuis l'administration des départements.
+    * Des corps pourront être ajoutés, supprimés ou modifiés depuis l'administration des corps présent dans le bloc d'
+      administration des nomenclatures RH.
+    * Améliorations ergonomiques de la "matrice" des privilèges
+    * La page d'administration des statuts a été réécrite pour plus de clarté et de souplesse
+        * Il n'est plus nécessaire de paramétrer les privilèges par statut, tout se passe désormais dans l'IHM d'
+          administration des statuts
+        * Les paramétrages de statuts sont maintenant annualisés
 
 * En bref
-  * Il est maintenant possible de choisir si on veut être connecté avec le CAS ou avec un compte LDAP ou local au
-    moment du login (options désactivables)
-  * Vous pouvez vous connecter avec l'identité d'un autre utilisateur à des fins de tests, si vous vous en donnez le
-    droit (cf. [config.local.php](config.local.php.default), rubrique "ldap").
-  * Nouvel état de sortie sur l'export des agréments, rendant celui-ci maintenant paramétrable par les
-    établissements (#42944)
-  * Les paramétrages de pièces justificatives par statut sont maintenant annualisés: il n'y a plus de notion d'année
-    de début/année de fin
-  * Les paramétrages des types d'intervention par statut sont également annualisés
-  * [Technique] Migration vers Laminas et Composer 2
-  * [Technique] Migration vers PHP 8.0
+    * Il est maintenant possible de choisir si on veut être connecté avec le CAS ou avec un compte LDAP ou local au
+      moment du login (options désactivables)
+    * Vous pouvez vous connecter avec l'identité d'un autre utilisateur à des fins de tests, si vous vous en donnez le
+      droit (cf. [config.local.php](config.local.php.default), rubrique "ldap").
+    * Nouvel état de sortie sur l'export des agréments, rendant celui-ci maintenant paramétrable par les
+      établissements (#42944)
+    * Les paramétrages de pièces justificatives par statut sont maintenant annualisés: il n'y a plus de notion d'année
+      de début/année de fin
+    * Les paramétrages des types d'intervention par statut sont également annualisés
+    * [Technique] Migration vers Laminas et Composer 2
+    * [Technique] Migration vers PHP 8.0
 
 ## Corrections de bugs (liste non exhaustive)
 
@@ -1424,8 +1454,8 @@ Objectif : Connecteur Export OSE => Logiciel RH
 
 * Si vous souhaitez mettre en place l'export RH vers Siham, il vous faudra le configurer. Vous avez pour cela la
   documentation :
-  * [côté utilisateur](doc/Export-Rh/fonctionnalite.md)
-  * [pour la configuration du connecteur](doc/Export-Rh/configuration.md)
+    * [côté utilisateur](doc/Export-Rh/fonctionnalite.md)
+    * [pour la configuration du connecteur](doc/Export-Rh/configuration.md)
 
 # Anciennes versions de OSE
 

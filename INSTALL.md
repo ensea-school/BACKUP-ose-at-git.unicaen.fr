@@ -190,7 +190,8 @@ Exemple pris avec /var/www/ose en répertoire d'installation et ose.unicaen.fr e
 	php_value memory_limit 2048M
 
 	<Directory /var/www/ose/public>
-		Options -Indexes MultiViews
+		Options -Indexes -MultiViews
+		Options +SymLinksIfOwnerMatch 
 		AllowOverride All # Un fichier .htaccess est placé dans le répertoire public de OSE : il doit être parcouru
 	</Directory>
 </VirtualHost>
@@ -205,7 +206,8 @@ Exemple pris avec /var/www/ose en répertoire d'installation et /ose en Alias.
 Alias /ose			                /var/www/ose/public
 
 <Directory /var/www/ose/public>
-	Options -Indexes MultiViews
+	Options -Indexes -MultiViews
+	Options +SymLinksIfOwnerMatch
 	AllowOverride All # Un fichier .htaccess est placé dans le répertoire public de OSE : il doit être parcouru
 	Order allow,deny
 	allow from all

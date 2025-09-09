@@ -1923,6 +1923,7 @@ return [
         'ANNEE_ID',
         'NUM_REGLE',
         'NATIONALITE_ETRANGERE',
+        'FA',
     ],
     'TYPE_RESSOURCE'                      => [
         'ID',
@@ -2586,6 +2587,7 @@ return [
         'LOG',
         'ATTACHMENT_PATHS',
         'COPIES',
+        'REPLY_TO',
     ],
     'JOUR_FERIE'                          => [
         'ID',

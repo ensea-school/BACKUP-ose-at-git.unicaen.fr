@@ -15,29 +15,77 @@ SELECT
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-  SELECT 9 PLAFOND_ID, p.ANNEE_ID, p.TYPE_VOLUME_HORAIRE_ID, p.INTERVENANT_ID, p.HEURES, NULL PLAFOND, NULL PLAFOND_ETAT_ID FROM (
+  SELECT 11 PLAFOND_ID, p.ANNEE_ID, p.TYPE_VOLUME_HORAIRE_ID, p.INTERVENANT_ID, p.HEURES, p.PLAFOND, NULL PLAFOND_ETAT_ID FROM (
     SELECT
-        i.annee_id                annee_id,
-        vh.type_volume_horaire_id type_volume_horaire_id,
-        i.id                      intervenant_id,
-        SUM(vh.heures)            heures
+        annee_id, intervenant_id, type_volume_horaire_id, plafond, heures
       FROM
-        volume_horaire vh
-        JOIN service s ON s.id = vh.service_id
-        JOIN intervenant i ON i.id = s.intervenant_id
-        JOIN statut si ON si.id = i.statut_id
+        (
+        SELECT
+          annee_id, intervenant_id, type_volume_horaire_id, plafond, heures, DIFF,
+          max(DIFF) OVER (PARTITION BY  annee_id, intervenant_id, type_volume_horaire_id) MDIFF
+        FROM
+          (
+          SELECT
+            tm.annee_id,
+            m.intervenant_id,
+            tvh.id type_volume_horaire_id,
+            heures_prevues_validees plafond,
+            heures_realisees_saisies heures,
+            heures_realisees_saisies - heures_prevues_validees diff
+          FROM
+            tbl_mission tm
+            JOIN mission m ON m.id = tm.mission_id
+            JOIN type_volume_horaire tvh ON tvh.code = 'REALISE'
+          WHERE
+            tm.heures_realisees_saisies > tm.heures_prevues_validees
+          ) t
+        ) t
       WHERE
-        vh.histo_destruction IS NULL
-        AND i.histo_destruction IS NULL
-        AND vh.motif_non_paiement_id IS NULL
-        AND si.code IN ('IMP')
-      GROUP BY
-        i.annee_id,
-        vh.type_volume_horaire_id,
-        i.id,
-        i.statut_id
-      HAVING
-        SUM(vh.heures) >= 0
+        diff = mdiff
+    ) p
+
+    UNION ALL
+
+  SELECT 10 PLAFOND_ID, p.ANNEE_ID, p.TYPE_VOLUME_HORAIRE_ID, p.INTERVENANT_ID, p.HEURES, p.PLAFOND, NULL PLAFOND_ETAT_ID FROM (
+    SELECT
+        i.annee_id annee_id,
+        type_volume_horaire_id,
+        intervenant_id,
+        heures,
+        plafond
+      FROM
+        (
+        SELECT
+          intervenant_id,
+          type_volume_horaire_id,
+          tranche,
+          sum(heures) heures,
+          least(min(plafond_tranche_mission), min(plafond_tranche)) plafond
+        FROM
+          (
+          SELECT
+            m.intervenant_id                                         intervenant_id,
+            vhm.type_volume_horaire_id                               type_volume_horaire_id,
+            to_char( vhm.horaire_debut, 'YYYY-mm' )                  tranche,
+            vhm.heures                                               heures,
+            ROUND(CASE to_char( vhm.horaire_debut, 'mm' ) WHEN '07' THEN 150 WHEN '08' THEN 150 ELSE 67 END / 30 * (m.date_fin - m.date_debut),2) plafond_tranche_mission,
+            CASE to_char( vhm.horaire_debut, 'mm' ) WHEN '07' THEN 150 WHEN '08' THEN 150 ELSE 67 END plafond_tranche
+          FROM
+            volume_horaire_mission vhm
+            JOIN type_volume_horaire tvh ON tvh.id = vhm.type_volume_horaire_id AND tvh.code = 'REALISE'
+            JOIN mission m ON m.id = vhm.mission_id AND m.histo_destruction IS NULL
+          WHERE
+            vhm.histo_destruction IS NULL
+          ) t
+        GROUP BY
+          intervenant_id,
+          type_volume_horaire_id,
+          tranche
+      ) t
+      JOIN intervenant i ON i.id = t.intervenant_id
+      WHERE
+        heures > plafond
+        AND rownum = 1
     ) p
   ) p
   JOIN intervenant i ON i.id = p.intervenant_id

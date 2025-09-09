@@ -45,6 +45,18 @@ return [
             'position'    => 14,
             'commentaire' => 'Durée de vie de la pièce jointe',
         ],
+        'FA'                    => [
+            'name'        => 'FA',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 20,
+            'commentaire' => NULL,
+        ],
         'FC'                    => [
             'name'        => 'FC',
             'type'        => 'bool',

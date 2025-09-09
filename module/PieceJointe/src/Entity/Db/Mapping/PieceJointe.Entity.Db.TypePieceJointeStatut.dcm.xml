@@ -21,6 +21,7 @@
         <field name="nationaliteEtrangere" type="boolean" column="NATIONALITE_ETRANGERE" nullable="false"/>
 
         <field name="fc" type="boolean" column="FC" nullable="false"/>
+        <field name="fa" type="boolean" column="FA" nullable="false"/>
         <field name="dureeVie" type="integer" column="DUREE_VIE" nullable="false"/>
         <field name="numRegle" type="integer" column="NUM_REGLE" nullable="false"/>
         <field name="obligatoireHNP" type="boolean" column="OBLIGATOIRE_HNP" nullable="false"/>

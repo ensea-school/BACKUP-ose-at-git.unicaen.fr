@@ -139,7 +139,7 @@ class CentreCoutService extends AbstractEntityService
             ccp.code      				 code_parent
         FROM centre_cout cc 
         LEFT JOIN centre_cout ccp ON ccp.id = cc.parent_id
-        JOIN centre_cout_structure ccs ON cc.id = ccs.centre_cout_id 
+        JOIN centre_cout_structure ccs ON cc.id = ccs.centre_cout_id AND  ccs.histo_destruction IS NULL
         JOIN structure s ON s.id = ccs.structure_id
         JOIN cc_activite cca ON cca.id = cc.activite_id
         JOIN type_ressource tr ON tr.id = cc.type_ressource_id

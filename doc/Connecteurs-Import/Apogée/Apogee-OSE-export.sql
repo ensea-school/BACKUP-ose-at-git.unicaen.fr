@@ -3,10 +3,13 @@
 -- Auteur : Bruno Bernard bruno.bernard@unicaen.fr
 --
 -- Evolutions
--- 04/10/2019 Plafonnement de la charge d enseignement liee a l'encadrement individuel (decision d etablissement unicaen) : 1 heure maxi par etudiant
--- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : s il existe une charge EAD alors a_distance = Oui sinon a_distance = Non
--- 31/03/2021 Exclusion des ELP fictifs en testant le temoin TEM_FICTIF de leur nature et non plus leur code nature
--- 01/06/2021 Alimentation nouvelle table des effectifs par etape par annee et par regime d inscription
+-- 04/10/2019 Plafonnement de la charge d'enseignement liee a l'encadrement individuel (decision d'établissement unicaen) : 1 heure maxi par étudiant
+-- 04/10/2019 Mise en coherence entre les heures de type EAD et le flag a_distance : s'il existe une charge EAD alors a_distance = Oui sinon a_distance = Non
+-- 31/03/2021 Exclusion des ELP fictifs en testant le témoin TEM_FICTIF de leur nature et non plus leur code nature
+-- 01/06/2021 Alimentation nouvelle table des effectifs par étape par année et par regime d'inscription
+-- 22/07/2025 Suppression des tables tampon ose_groupe_type_formation et ose_type_formation, modification requête alimentation de ose_etape
+-- 01/09/2025 Les formations sont en FI par défaut, et sinon selon les régimes d'inscription en FA ou FC
+
 --
 -- Reinitialisation des tables
 --
@@ -24,85 +27,8 @@ delete from ose_etape_effectifs
 ;
 delete from ose_etape
 ;
-delete from ose_type_formation
-;
-delete from ose_groupe_type_formation
-;
---
--- Groupes de types de formations a distinguer dans OSE
--- Ce sont ces regroupements de types de formations qui serviront de filtres dans les interfaces utilisateurs
---
--- A : Libelle long
--- B : Le libelle court, eventuellement suffixe par le niveau relatif de la VET, servira a filtrer les formations (exemples L1 L2 L3 LPro ...)
--- C : Ordre de classement des groupes de types de formation dans les interfaces utilisateurs
--- D : Est-il pertinent de suffixer le libelle court par le niveau relatif de la VET dans le diplome? (0/1)
--- E : Identifiant du groupe de types de formations
---                                             A                                       B                   C  D  E
-insert into ose_groupe_type_formation values ('Diplôme Universitaire de Technologie', 'DUT'               ,10,1,'DUT'        );
-insert into ose_groupe_type_formation values ('Bachelor Universitaire de Technologie','BUT'               ,11,1,'BUT'        );
-insert into ose_groupe_type_formation values ('PACES'                                ,'PACES'             ,21,0,'PACES'      );
-insert into ose_groupe_type_formation values ('Etudes de Santé'                      ,'Santé'             ,22,1,'SANTE'      );
-insert into ose_groupe_type_formation values ('Thèse d''exercice'                    ,'Thèse d''exercice' ,24,0,'THESE_EXER' );
-insert into ose_groupe_type_formation values ('DES'                                  ,'DES'               ,25,0,'DES'        );
-insert into ose_groupe_type_formation values ('DESC'                                 ,'DESC'              ,26,0,'DESC'       );
-insert into ose_groupe_type_formation values ('Licence'                              ,'L'                 ,30,1,'L'          );
-insert into ose_groupe_type_formation values ('Licence professionnelle'              ,'LPro'              ,35,0,'LP'         );
-insert into ose_groupe_type_formation values ('Master'                               ,'M'                 ,40,1,'M'          );
-insert into ose_groupe_type_formation values ('Diplôme d''ingénieur'                 ,'Ingénieur'         ,45,1,'ING'        );
-insert into ose_groupe_type_formation values ('Diplôme d''université'                ,'DU'                ,60,0,'DU'         );
-insert into ose_groupe_type_formation values ('Capacité'                             ,'Capacité'          ,70,0,'CAPA'       );
-insert into ose_groupe_type_formation values ('Orthophonie'                          ,'Orthophonie'       ,71,0,'ORTHO'      );
-insert into ose_groupe_type_formation values ('Maïeutique'                           ,'Maïeutique'        ,72,0,'MAIEUTIQUE' );
-insert into ose_groupe_type_formation values ('Autre formation'                      ,'Autre'             ,99,0,'AUTRE'      );
---
--- Types de formations
--- Table de correspondance entre les types de formations Apogee et les groupes de types de formations dans OSE
---
-insert into ose_type_formation
-with tpd as (
-  select
-    lib_tpd                                    as libelle_long,  -- Libelle long Apogee
-    lic_tpd                                    as libelle_court, -- Libelle court Apogee
-    case cod_tpd_etb
-      when '15' then 'DUT'
-      when '16' then 'DUT'
-      when 'BU' then 'BUT'
-      when 'M1' then 'PACES'
-      when 'M2' then 'SANTE'
-      when '87' then 'SANTE'
-      when '88' then 'SANTE'
-      when '43' then 'THESE_EXER'
-      when '45' then 'THESE_EXER'
-      when '57' then 'DES'
-      when '55' then 'DES'
-      when '65' then 'DESC'
-      when '23' then 'L'
-      when 'AL' then 'L'
-      when 'DL' then 'L'
-      when 'CP' then 'L'
-      when '22' then 'LP'
-      when '37' then 'M'
-      when '94' then 'M'
-      when 'MA' then 'M'
-      when 'DM' then 'M'
-      when '33' then 'ING'
-      when '68' then 'CAPA'
-      when '93' then 'ORTHO'
-      when '92' then 'MAIEUTIQUE'
-      else case when cod_tpd_sis between 'UA' and 'UF' then 'DU'
-        else 'AUTRE'
-        end
-      end                                      as z_groupe_id,   -- Id du groupe de types de formations
-    cod_tpd_etb                                as source_code    -- Code type de diplome Apogee
-  from typ_diplome
-  where tem_en_sve_tpd = 'O'
-  and ( eta_ths_hdr_drt is null or ( eta_ths_hdr_drt || tem_sante = 'TO' ) ) -- Exclusion des theses de recherche et HDR (formations sans enseignement)
-  and cod_tpd_etb not in ('03')                                              -- Exclusion des auditeurs libres
-  )
-select tpd.*
-from tpd
-join ose_groupe_type_formation gtf on gtf.source_code = tpd.z_groupe_id
-;
+
+
 --
 -- Etapes
 -- Une etape OSE est assimilable a une VET Apogee
@@ -115,13 +41,7 @@ with
       nvl ( vet.lib_web_vet, etp.lib_etp )     as libelle,
       etp.lic_etp                              as libelle_court,
       min ( dip.cod_tpd_etb ) keep ( dense_rank first order by anu.cod_anu, vde.cod_etp, vde.cod_vrs_vet ) as z_type_formation_id,
-      -- Determiner si la notion de niveau a du sens pour le type de formation
-      min (
-        case gtf.pertinence_niveau
-          when 0 then null
-          else vde.cod_sis_daa_min
-          end
-                            ) keep ( dense_rank first order by anu.cod_anu, vde.cod_etp, vde.cod_vrs_vet ) as niveau,
+      min ( vde.cod_sis_daa_min ) keep ( dense_rank first order by anu.cod_anu, vde.cod_etp, vde.cod_vrs_vet ) as niveau,
       -- Identifiant de la structure dans le referentiel de l etablissement
       str.cod_str                              as z_structure_id,
       -- Reperer les formations dediees aux echanges
@@ -156,8 +76,6 @@ with
     join version_etape             vet on vet.cod_etp = vde.cod_etp and vet.cod_vrs_vet = vde.cod_vrs_vet
     join composante                cmp on cmp.cod_cmp = vet.cod_cmp
     join ucbn_composante_ldap      str on str.cod_cmp = cmp.cod_cmp         -- Recherche du code structure dans le referentiel des structures de l etablissement
-    join ose_type_formation        tyf on tyf.source_code = dip.cod_tpd_etb
-    join ose_groupe_type_formation gtf on gtf.source_code = tyf.z_groupe_id
     where anu.cod_anu >= to_char ( add_months ( sysdate, -18 ), 'YYYY' )    -- Par convention l annee debute le 1er juillet
     and cmp.cod_tpc! = 'EXT'                                                -- Exclusion des structures exterieures (IFSI, etc.)
     group by
@@ -179,7 +97,7 @@ select
   least ( tmp.specifique_echanges, 1 )                                 as specifique_echanges,
   min ( tmp.domaine_fonctionnel )                                      as domaine_fonctionnel,
   -- Determiner en fonction des regimes d inscription si la VET est ouverte en FI, en FC et/ou en apprentissage
-  max ( case when rve.cod_rgi in ( '1', '3', '7' ) then 1 else 0 end ) as FI,
+  max ( case when rve.cod_rgi not in ( '4', '2', '5', '6' ) then 1 else 0 end ) as FI,
   max ( case when rve.cod_rgi in ( '4' )           then 1 else 0 end ) as FA,
   max ( case when rve.cod_rgi in ( '2', '5', '6' ) then 1 else 0 end ) as FC,
   tmp.cod_etp,
@@ -206,7 +124,7 @@ insert into ose_etape_effectifs
 select
   source_code      as z_etape_id,
   cod_anu          as annee_id,
-  sum( case when iae.cod_rge in ('1', '3', '7') then 1 else 0 end ) as effectif_FI,
+  sum( case when iae.cod_rge not in ('4', '2', '5', '6') then 1 else 0 end ) as effectif_FI,
   sum( case when iae.cod_rge in ('4')           then 1 else 0 end ) as effectif_FA,
   sum( case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end ) as effectif_FC
 from ose_etape   etp
@@ -543,7 +461,7 @@ with tmp_element_effectifs as (
   select
     elp.source_code,
     ice.cod_anu,
-    case when iae.cod_rge in ('1', '3', '7') then 1 else 0 end as effectif_FI,
+    case when iae.cod_rge not in ('4', '2', '5', '6') then 1 else 0 end as effectif_FI,
     case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
     case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
   from ose_element_pedagogique elp
@@ -562,7 +480,7 @@ with tmp_element_effectifs as (
   select
     elp.source_code,
     ice.cod_anu,
-    case when iae.cod_rge in ('1', '3', '7') then 1 else 0 end as effectif_FI,
+    case when iae.cod_rge not in ('4', '2', '5', '6') then 1 else 0 end as effectif_FI,
     case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
     case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
   from ose_element_pedagogique elp

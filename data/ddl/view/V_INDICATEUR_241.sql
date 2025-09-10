@@ -1,7 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_241 AS
 SELECT DISTINCT
-  MAX(i.NOM_USUEL),
-  MAX(i.PRENOM),
   w.intervenant_id,
   i.structure_id,
   MAX(pj.histo_modification) AS "Date de modification"

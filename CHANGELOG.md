@@ -27,7 +27,11 @@ OSE 24.9](#ose-249-09092025)
 
 Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
 
+# OSE 24.10 (à venir)
 
+## Corrections
+
+* Correction des vues pour les indicateurs 241 et 231 (#63193)
 
 # OSE 24.9 (09/09/2025)
 

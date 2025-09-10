@@ -16,8 +16,8 @@ WITH t AS (
 
   WHERE
     i.histo_destruction IS NULL
-    /*@INTERVENANT_ID=i.id*/
-    /*@ANNEE_ID=i.annee_id*/
+    /*@intervenant_id=i.id*/
+    /*@annee_id=i.annee_id*/
 )
 SELECT
   annee_id,

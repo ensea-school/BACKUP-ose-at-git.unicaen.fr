@@ -25,9 +25,9 @@ WHERE
     WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
     WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
   END IS NOT NULL
-  /*@PLAFOND_ID=p.PLAFOND_ID*/
-  /*@ANNEE_ID=p.ANNEE_ID*/
-  /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
-  /*@INTERVENANT_ID=p.INTERVENANT_ID*/
-  /*@STRUCTURE_ID=p.STRUCTURE_ID*/
-  /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/
+  /*@plafond_id=p.plafond_id*/
+  /*@annee_id=p.annee_id*/
+  /*@type_volume_horaire_id=p.type_volume_horaire_id*/
+  /*@intervenant_id=p.intervenant_id*/
+  /*@structure_id=p.structure_id*/
+  /*@plafond_etat_id=p.plafond_etat_id*/

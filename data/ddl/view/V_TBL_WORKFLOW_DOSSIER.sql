@@ -10,8 +10,8 @@ FROM
   tbl_dossier d
 WHERE
   d.actif = 1
-  /*@INTERVENANT_ID=d.intervenant_id*/
-  /*@ANNEE_ID=d.annee_id*/
+  /*@intervenant_id=d.intervenant_id*/
+  /*@annee_id=d.annee_id*/
 
 UNION ALL
 
@@ -26,5 +26,5 @@ FROM
   tbl_dossier d
 WHERE
   d.actif = 1
-  /*@INTERVENANT_ID=d.intervenant_id*/
-  /*@ANNEE_ID=d.annee_id*/
+  /*@intervenant_id=d.intervenant_id*/
+  /*@annee_id=d.annee_id*/

@@ -75,15 +75,15 @@ FROM
 
          JOIN scenario_noeud           sn ON sn.id = sne.scenario_noeud_id
                                          AND sn.histo_destruction IS NULL
-                                         /*@NOEUD_ID=sn.noeud_id*/
-                                         /*@SCENARIO_ID=sn.scenario_id*/
+                                         /*@noeud_id=sn.noeud_id*/
+                                         /*@scenario_id=sn.scenario_id*/
 
 
 
          JOIN noeud                     n ON n.id = sn.noeud_id
                                          AND n.histo_destruction IS NULL
-                                         /*@ANNEE_ID=n.annee_id*/
-                                         /*@ELEMENT_PEDAGOGIQUE_ID=n.element_pedagogique_id*/
+                                         /*@annee_id=n.annee_id*/
+                                         /*@element_pedagogique_id=n.element_pedagogique_id*/
 
          JOIN volume_horaire_ens      vhe ON vhe.element_pedagogique_id = n.element_pedagogique_id
                                          AND vhe.histo_destruction IS NULL
@@ -92,7 +92,7 @@ FROM
          JOIN type_intervention        ti ON ti.id = vhe.type_intervention_id
     LEFT JOIN element_pedagogique      ep ON ep.id = n.element_pedagogique_id
     LEFT JOIN etape                   etp ON etp.id = COALESCE(n.etape_id,ep.etape_id)
-                                         /*@ETAPE_ID=etp.id*/
+                                         /*@etape_id=etp.id*/
 
     LEFT JOIN type_formation           tf ON tf.id = etp.type_formation_id
 
@@ -111,6 +111,6 @@ FROM
                                          AND sd.type_intervention_id = ti.id
   WHERE
     1=1
-    /*@ETAPE_ENS_ID=sne.etape_id*/
-    /*@ETAPE_ID=etp.id*/
+    /*@etape_ens_id=sne.etape_id*/
+    /*@etape_id=etp.id*/
   ) t

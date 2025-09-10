@@ -27,8 +27,8 @@ FROM
     tbl_piece_jointe tpj
   WHERE
     demandee > 0
-    /*@INTERVENANT_ID=tpj.intervenant_id*/
-    /*@ANNEE_ID=tpj.annee_id*/
+    /*@intervenant_id=tpj.intervenant_id*/
+    /*@annee_id=tpj.annee_id*/
   GROUP BY
     annee_id,
     intervenant_id

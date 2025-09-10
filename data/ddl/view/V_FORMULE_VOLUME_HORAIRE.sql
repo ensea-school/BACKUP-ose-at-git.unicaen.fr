@@ -50,12 +50,12 @@ WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
   AND vh.heures <> 0
-  /*@INTERVENANT_ID=i.id*/
-  /*@STATUT_ID=si.id*/
-  /*@TYPE_INTERVENANT_ID=si.type_intervenant_id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@TYPE_VOLUME_HORAIRE_ID=vh.type_volume_horaire_id*/
-  /*@ETAT_VOLUME_HORAIRE_ID<=evh.id*/
+  /*@intervenant_id=i.id*/
+  /*@statut_id=si.id*/
+  /*@type_intervenant_id=si.type_intervenant_id*/
+  /*@annee_id=i.annee_id*/
+  /*@type_volume_horaire_id=vh.type_volume_horaire_id*/
+  /*@etat_volume_horaire_id<=evh.id*/
 
 UNION ALL
 
@@ -105,10 +105,10 @@ WHERE
   vhr.histo_destruction IS NULL
   AND sr.histo_destruction IS NULL
   AND vhr.heures <> 0
-  /*@INTERVENANT_ID=i.id*/
-  /*@STATUT_ID=si.id*/
-  /*@TYPE_INTERVENANT_ID=si.type_intervenant_id*/
-  /*@ANNEE_ID=i.annee_id*/
+  /*@intervenant_id=i.id*/
+  /*@statut_id=si.id*/
+  /*@type_intervenant_id=si.type_intervenant_id*/
+  /*@annee_id=i.annee_id*/
   /*@TYPE_VOLUME_HORAIRE_ID=vhr.type_volume_horaire_id*/
   /*@ETAT_VOLUME_HORAIRE_ID<=evh.id*/
 

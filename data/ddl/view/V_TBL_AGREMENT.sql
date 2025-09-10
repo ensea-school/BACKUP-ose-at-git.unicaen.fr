@@ -10,7 +10,7 @@ SELECT
     JOIN type_volume_horaire tvh ON tvh.code = 'PREVU' AND tvh.id = vh.type_volume_horaire_id
   WHERE
     vh.histo_destruction IS NULL
-    /*@INTERVENANT_ID=s.intervenant_id*/
+    /*@intervenant_id=s.intervenant_id*/
   GROUP BY
     s.intervenant_id, ep.structure_id
   HAVING
@@ -25,7 +25,7 @@ SELECT
     JOIN type_volume_horaire tvh ON tvh.code = 'PREVU' AND tvh.id = vh.type_volume_horaire_id
   WHERE
     vh.histo_destruction IS NULL
-    /*@INTERVENANT_ID=s.intervenant_id*/
+    /*@intervenant_id=s.intervenant_id*/
   GROUP BY
     s.intervenant_id, s.structure_id
   HAVING
@@ -87,8 +87,8 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
     WHERE
       ta.code = 'CONSEIL_ACADEMIQUE'
       AND si.conseil_aca = 1
-      /*@INTERVENANT_ID=i.id*/
-      /*@ANNEE_ID=i.annee_id*/
+      /*@intervenant_id=i.id*/
+      /*@annee_id=i.annee_id*/
   )
 WHERE
   rank = 1
@@ -130,8 +130,8 @@ SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID",
     WHERE
       ta.code = 'CONSEIL_RESTREINT'
       AND si.conseil_restreint = 1
-      /*@INTERVENANT_ID=i.id*/
-      /*@ANNEE_ID=i.annee_id*/
+      /*@intervenant_id=i.id*/
+      /*@annee_id=i.annee_id*/
   )
 WHERE
   rank = 1

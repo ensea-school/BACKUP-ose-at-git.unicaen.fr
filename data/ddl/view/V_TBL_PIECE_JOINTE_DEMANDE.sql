@@ -15,7 +15,7 @@ WITH i_h AS (
     JOIN element_pedagogique  ep ON ep.id = s.element_pedagogique_id -- Service sur l'établissement
   WHERE
     s.histo_destruction IS NULL
-    /*@INTERVENANT_ID=s.intervenant_id*/
+    /*@intervenant_id=s.intervenant_id*/
   GROUP BY
     s.intervenant_id
 ),
@@ -48,8 +48,8 @@ FROM intervenant i
          LEFT JOIN i_h ON i_h.intervenant_id = i.id
          LEFT JOIN hetd ON hetd.intervenant_id = i.id
 WHERE i.histo_destruction IS NULL
-    /*@INTERVENANT_ID=i.id*/
-    /*@ANNEE_ID=i.annee_id*/
+    /*@intervenant_id=i.id*/
+    /*@annee_id=i.annee_id*/
 
   -- Seuil heure soit en HETD soit en heure ou PJ obligatoire meme avec des heures non payables
   AND (

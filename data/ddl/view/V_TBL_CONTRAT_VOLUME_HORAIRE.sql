@@ -46,9 +46,9 @@ FROM
 WHERE
   vh.histo_destruction IS NULL
   AND vh.motif_non_paiement_id IS NULL
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@STATUT_ID=i.statut_id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
+  /*@statut_id=i.statut_id*/
 
 
 UNION ALL
@@ -99,9 +99,9 @@ FROM
 WHERE
   vh.histo_destruction IS NULL
   AND vh.motif_non_paiement_id IS NULL
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@STATUT_ID=i.statut_id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
+  /*@statut_id=i.statut_id*/
 
 
 UNION ALL
@@ -153,9 +153,9 @@ FROM
 WHERE
   vhr.histo_destruction IS NULL
   AND sr.motif_non_paiement_id IS NULL
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@STATUT_ID=i.statut_id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
+  /*@statut_id=i.statut_id*/
 
 
 UNION ALL
@@ -211,6 +211,6 @@ FROM
 WHERE
   vhm.histo_destruction IS NULL
   AND (vhm.auto_validation = 1 OR v.id IS NOT NULL)
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@STATUT_ID=i.statut_id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
+  /*@statut_id=i.statut_id*/

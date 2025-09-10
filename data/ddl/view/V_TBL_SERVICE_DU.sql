@@ -22,9 +22,9 @@ FROM
   LEFT JOIN motif_modification_service mms ON mms.id = msd.motif_id
 WHERE
   1=1
-  /*@INTERVENANT_ID=i.id*/
-  /*@STATUT_ID=si.id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@MOTIF_MODIFICATION_SERVICE_ID=mms.id*/
+  /*@intervenant_id=i.id*/
+  /*@statut_id=si.id*/
+  /*@annee_id=i.annee_id*/
+  /*@motif_modification_service_id=mms.id*/
 GROUP BY
   i.id, i.annee_id, i.structure_id, si.service_statutaire, si.depassement_service_du_sans_hc, si.service_prevu, si.service_realise, si.referentiel_prevu, si.referentiel_realise, si.id

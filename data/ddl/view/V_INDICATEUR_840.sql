@@ -17,7 +17,7 @@ FROM
                 LEFT JOIN tbl_chargens   t ON t.element_pedagogique_id = vhe.element_pedagogique_id
                                           AND t.type_intervention_id = vhe.type_intervention_id
                                           AND t.scenario_id = to_number(p.valeur)
-                                          /*@ANNEE_ID=t.annee_id*/
+                                          /*@annee_id=t.annee_id*/
               GROUP BY
                 vhe.element_pedagogique_id,
                 vhe.type_intervention_id
@@ -36,7 +36,7 @@ FROM
                                   AND s.histo_destruction IS NULL
                 JOIN intervenant i ON i.id = s.intervenant_id
                                   AND i.histo_destruction IS NULL
-                                  /*@ANNEE_ID=i.annee_id*/
+                                  /*@annee_id=i.annee_id*/
               WHERE
                 vh.histo_destruction IS NULL
               GROUP BY

@@ -16,7 +16,7 @@ FROM
   LEFT JOIN structure         s ON s.id = i.structure_id
 WHERE
   1=1
-  /*@INTERVENANT_ID=i.id*/
-  /*@STATUT_ID=si.id*/
-  /*@TYPE_INTERVENANT_ID=ti.id*/
-  /*@ANNEE_ID=i.annee_id*/
+  /*@intervenant_id=i.id*/
+  /*@statut_id=si.id*/
+  /*@type_intervenant_id=ti.id*/
+  /*@annee_id=i.annee_id*/

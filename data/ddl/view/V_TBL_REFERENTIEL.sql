@@ -55,9 +55,9 @@ FROM
                                                  AND v.histo_destruction IS NULL
   WHERE
     vh.histo_destruction IS NULL
-    /*@INTERVENANT_ID=i.id*/
-    /*@ANNEE_ID=i.annee_id*/
-    /*@STRUCTURE_ID=COALESCE(s.structure_id,i.structure_id)*/
+    /*@intervenant_id=i.id*/
+    /*@annee_id=i.annee_id*/
+    /*@structure_id=COALESCE(s.structure_id,i.structure_id)*/
   ) t
 GROUP BY
   t.annee_id,

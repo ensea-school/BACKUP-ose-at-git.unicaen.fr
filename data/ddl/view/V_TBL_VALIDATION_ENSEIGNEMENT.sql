@@ -43,6 +43,6 @@ FROM
        END
 WHERE
   1=1
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@STATUT_ID=si.id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
+  /*@statut_id=si.id*/

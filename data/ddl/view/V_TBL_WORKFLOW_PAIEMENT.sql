@@ -10,8 +10,8 @@ FROM
   tbl_paiement p
 WHERE
   p.heures_a_payer_aa + p.heures_a_payer_ac > 0
-  /*@INTERVENANT_ID=p.intervenant_id*/
-  /*@ANNEE_ID=p.annee_id*/
+  /*@intervenant_id=p.intervenant_id*/
+  /*@annee_id=p.annee_id*/
 GROUP BY
   p.annee_id,
   p.intervenant_id,
@@ -30,8 +30,8 @@ FROM
   tbl_paiement p
 WHERE
   p.heures_demandees_aa + p.heures_demandees_ac > 0
-  /*@INTERVENANT_ID=p.intervenant_id*/
-  /*@ANNEE_ID=p.annee_id*/
+  /*@intervenant_id=p.intervenant_id*/
+  /*@annee_id=p.annee_id*/
 GROUP BY
   p.annee_id,
   p.intervenant_id,

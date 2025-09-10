@@ -17,8 +17,8 @@ WITH t AS (
                                            AND pjd.annee_id BETWEEN pjf.annee_id AND COALESCE(pjf.date_archive - 1,(pjf.annee_id + pjd.duree_vie-1))
   WHERE
     1=1
-    /*@INTERVENANT_ID=pjd.intervenant_id*/
-    /*@ANNEE_ID=pjd.annee_id*/
+    /*@intervenant_id=pjd.intervenant_id*/
+    /*@annee_id=pjd.annee_id*/
   GROUP BY
     pjd.annee_id, pjd.type_piece_jointe_id, pjd.intervenant_id, pjd.intervenant_id, pjd.heures_pour_seuil, pjd.obligatoire
 
@@ -40,8 +40,8 @@ WITH t AS (
                                           AND pjd.type_piece_jointe_id = pjf.type_piece_jointe_id
   WHERE
     pjd.id IS NULL
-    /*@INTERVENANT_ID=pjf.intervenant_id*/
-    /*@ANNEE_ID=pjf.annee_id*/
+    /*@intervenant_id=pjf.intervenant_id*/
+    /*@annee_id=pjf.annee_id*/
   GROUP BY
     pjf.annee_id, pjf.type_piece_jointe_id, pjf.intervenant_id
 )

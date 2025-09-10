@@ -39,7 +39,7 @@ FROM
                                                  AND v.histo_destruction IS NULL
 WHERE
   s.histo_destruction IS NULL
-  /*@INTERVENANT_ID=s.intervenant_id*/
+  /*@intervenant_id=s.intervenant_id*/
 )
 SELECT
   i.annee_id                                                             annee_id,
@@ -71,8 +71,8 @@ FROM
   JOIN type_intervenant            ti ON ti.id = si.type_intervenant_id
 WHERE
   1=1
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
 GROUP BY
   i.annee_id,
   i.id,

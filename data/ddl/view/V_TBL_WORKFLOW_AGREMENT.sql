@@ -11,5 +11,5 @@ FROM
   JOIN type_agrement ta ON ta.id = a.type_agrement_id
 WHERE
   1=1
-  /*@INTERVENANT_ID=a.intervenant_id*/
-  /*@ANNEE_ID=a.annee_id*/
+  /*@intervenant_id=a.intervenant_id*/
+  /*@annee_id=a.annee_id*/

@@ -20,8 +20,8 @@ FROM
     LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
   WHERE
     mep.histo_destruction IS NULL
-    /*@INTERVENANT_ID=i.id*/
-    /*@ANNEE_ID=i.annee_id*/
+    /*@intervenant_id=i.id*/
+    /*@annee_id=i.annee_id*/
 
   UNION ALL
 
@@ -38,8 +38,8 @@ FROM
 
   WHERE
     mep.histo_destruction IS NULL
-    /*@INTERVENANT_ID=i.id*/
-    /*@ANNEE_ID=i.annee_id*/
+    /*@intervenant_id=i.id*/
+    /*@annee_id=i.annee_id*/
 
 ) t1
 JOIN structure str ON str.id = t1.structure_id

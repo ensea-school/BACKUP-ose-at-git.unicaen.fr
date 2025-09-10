@@ -117,5 +117,5 @@ FROM
   LEFT JOIN dossier_champ_autre dca5 ON dca5.id = 5 AND si.dossier_autre_5 = 1
 WHERE
   i.histo_destruction IS NULL
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/

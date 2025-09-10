@@ -10,8 +10,8 @@ FROM
   tbl_mission_prime mp
 WHERE
   mp.actif = 1
-  /*@INTERVENANT_ID=mp.intervenant_id*/
-  /*@ANNEE_ID=mp.annee_id*/
+  /*@intervenant_id=mp.intervenant_id*/
+  /*@annee_id=mp.annee_id*/
 GROUP BY
   mp.intervenant_id,
   mp.structure_id

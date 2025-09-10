@@ -18,8 +18,8 @@ FROM (
     tbl_contrat c
   WHERE
     c.volume_horaire_index = 0
-    /*@INTERVENANT_ID=c.intervenant_id*/
-    /*@ANNEE_ID=c.annee_id*/
+    /*@intervenant_id=c.intervenant_id*/
+    /*@annee_id=c.annee_id*/
   ) c
 GROUP BY
   c.intervenant_id,

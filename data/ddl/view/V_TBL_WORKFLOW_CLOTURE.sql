@@ -10,5 +10,5 @@ FROM
   tbl_cloture_realise c
 WHERE
   c.actif = 1
-  /*@INTERVENANT_ID=c.intervenant_id*/
-  /*@ANNEE_ID=c.annee_id*/
+  /*@intervenant_id=c.intervenant_id*/
+  /*@annee_id=c.annee_id*/

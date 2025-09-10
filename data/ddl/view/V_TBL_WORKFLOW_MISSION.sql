@@ -10,8 +10,8 @@ FROM
   tbl_mission m
 WHERE
   m.actif = 1
-  /*@INTERVENANT_ID=m.intervenant_id*/
-  /*@ANNEE_ID=m.annee_id*/
+  /*@intervenant_id=m.intervenant_id*/
+  /*@annee_id=m.annee_id*/
 GROUP BY
   m.intervenant_id, m.structure_id, m.intervenant_structure_id
 
@@ -28,8 +28,8 @@ FROM
   tbl_mission m
 WHERE
   m.actif = 1
-  /*@INTERVENANT_ID=m.intervenant_id*/
-  /*@ANNEE_ID=m.annee_id*/
+  /*@intervenant_id=m.intervenant_id*/
+  /*@annee_id=m.annee_id*/
 GROUP BY
   m.intervenant_id, m.structure_id
 
@@ -46,8 +46,8 @@ FROM
   tbl_mission m
 WHERE
   m.actif = 1
-  /*@INTERVENANT_ID=m.intervenant_id*/
-  /*@ANNEE_ID=m.annee_id*/
+  /*@intervenant_id=m.intervenant_id*/
+  /*@annee_id=m.annee_id*/
 GROUP BY
   m.intervenant_id,
   m.structure_id
@@ -65,8 +65,8 @@ FROM
   tbl_mission m
 WHERE
   m.actif = 1
-  /*@INTERVENANT_ID=m.intervenant_id*/
-  /*@ANNEE_ID=m.annee_id*/
+  /*@intervenant_id=m.intervenant_id*/
+  /*@annee_id=m.annee_id*/
 GROUP BY
   m.intervenant_id,
   m.structure_id

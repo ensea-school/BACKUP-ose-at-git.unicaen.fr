@@ -10,8 +10,8 @@ FROM
   tbl_candidature c
 WHERE
   c.actif = 1
-  /*@INTERVENANT_ID=c.intervenant_id*/
-  /*@ANNEE_ID=c.annee_id*/
+  /*@intervenant_id=c.intervenant_id*/
+  /*@annee_id=c.annee_id*/
 GROUP BY
   c.intervenant_id, c.structure_id
 
@@ -28,7 +28,7 @@ FROM
   tbl_candidature c
 WHERE
   c.actif = 1
-  /*@INTERVENANT_ID=c.intervenant_id*/
-  /*@ANNEE_ID=c.annee_id*/
+  /*@intervenant_id=c.intervenant_id*/
+  /*@annee_id=c.annee_id*/
 GROUP BY
   c.intervenant_id, c.structure_id

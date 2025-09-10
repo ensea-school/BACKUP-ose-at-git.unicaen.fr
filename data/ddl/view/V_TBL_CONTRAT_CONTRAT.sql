@@ -30,6 +30,6 @@ FROM
     LEFT JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS NULL
 WHERE
     1=1
-    /*@INTERVENANT_ID=i.id*/
-    /*@ANNEE_ID=i.annee_id*/
-    /*@STATUT_ID=i.statut_id*/
+    /*@intervenant_id=i.id*/
+    /*@annee_id=i.annee_id*/
+    /*@statut_id=i.statut_id*/

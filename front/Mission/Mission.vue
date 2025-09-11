@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="col-md-7">
-                                <label class=" form-label">Nombre d'heures prévisionnelles</label>
+                                <label class=" form-label">Nombre d'heures effectives prévisionnelles</label>
                                 <div class="input-group mb-3">
                                     <div class="form-control" v-html="heuresLib"></div>
                                     <button :data-bs-target="`#details-${mission.id}`" class="input-group-btn btn btn-secondary"

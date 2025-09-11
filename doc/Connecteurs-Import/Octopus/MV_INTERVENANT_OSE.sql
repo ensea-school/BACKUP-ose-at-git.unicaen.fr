@@ -30,7 +30,7 @@ WITH i AS (
                     NULL	   													fin_affectation_siham
              FROM octo.v_individu_contrat_type_ose@octoprod icto
                       JOIN octo.individu_unique@octoprod uni ON icto.individu_id = uni.c_individu_chaine
-                      JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
+                      JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
 
              WHERE (COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) - 184 <= SYSDATE OR COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) >= SYSDATE)  AND icto.code_ose IS NOT NULL
 
@@ -54,7 +54,7 @@ WITH i AS (
              FROM octo.individu_unique@octoprod uni
                       JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
    					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
-					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND  COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) - 184 <= SYSDATE AND COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))  >= SYSDATE AND icto.code_ose IS NOT NULL AND icto.code_ose NOT IN('NON_AUTORISE')
+					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id
              WHERE inds.d_debut - 184 <= SYSDATE
                --On ne remonte pas de statut autre pour ceux qui ont déjà un certain type de contrat
 	           --AND icto.individu_id IS NULL
@@ -295,7 +295,6 @@ FROM i
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
 WHERE i.validite_fin >= (sysdate - (365 * 2)) AND  1 = (CASE WHEN str2.code IS NULL AND i.z_type = 'permanent' AND i.z_statut_id NOT IN ('BIATSS', 'PAMSU') THEN 0 ELSE 1 END )
-
 
 
 

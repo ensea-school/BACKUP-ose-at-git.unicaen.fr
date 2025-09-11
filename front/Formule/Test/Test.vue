@@ -791,8 +791,8 @@ export default {
 
 
         exporterCsv: function () {
-            let content = "Structure;Compte dans le service statutaire;" +
-                "Heures non payables;Type d’intervention;Taux FI;Taux FA;Taux FC;" +
+            let content = "Structure;Heures non payables;" +
+                "Compte dans le service statutaire;Type d’intervention;Taux FI;Taux FA;Taux FC;" +
                 "Modulation service dû;Modulation service compl.;" +
                 "Param 1;Param 2;Param 3;Param 4;Param 5;Heures;" +
                 "Service FI;Service FA;Service FC;Service Référentiel;" +

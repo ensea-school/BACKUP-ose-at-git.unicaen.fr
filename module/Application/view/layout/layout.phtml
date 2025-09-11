@@ -108,7 +108,7 @@ echo $this->doctype();
 <div id="contenu-principal" class="container">
     <!--<div id="contenu-principal" class="container intranavigator intranavigator-page">-->
     <?php
-    if ($menuSecondaire = null): //$navigationHelper->menuSecondaire($pages)->render()): ?>
+    if ($menuSecondaire = $navigationHelper->menuSecondaire($pages)->render()): ?>
         <div class="row">
             <div id="sidebar" data-url="<?= $this->intervenant()->menuUrl() ?>" class="col-xs-6 col-md-2"
                  role="navigation">

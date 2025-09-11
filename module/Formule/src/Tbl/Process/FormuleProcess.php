@@ -141,6 +141,7 @@ class FormuleProcess implements ProcessInterface
 
         $sql = $formule->getSqlIntervenant();
         $sql = str_replace('V_FORMULE_INTERVENANT', '(' . $vIntervenant . ')', $sql);
+        $sql = str_replace('v_formule_intervenant', '(' . $vIntervenant . ')', $sql);
 
         return $sql;
     }
@@ -155,6 +156,7 @@ class FormuleProcess implements ProcessInterface
 
         $sql = $formule->getSqlVolumeHoraire() ?? "";
         $sql = str_replace('V_FORMULE_VOLUME_HORAIRE', '(' . $vVolumeHoraire . ')', $sql);
+        $sql = str_replace('v_formule_volume_horaire', '(' . $vVolumeHoraire . ')', $sql);
 
         return $sb->injectKey($sql, $params);
     }

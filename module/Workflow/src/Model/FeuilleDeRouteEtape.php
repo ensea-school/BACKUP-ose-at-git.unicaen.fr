@@ -20,18 +20,19 @@ class FeuilleDeRouteEtape
     public int           $numero;
     public WorkflowEtape $workflowEtape;
     public string        $libelle;
-    public ?string       $url         = null;
-    public bool          $atteignable = true;
-    public float         $objectif    = 1.0;
-    public float         $realisation = 0.0;
+    public ?string       $url               = null;
+    public bool          $atteignable       = true;
+    public float         $objectif          = 0.0;
+    public float         $realisation       = 0.0;
     public array         $whyNonAtteignable = [];
 
 
 
-    public function __construct(FeuilleDeRoute $feuilleDeRoute, WorkflowService $service)
+    public function __construct(FeuilleDeRoute $feuilleDeRoute, WorkflowService $service, WorkflowEtape $etape)
     {
         $this->feuilleDeRoute = $feuilleDeRoute;
         $this->service        = $service;
+        $this->workflowEtape  = $etape;
     }
 
 

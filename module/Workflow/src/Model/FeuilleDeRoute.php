@@ -160,7 +160,7 @@ class FeuilleDeRoute
           we.ordre
         ";
         $sqlParams = ['intervenant' => $this->intervenant->getId()];
-        $stmt = $this->service->getBdd()->selectEach($sql, $sqlParams);
+        $stmt      = $this->service->getBdd()->selectEach($sql, $sqlParams);
 
         while ($d = $stmt->next()) {
             mpg_lower($d);
@@ -170,13 +170,12 @@ class FeuilleDeRoute
             $structureLiblelle = $d['structure_libelle'];
             $atteignable       = (bool)$d['atteignable'];
             $objectif          = (float)$d['objectif'];
-            $partiel           = (float)$d['partiel'];
             $realisation       = (float)$d['realisation'];
             $whyNonAtteignable = $d['why_non_atteignable'];
 
             $etape = $this->workflowEtapes[$etapeCode];
 
-            $this->buildEtape($etape, $structureId, $structureLiblelle, $atteignable, $objectif, $partiel, $realisation, $whyNonAtteignable);
+            $this->buildEtape($etape, $structureId, $structureLiblelle, $atteignable, $objectif, $realisation, $whyNonAtteignable);
         }
 
         foreach ($this->fdr as $fdre) {
@@ -190,49 +189,68 @@ class FeuilleDeRoute
 
 
 
-    private function buildEtape(WorkflowEtape $etape, int $structureId, ?string $structureLibelle, bool $atteignable, float $objectif, float $partiel, float $realisation, ?string $whyNonAtteignable): void
+    private function buildEtape(WorkflowEtape $etape, int $structureId, ?string $structureLibelle, bool $atteignable, float $objectif, float $realisation, ?string $whyNonAtteignable): void
     {
         $role        = $this->service->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $this->service->getServiceContext()->getIntervenant();
 
-        if (!array_key_exists($etape->getCode(), $this->fdr)) {
-            $fdre                = new FeuilleDeRouteEtape($this, $this->service);
-            $fdre->workflowEtape = $etape;
-            $fdre->numero        = count($this->fdr) + 1;
-            $fdre->libelle       = $etape->getLibelle($role);
-            if ($intervenant && !$role) {
-                $fdre->url = $this->service->getUrl($etape->getRouteIntervenant() ?: $etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
-            } else {
-                $fdre->url = $this->service->getUrl($etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
-            }
-            $fdre->atteignable       = $atteignable;
-            $fdre->objectif          = 0;
-            $fdre->realisation       = 0;
-            $fdre->whyNonAtteignable = $this->makeWhyNonAtteignable($whyNonAtteignable);
+        $inStructure = null;
+        $inMain      = false;
 
-            $this->fdr[$etape->getCode()] = $fdre;
+        if (!$this->getStructure()) {
+            // Périmètre établissement
+            $inMain      = true;
+            $inStructure = $structureId !== 0 ? $structureId : null;
         } else {
-            $fdre = $this->fdr[$etape->getCode()];
+            // Périmètre composante : on ne garde que le global ou bien uniquement ce qui concerne la composante
+            if ($structureId === 0 || $structureId === $this->getStructure()->getId()) {
+                $inMain = true;
+            }
         }
 
-        $fdre->objectif += $objectif;
-        $fdre->realisation += $realisation;
+        if ($inMain) {
+            if (!array_key_exists($etape->getCode(), $this->fdr)) {
+                $fdre          = new FeuilleDeRouteEtape($this, $this->service, $etape);
+                $fdre->numero  = count($this->fdr) + 1;
+                $fdre->libelle = $etape->getLibelle($role);
 
-        if ($structureId) {
-            if (!$this->getStructure() || $this->getStructure()->getId() == $structureId) {
-                $fdres                          = new FeuilleDeRouteEtape($this, $this->service);
-                $fdres->workflowEtape           = $etape;
-                $fdres->numero                  = count($fdre->structures) + 1;
-                $fdres->libelle                 = $structureLibelle;
-                $fdres->url                     = null;
-                $fdres->atteignable             = $atteignable;
-                $fdres->objectif                = $objectif;
-                $fdres->realisation             = $realisation;
-                $fdre->structures[$structureId] = $fdres;
+                if ($intervenant && !$role) {
+                    $fdre->url = $this->service->getUrl($etape->getRouteIntervenant() ?: $etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
+                } else {
+                    $fdre->url = $this->service->getUrl($etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
+                }
 
-                $fdre->objectif          += $fdres->objectif;
-                $fdre->realisation       += $fdres->realisation;
+                $fdre->whyNonAtteignable = $this->makeWhyNonAtteignable($whyNonAtteignable);
+
+                $this->fdr[$etape->getCode()] = $fdre;
+            }else{
+                $fdre = $this->fdr[$etape->getCode()];
             }
+
+            $fdre->objectif    += $objectif;
+            $fdre->realisation += $realisation;
+            if (!$atteignable) {
+                $fdre->atteignable = false;
+
+                $arrayWNA = $this->makeWhyNonAtteignable($whyNonAtteignable);
+                foreach ($arrayWNA as $wa) {
+                    if (!in_array($wa, $fdre->whyNonAtteignable)) {
+                        $fdre->whyNonAtteignable[] = $wa;
+                    }
+                }
+            }
+        }
+
+        if ($inStructure !== null) {
+            $fdre = $this->fdr[$etape->getCode()];
+            $fdres                          = new FeuilleDeRouteEtape($this, $this->service, $etape);
+            $fdres->numero                  = count($fdre->structures) + 1;
+            $fdres->libelle                 = $structureLibelle;
+            $fdres->url                     = null;
+            $fdres->atteignable             = $atteignable;
+            $fdres->objectif                = $objectif;
+            $fdres->realisation             = $realisation;
+            $fdre->structures[$structureId] = $fdres;
         }
     }
 

@@ -1,6 +1,7 @@
 <?php
 
-$hostUrl = $_ENV['DEV_VITE_URL'] ?? null;
+
+$hostUrl  = $_ENV['DEV_VITE_URL'] ?? null;
 
 if (!$hostUrl) {
     $scheme = $_ENV['HTTP_X_FORWARDED_PROTO'] ?? $_ENV['REQUEST_SCHEME'] ?? 'http';
@@ -10,6 +11,7 @@ if (!$hostUrl) {
     $hostUrl = $scheme . '://' . $host . ':' . $port;
 
 }
+
 
 return [
     'unicaen-vue' => [

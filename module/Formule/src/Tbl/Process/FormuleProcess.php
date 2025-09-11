@@ -151,12 +151,12 @@ class FormuleProcess implements ProcessInterface
     {
         $sb = $this->getServiceBdd();
 
-        $vVolumeHoraire = $sb->injectKey($sb->getViewDefinition('V_FORMULE_VOLUME_HORAIRE'), $params);
+        $vVolumeHoraire = $sb->getViewDefinition('V_FORMULE_VOLUME_HORAIRE');
 
         $sql = $formule->getSqlVolumeHoraire() ?? "";
         $sql = str_replace('V_FORMULE_VOLUME_HORAIRE', '(' . $vVolumeHoraire . ')', $sql);
 
-        return $sql;
+        return $sb->injectKey($sql, $params);
     }
 
 

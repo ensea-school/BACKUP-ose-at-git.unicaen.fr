@@ -77,7 +77,7 @@ class WfEtapeService extends AbstractEntityService
      * @return Select
      */
 
-    public function getWfEtapeElement(Collection $wfEtapes = null)
+    public function getWfEtapeElement(?Collection $wfEtapes = null)
     {
         $wfEtapesElement = new Select('select-wfetapes');
         $wfEtapesElement->setLabel('Liste étapes');

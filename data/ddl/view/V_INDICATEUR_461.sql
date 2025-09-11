@@ -1,7 +1,7 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_461 AS
 SELECT DISTINCT
   c.intervenant_id,
-  c.structure_id
+  COALESCE(c.structure_id, i.structure_id) structure_id
 FROM
   contrat                c
   JOIN intervenant i ON c.intervenant_id = i.id

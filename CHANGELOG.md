@@ -32,6 +32,10 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 ## Corrections
 
 * Correction des vues pour les indicateurs 241 et 231 (#63193)
+* Correction des problèmes de warnings introduits en 24.9 (#62443)
+* Amélioration des performances pour le calcul des formules du Havre & Lille
+
+
 
 # OSE 24.9 (09/09/2025)
 

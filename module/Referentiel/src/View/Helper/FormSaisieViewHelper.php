@@ -30,7 +30,7 @@ class FormSaisieViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke(SaisieForm $form = null)
+    public function __invoke(?SaisieForm $form = null)
     {
         $this->form = $form;
         $this->form->setAttribute('id', 'referentiel');

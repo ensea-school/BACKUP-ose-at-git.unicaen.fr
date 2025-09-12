@@ -15,7 +15,6 @@ namespace Application\View\Renderer;
  * @method \Chargens\View\Helper\ChargensViewHelper chargens()
  * @method \Application\View\Helper\FormButtonGroupViewHelper formButtonGroup(?Laminas\Form\ElementInterface $element = null, ?string $labelPosition = null)
  * @method \Application\View\Helper\FormSupprimerViewHelper formSupprimer($form)
- * @method \Workflow\View\Helper\FeuilleDeRouteViewHelper feuilleDeRoute(?\Intervenant\Entity\Db\Intervenant $intervenant = null)
  * @method \Intervenant\View\Helper\IntervenantViewHelper intervenant(?\Intervenant\Entity\Db\Intervenant $intervenant = null)
  * @method \Application\View\Helper\TabViewHelper tab()
  * @method \Application\View\Helper\TreeViewHelper tree(\Application\Model\TreeNode $tree, array $attributes = [])

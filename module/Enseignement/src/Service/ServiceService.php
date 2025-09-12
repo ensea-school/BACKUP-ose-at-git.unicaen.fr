@@ -65,7 +65,7 @@ class ServiceService extends AbstractEntityService
 
 
     /**
-     * retourne la classe des entités
+     * Retourne la classe des entités
      *
      * @return string
      * @throws RuntimeException
@@ -252,7 +252,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, ?QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeIntervenant(?TypeIntervenant $typeIntervenant = null, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($typeIntervenant) {
@@ -601,7 +601,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return Service
      */
-    public function newEntity()
+    public function newEntity(): Service
     {
         /** @var Service $entity */
         $entity = parent::newEntity();

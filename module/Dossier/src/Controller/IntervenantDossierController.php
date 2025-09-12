@@ -22,7 +22,7 @@ use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 use Workflow\Entity\Db\Validation;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -108,7 +108,7 @@ class IntervenantDossierController extends AbstractController
                 //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
 
                 if (!$lastCompleted && $tblDossier->getCompletude() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
-                    $nextEtape = $this->getServiceWorkflow()->getNextEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
+                    $nextEtape = $this->getServiceWorkflow()->getNextEtape(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenant);
                     if ($nextEtape && $url = $nextEtape->getUrl()) {
                         return $this->redirect()->toUrl($url);
                     }

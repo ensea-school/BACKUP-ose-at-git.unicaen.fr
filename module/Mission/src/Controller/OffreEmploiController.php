@@ -19,7 +19,7 @@ use Plafond\Processus\PlafondProcessusAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
 use Workflow\Entity\Db\WfEtape;
-use Workflow\Entity\WorkflowEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -323,7 +323,7 @@ class  OffreEmploiController extends AbstractController
         $renseignerDonneesPersonnelles = false;
         $canValiderCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
         $canRefuserCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_REFUSER);
-        $etapeDonneesPersos            = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
+        $etapeDonneesPersos            = $this->getServiceWorkflow()->getEtape(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenant);
         if(!empty($etapeDonneesPersos))
         {
             $renseignerDonneesPersonnelles = ($etapeDonneesPersos->getFranchie() == 1) ? false : true;

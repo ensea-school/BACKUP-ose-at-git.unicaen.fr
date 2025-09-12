@@ -27,6 +27,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -137,8 +138,8 @@ class PieceJointeController extends \Application\Controller\AbstractController
     protected function makeMessages(Intervenant $intervenant)
     {
 
-        $workflowEtapePjSaisie = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_SAISIE, $intervenant);
-        $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_VALIDATION, $intervenant);
+        $workflowEtapePjSaisie = $this->getServiceWorkflow()->getEtape(WorkflowEtape::PJ_SAISIE, $intervenant);
+        $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WorkflowEtape::PJ_VALIDATION, $intervenant);
         $msgs                  = [];
 
         if($workflowEtapePjSaisie != null){

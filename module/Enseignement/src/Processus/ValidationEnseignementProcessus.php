@@ -33,7 +33,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
      *
      * @return Validation[]
      */
-    public function lister(TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant, Structure $structure = null)
+    public function lister(TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant, ?Structure $structure = null)
     {
         $dql = "
         SELECT

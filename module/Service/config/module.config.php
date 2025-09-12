@@ -10,6 +10,7 @@ use Service\Controller\ServiceController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 
 return [
@@ -121,7 +122,7 @@ return [
                     'paramsInject'        => [
                         'intervenant',
                     ],
-                    'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE,
+                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE.','.WorkflowEtape::REFERENTIEL_SAISIE,
                     'withtarget'          => true,
                     'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-prevu'),
                     'visible'             => Assertion\ServiceAssertion::class,
@@ -134,7 +135,7 @@ return [
                     'paramsInject'        => [
                         'intervenant',
                     ],
-                    'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE_REALISE,
+                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE.','.WorkflowEtape::REFERENTIEL_SAISIE_REALISE,
                     'withtarget'          => true,
                     'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-realise'),
                     'visible'             => Assertion\ServiceAssertion::class,

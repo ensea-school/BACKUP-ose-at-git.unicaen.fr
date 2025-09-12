@@ -14,6 +14,7 @@ use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -55,7 +56,7 @@ class ServiceAssertion extends AbstractAssertion
                 $intervenant
                 && $role
                 && $role->getStructure()
-                && (WfEtape::CODE_SERVICE_VALIDATION == $etape || WfEtape::CODE_SERVICE_VALIDATION_REALISE == $etape)
+                && (in_array($etape, [WorkflowEtape::ENSEIGNEMENT_VALIDATION, WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE, WorkflowEtape::REFERENTIEL_VALIDATION, WorkflowEtape::REFERENTIEL_VALIDATION_REALISE]))
             ) { // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...
                 // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
                 return $this->assertHasServices($intervenant, $role->getStructure(), $etape, $role);
@@ -70,10 +71,10 @@ class ServiceAssertion extends AbstractAssertion
             switch ($page['route']) {
                 case 'intervenant/services-prevus':
                     return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
-                break;
+                    break;
                 case 'intervenant/services-realises':
                     return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
-                break;
+                    break;
             }
         }
 
@@ -104,13 +105,13 @@ class ServiceAssertion extends AbstractAssertion
             case ServiceController::class . '.index':
             case ServiceController::class . '.resume':
                 return $this->assertResume($role);
-            break;
+                break;
             case ServiceController::class . '.intervenant-saisie-prevu':
                 return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
-            break;
+                break;
             case ServiceController::class . '.intervenant-saisie-realise':
                 return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
-            break;
+                break;
         }
 
         return true;
@@ -128,7 +129,8 @@ class ServiceAssertion extends AbstractAssertion
 
         $asserts = [
             $this->assertIntervenant($role, $intervenant),
-            $this->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeServiceSaisie(), $intervenant),
+            $this->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeEnseignementSaisie(), $intervenant) ||
+            $this->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeReferentielSaisie(), $intervenant),
         ];
         if ($typeVolumeHoraire->isPrevu()) {
             $asserts[] = $statut->getServicePrevu() || $statut->getReferentielPrevu();
@@ -145,14 +147,14 @@ class ServiceAssertion extends AbstractAssertion
     protected function assertResume(Role $role): bool
     {
         return $this->asserts([
-            (
-                $role->hasPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION)
-                || $role->hasPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION)
-                || $role->hasPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION)
-                || $role->hasPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION)
-            ),
-            !$role->getIntervenant(),
-        ]);
+                                  (
+                                      $role->hasPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION)
+                                      || $role->hasPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION)
+                                      || $role->hasPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION)
+                                      || $role->hasPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION)
+                                  ),
+                                  !$role->getIntervenant(),
+                              ]);
     }
 
 
@@ -175,7 +177,7 @@ class ServiceAssertion extends AbstractAssertion
 
         foreach ($reglesValidation as $regle) {
 
-            if ($etape == WfEtape::CODE_SERVICE_VALIDATION && $regle->getTypeVolumeHoraire()->getCode() == 'PREVU') {
+            if (($etape == WorkflowEtape::ENSEIGNEMENT_VALIDATION || $etape == WorkflowEtape::REFERENTIEL_VALIDATION) && $regle->getTypeVolumeHoraire()->getCode() == TypeVolumeHoraire::CODE_PREVU) {
                 if ($regle->getTypeIntervenant()->getCode() == $typeIntervenant->getCode()) {
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
@@ -186,7 +188,7 @@ class ServiceAssertion extends AbstractAssertion
                 }
             }
 
-            if ($etape == WfEtape::CODE_SERVICE_VALIDATION_REALISE && $regle->getTypeVolumeHoraire()->getCode() == 'REALISE') {
+            if (($etape == WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE || $etape == WorkflowEtape::REFERENTIEL_VALIDATION_REALISE) && $regle->getTypeVolumeHoraire()->getCode() == TypeVolumeHoraire::CODE_REALISE) {
                 if ($regle->getTypeIntervenant()->getCode() == $typeIntervenant->getCode()) {
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
@@ -206,7 +208,7 @@ class ServiceAssertion extends AbstractAssertion
 
     public function assertCampagneSaisie(Role $role, TypeVolumeHoraire $typeVolumeHoraire): bool
     {
-        if ($typeVolumeHoraire && $role->getIntervenant()) {
+        if ($role->getIntervenant()) {
             $campagneSaisie = $this->getServiceCampagneSaisie()->getBy(
                 $role->getIntervenant()->getStatut()->getTypeIntervenant(),
                 $typeVolumeHoraire
@@ -229,9 +231,9 @@ class ServiceAssertion extends AbstractAssertion
             if (!($cloture && $cloture->getId())) return true; // S'il n'y a pas de clôture alors OK
 
             $softPassCloture = $role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES);
-            if ($softPassCloture){
+            if ($softPassCloture) {
                 return !$intervenant->hasMiseEnPaiement(); // S'il n'y a pas de DMEP alors OK ça passe
-            }else{
+            } else {
                 return false; // c'est cloturé => lecture seule
             }
         }
@@ -245,9 +247,9 @@ class ServiceAssertion extends AbstractAssertion
     {
         // filtrer pour la structure ? ?
         return $this->asserts([
-            $intervenant->getStatut()->getMotifNonPaiement(),
-            $this->assertIntervenant($role, $intervenant),
-        ]);
+                                  $intervenant->getStatut()->getMotifNonPaiement(),
+                                  $this->assertIntervenant($role, $intervenant),
+                              ]);
     }
 
 
@@ -284,11 +286,18 @@ class ServiceAssertion extends AbstractAssertion
 
     public function assertEtapeAtteignable($etape, ?Intervenant $intervenant = null): bool
     {
-        if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
-            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
-                return false;
+        if (str_contains($etape, ',')){
+            $etapes = explode(',', $etape);
+            foreach ($etapes as $etape) {
+                if ($this->assertEtapeAtteignable($etape, $intervenant)) {
+                    return true;
+                }
             }
+        }
+
+        if ($intervenant) {
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+            return $feuilleDeRoute->get($etape)?->isAllowed() ?? false;
         }
 
         return true;

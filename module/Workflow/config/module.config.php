@@ -73,8 +73,4 @@ return [
         Service\ValidationService::class     => Service\ValidationServiceFactory::class,
         Assertion\WorkflowAssertion::class   => AssertionFactory::class,
     ],
-
-    'view_helpers' => [
-        'feuilleDeRoute' => View\Helper\FeuilleDeRouteViewHelperFactory::class,
-    ],
 ];

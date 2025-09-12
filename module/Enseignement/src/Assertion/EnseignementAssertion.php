@@ -19,6 +19,7 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -61,7 +62,7 @@ class EnseignementAssertion extends AbstractAssertion
                 $intervenant
                 && $role
                 && $role->getStructure()
-                && (WfEtape::CODE_SERVICE_VALIDATION == $etape || WfEtape::CODE_SERVICE_VALIDATION_REALISE == $etape)
+                && (WorkflowEtape::ENSEIGNEMENT_VALIDATION == $etape || WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE == $etape)
             ) { // dans ce cas ce n'est pas le WF qui agit, mais on voit la validation dès qu'on a des services directement,
                 // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
                 return $this->assertHasEnseignements($intervenant, $role->getStructure(), $etape, $role);
@@ -216,7 +217,7 @@ class EnseignementAssertion extends AbstractAssertion
 
         $asserts = [
             $this->getAssertionService()->assertIntervenant($role, $intervenant),
-            $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeServiceSaisie(), $intervenant),
+            $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeEnseignementSaisie(), $intervenant),
         ];
         if ($typeVolumeHoraire->isPrevu()) {
             $asserts[] = $statut->getServicePrevu() || $statut->getReferentielPrevu();
@@ -248,7 +249,6 @@ class EnseignementAssertion extends AbstractAssertion
     protected function assertImportAgenda (Role $role): bool
     {
         return true;
-        //return $this->getAssertionService()->assertEtapeAtteignable(WfEtape::CODE_SERVICE_SAISIE);
     }
 
 
@@ -261,7 +261,7 @@ class EnseignementAssertion extends AbstractAssertion
 
         $asserts = [
             $this->getAssertionService()->assertIntervenant($role, $intervenant),
-            $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeServiceSaisie(), $intervenant),
+            $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeEnseignementSaisie(), $intervenant),
         ];
         if ($typeVolumeHoraire->isPrevu()) {
             $asserts[] = $statut->getServicePrevu();
@@ -312,10 +312,10 @@ class EnseignementAssertion extends AbstractAssertion
     {
         $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
         switch ($etape) {
-            case WfEtape::CODE_SERVICE_VALIDATION:
+            case WorkflowEtape::ENSEIGNEMENT_VALIDATION:
                 $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
             break;
-            case WfEtape::CODE_SERVICE_VALIDATION_REALISE:
+            case WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE:
                 $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
             break;
             default:

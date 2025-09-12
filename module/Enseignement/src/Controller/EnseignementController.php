@@ -37,6 +37,7 @@ use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Workflow\Entity\Db\Validation;
+use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
@@ -69,6 +70,7 @@ class EnseignementController extends AbstractController
     use EtatSortieServiceAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
     use EtablissementServiceAwareTrait;
+    use ValidationServiceAwareTrait;
 
     public function prevuAction ()
     {
@@ -87,9 +89,15 @@ class EnseignementController extends AbstractController
         ]);
 
         /* @var $intervenant Intervenant */
-
         $intervenant       = $this->getEvent()->getParam('intervenant');
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
+
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $vh = new ViewModel();
+            $vh->setTemplate('intervenant/intervenant/menu');
+
+            return $vh;
+        }
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
@@ -105,7 +113,14 @@ class EnseignementController extends AbstractController
 
         $enseignements = $this->getProcessusEnseignement()->getEnseignements($recherche);
 
-        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'enseignements'));
+        /* Clôture de saisie (si nécessaire) */
+        if ($typeVolumeHoraire?->isRealise() && $intervenant->getStatut()->getCloture()) {
+            $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
+        } else {
+            $cloture = null;
+        }
+
+        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'enseignements', 'cloture'));
 
         return $vm;
     }

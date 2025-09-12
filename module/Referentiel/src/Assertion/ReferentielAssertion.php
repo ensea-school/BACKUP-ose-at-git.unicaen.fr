@@ -20,6 +20,7 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -211,7 +212,7 @@ class ReferentielAssertion extends AbstractAssertion
 
         $asserts = [
             $this->getAssertionService()->assertIntervenant($role, $intervenant),
-            $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeServiceSaisie(), $intervenant),
+            $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeReferentielSaisie(), $intervenant),
         ];
         if ($typeVolumeHoraire->isPrevu()) {
             $asserts[] = $statut->getServicePrevu() || $statut->getReferentielPrevu();
@@ -232,7 +233,7 @@ class ReferentielAssertion extends AbstractAssertion
 
         $asserts = [
             $this->getAssertionService()->assertIntervenant($role, $intervenant),
-            $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeServiceSaisie(), $intervenant),
+            $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeReferentielSaisie(), $intervenant),
         ];
         if ($typeVolumeHoraire->isPrevu()) {
             $asserts[] = $statut->getServicePrevu();
@@ -292,7 +293,7 @@ class ReferentielAssertion extends AbstractAssertion
 
         foreach ($reglesValidation as $regle) {
 
-            if ($etape == WfEtape::CODE_SERVICE_VALIDATION && $regle->getTypeVolumeHoraire()->isPrevu()) {
+            if ($etape == WorkflowEtape::REFERENTIEL_VALIDATION && $regle->getTypeVolumeHoraire()->isPrevu()) {
                 if ($regle->getTypeIntervenant()->getCode() == $typeIntervenant->getCode()) {
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
@@ -303,7 +304,7 @@ class ReferentielAssertion extends AbstractAssertion
                 }
             }
 
-            if ($etape == WfEtape::CODE_SERVICE_VALIDATION_REALISE && $regle->getTypeVolumeHoraire()->isRealise()) {
+            if ($etape == WorkflowEtape::REFERENTIEL_VALIDATION_REALISE && $regle->getTypeVolumeHoraire()->isRealise()) {
                 if ($regle->getTypeIntervenant()->getCode() == $typeIntervenant->getCode()) {
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service

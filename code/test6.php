@@ -16,3 +16,16 @@ $fdr = $sw->getFeuilleDeRoute($intervenant);
 $etapes = $fdr->getEtapes();
 
 dd($etapes);
+
+/**
+ *
+ * 984718 feuille multi composantes non finie
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+//

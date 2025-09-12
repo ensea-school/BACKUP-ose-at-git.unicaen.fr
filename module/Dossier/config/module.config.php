@@ -24,7 +24,7 @@ use Dossier\Service\EmployeurServiceFactory;
 use Dossier\View\Helper\ValidationViewHelperFactory;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 return [
     'routes' => [
@@ -135,7 +135,7 @@ return [
                     'paramsInject'        => [
                         'intervenant',
                     ],
-                    'workflow-etape-code' => WfEtape::CODE_DONNEES_PERSO_SAISIE,
+                    'workflow-etape-code' => WorkflowEtape::DONNEES_PERSO_SAISIE,
                     'withtarget'          => true,
                     'resource'            => PrivilegeController::getResourceId(IntervenantDossierController::class, 'index'),
                     'order'               => 5,

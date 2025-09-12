@@ -12,7 +12,7 @@
 
 
 use Dossier\Assertion\IntervenantDossierAssertion;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 $editIdentite  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IDENTITE);
 $editAdresse   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE);
@@ -26,7 +26,7 @@ $canEdit       = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRI
 $canSupprimer  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_SUPPRIME);
 $formErrors    = $this->formErrors($form);
 
-$nextEtape = $intervenantDossierValidation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
+$nextEtape = $intervenantDossierValidation ? WorkflowEtape::DONNEES_PERSO_VALIDATION : WorkflowEtape::DONNEES_PERSO_SAISIE;
 $this->headTitle()->append($intervenant->getPrenom() . " index.phtml" . $intervenant->getNomUsuel())->append("Données personnelles");
 $fieldsets = $form->getFieldsets();
 ?>

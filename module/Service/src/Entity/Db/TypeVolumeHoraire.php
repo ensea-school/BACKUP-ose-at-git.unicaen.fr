@@ -3,7 +3,7 @@
 namespace Service\Entity\Db;
 
 use Application\Provider\Privilege\Privileges;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 class TypeVolumeHoraire
 {
@@ -11,18 +11,18 @@ class TypeVolumeHoraire
     const CODE_PREVU   = 'PREVU';
     const CODE_REALISE = 'REALISE';
 
-    static public  $codes = [
+    static public $codes = [
         self::CODE_PREVU,
         self::CODE_REALISE,
     ];
 
-    private int    $id;
+    private int $id;
 
     private string $code;
 
     private string $libelle;
 
-    private int    $ordre;
+    private int $ordre;
 
 
 
@@ -171,13 +171,13 @@ class TypeVolumeHoraire
 
 
 
-    public function getWfEtapeServiceSaisie(): string
+    public function getWfEtapeEnseignementSaisie(): string
     {
         if ($this->isPrevu()) {
-            return WfEtape::CODE_SERVICE_SAISIE;
+            return WorkflowEtape::ENSEIGNEMENT_SAISIE;
         }
         if ($this->isRealise()) {
-            return WfEtape::CODE_SERVICE_SAISIE_REALISE;
+            return WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE;
         }
     }
 
@@ -186,10 +186,22 @@ class TypeVolumeHoraire
     public function getWfEtapeEnseignementValidation(): string
     {
         if ($this->isPrevu()) {
-            return WfEtape::CODE_SERVICE_VALIDATION;
+            return WorkflowEtape::ENSEIGNEMENT_VALIDATION;
         }
         if ($this->isRealise()) {
-            return WfEtape::CODE_SERVICE_VALIDATION_REALISE;
+            return WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE;
+        }
+    }
+
+
+
+    public function getWfEtapeReferentielSaisie(): string
+    {
+        if ($this->isPrevu()) {
+            return WorkflowEtape::REFERENTIEL_SAISIE;
+        }
+        if ($this->isRealise()) {
+            return WorkflowEtape::REFERENTIEL_SAISIE_REALISE;
         }
     }
 
@@ -198,10 +210,10 @@ class TypeVolumeHoraire
     public function getWfEtapeReferentielValidation(): string
     {
         if ($this->isPrevu()) {
-            return WfEtape::CODE_REFERENTIEL_VALIDATION;
+            return WorkflowEtape::REFERENTIEL_VALIDATION;
         }
         if ($this->isRealise()) {
-            return WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE;
+            return WorkflowEtape::REFERENTIEL_VALIDATION_REALISE;
         }
     }
 }

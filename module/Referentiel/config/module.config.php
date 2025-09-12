@@ -8,7 +8,7 @@ use Referentiel\Controller\FonctionReferentielController;
 use Referentiel\Controller\ServiceReferentielController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 
 return [
@@ -153,7 +153,7 @@ return [
                     'paramsInject'        => [
                         'intervenant',
                     ],
-                    'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION,
+                    'workflow-etape-code' => WorkflowEtape::REFERENTIEL_VALIDATION,
                     'withtarget'          => true,
                     'visible'             => Assertion\ReferentielAssertion::class,
                     'order'               => 9,
@@ -165,7 +165,7 @@ return [
                     'paramsInject'        => [
                         'intervenant',
                     ],
-                    'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE,
+                    'workflow-etape-code' => WorkflowEtape::REFERENTIEL_VALIDATION_REALISE,
                     'withtarget'          => true,
                     'visible'             => Assertion\ReferentielAssertion::class,
                     'order'               => 15,

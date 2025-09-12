@@ -24,7 +24,7 @@ class ValidationReferentielProcessus extends AbstractProcessus
     use ValidationServiceAwareTrait;
 
 
-    public function lister(TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant, Structure $structure = null)
+    public function lister(TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant, ?Structure $structure = null)
     {
         $dql = "
         SELECT

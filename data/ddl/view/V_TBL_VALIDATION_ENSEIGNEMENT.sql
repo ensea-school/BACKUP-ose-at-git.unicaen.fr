@@ -42,7 +42,7 @@ FROM
                                                          ELSE 'saisi'
        END
 WHERE
-  1=1
+  (vh.histo_destruction IS NULL OR t.validation_id IS NOT NULL)
   /*@intervenant_id=i.id*/
   /*@annee_id=i.annee_id*/
   /*@statut_id=si.id*/

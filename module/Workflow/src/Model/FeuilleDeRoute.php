@@ -92,7 +92,7 @@ class FeuilleDeRoute
             $this->build();
         }
 
-        if (array_key_exists($etapeCode, $this->fdrByName)) {
+        if (array_key_exists($etapeCode, $this->fdr)) {
             return $this->fdr[$etapeCode];
         } else {
             return null;

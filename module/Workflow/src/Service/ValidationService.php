@@ -55,9 +55,6 @@ class ValidationService extends AbstractEntityService
     public function validerDossier (IntervenantDossier $intervenantDossier): Validation
     {
         $validation = $this->newEntity();
-        /**
-         * @var Intervenant $intervenant
-         */
         $intervenant = $intervenantDossier->getIntervenant();
         $validation->setIntervenant($intervenantDossier->getIntervenant());
         $validation->setTypeValidation($this->getServiceTypeValidation()->getDonneesPerso());
@@ -200,10 +197,12 @@ class ValidationService extends AbstractEntityService
      *
      * @return \Workflow\Entity\Db\Validation
      */
-    public function newEntity ($type = null)
+    public function newEntity (?TypeValidation $type = null): Validation
     {
         $entity = parent::newEntity();
-        $entity->setTypeValidation($type);
+        if ($type) {
+            $entity->setTypeValidation($type);
+        }
 
         return $entity;
     }
@@ -241,7 +240,7 @@ class ValidationService extends AbstractEntityService
      *
      * @return array
      */
-    public function lister (TypeValidation $typeValidation, Intervenant $intervenant, Structure $structure = null)
+    public function lister (TypeValidation $typeValidation, Intervenant $intervenant, ?Structure $structure = null)
     {
         $dql = "
         SELECT

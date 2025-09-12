@@ -9,10 +9,9 @@ use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
-// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 
 
 /**
@@ -484,7 +483,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
     protected function assertDossierEdition(?Intervenant $intervenant = null): bool
     {
-        if (!$this->assertEtapeAtteignable(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant)) {
+        if (!$this->assertEtapeAtteignable(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenant)) {
             return false;
         }
 
@@ -493,13 +492,11 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable($etape, ?Intervenant $intervenant = null): bool
+    protected function assertEtapeAtteignable(string $etape, ?Intervenant $intervenant = null): bool
     {
         if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
-            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
-                return false;
-            }
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+            return $feuilleDeRoute->get($etape)?->isAllowed() ?: false;
         }
 
         return true;

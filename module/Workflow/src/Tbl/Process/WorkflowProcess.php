@@ -313,7 +313,7 @@ class WorkflowProcess implements ProcessInterface
           JOIN workflow_etape           e ON e.annee_id = i.annee_id AND 1 = CASE $dems END
           LEFT JOIN ($subQueries) w ON w.intervenant_id = i.id AND w.etape_code = e.code
         WHERE
-          w.intervenant_id IS NOT NULL
+          1=1
           /*@intervenant_id=i.id*/
           /*@annee_id=i.annee_id*/
           /*@statut_id=i.statut_id*/

@@ -38,25 +38,21 @@ class PiecesJointesAssertion extends AbstractAssertion
                 switch ($action) {
                     case 'index':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VISUALISATION)) return false;
-
+                        if (!$intervenant) return false;
                         return $this->assertPieceJointeAction($intervenant);
-                        break;
                     case 'televerser':
                     case 'supprimer':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_EDITION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                        break;
                     case 'valider':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VALIDATION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                        break;
                     case 'devalider':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                        break;
                 }
                 break;
         }

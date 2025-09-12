@@ -63,7 +63,7 @@ logs: ## Afficher les logs des containers docker
 
 
 update-bdd: ## Mise à jour de la base de données
-	docker exec -it $(APP_NAME)-php /var/www/html/bin/ose-code test6 update-bdd
+	docker exec -it $(APP_NAME)-php /var/www/html/bin/ose update-bdd
 .PHONY: update-bdd
 
 

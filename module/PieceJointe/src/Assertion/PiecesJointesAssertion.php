@@ -8,10 +8,8 @@ use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use PieceJointe\Controller\PieceJointeController;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
-
-// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 
 
 /**
@@ -42,25 +40,25 @@ class PiecesJointesAssertion extends AbstractAssertion
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VISUALISATION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                    break;
+                        break;
                     case 'televerser':
                     case 'supprimer':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_EDITION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                    break;
+                        break;
                     case 'valider':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VALIDATION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                    break;
+                        break;
                     case 'devalider':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                    break;
+                        break;
                 }
-            break;
+                break;
         }
 
         return true;
@@ -90,7 +88,7 @@ class PiecesJointesAssertion extends AbstractAssertion
         switch ($privilege) {
             case Privileges::DOSSIER_IDENTITE_EDITION:
                 return $this->assertEditionDossierContact($intervenant);
-            break;
+                break;
         }
     }
 
@@ -105,7 +103,7 @@ class PiecesJointesAssertion extends AbstractAssertion
 
     protected function assertDossierEdition(Intervenant $intervenant): bool
     {
-        if (!$this->assertEtapeAtteignable(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant)) {
+        if (!$this->assertEtapeAtteignable(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenant)) {
             return false;
         }
 
@@ -114,9 +112,9 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertPieceJointeAction(?Intervenant $intervenant): bool
+    protected function assertPieceJointeAction(Intervenant $intervenant): bool
     {
-        if (!$this->assertEtapeAtteignable(WfEtape::CODE_PJ_SAISIE, $intervenant)) {
+        if (!$this->assertEtapeAtteignable(WorkflowEtape::PJ_SAISIE, $intervenant)) {
             return false;
         }
 
@@ -125,16 +123,10 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable($etape, ?Intervenant $intervenant): bool
+    protected function assertEtapeAtteignable($etape, Intervenant $intervenant): bool
     {
-        if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
-            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
-                return false;
-            }
-        }
-
-        return true;
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+        return $feuilleDeRoute->get($etape)?->isAllowed() ?: false;
     }
 
 

@@ -1,6 +1,6 @@
 # Version stable
 
-OSE 24.9](#ose-249-09092025)
+OSE 24.10](#ose-2410-15092025)
 
 
 # OSE 25 (à venir)
@@ -27,7 +27,7 @@ OSE 24.9](#ose-249-09092025)
 
 Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
 
-# OSE 24.10 (à venir)
+# OSE 24.10 (15/09/2025)
 
 ## Corrections
 

@@ -510,7 +510,7 @@ class PlafondService extends AbstractEntityService
                 }
             }
             $view .= "\n  COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,";
-            if ($perimetre->getCode() !== $perimetre::VOLUME_HORAIRE) {
+            if (!in_array($perimetre->getCode(), [$perimetre::VOLUME_HORAIRE, $perimetre::ELEMENT])) {
                 $view .= "\n  CASE";
                 $view .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN ps.plafond_etat_prevu_id";
                 $view .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN ps.plafond_etat_realise_id";
@@ -569,13 +569,13 @@ class PlafondService extends AbstractEntityService
                 $view .= " FROM dual WHERE 0 = 1";
             }
             $view .= "\n  ) p";
-            if ($perimetre->getCode() !== $perimetre::STRUCTURE) {
+            if (!in_array($perimetre->getCode(), [$perimetre::STRUCTURE, $perimetre::ELEMENT])) {
                 $view .= "\n  JOIN intervenant i ON i.id = p.intervenant_id";
             }
             $view .= "\n  LEFT JOIN " . $configTablesJoin[$perimetre->getCode()];
             $view .= "\n  LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL";
             $view .= "\nWHERE\n";
-            if ($perimetre->getCode() !== $perimetre::VOLUME_HORAIRE) {
+            if (!in_array($perimetre->getCode(),[$perimetre::VOLUME_HORAIRE, $perimetre::ELEMENT])) {
                 $view .= "  CASE\n";
                 $view .= "    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN ps.plafond_etat_prevu_id\n";
                 $view .= "    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN ps.plafond_etat_realise_id\n";

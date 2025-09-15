@@ -582,6 +582,7 @@ return [
                 'key_values_if_null' => [
                     'PLAFOND_ID'             => 0,
                     'TYPE_VOLUME_HORAIRE_ID' => 0,
+                    'INTERVENANT_ID'         => 0,
                 ],
             ],
 

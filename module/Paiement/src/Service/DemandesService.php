@@ -185,13 +185,16 @@ class DemandesService extends AbstractService
             tp.structure_id                     structure_id,
             COALESCE(MAX(se.code), 
                      MAX(ssr.code),
-                     MAX(sm.code))              structure_code,
+                     MAX(sm.code),
+                     MAX(si.code))              structure_code,
             COALESCE(MAX(se.libelle_long), 
                      MAX(ssr.libelle_long),
-                     MAX(sm.libelle_long))      structure_libelle,
+                     MAX(sm.libelle_long),
+                     MAX(si.libelle_long))      structure_libelle,
             COALESCE(MAX(se.libelle_court), 
                      MAX(ssr.libelle_court),
-                     MAX(sm.libelle_court))   	structure_libelle_court,
+                     MAX(sm.libelle_court),
+                     MAX(si.libelle_court))   	structure_libelle_court,
             CASE
                 WHEN MAX(tp.service_id) IS NOT NULL AND MAX(s.element_pedagogique_id) IS NOT NULL THEN 'enseignement'
                 WHEN MAX(tp.service_id) IS NOT NULL AND MAX(s.element_pedagogique_id) IS NULL THEN 'enseignement-exterieur'
@@ -258,6 +261,8 @@ class DemandesService extends AbstractService
         LEFT JOIN structure sm ON sm.id = m.structure_id
         LEFT JOIN type_mission tm ON tm.id = m.type_mission_id
         LEFT JOIN etablissement etab ON etab.id = s.etablissement_id
+        LEFT JOIN intervenant i ON i.id = tp.intervenant_id
+        LEFT JOIN structure si ON si.id = i.structure_id
         WHERE
             tp.intervenant_id = :intervenant ";
 
@@ -317,6 +322,7 @@ class DemandesService extends AbstractService
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                                                                                                  = $value['STRUCTURE_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['libelleCourt']                                                                                                             = $value['STRUCTURE_LIBELLE_COURT'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['libelle']                                                                                  = $value['ETAPE_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['exterieur'] = 0;
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['libelle']                                         = $value['ELEMENT_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['libelle'] = $value['TYPE_HEURE_LIBELLE'];
                 if (!array_key_exists('heures', $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']])) {
@@ -387,7 +393,8 @@ class DemandesService extends AbstractService
                 $dmep[$value['STRUCTURE_CODE']]['id']                                                                                                        = $value['STRUCTURE_ID'];
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                                                                                   = $value['STRUCTURE_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['libelleCourt']                                                                                              = $value['STRUCTURE_LIBELLE_COURT'];
-                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['libelle']                                                                    = $value['ETAB_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['libelle'] = $value['ETAB_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['exterieur'] = 1;
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['libelle']                                         = $value['ENSEIGNEMENT_EXT_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']]['libelle'] = $value['TYPE_HEURE_LIBELLE'];
                 if (!array_key_exists('heures', $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAB_CODE']]['enseignements'][$ensCode]['typeHeure'][$value['TYPE_HEURE_CODE']])) {

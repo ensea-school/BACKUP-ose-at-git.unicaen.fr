@@ -36,6 +36,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * Amélioration des performances pour le calcul des formules du Havre & Lille
 * Test formules / export CSV : les colonnes non payable & service statutaire sont maintenant dans le bon ordre (#62553)
 * Les plafonds de périmètres élément pédagogique sont maintenant fonctionnels (#60536)
+* Remontée de la composante d'affectation si celle du contrat est null dans les indicateurs 461, 470, 471, 480, 481
 
 
 # OSE 24.9 (09/09/2025)
@@ -59,7 +60,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * L'affichage de la saisie de services fonctionne à nouveau avec des enseignements pris sur l'extérieur (pb arrivé en 24.8)
 * Correction d'un problème sur le refus d'une candidature dans le cadre des missions (#63060)
 * Correction sur la saisie d'enseignement hors établissement (#63120)
-* Remontée de la composante d'affectation si celle du contrat est null dans l'indicateur des contrats 
+* Remontée de la composante d'affectation si celle du contrat est null dans les indicateurs 450 et 460
 * Correction de la formule du Havre (sur les anciennes années) (#62443)
 * Correction de la requête d'alimentation de la formule de Lyon 3 (#38136)
 

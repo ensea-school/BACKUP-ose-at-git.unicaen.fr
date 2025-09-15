@@ -1,6 +1,7 @@
 <?php
 
 use Application\Provider\Privilege\Privileges;
+use Workflow\Entity\Db\WorkflowEtape;
 
 /**
  * @var $this         \Application\View\Renderer\PhpRenderer
@@ -117,4 +118,5 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
     </script>
 <?php
 
-echo $this->feuilleDeRoute($intervenant)->renderNav(\Workflow\Entity\Db\WfEtape::CODE_PJ_VALIDATION);
+$wfEtape = WorkflowEtape::PJ_SAISIE;
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);

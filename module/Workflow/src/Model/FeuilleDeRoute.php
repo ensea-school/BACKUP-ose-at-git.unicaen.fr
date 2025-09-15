@@ -110,6 +110,10 @@ class FeuilleDeRoute
 
     public function getNext(string|WorkflowEtape|FeuilleDeRouteEtape $etape): ?FeuilleDeRouteEtape
     {
+        if (!$this->builted) {
+            $this->build();
+        }
+
         if ($etape instanceof WorkflowEtape) {
             $etape = $etape->getCode();
         }
@@ -117,13 +121,17 @@ class FeuilleDeRoute
             $etape = $etape->workflowEtape->getCode();
         }
 
-        return null;
+        return null; /** @TODO */
     }
 
 
 
     public function getPrevious(string|WorkflowEtape|FeuilleDeRouteEtape $etape): ?FeuilleDeRouteEtape
     {
+        if (!$this->builted) {
+            $this->build();
+        }
+
         if ($etape instanceof WorkflowEtape) {
             $etape = $etape->getCode();
         }
@@ -131,7 +139,7 @@ class FeuilleDeRoute
             $etape = $etape->workflowEtape->getCode();
         }
 
-        return null;
+        return null; /** @TODO */
     }
 
 

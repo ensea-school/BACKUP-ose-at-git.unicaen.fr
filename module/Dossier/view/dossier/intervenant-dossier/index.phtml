@@ -26,7 +26,7 @@ $canEdit       = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRI
 $canSupprimer  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_SUPPRIME);
 $formErrors    = $this->formErrors($form);
 
-$nextEtape = $intervenantDossierValidation ? WorkflowEtape::DONNEES_PERSO_VALIDATION : WorkflowEtape::DONNEES_PERSO_SAISIE;
+$wfEtape = $intervenantDossierValidation ? WorkflowEtape::DONNEES_PERSO_VALIDATION : WorkflowEtape::DONNEES_PERSO_SAISIE;
 $this->headTitle()->append($intervenant->getPrenom() . " index.phtml" . $intervenant->getNomUsuel())->append("Données personnelles");
 $fieldsets = $form->getFieldsets();
 ?>
@@ -263,7 +263,7 @@ $fieldsets = $form->getFieldsets();
         <?php
         echo $this->form()->closeTag();
         echo "<br/>";
-        echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+        echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);
         ?>
         <?php if ($intervenantDossierValidation): ?>
     </div>

@@ -23,7 +23,7 @@ class WorkflowController extends AbstractController
     use WfEtapeServiceAwareTrait;
 
 
-    public function calculerToutAction()
+    public function calculerToutAction(): array
     {
         $action = $this->params()->fromQuery('action') === '1';
         $title  = 'Calcul du workflow...';
@@ -42,7 +42,7 @@ class WorkflowController extends AbstractController
 
 
 
-    public function feuilleDeRouteDataAction()
+    public function feuilleDeRouteDataAction(): AxiosModel
     {
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -78,7 +78,7 @@ class WorkflowController extends AbstractController
 
 
 
-    public function feuilleDeRouteRefreshAction()
+    public function feuilleDeRouteRefreshAction(): AxiosModel
     {
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -100,16 +100,21 @@ class WorkflowController extends AbstractController
 
 
 
-    public function feuilleDeRouteBtnNextAction()
+    public function feuilleDeRouteNavAction(): AxiosModel
     {
-        $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $wfEtapeCode = $this->params()->fromRoute('wfEtapeCode');
-        if (!$wfEtapeCode) {
-            throw new LogicException('L\'étape du workflow doit être précisée');
-        }
+        $etape = $this->axios()->fromPost('etape');
 
-        return compact('intervenant', 'wfEtapeCode');
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+        $nextEtape = $feuilleDeRoute->getNext($etape);
+
+        $props = [
+            'url',
+            'libelle',
+        ];
+
+        return new AxiosModel($nextEtape, $props);
     }
 }

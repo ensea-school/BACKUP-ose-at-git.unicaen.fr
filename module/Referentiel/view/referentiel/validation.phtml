@@ -39,4 +39,4 @@ foreach ($wells as $well => $title) {
     }
 }
 
-echo $this->feuilleDeRoute($intervenant)->renderNav($typeVolumeHoraire->getWfEtapeReferentielValidation());
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $typeVolumeHoraire->getWfEtapeReferentielValidation()]);

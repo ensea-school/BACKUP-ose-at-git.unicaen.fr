@@ -9,7 +9,6 @@
 /* @var $documentation string[] */
 
 use Application\Provider\Privilege\Privileges;
-use Application\Service\ContextService;
 
 $this->headTitle("Accueil");
 echo $this->messenger()
@@ -38,8 +37,7 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
                     ?><p>
                     <div class='alert alert-danger'> <?= $connexionNonAutorise ?></div></p><?php
                 } else {
-                    echo $this->tag('div')->html($this->feuilleDeRoute($intervenant)->renderCurrentBtn());
-
+                    echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId()]);
 
                     /* Guide à télécharger... */
                     $guideType = $intervenant->getStatut()->getTypeIntervenant()->getCode();
@@ -93,5 +91,6 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
     <!----------------------------- Feuille de route --------------------------->
 <?php
 if ($onlyIntervenant) {
-    echo $this->feuilleDeRoute($intervenant);
+    $urlRefresh = $this->url('workflow/feuille-de-route-refresh', ['intervenant' => $intervenant->getId()]);
+    echo $this->vue('workflow/feuille-de-route', ['intervenant' => $intervenant->getId(), 'urlRefresh' => $urlRefresh]);
 }

@@ -6,6 +6,7 @@ use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TypeContrat;
 use Intervenant\Entity\Db\Intervenant;
 use Contrat\Entity\Db\TblContrat;
+use Workflow\Entity\Db\WorkflowEtape;
 
 /**
  * @var PhpRenderer        $this
@@ -128,7 +129,7 @@ echo $this->messenger() ?>
 <?php endif; ?>
 
 <hr/>
-<?= $this->feuilleDeRoute($intervenant)->renderNav(\Workflow\Entity\Db\WfEtape::CODE_CONTRAT); ?>
+<?= $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => WorkflowEtape::CONTRAT]); ?>
 
 <script>
     $("body").on("envoi-mail-contrat", function (event, data) {

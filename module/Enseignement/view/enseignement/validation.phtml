@@ -35,6 +35,5 @@ foreach ($wells as $well => $title) {
     }
 }
 
-echo $this->feuilleDeRoute($intervenant)->renderNav(
-    $typeVolumeHoraire->isPrevu() ? WorkflowEtape::ENSEIGNEMENT_VALIDATION : WorkflowEtape::ENSEIGNEMENT_VALIDATION
-);
+$etape = $typeVolumeHoraire->isPrevu() ? WorkflowEtape::ENSEIGNEMENT_VALIDATION : WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE;
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $etape]);

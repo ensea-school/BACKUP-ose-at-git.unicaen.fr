@@ -6,10 +6,10 @@
  * @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire
  */
 
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 $title     = 'Suivi de missions';
-$nextEtape = WfEtape::CODE_MISSION_VALIDATION_REALISE;
+$wfEtape = WorkflowEtape::MISSION_SAISIE_REALISE;
 
 $this->intervenant($intervenant)->renderTitle($title);
 
@@ -21,4 +21,5 @@ echo $this->vue('mission/suivi', [
 ]);
 
 echo '<br />';
-echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);

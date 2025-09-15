@@ -64,4 +64,4 @@ if (!empty($data)): ?>
 
 
 <hr/>
-<?= $this->feuilleDeRoute($intervenant)->renderNav($typeAgrement->getCode()); ?>
+<?= $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $typeAgrement->getCode()]); ?>

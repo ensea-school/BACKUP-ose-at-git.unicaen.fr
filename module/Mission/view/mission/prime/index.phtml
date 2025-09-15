@@ -8,15 +8,14 @@
  */
 
 use Application\Provider\Privilege\Privileges;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 $canGerer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION));
 
 $title = 'Indemnités de fin de contrat';
-$nextEtape = WfEtape::CODE_MISSION_VALIDATION_REALISE;
+$wfEtape = WorkflowEtape::MISSION_PRIME;
 
 $this->intervenant($intervenant)->renderTitle($title);
-
 
 echo $this->vue('mission/liste-prime', [
     'intervenant'          => $intervenant->getId(),
@@ -26,4 +25,4 @@ echo $this->vue('mission/liste-prime', [
 
 echo '<br />';
 
-
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);

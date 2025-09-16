@@ -88,7 +88,7 @@ class ExportRhController extends AbstractController
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
 
-                $posts  = $this->getRequest()->getPost();
+                $posts = $this->getRequest()->getPost();
                 if (empty($posts['connecteurForm']['statut']) || $posts['connecteurForm']['statut'] != '') {
                     $codeStatut = $posts['connecteurForm']['statut'];
                 } else {
@@ -141,6 +141,7 @@ class ExportRhController extends AbstractController
         $nameConnecteur     = '';
         $affectationEnCours = '';
         $contratEnCours     = '';
+        $whyNotAtteignable  = null;
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
@@ -154,10 +155,10 @@ class ExportRhController extends AbstractController
 
         /*Vérifier si l'étape du worflow pour faire une PEC ou REN est franchie*/
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-        $wfEtape = $feuilleDeRoute->get(WorkflowEtape::EXPORT_RH);
-        $canExport = $wfEtape && $wfEtape->isAllowed();
-        if (!$canExport){
-            $whyNotAtteignable = implode( ', ', $wfEtape->whyNonAtteignable);
+        $wfEtape        = $feuilleDeRoute->get(WorkflowEtape::EXPORT_RH);
+        $canExport      = $wfEtape && $wfEtape->isAllowed();
+        if (!$canExport) {
+            $whyNotAtteignable = implode(', ', $wfEtape->whyNonAtteignable);
         }
 
         /**
@@ -210,19 +211,19 @@ class ExportRhController extends AbstractController
         $vm = new ViewModel();
         $vm->setTemplate('export-rh/export-rh/exporter');
         $vm->setVariables(compact('typeIntervenant',
-            'intervenant',
-            'intervenantRh',
-            'intervenantDossier',
-            'intervenantDossierValidation',
-            'canExport',
-            'whyNotAtteignable',
-            'form',
-            'renouvellement',
-            'priseEnCharge',
-            'nameConnecteur',
-            'affectationEnCours',
-            'contratEnCours',
-            'excludeStatut'));
+                                  'intervenant',
+                                  'intervenantRh',
+                                  'intervenantDossier',
+                                  'intervenantDossierValidation',
+                                  'canExport',
+                                  'whyNotAtteignable',
+                                  'form',
+                                  'renouvellement',
+                                  'priseEnCharge',
+                                  'nameConnecteur',
+                                  'affectationEnCours',
+                                  'contratEnCours',
+                                  'excludeStatut'));
 
         return $vm;
     }

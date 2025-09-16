@@ -7,6 +7,7 @@ use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
@@ -48,7 +49,7 @@ class PaiementAssertion extends AbstractAssertion
         // Si c'est bon alors on affine...
         switch ($action) {
             case 'demandemiseenpaiement':
-                return $this->assertEtapeAtteignable(WfEtape::CODE_DEMANDE_MEP, $intervenant);
+                return $this->assertEtapeAtteignable(WorkflowEtape::DEMANDE_MEP, $intervenant);
             break;
             case 'visualisationmiseenpaiement':
 
@@ -60,7 +61,7 @@ class PaiementAssertion extends AbstractAssertion
                 if ($role->getIntervenant()) return false; // pas pour les intervenants
             break;
             case 'extractionpaieprime':
-                return $this->assertEtapeAtteignable(WfEtape::CODE_MISSION_PRIME, $intervenant);
+                return $this->assertEtapeAtteignable(WorkflowEtape::MISSION_PRIME, $intervenant);
             break;
             case  'miseenpaiement':
 
@@ -87,11 +88,12 @@ class PaiementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable ($etape, ?Intervenant $intervenant, ?Structure $structure = null): bool
+    protected function assertEtapeAtteignable (string $etape, ?Intervenant $intervenant, ?Structure $structure = null): bool
     {
         if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant, $structure);
-            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant, $structure);
+            $workflowEtape = $feuilleDeRoute->get($etape);
+            if (!$workflowEtape || !$workflowEtape->isAllowed()) { // l'étape doit être atteignable
                 return false;
             }
         }

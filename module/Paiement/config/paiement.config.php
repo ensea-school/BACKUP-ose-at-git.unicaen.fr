@@ -8,6 +8,7 @@ use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\PaiementProcessFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 return [
     'routes' => [
@@ -130,7 +131,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'          => true,
-                    'workflow-etape-code' => WfEtape::CODE_SAISIE_MEP,
+                    'workflow-etape-code' => WorkflowEtape::SAISIE_MEP,
                     'resource'            => PrivilegeController::getResourceId(Controller\PaiementController::class, 'visualisationMiseEnPaiement'),
                     'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 17,

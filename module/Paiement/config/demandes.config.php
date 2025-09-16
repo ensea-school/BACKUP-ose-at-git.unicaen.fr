@@ -6,6 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Paiement\Assertion\PaiementAssertion;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 return [
     'routes' => [
@@ -78,7 +79,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'          => true,
-                    'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
+                    'workflow-etape-code' => WorkflowEtape::DEMANDE_MEP,
                     'resource'            => PrivilegeController::getResourceId(Controller\DemandesController::class, 'demandeMiseEnPaiement'),
                     'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 16,

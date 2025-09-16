@@ -59,6 +59,7 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * Correction demande de mise en paiement avec paiement par la composante d'affectation (#62759)
 * L'affichage de la saisie de services fonctionne à nouveau avec des enseignements pris sur l'extérieur (pb arrivé en 24.8)
 * Correction d'un problème sur le refus d'une candidature dans le cadre des missions (#63060)
+* Correction d'un problème de création automatique de la mission lors de l'acceptation d'une candidature (#63060)
 * Correction sur la saisie d'enseignement hors établissement (#63120)
 * Remontée de la composante d'affectation si celle du contrat est null dans les indicateurs 450 et 460
 * Correction de la formule du Havre (sur les anciennes années) (#62443)

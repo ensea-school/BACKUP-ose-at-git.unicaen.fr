@@ -6,10 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use Service\Controller\ServiceController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 
 

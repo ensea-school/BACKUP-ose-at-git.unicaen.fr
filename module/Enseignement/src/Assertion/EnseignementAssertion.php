@@ -18,7 +18,6 @@ use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Workflow\Entity\Db\Validation;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;

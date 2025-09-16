@@ -9,7 +9,6 @@ use Service\Controller\RegleStructureValidationController;
 use Service\Controller\ServiceController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 
 

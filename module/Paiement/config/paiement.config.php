@@ -7,7 +7,6 @@ use Paiement\Controller\PaiementController;
 use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\PaiementProcessFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 
 return [

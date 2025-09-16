@@ -10,7 +10,7 @@ use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -52,27 +52,28 @@ class SuiviAssertion extends AbstractAssertion
 
     protected function assertWorkflow(Mission|Intervenant|VolumeHoraireMission $entity): bool
     {
-        $codeEtape = WfEtape::CODE_MISSION_SAISIE_REALISE;
-
-        $structure = null;
         if ($entity instanceof Intervenant) {
-            /** @var Role $role */
             $role = $this->getRole();
-
+            $intervenant = $entity;
             $structure = $role->getStructure();
         }
         if ($entity instanceof VolumeHoraireMission) {
             $entity = $entity->getMission();
+            $intervenant = $entity->getIntervenant();
+            $structure = $entity->getStructure();
         }
         if ($entity instanceof Mission) {
-            return $this->assertMissionEditionRealise($entity);
+            $intervenant = $entity->getIntervenant();
+            $structure = $entity->getStructure();
         }
 
-        $wfEtape = $this->getServiceWorkflow()->getEtape($codeEtape, $entity, $structure);
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant, $structure);
+
+        $wfEtape = $feuilleDeRoute->get(WorkflowEtape::MISSION_SAISIE_REALISE);
 
         if (!$wfEtape) return false;
 
-        return $wfEtape->isAtteignable();
+        return $wfEtape->isAllowed();
     }
 
 

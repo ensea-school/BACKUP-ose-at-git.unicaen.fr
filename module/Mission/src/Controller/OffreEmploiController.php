@@ -18,7 +18,6 @@ use Mission\Service\OffreEmploiServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;

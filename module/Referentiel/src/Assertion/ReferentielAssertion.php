@@ -19,7 +19,6 @@ use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Workflow\Entity\Db\Validation;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
@@ -62,7 +61,7 @@ class ReferentielAssertion extends AbstractAssertion
                 $intervenant
                 && $role
                 && $role->getStructure()
-                && (WfEtape::CODE_SERVICE_VALIDATION == $etape || WfEtape::CODE_SERVICE_VALIDATION_REALISE == $etape)
+                && (WorkflowEtape::REFERENTIEL_VALIDATION == $etape || WorkflowEtape::REFERENTIEL_VALIDATION_REALISE == $etape)
             ) { // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...
                 // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
                 return $this->assertHasReferentiel($intervenant, $role->getStructure(), $etape, $role);

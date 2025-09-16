@@ -183,7 +183,7 @@ class AgrementAssertion extends AbstractAssertion
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-        return $feuilleDeRoute->get($wfEtape)->isAllowed();
+        return $feuilleDeRoute->get($wfEtape)?->isAllowed() ?? false;
     }
 
 

@@ -15,7 +15,7 @@ use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TblPaiement;
 use Referentiel\Entity\Db\ServiceReferentiel;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
@@ -783,10 +783,13 @@ class DemandesService extends AbstractService
     {
         $dql = "
         SELECT
-            tp
+            tp, i, mep, cc, df
         FROM
             " . TblPaiement::class . " tp
-        JOIN tp.intervenant i 
+            JOIN tp.intervenant i
+            LEFT JOIN tp.miseEnPaiement mep
+            LEFT JOIN tp.centreCout cc
+            LEFT JOIN tp.domaineFonctionnel df 
         WHERE
             tp. structure = :structure
         AND tp.annee = :annee
@@ -814,9 +817,10 @@ class DemandesService extends AbstractService
 
 
             if (empty($value->getMiseEnPaiement())) {
-                $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant, $value->getStructure());
-                //Si l'étape de demande de mise en paiement n'est pas atteignable alors on ne le propose pas
-                if (!$workflowEtape || !$workflowEtape->isAtteignable()) {
+                $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant, $structure);
+                $wfEtape = $feuilleDeRoute->get(WorkflowEtape::DEMANDE_MEP);
+
+                if (!$wfEtape || !$wfEtape->isAllowed()) {
                     continue;
                 }
                 //On ne prend pas le référentiel dans les demandes de mise en paiement en lot

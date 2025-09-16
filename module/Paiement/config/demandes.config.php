@@ -5,7 +5,6 @@ namespace Paiement;
 use Application\Provider\Privilege\Privileges;
 use Paiement\Assertion\PaiementAssertion;
 use UnicaenPrivilege\Guard\PrivilegeController;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 
 return [

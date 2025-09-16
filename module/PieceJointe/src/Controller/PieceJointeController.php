@@ -26,7 +26,6 @@ use Symfony\Component\Mime\Email;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 use Workflow\Entity\Db\Validation;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 

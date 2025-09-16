@@ -13,8 +13,7 @@ use ExportRh\Service\ExportRhServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use UnicaenSiham\Exception\SihamException;
-use Workflow\Entity\Db\WfEtape;
-use Workflow\Service\WfEtapeServiceAwareTrait;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 class ExportRhController extends AbstractController
@@ -27,7 +26,6 @@ class ExportRhController extends AbstractController
     use IntervenantServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use ParametresServiceAwareTrait;
-    use WfEtapeServiceAwareTrait;
 
 
     /**
@@ -155,24 +153,13 @@ class ExportRhController extends AbstractController
         $priseEnCharge                = false;
 
         /*Vérifier si l'étape du worflow pour faire une PEC ou REN est franchie*/
-        $canExport                    = false;
-        $etapeFranchissementParametre = $this->getServiceParametres()->get('export_rh_franchissement');
-        $etapeFranchissement          = $this->getServiceWorkflow()?->getEtape($this->getServiceWfEtape()?->get($etapeFranchissementParametre), $intervenant);
-
-        $etapeFranchissementLibelle = ($etapeFranchissement?->getEtape()->getCode() == WfEtape::CODE_CONTRAT) ? $etapeFranchissement?->getEtape()?->getLibelle($role) . ' et une date de retour signé de renseignée' : $etapeFranchissement?->getEtape()?->getLibelle($role);
-        if ($etapeFranchissement && $etapeFranchissement->getFranchie()) {
-            //Si l'étape de franchissement du worklow pour la PEC est le contrat on vérifie si au moins un contrat est signé
-            if ($etapeFranchissement->getEtape()->getCode() == WfEtape::CODE_CONTRAT) {
-                $contratsOse = $intervenant->getContrat();
-                foreach ($contratsOse as $contrat) {
-                    if (!empty($contrat->getDateRetourSigne())) {
-                        $canExport = true;
-                    }
-                }
-            } else {
-                $canExport = true;
-            }
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+        $wfEtape = $feuilleDeRoute->get(WorkflowEtape::EXPORT_RH);
+        $canExport = $wfEtape && $wfEtape->isAllowed();
+        if (!$canExport){
+            $whyNotAtteignable = implode( ', ', $wfEtape->whyNonAtteignable);
         }
+
         /**
          * Etape 1 : On cherche si l'intervenant est déjà dans le SI RH
          * Etape 2 : Si pas dans le SI RH alors c'est une prise en charge
@@ -228,7 +215,7 @@ class ExportRhController extends AbstractController
             'intervenantDossier',
             'intervenantDossierValidation',
             'canExport',
-            'etapeFranchissementLibelle',
+            'whyNotAtteignable',
             'form',
             'renouvellement',
             'priseEnCharge',

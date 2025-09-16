@@ -83,7 +83,20 @@ echo $this->messenger() ?>
                             </a>
                         <?php else:
                             try {
-                                echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Workflow\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
+                                $workflowService = \AppAdmin::container()->get(\Workflow\Service\WorkflowService::class);
+                                $feuilleDeRoute = $workflowService->getFeuilleDeRoute($intervenant, $structure);
+                                $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
+                                if ($wfEtape && $wfEtape->whyNonAtteignable){
+
+                                    foreach ($wfEtape->whyNonAtteignable as $raison) {
+                                        ?>
+                                        <div class="alert alert-danger alert-dismissible" role="alert">
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <?= $raison ?>
+                                        </div>
+                                        <?php
+                                    }
+                                }
                             } catch (\Exception $e) {
                                 echo "Ces heures ne peuvent pas être contractualisées";
                             }

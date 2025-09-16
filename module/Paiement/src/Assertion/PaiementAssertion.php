@@ -6,7 +6,6 @@ use Application\Acl\Role;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 

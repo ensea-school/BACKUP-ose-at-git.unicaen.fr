@@ -12,7 +12,7 @@ use Mission\Entity\Db\OffreEmploi;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -278,15 +278,10 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertCandidatureValider (Role $role, Candidature $candidature): bool
     {
-        $codeEtape = WfEtape::CANDIDATURE_VALIDATION;
-        $intervenant = $candidature->getIntervenant();
-        $wfEtape   = $this->getServiceWorkflow()->getEtape($codeEtape, $intervenant);
-        $structureOffre = $candidature->getOffre()->getStructure();
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($candidature->getIntervenant(), $candidature->getOffre()->getStructure());
+        $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CANDIDATURE_VALIDATION);
 
-        return $this->asserts([
-            $wfEtape && $wfEtape->isAtteignable(),
-            $this->assertStructure($role, $structureOffre),
-        ]);
+        return $wfEtape && $wfEtape->isAllowed();
     }
 
 

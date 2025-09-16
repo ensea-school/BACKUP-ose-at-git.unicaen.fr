@@ -5,7 +5,7 @@ namespace Mission\Assertion;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -25,9 +25,12 @@ class PrimeAssertion extends AbstractAssertion implements EntityManagerAwareInte
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_MISSION_PRIME, $intervenant);
-            $wfOk          = $workflowEtape && $workflowEtape->isAtteignable();
-            if (!$wfOk) return false;
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+            $wfEtape = $feuilleDeRoute->get(WorkflowEtape::MISSION_PRIME);
+
+            if (!$wfEtape || !$wfEtape->isAllowed()){
+                return false;
+            }
         }
 
         return true;

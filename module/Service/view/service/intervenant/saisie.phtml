@@ -1,6 +1,6 @@
 <?php
 
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 /**
  * @var $this                \Application\View\Renderer\PhpRenderer
@@ -10,8 +10,6 @@ use Workflow\Entity\Db\WfEtape;
  * @var $enseignements       \Enseignement\Entity\Db\Service[]
  * @var $referentiels        \Referentiel\Entity\Db\ServiceReferentiel[]
  */
-
-use Workflow\Entity\Db\WorkflowEtape;
 
 if ($typeVolumeHoraire->isPrevu()) {
     $wfEtape = WorkflowEtape::ENSEIGNEMENT_SAISIE;

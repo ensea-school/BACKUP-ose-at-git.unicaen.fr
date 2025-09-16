@@ -6,7 +6,6 @@ use Application\Provider\Privilege\Privileges;
 use Mission\Controller\PrimeController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
-use Workflow\Entity\Db\WfEtape;
 use Workflow\Entity\Db\WorkflowEtape;
 
 

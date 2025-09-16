@@ -13,6 +13,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
@@ -215,11 +216,10 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertWorkflow(Contrat $contrat): bool
     {
-        $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $contrat->getIntervenant(), $contrat->getStructure());
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($contrat->getIntervenant(), $contrat->getStructure());
+        $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
 
-        return $this->asserts(
-            $workflowEtape && $workflowEtape->isAtteignable()
-        );
+        return $wfEtape->isAllowed();
     }
 
 
@@ -318,9 +318,9 @@ class ContratAssertion extends AbstractAssertion
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $intervenant);
-            $wfOk          = $workflowEtape && $workflowEtape->isAtteignable();
-            if (!$wfOk) return false;
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+            $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
+            if (!$wfEtape || !$wfEtape->isAllowed()) return false;
         }
 
         return true;

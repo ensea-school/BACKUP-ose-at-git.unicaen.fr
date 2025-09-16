@@ -81,7 +81,7 @@ class AgrementService extends AbstractEntityService
 
 
 
-    public function getExportCsvData(Annee $annee, Structure $structure = null)
+    public function getExportCsvData(Annee $annee, ?Structure $structure = null)
     {
         $params = ['annee' => $annee->getId()];
 

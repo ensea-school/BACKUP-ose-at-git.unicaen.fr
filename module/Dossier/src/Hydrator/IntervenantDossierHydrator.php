@@ -30,7 +30,7 @@ class IntervenantDossierHydrator implements HydratorInterface
     use SituationMatrimonialeServiceAwareTrait;
 
 
-    private $defaultStatut;
+    private ?statut $defaultStatut = null;
 
 
 
@@ -38,7 +38,7 @@ class IntervenantDossierHydrator implements HydratorInterface
      *
      * @param Statut $defaultStatut
      */
-    public function __construct(Statut $defaultStatut = null)
+    public function __construct(?Statut $defaultStatut = null)
     {
         $this->setDefaultStatut($defaultStatut);
     }
@@ -272,14 +272,14 @@ class IntervenantDossierHydrator implements HydratorInterface
 
 
 
-    public function getDefaultStatut()
+    public function getDefaultStatut(): ?Statut
     {
         return $this->defaultStatut;
     }
 
 
 
-    public function setDefaultStatut($defaultStatut = null)
+    public function setDefaultStatut(?Statut $defaultStatut = null): self
     {
         $this->defaultStatut = $defaultStatut;
 

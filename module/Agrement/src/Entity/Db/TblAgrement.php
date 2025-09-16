@@ -9,7 +9,6 @@ use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\StructureAwareTrait;
-use Workflow\Resource\WorkflowResource;
 
 
 class TblAgrement implements ResourceInterface
@@ -66,14 +65,5 @@ class TblAgrement implements ResourceInterface
     public function getResourceId(): string
     {
         return 'TblAgrement';
-    }
-
-
-
-    public function getResourceWorkflow(): WorkflowResource
-    {
-        $etape = $this->getTypeAgrement()->getCode();
-
-        return WorkflowResource::create($etape, $this->getIntervenant(), $this->getStructure());
     }
 }

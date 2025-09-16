@@ -34,18 +34,6 @@ return [
         ],
     ],
 
-    'resources' => [
-        'WorkflowResource' => [],
-        'WorkflowEtape'    => [],
-    ],
-
-    'rules' => [
-        [
-            'resources' => ['WorkflowResource', 'WorkflowEtape'],
-            'assertion' => Assertion\WorkflowAssertion::class,
-        ],
-    ],
-
     'controllers' => [
         Controller\WorkflowController::class => Controller\WorkflowControllerFactory::class,
     ],
@@ -56,6 +44,5 @@ return [
         Service\WfEtapeService::class        => Service\WfEtapeServiceFactory::class,
         Service\TypeValidationService::class => Service\TypeValidationServiceFactory::class,
         Service\ValidationService::class     => Service\ValidationServiceFactory::class,
-        Assertion\WorkflowAssertion::class   => AssertionFactory::class,
     ],
 ];

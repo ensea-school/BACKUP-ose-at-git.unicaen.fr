@@ -3,18 +3,16 @@
 namespace Workflow\Entity;
 
 use Intervenant\Entity\Db\IntervenantAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Lieu\Entity\Db\StructureAwareTrait;
 use Workflow\Entity\Db\TblWorkflow;
 use Workflow\Entity\Db\WfEtape;
-use Workflow\Resource\WorkflowResource;
 
 /**
  * WorkflowEtape
  * @deprecated
  */
-class WorkflowEtape implements ResourceInterface
+class WorkflowEtape
 {
     use IntervenantAwareTrait;
     use StructureAwareTrait;
@@ -222,25 +220,6 @@ class WorkflowEtape implements ResourceInterface
         $this->franchie = $franchie;
 
         return $this;
-    }
-
-
-
-    public function getResource()
-    {
-        return WorkflowResource::create($this);
-    }
-
-
-
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId()
-    {
-        return 'WorkflowEtape';
     }
 
 }

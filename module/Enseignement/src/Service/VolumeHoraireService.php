@@ -31,7 +31,7 @@ class VolumeHoraireService extends AbstractEntityService
      * retourne la classe des entités
      *
      * @return string
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     public function getEntityClass()
     {
@@ -148,7 +148,7 @@ class VolumeHoraireService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire = null, ?QueryBuilder $qb = null, $alias = null)
+    public function finderByEtatVolumeHoraire(?EtatVolumeHoraire $etatVolumeHoraire = null, ?QueryBuilder $qb = null, ?string $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
@@ -172,7 +172,7 @@ class VolumeHoraireService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByStrictEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire = null, ?QueryBuilder $qb = null, $alias = null)
+    public function finderByStrictEtatVolumeHoraire(?EtatVolumeHoraire $etatVolumeHoraire = null, ?QueryBuilder $qb = null, ?string $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {

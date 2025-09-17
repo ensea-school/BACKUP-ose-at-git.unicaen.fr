@@ -27,6 +27,16 @@ OSE [24.10](#ose-2410-15092025)
 
 Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
 
+
+
+# OSE 24.11 (à venir)
+
+## Corrections
+
+* Bonne prise en compte de l'ordonnancement des statuts au niveau des données personnelles (#63380)
+
+
+
 # OSE 24.10 (15/09/2025)
 
 ## Corrections

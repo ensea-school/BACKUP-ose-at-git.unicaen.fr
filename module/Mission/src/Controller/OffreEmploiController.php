@@ -322,10 +322,13 @@ class  OffreEmploiController extends AbstractController
         $renseignerDonneesPersonnelles = false;
         $canValiderCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
         $canRefuserCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_REFUSER);
-        $etapeDonneesPersos            = $this->getServiceWorkflow()->getEtape(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenant);
+
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+
+        $etapeDonneesPersos            = $feuilleDeRoute->get(WorkflowEtape::DONNEES_PERSO_SAISIE);
         if(!empty($etapeDonneesPersos))
         {
-            $renseignerDonneesPersonnelles = ($etapeDonneesPersos->getFranchie() == 1) ? false : true;
+            $renseignerDonneesPersonnelles = !$etapeDonneesPersos->isFranchie();
         }
 
         if (!$intervenant) {

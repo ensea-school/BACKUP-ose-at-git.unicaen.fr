@@ -113,8 +113,9 @@ class IntervenantAssertion extends AbstractAssertion
     protected function assertEtapeAtteignable($etape, ?Intervenant $intervenant = null): bool
     {
         if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
-            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+            $workflowEtape = $feuilleDeRoute->get($etape);
+            if (!$workflowEtape || !$workflowEtape->isAllowed()) { // l'étape doit être atteignable
                 return false;
             }
         }

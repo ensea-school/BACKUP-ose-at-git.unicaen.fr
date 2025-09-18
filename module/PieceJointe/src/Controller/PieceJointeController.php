@@ -136,17 +136,18 @@ class PieceJointeController extends \Application\Controller\AbstractController
      */
     protected function makeMessages(Intervenant $intervenant)
     {
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
 
-        $workflowEtapePjSaisie = $this->getServiceWorkflow()->getEtape(WorkflowEtape::PJ_SAISIE, $intervenant);
-        $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WorkflowEtape::PJ_VALIDATION, $intervenant);
+        $workflowEtapePjSaisie = $feuilleDeRoute->get(WorkflowEtape::PJ_SAISIE);
+        $workflowEtapePjValide = $feuilleDeRoute->get(WorkflowEtape::PJ_VALIDATION);
         $msgs                  = [];
 
         if($workflowEtapePjSaisie != null){
-            if ($workflowEtapePjSaisie->getFranchie() != 1) {
+            if (!$workflowEtapePjSaisie->isFranchie()) {
                 $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
-            } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() == 1) {
+            } elseif ($workflowEtapePjSaisie->isFranchie() && $workflowEtapePjValide->isFranchie()) {
                 $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
-            } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() != 1) {
+            } elseif ($workflowEtapePjSaisie->isFranchie() && !$workflowEtapePjValide->isFranchie()) {
                 $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
                 $msgs['warning'][] = "Mais certaines doivent encore être validées par un gestionnaire.";
             }

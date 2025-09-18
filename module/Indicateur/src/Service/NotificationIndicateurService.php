@@ -10,7 +10,7 @@ use LogicException;
 use DateTime;
 
 /**
- * Description of WfEtapeDepService
+ * Description of NotificationIndicateurService
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  *

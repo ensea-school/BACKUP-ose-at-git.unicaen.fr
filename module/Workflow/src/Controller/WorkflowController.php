@@ -5,11 +5,8 @@ namespace Workflow\Controller;
 use Application\Controller\AbstractController;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
-use UnicaenApp\Exception\LogicException;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
-use Workflow\Service\WfEtapeDepServiceAwareTrait;
-use Workflow\Service\WfEtapeServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -18,9 +15,6 @@ class WorkflowController extends AbstractController
     use ContextServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use TableauBordServiceAwareTrait;
-
-    use WfEtapeDepServiceAwareTrait;
-    use WfEtapeServiceAwareTrait;
 
 
     public function calculerToutAction(): array
@@ -108,7 +102,7 @@ class WorkflowController extends AbstractController
         $etape = $this->axios()->fromPost('etape');
 
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-        $nextEtape = $feuilleDeRoute->getNext($etape);
+        $nextEtape      = $feuilleDeRoute->getNext($etape);
 
         $props = [
             'url',

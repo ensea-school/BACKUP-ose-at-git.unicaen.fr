@@ -108,8 +108,9 @@ class IntervenantDossierController extends AbstractController
                 //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
 
                 if (!$lastCompleted && $tblDossier->getCompletude() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
-                    $nextEtape = $this->getServiceWorkflow()->getNextEtape(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenant);
-                    if ($nextEtape && $url = $nextEtape->getUrl()) {
+                    $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($role->getIntervenant());
+                    $nextEtape = $feuilleDeRoute->getNext(WorkflowEtape::DONNEES_PERSO_SAISIE);
+                    if ($nextEtape && $url = $nextEtape->url) {
                         return $this->redirect()->toUrl($url);
                     }
                 }

@@ -3,7 +3,6 @@
 namespace Workflow\Service;
 
 use Application\Service\AbstractEntityService;
-use Application\Service\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Workflow\Entity\Db\TypeValidation;
 
@@ -19,7 +18,7 @@ class TypeValidationService extends AbstractEntityService
      * retourne la classe des entités
      *
      * @return string
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     public function getEntityClass ()
     {

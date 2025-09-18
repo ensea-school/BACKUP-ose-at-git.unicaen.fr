@@ -3,7 +3,6 @@
 namespace Workflow;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Assertion\AssertionFactory;
 
 
 return [
@@ -40,8 +39,6 @@ return [
 
     'services' => [
         Service\WorkflowService::class       => Service\WorkflowServiceFactory::class,
-        Service\WfEtapeDepService::class     => Service\WfEtapeDepServiceFactory::class,
-        Service\WfEtapeService::class        => Service\WfEtapeServiceFactory::class,
         Service\TypeValidationService::class => Service\TypeValidationServiceFactory::class,
         Service\ValidationService::class     => Service\ValidationServiceFactory::class,
     ],

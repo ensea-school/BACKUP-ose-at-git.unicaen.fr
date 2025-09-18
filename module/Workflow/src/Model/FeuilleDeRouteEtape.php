@@ -60,6 +60,12 @@ class FeuilleDeRouteEtape
 
 
 
+    public function isFranchie(): bool
+    {
+        return $this->realisation >= $this->objectif;
+    }
+
+
     public function isAllowed(): bool
     {
         return true;

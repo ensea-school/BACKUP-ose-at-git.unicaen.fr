@@ -25,6 +25,8 @@ class FeuilleDeRoute
      */
     private array $fdr = [];
 
+    private ?string $couranteCache = null;
+
     private bool $builted = false;
 
 
@@ -42,6 +44,7 @@ class FeuilleDeRoute
     {
         $this->fdr     = [];
         $this->builted = false;
+        $this->couranteCache = null;
     }
 
 
@@ -103,12 +106,19 @@ class FeuilleDeRoute
 
     public function getCourante(): ?FeuilleDeRouteEtape
     {
-        return null;
+        if (!$this->couranteCache) {
+            $wfEtape = $this->getNext();
+            if ($wfEtape){
+                $this->couranteCache = $wfEtape->getCode();
+            }
+        }
+
+        return $this->fdr[$this->couranteCache] ?? null;
     }
 
 
 
-    public function getNext(string|WorkflowEtape|FeuilleDeRouteEtape $etape): ?FeuilleDeRouteEtape
+    public function getNext(string|WorkflowEtape|FeuilleDeRouteEtape|null $etape = null, bool $needAllowed = true): ?FeuilleDeRouteEtape
     {
         if (!$this->builted) {
             $this->build();
@@ -121,22 +131,19 @@ class FeuilleDeRoute
             $etape = $etape->workflowEtape->getCode();
         }
 
-        return null; /** @TODO */
-    }
+        // Si l'étape n'est pas précisée, on est déjà dans la prochaine
+        $isNext = $etape === null;
 
-
-
-    public function getPrevious(string|WorkflowEtape|FeuilleDeRouteEtape $etape): ?FeuilleDeRouteEtape
-    {
-        if (!$this->builted) {
-            $this->build();
-        }
-
-        if ($etape instanceof WorkflowEtape) {
-            $etape = $etape->getCode();
-        }
-        if ($etape instanceof FeuilleDeRouteEtape) {
-            $etape = $etape->workflowEtape->getCode();
+        foreach($this->fdr as $code => $wfEtape){
+            if ($isNext){
+                if ($wfEtape->atteignable && !$wfEtape->isFranchie()){
+                    if (!$needAllowed || $wfEtape->isAllowed()){
+                        return $wfEtape;
+                    }
+                }
+            }elseif($code === $etape){
+                $isNext = true;
+            }
         }
 
         return null; /** @TODO */

@@ -75,6 +75,14 @@ update-ddl: ## Mise à jour des définitions de la base de données
 
 
 
+compile: ## Compilation avec Vite & Sass côté front
+	docker exec -it $(APP_NAME)-nodejs npx sass --style=compressed public/css/app.scss public/css/app.css
+	docker exec -it $(APP_NAME)-nodejs npx vite build
+	docker exec -it $(APP_NAME)-nodejs chown -R $(DEV_HOST_USER_ID):$(DEV_HOST_USER_ID) *
+.PHONY: compile
+
+
+
 clear-cache: ## Vide le cache de l'application
 	docker exec -it $(APP_NAME)-php /var/www/html/bin/ose clear-cache
 .PHONY: clear-cache

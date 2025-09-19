@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var $this             \Application\View\Renderer\PhpRenderer
+ * @var $this \Application\View\Renderer\PhpRenderer
  */
 
 use Laminas\View\Helper\Navigation as NavigationHelper;
@@ -11,17 +11,10 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     return;
 }
 
-/** @var NavigationHelper $navigationHelper */
-$navigationHelper = $this->navigation('navigation');
-$pages            = $navigationHelper->getContainer();
 
-$version   = $this->appInfos()->getConfig()->get('version');
-$appLayout = $this->appLayout();
+$version = $this->appInfos()->getConfig()->get('version');
 
-$navigation = AppAdmin::container()->get(\Framework\Navigation\Navigation::class);
-$mainMenu = $navigation->getHome()->getVisiblePages();
-
-echo $this->doctype();
+echo "<!DOCTYPE html>";
 ?>
 
 <html lang="fr">
@@ -81,62 +74,9 @@ echo $this->doctype();
 
 <body class="<?= AppAdmin::env() ?> p-0">
 
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
-    <div class="container">
-        <?= $this->appLink($this->appInfos()->nom) ?>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <?php foreach ($mainMenu as $page): ?>
-                    <li class="nav-item">
-                        <a class="nav-link <?php if ($page->isActive()) echo ' active' ?>" href="<?php echo $page->getUri() ?>">
-                            <?php echo $this->escapeHtml($page->getLabel()) ?>
-                        </a>
-                    </li>
-                <?php endforeach ?>
-            </ul>
-            <?= $this->vue('application/connexion', ['data' => $appLayout->connexionData()]); ?>
-        </div>
-    </div>
-</nav>
-
-<div id="contenu-principal" class="container">
-    <!--<div id="contenu-principal" class="container intranavigator intranavigator-page">-->
-    <?php
-    if ($menuSecondaire = $navigationHelper->menuSecondaire($pages)->render()): ?>
-        <div class="row">
-            <div id="sidebar" data-url="<?= $this->intervenant()->menuUrl() ?>" class="col-xs-6 col-md-2"
-                 role="navigation">
-                <?= $menuSecondaire; ?>
-            </div>
-            <div id="content" class="col-xs-12 col-md-10">
-                <?= $this->content; ?>
-            </div>
-        </div>
-    <?php else: ?>
-        <?= $this->content; ?>
-    <?php endif; ?>
-</div>
-
-
-<nav id="footer" class="nav justify-content-center">
-    <a title="<?= AppAdmin::config()['etablissement']['logoDescription'] ?? null ?>" class="nav-link lien-univ"
-       href="<?= AppAdmin::config()['etablissement']['logoUri'] ?? null ?>"><?= AppAdmin::config()['etablissement']['nom'] ?? null ?></a>
-    <a title="&#xC0;propos de cette application" class="nav-link apropos" href="<?= $this->basePath('apropos') ?>">À
-        propos</a>
-    <a title="Contact concernant l'application" class="nav-link contact" href="<?= $this->basePath('contact') ?>">Contact</a>
-    <a title="Page de navigation au sein de l'application" class="nav-link plan" href="<?= $this->basePath('plan') ?>">Plan
-        de navigation</a>
-    <a title="Mentions légales" class="nav-link ml"
-       href="<?= AppAdmin::config()['etablissement']['mentionsLegales'] ?? null ?>">Mentions légales</a>
-    <a title="Vie privée" class="nav-link il"
-       href="<?= AppAdmin::config()['etablissement']['viePrivee'] ?? null ?>">Vie privée</a>
-</nav>
+<?php require __DIR__ . '/partial/navbar.phtml'; ?>
+<?php require __DIR__ . '/partial/content.phtml'; ?>
+<?php require __DIR__ . '/partial/footer.phtml'; ?>
 
 
 <!-- Scripts (dépendances) -->

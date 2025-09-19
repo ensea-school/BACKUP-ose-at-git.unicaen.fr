@@ -133,7 +133,7 @@ return [
          * exemple si le login 'lecluse' est autorisé à usurper, il peut se connecter en tant que Pascal Durand
          * à l'aide de son login 'durandp' en entrant comme identifiant 'lecluse=durandp' et comme mot de passe celui de 'lecluse'
          */
-        'autorisationsUrsurpation'     => [],
+        'autorisationsUsurpation'     => [],
 
         /* IP ou nom DNS de la machine hébergeant le serveur LDAP. */
         'host'                         => 'ldap.votre-etablissement.fr',

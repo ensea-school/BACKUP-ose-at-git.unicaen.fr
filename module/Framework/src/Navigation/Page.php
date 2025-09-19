@@ -12,7 +12,7 @@ class Page
     /** @var array|Page[] */
     private array $pages = [];
 
-    private Router $router;
+    private Router    $router;
     private Authorize $authorize;
 
 
@@ -20,12 +20,13 @@ class Page
     public function __construct(
         private readonly Navigation         $navigation,
         private readonly ContainerInterface $container,
+        private readonly string             $pageName,
         private readonly array              $data,
         private ?Page                       $parent = null,
     )
     {
         $this->authorize = $this->container->get(Authorize::class);
-        $this->router = $this->container->get(Router::class);
+        $this->router    = $this->container->get(Router::class);
 
         if (array_key_exists('pages', $data)) {
             // tri direct
@@ -33,7 +34,7 @@ class Page
                 return ($p1['order'] ?? 0) <=> ($p2['order'] ?? 0);
             });
             foreach ($data['pages'] as $pageName => $pageData) {
-                $this->pages[$pageName] = new Page($this->navigation, $this->container, $pageData, $this);
+                $this->pages[$pageName] = new Page($this->navigation, $this->container, $pageName, $pageData, $this);
             }
         }
     }
@@ -74,24 +75,12 @@ class Page
 
     public function isActive(): bool
     {
-        if (array_key_exists('uri', $this->data)) {
-            $uri = $this->router->uriFromUrl($this->data['uri']);
-
-            return str_starts_with($this->router->getCurrentUri(), $uri);
+        $currentPage = $this->navigation->getCurrentPage();
+        if ($currentPage) {
+            return $this->isParentOf($this->navigation->getCurrentPage());
+        } else {
+            return false;
         }
-        if (array_key_exists('route', $this->data)) {
-            $route = $this->router->getRoute($this->data['route'] ?? null);
-
-            $currentRoute = $this->router->getCurrentRoute();
-
-            if (!$currentRoute){
-                return false;
-            }
-
-            return $route->isParentOf($currentRoute);
-        }
-
-        return false;
     }
 
 
@@ -105,6 +94,13 @@ class Page
         } while ($page = $page->getParent());
 
         return false;
+    }
+
+
+
+    public function getName(): string
+    {
+        return $this->pageName;
     }
 
 
@@ -126,6 +122,13 @@ class Page
     public function getRoute(): ?string
     {
         return $this->data['route'] ?? null;
+    }
+
+
+
+    public function getClass(): ?string
+    {
+        return $this->data['class'] ?? null;
     }
 
 
@@ -154,6 +157,9 @@ class Page
 
 
 
+    /**
+     * @return array|Page[]
+     */
     public function getVisiblePages(): array
     {
         $pages = $this->pages;

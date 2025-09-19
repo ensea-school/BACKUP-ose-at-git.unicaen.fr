@@ -165,10 +165,9 @@ class Router
     public function detectRoute(string $url): ?Route
     {
         foreach ($this->routes as $route) {
-            if ($res = $this->routeMatch($url, $route)) {
-                if ($res !== false) {
-                    return $route;
-                }
+            $res = $this->routeMatch($url, $route);
+            if ($res !== false) {
+                return $route;
             }
         }
         return null;
@@ -207,14 +206,14 @@ class Router
                     }
                     break;
                 case 'parameter':
-                    $slash              = strpos($uri, '/');
+                    $slash = strpos($uri, '/');
                     if (false === $slash) {
                         $parameterTestValue = $uri;
-                    }else{
+                    } else {
                         $parameterTestValue = substr($uri, 0, $slash);
                     }
-                    $params[$value]     = rawurldecode($parameterTestValue);
-                    $uri                = substr($uri, strlen($parameterTestValue));
+                    $params[$value] = rawurldecode($parameterTestValue);
+                    $uri            = substr($uri, strlen($parameterTestValue));
                     break;
                 case 'optional':
                     if ($uri == '') {
@@ -233,15 +232,15 @@ class Router
                                     }
                                     break;
                                 case 'parameter':
-                                    $slash              = strpos($uri, '/');
+                                    $slash = strpos($uri, '/');
                                     if (false === $slash) {
                                         $parameterTestValue = $uri;
-                                    }else{
+                                    } else {
                                         $parameterTestValue = substr($uri, 0, $slash);
                                     }
 
-                                    $params[$ovalue]    = rawurldecode($parameterTestValue);
-                                    $uri                = substr($uri, strlen($parameterTestValue));
+                                    $params[$ovalue] = rawurldecode($parameterTestValue);
+                                    $uri             = substr($uri, strlen($parameterTestValue));
                                     break;
                             }
                         }
@@ -250,9 +249,9 @@ class Router
             }
         }
 
-        if ($uri === ""){
+        if ($uri === "") {
             return $params;
-        }else{
+        } else {
             return false; // il reste du non parsé => on jette
         }
     }
@@ -286,7 +285,7 @@ class Router
                         $currentPos
                     )
                 ) {
-                    throw new Exception\RuntimeException('Found empty parameter name');
+                    throw new \RuntimeException('Found empty parameter name');
                 }
 
                 $levelParts[$level][] = [
@@ -298,7 +297,7 @@ class Router
                 $currentPos += strlen($matches[0]);
             } elseif ($matches['token'] === '{') {
                 if (!preg_match('(\G(?P<literal>[^}]+)\})', $def, $matches, 0, $currentPos)) {
-                    throw new Exception\RuntimeException('Translated literal missing closing bracket');
+                    throw new \RuntimeException('Translated literal missing closing bracket');
                 }
 
                 $currentPos += strlen($matches[0]);
@@ -314,7 +313,7 @@ class Router
                 $level--;
 
                 if ($level < 0) {
-                    throw new Exception\RuntimeException('Found closing bracket without matching opening bracket');
+                    throw new \RuntimeException('Found closing bracket without matching opening bracket');
                 }
             } else {
                 break;
@@ -322,7 +321,7 @@ class Router
         }
 
         if ($level > 0) {
-            throw new Exception\RuntimeException('Found unbalanced brackets');
+            throw new \RuntimeException('Found unbalanced brackets');
         }
 
         return $parts;

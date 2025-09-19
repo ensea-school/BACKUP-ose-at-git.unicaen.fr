@@ -1,0 +1,25 @@
+<?php
+
+/** @var NavigationHelper $navigationHelper */
+$navigationHelper = $this->navigation('navigation');
+$pages            = $navigationHelper->getContainer();
+
+?>
+<div id="contenu-principal" class="container">
+    <!--<div id="contenu-principal" class="container intranavigator intranavigator-page">-->
+    <?php
+    if ($menuSecondaire = $navigationHelper->menuSecondaire($pages)->render()): ?>
+        <div class="row">
+            <div id="sidebar" data-url="<?= $this->intervenant()->menuUrl() ?>" class="col-xs-6 col-md-2"
+                 role="navigation">
+                <?= $menuSecondaire; ?>
+            </div>
+            <div id="content" class="col-xs-12 col-md-10">
+                <?= $this->content; ?>
+            </div>
+        </div>
+    <?php else: ?>
+        <?= $this->content; ?>
+    <?php endif; ?>
+</div>
+

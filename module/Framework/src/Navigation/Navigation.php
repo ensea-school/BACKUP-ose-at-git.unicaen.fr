@@ -3,11 +3,18 @@
 namespace Framework\Navigation;
 
 use Framework\Container\Autowire;
+use Framework\Router\Router;
 use Psr\Container\ContainerInterface;
 
 class Navigation
 {
-    private Page $home;
+    public Page $home {
+        get {
+            return $this->home;
+        }
+    }
+
+    private ?Page $currentPage = null;
 
 
 
@@ -22,14 +29,59 @@ class Navigation
             throw new \Exception('La navigation ne comporte pas de page default/home');
         }
 
-        $this->home = new Page($this, $this->container, $navigation['default']['home']);
+        $this->home = new Page($this, $this->container, 'home', $navigation['default']['home']);
     }
 
 
 
-    public function getHome(): Page
+    public function getCurrentPage(): ?Page
     {
-        return $this->home;
+        if (!$this->currentPage) {
+            $router = $this->container->get(Router::class);
+
+            $currentRoute = $router->getCurrentRoute();
+            $home         = $this->home;
+
+            $this->searchCurrentPage($home, $currentRoute->getName());
+        }
+        return $this->currentPage;
     }
 
+
+
+    private function searchCurrentPage(Page $page, string $route): ?Page
+    {
+        $pageRoute = $page->getRoute();
+        if (empty($pageRoute)) {
+            return null;
+        }
+
+        if ($pageRoute === $route) {
+            $this->currentPage = $page;
+            return null;
+        } else {
+            foreach ($page->getPages() as $subPage) {
+                if ($this->searchCurrentPage($subPage, $route)) {
+                    return $subPage;
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+    public function getCurrentSubHomePage(): ?Page
+    {
+        $currentPage = $this->getCurrentPage();
+        if (!$currentPage){
+            return null;
+        }
+
+        while ($currentPage->getParent() !== $this->home){
+            $currentPage = $currentPage->getParent();
+        }
+
+        return $currentPage;
+    }
 }

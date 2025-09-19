@@ -2,6 +2,8 @@
 
 namespace Application\View\Helper;
 
+use Application\Service\NavbarService;
+use Framework\Navigation\Navigation;
 use Interop\Container\ContainerInterface;
 use UnicaenAuthentification\Options\ModuleOptions;
 use UnicaenAuthentification\Service\UserContext;
@@ -27,7 +29,10 @@ class LayoutViewHelperFactory
             $usurpationAllowed = true;
         }
 
-        $helper = new LayoutViewHelper();
+        $helper = new LayoutViewHelper(
+            $container->get(NavbarService::class),
+            $container->get(Navigation::class),
+        );
         $helper->setUsurpationEnabled($usurpationAllowed);
         $helper->setUsurpationEnCours($usurpationEnCours);
 

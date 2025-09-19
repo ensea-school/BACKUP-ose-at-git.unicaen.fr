@@ -158,7 +158,6 @@ $config = [
             'inlineScript' => \Laminas\View\Helper\InlineScript::class,
         ],
         'factories'  => [
-            \UnicaenApp\View\Helper\AppLink::class => View\Helper\AppLinkFactory::class,
             LocalConnectViewHelper::class          => LocalConnectViewHelperFactory::class,
             'tab'                                  => View\Helper\TabViewHelperFactory::class,
             'appLayout'                            => View\Helper\LayoutViewHelperFactory::class,

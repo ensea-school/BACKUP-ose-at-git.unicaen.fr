@@ -1,0 +1,35 @@
+<?php
+$nav = $this->appLayout()->navbarData();
+?>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="<?= $nav['appUrl'] ?>" title="<?= $nav['appTitle'] ?>"><h1
+                    class="title"><?= $nav['appName'] ?></h1></a>
+        <span class="annee"><select name="annee" id="annee" onchange="Util.changementAnnee(this.value);">
+                <?php
+                foreach ($nav['annees'] as $v => $l) {
+                    echo '<option value="' . $v . '"' . ($v == $nav['annee'] ? ' selected="selected"' : '') . '>' . $l . '</option>';
+                }
+                ?>
+            </select></span>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <?php foreach ($nav['menuItems'] as $page): ?>
+                    <li class="nav-item">
+                        <a class="nav-link<?php if ($page['active']) echo ' active' ?>" href="<?= $page['url'] ?>">
+                            <?= $page['label'] ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <?= $this->vue('application/connexion', ['data' => $nav['connexion']]); ?>
+        </div>
+    </div>
+</nav>
+<?php //echo $this->vue('application/navbar', ['data' => $this->appLayout()->navbarData()]); ?>

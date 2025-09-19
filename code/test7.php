@@ -10,7 +10,7 @@ $nav = $container->get(\Framework\Navigation\Navigation::class);
 
 
 \UnicaenApp\Util::topChrono();
-$pages = $nav->getHome()->getVisiblePages();
+$pages = $nav->home->getVisiblePages();
 \UnicaenApp\Util::topChrono();
 
 //dd($container->get('config')['bjyauthorize']['guards']['UnicaenPrivilege\Guard\PrivilegeController']);

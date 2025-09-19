@@ -3,8 +3,10 @@
 namespace Application\View\Helper;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Utilisateur;
+use Application\Service\NavbarService;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Framework\Navigation\Navigation;
+use Framework\Navigation\Page;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -25,18 +27,35 @@ class LayoutViewHelper extends AbstractHtmlElement
 
 
 
-    /**
-     *
-     * @param Utilisateur $utilisateur
-     * @param string      $title
-     * @param string      $subject
-     * @param string      $body
-     *
-     * @return string
-     */
-    public function __invoke()
+    public function __construct(
+        private readonly NavbarService $navbarService,
+        private readonly Navigation $navigation,
+    )
+    {
+
+    }
+
+
+
+    public function __invoke(): self
     {
         return $this;
+    }
+
+
+
+    public function navbarData(): array
+    {
+        return [
+            'appName'   => $this->navbarService->appName(),
+            'appTitle'  => $this->navbarService->appTitle(),
+            'appUrl'    => $this->navbarService->appUrl(),
+            'annees'    => $this->navbarService->annees(),
+            'annee'     => $this->navbarService->annee(),
+            'menuItems' => $this->navbarService->menuItems(),
+            'connexion' => $this->connexionData(),
+            //'menuActive' => $this->
+        ];
     }
 
 
@@ -83,6 +102,23 @@ class LayoutViewHelper extends AbstractHtmlElement
             'structureId'       => null,
             'structures'        => $structures,
         ];
+    }
+
+
+
+    /**
+     * @return array|Page[]
+     */
+    public function footerData(): array
+    {
+        $pages = $this->navigation->home->getPages();
+        foreach( $pages as $pn => $page ) {
+            if (!$page->isFooter()){
+                unset($pages[$pn]);
+            }
+        }
+
+        return $pages;
     }
 
 

@@ -1,0 +1,45 @@
+<?php
+
+use Application\View\Renderer\PhpRenderer;
+use Framework\Navigation\Page;
+
+/**
+ * @var $this  PhpRenderer
+ * @var $pages Page[]
+ */
+
+echo '<ul class="nav flex-column menu-secondaire">' . "\n";
+foreach ($pages as $page) {
+    $active = $page->isActive() ? ' active' : '';
+    try {
+        $url = $this->url($page->getRoute(), [], [], true);
+    } catch (\Exception $e) {
+        $url = null;
+    }
+    if ($url) {
+        echo "\t<li class='nav-item$active'>\n";
+        echo "\t\t" . '<a class="nav-link" title="' . $page->getTitle() . '" href="' . $this->url($page->getRoute(), [], [], true) . '">' . "\n";
+        echo "\t\t\t<span class=\"" . $page->getIcon() . "\"></span>\n" . $page->getLabel();
+        echo "\t\t</a>\n";
+        if ($subPages = $page->getVisiblePages()) {
+            echo "\t\t" . '<ul>' . "\n";
+            foreach ($subPages as $subPage) {
+                $active = $subPage->isActive() ? ' active' : '';
+                try {
+                    $url = $this->url($subPage->getRoute(), [], [], true);
+                } catch (\Exception $e) {
+                    $url = null;
+                }
+                if ($url) {
+                    echo "\t\t\t<li class='nav-item$active'>\n";
+                    echo "\t\t\t\t<a class='nav-link' title='" . $subPage->getTitle() . "' href='" . $this->url($subPage->getRoute(), [], [], true) . "'>";
+                    echo $subPage->getLabel() . "</a>\n";
+                    echo "\t\t\t</li>\n";
+                }
+            }
+            echo "\t\t" . '</ul>' . "\n";
+        }
+        echo "\t" . '</li>' . "\n";
+    }
+}
+echo '</ul>' . "\n";

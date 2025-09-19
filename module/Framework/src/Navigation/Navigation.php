@@ -78,7 +78,7 @@ class Navigation
             return null;
         }
 
-        while ($currentPage->getParent() !== $this->home){
+        while ($currentPage && $currentPage->getParent() !== $this->home){
             $currentPage = $currentPage->getParent();
         }
 

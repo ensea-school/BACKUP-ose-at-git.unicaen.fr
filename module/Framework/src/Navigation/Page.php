@@ -133,6 +133,20 @@ class Page
 
 
 
+    public function getColor(): ?string
+    {
+        return $this->data['color'] ?? null;
+    }
+
+
+
+    public function getIcon(): ?string
+    {
+        return $this->data['icon'] ?? null;
+    }
+
+
+
     public function getParent(): ?Page
     {
         return $this->parent;

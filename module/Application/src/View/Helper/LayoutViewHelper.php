@@ -124,6 +124,32 @@ class LayoutViewHelper extends AbstractHtmlElement
 
 
     /**
+     * @return array|Page[]
+     */
+    public function menuData(): array
+    {
+        $currentPage = $this->navigation->getCurrentPage();
+
+        if (!$currentPage) {
+            return [];
+        }
+
+        if ($currentPage->getParent() === $this->navigation->home){
+            return [];
+        }
+
+        $refPage = $this->navigation->getCurrentSubHomePage();
+
+        if (!$refPage) {
+            return [];
+        }
+
+        return $refPage->getVisiblePages();
+    }
+
+
+
+    /**
      * Retourne la liste des structures associées à des rôles.
      *
      * @return array

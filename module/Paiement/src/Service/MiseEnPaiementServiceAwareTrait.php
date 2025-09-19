@@ -31,7 +31,7 @@ trait MiseEnPaiementServiceAwareTrait
     public function getServiceMiseEnPaiement(): ?MiseEnPaiementService
     {
         if (empty($this->serviceMiseEnPaiement)) {
-            $this->serviceMiseEnPaiement = \AppAdmin::container()->get(MiseEnPaiementService::class);
+            $this->serviceMiseEnPaiement = \Framework\Application\Application::getInstance()->container()->get(MiseEnPaiementService::class);
         }
 
         return $this->serviceMiseEnPaiement;

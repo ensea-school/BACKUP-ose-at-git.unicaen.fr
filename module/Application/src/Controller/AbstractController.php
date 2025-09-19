@@ -50,7 +50,7 @@ abstract class AbstractController extends AbstractActionController
      */
     protected function em()
     {
-        return \AppAdmin::container()->get(EntityManager::class);
+        return \Framework\Application\Application::getInstance()->container()->get(EntityManager::class);
     }
 
 }

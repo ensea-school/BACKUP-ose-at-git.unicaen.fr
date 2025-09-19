@@ -32,7 +32,7 @@ trait UtilisateurServiceAwareTrait
     public function getServiceUtilisateur(): ?UtilisateurService
     {
         if (empty($this->serviceUtilisateur)) {
-            $this->serviceUtilisateur = \AppAdmin::container()->get(UtilisateurService::class);
+            $this->serviceUtilisateur = \Framework\Application\Application::getInstance()->container()->get(UtilisateurService::class);
         }
 
         return $this->serviceUtilisateur;

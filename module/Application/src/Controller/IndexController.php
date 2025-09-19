@@ -63,7 +63,7 @@ class IndexController extends AbstractController
 
     public function planAction()
     {
-        $configPages = \AppAdmin::container()->get('config')['navigation']['default']['home']['pages'];
+        $configPages = \Framework\Application\Application::getInstance()->container()->get('config')['navigation']['default']['home']['pages'];
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         return compact('configPages', 'role');

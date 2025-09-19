@@ -34,6 +34,6 @@ trait CentreCoutStructureSaisieFormAwareTrait
             return $this->formCentreCoutCentreCoutStructureSaisie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(CentreCoutStructureSaisieForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(CentreCoutStructureSaisieForm::class);
     }
 }

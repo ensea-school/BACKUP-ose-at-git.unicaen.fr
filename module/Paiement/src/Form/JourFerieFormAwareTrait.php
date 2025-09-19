@@ -34,6 +34,6 @@ trait JourFerieFormAwareTrait
             return $this->formJourFerie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(JourFerieForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(JourFerieForm::class);
     }
 }

@@ -1,7 +1,15 @@
-<?php $this->headTitle()->append($title = "Contact") ?>
+<?php
+
+use Framework\Application\Application;
+
+$app = Application::getInstance();
+
+$this->headTitle()->append($title = "Contact")
+
+?>
 
     <h1><?= $this->translate($title); ?></h1>
 
 <?php
 
-echo AppAdmin::container()->get(\Administration\Service\ParametresService::class)->get('page_contact');
+echo $app->container()->get(\Administration\Service\ParametresService::class)->get('page_contact');

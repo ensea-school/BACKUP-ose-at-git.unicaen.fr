@@ -35,6 +35,6 @@ trait SaisieAwareTrait
             return $this->formAgrementSaisie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(Saisie::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(Saisie::class);
     }
 }

@@ -31,7 +31,7 @@ trait SignatureFlowStepServiceAwareTrait
     public function getServiceSignatureFlowStep(): ?SignatureFlowStepService
     {
         if (empty($this->serviceSignatureFlowStep)) {
-            $this->serviceSignatureFlowStep = \AppAdmin::container()->get(SignatureFlowStepService::class);
+            $this->serviceSignatureFlowStep = \Framework\Application\Application::getInstance()->container()->get(SignatureFlowStepService::class);
         }
 
         return $this->serviceSignatureFlowStep;

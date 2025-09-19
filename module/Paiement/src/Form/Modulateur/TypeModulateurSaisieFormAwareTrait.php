@@ -34,6 +34,6 @@ trait TypeModulateurSaisieFormAwareTrait
             return $this->formModulateurTypeModulateurSaisie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(TypeModulateurSaisieForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TypeModulateurSaisieForm::class);
     }
 }

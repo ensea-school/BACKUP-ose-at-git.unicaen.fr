@@ -35,6 +35,6 @@ trait DisciplineFormAwareTrait
             return $this->formDiscipline;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(DisciplineForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(DisciplineForm::class);
     }
 }

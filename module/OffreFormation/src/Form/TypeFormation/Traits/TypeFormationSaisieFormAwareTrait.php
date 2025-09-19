@@ -35,6 +35,6 @@ trait TypeFormationSaisieFormAwareTrait
             return $this->formTypeFormationTypeFormationSaisie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(TypeFormationSaisieForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TypeFormationSaisieForm::class);
     }
 }

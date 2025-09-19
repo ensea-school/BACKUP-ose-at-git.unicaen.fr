@@ -1,7 +1,10 @@
 <?php
 
+use Framework\Application\Application;
 
 $hostUrl  = $_ENV['DEV_VITE_URL'] ?? null;
+
+$app = Application::getInstance();
 
 if (!$hostUrl) {
     $scheme = $_ENV['HTTP_X_FORWARDED_PROTO'] ?? $_ENV['REQUEST_SCHEME'] ?? 'http';
@@ -16,7 +19,7 @@ if (!$hostUrl) {
 return [
     'unicaen-vue' => [
         'host'        => $hostUrl,
-        'hot-loading' => AppAdmin::inDev() ? (AppAdmin::config()['dev']['hot-loading'] ?? false) : false,
+        'hot-loading' => $app->inDev() ? ($app->config()['dev']['hot-loading'] ?? false) : false,
         'dist-path'   => 'public/dist',
         'dist-url'    => 'dist',
     ],

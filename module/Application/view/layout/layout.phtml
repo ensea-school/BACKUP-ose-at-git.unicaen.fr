@@ -1,10 +1,14 @@
 <?php
 
+use Application\View\Renderer\PhpRenderer;
+use Framework\Application\Application;
+
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $this PhpRenderer
  */
 
-use Laminas\View\Helper\Navigation as NavigationHelper;
+$app = Application::getInstance();
+
 
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
     echo $this->content;
@@ -41,12 +45,12 @@ echo "<!DOCTYPE html>";
     <?= $this->headLink(); ?>
 
     <!-- Eléments de mise en forme (CSS et icônes) chargés depuis la config OSE -->
-    <?php if ($customCss = (AppAdmin::config()['etablissement']['css'] ?? null)) : ?>
+    <?php if ($customCss = ($app->config()['etablissement']['css'] ?? null)) : ?>
         <link href="<?= $customCss ?>" media="all" rel="stylesheet" type="text/css">
     <?php endif; ?>
 
     <?php
-    $icons = AppAdmin::config()['etablissement']['icons'] ?? [];
+    $icons = $app->config()['etablissement']['icons'] ?? [];
 
     foreach ($icons as $icon) {
         // Protection pour éviter d'appeler d'anciennes icônes Unicaen
@@ -72,7 +76,7 @@ echo "<!DOCTYPE html>";
 
 </head>
 
-<body class="<?= AppAdmin::env() ?> p-0">
+<body class="<?= $app->env() ?> p-0">
 
 <?php require __DIR__ . '/partial/navbar.phtml'; ?>
 <?php require __DIR__ . '/partial/content.phtml'; ?>

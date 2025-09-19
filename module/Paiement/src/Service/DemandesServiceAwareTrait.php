@@ -31,7 +31,7 @@ trait DemandesServiceAwareTrait
     public function getServiceDemandes(): ?DemandesService
     {
         if (empty($this->serviceDemandes)) {
-            $this->serviceDemandes = \AppAdmin::container()->get(DemandesService::class);
+            $this->serviceDemandes = \Framework\Application\Application::getInstance()->container()->get(DemandesService::class);
         }
 
         return $this->serviceDemandes;

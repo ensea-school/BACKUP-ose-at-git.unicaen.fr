@@ -30,7 +30,7 @@ trait SituationMatrimonialeServiceAwareTrait
     public function getServiceSituationMatrimoniale(): ?SituationMatrimonialeService
     {
         if (empty($this->serviceSituationMatrimoniale)) {
-            $this->serviceSituationMatrimoniale = \AppAdmin::container()->get(SituationMatrimonialeService::class);
+            $this->serviceSituationMatrimoniale = \Framework\Application\Application::getInstance()->container()->get(SituationMatrimonialeService::class);
         }
 
         return $this->serviceSituationMatrimoniale;

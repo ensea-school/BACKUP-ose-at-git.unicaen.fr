@@ -33,6 +33,6 @@ trait ParametresFormAwareTrait
             return $this->formParametres;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(ParametresForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ParametresForm::class);
     }
 }

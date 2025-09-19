@@ -31,7 +31,7 @@ trait PlafondServiceAwareTrait
     public function getServicePlafond(): ?PlafondService
     {
         if (empty($this->servicePlafond)) {
-            $this->servicePlafond = \AppAdmin::container()->get(PlafondService::class);
+            $this->servicePlafond = \Framework\Application\Application::getInstance()->container()->get(PlafondService::class);
         }
 
         return $this->servicePlafond;

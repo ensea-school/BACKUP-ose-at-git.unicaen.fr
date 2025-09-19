@@ -21,7 +21,7 @@ trait CacheContainerTrait
     {
         if (!isset($this->__cacheContainer)) {
             /** @var CacheService $cacheService */
-            $cacheService = \AppAdmin::container()->get(CacheService::class);
+            $cacheService = \Framework\Application\Application::getInstance()->container()->get(CacheService::class);
 
             if (!$class) $class = $this;
             $this->__cacheContainer = new CacheContainer($cacheService, $class);

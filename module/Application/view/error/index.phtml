@@ -1,7 +1,9 @@
 <?php
 
+use Framework\Application\Application;
+
 $this->headTitle()->append($title = 'Une erreur est survenue');
-$details = (AppAdmin::config()['global']['affichageErreurs'] ?? true) && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);
+$details = (Application::getInstance()->config()['global']['affichageErreurs'] ?? true) && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);
 
 ?>
 <div class="alert alert-danger exception" role="alert">

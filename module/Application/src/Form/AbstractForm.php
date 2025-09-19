@@ -19,7 +19,7 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
 
     public function getAuthorize(): Authorize
     {
-        return \AppAdmin::container()->get(Authorize::class);
+        return \Framework\Application\Application::getInstance()->container()->get(Authorize::class);
     }
 
 

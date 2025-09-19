@@ -33,6 +33,6 @@ trait SaisieAwareTrait
             return $this->formServiceReferentielSaisie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(Saisie::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(Saisie::class);
     }
 }

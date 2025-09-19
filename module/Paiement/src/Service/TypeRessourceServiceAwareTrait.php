@@ -31,7 +31,7 @@ trait TypeRessourceServiceAwareTrait
     public function getServiceTypeRessource(): ?TypeRessourceService
     {
         if (empty($this->serviceTypeRessource)) {
-            $this->serviceTypeRessource = \AppAdmin::container()->get(TypeRessourceService::class);
+            $this->serviceTypeRessource = \Framework\Application\Application::getInstance()->container()->get(TypeRessourceService::class);
         }
 
         return $this->serviceTypeRessource;

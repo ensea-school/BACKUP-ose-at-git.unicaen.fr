@@ -34,6 +34,6 @@ trait PlafondFormAwareTrait
             return $this->formPlafond;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(PlafondForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(PlafondForm::class);
     }
 }

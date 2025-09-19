@@ -30,7 +30,7 @@ trait EtatVolumeHoraireServiceAwareTrait
     public function getServiceEtatVolumeHoraire(): ?EtatVolumeHoraireService
     {
         if (empty($this->serviceEtatVolumeHoraire)) {
-            $this->serviceEtatVolumeHoraire = \AppAdmin::container()->get(EtatVolumeHoraireService::class);
+            $this->serviceEtatVolumeHoraire = \Framework\Application\Application::getInstance()->container()->get(EtatVolumeHoraireService::class);
         }
 
         return $this->serviceEtatVolumeHoraire;

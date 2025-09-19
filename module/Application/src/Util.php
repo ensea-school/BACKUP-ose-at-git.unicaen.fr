@@ -86,7 +86,7 @@ class Util
      */
     static public function routeToControllerAction($route)
     {
-        $container = \AppAdmin::container();
+        $container = \Framework\Application\Application::getInstance()->container();
         if (!$container) throw new \LogicException('Le container n\'est pas accessible!!!');
 
         if (!array_key_exists($route, self::$rcaCache)) {
@@ -244,7 +244,7 @@ class Util
         /* Si c'est une entité Doctrine, on récupère les infos du mapping */
         try {
             /** @var EntityManager $em */
-            $em = \AppAdmin::container()->get(EntityManager::class);
+            $em = \Framework\Application\Application::getInstance()->container()->get(EntityManager::class);
             $cmd = $em->getClassMetadata($class);
         } catch (\Exception $e) {
             $cmd = null;

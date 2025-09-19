@@ -33,7 +33,7 @@ trait <classname>
     public function get<method>(): ?<targetClassname>
     {
         if (empty($this-><variable>)) {
-            $this-><variable> = \AppAdmin::container()->get(<targetClassname>::class);
+            $this-><variable> = \Framework\Application\Application::getInstance()->container()->get(<targetClassname>::class);
         }
         
         return $this-><variable>;

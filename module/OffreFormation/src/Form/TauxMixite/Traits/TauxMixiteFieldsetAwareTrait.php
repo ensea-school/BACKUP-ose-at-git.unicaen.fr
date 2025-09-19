@@ -35,6 +35,6 @@ trait TauxMixiteFieldsetAwareTrait
             return $this->fieldsetOffreFormationTauxMixiteTauxMixite;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(TauxMixiteFieldset::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TauxMixiteFieldset::class);
     }
 }

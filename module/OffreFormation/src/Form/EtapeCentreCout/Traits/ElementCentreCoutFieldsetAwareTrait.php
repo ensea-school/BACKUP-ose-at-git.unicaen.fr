@@ -35,6 +35,6 @@ trait ElementCentreCoutFieldsetAwareTrait
             return $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(ElementCentreCoutFieldset::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ElementCentreCoutFieldset::class);
     }
 }

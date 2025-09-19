@@ -31,7 +31,7 @@ trait FormulatorServiceAwareTrait
     public function getServiceFormulator(): ?FormulatorService
     {
         if (empty($this->serviceFormulator)) {
-            $this->serviceFormulator = \AppAdmin::container()->get(FormulatorService::class);
+            $this->serviceFormulator = \Framework\Application\Application::getInstance()->container()->get(FormulatorService::class);
         }
 
         return $this->serviceFormulator;

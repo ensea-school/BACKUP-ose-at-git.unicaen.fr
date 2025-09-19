@@ -210,7 +210,7 @@ abstract class AbstractEntityService extends AbstractService
     private function _join(string $method, $service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null): self
     {
         if (is_string($service)) {
-            $service = \AppAdmin::container()->get($service);
+            $service = \Framework\Application\Application::getInstance()->container()->get($service);
             if (!$service instanceof AbstractEntityService) {
                 throw new \LogicException('Le service transmis n\'est pas compatible.');
             }

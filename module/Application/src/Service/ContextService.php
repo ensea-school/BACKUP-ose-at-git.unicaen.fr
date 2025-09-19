@@ -78,8 +78,8 @@ class ContextService extends AbstractService
     public function refreshRoleStatut (Statut $statut): void
     {
         $this->serviceUserContext->clearIdentityRoles();
-        \AppAdmin::container()->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
-        \AppAdmin::container()->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
+        \Framework\Application\Application::getInstance()->container()->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
+        \Framework\Application\Application::getInstance()->container()->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
         $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
     }
 

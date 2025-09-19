@@ -30,7 +30,7 @@ trait ParametresServiceAwareTrait
     public function getServiceParametres(): ?ParametresService
     {
         if (empty($this->serviceParametres)) {
-            $this->serviceParametres = \AppAdmin::container()->get(ParametresService::class);
+            $this->serviceParametres = \Framework\Application\Application::getInstance()->container()->get(ParametresService::class);
         }
 
         return $this->serviceParametres;

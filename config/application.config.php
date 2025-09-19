@@ -12,7 +12,7 @@ return [
             './vendor',
         ],
         'cache_dir'                => 'cache/',
-        'config_cache_enabled'     => AppAdmin::inCli(), // pas de cache en mode cli
+        'config_cache_enabled'     => PHP_SAPI !== 'cli', // pas de cache en mode cli
         'config_cache_key'         => 'application.config.cache',
         'module_map_cache_enabled' => true,
         'module_map_cache_key'     => 'application.module.cache',

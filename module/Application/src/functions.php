@@ -152,7 +152,7 @@ function vhlDump(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe): \
 
 function mpg_oracle(): bool
 {
-    return AppAdmin::container()->get('config')['unicaen-bddadmin']['connection']['default']['driver'] == 'Oracle';
+    return \Framework\Application\Application::getInstance()->container()->get('config')['unicaen-bddadmin']['connection']['default']['driver'] == 'Oracle';
 }
 
 

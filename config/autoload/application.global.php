@@ -1,9 +1,13 @@
 <?php
 
+use Framework\Application\Application;
+
+$config = Application::getInstance()->config();
+
 return [
     'cli_config' => [
-        'scheme' => AppAdmin::config()['global']['scheme'] ?? 'https',
-        'domain' => AppAdmin::config()['global']['domain'] ?? null,
+        'scheme' => $config['global']['scheme'] ?? 'https',
+        'domain' => $config['global']['domain'] ?? null,
     ],
 
     'session_config' => [
@@ -31,20 +35,20 @@ return [
 
     'application'     => [
         'etats-sortie' => [
-            'host'    => AppAdmin::config()['etats-sortie']['host'] ?? '127.0.0.1',
-            'port'    => AppAdmin::config()['etats-sortie']['port'] ?? 80,
-            'command' => AppAdmin::config()['etats-sortie']['command'] ?? \Unicaen\OpenDocument\Document::CONV_COMMAND_UNOCONV,
-            'tmp-dir' => AppAdmin::config()['etats-sortie']['tmp-dir'] ?? 'cache/',
+            'host'    => $config['etats-sortie']['host'] ?? '127.0.0.1',
+            'port'    => $config['etats-sortie']['port'] ?? 80,
+            'command' => $config['etats-sortie']['command'] ?? \Unicaen\OpenDocument\Document::CONV_COMMAND_UNOCONV,
+            'tmp-dir' => $config['etats-sortie']['tmp-dir'] ?? 'cache/',
         ],
     ],
 
     'view_manager'    => [
-        'display_not_found_reason' => AppAdmin::config()['global']['affichageErreurs'] ?? true, // display 404 reason in template
-        'display_exceptions'       => AppAdmin::config()['global']['affichageErreurs'] ?? true,
+        'display_not_found_reason' => $config['global']['affichageErreurs'] ?? true, // display 404 reason in template
+        'display_exceptions'       => $config['global']['affichageErreurs'] ?? true,
     ],
 
     'translator' => [
-        'locale'                    => AppAdmin::config()['global']['locale'] ?? 'fr_FR',
+        'locale'                    => $config['global']['locale'] ?? 'fr_FR',
         'translation_file_patterns' => [
             [
                 'type'     => 'gettext',

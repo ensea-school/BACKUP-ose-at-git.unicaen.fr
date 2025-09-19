@@ -1,24 +1,28 @@
 <?php
 
+use Framework\Application\Application;
+
+$config = Application::getInstance()->config();
+
 return [
     'unicaen-signature' => [
-        'notifications'          => AppAdmin::config()['unicaen-signature']['notifications'] ?? [function () {
+        'notifications'          => $config['unicaen-signature']['notifications'] ?? [function () {
             }],
-        'notifications_messages' => AppAdmin::config()['unicaen-signature']['notifications_messages'] ?? [function () {
+        'notifications_messages' => $config['unicaen-signature']['notifications_messages'] ?? [function () {
             }],
-        'current_user'           => AppAdmin::config()['unicaen-signature']['current_user'] ?? [function () {
+        'current_user'           => $config['unicaen-signature']['current_user'] ?? [function () {
             }],
         'documents_path'         => 'data/signature',
 
         'logger'                 => [
-            'enable'          => AppAdmin::config()['unicaen-signature']['log'] ?? true,
+            'enable'          => $config['unicaen-signature']['log'] ?? true,
             'level'           => \Monolog\Logger::DEBUG,
             'file'            => 'data/log/unicaen-signature.log',
             'stdout'          => false,
             'file_permission' => 0666,
             'customLogger'    => null,
         ],
-        'letterfiles'            => AppAdmin::config()['unicaen-signature']['letterfiles'] ?? [],
+        'letterfiles'            => $config['unicaen-signature']['letterfiles'] ?? [],
 
         'get_recipients_methods' => [
             [
@@ -40,7 +44,7 @@ return [
                 'getRecipients' => [],
             ],
         ],
-        'signature_levels'       => AppAdmin::config()['unicaen-signature']['signature_levels'] ?? [],
-        'hook_recipients'        => AppAdmin::config()['unicaen-signature']['hook_recipients'] ?? [],
+        'signature_levels'       => $config['unicaen-signature']['signature_levels'] ?? [],
+        'hook_recipients'        => $config['unicaen-signature']['hook_recipients'] ?? [],
     ],
 ];

@@ -31,7 +31,7 @@ trait NumeroPriseEnChargeServiceAwareTrait
     public function getServiceNumeroPriseEnCharge (): ?NumeroPriseEnChargeService
     {
         if (empty($this->serviceNumeroPriseEnCharge)) {
-            $this->serviceNumeroPriseEnCharge = \AppAdmin::container()->get(NumeroPriseEnChargeService::class);
+            $this->serviceNumeroPriseEnCharge = \Framework\Application\Application::getInstance()->container()->get(NumeroPriseEnChargeService::class);
         }
 
         return $this->serviceNumeroPriseEnCharge;

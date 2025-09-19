@@ -1,6 +1,8 @@
 <?php
 
-$ce = \AppAdmin::config()['etablissement'];
+use Framework\Application\Application;
+
+$ce = Application::getInstance()->config()['etablissement'];
 
 ?>
 <nav id="footer" class="nav justify-content-center">

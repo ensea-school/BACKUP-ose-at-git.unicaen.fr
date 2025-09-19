@@ -30,7 +30,7 @@ trait RegleStructureValidationServiceAwareTrait
     public function getServiceRegleStructureValidation(): ?RegleStructureValidationService
     {
         if (empty($this->serviceRegleStructureValidation)) {
-            $this->serviceRegleStructureValidation = \AppAdmin::container()->get(RegleStructureValidationService::class);
+            $this->serviceRegleStructureValidation = \Framework\Application\Application::getInstance()->container()->get(RegleStructureValidationService::class);
         }
 
         return $this->serviceRegleStructureValidation;

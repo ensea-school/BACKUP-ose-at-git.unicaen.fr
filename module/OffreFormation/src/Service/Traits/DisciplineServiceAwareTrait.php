@@ -32,7 +32,7 @@ trait DisciplineServiceAwareTrait
     public function getServiceDiscipline(): ?DisciplineService
     {
         if (empty($this->serviceDiscipline)) {
-            $this->serviceDiscipline = \AppAdmin::container()->get(DisciplineService::class);
+            $this->serviceDiscipline = \Framework\Application\Application::getInstance()->container()->get(DisciplineService::class);
         }
 
         return $this->serviceDiscipline;

@@ -32,7 +32,7 @@ trait ElementModulateurServiceAwareTrait
     public function getServiceElementModulateur(): ?ElementModulateurService
     {
         if (empty($this->serviceElementModulateur)) {
-            $this->serviceElementModulateur = \AppAdmin::container()->get(ElementModulateurService::class);
+            $this->serviceElementModulateur = \Framework\Application\Application::getInstance()->container()->get(ElementModulateurService::class);
         }
 
         return $this->serviceElementModulateur;

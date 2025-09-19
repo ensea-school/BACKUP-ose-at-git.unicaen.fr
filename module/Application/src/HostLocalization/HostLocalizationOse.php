@@ -2,13 +2,14 @@
 
 namespace Application\HostLocalization;
 
+use Framework\Application\Application;
 use UnicaenApp\HostLocalization\HostLocalizationInterface;
 
 class HostLocalizationOse implements HostLocalizationInterface
 {
     public function inEtablissement(): bool
     {
-        $inEtablissement = \AppAdmin::config()['global']['inEtablissement'] ?? true;
+        $inEtablissement = Application::getInstance()->config()['global']['inEtablissement'] ?? true;
         if ($inEtablissement instanceof HostLocalizationInterface) {
             $inEtablissement = $inEtablissement->inEtablissement();
         }

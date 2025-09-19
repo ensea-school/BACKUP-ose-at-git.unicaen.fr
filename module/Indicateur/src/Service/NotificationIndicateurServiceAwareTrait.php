@@ -31,7 +31,7 @@ trait NotificationIndicateurServiceAwareTrait
     public function getServiceNotificationIndicateur(): ?NotificationIndicateurService
     {
         if (empty($this->serviceNotificationIndicateur)) {
-            $this->serviceNotificationIndicateur = \AppAdmin::container()->get(NotificationIndicateurService::class);
+            $this->serviceNotificationIndicateur = \Framework\Application\Application::getInstance()->container()->get(NotificationIndicateurService::class);
         }
 
         return $this->serviceNotificationIndicateur;

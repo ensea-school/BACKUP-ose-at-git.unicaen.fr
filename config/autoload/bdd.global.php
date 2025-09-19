@@ -1,16 +1,20 @@
 <?php
 
+use Framework\Application\Application;
+
+$config = Application::getInstance()->config();
+
 return [
     'unicaen-bddadmin' => [
 
         'connection' => [
             'default' => [
                 'driver'   => 'Oracle',
-                'host'     => AppAdmin::config()['bdd']['host'] ?? null,
-                'port'     => AppAdmin::config()['bdd']['port'] ?? null,
-                'dbname'   => AppAdmin::config()['bdd']['dbname'] ?? null,
-                'user'     => AppAdmin::config()['bdd']['user'] ?? AppAdmin::config()['bdd']['username'] ?? null,
-                'password' => AppAdmin::config()['bdd']['password'] ?? null,
+                'host'     => $config['bdd']['host'] ?? null,
+                'port'     => $config['bdd']['port'] ?? null,
+                'dbname'   => $config['bdd']['dbname'] ?? null,
+                'user'     => $config['bdd']['user'] ?? $config['bdd']['username'] ?? null,
+                'password' => $config['bdd']['password'] ?? null,
             ],
         ],
 
@@ -72,13 +76,13 @@ return [
             'orm_default' => [
                 'params' => [
                     'driverClass'   => \Doctrine\DBAL\Driver\OCI8\Driver::class,
-                    'host'     => AppAdmin::config()['bdd']['host'] ?? null,
-                    'port'     => AppAdmin::config()['bdd']['port'] ?? null,
-                    'dbname'   => AppAdmin::config()['bdd']['dbname'] ?? null,
-                    'user'     => AppAdmin::config()['bdd']['user'] ?? AppAdmin::config()['bdd']['username'] ?? null,
-                    'password' => AppAdmin::config()['bdd']['password'] ?? null,
+                    'host'     => $config['bdd']['host'] ?? null,
+                    'port'     => $config['bdd']['port'] ?? null,
+                    'dbname'   => $config['bdd']['dbname'] ?? null,
+                    'user'     => $config['bdd']['user'] ?? $config['bdd']['username'] ?? null,
+                    'password' => $config['bdd']['password'] ?? null,
                     'charset'       => 'AL32UTF8',
-                    'connectstring' => AppAdmin::config()['bdd']['connectstring'] ?? null,
+                    'connectstring' => $config['bdd']['connectstring'] ?? null,
                     //'persistent' => true,
                 ],
             ],
@@ -89,7 +93,7 @@ return [
                 //                'query_cache'      => 'filesystem',
                 'result_cache'     => 'filesystem',
                 'hydration_cache'  => 'array',
-                'generate_proxies' => AppAdmin::config()['bdd']['generateProxies'] ?? true,
+                'generate_proxies' => $config['bdd']['generateProxies'] ?? true,
                 'proxy_dir'        => 'cache/DoctrineProxy',
             ],
         ],

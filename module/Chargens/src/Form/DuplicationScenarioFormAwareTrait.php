@@ -35,6 +35,6 @@ trait DuplicationScenarioFormAwareTrait
             return $this->formChargensDuplicationScenario;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(DuplicationScenarioForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(DuplicationScenarioForm::class);
     }
 }

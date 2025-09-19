@@ -4,9 +4,9 @@ namespace Application;
 
 use Application\Service\OseBddAdminFactory;
 use Application\View\Helper\LocalConnectViewHelperFactory;
-use Framework\Container\AutowireFactory;
 use Unicaen\BddAdmin\Bdd;
 use UnicaenAuthentification\View\Helper\LocalConnectViewHelper;
+use Framework\Application\Application;
 
 $config = [
     'doctrine' => [
@@ -130,7 +130,6 @@ $config = [
             Service\FichierService::class      => Service\FichierService::class,
         ],
         'factories'  => [
-            \Laminas\Navigation\Navigation::class                       => Navigation\NavigationFactory::class,
             Provider\Role\RoleProvider::class                           => Provider\Role\RoleProviderFactory::class,
             Provider\Resource\ResourceProvider::class                   => Provider\Resource\ResourceProviderFactory::class,
             Provider\Identity\IdentityProvider::class                   => Provider\Identity\IdentityProviderFactory::class,
@@ -189,7 +188,7 @@ $config = [
     ],
 ];
 
-if ($customCss = \AppAdmin::$config['etablissement']['css'] ?? null) {
+if ($customCss = Application::getInstance()->config()['etablissement']['css'] ?? null) {
     $config['public_files']['stylesheets']['999_'] = $customCss;
 }
 

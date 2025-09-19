@@ -30,7 +30,7 @@ trait WorkflowServiceAwareTrait
     public function getServiceWorkflow(): ?WorkflowService
     {
         if (empty($this->serviceWorkflow)) {
-            $this->serviceWorkflow = \AppAdmin::container()->get(WorkflowService::class);
+            $this->serviceWorkflow = \Framework\Application\Application::getInstance()->container()->get(WorkflowService::class);
         }
 
         return $this->serviceWorkflow;

@@ -83,7 +83,7 @@ echo $this->messenger() ?>
                             </a>
                         <?php else:
                             try {
-                                $workflowService = \AppAdmin::container()->get(\Workflow\Service\WorkflowService::class);
+                                $workflowService = \Framework\Application\Application::getInstance()->container()->get(\Workflow\Service\WorkflowService::class);
                                 $feuilleDeRoute = $workflowService->getFeuilleDeRoute($intervenant, $structure);
                                 $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
                                 if ($wfEtape && $wfEtape->whyNonAtteignable){

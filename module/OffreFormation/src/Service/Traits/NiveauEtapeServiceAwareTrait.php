@@ -32,7 +32,7 @@ trait NiveauEtapeServiceAwareTrait
     public function getServiceNiveauEtape(): ?NiveauEtapeService
     {
         if (empty($this->serviceNiveauEtape)) {
-            $this->serviceNiveauEtape = \AppAdmin::container()->get(NiveauEtapeService::class);
+            $this->serviceNiveauEtape = \Framework\Application\Application::getInstance()->container()->get(NiveauEtapeService::class);
         }
 
         return $this->serviceNiveauEtape;

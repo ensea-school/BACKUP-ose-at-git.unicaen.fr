@@ -1,4 +1,9 @@
 <?php
+
+use Framework\Application\Application;
+
+$config = Application::getInstance()->config();
+
 return [
     'laminas-developer-tools' => [
         /**
@@ -103,7 +108,7 @@ return [
              * Expects: bool
              * Default: false
              */
-            'enabled'       => AppAdmin::config()['dev']['toolbar'] ?? true,
+            'enabled'       => $config['dev']['toolbar'] ?? true,
 
             /**
              * If enabled, every empty collector will be hidden.

@@ -68,7 +68,7 @@ trait TranslatorTrait
         }
 
         /** @var \Laminas\I18n\Translator\Translator $translator */
-        $translator = \AppAdmin::container()->get('translator');
+        $translator = \Framework\Application\Application::getInstance()->container()->get('translator');
 
         return $translator->translate($message, $textDomain, $locale);
     }

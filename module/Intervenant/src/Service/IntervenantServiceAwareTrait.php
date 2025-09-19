@@ -30,7 +30,7 @@ trait IntervenantServiceAwareTrait
     public function getServiceIntervenant(): ?IntervenantService
     {
         if (empty($this->serviceIntervenant)) {
-            $this->serviceIntervenant = \AppAdmin::container()->get(IntervenantService::class);
+            $this->serviceIntervenant = \Framework\Application\Application::getInstance()->container()->get(IntervenantService::class);
         }
 
         return $this->serviceIntervenant;

@@ -34,6 +34,6 @@ trait EtapeFormAwareTrait
             return $this->formEtape;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(EtapeForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(EtapeForm::class);
     }
 }

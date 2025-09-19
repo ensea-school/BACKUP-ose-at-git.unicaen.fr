@@ -31,7 +31,7 @@ trait EnseignementProcessusAwareTrait
     public function getProcessusEnseignement(): ?EnseignementProcessus
     {
         if (empty($this->processusEnseignement)) {
-            $this->processusEnseignement = \AppAdmin::container()->get(EnseignementProcessus::class);
+            $this->processusEnseignement = \Framework\Application\Application::getInstance()->container()->get(EnseignementProcessus::class);
         }
 
         return $this->processusEnseignement;

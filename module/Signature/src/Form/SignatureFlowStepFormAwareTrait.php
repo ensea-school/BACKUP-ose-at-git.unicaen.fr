@@ -30,7 +30,7 @@ trait SignatureFlowStepFormAwareTrait
     public function getformSignatureFlowStep(): ?SignatureFlowStepForm
     {
         if (empty($this->formSignatureFlowStep)) {
-            return \AppAdmin::container()->get('FormElementManager')->get(SignatureFlowStepForm::class);
+            return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(SignatureFlowStepForm::class);
         }
         return $this->formSignatureFlowStep;
     }

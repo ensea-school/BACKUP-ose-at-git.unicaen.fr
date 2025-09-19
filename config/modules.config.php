@@ -1,5 +1,9 @@
 <?php
 
+use Framework\Application\Application;
+
+$config = Application::getInstance()->config();
+
 $modules = [
     'Laminas\Cache',
     'Laminas\Cache\Storage\Adapter\Memory',
@@ -57,11 +61,11 @@ $modules = [
     'Utilisateur',
 ];
 
-if (AppAdmin::config()['actul']['host'] ?? null){
+if ($config['actul']['host'] ?? null){
     $modules[] = 'Connecteur\\Actul';
 }
 
-if (AppAdmin::config()['pegase']['actif'] ?? false){
+if ($config['pegase']['actif'] ?? false){
     $modules[] = 'Connecteur\\Pegase';
 }
 

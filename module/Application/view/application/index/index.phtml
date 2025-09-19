@@ -9,6 +9,7 @@
 /* @var $documentation string[] */
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Application\Application;
 
 $this->headTitle("Accueil");
 echo $this->messenger()
@@ -23,7 +24,7 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
                         class="c3">E</span></span></h1>
         <p class="texte">
         <h1 class="titre">
-            <small><?= AppAdmin::config()['etablissement']['ose'] ?? 'Organisation des Services d\'Enseignement' ?></small>
+            <small><?= Application::getInstance()->config()['etablissement']['ose'] ?? 'Organisation des Services d\'Enseignement' ?></small>
         </h1>
         <p class="text-accueil"><?= $pageAccueil ?></p>
         <p class="annee">Année <?= $annee ?>.</p>

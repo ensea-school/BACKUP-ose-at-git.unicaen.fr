@@ -30,7 +30,7 @@ trait ContratServiceAwareTrait
     public function getServiceContrat(): ?ContratService
     {
         if (empty($this->serviceContrat)) {
-            $this->serviceContrat = \AppAdmin::container()->get(ContratService::class);
+            $this->serviceContrat = \Framework\Application\Application::getInstance()->container()->get(ContratService::class);
         }
 
         return $this->serviceContrat;

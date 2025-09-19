@@ -19,7 +19,7 @@ trait TagSaisieFormAwareTrait
             return $this->formTag;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(TagSaisieForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TagSaisieForm::class);
     }
 
 

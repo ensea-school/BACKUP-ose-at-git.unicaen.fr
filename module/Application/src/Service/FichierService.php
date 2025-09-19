@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Fichier;
+use Framework\Application\Application;
 
 /**
  * Description of FichierService
@@ -168,7 +169,7 @@ class FichierService extends AbstractEntityService
 
     public function getConfigStockage(): string
     {
-        $stockage = \AppAdmin::config()['fichiers']['stockage'] ?? 'bdd';
+        $stockage = Application::getInstance()->config()['fichiers']['stockage'] ?? 'bdd';
 
         return $stockage;
     }
@@ -177,7 +178,7 @@ class FichierService extends AbstractEntityService
 
     protected function getConfigDir(): string
     {
-        $dir = \AppAdmin::config()['fichiers']['dir'] ?? 'data/fichiers';
+        $dir = Application::getInstance()->config()['fichiers']['dir'] ?? 'data/fichiers';
 
         if (substr($dir, -1) != '/') $dir .= '/';
 

@@ -30,7 +30,7 @@ trait EtatSortieServiceAwareTrait
     public function getServiceEtatSortie(): ?EtatSortieService
     {
         if (empty($this->serviceEtatSortie)) {
-            $this->serviceEtatSortie = \AppAdmin::container()->get(EtatSortieService::class);
+            $this->serviceEtatSortie = \Framework\Application\Application::getInstance()->container()->get(EtatSortieService::class);
         }
 
         return $this->serviceEtatSortie;

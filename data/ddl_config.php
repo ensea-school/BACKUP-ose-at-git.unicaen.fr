@@ -11,6 +11,7 @@ return [
             'FORMULE_RESULTAT',
             'WF_ETAPE',
             'WF_ETAPE_DEP',
+            'WF_DEP_BLOQUANTE',
         ],
     ],
     'materialized-view' => [

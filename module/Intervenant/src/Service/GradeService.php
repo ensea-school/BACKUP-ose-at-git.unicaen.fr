@@ -14,7 +14,7 @@ use Intervenant\Entity\Db\Grade;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
  * @method Grade get($id)
- * @method Grade[] getList(QueryBuilder $qb = null, $alias = null)
+ * @method Grade[] getList(?QueryBuilder $qb = null, $alias = null)
  * @method Grade newEntity()
  */
 class GradeService extends AbstractEntityService
@@ -45,7 +45,7 @@ class GradeService extends AbstractEntityService
 
 
 
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

@@ -10,6 +10,7 @@ use Agrement\Service\Traits\AgrementServiceAwareTrait;
 use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
@@ -311,8 +312,8 @@ class AgrementController extends AbstractController
         $listeIntervenants = $this->getServiceIntervenant()->getIntervenants($intervenant);
         foreach ($listeIntervenants as $objectIntervenant) {
             $this->getServiceWorkflow()->calculerTableauxBord([
-                'agrement',
-                'contrat',
+                TblProvider::AGREMENT,
+                TblProvider::CONTRAT,
             ], $objectIntervenant);
         }
     }

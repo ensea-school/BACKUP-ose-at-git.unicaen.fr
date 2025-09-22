@@ -136,7 +136,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function isVisible(Structure $structure = null, Annee $annee = null)
+    public function isVisible(?Structure $structure = null, ?Annee $annee = null)
     {
         if ($structure && $annee) {
             $lst = $this->getTypeInterventionStructure($structure, $annee);
@@ -240,7 +240,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return bool
      */
-    public function isValide(Annee $annee, Structure $structure = null): bool
+    public function isValide(Annee $annee, ?Structure $structure = null): bool
     {
         /** @var TypeInterventionStructure[] $tisList */
         $tisList = $this->getTypeInterventionStructure()->filter(function (TypeInterventionStructure $tis) use ($structure) {

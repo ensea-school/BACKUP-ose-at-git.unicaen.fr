@@ -34,6 +34,6 @@ trait MiseEnPaiementFormAwareTrait
             return $this->formPaiementMiseEnPaiement;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(MiseEnPaiementForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(MiseEnPaiementForm::class);
     }
 }

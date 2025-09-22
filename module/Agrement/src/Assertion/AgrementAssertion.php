@@ -12,8 +12,8 @@ use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Workflow\Entity\Db\WfEtape;
-use Workflow\Resource\WorkflowResource;
+use Workflow\Entity\Db\WorkflowEtape;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 
 /**
@@ -24,6 +24,7 @@ use Workflow\Resource\WorkflowResource;
 class AgrementAssertion extends AbstractAssertion
 {
     use TblContratServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
 
     /* ---- Routage général ---- */
     public function __invoke(array $page) // gestion des visibilités de menus
@@ -33,7 +34,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -81,7 +82,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
@@ -137,20 +138,10 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(array $page)
+    protected function assertPage(array $page): bool
     {
         $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-        $wfEtape   = null;
-        $privilege = null;
-        if (false !== strpos($page['route'], 'conseil-restreint')) {
-            $wfEtape   = WfEtape::CODE_CONSEIL_RESTREINT;
-            $privilege = Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION;
-        } elseif (false !== strpos($page['route'], 'conseil-academique')) {
-            $wfEtape   = WfEtape::CODE_CONSEIL_ACADEMIQUE;
-            $privilege = Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION;
-        }
 
         if (!$role instanceof Role) return false;
 
@@ -158,21 +149,54 @@ class AgrementAssertion extends AbstractAssertion
             return false;
         }
 
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
-        if ($wfEtape && $intervenant && !$this->isAllowed(WorkflowResource::create($wfEtape, $intervenant))) return false;
+        if ($page['route'] == 'gestion/agrement'){
+            return $role->hasPrivilege(Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION)
+                || $role->hasPrivilege(Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION);
+        }
 
-        return true;
+        if ($page['route'] == 'gestion/agrement/conseil-restreint'){
+            return $role->hasPrivilege(Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION);
+        }
+
+        if ($page['route'] == 'gestion/agrement/conseil-academique'){
+            return $role->hasPrivilege(Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION);
+        }
+
+        if (!str_starts_with($page['route'], 'intervenant/agrement')){
+            return false; // page inconnue => on bloque par sécurité
+        }
+
+        if (!$intervenant){
+            return false;
+        }
+
+        $wfEtape   = null;
+        $privilege = null;
+        if (str_contains($page['route'], 'conseil-restreint')) {
+            $wfEtape   = WorkflowEtape::CONSEIL_RESTREINT;
+            $privilege = Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION;
+        } elseif (str_contains($page['route'], 'conseil-academique')) {
+            $wfEtape   = WorkflowEtape::CONSEIL_ACADEMIQUE;
+            $privilege = Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION;
+        }
+
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+        return $feuilleDeRoute->get($wfEtape)?->isAllowed() ?? false;
     }
 
 
 
-    protected function assertTblAgrementSaisie(Role $role, TblAgrement $entity)
+    protected function assertTblAgrementSaisie(Role $role, TblAgrement $entity): bool
     {
         /* Si c'est pour agréer et que le workflow l'interdit alors non! */
-        if (!$entity->getAgrement() && !$this->isAllowed($entity->getResourceWorkflow())) {
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
+        $wfEtape = $feuilleDeRoute->get($entity->getTypeAgrement()->getCode());
+
+        if (!$wfEtape->isAllowed()){
             return false;
         }
-
 
         if ($structure = $entity->getStructure()) {
             return $this->assertStructureSaisie($role, $structure);
@@ -182,16 +206,22 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertTypeAgrementVisualisation(TypeAgrement $typeAgrement, Intervenant $intervenant)
+    protected function assertTypeAgrementVisualisation(TypeAgrement $typeAgrement, Intervenant $intervenant): bool
     {
-        return $this->isAllowed(WorkflowResource::create($typeAgrement->getCode(), $intervenant));
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+        $wfEtape = $feuilleDeRoute->get($typeAgrement->getWorkflowEtapeCode());
+
+        return $wfEtape && $wfEtape->isAllowed();
     }
 
 
 
-    protected function assertAgrementSaisie(Role $role, Agrement $entity)
+    protected function assertAgrementSaisie(Role $role, Agrement $entity): bool
     {
-        if (!$this->isAllowed($entity->getResourceWorkflow())) {
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
+        $wfEtape = $feuilleDeRoute->get($entity->getType()->getWorkflowEtapeCode());
+
+        if (!$wfEtape->isAllowed()) {
             return false;
         }
 
@@ -204,7 +234,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertStructureSaisie(Role $role, Structure $entity)
+    protected function assertStructureSaisie(Role $role, Structure $entity): bool
     {
         if ($roleStructure = $role->getStructure()) {
             if (!$entity->inStructure($roleStructure)) return false; // pas d'édition pour les copains
@@ -215,35 +245,23 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    private function assertTblAgrementSuppression(Role $role, TblAgrement $entity)
+    private function assertTblAgrementSuppression(Role $role, TblAgrement $entity): bool
     {
-
-        /* Si c'est pour agréer et que le workflow l'interdit alors non! */
-        if (!$entity->getAgrement() && !$this->isAllowed($entity->getResourceWorkflow())) {
+        if (!$entity->getAgrement()){
             return false;
         }
 
-        $tblContrat              = $this->getServiceTblContrat();
-        $structureContractualise = $tblContrat->getStructureContractualise($entity->getIntervenant());
-        $ids                     = array_column($structureContractualise, 'id');
-
-        if ($entity->getStructure() != NULL && in_array($entity->getStructure()->getId(), $ids)) {
-            return false;
-        } else {
-            if ($structure = $entity->getStructure()) {
-                return $this->assertStructureSaisie($role, $structure);
-            }
-        }
-
-        return true;
+        return $this->assertAgrementSuppression($role, $entity->getAgrement());
     }
 
 
 
-    private function assertAgrementSuppression(Role $role, Agrement $entity)
+    private function assertAgrementSuppression(Role $role, Agrement $entity): bool
     {
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
+        $wfEtape = $feuilleDeRoute->get($entity->getType()->getWorkflowEtapeCode());
 
-        if (!$this->isAllowed($entity->getResourceWorkflow())) {
+        if (!$wfEtape->isAllowed()){
             return false;
         }
 

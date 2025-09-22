@@ -2,7 +2,10 @@
 
 namespace Administration\DataSource;
 
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\Perimetre;
 use Unicaen\BddAdmin\BddAwareTrait;
+use Workflow\Entity\Db\WorkflowEtapeDependance;
 
 class DataSource
 {
@@ -22,7 +25,7 @@ class DataSource
 
 
 
-    public function ANNEE()
+    public function ANNEE(): array
     {
         $annees = [];
         for ($a = 1950; $a < 2100; $a++) {
@@ -47,7 +50,7 @@ class DataSource
 
 
 
-    public function DEPARTEMENT()
+    public function DEPARTEMENT(): array
     {
         $departements = [];
 
@@ -75,7 +78,7 @@ class DataSource
 
 
 
-    public function IMPORT_TABLES()
+    public function IMPORT_TABLES(): array
     {
         $data = require 'data/import_tables.php';
 
@@ -93,7 +96,7 @@ class DataSource
 
 
 
-    public function JOUR_FERIE()
+    public function JOUR_FERIE(): array
     {
         $joursFeries = require 'data/jours_feries.php';
 
@@ -122,14 +125,14 @@ class DataSource
 
 
 
-    public function ETAT_SORTIE()
+    public function ETAT_SORTIE(): array
     {
         return require 'data/etats_sortie.php';
     }
 
 
 
-    public function CATEGORIE_PRIVILEGE()
+    public function CATEGORIE_PRIVILEGE(): array
     {
         $data       = require 'data/privileges.php';
         $categories = [];
@@ -146,7 +149,7 @@ class DataSource
 
 
 
-    public function PRIVILEGE()
+    public function PRIVILEGE(): array
     {
         $data       = require 'data/privileges.php';
         $privileges = [];
@@ -168,13 +171,13 @@ class DataSource
 
 
 
-    public function STATUT()
+    public function STATUT(): array
     {
         $donneesParDefaut = require 'data/donnees_par_defaut.php';
         $data             = $donneesParDefaut['STATUT'];
 
         $statuts = [];
-        for ($a = 2010; $a <= 2099; $a++) {
+        for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
             foreach ($data as $d) {
                 $d['ANNEE_ID']              = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
@@ -187,13 +190,13 @@ class DataSource
 
 
 
-    public function FONCTION_REFERENTIEL()
+    public function FONCTION_REFERENTIEL(): array
     {
         $donneesParDefaut = require 'data/donnees_par_defaut.php';
         $data             = $donneesParDefaut['FONCTION_REFERENTIEL'];
 
         $fonctions = [];
-        for ($a = 2010; $a <= 2099; $a++) {
+        for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
             foreach ($data as $d) {
                 $d['ANNEE_ID']              = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
@@ -206,13 +209,13 @@ class DataSource
 
 
 
-    public function TYPE_PIECE_JOINTE_STATUT()
+    public function TYPE_PIECE_JOINTE_STATUT(): array
     {
         $donneesParDefaut = require 'data/donnees_par_defaut.php';
         $data             = $donneesParDefaut['TYPE_PIECE_JOINTE_STATUT'];
 
         $statuts = [];
-        for ($a = 2010; $a <= 2099; $a++) {
+        for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
             foreach ($data as $d) {
                 $d['ANNEE_ID']              = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
@@ -225,7 +228,7 @@ class DataSource
 
 
 
-    public function PLAFOND()
+    public function PLAFOND(): array
     {
         $data     = require 'data/plafonds.php';
         $plafonds = [];
@@ -248,7 +251,7 @@ class DataSource
 
 
 
-    public function PLAFOND_ETAT()
+    public function PLAFOND_ETAT(): array
     {
         $data     = require 'data/plafonds.php';
         $plafonds = [];
@@ -269,7 +272,7 @@ class DataSource
 
 
 
-    public function PLAFOND_PERIMETRE()
+    public function PLAFOND_PERIMETRE(): array
     {
         $data     = require 'data/plafonds.php';
         $plafonds = [];
@@ -289,7 +292,7 @@ class DataSource
 
 
 
-    public function TAUX_REMU(string $action)
+    public function TAUX_REMU(string $action): array
     {
         $data = require 'data/taux_remu.php';
 
@@ -313,7 +316,7 @@ class DataSource
 
 
 
-    public function TAUX_REMU_VALEUR(string $action)
+    public function TAUX_REMU_VALEUR(string $action): array
     {
         $data = require 'data/taux_remu.php';
 
@@ -339,13 +342,13 @@ class DataSource
 
 
 
-    public function TYPE_MISSION()
+    public function TYPE_MISSION(): array
     {
         $data = require 'data/type_mission.php';
 
         $tms = [];
 
-        for ($a = 2010; $a <= 2099; $a++) {
+        for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
             foreach ($data as $code => $tm) {
                 $tms[] = [
                     'CODE'                     => $code,
@@ -364,7 +367,7 @@ class DataSource
 
 
 
-    public function TYPE_INDICATEUR()
+    public function TYPE_INDICATEUR(): array
     {
         $data        = require 'data/indicateurs.php';
         $indicateurs = [];
@@ -383,7 +386,7 @@ class DataSource
 
 
 
-    public function INDICATEUR()
+    public function INDICATEUR(): array
     {
         $data        = require 'data/indicateurs.php';
         $indicateurs = [];
@@ -412,15 +415,30 @@ class DataSource
 
 
 
-    public function WF_ETAPE()
+    public function WORKFLOW_ETAPE(): array
     {
         $data   = require 'data/workflow_etapes.php';
         $etapes = [];
         $ordre  = 1;
         foreach ($data as $code => $etape) {
-            $etape['CODE']  = $code;
-            $etape['ORDRE'] = $ordre++ * 10;
-            $etapes[]       = $etape;
+            $edata = [
+                'code'                  => $code,
+                'perimetre_id'          => $etape['perimetre'],
+                'route'                 => $etape['route'],
+                'route_intervenant'     => $etape['route_intervenant'] ?? null,
+                'libelle_intervenant'   => $etape['libelle_intervenant'],
+                'libelle_autres'        => $etape['libelle_autres'],
+                'desc_non_franchie'     => $etape['desc_non_franchie'],
+                'desc_sans_objectif'    => $etape['desc_sans_objectif'] ?? null,
+                'ordre'                 => $ordre++,
+                'histo_modificateur_id' => null,
+            ];
+
+            for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
+                $edata['annee_id'] = $a;
+                mpg_upper($edata);
+                $etapes[] = $edata;
+            }
         }
 
         return $etapes;
@@ -428,7 +446,42 @@ class DataSource
 
 
 
-    public function PARAMETRE()
+    public function WORKFLOW_ETAPE_DEPENDANCE(): array
+    {
+        $data = require 'data/workflow_etapes.php';
+
+        $deps = [];
+        foreach ($data as $etapeSuivCode => $etape) {
+            if (isset($etape['dependances'])) {
+                foreach ($etape['dependances'] as $etapePrecCode => $dependance) {
+                    $dep    = [
+                        'etape_suivante_id'     => $etapeSuivCode,
+                        'etape_precedante_id'   => $etapePrecCode,
+                        'active'                => true,
+                        'type_intervenant_id'   => $dependance['type_intervenant'] ?? null,
+                        'perimetre_id'          => $dependance['perimetre'] ?? Perimetre::ETABLISSEMENT,
+                        'avancement'            => $dependance['avancement'] ?? WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
+                        'histo_modificateur_id' => null,
+                    ];
+
+                    for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
+                        $ndep = $dep;
+                        $ndep['etape_suivante_id'] .= '-'.(string)$a;
+                        $ndep['etape_precedante_id'] .= '-'.(string)$a;
+                        $ndep['annee_id'] = $a;
+                        mpg_upper($ndep);
+                        $deps[] = $ndep;
+                    }
+                }
+            }
+        }
+
+        return $deps;
+    }
+
+
+
+    public function PARAMETRE(): array
     {
         $bdd = $this->getBdd();
 

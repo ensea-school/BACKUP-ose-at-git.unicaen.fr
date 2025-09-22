@@ -35,6 +35,6 @@ trait TypePieceJointeSaisieFormAwareTrait
             return $this->formPieceJointeTypePieceJointeSaisie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(TypePieceJointeSaisieForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TypePieceJointeSaisieForm::class);
     }
 }

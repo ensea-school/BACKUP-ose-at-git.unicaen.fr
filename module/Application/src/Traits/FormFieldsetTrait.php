@@ -2,7 +2,6 @@
 
 namespace Application\Traits;
 
-use Application\Constants;
 use Application\Filter\FloatFromString;
 use Application\Hydrator\GenericHydrator;
 use Doctrine\ORM\EntityManager;
@@ -27,7 +26,7 @@ trait FormFieldsetTrait
     protected function getEntityManager(): EntityManager
     {
         if (!$this->entityManager) {
-            $this->entityManager = \AppAdmin::container()->get(Constants::BDD);
+            $this->entityManager = \Framework\Application\Application::getInstance()->container()->get(EntityManager::class);
         }
 
         return $this->entityManager;
@@ -38,7 +37,7 @@ trait FormFieldsetTrait
     private function getControllerPluginFlashMessenger(): FlashMessenger
     {
         if (!$this->controllerPluginFlashMessenger) {
-            $this->controllerPluginFlashMessenger = \AppAdmin::container()->get('ControllerPluginManager')->get('flashMessenger');
+            $this->controllerPluginFlashMessenger = \Framework\Application\Application::getInstance()->container()->get('ControllerPluginManager')->get('flashMessenger');
         }
 
         return $this->controllerPluginFlashMessenger;
@@ -46,21 +45,9 @@ trait FormFieldsetTrait
 
 
 
-    /**
-     * Generates a url given the name of a route.
-     *
-     * @param string $name Name of the route
-     * @param array $params Parameters for the link
-     * @param array|\Traversable $options Options for the route
-     * @param bool $reuseMatchedParams Whether to reuse matched parameters
-     *
-     * @return string                         For the link href attribute
-     * @see    \Laminas\Mvc\I18n\Router\RouteInterface::assemble()
-     *
-     */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false): string
     {
-        $url = \AppAdmin::container()->get('ViewHelperManager')->get('url');
+        $url = \Framework\Application\Application::getInstance()->container()->get('ViewHelperManager')->get('url');
 
         /* @var $url \Laminas\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);

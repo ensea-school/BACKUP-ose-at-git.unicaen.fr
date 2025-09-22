@@ -83,7 +83,7 @@ class PeriodeService extends AbstractEntityService
      *
      * @return Periode
      */
-    public function getPeriodePaiement(\DateTime $date = null)
+    public function getPeriodePaiement(?\DateTime $date = null)
     {
         $anneeDateDebut = $this->getServiceContext()->getAnnee()->getDateDebut();
         $aY             = (int)$anneeDateDebut->format('Y');
@@ -119,7 +119,7 @@ class PeriodeService extends AbstractEntityService
 
 
 
-    public function finderByMiseEnPaiement(Structure $structure = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByMiseEnPaiement(?Structure $structure = null, ?QueryBuilder $qb = null, ?string $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -145,7 +145,7 @@ class PeriodeService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -179,7 +179,7 @@ class PeriodeService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEnseignement(QueryBuilder $qb = null, $alias = null)
+    public function finderByEnseignement(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.enseignement = 1");

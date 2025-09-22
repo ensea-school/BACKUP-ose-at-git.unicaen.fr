@@ -43,7 +43,7 @@ class LigneEnseignementViewHelper extends AbstractHtmlElement
     /**
      * @return string
      */
-    public function getRefreshUrl()
+    public function getRefreshUrl(): string
     {
         $url = $this->getView()->url(
             'enseignement/rafraichir-ligne',
@@ -315,7 +315,7 @@ class LigneEnseignementViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function setService(Service $service = null)
+    public function setService(?Service $service = null)
     {
         $service->setTypeVolumeHoraire($this->enseignements->getTypeVolumeHoraire());
         $typeVolumeHoraire    = $this->enseignements->getTypeVolumeHoraire();

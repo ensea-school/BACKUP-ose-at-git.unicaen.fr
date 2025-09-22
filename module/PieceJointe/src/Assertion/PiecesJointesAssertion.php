@@ -8,10 +8,8 @@ use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use PieceJointe\Controller\PieceJointeController;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
-
-// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 
 
 /**
@@ -31,7 +29,7 @@ class PiecesJointesAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
@@ -40,27 +38,23 @@ class PiecesJointesAssertion extends AbstractAssertion
                 switch ($action) {
                     case 'index':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VISUALISATION)) return false;
-
+                        if (!$intervenant) return false;
                         return $this->assertPieceJointeAction($intervenant);
-                    break;
                     case 'televerser':
                     case 'supprimer':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_EDITION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                    break;
                     case 'valider':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VALIDATION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                    break;
                     case 'devalider':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION)) return false;
 
                         return $this->assertPieceJointeAction($intervenant);
-                    break;
                 }
-            break;
+                break;
         }
 
         return true;
@@ -74,7 +68,7 @@ class PiecesJointesAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity, $privilege = null): bool
     {
         return true;
     }
@@ -83,29 +77,29 @@ class PiecesJointesAssertion extends AbstractAssertion
 
     /*assertion refonte dossier*/
 
-    protected function assertPrivilege($privilege, $subPrivilege = null)
+    protected function assertPrivilege($privilege, $subPrivilege = null): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         switch ($privilege) {
             case Privileges::DOSSIER_IDENTITE_EDITION:
                 return $this->assertEditionDossierContact($intervenant);
-            break;
+                break;
         }
     }
 
 
 
-    protected function assertEditionDossierContact(Intervenant $intervenant)
+    protected function assertEditionDossierContact(Intervenant $intervenant): bool
     {
         return true;
     }
 
 
 
-    protected function assertDossierEdition(Intervenant $intervenant = null)
+    protected function assertDossierEdition(Intervenant $intervenant): bool
     {
-        if (!$this->assertEtapeAtteignable(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant)) {
+        if (!$this->assertEtapeAtteignable(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenant)) {
             return false;
         }
 
@@ -114,9 +108,9 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertPieceJointeAction(Intervenant $intervenant = null)
+    protected function assertPieceJointeAction(Intervenant $intervenant): bool
     {
-        if (!$this->assertEtapeAtteignable(WfEtape::CODE_PJ_SAISIE, $intervenant)) {
+        if (!$this->assertEtapeAtteignable(WorkflowEtape::PJ_SAISIE, $intervenant)) {
             return false;
         }
 
@@ -125,21 +119,15 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
+    protected function assertEtapeAtteignable($etape, Intervenant $intervenant): bool
     {
-        if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
-            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
-                return false;
-            }
-        }
-
-        return true;
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+        return $feuilleDeRoute->get($etape)?->isAllowed() ?: false;
     }
 
 
 
-    protected function assertPriv($privilege)
+    protected function assertPriv($privilege): bool
     {
         $role = $this->getRole();
         if (!$role instanceof Role) return false;

@@ -5,41 +5,70 @@
  * @var $typeVolumeHoraire        Service\Entity\Db\TypeVolumeHoraire
  * @var $intervenant              \Intervenant\Entity\Db\Intervenant
  * @var $enseignements            Enseignement\Entity\Db\Service[]
+ * @var $cloture                  \Workflow\Entity\Db\Validation
  */
 
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 if ($typeVolumeHoraire->isPrevu()) {
-    $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+    $wfEtape = WorkflowEtape::ENSEIGNEMENT_SAISIE;
     $title     = 'Enseignements';
 } else {
-    $nextEtape = WfEtape::CODE_SERVICE_SAISIE_REALISE;
+    $wfEtape = WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE;
     $title     = 'Constatation des enseignements réalisés';
 }
 
-//$menuUrl = $this->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
+$menuUrl = $this->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
 
 $this->intervenant($intervenant)->renderTitle($title);
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+echo $this->plafonds($intervenant, $typeVolumeHoraire);
 
 $ens = $this->enseignements($typeVolumeHoraire, $intervenant, $enseignements);
 $ens->setHorodatage(true);
 echo $ens;
 
-echo '<hr />';
 
-echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+if ($cloture) {
+    $bottom = true;
+    echo $this->partial('service/intervenant/cloture', compact('cloture', 'bottom'));
+}
+
+echo $this->vue('formule/totaux-hetd', [
+        'intervenant'       => $intervenant->getId(),
+        'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+]);
+
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);
+
 ?>
 <script>
-    /*
-        $(function () {
-            WidgetInitializer.includeJs(unicaenVue.url('js/service.js'));
 
-            $('.enseignements').enseignements({
-                'heures-change': function () {
+    $(function () {
+        WidgetInitializer.includeJs(unicaenVue.url('js/service.js'));
 
-                }
-            });
-        });
-    */
+        <?php if ($enseignements !== false): ?>$('.enseignements').enseignements({
+            'heures-change-exists': function () {
+
+            },
+            'heures-change': function () {
+                // on met à jour le résultat de la formule
+                window.dispatchEvent(new CustomEvent("Formule/TotauxHetd.refresh"));
+
+                // on met à jour l'horodatage des services !!
+                $("#s-horodatage").refresh();
+
+                // Mise à jour des plafonds
+                $(".plafonds").refresh();
+
+                // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                $('#sidebar').load('<?= $menuUrl; ?>');
+
+                // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
+                window.dispatchEvent(new CustomEvent("Workflow/Nav.refresh"));
+            }
+        });<?php endif; ?>
+    });
+
 </script>

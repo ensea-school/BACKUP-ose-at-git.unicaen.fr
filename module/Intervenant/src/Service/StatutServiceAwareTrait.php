@@ -31,7 +31,7 @@ trait StatutServiceAwareTrait
     public function getServiceStatut(): ?StatutService
     {
         if (empty($this->serviceStatut)) {
-            $this->serviceStatut = \AppAdmin::container()->get(StatutService::class);
+            $this->serviceStatut = \Framework\Application\Application::getInstance()->container()->get(StatutService::class);
         }
 
         return $this->serviceStatut;

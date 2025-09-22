@@ -53,7 +53,7 @@ class CentreCoutService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByTypeHeures (TypeHeures $typeHeures, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeHeures (TypeHeures $typeHeures, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -163,7 +163,7 @@ class CentreCoutService extends AbstractEntityService
      *
      * @return CentreCout[]
      */
-    public function getListeParent (QueryBuilder $qb = null, $alias = null)
+    public function getListeParent (?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->where("$alias.parent is Null");

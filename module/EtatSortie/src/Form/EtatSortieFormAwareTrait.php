@@ -33,6 +33,6 @@ trait EtatSortieFormAwareTrait
             return $this->formEtatSortie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(EtatSortieForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(EtatSortieForm::class);
     }
 }

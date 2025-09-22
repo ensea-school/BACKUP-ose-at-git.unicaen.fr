@@ -8,7 +8,7 @@ use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Workflow\Entity\Db\Validation;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -19,7 +19,6 @@ use Workflow\Service\WorkflowServiceAwareTrait;
  */
 class ClotureAssertion extends AbstractAssertion
 {
-    use ServiceAssertionAwareTrait;
     use WorkflowServiceAwareTrait;
 
     /**
@@ -28,7 +27,7 @@ class ClotureAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(ResourceInterface $entity, ?string $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -44,7 +43,7 @@ class ClotureAssertion extends AbstractAssertion
                     case Privileges::CLOTURE_REOUVERTURE:
                         return $this->assertCloture($entity);
                 }
-            break;
+                break;
             case $entity instanceof Validation:
                 switch ($privilege) {
                     case Privileges::CLOTURE_CLOTURE:
@@ -52,7 +51,7 @@ class ClotureAssertion extends AbstractAssertion
                     case Privileges::CLOTURE_REOUVERTURE:
                         return $this->assertReouverture($entity->getIntervenant());
                 }
-            break;
+                break;
         }
 
         return true;
@@ -60,13 +59,16 @@ class ClotureAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(array $page)
+    protected function assertPage(array $page): bool
     {
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
-            if (!$this->getAssertionService()->assertEtapeAtteignable($etape, $intervenant)) {
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+            $wfEtape        = $feuilleDeRoute->get($etape);
+
+            if (!$wfEtape || !$wfEtape->isAllowed()) {
                 return false;
             }
         }
@@ -76,29 +78,38 @@ class ClotureAssertion extends AbstractAssertion
 
 
 
-    protected function assertCloture(Intervenant $intervenant = null)
+    protected function assertCloture(?Intervenant $intervenant = null): bool
     {
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+        $wfEtape        = $feuilleDeRoute->get(WorkflowEtape::CLOTURE_REALISE);
+
         return $this->asserts([
-            $intervenant,
-            $this->getAssertionService()->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
-        ]);
+                                  $intervenant,
+                                  $wfEtape,
+                                  $wfEtape?->isAllowed(),
+                              ]);
     }
 
 
 
-    protected function assertReouverture(Intervenant $intervenant = null)
+    protected function assertReouverture(?Intervenant $intervenant = null): bool
     {
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+
         $hasNoDMEP = false;
         if ($intervenant) {
-            $dmepEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
-            $hasNoDMEP = !$dmepEtape || $dmepEtape->getFranchie() == 0;
+            $dmepEtape = $feuilleDeRoute->get(WorkflowEtape::DEMANDE_MEP);
+            $hasNoDMEP = !$dmepEtape || $dmepEtape->realisation == 0;
         }
 
+        $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CLOTURE_REALISE);
+
         return $this->asserts([
-            $hasNoDMEP,
-            $intervenant,
-            $this->getAssertionService()->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
-        ]);
+                                  $hasNoDMEP,
+                                  $intervenant,
+                                  $wfEtape,
+                                  $wfEtape?->isAllowed(),
+                              ]);
     }
 
 }

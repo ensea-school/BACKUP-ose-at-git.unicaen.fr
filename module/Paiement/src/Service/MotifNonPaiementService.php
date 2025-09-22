@@ -41,7 +41,7 @@ class MotifNonPaiementService extends AbstractEntityService
      * @param QueryBuilder|null $queryBuilder
      * @return MotifNonPaiement[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function getList( ?QueryBuilder $qb = null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelleLong");

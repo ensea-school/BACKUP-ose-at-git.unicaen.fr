@@ -175,9 +175,7 @@ Util = {
             {},
             function ()
             {
-                //Préférable pour éviter de re-soumettre des posts lors d'un changement d'année
-                window.location = window.location.href;
-                //window.location.reload();
+                window.history.go(0);
             }
         );
     },

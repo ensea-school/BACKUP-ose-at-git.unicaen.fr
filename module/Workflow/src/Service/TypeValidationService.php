@@ -3,7 +3,6 @@
 namespace Workflow\Service;
 
 use Application\Service\AbstractEntityService;
-use Application\Service\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Workflow\Entity\Db\TypeValidation;
 
@@ -19,7 +18,7 @@ class TypeValidationService extends AbstractEntityService
      * retourne la classe des entités
      *
      * @return string
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     public function getEntityClass ()
     {
@@ -42,7 +41,7 @@ class TypeValidationService extends AbstractEntityService
 
     public function getMission (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_MISSION);
+        return $this->getByCode(TypeValidation::MISSION);
     }
 
 
@@ -64,77 +63,77 @@ class TypeValidationService extends AbstractEntityService
 
     public function getOffreEmploi (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_OFFRE_EMPLOI);
+        return $this->getByCode(TypeValidation::OFFRE_EMPLOI);
     }
 
 
 
     public function getCandidature (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_CANDIDATURE);
+        return $this->getByCode(TypeValidation::CANDIDATURE);
     }
 
 
 
     public function getMissionRealise (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_MISSION_REALISE);
+        return $this->getByCode(TypeValidation::MISSION_REALISE);
     }
 
 
 
     public function getDonneesPerso (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_DONNEES_PERSO);
+        return $this->getByCode(TypeValidation::DONNEES_PERSO);
     }
 
 
 
     public function getEnseignement (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_ENSEIGNEMENT);
+        return $this->getByCode(TypeValidation::ENSEIGNEMENT);
     }
 
 
 
     public function getReferentiel (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_REFERENTIEL);
+        return $this->getByCode(TypeValidation::REFERENTIEL);
     }
 
 
 
     public function getContrat (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_CONTRAT);
+        return $this->getByCode(TypeValidation::CONTRAT);
     }
 
 
 
     public function getFichier (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_FICHIER);
+        return $this->getByCode(TypeValidation::FICHIER);
     }
 
 
 
     public function getPieceJointe (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_PIECE_JOINTE);
+        return $this->getByCode(TypeValidation::PIECE_JOINTE);
     }
 
 
 
     public function getClotureRealise (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_CLOTURE_REALISE);
+        return $this->getByCode(TypeValidation::CLOTURE_REALISE);
     }
 
 
 
     public function getDeclaration (): TypeValidation
     {
-        return $this->getByCode(TypeValidation::CODE_DECLARATION_PRIME);
+        return $this->getByCode(TypeValidation::DECLARATION_PRIME);
     }
 
 
@@ -146,7 +145,7 @@ class TypeValidationService extends AbstractEntityService
      *
      * @return TypeValidation[]
      */
-    public function orderBy (QueryBuilder $qb = null, $alias = null)
+    public function orderBy (?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");

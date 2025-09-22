@@ -83,9 +83,11 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
      */
     public function __toString()
     {
-        $string = sprintf("%s - Fichier '%s'",
+        $string = sprintf(
+            "%s - Fichier '%s'",
             $this->getTypeMime(),
-            $this->getNom());
+            $this->getNom()
+        );
 
         if ($this->getValidation()) {
             $string .= $this->getValidation();
@@ -313,7 +315,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
      *
      * @return Fichier
      */
-    public function setValidation(\Workflow\Entity\Db\Validation $validation = null)
+    public function setValidation(?\Workflow\Entity\Db\Validation $validation = null)
     {
         $this->validation = $validation;
 

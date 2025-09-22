@@ -6,6 +6,8 @@
  * @var $typeVolumehoraire \Service\Entity\Db\TypeVolumeHoraire
  */
 
+use Workflow\Entity\Db\WorkflowEtape;
+
 
 $this->intervenant($intervenant)->renderTitle($title);
 
@@ -33,8 +35,5 @@ foreach ($wells as $well => $title) {
     }
 }
 
-echo $this->feuilleDeRoute($intervenant)->renderNav(
-    $typeVolumeHoraire->isPrevu() ?
-        \Workflow\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION
-        : \Workflow\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION_REALISE
-);
+$etape = $typeVolumeHoraire->isPrevu() ? WorkflowEtape::ENSEIGNEMENT_VALIDATION : WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE;
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $etape]);

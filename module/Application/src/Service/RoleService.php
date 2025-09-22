@@ -3,6 +3,8 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Laminas\Session\Container;
+use Application\Entity\Db\Role;
 
 /**
  * Description of Role
@@ -11,14 +13,18 @@ use Doctrine\ORM\QueryBuilder;
  */
 class RoleService extends AbstractEntityService
 {
+    private static ?Container $session = null;
+
+
+
     /**
-     * retourne la classe des entités
+     * Retourne la classe des entités
      *
      * @return string
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\Role::class;
+        return Role::class;
     }
 
 
@@ -40,11 +46,28 @@ class RoleService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");
         return $qb;
     }
 
+
+
+    public static function getSession(): Container
+    {
+        if (null === self::$session) {
+            self::$session = new Container('ROLE_SESSION_CONTAINER');
+        }
+        return self::$session;
+    }
+
+
+
+    public static function clearSession(): void
+    {
+        $session = self::getSession();
+        $session->getManager()->getStorage()->clear();
+    }
 }

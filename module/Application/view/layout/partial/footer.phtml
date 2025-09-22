@@ -1,0 +1,38 @@
+<?php
+
+use Framework\Application\Application;
+
+$ce = Application::getInstance()->config()['etablissement'];
+
+?>
+<nav id="footer" class="nav justify-content-center">
+    <a title="<?= $ce['logoDescription'] ?? null ?>"
+       class="nav-link lien-univ"
+       href="<?= $ce['logoUri'] ?? null ?>"
+    ><?= $ce['nom'] ?? null ?></a>
+
+    <a title="&#xC0;propos de cette application"
+       class="nav-link"
+       href="<?= $this->basePath('apropos') ?>"
+    >À propos</a>
+
+    <a title="Contact concernant l'application"
+       class="nav-link"
+       href="<?= $this->basePath('contact') ?>"
+    >Contact</a>
+
+    <a title="Page de navigation au sein de l'application"
+       class="nav-link"
+       href="<?= $this->basePath('plan') ?>"
+    >Plan de navigation</a>
+
+    <a title="Mentions légales"
+       class="nav-link"
+       href="<?= $ce['mentionsLegales'] ?? null ?>"
+    >Mentions légales</a>
+
+    <a title="Vie privée"
+       class="nav-link"
+       href="<?= $ce['viePrivee'] ?? null ?>"
+    >Vie privée</a>
+</nav>

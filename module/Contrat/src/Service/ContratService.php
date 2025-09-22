@@ -93,7 +93,7 @@ class ContratService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -113,7 +113,7 @@ class ContratService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByValidation($validation, QueryBuilder $qb = null, $alias = null)
+    public function finderByValidation($validation, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

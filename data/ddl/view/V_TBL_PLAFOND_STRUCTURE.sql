@@ -16,7 +16,23 @@ SELECT
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-    SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL STRUCTURE_ID,NULL HEURES,NULL PLAFOND,NULL PLAFOND_ETAT_ID,NULL DEROGATION FROM dual WHERE 0 = 1
+  SELECT 6 PLAFOND_ID, p.ANNEE_ID, p.TYPE_VOLUME_HORAIRE_ID, p.INTERVENANT_ID, p.STRUCTURE_ID, p.HEURES, NULL PLAFOND, NULL PLAFOND_ETAT_ID FROM (
+    SELECT
+        i.annee_id                 annee_id,
+        vhr.type_volume_horaire_id type_volume_horaire_id,
+        i.id                       intervenant_id,
+        s.id                       structure_id,
+        SUM(vhr.heures)            heures
+      FROM
+        service_referentiel       sr
+        JOIN intervenant           i ON i.id = sr.intervenant_id
+        JOIN structure             s ON s.id = sr.structure_id
+        JOIN volume_horaire_ref  vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+      WHERE
+        sr.histo_destruction IS NULL
+      GROUP BY
+        i.annee_id, vhr.type_volume_horaire_id, i.id, s.id
+    ) p
   ) p
   LEFT JOIN plafond_structure ps ON ps.plafond_id = p.plafond_id AND ps.structure_id = p.structure_id AND ps.annee_id = p.annee_id AND ps.histo_destruction IS NULL
   LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL

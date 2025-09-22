@@ -17,11 +17,11 @@ trait CacheContainerTrait
      *
      * @return CacheContainer
      */
-    public function getCacheContainer($class = null)
+    public function getCacheContainer(?string $class = null)
     {
         if (!isset($this->__cacheContainer)) {
             /** @var CacheService $cacheService */
-            $cacheService = \AppAdmin::container()->get(CacheService::class);
+            $cacheService = \Framework\Application\Application::getInstance()->container()->get(CacheService::class);
 
             if (!$class) $class = $this;
             $this->__cacheContainer = new CacheContainer($cacheService, $class);

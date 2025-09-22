@@ -22,6 +22,7 @@ return [
             Migration\v24ParametresContrat::class,
             Migration\v24FonctionReferentielParent::class,
             Migration\v25CentreCoutsTypeMission::class,
+            Migration\v25DoublonsValidations::class,
             Migration\v24ParametresAnnualises::class,
         ],
     ],

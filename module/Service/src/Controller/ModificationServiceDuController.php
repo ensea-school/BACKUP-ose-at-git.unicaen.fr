@@ -4,6 +4,7 @@ namespace Service\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Doctrine\DBAL\Exception;
 use Intervenant\Entity\Db\Intervenant;
@@ -139,9 +140,9 @@ class ModificationServiceDuController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule',
-            'plafond_intervenant',
-            'plafond_volume_horaire',
+            TblProvider::SERVICE_DU,
+            TblProvider::PLAFOND_INTERVENANT,
+            TblProvider::PLAFOND_VOLUME_HORAIRE,
         ], $intervenant);
     }
 }

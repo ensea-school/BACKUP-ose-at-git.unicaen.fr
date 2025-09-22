@@ -2,7 +2,7 @@
 
 namespace PieceJointe\Service\Factory;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use PieceJointe\Service\PieceJointeService;
 use Psr\Container\ContainerInterface;
 
@@ -20,7 +20,7 @@ class PieceJointeServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): PieceJointeService
     {
         $service = new PieceJointeService();
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

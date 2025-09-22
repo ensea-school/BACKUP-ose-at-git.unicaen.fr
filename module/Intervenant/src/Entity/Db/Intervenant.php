@@ -515,7 +515,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setStatut (Statut $statut = null)
+    public function setStatut (?Statut $statut = null)
     {
         $this->statut = $statut;
 
@@ -1334,7 +1334,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getAgrement (TypeAgrement $typeAgrement = null)
+    public function getAgrement (?TypeAgrement $typeAgrement = null)
     {
         if (null === $this->agrement) {
             return null;
@@ -1393,7 +1393,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getContrat (TypeContrat $typeContrat = null, Structure $structure = null)
+    public function getContrat (?TypeContrat $typeContrat = null, ?Structure $structure = null)
     {
         if (null === $this->contrat) {
             return null;
@@ -1685,7 +1685,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getValidation (TypeValidation $type = null)
+    public function getValidation (?TypeValidation $type = null)
     {
         if (null === $type) {
             return $this->validation;

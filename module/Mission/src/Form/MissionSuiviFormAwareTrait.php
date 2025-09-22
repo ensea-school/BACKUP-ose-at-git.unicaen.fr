@@ -34,6 +34,6 @@ trait MissionSuiviFormAwareTrait
             return $this->formMissionSuivi;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(MissionSuiviForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(MissionSuiviForm::class);
     }
 }

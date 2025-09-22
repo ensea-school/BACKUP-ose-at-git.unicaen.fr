@@ -8,7 +8,6 @@ use Application\Controller\AbstractController;
 use Application\Entity\Db\Annee;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Formule\Entity\Db\Formule;
-use Formule\Model\FormuleCalcul;
 use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Service\TestServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;

@@ -24,7 +24,7 @@ use RuntimeException;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
  * @method Etape get($id)
- * @method Etape[] getList(QueryBuilder $qb = null, $alias = null)
+ * @method Etape[] getList(?QueryBuilder $qb = null, $alias = null)
  */
 class EtapeService extends AbstractEntityService
 {
@@ -44,7 +44,7 @@ class EtapeService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return Etape::class;
     }
@@ -56,7 +56,7 @@ class EtapeService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'etp';
     }
@@ -165,7 +165,7 @@ class EtapeService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByNiveau(\OffreFormation\Entity\NiveauEtape $niveau, QueryBuilder $qb = null, $alias = null)
+    public function finderByNiveau(\OffreFormation\Entity\NiveauEtape $niveau, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -215,7 +215,7 @@ class EtapeService extends AbstractEntityService
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -231,7 +231,7 @@ class EtapeService extends AbstractEntityService
 
 
 
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -249,7 +249,7 @@ class EtapeService extends AbstractEntityService
      *
      * @return Etape
      */
-    public function getByCode($code, Annee $annee = null)
+    public function getByCode($code, ?Annee $annee = null)
     {
         if (null == $code) return null;
 

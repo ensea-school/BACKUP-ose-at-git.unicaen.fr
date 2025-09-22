@@ -20,7 +20,7 @@ class GestionAssertion extends AbstractAssertion
 
 
 
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -37,7 +37,7 @@ class GestionAssertion extends AbstractAssertion
 
 
 
-    protected function assertIntervenant( Role $role, $privilege )
+    protected function assertIntervenant( Role $role, $privilege ): bool
     {
         return $this->asserts([
             !$privilege || $role->hasPrivilege($privilege), // pareil si le rôle ne possède pas le privilège adéquat

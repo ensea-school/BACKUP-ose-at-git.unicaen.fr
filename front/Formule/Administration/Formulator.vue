@@ -2,11 +2,13 @@
     <h1>Formulator</h1>
 
     <div class="mb-2">
-    <a class="btn btn-secondary" :href="this.indexUrl()"><i class="fas fa-rotate-left"></i> Retour à l'administration des formules</a>
+        <a class="btn btn-primary" :href="testUrl(test)">Affichage du jeu de test</a>
+        &nbsp;
+        <a class="btn btn-secondary" :href="this.indexUrl()"><i class="fas fa-rotate-left"></i> Retour à l'administration des formules</a>
     </div>
 
     <div v-if="error">
-        <div class="alert alert-danger">{{ error }}</div>
+        <pre class="alert alert-danger">{{ error }}</pre>
     </div>
     <div v-else>
         <div class="alert alert-success">Formule bien intégrée</div>
@@ -17,9 +19,6 @@
         <div v-html="phpClass"></div>
     </div>
 
-    {{ error }}
-
-
 </template>
 <script>
 
@@ -29,12 +28,17 @@ export default {
     props: {
         phpClass: {type: String},
         error: {type: String},
+        test: {type: Number},
     },
     methods: {
         indexUrl()
         {
             return unicaenVue.url('formule/administration')
-        }
+        },
+        testUrl(id)
+        {
+            return unicaenVue.url('formule-test/saisir/:id', {id: id});
+        },
     },
 }
 

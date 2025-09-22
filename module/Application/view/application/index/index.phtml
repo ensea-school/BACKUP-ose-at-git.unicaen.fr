@@ -9,7 +9,7 @@
 /* @var $documentation string[] */
 
 use Application\Provider\Privilege\Privileges;
-use Application\Service\ContextService;
+use Framework\Application\Application;
 
 $this->headTitle("Accueil");
 echo $this->messenger()
@@ -24,7 +24,7 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
                         class="c3">E</span></span></h1>
         <p class="texte">
         <h1 class="titre">
-            <small><?= AppAdmin::config()['etablissement']['ose'] ?? 'Organisation des Services d\'Enseignement' ?></small>
+            <small><?= Application::getInstance()->config()['etablissement']['ose'] ?? 'Organisation des Services d\'Enseignement' ?></small>
         </h1>
         <p class="text-accueil"><?= $pageAccueil ?></p>
         <p class="annee">Année <?= $annee ?>.</p>
@@ -38,8 +38,7 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
                     ?><p>
                     <div class='alert alert-danger'> <?= $connexionNonAutorise ?></div></p><?php
                 } else {
-                    echo $this->tag('div')->html($this->feuilleDeRoute($intervenant)->renderCurrentBtn());
-
+                    echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId()]);
 
                     /* Guide à télécharger... */
                     $guideType = $intervenant->getStatut()->getTypeIntervenant()->getCode();
@@ -93,5 +92,6 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
     <!----------------------------- Feuille de route --------------------------->
 <?php
 if ($onlyIntervenant) {
-    echo $this->feuilleDeRoute($intervenant);
+    $urlRefresh = $this->url('workflow/feuille-de-route-refresh', ['intervenant' => $intervenant->getId()]);
+    echo $this->vue('workflow/feuille-de-route', ['intervenant' => $intervenant->getId(), 'urlRefresh' => $urlRefresh]);
 }

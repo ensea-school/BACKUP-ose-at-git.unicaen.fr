@@ -30,7 +30,7 @@ trait CorpsServiceAwareTrait
     public function getServiceCorps(): ?CorpsService
     {
         if (empty($this->serviceCorps)) {
-            $this->serviceCorps = \AppAdmin::container()->get(CorpsService::class);
+            $this->serviceCorps = \Framework\Application\Application::getInstance()->container()->get(CorpsService::class);
         }
 
         return $this->serviceCorps;

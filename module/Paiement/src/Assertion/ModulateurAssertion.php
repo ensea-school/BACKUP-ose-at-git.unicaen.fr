@@ -13,7 +13,7 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
 class ModulateurAssertion extends AbstractAssertion
 {
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
 
         $role = $this->getRole();
@@ -45,7 +45,7 @@ class ModulateurAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -59,7 +59,7 @@ class ModulateurAssertion extends AbstractAssertion
 
 
 
-    protected function assertStructure(Structure $structure)
+    protected function assertStructure(Structure $structure): bool
     {
         $rs = $this->getRole()->getStructure();
 
@@ -68,7 +68,7 @@ class ModulateurAssertion extends AbstractAssertion
 
 
 
-    protected function assertTypeModulateur(Role $role, TypeModulateur $typeModulateur)
+    protected function assertTypeModulateur(Role $role, TypeModulateur $typeModulateur): bool
     {
         $rs = $role->getStructure();
         if (!$rs) return true;
@@ -83,7 +83,7 @@ class ModulateurAssertion extends AbstractAssertion
 
 
 
-    protected function assertTypeModulateurStructure(Role $role, TypeModulateurStructure $tms)
+    protected function assertTypeModulateurStructure(Role $role, TypeModulateurStructure $tms): bool
     {
         return $this->asserts([
             $this->assertTypeModulateur($role, $tms->getTypeModulateur()),

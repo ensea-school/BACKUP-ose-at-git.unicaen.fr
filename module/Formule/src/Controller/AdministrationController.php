@@ -6,6 +6,7 @@ use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
 use Formule\Entity\Db\Formule;
 use Formule\Service\FormulatorServiceAwareTrait;
+use Formule\Service\TestServiceAwareTrait;
 use UnicaenCode\Util;
 use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\VueModel;
@@ -19,6 +20,7 @@ use UnicaenVue\View\Model\VueModel;
 class AdministrationController extends AbstractController
 {
     use FormulatorServiceAwareTrait;
+    use TestServiceAwareTrait;
 
 
     public function indexAction()
@@ -100,14 +102,22 @@ class AdministrationController extends AbstractController
         }
 
         $file     = $_FILES['fichier']['tmp_name'];
+        $filename = $_FILES['fichier']['name'];
 
         $variables = [];
         try{
-            $formule = $this->getServiceFormulator()->implanter($file);
+            $this->getServiceFormulator()->implanter($file);
             $variables['phpClass'] = null;
         }catch(\Exception $e){
             $variables['error'] = $e->getMessage();
         }
+
+        /* On crée un test de formule automatiquement */
+        $tableur = $this->getServiceFormulator()->charger($file);
+        $test = $tableur->formuleIntervenant();
+        $test->setLibelle($filename);
+        $this->getServiceTest()->save($test);
+        $variables['test'] = $test->getId();
 
         $vueModel = new VueModel();
         $vueModel->setTemplate('formule/administration/formulator');

@@ -33,6 +33,6 @@ trait MotifModificationServiceSaisieFormAwareTrait
             return $this->formMotifModificationServiceMotifModificationServiceSaisie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(MotifModificationServiceSaisieForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(MotifModificationServiceSaisieForm::class);
     }
 }

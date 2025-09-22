@@ -4,6 +4,7 @@ namespace Service\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
@@ -293,7 +294,7 @@ class ServiceController extends AbstractController
                 }
                 try {
                     $this->getServiceValidation()->delete($validation);
-                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
+                    $this->getServiceWorkflow()->calculerTableauxBord(TblProvider::CLOTURE_REALISE, $intervenant);
                     $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été réouverte", 'success');
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -304,7 +305,7 @@ class ServiceController extends AbstractController
                 }
                 try {
                     $this->getServiceValidation()->save($validation);
-                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
+                    $this->getServiceWorkflow()->calculerTableauxBord(TblProvider::CLOTURE_REALISE, $intervenant);
                     $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été clôturée", 'success');
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));

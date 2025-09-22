@@ -198,6 +198,13 @@ class TypeAgrement implements HistoriqueAwareInterface
 
 
 
+    public function getWorkflowEtapeCode(): string
+    {
+        return strtolower($this->getCode());
+    }
+
+
+
     /**
      * Intercepte les appels de méthodes de la forme "isXxxxxx" où Xxxxxx est un
      * code de type d'agrément.

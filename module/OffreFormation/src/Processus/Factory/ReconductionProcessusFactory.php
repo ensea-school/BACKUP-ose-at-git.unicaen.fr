@@ -20,7 +20,7 @@ use Unicaen\BddAdmin\Bdd;
 class ReconductionProcessusFactory
 {
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $etapeService = $container->get(EtapeService::class);
         $elementPedagogiqueService = $container->get(ElementPedagogiqueService::class);

@@ -54,7 +54,7 @@ return [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'      => '/trier',
-                            'contraints' => [
+                            'constraints' => [
                             ],
                             'defaults'   => [
                                 'action' => 'trier',

@@ -35,6 +35,6 @@ trait EtapeModulateursSaisieAwareTrait
             return $this->formOffreFormationEtapeModulateursSaisie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(EtapeModulateursSaisie::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(EtapeModulateursSaisie::class);
     }
 }

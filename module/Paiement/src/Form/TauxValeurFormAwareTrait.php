@@ -34,6 +34,6 @@ trait TauxValeurFormAwareTrait
             return $this->formTauxValeur;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(TauxValeurForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TauxValeurForm::class);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Signature\Service;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -24,7 +24,7 @@ class SignatureFlowServiceFactory
     {
 
         $service = new SignatureFlowService();
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

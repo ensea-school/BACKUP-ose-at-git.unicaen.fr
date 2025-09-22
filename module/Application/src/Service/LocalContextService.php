@@ -155,7 +155,7 @@ class LocalContextService extends AbstractService
      *
      * @return self
      */
-    public function setIntervenant(Intervenant $intervenant = null)
+    public function setIntervenant(?Intervenant $intervenant = null)
     {
         $this->intervenant                        = $intervenant;
         $this->getSessionContainer()->intervenant = $intervenant ? $intervenant->getId() : null;
@@ -171,7 +171,7 @@ class LocalContextService extends AbstractService
      *
      * @return self
      */
-    public function setStructure(Structure $structure = null)
+    public function setStructure(?Structure $structure = null)
     {
         $this->structure                        = $structure;
         $this->getSessionContainer()->structure = $structure ? $structure->getId() : null;
@@ -187,7 +187,7 @@ class LocalContextService extends AbstractService
      *
      * @return self
      */
-    public function setNiveau(NiveauEtape $niveau = null)
+    public function setNiveau(?NiveauEtape $niveau = null)
     {
         $this->niveau                        = $niveau;
         $this->getSessionContainer()->niveau = $niveau ? $niveau->getId() : null;
@@ -219,7 +219,7 @@ class LocalContextService extends AbstractService
      *
      * @return self
      */
-    public function setElementPedagogique(ElementPedagogique $elementPedagogique = null)
+    public function setElementPedagogique(?ElementPedagogique $elementPedagogique = null)
     {
         $this->elementPedagogique                        = $elementPedagogique;
         $this->getSessionContainer()->elementPedagogique = $elementPedagogique ? $elementPedagogique->getId() : null;

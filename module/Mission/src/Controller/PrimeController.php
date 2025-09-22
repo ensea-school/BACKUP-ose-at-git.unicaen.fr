@@ -4,6 +4,7 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Fichier;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
@@ -72,7 +73,7 @@ class PrimeController extends AbstractController
     private function updateTableauxBord (Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'mission_prime',
+            TblProvider::MISSION_PRIME,
         ], $intervenant);
     }
 

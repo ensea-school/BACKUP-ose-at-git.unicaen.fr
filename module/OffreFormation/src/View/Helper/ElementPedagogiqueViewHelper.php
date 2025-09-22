@@ -26,7 +26,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke(Entity $elementPedagogique = null)
+    public function __invoke(?Entity $elementPedagogique = null)
     {
         if ($elementPedagogique) $this->setElementPedagogique($elementPedagogique);
 

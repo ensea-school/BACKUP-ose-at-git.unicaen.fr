@@ -3,12 +3,45 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $container  \Psr\Container\ContainerInterface
+ * @var $io         \Symfony\Component\Console\Style\SymfonyStyle
  */
 
-//select * from v_tbl_paiement where intervenant_id = 826844 AND service_referentiel_id = 21673
+$nav = $container->get(\Framework\Navigation\Navigation::class);
 
-$stbl = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 
-$data = ['INTERVENANT_ID' => 824751];
+\UnicaenApp\Util::topChrono();
+$pages = $nav->home->getVisiblePages();
+\UnicaenApp\Util::topChrono();
 
-$stbl->calculer('paiement', $data);
+//dd($container->get('config')['bjyauthorize']['guards']['UnicaenPrivilege\Guard\PrivilegeController']);
+
+
+
+
+$router = $container->get(\Framework\Router\Router::class);
+
+$oldPlugin = $container->get('ControllerPluginManager')->get('url');
+
+
+$jeu = [
+    [null, [], []],
+    [null, [], [], true],
+    ['of', [], ],
+    ['of', [], ['force_canonical' => true]],
+    ['intervenant/agrement/ajouter', ['typeAgrement' => 1,'intervenant'  => 500]],
+    ['intervenant/agrement/ajouter', ['typeAgrement' => 1,'intervenant'  => 500, 'structure' => 15]],
+    ['intervenant/contrat', ['intervenant' => 800], ['force_canonical' => true], true],
+    ['service/resume', [], ['query' => ['action' => 'trier', 'tri' => 'i=ntervénant']]],
+    ['chargens/formation/json'],
+];
+
+foreach( $jeu as $params ){
+    $oldUrl = $oldPlugin->fromRoute(...$params);
+    $newUrl = $router->url(...$params);
+    dump($oldUrl);
+    dump($newUrl);
+}
+
+//dd($_SERVER);
+
+

@@ -17,6 +17,7 @@ use Lieu\Service\EtablissementServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
+use Administration\Service\ParametresServiceAwareTrait;
 
 /**
  * Service fournissant les différents contextes de fonctionnement de l'application.
@@ -27,7 +28,7 @@ class ContextService extends AbstractService
 {
     use EtablissementServiceAwareTrait;
     use Traits\AnneeServiceAwareTrait;
-    use \Administration\Service\ParametresServiceAwareTrait;
+    use ParametresServiceAwareTrait;
     use StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
@@ -54,6 +55,8 @@ class ContextService extends AbstractService
 
     protected ?Structure     $structure            = null;
 
+    protected ?Utilisateur   $utilisateur          = null;
+
     protected bool           $inInit               = false;
 
 
@@ -75,8 +78,8 @@ class ContextService extends AbstractService
     public function refreshRoleStatut (Statut $statut): void
     {
         $this->serviceUserContext->clearIdentityRoles();
-        \AppAdmin::container()->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
-        \AppAdmin::container()->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
+        \Framework\Application\Application::getInstance()->container()->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
+        \Framework\Application\Application::getInstance()->container()->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
         $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
     }
 
@@ -84,7 +87,10 @@ class ContextService extends AbstractService
 
     public function getUtilisateur(): ?Utilisateur
     {
-        return $this->getConnecteurLdap()->getUtilisateurCourant();
+        if (null === $this->utilisateur) {
+            $this->utilisateur = $this->getConnecteurLdap()->getUtilisateurCourant();
+        }
+        return $this->utilisateur;
     }
 
 

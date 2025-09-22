@@ -32,7 +32,7 @@ trait TblPieceJointeServiceAwareTrait
     public function getServiceTblPieceJointe(): ?TblPieceJointeService
     {
         if (empty($this->serviceTblPieceJointe)) {
-            $this->serviceTblPieceJointe = \AppAdmin::container()->get(TblPieceJointeService::class);
+            $this->serviceTblPieceJointe = \Framework\Application\Application::getInstance()->container()->get(TblPieceJointeService::class);
         }
 
         return $this->serviceTblPieceJointe;

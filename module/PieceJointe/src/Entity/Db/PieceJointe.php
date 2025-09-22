@@ -95,7 +95,7 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return PieceJointe
      */
-    public function setType(\PieceJointe\Entity\Db\TypePieceJointe $type = null)
+    public function setType(?\PieceJointe\Entity\Db\TypePieceJointe $type = null)
     {
         $this->type = $type;
 
@@ -187,7 +187,7 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return PieceJointe
      */
-    public function setValidation(\Workflow\Entity\Db\Validation $validation = null)
+    public function setValidation(?\Workflow\Entity\Db\Validation $validation = null)
     {
         $this->validation = $validation;
 
@@ -216,7 +216,7 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
      * @return PieceJointe
      */
 
-    public function setDateArchive(\Application\Entity\Db\Annee $annee = null)
+    public function setDateArchive(?\Application\Entity\Db\Annee $annee = null)
     {
         $this->dateArchive = $annee;
 

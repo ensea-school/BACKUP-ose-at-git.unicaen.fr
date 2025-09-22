@@ -41,7 +41,6 @@ return [
         ],
         'of'                => [
             'route'         => '/offre-de-formation',
-            'order'         => 2,
             'controller'    => OffreFormationController::class,
             'action'        => 'index',
             'may_terminate' => true,

@@ -1,7 +1,13 @@
 <?php
 
+use Framework\Application\Application;
+
+$config = Application::getInstance()->config();
+
 $modules = [
     'Laminas\Cache',
+    'Laminas\Cache\Storage\Adapter\Memory',
+    'Laminas\Cache\Storage\Adapter\Filesystem',
     'Laminas\Filter',
     'Laminas\Form',
     'Laminas\Hydrator',
@@ -9,7 +15,6 @@ $modules = [
     'Laminas\InputFilter',
     'Laminas\Mvc\I18n',
     'Laminas\Mvc\Plugin\FlashMessenger',
-    'Laminas\Mvc\Plugin\Prg',
     'Laminas\Navigation',
     'Laminas\Paginator',
     'Laminas\Router',
@@ -29,6 +34,7 @@ $modules = [
     'UnicaenSiham',
     'UnicaenVue',
     'Unicaen\BddAdmin',
+    'Framework',
     'Application',
     'Administration',
     'Agrement',
@@ -52,13 +58,14 @@ $modules = [
     'UnicaenSignature',
     'Signature',
     'Workflow',
+    'Utilisateur',
 ];
 
-if (AppAdmin::config()['actul']['host'] ?? null){
+if ($config['actul']['host'] ?? null){
     $modules[] = 'Connecteur\\Actul';
 }
 
-if (AppAdmin::config()['pegase']['actif'] ?? false){
+if ($config['pegase']['actif'] ?? false){
     $modules[] = 'Connecteur\\Pegase';
 }
 

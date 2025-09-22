@@ -2,10 +2,11 @@
 
 namespace Agrement\Entity\Db;
 
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Workflow\Resource\WorkflowResource;
 
 /**
  * AgrementService
@@ -121,7 +122,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Agrement
      */
-    public function setType(\Agrement\Entity\Db\TypeAgrement $type = null)
+    public function setType(?\Agrement\Entity\Db\TypeAgrement $type = null)
     {
         $this->type = $type;
 
@@ -149,7 +150,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Agrement
      */
-    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(?\Intervenant\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -177,7 +178,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Intervenant
      */
-    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
+    public function setStructure(?\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -217,17 +218,5 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     public function getResourceId()
     {
         return 'Agrement';
-    }
-
-
-
-    /**
-     * @return WorkflowResource
-     */
-    public function getResourceWorkflow()
-    {
-        $etape = $this->getType()->getCode();
-
-        return WorkflowResource::create($etape, $this->getIntervenant(), $this->getStructure());
     }
 }

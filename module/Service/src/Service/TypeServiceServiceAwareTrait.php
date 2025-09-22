@@ -31,7 +31,7 @@ trait TypeServiceServiceAwareTrait
     public function getServiceTypeService(): ?TypeServiceService
     {
         if (empty($this->serviceTypeService)) {
-            $this->serviceTypeService = \AppAdmin::container()->get(TypeServiceService::class);
+            $this->serviceTypeService = \Framework\Application\Application::getInstance()->container()->get(TypeServiceService::class);
         }
 
         return $this->serviceTypeService;

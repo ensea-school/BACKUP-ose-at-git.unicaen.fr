@@ -29,7 +29,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     use ContextServiceAwareTrait;
     use ParametresServiceAwareTrait;
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
         $role = $this->getRole();
         // Si le rôle n'est pas renseigné alors on s'en va...
@@ -112,7 +112,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
     /* ---- Edition étapes & éléments ---- */
-    protected function assertElementPedagogiqueSaisie(Role $role, ElementPedagogique $elementPedagogique)
+    protected function assertElementPedagogiqueSaisie(Role $role, ElementPedagogique $elementPedagogique): bool
     {
         return $this->asserts([
             $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
@@ -122,7 +122,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
-    protected function assertElementPedagogiqueSynchronisation(Role $role, ElementPedagogique $elementPedagogique)
+    protected function assertElementPedagogiqueSynchronisation(Role $role, ElementPedagogique $elementPedagogique): bool
     {
         return $this->asserts([
             $elementPedagogique->getSource()->getImportable(),
@@ -132,7 +132,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeSaisie(Role $role, Etape $etape)
+    protected function assertEtapeSaisie(Role $role, Etape $etape): bool
     {
         return $this->assertStructureSaisie($role, $etape->getStructure());
     }
@@ -140,7 +140,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
     /* ---- Centres de coûts ---- */
-    protected function assertEtapeSaisieCentresCouts(Role $role, Etape $etape)
+    protected function assertEtapeSaisieCentresCouts(Role $role, Etape $etape): bool
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
             && $etape->getElementPedagogique()->count() > 0;
@@ -148,14 +148,14 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
-    protected function assertCentreCoutEpSaisieCentresCouts(Role $role, CentreCoutEp $centreCoutEp)
+    protected function assertCentreCoutEpSaisieCentresCouts(Role $role, CentreCoutEp $centreCoutEp): bool
     {
         return $this->assertElementPedagogiqueSaisieCentresCouts($role, $centreCoutEp->getElementPedagogique());
     }
 
 
 
-    protected function assertElementPedagogiqueSaisieCentresCouts(Role $role, ElementPedagogique $elementPedagogique)
+    protected function assertElementPedagogiqueSaisieCentresCouts(Role $role, ElementPedagogique $elementPedagogique): bool
     {
         return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
     }
@@ -163,7 +163,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
     /* ---- Taux de mixité ---- */
-    protected function assertEtapeSaisieTauxMixite(Role $role, Etape $etape)
+    protected function assertEtapeSaisieTauxMixite(Role $role, Etape $etape): bool
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
             && $etape->getElementPedagogique()->count() > 0;
@@ -172,14 +172,14 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
     /*
-        protected function assertCentreCoutEpSaisieTauxMixite(Role $role, CentreCoutEp $centreCoutEp)
+        protected function assertCentreCoutEpSaisieTauxMixite(Role $role, CentreCoutEp $centreCoutEp): bool
         {
             return $this->assertElementPedagogiqueSaisieTauxMixite($role, $centreCoutEp->getElementPedagogique());
         }
     */
 
 
-    protected function assertElementPedagogiqueSaisieTauxMixite(Role $role, ElementPedagogique $elementPedagogique)
+    protected function assertElementPedagogiqueSaisieTauxMixite(Role $role, ElementPedagogique $elementPedagogique): bool
     {
         return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
     }
@@ -187,7 +187,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
     /* ---- Volumes horaires d'enseigneement ---- */
-    protected function assertEtapeSaisieVH(Role $role, Etape $etape)
+    protected function assertEtapeSaisieVH(Role $role, Etape $etape): bool
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
             && $etape->getElementPedagogique()->count() > 0;
@@ -195,7 +195,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
-    protected function assertElementPedagogiqueSaisieVH(Role $role, ElementPedagogique $elementPedagogique)
+    protected function assertElementPedagogiqueSaisieVH(Role $role, ElementPedagogique $elementPedagogique): bool
     {
         return $this->asserts([
             $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
@@ -205,14 +205,14 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
-    protected function assertTypeInterventionSaisieVH(Role $role, TypeIntervention $typeIntervention)
+    protected function assertTypeInterventionSaisieVH(Role $role, TypeIntervention $typeIntervention): bool
     {
         return true;
     }
 
 
 
-    protected function assertVolumeHoraireEnsSaisieVH(Role $role, VolumeHoraireEns $volumeHoraireEns)
+    protected function assertVolumeHoraireEnsSaisieVH(Role $role, VolumeHoraireEns $volumeHoraireEns): bool
     {
         return $this->asserts([
             $volumeHoraireEns->getSource() ? $this->assertSourceSaisie($volumeHoraireEns->getSource(), $volumeHoraireEns->getElementPedagogique()->getAnnee()) : true,
@@ -224,7 +224,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
     /* ---- Modulateurs ---- */
-    protected function assertEtapeSaisieModulateurs(Role $role, Etape $etape)
+    protected function assertEtapeSaisieModulateurs(Role $role, Etape $etape): bool
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
             && $etape->getElementPedagogique()->count() > 0;
@@ -232,14 +232,14 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
-    protected function assertElementPedagogiqueSaisieModulateurs(Role $role, ElementPedagogique $elementPedagogique)
+    protected function assertElementPedagogiqueSaisieModulateurs(Role $role, ElementPedagogique $elementPedagogique): bool
     {
         return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
     }
 
 
 
-    protected function assertElementModulateurSaisieModulateurs(Role $role, CentreCoutEp $centreCoutEp)
+    protected function assertElementModulateurSaisieModulateurs(Role $role, CentreCoutEp $centreCoutEp): bool
     {
         return $this->assertElementPedagogiqueSaisieCentresCouts($role, $centreCoutEp->getElementPedagogique());
     }
@@ -247,7 +247,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
     /* ---- Globaux ---- */
-    protected function assertStructureSaisie(Role $role, Structure $structure)
+    protected function assertStructureSaisie(Role $role, Structure $structure): bool
     {
         if ($rs = $role->getStructure()) {
             return $structure->inStructure($rs);
@@ -258,7 +258,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
-    protected function assertSourceSaisie(Source $source, Annee $annee)
+    protected function assertSourceSaisie(Source $source, Annee $annee): bool
     {
         $anneeMinimaleImportOdf = (int)$this->getServiceParametres()->get('annee_minimale_import_odf');
         if (0 == $anneeMinimaleImportOdf) {

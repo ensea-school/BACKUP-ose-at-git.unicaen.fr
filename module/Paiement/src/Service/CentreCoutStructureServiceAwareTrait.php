@@ -31,7 +31,7 @@ trait CentreCoutStructureServiceAwareTrait
     public function getServiceCentreCoutStructure(): ?CentreCoutStructureService
     {
         if (empty($this->serviceCentreCoutStructure)) {
-            $this->serviceCentreCoutStructure = \AppAdmin::container()->get(CentreCoutStructureService::class);
+            $this->serviceCentreCoutStructure = \Framework\Application\Application::getInstance()->container()->get(CentreCoutStructureService::class);
         }
 
         return $this->serviceCentreCoutStructure;

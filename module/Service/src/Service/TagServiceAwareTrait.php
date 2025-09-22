@@ -29,7 +29,7 @@ trait TagServiceAwareTrait
     public function getServiceTag(): ?TagService
     {
         if (empty($this->serviceTag)) {
-            $this->serviceTag = \AppAdmin::container()->get(TagService::class);
+            $this->serviceTag = \Framework\Application\Application::getInstance()->container()->get(TagService::class);
         }
 
         return $this->serviceTag;

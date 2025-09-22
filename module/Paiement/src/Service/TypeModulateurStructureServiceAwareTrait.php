@@ -31,7 +31,7 @@ trait TypeModulateurStructureServiceAwareTrait
     public function getServiceTypeModulateurStructure(): ?TypeModulateurStructureService
     {
         if (empty($this->serviceTypeModulateurStructure)) {
-            $this->serviceTypeModulateurStructure = \AppAdmin::container()->get(TypeModulateurStructureService::class);
+            $this->serviceTypeModulateurStructure = \Framework\Application\Application::getInstance()->container()->get(TypeModulateurStructureService::class);
         }
 
         return $this->serviceTypeModulateurStructure;

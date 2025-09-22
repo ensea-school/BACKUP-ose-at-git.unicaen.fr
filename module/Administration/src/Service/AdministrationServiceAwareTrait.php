@@ -31,7 +31,7 @@ trait AdministrationServiceAwareTrait
     public function getServiceAdministration(): ?AdministrationService
     {
         if (empty($this->serviceAdministration)) {
-            $this->serviceAdministration = \AppAdmin::container()->get(AdministrationService::class);
+            $this->serviceAdministration = \Framework\Application\Application::getInstance()->container()->get(AdministrationService::class);
         }
 
         return $this->serviceAdministration;

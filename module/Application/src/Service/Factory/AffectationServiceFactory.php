@@ -22,9 +22,7 @@ class AffectationServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $doctrineCache = $container->get('doctrine.cache.filesystem');
         $service = new AffectationService;
-        $service->setDoctrineCache($doctrineCache);
 
         return $service;
     }

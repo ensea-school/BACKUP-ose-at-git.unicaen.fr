@@ -132,7 +132,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return array
      */
-    public function initQuery(QueryBuilder $qb = null, $alias = null, array $fields = []): array
+    public function initQuery(?QueryBuilder $qb = null, $alias = null, array $fields = []): array
     {
         if (null === $alias) $alias = $this->getAlias();
         if (empty($qb)) {
@@ -210,7 +210,7 @@ abstract class AbstractEntityService extends AbstractService
     private function _join(string $method, $service, QueryBuilder $qb, $relation, $addSelect = false, $leftAlias = null, $rightAlias = null): self
     {
         if (is_string($service)) {
-            $service = \AppAdmin::container()->get($service);
+            $service = \Framework\Application\Application::getInstance()->container()->get($service);
             if (!$service instanceof AbstractEntityService) {
                 throw new \LogicException('Le service transmis n\'est pas compatible.');
             }
@@ -279,7 +279,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -301,7 +301,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return Statut[]|array
      */
-    public function getList(QueryBuilder $qb = null, $alias = null)
+    public function getList(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $this->orderBy($qb);
@@ -322,7 +322,7 @@ abstract class AbstractEntityService extends AbstractService
     /**
      * Retourne le nombre d'entités trouvé
      */
-    public function count(QueryBuilder $qb = null, ?string $alias = null): int
+    public function count(?QueryBuilder $qb = null, ?string $alias = null): int
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $entities = $qb->getQuery()->execute();
@@ -438,7 +438,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return QueryBuilder                   Retourne le QueryBuilder, pour chaîner les filtres au besoin
      */
-    public function finderByFilterObject($object, HydratorInterface $hydrator = null, QueryBuilder $qb = null, $alias = null, $exclude = [])
+    public function finderByFilterObject($object, ?HydratorInterface $hydrator = null, ?QueryBuilder $qb = null, ?string $alias = null, array $exclude = []): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if (null === $object) return $qb;
@@ -464,7 +464,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return QueryBuilder         Retourne le QueryBuilder, pour chaîner les filtres au besoin
      */
-    public function finderByFilterArray(array $properties, QueryBuilder $qb = null, $alias = null, $exclude = [])
+    public function finderByFilterArray(array $properties, ?QueryBuilder $qb = null, ?string $alias = null, array $exclude = []): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         foreach ($properties as $property => $value) {
@@ -490,7 +490,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return QueryBuilder
      */
-    public function finderByHistorique(QueryBuilder $qb = null, $alias = null)
+    public function finderByHistorique(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -507,7 +507,7 @@ abstract class AbstractEntityService extends AbstractService
     /**
      * Hack pour gérer le finder de structure différent des autres compte tenu de la hiérarchisation des structures
      */
-    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, ?string $alias = null): QueryBuilder
     {
         /** @var $qb QueryBuilder */
         [$qb, $alias] = $this->initQuery($qb, $alias);
@@ -535,7 +535,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return \Doctrine\ORM\QueryBuilder       Retourne le QueryBuilder, pour chaîner les filtres au besoin
      */
-    public function finderByProperty($property, $value, QueryBuilder $qb = null, $alias = null)
+    public function finderByProperty($property, $value, ?QueryBuilder $qb = null, ?string $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($value === null) {

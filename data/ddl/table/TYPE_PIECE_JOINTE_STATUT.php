@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'TYPE_PIECE_JOINTE_STATU_ID_SEQ',
     'columns'     => [
-        'ANNEE_ID'              => [
+        'ANNEE_ID'                   => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 17,
             'commentaire' => NULL,
         ],
-        'CHANGEMENT_RIB'        => [
+        'CHANGEMENT_RIB'             => [
             'name'        => 'CHANGEMENT_RIB',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +33,19 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
-        'DUREE_VIE'             => [
+        'DEMANDEE_APRES_RECRUTEMENT' => [
+            'name'        => 'DEMANDEE_APRES_RECRUTEMENT',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 1,
+            'nullable'    => TRUE,
+            'default'     => '0',
+            'position'    => 21,
+            'commentaire' => 'Piece jointe obligatoire même si les heures sont non payables',
+        ],
+        'DUREE_VIE'                  => [
             'name'        => 'DUREE_VIE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -45,7 +57,7 @@ return [
             'position'    => 14,
             'commentaire' => 'Durée de vie de la pièce jointe',
         ],
-        'FA'                    => [
+        'FA'                         => [
             'name'        => 'FA',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -57,7 +69,7 @@ return [
             'position'    => 20,
             'commentaire' => NULL,
         ],
-        'FC'                    => [
+        'FC'                         => [
             'name'        => 'FC',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +81,7 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATEUR_ID'     => [
+        'HISTO_CREATEUR_ID'          => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -81,7 +93,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATION'        => [
+        'HISTO_CREATION'             => [
             'name'        => 'HISTO_CREATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -93,7 +105,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTEUR_ID'  => [
+        'HISTO_DESTRUCTEUR_ID'       => [
             'name'        => 'HISTO_DESTRUCTEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -105,7 +117,7 @@ return [
             'position'    => 11,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTION'     => [
+        'HISTO_DESTRUCTION'          => [
             'name'        => 'HISTO_DESTRUCTION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -117,7 +129,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATEUR_ID' => [
+        'HISTO_MODIFICATEUR_ID'      => [
             'name'        => 'HISTO_MODIFICATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -129,7 +141,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATION'    => [
+        'HISTO_MODIFICATION'         => [
             'name'        => 'HISTO_MODIFICATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -141,7 +153,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'ID'                    => [
+        'ID'                         => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -153,7 +165,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'NATIONALITE_ETRANGERE' => [
+        'NATIONALITE_ETRANGERE'      => [
             'name'        => 'NATIONALITE_ETRANGERE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -165,7 +177,7 @@ return [
             'position'    => 19,
             'commentaire' => NULL,
         ],
-        'NUM_REGLE'             => [
+        'NUM_REGLE'                  => [
             'name'        => 'NUM_REGLE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -177,7 +189,7 @@ return [
             'position'    => 18,
             'commentaire' => NULL,
         ],
-        'OBLIGATOIRE'           => [
+        'OBLIGATOIRE'                => [
             'name'        => 'OBLIGATOIRE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -189,7 +201,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'OBLIGATOIRE_HNP'       => [
+        'OBLIGATOIRE_HNP'            => [
             'name'        => 'OBLIGATOIRE_HNP',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -201,7 +213,7 @@ return [
             'position'    => 15,
             'commentaire' => 'Piece jointe obligatoire même si les heures sont non payables',
         ],
-        'SEUIL_HETD'            => [
+        'SEUIL_HETD'                 => [
             'name'        => 'SEUIL_HETD',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -213,7 +225,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'STATUT_ID'             => [
+        'STATUT_ID'                  => [
             'name'        => 'STATUT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -225,7 +237,7 @@ return [
             'position'    => 16,
             'commentaire' => NULL,
         ],
-        'TYPE_HEURE_HETD'       => [
+        'TYPE_HEURE_HETD'            => [
             'name'        => 'TYPE_HEURE_HETD',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -237,7 +249,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'TYPE_PIECE_JOINTE_ID'  => [
+        'TYPE_PIECE_JOINTE_ID'       => [
             'name'        => 'TYPE_PIECE_JOINTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

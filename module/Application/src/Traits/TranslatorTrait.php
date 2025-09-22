@@ -23,13 +23,13 @@ trait TranslatorTrait
     /**
      * Se charge de traduire les exceptions en provenance de la base de données ou d'une erreur standard
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param string     $textDomain
      * @param string     $locale
      *
      * @return string
      */
-    private function translateException(\Exception $exception, $textDomain = 'default', $locale = null): string
+    private function translateException(\Throwable $exception, $textDomain = 'default', $locale = null): string
     {
         if (!$exception->getPrevious() instanceof \Doctrine\DBAL\Driver\Exception) {
             // Non gérée donc on retourne l'original'
@@ -55,7 +55,7 @@ trait TranslatorTrait
 
 
     /**
-     * @param string|\Exception $message
+     * @param string|\Throwable $message
      * @param string            $textDomain
      * @param string            $locale
      *
@@ -63,12 +63,12 @@ trait TranslatorTrait
      */
     protected function translate($message, $textDomain = 'default', $locale = null): string
     {
-        if ($message instanceof \Exception) {
+        if ($message instanceof \Throwable) {
             return $this->translateException($message, $textDomain = 'default', $locale = null);
         }
 
         /** @var \Laminas\I18n\Translator\Translator $translator */
-        $translator = \AppAdmin::container()->get('translator');
+        $translator = \Framework\Application\Application::getInstance()->container()->get('translator');
 
         return $translator->translate($message, $textDomain, $locale);
     }

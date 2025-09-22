@@ -34,6 +34,6 @@ trait MailerIntervenantFormAwareTrait
             return $this->formMailerIntervenant;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(MailerIntervenantForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(MailerIntervenantForm::class);
     }
 }

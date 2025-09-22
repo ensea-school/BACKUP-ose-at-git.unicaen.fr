@@ -1,4 +1,7 @@
 <?php
+
+use Intervenant\Entity\Db\TypeIntervenant;
+
 /**
  * @var \Intervenant\Entity\Db\Intervenant        $intervenant
  * @var \ExportRh\Entity\IntervenantRh            $intervenantRh
@@ -23,21 +26,20 @@ if ($priseEnCharge) {
     <?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
 
 
-    <?php if ($typeIntervenant == 'P' || array_key_exists($intervenant->getStatut()->getCode(), $excludeStatut)): ?>
+    <?php if ($typeIntervenant == TypeIntervenant::CODE_PERMANENT || array_key_exists($intervenant->getStatut()->getCode(), $excludeStatut)): ?>
         <div class="messenger alert alert-warning">
             L'export des données intervenants vers <?= $nameConnecteur; ?> est disponible uniquement pour les vacataires
             (hors <?= implode(', ', $excludeStatut) ?> )
         </div>
-    <?php elseif ($canExport === false): ?>
+    <?php elseif (!$canExport): ?>
         <div class="messenger alert alert-warning">
             L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
             (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
-            n'a pas
-            encore franchi l'étape de la feuille de route permettant la PEC ou la REN. Il doit avoir franchi l'étape "<?= $etapeFranchissementLibelle ?>"
+            n'a pas encore franchi l'étape de la feuille de route permettant la PEC ou la REN. <?= $whyNonAtteignable ?>"
         </div>
 
 
-    <?php elseif ($canExport === true): ?>
+    <?php elseif ($canExport): ?>
 
         <div class="well">
             <?php if (empty($intervenantRh)): ?>

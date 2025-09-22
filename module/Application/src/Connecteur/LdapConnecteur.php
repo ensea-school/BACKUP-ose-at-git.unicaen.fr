@@ -6,6 +6,7 @@ use Application\Entity\Db\Composante;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\AbstractService;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Framework\Application\Application;
 use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Entity\Ldap\AbstractEntity;
 use UnicaenApp\Entity\Ldap\People;
@@ -101,7 +102,7 @@ class LdapConnecteur extends AbstractService
 
     public function isActif(): bool
     {
-        return \AppAdmin::config()['ldap']['actif'] ?? true;
+        return Application::getInstance()->config()['ldap']['actif'] ?? true;
     }
 
 

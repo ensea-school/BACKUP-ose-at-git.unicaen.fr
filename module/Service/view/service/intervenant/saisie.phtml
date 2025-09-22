@@ -1,6 +1,6 @@
 <?php
 
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 /**
  * @var $this                \Application\View\Renderer\PhpRenderer
@@ -11,12 +11,11 @@ use Workflow\Entity\Db\WfEtape;
  * @var $referentiels        \Referentiel\Entity\Db\ServiceReferentiel[]
  */
 
-
 if ($typeVolumeHoraire->isPrevu()) {
-    $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+    $wfEtape = WorkflowEtape::ENSEIGNEMENT_SAISIE;
     $title     = 'Services';
 } else {
-    $nextEtape = WfEtape::CODE_SERVICE_SAISIE_REALISE;
+    $wfEtape = WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE;
     $title     = 'Constatation des services réalisés';
 }
 
@@ -56,7 +55,7 @@ echo $this->vue('formule/totaux-hetd', [
     'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
 ]);
 
-echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);
 
 if ($enseignements !== false || $referentiels !== false): ?>
     <script>
@@ -86,7 +85,7 @@ if ($enseignements !== false || $referentiels !== false): ?>
                     $('#sidebar').load('<?= $menuUrl; ?>');
 
                     // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
-                    $('#feuille-de-route-btn-next').refresh();
+                    window.dispatchEvent(new CustomEvent("Workflow/Nav.refresh"));
                 }
             });<?php endif; ?>
 
@@ -111,7 +110,7 @@ if ($enseignements !== false || $referentiels !== false): ?>
                     $('#sidebar').load('<?= $menuUrl; ?>');
 
                     // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
-                    $('#feuille-de-route-btn-next').refresh();
+                    window.dispatchEvent(new CustomEvent("Workflow/Nav.refresh"));
                 }
             });<?php endif; ?>
 

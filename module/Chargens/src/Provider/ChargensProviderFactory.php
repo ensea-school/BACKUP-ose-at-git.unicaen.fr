@@ -2,6 +2,7 @@
 
 namespace Chargens\Provider;
 
+use Doctrine\ORM\EntityManager;
 use OffreFormation\Service\TypeHeuresService;
 use Psr\Container\ContainerInterface;
 use Unicaen\BddAdmin\Bdd;
@@ -14,9 +15,9 @@ use UnicaenTbl\Service\TableauBordService;
  */
 class ChargensProviderFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $em = $container->get(\Application\Constants::BDD);
+        $em = $container->get(EntityManager::class);
         /* @var $em \Doctrine\ORM\EntityManager */
 
         $chargensProvider = new ChargensProvider();

@@ -34,6 +34,6 @@ trait ElementTauxRemuFieldsetAwareTrait
             return $this->fieldsetEtapeTauxRemuElementTauxRemu;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(ElementTauxRemuFieldset::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ElementTauxRemuFieldset::class);
     }
 }

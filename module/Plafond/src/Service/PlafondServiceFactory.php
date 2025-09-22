@@ -2,7 +2,7 @@
 
 namespace Plafond\Service;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 use Unicaen\BddAdmin\Bdd;
 use UnicaenTbl\Service\TableauBordService;
@@ -26,7 +26,7 @@ class PlafondServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $service = new PlafondService;
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
         $service->setServiceTableauBord($container->get(TableauBordService::class));
         $service->setBdd($container->get(Bdd::class));
 

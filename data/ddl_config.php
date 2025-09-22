@@ -9,6 +9,11 @@ return [
             'FORMULE_RESULTAT_SERVICE',
             'FORMULE_RESULTAT_SERVICE_REF',
             'FORMULE_RESULTAT',
+            'WF_ETAPE',
+            'WF_ETAPE_DEP',
+            'WF_DEP_BLOQUANTE',
+            'TBL_PIECE_JOINTE_DEMANDE',
+            'TBL_PIECE_JOINTE_FOURNIE',
         ],
     ],
     'materialized-view' => [
@@ -16,7 +21,7 @@ return [
 
         ],
         'excludes' => [
-            'MV_EXT_SERVICE',
+            //'MV_EXT_SERVICE',
         ],
     ],
     'view'              => [
@@ -34,6 +39,10 @@ return [
             'V_VALIDATION_MISE_EN_PAIEMENT',
             'V_FR_SERVICE_CENTRE_COUT',
             'V_FR_SERVICE_REF_CENTRE_COUT',
+            'V_VOLUME_HORAIRE_ETAT',
+            'V_VOL_HORAIRE_ETAT_MULTI',
+            'V_VOLUME_HORAIRE_REF_ETAT',
+            'V_VOL_HORAIRE_REF_ETAT_MULTI',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],
@@ -45,6 +54,7 @@ return [
             'OSE_PAIEMENT',
             'FORMULE_%',
             'OSE_FORMULE',
+            'OSE_WORKFLOW',
         ],
     ],
     'trigger'           => [

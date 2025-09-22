@@ -34,6 +34,6 @@ trait MissionFormAwareTrait
             return $this->formMission;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(MissionForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(MissionForm::class);
     }
 }

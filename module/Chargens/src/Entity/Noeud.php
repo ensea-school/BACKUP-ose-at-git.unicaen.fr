@@ -369,7 +369,7 @@ class Noeud
      *
      * @return bool
      */
-    public function hasScenarioNoeud(Scenario $scenario = null)
+    public function hasScenarioNoeud(?Scenario $scenario = null)
     {
         if (!$scenario) {
             $scenario = $this->provider->getScenario();
@@ -389,7 +389,7 @@ class Noeud
      *
      * @return ScenarioNoeud
      */
-    public function getScenarioNoeud(Scenario $scenario = null)
+    public function getScenarioNoeud(?Scenario $scenario = null)
     {
         if (!$scenario) {
             $scenario = $this->provider->getScenario();
@@ -433,7 +433,7 @@ class Noeud
     /**
      * @return $this
      */
-    public function removeScenarioNoeud(Scenario $scenario = null)
+    public function removeScenarioNoeud(?Scenario $scenario = null)
     {
         if ($scenario) {
             unset($this->scenarioNoeud[$scenario->getId()]);

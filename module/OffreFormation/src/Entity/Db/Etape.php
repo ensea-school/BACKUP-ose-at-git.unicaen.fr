@@ -326,7 +326,7 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
      *
      * @return Etape
      */
-    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
+    public function setStructure(?\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -354,7 +354,7 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
      *
      * @return Etape
      */
-    public function setTypeFormation(\OffreFormation\Entity\Db\TypeFormation $typeFormation = null)
+    public function setTypeFormation(?\OffreFormation\Entity\Db\TypeFormation $typeFormation = null)
     {
         $this->typeFormation = $typeFormation;
 
@@ -382,7 +382,7 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
      *
      * @return Etape
      */
-    public function setDomaineFonctionnel(\Paiement\Entity\Db\DomaineFonctionnel $domaineFonctionnel = null)
+    public function setDomaineFonctionnel(?\Paiement\Entity\Db\DomaineFonctionnel $domaineFonctionnel = null)
     {
         $this->domaineFonctionnel = $domaineFonctionnel;
 

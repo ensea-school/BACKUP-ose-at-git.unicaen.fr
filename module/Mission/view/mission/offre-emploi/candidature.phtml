@@ -1,16 +1,16 @@
 <?php
 
+use Workflow\Entity\Db\WorkflowEtape;
 
 $this->intervenant($intervenant)->renderTitle('Candidature');
 
 echo $this->vue('mission/liste-candidatures', [
-
     'intervenant'                   => $intervenant->getId(),
     'renseignerDonneesPersonnelles' => $renseignerDonneesPersonnelles,
 ]);
 
-$nextEtape = \Workflow\Entity\Db\WfEtape::CANDIDATURE_VALIDATION;
+$wfEtape = WorkflowEtape::CANDIDATURE_SAISIE;
 
 echo '<hr />';
 
-echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);

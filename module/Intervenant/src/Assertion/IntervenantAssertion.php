@@ -34,7 +34,7 @@ class IntervenantAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(ResourceInterface $entity, ?string $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -59,7 +59,7 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(array $page)
+    protected function assertPage(array $page): bool
     {
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
@@ -75,7 +75,7 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
@@ -98,7 +98,7 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertEdition(Intervenant $intervenant = null)
+    protected function assertEdition(?Intervenant $intervenant = null): bool
     {
         $role = $this->getRole();
         if ($role instanceof Role && $role->getStructure() && $intervenant->getStructure()) {
@@ -110,11 +110,12 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
+    protected function assertEtapeAtteignable($etape, ?Intervenant $intervenant = null): bool
     {
         if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
-            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+            $workflowEtape = $feuilleDeRoute->get($etape);
+            if (!$workflowEtape || !$workflowEtape->isAllowed()) { // l'étape doit être atteignable
                 return false;
             }
         }

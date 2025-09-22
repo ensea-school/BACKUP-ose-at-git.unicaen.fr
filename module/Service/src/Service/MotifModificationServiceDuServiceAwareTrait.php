@@ -30,7 +30,7 @@ trait MotifModificationServiceDuServiceAwareTrait
     public function getServiceMotifModificationServiceDu(): ?MotifModificationServiceDuService
     {
         if (empty($this->serviceMotifModificationServiceDu)) {
-            $this->serviceMotifModificationServiceDu = \AppAdmin::container()->get(MotifModificationServiceDuService::class);
+            $this->serviceMotifModificationServiceDu = \Framework\Application\Application::getInstance()->container()->get(MotifModificationServiceDuService::class);
         }
 
         return $this->serviceMotifModificationServiceDu;

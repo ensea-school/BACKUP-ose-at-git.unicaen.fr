@@ -1,0 +1,27 @@
+<?php
+
+use Application\View\Helper\LayoutViewHelper;
+
+/** @var LayoutViewHelper $layoutHelper */
+$layoutHelper = $this->appLayout();
+
+$pages = $layoutHelper->menuData();
+
+?>
+<div id="contenu-principal" class="container">
+    <!--<div id="contenu-principal" class="container intranavigator intranavigator-page">-->
+    <?php
+    if (!empty($pages)): ?>
+        <div class="row">
+            <div id="sidebar" data-url="<?= $this->intervenant()->menuUrl() ?>" class="col-xs-6 col-md-2"
+                 role="navigation">
+                <?php require __DIR__.'/menu.phtml'; ?>
+            </div>
+            <div id="content" class="col-xs-12 col-md-10">
+                <?= $this->content; ?>
+            </div>
+        </div>
+    <?php else: ?>
+        <?= $this->content; ?>
+    <?php endif; ?>
+</div>

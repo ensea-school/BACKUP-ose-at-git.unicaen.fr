@@ -2,7 +2,7 @@
 
 namespace Dossier\Service;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 
@@ -19,7 +19,7 @@ class DossierServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): DossierService
     {
         $service = new DossierService();
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

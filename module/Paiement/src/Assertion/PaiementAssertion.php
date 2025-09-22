@@ -6,7 +6,7 @@ use Application\Acl\Role;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
@@ -19,7 +19,7 @@ class PaiementAssertion extends AbstractAssertion
     use WorkflowServiceAwareTrait;
 
     /* ---- Routage général ---- */
-    public function __invoke (array $page) // gestion des visibilités de menus
+    public function __invoke (array $page): bool // gestion des visibilités de menus
     {
         return $this->assertPage($page);
     }
@@ -33,7 +33,7 @@ class PaiementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController ($controller, $action = null, $privilege = null)
+    protected function assertController ($controller, $action = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -48,7 +48,7 @@ class PaiementAssertion extends AbstractAssertion
         // Si c'est bon alors on affine...
         switch ($action) {
             case 'demandemiseenpaiement':
-                return $this->assertEtapeAtteignable(WfEtape::CODE_DEMANDE_MEP, $intervenant);
+                return $this->assertEtapeAtteignable(WorkflowEtape::DEMANDE_MEP, $intervenant);
             break;
             case 'visualisationmiseenpaiement':
 
@@ -60,7 +60,7 @@ class PaiementAssertion extends AbstractAssertion
                 if ($role->getIntervenant()) return false; // pas pour les intervenants
             break;
             case 'extractionpaieprime':
-                return $this->assertEtapeAtteignable(WfEtape::CODE_MISSION_PRIME, $intervenant);
+                return $this->assertEtapeAtteignable(WorkflowEtape::MISSION_PRIME, $intervenant);
             break;
             case  'miseenpaiement':
 
@@ -71,7 +71,7 @@ class PaiementAssertion extends AbstractAssertion
     }
 
 
-    protected function assertPage (array $page)
+    protected function assertPage (array $page): bool
     {
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
@@ -87,11 +87,12 @@ class PaiementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable ($etape, Intervenant $intervenant = null, Structure $structure = null)
+    protected function assertEtapeAtteignable (string $etape, ?Intervenant $intervenant, ?Structure $structure = null): bool
     {
         if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant, $structure);
-            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant, $structure);
+            $workflowEtape = $feuilleDeRoute->get($etape);
+            if (!$workflowEtape || !$workflowEtape->isAllowed()) { // l'étape doit être atteignable
                 return false;
             }
         }

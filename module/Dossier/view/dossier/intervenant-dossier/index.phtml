@@ -12,7 +12,7 @@
 
 
 use Dossier\Assertion\IntervenantDossierAssertion;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 $editIdentite  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IDENTITE);
 $editAdresse   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE);
@@ -26,7 +26,7 @@ $canEdit       = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRI
 $canSupprimer  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_SUPPRIME);
 $formErrors    = $this->formErrors($form);
 
-$nextEtape = $intervenantDossierValidation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
+$wfEtape = $intervenantDossierValidation ? WorkflowEtape::DONNEES_PERSO_VALIDATION : WorkflowEtape::DONNEES_PERSO_SAISIE;
 $this->headTitle()->append($intervenant->getPrenom() . " index.phtml" . $intervenant->getNomUsuel())->append("Données personnelles");
 $fieldsets = $form->getFieldsets();
 ?>
@@ -59,312 +59,264 @@ $fieldsets = $form->getFieldsets();
         height: 30px;
     }
 </style>
-<?php $this->intervenant($intervenant)->renderTitle('Données personnelles'); ?>
-
-<?php if ($intervenantDossierValidation): ?>
-<div class="bg-success" style="padding:10px;">
-    <?php endif; ?>
-
-    <?php
+<?php
+$this->intervenant($intervenant)->renderTitle('Données personnelles');
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
+?>
 
 
-    /**
-     * Message Importance des données perso.
-     *
-     * if (!$form->getObject()->getId()) {
-     * $msg = "Ces données sont indispensables pour éditer %s contrat et mettre en paiement %s heures d'enseignement.";
-     * if ($role->getIntervenant()) {
-     * $this->messenger()->addMessage(sprintf($msg, 'votre', 'vos'), 'warning');
-     * } else {
-     * $this->messenger()->addMessage(sprintf($msg, 'le', 'les'), 'warning');
-     * }
-     * } */
-
-
-    echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
-    ?>
-
-    <!--Progression du dossier-->
-    <?php if (!empty($formErrors)): ?>
-        <?= $this->formErrors($form); ?>
-    <?php else: ?>
-        <?php if (!empty($tblDossier)): ?>
-            <div class="messenger alert <?= ($tblDossier->getCompletude()) ? 'alert-success' : 'alert-warning' ?> ">
-                <?php if ($tblDossier->getCompletude() && $intervenantDossierValidation): ?>
-                    Vos données personnelles sont maintenant <span style="font-size:1em;" class="badge bg-success">Complètes</span> et
-                    <span
-                            style="font-size:1em;" class="badge bg-success">Validées</span>
-                <?php elseif ($tblDossier->getCompletude() && !$intervenantDossierValidation): ?>
-                    Vos données personnelles sont maintenant <span style="font-size:1em;"
-                                                                   class="badge bg-success">complètes</span> et en attente de validation par nos services
-                <?php else: ?>
-                    Vos données personnelles sont incomplètes, merci de renseigner les informations obligatoires demandées dans les blocs
-                    <span style="font-size:1em;" class="badge bg-warning text-dark">A compléter</span>
-                <?php endif; ?>
-            </div>
-        <?php else: ?>
-            <div class="messenger alert alert-warning">
-                Veuillez vérifier / compléter vos données personnelles pré-renseignées et enregistrer celles-ci pour
-                initialiser votre dossier.
-            </div>
-        <?php endif; ?>
-
-    <?php endif; ?>
-    <!--Affichage de l'horodatage pour le dossier de l'intervenant-->
-    <?= $this->historique($intervenantDossier) ?>
-
-    <?= $this->form()->openTag($form); ?>
-    <!-- legend champ obligatoire -->
-    <p class="text-right"><span class="text-danger">*</span> champs obligatoires pour compléter vos données personnelles
-    </p>
-
-    <?php if ($fieldsetRules['fieldset-statut'])  : ?>
-        <div class="row">
-            <?php
-            if ($canEdit) {
-                echo $this->partial('dossier/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-            } else {
-                echo $this->partial('dossier/intervenant-dossier/partial/formStatutView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-            }
-            ?>
-        </div>
-    <?php endif; ?>
-
-
-
-    <?php if (empty($intervenantDossierStatut)): ?>
-    <div class="row  display-flex hidden">
-        <?php else: ?>
-        <div class="row  display-flex">
+<!--Progression du dossier-->
+<?php if (!empty($formErrors)): ?>
+    <?= $this->formErrors($form); ?>
+<?php else: ?>
+    <?php if (!empty($tblDossier)): ?>
+        <div class="messenger alert ">
+            <?php if ($tblDossier->getCompletude() && $intervenantDossierValidation): ?>
+                Vos données personnelles sont maintenant <span style="font-size:1em;"
+                                                               class="badge bg-success">Complètes</span> et
+                <span
+                        style="font-size:1em;" class="badge bg-success">Validées</span>
+            <?php elseif ($tblDossier->getCompletude() && !$intervenantDossierValidation): ?>
+                Vos données personnelles sont maintenant <span style="font-size:1em;"
+                                                               class="badge bg-success">complètes</span> et en attente de validation par nos services
+            <?php else: ?>
+                Vos données personnelles sont incomplètes, merci de renseigner les informations obligatoires demandées dans les blocs
+                <span style="font-size:1em;" class="badge bg-warning text-dark">A compléter</span>
             <?php endif; ?>
-
-            <?php
-            /*Fiedlset identite (toujours affiché)*/
-
-            if ($editIdentite) {
-                echo $this->partial('dossier/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-            } else {
-                echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-            }
-            /*Fiedlset identite complementaire*/
-
-            if ($fieldsetRules['fieldset-identite-complementaire']) {
-                if ($editIdentite) {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                } else {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaireView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                }
-            }
-
-            /*Fieldset Contact*/
-            if ($fieldsetRules['fieldset-contact']) {
-                if ($editContact) {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formContact', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                } else {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formContactView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                }
-            }
-
-            /*Fieldset Adresse*/
-            if ($fieldsetRules['fieldset-adresse']) {
-                if ($editAdresse) {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formAdresse', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                } else {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formAdresseView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                }
-            }
-            /*Fiedlset Insee*/
-            if ($fieldsetRules['fieldset-insee']) {
-                if ($editInsee) {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formInsee', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                } else {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formInseeView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                }
-            }
-            if ($fieldsetRules['fieldset-iban']) {
-                if ($editIban) {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formBancaire', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                } else {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formBancaireView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                }
-            }
-            /*Fiedlset Employeur*/
-            if ($fieldsetRules['fieldset-employeur']) {
-                if ($editEmployeur) {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formEmployeur', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                } else {
-                    echo $this->partial('dossier/intervenant-dossier/partial/formEmployeurView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-                }
-            }
-            /*Fieldset Autres*/
-            if ($fieldsetRules['fieldset-autres']) {
-                echo $this->partial('dossier/intervenant-dossier/partial/formAutres', compact('form', 'intervenant', 'intervenantDossier', 'champsAutres', 'tblDossier'));
-            }
-
-            ?>
         </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <?php
-                echo $this->formHidden($this->form->get('security'));
-                if ($canEdit) {
-                    echo $this->formSubmit($form->get('submit-button'));
-                }
-
-                ?>
-                <?php if ($canValider): ?>
-                    <a class="valider-dossier btn btn-success pop-ajax"
-                       href="<?= $this->url('intervenant/dossier/valider', [], [], true) ?>"
-                       title="Valider les données personnelles"
-                       data-content="Confirmez-vous cette validation ?"
-                       data-confirm="true"
-                       data-confirm-button="Je confirme"
-                       data-cancel-button="Non"
-                       data-submit-event="valide-donnees"
-                    >
-                        <i class="fas fa-thumbs-up"></i> Je valide les données
-                    </a>
-                <?php endif ?>
-                <!-- actions de dévalidation du dossier -->
-                <?php if ($canDevalider): ?>
-                    <a class="devalider-dossier btn btn-danger pop-ajax"
-                       href="<?= $this->url('intervenant/dossier/devalider', [], [], true) ?>"
-                       title="Dévalider les données personnelles"
-                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
-                       data-confirm="true"
-                       data-confirm-button="Oui"
-                       data-submit-reload="true"
-                       data-cancel-button="Non"
-                       data-submit-event="devalide-donnees"
-                    >
-                        <i class="fas fa-thumbs-down"></i> Je dévalide les données
-                    </a>
-                <?php endif ?>
-
-                <!-- actions de suppression du dossier -->
-                <?php if ($canSupprimer): ?>
-                    <a class="supprimer-dossier btn btn-danger pop-ajax"
-                       href="<?= $this->url('intervenant/dossier/supprimer', [], [], true) ?>"
-                       title="Suppression des données personnelles"
-                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression de toutes les données personnelles ?</p>"
-                       data-confirm="true"
-                       data-confirm-button="Oui"
-                       data-cancel-button="Non"
-                       data-submit-event="supprimer-donnees"
-                    >
-                        <i class="fas fa-thumbs-down"></i> Je supprime les données
-                    </a>
-                <?php endif ?>
-            </div>
+    <?php else: ?>
+        <div class="messenger alert alert-warning">
+            Veuillez vérifier / compléter vos données personnelles pré-renseignées et enregistrer celles-ci pour
+            initialiser votre dossier.
         </div>
+    <?php endif; ?>
+
+<?php endif; ?>
+<!--Affichage de l'horodatage pour le dossier de l'intervenant-->
+<?= $this->historique($intervenantDossier) ?>
 
 
+<!--
+Debut du formulaire
+-->
+
+<?= $this->form()->openTag($form); ?>
+<!-- legend champ obligatoire -->
+<p class="text-right"><span class="text-danger">*</span> champs obligatoires pour compléter vos données personnelles
+</p>
+
+<?php if ($fieldsetRules['fieldset-statut'])  : ?>
+    <div class="row">
         <?php
-        echo $this->form()->closeTag();
-        echo "<br/>";
-        echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+        if ($canEdit) {
+            echo $this->partial('dossier/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        } else {
+            echo $this->partial('dossier/intervenant-dossier/partial/formStatutView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        }
         ?>
-        <?php if ($intervenantDossierValidation): ?>
     </div>
 <?php endif; ?>
+<!--Etape 1-->
+<div class="row  display-flex">
+    <h1>Etape 1 des données personnelles</h1>
+    <!--Identité-->
+    <?php
+
+    if ($editIdentite) {
+        echo $this->partial('dossier/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+    } else {
+        echo $this->partial('dossier/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+    }
+    if ($fieldsetRules['fieldset-identite-complementaire'] == 1) {
+        if ($editIdentite) {
+            echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        } else {
+            echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        }
+    }
+    if ($fieldsetRules['fieldset-adresse'] == 1) {
+        if ($editAdresse) {
+            echo $this->partial('dossier/intervenant-dossier/partial/formAdresse', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        } else {
+            echo $this->partial('dossier/intervenant-dossier/partial/formAdresseView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+        }
+    }
+
+    ?>
 
 
-    <script type="text/javascript">
+</div>
+<!--Etape 2-->
+<div class="row  display-flex">
+    <h1>Etape 1 des données personnelles</h1>
+    <!--Identité-->
+    <?php
+    if ($editIdentite) {
+        echo $this->partial('dossier/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+    } else {
+        echo $this->partial('dossier/intervenant-dossier/partial/formIdentite', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+    }
+    ?>
 
-
-        $(function () {
-            var dataModificated = 0;
-            var messageDataModificated = "Vous souhaitez changer de statut, mais vos données personnelles ont été modifié, si vous n'enregistrez pas au préalable, elles seront perdues. Souhaitez vous continuer ?"
-
-            manageDepartementNaissance();
-            manageSituationMatrimoniale();
-
-
-            function manageDepartementNaissance()
-            {
-                var selectPays = $("select[name='DossierIdentiteComplementaire[paysNaissance]']");
-                var selectDept = $("select[name='DossierIdentiteComplementaire[departementNaissance]']");
-
-
-                var emptyDept = $("option[value='']", selectDept);
-
-                selectPays.change(function () {
-                    var pays = $("option:selected", selectPays).html();
-                    var paysToLower = pays.toLowerCase();
-                    if (paysToLower == 'france') {
-                        selectDept.removeAttr('disabled')
-                        selectDept.siblings('button').removeClass('disabled')
-                        emptyDept.removeAttr('selected')
-
-                    } else {
-                        selectDept.prop('disabled', 'disabled')
-                        selectDept.siblings('button').addClass('disabled')
-                        emptyDept.html("(Sélectionnez un département)").prop("selected", "selected");
-                    }
-                });
-
-                selectPays.change();
+    <div class="row">
+        <div class="col-md-12">
+            <?php
+            echo $this->formHidden($this->form->get('security'));
+            if ($canEdit) {
+                echo $this->formSubmit($form->get('submit-button'));
             }
 
-            function manageSituationMatrimoniale()
-            {
-                var selectSituationMatrimoniale = $("select[name='DossierIdentite[situationMatrimoniale]']");
-                var dateSituationMatrimoniale = $("input[name='DossierIdentite[dateSituationMatrimoniale]']").parent('div').parent('div');
+            ?>
+            <?php if (!$canValider): ?>
+                <a class="valider-dossier btn btn-success pop-ajax"
+                   href="<?= $this->url('intervenant/dossier/valider', [], [], true) ?>"
+                   title="Valider les données personnelles"
+                   data-content="Confirmez-vous cette validation ?"
+                   data-confirm="true"
+                   data-confirm-button="Je confirme"
+                   data-cancel-button="Non"
+                   data-submit-event="valide-donnees"
+                >
+                    <i class="fas fa-thumbs-up"></i> Je valide les données
+                </a>
+            <?php endif ?>
+            <!-- actions de dévalidation du dossier -->
+            <?php if ($canDevalider): ?>
+                <a class="devalider-dossier btn btn-danger pop-ajax"
+                   href="<?= $this->url('intervenant/dossier/devalider', [], [], true) ?>"
+                   title="Dévalider les données personnelles"
+                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
+                   data-confirm="true"
+                   data-confirm-button="Oui"
+                   data-submit-reload="true"
+                   data-cancel-button="Non"
+                   data-submit-event="devalide-donnees"
+                >
+                    <i class="fas fa-thumbs-down"></i> Je dévalide les données
+                </a>
+            <?php endif ?>
 
-                var situation = $("option:selected", selectSituationMatrimoniale).html();
+            <!-- actions de suppression du dossier -->
+            <?php if ($canSupprimer): ?>
+                <a class="supprimer-dossier btn btn-danger pop-ajax"
+                   href="<?= $this->url('intervenant/dossier/supprimer', [], [], true) ?>"
+                   title="Suppression des données personnelles"
+                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression de toutes les données personnelles ?</p>"
+                   data-confirm="true"
+                   data-confirm-button="Oui"
+                   data-cancel-button="Non"
+                   data-submit-event="supprimer-donnees"
+                >
+                    <i class="fas fa-thumbs-down"></i> Je supprime les données
+                </a>
+            <?php endif ?>
+        </div>
+    </div>
+</div>
 
-                if (situation == 'Célibataire' || situation == '- NON RENSEIGNÉ') {
-                    dateSituationMatrimoniale.hide();
+
+<?php
+echo $this->form()->closeTag();
+echo "<br/>";
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);
+?>
+
+
+<script type="text/javascript">
+
+
+    $(function () {
+        var dataModificated = 0;
+        var messageDataModificated = "Vous souhaitez changer de statut, mais vos données personnelles ont été modifié, si vous n'enregistrez pas au préalable, elles seront perdues. Souhaitez vous continuer ?"
+
+        manageDepartementNaissance();
+        manageSituationMatrimoniale();
+
+
+        function manageDepartementNaissance()
+        {
+            var selectPays = $("select[name='DossierIdentiteComplementaire[paysNaissance]']");
+            var selectDept = $("select[name='DossierIdentiteComplementaire[departementNaissance]']");
+
+
+            var emptyDept = $("option[value='']", selectDept);
+
+            selectPays.change(function () {
+                var pays = $("option:selected", selectPays).html();
+                var paysToLower = pays.toLowerCase();
+                if (paysToLower == 'france') {
+                    selectDept.removeAttr('disabled')
+                    selectDept.siblings('button').removeClass('disabled')
+                    emptyDept.removeAttr('selected')
+
+                } else {
+                    selectDept.prop('disabled', 'disabled')
+                    selectDept.siblings('button').addClass('disabled')
+                    emptyDept.html("(Sélectionnez un département)").prop("selected", "selected");
                 }
+            });
 
-                selectSituationMatrimoniale.change(function () {
-                    var situation = $("option:selected", selectSituationMatrimoniale).html();
-                    console.log(situation);
-                    if (situation == 'Célibataire' || situation == '- NON RENSEIGNÉ -') {
-                        dateSituationMatrimoniale.hide();
-                    } else {
-                        dateSituationMatrimoniale.show();
-                    }
-                });
+            selectPays.change();
+        }
+
+        function manageSituationMatrimoniale()
+        {
+            var selectSituationMatrimoniale = $("select[name='DossierIdentiteComplementaire[situationMatrimoniale]']");
+            var dateSituationMatrimoniale = $("input[name='DossierIdentiteComplementaire[dateSituationMatrimoniale]']").parent('div').parent('div');
+
+            var situation = $("option:selected", selectSituationMatrimoniale).html();
+
+            if (situation == 'Célibataire' || situation == '- NON RENSEIGNÉ') {
+                dateSituationMatrimoniale.hide();
             }
 
+            selectSituationMatrimoniale.change(function () {
+                var situation = $("option:selected", selectSituationMatrimoniale).html();
+                console.log(situation);
+                if (situation == 'Célibataire' || situation == '- NON RENSEIGNÉ -') {
+                    dateSituationMatrimoniale.hide();
+                } else {
+                    dateSituationMatrimoniale.show();
+                }
+            });
+        }
 
-            $("select[name='DossierStatut[statut]']").change(function () {
-                if (dataModificated) {
-                    if (!confirm(messageDataModificated)) {
-                        e.preventDefault();
-                        e.stopImmediatePropagation();
-                    } else {
-                        var action = $("form[id='dossier']").attr('action');
-                        $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
-                        $("form[id='dossier']").submit();
-                    }
+
+        $("select[name='DossierStatut[statut]']").change(function () {
+            if (dataModificated) {
+                if (!confirm(messageDataModificated)) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
                 } else {
                     var action = $("form[id='dossier']").attr('action');
                     $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
                     $("form[id='dossier']").submit();
                 }
-            });
+            } else {
+                var action = $("form[id='dossier']").attr('action');
+                $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
+                $("form[id='dossier']").submit();
+            }
+        });
 
 
-            $(".dossierElement").change(function () {
-                dataModificated = 1;
-            })
-
-            $("body").on("devalide-donnees", function (event, data) {
-                window.location = window.location.href;
-            });
-            $("body").on("valide-donnees", function (event, data) {
-                window.location = window.location.href;
-            });
-            $("body").on("supprimer-donnees", function (event, data) {
-                var url = window.location.href;
-                var urlRedirect = url.replace('dossier', 'voir')
-                window.location = urlRedirect;
-            });
-
-
+        $(".dossierElement").change(function () {
+            dataModificated = 1;
         })
-        ;
-    </script>
+
+        $("body").on("devalide-donnees", function (event, data) {
+            window.location = window.location.href;
+        });
+        $("body").on("valide-donnees", function (event, data) {
+            window.location = window.location.href;
+        });
+        $("body").on("supprimer-donnees", function (event, data) {
+            var url = window.location.href;
+            var urlRedirect = url.replace('dossier', 'voir')
+            window.location = urlRedirect;
+        });
+
+
+    })
+    ;
+</script>

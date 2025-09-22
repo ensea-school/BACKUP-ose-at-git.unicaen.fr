@@ -1,8 +1,9 @@
 <?php
 
 use UnicaenMail\Entity\Db\Mail;
+use Framework\Application\Application;
 
-$conf = AppAdmin::config();
+$config = Application::getInstance()->config();
 
 return [
     'unicaen-mail' => [
@@ -15,18 +16,18 @@ return [
          * Options concernant l'envoi de mail par l'application
          */
         'transport_options' => [
-            'host' => $conf['mail']['smtpHost'] ?? 'localhost',
-            'port' => $conf['mail']['smtpPort'] ?? null,
-            'tls' => $conf['mail']['tls'] ?? true,
+            'host' => $config['mail']['smtpHost'] ?? 'localhost',
+            'port' => $config['mail']['smtpPort'] ?? null,
+            'tls' => $config['mail']['tls'] ?? true,
         ],
 
-        'redirect_to' => $conf['mail']['redirection'] ?? null,
-        'do_not_send' => $conf['mail']['envoiDesactive'] ?? true,
-        'redirect'    => !empty($conf['mail']['redirection'] ?? null),
+        'redirect_to' => $config['mail']['redirection'] ?? null,
+        'do_not_send' => $config['mail']['envoiDesactive'] ?? true,
+        'redirect'    => !empty($config['mail']['redirection'] ?? null),
 
         'subject_prefix' => 'OSE',
         'from_name'      => 'Application',
-        'from_email'     => $conf['mail']['from'] ?? null,
+        'from_email'     => $config['mail']['from'] ?? null,
 
         /**
          * Adresses des redirections si do_not_send est à true
@@ -34,42 +35,17 @@ return [
 
         'module' => [
             'default' => [
-                'redirect_to'    => $conf['mail']['redirection'] ?? null,
-                'do_not_send'    => $conf['mail']['envoiDesactive'] ?? true,
-                'redirect'       => !empty($conf['mail']['redirection'] ?? null),
+                'redirect_to'    => $config['mail']['redirection'] ?? null,
+                'do_not_send'    => $config['mail']['envoiDesactive'] ?? true,
+                'redirect'       => !empty($config['mail']['redirection'] ?? null),
                 'subject_prefix' => 'OSE',
                 'from_name'      => 'OSE | Application',
-                'from_email'     => $conf['mail']['from'] ?? null,
+                'from_email'     => $config['mail']['from'] ?? null,
 
             ],
 
         ],
     ],
 
-    'server_url' => ($conf['global']['scheme'] ?? 'http') . '://' . ($conf['global']['domain'] ?? 'localhost'),
-
-    /*'navigation' => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'configuration' => [
-                                'pages' => [
-                                    'email' => [
-
-                                        'label'    => 'Courriers électroniques',
-                                        'route'    => 'mail',
-                                        'resource' => PrivilegeController::getResourceId(MailController::class, 'index'),
-                                        'order'    => 9003,
-                                        'icon'     => 'fas fa-angle-right',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],*/
+    'server_url' => ($config['global']['scheme'] ?? 'http') . '://' . ($config['global']['domain'] ?? 'localhost'),
 ];

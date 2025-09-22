@@ -8,6 +8,7 @@ namespace Application\Entity\Db;
 class Annee
 {
     const MIN = 1950;
+    const MIN_DATA = 2010;
     const MAX = 2099;
 
     /**

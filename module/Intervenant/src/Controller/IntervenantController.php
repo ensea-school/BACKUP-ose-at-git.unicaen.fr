@@ -67,9 +67,10 @@ class  IntervenantController extends AbstractController
 
 
         if ($intervenant = $role->getIntervenant()) {
-            $etapeCourante = $this->getServiceWorkflow()->getEtapeCourante();
-            if ($etapeCourante && $this->getServiceWorkflow()->isAllowed($etapeCourante)) {
-                if ($etapeCourante && $url = $etapeCourante->getUrl()) {
+            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+            $etapeCourante = $feuilleDeRoute->getCourante();
+            if ($etapeCourante && $etapeCourante->isAllowed()) {
+                if ($url = $etapeCourante->url) {
                     return $this->redirect()->toUrl($url);
                 }
             } else {
@@ -353,9 +354,10 @@ class  IntervenantController extends AbstractController
                     $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
                     $form->get('id')->setValue($intervenant->getId()); // transmet le nouvel ID
                     if ($isNew) {
-                        $etape = $this->getServiceWorkflow()->getEtapeCourante($intervenant);
-                        if ($etape) {
-                            return $this->redirect()->toUrl($etape->getUrl());
+                        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+                        $etape = $feuilleDeRoute->getCourante();
+                        if ($etape && $etape->url) {
+                            return $this->redirect()->toUrl($etape->url);
                         }
                     }
 

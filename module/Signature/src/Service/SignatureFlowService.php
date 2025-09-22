@@ -48,7 +48,7 @@ class SignatureFlowService extends AbstractEntityService
 
 
 
-    public function getList(QueryBuilder $qb = null, $alias = null)
+    public function getList(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.enabled = 1");

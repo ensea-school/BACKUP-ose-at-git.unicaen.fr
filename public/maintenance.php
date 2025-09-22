@@ -1,11 +1,13 @@
 <?php
 
+use Framework\Application\Application;
+
 header("HTTP/1.1 503 Service Unavailable");
 
 $remoteAddr = $_SERVER['REMOTE_ADDR'];
 $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : null;
 
-$message = \AppAdmin::config()['maintenance']['messageInfo'] ?? 'L\'application est actuellement indisponible';
+$message = Application::getInstance()->config()['maintenance']['messageInfo'] ?? 'L\'application est actuellement indisponible';
 
 ?><!DOCTYPE html>
 <html lang="fr">

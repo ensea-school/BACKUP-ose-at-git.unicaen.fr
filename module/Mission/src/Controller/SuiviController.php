@@ -4,6 +4,7 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
@@ -250,8 +251,8 @@ class SuiviController extends AbstractController
     private function updateTableauxBord (Mission $mission)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'mission',
-            'paiement'
+            TblProvider::MISSION,
+            TblProvider::PAIEMENT
         ], $mission->getIntervenant());
     }
 

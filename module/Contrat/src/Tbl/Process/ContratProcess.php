@@ -238,7 +238,7 @@ class ContratProcess implements ProcessInterface
         $sql    = $this->getServiceBdd()->injectKey($sql, $params);
         $parser = $this->getBdd()->selectEach($sql);
         while ($data = $parser->next()) {
-            $data = array_change_key_case($data); // provisoire => migration postgres
+            mpg_lower($data);
             $this->loadVolumeHoraire($data);
         }
     }

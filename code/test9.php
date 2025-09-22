@@ -6,15 +6,10 @@
  * @var $io         \Symfony\Component\Console\Style\SymfonyStyle
  */
 
-use Symfony\Component\Console\Style\SymfonyStyle;
-use UnicaenTbl\Event;
+$s = $container->get(\Framework\Navigation\Navigation::class);
 
-$tbl = $container->get(\UnicaenTbl\Service\TableauBordService::class);
+dump($s->home->getPages());
 
-$params = [
-//    'INTERVENANT_ID' => 36215,
-//    'INTERVENANT_ID' => 777477,
-    'ANNEE_ID' => 2020,
-];
+$pages = $s->home->getPage('intervenant');
 
-$tbl->calculer('contrat', $params);
+dd($pages);

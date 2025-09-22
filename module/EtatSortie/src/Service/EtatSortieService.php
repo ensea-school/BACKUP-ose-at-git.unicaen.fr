@@ -4,9 +4,11 @@ namespace EtatSortie\Service;
 
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Constants;
+use Application\Service\AbstractEntityService;
 use EtatSortie\Entity\Db\EtatSortie;
 use Unicaen\OpenDocument\Document;
 use UnicaenApp\View\Model\CsvModel;
+use Framework\Application\Application;
 
 /**
  * Description of EtatSortieService
@@ -18,7 +20,7 @@ use UnicaenApp\View\Model\CsvModel;
  * @method EtatSortie newEntity()
  *
  */
-class EtatSortieService extends \Application\Service\AbstractEntityService
+class EtatSortieService extends AbstractEntityService
 {
     use ParametresServiceAwareTrait;
 
@@ -29,25 +31,14 @@ class EtatSortieService extends \Application\Service\AbstractEntityService
 
 
 
-    /**
-     * Retourne la classe des entités
-     *
-     * @return string
-     * @throws \Application\Service\RuntimeException
-     */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return EtatSortie::class;
     }
 
 
 
-    /**
-     * Retourne l'alias d'entité courante
-     *
-     * @return string
-     */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'etatsortie';
     }
@@ -115,7 +106,7 @@ class EtatSortieService extends \Application\Service\AbstractEntityService
             $traitement = function () use ($document, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
                 $dir = getcwd();
 
-                if (\AppAdmin::inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')) {
+                if (Application::getInstance()->inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')) {
                     $filename = getcwd() . '/code/' . substr($__PHP__CODE__TRAITEMENT__, strlen('UnicaenCode:')) . '.php';
                     if (file_exists($filename)) {
                         require $filename;
@@ -166,7 +157,7 @@ class EtatSortieService extends \Application\Service\AbstractEntityService
             $traitement = function () use ($csv, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
                 $dir = getcwd();
 
-                if (\AppAdmin::inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')) {
+                if (Application::getInstance()->inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')) {
                     $filename = getcwd() . '/code/' . substr($__PHP__CODE__TRAITEMENT__, strlen('UnicaenCode:')) . '.php';
                     if (file_exists($filename)) {
                         require $filename;

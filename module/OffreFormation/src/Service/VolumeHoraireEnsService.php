@@ -32,7 +32,7 @@ class VolumeHoraireEnsService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return VolumeHoraireEns::class;
     }
@@ -44,7 +44,7 @@ class VolumeHoraireEnsService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'vhe';
     }
@@ -56,7 +56,7 @@ class VolumeHoraireEnsService extends AbstractEntityService
      *
      * @return \OffreFormation\Entity\Db\VolumeHoraireEns
      */
-    public function newEntity(ElementPedagogique $elementPedagogique = null, TypeIntervention $typeIntervention = null)
+    public function newEntity(?ElementPedagogique $elementPedagogique = null, ?TypeIntervention $typeIntervention = null)
     {
         /** @var VolumeHoraireEns $entity */
         $entity = parent::newEntity();

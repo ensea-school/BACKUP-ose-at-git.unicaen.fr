@@ -31,7 +31,7 @@ trait NoteServiceAwareTrait
     public function getServiceNote(): ?NoteService
     {
         if (empty($this->serviceNote)) {
-            $this->serviceNote = \AppAdmin::container()->get(NoteService::class);
+            $this->serviceNote = \Framework\Application\Application::getInstance()->container()->get(NoteService::class);
         }
 
         return $this->serviceNote;

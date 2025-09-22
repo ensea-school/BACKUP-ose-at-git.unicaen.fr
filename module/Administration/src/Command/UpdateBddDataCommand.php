@@ -35,6 +35,7 @@ class UpdateBddDataCommand extends Command
         $io->title($this->getDescription());
         try {
             $bdd->data()->run(DataManager::ACTION_UPDATE);
+            $this->updateReadOnlyStatuts();
             $this->getServiceAdministration()->clearCache();
             $io->success('Données à jour');
         } catch (\Exception $e) {
@@ -43,5 +44,27 @@ class UpdateBddDataCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+
+
+    public function updateReadOnlyStatuts(): void
+    {
+        $data = require 'data/statuts.php';
+        $tableName = 'statut';
+        $keyColumn = 'code';
+        $typeIntervenantCol = 'type_intervenant_id';
+        $idCol = 'id';
+
+        mpg_upper($tableName);
+        mpg_upper($keyColumn);
+        mpg_upper($typeIntervenantCol);
+        mpg_upper($data);
+        mpg_upper($idCol);
+
+        foreach ($data as $code => $s) {
+            $s[$typeIntervenantCol] = (int)$this->getBdd()->selectOne('SELECT id FROM type_intervenant WHERE code = :code', [$keyColumn => $s[$typeIntervenantCol]], $idCol);
+            $this->getBdd()->getTable($tableName)->update($s, [$keyColumn => $code]);
+        }
     }
 }

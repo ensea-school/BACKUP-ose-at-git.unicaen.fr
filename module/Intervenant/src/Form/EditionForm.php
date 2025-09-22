@@ -9,6 +9,7 @@ use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Framework\Application\Application;
 use Intervenant\Entity\Db\Civilite;
 use Intervenant\Entity\Db\Grade;
 use Intervenant\Entity\Db\Intervenant;
@@ -645,7 +646,7 @@ class EditionFormHydrator extends GenericHydrator
     {
         $res = parent::extract($object);
 
-        $res['creerUtilisateur'] = !$object->getId() && !\AppAdmin::config()['cas']['actif'] ?? false;
+        $res['creerUtilisateur'] = !$object->getId() && !Application::getInstance()->config()['cas']['actif'] ?? false;
 
         if ($code = $object->getUtilisateurCode()) {
             $utilisateur = $this->getConnecteurLdap()->getUtilisateurFromCode($code, false);

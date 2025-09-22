@@ -2,6 +2,7 @@
 
 namespace Application\Provider\Resource;
 
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -12,9 +13,9 @@ use Psr\Container\ContainerInterface;
 class ResourceProviderFactory
 {
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $em = $container->get(\Application\Constants::BDD);
+        $em = $container->get(EntityManager::class);
         /* @var $em \Doctrine\ORM\EntityManager */
 
         $resourceProvider = new ResourceProvider();

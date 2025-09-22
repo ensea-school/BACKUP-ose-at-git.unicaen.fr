@@ -109,6 +109,14 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             ],
         ]);
 
+        $this->add([
+            'type'    => 'Checkbox',
+            'name'    => 'post-recrutement',
+            'options' => [
+                'label' => "Demander cette pièce justificative après le recrutement",
+            ],
+                   ]);
+
         $this->add(new Csrf('security'));
 
         $this->addSubmit();

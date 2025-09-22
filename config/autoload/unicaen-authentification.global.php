@@ -1,6 +1,9 @@
 <?php
 
-$conf = AppAdmin::config();
+use Framework\Application\Application;
+
+$config = Application::getInstance()->config();
+
 
 $settings = [
     /**
@@ -31,7 +34,7 @@ $settings = [
     /**
      * Gestion des autorisations d'usurpation
      */
-    'usurpation_allowed_usernames' => $conf['ldap']['autorisationsUrsurpation'] ?? [],
+    'usurpation_allowed_usernames' => $config['ldap']['autorisationsUsurpation'] ?? $config['ldap']['autorisationsUrsurpation'] ?? [],
 
     /**
      * Configuration de l'authentification locale.
@@ -43,23 +46,23 @@ $settings = [
          * Possibilité ou non de s'authentifier à l'aide d'un compte local.
          * Toujours OK si pas de CAS
          */
-        'enabled' => (($conf['ldap']['actif'] ?? true) || ($conf['ldap']['local'] ?? true)) && !(($conf['cas']['actif'] ?? false) && ($conf['cas']['exclusif'] ?? false)),
+        'enabled' => (($config['ldap']['actif'] ?? true) || ($config['ldap']['local'] ?? true)) && !(($config['cas']['actif'] ?? false) && ($config['cas']['exclusif'] ?? false)),
 
-        'description' => "Utilisez ce formulaire si vous possédez un compte LDAP établissement " . (($conf['ldap']['local'] ?? true) ? "ou un compte local " : '') . "dédié à l'application.",
+        'description' => "Utilisez ce formulaire si vous possédez un compte LDAP établissement " . (($config['ldap']['local'] ?? true) ? "ou un compte local " : '') . "dédié à l'application.",
 
         /**
          * Mode d'authentification à l'aide d'un compte dans la BDD de l'application.
          */
         'db'          => [
-            'enabled' => $conf['ldap']['local'] ?? true,
+            'enabled' => $config['ldap']['local'] ?? true,
         ],
 
         'ldap' => [
             /**
              * Possibilité ou non de s'authentifier via l'annuaire LDAP ET en local!!.
              */
-            'enabled' => ($conf['ldap']['actif'] ?? true) && !(($conf['cas']['actif'] ?? false) && ($conf['cas']['exclusif'] ?? false)),
-            'username' => strtolower($conf['ldap']['loginAttribute'] ?? ''),
+            'enabled' => ($config['ldap']['actif'] ?? true) && !(($config['cas']['actif'] ?? false) && ($config['cas']['exclusif'] ?? false)),
+            'username' => strtolower($config['ldap']['loginAttribute'] ?? ''),
         ],
     ],
 
@@ -72,7 +75,7 @@ $settings = [
         /**
          * Activation ou non de ce mode d'authentification.
          */
-        'enabled'     => $conf['cas']['actif'] ?? false,
+        'enabled'     => $config['cas']['actif'] ?? false,
 
         /**
          * Permet de sauter le formulaire d'authentification "/auth/connexion" si CAS est la seule source d'authentification
@@ -107,13 +110,13 @@ $settings = [
     ],
 ];
 
-if ($conf['cas']['actif'] ?? false) {
+if ($config['cas']['actif'] ?? false) {
     $settings['cas']['connection']['default']['params'] = [
-        'hostname' => $conf['cas']['host'] ?? null,
-        'port'     => $conf['cas']['port'] ?? null,
-        'version'  => $conf['cas']['version'] ?? null,
-        'uri'      => $conf['cas']['uri'] ?? null,
-        'debug'    => $conf['cas']['debug'] ?? null,
+        'hostname' => $config['cas']['host'] ?? null,
+        'port'     => $config['cas']['port'] ?? null,
+        'version'  => $config['cas']['version'] ?? null,
+        'uri'      => $config['cas']['uri'] ?? null,
+        'debug'    => $config['cas']['debug'] ?? null,
     ];
 }
 

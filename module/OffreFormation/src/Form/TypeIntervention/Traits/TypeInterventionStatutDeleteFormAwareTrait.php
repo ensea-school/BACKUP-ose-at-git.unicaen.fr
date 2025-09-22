@@ -35,6 +35,6 @@ trait TypeInterventionStatutDeleteFormAwareTrait
             return $this->formTypeInterventionTypeInterventionStatutDelete;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(TypeInterventionStatutDeleteForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TypeInterventionStatutDeleteForm::class);
     }
 }

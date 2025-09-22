@@ -73,12 +73,14 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
      *
      * @return string[][]
      */
-    public function getPrivilegesRoles()
+    public function getPrivilegesRoles(): array
     {
-        if (empty($this->privilegesCache)){
-            $this->privilegesCache = $this->makePrivilegesRoles();
+        $session = RoleService::getSession();
+
+        if (!$session->offsetExists('privilegesRoles') || empty($session->privilegesRoles)) {
+            $session->privilegesRoles = $this->makePrivilegesRoles();
         }
-        return $this->privilegesCache;
+        return $session->privilegesRoles;
     }
 
 

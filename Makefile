@@ -63,7 +63,7 @@ logs: ## Afficher les logs des containers docker
 
 
 update-bdd: ## Mise à jour de la base de données
-	docker exec -it $(APP_NAME)-php /var/www/html/bin/ose-code test6 update-bdd
+	docker exec -it $(APP_NAME)-php /var/www/html/bin/ose update-bdd
 .PHONY: update-bdd
 
 
@@ -72,6 +72,14 @@ update-ddl: ## Mise à jour des définitions de la base de données
 	docker exec -it $(APP_NAME)-php /var/www/html/bin/ose update-ddl
 	docker exec -it $(APP_NAME)-php chown -R $(DEV_HOST_USER_ID):$(DEV_HOST_USER_ID) *
 .PHONY: update-bdd
+
+
+
+compile: ## Compilation avec Vite & Sass côté front
+	docker exec -it $(APP_NAME)-nodejs npx sass --style=compressed public/css/app.scss public/css/app.css
+	docker exec -it $(APP_NAME)-nodejs npx vite build
+	docker exec -it $(APP_NAME)-nodejs chown -R $(DEV_HOST_USER_ID):$(DEV_HOST_USER_ID) *
+.PHONY: compile
 
 
 

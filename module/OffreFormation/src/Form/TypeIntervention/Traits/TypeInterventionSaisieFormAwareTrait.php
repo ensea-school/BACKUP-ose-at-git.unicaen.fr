@@ -35,6 +35,6 @@ trait TypeInterventionSaisieFormAwareTrait
             return $this->formTypeInterventionTypeInterventionSaisie;
         }
 
-        return \AppAdmin::container()->get('FormElementManager')->get(TypeInterventionSaisieForm::class);
+        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TypeInterventionSaisieForm::class);
     }
 }

@@ -6,9 +6,10 @@ use Application\Service\OseBddAdminFactory;
 use Application\View\Helper\LocalConnectViewHelperFactory;
 use Unicaen\BddAdmin\Bdd;
 use UnicaenAuthentification\View\Helper\LocalConnectViewHelper;
+use Framework\Application\Application;
 
 $config = [
-    'doctrine'   => [
+    'doctrine' => [
         'driver'        => [
             'orm_default_driver' => [
                 'class' => \Doctrine\ORM\Mapping\Driver\XmlDriver::class,
@@ -44,11 +45,11 @@ $config = [
             ],
         ],
     ],
-    'zfcuser'    => [
+    'zfcuser'  => [
         'user_entity_class' => Entity\Db\Utilisateur::class,
     ],
 
-    'router'     => [
+    'router' => [
         'routes' => [
             'home'             => [
                 'type'    => 'Literal',
@@ -116,20 +117,19 @@ $config = [
             ],
         ],
         'resource_providers' => [
-            Provider\Resource\ResourceProvider::class     => [],
+            Provider\Resource\ResourceProvider::class => [],
         ],
     ],
     'service_manager'    => [
         'invokables' => [
-            Service\AnneeService::class                    => Service\AnneeService::class,
-            Service\LocalContextService::class             => Service\LocalContextService::class,
-            Service\SourceService::class                   => Service\SourceService::class,
-            Service\AffectationService::class              => Service\AffectationService::class,
-            Service\RoleService::class                     => Service\RoleService::class,
-            Service\FichierService::class                  => Service\FichierService::class,
+            Service\AnneeService::class        => Service\AnneeService::class,
+            Service\LocalContextService::class => Service\LocalContextService::class,
+            Service\SourceService::class       => Service\SourceService::class,
+            Service\AffectationService::class  => Service\AffectationService::class,
+            Service\RoleService::class         => Service\RoleService::class,
+            Service\FichierService::class      => Service\FichierService::class,
         ],
         'factories'  => [
-            \Laminas\Navigation\Navigation::class                       => Navigation\NavigationFactory::class,
             Provider\Role\RoleProvider::class                           => Provider\Role\RoleProviderFactory::class,
             Provider\Resource\ResourceProvider::class                   => Provider\Resource\ResourceProviderFactory::class,
             Provider\Identity\IdentityProvider::class                   => Provider\Identity\IdentityProviderFactory::class,
@@ -142,22 +142,21 @@ $config = [
             ORM\RouteEntitiesInjector::class                            => ORM\RouteEntitiesInjectorFactory::class,
             ORM\Event\Listeners\HistoriqueListener::class               => ORM\Event\Listeners\HistoriqueListenerFactory::class,
             Bdd::class                                                  => OseBddAdminFactory::class,
-            \UnicaenMail\Service\Mail\MailService::class                => Service\MailServiceFactory::class
+            \UnicaenMail\Service\Mail\MailService::class                => Service\MailServiceFactory::class,
         ],
         'aliases'    => [
-            'HostLocalization' => HostLocalization\HostLocalizationOse::class,
+            'HostLocalization'              => HostLocalization\HostLocalizationOse::class,
             Service\PrivilegeService::class => \UnicaenPrivilege\Service\Privilege\PrivilegeService::class,
         ],
     ],
     'view_helpers'       => [
         'aliases'    => [
             // on utilise les objets standards de Laminas, et plus ceux d'Unicaen
-            'headLink'                   => \Laminas\View\Helper\HeadLink::class,
-            'headScript'                 => \Laminas\View\Helper\HeadScript::class,
-            'inlineScript'               => \Laminas\View\Helper\InlineScript::class,
+            'headLink'     => \Laminas\View\Helper\HeadLink::class,
+            'headScript'   => \Laminas\View\Helper\HeadScript::class,
+            'inlineScript' => \Laminas\View\Helper\InlineScript::class,
         ],
         'factories'  => [
-            \UnicaenApp\View\Helper\AppLink::class => View\Helper\AppLinkFactory::class,
             LocalConnectViewHelper::class          => LocalConnectViewHelperFactory::class,
             'tab'                                  => View\Helper\TabViewHelperFactory::class,
             'appLayout'                            => View\Helper\LayoutViewHelperFactory::class,
@@ -189,7 +188,7 @@ $config = [
     ],
 ];
 
-if ($customCss = \AppAdmin::$config['etablissement']['css'] ?? null) {
+if ($customCss = Application::getInstance()->config()['etablissement']['css'] ?? null) {
     $config['public_files']['stylesheets']['999_'] = $customCss;
 }
 

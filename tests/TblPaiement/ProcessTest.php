@@ -3,6 +3,7 @@
 namespace TblPaiement;
 
 use Administration\Service\ParametresService;
+use Application\Provider\Tbl\TblProvider;
 use Paiement\Service\TauxRemuService;
 use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\Sub\Rapprocheur;
@@ -18,7 +19,7 @@ final class ProcessTest extends OseTestCase
 
     protected function setUp(): void
     {
-        $c = \AppAdmin::container()->get(TableauBordService::class);
+        $c = \Framework\Application\Application::getInstance()->container()->get(TableauBordService::class);
 
         $tauxRemuMock = $this->getMockBuilder(TauxRemuService::class)->onlyMethods(['getTauxMap'])->getMock();
 
@@ -73,7 +74,7 @@ final class ProcessTest extends OseTestCase
             ],
         ]);
 
-        $ptbl = $c->getTableauBord('paiement');
+        $ptbl = $c->getTableauBord(TblProvider::PAIEMENT);
         $this->pp = $ptbl->getProcess();
         $this->pp->setServiceTauxRemu($tauxRemuMock);
 

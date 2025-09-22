@@ -7,6 +7,7 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use Framework\Application\Application;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Entity\Db\TypeIntervenant;
@@ -23,7 +24,7 @@ use Workflow\Service\WorkflowServiceAwareTrait;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
  * @method Intervenant get($id)
- * @method Intervenant[] getList(QueryBuilder $qb = null, $alias = null)
+ * @method Intervenant[] getList(?QueryBuilder $qb = null, $alias = null)
  */
 class IntervenantService extends AbstractEntityService
 {
@@ -375,7 +376,7 @@ class IntervenantService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy (QueryBuilder $qb = null, $alias = null)
+    public function orderBy (?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -395,7 +396,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByType (TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
+    public function finderByType (TypeIntervenant $typeIntervenant, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $sStatut = $this->getServiceStatut();
@@ -476,7 +477,7 @@ class IntervenantService extends AbstractEntityService
     {
         if (!$intervenant->getSource()->getImportable()) return null;
 
-        $url = \AppAdmin::config()['ldap']['systemeInformationUrl'] ?? null;
+        $url = Application::getInstance()->config()['ldap']['systemeInformationUrl'] ?? null;
         if (!$url) return null;
 
         $hydrator = new ClassMethodsHydrator();
@@ -622,7 +623,7 @@ class IntervenantService extends AbstractEntityService
 
     public function updateSource (Intervenant $intervenant): Intervenant
     {
-        $config = \AppAdmin::config()['export-rh'] ?? [];
+        $config = Application::getInstance()->config()['export-rh'] ?? [];
         if (!empty($config['sync-source'])) {
             //On regarde si le code fourni correspond bien à une source valide
             $source = $this->getServiceSource()->getByCode($config['sync-source']);

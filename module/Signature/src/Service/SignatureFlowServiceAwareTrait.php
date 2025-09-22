@@ -31,7 +31,7 @@ trait SignatureFlowServiceAwareTrait
     public function getServiceSignatureFlow(): ?SignatureFlowService
     {
         if (empty($this->serviceSignatureFlow)) {
-            $this->serviceSignatureFlow = \AppAdmin::container()->get(SignatureFlowService::class);
+            $this->serviceSignatureFlow = \Framework\Application\Application::getInstance()->container()->get(SignatureFlowService::class);
         }
 
         return $this->serviceSignatureFlow;

@@ -56,10 +56,18 @@ return [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',
     ],
-    'WF_ETAPE'                   => [
-        'actions' => ['install', 'update'],
-        'key'     => 'CODE',
-        'options' => ['update-ignore-cols' => ['LIBELLE_INTERVENANT', 'LIBELLE_AUTRES']],
+    'WORKFLOW_ETAPE'             => [
+        'actions' => ['install', 'update', 'workflow-reset'],
+        'key'     => ['CODE', 'ANNEE_ID'],
+        'options' => [
+            'hard-delete' => true,
+            'columns'            => [
+                'PERIMETRE_ID' => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s'],
+            ],
+            'update-ignore-cols' => [
+                'LIBELLE_INTERVENANT', 'LIBELLE_AUTRES', 'DESC_NON_FRANCHIE', 'DESC_SANS_OBJECTIF', 'ORDRE',
+            ],
+        ],
     ],
     'TYPE_AGREMENT'              => [
         'actions' => ['install', 'update'],
@@ -149,11 +157,11 @@ return [
     'TAUX_REMU'                  => [
         'actions' => ['install', 'update'],
         'options' => [
-            'update'  => true,
-            'delete'  => false,
-            'undelete'  => false,
-            'soft-delete'  => false,
-            'columns' => [
+            'update'      => true,
+            'delete'      => false,
+            'undelete'    => false,
+            'soft-delete' => false,
+            'columns'     => [
                 'TAUX_REMU_ID' => [
                     'transformer' => 'SELECT id FROM taux_remu WHERE histo_destruction IS NULL AND code = %s',
                 ],
@@ -164,10 +172,10 @@ return [
     'TAUX_REMU_VALEUR'           => [
         'actions' => ['install', 'update'],
         'options' => [
-            'update'  => true,
-            'delete'  => false,
-            'undelete'  => false,
-            'columns' => [
+            'update'   => true,
+            'delete'   => false,
+            'undelete' => false,
+            'columns'  => [
                 'TAUX_REMU_ID' => [
                     'transformer' => 'SELECT id FROM taux_remu WHERE histo_destruction IS NULL AND code = %s',
                 ],
@@ -300,14 +308,18 @@ return [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',
     ],
-    'WF_ETAPE_DEP'               => [
-        'actions' => ['install'],
-        'key'     => ['ETAPE_SUIV_ID', 'ETAPE_PREC_ID'],
-        'options' => ['columns' => [
-            'ETAPE_PREC_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
-            'ETAPE_SUIV_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
-            'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s'],
-        ],],
+    'WORKFLOW_ETAPE_DEPENDANCE'  => [
+        'actions' => ['install', 'workflow-reset'],
+        'key'     => ['ETAPE_SUIVANTE_ID', 'ETAPE_PRECEDANTE_ID', 'TYPE_INTERVENANT_ID'],
+        'options' => [
+            'hard-delete' => true,
+            'columns' => [
+                'ETAPE_PRECEDANTE_ID' => ['transformer' => 'SELECT id FROM workflow_etape WHERE code || \'-\' || annee_id = %s'],
+                'ETAPE_SUIVANTE_ID'   => ['transformer' => 'SELECT id FROM workflow_etape WHERE code || \'-\' || annee_id = %s'],
+                'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s'],
+                'PERIMETRE_ID'        => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s'],
+            ],
+        ],
     ],
 
     /* Paramètres par défaut, en fonction des nomenclatures ci-dessus */

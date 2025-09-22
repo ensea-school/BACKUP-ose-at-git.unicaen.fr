@@ -3,6 +3,7 @@
 namespace Indicateur\Processus;
 
 use Application\Processus\AbstractProcessus;
+use Framework\Application\Application;
 use Indicateur\Entity\Db\NotificationIndicateur;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Indicateur\Service\IndicateurServiceAwareTrait;
@@ -90,7 +91,7 @@ class IndicateurProcessus extends AbstractProcessus
             strip_tags($notification->getIndicateur()->getLibelle($count))
         );
 
-        $from = \AppAdmin::config()['mail']['from'] ?? null;
+        $from = Application::getInstance()->config()['mail']['from'] ?? null;
 
         $to = $notification->getAffectation()->getUtilisateur()->getEmail();
         $toName = (string)$notification->getAffectation()->getUtilisateur();

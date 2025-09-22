@@ -30,7 +30,7 @@ trait TypeContratServiceAwareTrait
     public function getServiceTypeContrat(): ?TypeContratService
     {
         if (empty($this->serviceTypeContrat)) {
-            $this->serviceTypeContrat = \AppAdmin::container()->get(TypeContratService::class);
+            $this->serviceTypeContrat = \Framework\Application\Application::getInstance()->container()->get(TypeContratService::class);
         }
 
         return $this->serviceTypeContrat;

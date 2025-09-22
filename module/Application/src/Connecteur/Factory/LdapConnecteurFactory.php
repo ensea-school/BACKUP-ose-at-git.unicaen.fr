@@ -3,6 +3,7 @@
 namespace Application\Connecteur\Factory;
 
 use Application\Connecteur\LdapConnecteur;
+use Framework\Application\Application;
 use Psr\Container\ContainerInterface;
 use UnicaenAuthentification\Service\UserContext;
 
@@ -59,8 +60,8 @@ class LdapConnecteurFactory
             $service->setUtilisateurCodeFiltre($configLdapUtilisateur['CODEFILTER']);
         }
 
-        $service->setUtilisateurExtraMasque(\AppAdmin::config()['ldap']['utilisateurExtraMasque'] ?? '');
-        $service->setUtilisateurExtraAttributes(\AppAdmin::config()['ldap']['utilisateurExtraAttributes'] ?? []);
+        $service->setUtilisateurExtraMasque(Application::getInstance()->config()['ldap']['utilisateurExtraMasque'] ?? '');
+        $service->setUtilisateurExtraAttributes(Application::getInstance()->config()['ldap']['utilisateurExtraAttributes'] ?? []);
 
         return $service;
     }

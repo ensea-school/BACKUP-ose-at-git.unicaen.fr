@@ -32,7 +32,7 @@ trait GroupeTypeFormationServiceAwareTrait
     public function getServiceGroupeTypeFormation(): ?GroupeTypeFormationService
     {
         if (empty($this->serviceGroupeTypeFormation)) {
-            $this->serviceGroupeTypeFormation = \AppAdmin::container()->get(GroupeTypeFormationService::class);
+            $this->serviceGroupeTypeFormation = \Framework\Application\Application::getInstance()->container()->get(GroupeTypeFormationService::class);
         }
 
         return $this->serviceGroupeTypeFormation;

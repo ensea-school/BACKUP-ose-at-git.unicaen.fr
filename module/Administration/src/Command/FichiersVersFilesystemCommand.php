@@ -2,6 +2,7 @@
 
 namespace Administration\Command;
 
+use Framework\Application\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,7 +31,7 @@ class FichiersVersFilesystemCommand extends Command
         $io  = new SymfonyStyle($input, $output);
         $filesystem = new Filesystem();
         $io->title($this->getDescription());
-        $config = \AppAdmin::config();
+        $config = Application::getInstance()->config();
         if ($config['fichiers']['stockage'] != 'file') {
             $io->error('Votre instance ne stocke pas les fichiers dans le système de fichiers');
             return Command::FAILURE;

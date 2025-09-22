@@ -6,7 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Mission\Controller\PrimeController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 
 return [
@@ -111,7 +111,7 @@ return [
                     'paramsInject'        => [
                         'intervenant',
                     ],
-                    'workflow-etape-code' => WfEtape::CODE_MISSION_PRIME,
+                    'workflow-etape-code' => WorkflowEtape::MISSION_PRIME,
                     'withtarget'          => true,
                     'resource'            => PrivilegeController::getResourceId(Controller\PrimeController::class, 'index'),
                     'order'               => 14,

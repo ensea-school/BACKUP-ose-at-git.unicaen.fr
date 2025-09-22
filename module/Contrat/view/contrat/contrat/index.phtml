@@ -6,6 +6,7 @@ use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TypeContrat;
 use Intervenant\Entity\Db\Intervenant;
 use Contrat\Entity\Db\TblContrat;
+use Workflow\Entity\Db\WorkflowEtape;
 
 /**
  * @var PhpRenderer        $this
@@ -82,7 +83,20 @@ echo $this->messenger() ?>
                             </a>
                         <?php else:
                             try {
-                                echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Workflow\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
+                                $workflowService = \Framework\Application\Application::getInstance()->container()->get(\Workflow\Service\WorkflowService::class);
+                                $feuilleDeRoute = $workflowService->getFeuilleDeRoute($intervenant, $structure);
+                                $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
+                                if ($wfEtape && $wfEtape->whyNonAtteignable){
+
+                                    foreach ($wfEtape->whyNonAtteignable as $raison) {
+                                        ?>
+                                        <div class="alert alert-danger alert-dismissible" role="alert">
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <?= $raison ?>
+                                        </div>
+                                        <?php
+                                    }
+                                }
                             } catch (\Exception $e) {
                                 echo "Ces heures ne peuvent pas être contractualisées";
                             }
@@ -128,7 +142,7 @@ echo $this->messenger() ?>
 <?php endif; ?>
 
 <hr/>
-<?= $this->feuilleDeRoute($intervenant)->renderNav(\Workflow\Entity\Db\WfEtape::CODE_CONTRAT); ?>
+<?= $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => WorkflowEtape::CONTRAT]); ?>
 
 <script>
     $("body").on("envoi-mail-contrat", function (event, data) {

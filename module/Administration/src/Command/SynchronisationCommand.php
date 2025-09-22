@@ -3,7 +3,7 @@
 namespace Administration\Command;
 
 use Application\Service\Traits\AffectationServiceAwareTrait;
-use Doctrine\Common\Cache\FilesystemCache;
+use Framework\Application\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,10 +36,10 @@ class SynchronisationCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $io->title($this->getDescription());
-        if (\AppAdmin::inMaintenance()) {
+        if (Application::getInstance()->inMaintenance()) {
             $io->writeln("OSE est en maintenance. La synchronisation est coupée pendant ce temps");
             return Command::FAILURE;
-        } elseif (\AppAdmin::config()['maintenance']['desactivationSynchronisation'] ?? false) {
+        } elseif (Application::getInstance()->config()['maintenance']['desactivationSynchronisation'] ?? false) {
             $io->writeln("La synchronisation est désactivée");
             return Command::FAILURE;
         } else {
@@ -54,20 +54,11 @@ class SynchronisationCommand extends Command
             $io->writeln("Fin du job '" . $job . "'");
             //Suppresion du cache des affectations
             $io->writeln("Suppression du cache doctrine des affectations");
+            RoleService::clearSession();
             $this->getServiceAffectation()->deleteCacheAffectation();
         }
 
         return Command::SUCCESS;
-    }
-
-    /**
-     * @param FilesystemCache $doctrineCache
-     */
-    public function setDoctrineCache(FilesystemCache $doctrineCache)
-    {
-        $this->doctrineCache = $doctrineCache;
-
-        return $this;
     }
 
 }

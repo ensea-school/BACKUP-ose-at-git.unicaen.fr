@@ -71,7 +71,7 @@ class AgrementService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
@@ -81,7 +81,7 @@ class AgrementService extends AbstractEntityService
 
 
 
-    public function getExportCsvData(Annee $annee, Structure $structure = null)
+    public function getExportCsvData(Annee $annee, ?Structure $structure = null)
     {
         $params = ['annee' => $annee->getId()];
 

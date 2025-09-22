@@ -8,7 +8,7 @@
 $c = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 $bdd = $container->get(\Unicaen\BddAdmin\Bdd::class);
 
-$ptbl = $c->getTableauBord('paiement');
+$ptbl = $c->getTableauBord(\Application\Provider\Tbl\TblProvider::PAIEMENT);
 
 
 $params = [

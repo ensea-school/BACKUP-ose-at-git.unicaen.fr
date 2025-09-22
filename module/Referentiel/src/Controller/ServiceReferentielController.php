@@ -4,6 +4,7 @@ namespace Referentiel\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
@@ -198,16 +199,16 @@ class ServiceReferentielController extends AbstractController
 
     private function updateTableauxBord (Intervenant $intervenant, ?TypeVolumeHoraire $typeVolumeHoraire=null, bool $validation = false)
     {
-        $tbls = ['formule', 'validation_referentiel', 'referentiel'];
+        $tbls = [TblProvider::FORMULE, TblProvider::VALIDATION_REFERENTIEL, TblProvider::REFERENTIEL];
         if ($typeVolumeHoraire && $typeVolumeHoraire->isRealise()){
             if ($validation){
-                $tbls[] = 'paiement';
+                $tbls[] = TblProvider::PAIEMENT;
             }
         }else{
             if ($validation) {
-                $tbls[] = 'contrat';
+                $tbls[] = TblProvider::CONTRAT;
             }else{
-                $tbls[] = 'piece_jointe_fournie';
+                $tbls[] = TblProvider::PIECE_JOINTE;
             }
         }
 

@@ -133,7 +133,7 @@ return [
          * exemple si le login 'lecluse' est autorisé à usurper, il peut se connecter en tant que Pascal Durand
          * à l'aide de son login 'durandp' en entrant comme identifiant 'lecluse=durandp' et comme mot de passe celui de 'lecluse'
          */
-        'autorisationsUrsurpation'     => [],
+        'autorisationsUsurpation'     => [],
 
         /* IP ou nom DNS de la machine hébergeant le serveur LDAP. */
         'host'                         => 'ldap.votre-etablissement.fr',
@@ -286,7 +286,6 @@ return [
         /* Répertoire de travail utilisé à la fois par OSE et par le service Unoconv */
         'tmp-dir' => __DIR__ . '/cache/', // par défaut dans le répertoire cache de OSE
     ],
-
 
 
     /* Fichiers */
@@ -567,52 +566,4 @@ return [
         ],
         'etapes' => ['FORMATION'],
     ],
-
-    //Configuration pour la signature électronique
-    'unicaen-signature' => [
-
-            //Activation des logs pour la signature électronique
-            'log' => true,
-
-            //Ce paramètre permet de tester la signature electronique avec un ou des utilisateurs précis
-            //Si il est renseigné le ou les signataires seront toujours ceux là et non les intervenants OSE
-            'hook_recipients' => [
-                ['firstname' => 'Jean',
-                 'lastname'  => 'Dupont',
-                 'email'     => 'xxxxxxxx@yyyyyyyyy.fr',],
-                ['firstname' => 'John',
-                 'lastname'  => 'Doe',
-                 'email'     => 'xxxxxxxx@yyyyyyyyy.fr',],
-            ],
-
-            //Paramètrage du parapheur Esup, seul parapheur disponible pour le moment
-            'letterfiles' =>
-            [
-                [
-
-                    'label'       => 'ESUP signature',
-                    'name'        => 'esup',
-                    'default'     => true,
-                    'class'       => \UnicaenSignature\Strategy\Letterfile\Esup\EsupLetterfileStrategy::class,
-                    'description' => 'Esup',
-                    /*Niveau de signature que vous souhaitez activer*/
-                    'levels'      => [
-                        'visa_hidden' => 'hiddenVisa',
-                        'visa_visual' => 'visa',
-                        'sign_visual' => 'pdfImageStamp',
-                        'sign_certif' => 'certSign',
-                        'sign_eidas'  => 'nexuSign',
-
-                    ],
-                    //URL esup et Utilisateur ESUP avec lequel les demandes de signatures seront envoyées
-                    'config'      => [
-
-                        'url'           => "https://xxxx.fr",
-                        'createdByEppn' => 'xxxxxxxx@yyyyyyyyy.fr',
-                    ],
-                ],
-            ],
-
-
-        ],
 ];

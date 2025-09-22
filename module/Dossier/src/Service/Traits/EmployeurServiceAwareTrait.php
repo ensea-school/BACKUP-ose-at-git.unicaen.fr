@@ -32,7 +32,7 @@ trait EmployeurServiceAwareTrait
     public function getServiceEmployeur(): ?EmployeurService
     {
         if (empty($this->serviceEmployeur)) {
-            $this->serviceEmployeur = \AppAdmin::container()->get(EmployeurService::class);
+            $this->serviceEmployeur = \Framework\Application\Application::getInstance()->container()->get(EmployeurService::class);
         }
 
         return $this->serviceEmployeur;

@@ -32,7 +32,7 @@ trait PrivilegeServiceAwareTrait
     public function getServicePrivilege(): ?PrivilegeService
     {
         if (empty($this->servicePrivilege)) {
-            $this->servicePrivilege = \AppAdmin::container()->get(PrivilegeService::class);
+            $this->servicePrivilege = \Framework\Application\Application::getInstance()->container()->get(PrivilegeService::class);
         }
 
         return $this->servicePrivilege;

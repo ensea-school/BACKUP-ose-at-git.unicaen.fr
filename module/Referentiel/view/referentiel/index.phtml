@@ -1,7 +1,7 @@
 <?php
 
 use Service\Entity\Db\TypeVolumeHoraire;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
@@ -12,10 +12,10 @@ use Workflow\Entity\Db\WfEtape;
 
 
 if ($typeVolumeHoraire->isPrevu()) {
-    $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+    $wfEtape = WorkflowEtape::REFERENTIEL_SAISIE;
     $title     = 'Référentiel';
 } else {
-    $nextEtape = WfEtape::CODE_SERVICE_SAISIE_REALISE;
+    $wfEtape = WorkflowEtape::REFERENTIEL_SAISIE_REALISE;
     $title     = 'Constatation du référentiel réalisé';
 }
 
@@ -30,18 +30,4 @@ echo $ref;
 
 echo '<hr />';
 
-echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
-?>
-<script>
-    /*
-        $(function () {
-            WidgetInitializer.includeJs(unicaenVue.url('js/service-referentiel.js'));
-
-            $('.referentiels').referentiels({
-                'heures-change': function () {
-
-                }
-            });
-        });
-    */
-</script>
+echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);

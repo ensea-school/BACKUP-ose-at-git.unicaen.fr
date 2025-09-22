@@ -32,7 +32,7 @@ trait TblAgrementServiceAwareTrait
     public function getServiceTblAgrement(): ?TblAgrementService
     {
         if (empty($this->serviceTblAgrement)) {
-            $this->serviceTblAgrement = \AppAdmin::container()->get(TblAgrementService::class);
+            $this->serviceTblAgrement = \Framework\Application\Application::getInstance()->container()->get(TblAgrementService::class);
         }
 
         return $this->serviceTblAgrement;

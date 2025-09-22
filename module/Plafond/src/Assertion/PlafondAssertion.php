@@ -25,7 +25,7 @@ class PlafondAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController($controller, $action = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -50,7 +50,7 @@ class PlafondAssertion extends AbstractAssertion
 
 
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
         $role = $this->getRole();
 
@@ -79,7 +79,7 @@ class PlafondAssertion extends AbstractAssertion
 
 
 
-    protected function assertIntervenant($role, Intervenant $intervenant)
+    protected function assertIntervenant($role, Intervenant $intervenant): bool
     {
         if ($intervenant->getStructure()) {
             return $this->assertStructure($role, $intervenant->getStructure());

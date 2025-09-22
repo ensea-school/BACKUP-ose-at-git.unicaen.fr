@@ -22,7 +22,7 @@ class TypeInterventionAssertion extends AbstractAssertion
     use ContextServiceAwareTrait;
     use ParametresServiceAwareTrait;
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
         $role = $this->getRole();
         // Si le rôle n'est pas renseigné alors on s'en va...
@@ -45,14 +45,14 @@ class TypeInterventionAssertion extends AbstractAssertion
 
 
 
-    protected function assertTypeInterventionStructureSaisie(Role $role, TypeInterventionStructure $tis)
+    protected function assertTypeInterventionStructureSaisie(Role $role, TypeInterventionStructure $tis): bool
     {
         return $this->assertStructureSaisie($role, $tis->getStructure());
     }
 
 
 
-    protected function assertStructureSaisie(Role $role, Structure $structure)
+    protected function assertStructureSaisie(Role $role, Structure $structure): bool
     {
         if ($rs = $role->getStructure()) {
             return $structure->inStructure($rs);

@@ -68,9 +68,9 @@ FROM
   LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' OR ti.code = 'E' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
 WHERE
   1=1
-  /*@INTERVENANT_ID=fr.intervenant_id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@SERVICE_ID=frvh.service_id*/
+  /*@intervenant_id=fr.intervenant_id*/
+  /*@annee_id=i.annee_id*/
+  /*@service_id=frvh.service_id*/
 
 UNION ALL
 
@@ -123,9 +123,9 @@ FROM
 WHERE
   mep.histo_destruction IS NULL
   AND frvh.id IS NULL
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
-  /*@SERVICE_ID=s.id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
+  /*@service_id=s.id*/
 
 UNION ALL
 
@@ -183,9 +183,9 @@ FROM
   LEFT JOIN STRUCTURE                        str ON str.id = CASE WHEN ccp.valeur = 'enseignement' OR ti.code = 'E' THEN sr.structure_id ELSE i.structure_id END
 WHERE
    1=1
-   /*@INTERVENANT_ID=i.id*/
-   /*@ANNEE_ID=i.annee_id*/
-   /*@SERVICE_REFERENTIEL_ID=frsr.service_referentiel_id*/
+   /*@intervenant_id=i.id*/
+   /*@annee_id=i.annee_id*/
+   /*@service_referentiel_id=frsr.service_referentiel_id*/
 
 UNION ALL
 
@@ -237,8 +237,8 @@ FROM
 WHERE
   mep.histo_destruction IS NULL
   AND frvh.id IS NULL
-  /*@INTERVENANT_ID=i.id*/
-  /*@ANNEE_ID=i.annee_id*/
+  /*@intervenant_id=i.id*/
+  /*@annee_id=i.annee_id*/
   /*@SERVICE_ID=s.id*/
 
 UNION ALL
@@ -302,8 +302,8 @@ FROM
   LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' OR ti.code = 'E' THEN COALESCE( m.structure_id, i.structure_id ) ELSE i.structure_id END
 WHERE
   tm.valide = 1
-  /*@ANNEE_ID=tm.annee_id*/
-  /*@INTERVENANT_ID=tm.intervenant_id*/
+  /*@annee_id=tm.annee_id*/
+  /*@intervenant_id=tm.intervenant_id*/
   /*@MISSION_ID=tm.mission_id*/
   AND (vhm.auto_validation = 1 OR v.id IS NOT NULL)
 

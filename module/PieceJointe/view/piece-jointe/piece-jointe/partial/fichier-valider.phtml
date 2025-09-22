@@ -1,0 +1,16 @@
+<?php
+/**
+ * @var string $url Url de validation du fichier
+ */
+
+
+?>
+
+<?php if ($url): ?>
+
+    <!-- lien de suppression du fichier -->
+    <a  class="valide-file btn btn-sm btn-success"
+        href="<?php echo $url ?>"
+        title="Valider le fichier déposé"
+        data-loading-text="Patientez..."><i class="fas fa-thumbs-up"></i></a>
+<?php endif; ?>

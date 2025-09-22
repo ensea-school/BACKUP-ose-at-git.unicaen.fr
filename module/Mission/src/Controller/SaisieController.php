@@ -4,6 +4,7 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\JsonModel;
@@ -321,8 +322,8 @@ class SaisieController extends AbstractController
     private function updateTableauxBord(Mission $mission)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'mission',
-            'contrat',
+            TblProvider::MISSION,
+            TblProvider::CONTRAT,
         ], $mission->getIntervenant());
     }
 }

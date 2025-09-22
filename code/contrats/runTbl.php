@@ -53,4 +53,4 @@ $tbl->setOnAction(function (Event $event) use ($io, $progresBar) {
     }
 });
 
-$tbl->calculer('contrat', $params);
+$tbl->calculer(\Application\Provider\Tbl\TblProvider::CONTRAT, $params);

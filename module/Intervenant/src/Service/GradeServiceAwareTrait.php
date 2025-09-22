@@ -30,7 +30,7 @@ trait GradeServiceAwareTrait
     public function getServiceGrade(): ?GradeService
     {
         if (empty($this->serviceGrade)) {
-            $this->serviceGrade = \AppAdmin::container()->get(GradeService::class);
+            $this->serviceGrade = \Framework\Application\Application::getInstance()->container()->get(GradeService::class);
         }
 
         return $this->serviceGrade;

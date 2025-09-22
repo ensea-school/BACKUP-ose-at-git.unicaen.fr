@@ -7,7 +7,7 @@ use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use UnicaenPrivilege\Assertion\AssertionFactory;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 
 
 return [
@@ -170,6 +170,19 @@ return [
     'navigation' => [
         'intervenant' => [
             'pages' => [
+                /*'enseignements-prevus'   => [
+                    'label'               => "Enseignements prévisionnels",
+                    'title'               => "Enseignements prévisionnels de l'intervenant",
+                    'route'               => 'intervenant/enseignement-prevu',
+                    'paramsInject'        => [
+                        'intervenant',
+                    ],
+                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE,
+                    'withtarget'          => true,
+                    'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-prevu'),
+                    'visible'             => Assertion\EnseignementAssertion::class,
+                    'order'               => 6,
+                ],*/
                 'validation-enseignement-prevu'   => [
                     'label'               => "Validation des enseignements prévisionnels",
                     'title'               => "Validation des enseignements prévisionnels de l'intervenant",
@@ -177,11 +190,25 @@ return [
                     'paramsInject'        => [
                         'intervenant',
                     ],
-                    'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION,
+                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_VALIDATION,
                     'withtarget'          => true,
                     'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 8,
                 ],
+
+                /*'enseignements-realises' => [
+                    'label'               => "Enseignements réalisés",
+                    'title'               => "Constatation des enseignements réalisés",
+                    'route'               => 'intervenant/enseignement-realise',
+                    'paramsInject'        => [
+                        'intervenant',
+                    ],
+                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE,
+                    'withtarget'          => true,
+                    'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-realise'),
+                    'visible'             => Assertion\EnseignementAssertion::class,
+                    'order'               => 13,
+                ],*/
                 'validation-enseignement-realise' => [
                     'label'               => "Validation des enseignements réalisés",
                     'title'               => "Validation des enseignements réalisés de l'intervenant",
@@ -189,7 +216,7 @@ return [
                     'paramsInject'        => [
                         'intervenant',
                     ],
-                    'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION_REALISE,
+                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE,
                     'withtarget'          => true,
                     'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 14,

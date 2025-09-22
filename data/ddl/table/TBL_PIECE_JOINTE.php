@@ -9,7 +9,7 @@ return [
     'commentaire' => 'Pièces justificatives',
     'sequence'    => 'TBL_PIECE_JOINTE_ID_SEQ',
     'columns'     => [
-        'ANNEE_ID'             => [
+        'ANNEE_ID'                   => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,31 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'DEMANDEE'             => [
+        'DATE_ORIGINE'               => [
+            'name'        => 'DATE_ORIGINE',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => '0',
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
+        'DATE_VALIDITEE'             => [
+            'name'        => 'DATE_VALIDITEE',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => '0',
+            'position'    => 11,
+            'commentaire' => NULL,
+        ],
+        'DEMANDEE'                   => [
             'name'        => 'DEMANDEE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +57,19 @@ return [
             'position'    => 6,
             'commentaire' => 'Témoin (1 si la PJ est demandée)',
         ],
-        'FOURNIE'              => [
+        'DEMANDEE_APRES_RECRUTEMENT' => [
+            'name'        => 'DEMANDEE_APRES_RECRUTEMENT',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 12,
+            'commentaire' => 'PIECE DEMANDE APRES RECRUTEMENT',
+        ],
+        'FOURNIE'                    => [
             'name'        => 'FOURNIE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -45,19 +81,7 @@ return [
             'position'    => 7,
             'commentaire' => 'Témoin (1 si la PJ est fournie)',
         ],
-        'HEURES_POUR_SEUIL'    => [
-            'name'        => 'HEURES_POUR_SEUIL',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 9,
-            'commentaire' => 'NB d\'heures de seuil pour la demande',
-        ],
-        'ID'                   => [
+        'ID'                         => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +93,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'       => [
+        'INTERVENANT_ID'             => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -81,7 +105,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'OBLIGATOIRE'          => [
+        'OBLIGATOIRE'                => [
             'name'        => 'OBLIGATOIRE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -90,10 +114,10 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 10,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
-        'PIECE_JOINTE_ID'      => [
+        'PIECE_JOINTE_ID'            => [
             'name'        => 'PIECE_JOINTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -105,7 +129,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'TYPE_PIECE_JOINTE_ID' => [
+        'TYPE_PIECE_JOINTE_ID'       => [
             'name'        => 'TYPE_PIECE_JOINTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -117,7 +141,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'VALIDEE'              => [
+        'VALIDEE'                    => [
             'name'        => 'VALIDEE',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',

@@ -15,7 +15,7 @@ WITH i_h AS (
     JOIN element_pedagogique  ep ON ep.id = s.element_pedagogique_id -- Service sur l'établissement
   WHERE
     s.histo_destruction IS NULL
-    /*@INTERVENANT_ID=s.intervenant_id*/
+    /*@intervenant_id=s.intervenant_id*/
   GROUP BY
     s.intervenant_id
 ),
@@ -36,10 +36,9 @@ SELECT i.annee_id                        annee_id,
        i.code                            code_intervenant,
        i.id                              intervenant_id,
        tpj.id                            type_piece_jointe_id,
-       MAX(COALESCE(i_h.heures, 0))      heures_pour_seuil,
-       MAX(tpjs.obligatoire)             obligatoire,
-       MAX(COALESCE(hetd.total_hetd, 0)) heures_pour_seuil_hetd,
-       MIN(tpjs.duree_vie)               duree_vie
+       MAX(tpjs.obligatoire) 					obligatoire,
+       MIN(tpjs.duree_vie) 				 	duree_vie,
+       MAX(tpjs.demandee_apres_recrutement)	demandee_apres_recrutement
 FROM intervenant i
          LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
          JOIN type_piece_jointe_statut tpjs
@@ -48,8 +47,8 @@ FROM intervenant i
          LEFT JOIN i_h ON i_h.intervenant_id = i.id
          LEFT JOIN hetd ON hetd.intervenant_id = i.id
 WHERE i.histo_destruction IS NULL
-    /*@INTERVENANT_ID=i.id*/
-    /*@ANNEE_ID=i.annee_id*/
+    /*@intervenant_id=i.id*/
+    /*@annee_id=i.annee_id*/
 
   -- Seuil heure soit en HETD soit en heure ou PJ obligatoire meme avec des heures non payables
   AND (
@@ -82,9 +81,10 @@ WHERE i.histo_destruction IS NULL
       END = 1
   -- Filtre FC
   AND (tpjs.fc = 0 OR i_h.fc > 0)
--- Filtre FA
+  -- Filtre FA
   AND (tpjs.fa = 0 OR i_h.fa > 0)
-GROUP BY i.annee_id,
-         i.id,
-         i.code,
-         tpj.id
+GROUP BY
+  	i.annee_id,
+  	i.id,
+  	i.code,
+  	tpj.id

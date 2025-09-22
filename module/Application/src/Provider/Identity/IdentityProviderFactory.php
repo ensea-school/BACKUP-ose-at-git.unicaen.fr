@@ -3,6 +3,7 @@
 namespace Application\Provider\Identity;
 
 use Application\Service\ContextService;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -20,11 +21,11 @@ class IdentityProviderFactory
      *
      * @return object
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $identityProvider = new IdentityProvider;
 
-        $identityProvider->setEntityManager($container->get(\Application\Constants::BDD));
+        $identityProvider->setEntityManager($container->get(EntityManager::class));
         $identityProvider->setServiceContext($container->get(ContextService::class));
         $identityProvider->setHostLocalization($container->get('HostLocalization'));
 

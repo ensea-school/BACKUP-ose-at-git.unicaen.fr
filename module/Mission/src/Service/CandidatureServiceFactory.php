@@ -2,7 +2,7 @@
 
 namespace Mission\Service;
 
-use Application\Constants;
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 use UnicaenMail\Service\Mail\MailService;
 
@@ -28,7 +28,7 @@ class CandidatureServiceFactory
         $mailService = $container->get(MailService::class);
         $service     = new CandidatureService();
         $service->setMailService($mailService);
-        $service->setEntityManager($container->get(Constants::BDD));
+        $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */
 

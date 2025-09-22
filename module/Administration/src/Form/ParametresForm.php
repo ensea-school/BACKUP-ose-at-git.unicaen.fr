@@ -20,7 +20,6 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
 use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
-use Workflow\Service\WfEtapeServiceAwareTrait;
 
 
 /**
@@ -38,7 +37,6 @@ class ParametresForm extends AbstractForm
     use StructureServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
     use FormuleServiceAwareTrait;
-    use WfEtapeServiceAwareTrait;
     use SignatureConfigurationServiceAwareTrait;
 
 
@@ -576,18 +574,6 @@ class ParametresForm extends AbstractForm
                        ],
                        'attributes' => [
                            'rows' => 12,
-                       ],
-                   ]);
-
-        $this->add([
-                       'type'       => 'Select',
-                       'name'       => 'export_rh_franchissement',
-                       'options'    => [
-                           'value_options' => Util::collectionAsOptions($this->getServiceWfEtape()->getList()),
-                       ],
-                       'attributes' => [
-                           'class'            => 'selectpicker',
-                           'data-live-search' => 'true',
                        ],
                    ]);
 

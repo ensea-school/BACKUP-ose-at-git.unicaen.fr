@@ -2,6 +2,7 @@
 
 namespace Administration\Command;
 
+use Application\Provider\Tbl\TblProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -63,7 +64,7 @@ class CalculTableauxBordCommand extends Command
 
             return Command::SUCCESS;
         }else{
-            $result = $this->getServiceTableauBord()->calculerTout(['formule']);
+            $result = $this->getServiceTableauBord()->calculerTout([TblProvider::FORMULE]);
 
             $io->comment('Fin du calcul des tableaux de bord');
             if ($result) {

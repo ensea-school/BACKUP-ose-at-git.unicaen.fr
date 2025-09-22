@@ -17,4 +17,4 @@ $params = [
     'STATUT_ID' => 744,
     'ANNEE_ID'  => 2023,
 ];
-$sTbl->calculer('formule', $params);
+$sTbl->calculer(\Application\Provider\Tbl\TblProvider::FORMULE, $params);

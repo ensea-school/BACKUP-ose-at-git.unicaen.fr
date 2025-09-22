@@ -36,15 +36,9 @@ $dossierIdentite = $form->get('DossierIdentite');
             <?= $this->formControlGroup($dossierIdentite->get('nomUsuel')); ?>
             <?= $this->formControlGroup($dossierIdentite->get('nomPatronymique')); ?>
             <?= $this->formControlGroup($dossierIdentite->get('prenom')); ?>
+            <?= $this->formControlGroup($dossierIdentite->get('dateNaissance')); ?>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($dossierIdentite->get('situationMatrimoniale')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($dossierIdentite->get('dateSituationMatrimoniale')); ?>
-                </div>
-            </div>
+
 
 
         </div>

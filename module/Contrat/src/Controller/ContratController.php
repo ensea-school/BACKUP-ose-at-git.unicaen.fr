@@ -6,6 +6,7 @@ use Administration\Entity\Db\Parametre;
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
@@ -636,8 +637,8 @@ class ContratController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $errors = $this->getServiceWorkflow()->calculerTableauxBord([
-                                                                        'formule',
-                                                                        'contrat',
+                                                                        TblProvider::FORMULE,
+                                                                        TblProvider::CONTRAT,
                                                                     ], $intervenant);
         if (!empty($errors)) {
             foreach ($errors as $error) {

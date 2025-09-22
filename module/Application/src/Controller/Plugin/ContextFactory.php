@@ -2,6 +2,7 @@
 
 namespace Application\Controller\Plugin;
 
+use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -12,11 +13,11 @@ use Psr\Container\ContainerInterface;
 class ContextFactory
 {
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $context = new Context();
 
-        $context->setEntityManager($container->get(\Application\Constants::BDD));
+        $context->setEntityManager($container->get(EntityManager::class));
 
         return $context;
     }

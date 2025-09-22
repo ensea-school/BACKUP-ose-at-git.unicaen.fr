@@ -4,6 +4,7 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Intervenant\Entity\Db\Intervenant;
@@ -18,8 +19,7 @@ use Mission\Service\OffreEmploiServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
-use Workflow\Entity\Db\WfEtape;
-use Workflow\Entity\WorkflowEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -289,8 +289,8 @@ class  OffreEmploiController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-                                                              'candidature',
-                                                              'mission',
+                                                              TblProvider::CANDIDATURE,
+                                                              TblProvider::MISSION,
                                                           ], $intervenant);
     }
 
@@ -328,10 +328,13 @@ class  OffreEmploiController extends AbstractController
         $renseignerDonneesPersonnelles = false;
         $canValiderCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
         $canRefuserCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_REFUSER);
-        $etapeDonneesPersos            = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
+
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+
+        $etapeDonneesPersos            = $feuilleDeRoute->get(WorkflowEtape::DONNEES_PERSO_SAISIE);
         if(!empty($etapeDonneesPersos))
         {
-            $renseignerDonneesPersonnelles = ($etapeDonneesPersos->getFranchie() == 1) ? false : true;
+            $renseignerDonneesPersonnelles = !$etapeDonneesPersos->isFranchie();
         }
 
         if (!$intervenant) {

@@ -30,7 +30,7 @@ trait AdresseNumeroComplServiceAwareTrait
     public function getServiceAdresseNumeroCompl(): ?AdresseNumeroComplService
     {
         if (empty($this->serviceAdresseNumeroCompl)) {
-            $this->serviceAdresseNumeroCompl = \AppAdmin::container()->get(AdresseNumeroComplService::class);
+            $this->serviceAdresseNumeroCompl = \Framework\Application\Application::getInstance()->container()->get(AdresseNumeroComplService::class);
         }
 
         return $this->serviceAdresseNumeroCompl;

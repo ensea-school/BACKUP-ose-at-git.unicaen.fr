@@ -55,7 +55,7 @@ class DomaineFonctionnelService extends AbstractEntityService
      * @param string|null $alias
      * @return \Paiement\Entity\Db\DomaineFonctionnel[]
      */
-    public function getList(QueryBuilder $qb = null, $alias = null)
+    public function getList(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");

@@ -3,6 +3,7 @@
 namespace Chargens\Service;
 
 use Application\Provider\Privilege\Privileges;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -155,8 +156,8 @@ class SeuilChargeService extends AbstractEntityService
             'TYPE_INTERVENTION_ID' => $entity->getTypeIntervention()->getId(),
         ];
 
-        $this->getServiceTableauBord()->calculer('chargens_seuils_def', $params);
-        $this->getServiceTableauBord()->calculer('chargens', $params);
+        $this->getServiceTableauBord()->calculer(TblProvider::CHARGENS_SEUILS_DEF, $params);
+        $this->getServiceTableauBord()->calculer(TblProvider::CHARGENS, $params);
 
         return $entity;
     }
@@ -350,7 +351,7 @@ class SeuilChargeService extends AbstractEntityService
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

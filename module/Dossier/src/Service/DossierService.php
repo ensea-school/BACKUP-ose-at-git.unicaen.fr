@@ -173,7 +173,7 @@ class DossierService extends AbstractEntityService
     {
         $validation        = null;
         $serviceValidation = $this->getServiceValidation();
-        $qb                = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
+        $qb                = $serviceValidation->finderByType(TypeValidation::DONNEES_PERSO);
         $serviceValidation->finderByHistorique($qb);
         $serviceValidation->finderByIntervenant($intervenant, $qb);
         $validations = $serviceValidation->getList($qb);

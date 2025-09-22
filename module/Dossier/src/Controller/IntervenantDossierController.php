@@ -4,9 +4,11 @@ namespace Dossier\Controller;
 
 use Application\Constants;
 use Application\Controller\AbstractController;
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use DoctrineORMModule\Proxy\__CG__\Intervenant\Entity\Db\Statut;
+use Dossier\Entity\Db\IntervenantDossier;
+use Intervenant\Entity\Db\Statut;
 use Dossier\Form\Traits\AutresFormAwareTrait;
 use Dossier\Form\Traits\IntervenantDossierFormAwareTrait;
 use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
@@ -19,7 +21,8 @@ use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
-use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\Validation;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -42,18 +45,18 @@ class IntervenantDossierController extends AbstractController
     use ImportProcessusAwareTrait;
 
 
-    protected function initFilters ()
+    protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Intervenant\Entity\Db\Intervenant::class,
-            \Workflow\Entity\Db\Validation::class,
-            \Dossier\Entity\Db\IntervenantDossier::class,
+            Intervenant::class,
+            Validation::class,
+            IntervenantDossier::class,
         ]);
     }
 
 
 
-    public function indexAction ()
+    public function indexAction()
     {
         $this->initFilters();
 
@@ -72,7 +75,10 @@ class IntervenantDossierController extends AbstractController
             //$this->em()->refresh($intervenantDossier);
             $tblDossier = $intervenantDossier->getTblDossier();
         }
-        $lastCompleted = (!empty($tblDossier)) ? $tblDossier->getCompletude() : '';
+
+        //Ici on récupére le workflo pour savoir à quelle étape des données personnelles on se trouve
+        $lastCompleted = (!empty($tblDossier)) ? $tblDossier->getCompletudeAvantRecrutement() : '';
+
 
         /* Initialisation du formulaire */
         $form = $this->getFormIntervenantIntervenantDossier()->setIntervenant($intervenant)->initForm();
@@ -99,14 +105,15 @@ class IntervenantDossierController extends AbstractController
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());
                 $this->em()->refresh($intervenantDossier);
                 $tblDossier    = $intervenantDossier->getTblDossier();
-                $lastCompleted = $tblDossier->getCompletude();
+                $lastCompleted = $tblDossier->getCompletudeAvantRecrutement();
 
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
                 //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
 
-                if (!$lastCompleted && $tblDossier->getCompletude() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
-                    $nextEtape = $this->getServiceWorkflow()->getNextEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
-                    if ($nextEtape && $url = $nextEtape->getUrl()) {
+                if (!$lastCompleted && $tblDossier->getCompletudeAvantRecrutement() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
+                    $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($role->getIntervenant());
+                    $nextEtape = $feuilleDeRoute->getNext(WorkflowEtape::DONNEES_PERSO_SAISIE);
+                    if ($nextEtape && $url = $nextEtape->url) {
                         return $this->redirect()->toUrl($url);
                     }
                 }
@@ -136,7 +143,8 @@ class IntervenantDossierController extends AbstractController
             $hetd = Util::formattedFloat(
                 $lastHETD,
                 \NumberFormatter::DECIMAL,
-                2);
+                2
+            );
             $this->flashMessenger()->addInfoMessage(
                 $role->getIntervenant() ?
                     sprintf("Vous avez effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
@@ -160,7 +168,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function changeStatutDossierAction ()
+    public function changeStatutDossierAction()
     {
         if ($this->getRequest()->isPost()) {
             $data        = $this->getRequest()->getPost();
@@ -201,8 +209,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function validerAction ()
+    public function validerAction()
     {
         $this->initFilters();
 
@@ -227,8 +234,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function devaliderAction ()
+    public function devaliderAction()
     {
         $this->initFilters();
 
@@ -248,8 +254,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function supprimerAction ()
+    public function supprimerAction()
     {
         $this->initFilters();
 
@@ -270,8 +275,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function differencesAction ()
+    public function differencesAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -299,8 +303,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function purgerDifferencesAction ()
+    public function purgerDifferencesAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -310,8 +313,9 @@ class IntervenantDossierController extends AbstractController
                 $this->getServiceDossier()->purgerDonneesPersoModif($intervenant, $utilisateur);
 
                 $this->flashMessenger()->addSuccessMessage(sprintf(
-                    "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
-                    $intervenant));
+                                                               "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
+                                                               $intervenant
+                                                           ));
 
                 $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
             } catch (\Exception $e) {
@@ -326,12 +330,11 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    private
-    function updateTableauxBord (Intervenant $intervenant, $validation = false)
+    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'dossier',
-            'piece_jointe_demande',
-        ], $intervenant);
+                                                              TblProvider::DOSSIER,
+                                                              TblProvider::PIECE_JOINTE,
+                                                          ], $intervenant);
     }
 }

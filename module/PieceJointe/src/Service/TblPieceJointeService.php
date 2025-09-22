@@ -12,6 +12,7 @@ use PieceJointe\Entity\Db\TblPieceJointe;
 use UnicaenVue\View\Model\AxiosModel;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WfEtape;
+use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
@@ -155,24 +156,24 @@ class TblPieceJointeService extends AbstractEntityService
 
     protected function makeMessages(Intervenant $intervenant): array
     {
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
 
-        $workflowEtapePjSaisie = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_SAISIE, $intervenant);
-        $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_VALIDATION, $intervenant);
+        $workflowEtapePjSaisie = $feuilleDeRoute->get(WorkflowEtape::PJ_SAISIE);
+        $workflowEtapePjValide = $feuilleDeRoute->get(WorkflowEtape::PJ_VALIDATION);
         $msgs                  = [];
 
         if ($workflowEtapePjSaisie != null) {
-            if ($workflowEtapePjSaisie->getFranchie() != 1) {
-
+            if (!$workflowEtapePjSaisie->isFranchie()) {
                 $msg['type'] = 'danger';
                 $msg['text'] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
                 $msgs[]      = $msg;
                 unset($msg);
-            } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() == 1) {
+            } elseif ($workflowEtapePjSaisie->isFranchie() && $workflowEtapePjValide->isFranchie()) {
                 $msg['type'] = 'success';
                 $msg['text'] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
                 $msgs[]      = $msg;
                 unset($msg);
-            } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() != 1) {
+            } elseif ($workflowEtapePjSaisie->isFranchie() && !$workflowEtapePjValide->isFranchie()) {
                 $msg['type'] = 'success';
                 $msg['text'] = "Toutes les pièces justificatives obligatoires ont été fournies.";
                 $msgs[]      = $msg;

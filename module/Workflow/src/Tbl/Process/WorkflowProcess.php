@@ -357,7 +357,7 @@ class WorkflowProcess implements ProcessInterface
 
 
             // Pièces justificatives
-            [
+            [//DEMANDEE_APRES_RECRUTEMENT
                 'etapes' => [WorkflowEtape::PJ_SAISIE, WorkflowEtape::PJ_VALIDATION],
                 'sql'    => "CASE
     WHEN EXISTS(

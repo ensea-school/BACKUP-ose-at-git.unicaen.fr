@@ -226,7 +226,7 @@ class PieceJointeService extends AbstractEntityService
         $intervenant = $pj->getIntervenant();
 
 
-        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_PIECE_JOINTE);
+        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::PIECE_JOINTE);
         //On valide également tous les fichiers
         foreach ($pj->getFichier() as $fichier) {
             $this->getServiceFichier()->valider($fichier, $intervenant);

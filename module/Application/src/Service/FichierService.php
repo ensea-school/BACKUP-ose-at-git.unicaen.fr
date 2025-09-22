@@ -262,7 +262,7 @@ class FichierService extends AbstractEntityService
         $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $role->getStructure() ? $role->getStructure() : $intervenant->getStructure();
 
-        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_FICHIER);
+        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::FICHIER);
 
         $validation = $this->getServiceValidation()->newEntity($typeValidation);
         $validation->setIntervenant($intervenant);

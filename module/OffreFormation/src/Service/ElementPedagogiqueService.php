@@ -71,7 +71,7 @@ class ElementPedagogiqueService extends AbstractEntityService
             $term      = preg_replace('#\s{2,}#', ' ', trim($filters['term']));
             $criterion = explode(' ', $term);
 
-            $concat = "ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT";
+            $concat = "ep.code || ' ' || ep.libelle|| ' ' || e.Code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT";
             $parts  = $params = [];
             for ($i = 0; $i < count($criterion); $i++) {
                 $parts[]                  = "(UPPER(CONVERT($concat, 'US7ASCII')) LIKE UPPER(CONVERT(:criterionStr$i, 'US7ASCII'))) ";
@@ -118,12 +118,12 @@ select * from (
   select ep.id,
     rank() over (partition by ep.id order by cp.ordre) rang,
     count(*) over (partition by ep.id)                 nb_ch,
-    ep.code, ep.source_code, TRIM(ep.libelle) libelle,
+    ep.code, TRIM(ep.libelle) libelle,
     e.libelle libelle_etape, e.niveau,
     pe.libelle_long libelle_pe,
     gtf.libelle_court libelle_gtf,
     tf.libelle_long libelle_tf,
-    ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info,
+    ep.code || ' ' || ep.libelle|| ' ' || e.code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info,
     CASE WHEN tiep.element_pedagogique_id is NULL THEN 0 ELSE 1 END has_type_intervention
   from
     chemin_pedagogique cp

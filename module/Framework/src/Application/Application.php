@@ -4,6 +4,7 @@ namespace Framework\Application;
 
 use Exception;
 use Framework\Container\Container;
+use Framework\Router\Router;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\Stdlib\ArrayUtils;
 use Locale;
@@ -200,4 +201,24 @@ class Application
         $this->container->get('Application')->bootstrap($listeners);
     }
 
+
+
+    public function run(): void
+    {
+        $app = $this->container->get('Application');
+        $app->run();
+    }
+
+
+
+    public function run2(): void
+    {
+        if ($this->inCli()){
+            // mode web uniquement!!
+            return;
+        }
+
+        $mvc = new Mvc($this->container());
+        $mvc->start();
+    }
 }

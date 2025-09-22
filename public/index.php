@@ -3,8 +3,8 @@
 chdir(dirname(__DIR__));
 
 require 'vendor/autoload.php';
+require 'config/container.php';
 
-$container = require __DIR__ . '/../config/container.php';
+use Framework\Application\Application;
 
-$app = $container->get('Application');
-$app->run();
+Application::getInstance()->run();

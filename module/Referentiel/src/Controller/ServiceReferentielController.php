@@ -208,7 +208,7 @@ class ServiceReferentielController extends AbstractController
             if ($validation) {
                 $tbls[] = TblProvider::CONTRAT;
             }else{
-                $tbls[] = TblProvider::PIECE_JOINTE_FOURNIE;
+                $tbls[] = TblProvider::PIECE_JOINTE;
             }
         }
 

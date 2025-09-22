@@ -265,7 +265,7 @@ class EnseignementController extends AbstractController
         ], $intervenant);
 
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord([TblProvider::PIECE_JOINTE_DEMANDE, TblProvider::PIECE_JOINTE_FOURNIE], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord([TblProvider::PIECE_JOINTE], $intervenant);
         }
     }
 

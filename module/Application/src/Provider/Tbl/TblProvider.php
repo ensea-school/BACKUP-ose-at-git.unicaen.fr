@@ -11,8 +11,6 @@ class TblProvider
     const FORMULE                 = 'formule';
     const DMEP_LIQUIDATION        = 'dmep_liquidation';
     const CANDIDATURE             = 'candidature';
-    const PIECE_JOINTE_DEMANDE    = 'piece_jointe_demande';
-    const PIECE_JOINTE_FOURNIE    = 'piece_jointe_fournie';
     const AGREMENT                = 'agrement';
     const CLOTURE_REALISE         = 'cloture_realise';
     const MISSION                 = 'mission';

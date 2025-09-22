@@ -143,7 +143,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $workflowEtapePjValide = $feuilleDeRoute->get(WorkflowEtape::PJ_VALIDATION);
         $msgs                  = [];
 
-        if($workflowEtapePjSaisie != null){
+        if ($workflowEtapePjSaisie != null) {
             if (!$workflowEtapePjSaisie->isFranchie()) {
                 $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
             } elseif ($workflowEtapePjSaisie->isFranchie() && $workflowEtapePjValide->isFranchie()) {
@@ -152,7 +152,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
                 $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
                 $msgs['warning'][] = "Mais certaines doivent encore être validées par un gestionnaire.";
             }
-        }else{
+        } else {
             //Si aucune pièce n'est demandé mais que le workflow n'a pas été recalculé, on evite un message d'erreur
             $msgs['success'] = "";
         }
@@ -541,10 +541,10 @@ class PieceJointeController extends \Application\Controller\AbstractController
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            TblProvider::PIECE_JOINTE_FOURNIE,
-            TblProvider::AGREMENT,
-            TblProvider::CONTRAT,
-        ], $intervenant);
+                                                              TblProvider::PIECE_JOINTE,
+                                                              TblProvider::AGREMENT,
+                                                              TblProvider::CONTRAT,
+                                                          ], $intervenant);
 
         //Récupérer tous les intervenants avec le même code intervenant
         $intervenants = $this->getServiceIntervenant()->getIntervenants($intervenant);
@@ -552,7 +552,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         //On recalcule le tbl piece_jointe pour tous les intervenants ayant le même code intervenant que l'intervenant de l'année en cours
         foreach ($intervenants as $objectIntervenant) {
             $this->getServiceWorkflow()->calculerTableauxBord([
-                                                                  TblProvider::PIECE_JOINTE,,
+                                                                  TblProvider::PIECE_JOINTE,
                                                               ], $objectIntervenant);
         }
     }

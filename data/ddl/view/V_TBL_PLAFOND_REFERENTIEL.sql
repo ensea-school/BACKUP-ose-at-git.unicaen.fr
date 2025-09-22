@@ -16,7 +16,42 @@ SELECT
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-    SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL FONCTION_REFERENTIEL_ID,NULL HEURES,NULL PLAFOND,NULL PLAFOND_ETAT_ID,NULL DEROGATION FROM dual WHERE 0 = 1
+  SELECT 7 PLAFOND_ID, p.ANNEE_ID, p.TYPE_VOLUME_HORAIRE_ID, p.INTERVENANT_ID, p.FONCTION_REFERENTIEL_ID, p.HEURES, NULL PLAFOND, NULL PLAFOND_ETAT_ID FROM (
+    SELECT
+        i.annee_id                        annee_id,
+        vhr.type_volume_horaire_id        type_volume_horaire_id,
+        i.id                              intervenant_id,
+        fr.id                             fonction_referentiel_id,
+        SUM(vhr.heures)                   heures
+      FROM
+             service_referentiel       sr
+        JOIN intervenant                i ON i.id = sr.intervenant_id
+        JOIN fonction_referentiel      fr ON fr.id = sr.fonction_id
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+      WHERE
+        sr.histo_destruction IS NULL
+      GROUP BY
+        i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id
+
+      UNION ALL
+
+      SELECT
+        i.annee_id                 annee_id,
+        vhr.type_volume_horaire_id type_volume_horaire_id,
+        i.id                       intervenant_id,
+        fr.id                      fonction_referentiel_id,
+        SUM(vhr.heures)            heures
+      FROM
+        service_referentiel       sr
+        JOIN intervenant i ON i.id = sr.intervenant_id
+        JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
+        JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+      WHERE
+        sr.histo_destruction IS NULL
+      GROUP BY
+        i.annee_id, vhr.type_volume_horaire_id, i.id, fr.id
+    ) p
   ) p
   JOIN intervenant i ON i.id = p.intervenant_id
   LEFT JOIN plafond_referentiel ps ON ps.plafond_id = p.plafond_id AND ps.fonction_referentiel_id = p.fonction_referentiel_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL
@@ -26,9 +61,9 @@ WHERE
     WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
     WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
   END IS NOT NULL
-  /*@plafond_id=p.plafond_id*/
-  /*@annee_id=p.annee_id*/
-  /*@type_volume_horaire_id=p.type_volume_horaire_id*/
-  /*@intervenant_id=p.intervenant_id*/
-  /*@fonction_referentiel_id=p.fonction_referentiel_id*/
-  /*@plafond_etat_id=p.plafond_etat_id*/
+  /*@PLAFOND_ID=p.PLAFOND_ID*/
+  /*@ANNEE_ID=p.ANNEE_ID*/
+  /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
+  /*@INTERVENANT_ID=p.INTERVENANT_ID*/
+  /*@FONCTION_REFERENTIEL_ID=p.FONCTION_REFERENTIEL_ID*/
+  /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/

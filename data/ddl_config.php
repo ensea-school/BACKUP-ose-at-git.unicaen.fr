@@ -12,6 +12,8 @@ return [
             'WF_ETAPE',
             'WF_ETAPE_DEP',
             'WF_DEP_BLOQUANTE',
+            'TBL_PIECE_JOINTE_DEMANDE',
+            'TBL_PIECE_JOINTE_FOURNIE',
         ],
     ],
     'materialized-view' => [

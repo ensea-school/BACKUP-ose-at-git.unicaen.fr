@@ -21,7 +21,7 @@ class DossierProcessFactory
      *
      * @return DossierProcess
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): DossierProcess
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): DossierProcess
     {
         $service = new DossierProcess;
 

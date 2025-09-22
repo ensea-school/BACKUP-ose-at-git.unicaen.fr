@@ -1,5 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_FOURNIE AS
- SELECT
+SELECT
    i.annee_id,
    i.code code_intervenant,
    pj.type_piece_jointe_id,

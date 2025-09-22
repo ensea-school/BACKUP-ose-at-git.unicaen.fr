@@ -270,8 +270,6 @@ class WorkflowService extends AbstractService
         $deps = [
             TblProvider::SERVICE_DU              => [TblProvider::FORMULE],
             TblProvider::FORMULE                 => [TblProvider::AGREMENT, TblProvider::PAIEMENT],
-            TblProvider::PIECE_JOINTE_DEMANDE    => [TblProvider::PIECE_JOINTE],
-            TblProvider::PIECE_JOINTE_FOURNIE    => [TblProvider::PIECE_JOINTE],
             TblProvider::CANDIDATURE             => [TblProvider::WORKFLOW],
             TblProvider::AGREMENT                => [TblProvider::WORKFLOW],
             TblProvider::CLOTURE_REALISE         => [TblProvider::WORKFLOW],

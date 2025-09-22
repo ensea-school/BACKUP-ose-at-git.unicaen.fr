@@ -4,9 +4,9 @@
 
 return [
     'name'        => 'PIECE_JOINTE_FICHIER',
-    'temporary'   => false,
-    'logging'     => true,
-    'commentaire' => null,
+    'temporary'   => FALSE,
+    'logging'     => TRUE,
+    'commentaire' => NULL,
     'sequence'    => 'PIECE_JOINTE_FICHIER_ID_SEQ',
     'columns'     => [
         'FICHIER_ID'      => [
@@ -14,25 +14,25 @@ return [
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => null,
-            'precision'   => null,
-            'nullable'    => false,
-            'default'     => null,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
             'position'    => 2,
-            'commentaire' => null,
+            'commentaire' => NULL,
         ],
         'PIECE_JOINTE_ID' => [
             'name'        => 'PIECE_JOINTE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => null,
-            'precision'   => null,
-            'nullable'    => false,
-            'default'     => null,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
             'position'    => 1,
-            'commentaire' => null,
-        ]
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

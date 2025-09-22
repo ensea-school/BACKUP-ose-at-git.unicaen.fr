@@ -95,7 +95,7 @@ class StatutService extends AbstractEntityService
         [$qb, $alias] = $this->initQuery($qb, $alias);
         // $qb->andWhere("$alias.dossierSelectionnable = 1");
         $qb->andWhere("$alias.annee = " . $this->getServiceContext()->getAnnee()->getId());
-        $qb->addOrderBy("$alias.code");
+        $qb->addOrderBy("$alias.ordre");
 
         $statuts = $qb->getQuery()->execute();
 

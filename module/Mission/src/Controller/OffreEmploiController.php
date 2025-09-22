@@ -6,6 +6,7 @@ use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
 use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use BjyAuthorize\Exception\UnAuthorizedException;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Candidature;
@@ -318,6 +319,11 @@ class  OffreEmploiController extends AbstractController
          * @var Intervenant   $intervenant
          * @var WorkflowEtape $etapeDonneesPersos
          */
+        $canAcces = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_CANDIDATURE_VISUALISATION));
+        if (!$canAcces) {
+            throw new UnAuthorizedException();
+        }
+
         $intervenant                   = $this->getEvent()->getParam('intervenant');
         $renseignerDonneesPersonnelles = false;
         $canValiderCandidature         = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
@@ -343,6 +349,11 @@ class  OffreEmploiController extends AbstractController
 
     public function getCandidaturesAction()
     {
+        $canAcces = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_CANDIDATURE_VISUALISATION));
+        if (!$canAcces) {
+            throw new UnAuthorizedException();
+        }
+
         $intervenant = $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');

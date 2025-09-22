@@ -1,6 +1,6 @@
 # Version stable
 
-OSE 24.9](#ose-249-09092025)
+OSE [24.10](#ose-2410-15092025)
 
 
 # OSE 25 (à venir)
@@ -27,14 +27,27 @@ OSE 24.9](#ose-249-09092025)
 
 Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
 
-# OSE 24.10 (à venir)
+
+
+# OSE 24.11 (à venir)
+
+## Corrections
+
+* Bonne prise en compte de l'ordonnancement des statuts au niveau des données personnelles (#63380)
+* Correction sur les pieces jointes demandées par rapport à un seuil d'HETD (#62910)
+
+
+
+# OSE 24.10 (15/09/2025)
 
 ## Corrections
 
 * Correction des vues pour les indicateurs 241 et 231 (#63193)
 * Correction des problèmes de warnings introduits en 24.9 (#62443)
 * Amélioration des performances pour le calcul des formules du Havre & Lille
-
+* Test formules / export CSV : les colonnes non payable & service statutaire sont maintenant dans le bon ordre (#62553)
+* Les plafonds de périmètres élément pédagogique sont maintenant fonctionnels (#60536)
+* Remontée de la composante d'affectation si celle du contrat est null dans les indicateurs 461, 470, 471, 480, 481
 
 
 # OSE 24.9 (09/09/2025)
@@ -57,8 +70,9 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 * Correction demande de mise en paiement avec paiement par la composante d'affectation (#62759)
 * L'affichage de la saisie de services fonctionne à nouveau avec des enseignements pris sur l'extérieur (pb arrivé en 24.8)
 * Correction d'un problème sur le refus d'une candidature dans le cadre des missions (#63060)
+* Correction d'un problème de création automatique de la mission lors de l'acceptation d'une candidature (#63060)
 * Correction sur la saisie d'enseignement hors établissement (#63120)
-* Remontée de la composante d'affectation si celle du contrat est null dans l'indicateur des contrats 
+* Remontée de la composante d'affectation si celle du contrat est null dans les indicateurs 450 et 460
 * Correction de la formule du Havre (sur les anciennes années) (#62443)
 * Correction de la requête d'alimentation de la formule de Lyon 3 (#38136)
 

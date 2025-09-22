@@ -5,6 +5,7 @@ namespace OffreFormation\Service;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
@@ -25,6 +26,7 @@ class OffreFormationService extends AbstractEntityService
     use SourceServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use LocalContextServiceAwareTrait;
+    use EtatSortieServiceAwareTrait;
 
 
     public function getEntityClass()
@@ -295,10 +297,33 @@ class OffreFormationService extends AbstractEntityService
 
     public function generateCsvExport(?Structure $structure, ?NiveauEtape $niveau, ?Etape $etape): CsvModel
     {
+        /* Préparation et affichage */
+        $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'export-offre-formation']);
 
-        $elements = $this->getNeep($structure, $niveau, $etape)[2];
+        $fileName = 'Export-offre-formation - ' . date('dmY') . '.csv';
 
-        $headers = [
+        //$filters             = $recherche->getFilters();
+        $filters['ANNEE_ID'] = '2025';
+        /*if ($structure) {
+            $filters['STRUCTURE_AFF_IDS OR STRUCTURE_ENS_IDS'] = $structure->idsFilter();
+        }
+
+        $options = [
+            'annee'               => $annee->getLibelle(),
+            'type_volume_horaire' => $recherche->getTypeVolumeHoraire()->getLibelle(),
+            'etat_volume_horaire' => $recherche->getEtatVolumeHoraire()->getLibelle(),
+            'composante'          => $recherche->getStructureAff() ? $recherche->getStructureAff()->getLibelleCourt() : 'Toutes',
+            'type_intervenant'    => $recherche->getTypeIntervenant() ? $recherche->getTypeIntervenant()->getLibelle() : 'Tous intervenants',
+        ];*/
+
+
+        $csv = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, []);
+        $csv->setFilename($fileName);
+
+
+        //$elements = $this->getNeep($structure, $niveau, $etape)[2];
+
+        /*$headers = [
             'Structure',
             'Code formation',
             'Libellé formation',
@@ -315,65 +340,11 @@ class OffreFormationService extends AbstractEntityService
             'Effectifs FI actuels',
             'Effectifs FA actuels',
             'Effectifs FC actuels',
-        ];
+        ];*/
 
-        $typesIntervention = ['CM', 'TD', 'TP'];
-        foreach ($elements as $element) {
-            foreach ($element->getVolumeHoraireEns() as $vhe) {
-                if (!in_array($vhe->getTypeIntervention()->getCode(), $typesIntervention)) {
-                    $typesIntervention[] = $vhe->getTypeIntervention()->getCode();
-                }
-            }
-        }
+        return $csv;
 
-        foreach ($typesIntervention as $type) {
-            $headers[] = 'Nbr groupes ' . $type;
-            $headers[] = 'Nbr heures ' . $type;
-        }
-        $csvModel = new CsvModel();
 
-        $csvModel->setHeader($headers);
-
-        foreach ($elements as $element) {
-            $typeIntervention = $element->getTypeIntervention();
-            $typeInterventionValues = [];
-            foreach ($typesIntervention as $type) {
-                $typeInterventionValues[$type] = 0;
-                $typeInterventionValues[$type . 'Groupe'] = 0;
-            }
-
-            foreach ($element->getVolumeHoraireEns() as $vhe) {
-                $typeInterventionValues[$vhe->getTypeIntervention()->getCode()] = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
-                $typeInterventionValues[$vhe->getTypeIntervention()->getCode() . 'Groupe'] = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
-            }
-            $etape = $element->getEtape();
-            $effectifs = $element->getEffectifs();
-            $discipline = $element->getDiscipline();
-            $lineValues = [
-                $etape->getStructure()->getLibelleCourt(),
-                $etape->getCode(),
-                $etape->getLibelle(),
-                $etape->getNiveauToString(),
-                $element->getCode(),
-                $element->getLibelle(),
-                $discipline ? $discipline->getSourceCode() : null,
-                $discipline ? $discipline->getLibelleLong() : null,
-                $element->getPeriode(),
-                $element->getTauxFoad(),
-                $element->getTauxFi(),
-                $element->getTauxFa(),
-                $element->getTauxFc(),
-                $effectifs ? $effectifs->getFi() : null,
-                $effectifs ? $effectifs->getFa() : null,
-                $effectifs ? $effectifs->getFc() : null,
-            ];
-
-            $csvModel->addLine(array_merge($lineValues, $typeInterventionValues));
-        }
-        $uniqueId = date('Y-m-d-H-i');
-        $csvModel->setFilename('offre-de-formation-' . $uniqueId . '.csv');
-
-        return $csvModel;
     }
 
 }

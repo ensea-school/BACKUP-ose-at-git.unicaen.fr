@@ -38,7 +38,7 @@ class ElementPedagogiqueService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass ()
+    public function getEntityClass()
     {
         return ElementPedagogique::class;
     }
@@ -59,7 +59,7 @@ class ElementPedagogiqueService extends AbstractEntityService
      *
      * @return array
      */
-    public function getSearchResultByTerm (array $filters = [], $order = "gtf.ordre, e.niveau, ep.libelle")
+    public function getSearchResultByTerm(array $filters = [], $order = "gtf.ordre, e.niveau, ep.libelle")
     {
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -161,7 +161,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return ElementPedagogique
      */
-    public function getByCode ($code, Annee $annee = null)
+    public function getByCode($code, Annee $annee = null)
     {
         if (null == $code) return null;
 
@@ -180,7 +180,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return int $n nombre d'élément pédagogique avec un centre de coût.
      */
-    public function countEpWithCc (Etape $etape)
+    public function countEpWithCc(Etape $etape)
     {
         $n                    = 0;
         $elementsPedagogiques = $etape->getElementPedagogique();
@@ -204,7 +204,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return int $n nombre d'élément pédagogique avec un modulateur
      */
-    public function countEpWithModulateur (Etape $etape)
+    public function countEpWithModulateur(Etape $etape)
     {
         $n                    = 0;
         $elementsPedagogiques = $etape->getElementPedagogique();
@@ -230,7 +230,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return QueryBuilder
      */
-    public function finderByContext (QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -249,7 +249,7 @@ where rang = 1 AND rownum <= :limit
      * @return ElementPedagogique
      * @throws \RuntimeException
      */
-    public function save ($entity)
+    public function save($entity)
     {
         if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ELEMENT_EDITION)) {
             throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cet enseignement.');
@@ -278,7 +278,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return \OffreFormation\Entity\Db\ElementPedagogique
      */
-    public function newEntity ()
+    public function newEntity()
     {
         $entity = parent::newEntity();
         // toutes les entités créées ont OSE pour source!!
@@ -299,7 +299,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return self
      */
-    public function delete ($entity, $softDelete = true)
+    public function delete($entity, $softDelete = true)
     {
         if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ELEMENT_EDITION)) {
             throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cet enseignement.');
@@ -325,7 +325,7 @@ where rang = 1 AND rownum <= :limit
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function updateTauxRemu (ElementPedagogique $elementPedagogique, ?TauxRemu $tauxRemu)
+    public function updateTauxRemu(ElementPedagogique $elementPedagogique, ?TauxRemu $tauxRemu)
     {
 
         /** @var ElementPedagogique $elp */
@@ -337,7 +337,7 @@ where rang = 1 AND rownum <= :limit
 
 
 
-    public function forcerTauxMixite (ElementPedagogique $elementPedagogique, $tauxFi, $tauxFc, $tauxFa)
+    public function forcerTauxMixite(ElementPedagogique $elementPedagogique, $tauxFi, $tauxFc, $tauxFa)
     {
         /** @var ElementTauxRegimes $etr */
         $etr = $this->getEntityManager()->getRepository(ElementTauxRegimes::class)->findOneBy([
@@ -410,7 +410,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function synchronisation ($element)
+    public function synchronisation($element)
     {
         if (is_string($element)) {
             $code  = $element;
@@ -453,7 +453,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return QueryBuilder|null
      */
-    public function orderBy (QueryBuilder $qb = null, $alias = null)
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy($this->getAlias() . '.libelle');
@@ -468,7 +468,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return string
      */
-    public function getAlias ()
+    public function getAlias()
     {
         return 'ep';
     }
@@ -482,7 +482,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return array
      */
-    protected function truncateResult ($result, $length = 15)
+    protected function truncateResult($result, $length = 15)
     {
         if ($length && ($remain = count($result) - $length) > 0) {
             $result   = array_slice($result, 0, $length);

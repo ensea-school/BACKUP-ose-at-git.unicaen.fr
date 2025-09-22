@@ -62,7 +62,8 @@
                 <div v-for="(etape, codeEtape) in datas.etapes">
                     <div v-for="(enseignement,codeEnseignement) in etape.enseignements">
                         <div class="cartridge gray bordered" style="padding-bottom: 5px">
-                            <span>Enseignement</span>
+                            <span v-if="etape.exterieur == 0">Enseignement</span>
+                            <span v-if="etape.exterieur == 1">Enseignement hors établissement</span>
                             <span v-html="codeEtape +  ' - ' + shorten(etape.libelle, 40)"></span>
                             <span>{{ codeEnseignement + ' - ' + enseignement.libelle }}</span>
                         </div>

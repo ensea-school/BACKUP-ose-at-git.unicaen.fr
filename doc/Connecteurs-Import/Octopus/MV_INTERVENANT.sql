@@ -52,9 +52,9 @@ WITH i AS (
                         ELSE NULL END		                                        fin_affectation_siham
 
              FROM octo.individu_unique@octoprod uni
-                      JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
-   					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
-					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND  COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) - 184 <= SYSDATE AND COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))  >= SYSDATE AND icto.code_ose IS NOT NULL AND icto.code_ose NOT IN('NON_AUTORISE')
+            JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
+   					LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
+					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND icto.code_ose IS NULL
              WHERE inds.d_debut - 184 <= SYSDATE
                --On ne remonte pas de statut autre pour ceux qui ont déjà un certain type de contrat
 	           --AND icto.individu_id IS NULL
@@ -63,7 +63,6 @@ WITH i AS (
                  OR (inds.t_enseignant = 'O' AND inds.t_heberge = 'O')
                  OR (inds.t_vacataire = 'O')
                  OR (inds.t_heberge = 'O'))
-               AND icto.individu_id IS NULL
                --AND (vinds.t_doctorant='N' OR vinds.individu_id IS NULL)
                AND inds.c_source IN ('HARP', 'OCTO', 'SIHAM')
 

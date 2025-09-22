@@ -80,34 +80,19 @@ $dossierIdentite = $form->get('DossierIdentite');
                     ?>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <?= $this->formLabel($dossierIdentite->get('situationMatrimoniale')); ?>
-                        <div class="input-group cold-md-6 readonly">
-                            <?php
-                            if (!empty($intervenantDossier->getSituationMatrimoniale())) {
-                                echo ($viewIdentite) ? $intervenantDossier->getSituationMatrimoniale()->getLibelle() : '********';
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <?= $this->formLabel($dossierIdentite->get('dateSituationMatrimoniale')); ?>
-                        <div class="input-group cold-md-6 readonly">
-                            <?php
-                            if (!empty($dossierIdentite->get('dateSituationMatrimoniale')->getValue())) {
-                                $dateMatrimoniale = $dossierIdentite->get('dateSituationMatrimoniale')->getValue();
-                                $dateMatrimonialeFormatted = DateTime::createFromFormat('Y-m-d',$dateMatrimoniale)->format('d/m/Y');
-                                echo ($viewIdentite) ? $dateMatrimonialeFormatted : '**/**/****';
-                            }
-                            ?>
-                        </div>
-                    </div>
+            <div class="form-group">
+                <?= $this->formLabel($dossierIdentite->get('dateNaissance')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($dossierIdentite->get('dateNaissance')->getValue())) {
+                        $dateNaissance          = $dossierIdentite->get('dateNaissance')->getValue();
+                        $dateNaissanceFormatted = DateTime::createFromFormat('Y-m-d', $dateNaissance)->format('d/m/Y');
+                        echo ($viewIdentite) ? $dateNaissanceFormatted : '**/**/****';
+                    }
+                    ?>
                 </div>
             </div>
+
 
         </div>
     </div>

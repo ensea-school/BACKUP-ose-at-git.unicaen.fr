@@ -1,122 +1,13 @@
 <?php
 
-use Application\Provider\Privilege\Privileges;
-use Workflow\Entity\Db\WorkflowEtape;
-
 /**
- * @var $this         \Application\View\Renderer\PhpRenderer
- * @var $intervenant  \Intervenant\Entity\Db\Intervenant
- * @var $title        string
- * @var $demandees    \PieceJointe\Entity\Db\TblPieceJointeDemande[]
- * @var $fournies     \PieceJointe\Entity\Db\TblPieceJointeFournie[]
- * @var $synthese     \PieceJointe\Entity\Db\TblPieceJointe[]
- * @var $messages     array
- * @var $alertContrat boolean
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $intervenant       \Intervenant\Entity\Db\Intervenant
+ * @var $messages          array
  */
-
-$this->headTitle()->append((string)$intervenant)->append("Pièces justificatives");
-
-$canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
-$canValider   = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
-$canDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION));
-$canArchiver  = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_ARCHIVAGE));
-
-$infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getId()]);
-
-$menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
-
-?>
-    <h1 class="page-header"><?= $this->intervenant($intervenant)->renderTitle('Pièces justificatives'); ?></h1>
-
-    <div class="piece-jointe">
-        <div class="infos" data-url="<?= $infosUrl ?>">
-            <?= $this->partial('piece-jointe/piece-jointe/infos', compact('messages')); ?>
-        </div>
-        <?php
-
-        $restantes = $fournies;
-        if (!empty($demandees)) {
-            echo '<div class="well">';
-            echo '<h2>Pièces demandées</h2>';
-            $obligatoire = true;
-            foreach ($demandees as $pj) { // on liste les pièces demandées
-                //Check si piece obligatoire
-                $obligatoire = $pj->isObligatoire();
-                $tpj         = $pj->getTypePieceJointe();
-                if (isset($fournies[$tpj->getId()]) && (array_key_exists($tpj->getId(), $synthese) && $synthese[$tpj->getId()]->getFournie() == 1)) { // qu'elles soient fournies ou non
-                    $pj = $fournies[$tpj->getId()];
-                    unset($restantes[$tpj->getId()]);
-                } else {
-                    $pj = null;
-                }
-                echo $this->partial('piece-jointe/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
-            }
-            echo '</div>';
-
-            if ($alertContrat) {
-                ?>
-                <div id="alert-contrat" class="alert alert-warning alert-dismissible fade show" role="alert" style="display:none">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    <p><strong>Information importante</strong></p>
-                    <p>Votre saisie est terminée.</p>
-                    <p>Votre contrat ne pourra être édité qu'après validation de l'ensemble des pièces justificatives.<br/>
-                        Aucune heure pourra être effectuée avant la signature du contrat.</p>
-                </div>
-                <?php
-            }
-        }
+$this->intervenant($intervenant)->renderTitle("Demande des pièces justificatives");
 
 
-        if (!empty($restantes)) {
-            $html         = '<div class="well">';
-            $html         .= '<h2>Autres pièces fournies</h2>';
-            $obligatoire  = false;
-            $haveRestante = false;
-            foreach ($restantes as $tpjId => $pj) { // on liste les pièces fournies mais qui ne sont pas demandées...
-                //on affiche la pièce jointe restante uniquement sur l'année où elle a été fourni
-
-                if ($pj->getIntervenant()->getAnnee()->getId() == $annee->getId()) {
-                    $haveRestante = true;
-                    $tpj          = $pj->getType();
-                    $html         .= $this->partial('piece-jointe/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
-                }
-            }
-            $html .= '</div>';
-            if ($haveRestante) {
-                echo $html;
-            }
-        }
-
-        ?>
-    </div>
-    <script type="text/javascript" src="<?= $this->basePath('/js/piece-jointe.js') ?>"></script>
-    <script>
-
-        $(function () {
-
-            $('.piece-jointe').pieceJointe({
-                'validation-change': function ()
-                {
-                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
-                    $('#sidebar').load('<?= $menuUrl; ?>');
-                },
-            });
-
-        });
-
-        $('[id^="update-pj-"]').click(function (e) {
-            e.preventDefault();
-            var id = $(this).attr('id');
-            var splitId = id.split('-');
-            var tpjId = splitId[2];
-            $('#valide-pj-'+tpjId).remove();
-            $('#archive-form-pj-'+tpjId).css('display', 'block');
-            return false;
-        });
-
-
-    </script>
-<?php
-
-$wfEtape = WorkflowEtape::PJ_SAISIE;
-echo $this->vue('workflow/nav', ['intervenant' => $intervenant->getId(), 'etape' => $wfEtape]);
+echo $this->vue('piece-jointe/liste-pieces-jointes', [
+    'intervenant' => $intervenant->getId(),
+]);

@@ -21,6 +21,8 @@ use Dossier\Service\DossierService;
 use Dossier\Service\DossierServiceFactory;
 use Dossier\Service\EmployeurService;
 use Dossier\Service\EmployeurServiceFactory;
+use Dossier\Tbl\Process\DossierProcess;
+use Dossier\Tbl\Process\DossierProcessFactory;
 use Dossier\View\Helper\ValidationViewHelperFactory;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
@@ -290,6 +292,7 @@ return [
         DossierAutreTypeService::class     => DossierAutreTypeServiceFactory::class,
         EmployeurService::class            => EmployeurServiceFactory::class,
         IntervenantDossierAssertion::class => AssertionFactory::class,
+        DossierProcess::class              => DossierProcessFactory::class,
 
     ],
     'view_helpers' => [

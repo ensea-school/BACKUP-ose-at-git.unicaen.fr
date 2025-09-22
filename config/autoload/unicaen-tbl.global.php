@@ -126,51 +126,38 @@ return [
                 ],
             ],
 
-            TblProvider::PIECE_JOINTE_DEMANDE => [
-                'order'   => 7,
-                'process' => 'DbDiff',
+            TblProvider::DOSSIER => [
+                'order'   => 13,
+                'process' => \Dossier\Tbl\Process\DossierProcess::class,
                 'cols'    => [
                     'ANNEE_ID',
-                    'CODE_INTERVENANT',
                     'INTERVENANT_ID',
-                    'TYPE_PIECE_JOINTE_ID',
-                    'HEURES_POUR_SEUIL',
-                    'OBLIGATOIRE',
-                    'HEURES_POUR_SEUIL_HETD',
-                    'DUREE_VIE',
+                    'ACTIF',
+                    'DOSSIER_ID',
+                    'VALIDATION_ID',
+                    'COMPLETUDE_STATUT',
+                    'COMPLETUDE_IDENTITE',
+                    'COMPLETUDE_IDENTITE_COMP',
+                    'COMPLETUDE_CONTACT',
+                    'COMPLETUDE_ADRESSE',
+                    'COMPLETUDE_INSEE',
+                    'COMPLETUDE_BANQUE',
+                    'COMPLETUDE_EMPLOYEUR',
+                    'COMPLETUDE_AUTRES_1',
+                    'COMPLETUDE_AUTRES_2',
+                    'COMPLETUDE_AUTRES_3',
+                    'COMPLETUDE_AUTRES_4',
+                    'COMPLETUDE_AUTRES_5',
+                    'COMPLETUDE_AVANT_RECRUTEMENT',
+                    'COMPLETUDE_APRES_RECRUTEMENT',
                 ],
                 'key'     => [
                     'INTERVENANT_ID',
-                    'TYPE_PIECE_JOINTE_ID',
                 ],
             ],
 
-            TblProvider::PIECE_JOINTE_FOURNIE => [
-                'order'              => 8,
-                'process'            => 'DbDiff',
-                'cols'               => [
-                    'ANNEE_ID',
-                    'CODE_INTERVENANT',
-                    'TYPE_PIECE_JOINTE_ID',
-                    'INTERVENANT_ID',
-                    'PIECE_JOINTE_ID',
-                    'VALIDATION_ID',
-                    'FICHIER_ID',
-                    'DUREE_VIE',
-                    'DATE_VALIDITE',
-                    'DATE_ARCHIVE',
-                ],
-                'key'                => [
-                    'TYPE_PIECE_JOINTE_ID',
-                    'INTERVENANT_ID',
-                    'VALIDATION_ID',
-                    'FICHIER_ID',
-                ],
-                'key_values_if_null' => [
-                    'VALIDATION_ID' => 0,
-                    'FICHIER_ID'    => 0,
-                ],
-            ],
+
+
 
             TblProvider::AGREMENT => [
                 'order'              => 9,
@@ -296,30 +283,6 @@ return [
                 ],
             ],
 
-            TblProvider::DOSSIER => [
-                'order'   => 13,
-                'process' => 'DbDiff',
-                'cols'    => [
-                    'ANNEE_ID',
-                    'INTERVENANT_ID',
-                    'ACTIF',
-                    'DOSSIER_ID',
-                    'VALIDATION_ID',
-                    'COMPLETUDE_STATUT',
-                    'COMPLETUDE_IDENTITE',
-                    'COMPLETUDE_IDENTITE_COMP',
-                    'COMPLETUDE_CONTACT',
-                    'COMPLETUDE_ADRESSE',
-                    'COMPLETUDE_INSEE',
-                    'COMPLETUDE_BANQUE',
-                    'COMPLETUDE_EMPLOYEUR',
-                    'COMPLETUDE_AUTRES',
-                ],
-                'key'     => [
-                    'INTERVENANT_ID',
-                ],
-            ],
-
             TblProvider::PAIEMENT => [
                 'order'              => 14,
                 'process'            => \Paiement\Tbl\Process\PaiementProcess::class,
@@ -369,7 +332,7 @@ return [
 
             TblProvider::PIECE_JOINTE => [
                 'order'   => 15,
-                'process' => 'DbDiff',
+                'process' => \PieceJointe\Tbl\Process\PieceJointeProcess::class,
                 'cols'    => [
                     'ANNEE_ID',
                     'TYPE_PIECE_JOINTE_ID',
@@ -380,6 +343,11 @@ return [
                     'VALIDEE',
                     'HEURES_POUR_SEUIL',
                     'OBLIGATOIRE',
+                    'DEMANDEE_APRES_RECRUTEMENT',
+                    'DATE_ORIGINE',
+                    'DATE_VALIDITEE',
+                    'SEUIL_HETD',
+
                 ],
                 'key'     => [
                     'TYPE_PIECE_JOINTE_ID',

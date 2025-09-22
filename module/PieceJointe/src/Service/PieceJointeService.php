@@ -97,8 +97,8 @@ class PieceJointeService extends AbstractEntityService
         ORDER BY tpj.ordre ASC  
         ";
         $lpjd = $this->getEntityManager()->createQuery($dql)->setParameters([
-            'intervenant' => $intervenant,
-        ])->getResult();
+                                                                                'intervenant' => $intervenant,
+                                                                            ])->getResult();
         /* @var $lpjd TblPieceJointeDemande[] */
         $hps    = 0;
         $result = [];
@@ -150,8 +150,8 @@ class PieceJointeService extends AbstractEntityService
         ";
 
         $listTblPieceJointe = $this->getEntityManager()->createQuery($dql)->setParameters([
-            'intervenant' => $intervenant->getId(),
-        ])->getResult();
+                                                                                              'intervenant' => $intervenant->getId(),
+                                                                                          ])->getResult();
 
         $result = [];
         foreach ($listTblPieceJointe as $TblPieceJointe) {
@@ -190,16 +190,16 @@ class PieceJointeService extends AbstractEntityService
         ORDER BY pjf.annee DESC";
 
         $lpjf = $this->getEntityManager()->createQuery($dql)->setParameters([
-            'intervenant' => $intervenant->getCode(),
-            'annee'       => $intervenant->getAnnee()->getId(),
-        ])->getResult();
+                                                                                'intervenant' => $intervenant->getCode(),
+                                                                                'annee'       => $intervenant->getAnnee()->getId(),
+                                                                            ])->getResult();
 
 
         /* @var $lpjf \PieceJointe\Entity\Db\TblPieceJointeFournie[] */
 
         $result = [];
         foreach ($lpjf as $pjf) {
-            $pj        = $pjf->getPieceJointe();
+            $pj = $pjf->getPieceJointe();
             //Gérer les cas où plusieurs PJ sont éligible mais sans date d'archive, on prend la première uniquement.
             if (!array_key_exists($pj->getType()->getId(), $result)) {
                 $result[$pj->getType()->getId()] = $pj;
@@ -221,10 +221,16 @@ class PieceJointeService extends AbstractEntityService
      */
     public function valider(PieceJointe $pj)
     {
-        $role      = $this->getServiceContext()->getSelectedIdentityRole();
-        $structure = $role->getStructure() ? $role->getStructure() : $pj->getIntervenant()->getStructure();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure   = $role->getStructure() ? $role->getStructure() : $pj->getIntervenant()->getStructure();
+        $intervenant = $pj->getIntervenant();
 
-        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::PIECE_JOINTE);
+
+        $typeValidation = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_PIECE_JOINTE);
+        //On valide également tous les fichiers
+        foreach ($pj->getFichier() as $fichier) {
+            $this->getServiceFichier()->valider($fichier, $intervenant);
+        }
 
         $validation = $this->getServiceValidation()->newEntity($typeValidation);
         $validation->setIntervenant($pj->getIntervenant());
@@ -270,6 +276,12 @@ class PieceJointeService extends AbstractEntityService
         $pj->setValidation(null);
 
         $this->getEntityManager()->flush($pj);
+
+        //On devalide tous les fichiers liées à cette pièce jointe
+        foreach ($pj->getFichier() as $fichier) {
+            $this->getServiceFichier()->devalider($fichier);
+        }
+
 
         return $validation;
     }

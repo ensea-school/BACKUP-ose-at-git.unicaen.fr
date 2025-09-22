@@ -16,9 +16,9 @@ class TypePieceJointeStatut implements ParametreEntityInterface
 
     private float $seuilHetd = 0;
 
-    private bool $typeHeureHetd = false;
+    private bool  $typeHeureHetd        = false;
 
-    private bool $fc = false;
+    private bool  $fc                   = false;
 
     private bool $fa = false;
 
@@ -26,13 +26,15 @@ class TypePieceJointeStatut implements ParametreEntityInterface
 
     private bool $nationaliteEtrangere = false;
 
-    private int $dureeVie = 1;
+    private int   $dureeVie             = 1;
 
-    private bool $obligatoireHNP = false;
+    private bool  $obligatoireHNP       = false;
 
-    private bool $obligatoire = true;
+    private bool  $obligatoire          = true;
 
     protected int $numRegle = 1;
+
+    protected bool $demandeeApresRecrutement = false;
 
 
 
@@ -200,6 +202,24 @@ class TypePieceJointeStatut implements ParametreEntityInterface
 
         return $this;
     }
+
+
+
+    public function isDemandeeApresRecrutement(): bool
+    {
+        return $this->demandeeApresRecrutement;
+    }
+
+
+
+    public function setDemandeeApresRecrutement(bool $demandeeApresRecrutement): typePieceJointeStatut
+    {
+        $this->demandeeApresRecrutement = $demandeeApresRecrutement;
+
+        return $this;
+    }
+
+
 
 
 

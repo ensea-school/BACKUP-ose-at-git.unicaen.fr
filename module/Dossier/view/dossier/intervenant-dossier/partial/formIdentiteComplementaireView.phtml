@@ -41,18 +41,7 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
         </div>
         <div class="card-body">
 
-            <div class="form-group">
-                <?= $this->formLabel($dossierIdentiteComplementaire->get('dateNaissance')); ?>
-                <div class="input-group cold-md-6 readonly">
-                    <?php
-                    if (!empty($dossierIdentiteComplementaire->get('dateNaissance')->getValue())) {
-                        $dateNaissance = $dossierIdentiteComplementaire->get('dateNaissance')->getValue();
-                        $dateNaissanceFormatted = DateTime::createFromFormat('Y-m-d',$dateNaissance)->format('d/m/Y');
-                        echo ($viewIdentite) ? $dateNaissanceFormatted : '**/**/****';
-                    }
-                    ?>
-                </div>
-            </div>
+
             <div class="form-group">
                 <?= $this->formLabel($dossierIdentiteComplementaire->get('paysNaissance')); ?>
                 <div class="input-group cold-md-6 readonly">
@@ -98,6 +87,34 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
 
 
                     ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?= $this->formLabel($dossierIdentiteComplementaire->get('situationMatrimoniale')); ?>
+                        <div class="input-group cold-md-6 readonly">
+                            <?php
+                            if (!empty($intervenantDossier->getSituationMatrimoniale())) {
+                                echo ($viewIdentite) ? $intervenantDossier->getSituationMatrimoniale()->getLibelle() : '********';
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?= $this->formLabel($dossierIdentiteComplementaire->get('dateSituationMatrimoniale')); ?>
+                        <div class="input-group cold-md-6 readonly">
+                            <?php
+                            if (!empty($dossierIdentiteComplementaire->get('dateSituationMatrimoniale')->getValue())) {
+                                $dateMatrimoniale = $dossierIdentiteComplementaire->get('dateSituationMatrimoniale')->getValue();
+                                $dateMatrimonialeFormatted = DateTime::createFromFormat('Y-m-d',$dateMatrimoniale)->format('d/m/Y');
+                                echo ($viewIdentite) ? $dateMatrimonialeFormatted : '**/**/****';
+                            }
+                            ?>
+                        </div>
+                    </div>
                 </div>
             </div>
 

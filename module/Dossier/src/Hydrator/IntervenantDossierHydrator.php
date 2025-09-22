@@ -36,7 +36,7 @@ class IntervenantDossierHydrator implements HydratorInterface
 
     /**
      *
-     * @param Statut $defaultStatut
+     * @param ?Statut $defaultStatut
      */
     public function __construct(?Statut $defaultStatut = null)
     {
@@ -61,16 +61,16 @@ class IntervenantDossierHydrator implements HydratorInterface
             'nomPatronymique'           => $object->getNomPatronymique(),
             'prenom'                    => $object->getPrenom(),
             'civilite'                  => ($object->getCivilite()) ? $object->getCivilite()->getId() : '',
-            'situationMatrimoniale'     => ($object->getSituationMatrimoniale()) ? $object->getSituationMatrimoniale()->getId() : '',
-            'dateSituationMatrimoniale' => $object->getDateSituationMatrimoniale(),
+            'dateNaissance'        => $object->getDateNaissance(),
         ];
 
         $data['DossierIdentiteComplementaire'] = [
-            'dateNaissance'        => $object->getDateNaissance(),
             'paysNaissance'        => ($object->getPaysNaissance()) ? $object->getPaysNaissance()->getId() : '',
             'paysNationalite'      => ($object->getPaysNationalite()) ? $object->getPaysNationalite()->getId() : '',
             'departementNaissance' => ($object->getDepartementNaissance()) ? $object->getDepartementNaissance()->getId() : '',
             'villeNaissance'       => $object->getCommuneNaissance(),
+            'situationMatrimoniale'     => ($object->getSituationMatrimoniale()) ? $object->getSituationMatrimoniale()->getId() : '',
+            'dateSituationMatrimoniale' => $object->getDateSituationMatrimoniale(),
         ];
 
 
@@ -146,7 +146,7 @@ class IntervenantDossierHydrator implements HydratorInterface
      * @return object
      */
 
-    public function hydrate(array $data, $object)
+    public function hydrate(array $data, object $object): object
     {
         /* @var $object IntervenantDossier */
         //Hydratation de l'indentité
@@ -159,21 +159,15 @@ class IntervenantDossierHydrator implements HydratorInterface
             $civilite = (!empty($data['DossierIdentite']['civilite'])) ?
                 $this->getServiceCivilite()->get($data['DossierIdentite']['civilite']) : null;
             $object->setCivilite($civilite);
-            //Situation matrimoniale
-            $situationMatrimoniale = (!empty($data['DossierIdentite']['situationMatrimoniale'])) ?
-                $this->getServiceSituationMatrimoniale()->get($data['DossierIdentite']['situationMatrimoniale']) : null;
-            $object->setSituationMatrimoniale($situationMatrimoniale);
-            //Date de la situation matrimoniale
-            $dateSituationMatrimoniale = (!empty($data['DossierIdentite']['dateSituationMatrimoniale'])) ?
-                \DateTime::createFromFormat('Y-m-d', $data['DossierIdentite']['dateSituationMatrimoniale']) : null;
-            $object->setDateSituationMatrimoniale($dateSituationMatrimoniale);
+            //Date de naissance
+            $dateNaissance = (!empty($data['DossierIdentite']['dateNaissance'])) ?
+                \DateTime::createFromFormat('Y-m-d', $data['DossierIdentite']['dateNaissance']) : null;
+            $object->setDateNaissance($dateNaissance);
+
         }
         //hydratation de l'identité complémentaire
         if (isset($data['DossierIdentiteComplementaire'])) {
-            //Date de naissance
-            $dateNaissance = (!empty($data['DossierIdentiteComplementaire']['dateNaissance'])) ?
-                \DateTime::createFromFormat('Y-m-d', $data['DossierIdentiteComplementaire']['dateNaissance']) : null;
-            $object->setDateNaissance($dateNaissance);
+
             //Pays de naissance
             $paysNaissance = (!empty($data['DossierIdentiteComplementaire']['paysNaissance'])) ?
                 $this->getServicePays()->get($data['DossierIdentiteComplementaire']['paysNaissance']) : null;
@@ -192,6 +186,14 @@ class IntervenantDossierHydrator implements HydratorInterface
             $object->setDepartementNaissance($departementNaissance);
 
             $object->setCommuneNaissance(trim($data['DossierIdentiteComplementaire']['villeNaissance']));
+            //Situation matrimoniale
+            $situationMatrimoniale = (!empty($data['DossierIdentiteComplementaire']['situationMatrimoniale'])) ?
+                $this->getServiceSituationMatrimoniale()->get($data['DossierIdentiteComplementaire']['situationMatrimoniale']) : null;
+            $object->setSituationMatrimoniale($situationMatrimoniale);
+            //Date de la situation matrimoniale
+            $dateSituationMatrimoniale = (!empty($data['DossierIdentiteComplementaire']['dateSituationMatrimoniale'])) ?
+                \DateTime::createFromFormat('Y-m-d', $data['DossierIdentiteComplementaire']['dateSituationMatrimoniale']) : null;
+            $object->setDateSituationMatrimoniale($dateSituationMatrimoniale);
         }
         //Hydratation de l'adresse
         if (isset($data['DossierAdresse'])) {
@@ -227,7 +229,7 @@ class IntervenantDossierHydrator implements HydratorInterface
         }
 
 
-        //Hydratation de INSEE
+        //Hydratation d'INSEE
         if (isset($data['DossierInsee'])) {
             $object->setNumeroInsee(trim($data['DossierInsee']['numeroInsee']));
             $object->setNumeroInseeProvisoire($data['DossierInsee']['numeroInseeEstProvisoire']);
@@ -242,7 +244,7 @@ class IntervenantDossierHydrator implements HydratorInterface
             $object->setRibHorsSepa($data['DossierBancaire']['ribHorsSepa']);
         }
 
-        //Hydratation de employeur
+        //Hydratation d'employeur
         if (isset($data['DossierEmployeur'])) {
             $employeur = (!empty($data['DossierEmployeur']['employeur']['id'])) ?
                 $this->getServiceEmployeur()->get($data['DossierEmployeur']['employeur']['id']) : null;

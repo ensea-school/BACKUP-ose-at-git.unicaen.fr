@@ -18,10 +18,10 @@ $hasValidation = $pj && $pj->getValidation();
 $linksModelesDocs = null;
 if (($url = $tpj->getUrlModeleDoc())) {
     if (0 === strpos($url, 'http://') || 0 === strpos($url, 'https://')) {
-//        $target = "_blank";
+        //        $target = "_blank";
         $href = $url;
     } else {
-//        $target = "_self";
+        //        $target = "_self";
         $href = $this->basePath($url);
     }
     $href             = str_replace(':annee', (string)$intervenant->getAnnee()->getId(), $href);
@@ -70,11 +70,11 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                 <!--Infos sur document fourni sur une autre année-->
                 <?=
                 ($pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()) ? $type . "  <span style=\"font-size:0.6em;\">Fourni(e) en " . $pj->getIntervenant()->getAnnee()->getId() . "</span>" : $type;
-                ?>
+?>
                 <!--Info sur document facultatif-->
                 <?=
-                !$obligatoire ? '<span style="font-size:0.6em;"> (Document facultatif)</span>' : ''
-                ?>
+!$obligatoire ? '<span style="font-size:0.6em;"> (Document facultatif)</span>' : ''
+?>
                 <br/>
             </h5>
         </div>
@@ -88,15 +88,16 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                             <?= $this->htmlList((array)$linksModelesDocs, false, false, false) ?>
                         </div>
                     <?php endif ?>
-                    <!-- Liste des fichiers déposés -->
+                    <!-- Liste des fichiers déposés --> 
                     <?= $uploader->renderUploadedFiles($this->url('piece-jointe/intervenant/fichier/lister', ['typePieceJointe' => $tpj->getId(), 'pieceJointe' => (!is_null($pj)) ? $pj->getId() : ''], [], true)) ?>
                 </div>
                 <div class="col-md-6">
                     <!-- formulaire éventuel de dépôt de PJ -->
                     <?php
-                    $uploader->getForm()->setAttribute('style', 'display:' . (($pj && $pj->getValidation()) ? 'none' : 'block'));
-                    echo $uploader->renderForm();
-                    ?>
+    //$uploader->getForm()->setAttribute('style', 'display:' . (($pj && $pj->getValidation()) ? 'none' : 'block'));
+echo $uploader->renderForm();
+echo "here";
+?>
 
                 </div>
             </div>
@@ -122,11 +123,11 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                 <!--Infos sur document fourni sur une autre année-->
                 <?=
                 $type;
-                ?>
+    ?>
                 <!--Info sur document facultatif-->
                 <?=
-                !$obligatoire ? '<span style="font-size:0.6em;"> (Document facultatif)</span>' : ''
-                ?>
+    !$obligatoire ? '<span style="font-size:0.6em;"> (Document facultatif)</span>' : ''
+    ?>
                 <br/>
             </h3>
         </div>
@@ -144,11 +145,12 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                     <?= $uploader->renderUploadedFiles($this->url('piece-jointe/intervenant/fichier/lister', ['typePieceJointe' => $tpj->getId(), 'pieceJointe' => ''], [], true)) ?>
                 </div>
                 <div class="col-md-6">
+
                     <!-- formulaire éventuel de dépôt de PJ -->
                     <?php
-                    $uploader->getForm()->setAttribute('style', 'display:block');
-                    echo $uploader->renderForm();
-                    ?>
+        $uploader->getForm()->setAttribute('style', 'display:block');
+    echo $uploader->renderForm();
+    ?>
 
                 </div>
             </div>

@@ -44,7 +44,9 @@ foreach ($champsAutres as $champsAutre) {
     }
 }
 
-if (empty($autres)) return;
+if (empty($autres)) {
+    return;
+}
 
 ?>
 <div class="col-md-6">
@@ -52,7 +54,7 @@ if (empty($autres)) return;
         <div class="card-header">
             AUTRES
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAutres()): ?>
+                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAutre1()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -63,13 +65,13 @@ if (empty($autres)) return;
             <?php foreach ($autres as $champ): ?>
                 <div class="form-group">
                  <?php if (!$champ['canEdit']): ?>
-                    <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ['id']),); ?>
+                    <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ['id']), ); ?>
                     <div class="input-group cold-md-6 readonly">
                         <?php
                         if ($champ['value']) {
                             echo ($champ['canView']) ? $champ['value'] : '***************';
                         }
-                        ?>
+                     ?>
                     </div>
                 </div>
                 <?php else: ?>

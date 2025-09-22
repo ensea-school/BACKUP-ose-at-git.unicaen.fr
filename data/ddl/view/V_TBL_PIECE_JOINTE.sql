@@ -11,8 +11,8 @@ WITH t AS (
     COALESCE(pjd.heures_pour_seuil,0)                           heures_pour_seuil,
     COALESCE(pjd.obligatoire,1)                                 obligatoire
   FROM
-              tbl_piece_jointe_demande  pjd
-    LEFT JOIN tbl_piece_jointe_fournie  pjf ON pjf.code_intervenant = pjd.code_intervenant
+              v_tbl_piece_jointe_demande  pjd
+    LEFT JOIN v_tbl_piece_jointe_fournie  pjf ON pjf.code_intervenant = pjd.code_intervenant
                                            AND pjf.type_piece_jointe_id = pjd.type_piece_jointe_id
                                            AND pjd.annee_id BETWEEN pjf.annee_id AND COALESCE(pjf.date_archive - 1,(pjf.annee_id + pjd.duree_vie-1))
   WHERE
@@ -35,8 +35,8 @@ WITH t AS (
     0                                                           heures_pour_seuil,
     0                                                           obligatoire
   FROM
-              tbl_piece_jointe_fournie pjf
-    LEFT JOIN tbl_piece_jointe_demande pjd ON pjd.intervenant_id = pjf.intervenant_id
+              v_tbl_piece_jointe_fournie pjf
+    LEFT JOIN v_tbl_piece_jointe_demande pjd ON pjd.intervenant_id = pjf.intervenant_id
                                           AND pjd.type_piece_jointe_id = pjf.type_piece_jointe_id
   WHERE
     pjd.id IS NULL

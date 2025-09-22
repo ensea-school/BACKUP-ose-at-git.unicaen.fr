@@ -1924,6 +1924,7 @@ return [
         'NUM_REGLE',
         'NATIONALITE_ETRANGERE',
         'FA',
+        'POST_RECRUTEMENT',
     ],
     'TYPE_RESSOURCE'                      => [
         'ID',

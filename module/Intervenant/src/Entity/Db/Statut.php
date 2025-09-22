@@ -32,6 +32,12 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     const ENSEIGNEMENT_MODALITE_SEMESTRIEL = 'semestriel';
 
+    const DONNEES_PERSONNELLES_NON_DEMANDEES              = 0;
+    const DONNEES_PERSONNELLES_DEMANDEES                  = 1;
+    const DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT = 2;
+
+    const CODE_SITUATION_MATRIMONIALE_CELIBATAIRE = 'CEL';
+
     use ParametreEntityTrait;
     use TypeIntervenantAwareTrait;
     use EntityManagerAwareTrait;
@@ -60,9 +66,9 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool $dossierSelectionnable = true;
 
-    private bool $dossierIdentiteComplementaire = true;
+    private int $dossierIdentiteComplementaire = 0;
 
-    private bool $dossierContact = true;
+    private int $dossierContact = 0;
 
     private bool $dossierTelPerso = false;
 
@@ -72,41 +78,41 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool $dossierEmployeurFacultatif = false;
 
-    private bool $dossierAdresse = true;
+    private int $dossierAdresse = 0;
 
-    private bool $dossierBanque = true;
+    private int $dossierBanque = 0;
 
-    private bool $dossierInsee = true;
+    private int $dossierInsee = 0;
 
-    private bool $dossierStatut = true;
+    private int $dossierStatut = 0;
 
-    private bool $dossierEmployeur = false;
+    private int $dossierEmployeur = 0;
 
-    private bool $dossierAutre1 = false;
+    private int $dossierAutre1 = 0;
 
     private bool $dossierAutre1Visualisation = true;
 
     private bool $dossierAutre1Edition = true;
 
-    private bool $dossierAutre2 = false;
+    private int $dossierAutre2 = 0;
 
     private bool $dossierAutre2Visualisation = true;
 
     private bool $dossierAutre2Edition = true;
 
-    private bool $dossierAutre3 = false;
+    private int $dossierAutre3 = 0;
 
     private bool $dossierAutre3Visualisation = true;
 
     private bool $dossierAutre3Edition = true;
 
-    private bool $dossierAutre4 = false;
+    private int $dossierAutre4 = 0;
 
     private bool $dossierAutre4Visualisation = true;
 
     private bool $dossierAutre4Edition = true;
 
-    private bool $dossierAutre5 = false;
+    private int $dossierAutre5 = 0;
 
     private bool $dossierAutre5Visualisation = true;
 
@@ -472,14 +478,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierIdentiteComplementaire(): bool
+    public function getDossierIdentiteComplementaire(): int
     {
         return $this->dossierIdentiteComplementaire;
     }
 
 
 
-    public function setDossierIdentiteComplementaire(bool $dossierIdentiteComplementaire): Statut
+    public function setDossierIdentiteComplementaire(int $dossierIdentiteComplementaire): Statut
     {
         $this->dossierIdentiteComplementaire = $dossierIdentiteComplementaire;
 
@@ -488,14 +494,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierContact(): bool
+    public function getDossierContact(): int
     {
         return $this->dossierContact;
     }
 
 
 
-    public function setDossierContact(bool $dossierContact): Statut
+    public function setDossierContact(int $dossierContact): Statut
     {
         $this->dossierContact = $dossierContact;
 
@@ -568,14 +574,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierAdresse(): bool
+    public function getDossierAdresse(): int
     {
         return $this->dossierAdresse;
     }
 
 
 
-    public function setDossierAdresse(bool $dossierAdresse): Statut
+    public function setDossierAdresse(int $dossierAdresse): Statut
     {
         $this->dossierAdresse = $dossierAdresse;
 
@@ -584,14 +590,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierBanque(): bool
+    public function getDossierBanque(): int
     {
         return $this->dossierBanque;
     }
 
 
 
-    public function setDossierBanque(bool $dossierBanque): Statut
+    public function setDossierBanque(int $dossierBanque): Statut
     {
         $this->dossierBanque = $dossierBanque;
 
@@ -600,14 +606,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierInsee(): bool
+    public function getDossierInsee(): int
     {
         return $this->dossierInsee;
     }
 
 
 
-    public function setDossierInsee(bool $dossierInsee): Statut
+    public function setDossierInsee(int $dossierInsee): Statut
     {
         $this->dossierInsee = $dossierInsee;
 
@@ -616,14 +622,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierStatut(): bool
+    public function getDossierStatut(): int
     {
         return $this->dossierStatut;
     }
 
 
 
-    public function setDossierStatut(bool $dossierStatut): Statut
+    public function setDossierStatut(int $dossierStatut): Statut
     {
         $this->dossierStatut = $dossierStatut;
 
@@ -632,14 +638,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierEmployeur(): bool
+    public function getDossierEmployeur(): int
     {
         return $this->dossierEmployeur;
     }
 
 
 
-    public function setDossierEmployeur(bool $dossierEmployeur): Statut
+    public function setDossierEmployeur(int $dossierEmployeur): Statut
     {
         $this->dossierEmployeur = $dossierEmployeur;
 
@@ -648,14 +654,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierAutre1(): bool
+    public function getDossierAutre1(): int
     {
         return $this->dossierAutre1;
     }
 
 
 
-    public function setDossierAutre1(bool $dossierAutre1): Statut
+    public function setDossierAutre1(int $dossierAutre1): Statut
     {
         $this->dossierAutre1 = $dossierAutre1;
 
@@ -696,14 +702,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierAutre2(): bool
+    public function getDossierAutre2(): int
     {
         return $this->dossierAutre2;
     }
 
 
 
-    public function setDossierAutre2(bool $dossierAutre2): Statut
+    public function setDossierAutre2(int $dossierAutre2): Statut
     {
         $this->dossierAutre2 = $dossierAutre2;
 
@@ -744,14 +750,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierAutre3(): bool
+    public function getDossierAutre3(): int
     {
         return $this->dossierAutre3;
     }
 
 
 
-    public function setDossierAutre3(bool $dossierAutre3): Statut
+    public function setDossierAutre3(int $dossierAutre3): Statut
     {
         $this->dossierAutre3 = $dossierAutre3;
 
@@ -792,14 +798,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierAutre4(): bool
+    public function getDossierAutre4(): int
     {
         return $this->dossierAutre4;
     }
 
 
 
-    public function setDossierAutre4(bool $dossierAutre4): Statut
+    public function setDossierAutre4(int $dossierAutre4): Statut
     {
         $this->dossierAutre4 = $dossierAutre4;
 
@@ -840,14 +846,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getDossierAutre5(): bool
+    public function getDossierAutre5(): int
     {
         return $this->dossierAutre5;
     }
 
 
 
-    public function setDossierAutre5(bool $dossierAutre5): Statut
+    public function setDossierAutre5(int $dossierAutre5): Statut
     {
         $this->dossierAutre5 = $dossierAutre5;
 

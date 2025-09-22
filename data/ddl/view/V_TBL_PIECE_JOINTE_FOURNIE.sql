@@ -30,6 +30,8 @@ SELECT
                                          AND v.histo_destruction IS NULL
  WHERE
    pj.histo_destruction IS NULL
+   /*@intervenant_id=i.id*/
+   /*@annee_id=i.annee_id*/
  GROUP BY
    i.annee_id,
    i.code,

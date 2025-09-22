@@ -21,7 +21,7 @@ class PieceJointeProcessFactory
      *
      * @return PieceJointeProcess
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): PieceJointeProcess
+    public function __invoke(ContainerInterface $container, string $requestedName, ?array $options = null): PieceJointeProcess
     {
         $service = new PieceJointeProcess();
 

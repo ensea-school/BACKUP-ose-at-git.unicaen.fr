@@ -26,7 +26,8 @@ FROM
   FROM
     tbl_piece_jointe tpj
   WHERE
-    demandee > 0
+    tpj.demandee > 0
+    AND tpj.demandee_apres_recrutement = 0
     /*@intervenant_id=tpj.intervenant_id*/
     /*@annee_id=tpj.annee_id*/
   GROUP BY
@@ -34,9 +35,54 @@ FROM
     intervenant_id
 ) pj
   JOIN (
-          SELECT 'pj_saisie'      code FROM dual
-    UNION SELECT 'pj_validation'  code FROM dual
+              SELECT 'pj_saisie'      code FROM dual
+    UNION ALL SELECT 'pj_validation'  code FROM dual
   ) e ON (
        (e.code = 'pj_saisie'     AND pj.demandees > 0)
     OR (e.code = 'pj_validation' AND pj.fournies  > 0)
+  )
+
+UNION ALL
+
+SELECT
+  e.code                                                    etape_code,
+  pj.intervenant_id                                         intervenant_id,
+  null                                                      structure_id,
+  CASE
+    WHEN e.code = 'pj_compl_saisie' THEN pj.demandees
+    WHEN e.code = 'pj_compl_validation' THEN pj.demandees
+  END                                                       objectif,
+  CASE
+    WHEN e.code = 'pj_compl_saisie' THEN pj.fournies
+    WHEN e.code = 'pj_compl_validation' THEN pj.validees
+  END                                                       partiel,
+  CASE
+    WHEN e.code = 'pj_compl_saisie' THEN pj.fournies
+    WHEN e.code = 'pj_compl_validation' THEN pj.validees
+  END                                                       realisation
+FROM
+  (
+  SELECT
+    intervenant_id,
+    SUM(demandee) demandees,
+    SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE fournie END)  fournies,
+    SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE validee END)  validees,
+    SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE 0 END)        facultatives
+  FROM
+    tbl_piece_jointe tpj
+  WHERE
+    tpj.demandee > 0
+    AND tpj.demandee_apres_recrutement = 1
+    /*@intervenant_id=tpj.intervenant_id*/
+    /*@annee_id=tpj.annee_id*/
+  GROUP BY
+    annee_id,
+    intervenant_id
+) pj
+  JOIN (
+              SELECT 'pj_compl_saisie'      code FROM dual
+    UNION ALL SELECT 'pj_compl_validation'  code FROM dual
+  ) e ON (
+       (e.code = 'pj_compl_saisie'     AND pj.demandees > 0)
+    OR (e.code = 'pj_compl_validation' AND pj.fournies  > 0)
   )

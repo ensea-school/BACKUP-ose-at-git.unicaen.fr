@@ -361,14 +361,14 @@ class WorkflowProcess implements ProcessInterface
                 'etapes' => [WorkflowEtape::PJ_SAISIE, WorkflowEtape::PJ_VALIDATION],
                 'sql'    => "CASE
     WHEN EXISTS(
-    SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id AND si.pj_active = 1
+    SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id AND si.pj_active = 1 AND tpjs.demandee_apres_recrutement = 0
   ) THEN 1 ELSE 0 END",
             ],
             [
                 'etapes' => [WorkflowEtape::PJ_COMPL_SAISIE, WorkflowEtape::PJ_COMPL_VALIDATION],
                 'sql'    => "CASE
     WHEN EXISTS(
-    SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id AND si.pj_active = 1
+    SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id AND si.pj_active = 1 AND tpjs.demandee_apres_recrutement = 1
   ) THEN si.pj_active ELSE 0 END",
             ],
 

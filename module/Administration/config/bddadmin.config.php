@@ -9,8 +9,13 @@ return [
             'sources' => [
                 10 => DataSource\DataSource::class,
                 20 => 'data/nomenclatures.php',
-                30 => 'data/donnees_par_defaut.php',
+                30 => 'data/default',
             ],
+
+            'actions' => [
+                'privileges' => 'Mise à jour des privilèges dans la base de données',
+            ],
+            'config'  => require 'data/data_updater_config.php',
         ],
 
         'migration' => [

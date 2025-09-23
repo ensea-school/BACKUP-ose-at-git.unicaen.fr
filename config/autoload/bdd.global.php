@@ -43,17 +43,6 @@ return [
             ],
         ],
 
-        'data' => [
-            'sources' => [
-                20 => 'data/nomenclatures.php',
-                30 => 'data/donnees_par_defaut.php',
-            ],
-            'actions' => [
-                'privileges' => 'Mise à jour des privilèges dans la base de données',
-            ],
-            'config'  => require 'data/data_updater_config.php',
-        ],
-
         'id_column' => 'ID',
 
         'histo' => [

@@ -92,6 +92,7 @@ Dépendances requises :
     * json
     * ldap
     * bcmath
+    * calendar
     * mbstring
     * opcache
     * xml

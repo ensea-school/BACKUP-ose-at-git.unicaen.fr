@@ -56,19 +56,6 @@ return [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',
     ],
-    'WORKFLOW_ETAPE'             => [
-        'actions' => ['install', 'update', 'workflow-reset'],
-        'key'     => ['CODE', 'ANNEE_ID'],
-        'options' => [
-            'hard-delete' => true,
-            'columns'            => [
-                'PERIMETRE_ID' => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s'],
-            ],
-            'update-ignore-cols' => [
-                'LIBELLE_INTERVENANT', 'LIBELLE_AUTRES', 'DESC_NON_FRANCHIE', 'DESC_SANS_OBJECTIF', 'ORDRE',
-            ],
-        ],
-    ],
     'TYPE_AGREMENT'              => [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',
@@ -136,6 +123,19 @@ return [
 
 
     /* Tables avec paramétrages pré-configurés (certaines colonnes + nouveaux enregistrements) */
+    'WORKFLOW_ETAPE'             => [
+        'actions' => ['install', 'update', 'workflow-reset'],
+        'key'     => ['CODE', 'ANNEE_ID'],
+        'options' => [
+            'hard-delete' => true,
+            'columns'            => [
+                'PERIMETRE_ID' => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s'],
+            ],
+            'update-ignore-cols' => [
+                'LIBELLE_INTERVENANT', 'LIBELLE_AUTRES', 'DESC_NON_FRANCHIE', 'DESC_SANS_OBJECTIF', 'ORDRE',
+            ],
+        ],
+    ],
     'ADRESSE_NUMERO_COMPL'       => [
         'actions' => ['install'],
         'key'     => ['CODE'],

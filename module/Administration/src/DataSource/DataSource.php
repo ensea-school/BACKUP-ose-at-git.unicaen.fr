@@ -56,7 +56,7 @@ class DataSource
 
         $r = fopen('data/departement.csv', 'r');
         $i = 0;
-        while ($d = fgetcsv($r, 0, ',', '"')) {
+        while ($d = fgetcsv($r, 0, ',', '"', '\\')) {
             $i++;
             if ($i > 1) {
                 $code = (string)$d[0];

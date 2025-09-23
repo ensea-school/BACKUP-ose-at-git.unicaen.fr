@@ -4,6 +4,7 @@ namespace Application\Provider\Identity;
 
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
+use Application\Service\RoleService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterface;
 use Intervenant\Service\IntervenantServiceAwareTrait;
@@ -38,8 +39,10 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
 
     public function clearIdentityRoles(): void
     {
-        $session                = $this->getSessionContainer();
-        $session->identityRoles = [];
+        $session = RoleService::getSession();
+        if ($session->offsetExists('identityRoles')) {
+            $session->offsetUnset('identityRoles');
+        }
     }
 
 
@@ -49,16 +52,20 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
      */
     public function getIdentityRoles(): array
     {
-        $session = $this->getSessionContainer();
+        if (!$this->getServiceContext()->getUtilisateur()) {
+            // pas d'utilisateur, on est forcément guest
+            return ['guest' => 'guest'];
+        }
+        //Sinon on regarde si il y a des rôles en session
+        $session = RoleService::getSession();
         // pas de cache si on est que guest
-        if (!$session->offsetExists('identityRoles') || empty($session->identityRoles) || count($session->identityRoles) < 2) {
+        if (!$session->offsetExists('identityRoles')) {
             $filter = $this->getEntityManager()->getFilters()->enable('historique');
             $filter->init([
                               Role::class,
                               Affectation::class,
                           ]);
 
-            $identityRoles = ['guest' => 'guest'];
 
             $inEtablissement = $this->getHostLocalization()->inEtablissement();
 

@@ -34,11 +34,11 @@
 
         "unicaen/code"                     : "6.6.0",
         "unicaen/import"                   : "6.1.0",
-        "unicaen/tbl"                      : "6.3.0",
+        "unicaen/tbl"                      : "6.3.1",
         "unicaen/open-document"            : "6.1.3",
         "unicaen/siham"                    : "6.2.0",
         "unicaen/vue"                      : "6.4.0",
-        "unicaen/bddadmin"                 : "1.5.0",
+        "unicaen/bddadmin"                 : "1.7.0",
 
         "connecteur-ose/actul"             : "dev-master",
         "connecteur-ose/pegase"            : "dev-master"

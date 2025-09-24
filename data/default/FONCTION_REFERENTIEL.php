@@ -1,0 +1,112 @@
+<?php
+
+//@formatter:off
+
+return [
+    [
+        'CODE'                   => 'CHARGE.MISSION',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1153',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Charge Mission auprès Président Unicaen',
+        'LIBELLE_LONG'           => 'Charge d\'une mission auprès du Président de l\'Université',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'DIR.DEPARTEMENT',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1011',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Direction de département.',
+        'LIBELLE_LONG'           => 'Direction de département',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'DIRECTION.UR',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1153',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Direction d\'une Unité de Recherche',
+        'LIBELLE_LONG'           => 'Direction d\'une Unité de Recherche',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'DIR.STRUCT',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1153',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Direction de structure',
+        'LIBELLE_LONG'           => 'Direction de structure',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'ENCAD.TUTEUR.ETUD',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1011',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Encadrement des tuteurs étudiants',
+        'LIBELLE_LONG'           => 'Encadrement des tuteurs étudiants',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'PORTAGE.PROJ.RECH.',
+        'DOMAINE_FONCTIONNEL_ID' => 'D112',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Portage de projet de recherche',
+        'LIBELLE_LONG'           => 'Portage de projet de recherche',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'REFERENT.EGALITE.COMPOSANTE',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1153',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Référent égalité Femme/Homme',
+        'LIBELLE_LONG'           => 'Référent égalité Femme/Homme',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'REF.PEDAG.COMP',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1011',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Référent Pédagogique de Composante',
+        'LIBELLE_LONG'           => 'Référent Pédagogique de Composante',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'RESP.FORMATION',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1011',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Responsable Formation',
+        'LIBELLE_LONG'           => 'Responsable Formation',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'RESP.INST.',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1153',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Responsabilité institutionnelle',
+        'LIBELLE_LONG'           => 'Responsabilité institutionnelle',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'RESP.POLE_ED_PL_GE',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1153',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Resp. Pôle, ED, plateforme ou Gd équipt',
+        'LIBELLE_LONG'           => 'RESPONSABILITÉS DE PÔLE, ÉCOLE DOCTORALE, PLATEFORME OU GRAND ÉQUIPEMENT',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'SECTION.DISCIPLINAIRE',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1153',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Section disciplinaire',
+        'LIBELLE_LONG'           => 'Section disciplinaire',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+    [
+        'CODE'                   => 'VALIDATION.ETUDES',
+        'DOMAINE_FONCTIONNEL_ID' => 'D1011',
+        'ETAPE_REQUISE'          => FALSE,
+        'LIBELLE_COURT'          => 'Validation d\'études',
+        'LIBELLE_LONG'           => 'Validation d\'études',
+        'SERVICE_STATUTAIRE'     => TRUE,
+    ],
+];
+
+//@formatter:on

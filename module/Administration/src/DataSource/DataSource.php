@@ -173,8 +173,7 @@ class DataSource
 
     public function STATUT(): array
     {
-        $donneesParDefaut = require 'data/donnees_par_defaut.php';
-        $data             = $donneesParDefaut['STATUT'];
+        $data = require 'data/default/STATUT.php';
 
         $statuts = [];
         for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
@@ -192,8 +191,7 @@ class DataSource
 
     public function FONCTION_REFERENTIEL(): array
     {
-        $donneesParDefaut = require 'data/donnees_par_defaut.php';
-        $data             = $donneesParDefaut['FONCTION_REFERENTIEL'];
+        $data = require 'data/default/FONCTION_REFERENTIEL.php';
 
         $fonctions = [];
         for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {
@@ -211,8 +209,7 @@ class DataSource
 
     public function TYPE_PIECE_JOINTE_STATUT(): array
     {
-        $donneesParDefaut = require 'data/donnees_par_defaut.php';
-        $data             = $donneesParDefaut['TYPE_PIECE_JOINTE_STATUT'];
+        $data = require 'data/default/TYPE_PIECE_JOINTE_STATUT.php';
 
         $statuts = [];
         for ($a = Annee::MIN_DATA; $a <= Annee::MAX; $a++) {

@@ -1,0 +1,230 @@
+<?php
+
+//@formatter:off
+
+return [
+    [
+        'CODE'           => 'ACCID_SERVICE',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Accident de service',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'ACCID_TRAV',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Accident de travail',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'ADAPTRQTH',
+        'DECHARGE'       => TRUE,
+        'LIBELLE'        => 'Adaptation RQTH',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'ADOPT',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Adoption',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'CPF',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Compte personnel de formation',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'BONIF',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Congé bonifié',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'GRAVE_MALAD',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Congé de grave maladie',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'LONG_DUREE',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Congé de longue durée',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'LONG_MALAD',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Congé de longue maladie',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'MATER',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Congé de maternité',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'ORDIN_MALAD',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Congé ordinaire de maladie',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'CONG_PARENT',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Congé parental',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'PATER',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Congé paternité',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'CPP',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Congé pour projet pédagogique',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'DECHARGE',
+        'DECHARGE'       => TRUE,
+        'LIBELLE'        => 'Décharge',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'DECHPORT_H2020ANR',
+        'DECHARGE'       => TRUE,
+        'LIBELLE'        => 'Décharge portage H2020/ANR Jeunes Chercheurs',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'RESP_ENS_CONSTRACT',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Décharge pour responsabilité particulière (enseignant contractuel CDD)',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'DECH_SYNDIC',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Décharge syndicale',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'DELEG',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Délégation',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'DELEG_IUF',
+        'DECHARGE'       => TRUE,
+        'LIBELLE'        => 'Délégation IUF',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'DEPART',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Départ',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'DETACH',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Détachement',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'DISPO',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Disponibilité',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'FORMAT_PRO',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Formation professionnelle',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'GREVE',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Grève',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'MAJOR_SERV_DU',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Majoration de service dû',
+        'MULTIPLICATEUR' => 1,
+    ],
+    [
+        'CODE'           => 'MBRE_FORM_SPE',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Membre formation spécialisée',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'MISE_DISPO',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Mise à disposition',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'MI_TPS_THERAP',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Mi-temps thérapeutique',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'NOMIN_EN_COURS',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Nomination en cours d\'année',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'RECH_CONV_THEM',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Recherche ou conversion thématique',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'SURNOMBRE',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Surnombre',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'SUSP-ADMIN',
+        'DECHARGE'       => TRUE,
+        'LIBELLE'        => 'Suspension administrative',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'SUSP-DISC',
+        'DECHARGE'       => TRUE,
+        'LIBELLE'        => 'Suspension disciplinaire',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'TEMPS_INCOMPLET',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Temps incomplet',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'TPEN',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Temps partagé EN',
+        'MULTIPLICATEUR' => -1,
+    ],
+    [
+        'CODE'           => 'TEMPS_PARTIEL',
+        'DECHARGE'       => FALSE,
+        'LIBELLE'        => 'Temps partiel',
+        'MULTIPLICATEUR' => -1,
+    ],
+];
+
+//@formatter:on

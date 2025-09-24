@@ -31,6 +31,10 @@ Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en versio
 
 # OSE 24.11 (à venir)
 
+## Nouveautés
+
+* Nouvel état de sortie pour l'offre de formation permettant d'affiner par rapport au besoin de chaque établissement l'export de l'offre de formation
+
 ## Corrections
 
 * Bonne prise en compte de l'ordonnancement des statuts au niveau des données personnelles (#63380)

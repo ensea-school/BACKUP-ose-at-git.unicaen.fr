@@ -299,48 +299,24 @@ class OffreFormationService extends AbstractEntityService
     {
         /* Préparation et affichage */
         $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'export-offre-formation']);
+        $annee = $this->getServiceContext()->getAnnee()->getId();
 
         $fileName = 'Export-offre-formation - ' . date('dmY') . '.csv';
 
-        //$filters             = $recherche->getFilters();
-        $filters['ANNEE_ID'] = '2025';
-        /*if ($structure) {
-            $filters['STRUCTURE_AFF_IDS OR STRUCTURE_ENS_IDS'] = $structure->idsFilter();
+
+        $filters['ANNEE_ID'] = $annee;
+
+        if ($structure) {
+            $filters['STRUCTURE_ID'] = $structure->getId();
         }
-
-        $options = [
-            'annee'               => $annee->getLibelle(),
-            'type_volume_horaire' => $recherche->getTypeVolumeHoraire()->getLibelle(),
-            'etat_volume_horaire' => $recherche->getEtatVolumeHoraire()->getLibelle(),
-            'composante'          => $recherche->getStructureAff() ? $recherche->getStructureAff()->getLibelleCourt() : 'Toutes',
-            'type_intervenant'    => $recherche->getTypeIntervenant() ? $recherche->getTypeIntervenant()->getLibelle() : 'Tous intervenants',
-        ];*/
-
-
+        if ($etape) {
+            $filters['ETAPE_ID'] = $etape->getId();
+        }
+        if ($etape) {
+            $filters['NIVEAU'] = $niveau->getLib();
+        }
         $csv = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, []);
         $csv->setFilename($fileName);
-
-
-        //$elements = $this->getNeep($structure, $niveau, $etape)[2];
-
-        /*$headers = [
-            'Structure',
-            'Code formation',
-            'Libellé formation',
-            'Niveau',
-            'Code enseignement',
-            'Libellé enseignement',
-            'Code discipline',
-            'Libellé discipline',
-            'Période',
-            'FOAD',
-            'Taux FI / effectifs année préc.',
-            'Taux FA / effectifs année préc.',
-            'Taux FC / effectifs année préc.',
-            'Effectifs FI actuels',
-            'Effectifs FA actuels',
-            'Effectifs FC actuels',
-        ];*/
 
         return $csv;
 

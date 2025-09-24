@@ -25,11 +25,11 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
     use StatutServiceAwareTrait;
 
 
-    private array $privilegesCache       = [];
+    private array $privilegesCache = [];
 
     private array $privilegesRolesConfig = [];
 
-    private array $noAdminPrivileges     = [
+    private array $noAdminPrivileges = [
         Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
         Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
         Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
@@ -75,6 +75,10 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
      */
     public function getPrivilegesRoles(): array
     {
+        if (!$this->getServiceContext()->getUtilisateur()) {
+            return [];
+        }
+
         $session = RoleService::getSession();
 
         if (!$session->offsetExists('privilegesRoles') || empty($session->privilegesRoles)) {
@@ -91,10 +95,10 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
     public function getList()
     {
         $qb = $this->getRepo()->createQueryBuilder('p')
-            ->addSelect('c')
-            ->join('p.categorie', 'c')
-            ->addOrderBy('c.libelle')
-            ->addOrderBy('p.ordre');
+                   ->addSelect('c')
+                   ->join('p.categorie', 'c')
+                   ->addOrderBy('c.libelle')
+                   ->addOrderBy('p.ordre');
 
         return $qb->getQuery()->getResult();
     }
@@ -151,7 +155,7 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
 
     public function getResources()
     {
-        $resources = [];
+        $resources  = [];
         $privileges = array_keys($this->getPrivilegesRoles());
         foreach ($privileges as $privilege) {
             $resources[] = Privileges::getResourceId($privilege);

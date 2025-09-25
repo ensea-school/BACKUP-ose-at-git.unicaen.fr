@@ -10,7 +10,7 @@ FROM
     LEFT JOIN mise_en_paiement mep ON mep.id = tp.mise_en_paiement_id
 WHERE
   tp.periode_paiement_id IS NULL
-  AND w.etape_code = 'SAISIE_MEP'
+  AND w.etape_code = 'saisie_mep'
   AND w.type_intervenant_code = 'S'
   AND w.atteignable = 1
   AND w.objectif > w.realisation

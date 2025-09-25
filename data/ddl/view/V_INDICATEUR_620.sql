@@ -8,7 +8,7 @@ FROM
   JOIN TYPE_VOLUME_HORAIRE tvh ON tvh.CODE = 'PREVU'
   LEFT JOIN HISTO_INTERVENANT_SERVICE his ON his.INTERVENANT_ID = w.intervenant_id
 WHERE
-  w.etape_code = 'SERVICE_VALIDATION'
+  w.etape_code = 'enseignement_validation'
   AND w.type_intervenant_code = 'E'
   AND w.atteignable = 1
   AND w.objectif > w.realisation

@@ -7,6 +7,6 @@ FROM
   JOIN intervenant i ON i.id = w.intervenant_id
 WHERE
   w.atteignable = 1
-  AND w.etape_code = 'CONSEIL_ACADEMIQUE'
+  AND w.etape_code = 'conseil_academique'
   AND w.objectif > 0
   AND w.realisation < 1

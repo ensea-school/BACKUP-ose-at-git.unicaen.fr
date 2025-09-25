@@ -13,7 +13,7 @@ FROM
   JOIN statut      si                   ON si.id = i.statut_id
 WHERE
   w.atteignable = 1
-  AND w.etape_code = 'CONTRAT'
+  AND w.etape_code = 'contrat'
   AND w.objectif > w.realisation
   AND i.histo_destruction IS NULL
   AND si.contrat = 1

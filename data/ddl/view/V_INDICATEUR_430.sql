@@ -13,7 +13,7 @@ FROM
   JOIN type_service ts ON tblc.type_service_id = ts.id
 WHERE
   w.atteignable = 1
-  AND w.etape_code = 'CONTRAT'
+  AND w.etape_code = 'contrat'
   AND tblc.contrat_id IS NULL
   AND tblc.contrat_parent_id IS NOT NULL
   AND tblc.actif = 1

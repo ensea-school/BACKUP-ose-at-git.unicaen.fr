@@ -8,7 +8,7 @@ FROM
   JOIN tbl_mission tm ON tm.intervenant_id = w.intervenant_id
   JOIN mission m ON tm.mission_id = m.id
 WHERE
-  w.etape_code = 'MISSION_VALIDATION'
+  w.etape_code = 'mission_validation'
   AND w.atteignable = 1
   AND w.objectif > w.realisation
 GROUP BY

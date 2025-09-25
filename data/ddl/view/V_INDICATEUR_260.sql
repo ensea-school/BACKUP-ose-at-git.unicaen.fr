@@ -9,8 +9,8 @@ FROM
   JOIN intervenant i ON i.id = w.intervenant_id
   JOIN PIECE_JOINTE pj ON i.id = pj.intervenant_id
 WHERE
-  w.etape_code = 'PJ_VALIDATION'
-  AND wc.etape_code = 'PJ_SAISIE'
+  w.etape_code = 'pj_validation'
+  AND wc.etape_code = 'pj_saisie'
   AND w.type_intervenant_code = 'S'
   AND wc.objectif = wc.realisation
   AND w.atteignable = 1

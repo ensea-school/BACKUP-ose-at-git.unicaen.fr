@@ -6,6 +6,6 @@ FROM
   tbl_workflow w
 WHERE
   w.atteignable = 1
-  AND w.etape_code = 'CONSEIL_RESTREINT'
+  AND w.etape_code = 'conseil_restreint'
   AND w.objectif > 0
   AND w.realisation < 1

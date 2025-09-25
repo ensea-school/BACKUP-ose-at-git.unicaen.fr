@@ -6,7 +6,7 @@ FROM
   tbl_workflow w
   JOIN tbl_mission tm ON tm.intervenant_id = w.intervenant_id
 WHERE
-  w.etape_code = 'MISSION_SAISIE_REALISE'
+  w.etape_code = 'mission_saisie_realise'
   AND w.atteignable = 1
   AND w.objectif > w.realisation
 GROUP BY

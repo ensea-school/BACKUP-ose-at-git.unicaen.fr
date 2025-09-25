@@ -6,7 +6,7 @@ WITH caok AS (
     tbl_workflow w
   WHERE
     w.objectif > 0
-    AND w.etape_code = 'CONSEIL_ACADEMIQUE'
+    AND w.etape_code = 'conseil_academique'
     AND w.realisation = w.objectif
 )
 SELECT
@@ -17,6 +17,6 @@ FROM
   JOIN caok ON caok.intervenant_id = w.intervenant_id
 WHERE
   w.atteignable = 1
-  AND w.etape_code = 'CONTRAT'
+  AND w.etape_code = 'contrat'
   AND w.objectif > 0
   AND w.realisation < 1

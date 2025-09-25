@@ -9,7 +9,7 @@ FROM
   LEFT JOIN service s ON s.intervenant_id = w.intervenant_id
   LEFT JOIN volume_horaire vh ON s.id = vh.service_id
 WHERE
-  w.etape_code = 'DEMANDE_MEP'
+  w.etape_code = 'demande_mep'
   AND w.type_intervenant_code = 'P'
   AND w.atteignable = 1
   AND w.objectif > w.realisation

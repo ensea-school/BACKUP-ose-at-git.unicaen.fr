@@ -12,7 +12,7 @@ FROM tbl_workflow w
   JOIN tbl_contrat tblc ON tblc.intervenant_id = w.intervenant_id AND volume_horaire_index = 0
 WHERE
   w.atteignable = 1
-  AND w.etape_code = 'CONTRAT'
+  AND w.etape_code = 'contrat'
   AND w.objectif > 0
   AND w.realisation = 0
   AND i.histo_destruction IS NULL

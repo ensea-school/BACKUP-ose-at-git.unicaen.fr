@@ -9,11 +9,11 @@ FROM
   JOIN tbl_workflow wc ON wc.intervenant_id = w.intervenant_id
   LEFT JOIN HISTO_INTERVENANT_SERVICE his ON his.INTERVENANT_ID = w.intervenant_id
 WHERE
-  w.etape_code = 'SERVICE_VALIDATION_REALISE'
+  w.etape_code = 'enseignement_validation_realise'
   AND w.type_intervenant_code = 'P'
   AND w.objectif > w.realisation
   AND w.atteignable = 1
-  AND wc.etape_code = 'CLOTURE_REALISE'
+  AND wc.etape_code = 'cloture_realise'
   AND wc.objectif = wc.realisation
   AND his.TYPE_VOLUME_HORAIRE_ID = tvh.ID
   AND his.REFERENTIEL = 0

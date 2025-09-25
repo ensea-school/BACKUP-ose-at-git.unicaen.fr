@@ -10,7 +10,7 @@ FROM
   JOIN statut s ON s.id = i.statut_id AND s.type_intervenant_id = (SELECT id FROM type_intervenant ti WHERE code = 'P')
   JOIN structure s ON s.id = w.structure_id
 WHERE
-  w.etape_code = 'SERVICE_VALIDATION_REALISE'
+  w.etape_code = 'enseignement_validation_realise'
   AND w.objectif > w.realisation
   AND w.atteignable = 1
   AND CASE WHEN s.cloture = 1 AND wc.objectif = wc.realisation THEN 1

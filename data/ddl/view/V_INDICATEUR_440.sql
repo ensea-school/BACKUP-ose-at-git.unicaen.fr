@@ -9,7 +9,7 @@ WHERE
   s.type_intervenant_code = 'V'
   AND s.type_volume_horaire_code = 'PREVU'
   AND nbvh <> valide
-  AND w.etape_code = 'CONTRAT'
+  AND w.etape_code = 'contrat'
   AND w.atteignable = 1
   AND w.objectif > 0
   AND w.realisation = w.objectif

@@ -4,7 +4,7 @@ namespace Formule\Assertion;
 
 use Application\Acl\Role;
 use Intervenant\Entity\Db\Intervenant;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Framework\Authorize\AbstractAssertion;
 
 
 /**

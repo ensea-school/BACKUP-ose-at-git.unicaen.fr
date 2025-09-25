@@ -3,11 +3,11 @@
 namespace Service;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\ModificationServiceDuController;
 use Service\Controller\MotifModificationServiceController;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
 
 
 return [
@@ -64,7 +64,7 @@ return [
                         'motif-modification-service' => [
                             'label'    => 'Motifs de modification du service dû',
                             'route'    => 'motif-modification-service',
-                            'resource' => PrivilegeController::getResourceId(MotifModificationServiceController::class, 'index'),
+                            'resource' => Authorize::controllerResource(MotifModificationServiceController::class, 'index'),
                             'order'    => 40,
                             'color'    => '#BBCF55',
                         ],
@@ -80,7 +80,7 @@ return [
                             'label'    => "Modifications de service dû (CSV)",
                             'title'    => "Modifications de service dû (CSV)",
                             'route'    => 'modification-service-du/export-csv',
-                            'resource' => PrivilegeController::getResourceId(ModificationServiceDuController::class, 'export-csv'),
+                            'resource' => Authorize::controllerResource(ModificationServiceDuController::class, 'export-csv'),
                         ],
                     ],
                 ],
@@ -96,7 +96,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(ModificationServiceDuController::class, 'saisir'),
+                    'resource'     => Authorize::controllerResource(ModificationServiceDuController::class, 'saisir'),
                     'order'        => 4,
                 ],
             ],

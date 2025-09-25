@@ -4,7 +4,7 @@ namespace Lieu;
 
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -45,7 +45,7 @@ return [
                         'voirie' => [
                             'label'    => 'Voiries',
                             'route'    => 'voirie',
-                            'resource' => PrivilegeController::getResourceId(Controller\VoirieController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\VoirieController::class, 'index'),
                             'order'    => 50,
                             'color'    => '#BBCF55',
                         ],

@@ -3,7 +3,7 @@
 namespace EtatSortie;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -67,7 +67,7 @@ return [
                             'label'    => "États de sortie",
                             'title'    => "États de sortie",
                             'route'    => 'etat-sortie',
-                            'resource' => PrivilegeController::getResourceId(Controller\EtatSortieController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\EtatSortieController::class, 'index'),
                             'order'    => 30,
                         ],
                     ],

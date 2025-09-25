@@ -3,7 +3,7 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -41,7 +41,7 @@ return [
                         'motif-non-paiement' => [
                             'label'    => 'Motifs de non paiement',
                             'route'    => 'motif-non-paiement',
-                            'resource' => PrivilegeController::getResourceId(Controller\MotifNonPaiementController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\MotifNonPaiementController::class, 'index'),
                             'order'    => 50,
                             'color'    => '#BBCF55',
                         ],

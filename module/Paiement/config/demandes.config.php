@@ -3,8 +3,8 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Paiement\Assertion\PaiementAssertion;
-use UnicaenPrivilege\Guard\PrivilegeController;
 use Workflow\Entity\Db\WorkflowEtape;
 
 return [
@@ -79,7 +79,7 @@ return [
                     ],
                     'withtarget'          => true,
                     'workflow-etape-code' => WorkflowEtape::DEMANDE_MEP,
-                    'resource'            => PrivilegeController::getResourceId(Controller\DemandesController::class, 'demandeMiseEnPaiement'),
+                    'resource'            => Authorize::controllerResource(Controller\DemandesController::class, 'demandeMiseEnPaiement'),
                     'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 16,
                 ],

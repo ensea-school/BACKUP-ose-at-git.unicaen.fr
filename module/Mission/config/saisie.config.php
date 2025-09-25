@@ -3,8 +3,8 @@
 namespace Mission;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
+use Framework\Authorize\Authorize;
 
 
 return [
@@ -116,7 +116,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget' => true,
-                    'resource' => PrivilegeController::getResourceId(Controller\SaisieController::class, 'index'),
+                    'resource' => Authorize::controllerResource(Controller\SaisieController::class, 'index'),
                     'order' => 8,
                 ],
             ],

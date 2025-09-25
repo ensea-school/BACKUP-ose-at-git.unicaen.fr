@@ -3,8 +3,8 @@
 namespace Administration;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -31,7 +31,7 @@ return [
         'gestion' => [
             'label'    => "Gestion",
             'route'    => 'gestion',
-            'resource' => PrivilegeController::getResourceId(Controller\GestionController::class, 'index'),
+            'resource' => Authorize::controllerResource(Controller\GestionController::class, 'index'),
             'order'    => 6,
             'pages'    => [
             ],

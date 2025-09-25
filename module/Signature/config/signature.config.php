@@ -3,6 +3,7 @@
 namespace Signature;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Signature\Command\UpdateSignaturesContratsProcessesCommand;
 use Signature\Command\UpdateSignaturesContratsProcessesCommandFactory;
 use Signature\Controller\SignatureController;
@@ -13,7 +14,6 @@ use Signature\Service\SignatureFlowService;
 use Signature\Service\SignatureFlowServiceFactory;
 use Signature\Service\SignatureFlowStepService;
 use Signature\Service\SignatureFlowStepServiceFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
 
@@ -73,7 +73,7 @@ return [
                             'label'      => "Gestion des circuits de signatures",
                             'title'      => "Gestion des circuits de signatures",
                             'route'      => 'signature-flow',
-                            'resource'   => PrivilegeController::getResourceId(SignatureFlowController::class, 'index'),
+                            'resource'   => Authorize::controllerResource(SignatureFlowController::class, 'index'),
                             'withtarget' => true,
                             'order'      => 10,
                         ],

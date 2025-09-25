@@ -3,7 +3,7 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -41,7 +41,7 @@ return [
                         'type-ressource' => [
                             'label'    => 'Types de ressources',
                             'route'    => 'type-ressource',
-                            'resource' => PrivilegeController::getResourceId(Controller\TypeRessourceController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\TypeRessourceController::class, 'index'),
                             'order'    => 50,
                             'color'    => '#71DFD7',
                         ],

@@ -7,7 +7,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Framework\Authorize\AbstractAssertion;
 
 
 /**

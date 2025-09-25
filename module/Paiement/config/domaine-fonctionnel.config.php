@@ -3,7 +3,7 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -45,7 +45,7 @@ return [
                         'domaine-fonctionnel' => [
                             'label'    => 'Domaines fonctionnels',
                             'route'    => 'domaine-fonctionnel',
-                            'resource' => PrivilegeController::getResourceId(Controller\DomaineFonctionnelController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\DomaineFonctionnelController::class, 'index'),
                             'order'    => 20,
                             'color'    => '#BBCF55',
                         ],

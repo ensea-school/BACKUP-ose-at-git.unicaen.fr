@@ -1,5 +1,6 @@
 <?php
 
+use Framework\Authorize\Authorize;
 use UnicaenApp\Util;
 
 /**
@@ -87,7 +88,7 @@ if ($structureElement) {
             </table>
         </div>
     </div>
-    <?php if ($this->isAllowed(\UnicaenPrivilege\Guard\PrivilegeController::getResourceId(\Paiement\Controller\BudgetController::class, 'export'))): ?>
+    <?php if ($this->isAllowed(Authorize::controllerResource(\Paiement\Controller\BudgetController::class, 'export'))): ?>
         <div class="budget-export">
             <a href="<?= $this->url('budget/export', ['structure' => $structure->getId()]) ?>">
                 <i class="fas fa-download"></i>

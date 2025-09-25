@@ -3,9 +3,9 @@
 namespace Plafond;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Plafond\View\Helper\PlafondConfigElementViewHelperFactory;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
 
 return [
 
@@ -137,7 +137,7 @@ return [
                         'plafonds' => [
                             'label'    => "Plafonds",
                             'route'    => 'plafond',
-                            'resource' => PrivilegeController::getResourceId('Plafond\Controller\Plafond', 'index'),
+                            'resource' => Authorize::controllerResource('Plafond\Controller\Plafond', 'index'),
                             'color'    => '#9B9B9B',
                             'order'    => 60,
                         ],

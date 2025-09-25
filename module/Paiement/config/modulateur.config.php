@@ -3,7 +3,7 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -76,7 +76,7 @@ return [
                             'label'    => 'Modulateurs des taux horaires',
                             'route'    => 'modulateur',
                             'order'    => 10,
-                            'resource' => PrivilegeController::getResourceId(Controller\ModulateurController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\ModulateurController::class, 'index'),
                         ],
                     ],
                 ],
@@ -115,7 +115,7 @@ return [
         Service\TypeModulateurStructureService::class => Service\TypeModulateurStructureServiceFactory::class,
         Service\ModulateurService::class              => Service\ModulateurServiceFactory::class,
         Service\TypeModulateurService::class          => Service\TypeModulateurServiceFactory::class,
-        Assertion\ModulateurAssertion::class          => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Assertion\ModulateurAssertion::class          => \Framework\Authorize\AssertionFactory::class,
     ],
 
     'controllers' => [

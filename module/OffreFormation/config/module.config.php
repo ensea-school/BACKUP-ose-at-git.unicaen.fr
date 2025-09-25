@@ -3,6 +3,7 @@
 namespace OffreFormation;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use OffreFormation\Controller\DisciplineController;
 use OffreFormation\Controller\ElementPedagogiqueController;
 use OffreFormation\Controller\EtapeCentreCoutController;
@@ -12,7 +13,6 @@ use OffreFormation\Controller\ModulateurController;
 use OffreFormation\Controller\OffreFormationController;
 use OffreFormation\Controller\TypeFormationController;
 use OffreFormation\Controller\TypeInterventionController;
-use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
@@ -349,7 +349,7 @@ return [
             'title'    => "Gestion de l'offre de formation",
             'route'    => 'of',
             'order'    => 2,
-            'resource' => PrivilegeController::getResourceId(OffreFormationController::class, 'index'),
+            'resource' => Authorize::controllerResource(OffreFormationController::class, 'index'),
         ],
         'administration' => [
             'pages' => [
@@ -360,41 +360,41 @@ return [
                             'title'    => 'Reconduction de l\'offre de formation complémentaire',
                             'route'    => 'aof/reconduction',
                             'order'    => 20,
-                            'resource' => PrivilegeController::getResourceId(OffreFormationController::class, 'reconduction'),
+                            'resource' => Authorize::controllerResource(OffreFormationController::class, 'reconduction'),
                         ],
                         'reconduction-centre-cout' => [
                             'label'    => 'Reconduction des centres de coûts',
                             'title'    => 'Reconduction des centres de coûts de l\'offre de formation',
                             'route'    => 'aof/reconduction-centre-cout',
                             'order'    => 30,
-                            'resource' => PrivilegeController::getResourceId(OffreFormationController::class, 'reconductionCentreCout'),
+                            'resource' => Authorize::controllerResource(OffreFormationController::class, 'reconductionCentreCout'),
                         ],
                         'reconduction-modulateur'  => [
                             'label'    => 'Reconduction des modulateurs',
                             'title'    => 'Reconduction des modulateurs de l\'offre de formation',
                             'route'    => 'aof/reconduction-modulateur',
                             'order'    => 40,
-                            'resource' => PrivilegeController::getResourceId(OffreFormationController::class, 'reconductionModulateur'),
+                            'resource' => Authorize::controllerResource(OffreFormationController::class, 'reconductionModulateur'),
                         ],
                         'discipline'               => [
                             'color'    => '#9F491F',
                             'label'    => "Types de disciplines",
                             'title'    => "Gestion des disciplines",
                             'route'    => 'discipline',
-                            'resource' => PrivilegeController::getResourceId(DisciplineController::class, 'index'),
+                            'resource' => Authorize::controllerResource(DisciplineController::class, 'index'),
                             'order'    => 50,
                         ],
                         'type-formation'           => [
                             'label'          => 'Types de formations',
                             'route'          => 'type-formation',
-                            'resource'       => PrivilegeController::getResourceId(TypeFormationController::class, 'index'),
+                            'resource'       => Authorize::controllerResource(TypeFormationController::class, 'index'),
                             'order'          => 60,
                             'border - color' => '#111',
                         ],
                         'type-intervention'        => [
                             'label'    => 'Types d\'interventions',
                             'route'    => 'type-intervention',
-                            'resource' => PrivilegeController::getResourceId(TypeInterventionController::class, 'index'),
+                            'resource' => Authorize::controllerResource(TypeInterventionController::class, 'index'),
                             'order'    => 70,
                             'color'    => '#71DFD7',
                         ],
@@ -627,8 +627,8 @@ return [
         Service\NiveauFormationService::class           => Service\Factory\NiveauFormationServiceFactory::class,
         Service\ElementModulateurService::class         => Service\Factory\ElementModulateurServiceFactory::class,
         Service\OffreFormationService::class            => Service\Factory\OffreFormationServiceFactory::class,
-        Assertion\OffreDeFormationAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
-        Assertion\TypeInterventionAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Assertion\OffreDeFormationAssertion::class      => \Framework\Authorize\AssertionFactory::class,
+        Assertion\TypeInterventionAssertion::class      => \Framework\Authorize\AssertionFactory::class,
         Service\VolumeHoraireEnsService::class          => Service\Factory\VolumeHoraireEnsServiceFactory::class,
         Processus\ReconductionProcessus::class          => Processus\Factory\ReconductionProcessusFactory::class,
         Service\TypeInterventionService::class          => Service\Factory\TypeInterventionServiceFactory::class,

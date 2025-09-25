@@ -3,11 +3,11 @@
 namespace Referentiel;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Referentiel\Controller\FonctionReferentielController;
 use Referentiel\Controller\ServiceReferentielController;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
 use Workflow\Entity\Db\WorkflowEtape;
 
 
@@ -181,7 +181,7 @@ return [
                         'fonction-referentiel' => [
                             'label'    => 'Référentiel fonctions',
                             'route'    => 'fonction-referentiel',
-                            'resource' => PrivilegeController::getResourceId(FonctionReferentielController::class, 'index'),
+                            'resource' => Authorize::controllerResource(FonctionReferentielController::class, 'index'),
                             'order'    => 70,
                             'color'    => '#BBCF55',
                         ],

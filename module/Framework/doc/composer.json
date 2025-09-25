@@ -1,0 +1,13 @@
+{
+    "require"          : {
+        // "unicaen/privilege"                : "dev-php84",
+    },
+    "replace": {
+        "unicaen/privilege"                : "*"
+    },
+    "autoload"         : {
+        "psr-4": {
+            "UnicaenPrivilege\\": "module/Framework/src/Wrapper/UnicaenPrivilege"
+        }
+    }
+}

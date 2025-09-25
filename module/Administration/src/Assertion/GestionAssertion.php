@@ -3,7 +3,7 @@
 namespace Administration\Assertion;
 
 use Application\Acl\Role;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Framework\Authorize\AbstractAssertion;
 
 
 /**

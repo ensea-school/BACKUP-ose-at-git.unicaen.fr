@@ -3,8 +3,8 @@
 namespace Lieu;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -62,7 +62,7 @@ return [
                         'structure' => [
                             'label'    => 'Structures',
                             'route'    => 'structure',
-                            'resource' => PrivilegeController::getResourceId(Controller\StructureController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\StructureController::class, 'index'),
                             'order'    => 40,
                             'color'    => '#BBCF55',
                         ],

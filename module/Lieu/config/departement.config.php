@@ -2,7 +2,7 @@
 
 namespace Lieu;
 
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 use Application\Provider\Privilege\Privileges;
 
 return [
@@ -38,7 +38,7 @@ return [
                         'gestion-departement' => [
                             'label'          => 'Départements',
                             'route'          => 'departement',
-                            'resource'       => PrivilegeController::getResourceId(Controller\DepartementController::class, 'index'),
+                            'resource'       => Authorize::controllerResource(Controller\DepartementController::class, 'index'),
                             'order'          => 10,
                             'border - color' => '#111',
                         ],

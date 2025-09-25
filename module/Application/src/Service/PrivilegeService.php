@@ -105,7 +105,7 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
 
 
 
-    public function makePrivilegesRoles()
+    public function makePrivilegesRoles(): array
     {
         $privilegesRoles = $this->privilegesRolesConfig;
 
@@ -153,7 +153,7 @@ class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
 
 
 
-    public function getResources()
+    public function getResources(): array
     {
         $resources  = [];
         $privileges = array_keys($this->getPrivilegesRoles());

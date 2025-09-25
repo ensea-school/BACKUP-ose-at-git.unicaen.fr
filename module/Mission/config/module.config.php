@@ -4,7 +4,7 @@ namespace Mission;
 
 use Application\Provider\Privilege\Privileges;
 use Mission\Controller\PrimeController;
-use UnicaenPrivilege\Assertion\AssertionFactory;
+use Framework\Authorize\AssertionFactory;
 
 
 return [

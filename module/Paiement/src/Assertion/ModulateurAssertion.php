@@ -7,7 +7,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\TypeModulateur;
 use Paiement\Entity\Db\TypeModulateurStructure;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Framework\Authorize\AbstractAssertion;
 
 
 class ModulateurAssertion extends AbstractAssertion

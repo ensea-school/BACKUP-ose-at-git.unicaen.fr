@@ -3,10 +3,10 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Paiement\Controller\PaiementController;
 use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\PaiementProcessFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
 use Workflow\Entity\Db\WorkflowEtape;
 
 return [
@@ -131,7 +131,7 @@ return [
                     ],
                     'withtarget'          => true,
                     'workflow-etape-code' => WorkflowEtape::SAISIE_MEP,
-                    'resource'            => PrivilegeController::getResourceId(Controller\PaiementController::class, 'visualisationMiseEnPaiement'),
+                    'resource'            => Authorize::controllerResource(Controller\PaiementController::class, 'visualisationMiseEnPaiement'),
                     'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 17,
                 ],
@@ -143,7 +143,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(Controller\PaiementController::class, 'editionMiseEnPaiement'),
+                    'resource'     => Authorize::controllerResource(Controller\PaiementController::class, 'editionMiseEnPaiement'),
                     'visible'      => Assertion\PaiementAssertion::class,
                     'order'        => 18,
                 ],
@@ -155,7 +155,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(Controller\PaiementController::class, 'detailsCalculs'),
+                    'resource'     => Authorize::controllerResource(Controller\PaiementController::class, 'detailsCalculs'),
                     'visible'      => Assertion\PaiementAssertion::class,
                     'order'        => 19,
                 ],
@@ -222,14 +222,14 @@ return [
                     'title'    => 'Pilotage',
                     'icon'     => 'fas fa-chart-line',
                     'route'    => 'paiement/pilotage',
-                    'resource' => PrivilegeController::getResourceId(PaiementController::class, 'pilotage'),
+                    'resource' => Authorize::controllerResource(PaiementController::class, 'pilotage'),
                     'pages'    => [
                         'ecarts-etats' => [
                             'label'       => 'Ecarts d\'heures complémentaires (CSV)',
                             'title'       => 'Ecarts d\'heures complémentaires (CSV)',
                             'description' => 'Export CSV des HETD (ne porte que sur les heures complémentaires et non sur le service dû)',
                             'route'       => 'paiement/ecarts-etats',
-                            'resource'    => PrivilegeController::getResourceId(PaiementController::class, 'ecartsEtats'),
+                            'resource'    => Authorize::controllerResource(PaiementController::class, 'ecartsEtats'),
                         ],
                     ],
                     'order'    => 20,
@@ -292,7 +292,7 @@ return [
         Service\TblPaiementService::class                        => Service\TblPaiementServiceFactory::class,
         Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementServiceFactory::class,
         Service\NumeroPriseEnChargeService::class                => Service\NumeroPriseEnChargeServiceFactory::class,
-        Assertion\PaiementAssertion::class                       => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Assertion\PaiementAssertion::class                       => \Framework\Authorize\AssertionFactory::class,
         PaiementProcess::class                                   => PaiementProcessFactory::class,
     ],
 

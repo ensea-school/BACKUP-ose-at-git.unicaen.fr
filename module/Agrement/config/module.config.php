@@ -16,8 +16,8 @@ use Agrement\Service\TypeAgrementService;
 use Agrement\Service\TypeAgrementServiceFactory;
 use Agrement\View\Helper\AgrementVewHelperFactory;
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
+use Framework\Authorize\Authorize;
 
 
 return [
@@ -120,7 +120,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(AgrementController::class, 'lister'),
+                    'resource'     => Authorize::controllerResource(AgrementController::class, 'lister'),
                     'visible'      => AgrementAssertion::class,
                     'order'        => 10,
                 ],
@@ -132,7 +132,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(AgrementController::class, 'lister'),
+                    'resource'     => Authorize::controllerResource(AgrementController::class, 'lister'),
                     'visible'      => AgrementAssertion::class,
                     'order'        => 11,
                 ],
@@ -146,7 +146,7 @@ return [
                     'title'    => "Gestion des agréments par lot",
                     'icon'     => 'fas fa-tags',
                     'route'    => 'gestion/agrement',
-                    'resource' => PrivilegeController::getResourceId(AgrementController::class, 'index'),
+                    'resource' => Authorize::controllerResource(AgrementController::class, 'index'),
                     'visible'  => AgrementAssertion::class,
                     'order'    => 50,
                     'color'    => '#E1AC5A',
@@ -156,7 +156,7 @@ return [
                             'description' => 'Gestion par lots des agréments du conseil restreint',
                             'title'       => 'Conseil restreint',
                             'route'       => 'gestion/agrement/conseil-restreint',
-                            'resource'    => PrivilegeController::getResourceId(AgrementController::class, 'saisir-lot'),
+                            'resource'    => Authorize::controllerResource(AgrementController::class, 'saisir-lot'),
                             'visible'     => AgrementAssertion::class,
                         ],
                         'conseil-academique' => [
@@ -164,7 +164,7 @@ return [
                             'description' => 'Gestion par lots des agréments du conseil académique',
                             'title'       => 'Conseil académique',
                             'route'       => 'gestion/agrement/conseil-academique',
-                            'resource'    => PrivilegeController::getResourceId(AgrementController::class, 'saisir-lot'),
+                            'resource'    => Authorize::controllerResource(AgrementController::class, 'saisir-lot'),
                             'visible'     => AgrementAssertion::class,
                         ],
                         'export-csv'         => [
@@ -172,7 +172,7 @@ return [
                             'description' => 'Export CSV des agrément donnés ou en attente',
                             'title'       => 'Export CSV',
                             'route'       => 'gestion/agrement/export-csv',
-                            'resource'    => PrivilegeController::getResourceId(AgrementController::class, 'export-csv'),
+                            'resource'    => Authorize::controllerResource(AgrementController::class, 'export-csv'),
                         ],
                     ],
                 ],

@@ -3,11 +3,11 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Paiement\Controller\TauxRemuController;
 use Paiement\Service\TauxRemuService;
 use Paiement\Service\TauxRemuServiceFactory;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
 
 
 return [
@@ -61,7 +61,7 @@ return [
                         'taux' => [
                             'label'    => "Taux de rémunération",
                             'route'    => 'taux',
-                            'resource' => PrivilegeController::getResourceId(TauxRemuController::class, 'index'),
+                            'resource' => Authorize::controllerResource(TauxRemuController::class, 'index'),
                             'order'    => 60,
                         ],
                     ],

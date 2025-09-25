@@ -3,9 +3,9 @@
 namespace Mission;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Mission\Controller\PrimeController;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
 use Workflow\Entity\Db\WorkflowEtape;
 
 
@@ -113,7 +113,7 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::MISSION_PRIME,
                     'withtarget'          => true,
-                    'resource'            => PrivilegeController::getResourceId(Controller\PrimeController::class, 'index'),
+                    'resource'            => Authorize::controllerResource(Controller\PrimeController::class, 'index'),
                     'order'               => 14,
                 ],
             ],

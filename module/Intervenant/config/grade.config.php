@@ -4,7 +4,7 @@ namespace Intervenant;
 
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -45,7 +45,7 @@ return [
                         'grade' => [
                             'label'    => 'Grades',
                             'route'    => 'grades',
-                            'resource' => PrivilegeController::getResourceId(Controller\GradeController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\GradeController::class, 'index'),
                             'order'    => 30,
                             'color'    => '#BBCF55',
                         ],

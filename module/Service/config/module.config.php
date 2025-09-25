@@ -3,12 +3,12 @@
 namespace Service;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\CampagneSaisieController;
 use Service\Controller\RegleStructureValidationController;
 use Service\Controller\ServiceController;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
 use Workflow\Entity\Db\WorkflowEtape;
 
 
@@ -109,7 +109,7 @@ return [
             'title'    => "Visualisation et export des services",
             'order'    => 3,
             'route'    => 'service',
-            'resource' => PrivilegeController::getResourceId(ServiceController::class, 'index'),
+            'resource' => Authorize::controllerResource(ServiceController::class, 'index'),
         ],
 
         'intervenant' => [
@@ -123,7 +123,7 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE.','.WorkflowEtape::REFERENTIEL_SAISIE,
                     'withtarget'          => true,
-                    'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-prevu'),
+                    'resource'            => Authorize::controllerResource(ServiceController::class, 'intervenant-saisie-prevu'),
                     'visible'             => Assertion\ServiceAssertion::class,
                     'order'               => 6,
                 ],
@@ -136,7 +136,7 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE.','.WorkflowEtape::REFERENTIEL_SAISIE_REALISE,
                     'withtarget'          => true,
-                    'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-realise'),
+                    'resource'            => Authorize::controllerResource(ServiceController::class, 'intervenant-saisie-realise'),
                     'visible'             => Assertion\ServiceAssertion::class,
                     'order'               => 13,
                 ],
@@ -151,7 +151,7 @@ return [
                             'label'    => "Campagnes de saisie des services",
                             'route'    => 'parametres/campagnes-saisie',
                             'order'    => 20,
-                            'resource' => PrivilegeController::getResourceId(CampagneSaisieController::class, 'campagnes-saisie'),
+                            'resource' => Authorize::controllerResource(CampagneSaisieController::class, 'campagnes-saisie'),
                         ],
                     ],
                 ],
@@ -164,7 +164,7 @@ return [
                             'route'      => 'parametres/regle-structure-validation',
                             'withtarget' => true,
                             'order'      => 30,
-                            'resource'   => PrivilegeController::getResourceId(RegleStructureValidationController::class, 'index'),
+                            'resource'   => Authorize::controllerResource(RegleStructureValidationController::class, 'index'),
                         ],
                     ],
                 ],

@@ -8,7 +8,7 @@ use Application\Controller\AbstractController;
 use Application\Provider\Privileges;
 use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use BjyAuthorize\Exception\UnAuthorizedException;
+use Framework\Authorize\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Form\ContratRetourFormAwareTrait;

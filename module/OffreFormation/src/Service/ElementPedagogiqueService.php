@@ -6,7 +6,7 @@ use Application\Entity\Db\Annee;
 use Application\Provider\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use BjyAuthorize\Exception\UnAuthorizedException;
+use Framework\Authorize\UnAuthorizedException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;

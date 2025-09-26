@@ -4,7 +4,8 @@ namespace Application\Form;
 
 use Application\Service\AbstractEntityService;
 use Application\Traits\FormFieldsetTrait;
-use BjyAuthorize\Service\Authorize;
+use Framework\Application\Application;
+use Framework\Authorize\Authorize;
 use Laminas\Form\Element\Csrf;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
@@ -19,7 +20,7 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
 
     public function getAuthorize(): Authorize
     {
-        return \Framework\Application\Application::getInstance()->container()->get(Authorize::class);
+        return Application::getInstance()->container()->get(Authorize::class);
     }
 
 

@@ -4,6 +4,8 @@ namespace Referentiel\Assertion;
 
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use BjyAuthorize\Service\Authorize;
+use Framework\Application\Application;
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -330,7 +332,10 @@ class ReferentielAssertion extends AbstractAssertion
 
     protected function assertServiceReferentielValidation(Role $role, ServiceReferentiel $serviceReferentiel): bool
     {
-        return $this->assert($role, $serviceReferentiel->getIntervenant(), $serviceReferentiel->getStructure());
+        // Hack à supprimer une fois le nouveau moteur authorize ok
+        $acl = Application::getInstance()->container(Authorize::class)->getAcl();
+
+        return $this->assert($acl, $this->$role, $serviceReferentiel->getIntervenant(), $serviceReferentiel->getStructure());
     }
 
 

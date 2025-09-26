@@ -2,10 +2,9 @@
 
 namespace Chargens\Provider;
 
-use Application\Provider\Chargens\ChargeProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use BjyAuthorize\Service\Authorize;
+use Framework\Authorize\Authorize;
 use Chargens\Entity\Db\Scenario;
 use Chargens\Entity\Noeud;
 use Lieu\Entity\Db\Structure;
@@ -27,11 +26,6 @@ class ChargensProvider
     use TableauBordServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use BddAwareTrait;
-
-    /**
-     * @var Authorize
-     */
-    private $serviceAuthorize;
 
     /**
      * @var Scenario
@@ -70,26 +64,10 @@ class ChargensProvider
 
 
 
-    /**
-     * @return Authorize
-     */
-    public function getServiceAuthorize()
+    public function __construct(
+        public readonly Authorize $authorize,
+    )
     {
-        return $this->serviceAuthorize;
-    }
-
-
-
-    /**
-     * @param Authorize $serviceAuthorize
-     *
-     * @return ChargensProvider
-     */
-    public function setServiceAuthorize($serviceAuthorize)
-    {
-        $this->serviceAuthorize = $serviceAuthorize;
-
-        return $this;
     }
 
 

@@ -2,7 +2,6 @@
 
 namespace Framework\Authorize;
 
-use BjyAuthorize\Service\Authorize;
 use Psr\Container\ContainerInterface;
 use Laminas\Mvc\Application;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -21,17 +20,15 @@ class AssertionFactory implements FactoryInterface
         $application = $container->get('Application');
         $mvcEvent    = $application->getMvcEvent();
 
-        /* @var $serviceAuthorize Authorize */
-        $serviceAuthorize = $container->get('BjyAuthorize\Service\Authorize');
-
         /** @var UserContext $serviceUserContext */
         $serviceUserContext = $container->get(UserContext::class);
 
         /* @var $assertion AbstractAssertion */
-        $assertion = new $requestedName;
+        $assertion = new $requestedName(
+            $container->get(Authorize::class),
+        );
 
         $assertion->setMvcEvent($mvcEvent);
-        $assertion->setServiceAuthorize($serviceAuthorize);
         $assertion->setServiceUserContext($serviceUserContext);
 
         return $assertion;

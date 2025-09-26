@@ -11,7 +11,6 @@ use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Entity\Db\WorkflowEtapeDependance;
@@ -28,7 +27,6 @@ class WorkflowService extends AbstractService
 
     use ContextServiceAwareTrait;
     use EntityManagerAwareTrait;
-    use AuthorizeServiceAwareTrait;
     use TableauBordServiceAwareTrait;
     use BddAwareTrait;
 

@@ -4,6 +4,7 @@ namespace Service\Form;
 
 use Application\Form\AbstractForm;
 use Application\Provider\Privileges;
+use Framework\Authorize\Authorize;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
@@ -26,7 +27,6 @@ use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 
 
 /**
@@ -40,7 +40,6 @@ class RechercheForm extends AbstractForm
     use TypeIntervenantServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
-    use AuthorizeServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use NiveauEtapeServiceAwareTrait;
     use ElementPedagogiqueRechercheFieldsetAwareTrait;
@@ -75,6 +74,15 @@ class RechercheForm extends AbstractForm
 
 
 
+    public function __construct(
+        private readonly Authorize $authorize
+    )
+    {
+        parent::__construct();
+    }
+
+
+
     /**
      * Ajoute un bouton d'action au formulaire
      *
@@ -93,11 +101,11 @@ class RechercheForm extends AbstractForm
         if (!isset($attributes['onclick'])) $attributes['onclick'] = '$("#' . $this->getId() . '").attr("action", "' . $actionUrl . '");';
 
         $this->add([
-            'name'       => $name,
-            'type'       => 'Button',
-            'options'    => ['label' => $label],
-            'attributes' => $attributes,
-        ]);
+                       'name'       => $name,
+                       'type'       => 'Button',
+                       'options'    => ['label' => $label],
+                       'attributes' => $attributes,
+                   ]);
         $this->actionButtons[$name] = $this->get($name);
 
         return $this;
@@ -137,31 +145,31 @@ class RechercheForm extends AbstractForm
         $typeIntervenant = new \Laminas\Form\Element\Radio('type-intervenant');
         $typeIntervenant
             ->setValueOptions([
-                ''                                                          => "Peu importe",
-                $this->getServiceTypeIntervenant()->getPermanent()->getId() => "Permanent",
-                $this->getServiceTypeIntervenant()->getExterieur()->getId() => "Vacataire"])
+                                  ''                                                          => "Peu importe",
+                                  $this->getServiceTypeIntervenant()->getPermanent()->getId() => "Permanent",
+                                  $this->getServiceTypeIntervenant()->getExterieur()->getId() => "Vacataire"])
             ->setValue('')
             ->setAttribute('data-intervenant-exterieur-id', $this->getServiceTypeIntervenant()->getExterieur()->getId())
             ->setLabel("Statut :");
         $this->add($typeIntervenant);
 
         $this->add([
-            'name'       => 'structure-aff',
-            'type'       => \Lieu\Form\Element\Structure::class,
-            'options'    => [
-                'label'                     => "Structure d'affectation:",
-                'empty_option'              => "(Toutes)",
-                'context_filter' => false,
-                'disable_inarray_validator' => true,
-                'label_attributes'          => [
-                    'title' => "Structure gestionnaire de l'enseignement",
-                ],
-            ],
-            'attributes' => [
-                'title' => "Structure gestionnaire de l'enseignement",
-                'class' => 'input-sm selectpicker',
-            ],
-        ]);
+                       'name'       => 'structure-aff',
+                       'type'       => \Lieu\Form\Element\Structure::class,
+                       'options'    => [
+                           'label'                     => "Structure d'affectation:",
+                           'empty_option'              => "(Toutes)",
+                           'context_filter'            => false,
+                           'disable_inarray_validator' => true,
+                           'label_attributes'          => [
+                               'title' => "Structure gestionnaire de l'enseignement",
+                           ],
+                       ],
+                       'attributes' => [
+                           'title' => "Structure gestionnaire de l'enseignement",
+                           'class' => 'input-sm selectpicker',
+                       ],
+                   ]);
 
         $intervenant = new SearchAndSelect('intervenant');
         $intervenant
@@ -202,10 +210,10 @@ class RechercheForm extends AbstractForm
 
         $this->addActionButton('submit-resume', 'Afficher (résumé)', $this->getUrl('service/resume'), true);
         $this->addActionButton('submit-details', 'Afficher (détails)', $this->getUrl('service'));
-        if ($this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXPORT_CSV))) {
+        if ($this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXPORT_CSV)) {
             $this->addActionButton('submit-export-csv', 'Exporter (CSV)', $this->getUrl('service/export-csv'));
         }
-        if ($this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXPORT_PDF))) {
+        if ($this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXPORT_PDF)) {
             $this->addActionButton('submit-export-pdf', 'Exporter (PDF)', $this->getUrl('service/export-pdf'));
         }
     }
@@ -236,9 +244,6 @@ class RechercheForm extends AbstractForm
         ];
     }
 }
-
-
-
 
 
 /**

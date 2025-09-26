@@ -286,7 +286,7 @@ class LienProvider
         }
 
         if ($canEdit) {
-            $sa = $this->chargens->getServiceAuthorize();
+            $sa = $this->chargens->authorize;
 
             $a = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_ACTIF_EDITION));
             $lien->setCanEditActif($a);

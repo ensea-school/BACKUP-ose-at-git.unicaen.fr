@@ -3,6 +3,8 @@
 namespace Application\Service;
 
 use Application\Traits\TranslatorTrait;
+use Framework\Application\Application;
+use Framework\Authorize\Authorize;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -19,13 +21,9 @@ class AbstractService implements EntityManagerAwareInterface
     use Traits\ContextServiceAwareTrait;
     use TranslatorTrait;
 
-    /**
-     *
-     * @return \BjyAuthorize\Service\Authorize
-     */
-    public function getAuthorize()
+    public function getAuthorize(): Authorize
     {
-        return \Framework\Application\Application::getInstance()->container()->get('BjyAuthorize\Service\Authorize');
+        return Application::getInstance()->container()->get(Authorize::class);
     }
 
 }

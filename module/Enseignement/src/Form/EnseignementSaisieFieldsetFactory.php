@@ -2,11 +2,12 @@
 
 namespace Enseignement\Form;
 
+use Framework\Authorize\Authorize;
 use Psr\Container\ContainerInterface;
 
 
 /**
- * Description of SaisieFieldsetFactory
+ * Description of EnseignementSaisieFieldsetFactory
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
@@ -18,12 +19,13 @@ class EnseignementSaisieFieldsetFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return SaisieFieldset
+     * @return EnseignementSaisieFieldset
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $fieldset = new EnseignementSaisieFieldset();
-        $fieldset->setServiceAuthorize($container->get('BjyAuthorize\Service\Authorize'));
+        $fieldset = new EnseignementSaisieFieldset(
+            $container->get(Authorize::class),
+        );
 
         return $fieldset;
     }

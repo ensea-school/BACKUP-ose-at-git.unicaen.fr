@@ -14,9 +14,23 @@ class Authorize
 
 
 
-    public function isAllowed(string $resource): bool
+    public function isAllowed(string $resource, ?string $privilege = null): bool
     {
-        return $this->oldAuthorize->isAllowed($resource);
+        return $this->oldAuthorize->isAllowed($resource, $privilege);
+    }
+
+
+
+    public function isAllowedPrivilege(string $privilege): bool
+    {
+        return $this->isAllowed(self::privilegeResource($privilege));
+    }
+
+
+
+    public function isAllowedController(string $controller, ?string $action = null): bool
+    {
+        return $this->isAllowed(self::controllerResource($controller, $action));
     }
 
 

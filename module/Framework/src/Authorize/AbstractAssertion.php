@@ -2,11 +2,11 @@
 
 namespace Framework\Authorize;
 
+use Laminas\Permissions\Acl\Assertion\AssertionInterface;
 use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Permissions\Acl\Acl;
-use Laminas\Permissions\Acl\Assertion\AssertionInterface;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 
@@ -25,6 +25,14 @@ abstract class AbstractAssertion implements AssertionInterface
     private RoleInterface|bool|null $role = false;
 
     private MvcEvent $mvcEvent;
+
+
+
+    public function __construct(
+        protected readonly Authorize $authorize,
+    ) {
+
+    }
 
 
 
@@ -47,7 +55,6 @@ abstract class AbstractAssertion implements AssertionInterface
      */
     public final function assert(Acl $acl, ?RoleInterface $role = null, ?ResourceInterface $resource = null, $privilege = null): bool
     {
-        $this->setAcl($acl);
         $this->setRole($role);
         $this->init();
         switch (true) {
@@ -80,27 +87,7 @@ abstract class AbstractAssertion implements AssertionInterface
 
     public function isAllowed(string|ResourceInterface $resource, ?string $privilege = null): bool
     {
-        return $this->getServiceAuthorize()->isAllowed($resource, $privilege);
-    }
-
-
-
-    public function getAcl(): Acl
-    {
-        if (!$this->acl) {
-            $this->acl = $this->getServiceAuthorize()->getAcl();
-        }
-
-        return $this->acl;
-    }
-
-
-
-    public function setAcl(?Acl $acl = null): self
-    {
-        $this->acl = $acl;
-
-        return $this;
+        return $this->authorize->isAllowed($resource, $privilege);
     }
 
 

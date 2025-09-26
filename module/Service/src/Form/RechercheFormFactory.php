@@ -2,6 +2,7 @@
 
 namespace Service\Form;
 
+use Framework\Authorize\Authorize;
 use Psr\Container\ContainerInterface;
 
 
@@ -22,10 +23,9 @@ class RechercheFormFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $fieldset = new RechercheForm();
-        if ($container->has('BjyAuthorize\Service\Authorize')) {
-            $fieldset->setServiceAuthorize($container->get('BjyAuthorize\Service\Authorize'));
-        }
+        $fieldset = new RechercheForm(
+            $container->get(Authorize::class),
+        );
 
         return $fieldset;
     }

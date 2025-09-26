@@ -19,12 +19,6 @@ class WorkflowServiceFactory
         $service->setEntityManager($container->get(EntityManager::class));
         $service->setBdd($container->get(Bdd::class));
 
-        if ($container->has('BjyAuthorize\Service\Authorize')) {
-            $service->setServiceAuthorize(
-                $container->get('BjyAuthorize\Service\Authorize')
-            );
-        }
-
         return $service;
     }
 

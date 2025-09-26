@@ -6,7 +6,7 @@ use Application\Controller\AbstractController;
 use Application\Entity\Db\Annee;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use BjyAuthorize\Exception\UnAuthorizedException;
+use Framework\Authorize\UnAuthorizedException;
 use Chargens\Entity\Db\Scenario;
 use Chargens\Entity\Db\SeuilCharge;
 use Chargens\Form\DifferentielFormAwareTrait;

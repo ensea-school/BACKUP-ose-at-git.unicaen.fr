@@ -3,6 +3,7 @@
 namespace Chargens\Provider;
 
 use Doctrine\ORM\EntityManager;
+use Framework\Authorize\Authorize;
 use OffreFormation\Service\TypeHeuresService;
 use Psr\Container\ContainerInterface;
 use Unicaen\BddAdmin\Bdd;
@@ -20,14 +21,11 @@ class ChargensProviderFactory
         $em = $container->get(EntityManager::class);
         /* @var $em \Doctrine\ORM\EntityManager */
 
-        $chargensProvider = new ChargensProvider();
+        $chargensProvider = new ChargensProvider(
+            $container->get(Authorize::class),
+        );
         $chargensProvider->setEntityManager($em);
         $chargensProvider->setBdd($container->get(Bdd::class));
-
-        if ($container->has('BjyAuthorize\Service\Authorize')) {
-            $serviceAuthorize = $container->get('BjyAuthorize\Service\Authorize');
-            $chargensProvider->setServiceAuthorize($serviceAuthorize);
-        }
 
         $chargensProvider->setServiceTypeHeures(
             $container->get(TypeHeuresService::class)

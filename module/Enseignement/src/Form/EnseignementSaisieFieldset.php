@@ -7,6 +7,7 @@ use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
+use Framework\Authorize\Authorize;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
@@ -44,6 +45,14 @@ class EnseignementSaisieFieldset extends AbstractFieldset
      * @var Etablissement
      */
     protected $etablissement;
+
+
+
+    public function __construct(
+        private readonly Authorize $authorize,
+    )
+    {
+    }
 
 
 
@@ -209,7 +218,7 @@ class EnseignementSaisieFieldset extends AbstractFieldset
     public function removeUnusedElements()
     {
         if ($this->getIntervenant()) {
-            $canSaisieExterieur = $this->getServiceAuthorize()->isAllowed($this->getIntervenant(), Privileges::ENSEIGNEMENT_EXTERIEUR);
+            $canSaisieExterieur = $this->authorize->isAllowed($this->getIntervenant(), Privileges::ENSEIGNEMENT_EXTERIEUR);
             $this->remove('intervenant');
             $this->add([
                 'name'       => 'intervenant-id',
@@ -219,7 +228,7 @@ class EnseignementSaisieFieldset extends AbstractFieldset
                 ],
             ]);
         } else {
-            $canSaisieExterieur = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXTERIEUR));
+            $canSaisieExterieur = $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR);
         }
 
         if (!$canSaisieExterieur) {

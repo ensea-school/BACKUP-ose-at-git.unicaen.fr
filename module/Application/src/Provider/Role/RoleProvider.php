@@ -4,7 +4,6 @@ namespace Application\Provider\Role;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Affectation;
-use Application\Service\RoleService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use Intervenant\Service\IntervenantServiceAwareTrait;
@@ -22,8 +21,6 @@ use UnicaenPrivilege\Provider\Privilege\PrivilegeProviderAwareTrait;
  */
 class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 {
-    const AFFECTATIONS_CACHE_ID = 'Application_Provider_RoleRoleProvider_affectations';
-
     use EntityManagerAwareTrait;
     use StatutServiceAwareTrait;
     use IntervenantServiceAwareTrait;
@@ -32,47 +29,53 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
 
     /**
+     * @var array
+     */
+    protected $roles;
+
+    /**
+     * @var array
+     */
+    private $rolesPrivileges;
+
+
+
+    /**
      * @return RoleInterface[]
      */
-    public function getRoles(): array
+    public function getRoles()
     {
-        if (!$this->getServiceContext()->getUtilisateur()) {
-            return [];
+        if (null === $this->roles) {
+            $this->roles = $this->makeRoles();
         }
-        return $this->makeRoles();
-        $session = RoleService::getSession();
-        if (!$session->offsetExists('roles') || empty($session->roles)) {
-            $session->roles = $this->makeRoles();
-        }
-        return $session->roles;
+
+        return $this->roles;
     }
 
 
 
-    public function clearRoles(): void
+    public function clearRoles()
     {
-        $session = RoleService::getSession();
-        if ($session->offsetExists('roles')) {
-            $session->offsetUnset('roles');
-        }
+        $this->roles = null;
     }
 
 
 
-    protected function getRolesPrivileges(): array
+    protected function getRolesPrivileges()
     {
-        $rolesPrivileges = [];
-        $pr              = $this->getPrivilegeProvider()->getPrivilegesRoles();
-        foreach ($pr as $priv => $roles) {
-            foreach ($roles as $role) {
-                if (!isset($rolesPrivileges[$role])) {
-                    $rolesPrivileges[$role] = [];
+        if (!$this->rolesPrivileges) {
+            $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
+            foreach ($pr as $priv => $roles) {
+                foreach ($roles as $role) {
+                    if (!isset($this->rolesPrivileges[$role])) {
+                        $this->rolesPrivileges[$role] = [];
+                    }
+                    $this->rolesPrivileges[$role][] = $priv;
                 }
-                $rolesPrivileges[$role][] = $priv;
             }
         }
 
-        return $rolesPrivileges;
+        return $this->rolesPrivileges;
     }
 
 
@@ -101,8 +104,8 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         WHERE
             r.histoDestruction IS NULL'
         )->setParameter('utilisateur', $utilisateur);
-        $query->enableResultCache(true);
-        $query->setResultCacheId(self::AFFECTATIONS_CACHE_ID);
+        $query->useResultCache(true);
+        $query->setResultCacheId(str_replace('\\', '_', __CLASS__) . '_affectations');
 
 
         $result          = $query->getResult();

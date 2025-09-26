@@ -9,7 +9,6 @@ use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Service\PrivilegeService;
-use Application\Service\RoleService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PrivilegeServiceAwareTrait;
@@ -40,7 +39,6 @@ class DroitsController extends AbstractController
     use ContextServiceAwareTrait;
     use SessionContainerTrait;
     use CacheContainerTrait;
-
 
 
     /**
@@ -85,7 +83,6 @@ class DroitsController extends AbstractController
             if ($form->isValid()) {
                 try {
                     $this->getServiceRole()->save($role);
-                    RoleService::clearSession();
                     $this->getServiceAffectation()->deleteCacheAffectation();
                     $form->get('id')->setValue($role->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
@@ -106,7 +103,6 @@ class DroitsController extends AbstractController
         $title = "Suppression du rôle";
         $form  = $this->makeFormSupprimer(function () use ($role) {
             $this->getServiceRole()->delete($role);
-            RoleService::clearSession();
             $this->getServiceAffectation()->deleteCacheAffectation();
             $this->getSessionContainer()->offsetUnset('privileges' . $this->getServiceContext()->getAnnee()->getId());
         });
@@ -152,12 +148,11 @@ class DroitsController extends AbstractController
         switch ($action) {
             case 'accorder':
                 if ($role) $this->roleAddPrivilege($role, $privilege);
-            break;
+                break;
             case 'refuser':
                 if ($role) $this->roleRemovePrivilege($role, $privilege);
-            break;
+                break;
         }
-        RoleService::clearSession();
         $this->getServiceAffectation()->deleteCacheAffectation();
 
         return compact('role', 'privilege');
@@ -192,7 +187,8 @@ class DroitsController extends AbstractController
 
         $serviceAffectations = $this->getServiceAffectation();
 
-        [$qb, $alias] = $serviceAffectations->initQuery();
+        [$qb,
+         $alias] = $serviceAffectations->initQuery();
 
         $serviceAffectations->join($this->getServiceRole(), $qb, 'role', true);
         $serviceAffectations->join($this->getServiceUtilisateur(), $qb, 'utilisateur', true);
@@ -244,7 +240,6 @@ class DroitsController extends AbstractController
                 }
             }
         }
-        RoleService::clearSession();
         $this->getServiceAffectation()->deleteCacheAffectation();
 
         return compact('form', 'title', 'errors');
@@ -261,7 +256,6 @@ class DroitsController extends AbstractController
         $form = $this->makeFormSupprimer(function () use ($affectation) {
             $this->getServiceAffectation()->delete($affectation);
         });
-        RoleService::clearSession();
         $this->getServiceAffectation()->deleteCacheAffectation();
 
         return compact('affectation', 'title', 'form');
@@ -278,11 +272,14 @@ class DroitsController extends AbstractController
     {
         $options = [];
         if (empty($roleStatutCode)) {
-            $options['null'] = ['label' => 'Sélection du rôle', 'options' => ['' => 'Veuillez sélectionner un rôle...']];
+            $options['null'] = ['label'   => 'Sélection du rôle',
+                                'options' => ['' => 'Veuillez sélectionner un rôle...']];
         }
 
-        $options['roles']   = ['label' => 'Rôles (personnel)', 'options' => []];
-        $options['statuts'] = ['label' => 'Statuts (intervenants)', 'options' => []];
+        $options['roles']   = ['label'   => 'Rôles (personnel)',
+                               'options' => []];
+        $options['statuts'] = ['label'   => 'Statuts (intervenants)',
+                               'options' => []];
 
         $qb    = $this->getServiceRole()->finderByHistorique();
         $roles = $this->getServiceRole()->getList($qb);
@@ -298,15 +295,15 @@ class DroitsController extends AbstractController
 
         $form = new \Laminas\Form\Form;
         $form->add([
-            'name'       => 'role',
-            'type'       => 'Laminas\Form\Element\Select',
-            'attributes' => ['onchange' => 'document.location.href=$(this).parents("form").attr("action")+"/"+$(this).val();'],
-            'options'    => [
-                'label'         => 'Choix du rôle ou du statut à paramétrer :',
-                'value_options' => $options,
-                'empty_option'  => 'Sélectionner un rôle...',
-            ],
-        ]);
+                       'name'       => 'role',
+                       'type'       => 'Laminas\Form\Element\Select',
+                       'attributes' => ['onchange' => 'document.location.href=$(this).parents("form").attr("action")+"/"+$(this).val();'],
+                       'options'    => [
+                           'label'         => 'Choix du rôle ou du statut à paramétrer :',
+                           'value_options' => $options,
+                           'empty_option'  => 'Sélectionner un rôle...',
+                       ],
+                   ]);
         $form->setAttribute('action', $this->url()->fromRoute(null, []));
 
         $form->get('role')->setValue($roleStatutCode ?: '');

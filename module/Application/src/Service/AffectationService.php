@@ -79,7 +79,8 @@ class AffectationService extends AbstractEntityService
 
     public function finderByRole(Role $role, ?QueryBuilder $qb = null, $alias = null)
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        [$qb,
+         $alias] = $this->initQuery($qb, $alias);
 
         if ($role) {
             $qb->join("$alias.role", 'r');
@@ -94,7 +95,8 @@ class AffectationService extends AbstractEntityService
 
     public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        [$qb,
+         $alias] = $this->initQuery($qb, $alias);
 
         $structureService = $this->getServiceStructure();
         $structureAlias   = $structureService->getAlias();
@@ -108,12 +110,12 @@ class AffectationService extends AbstractEntityService
 
 
 
-    public function deleteCacheAffectation():void
+    public function deleteCacheAffectation(): void
     {
         $em = $this->getEntityManager();
 
         $cache = $em->getConfiguration()->getResultCache();
-        $cache->deleteItem(RoleProvider::AFFECTATIONS_CACHE_ID);
+        $cache->deleteItem(str_replace('\\', '_', RoleProvider::class) . '_affectations');
     }
 
 }

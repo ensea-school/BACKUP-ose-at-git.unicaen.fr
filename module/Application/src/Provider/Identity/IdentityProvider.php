@@ -4,7 +4,6 @@ namespace Application\Provider\Identity;
 
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
-use Application\Service\RoleService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterface;
 use Intervenant\Service\IntervenantServiceAwareTrait;
@@ -26,23 +25,26 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
     use ContextServiceAwareTrait;
     use HostLocalizationAwareTrait;
 
+    /**
+     * @var array
+     */
+    private $identityRoles;
+
+
 
     /**
      * {@inheritDoc}
      */
-    public function injectIdentityRoles(ChainEvent $event): void
+    public function injectIdentityRoles(ChainEvent $event)
     {
         $event->addRoles($this->getIdentityRoles());
     }
 
 
 
-    public function clearIdentityRoles(): void
+    public function clearIdentityRoles()
     {
-        $session = RoleService::getSession();
-        if ($session->offsetExists('identityRoles')) {
-            $session->offsetUnset('identityRoles');
-        }
+        $this->identityRoles = null;
     }
 
 
@@ -50,33 +52,25 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function getIdentityRoles(): array
+    public function getIdentityRoles()
     {
-        if (!$this->getServiceContext()->getUtilisateur()) {
-            // pas d'utilisateur, on est forcément guest
-            return ['guest' => 'guest'];
-        }
-        //Sinon on regarde si il y a des rôles en session
-        $session = RoleService::getSession();
-        // pas de cache si on est que guest
-        if (!$session->offsetExists('identityRoles')) {
+        if (!$this->identityRoles) {
             $filter = $this->getEntityManager()->getFilters()->enable('historique');
             $filter->init([
                               Role::class,
                               Affectation::class,
                           ]);
 
+            $this->identityRoles = ['guest' => 'guest'];
 
             $inEtablissement = $this->getHostLocalization()->inEtablissement();
-
-            $this->getServiceContext()->getServiceUserContext()->clearIdentityRoles();
 
             /**
              * Rôles que possède l'utilisateur dans la base de données.
              */
             if ($utilisateur = $this->getServiceContext()->getUtilisateur()) {
-                $identityRoles = ['user' => 'user'];
-                $affectations  = $this->getEntityManager()->getRepository(Affectation::class)->findBy(['utilisateur' => $utilisateur]);
+                $this->identityRoles = ['user' => 'user'];
+                $affectations        = $this->getEntityManager()->getRepository(Affectation::class)->findBy(['utilisateur' => $utilisateur]);
                 foreach ($affectations as $affectation) {
                     /* @var $affectation Affectation */
                     $role = $affectation->getRole();
@@ -86,7 +80,7 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
                             if ($structure = $affectation->getStructure()) {
                                 $roleId .= '-' . $structure->getSourceCode();
                             }
-                            $identityRoles[] = $roleId;
+                            $this->identityRoles[] = $roleId;
                         }
                     } catch (\Exception $e) {
                         // on ignore les affectations dont les rôles ont été supprimés
@@ -98,11 +92,10 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
              * Rôle lié au statut de l'intervenant
              */
             if ($intervenant = $this->getServiceContext()->getIntervenant()) {
-                $identityRoles[$intervenant->getStatut()->getRoleId()] = $intervenant->getStatut()->getRoleId();
+                $this->identityRoles[$intervenant->getStatut()->getRoleId()] = $intervenant->getStatut()->getRoleId();
             }
-            $session->identityRoles = $identityRoles;
         }
 
-        return $session->identityRoles;
+        return $this->identityRoles;
     }
 }

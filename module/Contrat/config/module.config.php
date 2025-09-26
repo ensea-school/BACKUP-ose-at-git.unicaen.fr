@@ -2,7 +2,7 @@
 
 namespace Contrat;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Controller\ContratController;
 use Contrat\Service\TblContratService;

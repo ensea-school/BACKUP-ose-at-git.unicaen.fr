@@ -3,7 +3,7 @@
 namespace PieceJointe\Service;
 
 use Application\Entity\Db\Fichier;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\AbstractEntityService;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\Intervenant;

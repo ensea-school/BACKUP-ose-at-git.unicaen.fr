@@ -4,7 +4,7 @@ namespace Paiement\Controller;
 
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Enseignement\Entity\Db\VolumeHoraire;

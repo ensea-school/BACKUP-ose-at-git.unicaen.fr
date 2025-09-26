@@ -20,13 +20,13 @@
         <many-to-one field="contrat" target-entity="Contrat\Entity\Db\Contrat">
             <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+        <many-to-one field="histoDestructeur" target-entity="Utilisateur\Entity\Db\Utilisateur">
             <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+        <many-to-one field="histoModificateur" target-entity="Utilisateur\Entity\Db\Utilisateur">
             <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+        <many-to-one field="histoCreateur" target-entity="Utilisateur\Entity\Db\Utilisateur">
             <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">

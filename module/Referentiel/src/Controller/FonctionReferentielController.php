@@ -3,10 +3,10 @@
 namespace Referentiel\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Referentiel\Entity\Db\FonctionReferentiel;
-use Referentiel\Service\FonctionReferentielServiceAwareTrait;
 use Referentiel\Form\FonctionReferentielSaisieFormAwareTrait;
+use Referentiel\Service\FonctionReferentielServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 class FonctionReferentielController extends AbstractController

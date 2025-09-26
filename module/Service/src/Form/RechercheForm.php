@@ -3,7 +3,7 @@
 namespace Service\Form;
 
 use Application\Form\AbstractForm;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;

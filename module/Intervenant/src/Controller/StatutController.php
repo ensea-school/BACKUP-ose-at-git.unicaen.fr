@@ -5,8 +5,7 @@ namespace Intervenant\Controller;
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
-use Application\Provider\Role\RoleProvider;
+use Application\Provider\Privileges;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Form\StatutSaisieForm;
 use Intervenant\Form\StatutSaisieFormAwareTrait;
@@ -15,6 +14,7 @@ use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Plafond\Form\PlafondConfigFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Utilisateur\Provider\RoleProvider;
 
 class StatutController extends AbstractController
 {

@@ -2,7 +2,6 @@
 
 namespace Dossier\Service;
 
-use Application\Entity\Db\Utilisateur;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -11,6 +10,7 @@ use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
+use Utilisateur\Entity\Db\Utilisateur;
 use Workflow\Entity\Db\TypeValidation;
 use Workflow\Entity\Db\Validation;
 use Workflow\Service\ValidationServiceAwareTrait;

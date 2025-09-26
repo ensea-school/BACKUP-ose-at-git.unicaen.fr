@@ -2,7 +2,7 @@
 
 namespace OffreFormation\Service;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;

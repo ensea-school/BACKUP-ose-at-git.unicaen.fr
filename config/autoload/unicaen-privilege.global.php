@@ -1,16 +1,16 @@
 <?php
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 
 return [
     'unicaen-auth' => [
-        'privilege_entity_class' => \Application\Entity\Db\Privilege::class,
+        'privilege_entity_class' => \Utilisateur\Entity\Db\Privilege::class,
         'enable_privileges'      => true,
     ],
 
     'bjyauthorize' => [
         'resource_providers' => [
-            \Application\Service\PrivilegeService::class => [],
+            \Utilisateur\Service\PrivilegeService::class => [],
         ],
         'rule_providers'     => [
             \UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider::class => [],

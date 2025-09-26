@@ -4,10 +4,10 @@ namespace Workflow\Entity\Db;
 
 use Administration\Interfaces\ParametreEntityInterface;
 use Administration\Traits\ParametreEntityTrait;
-use Application\Acl\Role;
 use Application\Entity\Db\Perimetre;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Utilisateur\Acl\Role;
 
 class WorkflowEtape implements ParametreEntityInterface
 {

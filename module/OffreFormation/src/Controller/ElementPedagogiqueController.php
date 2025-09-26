@@ -4,7 +4,7 @@ namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Filter\FloatFromString;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;

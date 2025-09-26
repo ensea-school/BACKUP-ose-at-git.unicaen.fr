@@ -2,12 +2,12 @@
 
 namespace Plafond\Assertion;
 
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
+use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
-use Framework\Authorize\AbstractAssertion;
+use Utilisateur\Acl\Role;
 
 
 /**

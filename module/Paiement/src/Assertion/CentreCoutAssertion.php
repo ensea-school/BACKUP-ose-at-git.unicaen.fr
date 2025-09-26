@@ -2,11 +2,11 @@
 
 namespace Paiement\Assertion;
 
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
+use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\CentreCoutStructure;
-use Framework\Authorize\AbstractAssertion;
+use Utilisateur\Acl\Role;
 
 /**
  * Description of PaiementAssertion

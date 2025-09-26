@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Utilisateur\Entity\Db\Role" table="ROLE">
+        <indexes>
+            <index name="IDX_5657E8959860CDC" columns="HISTO_CREATEUR_ID"/>
+            <index name="IDX_5657E897E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+            <index name="IDX_5657E8963F06898" columns="HISTO_MODIFICATEUR_ID"/>
+        </indexes>
+        <unique-constraints>
+            <unique-constraint name="role_code_un" columns="CODE"/>
+        </unique-constraints>
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <field name="code" type="string" column="CODE" length="3" nullable="false"/>
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <field name="libelle" type="string" column="LIBELLE" length="50" nullable="false"/>
+        <field name="peutChangerStructure" type="boolean" column="PEUT_CHANGER_STRUCTURE" nullable="false" />
+        <field name="accessibleExterieur" type="boolean" column="ACCESSIBLE_EXTERIEUR" nullable="false" />
+        <many-to-one field="perimetre" target-entity="Application\Entity\Db\Perimetre">
+            <join-columns>
+                <join-column name="PERIMETRE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoModificateur" target-entity="Utilisateur\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoDestructeur" target-entity="Utilisateur\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoCreateur" target-entity="Utilisateur\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <one-to-many field="affectation" target-entity="Utilisateur\Entity\Db\Affectation" mapped-by="role"/>
+        <many-to-many field="privileges" target-entity="Utilisateur\Entity\Db\Privilege">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+            <join-table name="ROLE_PRIVILEGE">
+                <join-columns>
+                    <join-column name="ROLE_ID" referenced-column-name="ID"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="PRIVILEGE_ID" referenced-column-name="ID"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+    </entity>
+</doctrine-mapping>

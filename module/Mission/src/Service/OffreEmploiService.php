@@ -2,12 +2,12 @@
 
 namespace Mission\Service;
 
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenVue\View\Model\AxiosModel;
+use Utilisateur\Acl\Role;
 
 /**
  * Description of OffreEmploiService

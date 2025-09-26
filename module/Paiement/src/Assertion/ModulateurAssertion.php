@@ -2,12 +2,12 @@
 
 namespace Paiement\Assertion;
 
-use Application\Acl\Role;
+use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\TypeModulateur;
 use Paiement\Entity\Db\TypeModulateurStructure;
-use Framework\Authorize\AbstractAssertion;
+use Utilisateur\Acl\Role;
 
 
 class ModulateurAssertion extends AbstractAssertion

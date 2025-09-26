@@ -3,15 +3,16 @@
 namespace Administration;
 
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Framework\Authorize\Authorize;
+use Utilisateur\Controller\DroitsController;
 
 $rubriques = [
     'droits'          => [
         'icon'     => 'fas fa-lock-open',
         'label'    => "Droits d'accès",
         'title'    => "Gestion des droits d'accès",
-        'resource' => Authorize::controllerResource('Application\Controller\Droits', 'index'),
+        'resource' => Authorize::controllerResource(DroitsController::class, 'index'),
         'color'    => '#bbcf55',
     ],
     'configuration'   => [

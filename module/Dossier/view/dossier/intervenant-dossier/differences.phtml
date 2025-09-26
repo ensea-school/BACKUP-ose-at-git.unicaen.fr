@@ -7,7 +7,7 @@
  * @var $differences \Indicateur\Entity\Db\IndicModifDossier[]
  */
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 
 $canPurge = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_PURGER_DIFFERENCES));
 

@@ -2,7 +2,7 @@
 
 namespace Paiement;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Framework\Authorize\Authorize;
 use Paiement\Controller\PaiementController;
 use Paiement\Tbl\Process\PaiementProcess;

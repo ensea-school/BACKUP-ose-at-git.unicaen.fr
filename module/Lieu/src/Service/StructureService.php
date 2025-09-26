@@ -2,16 +2,16 @@
 
 namespace Lieu\Service;
 
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\AffectationServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\TblPaiementServiceAwareTrait;
+use Utilisateur\Acl\Role;
+use Utilisateur\Service\AffectationServiceAwareTrait;
 
 
 /**
@@ -190,7 +190,7 @@ class StructureService extends AbstractEntityService
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
         if (true === $role) {
-            $qb->andWhere("EXISTS ( SELECT a from Application\Entity\Db\Affectation a WHERE a.structure = $alias)");
+            $qb->andWhere("EXISTS ( SELECT a from Utilisateur\Entity\Db\Affectation a WHERE a.structure = $alias)");
         } elseif ($role->getStructure()) {
             $this->finderByStructure($role->getStructure(), $qb, $alias);
         }

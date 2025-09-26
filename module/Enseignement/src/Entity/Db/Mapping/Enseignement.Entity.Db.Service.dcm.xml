@@ -17,10 +17,10 @@
         <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant">
             <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+        <many-to-one field="histoModificateur" target-entity="Utilisateur\Entity\Db\Utilisateur">
             <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+        <many-to-one field="histoDestructeur" target-entity="Utilisateur\Entity\Db\Utilisateur">
             <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
@@ -32,7 +32,7 @@
         <many-to-one field="etablissement" target-entity="Lieu\Entity\Db\Etablissement">
             <join-column name="ETABLISSEMENT_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+        <many-to-one field="histoCreateur" target-entity="Utilisateur\Entity\Db\Utilisateur">
             <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <!-- NB: Ajout de relations à la main -->

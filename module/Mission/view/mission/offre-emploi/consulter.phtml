@@ -4,7 +4,7 @@
  * @var $intervenant       \Intervenant\Entity\Db\Intervenant
  */
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 
 $this->headTitle()->append("Gestion des offres d'emploi");
 $canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_TYPE));

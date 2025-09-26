@@ -2,11 +2,11 @@
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $offreEmploi       \Mission\Entity\Db\OffreEmploi
- * @var $utilisateur       \Application\Entity\Db\Utilisateur
+ * @var $utilisateur       \Utilisateur\Entity\Db\Utilisateur
  * @var $intervenant       \Intervenant\Entity\Db\Intervenant
  */
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 
 $this->headTitle()->append("Gestion des offres d'emploi");
 $canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_MODIFIER));

@@ -4,7 +4,7 @@ namespace Intervenant\Controller;
 
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Intervenant\Assertion\NoteAssertion;
 use Intervenant\Entity\Db\Note;
 use Intervenant\Form\MailerIntervenantFormAwareTrait;

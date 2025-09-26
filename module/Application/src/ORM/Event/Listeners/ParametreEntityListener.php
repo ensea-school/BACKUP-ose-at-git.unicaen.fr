@@ -6,7 +6,6 @@ use Administration\Interfaces\ParametreEntityInterface;
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Annee;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -16,6 +15,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Utilisateur\Service\UtilisateurServiceAwareTrait;
 
 class ParametreEntityListener implements EventSubscriber
 {

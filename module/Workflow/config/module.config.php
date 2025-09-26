@@ -2,7 +2,7 @@
 
 namespace Workflow;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 
 
 return [

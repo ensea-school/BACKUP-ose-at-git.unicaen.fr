@@ -3,7 +3,7 @@
 namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Intervenant\Entity\Db\Statut;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;

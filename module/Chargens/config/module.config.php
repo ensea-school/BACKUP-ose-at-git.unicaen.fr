@@ -2,7 +2,7 @@
 
 namespace Chargens;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Chargens\Assertion\ChargensAssertion;
 use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;

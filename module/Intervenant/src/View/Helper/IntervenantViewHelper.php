@@ -2,14 +2,14 @@
 
 namespace Intervenant\View\Helper;
 
-use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Constants;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Helper\AbstractHtmlElement;
+use Utilisateur\Connecteur\LdapConnecteurAwareTrait;
 
 /**
  * Description of Intervenant

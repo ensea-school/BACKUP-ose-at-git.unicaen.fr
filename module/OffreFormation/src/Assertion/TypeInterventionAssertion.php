@@ -3,13 +3,13 @@
 namespace OffreFormation\Assertion;
 
 use Administration\Service\ParametresServiceAwareTrait;
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeInterventionStructure;
-use Framework\Authorize\AbstractAssertion;
+use Utilisateur\Acl\Role;
 
 
 /**

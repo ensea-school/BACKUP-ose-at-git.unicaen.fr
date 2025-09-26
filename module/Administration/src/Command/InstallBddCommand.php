@@ -4,7 +4,6 @@ namespace Administration\Command;
 
 use Administration\Service\AdministrationServiceAwareTrait;
 use Application\Service\OseBddAdminFactory;
-use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Framework\Application\Application;
 use Plafond\Service\PlafondServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
@@ -13,6 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Unicaen\BddAdmin\BddAwareTrait;
+use Utilisateur\Service\UtilisateurServiceAwareTrait;
 
 
 /**

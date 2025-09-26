@@ -2,7 +2,7 @@
 
 namespace OffreFormation;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Framework\Authorize\Authorize;
 use OffreFormation\Controller\DisciplineController;
 use OffreFormation\Controller\ElementPedagogiqueController;

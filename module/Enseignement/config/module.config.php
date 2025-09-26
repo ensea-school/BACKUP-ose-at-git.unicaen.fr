@@ -2,13 +2,14 @@
 
 namespace Enseignement;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
-//use Framework\Authorize\Authorize;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 use Framework\Authorize\AssertionFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 use Workflow\Entity\Db\WorkflowEtape;
+
+//use Framework\Authorize\Authorize;
 
 
 return [

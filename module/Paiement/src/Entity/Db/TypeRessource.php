@@ -2,7 +2,7 @@
 
 namespace Paiement\Entity\Db;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\TypeHeures;
 use UnicaenApp\Entity\HistoriqueAwareInterface;

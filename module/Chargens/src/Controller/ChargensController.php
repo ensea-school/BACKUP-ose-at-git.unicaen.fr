@@ -4,7 +4,7 @@ namespace Chargens\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Annee;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Chargens\Entity\Db\Scenario;

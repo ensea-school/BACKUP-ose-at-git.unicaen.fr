@@ -5,12 +5,12 @@ namespace Application\ORM\Event\Listeners;
 
 use Administration\Interfaces\ParametreEntityInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
+use Utilisateur\Service\UtilisateurServiceAwareTrait;
 
 /**
  * Description of HistoriqueListener

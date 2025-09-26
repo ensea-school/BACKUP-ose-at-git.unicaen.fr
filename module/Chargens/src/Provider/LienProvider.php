@@ -2,7 +2,7 @@
 
 namespace Chargens\Provider;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Chargens\Entity\Lien;
 use Chargens\Entity\Noeud;
 use Chargens\Hydrator\LienDbHydrator;

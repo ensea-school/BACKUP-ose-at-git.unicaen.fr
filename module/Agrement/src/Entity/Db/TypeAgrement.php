@@ -2,7 +2,7 @@
 
 namespace Agrement\Entity\Db;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

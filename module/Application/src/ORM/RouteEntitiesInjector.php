@@ -34,7 +34,7 @@ class RouteEntitiesInjector
                     /** @var IntervenantService $serviceIntervenant */
                     $serviceIntervenant = $e->getApplication()->getServiceManager()->get(IntervenantService::class);
 
-                    /* @var $role \Application\Acl\Role */
+                    /* @var $role \Utilisateur\Acl\Role */
                     $role   = $serviceIntervenant->getServiceContext()->getSelectedIdentityRole();
                     $entity = $serviceIntervenant->getByRouteParam($value);
                     if ($role && $role->getIntervenant()) {

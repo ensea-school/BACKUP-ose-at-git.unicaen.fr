@@ -2,10 +2,10 @@
 
 namespace Plafond;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
+use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Plafond\View\Helper\PlafondConfigElementViewHelperFactory;
-use Framework\Authorize\AssertionFactory;
 
 return [
 

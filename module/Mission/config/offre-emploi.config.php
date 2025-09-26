@@ -3,13 +3,13 @@
 namespace Mission;
 
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
+use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Mission\Controller\OffreEmploiController;
 use Mission\Controller\OffreEmploiControllerFactory;
 use Mission\Service\CandidatureService;
 use Mission\Service\CandidatureServiceFactory;
-use Framework\Authorize\AssertionFactory;
 use Mission\Service\OffreEmploiService;
 use Mission\Service\OffreEmploiServiceFactory;
 

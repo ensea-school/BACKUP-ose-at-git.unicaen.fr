@@ -2,12 +2,12 @@
 
 namespace Indicateur\Service;
 
-use Application\Entity\Db\Affectation;
 use Application\Service\AbstractService;
+use DateTime;
 use Indicateur\Entity\Db\Indicateur;
 use Indicateur\Entity\Db\NotificationIndicateur;
 use LogicException;
-use DateTime;
+use Utilisateur\Entity\Db\Affectation;
 
 /**
  * Description of NotificationIndicateurService

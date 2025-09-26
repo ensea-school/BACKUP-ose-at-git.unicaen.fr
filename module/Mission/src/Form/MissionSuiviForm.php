@@ -3,7 +3,7 @@
 namespace Mission\Form;
 
 use Application\Form\AbstractForm;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Doctrine\Common\Collections\ArrayCollection;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Mission\Entity\Db\Mission;

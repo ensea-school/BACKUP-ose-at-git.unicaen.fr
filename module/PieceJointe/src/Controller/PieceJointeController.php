@@ -3,8 +3,8 @@
 namespace PieceJointe\Controller;
 
 use Application\Entity\Db\Fichier;
+use Application\Provider\Privileges;
 use Application\Provider\Tbl\TblProvider;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;

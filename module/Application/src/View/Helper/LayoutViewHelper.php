@@ -2,7 +2,6 @@
 
 namespace Application\View\Helper;
 
-use Application\Acl\Role;
 use Application\Service\NavbarService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Navigation\Navigation;
@@ -10,6 +9,7 @@ use Framework\Navigation\Page;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
+use Utilisateur\Acl\Role;
 
 /**
  * Description of UtilisateurViewHelper

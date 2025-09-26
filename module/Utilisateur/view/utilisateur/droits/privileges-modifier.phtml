@@ -1,0 +1,9 @@
+<?php
+
+/* @var $role \Utilisateur\Entity\Db\Role */
+/* @var $privilege \Utilisateur\Entity\Db\Privilege */
+
+echo $this->partial(
+    '/utilisateur/droits/partial/tbl-link',
+    compact('role', 'privilege')
+);

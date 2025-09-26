@@ -5,7 +5,7 @@ namespace Intervenant\Entity\Db;
 
 use Administration\Interfaces\ParametreEntityInterface;
 use Administration\Traits\ParametreEntityTrait;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Dossier\Entity\Db\DossierAutre;
 use EtatSortie\Entity\Db\EtatSortie;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;

@@ -3,23 +3,17 @@
 namespace Signature\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Role;
-use Application\Service\Traits\RoleServiceAwareTrait;
-use Contrat\Service\ContratServiceAwareTrait;
 use Signature\Form\SignatureFlowFormAwareTrait;
 use Signature\Form\SignatureFlowStepFormAwareTrait;
 use Signature\Service\SignatureFlowServiceAwareTrait;
 use Signature\Service\SignatureFlowStepServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Entity\Db\SignatureFlow;
 use UnicaenSignature\Entity\Db\SignatureFlowStep;
-use UnicaenSignature\Entity\Db\SignatureRecipient;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
 use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
-use UnicaenSignature\Service\SignatureService;
 use UnicaenSignature\Service\SignatureServiceAwareTrait;
-use UnicaenVue\View\Model\VueModel;
+use Utilisateur\Service\RoleServiceAwareTrait;
 
 
 /**

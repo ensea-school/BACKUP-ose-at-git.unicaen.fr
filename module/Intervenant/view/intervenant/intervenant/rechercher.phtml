@@ -11,7 +11,7 @@
 
     echo $this->vue('intervenant/recherche', []);
 
-    $canAddIntervenant = $this->isAllowed(\Application\Provider\Privilege\Privileges::getResourceId(\Application\Provider\Privilege\Privileges::INTERVENANT_CREATION));
+    $canAddIntervenant = $this->isAllowed(\Application\Provider\Privileges::getResourceId(\Application\Provider\Privileges::INTERVENANT_CREATION));
 
     if ($canAddIntervenant) {
         $url = $this->url('intervenant/creer');

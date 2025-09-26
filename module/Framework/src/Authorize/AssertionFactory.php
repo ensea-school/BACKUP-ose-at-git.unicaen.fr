@@ -8,11 +8,6 @@ use Laminas\Mvc\Application;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use UnicaenAuthentification\Service\UserContext;
 
-/**
- * Class AssertionFactory
- *
- * @package UnicaenPrivilege\Assertion
- */
 class AssertionFactory implements FactoryInterface
 {
     /**

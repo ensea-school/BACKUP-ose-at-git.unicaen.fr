@@ -3,13 +3,13 @@
 namespace Application\Controller;
 
 use Administration\Service\ParametresServiceAwareTrait;
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
+use Utilisateur\Acl\Role;
 
 /**
  *

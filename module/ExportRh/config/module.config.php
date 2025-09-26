@@ -2,7 +2,7 @@
 
 namespace ExportRh;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use ExportRh\Assertion\ExportRhAssertion;
 use ExportRh\Connecteur\Siham\SihamConnecteur;
 use ExportRh\Connecteur\Siham\SihamConnecteurFactory;

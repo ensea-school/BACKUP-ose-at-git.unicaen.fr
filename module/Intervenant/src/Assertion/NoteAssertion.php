@@ -2,12 +2,12 @@
 
 namespace Intervenant\Assertion;
 
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Intervenant\Entity\Db\Note;
 use Framework\Authorize\AbstractAssertion;
+use Intervenant\Entity\Db\Note;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Utilisateur\Acl\Role;
 
 
 /**

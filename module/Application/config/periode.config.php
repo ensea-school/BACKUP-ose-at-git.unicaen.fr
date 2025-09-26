@@ -6,7 +6,7 @@
 namespace Application;
 
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\PeriodeService;
 use Framework\Authorize\Authorize;
 use UnicaenPrivilege\Guard\PrivilegeController;

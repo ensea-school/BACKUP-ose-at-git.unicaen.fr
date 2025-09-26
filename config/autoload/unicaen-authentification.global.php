@@ -7,7 +7,7 @@ $config = Application::getInstance()->config();
 
 $settings = [
     /**
-     * Flag indiquant si l'utilisateur authenitifié avec succès via l'annuaire LDAP doit
+     * Flag indiquant si l'utilisateur authentifié avec succès via l'annuaire LDAP doit
      * être enregistré/mis à jour dans la table des utilisateurs de l'appli.
      */
     'save_ldap_user_in_database' => true,
@@ -29,7 +29,7 @@ $settings = [
      * - 'role_entity_class'      : 'UnicaenAuth\Entity\Db\Role'
      * - 'privilege_entity_class' : 'UnicaenAuth\Entity\Db\Privilege'
      */
-    'role_entity_class'            => 'Application\Entity\Db\Role',
+    'role_entity_class'            => \Utilisateur\Entity\Db\Role::class,
 
     /**
      * Gestion des autorisations d'usurpation

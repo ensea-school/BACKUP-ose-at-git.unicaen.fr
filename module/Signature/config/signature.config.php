@@ -2,7 +2,7 @@
 
 namespace Signature;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Framework\Authorize\Authorize;
 use Signature\Command\UpdateSignaturesContratsProcessesCommand;
 use Signature\Command\UpdateSignaturesContratsProcessesCommandFactory;

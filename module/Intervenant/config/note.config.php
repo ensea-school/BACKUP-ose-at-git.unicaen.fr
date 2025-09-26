@@ -2,9 +2,8 @@
 
 namespace Intervenant;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Intervenant\Assertion\NoteAssertion;
-use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [

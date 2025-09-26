@@ -3,7 +3,7 @@
 namespace Service\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Service\Form\CampagneSaisieFormAwareTrait;
 use Service\Service\CampagneSaisieServiceAwareTrait;

@@ -2,7 +2,7 @@
 
 namespace Chargens\Service;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Provider\Tbl\TblProvider;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;

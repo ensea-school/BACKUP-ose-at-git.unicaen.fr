@@ -55,11 +55,13 @@ class AutowireFactory
             }
 
             if (!$traite) {
-                if ($parameter->getType()->getName() == ContainerInterface::class) {
+                if ($parameter->getType()?->getName() == ContainerInterface::class) {
                     $dependencies[] = $this->container;
                 }else {
-                    $dependencyName = $parameter->getType()->getName();
-                    $dependencies[] = $container->get($dependencyName);
+                    $dependencyName = $parameter->getType()?->getName();
+                    if ($dependencyName) {
+                        $dependencies[] = $container->get($dependencyName);
+                    }
                 }
             }
         }

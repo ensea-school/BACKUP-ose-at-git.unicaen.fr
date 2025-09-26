@@ -2,13 +2,12 @@
 
 namespace Paiement\Assertion;
 
-use Application\Acl\Role;
 use Application\Entity\Db\Agrement;
-use Application\Provider\Privilege\Privileges;
-use Paiement\Entity\Db\TauxRemu;
-use phpDocumentor\Reflection\Types\Boolean;
+use Application\Provider\Privileges;
 use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Paiement\Entity\Db\TauxRemu;
+use Utilisateur\Acl\Role;
 
 
 /**

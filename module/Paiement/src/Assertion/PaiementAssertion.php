@@ -2,10 +2,10 @@
 
 namespace Paiement\Assertion;
 
-use Application\Acl\Role;
+use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
-use Framework\Authorize\AbstractAssertion;
+use Utilisateur\Acl\Role;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 

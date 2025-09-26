@@ -2,12 +2,12 @@
 
 namespace Service;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
+use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\ModificationServiceDuController;
 use Service\Controller\MotifModificationServiceController;
-use Framework\Authorize\AssertionFactory;
 
 
 return [

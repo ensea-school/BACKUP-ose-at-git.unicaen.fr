@@ -3,7 +3,7 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Provider\Tbl\TblProvider;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;

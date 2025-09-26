@@ -5,7 +5,7 @@
  * @var $data          array
  * @var $filtres       array
  * @var $entityManager \Doctrine\ORM\EntityManager
- * @var $role          \Application\Acl\Role
+ * @var $role          \Utilisateur\Acl\Role
  * @var $options       array
  *
  * @var $csv           \UnicaenApp\View\Model\CsvModel

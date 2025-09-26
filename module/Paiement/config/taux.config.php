@@ -2,12 +2,12 @@
 
 namespace Paiement;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
+use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Paiement\Controller\TauxRemuController;
 use Paiement\Service\TauxRemuService;
 use Paiement\Service\TauxRemuServiceFactory;
-use Framework\Authorize\AssertionFactory;
 
 
 return [

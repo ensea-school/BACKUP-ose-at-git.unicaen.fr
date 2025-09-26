@@ -4,13 +4,13 @@ namespace Signature\Form;
 
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\RoleServiceAwareTrait;
 use Laminas\Form\Element\Number;
 use Signature\Hydrator\SignatureFlowStepHydrator;
 use UnicaenApp\Util;
 use UnicaenSignature\Entity\Data\LevelInfo;
 use UnicaenSignature\Entity\Db\SignatureFlowStep;
 use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
+use Utilisateur\Service\RoleServiceAwareTrait;
 
 
 /**

@@ -2,9 +2,9 @@
 
 namespace Formule\Assertion;
 
-use Application\Acl\Role;
-use Intervenant\Entity\Db\Intervenant;
 use Framework\Authorize\AbstractAssertion;
+use Intervenant\Entity\Db\Intervenant;
+use Utilisateur\Acl\Role;
 
 
 /**

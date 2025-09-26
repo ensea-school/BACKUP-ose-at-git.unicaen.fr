@@ -3,10 +3,10 @@
 namespace Service\Entity\Db;
 
 
-use Application\Acl\Role;
 use Application\Constants;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
+use Utilisateur\Acl\Role;
 
 class CampagneSaisie
 {

@@ -2,7 +2,7 @@
 
 namespace Paiement;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Framework\Authorize\Authorize;
 use Paiement\Assertion\PaiementAssertion;
 use Workflow\Entity\Db\WorkflowEtape;

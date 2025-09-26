@@ -3,7 +3,7 @@
 namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Formule\Model\FormuleDetailsExtractor;
 use Formule\Service\AfficheurServiceAwareTrait;
 use Formule\Service\FormuleServiceAwareTrait;

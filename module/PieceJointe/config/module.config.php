@@ -2,7 +2,8 @@
 
 namespace PieceJointe;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
+use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use PieceJointe\Assertion\PiecesJointesAssertion;
 use PieceJointe\Controller\Factory\PieceJointeControllerFactory;
@@ -21,7 +22,6 @@ use PieceJointe\Service\TypePieceJointeService;
 use PieceJointe\Service\TypePieceJointeStatutService;
 use PieceJointe\Tbl\Process\PieceJointeProcess;
 use PieceJointe\Tbl\Process\PieceJointeProcessFactory;
-use Framework\Authorize\AssertionFactory;
 
 return [
     'routes' => [

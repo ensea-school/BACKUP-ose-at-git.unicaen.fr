@@ -3,12 +3,12 @@
 namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
 use Paiement\Form\TauxFormAwareTrait;
 use Paiement\Form\TauxValeurFormAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenVue\View\Model\AxiosModel;
 

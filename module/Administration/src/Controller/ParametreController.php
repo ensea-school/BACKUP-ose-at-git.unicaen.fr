@@ -7,7 +7,7 @@ use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Lieu\Service\EtablissementServiceAwareTrait;

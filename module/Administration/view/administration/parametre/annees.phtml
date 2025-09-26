@@ -6,7 +6,7 @@
  * @var $canEdit boolean
  */
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 
 $annees  = array_chunk($annees, 10);
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANNEES_EDITION));

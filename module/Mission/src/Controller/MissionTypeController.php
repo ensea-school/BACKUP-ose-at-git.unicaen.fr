@@ -4,7 +4,7 @@ namespace Mission\Controller;
 
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Lieu\Entity\Db\Structure;

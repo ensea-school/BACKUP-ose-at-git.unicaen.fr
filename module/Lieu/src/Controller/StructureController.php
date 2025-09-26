@@ -3,7 +3,7 @@
 namespace Lieu\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Lieu\Entity\Db\Structure;
 use Lieu\Form\StructureSaisieFormAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;

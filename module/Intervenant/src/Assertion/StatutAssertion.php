@@ -2,11 +2,11 @@
 
 namespace Intervenant\Assertion;
 
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
-use Intervenant\Entity\Db\Statut;
+use Application\Provider\Privileges;
 use Framework\Authorize\AbstractAssertion;
+use Intervenant\Entity\Db\Statut;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Utilisateur\Acl\Role;
 
 
 /**

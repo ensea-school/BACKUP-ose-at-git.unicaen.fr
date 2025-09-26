@@ -4,9 +4,9 @@ namespace Application;
 
 use Application\Service\OseBddAdminFactory;
 use Application\View\Helper\LocalConnectViewHelperFactory;
+use Framework\Application\Application;
 use Unicaen\BddAdmin\Bdd;
 use UnicaenAuthentification\View\Helper\LocalConnectViewHelper;
-use Framework\Application\Application;
 
 $config = [
     'doctrine' => [
@@ -46,7 +46,7 @@ $config = [
         ],
     ],
     'zfcuser'  => [
-        'user_entity_class' => Entity\Db\Utilisateur::class,
+        'user_entity_class' => \Utilisateur\Entity\Db\Utilisateur::class,
     ],
 
     'router' => [
@@ -100,11 +100,11 @@ $config = [
     ],
 
     'bjyauthorize'       => [
-        'identity_provider' => Provider\Identity\IdentityProvider::class,
+        'identity_provider' => \Utilisateur\Provider\IdentityProvider::class,
 
         'role_providers'     => [
-            Provider\Role\RoleProvider::class => [
-                Acl\Role::class,
+            \Utilisateur\Provider\RoleProvider::class => [
+                \Utilisateur\Acl\Role::class,
             ],
         ],
         'guards'             => [
@@ -122,22 +122,16 @@ $config = [
     ],
     'service_manager'    => [
         'invokables' => [
-            Service\AnneeService::class        => Service\AnneeService::class,
-            Service\LocalContextService::class => Service\LocalContextService::class,
-            Service\SourceService::class       => Service\SourceService::class,
-            Service\AffectationService::class  => Service\AffectationService::class,
-            Service\RoleService::class         => Service\RoleService::class,
-            Service\FichierService::class      => Service\FichierService::class,
+            Service\AnneeService::class                    => Service\AnneeService::class,
+            Service\LocalContextService::class             => Service\LocalContextService::class,
+            Service\SourceService::class                   => Service\SourceService::class,
+            Service\FichierService::class                  => Service\FichierService::class,
+            Service\PerimetreService::class => Service\PerimetreService::class,
         ],
         'factories'  => [
-            Provider\Role\RoleProvider::class                           => Provider\Role\RoleProviderFactory::class,
             Provider\Resource\ResourceProvider::class                   => Provider\Resource\ResourceProviderFactory::class,
-            Provider\Identity\IdentityProvider::class                   => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class                               => Service\Factory\ContextServiceFactory::class,
-            \UnicaenPrivilege\Service\Privilege\PrivilegeService::class => Service\Factory\PrivilegeServiceFactory::class,
-            Connecteur\LdapConnecteur::class                            => Connecteur\Factory\LdapConnecteurFactory::class,
             Cache\CacheService::class                                   => Cache\Factory\CacheServiceFactory::class,
-            Service\UtilisateurService::class                           => Service\Factory\UtilisateurServiceFactory::class,
             HostLocalization\HostLocalizationOse::class                 => HostLocalization\HostLocalizationOseFactory::class,
             ORM\RouteEntitiesInjector::class                            => ORM\RouteEntitiesInjectorFactory::class,
             ORM\Event\Listeners\HistoriqueListener::class               => ORM\Event\Listeners\HistoriqueListenerFactory::class,
@@ -145,8 +139,7 @@ $config = [
             \UnicaenMail\Service\Mail\MailService::class                => Service\MailServiceFactory::class,
         ],
         'aliases'    => [
-            'HostLocalization'              => HostLocalization\HostLocalizationOse::class,
-            Service\PrivilegeService::class => \UnicaenPrivilege\Service\Privilege\PrivilegeService::class,
+            'HostLocalization'                           => HostLocalization\HostLocalizationOse::class,
         ],
     ],
     'view_helpers'       => [
@@ -162,7 +155,6 @@ $config = [
             'appLayout'                            => View\Helper\LayoutViewHelperFactory::class,
         ],
         'invokables' => [
-            'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
             'tree'            => View\Helper\TreeViewHelper::class,
             'formSupprimer'   => View\Helper\FormSupprimerViewHelper::class,
             'formButtonGroup' => View\Helper\FormButtonGroupViewHelper::class,

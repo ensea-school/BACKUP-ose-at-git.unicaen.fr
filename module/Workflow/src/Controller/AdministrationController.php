@@ -3,7 +3,7 @@
 namespace Workflow\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use UnicaenVue\View\Model\AxiosModel;
 use UnicaenVue\View\Model\VueModel;
 use Workflow\Entity\Db\WorkflowEtape;

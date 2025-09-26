@@ -2,7 +2,7 @@
 
 namespace Intervenant;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 

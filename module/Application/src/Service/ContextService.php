@@ -2,11 +2,8 @@
 
 namespace Application\Service;
 
-use Application\Acl\Role;
-use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
-use Application\Entity\Db\Affectation;
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
@@ -17,7 +14,10 @@ use Lieu\Service\EtablissementServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
-use Administration\Service\ParametresServiceAwareTrait;
+use Utilisateur\Acl\Role;
+use Utilisateur\Connecteur\LdapConnecteurAwareTrait;
+use Utilisateur\Entity\Db\Affectation;
+use Utilisateur\Entity\Db\Utilisateur;
 
 /**
  * Service fournissant les différents contextes de fonctionnement de l'application.
@@ -78,8 +78,8 @@ class ContextService extends AbstractService
     public function refreshRoleStatut (Statut $statut): void
     {
         $this->serviceUserContext->clearIdentityRoles();
-        \Framework\Application\Application::getInstance()->container()->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
-        \Framework\Application\Application::getInstance()->container()->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
+        \Framework\Application\Application::getInstance()->container()->get(\Utilisateur\Provider\IdentityProvider::class)->clearIdentityRoles();
+        \Framework\Application\Application::getInstance()->container()->get(\Utilisateur\Provider\RoleProvider::class)->clearRoles();
         $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
     }
 

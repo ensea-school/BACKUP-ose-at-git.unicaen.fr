@@ -3,7 +3,7 @@
 namespace Lieu;
 
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Framework\Authorize\Authorize;
 
 return [

@@ -2,8 +2,8 @@
 
 namespace Administration\Assertion;
 
-use Application\Acl\Role;
 use Framework\Authorize\AbstractAssertion;
+use Utilisateur\Acl\Role;
 
 
 /**

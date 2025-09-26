@@ -9,7 +9,7 @@ use Agrement\Service\AgrementService;
 use Agrement\Service\Traits\AgrementServiceAwareTrait;
 use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use EtatSortie\Service\EtatSortieServiceAwareTrait;

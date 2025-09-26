@@ -2,8 +2,8 @@
 
 namespace Service\Entity\Db;
 
-use Application\Entity\Db\Utilisateur;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
+use Utilisateur\Entity\Db\Utilisateur;
 
 /**
  * HistoIntervenantService

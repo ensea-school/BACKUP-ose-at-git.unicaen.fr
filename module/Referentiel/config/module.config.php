@@ -2,12 +2,12 @@
 
 namespace Referentiel;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
+use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Referentiel\Controller\FonctionReferentielController;
 use Referentiel\Controller\ServiceReferentielController;
-use Framework\Authorize\AssertionFactory;
 use Workflow\Entity\Db\WorkflowEtape;
 
 

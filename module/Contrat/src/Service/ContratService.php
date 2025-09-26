@@ -4,12 +4,8 @@ namespace Contrat\Service;
 
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Role;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
-use Application\Service\Traits\RoleServiceAwareTrait;
-use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TblContrat;
 use Doctrine\ORM\QueryBuilder;
@@ -26,6 +22,10 @@ use UnicaenSignature\Entity\Db\Process;
 use UnicaenSignature\Entity\Db\Signature;
 use UnicaenSignature\Service\ProcessServiceAwareTrait;
 use UnicaenSignature\Service\SignatureServiceAwareTrait;
+use Utilisateur\Entity\Db\Role;
+use Utilisateur\Service\AffectationServiceAwareTrait;
+use Utilisateur\Service\RoleServiceAwareTrait;
+use Utilisateur\Service\UtilisateurServiceAwareTrait;
 use Workflow\Service\TypeValidationServiceAwareTrait;
 use Workflow\Service\ValidationServiceAwareTrait;
 

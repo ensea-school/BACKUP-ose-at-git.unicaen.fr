@@ -2,7 +2,7 @@
 
 namespace OffreFormation\View\Helper;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Util;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Entity\Db\Structure;

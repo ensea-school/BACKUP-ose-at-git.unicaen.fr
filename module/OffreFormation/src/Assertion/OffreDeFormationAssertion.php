@@ -3,10 +3,10 @@
 namespace OffreFormation\Assertion;
 
 use Administration\Service\ParametresServiceAwareTrait;
-use Application\Acl\Role;
 use Application\Entity\Db\Annee;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\CentreCoutEp;
@@ -16,7 +16,7 @@ use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Entity\Db\VolumeHoraireEns;
 use UnicaenImport\Entity\Db\Source;
-use Framework\Authorize\AbstractAssertion;
+use Utilisateur\Acl\Role;
 
 
 /**

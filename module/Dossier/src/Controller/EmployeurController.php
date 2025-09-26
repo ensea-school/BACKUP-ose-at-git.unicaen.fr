@@ -4,7 +4,7 @@ namespace Dossier\Controller;
 
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Dossier\Entity\Db\Employeur;
 use Dossier\Form\Traits\EmployeurSaisieFormAwareTrait;
 use Dossier\Service\Traits\EmployeurServiceAwareTrait;

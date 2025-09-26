@@ -5,13 +5,13 @@ namespace Agrement\Assertion;
 use Agrement\Entity\Db\Agrement;
 use Agrement\Entity\Db\TblAgrement;
 use Agrement\Entity\Db\TypeAgrement;
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Contrat\Service\TblContratServiceAwareTrait;
+use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
-use Framework\Authorize\AbstractAssertion;
+use Utilisateur\Acl\Role;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 

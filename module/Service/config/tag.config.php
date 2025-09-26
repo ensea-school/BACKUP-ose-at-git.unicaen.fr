@@ -2,10 +2,10 @@
 
 namespace Service;
 
+use Application\Provider\Privileges;
 use Framework\Authorize\Authorize;
-use Service\Controller\TagController;
-use Application\Provider\Privilege\Privileges;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Service\Controller\TagController;
 
 return [
     'routes' => [

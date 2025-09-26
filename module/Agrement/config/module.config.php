@@ -6,8 +6,8 @@ use Agrement\Assertion\AgrementAssertion;
 use Agrement\Controller\AgrementController;
 use Agrement\Controller\Factory\AgrementControllerFactory;
 use Agrement\Entity\Db\TypeAgrement;
-use Agrement\Form\Saisie;
 use Agrement\Form\Factory\AgrementFormFactory;
+use Agrement\Form\Saisie;
 use Agrement\Service\AgrementService;
 use Agrement\Service\AgrementServiceFactory;
 use Agrement\Service\TblAgrementService;
@@ -15,7 +15,7 @@ use Agrement\Service\TblAgrementServiceFactory;
 use Agrement\Service\TypeAgrementService;
 use Agrement\Service\TypeAgrementServiceFactory;
 use Agrement\View\Helper\AgrementVewHelperFactory;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 

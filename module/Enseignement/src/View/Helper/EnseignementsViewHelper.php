@@ -3,7 +3,7 @@
 namespace Enseignement\View\Helper;
 
 use Administration\Service\ParametresServiceAwareTrait;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;

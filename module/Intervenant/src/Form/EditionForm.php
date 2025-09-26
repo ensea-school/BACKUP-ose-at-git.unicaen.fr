@@ -2,13 +2,11 @@
 
 namespace Intervenant\Form;
 
-use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Framework\Application\Application;
 use Intervenant\Entity\Db\Civilite;
 use Intervenant\Entity\Db\Grade;
@@ -29,6 +27,8 @@ use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
 use UnicaenImport\Entity\Db\Source;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
+use Utilisateur\Connecteur\LdapConnecteurAwareTrait;
+use Utilisateur\Service\UtilisateurServiceAwareTrait;
 
 /**
  * Description of EditionForm

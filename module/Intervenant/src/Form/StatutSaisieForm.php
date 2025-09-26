@@ -4,12 +4,12 @@ namespace Intervenant\Form;
 
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\RoleServiceAwareTrait;
 use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
 use EtatSortie\Entity\Db\EtatSortie;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
+use Utilisateur\Service\RoleServiceAwareTrait;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>

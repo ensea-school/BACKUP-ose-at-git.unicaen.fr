@@ -5,7 +5,6 @@ namespace Administration\Form;
 use Administration\Entity\Db\Parametre;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Chargens\Service\ScenarioServiceAwareTrait;
 use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Formule\Entity\Db\Formule;
@@ -20,6 +19,7 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
 use UnicaenSignature\Service\SignatureConfigurationServiceAwareTrait;
+use Utilisateur\Service\UtilisateurServiceAwareTrait;
 
 
 /**

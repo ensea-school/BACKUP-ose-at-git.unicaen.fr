@@ -13,7 +13,7 @@
         <join-column name="INDICATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="affectation" target-entity="Application\Entity\Db\Affectation">
+    <many-to-one field="affectation" target-entity="Utilisateur\Entity\Db\Affectation">
       <join-columns>
         <join-column name="AFFECTATION_ID" referenced-column-name="ID"/>
       </join-columns>

@@ -3,7 +3,7 @@
 namespace Enseignement\Form;
 
 use Application\Form\AbstractFieldset;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;

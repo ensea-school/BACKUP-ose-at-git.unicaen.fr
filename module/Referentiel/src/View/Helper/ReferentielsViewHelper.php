@@ -3,7 +3,7 @@
 namespace Referentiel\View\Helper;
 
 use Administration\Service\ParametresServiceAwareTrait;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\IntervenantAwareTrait;

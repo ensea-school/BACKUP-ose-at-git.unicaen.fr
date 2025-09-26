@@ -3,14 +3,14 @@
 namespace Enseignement\View\Helper\VolumeHoraire;
 
 use Application\Constants;
-use Service\Entity\Db\Tag;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Enseignement\Entity\VolumeHoraireListe;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use Service\Entity\Db\Tag;
 
 
 /**

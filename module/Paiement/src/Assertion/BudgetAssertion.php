@@ -2,12 +2,12 @@
 
 namespace Paiement\Assertion;
 
-use Application\Acl\Role;
+use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;
-use Framework\Authorize\AbstractAssertion;
+use Utilisateur\Acl\Role;
 
 
 /**

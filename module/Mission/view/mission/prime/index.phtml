@@ -7,7 +7,7 @@
  * @var $typeVolumeHoraire          \Service\Entity\Db\TypeVolumeHoraire
  */
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Workflow\Entity\Db\WorkflowEtape;
 
 $canGerer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION));

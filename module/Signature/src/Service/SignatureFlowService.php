@@ -3,11 +3,11 @@
 namespace Signature\Service;
 
 
-use Application\Entity\Db\Role;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\RoleServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenSignature\Entity\Db\SignatureFlow;
+use Utilisateur\Entity\Db\Role;
+use Utilisateur\Service\RoleServiceAwareTrait;
 
 
 /**

@@ -9,6 +9,7 @@ use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\Stdlib\ArrayUtils;
 use Locale;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class Application
 {
@@ -17,6 +18,8 @@ class Application
     private ContainerInterface $container;
 
     private array $config;
+
+    private Session $session;
 
 
 
@@ -58,6 +61,13 @@ class Application
     public function container(): ContainerInterface
     {
         return $this->container;
+    }
+
+
+
+    public function session(): Session
+    {
+        return $this->session;
     }
 
 
@@ -187,6 +197,10 @@ class Application
         $this->container = new Container();
         $smConfig->configureServiceManager($this->container);
         $this->container->setService('ApplicationConfig', $appConfig);
+
+        // Crée et lance la session
+        //$this->session = new Session();
+        //$this->container->setService('session', $this->session);
 
         // Load modules
         $this->container->get('ModuleManager')->loadModules();

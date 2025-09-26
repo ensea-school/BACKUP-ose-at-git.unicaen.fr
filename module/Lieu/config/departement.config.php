@@ -2,8 +2,8 @@
 
 namespace Lieu;
 
+use Application\Provider\Privileges;
 use Framework\Authorize\Authorize;
-use Application\Provider\Privilege\Privileges;
 
 return [
     'routes' => [

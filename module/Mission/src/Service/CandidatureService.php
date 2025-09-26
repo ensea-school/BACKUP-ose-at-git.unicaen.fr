@@ -3,8 +3,7 @@
 namespace Mission\Service;
 
 use Administration\Service\ParametresServiceAwareTrait;
-use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -13,6 +12,7 @@ use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
+use Utilisateur\Acl\Role;
 
 /**
  * Description of CandidatureService

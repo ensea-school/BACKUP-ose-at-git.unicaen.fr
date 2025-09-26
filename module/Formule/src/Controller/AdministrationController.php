@@ -3,7 +3,7 @@
 namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Formule\Entity\Db\Formule;
 use Formule\Service\FormulatorServiceAwareTrait;
 use Formule\Service\TestServiceAwareTrait;

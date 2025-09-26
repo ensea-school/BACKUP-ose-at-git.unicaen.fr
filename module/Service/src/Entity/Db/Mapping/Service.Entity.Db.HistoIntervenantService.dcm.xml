@@ -22,7 +22,7 @@
             </join-columns>
         </many-to-one>
 
-        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+        <many-to-one field="histoModificateur" target-entity="Utilisateur\Entity\Db\Utilisateur">
             <join-columns>
                 <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
             </join-columns>

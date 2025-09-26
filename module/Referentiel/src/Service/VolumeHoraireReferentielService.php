@@ -3,13 +3,12 @@
 namespace Referentiel\Service;
 
 use Application\Service\AbstractEntityService;
-use Referentiel\Entity\Db\VolumeHoraireReferentiel;
-use Application\Provider\Privilege\Privileges;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Doctrine\ORM\QueryBuilder;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 /**
  * Description of VolumeHoraireReferentiel

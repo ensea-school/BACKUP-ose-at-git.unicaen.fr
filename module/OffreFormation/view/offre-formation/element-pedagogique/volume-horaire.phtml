@@ -1,8 +1,8 @@
 <?php
 
 use Application\Filter\StringFromFloat;
-use OffreFormation\Form\VolumeHoraireEnsForm;
 use OffreFormation\Entity\Db\VolumeHoraireEns;
+use OffreFormation\Form\VolumeHoraireEnsForm;
 
 /**
  * @var $this             \Application\View\Renderer\PhpRenderer
@@ -35,7 +35,7 @@ $canSave = false;
     </thead>
     <tbody>
     <?php foreach ($vhes as $vhe):
-        $canEdit = $this->isAllowed($vhe, Application\Provider\Privilege\Privileges::ODF_ELEMENT_VH_EDITION);
+        $canEdit = $this->isAllowed($vhe, \Application\Provider\Privileges::ODF_ELEMENT_VH_EDITION);
 
         if ($canEdit) {
             $canSave = true;

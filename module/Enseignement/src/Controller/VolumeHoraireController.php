@@ -4,7 +4,7 @@ namespace Enseignement\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Form\AbstractForm;
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;

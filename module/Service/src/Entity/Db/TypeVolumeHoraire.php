@@ -2,7 +2,7 @@
 
 namespace Service\Entity\Db;
 
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 use Workflow\Entity\Db\WorkflowEtape;
 
 class TypeVolumeHoraire

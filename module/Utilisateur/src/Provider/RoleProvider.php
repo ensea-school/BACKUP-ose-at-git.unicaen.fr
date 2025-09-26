@@ -36,10 +36,11 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
      */
     public function getRoles(): array
     {
+        return $this->makeRoles();
         $session = RoleService::getSession();
-        //if (!$session->offsetExists('roles') || empty($session->roles)) {
+        if (!$session->offsetExists('roles') || empty($session->roles)) {
             $session->roles = $this->makeRoles();
-        //}
+        }
         return $session->roles;
     }
 
@@ -47,6 +48,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
     public function clearRoles(): void
     {
+        return;
         $session = RoleService::getSession();
         if ($session->offsetExists('roles')) {
             $session->offsetUnset('roles');

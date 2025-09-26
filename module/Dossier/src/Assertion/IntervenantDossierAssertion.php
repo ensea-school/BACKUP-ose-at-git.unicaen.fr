@@ -8,7 +8,7 @@ use Dossier\Controller\IntervenantDossierController;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Framework\Authorize\AbstractAssertion;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 

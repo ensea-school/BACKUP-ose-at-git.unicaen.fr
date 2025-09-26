@@ -3,7 +3,7 @@
 namespace Administration;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -39,13 +39,13 @@ return [
                             'label'    => "Années",
                             'route'    => 'parametres/annees',
                             'order'    => 10,
-                            'resource' => PrivilegeController::getResourceId(Controller\ParametreController::class, 'annees'),
+                            'resource' => Authorize::controllerResource(Controller\ParametreController::class, 'annees'),
                         ],
                         'generaux' => [
                             'label'    => "Paramètres généraux",
                             'route'    => 'parametres/generaux',
                             'order'    => 40,
-                            'resource' => PrivilegeController::getResourceId(Controller\ParametreController::class, 'generaux'),
+                            'resource' => Authorize::controllerResource(Controller\ParametreController::class, 'generaux'),
                         ],
                     ],
                 ],

@@ -3,7 +3,7 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -45,7 +45,7 @@ return [
                         'jour-ferie' => [
                             'label'    => 'Jours fériés',
                             'route'    => 'jour-ferie',
-                            'resource' => PrivilegeController::getResourceId(Controller\JourFerieController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\JourFerieController::class, 'index'),
                             'order'    => 11,
                             'color'    => '#BBCF55',
                         ],

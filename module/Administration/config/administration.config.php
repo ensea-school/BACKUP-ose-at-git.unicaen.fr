@@ -4,63 +4,63 @@ namespace Administration;
 
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 $rubriques = [
     'droits'          => [
         'icon'     => 'fas fa-lock-open',
         'label'    => "Droits d'accès",
         'title'    => "Gestion des droits d'accès",
-        'resource' => PrivilegeController::getResourceId('Application\Controller\Droits', 'index'),
+        'resource' => Authorize::controllerResource('Application\Controller\Droits', 'index'),
         'color'    => '#bbcf55',
     ],
     'configuration'   => [
         'icon'     => 'fas fa-gear',
         'label'    => "Configuration",
         'title'    => "Paramétrages de base de l'application",
-        'resource' => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
+        'resource' => Authorize::controllerResource(Controller\AdministrationController::class, 'index'),
         'color'    => '#f5e79e',
     ],
     'nomenclatures'   => [
         'icon'     => 'fas fa-folder-open',
         'label'    => "Nomenclatures",
         'title'    => "Diverses nomenclatures en usage",
-        'resource' => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
+        'resource' => Authorize::controllerResource(Controller\AdministrationController::class, 'index'),
         'color'    => '#217dd8',
     ],
     'intervenants'    => [
         'icon'     => 'fas fa-user',
         'label'    => "Intervenants",
         'title'    => "Paramétrages liés aux intervenants",
-        'resource' => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
+        'resource' => Authorize::controllerResource(Controller\AdministrationController::class, 'index'),
         'color'    => '#E5272E',
     ],
     'odf'             => [
         'icon'     => 'fas fa-user-graduate',
         'label'    => "Offre de formation",
         'title'    => "Administration du fonctionnement de l'offre de formation",
-        'resource' => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
+        'resource' => Authorize::controllerResource(Controller\AdministrationController::class, 'index'),
         'color'    => '#71dfd7',
     ],
     'rh'              => [
         'icon'     => 'fas fa-paperclip',
         'label'    => "RH",
         'title'    => "Nomenclatures et paramétrages relatifs aux ressources humaines",
-        'resource' => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
+        'resource' => Authorize::controllerResource(Controller\AdministrationController::class, 'index'),
         'color'    => '#9e9e9e',
     ],
     'finances'        => [
         'icon'     => 'fas fa-chart-line',
         'label'    => "Finances",
         'title'    => "Nomenclatures et paramétrages liés aux aspects financiers",
-        'resource' => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
+        'resource' => Authorize::controllerResource(Controller\AdministrationController::class, 'index'),
         'color'    => '#eb4995',
     ],
     'synchronisation' => [
         'icon'     => 'fas fa-database',
         'label'    => "Synchronisation",
         'title'    => "Liaisons entre OSE et le système d'information",
-        'resource' => PrivilegeController::getResourceId('Import\Controller\Import', 'index'),
+        'resource' => Authorize::controllerResource('Import\Controller\Import', 'index'),
         'color'    => '#9f491f',
         'route'    => 'import',
     ],
@@ -68,7 +68,7 @@ $rubriques = [
         'icon'  => 'fas fa-signature',
         'label' => "Signature électronique",
         'title' => "Gestion de la signature électronique",
-        //'resource' => PrivilegeController::getResourceId('Import\Controller\Import', 'index'),
+        //'resource' => Authorize::controllerResource('Import\Controller\Import', 'index'),
         'color' => '#9f491f',
         'route' => 'signature',
     ],
@@ -162,7 +162,7 @@ $config = [
         'administration' => [
             'label'    => "Administration",
             'route'    => 'administration',
-            'resource' => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
+            'resource' => Authorize::controllerResource(Controller\AdministrationController::class, 'index'),
             'order'    => 7,
             'pages'    => [
                 // remplies automatiquement

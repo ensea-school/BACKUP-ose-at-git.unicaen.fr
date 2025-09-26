@@ -2,10 +2,10 @@
 
 namespace Service;
 
+use Framework\Authorize\Authorize;
 use Service\Controller\TagController;
 use Application\Provider\Privilege\Privileges;
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
@@ -56,7 +56,7 @@ return [
                         'tag' => [
                             'label'    => 'Tags',
                             'route'    => 'tag',
-                            'resource' => PrivilegeController::getResourceId(TagController::class, 'index'),
+                            'resource' => Authorize::controllerResource(TagController::class, 'index'),
                             'order'    => 50,
                             'color'    => '#BBCF55',
                         ],

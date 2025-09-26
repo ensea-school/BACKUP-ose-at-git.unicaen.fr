@@ -3,8 +3,8 @@
 namespace Formule;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -68,7 +68,7 @@ return [
                     ],
                     'action'       => 'details',
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(Controller\AffichageController::class, 'details'),
+                    'resource'     => Authorize::controllerResource(Controller\AffichageController::class, 'details'),
                     'order'        => 3,
                 ],
             ],

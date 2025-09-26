@@ -3,8 +3,8 @@
 namespace Lieu;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use Lieu\Controller\EtablissementController;
-use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
@@ -61,7 +61,7 @@ return [
                         'gestion-etablissement' => [
                             'label'          => 'Établissements',
                             'route'          => 'etablissement',
-                            'resource'       => PrivilegeController::getResourceId(Controller\EtablissementController::class, 'index'),
+                            'resource'       => Authorize::controllerResource(Controller\EtablissementController::class, 'index'),
                             'order'          => 20,
                             'border - color' => '#111',
                         ],

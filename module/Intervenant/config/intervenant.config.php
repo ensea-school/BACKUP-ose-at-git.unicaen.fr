@@ -3,7 +3,7 @@
 namespace Intervenant;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 
 return [
@@ -113,7 +113,7 @@ return [
             'label'    => 'Intervenant',
             'title'    => "Intervenant",
             'route'    => 'intervenant',
-            'resource' => PrivilegeController::getResourceId(Controller\IntervenantController::class, 'index'),
+            'resource' => Authorize::controllerResource(Controller\IntervenantController::class, 'index'),
             'order'    => 1,
             'pages'    => [
                 'rechercher' => [
@@ -125,7 +125,7 @@ return [
                     ],
                     'icon'         => "fas fa-magnifying-glass",
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(Controller\IntervenantController::class, 'rechercher'),
+                    'resource'     => Authorize::controllerResource(Controller\IntervenantController::class, 'rechercher'),
                     'order'        => 1,
                 ],
                 'voir'       => [
@@ -136,7 +136,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(Controller\IntervenantController::class, 'voir'),
+                    'resource'     => Authorize::controllerResource(Controller\IntervenantController::class, 'voir'),
                     'order'        => 2,
                 ],
             ],
@@ -204,7 +204,7 @@ return [
 
 
     'services' => [
-        Assertion\IntervenantAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Assertion\IntervenantAssertion::class => \Framework\Authorize\AssertionFactory::class,
         Service\IntervenantService::class     => Service\IntervenantServiceFactory::class,
         Processus\IntervenantProcessus::class => Processus\IntervenantProcessusFactory::class,
         Service\SituationMatrimonialeService::class   => Service\SituationMatrimonialeServiceFactory::class,

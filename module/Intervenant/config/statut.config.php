@@ -3,8 +3,8 @@
 namespace Intervenant;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
+use Framework\Authorize\Authorize;
 
 
 return [
@@ -52,7 +52,7 @@ return [
                         'statut' => [
                             'label'    => 'Statuts',
                             'route'    => 'statut',
-                            'resource' => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
+                            'resource' => Authorize::controllerResource('Intervenant\Controller\Statut', 'index'),
                             'order'    => 40,
                             'color'    => '#BBCF55',
                         ],

@@ -3,7 +3,7 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -83,14 +83,14 @@ return [
                         'centre-cout'          => [
                             'label'    => 'Centres de coûts',
                             'route'    => 'centre-cout',
-                            'resource' => PrivilegeController::getResourceId(Controller\CentreCoutController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\CentreCoutController::class, 'index'),
                             'order'    => 10,
                             'color'    => '#BBCF55',
                         ],
                         'centre-cout-activite' => [
                             'label'    => 'Types d\'activités des centres de coûts',
                             'route'    => 'centre-cout-activite',
-                            'resource' => PrivilegeController::getResourceId(Controller\CentreCoutController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\CentreCoutController::class, 'index'),
                             'order'    => 40,
                             'color'    => '#BBCF55',
                         ],
@@ -126,7 +126,7 @@ return [
     ],
 
     'services' => [
-        Assertion\CentreCoutAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Assertion\CentreCoutAssertion::class      => \Framework\Authorize\AssertionFactory::class,
         Service\CentreCoutService::class          => Service\CentreCoutServiceFactory::class,
         Service\CentreCoutStructureService::class => Service\CentreCoutStructureServiceFactory::class,
         Service\CcActiviteService::class          => Service\CcActiviteServiceFactory::class,

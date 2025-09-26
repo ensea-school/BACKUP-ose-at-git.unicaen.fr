@@ -6,7 +6,7 @@ use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Note;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 

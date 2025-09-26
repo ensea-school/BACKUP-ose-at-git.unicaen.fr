@@ -3,7 +3,7 @@
 namespace Indicateur;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -110,7 +110,7 @@ return [
                     'icon'     => 'fas fa-chart-line',
                     'title'    => "Indicateurs",
                     'route'    => 'indicateur',
-                    'resource' => PrivilegeController::getResourceId('Indicateur\Controller\Indicateur', 'index'),
+                    'resource' => Authorize::controllerResource('Indicateur\Controller\Indicateur', 'index'),
                     'order'    => 10,
                     'color'    => '#217DD8',
                     'pages'    => [
@@ -119,7 +119,7 @@ return [
                             'icon'     => 'fas fa-chart-line',
                             'title'    => "Indicateurs",
                             'route'    => 'indicateur',
-                            'resource' => PrivilegeController::getResourceId('Indicateur\Controller\Indicateur', 'index'),
+                            'resource' => Authorize::controllerResource('Indicateur\Controller\Indicateur', 'index'),
                             'order'    => 10,
                             'color'    => '#217DD8',
                         ],

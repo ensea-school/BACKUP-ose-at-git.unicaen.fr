@@ -5,8 +5,8 @@ namespace Application;
 
 use Administration\Interfaces\ParametreEntityInterface;
 use Doctrine\ORM\EntityManager;
+use Framework\Authorize\Authorize;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
-use UnicaenPrivilege\Guard\PrivilegeController;
 
 /**
  * Class Util
@@ -145,7 +145,7 @@ class Util
             throw new \LogicException('Les contrôleur et action de la route "' . $route . '" n\'ont pas pu être calculées.');
         }
 
-        return PrivilegeController::getResourceId($controller, $action);
+        return Authorize::controllerResource($controller, $action);
     }
 
 

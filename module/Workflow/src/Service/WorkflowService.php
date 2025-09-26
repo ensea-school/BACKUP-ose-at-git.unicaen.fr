@@ -24,7 +24,7 @@ use Workflow\Model\FeuilleDeRoute;
  */
 class WorkflowService extends AbstractService
 {
-    const string ETAPES_CACHE_ID = 'Workflow_Service_getEtapes';
+    const ETAPES_CACHE_ID = 'Workflow_Service_getEtapes';
 
     use ContextServiceAwareTrait;
     use EntityManagerAwareTrait;

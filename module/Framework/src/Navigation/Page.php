@@ -60,7 +60,7 @@ class Page
 
 
         if (is_string($ressource)) {
-            $visible = $this->authorize->isAllowedResource($ressource);
+            $visible = $this->authorize->isAllowed($ressource);
         }
 
         if (is_string($visible) && $this->container->has($visible)) {

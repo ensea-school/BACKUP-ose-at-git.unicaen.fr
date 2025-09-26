@@ -9,7 +9,7 @@ use Contrat\Service\TblContratService;
 use Contrat\Service\TblContratServiceFactory;
 use Contrat\Tbl\Process\ContratProcess;
 use Contrat\Tbl\Process\ContratProcessFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -245,7 +245,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(ContratController::class, 'index'),
+                    'resource'     => Authorize::controllerResource(ContratController::class, 'index'),
                     'order'        => 12,
                 ],
             ],
@@ -281,7 +281,7 @@ return [
         ContratController::class => Controller\ContratControllerFactory::class,
     ],
     'services'     => [
-        Assertion\ContratAssertion::class         => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Assertion\ContratAssertion::class         => \Framework\Authorize\AssertionFactory::class,
         Service\ContratService::class             => Service\ContratServiceFactory::class,
         Service\TypeContratService::class         => Service\TypeContratServiceFactory::class,
         Processus\ContratProcessus::class         => Processus\ContratProcessusFactory::class,

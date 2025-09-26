@@ -3,7 +3,7 @@
 namespace Mission;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 
 return [
@@ -58,7 +58,7 @@ return [
                         'missions-type' => [
                             'label'    => "Types de missions",
                             'route'    => 'missions-type',
-                            'resource' => PrivilegeController::getResourceId(Controller\MissionTypeController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\MissionTypeController::class, 'index'),
                             'order'    => 70,
                             'color'    => '#BBCF55',
                         ],

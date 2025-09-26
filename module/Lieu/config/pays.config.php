@@ -3,7 +3,7 @@
 namespace Lieu;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -38,7 +38,7 @@ return [
                         'pays' => [
                             'label'          => 'Pays',
                             'route'          => 'pays',
-                            'resource'       => PrivilegeController::getResourceId(Controller\PaysController::class, 'index'),
+                            'resource'       => Authorize::controllerResource(Controller\PaysController::class, 'index'),
                             'order'          => 30,
                             'border - color' => '#111',
                         ],

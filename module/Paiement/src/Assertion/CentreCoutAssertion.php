@@ -6,7 +6,7 @@ use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\CentreCoutStructure;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Framework\Authorize\AbstractAssertion;
 
 /**
  * Description of PaiementAssertion

@@ -7,7 +7,7 @@ namespace Intervenant;
 
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -48,7 +48,7 @@ return [
                         'corps' => [
                             'label'    => 'Corps',
                             'route'    => 'corps',
-                            'resource' => PrivilegeController::getResourceId(Controller\CorpsController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\CorpsController::class, 'index'),
                             'order'    => 10,
                             'color'    => '#BBCF55',
                         ],

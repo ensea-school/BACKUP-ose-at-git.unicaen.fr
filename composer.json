@@ -9,7 +9,7 @@
         }
     ],
     "require"          : {
-        "php"                              : ">=8.4",
+        "php"                              : ">=8.2",
         "laminas/laminas-cli"              : "1.11.0",
         "laminas/laminas-cache-storage-adapter-filesystem": "2.5.0",
         "symfony/process"                  : "7.2.0",
@@ -42,6 +42,9 @@
 
         "connecteur-ose/actul"             : "dev-master",
         "connecteur-ose/pegase"            : "dev-master"
+    },
+    "replace": {
+
     },
     "autoload"         : {
         "psr-4": {

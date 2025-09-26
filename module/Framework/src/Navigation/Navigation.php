@@ -8,11 +8,7 @@ use Psr\Container\ContainerInterface;
 
 class Navigation
 {
-    public Page $home {
-        get {
-            return $this->home;
-        }
-    }
+    public Page $home;
 
     private ?Page $currentPage = null;
 

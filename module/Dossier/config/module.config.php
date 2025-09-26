@@ -24,8 +24,8 @@ use Dossier\Service\EmployeurServiceFactory;
 use Dossier\Tbl\Process\DossierProcess;
 use Dossier\Tbl\Process\DossierProcessFactory;
 use Dossier\View\Helper\ValidationViewHelperFactory;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
+use Framework\Authorize\Authorize;
 use Workflow\Entity\Db\WorkflowEtape;
 
 return [
@@ -139,7 +139,7 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::DONNEES_PERSO_SAISIE,
                     'withtarget'          => true,
-                    'resource'            => PrivilegeController::getResourceId(IntervenantDossierController::class, 'index'),
+                    'resource'            => Authorize::controllerResource(IntervenantDossierController::class, 'index'),
                     'order'               => 5,
                 ],
             ],
@@ -155,7 +155,7 @@ return [
                             'route'      => 'autres-infos',
                             'withtarget' => true,
                             'order'      => 10,
-                            'resource'   => PrivilegeController::getResourceId(AutresController::class, 'index'),
+                            'resource'   => Authorize::controllerResource(AutresController::class, 'index'),
                         ],
                     ],
                 ],
@@ -166,7 +166,7 @@ return [
                             'label'    => "Employeurs",
                             'title'    => "Gestion des employeurs",
                             'route'    => 'employeur',
-                            'resource' => PrivilegeController::getResourceId(EmployeurController::class, 'index'),
+                            'resource' => Authorize::controllerResource(EmployeurController::class, 'index'),
                             'order'    => 20,
                         ],
                     ],

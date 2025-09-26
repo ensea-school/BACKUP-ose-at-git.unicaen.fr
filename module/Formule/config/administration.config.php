@@ -3,7 +3,7 @@
 namespace Formule;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -48,7 +48,7 @@ return [
                         'formule-administration' => [
                             'label'    => 'Formules de calcul',
                             'route'    => 'formule/administration',
-                            'resource' => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
+                            'resource' => Authorize::controllerResource(Controller\AdministrationController::class, 'index'),
                             'order'    => 50,
                             'color'    => '#0C8758',
                         ],

@@ -4,13 +4,12 @@ namespace Mission;
 
 
 use Application\Provider\Privilege\Privileges;
-use Mission\Assertion\OffreEmploiAssertion;
+use Framework\Authorize\Authorize;
 use Mission\Controller\OffreEmploiController;
 use Mission\Controller\OffreEmploiControllerFactory;
 use Mission\Service\CandidatureService;
 use Mission\Service\CandidatureServiceFactory;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
 use Mission\Service\OffreEmploiService;
 use Mission\Service\OffreEmploiServiceFactory;
 
@@ -121,7 +120,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(OffreEmploiController::class, 'candidature'),
+                    'resource'     => Authorize::controllerResource(OffreEmploiController::class, 'candidature'),
                     'order'        => 5,
                 ],
             ],

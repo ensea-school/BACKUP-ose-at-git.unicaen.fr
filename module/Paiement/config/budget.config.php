@@ -3,7 +3,7 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -99,7 +99,7 @@ return [
                     'title'    => 'Budget',
                     'icon'     => 'fas fa-eur',
                     'route'    => 'budget',
-                    'resource' => PrivilegeController::getResourceId(Controller\BudgetController::class, 'index'),
+                    'resource' => Authorize::controllerResource(Controller\BudgetController::class, 'index'),
                     'order'    => 30,
                     'color'    => '#EB4995',
                     'pages'    => [
@@ -107,19 +107,19 @@ return [
                             'label'    => 'Tableau de bord',
                             'title'    => 'Tableau de bord',
                             'route'    => 'budget/tableau-de-bord',
-                            'resource' => PrivilegeController::getResourceId(Controller\BudgetController::class, 'tableau-de-bord'),
+                            'resource' => Authorize::controllerResource(Controller\BudgetController::class, 'tableau-de-bord'),
                         ],
                         'engagements-liquidation' => [
                             'label'    => 'Engagements & liquidation',
                             'title'    => 'Engagements & liquidation',
                             'route'    => 'budget/engagements-liquidation',
-                            'resource' => PrivilegeController::getResourceId(Controller\BudgetController::class, 'engagements-liquidation'),
+                            'resource' => Authorize::controllerResource(Controller\BudgetController::class, 'engagements-liquidation'),
                         ],
                         'export'                  => [
                             'label'    => 'Export des données de paiement (CSV)',
                             'title'    => 'Export des données de paiement (CSV)',
                             'route'    => 'budget/export',
-                            'resource' => PrivilegeController::getResourceId(Controller\BudgetController::class, 'export'),
+                            'resource' => Authorize::controllerResource(Controller\BudgetController::class, 'export'),
                         ],
                     ],
                 ],
@@ -159,7 +159,7 @@ return [
         Service\TypeRessourceService::class => Service\TypeRessourceServiceFactory::class,
         Service\DotationService::class      => Service\DotationServiceFactory::class,
         Service\BudgetService::class        => Service\BudgetServiceFactory::class,
-        Assertion\BudgetAssertion::class    => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Assertion\BudgetAssertion::class    => \Framework\Authorize\AssertionFactory::class,
     ],
 
     'controllers' => [

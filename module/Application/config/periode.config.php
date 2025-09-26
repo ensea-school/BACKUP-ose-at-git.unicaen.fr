@@ -8,6 +8,7 @@ namespace Application;
 
 use Application\Provider\Privilege\Privileges;
 use Application\Service\PeriodeService;
+use Framework\Authorize\Authorize;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
@@ -78,7 +79,7 @@ return [
                                     'gestion-periode' => [
                                         'label'          => 'Périodes',
                                         'route'          => 'periodes',
-                                        'resource'       => PrivilegeController::getResourceId('Application\Controller\Periode', 'index'),
+                                        'resource'       => Authorize::controllerResource('Application\Controller\Periode', 'index'),
                                         'order'          => 30,
                                         'border - color' => '#111',
                                     ],

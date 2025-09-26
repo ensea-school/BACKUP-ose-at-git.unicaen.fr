@@ -23,7 +23,7 @@ class ParametreEntityListener implements EventSubscriber
     use UtilisateurServiceAwareTrait;
     use ParametresServiceAwareTrait;
 
-    const string REMOVE_DATE = '1066-10-14';
+    const REMOVE_DATE = '1066-10-14';
 
 
     protected LifecycleEventArgs $args;

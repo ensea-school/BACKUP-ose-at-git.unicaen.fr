@@ -4,8 +4,8 @@ namespace Chargens;
 
 use Application\Provider\Privilege\Privileges;
 use Chargens\Assertion\ChargensAssertion;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
+use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -185,49 +185,49 @@ return [
             'label'    => "Charges",
             'title'    => "Charges d'enseignement",
             'route'    => 'chargens',
-            'resource' => PrivilegeController::getResourceId(Controller\ChargensController::class, 'index'),
+            'resource' => Authorize::controllerResource(Controller\ChargensController::class, 'index'),
             'order'    => 4,
             'pages'    => [
                 'scenario'     => [
                     'label'       => "Gestion des scénarios",
                     'description' => "Permet de créer, dupliquer ou supprimer des scénarios",
                     'route'       => 'chargens/scenario',
-                    'resource'    => PrivilegeController::getResourceId(Controller\ChargensController::class, 'scenario'),
+                    'resource'    => Authorize::controllerResource(Controller\ChargensController::class, 'scenario'),
                     'visible'     => false,
                 ],
                 'seuil'        => [
                     'label'       => "Gestion des seuils de dédoublement",
                     'description' => "Permet de spécifier des seuils de dédoublement qui s'appliqueront à toutes les formations concernées",
                     'route'       => 'chargens/seuil',
-                    'resource'    => PrivilegeController::getResourceId(Controller\ChargensController::class, 'seuil'),
+                    'resource'    => Authorize::controllerResource(Controller\ChargensController::class, 'seuil'),
                     'visible'     => false,
                 ],
                 'formation'    => [
                     'label'       => "Paramétrage des formations",
                     'description' => "Permet de configurer de manière fine les formations (définition des taux d'assiduite, seuils, effectifs...)",
                     'route'       => 'chargens/formation',
-                    'resource'    => PrivilegeController::getResourceId(Controller\ChargensController::class, 'formation'),
+                    'resource'    => Authorize::controllerResource(Controller\ChargensController::class, 'formation'),
                     'visible'     => false,
                 ],
                 'export'       => [
                     'label'       => "Export des charges d'enseignement (CSV)",
                     'description' => "Produit un fichier qui comporte l'ensemble des données concernant les charges d'enseignement",
                     'route'       => 'chargens/export',
-                    'resource'    => PrivilegeController::getResourceId(Controller\ChargensController::class, 'export'),
+                    'resource'    => Authorize::controllerResource(Controller\ChargensController::class, 'export'),
                     'visible'     => false,
                 ],
                 'differentiel' => [
                     'label'       => "Différentiel entre deux exports des charges d'enseignement",
                     'description' => "Affiche les différences entre deux exports des charges d'enseignement",
                     'route'       => 'chargens/differentiel',
-                    'resource'    => PrivilegeController::getResourceId(Controller\ChargensController::class, 'differentiel'),
+                    'resource'    => Authorize::controllerResource(Controller\ChargensController::class, 'differentiel'),
                     'visible'     => false,
                 ],
                 'depassement'  => [
                     'label'       => "Rapprochement des charges et des services d'enseignement (CSV)",
                     'description' => "Produit un fichier qui rapproche les services d'enseignement saisis et les charges d'enseignement calculées",
                     'route'       => 'chargens/depassement',
-                    'resource'    => PrivilegeController::getResourceId(Controller\ChargensController::class, 'depassement'),
+                    'resource'    => Authorize::controllerResource(Controller\ChargensController::class, 'depassement'),
                     'visible'     => false,
                 ],
             ],

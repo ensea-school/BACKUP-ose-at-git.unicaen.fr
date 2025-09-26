@@ -5,8 +5,9 @@ namespace Enseignement;
 use Application\Provider\Privilege\Privileges;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
+//use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use UnicaenPrivilege\Assertion\AssertionFactory;
+use Framework\Authorize\AssertionFactory;
 use Workflow\Entity\Db\WorkflowEtape;
 
 
@@ -179,7 +180,7 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE,
                     'withtarget'          => true,
-                    'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-prevu'),
+                    'resource'            => Authorize::controllerResource(ServiceController::class, 'intervenant-saisie-prevu'),
                     'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 6,
                 ],*/
@@ -205,7 +206,7 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE,
                     'withtarget'          => true,
-                    'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-realise'),
+                    'resource'            => Authorize::controllerResource(ServiceController::class, 'intervenant-saisie-realise'),
                     'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 13,
                 ],*/

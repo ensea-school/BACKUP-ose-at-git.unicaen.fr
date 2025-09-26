@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
@@ -136,7 +137,7 @@ return [
                                         'description' => 'Permet de visualiser les affectations existantes et de les modifier le cas échéant. Pour rappel, une affectation est la liaison entre un rôle et un personnel.',
                                         'route'       => 'droits/affectations',
                                         'order'       => 10,
-                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Droits', 'affectations'),
+                                        'resource'    => Authorize::controllerResource('Application\Controller\Droits', 'affectations'),
                                     ],
                                     'privileges'   => [
                                         'label'       => "Privilèges",
@@ -144,7 +145,7 @@ return [
                                         'description' => 'Tableau de bord listant, par rôle, les privilèges qui lui sont accordés. Le tableau permet également, si vous en avez le droit, de modifier les privilèges accordés par rôle.',
                                         'route'       => 'droits/privileges',
                                         'order'       => 20,
-                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Droits', 'privileges'),
+                                        'resource'    => Authorize::controllerResource('Application\Controller\Droits', 'privileges'),
                                     ],
                                     'roles'        => [
                                         'label'       => "Rôles",
@@ -152,7 +153,7 @@ return [
                                         'description' => 'Permet de visualiser les rôles existants. Permet également de les modifier, d\'en ajouter ou d\'en supprimer si vous avez les droits requis pour cela.',
                                         'route'       => 'droits/roles',
                                         'order'       => 30,
-                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Droits', 'roles'),
+                                        'resource'    => Authorize::controllerResource('Application\Controller\Droits', 'roles'),
                                     ],
                                 ],
                             ],

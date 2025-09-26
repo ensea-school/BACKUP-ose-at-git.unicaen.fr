@@ -3,6 +3,7 @@
 namespace PieceJointe;
 
 use Application\Provider\Privilege\Privileges;
+use Framework\Authorize\Authorize;
 use PieceJointe\Assertion\PiecesJointesAssertion;
 use PieceJointe\Controller\Factory\PieceJointeControllerFactory;
 use PieceJointe\Controller\PieceJointeController;
@@ -20,8 +21,7 @@ use PieceJointe\Service\TypePieceJointeService;
 use PieceJointe\Service\TypePieceJointeStatutService;
 use PieceJointe\Tbl\Process\PieceJointeProcess;
 use PieceJointe\Tbl\Process\PieceJointeProcessFactory;
-use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
+use Framework\Authorize\AssertionFactory;
 
 return [
     'routes' => [
@@ -181,7 +181,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => PrivilegeController::getResourceId(PieceJointeController::class, 'index'),
+                    'resource'     => Authorize::controllerResource(PieceJointeController::class, 'index'),
                     'order'        => 7,
                 ],
             ],
@@ -197,7 +197,7 @@ return [
                             'route'      => 'piece-jointe/type-piece-jointe-statut',
                             'withtarget' => true,
                             'order'      => 20,
-                            'resource'   => PrivilegeController::getResourceId(PieceJointeController::class, 'type-piece-jointe-statut'),
+                            'resource'   => Authorize::controllerResource(PieceJointeController::class, 'type-piece-jointe-statut'),
                         ],
                     ],
                 ],

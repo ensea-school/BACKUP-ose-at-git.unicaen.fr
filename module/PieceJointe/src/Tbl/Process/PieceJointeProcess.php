@@ -182,7 +182,7 @@ class PieceJointeProcess implements ProcessInterface
             if (!empty($piecesJointesFournies)) {
                 foreach ($piecesJointesFournies as $pieceJointeFournie) {
                     //L'année de la pièce jointe fournie est postérieur à l'année de la pièce jointe demandée
-                    if ((int)$pieceJointeDemandee['ANNEE_ID'] >= (int)$pieceJointeFournie['ANNEE_ID']) {
+                    if ((int)$pieceJointeDemandee['ANNEE_ID'] >= (int)$pieceJointeFournie['ANNEE_ID'] && !empty($pieceJointeFournie['VALIDATION_ID'])) {
                         if (//1 -Si la date de validité de la pièce jointe est strictement supérieure à l'année où elle est demandée
                             (int)$pieceJointeFournie['DATE_VALIDITEE'] > (int)$pieceJointeDemandee['ANNEE_ID'] &&
                             //2 - L'année de la pièce jointe fournie correspond au critère de durée de vie de la pièce jointe demandée

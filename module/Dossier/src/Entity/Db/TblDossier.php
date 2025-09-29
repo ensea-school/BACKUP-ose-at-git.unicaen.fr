@@ -46,15 +46,16 @@ class TblDossier
 
     private bool $completudeAutre5;
 
-    private bool $completudeAvantRecrutement;
+    private int $avantRecrutementRealisee;
 
-    private bool $completudeApresRecrutement;
+    private int $apresRecrutementRealisee;
+
+    private int $avantRecrutementAttendue;
+
+    private int $apresRecrutementAttendue;
 
 
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
@@ -242,16 +243,50 @@ class TblDossier
 
 
 
-    public function getCompletudeAvantRecrutement(): bool
+    public function getAvantRecrutementAttendue(): int
     {
-        return $this->completudeAvantRecrutement;
+        return $this->avantRecrutementAttendue;
     }
 
 
 
-    public function getCompletudeApresRecrutement(): bool
+    public function getApresRecrutementAttendue(): int
     {
-        return $this->completudeApresRecrutement;
+        return $this->apresRecrutementAttendue;
+    }
+
+
+
+    public function getAvantRecrutementRealisee(): int
+    {
+        return $this->avantRecrutementRealisee;
+    }
+
+
+
+    public function getApresRecrutementRealisee(): int
+    {
+        return $this->apresRecrutementRealisee;
+    }
+
+
+
+    public function isCompletAvantRecrutement(): bool
+    {
+        if ($this->getAvantRecrutementAttendue() == $this->getAvantRecrutementRealisee()) {
+            return true;
+        }
+        return false;
+    }
+
+
+
+    public function isCompletApresRecrutement(): bool
+    {
+        if ($this->getApresRecrutementAttendue() == $this->getApresRecrutementRealisee()) {
+            return true;
+        }
+        return false;
     }
 
 

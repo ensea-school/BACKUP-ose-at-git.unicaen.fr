@@ -9,8 +9,8 @@ FROM
   JOIN INTERVENANT_DOSSIER ido ON ido.ID = d.DOSSIER_ID
 WHERE
   d.dossier_id IS NOT NULL
-  AND d.completude_avant_recrutement = 1
-  AND d.completude_apres_recrutement = 1
+  AND d.avant_recrutement_attendue = d.avant_recrutement_realisee
+  AND d.apres_recrutement_attendue = d.apres_recrutement_realisee
   AND d.validation_id IS NULL
   AND d.actif = 1
 GROUP BY (d.intervenant_id, i.STRUCTURE_ID)

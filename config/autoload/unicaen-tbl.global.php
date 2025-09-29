@@ -148,15 +148,15 @@ return [
                     'COMPLETUDE_AUTRES_3',
                     'COMPLETUDE_AUTRES_4',
                     'COMPLETUDE_AUTRES_5',
-                    'COMPLETUDE_AVANT_RECRUTEMENT',
-                    'COMPLETUDE_APRES_RECRUTEMENT',
+                    'APRES_RECRUTEMENT_ATTENDUE',
+                    'APRES_RECRUTEMENT_REALISEE',
+                    'AVANT_RECRUTEMENT_ATTENDUE',
+                    'AVANT_RECRUTEMENT_REALISEE',
                 ],
                 'key'     => [
                     'INTERVENANT_ID',
                 ],
             ],
-
-
 
 
             TblProvider::AGREMENT => [

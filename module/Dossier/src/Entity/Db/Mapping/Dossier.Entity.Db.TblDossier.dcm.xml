@@ -30,7 +30,13 @@
         <field name="completudeAutre3" type="boolean" column="COMPLETUDE_AUTRE_3" nullable="false"/>
         <field name="completudeAutre4" type="boolean" column="COMPLETUDE_AUTRE_4" nullable="false"/>
         <field name="completudeAutre5" type="boolean" column="COMPLETUDE_AUTRE_5" nullable="false"/>
-        <field name="completudeAvantRecrutement" type="boolean" column="COMPLETUDE_AVANT_RECRUTEMENT" nullable="false"/>
-        <field name="completudeApresRecrutement" type="boolean" column="COMPLETUDE_APRES_RECRUTEMENT" nullable="false"/>
+        <field name="avantRecrutementAttendue" type="integer" column="AVANT_RECRUTEMENT_ATTENDUE"
+               nullable="false"/>
+        <field name="avantRecrutementRealisee" type="integer" column="AVANT_RECRUTEMENT_REALISEE"
+               nullable="false"/>
+        <field name="apresRecrutementAttendue" type="integer" column="APRES_RECRUTEMENT_ATTENDUE"
+               nullable="false"/>
+        <field name="apresRecrutementRealisee" type="integer" column="APRES_RECRUTEMENT_REALISEE"
+               nullable="false"/>
     </entity>
 </doctrine-mapping>

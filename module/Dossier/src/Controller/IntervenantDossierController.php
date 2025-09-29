@@ -8,6 +8,7 @@ use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Dossier\Entity\Db\IntervenantDossier;
+use Dossier\Entity\Db\TblDossier;
 use Intervenant\Entity\Db\Statut;
 use Dossier\Form\Traits\AutresFormAwareTrait;
 use Dossier\Form\Traits\IntervenantDossierFormAwareTrait;
@@ -48,10 +49,10 @@ class IntervenantDossierController extends AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            Intervenant::class,
-            Validation::class,
-            IntervenantDossier::class,
-        ]);
+                                                                  Intervenant::class,
+                                                                  Validation::class,
+                                                                  IntervenantDossier::class,
+                                                              ]);
     }
 
 
@@ -72,12 +73,11 @@ class IntervenantDossierController extends AbstractController
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
         $tblDossier                   = $intervenantDossier->getTblDossier();
         if (!$tblDossier and $intervenantDossier->getId()) {
-            //$this->em()->refresh($intervenantDossier);
             $tblDossier = $intervenantDossier->getTblDossier();
         }
 
         //Ici on récupére le workflo pour savoir à quelle étape des données personnelles on se trouve
-        $lastCompleted = (!empty($tblDossier)) ? $tblDossier->getCompletudeAvantRecrutement() : '';
+        $lastCompleted = (!empty($tblDossier)) ? $tblDossier->isCompletAvantRecrutement() : '';
 
 
         /* Initialisation du formulaire */
@@ -104,15 +104,18 @@ class IntervenantDossierController extends AbstractController
                 //Recalcul des tableaux de bord nécessaires
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());
                 $this->em()->refresh($intervenantDossier);
+                /**
+                 * @var TblDossier $tblDossier
+                 */
                 $tblDossier    = $intervenantDossier->getTblDossier();
-                $lastCompleted = $tblDossier->getCompletudeAvantRecrutement();
+                $lastCompleted = $tblDossier->isCompletudeAvantRecrutement();
 
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
                 //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
 
-                if (!$lastCompleted && $tblDossier->getCompletudeAvantRecrutement() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
+                if (!$lastCompleted && $tblDossier->isCompletudeAvantRecrutement() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
                     $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($role->getIntervenant());
-                    $nextEtape = $feuilleDeRoute->getNext(WorkflowEtape::DONNEES_PERSO_SAISIE);
+                    $nextEtape      = $feuilleDeRoute->getNext(WorkflowEtape::DONNEES_PERSO_SAISIE);
                     if ($nextEtape && $url = $nextEtape->url) {
                         return $this->redirect()->toUrl($url);
                     }
@@ -133,7 +136,8 @@ class IntervenantDossierController extends AbstractController
             'fieldset-iban'                    => $intervenantDossier->getStatut()->getDossierBanque(),
             'fieldset-insee'                   => $intervenantDossier->getStatut()->getDossierInsee(),
             'fieldset-employeur'               => $intervenantDossier->getStatut()->getDossierEmployeur(),
-            'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champ autre
+            'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,
+            //Si le statut intervenant a au moins 1 champ autre
         ];
 
         $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);

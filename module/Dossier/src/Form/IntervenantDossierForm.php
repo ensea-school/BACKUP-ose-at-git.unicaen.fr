@@ -79,7 +79,7 @@ class IntervenantDossierForm extends AbstractForm
         ];
 
         foreach ($blocDonneesPersonnelles as $blocName => $blocStep) {
-            if ($blocStep === 1) {
+            if ($blocStep !== 0) {
                 $propertyName            = $blocName . 'Fieldset';
                 $fieldsetConstructorName = '\\Dossier\\Form\\' . ucfirst($blocName) . 'Fieldset';
                 $fieldsetName            = ucfirst($blocName);

@@ -41,6 +41,7 @@ Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 * Bonne prise en compte de l'ordonnancement des statuts au niveau des données personnelles (#63380)
 * Correction sur les pieces jointes demandées par rapport à un seuil d'HETD (#62910)
 * Sur le formulaire de saisie d'enseignement, la recherche d'enseignement se fait bien sur le code et non le source_code
+* Correction sur le formulaire d'édition d'un groupe type de formation
 
 
 # OSE 24.10 (15/09/2025)

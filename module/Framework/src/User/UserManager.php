@@ -2,8 +2,11 @@
 
 namespace Framework\User;
 
+use Framework\Application\Application;
 use Framework\Application\Session;
+use Intervenant\Service\IntervenantService;
 use UnicaenAuthentification\Service\UserContext;
+use Utilisateur\Connecteur\LdapConnecteur;
 
 class UserManager
 {
@@ -16,8 +19,9 @@ class UserManager
 
 
     public function __construct(
-        private readonly Session     $session,
-        private readonly UserContext $userContext
+        private readonly Session        $session,
+        private readonly UserContext    $userContext,
+        private readonly LdapConnecteur $ldap,
     )
     {
     }
@@ -47,12 +51,21 @@ class UserManager
         $profiles = [];
         foreach ($roles as $role) {
             $profile = new UserProfile();
-            $profile->setId(count($profiles)+1);
+            $profile->setId(count($profiles) + 1);
             $profile->setCode($role->getRoleId());
             $profile->setDisplayName($role->getRoleName());
 
             $profile->setContext('role', $role->getDbRole());
             $profile->setContext('structure', $role->getStructure());
+            if (!$role->getDbRole()) {
+                $utilisateurCode = $this->ldap->getUtilisateurCourantCode();
+                if ($utilisateurCode) {
+                    $intervenantService = Application::getInstance()->container()->get(IntervenantService::class);
+                    $intervenant = $intervenantService->getByUtilisateurCode($utilisateurCode);
+                    $profile->setContext('intervenant', $intervenant);
+                }
+            }
+
             $profiles[$profile->getId()] = $profile;
         }
 
@@ -134,9 +147,9 @@ class UserManager
             } else {
                 $this->logout();
             }
-        }else{
+        } else {
             // Changement du profil courant
-            $role = $this->userContext->getSelectedIdentityRole();
+            $role    = $this->userContext->getSelectedIdentityRole();
             $profile = $this->getCurrentProfile();
             if ($role?->getRoleId() !== $profile?->getCode()) {
                 $this->updateCurrentProfile();

@@ -368,7 +368,14 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
     function __sleep ()
     {
-        return [];
+        return [
+            'id',
+            'code',
+            'codeRh',
+            'utilisateurCode',
+            'nomUsuel',
+            'prenom',
+        ];
     }
 
 

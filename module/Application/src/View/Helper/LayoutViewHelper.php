@@ -78,7 +78,7 @@ class LayoutViewHelper extends AbstractHtmlElement
             /** @var Role $role */
             $r = $p->getContext('role');
 
-            if (!$needStructures && $r->getPeutChangerStructure()) {
+            if (!$needStructures && $r?->getPeutChangerStructure()) {
                 $needStructures = true;
             }
             $roles[$p->getCode()] = [

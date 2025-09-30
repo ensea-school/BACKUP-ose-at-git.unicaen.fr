@@ -16,6 +16,15 @@ return [
             \UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider::class => [],
         ],
 
+        'cache_options'         => [
+            'adapter'   => [
+                'name' => \Framework\Cache\LaminasArrayStorageAdapter::class,
+            ],
+            'plugins'   => [
+                'serializer',
+            ]
+        ],
+
         'guards' => [
             \UnicaenPrivilege\Guard\PrivilegeController::class => [
                 [
@@ -49,4 +58,8 @@ return [
             ],
         ],
     ],
+
+    'service_manager' => [
+        'factories' => []
+    ]
 ];

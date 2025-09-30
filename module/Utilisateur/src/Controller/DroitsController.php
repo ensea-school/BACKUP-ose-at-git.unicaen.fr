@@ -2,7 +2,7 @@
 
 namespace Utilisateur\Controller;
 
-use Application\Cache\Traits\CacheContainerTrait;
+use Framework\Cache\CacheContainerTrait;
 use Application\Controller\AbstractController;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;

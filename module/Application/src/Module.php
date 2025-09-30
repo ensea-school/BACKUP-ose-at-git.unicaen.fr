@@ -13,7 +13,6 @@ use Application\ORM\RouteEntitiesInjector;
 use Laminas\Config\Factory as ConfigFactory;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Stdlib\Glob;
-use UnicaenAuthentification\Service\UserContext;
 
 
 
@@ -27,17 +26,6 @@ class Module
         // Injection des entités à partir ID transmis dans les routes
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_ROUTE, $container->get(RouteEntitiesInjector::class), -90);
-
-        // On force le rôle courant à NULL si on se déconnecte
-        // Cela permet, si on a le choix de plusieurs rôles et qu'on en prend un qui n'est pas celui par défaut,
-        // de se reconnecter avec le rôle par défaut et non le rôle précédemment sélectionné
-        /** @var $userContext UserContext */
-        $userContext = $container->get(UserContext::class);
-        $adapter = $container->get('ZfcUser\Authentication\Adapter\AdapterChain');
-
-        $adapter->getEventManager()->attach('logout', function ($e) use ($userContext) {
-            $userContext->setSelectedIdentityRole(null);
-        });
     }
 
 

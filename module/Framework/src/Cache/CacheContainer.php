@@ -1,11 +1,11 @@
 <?php
 
-namespace Application\Cache;
+namespace Framework\Cache;
 
 class CacheContainer
 {
 
-    private CacheService $cacheService;
+    private CacheInterface $cacheService;
 
     private ?object $object = null;
 
@@ -15,7 +15,7 @@ class CacheContainer
 
 
 
-    public function __construct(CacheService $cacheService, string|object $class)
+    public function __construct(CacheInterface $cacheService, string|object $class)
     {
         $this->cacheService = $cacheService;
         if (is_object($class)) $this->object = $class;
@@ -27,7 +27,7 @@ class CacheContainer
     public function __get(string $name): mixed
     {
         if (!array_key_exists($name, $this->localCache)) {
-            $this->localCache[$name] = $this->cacheService->get($this->class, $name);
+            $this->localCache[$name] = $this->cacheService->get($this->makeKey($name));
         }
 
         return $this->localCache[$name];
@@ -38,7 +38,7 @@ class CacheContainer
     public function __set(string $name, mixed $value): void
     {
         $this->localCache[$name] = $value;
-        $this->cacheService->set($this->class, $name, $value);
+        $this->cacheService->set($this->makeKey($name), $value);
     }
 
 
@@ -49,7 +49,7 @@ class CacheContainer
             return true;
         }
 
-        return $this->cacheService->exists($this->class, $name);
+        return $this->cacheService->has($this->makeKey($name));
     }
 
 
@@ -57,7 +57,7 @@ class CacheContainer
     public function __unset(string $name): void
     {
         unset($this->localCache[$name]);
-        $this->cacheService->remove($this->class, $name);
+        $this->cacheService->delete($this->makeKey($name));
     }
 
 
@@ -77,5 +77,12 @@ class CacheContainer
 
             return $value;
         }
+    }
+
+
+
+    private function makeKey(string $name): string
+    {
+        return $this->class . '::' . $name;
     }
 }

@@ -14,6 +14,8 @@
         "laminas/laminas-cache-storage-adapter-filesystem": "2.5.0",
         "symfony/process"                  : "7.3.3",
         "symfony/http-foundation"          : "7.3.3",
+        "yraiso/casauth-bundle"            : "1.0.8",
+
         "doctrine/doctrine-orm-module"     : "^6.3",
         "doctrine/dbal"                    : "^3.9",
 
@@ -45,7 +47,7 @@
         "connecteur-ose/pegase"            : "dev-master"
     },
     "replace": {
-
+        "laminas/laminas-cache"            : "*"
     },
     "autoload"         : {
         "psr-4": {
@@ -72,7 +74,9 @@
             "Referentiel\\"   : "module/Referentiel/src/",
             "Service\\"       : "module/Service/src/",
             "Workflow\\"      : "module/Workflow/src/",
-            "Utilisateur\\"   : "module/Utilisateur/src/"
+            "Utilisateur\\"   : "module/Utilisateur/src/",
+
+            "Laminas\\Cache\\": "module/Framework/src/Wrapper/LaminasCache"
         }
     },
     "require-dev"      : {

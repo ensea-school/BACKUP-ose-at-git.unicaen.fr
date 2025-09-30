@@ -131,7 +131,6 @@ $config = [
         'factories'  => [
             Provider\Resource\ResourceProvider::class                   => Provider\Resource\ResourceProviderFactory::class,
             Service\ContextService::class                               => Service\Factory\ContextServiceFactory::class,
-            Cache\CacheService::class                                   => Cache\Factory\CacheServiceFactory::class,
             HostLocalization\HostLocalizationOse::class                 => HostLocalization\HostLocalizationOseFactory::class,
             ORM\RouteEntitiesInjector::class                            => ORM\RouteEntitiesInjectorFactory::class,
             ORM\Event\Listeners\HistoriqueListener::class               => ORM\Event\Listeners\HistoriqueListenerFactory::class,

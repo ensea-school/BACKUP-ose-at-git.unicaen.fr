@@ -5,9 +5,6 @@ use Framework\Application\Application;
 $config = Application::getInstance()->config();
 
 $modules = [
-    'Laminas\Cache',
-    'Laminas\Cache\Storage\Adapter\Memory',
-    'Laminas\Cache\Storage\Adapter\Filesystem',
     'Laminas\Filter',
     'Laminas\Form',
     'Laminas\Hydrator',

@@ -6,6 +6,7 @@ use Application\Service\NavbarService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Navigation\Navigation;
 use Framework\Navigation\Page;
+use Framework\User\UserManager;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -30,6 +31,7 @@ class LayoutViewHelper extends AbstractHtmlElement
     public function __construct(
         private readonly NavbarService $navbarService,
         private readonly Navigation $navigation,
+        private readonly UserManager $userManager,
     )
     {
 
@@ -62,27 +64,26 @@ class LayoutViewHelper extends AbstractHtmlElement
 
     public function connexionData(): array
     {
-        $utilisateur = $this->getServiceContext()->getUtilisateur();
-
-        if (!$utilisateur) {
+        if (!$this->userManager->isConnected()) {
             return ['connecte' => false];
         }
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $roleNom = $role->getRoleId() == 'role' ? 'Authentifié(e)' : $role->getRoleName();
-
-        /** @var Role $sRoles */
-        $sRoles         = $this->getServiceContext()->getServiceUserContext()->getSelectableIdentityRoles();
-        $roles          = [];
+        $user = $this->userManager->getCurrent();
+        $profile = $this->userManager->getCurrentProfile();
         $needStructures = false;
-        foreach ($sRoles as $r) {
+        $roles = [];
+
+        $ps         = $this->userManager->getProfiles();
+        foreach ($ps as $p) {
+            /** @var Role $role */
+            $r = $p->getContext('role');
+
             if (!$needStructures && $r->getPeutChangerStructure()) {
                 $needStructures = true;
             }
-            $roles[$r->getRoleId()] = [
-                'libelle'              => $r->getRoleName(),
-                'peutChangerStructure' => $r->getPeutChangerStructure(),
+            $roles[$p->getCode()] = [
+                'libelle'              => $p->getDisplayName(),
+                'peutChangerStructure' => $r?->getPeutChangerStructure() ?? false,
             ];
         }
 
@@ -92,9 +93,9 @@ class LayoutViewHelper extends AbstractHtmlElement
         }
 
         return [
-            'utilisateurNom'    => $utilisateur->getDisplayName(),
-            'roleNom'           => $roleNom,
-            'roleId'            => $role->getRoleId(),
+            'utilisateurNom'    => $user->getDisplayName(),
+            'roleNom'           => $profile->getDisplayName(),
+            'roleId'            => $profile->getCode(),
             'connecte'          => true,
             'usurpationEnabled' => $this->isUsurpationEnabled(),
             'usurpationEnCours' => $this->isUsurpationEnCours(),

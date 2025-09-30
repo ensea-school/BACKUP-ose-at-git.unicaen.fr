@@ -4,12 +4,10 @@ namespace Framework\Application;
 
 use Exception;
 use Framework\Container\Container;
-use Framework\Router\Router;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\Stdlib\ArrayUtils;
 use Locale;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class Application
 {
@@ -199,8 +197,8 @@ class Application
         $this->container->setService('ApplicationConfig', $appConfig);
 
         // Crée et lance la session
-        //$this->session = new Session();
-        //$this->container->setService('session', $this->session);
+        $this->session = new Session();
+        $this->container->setService(Session::class, $this->session);
 
         // Load modules
         $this->container->get('ModuleManager')->loadModules();

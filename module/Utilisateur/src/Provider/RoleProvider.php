@@ -30,18 +30,18 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     use PrivilegeProviderAwareTrait;
     use ContextServiceAwareTrait;
 
+    private array $roles = [];
+
 
     /**
      * @return RoleInterface[]
      */
     public function getRoles(): array
     {
-        return $this->makeRoles();
-        $session = RoleService::getSession();
-        if (!$session->offsetExists('roles') || empty($session->roles)) {
-            $session->roles = $this->makeRoles();
+        if (empty($this->roles)) {
+            $this->roles = $this->makeRoles();
         }
-        return $session->roles;
+        return $this->roles;
     }
 
 

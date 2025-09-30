@@ -3,7 +3,6 @@
 namespace Framework\Authorize;
 
 use Laminas\Permissions\Acl\Assertion\AssertionInterface;
-use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Permissions\Acl\Acl;
@@ -18,7 +17,6 @@ use Laminas\Permissions\Acl\Role\RoleInterface;
 abstract class AbstractAssertion implements AssertionInterface
 {
     use UserContextServiceAwareTrait;
-    use AuthorizeServiceAwareTrait;
 
     private Acl $acl;
 

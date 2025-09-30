@@ -65,11 +65,11 @@ return [
             'orm_default' => [
                 'params' => [
                     'driverClass'   => \Doctrine\DBAL\Driver\OCI8\Driver::class,
-                    'host'     => $config['bdd']['host'] ?? null,
-                    'port'     => $config['bdd']['port'] ?? null,
-                    'dbname'   => $config['bdd']['dbname'] ?? null,
-                    'user'     => $config['bdd']['user'] ?? $config['bdd']['username'] ?? null,
-                    'password' => $config['bdd']['password'] ?? null,
+                    'host'          => $config['bdd']['host'] ?? null,
+                    'port'          => $config['bdd']['port'] ?? null,
+                    'dbname'        => $config['bdd']['dbname'] ?? null,
+                    'user'          => $config['bdd']['user'] ?? $config['bdd']['username'] ?? null,
+                    'password'      => $config['bdd']['password'] ?? null,
                     'charset'       => 'AL32UTF8',
                     'connectstring' => $config['bdd']['connectstring'] ?? null,
                     //'persistent' => true,
@@ -98,13 +98,14 @@ return [
                 'namespace' => 'OSE__' . __NAMESPACE__,
             ],
             'filesystem' => [
-                'class'     => 'Application\Cache\FilesystemCache',
-                'directory' => 'cache/Doctrine',
-                'namespace' => 'DoctrineModule',
+                'class' => \Framework\Cache\DoctrineFilesystemCacheAdapter::class,
+            ],
+            'array'      => [
+                'class' => \Framework\Cache\DoctrineArrayCacheAdapter::class,
             ],
         ],
     ],
-    'caches'         => [
+    'caches'   => [
         'doctrinemodule.cache.filesystem' => [
             'options' => [
                 'cache_dir' => 'cache/Doctrine',

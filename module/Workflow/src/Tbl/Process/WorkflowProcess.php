@@ -3,7 +3,7 @@
 namespace Workflow\Tbl\Process;
 
 
-use Application\Cache\Traits\CacheContainerTrait;
+use Framework\Cache\CacheContainerTrait;
 use Application\Entity\Db\Perimetre;
 use Application\Service\AnneeService;
 use Intervenant\Entity\Db\Intervenant;

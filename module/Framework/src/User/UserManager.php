@@ -138,7 +138,7 @@ class UserManager
             // Changement du profil courant
             $role = $this->userContext->getSelectedIdentityRole();
             $profile = $this->getCurrentProfile();
-            if ($role->getRoleId() !== $profile->getCode()) {
+            if ($role?->getRoleId() !== $profile?->getCode()) {
                 $this->updateCurrentProfile();
             }
         }

@@ -43,6 +43,7 @@ Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 * Sur le formulaire de saisie d'enseignement, la recherche d'enseignement se fait bien sur le code et non le source_code
 * Correction sur le formulaire d'édition d'un groupe type de formation
 * Afficher les demandes de mise en paiement d'une sous structure lorsqu'on possède un rôle de structure parente à celles-ci (#63508)
+* Correction pour masquer les candidatures des autres étudiants sur le détail d'une offre d'emploi
 
 
 # OSE 24.10 (15/09/2025)

@@ -4,39 +4,37 @@ namespace Framework\User;
 
 class UserProfile implements UserProfileInterface
 {
-    private ?int    $id          = null;
-    private ?string $code        = null;
-    private ?string $displayName = null;
-    private array   $context     = [];
+    private null|int|string $id          = null;
+    private ?string         $displayName = null;
+    private array           $context     = [];
 
     const PRIVILEGE_GUEST = 'guest';
-    const PRIVILEGE_USER = 'user';
+    const PRIVILEGE_USER  = 'user';
 
 
-    public function getId(): ?int
+
+    public function __construct(int|string|null $id = null, ?string $displayName = null)
+    {
+        if (null !== $id){
+            $this->id = $id;
+        }
+        if (null !== $displayName){
+            $this->displayName = $displayName;
+        }
+    }
+
+
+
+    public function getId(): null|int|string
     {
         return $this->id;
     }
 
 
 
-    public function setId(?int $id): void
+    public function setId(null|int|string $id): void
     {
         $this->id = $id;
-    }
-
-
-
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
-
-
-    public function setCode(?string $code): void
-    {
-        $this->code = $code;
     }
 
 

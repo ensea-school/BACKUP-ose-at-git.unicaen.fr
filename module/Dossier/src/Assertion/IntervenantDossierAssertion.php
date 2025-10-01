@@ -407,7 +407,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
         $isValidate         = $this->getServiceDossier()->getValidation($intervenant);
 
         return $this->asserts([
-            (!empty($intervenantDossier->getTblDossier())) ? $intervenantDossier->getTblDossier()->getCompletudeAvantRecrutement() : false,
+            (!empty($intervenantDossier->getTblDossier())) ? $intervenantDossier->getTblDossier()->getAvantRecrutementRealisee() : false,
             !$isValidate,
             $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION),
         ]);

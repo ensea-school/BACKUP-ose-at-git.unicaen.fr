@@ -4,7 +4,7 @@ namespace Framework\User;
 
 interface UserProfileInterface
 {
-    public function getId(): ?int;
+    public function getId(): null|int|string;
 
 
 

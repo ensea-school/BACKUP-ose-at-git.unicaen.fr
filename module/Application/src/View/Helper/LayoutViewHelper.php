@@ -68,8 +68,8 @@ class LayoutViewHelper extends AbstractHtmlElement
             return ['connecte' => false];
         }
 
-        $user = $this->userManager->getCurrent();
-        $profile = $this->userManager->getCurrentProfile();
+        $user = $this->userManager->getUser();
+        $profile = $this->userManager->getProfile();
         $needStructures = false;
         $roles = [];
 
@@ -81,7 +81,7 @@ class LayoutViewHelper extends AbstractHtmlElement
             if (!$needStructures && $r?->getPeutChangerStructure()) {
                 $needStructures = true;
             }
-            $roles[$p->getCode()] = [
+            $roles[$p->getId()] = [
                 'libelle'              => $p->getDisplayName(),
                 'peutChangerStructure' => $r?->getPeutChangerStructure() ?? false,
             ];
@@ -94,8 +94,8 @@ class LayoutViewHelper extends AbstractHtmlElement
 
         return [
             'utilisateurNom'    => $user->getDisplayName(),
-            'roleNom'           => $profile->getDisplayName(),
-            'roleId'            => $profile->getCode(),
+            'roleNom'           => $profile?->getDisplayName() ?? 'Authentifié(e)',
+            'roleId'            => $profile?->getId(),
             'connecte'          => true,
             'usurpationEnabled' => $this->isUsurpationEnabled(),
             'usurpationEnCours' => $this->isUsurpationEnCours(),

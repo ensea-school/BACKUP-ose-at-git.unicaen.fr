@@ -3,11 +3,13 @@
 namespace Utilisateur\Controller;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Framework\User\UserManager;
 use Laminas\View\Model\JsonModel;
+use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenAuthentification\Controller\UtilisateurController as BaseController;
 use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
-use Utilisateur\Acl\Role;
+use Utilisateur\Entity\Db\Role;
 use Utilisateur\Service\UtilisateurServiceAwareTrait;
 
 
@@ -17,6 +19,13 @@ class UtilisateurController extends BaseController
     use StructureServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
     use UserServiceAwareTrait;
+
+    public function __construct(
+        private readonly UserManager $userManager,
+    )
+    {
+    }
+
 
 
     /**
@@ -28,30 +37,35 @@ class UtilisateurController extends BaseController
         $roleId = $this->axios()->fromPost('role');
         $structureId = $this->axios()->fromPost('structure');
 
-        if ($roleId) {
-            $this->serviceUserContext->setSelectedIdentityRole($roleId);
-        }
+        $this->userManager->setProfile($roleId);
 
-        /* @var $role Role */
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $profile = $this->userManager->getProfile();
 
-        if ($role->getPerimetre() && $role->getPerimetre()->isEtablissement()) {
-            $structure = null;
-            if ($structureId) {
+        /** @var Role $role */
+        $role = $profile->getContext('role');
+
+        if ($role) {
+            if ($role->getPeutChangerStructure()) {
                 $structure = $this->getServiceStructure()->get($structureId);
+            } else {
+                /** @var Structure $structure */
+                $structure = $profile->getContext('structure');
             }
-            $this->getServiceContext()->setStructure($structure);
-
-            $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>%s.",
-                $role->getRoleName(),
-                $structure ? " pour la structure <strong>$structure</strong>" : null);
-        } else {
-            $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>.", $role);
-            if ($s = $role->getStructure()) {
-                $this->getServiceContext()->setStructure($s);
-            }
+        }else{
+            // intervenant
+            $structure = null;
         }
 
+        $this->getServiceContext()->setStructure($structure);
+
+        if ($role) {
+            $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>.", $role->getLibelle());
+        }else{
+            $message = sprintf("Vous endossez à présent le profil intervenant <strong>%s</strong>.", $profile->getDisplayName());
+        }
+        if ($structure){
+            $message .= sprintf(' pour la structure <strong>%s</strong>', $structure);
+        }
         $this->flashMessenger()->addSuccessMessage($message);
 
         exit;

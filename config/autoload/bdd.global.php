@@ -64,7 +64,7 @@ return [
         'connection'    => [
             'orm_default' => [
                 'params' => [
-                    'driverClass'   => \Doctrine\DBAL\Driver\OCI8\Driver::class,
+                    'driverClass'   => \Application\ORM\OracleDriver::class,
                     'host'          => $config['bdd']['host'] ?? null,
                     'port'          => $config['bdd']['port'] ?? null,
                     'dbname'        => $config['bdd']['dbname'] ?? null,

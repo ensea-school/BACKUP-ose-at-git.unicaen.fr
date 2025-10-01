@@ -2,6 +2,7 @@
 
 namespace Utilisateur\Entity\Db;
 
+use Framework\User\UserProfile;
 use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -35,6 +36,25 @@ class Affectation implements HistoriqueAwareInterface, ImportAwareInterface
     public function getId()
     {
         return $this->id;
+    }
+
+
+
+    public function getProfile(): UserProfile
+    {
+        $id          = $this->getRole()->getRoleId();
+        $displayName = $this->getRole()->getLibelle();
+
+        if ($structure = $this->getStructure()) {
+            $id          .= '-' . $structure->getSourceCode();
+            $displayName .= ' (' . $structure->getLibelleCourt() . ')';
+        }
+
+        $profile = new UserProfile($id, $displayName);
+        $profile->setContext('role', $this->getRole());
+        $profile->setContext('structure', $this->getStructure());
+
+        return $profile;
     }
 
 }

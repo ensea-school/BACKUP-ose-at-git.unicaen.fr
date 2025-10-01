@@ -2,187 +2,65 @@
 
 namespace Framework\User;
 
-use Framework\Application\Application;
 use Framework\Application\Session;
-use Intervenant\Service\IntervenantService;
-use UnicaenAuthentification\Service\UserContext;
-use Utilisateur\Connecteur\LdapConnecteur;
+use UnicaenApp\Traits\SessionContainerTrait;
 
 class UserManager
 {
-    private const SESSION_USER        = 'user-manager/user';
     private const SESSION_PROFILE     = 'user-manager/profile';
-    private const SESSION_PROFILES    = 'user-manager/profiles';
     private const SESSION_PRIVILEGES  = 'user-manager/privileges';
     private const SESSION_OLD_USER_ID = 'user-manager/old-user-id';
 
+    private UserProviderInterface $userProvider;
 
+    private ?UserInterface $user = null;
+
+    /** @var array|UserProfileInterface[] */
+    private array $profiles = [];
+
+    use SessionContainerTrait;
 
     public function __construct(
-        private readonly Session        $session,
-        private readonly UserContext    $userContext,
-        private readonly LdapConnecteur $ldap,
+        private readonly Session $session,
     )
     {
     }
 
 
 
-    public function login(): void
+    public function getUserProvider(): UserProviderInterface
     {
-        $user = $this->userContext->getDbUser();
-        $this->session->set(self::SESSION_USER, $user);
-        $this->updateProfiles();
+        return $this->userProvider;
     }
 
 
 
-    public function logout(): void
+    public function setUserProvider(UserProviderInterface $userProvider): UserManager
     {
-        $this->session->set(self::SESSION_USER, null);
-        $this->updateProfiles();
+        $this->userProvider = $userProvider;
+        return $this;
     }
 
 
 
-    public function updateProfiles(): void
+    public function getUser(): ?UserInterface
     {
-        $roles    = $this->userContext->getSelectableIdentityRoles();
-        $profiles = [];
-        foreach ($roles as $role) {
-            $profile = new UserProfile();
-            $profile->setId(count($profiles) + 1);
-            $profile->setCode($role->getRoleId());
-            $profile->setDisplayName($role->getRoleName());
-
-            $profile->setContext('role', $role->getDbRole());
-            $profile->setContext('structure', $role->getStructure());
-            if (!$role->getDbRole()) {
-                $utilisateurCode = $this->ldap->getUtilisateurCourantCode();
-                if ($utilisateurCode) {
-                    $intervenantService = Application::getInstance()->container()->get(IntervenantService::class);
-                    $intervenant = $intervenantService->getByUtilisateurCode($utilisateurCode);
-                    $profile->setContext('intervenant', $intervenant);
-                }
-            }
-
-            $profiles[$profile->getId()] = $profile;
-        }
-
-        if (empty($profiles) && $this->isConnected()) {
-            $profile = new UserProfile();
-            $profile->setId(1);
-            $profile->setCode(UserProfile::PRIVILEGE_USER);
-            $profile->setDisplayName('Authentifié(e)');
-            $profiles[$profile->getId()] = $profile;
-        }
-
-        $this->session->set(self::SESSION_PROFILES, $profiles);
-
-        $this->updateCurrentProfile();
+        return $this->user;
     }
 
 
 
-    public function updateCurrentProfile(): void
+    public function setUser(?UserInterface $user): void
     {
-        $role = $this->userContext->getSelectedIdentityRole();
+        $oldUserId = $this->sessionGet(self::SESSION_OLD_USER_ID);
+        $changed   = ($oldUserId !== $this->user?->getId()) || ($this->user?->getId() !== $user?->getId());
 
-        $profiles = $this->getProfiles();
-        if (1 === count($profiles)) {
-            $this->session->set(self::SESSION_PROFILE, current($profiles));
-            return;
+        if ($changed) {
+            $this->user = $user;
+            $this->sessionSet(self::SESSION_OLD_USER_ID, $this->user?->getId());
+
+            $this->loadProfiles();
         }
-        foreach ($profiles as $profile) {
-            if ($role->getRoleId() === $profile->getCode()) {
-                $this->session->set(self::SESSION_PROFILE, $profile);
-                return;
-            }
-        }
-        $this->session->set(self::SESSION_PROFILE, null);
-
-        $this->updatePrivileges();
-    }
-
-
-
-    public function updatePrivileges(): void
-    {
-        $privileges = [];
-
-        if ($this->isConnected()) {
-            $privileges[] = UserProfile::PRIVILEGE_USER;
-            $role         = $this->userContext->getSelectedIdentityRole();
-            if ($role && $rp = $role->getPrivileges()) {
-                foreach ($rp as $privilege) {
-                    $privileges[] = $privilege;
-                }
-            }
-
-        } else {
-            $privileges[] = UserProfile::PRIVILEGE_GUEST;
-        }
-
-        $this->session->set(self::SESSION_PRIVILEGES, $privileges);
-    }
-
-
-
-    public function getCurrent(): ?UserInterface
-    {
-        return $this->session->get(self::SESSION_USER, null);
-    }
-
-
-
-    public function detectChanges(): void
-    {
-        $newId = $this->userContext->getDbUser()?->getId();
-
-        $oldId = $this->session->get(self::SESSION_OLD_USER_ID, null);
-        if ($oldId !== $newId) {
-            $this->session->set(self::SESSION_OLD_USER_ID, $newId);
-            if ($newId !== null) {
-                $this->login();
-            } else {
-                $this->logout();
-            }
-        } else {
-            // Changement du profil courant
-            $role    = $this->userContext->getSelectedIdentityRole();
-            $profile = $this->getCurrentProfile();
-            if ($role?->getRoleId() !== $profile?->getCode()) {
-                $this->updateCurrentProfile();
-            }
-        }
-    }
-
-
-
-    public function getCurrentProfile(): ?UserProfile
-    {
-        return $this->session->get(self::SESSION_PROFILE, null);
-    }
-
-
-
-    public function setCurrentProfile(?UserProfileInterface $profile): void
-    {
-        // contrôle
-        $profiles = $this->getProfiles();
-        $found    = false;
-        foreach ($profiles as $p) {
-            if ($profile === $p) {
-                $found = true;
-            }
-        }
-        if (!$found) {
-            throw new \Exception("You aren't authorized to take this profile");
-        }
-
-        // Assignation
-        $this->session->set(self::SESSION_PROFILE, $profile);
-        $this->updatePrivileges();
     }
 
 
@@ -192,14 +70,51 @@ class UserManager
      */
     public function getProfiles(): array
     {
-        return $this->session->get(self::SESSION_PROFILES, []);
+        return $this->profiles;
     }
 
 
 
-    public function isConnected(): bool
+    public function getProfile(): ?UserProfile
     {
-        return null !== $this->getCurrent();
+        $profileId = $this->sessionGet(self::SESSION_PROFILE);
+        if ($profileId !== null && array_key_exists($profileId, $this->profiles)) {
+            return $this->profiles[$profileId];
+        } else {
+            return null;
+        }
+    }
+
+
+
+    public function setProfile(null|UserProfileInterface|int|string $profile): void
+    {
+        $lastProfileId = $this->sessionGet(self::SESSION_PROFILE);
+        $profileId     = null;
+        if (is_int($profile) || is_string($profile)) {
+            $profileId = $profile;
+
+            // contrôle
+            $profiles = $this->getProfiles();
+            if (!array_key_exists($profileId, $profiles)) {
+                throw new \Exception("You aren't authorized to take this profile");
+            }
+        } elseif ($profile instanceof UserProfileInterface) {
+            $profileId = $profile->getId();
+
+            // contrôle
+            $profiles = $this->getProfiles();
+            if (($profiles[$profileId] ?? null) !== $profile) {
+                throw new \Exception("You aren't authorized to take this profile");
+            }
+        }
+
+        // Assignation
+        if ($lastProfileId !== $profileId) {
+            $this->sessionSet(self::SESSION_PROFILE, $profileId);
+            $this->userProvider->onProfileChange($this->getProfile());
+            $this->loadPrivileges();
+        }
     }
 
 
@@ -209,7 +124,81 @@ class UserManager
      */
     public function getPrivileges(): array
     {
-        return $this->session->get(self::SESSION_PRIVILEGES);
+        return $this->sessionGet(self::SESSION_PRIVILEGES);
+    }
+
+
+
+    public function isConnected(): bool
+    {
+        return null !== $this->getUser();
+    }
+
+
+
+    protected function loadProfiles(): void
+    {
+        $this->profiles = [];
+
+        $profiles = $this->userProvider->getProfiles();
+        foreach ($profiles as $profile) {
+            $this->profiles[$profile->getId()] = $profile;
+        }
+        if (empty($this->profiles)) {
+            if ($this->isConnected()) { // au moins un profil authentifié si rien n'est fourni
+                $profile                           = new UserProfile(UserProfile::PRIVILEGE_USER, 'Authentifié(e)');
+                $this->profiles[$profile->getId()] = $profile;
+            } else {
+                // $profile = new UserProfile(UserProfile::PRIVILEGE_GUEST, 'Connexion');
+                // $this->profiles[$profile->getId()] = $profile;
+            }
+        }
+
+        $this->loadProfile();
+
+    }
+
+
+
+    protected function loadProfile(): void
+    {
+        $profiles  = $this->getProfiles();
+        $profileId = $this->sessionGet(self::SESSION_PROFILE);
+        if (empty($profiles)) {
+            $this->setProfile(null);
+        } else {
+            if (!array_key_exists($profileId, $profiles)) {
+                $this->setProfile(current($profiles));
+            }
+        }
+    }
+
+
+
+    protected function loadPrivileges(): void
+    {
+        $privileges = $this->userProvider->getPrivileges($this->getProfile());
+        if ($this->isConnected()) {
+            $privileges[] = UserProfile::PRIVILEGE_USER;
+        } else {
+            $privileges[] = UserProfile::PRIVILEGE_GUEST;
+        }
+
+        $this->sessionSet(self::SESSION_PRIVILEGES, $privileges);
+    }
+
+
+
+    private function sessionSet(string $key, mixed $value): void
+    {
+        $this->getSessionContainer()->offsetSet($key, $value);
+    }
+
+
+
+    private function sessionGet(string $key): mixed
+    {
+        return $this->getSessionContainer()->offsetGet($key);
     }
 
 }

@@ -78,7 +78,8 @@ class DossierService extends AbstractEntityService
 
         $qb = $this->finderByIntervenant($intervenant);
         $this->finderByHistorique($qb);
-        foreach ($this->getList($qb) as $dossier) {
+        $dossiers = $this->getList($qb);
+        foreach ($dossiers as $dossier) {
             return $dossier;
         }
         $dossier                             = $this->newEntity()->fromIntervenant($intervenant);

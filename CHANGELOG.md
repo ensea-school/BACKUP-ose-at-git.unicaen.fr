@@ -42,6 +42,7 @@ Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 * Correction sur les pieces jointes demandées par rapport à un seuil d'HETD (#62910)
 * Sur le formulaire de saisie d'enseignement, la recherche d'enseignement se fait bien sur le code et non le source_code
 * Correction sur le formulaire d'édition d'un groupe type de formation
+* Afficher les demandes de mise en paiement d'une sous structure lorsqu'on possède un rôle de structure parente à celles-ci (#63508)
 
 
 # OSE 24.10 (15/09/2025)

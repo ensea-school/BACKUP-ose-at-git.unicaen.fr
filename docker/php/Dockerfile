@@ -36,6 +36,7 @@ RUN install-php-extensions \
 		opcache \
 		zip \
         pdo_pgsql \
+        calendar \
         soap \
         bcmath \
         curl \

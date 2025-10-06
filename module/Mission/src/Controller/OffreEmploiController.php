@@ -307,8 +307,10 @@ class  OffreEmploiController extends AbstractController
         $utilisateur = $this->getServiceContext()->getUtilisateur();
         $intervenant = $this->getServiceContext()->getIntervenant();
         $canPostuler = $this->isAllowed($offreEmploi, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
+        $canVoirCandidature = (empty($intervenant)) ? $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_CANDIDATURE_VISUALISATION)) : false;
 
-        return compact('offreEmploi', 'utilisateur', 'canPostuler');
+
+        return compact('offreEmploi', 'utilisateur', 'canPostuler', 'canVoirCandidature');
     }
 
 

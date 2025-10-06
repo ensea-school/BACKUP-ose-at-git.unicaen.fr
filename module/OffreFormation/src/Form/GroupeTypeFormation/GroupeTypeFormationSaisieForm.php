@@ -24,7 +24,8 @@ class GroupeTypeFormationSaisieForm extends AbstractForm
 
     public function init()
     {
-        $ignore = ["ordre"];
+        $ignore = ["ordre",
+                   "source"];
         $this->spec(GroupeTypeFormation::class, $ignore);
         $this->build();
 

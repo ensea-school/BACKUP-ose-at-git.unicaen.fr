@@ -31,7 +31,7 @@ $settings = [
     /**
      * Gestion des autorisations d'usurpation
      */
-    'usurpation_allowed_usernames' => $conf['ldap']['autorisationsUrsurpation'] ?? [],
+    'usurpation_allowed_usernames' => $conf['ldap']['autorisationsUrsurpation'] ?? $conf['ldap']['autorisationsUsurpation'] ?? [],
 
     /**
      * Configuration de l'authentification locale.

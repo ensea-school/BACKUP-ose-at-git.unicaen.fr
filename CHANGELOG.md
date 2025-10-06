@@ -1,6 +1,6 @@
 # Version stable
 
-OSE [24.11](#ose-2411-06102025)
+OSE [24.11](#ose-2411-07102025)
 
 
 # OSE 25 (à venir)
@@ -30,7 +30,7 @@ Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 
 
 
-# OSE 24.11 (06/10/2025)
+# OSE 24.11 (07/10/2025)
 
 ## Nouveautés
 

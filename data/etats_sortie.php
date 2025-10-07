@@ -497,7 +497,7 @@ ORDER BY
         'LIBELLE'        => 'Export offre de formation',
         'PDF_TRAITEMENT' => null,
         'AUTO_BREAK'     => false,
-        'REQUETE'        => 'SELECT * FROM v_export_offre_formation',
+        'REQUETE' => 'SELECT * FROM v_export_formation',
         'CSV_PARAMS'     => '{
             "ANNEE_ID"                  : { "visible": false },
             "STRUCTURE_ID"              : { "visible": false },

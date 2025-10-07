@@ -41,5 +41,3 @@ WHERE
 e.histo_destruction IS NULL
 GROUP BY
 ep.id
-
-

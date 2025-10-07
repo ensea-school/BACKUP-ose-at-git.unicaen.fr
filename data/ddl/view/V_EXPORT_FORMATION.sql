@@ -25,9 +25,7 @@ COALESCE(SUM(CASE WHEN ti.code = 'CM' THEN vhe.groupes END),0)		            nb_g
 COALESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.heures END),0)		            heures_td,
 COALESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.groupes END),0) 		          nb_groupe_td,
 COALESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.heures END),0) 		            heures_tp,
-COALESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.groupes END),0) 		          nb_groupe_tp,
-COALESCE(SUM(CASE WHEN ti.code = 'Accompagnement' THEN vhe.heures END),0) 		heures_accompagnement,
-COALESCE(SUM(CASE WHEN ti.code = 'Accompagnement' THEN vhe.groupes END),0) 	nb_groupe_accompagnement
+COALESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.groupes END),0) 		          nb_groupe_tp
 FROM
 etape e
 LEFT JOIN type_formation tf ON e.type_formation_id = tf.id

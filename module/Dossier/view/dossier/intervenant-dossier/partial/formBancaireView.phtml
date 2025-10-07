@@ -2,14 +2,12 @@
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
  * @var $form               \Dossier\Form\IntervenantDossierForm
- * @var $intervenant        \Intervenant\Entity\Db\Intervenant
- * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
 use Dossier\Assertion\IntervenantDossierAssertion;
 
-$viewIban = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_IBAN);
+$viewIban = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_IBAN);
 
 $form->prepare();
 $dossierBancaire = $form->get('DossierBancaire');
@@ -21,7 +19,7 @@ $dossierBancaire = $form->get('DossierBancaire');
         <div class="card-header">
             COORDONNÉES BANCAIRES
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeBanque()): ?>
+                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeBanque()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -33,8 +31,8 @@ $dossierBancaire = $form->get('DossierBancaire');
                 <?= $this->formLabel($dossierBancaire->get('ribIban')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getIBAN())) {
-                        echo ($viewIban) ? $intervenantDossier->getIBAN() : '**************************';
+                    if (!empty($tblDossier->getDossier()->getIBAN())) {
+                        echo ($viewIban) ? $tblDossier->getDossier()->getIBAN() : '**************************';
                     }
                     ?>
                 </div>
@@ -43,8 +41,8 @@ $dossierBancaire = $form->get('DossierBancaire');
                 <?= $this->formLabel($dossierBancaire->get('ribBic')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getBIC())) {
-                        echo ($viewIban) ? $intervenantDossier->getBIC() : '*************';
+                    if (!empty($tblDossier->getDossier()->getBIC())) {
+                        echo ($viewIban) ? $tblDossier->getDossier()->getBIC() : '*************';
                     }
                     ?>
                 </div>
@@ -54,7 +52,7 @@ $dossierBancaire = $form->get('DossierBancaire');
                 <div class="input-group cold-md-6 readonly">
                     <?php
                     if ($viewIban) {
-                        echo ($intervenantDossier->isRibHorsSepa()) ? 'OUI' : 'NON';
+                        echo ($tblDossier->getDossier()->isRibHorsSepa()) ? 'OUI' : 'NON';
                     } else {
                         echo '***';
                     }

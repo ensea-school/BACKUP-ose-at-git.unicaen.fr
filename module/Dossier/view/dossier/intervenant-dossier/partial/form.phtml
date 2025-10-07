@@ -1,11 +1,12 @@
+<?php
 /**
-* @var $this             \Application\View\Renderer\PhpRenderer
-* @var $form             \Dossier\Form\IntervenantDossierForm
-* @var $canValider       boolean
-* @var $canDevalider     boolean
-* @var $canSupprimer     boolean
-* @var $dossier          Dossier
-*/
+ * @var $this             \Application\View\Renderer\PhpRenderer
+ * @var $form             \Dossier\Form\IntervenantDossierForm
+ * @var $canValider       boolean
+ * @var $canDevalider     boolean
+ * @var $canSupprimer     boolean
+ * @var $tblDossier       \Dossier\Entity\Db\TblDossier
+ */
 
 $Dossier = $dossier;
 
@@ -119,7 +120,7 @@ $dossier = $form->get('dossier');
 
 
 <?php
-if ($Dossier->getId()) {
+if ($tblDossier->getDossier()->getId()) {
     echo $this->historique($Dossier);
 }
 ?>

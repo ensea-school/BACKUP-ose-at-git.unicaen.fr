@@ -87,17 +87,25 @@ return [
                     'action'        => 'index',
                     'may_terminate' => true,
                     'child_routes'  => [
-                        'change-statut-dossier' => [
+                        'change-statut-dossier'    => [
                             'route'  => '/change-statut-dossier',
                             'action' => 'change-statut-dossier',
                         ],
-                        'valider'               => [
+                        'valider'                  => [
                             'route'  => '/valider',
                             'action' => 'valider',
                         ],
-                        'devalider'             => [
+                        'valider-complementaire'   => [
+                            'route'  => '/valider-complementaire',
+                            'action' => 'valider-complementaire',
+                        ],
+                        'devalider'                => [
                             'route'  => '/devalider',
                             'action' => 'devalider',
+                        ],
+                        'devalider-complementaire' => [
+                            'route'  => '/devalider-complementaire',
+                            'action' => 'devalider-complementaire',
                         ],
 
                         'supprimer'          => [
@@ -177,7 +185,8 @@ return [
     'guards'       => [
         [
             'controller' => IntervenantDossierController::class,
-            'action'     => ['index', 'change-statut-dossier'],
+            'action'     => ['index',
+                             'change-statut-dossier'],
             'privileges' => [Privileges::DOSSIER_VISUALISATION],
             'assertion'  => IntervenantDossierAssertion::class,
         ],
@@ -210,6 +219,20 @@ return [
         ],
         [
             'controller' => IntervenantDossierController::class,
+            'action'     => ['valider-complementaire'],
+            'privileges' => [Privileges::DOSSIER_VALIDATION_COMP],
+            'assertion'  => IntervenantDossierAssertion::class,
+
+        ],
+        [
+            'controller' => IntervenantDossierController::class,
+            'action'     => ['devalider-complementaire'],
+            'privileges' => [Privileges::DOSSIER_DEVALIDATION_COMP],
+            'assertion'  => IntervenantDossierAssertion::class,
+
+        ],
+        [
+            'controller' => IntervenantDossierController::class,
             'action'     => ['supprimer'],
             'privileges' => [Privileges::DOSSIER_SUPPRESSION],
             'assertion'  => IntervenantDossierAssertion::class,
@@ -226,14 +249,18 @@ return [
         ],
         [
             'controller' => EmployeurController::class,
-            'action'     => ['index', 'saisie', 'supprimer', 'employeur'],
+            'action'     => ['index',
+                             'saisie',
+                             'supprimer',
+                             'employeur'],
             'privileges' => [Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION],
             'assertion'  => IntervenantDossierAssertion::class,
 
         ],
         [
             'controller' => EmployeurController::class,
-            'action'     => ['recherche', 'data-employeur'],
+            'action'     => ['recherche',
+                             'data-employeur'],
             'roles'      => ['guest'],
 
         ],
@@ -266,6 +293,9 @@ return [
                 IntervenantDossierAssertion::PRIV_CAN_VALIDE,
                 IntervenantDossierAssertion::PRIV_CAN_DEVALIDE,
                 IntervenantDossierAssertion::PRIV_CAN_EDIT,
+                IntervenantDossierAssertion::PRIV_CAN_VALIDE_COMP,
+                IntervenantDossierAssertion::PRIV_CAN_DEVALIDE_COMP,
+                IntervenantDossierAssertion::PRIV_CAN_EDIT_COMP,
                 IntervenantDossierAssertion::PRIV_CAN_SUPPRIME,
 
 

@@ -35,10 +35,11 @@ class ValidationService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass ()
+    public function getEntityClass()
     {
         return Validation::class;
     }
+
 
 
     /**
@@ -46,18 +47,21 @@ class ValidationService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias ()
+    public function getAlias()
     {
         return 'v';
     }
 
 
-    public function validerDossier (IntervenantDossier $intervenantDossier): Validation
+
+    public function validerDossier(IntervenantDossier $intervenantDossier, bool $complementaire = false): Validation
     {
-        $validation = $this->newEntity();
+
+        $validation  = $this->newEntity();
         $intervenant = $intervenantDossier->getIntervenant();
         $validation->setIntervenant($intervenantDossier->getIntervenant());
-        $validation->setTypeValidation($this->getServiceTypeValidation()->getDonneesPerso());
+        $typeValidation = (!$complementaire) ? $this->getServiceTypeValidation()->getDonneesPerso() : $this->getServiceTypeValidation()->getDonneesPersoComplementaire();
+        $validation->setTypeValidation($typeValidation);
         $validation->setStructure($intervenant->getStructure());
         $this->save($validation);
 
@@ -65,7 +69,8 @@ class ValidationService extends AbstractEntityService
     }
 
 
-    public function validerMission (Mission $mission): Validation
+
+    public function validerMission(Mission $mission): Validation
     {
         $validation = $this->newEntity();
         $validation->setIntervenant($mission->getIntervenant());
@@ -78,7 +83,8 @@ class ValidationService extends AbstractEntityService
     }
 
 
-    public function validerVolumeHoraireMission (VolumeHoraireMission $volumeHoraireMission): Validation
+
+    public function validerVolumeHoraireMission(VolumeHoraireMission $volumeHoraireMission): Validation
     {
         if ($volumeHoraireMission->getTypeVolumeHoraire()->isPrevu()) {
             $typeValidation = $this->getServiceTypeValidation()->getMission();
@@ -97,7 +103,8 @@ class ValidationService extends AbstractEntityService
     }
 
 
-    public function validerOffreEmploi (OffreEmploi $offreEmploi): Validation
+
+    public function validerOffreEmploi(OffreEmploi $offreEmploi): Validation
     {
         $validation = $this->newEntity();
         $validation->setTypeValidation($this->getServiceTypeValidation()->getOffreEmploi());
@@ -109,7 +116,8 @@ class ValidationService extends AbstractEntityService
     }
 
 
-    public function validerCandidature (Candidature $candidature): Validation
+
+    public function validerCandidature(Candidature $candidature): Validation
     {
         $validation = $this->newEntity();
         $validation->setTypeValidation($this->getServiceTypeValidation()->getCandidature());
@@ -124,6 +132,7 @@ class ValidationService extends AbstractEntityService
     }
 
 
+
     /**
      *
      * @param Intervenant            $intervenant
@@ -131,26 +140,27 @@ class ValidationService extends AbstractEntityService
      *
      * @return Validation|null
      */
-    public function getValidationClotureServices (Intervenant $intervenant)
+    public function getValidationClotureServices(Intervenant $intervenant)
     {
         $tv = $this->getServiceTypeValidation()->getByCode(TypeValidation::CLOTURE_REALISE);
 
         $validation = $this->getRepo()->findOneBy([
-            'typeValidation'   => $tv,
-            'intervenant'      => $intervenant,
-            'histoDestruction' => null,
-        ]);
+                                                      'typeValidation'   => $tv,
+                                                      'intervenant'      => $intervenant,
+                                                      'histoDestruction' => null,
+                                                  ]);
 
         if (!$validation) {
             $role = $this->getServiceContext()->getSelectedIdentityRole();
 
             $validation = $this->newEntity($tv);
             $validation->setIntervenant($intervenant);
-            $validation->setStructure($role->getStructure() ? : $intervenant->getStructure());
+            $validation->setStructure($role->getStructure() ?: $intervenant->getStructure());
         }
 
         return $validation;
     }
+
 
 
     /**
@@ -161,7 +171,7 @@ class ValidationService extends AbstractEntityService
      *
      * @return self
      */
-    public function delete ($entity, $softDelete = true)
+    public function delete($entity, $softDelete = true)
     {
         /* On détruit d'abord les dépendances possibles ... */
         foreach ($entity->getVolumeHoraire() as $vh) {
@@ -190,6 +200,7 @@ class ValidationService extends AbstractEntityService
     }
 
 
+
     /**
      * Retourne une nouvelle entité de la classe donnée
      *
@@ -197,7 +208,7 @@ class ValidationService extends AbstractEntityService
      *
      * @return \Workflow\Entity\Db\Validation
      */
-    public function newEntity (?TypeValidation $type = null): Validation
+    public function newEntity(?TypeValidation $type = null): Validation
     {
         $entity = parent::newEntity();
         if ($type) {
@@ -208,6 +219,7 @@ class ValidationService extends AbstractEntityService
     }
 
 
+
     /**
      * Recherche par type
      *
@@ -216,9 +228,10 @@ class ValidationService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByType ($type, ?QueryBuilder $qb = null, $alias = null)
+    public function finderByType($type, ?QueryBuilder $qb = null, $alias = null)
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        [$qb,
+         $alias] = $this->initQuery($qb, $alias);
 
         if (is_string($type)) {
             $type = $this->getServiceTypeValidation()->getByCode($type);
@@ -233,6 +246,7 @@ class ValidationService extends AbstractEntityService
     }
 
 
+
     /**
      * @param TypeValidation $typeValidation
      * @param Intervenant    $intervenant
@@ -240,7 +254,7 @@ class ValidationService extends AbstractEntityService
      *
      * @return array
      */
-    public function lister (TypeValidation $typeValidation, Intervenant $intervenant, ?Structure $structure = null)
+    public function lister(TypeValidation $typeValidation, Intervenant $intervenant, ?Structure $structure = null)
     {
         $dql = "
         SELECT

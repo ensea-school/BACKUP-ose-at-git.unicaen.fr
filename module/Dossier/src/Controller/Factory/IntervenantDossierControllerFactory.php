@@ -3,6 +3,7 @@
 namespace Dossier\Controller\Factory;
 
 use Dossier\Controller\IntervenantDossierController;
+use Dossier\Service\TblDossierService;
 use Psr\Container\ContainerInterface;
 use UnicaenImport\Processus\ImportProcessus;
 
@@ -20,6 +21,7 @@ class IntervenantDossierControllerFactory
         $controller = new IntervenantDossierController();
 
         $controller->setProcessusImport($container->get(ImportProcessus::class));
+        $controller->setServiceTblDossier($container->get(TblDossierService::class));
 
         return $controller;
     }

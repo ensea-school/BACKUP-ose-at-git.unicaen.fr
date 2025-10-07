@@ -13,7 +13,7 @@ return [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 25,
+            'length'      => 40,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,

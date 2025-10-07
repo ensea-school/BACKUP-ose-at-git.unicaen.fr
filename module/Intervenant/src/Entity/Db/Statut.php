@@ -262,7 +262,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     public function axiosDefinition(): array
     {
-        return ['libelle', 'code'];
+        return ['libelle',
+                'code'];
     }
 
 
@@ -1870,7 +1871,9 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::MODIF_SERVICE_DU_ASSOCIATION               => $this->modificationServiceDu,
             Privileges::MODIF_SERVICE_DU_VISUALISATION             => $this->modificationServiceDu && $this->modificationServiceDuVisualisation,
             Privileges::DOSSIER_VISUALISATION                      => $this->dossier && $this->dossierVisualisation,
+            Privileges::DOSSIER_VISUALISATION_COMP                 => $this->dossier && $this->dossierVisualisation,
             Privileges::DOSSIER_EDITION                            => $this->dossier && $this->dossierEdition,
+            Privileges::DOSSIER_EDITION_COMP                       => $this->dossier && $this->dossierEdition,
             Privileges::DOSSIER_ADRESSE_VISUALISATION              => $this->dossier && $this->dossierVisualisation && $this->dossierAdresse,
             Privileges::DOSSIER_ADRESSE_EDITION                    => $this->dossier && $this->dossierEdition && $this->dossierAdresse,
             Privileges::DOSSIER_BANQUE_VISUALISATION               => $this->dossier && $this->dossierVisualisation && $this->dossierBanque,

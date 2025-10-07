@@ -9,6 +9,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Dossier\Entity\Db\IntervenantDossier;
 use Dossier\Entity\Db\TblDossier;
+use Dossier\Service\Traits\TblDossierServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Dossier\Form\Traits\AutresFormAwareTrait;
 use Dossier\Form\Traits\IntervenantDossierFormAwareTrait;
@@ -44,6 +45,7 @@ class IntervenantDossierController extends AbstractController
     use AnneeServiceAwareTrait;
     use StatutServiceAwareTrait;
     use ImportProcessusAwareTrait;
+    use TblDossierServiceAwareTrait;
 
 
     protected function initFilters()
@@ -60,8 +62,6 @@ class IntervenantDossierController extends AbstractController
     public function indexAction()
     {
         $this->initFilters();
-
-        /* Initialisation */
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
@@ -70,17 +70,14 @@ class IntervenantDossierController extends AbstractController
         /* Récupération du dossier de l'intervenant */
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         /* Récupération de la validation du dossier si elle existe */
-        $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
-        $tblDossier                   = $intervenantDossier->getTblDossier();
+        $tblDossier = $intervenantDossier->getTblDossier();
+
         if (!$tblDossier and $intervenantDossier->getId()) {
             $tblDossier = $intervenantDossier->getTblDossier();
         }
+        $intervenantDossierValidation               = $tblDossier->getValidation();
+        $intervenantDossierValidationComplementaire = $tblDossier->getValidationComplementaire($intervenant);
 
-        //Ici on récupére le workflo pour savoir à quelle étape des données personnelles on se trouve
-        $lastCompleted = (!empty($tblDossier)) ? $tblDossier->isCompletAvantRecrutement() : '';
-
-
-        /* Initialisation du formulaire */
         $form = $this->getFormIntervenantIntervenantDossier()->setIntervenant($intervenant)->initForm();
         $form->bind($intervenantDossier);
 
@@ -108,12 +105,12 @@ class IntervenantDossierController extends AbstractController
                  * @var TblDossier $tblDossier
                  */
                 $tblDossier    = $intervenantDossier->getTblDossier();
-                $lastCompleted = $tblDossier->isCompletudeAvantRecrutement();
+                $lastCompleted = $tblDossier->isCompletAvantRecrutement();
 
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
                 //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
 
-                if (!$lastCompleted && $tblDossier->isCompletudeAvantRecrutement() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
+                if (!$lastCompleted && $tblDossier->isCompletAvantRecrutement() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
                     $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($role->getIntervenant());
                     $nextEtape      = $feuilleDeRoute->getNext(WorkflowEtape::DONNEES_PERSO_SAISIE);
                     if ($nextEtape && $url = $nextEtape->url) {
@@ -137,7 +134,6 @@ class IntervenantDossierController extends AbstractController
             'fieldset-insee'                   => $intervenantDossier->getStatut()->getDossierInsee(),
             'fieldset-employeur'               => $intervenantDossier->getStatut()->getDossierEmployeur(),
             'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,
-            //Si le statut intervenant a au moins 1 champ autre
         ];
 
         $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
@@ -159,11 +155,6 @@ class IntervenantDossierController extends AbstractController
 
         return compact(
             'form',
-            'role',
-            'intervenant',
-            'intervenantDossier',
-            'intervenantDossierValidation',
-            'intervenantDossierStatut',
             'tblDossier',
             'champsAutres',
             'fieldsetRules'
@@ -218,6 +209,7 @@ class IntervenantDossierController extends AbstractController
         $this->initFilters();
 
         $role               = $this->getServiceContext()->getSelectedIdentityRole();
+        $typeValidation     = $this->getEvent()->getParam('typeValidation');
         $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         $validation         = $this->getServiceDossier()->getValidation($intervenant);
@@ -238,17 +230,69 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function devaliderAction()
+    public function validerComplementaireAction(): MessengerViewModel
     {
         $this->initFilters();
 
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $validation  = $this->getServiceDossier()->getValidation($intervenant);
+        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant              = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenantDossier       = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $validationComplementaire = $intervenantDossier->getTblDossier()->getValidationComplementaire();
+
+        if ($validationComplementaire) {
+            throw new \Exception('Vos données complémentaires a déjà été validées par ' . $validationComplementaire->getHistoCreateur() . ' le ' . $validationComplementaire->getHistoCreation()->format(Constants::DATE_FORMAT));
+        }
+        try {
+            $this->getServiceValidation()->validerDossier($intervenantDossier, true);
+            $this->updateTableauxBord($intervenant, true);
+
+            $this->flashMessenger()->addSuccessMessage("Validation des données personnelles complémentaires <strong>enregistrée</strong> avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new MessengerViewModel;
+    }
+
+
+
+    public function devaliderAction(): MessengerViewModel
+    {
+        $this->initFilters();
+
+        $role               = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+
+        $validation = $intervenantDossier->getTblDossier()->getValidation();
+
         try {
             $this->getServiceValidation()->delete($validation);
             $this->updateTableauxBord($intervenant, true);
             $this->flashMessenger()->addSuccessMessage("Validation des données personnelles <strong>supprimée</strong> avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return new MessengerViewModel;
+    }
+
+
+
+    public function devaliderComplementaireAction(): MessengerViewModel
+    {
+        $this->initFilters();
+
+        $role               = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+
+        $validationDonneesComplementaires = $intervenantDossier->getTblDossier()->getValidationComplementaire();
+
+        try {
+            $this->getServiceValidation()->delete($validationDonneesComplementaires);
+            $this->updateTableauxBord($intervenant, true);
+            $this->flashMessenger()->addSuccessMessage("Validation des données personnelles complémentaires <strong>supprimée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }

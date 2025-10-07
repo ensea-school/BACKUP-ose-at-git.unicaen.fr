@@ -19,32 +19,35 @@ use Workflow\Service\WorkflowServiceAwareTrait;
 class IntervenantDossierAssertion extends AbstractAssertion
 {
     //Constantes privilieges personnalisés
-    const PRIV_EDIT_IDENTITE  = 'dossier-edit-identite';
-    const PRIV_VIEW_IDENTITE  = 'dossier-view-identite';
-    const PRIV_EDIT_ADRESSE   = 'dossier-edit-adresse';
-    const PRIV_VIEW_ADRESSE   = 'dossier-view-adresse';
-    const PRIV_EDIT_CONTACT   = 'dossier-edit-contact';
-    const PRIV_VIEW_CONTACT   = 'dossier-view-contact';
-    const PRIV_VIEW_IBAN      = 'dossier-voir-iban';
-    const PRIV_EDIT_IBAN      = 'dossier-edit-iban';
-    const PRIV_EDIT_INSEE     = 'dossier-edit-insee';
-    const PRIV_VIEW_INSEE     = 'dossier-voir-insee';
-    const PRIV_EDIT_EMPLOYEUR = 'dossier-edit-employeur';
-    const PRIV_VIEW_EMPLOYEUR = 'dossier-voir-employeur';
-    const PRIV_EDIT_AUTRE1    = 'dossier-edit-autre1';
-    const PRIV_VIEW_AUTRE1    = 'dossier-voir-autre1';
-    const PRIV_EDIT_AUTRE2    = 'dossier-edit-autre2';
-    const PRIV_VIEW_AUTRE2    = 'dossier-voir-autre2';
-    const PRIV_EDIT_AUTRE3    = 'dossier-edit-autre3';
-    const PRIV_VIEW_AUTRE3    = 'dossier-voir-autre3';
-    const PRIV_EDIT_AUTRE4    = 'dossier-edit-autre4';
-    const PRIV_VIEW_AUTRE4    = 'dossier-voir-autre4';
-    const PRIV_EDIT_AUTRE5    = 'dossier-edit-autre5';
-    const PRIV_VIEW_AUTRE5    = 'dossier-voir-autre5';
-    const PRIV_CAN_VALIDE     = 'dossier-peut-valider';
-    const PRIV_CAN_DEVALIDE   = 'dossier-peut-devalider';
-    const PRIV_CAN_EDIT       = 'dossier-peut-editer';
-    const PRIV_CAN_SUPPRIME   = 'dossier-peut-supprimer';
+    const PRIV_EDIT_IDENTITE     = 'dossier-edit-identite';
+    const PRIV_VIEW_IDENTITE     = 'dossier-view-identite';
+    const PRIV_EDIT_ADRESSE      = 'dossier-edit-adresse';
+    const PRIV_VIEW_ADRESSE      = 'dossier-view-adresse';
+    const PRIV_EDIT_CONTACT      = 'dossier-edit-contact';
+    const PRIV_VIEW_CONTACT      = 'dossier-view-contact';
+    const PRIV_VIEW_IBAN         = 'dossier-voir-iban';
+    const PRIV_EDIT_IBAN         = 'dossier-edit-iban';
+    const PRIV_EDIT_INSEE        = 'dossier-edit-insee';
+    const PRIV_VIEW_INSEE        = 'dossier-voir-insee';
+    const PRIV_EDIT_EMPLOYEUR    = 'dossier-edit-employeur';
+    const PRIV_VIEW_EMPLOYEUR    = 'dossier-voir-employeur';
+    const PRIV_EDIT_AUTRE1       = 'dossier-edit-autre1';
+    const PRIV_VIEW_AUTRE1       = 'dossier-voir-autre1';
+    const PRIV_EDIT_AUTRE2       = 'dossier-edit-autre2';
+    const PRIV_VIEW_AUTRE2       = 'dossier-voir-autre2';
+    const PRIV_EDIT_AUTRE3       = 'dossier-edit-autre3';
+    const PRIV_VIEW_AUTRE3       = 'dossier-voir-autre3';
+    const PRIV_EDIT_AUTRE4       = 'dossier-edit-autre4';
+    const PRIV_VIEW_AUTRE4       = 'dossier-voir-autre4';
+    const PRIV_EDIT_AUTRE5       = 'dossier-edit-autre5';
+    const PRIV_VIEW_AUTRE5       = 'dossier-voir-autre5';
+    const PRIV_CAN_VALIDE        = 'dossier-peut-valider';
+    const PRIV_CAN_DEVALIDE      = 'dossier-peut-devalider';
+    const PRIV_CAN_EDIT          = 'dossier-peut-editer';
+    const PRIV_CAN_VALIDE_COMP   = 'dossier-peut-valider-complementaire';
+    const PRIV_CAN_DEVALIDE_COMP = 'dossier-peut-devalider-complementaire';
+    const PRIV_CAN_EDIT_COMP     = 'dossier-peut-editer-complementaire';
+    const PRIV_CAN_SUPPRIME      = 'dossier-peut-supprimer';
 
     use WorkflowServiceAwareTrait;
     use DossierServiceAwareTrait;
@@ -84,6 +87,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
             self::PRIV_CAN_DEVALIDE,
             self::PRIV_CAN_EDIT,
             self::PRIV_CAN_SUPPRIME,
+            self::PRIV_CAN_VALIDE_COMP,
+            self::PRIV_CAN_DEVALIDE_COMP,
+            self::PRIV_CAN_EDIT_COMP,
         ];
 
         $role = $this->getRole();
@@ -146,6 +152,12 @@ class IntervenantDossierAssertion extends AbstractAssertion
                         return $this->assertCanDevalidate($entity);
                     case self::PRIV_CAN_EDIT:
                         return $this->assertCanEdit($entity);
+                    case self::PRIV_CAN_VALIDE_COMP:
+                        return $this->assertCanValidateComplementaire($entity);
+                    case self::PRIV_CAN_DEVALIDE_COMP:
+                        return $this->assertCanDevalidateComplementaire($entity);
+                    case self::PRIV_CAN_EDIT_COMP:
+                        return $this->assertCanEditComplementaire($entity);
                     case self::PRIV_CAN_SUPPRIME:
                         return $this->assertCanSupprime($entity);
                 }
@@ -158,11 +170,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditIdentite(Intervenant $intervenant): bool
     {
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_EDITION),
+                              ]);
     }
 
 
@@ -170,9 +180,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewIdentite(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_IDENTITE_VISUALISATION),
+                              ]);
     }
 
 
@@ -180,11 +189,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAdresse(Intervenant $intervenant): bool
     {
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_EDITION),
+                              ]);
     }
 
 
@@ -192,9 +199,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewAdresse(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION),
+                              ]);
     }
 
 
@@ -203,11 +209,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
 
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_EDITION),
+                              ]);
     }
 
 
@@ -215,9 +219,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewContact(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CONTACT_VISUALISATION),
+                              ]);
     }
 
 
@@ -226,11 +229,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
 
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_EDITION),
+                              ]);
     }
 
 
@@ -238,10 +239,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewInsee(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
 
-        ]);
+                              ]);
     }
 
 
@@ -249,11 +249,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditIban(Intervenant $intervenant): bool
     {
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_EDITION),
+                              ]);
     }
 
 
@@ -261,9 +259,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewIban(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
+                              ]);
     }
 
 
@@ -271,11 +268,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditEmployeur(Intervenant $intervenant): bool
     {
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EMPLOYEUR_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EMPLOYEUR_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_EMPLOYEUR_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_EMPLOYEUR_EDITION),
+                              ]);
     }
 
 
@@ -283,9 +278,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewEmployeur(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EMPLOYEUR_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_EMPLOYEUR_VISUALISATION),
+                              ]);
     }
 
 
@@ -293,11 +288,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre1(Intervenant $intervenant): bool
     {
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_EDITION),
+                              ]);
     }
 
 
@@ -305,9 +298,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewAutre1(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_VISUALISATION),
+                              ]);
     }
 
 
@@ -315,11 +307,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre2(Intervenant $intervenant): bool
     {
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_EDITION),
+                              ]);
     }
 
 
@@ -327,9 +317,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewAutre2(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_VISUALISATION),
+                              ]);
     }
 
 
@@ -337,11 +326,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre3(Intervenant $intervenant): bool
     {
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_EDITION),
+                              ]);
     }
 
 
@@ -349,9 +336,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewAutre3(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_VISUALISATION),
+                              ]);
     }
 
 
@@ -359,11 +345,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre4(Intervenant $intervenant): bool
     {
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_EDITION),
+                              ]);
     }
 
 
@@ -371,9 +355,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewAutre4(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_VISUALISATION),
+                              ]);
     }
 
 
@@ -381,11 +364,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre5(Intervenant $intervenant): bool
     {
         return $this->asserts([
-            !$this->getServiceDossier()->getValidation($intervenant),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_EDITION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_VISUALISATION),
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_EDITION),
+                              ]);
     }
 
 
@@ -393,9 +374,8 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertViewAutre5(): bool
     {
         return $this->asserts([
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VISUALISATION),
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_VISUALISATION),
-        ]);
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_VISUALISATION),
+                              ]);
     }
 
 
@@ -407,10 +387,25 @@ class IntervenantDossierAssertion extends AbstractAssertion
         $isValidate         = $this->getServiceDossier()->getValidation($intervenant);
 
         return $this->asserts([
-            (!empty($intervenantDossier->getTblDossier())) ? $intervenantDossier->getTblDossier()->getAvantRecrutementRealisee() : false,
-            !$isValidate,
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION),
-        ]);
+                                  (!empty($intervenantDossier->getTblDossier())) ? $intervenantDossier->getTblDossier()->isCompletAvantRecrutement() : false,
+                                  !$isValidate,
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION),
+                              ]);
+    }
+
+
+
+    protected function assertCanValidateComplementaire(Intervenant $intervenant): bool
+    {
+
+        $intervenantDossier       = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $isValidateComplementaire = $intervenantDossier->getTblDossier()->getValidationComplementaire();
+
+        return $this->asserts([
+                                  (!empty($intervenantDossier->getTblDossier())) ? $intervenantDossier->getTblDossier()->isCompletApresRecrutement() : false,
+                                  !$isValidateComplementaire,
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_VALIDATION_COMP),
+                              ]);
     }
 
 
@@ -421,9 +416,23 @@ class IntervenantDossierAssertion extends AbstractAssertion
         $isValidate = $this->getServiceDossier()->getValidation($intervenant);
 
         return $this->asserts([
-            $isValidate,
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_DEVALIDATION),
-        ]);
+                                  $isValidate,
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_DEVALIDATION),
+                              ]);
+    }
+
+
+
+    protected function assertCanDevalidateComplementaire(Intervenant $intervenant): bool
+    {
+
+        $intervenantDossier       = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $isValidateComplementaire = $intervenantDossier->getTblDossier()->getValidationComplementaire();
+
+        return $this->asserts([
+                                  $isValidateComplementaire,
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_DEVALIDATION_COMP),
+                              ]);
     }
 
 
@@ -431,12 +440,27 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertCanEdit(Intervenant $intervenant): bool
     {
 
-        $isValidate = $this->getServiceDossier()->getValidation($intervenant);
+        $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $isValidate         = $intervenantDossier->getTblDossier()->getvalidation();
 
         return $this->asserts([
-            !$isValidate,
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
-        ]);
+                                  !$isValidate,
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION),
+                              ]);
+    }
+
+
+
+    protected function assertCanEditComplementaire(Intervenant $intervenant): bool
+    {
+
+        $intervenantDossier       = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $isValidateComplementaire = $intervenantDossier->getTblDossier()->getValidationComplementaire();
+
+        return $this->asserts([
+                                  !$isValidateComplementaire,
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_EDITION_COMP),
+                              ]);
     }
 
 
@@ -447,9 +471,9 @@ class IntervenantDossierAssertion extends AbstractAssertion
         $isValidate = $this->getServiceDossier()->getValidation($intervenant);
 
         return $this->asserts([
-            !$isValidate,
-            $this->getRole()->hasPrivilege(Privileges::DOSSIER_SUPPRESSION),
-        ]);
+                                  !$isValidate,
+                                  $this->getRole()->hasPrivilege(Privileges::DOSSIER_SUPPRESSION),
+                              ]);
     }
 
 

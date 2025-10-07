@@ -17,6 +17,9 @@
         <many-to-one field="validation" target-entity="Workflow\Entity\Db\Validation" fetch="LAZY">
             <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <many-to-one field="validationComplementaire" target-entity="Workflow\Entity\Db\Validation" fetch="LAZY">
+            <join-column name="VALIDATION_COMPLEMENTAIRE_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <field name="completudeIdentite" type="boolean" column="COMPLETUDE_IDENTITE" nullable="false"/>
         <field name="completudeIdentiteComp" type="boolean" column="COMPLETUDE_IDENTITE_COMP" nullable="false"/>
         <field name="completudeStatut" type="boolean" column="COMPLETUDE_STATUT" nullable="false"/>

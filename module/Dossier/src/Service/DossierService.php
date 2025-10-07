@@ -198,11 +198,11 @@ class DossierService extends AbstractEntityService
     public function purgerDonneesPersoModif(Intervenant $intervenant, Utilisateur $destructeur)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->update(\Indicateur\Entity\Db\IndicModifDossier::class, 't')
-            ->set("t.histoDestruction", ":destruction")
-            ->set("t.histoDestructeur", ":destructeur")
-            ->where("t.intervenant = :intervenant")
-            ->andWhere("t.histoDestruction IS NULL");
+                   ->update(\Indicateur\Entity\Db\IndicModifDossier::class, 't')
+                   ->set("t.histoDestruction", ":destruction")
+                   ->set("t.histoDestructeur", ":destructeur")
+                   ->where("t.intervenant = :intervenant")
+                   ->andWhere("t.histoDestruction IS NULL");
 
         $qb
             ->setParameter('intervenant', $intervenant)
@@ -260,7 +260,11 @@ class DossierService extends AbstractEntityService
         $intervenantDossierAdresse = $intervenantDossier->getAdresse();
         /*Normalisation et nettoyage de l'adresse pour comparaison*/
         $intervenantDossierAdresse = trim(strtolower($intervenantDossierAdresse ?? ""));
-        $intervenantDossierAdresse = str_replace(["\r\n", "\n", "\r", ",", "'"], ' ', $intervenantDossierAdresse);
+        $intervenantDossierAdresse = str_replace(["\r\n",
+                                                  "\n",
+                                                  "\r",
+                                                  ",",
+                                                  "'"], ' ', $intervenantDossierAdresse);
         $intervenantDossierAdresse = preg_replace('/\s\s+/', ' ', $intervenantDossierAdresse);
         $newDatas['ADRESSE']       = (!empty($intervenantDossierAdresse)) ? $intervenantDossierAdresse : '(aucun)';
 
@@ -278,7 +282,11 @@ class DossierService extends AbstractEntityService
         /*Normalisation et nettoyage de l'adresse pour comparaison*/
         if (!empty($intervenantAdresse)) {
             $intervenantAdresse = trim(strtolower($intervenantAdresse));
-            $intervenantAdresse = str_replace(["\r\n", "\n", "\r", ",", "'"], ' ', $intervenantAdresse);
+            $intervenantAdresse = str_replace(["\r\n",
+                                               "\n",
+                                               "\r",
+                                               ",",
+                                               "'"], ' ', $intervenantAdresse);
             $intervenantAdresse = preg_replace('/\s\s+/', ' ', $intervenantAdresse);
         }
 
@@ -297,11 +305,11 @@ class DossierService extends AbstractEntityService
                         $indicModifDossierField->setAttrName($field);
                         $estCreationDossier = (array_key_exists($field, $indicModifDossierInProgress)) ? 0 : 1;
                         $indicModifDossierField->setAttrOldValue($oldDatas[$field])
-                            ->setAttrNewValue($newDatas[$field])
-                            ->setAttrOldSourceName($sourceIntervenant)
-                            ->setAttrNewSourceName($sourceOse)
-                            ->setEstCreationDossier($estCreationDossier)
-                            ->setIntervenant($intervenant);
+                                               ->setAttrNewValue($newDatas[$field])
+                                               ->setAttrOldSourceName($sourceIntervenant)
+                                               ->setAttrNewSourceName($sourceOse)
+                                               ->setEstCreationDossier($estCreationDossier)
+                                               ->setIntervenant($intervenant);
                         $em->persist($indicModifDossierField);
                     }
                 }

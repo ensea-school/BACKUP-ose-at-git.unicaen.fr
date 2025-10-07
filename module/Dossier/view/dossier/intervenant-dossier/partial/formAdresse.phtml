@@ -3,8 +3,6 @@
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
  * @var $form               \Dossier\Form\IntervenantDossierForm
- * @var $intervenant        \Intervenant\Entity\Db\Intervenant
- * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 $form->prepare();
@@ -28,7 +26,8 @@ $dossierAdresse = $form->get('DossierAdresse');
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$tblDossier->getCompletudeAdresse()): ?>
                     <div class="messenger alert alert-secondary ">
-                        Pour compléter votre adresse vous devez renseigner au minimum le champ complément d'adresse ou renseigner votre numéro de rue pour
+                        Pour compléter votre adresse vous devez renseigner au minimum le champ complément d'adresse ou
+                        renseigner votre numéro de rue pour
                         avoir une adresse valide.
                     </div>
                 <?php endif; ?>

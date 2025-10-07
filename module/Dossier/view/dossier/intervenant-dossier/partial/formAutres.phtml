@@ -3,8 +3,6 @@
 /**
  * @var $this                         \Application\View\Renderer\PhpRenderer
  * @var $form                         \Dossier\Form\IntervenantDossierForm
- * @var $intervenant                  \Intervenant\Entity\Db\Intervenant
- * @var $intervenantDossier           \Dossier\Entity\Db\IntervenantDossier
  * @var $tblDossier                   \Dossier\Entity\Db\TblDossier
  * @var $champsAutres                 \Dossier\Entity\Db\DossierAutre[]
  */
@@ -28,12 +26,12 @@ $dossierAutres = $form->get('DossierAutres');
 
 $autres = [];
 foreach ($champsAutres as $champsAutre) {
-    $canView = $this->isAllowed($intervenant, constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champsAutre->getId()));
-    $canEdit = $this->isAllowed($intervenant, constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_EDIT_AUTRE' . $champsAutre->getId()));
+    $canView = $this->isAllowed($tblDossier->getIntervenant(), constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champsAutre->getId()));
+    $canEdit = $this->isAllowed($tblDossier->getIntervenant(), constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_EDIT_AUTRE' . $champsAutre->getId()));
 
     if ($canView) {
         $method = 'getAutre' . $champsAutre->getId();
-        $value = $intervenantDossier->$method();
+        $value  = $tblDossier->getDossier()->$method();
 
         $autres[] = [
             'id'      => $champsAutre->getId(),
@@ -54,7 +52,7 @@ if (empty($autres)) {
         <div class="card-header">
             AUTRES
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAutre1()): ?>
+                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeAutre1()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -64,18 +62,18 @@ if (empty($autres)) {
         <div class="card-body">
             <?php foreach ($autres as $champ): ?>
                 <div class="form-group">
-                 <?php if (!$champ['canEdit']): ?>
-                    <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ['id']), ); ?>
+                <?php if (!$champ['canEdit']): ?>
+                    <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
                     <div class="input-group cold-md-6 readonly">
                         <?php
                         if ($champ['value']) {
                             echo ($champ['canView']) ? $champ['value'] : '***************';
                         }
-                     ?>
+                        ?>
                     </div>
-                </div>
+                    </div>
                 <?php else: ?>
-                <?= $this->formControlGroup($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
+                    <?= $this->formControlGroup($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
                 <?php endif; ?>
             <?php endforeach; ?>
 

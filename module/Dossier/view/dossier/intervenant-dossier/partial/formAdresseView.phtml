@@ -3,14 +3,12 @@
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
  * @var $form               \Dossier\Form\IntervenantDossierForm
- * @var $intervenant        \Intervenant\Entity\Db\Intervenant
- * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
 use Dossier\Assertion\IntervenantDossierAssertion;
 
-$viewAdresse = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_ADRESSE);
+$viewAdresse = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_ADRESSE);
 
 $form->prepare();
 $dossierAdresse = $form->get('DossierAdresse');
@@ -22,7 +20,7 @@ $dossierAdresse = $form->get('DossierAdresse');
         <div class="card-header">
             ADRESSE
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAdresse()): ?>
+                <?php if (!$tblDossier->getCompletudeAdresse()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -44,8 +42,8 @@ $dossierAdresse = $form->get('DossierAdresse');
                 <?= $this->formLabel($dossierAdresse->get('lieuDit')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getAdresseLieuDit())) {
-                        echo ($viewAdresse) ? $intervenantDossier->getAdresseLieuDit() : '*******************';
+                    if (!empty($tblDossier->getDossier()->getAdresseLieuDit())) {
+                        echo ($viewAdresse) ? $tblDossier->getDossier()->getAdresseLieuDit() : '*******************';
                     }
                     ?>
                 </div>
@@ -58,8 +56,8 @@ $dossierAdresse = $form->get('DossierAdresse');
 
                     <div class="readonly">
                         <?php
-                        if (!empty($intervenantDossier->getAdresseNumero())) {
-                            echo ($viewAdresse) ? $intervenantDossier->getAdresseNumero() : '***';
+                        if (!empty($tblDossier->getDossier()->getAdresseNumero())) {
+                            echo ($viewAdresse) ? $tblDossier->getDossier()->getAdresseNumero() : '***';
                         }
                         ?>
                     </div>
@@ -70,8 +68,8 @@ $dossierAdresse = $form->get('DossierAdresse');
 
                     <div class="readonly">
                         <?php
-                        if (!empty($intervenantDossier->getAdresseNumeroCompl())) {
-                            echo ($viewAdresse) ? $intervenantDossier->getAdresseNumeroCompl()->getLibelle() : '***';
+                        if (!empty($tblDossier->getDossier()->getAdresseNumeroCompl())) {
+                            echo ($viewAdresse) ? $tblDossier->getDossier()->getAdresseNumeroCompl()->getLibelle() : '***';
                         }
                         ?>
                     </div>
@@ -81,8 +79,8 @@ $dossierAdresse = $form->get('DossierAdresse');
 
                     <div class="readonly">
                         <?php
-                        if (!empty($intervenantDossier->getAdresseVoirie())) {
-                            echo ($viewAdresse) ? $intervenantDossier->getAdresseVoirie()->getLibelle() : '***';
+                        if (!empty($tblDossier->getDossier()->getAdresseVoirie())) {
+                            echo ($viewAdresse) ? $tblDossier->getDossier()->getAdresseVoirie()->getLibelle() : '***';
                         }
                         ?>
                     </div>
@@ -92,8 +90,8 @@ $dossierAdresse = $form->get('DossierAdresse');
 
                     <div class="readonly">
                         <?php
-                        if (!empty($intervenantDossier->getAdresseVoie())) {
-                            echo ($viewAdresse) ? $intervenantDossier->getAdresseVoie() : '***';
+                        if (!empty($tblDossier->getDossier()->getAdresseVoie())) {
+                            echo ($viewAdresse) ? $tblDossier->getDossier()->getAdresseVoie() : '***';
                         }
                         ?>
                     </div>
@@ -103,8 +101,8 @@ $dossierAdresse = $form->get('DossierAdresse');
                 <?= $this->formLabel($dossierAdresse->get('precisions')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getAdressePrecisions())) {
-                        echo ($viewAdresse) ? $intervenantDossier->getAdressePrecisions() : '*******************';
+                    if (!empty($tblDossier->getDossier()->getAdressePrecisions())) {
+                        echo ($viewAdresse) ? $tblDossier->getDossier()->getAdressePrecisions() : '*******************';
                     }
                     ?>
                 </div>
@@ -115,8 +113,8 @@ $dossierAdresse = $form->get('DossierAdresse');
 
                     <div class="readonly">
                         <?php
-                        if (!empty($intervenantDossier->getAdresseCodePostal())) {
-                            echo ($viewAdresse) ? $intervenantDossier->getAdresseCodePostal() : '***';
+                        if (!empty($tblDossier->getDossier()->getAdresseCodePostal())) {
+                            echo ($viewAdresse) ? $tblDossier->getDossier()->getAdresseCodePostal() : '***';
                         }
                         ?>
                     </div>
@@ -125,8 +123,8 @@ $dossierAdresse = $form->get('DossierAdresse');
                     <?= $this->formLabel($dossierAdresse->get('ville')); ?>
                     <div class="readonly">
                         <?php
-                        if (!empty($intervenantDossier->getAdresseCommune())) {
-                            echo ($viewAdresse) ? $intervenantDossier->getAdresseCommune() : '***';
+                        if (!empty($tblDossier->getDossier()->getAdresseCommune())) {
+                            echo ($viewAdresse) ? $tblDossier->getDossier()->getAdresseCommune() : '***';
                         }
                         ?>
                     </div>
@@ -136,8 +134,8 @@ $dossierAdresse = $form->get('DossierAdresse');
                 <?= $this->formLabel($dossierAdresse->get('pays')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getAdressePays())) {
-                        echo ($viewAdresse) ? $intervenantDossier->getAdressePays()->getLibelle() : '*******************';
+                    if (!empty($tblDossier->getDossier()->getAdressePays())) {
+                        echo ($viewAdresse) ? $tblDossier->getDossier()->getAdressePays()->getLibelle() : '*******************';
                     }
                     ?>
                 </div>

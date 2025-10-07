@@ -31,6 +31,7 @@ class DossierProcess implements ProcessInterface
     }
 
 
+
     public function run(TableauBord $tableauBord, array $params = []): void
     {
         $this->loadDossiers($params);
@@ -44,9 +45,9 @@ class DossierProcess implements ProcessInterface
     protected function loadDossiers(array $params): void
     {
         $sqlDossier = 'SELECT * FROM ('
-            . $this->getServiceBdd()->injectKey($this->dossierSql(), $params)
-            . ') t '
-            . $this->getServiceBdd()->makeWhere($params);
+                      . $this->getServiceBdd()->injectKey($this->dossierSql(), $params)
+                      . ') t '
+                      . $this->getServiceBdd()->makeWhere($params);
 
 
         $dossiers = $this->getBdd()->selectEach($sqlDossier);
@@ -69,21 +70,24 @@ class DossierProcess implements ProcessInterface
     protected function traitementDossiers(): void
     {
         foreach ($this->dossiers as $key => $dossier) {
-            $dossierTbl                   = [];
-            $dossierTbl['ANNEE_ID']       = $dossier['ANNEE_ID'];
-            $dossierTbl['DOSSIER_ID']     = $dossier['DOSSIER_ID'];
-            $dossierTbl['INTERVENANT_ID'] = $dossier['INTERVENANT_ID'];
-            $dossierTbl['ACTIF']          = $dossier['DOSSIER'];
-            $dossierTbl['VALIDATION_ID']  = $dossier['VALIDATION_ID'];
+            $dossierTbl                                 = [];
+            $dossierTbl['ANNEE_ID']                     = $dossier['ANNEE_ID'];
+            $dossierTbl['DOSSIER_ID']                   = $dossier['DOSSIER_ID'];
+            $dossierTbl['INTERVENANT_ID']               = $dossier['INTERVENANT_ID'];
+            $dossierTbl['ACTIF']                        = $dossier['DOSSIER'];
+            $dossierTbl['VALIDATION_ID']                = $dossier['VALIDATION_ID'];
+            $dossierTbl['VALIDATION_COMPLEMENTAIRE_ID'] = $dossier['VALIDATION_COMPLEMENTAIRE_ID'];
             $this->calculateurCompletude->calculer($dossier, $dossierTbl);
             $this->tblData[$dossier['INTERVENANT_ID']] = $dossierTbl;
         }
     }
 
-    protected function enregistrement(TableauBord $tableauBord, array $params):void
+
+
+    protected function enregistrement(TableauBord $tableauBord, array $params): void
     {
         try {
-            $key = $tableauBord->getOption('key');
+            $key   = $tableauBord->getOption('key');
             $table = $this->getBdd()->getTable('TBL_DOSSIER');
 
             $options = [
@@ -100,19 +104,19 @@ class DossierProcess implements ProcessInterface
 
     }
 
+
+
     protected function dossierSql(): string
     {
         return $this->getServiceBdd()->getViewDefinition('V_TBL_DOSSIER');
     }
 
+
+
     public function getCalculateurCompletude(): CalculateurCompletude
     {
         return $this->calculateurCompletude;
     }
-
-
-
-
 
 
 }

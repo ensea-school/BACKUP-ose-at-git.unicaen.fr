@@ -3,18 +3,12 @@
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
  * @var $form               \Dossier\Form\IntervenantDossierForm
- * @var $intervenant        \Intervenant\Entity\Db\Intervenant
- * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
 use Dossier\Assertion\IntervenantDossierAssertion;
 
-$viewIdentite = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
-
-/**
- * @var \Dossier\Entity\Db\IntervenantDossier $intervenantDossier
- */
+$viewIdentite = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
 
 //$Dossier = $dossier;
 
@@ -31,7 +25,7 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
         <div class="card-header">
             IDENTITÉ COMPLEMENTAIRE
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeIdentiteComp()): ?>
+                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeIdentiteComp()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -46,8 +40,8 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
                 <?= $this->formLabel($dossierIdentiteComplementaire->get('paysNaissance')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getPaysNaissance())) {
-                        echo ($viewIdentite) ? $intervenantDossier->getPaysNaissance()->getLibelle() : '*******************';
+                    if (!empty($tblDossier->getDossier()->getPaysNaissance())) {
+                        echo ($viewIdentite) ? $tblDossier->getDossier()->getPaysNaissance()->getLibelle() : '*******************';
                     }
 
 
@@ -58,20 +52,20 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
                 <?= $this->formLabel($dossierIdentiteComplementaire->get('paysNationalite')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getPaysNationalite())) {
-                        echo ($viewIdentite) ? $intervenantDossier->getPaysNationalite()->getLibelle() : '*******************';
+                    if (!empty($tblDossier->getDossier()->getPaysNationalite())) {
+                        echo ($viewIdentite) ? $tblDossier->getDossier()->getPaysNationalite()->getLibelle() : '*******************';
                     }
 
                     ?>
                 </div>
             </div>
-            <?php if ($intervenantDossier->getPaysNaissance() && $intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE'): ?>
+            <?php if ($tblDossier->getDossier()->getPaysNaissance() && $tblDossier->getDossier()->getPaysNaissance()->getLibelle() == 'FRANCE'): ?>
                 <div class="form-group">
                     <?= $this->formLabel($dossierIdentiteComplementaire->get('departementNaissance')); ?>
                     <div class="input-group cold-md-6 readonly">
                         <?php
-                        if (!empty($intervenantDossier->getDepartementNaissance())) {
-                            echo ($viewIdentite) ? $intervenantDossier->getDepartementNaissance()->getLibelle() : '*******************';
+                        if (!empty($tblDossier->getDossier()->getDepartementNaissance())) {
+                            echo ($viewIdentite) ? $tblDossier->getDossier()->getDepartementNaissance()->getLibelle() : '*******************';
                         }
                         ?>
                     </div>
@@ -81,8 +75,8 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
                 <?= $this->formLabel($dossierIdentiteComplementaire->get('villeNaissance')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getCommuneNaissance())) {
-                        echo ($viewIdentite) ? $intervenantDossier->getCommuneNaissance() : '*******************';
+                    if (!empty($tblDossier->getDossier()->getCommuneNaissance())) {
+                        echo ($viewIdentite) ? $tblDossier->getDossier()->getCommuneNaissance() : '*******************';
                     }
 
 
@@ -95,8 +89,8 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
                         <?= $this->formLabel($dossierIdentiteComplementaire->get('situationMatrimoniale')); ?>
                         <div class="input-group cold-md-6 readonly">
                             <?php
-                            if (!empty($intervenantDossier->getSituationMatrimoniale())) {
-                                echo ($viewIdentite) ? $intervenantDossier->getSituationMatrimoniale()->getLibelle() : '********';
+                            if (!empty($tblDossier->getDossier()->getSituationMatrimoniale())) {
+                                echo ($viewIdentite) ? $tblDossier->getDossier()->getSituationMatrimoniale()->getLibelle() : '********';
                             }
                             ?>
                         </div>
@@ -108,8 +102,8 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
                         <div class="input-group cold-md-6 readonly">
                             <?php
                             if (!empty($dossierIdentiteComplementaire->get('dateSituationMatrimoniale')->getValue())) {
-                                $dateMatrimoniale = $dossierIdentiteComplementaire->get('dateSituationMatrimoniale')->getValue();
-                                $dateMatrimonialeFormatted = DateTime::createFromFormat('Y-m-d',$dateMatrimoniale)->format('d/m/Y');
+                                $dateMatrimoniale          = $dossierIdentiteComplementaire->get('dateSituationMatrimoniale')->getValue();
+                                $dateMatrimonialeFormatted = DateTime::createFromFormat('Y-m-d', $dateMatrimoniale)->format('d/m/Y');
                                 echo ($viewIdentite) ? $dateMatrimonialeFormatted : '**/**/****';
                             }
                             ?>

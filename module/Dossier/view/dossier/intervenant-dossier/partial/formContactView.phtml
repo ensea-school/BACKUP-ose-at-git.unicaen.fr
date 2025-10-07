@@ -3,14 +3,12 @@
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
  * @var $form               \Dossier\Form\IntervenantDossierForm
- * @var $intervenant        \Intervenant\Entity\Db\Intervenant
- * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
 use Dossier\Assertion\IntervenantDossierAssertion;
 
-$viewContact = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_CONTACT);
+$viewContact = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_CONTACT);
 
 /**
  * @var \Dossier\Entity\Db\IntervenantDossier $intervenantDossier
@@ -28,7 +26,7 @@ $dossierContact = $form->get('DossierContact');
         <div class="card-header">
             CONTACT
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeContact()): ?>
+                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeContact()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -40,8 +38,8 @@ $dossierContact = $form->get('DossierContact');
                 <?= $this->formLabel($dossierContact->get('emailEtablissement')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getEmailPro())) {
-                        echo ($viewContact) ? $intervenantDossier->getEmailPro() : '**********@*****.com';
+                    if (!empty($tblDossier->getDossier()->getEmailPro())) {
+                        echo ($viewContact) ? $tblDossier->getDossier()->getEmailPro() : '**********@*****.com';
                     }
                     ?>
                 </div>
@@ -50,8 +48,8 @@ $dossierContact = $form->get('DossierContact');
                 <?= $this->formLabel($dossierContact->get('emailPersonnel')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getEmailPerso())) {
-                        echo ($viewContact) ? $intervenantDossier->getEmailPerso() : '**********@*****.com';
+                    if (!empty($tblDossier->getDossier()->getEmailPerso())) {
+                        echo ($viewContact) ? $tblDossier->getDossier()->getEmailPerso() : '**********@*****.com';
                     }
                     ?>
                 </div>
@@ -60,8 +58,8 @@ $dossierContact = $form->get('DossierContact');
                 <?= $this->formLabel($dossierContact->get('telephoneProfessionnel')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getTelPro())) {
-                        echo ($viewContact) ? $intervenantDossier->getTelPro() : '** ** ** ** **';
+                    if (!empty($tblDossier->getDossier()->getTelPro())) {
+                        echo ($viewContact) ? $tblDossier->getDossier()->getTelPro() : '** ** ** ** **';
                     }
                     ?>
                 </div>
@@ -70,8 +68,8 @@ $dossierContact = $form->get('DossierContact');
                 <?= $this->formLabel($dossierContact->get('telephonePersonnel')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getTelPerso())) {
-                        echo ($viewContact) ? $intervenantDossier->getTelPerso() : '** ** ** ** **';
+                    if (!empty($tblDossier->getDossier()->getTelPerso())) {
+                        echo ($viewContact) ? $tblDossier->getDossier()->getTelPerso() : '** ** ** ** **';
                     }
                     ?>
                 </div>

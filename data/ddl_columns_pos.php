@@ -1567,6 +1567,7 @@ return [
         'AVANT_RECRUTEMENT_ATTENDUE',
         'APRES_RECRUTEMENT_REALISEE',
         'AVANT_RECRUTEMENT_REALISEE',
+        'VALIDATION_COMPLEMENTAIRE_ID',
     ],
     'TBL_LIEN'                            => [
         'ID',

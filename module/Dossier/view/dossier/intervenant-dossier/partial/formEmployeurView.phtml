@@ -2,14 +2,12 @@
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
  * @var $form               \Dossier\Form\IntervenantDossierForm
- * @var $intervenant        \Intervenant\Entity\Db\Intervenant
- * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
 use Dossier\Assertion\IntervenantDossierAssertion;
 
-$viewEmployeur = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_EMPLOYEUR);
+$viewEmployeur = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_EMPLOYEUR);
 $form->prepare();
 $dossierEmployeur = $form->get('DossierEmployeur');
 
@@ -21,7 +19,7 @@ $dossierEmployeur = $form->get('DossierEmployeur');
         <div class="card-header">
             EMPLOYEUR PRINCIPAL
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeEmployeur()): ?>
+                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeEmployeur()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -34,9 +32,9 @@ $dossierEmployeur = $form->get('DossierEmployeur');
                 <?= $this->formLabel($dossierEmployeur->get('employeur')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getEmployeur())) {
-                        $employeur = $intervenantDossier->getEmployeur()->getRaisonSociale();
-                        $siren     = $intervenantDossier->getEmployeur()->getSiren();
+                    if (!empty($tblDossier->getDossier()->getEmployeur())) {
+                        $employeur = $tblDossier->getDossier()->getEmployeur()->getRaisonSociale();
+                        $siren     = $tblDossier->getDossier()->getEmployeur()->getSiren();
                         echo ($viewEmployeur) ? $employeur . '(SIRET : ' . $siren . ')' : '***************';
                     }
                     ?>

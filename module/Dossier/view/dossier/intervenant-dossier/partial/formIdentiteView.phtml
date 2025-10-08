@@ -3,18 +3,12 @@
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
  * @var $form               \Dossier\Form\IntervenantDossierForm
- * @var $intervenant        \Intervenant\Entity\Db\Intervenant
- * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
 use Dossier\Assertion\IntervenantDossierAssertion;
 
-$viewIdentite = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
-
-/**
- * @var \Dossier\Entity\Db\IntervenantDossier $intervenantDossier
- */
+$viewIdentite = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
 
 //$Dossier = $dossier;
 
@@ -31,7 +25,7 @@ $dossierIdentite = $form->get('DossierIdentite');
         <div class="card-header">
             IDENTITÉ
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeIdentite()): ?>
+                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeIdentite()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -44,8 +38,8 @@ $dossierIdentite = $form->get('DossierIdentite');
                 <?= $this->formLabel($dossierIdentite->get('civilite')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getCivilite())) {
-                        echo $intervenantDossier->getCivilite()->getLibelleCourt();
+                    if (!empty($tblDossier->getDossier()->getCivilite())) {
+                        echo $tblDossier->getDossier()->getCivilite()->getLibelleCourt();
                     }
                     ?>
                 </div>
@@ -54,8 +48,8 @@ $dossierIdentite = $form->get('DossierIdentite');
                 <?= $this->formLabel($dossierIdentite->get('nomUsuel')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getNomUsuel())) {
-                        echo $intervenantDossier->getNomUsuel();
+                    if (!empty($tblDossier->getDossier()->getNomUsuel())) {
+                        echo $tblDossier->getDossier()->getNomUsuel();
                     }
                     ?>
                 </div>
@@ -64,8 +58,8 @@ $dossierIdentite = $form->get('DossierIdentite');
                 <?= $this->formLabel($dossierIdentite->get('nomPatronymique')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getNomPatronymique())) {
-                        echo $intervenantDossier->getNomPatronymique();
+                    if (!empty($tblDossier->getDossier()->getNomPatronymique())) {
+                        echo $tblDossier->getDossier()->getNomPatronymique();
                     }
                     ?>
                 </div>
@@ -74,8 +68,8 @@ $dossierIdentite = $form->get('DossierIdentite');
                 <?= $this->formLabel($dossierIdentite->get('prenom')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getPrenom())) {
-                        echo $intervenantDossier->getPrenom();
+                    if (!empty($tblDossier->getDossier()->getPrenom())) {
+                        echo $tblDossier->getDossier()->getPrenom();
                     }
                     ?>
                 </div>

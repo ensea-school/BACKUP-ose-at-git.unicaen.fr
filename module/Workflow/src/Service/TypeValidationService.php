@@ -20,7 +20,7 @@ class TypeValidationService extends AbstractEntityService
      * @return string
      * @throws \RuntimeException
      */
-    public function getEntityClass ()
+    public function getEntityClass()
     {
         return TypeValidation::class;
     }
@@ -32,14 +32,14 @@ class TypeValidationService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias ()
+    public function getAlias()
     {
         return 'typev';
     }
 
 
 
-    public function getMission (): TypeValidation
+    public function getMission(): TypeValidation
     {
         return $this->getByCode(TypeValidation::MISSION);
     }
@@ -52,7 +52,7 @@ class TypeValidationService extends AbstractEntityService
      *
      * @return TypeValidation
      */
-    public function getByCode ($code)
+    public function getByCode($code)
     {
         if (null == $code) return null;
 
@@ -61,77 +61,84 @@ class TypeValidationService extends AbstractEntityService
 
 
 
-    public function getOffreEmploi (): TypeValidation
+    public function getOffreEmploi(): TypeValidation
     {
         return $this->getByCode(TypeValidation::OFFRE_EMPLOI);
     }
 
 
 
-    public function getCandidature (): TypeValidation
+    public function getCandidature(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CANDIDATURE);
     }
 
 
 
-    public function getMissionRealise (): TypeValidation
+    public function getMissionRealise(): TypeValidation
     {
         return $this->getByCode(TypeValidation::MISSION_REALISE);
     }
 
 
 
-    public function getDonneesPerso (): TypeValidation
+    public function getDonneesPerso(): TypeValidation
     {
         return $this->getByCode(TypeValidation::DONNEES_PERSO);
     }
 
 
 
-    public function getEnseignement (): TypeValidation
+    public function getDonneesPersoComplementaire(): TypeValidation
+    {
+        return $this->getByCode(TypeValidation::DONNEES_PERSO_COMP);
+    }
+
+
+
+    public function getEnseignement(): TypeValidation
     {
         return $this->getByCode(TypeValidation::ENSEIGNEMENT);
     }
 
 
 
-    public function getReferentiel (): TypeValidation
+    public function getReferentiel(): TypeValidation
     {
         return $this->getByCode(TypeValidation::REFERENTIEL);
     }
 
 
 
-    public function getContrat (): TypeValidation
+    public function getContrat(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CONTRAT);
     }
 
 
 
-    public function getFichier (): TypeValidation
+    public function getFichier(): TypeValidation
     {
         return $this->getByCode(TypeValidation::FICHIER);
     }
 
 
 
-    public function getPieceJointe (): TypeValidation
+    public function getPieceJointe(): TypeValidation
     {
         return $this->getByCode(TypeValidation::PIECE_JOINTE);
     }
 
 
 
-    public function getClotureRealise (): TypeValidation
+    public function getClotureRealise(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CLOTURE_REALISE);
     }
 
 
 
-    public function getDeclaration (): TypeValidation
+    public function getDeclaration(): TypeValidation
     {
         return $this->getByCode(TypeValidation::DECLARATION_PRIME);
     }
@@ -145,9 +152,10 @@ class TypeValidationService extends AbstractEntityService
      *
      * @return TypeValidation[]
      */
-    public function orderBy (?QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        [$qb,
+         $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");
 
         return $qb;

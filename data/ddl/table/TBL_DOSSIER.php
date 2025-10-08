@@ -285,6 +285,18 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
+        'VALIDATION_COMPLEMENTAIRE_ID'                         => [
+            'name'        => 'VALIDATION_COMPLEMENTAIRE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 25,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

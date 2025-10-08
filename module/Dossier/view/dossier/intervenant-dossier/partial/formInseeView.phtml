@@ -3,14 +3,12 @@
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
  * @var $form               \Dossier\Form\IntervenantDossierForm
- * @var $intervenant        \Intervenant\Entity\Db\Intervenant
- * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
 use Dossier\Assertion\IntervenantDossierAssertion;
 
-$viewInsee = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_INSEE);
+$viewInsee = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_INSEE);
 
 /**
  * @var \Dossier\Entity\Db\IntervenantDossier $intervenantDossier
@@ -26,7 +24,7 @@ $dossierInsee = $form->get('DossierInsee');
         <div class="card-header">
             INSEE
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeInsee()): ?>
+                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeInsee()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -38,8 +36,8 @@ $dossierInsee = $form->get('DossierInsee');
                 <?= $this->formLabel($dossierInsee->get('numeroInsee')); ?>
                 <div class="input-group cold-md-6 readonly">
                     <?php
-                    if (!empty($intervenantDossier->getNumeroInsee())) {
-                        echo ($viewInsee) ? $intervenantDossier->getNumeroInsee() : '*************************';
+                    if (!empty($tblDossier->getDossier()->getNumeroInsee())) {
+                        echo ($viewInsee) ? $tblDossier->getDossier()->getNumeroInsee() : '*************************';
                     }
                     ?>
                 </div>
@@ -49,7 +47,7 @@ $dossierInsee = $form->get('DossierInsee');
                 <div class="input-group cold-md-6 readonly">
                     <?php
                     if ($viewInsee) {
-                        echo ($intervenantDossier->getNumeroInseeProvisoire()) ? 'OUI' : 'NON';
+                        echo ($tblDossier->getDossier()->getNumeroInseeProvisoire()) ? 'OUI' : 'NON';
                     }
                     ?>
                 </div>

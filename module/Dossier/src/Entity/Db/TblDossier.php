@@ -20,6 +20,8 @@ class TblDossier
 
     private ?Validation $validation;
 
+    private ?Validation $validationComplementaire;
+
     private bool $completudeIdentite;
 
     private bool $completudeIdentiteComp;
@@ -109,6 +111,13 @@ class TblDossier
     public function getValidation(): ?Validation
     {
         return $this->validation;
+    }
+
+
+
+    public function getValidationComplementaire(): ?Validation
+    {
+        return $this->validationComplementaire;
     }
 
 

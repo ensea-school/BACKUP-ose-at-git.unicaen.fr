@@ -9,7 +9,8 @@ namespace Application\Provider;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
+class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
+{
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                  = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION              = 'agrement-conseil-academique-suppression';
@@ -86,8 +87,10 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const DOSSIER_CONTACT_EDITION                              = 'dossier-contact-edition';
     const DOSSIER_CONTACT_VISUALISATION                        = 'dossier-contact-visualisation';
     const DOSSIER_DEVALIDATION                                 = 'dossier-devalidation';
+    const DOSSIER_DEVALIDATION_COMP                            = 'dossier-devalidation-complementaire';
     const DOSSIER_DIFFERENCES                                  = 'dossier-differences';
     const DOSSIER_EDITION                                      = 'dossier-edition';
+    const DOSSIER_EDITION_COMP                                 = 'dossier-edition-complementaire';
     const DOSSIER_EMPLOYEUR_EDITION                            = 'dossier-employeur-edition';
     const DOSSIER_EMPLOYEUR_VISUALISATION                      = 'dossier-employeur-visualisation';
     const DOSSIER_IDENTITE_EDITION                             = 'dossier-identite-edition';
@@ -97,7 +100,9 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const DOSSIER_PURGER_DIFFERENCES                           = 'dossier-purger-differences';
     const DOSSIER_SUPPRESSION                                  = 'dossier-suppression';
     const DOSSIER_VALIDATION                                   = 'dossier-validation';
+    const DOSSIER_VALIDATION_COMP                              = 'dossier-validation-complementaire';
     const DOSSIER_VISUALISATION                                = 'dossier-visualisation';
+    const DOSSIER_VISUALISATION_COMP                           = 'dossier-visualisation-complementaire';
     const DROIT_AFFECTATION_EDITION                            = 'droit-affectation-edition';
     const DROIT_AFFECTATION_VISUALISATION                      = 'droit-affectation-visualisation';
     const DROIT_PRIVILEGE_EDITION                              = 'droit-privilege-edition';

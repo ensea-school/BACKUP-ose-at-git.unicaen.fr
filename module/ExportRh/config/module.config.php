@@ -92,7 +92,6 @@ return [
 
     'services'    => [
         Service\ExportRhService::class => Service\ExportRhServiceFactory::class,
-        ExportRhAssertion::class       => \Framework\Authorize\AssertionFactory::class,
         SihamConnecteur::class         => SihamConnecteurFactory::class,
     ],
     'controllers' => [

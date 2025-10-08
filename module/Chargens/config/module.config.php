@@ -4,7 +4,6 @@ namespace Chargens;
 
 use Application\Provider\Privileges;
 use Chargens\Assertion\ChargensAssertion;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 
 return [
@@ -258,7 +257,6 @@ return [
         Service\ScenarioService::class               => Service\ScenarioServiceFactory::class,
         Service\SeuilChargeService::class            => Service\SeuilChargeServiceFactory::class,
         Provider\ChargensProvider::class             => Provider\ChargensProviderFactory::class,
-        Assertion\ChargensAssertion::class           => AssertionFactory::class,
         Command\ChargensCalculEffectifCommand::class => Command\ChargensCalculEffectifCommandFactory::class,
     ],
 

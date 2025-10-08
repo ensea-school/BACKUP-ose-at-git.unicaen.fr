@@ -55,18 +55,8 @@ class ChargensAssertion extends AbstractAssertion
 
 
 
-    /**
-     * @param string $controller
-     * @param string $action
-     * @param string $privilege
-     *
-     * @return boolean
-     */
-    protected function assertController(string $controller, ?string $action = null, ?string $privilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
         // Si c'est bon alors on affine...
         switch ($action) {
             case 'scenario-supprimer':
@@ -83,9 +73,6 @@ class ChargensAssertion extends AbstractAssertion
                         return true;
                     }
                 }
-
-
-            break;
         }
 
         return true;

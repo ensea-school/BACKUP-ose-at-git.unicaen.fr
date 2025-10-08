@@ -3,7 +3,6 @@
 namespace Administration;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 
 return [
@@ -40,9 +39,5 @@ return [
 
     'controllers' => [
         Controller\GestionController::class => Controller\GestionControllerFactory::class,
-    ],
-
-    'services' => [
-        Assertion\GestionAssertion::class => AssertionFactory::class,
     ],
 ];

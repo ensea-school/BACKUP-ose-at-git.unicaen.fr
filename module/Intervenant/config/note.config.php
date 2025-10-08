@@ -118,6 +118,5 @@ return [
     'services' => [
         Service\NoteService::class            => Service\NoteServiceFactory::class,
         Service\TypeNoteService::class        => Service\TypeNoteServiceFactory::class,
-        Assertion\NoteAssertion::class        => \Framework\Authorize\AssertionFactory::class,
     ],
 ];

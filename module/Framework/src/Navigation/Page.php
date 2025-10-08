@@ -15,6 +15,8 @@ class Page
     private Router    $router;
     private Authorize $authorize;
 
+    private ?bool $isVisible = null;
+
 
 
     public function __construct(
@@ -50,25 +52,10 @@ class Page
 
     public function isVisible(): bool
     {
-        $visible = $this->data['visible'] ?? true;
-
-        if (false === $visible) {
-            return false;
+        if (null === $this->isVisible) {
+            $this->isVisible = $this->authorize->isAllowedPage($this);
         }
-
-        $ressource = $this->data['resource'] ?? null;
-
-
-        if (is_string($ressource)) {
-            $visible = $this->authorize->isAllowed($ressource);
-        }
-
-        if (is_string($visible) && $this->container->has($visible)) {
-            $assertion = $this->container->get($visible);
-            $visible   = $assertion->__invoke($this->data);
-        }
-
-        return $visible;
+        return $this->isVisible;
     }
 
 
@@ -151,7 +138,7 @@ class Page
     {
         if (null !== $key) {
             return $this->data[$key] ?? null;
-        }else{
+        } else {
             return $this->data;
         }
     }
@@ -231,14 +218,14 @@ class Page
             $attribs['aria-current'] = 'page';
         }
 
-        foreach($attribs as $attrib => $value) {
+        foreach ($attribs as $attrib => $value) {
             if ($value) {
-                $attribs[$attrib] = ' '.$attrib.'="'.htmlspecialchars($value, ENT_QUOTES).'"';
-            }else{
+                $attribs[$attrib] = ' ' . $attrib . '="' . htmlspecialchars($value, ENT_QUOTES) . '"';
+            } else {
                 unset($attribs[$attrib]);
             }
         }
 
-        return '<a' .implode('', $attribs) . '>' . $label . '</a>';
+        return '<a' . implode('', $attribs) . '>' . $label . '</a>';
     }
 }

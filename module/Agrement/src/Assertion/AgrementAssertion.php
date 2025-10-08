@@ -9,6 +9,7 @@ use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Contrat\Service\TblContratServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
+use Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
@@ -26,13 +27,6 @@ class AgrementAssertion extends AbstractAssertion
     use TblContratServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
-
-    /* ---- Routage général ---- */
-    public function __invoke(array $page) // gestion des visibilités de menus
-    {
-        return $this->assertPage($page);
-    }
-
 
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
@@ -79,15 +73,12 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertController($controller, $action = null, $privilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
         $typeAgrement = $this->getMvcEvent()->getParam('typeAgrement');
         /* @var $typeAgrement TypeAgrement */
-
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch ($action) {
             case 'lister':
@@ -132,8 +123,9 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(array $page): bool
+    protected function assertPage(Page $page): bool
     {
+        $page = $page->getData();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         if ($this->getServiceContext()->getIntervenant() && str_starts_with($page['route'], 'gestion/')) {

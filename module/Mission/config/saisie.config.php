@@ -3,7 +3,6 @@
 namespace Mission;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 
 
@@ -151,9 +150,5 @@ return [
             'resources' => 'VolumeHoraireMission',
             'assertion' => Assertion\SaisieAssertion::class,
         ],
-    ],
-
-    'services' => [
-        Assertion\SaisieAssertion::class => AssertionFactory::class,
     ],
 ];

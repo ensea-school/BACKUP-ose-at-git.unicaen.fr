@@ -308,14 +308,7 @@ class ContratAssertion extends AbstractAssertion
 
 
 
-    /**
-     * @param string $controller
-     * @param string $action
-     * @param string $privilege
-     *
-     * @return boolean
-     */
-    protected function assertController($controller, $action = null, $privilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 

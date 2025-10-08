@@ -5,7 +5,6 @@ namespace Enseignement;
 use Application\Provider\Privileges;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
-use Framework\Authorize\AssertionFactory;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Workflow\Entity\Db\WorkflowEtape;
 
@@ -364,7 +363,6 @@ return [
         Processus\ValidationEnseignementProcessus::class => InvokableFactory::class,
         Service\ServiceService::class                    => InvokableFactory::class,
         Service\VolumeHoraireService::class              => InvokableFactory::class,
-        Assertion\EnseignementAssertion::class           => AssertionFactory::class,
     ],
 
 

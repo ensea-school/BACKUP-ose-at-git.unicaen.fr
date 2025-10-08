@@ -627,8 +627,6 @@ return [
         Service\NiveauFormationService::class           => Service\Factory\NiveauFormationServiceFactory::class,
         Service\ElementModulateurService::class         => Service\Factory\ElementModulateurServiceFactory::class,
         Service\OffreFormationService::class            => Service\Factory\OffreFormationServiceFactory::class,
-        Assertion\OffreDeFormationAssertion::class      => \Framework\Authorize\AssertionFactory::class,
-        Assertion\TypeInterventionAssertion::class      => \Framework\Authorize\AssertionFactory::class,
         Service\VolumeHoraireEnsService::class          => Service\Factory\VolumeHoraireEnsServiceFactory::class,
         Processus\ReconductionProcessus::class          => Processus\Factory\ReconductionProcessusFactory::class,
         Service\TypeInterventionService::class          => Service\Factory\TypeInterventionServiceFactory::class,

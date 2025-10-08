@@ -2,9 +2,6 @@
 
 namespace Application;
 
-
-use UnicaenPrivilege\Guard\PrivilegeController;
-use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 use Laminas\Config\Factory;
 use Laminas\Stdlib\Glob;
 
@@ -16,7 +13,6 @@ class ConfigFactory
         $paths = Glob::glob($dir . '/config/{,*.}{config}.php', Glob::GLOB_BRACE);
 
         $config      = Factory::fromFiles($paths);
-        $routeGuards = [];
 
         $finalConfig = [];
 
@@ -44,18 +40,10 @@ class ConfigFactory
             'template_map'        => include $dir . '/template_map.php',
         ];
 
-        if (isset($config['console'])) {
-            $finalConfig['console']['router']['routes'] = [];
-            foreach ($config['console'] as $cr => $cc) {
-                $finalConfig['console']['router']['routes'][$cr] = self::routeSimplified($cc, $routeGuards, true);
-            }
-            unset($config['console']);
-        }
-
         if (isset($config['routes'])) {
             $finalConfig['router']['routes'] = [];
             foreach ($config['routes'] as $cr => $cc) {
-                $finalConfig['router']['routes'][$cr] = self::routeSimplified($cc, $routeGuards, false);
+                $finalConfig['router']['routes'][$cr] = self::routeSimplified($cc, false);
             }
             unset($config['routes']);
         }
@@ -69,30 +57,6 @@ class ConfigFactory
                 ],
             ];
             unset($config['navigation']);
-        }
-
-        if (!empty($routeGuards)) {
-            foreach ($routeGuards as $routeGuard) {
-                $finalConfig['bjyauthorize']['guards'][PrivilegeController::class][] = $routeGuard;
-            }
-        }
-
-        if (isset($config['rules'])) {
-            if (!isset($finalConfig['bjyauthorize'])) $finalConfig['bjyauthorize'] = [];
-            $finalConfig['bjyauthorize']['rule_providers'] = [
-                PrivilegeRuleProvider::class => [
-                    'allow' => $config['rules'],
-                ],
-            ];
-            unset($config['rules']);
-        }
-
-        if (isset($config['resources'])) {
-            if (!isset($finalConfig['bjyauthorize'])) $finalConfig['bjyauthorize'] = [];
-            $finalConfig['bjyauthorize']['resource_providers'] = [
-                \BjyAuthorize\Provider\Resource\Config::class => $config['resources'],
-            ];
-            unset($config['resources']);
         }
 
         if (isset($config['controllers'])) {
@@ -135,59 +99,8 @@ class ConfigFactory
 
 
 
-    public static function autoloaderConfig(string $dir, string $namespace): array
+    public static function routeSimplified(array $config, bool $isConsole = false): array
     {
-        return [
-            'Laminas\Loader\ClassMapAutoloader' => [
-                $dir . '/autoload_classmap.php',
-            ],
-            'Laminas\Loader\StandardAutoloader' => [
-                'namespaces' => [
-                    $namespace => $dir . '/src',
-                ],
-            ],
-        ];
-    }
-
-
-
-    public static function routeSimplified(array $config, array &$routeGuards, bool $isConsole = false): array
-    {
-        /* Détection des guards */
-        if (isset($config['controller']) && isset($config['action']) && isset($config['privileges'])) {
-            $routeGuard = [
-                'controller' => $config['controller'],
-                'action'     => $config['action'],
-                'privileges' => $config['privileges'],
-            ];
-            unset($config['privileges']);
-
-            if (isset($config['assertion'])) {
-                $routeGuard['assertion'] = $config['assertion'];
-
-                unset($config['assertion']);
-            }
-
-            $routeGuards[] = $routeGuard;
-        }
-
-        if (isset($config['controller']) && isset($config['action']) && isset($config['roles'])) {
-            $routeGuard = [
-                'controller' => $config['controller'],
-                'action'     => $config['action'],
-                'roles'      => $config['roles'],
-            ];
-            unset($config['roles']);
-
-            if (isset($config['assertion'])) {
-                $routeGuard['assertion'] = $config['assertion'];
-
-                unset($config['assertion']);
-            }
-
-            $routeGuards[] = $routeGuard;
-        }
-
         /* On remonte ces params dans le sous-menu options */
         $optionsParams = ['route', 'defaults', 'constraints'];
         foreach ($optionsParams as $param) {
@@ -221,7 +134,7 @@ class ConfigFactory
         /* Si il y a des routes filles, on les parse aussi */
         if (isset($config['child_routes'])) {
             foreach ($config['child_routes'] as $sRoute => $sConfig) {
-                $config['child_routes'][$sRoute] = self::routeSimplified($sConfig, $routeGuards);
+                $config['child_routes'][$sRoute] = self::routeSimplified($sConfig);
             }
         }
 

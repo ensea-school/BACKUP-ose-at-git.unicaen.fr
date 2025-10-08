@@ -6,6 +6,8 @@ use Application\Provider\Privileges;
 use Application\Service\ContextService;
 use Doctrine\ORM\EntityManager;
 use Framework\Application\Application;
+use Framework\Container\Autowire;
+use Framework\User\UserManager;
 use Framework\User\UserProfile;
 use Framework\User\UserProfileInterface;
 use Framework\User\UserAdapterInterface;
@@ -34,6 +36,9 @@ class UserProvider implements UserAdapterInterface
         private readonly LdapConnecteur        $ldap,
         private readonly AuthenticationService $authenticationService,
         private readonly ContextService        $contextService,
+
+        #[Autowire(config:'application/privileges')]
+        private readonly ?array $customPrivileges,
     )
     {
 
@@ -167,25 +172,31 @@ class UserProvider implements UserAdapterInterface
      */
     public function getPrivileges(?UserProfileInterface $profile): array
     {
+        $privileges = [];
+
         /** @var Statut $statut */
         if ($statut = $profile?->getContext('statut')) {
             /** @var Statut|null $statut */
-            return array_keys($statut->getPrivileges());
+            $privileges = array_keys($statut->getPrivileges());
         } elseif ($role = $profile?->getContext('role')) {
             /** @var Role|null $role */
             /** @var Privilege[] $ps */
             if (Role::ADMINISTRATEUR === $role->getCode()) {
-                return $this->getAdministrateurPrivileges();
+                $privileges = $this->getAdministrateurPrivileges();
             } else {
                 $ps         = $role->getPrivileges();
                 $privileges = [];
                 foreach ($ps as $privilege) {
                     $privileges[] = $privilege->getFullCode();
                 }
-                return $privileges;
+                $customPrivileges = $this->customPrivileges[$role->getCode()] ?? [];
+                foreach( $customPrivileges as $privilege ){
+                    $privileges[] = $privilege;
+                }
             }
         }
-        return [];
+
+        return $privileges;
     }
 
 

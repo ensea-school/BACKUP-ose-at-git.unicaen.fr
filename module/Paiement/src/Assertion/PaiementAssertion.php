@@ -4,6 +4,7 @@ namespace Paiement\Assertion;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
+use Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Workflow\Entity\Db\WorkflowEtape;
@@ -19,13 +20,6 @@ class PaiementAssertion extends AbstractAssertion
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
 
-    /* ---- Routage général ---- */
-    public function __invoke (array $page): bool // gestion des visibilités de menus
-    {
-        return $this->assertPage($page);
-    }
-
-
 
     /**
      * @param string $controller
@@ -34,15 +28,11 @@ class PaiementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController ($controller, $action = null, $privilege = null): bool
+    protected function assertController (string $controller, ?string $action): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
-        // Si c'est bon alors on affine...
         switch ($action) {
             case 'demandemiseenpaiement':
                 return $this->assertEtapeAtteignable(WorkflowEtape::DEMANDE_MEP, $intervenant);
@@ -68,8 +58,9 @@ class PaiementAssertion extends AbstractAssertion
     }
 
 
-    protected function assertPage (array $page): bool
+    protected function assertPage (Page $page): bool
     {
+        $page = $page->getData();
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
             $intervenant = $this->getMvcEvent()->getParam('intervenant');

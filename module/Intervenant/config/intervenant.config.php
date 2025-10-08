@@ -204,7 +204,6 @@ return [
 
 
     'services' => [
-        Assertion\IntervenantAssertion::class => \Framework\Authorize\AssertionFactory::class,
         Service\IntervenantService::class     => Service\IntervenantServiceFactory::class,
         Processus\IntervenantProcessus::class => Processus\IntervenantProcessusFactory::class,
         Service\SituationMatrimonialeService::class   => Service\SituationMatrimonialeServiceFactory::class,

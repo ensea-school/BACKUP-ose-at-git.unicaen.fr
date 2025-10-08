@@ -47,7 +47,7 @@ class NoteAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         /**
          * @var Note $note

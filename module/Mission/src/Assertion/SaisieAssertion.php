@@ -27,12 +27,8 @@ class SaisieAssertion extends AbstractAssertion
     use ContextServiceAwareTrait;
 
 
-    protected function assertController($controller, $action = null, $privilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
-        // Si c'est bon alors on affine...
         $entity = $this->getServiceContext()->getIntervenant();
         if (!$entity) {
             $entity = $this->getMvcEvent()->getParam('intervenant');

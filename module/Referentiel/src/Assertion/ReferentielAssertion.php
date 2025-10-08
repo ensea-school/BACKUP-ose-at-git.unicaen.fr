@@ -5,6 +5,7 @@ namespace Referentiel\Assertion;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
+use Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
@@ -39,15 +40,10 @@ class ReferentielAssertion extends AbstractAssertion
     use ServiceAssertionAwareTrait;
 
 
-    /* ---- Routage général ---- */
-    public function __invoke(array $page): bool // gestion des visibilités de menus
-    {
-        return $this->assertPage($page);
-    }
 
-
-    protected function assertPage(array $page): bool
+    protected function assertPage(Page $page): bool
     {
+        $page = $page->getData();
         $intervenant = null;
         if (isset($page['workflow-etape-code'])) {
             $etape = $page['workflow-etape-code'];
@@ -164,7 +160,7 @@ class ReferentielAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */

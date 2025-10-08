@@ -281,7 +281,6 @@ return [
         ContratController::class => Controller\ContratControllerFactory::class,
     ],
     'services'     => [
-        Assertion\ContratAssertion::class         => \Framework\Authorize\AssertionFactory::class,
         Service\ContratService::class             => Service\ContratServiceFactory::class,
         Service\TypeContratService::class         => Service\TypeContratServiceFactory::class,
         Processus\ContratProcessus::class         => Processus\ContratProcessusFactory::class,

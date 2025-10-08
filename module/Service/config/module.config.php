@@ -3,7 +3,6 @@
 namespace Service;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\CampagneSaisieController;
@@ -282,8 +281,6 @@ return [
         Service\CampagneSaisieService::class           => InvokableFactory::class,
         Service\RegleStructureValidationService::class => InvokableFactory::class,
         Service\ResumeService::class                   => InvokableFactory::class,
-        Assertion\ClotureAssertion::class              => AssertionFactory::class,
-        Assertion\ServiceAssertion::class              => AssertionFactory::class,
         Service\RechercheService::class                => InvokableFactory::class,
         Hydrator\RechercheHydrator::class              => InvokableFactory::class,
     ],

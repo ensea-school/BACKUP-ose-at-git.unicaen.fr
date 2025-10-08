@@ -258,7 +258,6 @@ return [
         Service\TblPaiementService::class                        => Service\TblPaiementServiceFactory::class,
         Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementServiceFactory::class,
         Service\NumeroPriseEnChargeService::class                => Service\NumeroPriseEnChargeServiceFactory::class,
-        Assertion\PaiementAssertion::class                       => \Framework\Authorize\AssertionFactory::class,
         PaiementProcess::class                                   => PaiementProcessFactory::class,
     ],
 

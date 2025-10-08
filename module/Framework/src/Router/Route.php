@@ -64,7 +64,7 @@ class Route
         }
 
         if (!empty($data['assertion'])) {
-            $this->privileges = $data['assertion'];
+            $this->assertion = $data['assertion'];
         }
 
         foreach ($defaults as $k => $v) {

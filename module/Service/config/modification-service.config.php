@@ -3,7 +3,6 @@
 namespace Service;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\ModificationServiceDuController;
@@ -147,7 +146,6 @@ return [
     'services' => [
         Service\MotifModificationServiceDuService::class => InvokableFactory::class,
         Service\ModificationServiceDuService::class      => InvokableFactory::class,
-        Assertion\ModificationServiceDuAssertion::class  => AssertionFactory::class,
     ],
 
     'forms' => [

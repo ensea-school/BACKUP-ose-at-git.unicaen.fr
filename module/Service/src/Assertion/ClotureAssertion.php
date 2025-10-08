@@ -4,6 +4,7 @@ namespace Service\Assertion;
 
 use Application\Provider\Privileges;
 use Framework\Authorize\AbstractAssertion;
+use Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Workflow\Entity\Db\Validation;
@@ -20,12 +21,8 @@ class ClotureAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
 
-    /**
-     * @param ResourceInterface $entity
-     * @param string            $privilege
-     *
-     * @return boolean
-     */
+
+
     protected function assertEntity(ResourceInterface $entity, ?string $privilege = null): bool
     {
         // pareil si le rôle ne possède pas le privilège adéquat
@@ -54,8 +51,9 @@ class ClotureAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(array $page): bool
+    protected function assertPage(Page $page): bool
     {
+        $page = $page->getData();
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
             $intervenant = $this->getMvcEvent()->getParam('intervenant');

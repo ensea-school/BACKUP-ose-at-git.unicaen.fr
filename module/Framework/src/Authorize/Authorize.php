@@ -2,7 +2,9 @@
 
 namespace Framework\Authorize;
 
+use Framework\Application\Application;
 use Framework\Container\Autowire;
+use Framework\Navigation\Page;
 use Framework\Router\Router;
 use Framework\User\UserManager;
 use Framework\User\UserManagerInterface;
@@ -25,11 +27,11 @@ class Authorize extends AbstractListenerAggregate
 
     public function __construct(
         #[Autowire(service: UserManager::class)]
-        private readonly UserManagerInterface   $userManager,
+        private readonly UserManagerInterface $userManager,
 
-        private readonly Router        $router,
-        private readonly GuardProvider $guardProvider,
-        private readonly RuleProvider  $ruleProvider,
+        private readonly Router               $router,
+        private readonly GuardProvider        $guardProvider,
+        private readonly RuleProvider         $ruleProvider,
     )
     {
 
@@ -51,6 +53,8 @@ class Authorize extends AbstractListenerAggregate
                 $route = substr($resource, strlen(self::SYNTAX_ROUTE));
                 return $this->isAllowedRoute($route);
             }
+        } elseif ($resource instanceof Page) {
+            return $this->isAllowedPage($resource);
         }
 
         return $this->isAllowedResource($resource, $privilege);
@@ -94,12 +98,12 @@ class Authorize extends AbstractListenerAggregate
         $action = $route->getAction();
 
         $actionRule = $this->guardProvider->get($controller, $action);
-        if ($actionRule && !$this->isAllowedRule($actionRule, ['route' => $route])) {
+        if ($actionRule && !$this->isAllowedRule($actionRule, ['controller' => $controller, 'action' => $action])) {
             return false;
         }
 
         $controllerRule = $this->guardProvider->get($controller);
-        if ($controllerRule && !$this->isAllowedRule($controllerRule, ['route' => $route])) {
+        if ($controllerRule && !$this->isAllowedRule($controllerRule, ['controller' => $controller])) {
             return false;
         }
 
@@ -109,15 +113,54 @@ class Authorize extends AbstractListenerAggregate
 
 
 
+    public function isAllowedPage(Page $page): bool
+    {
+        $visible = $page->getData('visible');
+
+        if (false === $visible) {
+            return false;
+        }
+
+        $route = $page->getRoute();
+        if ($route && !$this->isAllowedRoute($route)) {
+            return false;
+        }
+
+        $ressource = $page->getData('resource');
+        if ($ressource && !$this->isAllowed($ressource)) {
+            return false;
+        }
+
+        $rule = new Rule();
+
+        $visible = $page->getData('visible');
+        if (is_string($visible) && !empty($visible)) {
+            $rule->assertion = $visible;
+        }
+
+        $assertion = $page->getData('assertion');
+        if (is_string($assertion)) {
+            $rule->assertion = $assertion;
+        }
+
+        $rule->roles      = $page->getData('roles') ?? [];
+        $rule->privileges = $page->getData('privileges') ?? [];
+
+        return $this->isAllowedRule($rule, ['page' => $page]);
+    }
+
+
+
     public function isAllowedController(string $controller, ?string $action = null): bool
     {
         $actionRule = $this->guardProvider->get($controller, $action);
-        if ($actionRule && !$this->isAllowedRule($actionRule, ['controller' => $controller, 'action' => $action])) {
+        $context    = ['controller' => $controller, 'action' => $action];
+        if ($actionRule && !$this->isAllowedRule($actionRule, $context)) {
             return false;
         }
 
         $controllerRule = $this->guardProvider->get($controller);
-        if ($controllerRule && !$this->isAllowedRule($controllerRule, ['controller' => $controller, 'action' => $action])) {
+        if ($controllerRule && !$this->isAllowedRule($controllerRule, $context)) {
             return false;
         }
 
@@ -146,12 +189,25 @@ class Authorize extends AbstractListenerAggregate
         }
 
         foreach ($rules as $rule) {
-            if ($this->isAllowedRule($rule, $context)) {
-                return true;
+            if ($this->ruleMatch($rule, $privilege)) {
+                if ($this->isAllowedRule($rule, $context)) {
+                    return true;
+                }
             }
         }
 
         return false;
+    }
+
+
+
+    private function ruleMatch(Rule $rule, ?string $privilege): bool
+    {
+        if (!$privilege) {
+            return empty($rule->privileges);
+        }
+
+        return in_array($privilege, $rule->privileges);
     }
 
 
@@ -227,8 +283,27 @@ class Authorize extends AbstractListenerAggregate
             }
         }
 
-        if ($rule->assertion){
+        if ($rule->assertion) {
+            if (is_callable($rule->assertion)) {
+                return call_user_func($rule->assertion, $context);
+            } elseif (is_string($rule->assertion)) {
+                $assertion = Application::getInstance()->container()->get($rule->assertion);
+                if (!$assertion) {
+                    throw new \Exception("Assertion '{$rule->assertion}' not found");
+                }
+                if (!$assertion instanceof AssertionInterface) {
+                    throw new \Exception("Assertion '{$rule->assertion}' must be an " . AssertionInterface::class . " instance");
+                }
 
+                if ($assertion instanceof AbstractAssertion) {
+                    /* @var $application \Laminas\Mvc\Application */
+                    $application = Application::getInstance()->container()->get('Application');
+                    $mvcEvent    = $application->getMvcEvent();
+                    $assertion->setMvcEvent($mvcEvent);
+                }
+
+                return $assertion->assert($context);
+            }
         }
 
         return true;

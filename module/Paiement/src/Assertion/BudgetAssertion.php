@@ -22,11 +22,8 @@ class BudgetAssertion extends AbstractAssertion
     /**
      * Exemple
      */
-    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
+    protected function assertEntity(?ResourceInterface $entity, ?string $privilege): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
         switch (true) {
             case $entity instanceof Dotation:
                 return $this->assertStructure($entity->getStructure());
@@ -37,23 +34,6 @@ class BudgetAssertion extends AbstractAssertion
             case $entity instanceof Structure:
                 return $this->assertStructure($entity);
         }
-
-        return true;
-    }
-
-
-
-    /**
-     * @param string $controller
-     * @param string $action
-     * @param string $privilege
-     *
-     * @return boolean
-     */
-    protected function assertController($controller, $action = null, $privilege = null): bool
-    {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         return true;
     }

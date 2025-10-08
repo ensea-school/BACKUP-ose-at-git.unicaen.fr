@@ -3,7 +3,6 @@
 namespace Plafond;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Plafond\View\Helper\PlafondConfigElementViewHelperFactory;
 
@@ -236,7 +235,6 @@ return [
     ],
 
     'services' => [
-        Assertion\PlafondAssertion::class => AssertionFactory::class,
         Service\PlafondService::class     => Service\PlafondServiceFactory::class,
         Processus\PlafondProcessus::class => Processus\PlafondProcessusFactory::class,
         Service\IndicateurService::class  => Service\IndicateurServiceFactory::class,

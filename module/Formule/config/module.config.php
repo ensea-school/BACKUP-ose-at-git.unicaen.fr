@@ -3,7 +3,6 @@
 namespace Formule;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 
 return [
@@ -82,7 +81,6 @@ return [
 
 
     'services' => [
-        Assertion\FormuleAssertion::class => AssertionFactory::class,
         Service\FormuleService::class     => Service\FormuleServiceFactory::class,
         Tbl\Process\FormuleProcess::class => Tbl\Process\FormuleProcessFactory::class,
         Command\BuildCommand::class       => Command\BuildCommandFactory::class,

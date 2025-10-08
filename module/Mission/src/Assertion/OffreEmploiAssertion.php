@@ -5,6 +5,7 @@ namespace Mission\Assertion;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
+use Framework\Navigation\Page;
 use Framework\User\UserProfile;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
@@ -27,16 +28,10 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
 
-    /* ---- Routage général ---- */
-    public function __invoke (array $page): bool // gestion des visibilités de menus
+
+    protected function assertPage (Page $page): bool
     {
-        return $this->assertPage($page);
-    }
-
-
-
-    protected function assertPage (array $page): bool
-    {
+        $page = $page->getData();
         switch ($page['route']) {
             case 'offre-emploi':
             case 'candidature':
@@ -99,12 +94,8 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertController ($controller, $action = null, $privilege = null): bool
+    protected function assertController (string $controller, ?string $action): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
-        // Si c'est bon alors on affine...
         $entity = $this->getServiceContext()->getIntervenant();
         if (!$entity) {
             $entity = $this->getMvcEvent()->getParam('intervenant');

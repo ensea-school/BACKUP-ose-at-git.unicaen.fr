@@ -4,7 +4,6 @@ namespace Mission;
 
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Mission\Controller\OffreEmploiController;
 use Mission\Controller\OffreEmploiControllerFactory;
@@ -40,7 +39,8 @@ return [
             'route'         => '/offre-emploi',
             'controller'    => OffreEmploiController::class,
             'action'        => 'index',
-            'privileges'    => ['guest','user'],//Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+            'privileges'    => ['guest', Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION],
+            'assertion'     => Assertion\OffreEmploiAssertion::class,
             'may_terminate' => true,
             'child_routes'  => [
                 'saisir'               => [
@@ -59,13 +59,15 @@ return [
                     'route'      => '/get/:offreEmploi',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'get',
-                    'privileges'  => ['guest','user'],
+                    'privileges' => ['guest', Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION],
+                    'assertion'  => Assertion\OffreEmploiAssertion::class,
                 ],
                 'liste'                => [
                     'route'      => '/liste',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'liste',
-                    'privileges'  => ['guest','user'],
+                    'privileges' => ['guest', Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION],
+                    'assertion'  => Assertion\OffreEmploiAssertion::class,
                 ],
                 'supprimer'            => [
                     'route'      => '/supprimer/:offreEmploi',
@@ -129,34 +131,32 @@ return [
         'gestion'       => [
             'pages' => [
                 'offres-emploi' => [
-                    'label'    => "Offre emplois étudiants",
-                    'icon'     => 'fas fa-duotone fa-pen-to-square',
-                    'title'    => "Offre",
-                    'route'    => 'offre-emploi',
-                    'resource' => Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_AJOUTER),
-                    'order'    => 60,
-                    'color'    => '#217DD8',
-                    'pages'    => [
+                    'label' => "Offre emplois étudiants",
+                    'icon'  => 'fas fa-duotone fa-pen-to-square',
+                    'title' => "Offre",
+                    'route' => 'offre-emploi',
+                    'order' => 60,
+                    'color' => '#217DD8',
+                    'pages' => [
                         'offre' => [
-                            'label'    => "Consulter la liste des offres",
-                            'title'    => "Consulter la liste des emplois étudiants",
-                            'route'    => 'offre-emploi',
-                            'resource' => Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_AJOUTER),
-                            'order'    => 10,
-                            'color'    => '#217DD8',
+                            'label' => "Consulter la liste des offres",
+                            'title' => "Consulter la liste des emplois étudiants",
+                            'route' => 'offre-emploi',
+                            'order' => 10,
+                            'color' => '#217DD8',
                         ],
                     ],
                 ],
             ],
         ],
         'offres-emploi' => [
-            'label'   => "Offres d'emploi",
-            'icon'    => 'fas fa-duotone fa-pen-to-square',
-            'title'   => "Consulter la liste des emplois étudiants",
-            'route'   => 'offre-emploi',
-            'visible' => Assertion\OffreEmploiAssertion::class,
-            'order'   => 10,
-            'color'   => '#217DD8',
+            'label'     => "Offres d'emploi",
+            'icon'      => 'fas fa-duotone fa-pen-to-square',
+            'title'     => "Consulter la liste des emplois étudiants",
+            'route'     => 'offre-emploi',
+            'assertion' => Assertion\OffreEmploiAssertion::class,
+            'order'     => 10,
+            'color'     => '#217DD8',
         ],
     ],
 
@@ -192,10 +192,8 @@ return [
     ],
 
     'services' => [
-        OffreEmploiService::class             => OffreEmploiServiceFactory::class,
-        CandidatureService::class             => CandidatureServiceFactory::class,
-        Assertion\OffreEmploiAssertion::class => AssertionFactory::class,
-
+        OffreEmploiService::class => OffreEmploiServiceFactory::class,
+        CandidatureService::class => CandidatureServiceFactory::class,
     ],
 
     'forms' => [

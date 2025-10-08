@@ -16,7 +16,6 @@ use Agrement\Service\TypeAgrementService;
 use Agrement\Service\TypeAgrementServiceFactory;
 use Agrement\View\Helper\AgrementVewHelperFactory;
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 
 
@@ -240,8 +239,6 @@ return [
         AgrementService::class     => AgrementServiceFactory::class,
         TblAgrementService::class  => TblAgrementServiceFactory::class,
         TypeAgrementService::class => TypeAgrementServiceFactory::class,
-        AgrementAssertion::class   => AssertionFactory::class,
-
     ],
     'view_helpers' => [
         'agrement' => AgrementVewHelperFactory::class,

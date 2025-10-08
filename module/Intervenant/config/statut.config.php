@@ -3,7 +3,6 @@
 namespace Intervenant;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 
 
@@ -90,7 +89,6 @@ return [
 
     'services' => [
         Service\StatutService::class          => Service\StatutServiceFactory::class,
-        Assertion\StatutAssertion::class      => AssertionFactory::class,
     ],
 
 

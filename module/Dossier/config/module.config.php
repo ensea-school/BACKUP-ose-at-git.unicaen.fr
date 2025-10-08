@@ -24,7 +24,6 @@ use Dossier\Service\EmployeurServiceFactory;
 use Dossier\Tbl\Process\DossierProcess;
 use Dossier\Tbl\Process\DossierProcessFactory;
 use Dossier\View\Helper\ValidationViewHelperFactory;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Workflow\Entity\Db\WorkflowEtape;
 
@@ -291,7 +290,6 @@ return [
         DossierAutreService::class         => DossierAutreServiceFactory::class,
         DossierAutreTypeService::class     => DossierAutreTypeServiceFactory::class,
         EmployeurService::class            => EmployeurServiceFactory::class,
-        IntervenantDossierAssertion::class => AssertionFactory::class,
         DossierProcess::class              => DossierProcessFactory::class,
 
     ],

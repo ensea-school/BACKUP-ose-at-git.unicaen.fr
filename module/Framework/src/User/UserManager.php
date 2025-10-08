@@ -242,7 +242,7 @@ class UserManager implements UserManagerInterface
 
     public function hasPrivilege(string $privilege): bool
     {
-        if (empty($this->privileges)) {
+        if (empty($this->privileges) && !Application::getInstance()->inDev()) {
             $this->privileges = $this->sessionget(self::SESSION_PRIVILEGES) ?? [];
         }
         if (empty($this->privileges)){

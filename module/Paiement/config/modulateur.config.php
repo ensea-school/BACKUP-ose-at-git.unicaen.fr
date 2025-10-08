@@ -115,7 +115,6 @@ return [
         Service\TypeModulateurStructureService::class => Service\TypeModulateurStructureServiceFactory::class,
         Service\ModulateurService::class              => Service\ModulateurServiceFactory::class,
         Service\TypeModulateurService::class          => Service\TypeModulateurServiceFactory::class,
-        Assertion\ModulateurAssertion::class          => \Framework\Authorize\AssertionFactory::class,
     ],
 
     'controllers' => [

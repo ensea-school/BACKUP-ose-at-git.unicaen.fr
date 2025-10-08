@@ -3,9 +3,7 @@
 namespace PieceJointe;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
-use PieceJointe\Assertion\PiecesJointesAssertion;
 use PieceJointe\Controller\Factory\PieceJointeControllerFactory;
 use PieceJointe\Controller\PieceJointeController;
 use PieceJointe\Form\Factory\ModifierTypePieceJointeStatutFormFactory;
@@ -301,7 +299,6 @@ return [
         PieceJointeService::class           => PieceJointeServiceFactory::class,
         TypePieceJointeService::class       => TypePieceJointeServiceFactory::class,
         TypePieceJointeStatutService::class => TypePieceJointeStatutServiceFactory::class,
-        PiecesJointesAssertion::class       => AssertionFactory::class,
         PieceJointeProcess::class           => PieceJointeProcessFactory::class,
 
     ],

@@ -3,9 +3,7 @@
 namespace Mission;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
-use Mission\Controller\PrimeController;
 use Workflow\Entity\Db\WorkflowEtape;
 
 
@@ -124,8 +122,6 @@ return [
 
     'services' => [
         Service\PrimeService::class     => Service\PrimeServiceFactory::class,
-        Assertion\PrimeAssertion::class => AssertionFactory::class,
-
     ],
 
 ];

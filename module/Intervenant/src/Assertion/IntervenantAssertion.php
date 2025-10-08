@@ -3,7 +3,9 @@
 namespace Intervenant\Assertion;
 
 use Application\Provider\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
+use Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Workflow\Service\WorkflowServiceAwareTrait;
@@ -17,13 +19,7 @@ use Workflow\Service\WorkflowServiceAwareTrait;
 class IntervenantAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
-
-
-    /* ---- Routage général ---- */
-    public function __invoke(array $page) // gestion des visibilités de menus
-    {
-        return $this->assertPage($page);
-    }
+    use ContextServiceAwareTrait;
 
 
 
@@ -51,8 +47,9 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(array $page): bool
+    protected function assertPage(Page $page): bool
     {
+        $page = $page->getData();
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
@@ -67,13 +64,10 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertController($controller, $action = null, $privilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch ($action) {
             case 'supprimer':
@@ -89,8 +83,8 @@ class IntervenantAssertion extends AbstractAssertion
 
     protected function assertEdition(?Intervenant $intervenant = null): bool
     {
-        if ($this->getServiceUserContext()->getStructure() && $intervenant->getStructure()) {
-            return $intervenant->getStructure()->inStructure($this->getServiceUserContext()->getStructure());
+        if ($this->getServiceContext()->getStructure() && $intervenant->getStructure()) {
+            return $intervenant->getStructure()->inStructure($this->getServiceContext()->getStructure());
         }
 
         return true;

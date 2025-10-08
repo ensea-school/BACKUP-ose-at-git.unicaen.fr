@@ -5,6 +5,7 @@ namespace Service\Assertion;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
+use Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Service\Controller\ServiceController;
@@ -32,16 +33,9 @@ class ServiceAssertion extends AbstractAssertion
     use RegleStructureValidationServiceAwareTrait;
 
 
-    /* ---- Routage général ---- */
-    public function __invoke(array $page): bool // gestion des visibilités de menus
+    protected function assertPage(Page $page): bool
     {
-        return $this->assertPage($page);
-    }
-
-
-
-    protected function assertPage(array $page): bool
-    {
+        $page = $page->getData();
         $intervenant = null;
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
@@ -77,14 +71,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    /**
-     * @param string $controller
-     * @param string $action
-     * @param string $privilege
-     *
-     * @return boolean
-     */
-    protected function assertController($controller, $action = null, $privilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */

@@ -35,22 +35,6 @@ class ModulateurAssertion extends AbstractAssertion
 
 
 
-    /**
-     * @param string $controller
-     * @param string $privilege
-     *
-     * @return boolean
-     */
-    protected function assertController($controller, $action = null, $privilege = null): bool
-    {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
-        return true;
-    }
-
-
-
     protected function assertStructure(Structure $structure): bool
     {
         $rs = $this->getServiceContext()->getStructure();

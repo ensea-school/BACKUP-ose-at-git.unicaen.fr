@@ -3,7 +3,6 @@
 namespace Mission;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 
 
@@ -112,9 +111,5 @@ return [
 
     'forms' => [
         Form\MissionSuiviForm::class => Form\MissionSuiviFormFactory::class,
-    ],
-
-    'services' => [
-        Assertion\SuiviAssertion::class => AssertionFactory::class,
     ],
 ];

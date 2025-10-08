@@ -3,7 +3,6 @@
 namespace Lieu;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 
 return [
@@ -86,7 +85,6 @@ return [
 
     'services' => [
         Service\StructureService::class     => Service\StructureServiceFactory::class,
-        Assertion\StructureAssertion::class => AssertionFactory::class,
     ],
 
     'view_helpers' => [

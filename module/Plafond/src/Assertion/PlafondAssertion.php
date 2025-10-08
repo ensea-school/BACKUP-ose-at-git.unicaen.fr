@@ -26,7 +26,7 @@ class PlafondAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         $structure = $this->getMvcEvent()->getParam('structure');
         /* @var $structure Structure */
@@ -46,9 +46,6 @@ class PlafondAssertion extends AbstractAssertion
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
         switch (true) {
             case $entity instanceof Intervenant:
                 switch ($privilege) {

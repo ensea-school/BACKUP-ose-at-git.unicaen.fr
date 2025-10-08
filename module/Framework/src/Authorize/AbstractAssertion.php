@@ -2,12 +2,9 @@
 
 namespace Framework\Authorize;
 
-use Laminas\Permissions\Acl\Assertion\AssertionInterface;
-use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
+use Framework\Navigation\Page;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Laminas\Permissions\Acl\Role\RoleInterface;
 
 /**
  * Description of AbstractAssertion
@@ -16,20 +13,14 @@ use Laminas\Permissions\Acl\Role\RoleInterface;
  */
 abstract class AbstractAssertion implements AssertionInterface
 {
-    use UserContextServiceAwareTrait;
-
-    private Acl $acl;
-
-    private RoleInterface|bool|null $role = false;
-
     private MvcEvent $mvcEvent;
 
 
 
     public function __construct(
         protected readonly Authorize $authorize,
-    ) {
-
+    )
+    {
     }
 
 
@@ -51,131 +42,55 @@ abstract class AbstractAssertion implements AssertionInterface
      * $role, $this->resource, or $privilege parameters are null, it means that the query applies to all Roles, Resources, or
      * privileges, respectively.
      */
-    public final function assert(Acl $acl, ?RoleInterface $role = null, ?ResourceInterface $resource = null, $privilege = null): bool
+    public final function assert(array $context): bool
     {
-        $this->setRole($role);
-        $this->init();
-        switch (true) {
-            case $this->detectPrivilege($resource):
-//                var_dump('assertPrivilege '.get_class($this).' '.$resource->getResourceId().' '.$privilege);
-                return $this->assertPrivilege(ltrim(strstr($resource, '/'), '/'), $privilege);
-
-            case $this->detectController($resource):
-
-                $resource   = (string)$resource;
-                $spos       = strpos($resource, '/') + 1;
-                $dpos       = strrpos($resource, ':') + 1;
-                $controller = substr($resource, $spos, $dpos - $spos - 1);
-                $action     = substr($resource, $dpos);
-
-//                var_dump('assertController '.get_class($this).' '.$controller.'.'.$action.' '.$privilege);
-                return $this->assertController($controller, $action, $privilege);
-
-            case $this->detectEntity($resource):
-//                var_dump('assertEntity '.get_class($this).' '.$resource->getResourceId().' '.$privilege);
-                return $this->assertEntity($resource, $privilege);
-
-            default:
-//                var_dump('assertOther '.get_class($this).' '.$resource->getResourceId().' '.$privilege);
-                return $this->assertOther($resource, $privilege);
+        if (array_key_exists('resource', $context)) {
+            $resource = $context['resource'];
+            if (is_object($resource) && method_exists($resource, 'getId')) {
+                return $this->assertEntity($resource, $context['privilege'] ?? null);
+            }
+        } elseif (array_key_exists('controller', $context)) {
+            $controller = $context['controller'];
+            return $this->assertController($controller, $context['action'] ?? null);
+        } elseif (array_key_exists('page', $context)) {
+            $page = $context['page'];
+            return $this->assertPage($page);
         }
+
+        return $this->assertOther($context);
     }
 
 
 
-    public function isAllowed(string|ResourceInterface $resource, ?string $privilege = null): bool
+    public function isAllowed(null|string|ResourceInterface $resource, ?string $privilege = null): bool
     {
         return $this->authorize->isAllowed($resource, $privilege);
     }
 
 
 
-    public function getRole(): ?RoleInterface
-    {
-        if (false === $this->role) {
-            $sUserContext = $this->serviceUserContext;
-            if ($sUserContext->getIdentity()) {
-                $this->role = $sUserContext->getSelectedIdentityRole();
-            }
-        }
-
-        if (false === $this->role) {
-            return null;
-        }else {
-            return $this->role;
-        }
-    }
-
-
-
-    public function setRole(?RoleInterface $role = null): self
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-
-
-    private function detectPrivilege(?ResourceInterface $resource = null): bool
-    {
-        if ($resource instanceof ResourceInterface) $resource = $resource->getResourceId();
-
-        return is_string($resource) && 0 === strpos($resource, 'privilege/');
-    }
-
-
-
-    protected function assertPrivilege(string $privilege, ?string $subPrivilege = null): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         return true;
     }
 
 
 
-    private function detectController(string|ResourceInterface|null $resource = null): bool
-    {
-        if ($resource instanceof ResourceInterface) $resource = $resource->getResourceId();
-
-        return 0 === strpos($resource, 'controller/');
-    }
-
-
-
-    /**
-     * Ititialisation des paramètres de l'assertion (si nécessaire)
-     */
-    public function init(): void
-    {
-
-    }
-
-
-
-    protected function assertController(string $controller, ?string $action = null, ?string $privilege = null): bool
+    protected function assertEntity(ResourceInterface $entity, ?string $privilege): bool
     {
         return true;
     }
 
 
 
-    private function detectEntity(string|ResourceInterface|null $resource = null): bool
-    {
-        return
-            is_object($resource)
-            && method_exists($resource, 'getId');
-    }
-
-
-
-    protected function assertEntity(ResourceInterface $entity, ?string $privilege = null): bool
+    protected function assertPage(Page $page): bool
     {
         return true;
     }
 
 
 
-    protected function assertOther(string|ResourceInterface|null $resource = null, ?string $privilege = null): bool
+    protected function assertOther(array $context): bool
     {
         return true;
     }

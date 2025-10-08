@@ -126,7 +126,6 @@ return [
     ],
 
     'services' => [
-        Assertion\CentreCoutAssertion::class      => \Framework\Authorize\AssertionFactory::class,
         Service\CentreCoutService::class          => Service\CentreCoutServiceFactory::class,
         Service\CentreCoutStructureService::class => Service\CentreCoutStructureServiceFactory::class,
         Service\CcActiviteService::class          => Service\CcActiviteServiceFactory::class,

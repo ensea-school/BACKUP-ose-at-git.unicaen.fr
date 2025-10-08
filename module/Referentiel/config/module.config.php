@@ -3,7 +3,6 @@
 namespace Referentiel;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Referentiel\Controller\FonctionReferentielController;
@@ -306,7 +305,6 @@ return [
         Service\VolumeHoraireReferentielService::class  => InvokableFactory::class,
         Processus\ServiceReferentielProcessus::class    => InvokableFactory::class,
         Processus\ValidationReferentielProcessus::class => InvokableFactory::class,
-        Assertion\ReferentielAssertion::class           => AssertionFactory::class,
     ],
 
     'forms' => [

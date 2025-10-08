@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AssertionFactory;
 use Framework\Authorize\Authorize;
 use Paiement\Controller\TauxRemuController;
 use Paiement\Service\TauxRemuService;
@@ -116,7 +115,6 @@ return [
 
     'services' => [
         TauxRemuService::class => TauxRemuServiceFactory::class,
-        Assertion\TauxRemuAssertion::class => AssertionFactory::class
     ],
 
     'forms' => [

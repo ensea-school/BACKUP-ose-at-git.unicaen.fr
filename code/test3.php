@@ -8,9 +8,9 @@
 
 $sa = $container->get(\Framework\Authorize\Authorize::class);
 
-//$a = $sa->isAllowedController(\Application\Controller\IndexController::class, 'index');
+$a = $container->get(\Framework\Navigation\Navigation::class)->home->getPage('intervenant')->getPage('validation-referentiel-prevu');
 
-$a = $sa->isAllowedController(\Application\Controller\PeriodeController::class, 'index');
 
+$a = $a->isVisible();
 dump($a);
 

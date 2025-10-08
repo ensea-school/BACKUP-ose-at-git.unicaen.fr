@@ -19,6 +19,8 @@ OSE [24.11](#ose-2411-07102025)
 
 * Possibilité d'exploiter 2 états de sortie différents via le menu "Services"
 
+* Optimisation générale de l'application
+
 ## Corrections
 
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)

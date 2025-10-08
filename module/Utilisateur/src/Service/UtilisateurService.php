@@ -8,7 +8,6 @@ use RuntimeException;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use UnicaenApp\Util;
-use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 use Utilisateur\Connecteur\LdapConnecteurAwareTrait;
 use Utilisateur\Entity\Db\Role;
 use Utilisateur\Entity\Db\Utilisateur;
@@ -23,7 +22,6 @@ class UtilisateurService extends AbstractEntityService
 {
     use ParametresServiceAwareTrait;
     use LdapConnecteurAwareTrait;
-    use UserServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 

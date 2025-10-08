@@ -6,12 +6,7 @@ use Application\Entity\Db\Perimetre;
 use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use UnicaenUtilisateur\Entity\Db\RoleInterface;
-use UnicaenUtilisateur\Entity\Db\UserInterface;
 
-/**
- * Role
- */
 class Role implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
@@ -170,7 +165,7 @@ class Role implements HistoriqueAwareInterface
      *
      * @return self
      */
-    public function setPerimetre($perimetre): RoleInterface
+    public function setPerimetre($perimetre): self
     {
         $this->perimetre = $perimetre;
 
@@ -351,20 +346,6 @@ class Role implements HistoriqueAwareInterface
 
 
 
-    public function getDescription(): ?string
-    {
-        // TODO: Implement getDescription() method.
-    }
-
-
-
-    public function setDescription(?string $description): void
-    {
-        // TODO: Implement setDescription() method.
-    }
-
-
-
     public function isDefault(): bool
     {
         // TODO: Implement isDefault() method.
@@ -393,20 +374,6 @@ class Role implements HistoriqueAwareInterface
 
 
 
-    public function getParent(): ?RoleInterface
-    {
-        // TODO: Implement getParent() method.
-    }
-
-
-
-    public function setParent(?RoleInterface $parent = null): void
-    {
-        // TODO: Implement setParent() method.
-    }
-
-
-
     public function getLdapFilter(): ?string
     {
         // TODO: Implement getLdapFilter() method.
@@ -417,27 +384,6 @@ class Role implements HistoriqueAwareInterface
     public function setLdapFilter(?string $ldapFilter): void
     {
         // TODO: Implement setLdapFilter() method.
-    }
-
-
-
-    public function getUsers(): Collection
-    {
-        // TODO: Implement getUsers() method.
-    }
-
-
-
-    public function addUser(UserInterface $user): void
-    {
-        // TODO: Implement addUser() method.
-    }
-
-
-
-    public function removeUser(UserInterface $user): void
-    {
-        // TODO: Implement removeUser() method.
     }
 
 }

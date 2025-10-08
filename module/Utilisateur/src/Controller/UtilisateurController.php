@@ -8,7 +8,6 @@ use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenAuthentification\Controller\UtilisateurController as BaseController;
-use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 use Utilisateur\Entity\Db\Role;
 use Utilisateur\Service\UtilisateurServiceAwareTrait;
 
@@ -18,7 +17,6 @@ class UtilisateurController extends BaseController
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
-    use UserServiceAwareTrait;
 
     public function __construct(
         private readonly UserManager $userManager,

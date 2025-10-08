@@ -24,7 +24,6 @@ $modules = [
     'UnicaenApp',
     'UnicaenAuthentification',
     'UnicaenMail',
-    'UnicaenUtilisateur',
     'UnicaenImport',
     'UnicaenTbl',
     'UnicaenSiham',

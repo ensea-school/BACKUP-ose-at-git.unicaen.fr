@@ -5,7 +5,6 @@ namespace Utilisateur\Entity\Db;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Framework\Authorize\Authorize;
-use UnicaenUtilisateur\Entity\Db\RoleInterface;
 
 class Privilege
 {
@@ -128,21 +127,21 @@ class Privilege
 
 
 
-    public function addRole(RoleInterface $role)
+    public function addRole(Role $role)
     {
         // TODO: Implement addRole() method.
     }
 
 
 
-    public function removeRole(RoleInterface $role)
+    public function removeRole(Role $role)
     {
         // TODO: Implement removeRole() method.
     }
 
 
 
-    function hasRole(RoleInterface $role)
+    function hasRole(Role $role)
     {
         return false;
     }

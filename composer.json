@@ -12,6 +12,7 @@
         "php"                              : ">=8.2",
         "laminas/laminas-cli"              : "1.11.0",
         "laminas/laminas-cache-storage-adapter-filesystem": "2.5.0",
+        "laminas/laminas-permissions-acl"  : "2.17.0",
         "symfony/process"                  : "7.3.3",
         "symfony/http-foundation"          : "7.3.3",
         "yraiso/casauth-bundle"            : "1.0.8",
@@ -30,7 +31,6 @@
         "unicaen/zfc-user"                 : "dev-php84",
         "unicaen/app"                      : "dev-php84",
         "unicaen/authentification"         : "dev-php84",
-        "unicaen/privilege"                : "dev-php84",
         "unicaen/utilisateur"              : "dev-php84",
         "unicaen/mail"                     : "dev-php84",
         "unicaen/signature"                : "1.0.7",
@@ -47,7 +47,9 @@
         "connecteur-ose/pegase"            : "dev-master"
     },
     "replace": {
-        "laminas/laminas-cache"            : "*"
+        "laminas/laminas-cache"            : "*",
+        "unicaen/bjy-authorize"            : "*",
+        "unicaen/privilege"                : "*"
     },
     "autoload"         : {
         "psr-4": {
@@ -76,7 +78,9 @@
             "Workflow\\"      : "module/Workflow/src/",
             "Utilisateur\\"   : "module/Utilisateur/src/",
 
-            "Laminas\\Cache\\": "module/Framework/src/Wrapper/LaminasCache"
+            "Laminas\\Cache\\": "module/Framework/src/Wrapper/LaminasCache",
+            "UnicaenPrivilege\\": "module/Framework/src/Wrapper/UnicaenPrivilege",
+            "BjyAuthorize\\" : "module/Framework/src/Wrapper/BjyAuthorize"
         }
     },
     "require-dev"      : {

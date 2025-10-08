@@ -6,14 +6,13 @@ use Application\Entity\Db\Perimetre;
 use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
 use UnicaenUtilisateur\Entity\Db\RoleInterface;
 use UnicaenUtilisateur\Entity\Db\UserInterface;
 
 /**
  * Role
  */
-class Role implements HistoriqueAwareInterface, RoleInterface
+class Role implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
@@ -290,26 +289,14 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    /**
-     * Add privilege
-     *
-     * @param Privilege $privilege
-     *
-     * @return self
-     */
-    public function addPrivilege(PrivilegeInterface $privilege): void
+    public function addPrivilege(Privilege $privilege): void
     {
         $this->privileges[] = $privilege;
     }
 
 
 
-    /**
-     * Remove privilege
-     *
-     * @param Privilege $privilege
-     */
-    public function removePrivilege(PrivilegeInterface $privilege): void
+    public function removePrivilege(Privilege $privilege): void
     {
         $this->privileges->removeElement($privilege);
     }

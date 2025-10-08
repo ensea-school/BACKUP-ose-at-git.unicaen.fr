@@ -7,7 +7,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Doctrine\ORM\EntityRepository;
 use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
 use Utilisateur\Entity\Db\Privilege;
 
 /**
@@ -60,7 +59,7 @@ class PrivilegeService
 
 
     /**
-     * @return PrivilegeInterface[]
+     * @return Privilege[]
      */
     public function getList()
     {

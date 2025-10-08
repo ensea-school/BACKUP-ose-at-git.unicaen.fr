@@ -5,11 +5,9 @@ namespace Utilisateur\Entity\Db;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Framework\Authorize\Authorize;
-use UnicaenPrivilege\Entity\Db\PrivilegeCategorieInterface;
-use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
 use UnicaenUtilisateur\Entity\Db\RoleInterface;
 
-class Privilege implements PrivilegeInterface
+class Privilege
 {
     protected int $id;
 
@@ -116,7 +114,7 @@ class Privilege implements PrivilegeInterface
 
 
 
-    public function setCategorie(PrivilegeCategorieInterface $categorie)
+    public function setCategorie(CategoriePrivilege $categorie)
     {
         // TODO: Implement setCategorie() method.
     }

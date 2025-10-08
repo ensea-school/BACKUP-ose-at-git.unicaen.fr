@@ -9,11 +9,6 @@ use UnicaenAuthentification\Service\UserContext;
 
 class AssertionFactory implements FactoryInterface
 {
-    /**
-     * @param ContainerInterface $container
-     *
-     * @return UserContext
-     */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         /* @var $application Application */

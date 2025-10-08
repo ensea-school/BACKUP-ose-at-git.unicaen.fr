@@ -119,10 +119,12 @@ class AnneeService extends AbstractEntityService
     public function getChoixAnnees(): array
     {
         $session = $this->getSessionContainer();
-        $role    = $this->getServiceContext()->getSelectedIdentityRole();
-        $rid     = $role ? $role->getRoleId() : '__no___role__999az';
-        if (!$role || !$session->choixAnnees || !isset($session->choixAnnees[$rid])) {
-            if ($role && ($intervenant = $role->getIntervenant())) {
+        $intervenant = $intervenant = $this->getServiceContext()->getIntervenant();
+
+        $rid = $intervenant ? 'intervenant-'.$intervenant->getCode() : 'role';
+
+        if (!$session->choixAnnees || !isset($session->choixAnnees[$rid])) {
+            if ($intervenant = $this->getServiceContext()->getIntervenant()) {
                 $sql    = 'SELECT a.id, a.libelle 
                           FROM annee a
                           JOIN parametre p ON p.nom = \'annee\'

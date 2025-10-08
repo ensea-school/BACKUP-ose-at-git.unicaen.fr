@@ -54,14 +54,13 @@ class DemandesController extends AbstractController
 
     public function ajouterDemandesMiseEnPaiementAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
-        if ($role->getIntervenant()) {
+        if ($this->getServiceContext()->getIntervenant()) {
             //On redirige vers la visualisation des mises en paiement
             return false;
         }
-        if ($this->getRequest()->isPost() && !$role->getIntervenant()) {
+        if ($this->getRequest()->isPost()) {
             $demandes                         = $this->axios()->fromPost();
             $demandesApprouveesBudgetairement = $this->getServiceDemandes()->verifierBudgetDemandeMiseEnPaiement($demandes);
             $error                            = 0;
@@ -124,21 +123,17 @@ class DemandesController extends AbstractController
 
     public function getDemandesMiseEnPaiementAction()
     {
-        $structureRole = null;
-        $role          = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         /**
          * @var Intervenant $intervenant
          */
         $intervenant = $this->getEvent()->getParam('intervenant');
         //Un intervenant ne peut pas récuperer les datas de demande de mise en paiement
-        if ($role->getIntervenant()) {
+        if ($this->getServiceContext()->getIntervenant()) {
             return new AxiosModel([]);
         }
         //$this->updateTableauxBord($intervenant);
-        if ($role->getPerimetre()->isComposante()) {
-            $structureRole = $role->getStructure();
-        }
+        $structureRole = $this->getServiceContext()->getStructure();
 
         $servicesAPayer = $this->getServiceDemandes()->getDemandeMiseEnPaiementResume($intervenant, $structureRole);
 
@@ -149,11 +144,10 @@ class DemandesController extends AbstractController
 
     public function demandeMiseEnPaiementAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
         //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
-        if ($role->getIntervenant()) {
+        if ($this->getServiceContext()->getIntervenant()) {
             //On redirige vers la visualisation des mises en paiement
             $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
         }
@@ -166,12 +160,11 @@ class DemandesController extends AbstractController
 
     public function supprimerDemandeMiseEnPaiementAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $idDmep      = $this->params()->fromRoute('mise-en-paiement');
         $intervenant = $this->getEvent()->getParam('intervenant');
         //Un intervenant ne peut pas supprimer des demandes de mise en paiement
-        if ($role->getIntervenant()) {
+        if ($this->getServiceContext()->getIntervenant()) {
             //On redirige vers la visualisation des mises en paiement
             return false;
         }

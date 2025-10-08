@@ -4,7 +4,6 @@ namespace Paiement;
 
 use Application\Provider\Privileges;
 use Framework\Authorize\Authorize;
-use Paiement\Assertion\PaiementAssertion;
 use Workflow\Entity\Db\WorkflowEtape;
 
 return [
@@ -19,27 +18,28 @@ return [
                         'structure' => '[0-9]*',
                     ],
                     'privileges'  => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
                 'ajouter-demande-mise-en-paiement'     => [
                     'route'      => '/:intervenant/ajouter-demandes',
                     'controller' => Controller\DemandesController::class,
                     'action'     => 'ajouterDemandesMiseEnPaiement',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
                 'supprimer-demande-mise-en-paiement'   => [
                     'route'      => '/:intervenant/supprimer-demande/:mise-en-paiement',
                     'controller' => Controller\DemandesController::class,
                     'action'     => 'supprimerDemandeMiseEnPaiement',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
                 'process-demande-mise-en-paiement-lot' => [
                     'route'      => '/process-demande-mise-en-paiement-lot',
                     'controller' => Controller\DemandesController::class,
                     'action'     => 'processDemandeMiseEnPaiementLot',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-                    'assertion'  => PaiementAssertion::class,
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
             ],
         ],
@@ -51,13 +51,15 @@ return [
                             'route'      => '/demande',
                             'controller' => Controller\DemandesController::class,
                             'action'     => 'demandeMiseEnPaiement',
+                            'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
+                            'assertion'  => Assertion\PaiementAssertion::class,
                         ],
                         'get-demandes-mise-en-paiement' => [
                             'route'      => '/get-demandes-mise-en-paiement[/:structure]',
                             'controller' => Controller\DemandesController::class,
                             'action'     => 'getDemandesMiseEnpaiement',
                             'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-
+                            'assertion'  => Assertion\PaiementAssertion::class,
                         ],
 
 
@@ -100,16 +102,6 @@ return [
         ],
     ],
 
-    'guards' => [
-        [
-            'controller' => Controller\DemandesController::class,
-            'action'     => ['ajouterDemandeMiseEnPaiement', 'supprimerDemandeMiseEnPaiement', 'get-demandes-mise-en-paiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
-            'privileges' => [
-                Privileges::MISE_EN_PAIEMENT_DEMANDE,
-            ],
-            'assertion'  => Assertion\PaiementAssertion::class,
-        ],
-    ],
 
     'services' => [
         Service\DemandesService::class => Service\DemandesServiceFactory::class,

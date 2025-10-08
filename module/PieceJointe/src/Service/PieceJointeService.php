@@ -221,8 +221,7 @@ class PieceJointeService extends AbstractEntityService
      */
     public function valider(PieceJointe $pj)
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $structure   = $role->getStructure() ? $role->getStructure() : $pj->getIntervenant()->getStructure();
+        $structure   = $this->getServiceContext()->getStructure() ?: $pj->getIntervenant()->getStructure();
         $intervenant = $pj->getIntervenant();
 
 

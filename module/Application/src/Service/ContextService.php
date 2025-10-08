@@ -5,6 +5,7 @@ namespace Application\Service;
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Annee;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Framework\User\UserManager;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Service\IntervenantServiceAwareTrait;
@@ -61,91 +62,35 @@ class ContextService extends AbstractService
 
 
 
-    public function getSelectedIdentityRole(): ?Role
+    public function __construct(
+        private readonly UserManager $userManager,
+    )
     {
-        if (null === $this->selectedIdentityRole) {
-            if ($this->serviceUserContext->getIdentity()) {
-                $this->selectedIdentityRole = $this->serviceUserContext->getSelectedIdentityRole();
-                if (!$this->selectedIdentityRole instanceof Role) $this->selectedIdentityRole = new Role();
-            }
-        }
-
-        return $this->selectedIdentityRole;
-    }
-
-
-
-    public function refreshRoleStatut (Statut $statut): void
-    {
-        $this->serviceUserContext->clearIdentityRoles();
-        \Framework\Application\Application::getInstance()->container()->get(\Utilisateur\Provider\IdentityProvider::class)->clearIdentityRoles();
-        \Framework\Application\Application::getInstance()->container()->get(\Utilisateur\Provider\RoleProvider::class)->clearRoles();
-        $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
     }
 
 
 
     public function getUtilisateur(): ?Utilisateur
     {
-        if (null === $this->utilisateur) {
-            $this->utilisateur = $this->getConnecteurLdap()->getUtilisateurCourant();
-        }
-        return $this->utilisateur;
+        return $this->userManager->getUser();
     }
 
 
 
     public function getIntervenant(): ?Intervenant
     {
-        if (!$this->intervenantInit || $this->serviceUserContext->getNextSelectedIdentityRole()) {
-            $this->intervenantInit = true;
+        $profile = $this->userManager->getProfile();
 
-            $sc = $this->getSessionContainer();
-            if (!$this->intervenant && ($id = $sc->intervenantId)) {
-                $this->intervenant = $this->getServiceIntervenant()->get($id);
-            } else {
-                $utilisateurCode = $this->getConnecteurLdap()->getUtilisateurCourantCode();
-                if ($utilisateurCode) {
-                    $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
-                } else {
-                    return null;
-                }
-            }
-        }
-
-        return $this->intervenant;
+        return $profile?->getContext('intervenant');
     }
 
 
 
     public function getAffectation(): ?Affectation
     {
-        $role        = $this->getSelectedIdentityRole();
-        $utilisateur = $this->getUtilisateur();
+        $profile = $this->userManager->getProfile();
 
-        if (!$role) return null;
-        if (!$utilisateur) return null;
-
-        $params      = [
-            'utilisateur'      => $utilisateur,
-            'role'             => $role->getDbRole(),
-            'structure'        => $role->getPerimetre()->isComposante() ? $this->getStructure() : null,
-            'histoDestruction' => null,
-        ];
-        $affectation = $this->getEntityManager()->getRepository(Affectation::class)->findOneBy($params);
-
-        return $affectation;
-    }
-
-
-
-    public function setIntervenant(?Intervenant $intervenant): self
-    {
-        $this->intervenant = $intervenant;
-        $sc                = $this->getSessionContainer();
-        $sc->intervenantId = $intervenant ? $intervenant->getId() : null;
-
-        return $this;
+        return $profile?->getContext('affectation');
     }
 
 
@@ -245,39 +190,11 @@ class ContextService extends AbstractService
 
 
 
-    public function getStructure(bool $checkInRole = true): ?Structure
+    public function getStructure(): ?Structure
     {
-        if ($checkInRole && !$this->isInInit()) {
-            $role = $this->getSelectedIdentityRole();
-            if ($role && $role->getStructure()) {
-                return $role->getStructure();
-            }
-        }
+        $profile = $this->userManager->getProfile();
 
-        if (!$this->structure) {
-            $sc          = $this->getSessionContainer();
-            $structureId = $sc->structure;
-            if ($structureId) {
-                $this->structure = $this->getServiceStructure()->get($structureId);
-            }
-        }
-
-        return $this->structure;
-    }
-
-
-
-    public function setStructure(?Structure $structure): self
-    {
-        if ($structure instanceof Structure) {
-            $this->structure                        = $structure;
-            $this->getSessionContainer()->structure = $structure->getId();
-        } else {
-            $this->structure                        = null;
-            $this->getSessionContainer()->structure = null;
-        }
-
-        return $this;
+        return $profile?->getContext('structure');
     }
 
 

@@ -99,14 +99,12 @@ class ServiceReferentielService extends AbstractEntityService
      */
     public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
         $this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
-        if ($intervenant = $role->getIntervenant()) { // Si c'est un intervenant
+        if ($intervenant = $this->getServiceContext()->getIntervenant()) { // Si c'est un intervenant
             $this->finderByIntervenant($intervenant, $qb, $alias);
         }
 
@@ -223,8 +221,7 @@ class ServiceReferentielService extends AbstractEntityService
     public function newEntity()
     {
         $entity = parent::newEntity();
-        $role   = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($intervenant = $role->getIntervenant()) {
+        if ($intervenant = $this->getServiceContext()->getIntervenant()) {
             $entity->setIntervenant($intervenant);
         }
 
@@ -245,9 +242,7 @@ class ServiceReferentielService extends AbstractEntityService
      */
     public function save($entity)
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
+        if (!$entity->getIntervenant() && $intervenant = $this->getServiceContext()->getIntervenant()) {
             $entity->setIntervenant($intervenant);
         }
         if (!$this->getAuthorize()->isAllowed($entity, $entity->getTypeVolumeHoraire()->getPrivilegeReferentielEdition())) {

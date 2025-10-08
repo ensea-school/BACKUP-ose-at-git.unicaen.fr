@@ -2,36 +2,32 @@
 
 namespace Paiement\Assertion;
 
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\TypeModulateur;
 use Paiement\Entity\Db\TypeModulateurStructure;
-use Utilisateur\Acl\Role;
 
 
 class ModulateurAssertion extends AbstractAssertion
 {
+    use ContextServiceAwareTrait;
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch (true) {
             case $entity instanceof TypeModulateur:
-                return $this->assertTypeModulateur($role, $entity);
+                return $this->assertTypeModulateur($entity);
 
             case $entity instanceof Structure:
                 return $this->assertStructure($entity);
 
             case $entity instanceof TypeModulateurStructure:
-                return $this->assertTypeModulateurStructure($role, $entity);
+                return $this->assertTypeModulateurStructure($entity);
         }
 
         return true;
@@ -47,12 +43,8 @@ class ModulateurAssertion extends AbstractAssertion
      */
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         return true;
     }
@@ -61,16 +53,16 @@ class ModulateurAssertion extends AbstractAssertion
 
     protected function assertStructure(Structure $structure): bool
     {
-        $rs = $this->getRole()->getStructure();
+        $rs = $this->getServiceContext()->getStructure();
 
         return (!$rs || $structure->inStructure($rs));
     }
 
 
 
-    protected function assertTypeModulateur(Role $role, TypeModulateur $typeModulateur): bool
+    protected function assertTypeModulateur(TypeModulateur $typeModulateur): bool
     {
-        $rs = $role->getStructure();
+        $rs = $this->getServiceContext()->getStructure();
         if (!$rs) return true;
         $valRet = false;
 
@@ -83,10 +75,10 @@ class ModulateurAssertion extends AbstractAssertion
 
 
 
-    protected function assertTypeModulateurStructure(Role $role, TypeModulateurStructure $tms): bool
+    protected function assertTypeModulateurStructure(TypeModulateurStructure $tms): bool
     {
         return $this->asserts([
-            $this->assertTypeModulateur($role, $tms->getTypeModulateur()),
+            $this->assertTypeModulateur($tms->getTypeModulateur()),
             $this->assertStructure($tms->getStructure()),
         ]);
     }

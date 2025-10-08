@@ -9,7 +9,6 @@ use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeInterventionStructure;
-use Utilisateur\Acl\Role;
 
 
 /**
@@ -24,18 +23,14 @@ class TypeInterventionAssertion extends AbstractAssertion
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
         switch (true) {
             case $entity instanceof TypeInterventionStructure:
                 switch ($privilege) {
                     case Privileges::TYPE_INTERVENTION_EDITION:
-                        return $this->assertTypeInterventionStructureSaisie($role, $entity);
+                        return $this->assertTypeInterventionStructureSaisie($entity);
                 }
             break;
         }
@@ -45,16 +40,16 @@ class TypeInterventionAssertion extends AbstractAssertion
 
 
 
-    protected function assertTypeInterventionStructureSaisie(Role $role, TypeInterventionStructure $tis): bool
+    protected function assertTypeInterventionStructureSaisie(TypeInterventionStructure $tis): bool
     {
-        return $this->assertStructureSaisie($role, $tis->getStructure());
+        return $this->assertStructureSaisie($tis->getStructure());
     }
 
 
 
-    protected function assertStructureSaisie(Role $role, Structure $structure): bool
+    protected function assertStructureSaisie(Structure $structure): bool
     {
-        if ($rs = $role->getStructure()) {
+        if ($rs = $this->getServiceContext()->getStructure()) {
             return $structure->inStructure($rs);
         }
 

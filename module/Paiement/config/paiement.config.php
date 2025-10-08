@@ -18,7 +18,7 @@ return [
             'privileges'    => Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
             'may_terminate' => true,
             'child_routes'  => [
-                'etat-demande-paiement'                => [
+                'etat-demande-paiement' => [
                     'route'      => '/etat-demande-paiement',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'etatPaiement',
@@ -26,64 +26,74 @@ return [
                         'etat' => Entity\Db\MiseEnPaiement::A_METTRE_EN_PAIEMENT,
                     ],
                 ],
-                'mise-en-paiement'                     => [
+                'mise-en-paiement'      => [
                     'route'       => '/mise-en-paiement/:structure/:intervenants',
                     'controller'  => Controller\PaiementController::class,
                     'action'      => 'MiseEnPaiement',
                     'constraints' => [
                         'structure' => '[0-9]*',
                     ],
+                    'privileges'  => [Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION],
+                    'assertion'   => Assertion\PaiementAssertion::class,
                 ],
-                'details-calculs'                      => [
+                'details-calculs'       => [
                     'route'      => '/details-calculs/:intervenant/',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'DetailsCalculs',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DETAILS,
                 ],
-                'etat-paiement'                        => [
+                'etat-paiement'         => [
                     'route'      => '/etat-paiement',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'etatPaiement',
                     'defaults'   => [
                         'etat' => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
                     ],
+                    'privileges' => [
+                        Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
+                    ],
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
-                'mises-en-paiement-csv'                => [
+                'mises-en-paiement-csv' => [
                     'route'      => '/mises-en-paiement-csv',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'misesEnPaiementCsv',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_EXPORT_CSV,
                 ],
-                'extraction-paie'                      => [
+                'extraction-paie'       => [
                     'route'      => '/extraction-paie[/:type][/:periode]',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'extractionPaie',
+                    'privileges' => [Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE],
                 ],
-                'extraction-paie-prime'                => [
+                'extraction-paie-prime' => [
                     'route'      => '/extraction-paie-prime[/:periode]',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'extractionPaiePrime',
+                    'privileges' => [Privileges::MISSION_PRIME_GESTION],
                 ],
-                'imputation-siham'                     => [
+                'imputation-siham'      => [
                     'route'      => '/imputation-siham',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'imputationSiham',
                     'defaults'   => [
                         'etat' => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
                     ],
+                    'privileges' => [Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE],
                 ],
-                'import-numero-pec'                    => [
+                'import-numero-pec'     => [
                     'route'      => '/import-numero-pec',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'importNumeroPec',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE,
                 ],
-                'pilotage'                             => [
+                'pilotage'              => [
                     'route'      => '/pilotage',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'pilotage',
                     'privileges' => Privileges::PILOTAGE_VISUALISATION,
                 ],
-                'ecarts-etats'                         => [
+                'ecarts-etats'          => [
                     'route'      => '/ecarts-etats',
                     'action'     => 'ecartsEtats',
                     'controller' => Controller\PaiementController::class,
@@ -98,7 +108,7 @@ return [
                     'route'         => '/:intervenant/mise-en-paiement',
                     'controller'    => Controller\PaiementController::class,
                     'child_routes'  => [
-                        'visualisation'                 => [
+                        'visualisation' => [
                             'route'      => '/visualisation',
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'visualisationMiseEnPaiement',
@@ -106,12 +116,14 @@ return [
                                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
                                 Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT,
                             ],
-                            'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
+                            'assertion'  => Assertion\PaiementAssertion::class,
                         ],
-                        'edition'                       => [
+                        'edition'       => [
                             'route'      => '/edition',
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'editionMiseEnPaiement',
+                            'privileges' => Privileges::MISE_EN_PAIEMENT_EDITION,
+                            'assertion'  => Assertion\PaiementAssertion::class,
                         ],
                     ],
                 ],
@@ -203,13 +215,13 @@ return [
                             'resource' => Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION),
                         ],
 
-                        'imputation-siham'             => [
+                        'imputation-siham'  => [
                             'label'    => "Imputation budgétaire SIHAM",
                             'title'    => "Export des données pour chargement en masse des imputations budgétaires dans SIHAM",
                             'route'    => 'paiement/imputation-siham',
                             'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
-                        'import-numero-pec'            => [
+                        'import-numero-pec' => [
                             'label'    => "Import des numéros de prise en charge",
                             'title'    => "Importer les numéros de prise en charge pour automatiser le fichier de paie",
                             'route'    => 'paiement/import-numero-pec',
@@ -239,52 +251,6 @@ return [
         ],
     ],
 
-    'guards' => [
-        [
-            'controller' => Controller\PaiementController::class,
-            'action'     => ['visualisationMiseEnPaiement'],
-
-        ],
-        [
-            'controller' => Controller\PaiementController::class,
-            'action'     => ['editionMiseEnPaiement'],
-            'privileges' => [
-                Privileges::MISE_EN_PAIEMENT_EDITION,
-            ],
-            'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
-        ],
-        [
-            'controller' => Controller\PaiementController::class,
-            'action'     => ['etatPaiement'],
-            'privileges' => [
-                Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
-            ],
-            'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
-        ],
-        [
-            'controller' => Controller\PaiementController::class,
-            'action'     => ['miseEnPaiement'],
-            'privileges' => [Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION],
-            'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
-        ],
-        [
-            'controller' => Controller\PaiementController::class,
-            'action'     => ['misesEnPaiementCsv'],
-            'privileges' => [
-                Privileges::MISE_EN_PAIEMENT_EXPORT_CSV,
-            ],
-        ],
-        [
-            'controller' => Controller\PaiementController::class,
-            'action'     => ['extractionPaie', 'imputationSiham', 'importNumeroPec'],
-            'privileges' => [Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE],
-        ],
-        [
-            'controller' => Controller\PaiementController::class,
-            'action'     => ['extractionPaiePrime'],
-            'privileges' => [Privileges::MISSION_PRIME_GESTION],
-        ],
-    ],
 
     'services' => [
         Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementServiceFactory::class,
@@ -297,7 +263,7 @@ return [
     ],
 
     'view_helpers' => [
-        'typeHeures'            => View\Helper\TypeHeuresViewHelperFactory::class,
+        'typeHeures' => View\Helper\TypeHeuresViewHelperFactory::class,
     ],
 
     'forms' => [

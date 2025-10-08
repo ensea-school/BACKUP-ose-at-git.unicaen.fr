@@ -49,7 +49,7 @@ return [
         [
             'controller' => EtablissementController::class,
             'action'     => ['recherche'],
-            'roles'      => ['user'],
+            'privileges' => ['user'],
         ],
     ],
 

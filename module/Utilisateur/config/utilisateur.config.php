@@ -8,7 +8,7 @@ return [
             'route'      => '/utilisateur-recherche',
             'controller' => Controller\UtilisateurController::class,
             'action'     => 'recherche',
-            'roles'      => ['user'],
+            'privileges' => ['user'],
         ],
     ],
 

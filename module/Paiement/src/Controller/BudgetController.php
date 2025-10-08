@@ -48,8 +48,7 @@ class BudgetController extends AbstractController
             Dotation::class,
         ]);
 
-        $role      = $this->getServiceContext()->getSelectedIdentityRole();
-        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+        $structure = $this->getServiceContext()->getStructure() ?: $this->getEvent()->getParam('structure');
 
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -94,8 +93,7 @@ class BudgetController extends AbstractController
             Dotation::class,
         ]);
 
-        $role      = $this->getServiceContext()->getSelectedIdentityRole();
-        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+        $structure = $this->getServiceContext()->getStructure() ?: $this->getEvent()->getParam('structure');
 
         $tbl = $this->getServiceDotation()->getTableauBord();
         $liq = $this->getServiceBudget()->getTblLiquidation();
@@ -144,8 +142,7 @@ class BudgetController extends AbstractController
             ],
 
         ];
-        $role      = $this->getServiceContext()->getSelectedIdentityRole();
-        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+        $structure = $this->getServiceContext()->getStructure() ?: $this->getEvent()->getParam('structure');
         if ($structure instanceof Structure) {
             $dotation    = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
             $liquidation = $this->getServiceBudget()->getTblLiquidation($structure);
@@ -178,10 +175,9 @@ class BudgetController extends AbstractController
         ]);
 
         $annee     = $this->getServiceContext()->getAnnee();
-        $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $this->getEvent()->getParam('structure');
         if (!$structure) {
-            $structure = $role->getStructure();
+            $structure = $this->getServiceContext()->getStructure();
         }
         /* @var $structure Structure */
         $structureElement = $this->getStructureElement($structure);
@@ -288,11 +284,9 @@ class BudgetController extends AbstractController
 
     public function exportAction ()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $structure = $this->getEvent()->getParam('structure');
         if (!$structure) {
-            $structure = $role->getStructure();
+            $structure = $this->getServiceContext()->getStructure();
         }
 
         $data = $this->getServiceBudget()->getTableauBord($structure);
@@ -355,8 +349,6 @@ class BudgetController extends AbstractController
 
     protected function getStructureElement (?Structure $structure): StructureElement
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $structureElement = new StructureElement('structure');
         $structureElement->init();
         $structureElement->setLabel('');

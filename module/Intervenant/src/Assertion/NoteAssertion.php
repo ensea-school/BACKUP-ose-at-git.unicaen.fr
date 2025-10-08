@@ -20,40 +20,25 @@ class NoteAssertion extends AbstractAssertion
     use ContextServiceAwareTrait;
 
     const PRIV_SUPPRIMER_NOTE = 'intervenant-supprimer-note';
-    const PRIV_EDITER_NOTE = 'intervenant-editer-note';
+    const PRIV_EDITER_NOTE    = 'intervenant-editer-note';
+
+
 
     protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
-
-        $localPrivs = [
-            self::PRIV_SUPPRIMER_NOTE,
-            self::PRIV_EDITER_NOTE,
-
-        ];
-
-
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-
-
         switch (true) {
             case $entity instanceof Note:
                 switch ($privilege) {
                     case self::PRIV_SUPPRIMER_NOTE:
                         return $this->assertSuppressionNote($entity);
-                        break;
                     case self::PRIV_EDITER_NOTE:
                         return $this->assertEditionNote($entity);
-                        break;
-
                 }
-                break;
         }
 
         return true;
     }
+
 
 
     /**
@@ -65,13 +50,6 @@ class NoteAssertion extends AbstractAssertion
      */
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-
-
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-
         /**
          * @var Note $note
          */
@@ -87,13 +65,14 @@ class NoteAssertion extends AbstractAssertion
     }
 
 
+
     protected function assertSuppressionNote(?Note $note = null): bool
     {
         if (empty($note)) {
             return false;
         }
 
-        if ($this->getRole()->hasPrivilege(Privileges::INTERVENANT_NOTE_ADMINISTRATION)) {
+        if ($this->authorize->isAllowedPrivilege(Privileges::INTERVENANT_NOTE_ADMINISTRATION)) {
             return true;
         }
 
@@ -109,6 +88,8 @@ class NoteAssertion extends AbstractAssertion
         return false;
     }
 
+
+
     protected function assertEditionNote(?Note $note = null): bool
     {
         if (empty($note)) return false;
@@ -118,7 +99,7 @@ class NoteAssertion extends AbstractAssertion
             return false;
         }
 
-        if ($this->getRole()->hasPrivilege(Privileges::INTERVENANT_NOTE_ADMINISTRATION)) {
+        if ($this->authorize->isAllowedPrivilege(Privileges::INTERVENANT_NOTE_ADMINISTRATION)) {
             return true;
         }
 

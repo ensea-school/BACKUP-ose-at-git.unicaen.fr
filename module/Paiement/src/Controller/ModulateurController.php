@@ -46,9 +46,7 @@ class ModulateurController extends AbstractController
         $typeModulateurs          = $this->getServiceTypeModulateur()->getList();
         $typeModulateurStructures = $this->getServiceTypeModulateurStructure()->getList();
 
-
-        $role      = $this->getServiceContext()->getSelectedIdentityRole();
-        $structure = $role->getStructure();
+        $structure = $this->getServiceContext()->getStructure();
 
         return compact('modulateurs', 'typeModulateurs', 'typeModulateurStructures', 'structure', 'anneeId');
     }

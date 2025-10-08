@@ -51,6 +51,7 @@ class Affectation implements HistoriqueAwareInterface, ImportAwareInterface
         }
 
         $profile = new UserProfile($id, $displayName);
+        $profile->setContext('affectation', $this);
         $profile->setContext('role', $this->getRole());
         $profile->setContext('structure', $this->getStructure());
 

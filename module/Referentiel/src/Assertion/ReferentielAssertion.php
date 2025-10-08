@@ -4,8 +4,6 @@ namespace Referentiel\Assertion;
 
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use BjyAuthorize\Service\Authorize;
-use Framework\Application\Application;
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -19,7 +17,6 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Utilisateur\Acl\Role;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
@@ -51,9 +48,6 @@ class ReferentielAssertion extends AbstractAssertion
 
     protected function assertPage(array $page): bool
     {
-        $role = $this->getRole();
-        /* @var $role Role */
-
         $intervenant = null;
         if (isset($page['workflow-etape-code'])) {
             $etape = $page['workflow-etape-code'];
@@ -61,12 +55,11 @@ class ReferentielAssertion extends AbstractAssertion
 
             if (
                 $intervenant
-                && $role
-                && $role->getStructure()
+                && $this->getServiceContext()->getStructure()
                 && (WorkflowEtape::REFERENTIEL_VALIDATION == $etape || WorkflowEtape::REFERENTIEL_VALIDATION_REALISE == $etape)
             ) { // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...
                 // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
-                return $this->assertHasReferentiel($intervenant, $role->getStructure(), $etape, $role);
+                return $this->assertHasReferentiel($intervenant, $this->getServiceContext()->getStructure(), $etape);
             } else {
                 if (!$this->getAssertionService()->assertEtapeAtteignable($etape, $intervenant)) {
                     return false;
@@ -83,10 +76,10 @@ class ReferentielAssertion extends AbstractAssertion
                     return $this->assertEntity($intervenant, Privileges::REFERENTIEL_REALISE_VISUALISATION);
                     break;
                 case 'intervenant/referentiel-prevu':
-                    return $this->assertPageReferentiel($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
+                    return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_PREVU);
                     break;
                 case 'intervenant/referentiel-realise':
-                    return $this->assertPageReferentiel($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
+                    return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_REALISE);
                     break;
             }
         }
@@ -103,12 +96,8 @@ class ReferentielAssertion extends AbstractAssertion
      */
     protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
         switch (true) {
@@ -116,50 +105,50 @@ class ReferentielAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case Privileges::REFERENTIEL_PREVU_VISUALISATION:
                     case Privileges::REFERENTIEL_REALISE_VISUALISATION:
-                        return $this->assertServiceReferentielVisualisation($role, $entity);
+                        return $this->assertServiceReferentielVisualisation($entity);
                     case Privileges::REFERENTIEL_PREVU_EDITION:
                     case Privileges::REFERENTIEL_REALISE_EDITION:
-                        return $this->assertServiceReferentielEdition($role, $entity);
+                        return $this->assertServiceReferentielEdition($entity);
                     case Privileges::REFERENTIEL_PREVU_VALIDATION:
                     case Privileges::REFERENTIEL_REALISE_VALIDATION:
-                        return $this->assertServiceReferentielValidation($role, $entity);
+                        return $this->assertServiceReferentielValidation($entity);
                 }
                 break;
             case $entity instanceof VolumeHoraireReferentiel:
                 switch ($privilege) {
                     case Privileges::REFERENTIEL_PREVU_VALIDATION:
                     case Privileges::REFERENTIEL_REALISE_VALIDATION:
-                        return $this->assertVolumeHoraireReferentielValidation($role, $entity);
+                        return $this->assertVolumeHoraireReferentielValidation($entity);
                 }
                 break;
             case $entity instanceof Intervenant:
                 switch ($privilege) {
                     case Privileges::REFERENTIEL_PREVU_VISUALISATION:
-                        return $this->assertIntervenantReferentiel($role, $entity, TypeVolumeHoraire::CODE_PREVU, false);
+                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_PREVU, false);
 
                     case Privileges::REFERENTIEL_PREVU_EDITION:
-                        return $this->assertIntervenantReferentiel($role, $entity, TypeVolumeHoraire::CODE_PREVU, true);
+                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_PREVU, true);
 
                     case Privileges::REFERENTIEL_REALISE_VISUALISATION:
-                        return $this->assertIntervenantReferentiel($role, $entity, TypeVolumeHoraire::CODE_REALISE, false);
+                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_REALISE, false);
 
                     case Privileges::REFERENTIEL_REALISE_EDITION:
-                        return $this->assertIntervenantReferentiel($role, $entity, TypeVolumeHoraire::CODE_REALISE, true);
+                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_REALISE, true);
                 }
                 break;
             case $entity instanceof Validation:
                 switch ($privilege) {
                     case Privileges::REFERENTIEL_PREVU_VALIDATION:
                     case Privileges::REFERENTIEL_REALISE_VALIDATION:
-                        return $this->assertValidationValidation($role, $entity);
+                        return $this->assertValidationValidation($entity);
                     case Privileges::REFERENTIEL_DEVALIDATION:
-                        return $this->assertValidationDevalidation($role, $entity);
+                        return $this->assertValidationDevalidation($entity);
                 }
                 break;
             case $entity instanceof FonctionReferentiel:
                 switch ($privilege) {
                     case Privileges::REFERENTIEL_ADMIN_EDITION:
-                        return $this->assertFonctionReferentielEdition($role, $entity);
+                        return $this->assertFonctionReferentielEdition($entity);
                 }
                 break;
         }
@@ -177,25 +166,21 @@ class ReferentielAssertion extends AbstractAssertion
      */
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-        $role = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-
-        if (!$this->getAssertionService()->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!
+        if (!$this->getAssertionService()->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!
 
         switch ($controller . '.' . $action) {
             case ServiceReferentielController::class . '.validation':
-                return $role->hasPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION) || $role->hasPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION);
+                return $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION) || $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION);
 
                 break;
             case ServiceReferentielController::class . '.referentiel-prevu':
-                return $this->assertPageReferentiel($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
+                return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_PREVU);
                 break;
             case ServiceReferentielController::class . '.referentiel-realise':
-                return $this->assertPageReferentiel($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
+                return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_REALISE);
                 break;
         }
 
@@ -203,7 +188,7 @@ class ReferentielAssertion extends AbstractAssertion
     }
 
 
-    protected function assertPageReferentiel(Role $role, ?Intervenant $intervenant, string $typeVolumeHoraireCode): bool
+    protected function assertPageReferentiel(?Intervenant $intervenant, string $typeVolumeHoraireCode): bool
     {
         if (!$intervenant) return true;
 
@@ -212,7 +197,7 @@ class ReferentielAssertion extends AbstractAssertion
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
 
         $asserts = [
-            $this->getAssertionService()->assertIntervenant($role, $intervenant),
+            $this->getAssertionService()->assertIntervenant($intervenant),
             $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeReferentielSaisie(), $intervenant),
         ];
         if ($typeVolumeHoraire->isPrevu()) {
@@ -226,14 +211,14 @@ class ReferentielAssertion extends AbstractAssertion
     }
 
 
-    protected function assertServiceReferentielVisualisation(Role $role, ServiceReferentiel $serviceReferentiel): bool
+    protected function assertServiceReferentielVisualisation(ServiceReferentiel $serviceReferentiel): bool
     {
         $typeVolumeHoraire = $serviceReferentiel->getTypeVolumeHoraire();
         $intervenant = $serviceReferentiel->getIntervenant();
         $statut = $intervenant->getStatut();
 
         $asserts = [
-            $this->getAssertionService()->assertIntervenant($role, $intervenant),
+            $this->getAssertionService()->assertIntervenant($intervenant),
             $this->getAssertionService()->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeReferentielSaisie(), $intervenant),
         ];
         if ($typeVolumeHoraire->isPrevu()) {
@@ -247,12 +232,12 @@ class ReferentielAssertion extends AbstractAssertion
     }
 
 
-    protected function assertServiceReferentielEdition(Role $role, ServiceReferentiel $serviceReferentiel): bool
+    protected function assertServiceReferentielEdition(ServiceReferentiel $serviceReferentiel): bool
     {
         $asserts = [];
-        if (!$role->hasPrivilege(Privileges::REFERENTIEL_SAISIE_TOUTES_COMPOSANTES)) {
+        if (!$this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_SAISIE_TOUTES_COMPOSANTES)) {
             // Si on n'a pas le privilège pour pouvoir du référentiel dans toutes les composantes sans restriction
-            if ($structure = $role->getStructure()) {
+            if ($structure = $this->getServiceContext()->getStructure()) {
                 $structureAffectation = $serviceReferentiel->getIntervenant() ? $serviceReferentiel->getIntervenant()->getStructure() : null;
                 $structureEnseignement = $serviceReferentiel->getStructure() ?? $structure;
 
@@ -269,15 +254,15 @@ class ReferentielAssertion extends AbstractAssertion
             }
         }
 
-        $asserts[] = $this->getAssertionService()->assertIntervenant($role, $serviceReferentiel->getIntervenant());
-        $asserts[] = $this->getAssertionService()->assertCampagneSaisie($role, $serviceReferentiel->getTypeVolumeHoraire());
-        $asserts[] = $this->getAssertionService()->assertCloture($role, $serviceReferentiel->getIntervenant());
+        $asserts[] = $this->getAssertionService()->assertIntervenant($serviceReferentiel->getIntervenant());
+        $asserts[] = $this->getAssertionService()->assertCampagneSaisie($serviceReferentiel->getTypeVolumeHoraire());
+        $asserts[] = $this->getAssertionService()->assertCloture($serviceReferentiel->getIntervenant());
 
         return $this->asserts($asserts);
     }
 
 
-    protected function assertHasReferentiel(Intervenant $intervenant, Structure $structure, string $etape, Role $role): bool
+    protected function assertHasReferentiel(Intervenant $intervenant, Structure $structure, string $etape): bool
     {
         $services = $intervenant->getServiceReferentiel();
         $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
@@ -299,7 +284,7 @@ class ReferentielAssertion extends AbstractAssertion
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
                     if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
-                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure()?->inStructure($role->getStructure()))) {
+                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure()?->inStructure($this->getServiceContext()->getStructure()))) {
                         return true;
                     }
                 }
@@ -310,7 +295,7 @@ class ReferentielAssertion extends AbstractAssertion
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
                     if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
-                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure()?->inStructure($role->getStructure()))) {
+                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure()?->inStructure($this->getServiceContext()->getStructure()))) {
                         return true;
                     }
                 }
@@ -322,59 +307,55 @@ class ReferentielAssertion extends AbstractAssertion
     }
 
 
-    protected function assertVolumeHoraireReferentielValidation(Role $role, VolumeHoraireReferentiel $volumeHoraireReferentiel): bool
+    protected function assertVolumeHoraireReferentielValidation(VolumeHoraireReferentiel $volumeHoraireReferentiel): bool
     {
         $serviceReferentiel = $volumeHoraireReferentiel->getServiceReferentiel();
 
-        return $this->assertServiceReferentielValidation($role, $serviceReferentiel);
+        return $this->assertServiceReferentielValidation($serviceReferentiel);
     }
 
 
-    protected function assertServiceReferentielValidation(Role $role, ServiceReferentiel $serviceReferentiel): bool
+    protected function assertServiceReferentielValidation(ServiceReferentiel $serviceReferentiel): bool
     {
-        // Hack à supprimer une fois le nouveau moteur authorize ok
-        $acl = Application::getInstance()->container(Authorize::class)->getAcl();
-
-        return $this->assert($acl, $this->$role, $serviceReferentiel->getIntervenant(), $serviceReferentiel->getStructure());
+        return $this->assertEntity($serviceReferentiel->getIntervenant(), $serviceReferentiel->getStructure());
     }
 
 
-    protected function assertValidationValidation(Role $role, Validation $validation): bool
+    protected function assertValidationValidation(Validation $validation): bool
     {
         return $this->asserts([
             !$validation->getId(),
-            $this->assertValidation($role, $validation->getIntervenant(), $validation->getStructure()),
+            $this->assertValidation($validation->getIntervenant(), $validation->getStructure()),
         ]);
     }
 
 
-    protected function assertValidation(Role $role, Intervenant $intervenant, ?Structure $structure): bool
+    protected function assertValidation(Intervenant $intervenant, ?Structure $structure): bool
     {
         return $this->asserts([
-            $this->getAssertionService()->assertIntervenant($role, $intervenant),
-            $this->getAssertionService()->assertStructure($role, $structure),
+            $this->getAssertionService()->assertIntervenant($intervenant),
+            $this->getAssertionService()->assertStructure($structure),
         ]);
     }
 
 
-    protected function assertValidationDevalidation(Role $role, Validation $validation): bool
+    protected function assertValidationDevalidation(Validation $validation): bool
     {
         return $this->asserts([
             $validation->getId(),
-            $this->getAssertionService()->assertIntervenant($role, $validation->getIntervenant()),
-            $this->getAssertionService()->assertStructure($role, $validation->getStructure()),
+            $this->getAssertionService()->assertIntervenant($validation->getIntervenant()),
+            $this->getAssertionService()->assertStructure($validation->getStructure()),
         ]);
     }
 
 
     protected function assertIntervenantReferentiel(
-        Role        $role,
         Intervenant $intervenant,
         string      $typeVolumeHoraireCode,
         bool        $edition = false
     ): bool
     {
-        if (!$this->getAssertionService()->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!
+        if (!$this->getAssertionService()->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!
 
         $statut = $intervenant->getStatut();
         if (TypeVolumeHoraire::CODE_PREVU == $typeVolumeHoraireCode) {
@@ -389,13 +370,13 @@ class ReferentielAssertion extends AbstractAssertion
 
 
 
-    protected function assertFonctionReferentielEdition(Role $role, FonctionReferentiel $fonctionReferentiel): bool
+    protected function assertFonctionReferentielEdition(FonctionReferentiel $fonctionReferentiel): bool
     {
-        if ($role->getStructure()){
+        if ($this->getServiceContext()->getStructure()){
             if (!$fonctionReferentiel->getStructure()){
                 return false;
             }
-            return $fonctionReferentiel->getStructure()->inStructure($role->getStructure());
+            return $fonctionReferentiel->getStructure()->inStructure($this->getServiceContext()->getStructure());
         }
 
         return true;

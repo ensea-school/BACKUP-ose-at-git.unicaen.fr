@@ -185,8 +185,6 @@ class DroitsController extends AbstractController
 
     public function affectationsAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $serviceAffectations = $this->getServiceAffectation();
 
         [$qb, $alias] = $serviceAffectations->initQuery();
@@ -196,7 +194,7 @@ class DroitsController extends AbstractController
         $serviceAffectations->join($this->getServiceSource(), $qb, 'source', true);
         $serviceAffectations->leftJoin($this->getServiceStructure(), $qb, 'structure', true);
         $serviceAffectations->finderByHistorique($qb);
-        if ($structure = $role->getStructure()) {
+        if ($structure = $this->getServiceContext()->getStructure()) {
             $serviceAffectations->finderByStructure($structure, $qb);
         }
 

@@ -16,7 +16,6 @@ use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Entity\Db\VolumeHoraireEns;
 use UnicaenImport\Entity\Db\Source;
-use Utilisateur\Acl\Role;
 
 
 /**
@@ -31,42 +30,39 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
         switch (true) {
             case $entity instanceof ElementPedagogique:
                 switch ($privilege) {
                     case Privileges::ODF_ELEMENT_EDITION:
-                        return $this->assertElementPedagogiqueSaisie($role, $entity);
+                        return $this->assertElementPedagogiqueSaisie($entity);
                     case Privileges::ODF_CENTRES_COUT_EDITION:
-                        return $this->assertElementPedagogiqueSaisieCentresCouts($role, $entity);
+                        return $this->assertElementPedagogiqueSaisieCentresCouts($entity);
                     case Privileges::ODF_MODULATEURS_EDITION:
-                        return $this->assertElementPedagogiqueSaisieModulateurs($role, $entity);
+                        return $this->assertElementPedagogiqueSaisieModulateurs($entity);
                     case Privileges::ODF_TAUX_MIXITE_EDITION:
-                        return $this->assertElementPedagogiqueSaisieTauxMixite($role, $entity);
+                        return $this->assertElementPedagogiqueSaisieTauxMixite($entity);
                     case Privileges::ODF_ELEMENT_VH_EDITION:
-                        return $this->assertElementPedagogiqueSaisieVH($role, $entity);
+                        return $this->assertElementPedagogiqueSaisieVH($entity);
                     case Privileges::ODF_ELEMENT_SYNCHRONISATION:
-                        return $this->assertElementPedagogiqueSynchronisation($role, $entity);
+                        return $this->assertElementPedagogiqueSynchronisation($entity);
                 }
             break;
             case $entity instanceof Etape:
                 switch ($privilege) {
                     case Privileges::ODF_ETAPE_EDITION:
-                        return $this->assertEtapeSaisie($role, $entity);
+                        return $this->assertEtapeSaisie($entity);
                     case Privileges::ODF_CENTRES_COUT_EDITION:
-                        return $this->assertEtapeSaisieCentresCouts($role, $entity);
+                        return $this->assertEtapeSaisieCentresCouts($entity);
                     case Privileges::ODF_MODULATEURS_EDITION:
-                        return $this->assertEtapeSaisieModulateurs($role, $entity);
+                        return $this->assertEtapeSaisieModulateurs($entity);
                     case Privileges::ODF_TAUX_MIXITE_EDITION:
-                        return $this->assertEtapeSaisieTauxMixite($role, $entity);
+                        return $this->assertEtapeSaisieTauxMixite($entity);
                     case Privileges::ODF_ELEMENT_VH_EDITION:
-                        return $this->assertEtapeSaisieVH($role, $entity);
+                        return $this->assertEtapeSaisieVH($entity);
                 }
             break;
             case $entity instanceof Structure:
@@ -77,31 +73,31 @@ class OffreDeFormationAssertion extends AbstractAssertion
                     case Privileges::ODF_MODULATEURS_EDITION:
                     case Privileges::ODF_TAUX_MIXITE_EDITION:
                     case Privileges::ODF_ELEMENT_VH_EDITION:
-                        return $this->assertStructureSaisie($role, $entity);
+                        return $this->assertStructureSaisie($entity);
                 }
             break;
             case $entity instanceof CentreCoutEp:
                 switch ($privilege) {
                     case Privileges::ODF_CENTRES_COUT_EDITION:
-                        return $this->assertCentreCoutEpSaisieCentresCouts($role, $entity);
+                        return $this->assertCentreCoutEpSaisieCentresCouts($entity);
                 }
             break;
             case $entity instanceof ElementModulateur:
                 switch ($privilege) {
                     case Privileges::ODF_MODULATEURS_EDITION:
-                        return $this->assertElementModulateurSaisieModulateurs($role, $entity);
+                        return $this->assertElementModulateurSaisieModulateurs($entity);
                 }
             break;
             case $entity instanceof VolumeHoraireEns:
                 switch ($privilege) {
                     case Privileges::ODF_ELEMENT_VH_EDITION:
-                        return $this->assertVolumeHoraireEnsSaisieVH($role, $entity);
+                        return $this->assertVolumeHoraireEnsSaisieVH($entity);
                 }
             break;
             case $entity instanceof TypeIntervention:
                 switch ($privilege) {
                     case Privileges::ODF_ELEMENT_VH_EDITION:
-                        return $this->assertTypeInterventionSaisieVH($role, $entity);
+                        return $this->assertTypeInterventionSaisieVH($entity);
                 }
             break;
         }
@@ -112,144 +108,144 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
     /* ---- Edition étapes & éléments ---- */
-    protected function assertElementPedagogiqueSaisie(Role $role, ElementPedagogique $elementPedagogique): bool
+    protected function assertElementPedagogiqueSaisie(ElementPedagogique $elementPedagogique): bool
     {
         return $this->asserts([
-            $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
+            $this->assertStructureSaisie($elementPedagogique->getStructure()),
             $this->assertSourceSaisie($elementPedagogique->getSource(), $elementPedagogique->getAnnee()),
         ]);
     }
 
 
 
-    protected function assertElementPedagogiqueSynchronisation(Role $role, ElementPedagogique $elementPedagogique): bool
+    protected function assertElementPedagogiqueSynchronisation(ElementPedagogique $elementPedagogique): bool
     {
         return $this->asserts([
             $elementPedagogique->getSource()->getImportable(),
-            $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
+            $this->assertStructureSaisie($elementPedagogique->getStructure()),
         ]);
     }
 
 
 
-    protected function assertEtapeSaisie(Role $role, Etape $etape): bool
+    protected function assertEtapeSaisie(Etape $etape): bool
     {
-        return $this->assertStructureSaisie($role, $etape->getStructure());
+        return $this->assertStructureSaisie($etape->getStructure());
     }
 
 
 
     /* ---- Centres de coûts ---- */
-    protected function assertEtapeSaisieCentresCouts(Role $role, Etape $etape): bool
+    protected function assertEtapeSaisieCentresCouts(Etape $etape): bool
     {
-        return $this->assertStructureSaisie($role, $etape->getStructure())
+        return $this->assertStructureSaisie($etape->getStructure())
             && $etape->getElementPedagogique()->count() > 0;
     }
 
 
 
-    protected function assertCentreCoutEpSaisieCentresCouts(Role $role, CentreCoutEp $centreCoutEp): bool
+    protected function assertCentreCoutEpSaisieCentresCouts(CentreCoutEp $centreCoutEp): bool
     {
-        return $this->assertElementPedagogiqueSaisieCentresCouts($role, $centreCoutEp->getElementPedagogique());
+        return $this->assertElementPedagogiqueSaisieCentresCouts($centreCoutEp->getElementPedagogique());
     }
 
 
 
-    protected function assertElementPedagogiqueSaisieCentresCouts(Role $role, ElementPedagogique $elementPedagogique): bool
+    protected function assertElementPedagogiqueSaisieCentresCouts(ElementPedagogique $elementPedagogique): bool
     {
-        return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
+        return $this->assertStructureSaisie($elementPedagogique->getStructure());
     }
 
 
 
     /* ---- Taux de mixité ---- */
-    protected function assertEtapeSaisieTauxMixite(Role $role, Etape $etape): bool
+    protected function assertEtapeSaisieTauxMixite(Etape $etape): bool
     {
-        return $this->assertStructureSaisie($role, $etape->getStructure())
+        return $this->assertStructureSaisie($etape->getStructure())
             && $etape->getElementPedagogique()->count() > 0;
     }
 
 
 
     /*
-        protected function assertCentreCoutEpSaisieTauxMixite(Role $role, CentreCoutEp $centreCoutEp): bool
+        protected function assertCentreCoutEpSaisieTauxMixite(CentreCoutEp $centreCoutEp): bool
         {
-            return $this->assertElementPedagogiqueSaisieTauxMixite($role, $centreCoutEp->getElementPedagogique());
+            return $this->assertElementPedagogiqueSaisieTauxMixite($centreCoutEp->getElementPedagogique());
         }
     */
 
 
-    protected function assertElementPedagogiqueSaisieTauxMixite(Role $role, ElementPedagogique $elementPedagogique): bool
+    protected function assertElementPedagogiqueSaisieTauxMixite(ElementPedagogique $elementPedagogique): bool
     {
-        return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
+        return $this->assertStructureSaisie($elementPedagogique->getStructure());
     }
 
 
 
     /* ---- Volumes horaires d'enseigneement ---- */
-    protected function assertEtapeSaisieVH(Role $role, Etape $etape): bool
+    protected function assertEtapeSaisieVH(Etape $etape): bool
     {
-        return $this->assertStructureSaisie($role, $etape->getStructure())
+        return $this->assertStructureSaisie($etape->getStructure())
             && $etape->getElementPedagogique()->count() > 0;
     }
 
 
 
-    protected function assertElementPedagogiqueSaisieVH(Role $role, ElementPedagogique $elementPedagogique): bool
+    protected function assertElementPedagogiqueSaisieVH(ElementPedagogique $elementPedagogique): bool
     {
         return $this->asserts([
-            $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
+            $this->assertStructureSaisie($elementPedagogique->getStructure()),
             $this->assertSourceSaisie($elementPedagogique->getSource(), $elementPedagogique->getAnnee()),
         ]);
     }
 
 
 
-    protected function assertTypeInterventionSaisieVH(Role $role, TypeIntervention $typeIntervention): bool
+    protected function assertTypeInterventionSaisieVH(TypeIntervention $typeIntervention): bool
     {
         return true;
     }
 
 
 
-    protected function assertVolumeHoraireEnsSaisieVH(Role $role, VolumeHoraireEns $volumeHoraireEns): bool
+    protected function assertVolumeHoraireEnsSaisieVH(VolumeHoraireEns $volumeHoraireEns): bool
     {
         return $this->asserts([
             $volumeHoraireEns->getSource() ? $this->assertSourceSaisie($volumeHoraireEns->getSource(), $volumeHoraireEns->getElementPedagogique()->getAnnee()) : true,
-            $volumeHoraireEns->getElementPedagogique() ? $this->assertElementPedagogiqueSaisieVH($role, $volumeHoraireEns->getElementPedagogique()) : true,
-            $volumeHoraireEns->getTypeIntervention() ? $this->assertTypeInterventionSaisieVH($role, $volumeHoraireEns->getTypeIntervention()) : true,
+            $volumeHoraireEns->getElementPedagogique() ? $this->assertElementPedagogiqueSaisieVH($volumeHoraireEns->getElementPedagogique()) : true,
+            $volumeHoraireEns->getTypeIntervention() ? $this->assertTypeInterventionSaisieVH($volumeHoraireEns->getTypeIntervention()) : true,
         ]);
     }
 
 
 
     /* ---- Modulateurs ---- */
-    protected function assertEtapeSaisieModulateurs(Role $role, Etape $etape): bool
+    protected function assertEtapeSaisieModulateurs(Etape $etape): bool
     {
-        return $this->assertStructureSaisie($role, $etape->getStructure())
+        return $this->assertStructureSaisie($etape->getStructure())
             && $etape->getElementPedagogique()->count() > 0;
     }
 
 
 
-    protected function assertElementPedagogiqueSaisieModulateurs(Role $role, ElementPedagogique $elementPedagogique): bool
+    protected function assertElementPedagogiqueSaisieModulateurs(ElementPedagogique $elementPedagogique): bool
     {
-        return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
+        return $this->assertStructureSaisie($elementPedagogique->getStructure());
     }
 
 
 
-    protected function assertElementModulateurSaisieModulateurs(Role $role, CentreCoutEp $centreCoutEp): bool
+    protected function assertElementModulateurSaisieModulateurs(CentreCoutEp $centreCoutEp): bool
     {
-        return $this->assertElementPedagogiqueSaisieCentresCouts($role, $centreCoutEp->getElementPedagogique());
+        return $this->assertElementPedagogiqueSaisieCentresCouts($centreCoutEp->getElementPedagogique());
     }
 
 
 
     /* ---- Globaux ---- */
-    protected function assertStructureSaisie(Role $role, Structure $structure): bool
+    protected function assertStructureSaisie(Structure $structure): bool
     {
-        if ($rs = $role->getStructure()) {
+        if ($rs = $this->getServiceContext()->getStructure()) {
             return $structure->inStructure($rs);
         }
 

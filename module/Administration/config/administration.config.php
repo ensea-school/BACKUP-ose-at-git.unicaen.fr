@@ -175,7 +175,7 @@ $config = [
         [
             'controller' => Controller\AdministrationController::class,
             'action'     => ['rubrique'],
-            'roles'      => 'user',
+            'privileges' => 'user',
         ],
     ],
 

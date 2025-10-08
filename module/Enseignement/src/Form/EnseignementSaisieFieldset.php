@@ -137,7 +137,7 @@ class EnseignementSaisieFieldset extends AbstractFieldset
             ]);
         }
 
-        if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure() ?: $this->getServiceLocalContext()->getStructure()) {
+        if ($structure = $this->getServiceContext()->getStructure() ?: $this->getServiceLocalContext()->getStructure()) {
             $fs->get('structure')->setValue($structure->getId());
         }
 

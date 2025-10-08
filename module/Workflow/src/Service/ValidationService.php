@@ -142,11 +142,9 @@ class ValidationService extends AbstractEntityService
         ]);
 
         if (!$validation) {
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
-
             $validation = $this->newEntity($tv);
             $validation->setIntervenant($intervenant);
-            $validation->setStructure($role->getStructure() ? : $intervenant->getStructure());
+            $validation->setStructure($this->getServiceContext()->getStructure() ? : $intervenant->getStructure());
         }
 
         return $validation;

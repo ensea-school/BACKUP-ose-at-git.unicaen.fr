@@ -51,9 +51,8 @@ class EnseignementProcessus extends AbstractProcessus
      */
     public function getEnseignements(Recherche $recherche): array
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($role->getIntervenant()) {
-            $intervenant = $role->getIntervenant();
+        if ($this->getServiceContext()->getIntervenant()) {
+            $intervenant = $this->getServiceContext()->getIntervenant();
         } else {
             $intervenant = $recherche->getIntervenant();
         }
@@ -99,8 +98,8 @@ class EnseignementProcessus extends AbstractProcessus
         $this->getServiceVolumeHoraire()->orderBy($qb);
         $this->getServiceTypeIntervention()->orderBy($qb);
 
-        if (!$intervenant && $role->getStructure()) {
-            $service->finderByComposante($role->getStructure(), $qb);
+        if (!$intervenant && $this->getServiceContext()->getStructure()) {
+            $service->finderByComposante($this->getServiceContext()->getStructure(), $qb);
         }
 
         $services = $service->getList($qb);

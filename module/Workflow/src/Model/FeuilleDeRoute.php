@@ -206,7 +206,7 @@ class FeuilleDeRoute
 
     private function buildEtape(WorkflowEtape $etape, int $structureId, ?string $structureLibelle, bool $atteignable, float $objectif, float $realisation, ?string $whyNonAtteignable): void
     {
-        $role        = $this->service->getServiceContext()->getSelectedIdentityRole();
+        $affectation = $this->service->getServiceContext()->getAffectation();
         $intervenant = $this->service->getServiceContext()->getIntervenant();
 
         $inStructure = null;
@@ -227,9 +227,9 @@ class FeuilleDeRoute
             if (!array_key_exists($etape->getCode(), $this->fdr)) {
                 $fdre          = new FeuilleDeRouteEtape($this, $this->service, $etape);
                 $fdre->numero  = count($this->fdr) + 1;
-                $fdre->libelle = $etape->getLibelle($role);
+                $fdre->libelle = $etape->getLibelle((bool)$intervenant);
 
-                if ($intervenant && !$role) {
+                if ($intervenant && !$affectation) {
                     $fdre->url = $this->service->getUrl($etape->getRouteIntervenant() ?: $etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
                 } else {
                     $fdre->url = $this->service->getUrl($etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);

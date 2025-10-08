@@ -36,12 +36,8 @@ class IntervenantAssertion extends AbstractAssertion
      */
     protected function assertEntity(ResourceInterface $entity, ?string $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch (true) {
             case $entity instanceof Intervenant:
@@ -77,14 +73,11 @@ class IntervenantAssertion extends AbstractAssertion
 
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-        $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch ($action) {
             case 'supprimer':
@@ -100,9 +93,8 @@ class IntervenantAssertion extends AbstractAssertion
 
     protected function assertEdition(?Intervenant $intervenant = null): bool
     {
-        $role = $this->getRole();
-        if ($role instanceof Role && $role->getStructure() && $intervenant->getStructure()) {
-            return $intervenant->getStructure()->inStructure($role->getStructure());
+        if ($this->getServiceUserContext()->getStructure() && $intervenant->getStructure()) {
+            return $intervenant->getStructure()->inStructure($this->getServiceUserContext()->getStructure());
         }
 
         return true;

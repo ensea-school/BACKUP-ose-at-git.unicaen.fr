@@ -578,15 +578,12 @@ class EnseignementsViewHelper extends AbstractHtmlElement
      */
     public function calcDefaultColumnsVisibility()
     {
-        $services = $this->getServices();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $multiIntervenants = empty($this->getIntervenant());
         $this->setColumnVisibility('intervenant', $multiIntervenants);
         $this->setColumnVisibility('structure-aff', $multiIntervenants);
 
         // si c'est une composante alors on affiche le détail pour l'enseignement
-        $detailsEns = !$role->getIntervenant();
+        $detailsEns = !$this->getServiceContext()->getIntervenant();
         $this->setColumnVisibility('foad', $detailsEns);
         $this->setColumnVisibility('regimes-inscription', $detailsEns);
 

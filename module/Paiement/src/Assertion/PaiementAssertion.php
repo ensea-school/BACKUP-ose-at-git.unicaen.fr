@@ -2,10 +2,10 @@
 
 namespace Paiement\Assertion;
 
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
-use Utilisateur\Acl\Role;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -17,6 +17,7 @@ use Workflow\Service\WorkflowServiceAwareTrait;
 class PaiementAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     /* ---- Routage général ---- */
     public function __invoke (array $page): bool // gestion des visibilités de menus
@@ -35,12 +36,8 @@ class PaiementAssertion extends AbstractAssertion
      */
     protected function assertController ($controller, $action = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -57,7 +54,7 @@ class PaiementAssertion extends AbstractAssertion
 
             break;
             case 'etatpaiement':
-                if ($role->getIntervenant()) return false; // pas pour les intervenants
+                if ($this->getServiceContext()->getIntervenant()) return false; // pas pour les intervenants
             break;
             case 'extractionpaieprime':
                 return $this->assertEtapeAtteignable(WorkflowEtape::MISSION_PRIME, $intervenant);

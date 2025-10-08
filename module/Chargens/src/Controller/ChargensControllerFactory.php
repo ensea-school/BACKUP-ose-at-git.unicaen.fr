@@ -2,6 +2,7 @@
 
 namespace Chargens\Controller;
 
+use Framework\Navigation\Navigation;
 use Psr\Container\ContainerInterface;
 
 class ChargensControllerFactory
@@ -15,7 +16,9 @@ class ChargensControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new ChargensController();
+        $controller = new ChargensController(
+            $container->get(Navigation::class),
+        );
 
         return $controller;
     }

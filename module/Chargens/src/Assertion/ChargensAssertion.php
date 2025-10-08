@@ -35,10 +35,6 @@ class ChargensAssertion extends AbstractAssertion
      */
     protected function assertEntity(string|ResourceInterface|null $entity = null, ?string $privilege = null): bool
     {
-        $role = $this->getRole();
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-
         // Si c'est bon alors on affine...
         switch (true) {
             case $entity instanceof Scenario:
@@ -69,12 +65,8 @@ class ChargensAssertion extends AbstractAssertion
      */
     protected function assertController(string $controller, ?string $action = null, ?string $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
         switch ($action) {
@@ -111,18 +103,15 @@ class ChargensAssertion extends AbstractAssertion
 
     private function assertScenarioStructureEdition(?Structure $structure = null): bool
     {
-        /** @var Role $role */
-        $role = $this->getRole();
-
         $asserts = [];
 
         if ($structure) {
-            $asserts[] = $this->authorize->isAllowed($this->getRole(), Privileges::getResourceId(Privileges::CHARGENS_SCENARIO_COMPOSANTE_EDITION));
-            if ($role->getStructure()){
-                $asserts[] = $structure->inStructure($role->getStructure());
+            $asserts[] = $this->authorize->isAllowedPrivilege(Privileges::CHARGENS_SCENARIO_COMPOSANTE_EDITION);
+            if ($this->getServiceContext()->getStructure()){
+                $asserts[] = $structure->inStructure($this->getServiceContext()->getStructure());
             }
         } else {
-            $asserts[] = $this->authorize->isAllowed($this->getRole(), Privileges::getResourceId(Privileges::CHARGENS_SCENARIO_ETABLISSEMENT_EDITION));
+            $asserts[] = $this->authorize->isAllowedPrivilege(Privileges::CHARGENS_SCENARIO_ETABLISSEMENT_EDITION);
         }
 
         return $this->asserts($asserts);

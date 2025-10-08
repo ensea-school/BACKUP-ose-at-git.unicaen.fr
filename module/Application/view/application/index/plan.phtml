@@ -1,10 +1,10 @@
 <?php
 /**
- * @var \Utilisateur\Acl\Role|null $role
- * @var array                      $configPages
+ * @var bool  $isConnected
+ * @var array $configPages
  */
 
-if (!$role) {
+if (!$isConnected) {
     echo 'Vous devez être connecté pour accéder au plan de navigation';
     return;
 }
@@ -53,7 +53,7 @@ uasort($pi, function ($a, $b) {
 });
 
 $pagesIntervenant = [
-    $pi['rechercher']['label'] => $this->url($pi['rechercher']['route']),
+        $pi['rechercher']['label'] => $this->url($pi['rechercher']['route']),
 ];
 unset($pi['rechercher']);
 unset($pi['voir']);
@@ -61,12 +61,12 @@ unset($pi['voir']);
 $iparams = ['intervenant' => $intervenantId];
 
 $pagesIntervenant['Fiche individuelle'] = [
-    'Fiche'           => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'fiche']]),
-    'Édition'         => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'edition']]),
-    'Synchronisation' => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'synchronisation']]),
-    'Suppression'     => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'suppression']]),
-    'Dérogations'     => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'derogations']]),
-    'Notes'           => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'notes']]),
+        'Fiche'           => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'fiche']]),
+        'Édition'         => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'edition']]),
+        'Synchronisation' => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'synchronisation']]),
+        'Suppression'     => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'suppression']]),
+        'Dérogations'     => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'derogations']]),
+        'Notes'           => $this->url('intervenant/voir', $iparams, ['query' => ['tab' => 'notes']]),
 ];
 
 foreach ($pi as $p) {
@@ -74,13 +74,13 @@ foreach ($pi as $p) {
 }
 
 $pages = [
-    'Intervenant'        => $pagesIntervenant,
-    'Offre de formation' => [
-        $configPages['of']['label'] => $this->url($configPages['of']['route']),
-    ],
-    'Services'           => [
-        $configPages['service']['label'] => $this->url($configPages['service']['route']),
-    ],
+        'Intervenant'        => $pagesIntervenant,
+        'Offre de formation' => [
+                $configPages['of']['label'] => $this->url($configPages['of']['route']),
+        ],
+        'Services'           => [
+                $configPages['service']['label'] => $this->url($configPages['service']['route']),
+        ],
 ];
 
 foreach ($configPages['chargens']['pages'] as $p) {
@@ -110,7 +110,7 @@ foreach ($configPages['administration']['pages'] as $p) {
 
 foreach ($pages as $rubrique => $rpages) {
     echo "<h2>$rubrique</h2>\n";
-    if ('Intervenant' == $rubrique){
+    if ('Intervenant' == $rubrique) {
         ?>
         <div class="mb-2">
             <label class="form-label">ID d'intervenant :</label>

@@ -3,6 +3,7 @@
 namespace Administration\Controller;
 
 use Application\Controller\AbstractController;
+use Framework\Navigation\Navigation;
 
 
 /**
@@ -14,9 +15,17 @@ use Application\Controller\AbstractController;
 class GestionController extends AbstractController
 {
 
+    public function __construct(
+        private readonly Navigation $navigation
+    )
+    {
+    }
+
     public function indexAction()
     {
-        return [];
+        $pages = $this->navigation->getCurrentPage()->getVisiblePages();
+
+        return compact('pages');
     }
 
 

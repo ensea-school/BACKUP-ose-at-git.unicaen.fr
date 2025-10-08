@@ -122,8 +122,6 @@ class OffreFormationController extends AbstractController
     {
         $this->initFilterHistorique();
         [$structure, $niveau, $etape] = $this->getParams();
-        //Get role of user
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $anneeEnCours = $this->getServiceContext()->getAnnee();
         [$offresComplementaires, $mappingEtape, $reconductionTotale] = $this->getServiceOffreFormation()->getOffreComplementaire($structure, $niveau, $etape);
@@ -175,9 +173,6 @@ class OffreFormationController extends AbstractController
         $etapesReconduites = [];
         [$structure, $niveau, $etape] = $this->getParams();
 
-        //Get role of user
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $request = $this->getRequest();
         if ($request->isPost()) {
 
@@ -221,7 +216,6 @@ class OffreFormationController extends AbstractController
 
         [$structure, $niveau, $etape] = $this->getParams();
         $etapesReconduites = [];
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $request = $this->getRequest();
         if ($request->isPost()) {

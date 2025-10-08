@@ -115,7 +115,6 @@ class ServiceReferentielController extends AbstractController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
         $service = $this->getServiceServiceReferentiel();
-        $role    = $this->getServiceContext()->getSelectedIdentityRole();
         $form    = $this->getFormServiceReferentielSaisie();
         $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
 
@@ -158,7 +157,7 @@ class ServiceReferentielController extends AbstractController
             ->setTypeVolumeHoraire($typeVolumeHoraire)
             ->setIntervenant($intervenant);
         if ($assertionEntity->getStructure() == null) {
-            $assertionEntity->setStructure($role->getStructure());
+            $assertionEntity->setStructure($this->getServiceContext()->getStructure());
         }
         if (!$this->isAllowed($assertionEntity, $typeVolumeHoraire->getPrivilegeReferentielEdition())) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
@@ -335,8 +334,6 @@ class ServiceReferentielController extends AbstractController
     {
         $this->initFilters();
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $filterStructure = null;//$role->getStructure(); // pour filtrer les affichages à la structure concernée uniquement
 
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -369,9 +366,9 @@ class ServiceReferentielController extends AbstractController
 
         /* Messages */
         if (empty($services['non-valides'])) {
-            if ($role->getIntervenant()) {
+            if ($this->getServiceContext()->getIntervenant()) {
                 $message = sprintf(
-                    "Tous votre référentiel %s a été validé.",
+                    "Tout votre référentiel %s a été validé.",
                     $typeVolumeHoraire->isPrevu() ? "prévisionnel" : "réalisé"
                 );
             } else {

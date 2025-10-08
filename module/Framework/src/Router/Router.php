@@ -3,14 +3,11 @@
 namespace Framework\Router;
 
 use Framework\Container\Autowire;
-use Laminas\View\Helper\Url;
 use Psr\Container\ContainerInterface;
 
 class Router
 {
     public Route $home;
-
-    private Url $laminasUrl;
 
     private ?string $rootUrl = null;
 
@@ -27,25 +24,9 @@ class Router
 
         #[Autowire(config: 'router/routes')]
         array                               $routes,
-
-        #[Autowire(config: 'bjyauthorize/guards/UnicaenPrivilege\Guard\PrivilegeController')]
-        array                               $guards,
     )
     {
-        $this->laminasUrl = $container->get('ViewHelperManager')->get('url');
-
-        /*if (is_array($guards)) {
-            foreach( $guards as $guard) {
-
-            }
-        }*/
-
-//        foreach( $this->routes as $name => $routeData){
-//            $route = new Route($routeData);
-//        }
-
         $this->loadRoutes($routes, null);
-        //dump($this->routes);
     }
 
 
@@ -89,9 +70,6 @@ class Router
         if ($route) {
             $route = $this->getRoute($route);
             return $this->makeUrl($route, $params, $options, $reuseMatchedParams);
-        } else {
-            // @todo à éliminer
-            return $this->laminasUrl->__invoke($route, $params);
         }
     }
 

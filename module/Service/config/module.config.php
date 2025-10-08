@@ -250,12 +250,6 @@ return [
         ],
         [
             'controller' => ServiceController::class,
-            'action'     => ['intervenant-cloture'],
-            'roles'      => ['user'],
-            'assertion'  => Assertion\ClotureAssertion::class,
-        ],
-        [
-            'controller' => ServiceController::class,
             'action'     => ['intervenant-saisie-prevu'],
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,

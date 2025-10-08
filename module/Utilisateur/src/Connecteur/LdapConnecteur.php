@@ -4,12 +4,12 @@ namespace Utilisateur\Connecteur;
 
 use Application\Service\AbstractService;
 use Framework\Application\Application;
+use Framework\User\UserManager;
 use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Entity\Ldap\AbstractEntity;
 use UnicaenApp\Entity\Ldap\People;
 use UnicaenApp\Mapper\Ldap\People as MapperPeople;
 use UnicaenApp\Mapper\Ldap\Structure as MapperStructure;
-use UnicaenAuthentification\Service\UserContext;
 use UnicaenAuthentification\Service\UserMapper as MapperUser;
 use Utilisateur\Entity\Db\Utilisateur;
 use Utilisateur\Service\UtilisateurServiceAwareTrait;
@@ -24,77 +24,22 @@ class LdapConnecteur extends AbstractService
 {
     use UtilisateurServiceAwareTrait;
 
-    /**
-     * @var UserContext
-     */
-    protected $serviceUserContext;
-
-    /**
-     * @var MapperStructure
-     */
-    protected $mapperStructure;
-
-    /**
-     * @var MapperPeople
-     */
-    protected $mapperPeople;
-
-    /**
-     * @var MapperUser
-     */
-    protected $mapperUser;
-
-    /**
-     * @var string
-     */
-    private $utilisateurLogin;
-
-    /**
-     * @var string
-     */
-    private $utilisateurFiltre;
-
-    /**
-     * @var string
-     */
-    private $utilisateurCode;
-
-    /**
-     * @var string
-     */
-    private $utilisateurCodeFiltre = '';
-
-    /**
-     * @var string
-     */
-    private $utilisateurExtraMasque;
-
-    /**
-     * @var array
-     */
-    private $utilisateurExtraAttributes;
+    private string $utilisateurLogin;
+    private string $utilisateurFiltre;
+    private string $utilisateurCode;
+    private string $utilisateurCodeFiltre = '';
+    private string $utilisateurExtraMasque;
+    private array $utilisateurExtraAttributes = [];
 
 
 
-    /**
-     * LdapConnecteur constructor.
-     *
-     * @param UserContext     $serviceUserContext
-     * @param MapperStructure $mapperStructure
-     * @param MapperPeople    $mapperPeople
-     * @param MapperUser      $mapperUser
-     */
     public function __construct(
-        UserContext $serviceUserContext,
-        MapperStructure $mapperStructure,
-        MapperPeople $mapperPeople,
-        MapperUser $mapperUser
+        private readonly UserManager     $userManager,
+        private readonly MapperStructure $mapperStructure,
+        private readonly MapperPeople    $mapperPeople,
+        private readonly MapperUser      $mapperUser
     )
     {
-        $this->serviceUserContext = $serviceUserContext;
-        $this->mapperStructure    = $mapperStructure;
-        $this->mapperPeople       = $mapperPeople;
-        $this->mapperUser         = $mapperUser;
     }
 
 
@@ -111,7 +56,7 @@ class LdapConnecteur extends AbstractService
      *
      * @return array
      */
-    public function rechercheUtilisateurs($critere)
+    public function rechercheUtilisateurs(string $critere): array
     {
         $result = [];
         if (($username = $critere) && $this->isActif()) {
@@ -175,7 +120,7 @@ class LdapConnecteur extends AbstractService
     public function getUtilisateur(string $login, bool $autoInsert = true): ?Utilisateur
     {
         if ($user = $this->getServiceUtilisateur()->getRepo()->findOneBy(['username' => $login])) return $user; // si on le trouve alors c'est OK
-        if ($user = $this->mapperUser->findByUsername($login)) return $user; // si on le trouve alors c'est OK
+        if ($user = $this->mapperUser->findByUsername($login)) return $user;                                    // si on le trouve alors c'est OK
 
         if ($people = $this->mapperPeople->findOneByUsername($login)) {
             $entity = new Utilisateur();
@@ -270,12 +215,9 @@ class LdapConnecteur extends AbstractService
 
 
 
-    /**
-     * @return Utilisateur
-     */
-    public function getUtilisateurCourant()
+    public function getUtilisateurCourant(): ?Utilisateur
     {
-        return $this->serviceUserContext->getDbUser();
+        return $this->userManager->getUser();
     }
 
 

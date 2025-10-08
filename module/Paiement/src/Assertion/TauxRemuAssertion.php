@@ -23,13 +23,8 @@ class TauxRemuAssertion extends AbstractAssertion
      */
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
         switch (true) {

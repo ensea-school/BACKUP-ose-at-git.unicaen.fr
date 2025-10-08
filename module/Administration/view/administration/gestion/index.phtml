@@ -7,4 +7,4 @@
 
 <?php
 
-    echo $this->navigation('navigation')->menuContextuel()->setPartial('application/menu-callout.phtml');
+echo $this->partial('application/menu-callout.phtml', ['pages' => $pages]);

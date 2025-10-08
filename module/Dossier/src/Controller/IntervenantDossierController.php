@@ -62,8 +62,7 @@ class IntervenantDossierController extends AbstractController
         $this->initFilters();
 
         /* Initialisation */
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getServiceContext()->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
@@ -113,8 +112,8 @@ class IntervenantDossierController extends AbstractController
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
                 //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
 
-                if (!$lastCompleted && $tblDossier->isCompletudeAvantRecrutement() && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
-                    $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($role->getIntervenant());
+                if (!$lastCompleted && $tblDossier->isCompletudeAvantRecrutement() && $this->getServiceContext()->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
+                    $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($this->getServiceContext()->getIntervenant());
                     $nextEtape      = $feuilleDeRoute->getNext(WorkflowEtape::DONNEES_PERSO_SAISIE);
                     if ($nextEtape && $url = $nextEtape->url) {
                         return $this->redirect()->toUrl($url);
@@ -150,7 +149,7 @@ class IntervenantDossierController extends AbstractController
                 2
             );
             $this->flashMessenger()->addInfoMessage(
-                $role->getIntervenant() ?
+                $this->getServiceContext()->getIntervenant() ?
                     sprintf("Vous avez effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
                     : sprintf("L'intervenant a effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
             );
@@ -159,7 +158,6 @@ class IntervenantDossierController extends AbstractController
 
         return compact(
             'form',
-            'role',
             'intervenant',
             'intervenantDossier',
             'intervenantDossierValidation',
@@ -176,8 +174,7 @@ class IntervenantDossierController extends AbstractController
     {
         if ($this->getRequest()->isPost()) {
             $data        = $this->getRequest()->getPost();
-            $role        = $this->getServiceContext()->getSelectedIdentityRole();
-            $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+            $intervenant = $this->getServiceContext()->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
             if (!$intervenant) {
                 throw new \LogicException('Intervenant non précisé ou inexistant');
             }
@@ -199,11 +196,6 @@ class IntervenantDossierController extends AbstractController
                     $intervenant->setSyncStatut(false);
                     $this->getServiceIntervenant()->save($intervenant);
                     $this->updateTableauxBord($intervenant);
-                    // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
-                    // au statut choisi dans le dossier.
-                    if ($role->getIntervenant()) {
-                        $this->getServiceContext()->refreshRoleStatut($statut);
-                    }
                 }
             }
         }
@@ -217,8 +209,7 @@ class IntervenantDossierController extends AbstractController
     {
         $this->initFilters();
 
-        $role               = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant        = $this->getServiceContext()->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         $validation         = $this->getServiceDossier()->getValidation($intervenant);
         if ($validation) {
@@ -242,8 +233,7 @@ class IntervenantDossierController extends AbstractController
     {
         $this->initFilters();
 
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getServiceContext()->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $validation  = $this->getServiceDossier()->getValidation($intervenant);
         try {
             $this->getServiceValidation()->delete($validation);
@@ -262,8 +252,7 @@ class IntervenantDossierController extends AbstractController
     {
         $this->initFilters();
 
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getServiceContext()->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $dossier     = $this->getServiceDossier()->getByIntervenant($intervenant);
 
         try {

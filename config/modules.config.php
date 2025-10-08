@@ -5,6 +5,7 @@ use Framework\Application\Application;
 $config = Application::getInstance()->config();
 
 $modules = [
+
     'Laminas\Filter',
     'Laminas\Form',
     'Laminas\Hydrator',
@@ -17,7 +18,6 @@ $modules = [
     'Laminas\Router',
     'Laminas\Session',
     'Laminas\Validator',
-    'BjyAuthorize',
     'DoctrineModule',
     'DoctrineORMModule',
     'ZfcUser',

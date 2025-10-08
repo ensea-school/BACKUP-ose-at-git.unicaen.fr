@@ -482,9 +482,7 @@ class EnseignementController extends AbstractController
     {
         $this->initFilters();
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $filterStructure = null;//$role->getStructure(); // pour filtrer les affichages à la structure concernée uniquement
+        $filterStructure = null; // pour filtrer les affichages à la structure concernée uniquement
         // pas de filtre pour qu'une composante puisse voir ses enseignements validée par d'autres en prévisionnel
 
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -522,7 +520,7 @@ class EnseignementController extends AbstractController
 
         /* Messages */
         if (empty($services['non-valides'])) {
-            if ($role->getIntervenant()) {
+            if ($this->getServiceContext()->getIntervenant()) {
                 $message = sprintf(
                     "Tous vos enseignements %s ont été validés.",
                     $typeVolumeHoraire->isPrevu() ? "prévisionnels" : "réalisés"

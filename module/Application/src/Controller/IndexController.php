@@ -8,25 +8,17 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
-use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
-use Utilisateur\Acl\Role;
 
-/**
- *
- */
 class IndexController extends AbstractController
 {
     use ContextServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use ParametresServiceAwareTrait;
-    use UserContextServiceAwareTrait;
 
 
     public function indexAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $documentation = [
             'E' => $this->getServiceParametres()->get('doc-intervenant-vacataires'),
             'P' => $this->getServiceParametres()->get('doc-intervenant-permanents'),
@@ -36,7 +28,7 @@ class IndexController extends AbstractController
         $intervenant = $this->getServiceContext()->getIntervenant();
         $utilisateur = $this->getServiceContext()->getUtilisateur();
 
-        $onlyIntervenant = $intervenant && (null == $this->getServiceContext()->getSelectedIdentityRole()->getDbRole());
+        $onlyIntervenant = $intervenant && !(bool)$this->getServiceContext()->getAffectation();
 
         $view = new ViewModel([
             'annee'                     => $this->getServiceContext()->getAnnee(),
@@ -48,10 +40,10 @@ class IndexController extends AbstractController
             'intervenant' => $intervenant,
             'utilisateur' => $utilisateur,
             'onlyIntervenant' => $onlyIntervenant,
-            'noPrivilege' => null == $role?->getDbRole(),
+            'noPrivilege' => !(bool)$this->getServiceContext()->getAffectation(),
         ]);
 
-        if ($role && $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_VISUALISATION))) {
+        if ($this->getServiceContext()->getAffectation() && $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_VISUALISATION))) {
             // URL de la page affichant les indicateurs auxquels est abonné l'utilisateur
             $view->setVariable('abonnementsUrl', $this->url()->fromRoute('indicateur/abonnements'));
         }
@@ -64,9 +56,9 @@ class IndexController extends AbstractController
     public function planAction()
     {
         $configPages = \Framework\Application\Application::getInstance()->container()->get('config')['navigation']['default']['home']['pages'];
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $isConnected = (bool)$this->getServiceContext()->getUtilisateur();
 
-        return compact('configPages', 'role');
+        return compact('configPages', 'isConnected');
     }
     
 
@@ -78,16 +70,6 @@ class IndexController extends AbstractController
         if ($annee) {
             $annee = $this->getServiceAnnee()->get($annee);
             $this->getServiceContext()->setAnnee($annee);
-
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
-            if ($role instanceof Role && $role->getIntervenant()) {
-                $intervenant = $this->getServiceIntervenant()->getByCode($role->getIntervenant()->getCode());
-                //Correction mauvais refresh du role lors du changement d'année
-                if ($intervenant) {
-                    $this->serviceUserContext->setSelectedIdentityRole($intervenant->getStatut()->getRoleId());
-                    //$this->serviceUserContext->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
-                }
-            }
         }
 
         return [];

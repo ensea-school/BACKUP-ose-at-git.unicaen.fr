@@ -5,13 +5,13 @@ namespace Contrat\Assertion;
 use Administration\Entity\Db\Parametre;
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Provider\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
-use Utilisateur\Acl\Role;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -27,11 +27,24 @@ class ContratAssertion extends AbstractAssertion
 {
     use ParametresServiceAwareTrait;
     use ContratServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     const PRIV_LISTER_FICHIERS   = 'contrat-lister-fichiers';
     const PRIV_SUPPRIMER_FICHIER = 'contrat-supprimer-fichier';
     const PRIV_AJOUTER_FICHIER   = 'contrat-ajouter-fichier';
     const PRIV_EXPORT            = 'contrat-export-all';
+
+
+
+    /**
+     * @return \Application\Service\ContextService|null
+     */
+    public function getContextService(): ?\Application\Service\ContextService
+    {
+        return $this->getServiceContext();
+    }
+
+
 
     use WorkflowServiceAwareTrait;
 
@@ -50,11 +63,6 @@ class ContratAssertion extends AbstractAssertion
             self::PRIV_SUPPRIMER_FICHIER,
         ];
 
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-
         switch (true) {
             case $entity instanceof Contrat:
                 switch ($privilege) {
@@ -67,7 +75,7 @@ class ContratAssertion extends AbstractAssertion
         }
 
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !in_array($privilege, $localPrivs) && !$role->hasPrivilege($privilege)) return false; // @todo traiter les privilèges locaux!!
+        if ($privilege && !in_array($privilege, $localPrivs) && !$this->authorize->isAllowedPrivilege($privilege)) return false; // @todo traiter les privilèges locaux!!
 
         switch (true) {
             case $entity instanceof Contrat:
@@ -113,23 +121,18 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertGeneration(Contrat $contrat): bool
     {
-        /**
-         * @var Role    $role
-         * @var Contrat $contrat
-         */
-        $role = $this->getRole();
         //Si je suis connecté en tant qu'intervenant
-        if ($role->getIntervenant()) {
+        if ($this->getContextService()->getIntervenant()) {
             //Si le role à le même intervenant que le contrat et que le contrat est validé
-            if ($role->getIntervenant() == $contrat->getIntervenant() && !$contrat->estUnProjet()) {
+            if ($this->getServiceContext()->getIntervenant() == $contrat->getIntervenant() && !$contrat->estUnProjet()) {
                 return true;
             }
         }
 
         if ($contrat->estUnProjet()) {
-            return $this->getRole()->hasPrivilege(Privileges::CONTRAT_PROJET_GENERATION);
+            return $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_PROJET_GENERATION);
         } else {
-            return $this->getRole()->hasPrivilege(Privileges::CONTRAT_CONTRAT_GENERATION);
+            return $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_CONTRAT_GENERATION);
         }
     }
 
@@ -138,7 +141,7 @@ class ContratAssertion extends AbstractAssertion
     protected function assertListerFichiers(Contrat $contrat): bool
     {
         return $this->asserts([
-                                  $this->getRole()->hasPrivilege(Privileges::CONTRAT_VISUALISATION),
+                                  $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_VISUALISATION),
                                   $this->assertVisualisation($contrat),
                                   !$contrat->estUnProjet(),
                               ]);
@@ -155,11 +158,11 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertRole(Contrat $contrat, $checkStructure = true): bool
     {
-        if ($intervenant = $this->getRole()->getIntervenant()) {
+        if ($intervenant = $this->getServiceContext()->getIntervenant()) {
             if (!$this->assertIntervenant($contrat, $intervenant)) return false;
         }
 
-        if ($checkStructure && ($structure = $this->getRole()->getStructure())) {
+        if ($checkStructure && ($structure = $this->getServiceContext()->getStructure())) {
             if (!$this->assertStructure($contrat, $structure)) return false;
         }
 
@@ -185,7 +188,7 @@ class ContratAssertion extends AbstractAssertion
     protected function assertModifierFichier(Contrat $contrat): bool
     {
         return $this->asserts([
-                                  $this->getRole()->hasPrivilege(Privileges::CONTRAT_DEPOT_RETOUR_SIGNE),
+                                  $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_DEPOT_RETOUR_SIGNE),
                                   empty($contrat->getDateRetourSigne()),
                                   $this->assertDepotRetourSigne($contrat),
                               ]);

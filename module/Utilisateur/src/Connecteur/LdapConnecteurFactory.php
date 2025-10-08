@@ -3,8 +3,8 @@
 namespace Utilisateur\Connecteur;
 
 use Framework\Application\Application;
+use Framework\User\UserManager;
 use Psr\Container\ContainerInterface;
-use UnicaenAuthentification\Service\UserContext;
 
 
 /**
@@ -24,13 +24,13 @@ class LdapConnecteurFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $serviceUserContext = $container->get(UserContext::class);
+        $userManager = $container->get(UserManager::class);
         $mapperStructure    = $container->get('ldap_structure_mapper');
         $mapperPeople       = $container->get('ldap_people_mapper');
         $mapperUser         = $container->get('zfcuser_user_mapper');
 
         $service = new LdapConnecteur(
-            $serviceUserContext,
+            $userManager,
             $mapperStructure,
             $mapperPeople,
             $mapperUser

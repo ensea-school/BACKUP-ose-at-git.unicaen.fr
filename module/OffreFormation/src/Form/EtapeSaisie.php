@@ -151,8 +151,6 @@ class EtapeSaisie extends AbstractForm
             ],
         ]);
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         // peuplement liste des types de formation
         $valueOptions = \UnicaenApp\Util::collectionAsOptions($this->getTypesFormation());
         $this->get('typeFormation')

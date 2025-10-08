@@ -8,6 +8,7 @@ use Agrement\Entity\Db\TypeAgrement;
 use Framework\Cache\CacheContainerTrait;
 use Application\ORM\Event\Listeners\ParametreEntityListener;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Framework\User\UserManager;
 use Intervenant\Service\IntervenantService;
 use Laminas\Mvc\MvcEvent;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -23,6 +24,13 @@ class RouteEntitiesInjector
     use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
 
+    public function __construct(
+        private readonly UserManager $userManager,
+    )
+    {
+    }
+
+
 
     public function __invoke(MvcEvent $e)
     {
@@ -33,26 +41,13 @@ class RouteEntitiesInjector
                 case 'intervenant':
                     /** @var IntervenantService $serviceIntervenant */
                     $serviceIntervenant = $e->getApplication()->getServiceManager()->get(IntervenantService::class);
-
-                    /* @var $role \Utilisateur\Acl\Role */
-                    $role   = $serviceIntervenant->getServiceContext()->getSelectedIdentityRole();
                     $entity = $serviceIntervenant->getByRouteParam($value);
-                    if ($role && $role->getIntervenant()) {
-                        if ($role->getIntervenant()->getCode() != $entity->getCode()) {
-                            $entity = $role->getIntervenant(); // c'est l'intervenant du rôle qui prime
-                        } else {
-                            $role->setIntervenant($entity); // Si c'est la même personne, on lui donne sa fiche d'ID demandée
-                        }
 
-                        $contextIntervenant = $this->getServiceContext()->getIntervenant();
-                        $roleIntervenant    = $role->getIntervenant();
-
-                        if ($contextIntervenant && $contextIntervenant !== $roleIntervenant) {
-                            if ($contextIntervenant->getCode() === $roleIntervenant->getCode()) {
-                                $this->getServiceContext()->setIntervenant($roleIntervenant);
-                            }
-                        }
+                    $profile = $this->userManager->getProfile();
+                    if ($profile && $profile->getContext('intervenant')) {
+                        $profile->setContext('intervenant', $entity);
                     }
+
                     $e->setParam($name, $entity);
                 break;
                 case 'typeAgrementCode':

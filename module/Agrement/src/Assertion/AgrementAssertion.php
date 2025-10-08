@@ -6,6 +6,7 @@ use Agrement\Entity\Db\Agrement;
 use Agrement\Entity\Db\TblAgrement;
 use Agrement\Entity\Db\TypeAgrement;
 use Application\Provider\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Contrat\Service\TblContratServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
@@ -25,6 +26,7 @@ class AgrementAssertion extends AbstractAssertion
 {
     use TblContratServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     /* ---- Routage général ---- */
     public function __invoke(array $page) // gestion des visibilités de menus
@@ -36,12 +38,8 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
         switch (true) {
@@ -49,10 +47,10 @@ class AgrementAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION:
-                        return $this->assertTblAgrementSaisie($role, $entity);
+                        return $this->assertTblAgrementSaisie($entity);
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION:
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
-                        return $this->assertTblAgrementSuppression($role, $entity);
+                        return $this->assertTblAgrementSuppression($entity);
 
                 }
                 break;
@@ -60,10 +58,10 @@ class AgrementAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION:
-                        return $this->assertAgrementSaisie($role, $entity);
+                        return $this->assertAgrementSaisie($entity);
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION:
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
-                        return $this->assertAgrementSuppression($role, $entity);
+                        return $this->assertAgrementSuppression($entity);
                 }
                 break;
             case $entity instanceof Structure:
@@ -72,7 +70,7 @@ class AgrementAssertion extends AbstractAssertion
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION:
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION:
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
-                        return $this->assertStructureSaisie($role, $entity);
+                        return $this->assertStructureSaisie($entity);
                 }
                 break;
         }
@@ -84,16 +82,13 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-        $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
         $typeAgrement = $this->getMvcEvent()->getParam('typeAgrement');
         /* @var $typeAgrement TypeAgrement */
 
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch ($action) {
             case 'lister':
@@ -116,7 +111,7 @@ class AgrementAssertion extends AbstractAssertion
 
             case 'index':
             case 'saisir-lot':
-                if ($role->getIntervenant()) return false; // un intervenant ne peut pas voir ça...
+                if ($this->getServiceContext()->getIntervenant()) return false; // un intervenant ne peut pas voir ça...
                 if ($typeAgrement) {
                     $resource = Privileges::getResourceId($typeAgrement->getPrivilegeVisualisation());
                     if (!$this->isAllowed($resource)) return false;
@@ -140,26 +135,23 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertPage(array $page): bool
     {
-        $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
-        if (!$role instanceof Role) return false;
-
-        if ($role->getIntervenant() && str_starts_with($page['route'], 'gestion/')) {
+        if ($this->getServiceContext()->getIntervenant() && str_starts_with($page['route'], 'gestion/')) {
             return false;
         }
 
         if ($page['route'] == 'gestion/agrement'){
-            return $role->hasPrivilege(Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION)
-                || $role->hasPrivilege(Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION);
+            return $this->authorize->isAllowedPrivilege(Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION)
+                || $this->authorize->isAllowedPrivilege(Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION);
         }
 
         if ($page['route'] == 'gestion/agrement/conseil-restreint'){
-            return $role->hasPrivilege(Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION);
+            return $this->authorize->isAllowedPrivilege(Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION);
         }
 
         if ($page['route'] == 'gestion/agrement/conseil-academique'){
-            return $role->hasPrivilege(Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION);
+            return $this->authorize->isAllowedPrivilege(Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION);
         }
 
         if (!str_starts_with($page['route'], 'intervenant/agrement')){
@@ -180,7 +172,7 @@ class AgrementAssertion extends AbstractAssertion
             $privilege = Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION;
         }
 
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
         return $feuilleDeRoute->get($wfEtape)?->isAllowed() ?? false;
@@ -188,7 +180,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertTblAgrementSaisie(Role $role, TblAgrement $entity): bool
+    protected function assertTblAgrementSaisie(TblAgrement $entity): bool
     {
         /* Si c'est pour agréer et que le workflow l'interdit alors non! */
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
@@ -199,7 +191,7 @@ class AgrementAssertion extends AbstractAssertion
         }
 
         if ($structure = $entity->getStructure()) {
-            return $this->assertStructureSaisie($role, $structure);
+            return $this->assertStructureSaisie($structure);
         }
         return true;
     }
@@ -216,7 +208,7 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertAgrementSaisie(Role $role, Agrement $entity): bool
+    protected function assertAgrementSaisie(Agrement $entity): bool
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
         $wfEtape = $feuilleDeRoute->get($entity->getType()->getWorkflowEtapeCode());
@@ -226,7 +218,7 @@ class AgrementAssertion extends AbstractAssertion
         }
 
         if ($structure = $entity->getStructure()) {
-            return $this->assertStructureSaisie($role, $structure);
+            return $this->assertStructureSaisie($structure);
         }
 
         return true;
@@ -234,9 +226,9 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    protected function assertStructureSaisie(Role $role, Structure $entity): bool
+    protected function assertStructureSaisie(Structure $entity): bool
     {
-        if ($roleStructure = $role->getStructure()) {
+        if ($roleStructure = $this->getServiceContext()->getStructure()) {
             if (!$entity->inStructure($roleStructure)) return false; // pas d'édition pour les copains
         }
 
@@ -245,18 +237,18 @@ class AgrementAssertion extends AbstractAssertion
 
 
 
-    private function assertTblAgrementSuppression(Role $role, TblAgrement $entity): bool
+    private function assertTblAgrementSuppression(TblAgrement $entity): bool
     {
         if (!$entity->getAgrement()){
             return false;
         }
 
-        return $this->assertAgrementSuppression($role, $entity->getAgrement());
+        return $this->assertAgrementSuppression($entity->getAgrement());
     }
 
 
 
-    private function assertAgrementSuppression(Role $role, Agrement $entity): bool
+    private function assertAgrementSuppression(Agrement $entity): bool
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
         $wfEtape = $feuilleDeRoute->get($entity->getType()->getWorkflowEtapeCode());
@@ -273,7 +265,7 @@ class AgrementAssertion extends AbstractAssertion
             return false;
         } else {
             if ($structure = $entity->getStructure()) {
-                return $this->assertStructureSaisie($role, $structure);
+                return $this->assertStructureSaisie($structure);
             }
         }
 

@@ -234,7 +234,7 @@ return [
         [
             'controller' => EmployeurController::class,
             'action'     => ['recherche', 'data-employeur'],
-            'roles'      => ['guest'],
+            'privileges' => ['guest'],
 
         ],
     ],

@@ -217,6 +217,11 @@ class Application
 
     public function run(): void
     {
+        if ($this->inCli()){
+            // mode web uniquement!!
+            return;
+        }
+
         $app = $this->container->get('Application');
         $app->run();
     }

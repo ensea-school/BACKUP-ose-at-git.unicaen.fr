@@ -85,7 +85,6 @@ class AgrementController extends AbstractController
     {
         $this->initFilters();
 
-        $role         = $this->getServiceContext()->getSelectedIdentityRole();
         $typeAgrement = $this->getEvent()->getParam('typeAgrement');
         $intervenant  = $this->getEvent()->getParam('intervenant');
 
@@ -135,7 +134,7 @@ class AgrementController extends AbstractController
             if ($ta->getStructure()) $needStructure = true;
         }
 
-        return compact('role', 'typeAgrement', 'intervenant', 'data', 'needStructure', 'hasActions');
+        return compact('typeAgrement', 'intervenant', 'data', 'needStructure', 'hasActions');
     }
 
 
@@ -170,7 +169,6 @@ class AgrementController extends AbstractController
         /* @var $typeAgrement TypeAgrement */
 
         $title = sprintf("Agrément par %s", $typeAgrement->toString(true));
-        $role  = $this->getServiceContext()->getSelectedIdentityRole();
 
         $form = $this->getFormAgrementSaisie();
 
@@ -220,7 +218,7 @@ class AgrementController extends AbstractController
           AND we.code = :typeAgrement
           AND wie.atteignable = true
           AND wie.realisation = 0
-          " . ($role->getStructure() ? 'AND (s.ids LIKE :structure OR (wie.structure IS NULL AND istr.ids LIKE :structure))' : '') . "
+          " . ($this->getServiceContext()->getStructure() ? 'AND (s.ids LIKE :structure OR (wie.structure IS NULL AND istr.ids LIKE :structure))' : '') . "
         ORDER BY
           s.libelleCourt, i.nomUsuel, i.prenom
         ";
@@ -228,8 +226,8 @@ class AgrementController extends AbstractController
         $query = $this->em()->createQuery($dql);
         $query->setParameter('annee', $this->getServiceContext()->getAnnee());
         $query->setParameter('typeAgrement', $typeAgrement->getCode());
-        if ($role->getStructure()) {
-            $query->setParameter('structure', $role->getStructure()->idsFilter());
+        if ($structure = $this->getServiceContext()->getStructure()) {
+            $query->setParameter('structure', $structure->idsFilter());
         }
 
         $res = $query->getResult();

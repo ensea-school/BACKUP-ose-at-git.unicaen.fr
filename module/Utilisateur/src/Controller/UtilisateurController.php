@@ -28,10 +28,6 @@ class UtilisateurController extends BaseController
 
 
 
-    /**
-     * Traite les requêtes AJAX POST de sélection d'un profil utilisateur.
-     * La sélection est mémorisé en session par le service UserContext.
-     */
     public function selectionnerProfilAction($addFlashMessage = true)
     {
         $roleId = $this->axios()->fromPost('role');
@@ -47,6 +43,7 @@ class UtilisateurController extends BaseController
         if ($role) {
             if ($role->getPeutChangerStructure()) {
                 $structure = $this->getServiceStructure()->get($structureId);
+                $profile->setContext('structure', $structure);
             } else {
                 /** @var Structure $structure */
                 $structure = $profile->getContext('structure');
@@ -55,8 +52,6 @@ class UtilisateurController extends BaseController
             // intervenant
             $structure = null;
         }
-
-        $this->getServiceContext()->setStructure($structure);
 
         if ($role) {
             $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>.", $role->getLibelle());

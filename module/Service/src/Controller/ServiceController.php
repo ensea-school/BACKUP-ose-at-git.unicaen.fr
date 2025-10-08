@@ -84,8 +84,7 @@ class ServiceController extends AbstractController
         $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $viewModel        = new ViewModel();
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($role->getStructure()) {
+        if ($this->getServiceContext()->getStructure()) {
             $this->flashMessenger()->addWarningMessage(
                 "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
                 . "ou enseignant dans votre structure de responsabilité ou l'une de ses sous-structures."
@@ -158,7 +157,7 @@ class ServiceController extends AbstractController
                 'isoler-non-payes' => false,
                 'regroupement'     => 'intervenant',
             ];
-            if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
+            if ($structure = $this->getServiceContext()->getStructure()) {
                 $params['composante'] = $structure;
             }
             $resumeServices = $this->getServiceResume()->getTableauBord($recherche, $params);
@@ -236,10 +235,8 @@ class ServiceController extends AbstractController
 
         $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
         if (!$campagneSaisie->estOuverte()) {
-
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
-            if ($message = $campagneSaisie->getMessage($role)) {
-                if ($role->getIntervenant()) {
+            if ($message = $campagneSaisie->getMessage((bool)$this->getServiceContext()->getIntervenant())) {
+                if ($this->getServiceContext()->getIntervenant()) {
                     $this->flashMessenger()->addErrorMessage($message);
                 } else {
                     $this->flashMessenger()->addWarningMessage($message);

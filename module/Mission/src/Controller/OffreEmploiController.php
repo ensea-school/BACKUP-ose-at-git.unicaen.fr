@@ -111,7 +111,6 @@ class  OffreEmploiController extends AbstractController
     public function listeAction()
     {
         $params          = [];
-        $role            = $this->getServiceContext()->getSelectedIdentityRole();
         $annee           = $this->getServiceContext()->getAnnee();
         $params['annee'] = $annee;
 
@@ -119,14 +118,14 @@ class  OffreEmploiController extends AbstractController
 
 
         if ($canEdit) {
-            if ($role->getStructure()) {
-                $params['structure'] = $role->getStructure()->idsFilter();
+            if ($structure = $this->getServiceContext()->getStructure()) {
+                $params['structure'] = $structure->idsFilter();
             }
 
-            return $this->getServiceOffreEmploi()->data($params, $role);
+            return $this->getServiceOffreEmploi()->data($params);
         }
 
-        return $this->getServiceOffreEmploi()->dataPublic($params, $role);
+        return $this->getServiceOffreEmploi()->dataPublic($params);
     }
 
 
@@ -163,9 +162,8 @@ class  OffreEmploiController extends AbstractController
 
         $this->em()->clear();
 
-        $role  = $this->getServiceContext()->getSelectedIdentityRole();
         $annee = $this->getServiceContext()->getAnnee();
-        $model = $this->getServiceOffreEmploi()->data(['offreEmploi' => $offreEmploi, 'annee' => $annee], $role);
+        $model = $this->getServiceOffreEmploi()->data(['offreEmploi' => $offreEmploi, 'annee' => $annee]);
         $model->returnFirstItem();
 
         return $model;

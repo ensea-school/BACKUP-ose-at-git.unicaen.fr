@@ -106,14 +106,9 @@ class CampagneSaisie
 
 
 
-    /**
-     * @param Role $role
-     *
-     * @return string
-     */
-    public function getMessage(Role $role): string
+    public function getMessage(bool $forIntervenant = true): string
     {
-        if ($role->getIntervenant()) {
+        if ($forIntervenant) {
             $message = $this->getMessageIntervenant();
         } else {
             $message = $this->getMessageAutres();

@@ -12,7 +12,6 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Utilisateur\Acl\Role;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
@@ -43,9 +42,6 @@ class ServiceAssertion extends AbstractAssertion
 
     protected function assertPage(array $page): bool
     {
-        $role = $this->getRole();
-        /* @var $role Role */
-
         $intervenant = null;
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
@@ -53,12 +49,11 @@ class ServiceAssertion extends AbstractAssertion
 
             if (
                 $intervenant
-                && $role
-                && $role->getStructure()
+                && $this->getServiceContext()->getStructure()
                 && (in_array($etape, [WorkflowEtape::ENSEIGNEMENT_VALIDATION, WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE, WorkflowEtape::REFERENTIEL_VALIDATION, WorkflowEtape::REFERENTIEL_VALIDATION_REALISE]))
             ) { // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...
                 // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
-                return $this->assertHasServices($intervenant, $role->getStructure(), $etape, $role);
+                return $this->assertHasServices($intervenant, $this->getServiceContext()->getStructure(), $etape);
             } else {
                 if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
                     return false;
@@ -69,10 +64,10 @@ class ServiceAssertion extends AbstractAssertion
         if ($intervenant && isset($page['route'])) {
             switch ($page['route']) {
                 case 'intervenant/services-prevus':
-                    return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
+                    return $this->assertPageServices($intervenant, TypeVolumeHoraire::CODE_PREVU);
                     break;
                 case 'intervenant/services-realises':
-                    return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
+                    return $this->assertPageServices($intervenant, TypeVolumeHoraire::CODE_REALISE);
                     break;
             }
         }
@@ -91,25 +86,21 @@ class ServiceAssertion extends AbstractAssertion
      */
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-        $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-
-        if (!$this->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!
+        if (!$this->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!
 
         switch ($controller . '.' . $action) {
             case ServiceController::class . '.index':
             case ServiceController::class . '.resume':
-                return $this->assertResume($role);
+                return $this->assertResume();
                 break;
             case ServiceController::class . '.intervenant-saisie-prevu':
-                return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
+                return $this->assertPageServices($intervenant, TypeVolumeHoraire::CODE_PREVU);
                 break;
             case ServiceController::class . '.intervenant-saisie-realise':
-                return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
+                return $this->assertPageServices($intervenant, TypeVolumeHoraire::CODE_REALISE);
                 break;
         }
 
@@ -118,7 +109,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertPageServices(Role $role, ?Intervenant $intervenant, string $typeVolumeHoraireCode): bool
+    protected function assertPageServices(?Intervenant $intervenant, string $typeVolumeHoraireCode): bool
     {
         if (!$intervenant) return true;
 
@@ -127,7 +118,7 @@ class ServiceAssertion extends AbstractAssertion
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
 
         $asserts = [
-            $this->assertIntervenant($role, $intervenant),
+            $this->assertIntervenant($intervenant),
             $this->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeEnseignementSaisie(), $intervenant) ||
             $this->assertEtapeAtteignable($typeVolumeHoraire->getWfEtapeReferentielSaisie(), $intervenant),
         ];
@@ -143,22 +134,22 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertResume(Role $role): bool
+    protected function assertResume(): bool
     {
         return $this->asserts([
                                   (
-                                      $role->hasPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION)
-                                      || $role->hasPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION)
-                                      || $role->hasPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION)
-                                      || $role->hasPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION)
+                                      $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION)
+                                      || $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION)
+                                      || $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION)
+                                      || $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION)
                                   ),
-                                  !$role->getIntervenant(),
+                                  !$this->getServiceContext()->getIntervenant(),
                               ]);
     }
 
 
 
-    protected function assertHasServices(Intervenant $intervenant, Structure $structure, string $etape, Role $role): bool
+    protected function assertHasServices(Intervenant $intervenant, Structure $structure, string $etape): bool
     {
         $services        = $intervenant->getService();
         $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
@@ -181,7 +172,7 @@ class ServiceAssertion extends AbstractAssertion
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
                     if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
-                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $role->getStructure())) {
+                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $this->getServiceContext()->getStructure())) {
                         return true;
                     }
                 }
@@ -192,7 +183,7 @@ class ServiceAssertion extends AbstractAssertion
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
                     if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
-                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $role->getStructure())) {
+                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $this->getServiceContext()->getStructure())) {
                         return true;
                     }
                 }
@@ -205,11 +196,11 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertCampagneSaisie(Role $role, TypeVolumeHoraire $typeVolumeHoraire): bool
+    public function assertCampagneSaisie(TypeVolumeHoraire $typeVolumeHoraire): bool
     {
-        if ($role->getIntervenant()) {
+        if ($this->getServiceContext()->getIntervenant()) {
             $campagneSaisie = $this->getServiceCampagneSaisie()->getBy(
-                $role->getIntervenant()->getStatut()->getTypeIntervenant(),
+                $this->getServiceContext()->getIntervenant()->getStatut()->getTypeIntervenant(),
                 $typeVolumeHoraire
             );
             if (!$campagneSaisie->estOuverte()) return false;
@@ -220,16 +211,16 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertCloture(Role $role, Intervenant $intervenant): bool
+    public function assertCloture(Intervenant $intervenant): bool
     {
         if ($intervenant->getStatut()->getCloture()) {
-            $hardPassCloture = $role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES_AVEC_MEP);
+            $hardPassCloture = $this->authorize->isAllowedPrivilege(Privileges::CLOTURE_EDITION_SERVICES_AVEC_MEP);
             if ($hardPassCloture) return true; // on a toujours le droit
 
             $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
             if (!($cloture && $cloture->getId())) return true; // S'il n'y a pas de clôture alors OK
 
-            $softPassCloture = $role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES);
+            $softPassCloture = $this->authorize->isAllowedPrivilege(Privileges::CLOTURE_EDITION_SERVICES);
             if ($softPassCloture) {
                 return !$intervenant->hasMiseEnPaiement(); // S'il n'y a pas de DMEP alors OK ça passe
             } else {
@@ -242,21 +233,21 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertMotifNonPaiement(Role $role, Intervenant $intervenant): bool
+    public function assertMotifNonPaiement(Intervenant $intervenant): bool
     {
         // filtrer pour la structure ? ?
         return $this->asserts([
                                   $intervenant->getStatut()->getMotifNonPaiement(),
-                                  $this->assertIntervenant($role, $intervenant),
+                                  $this->assertIntervenant($intervenant),
                               ]);
     }
 
 
 
-    public function assertIntervenant(Role $role, ?Intervenant $intervenant = null): bool
+    public function assertIntervenant(?Intervenant $intervenant = null): bool
     {
         if ($intervenant) {
-            if ($ri = $role->getIntervenant()) {
+            if ($ri = $this->getServiceContext()->getIntervenant()) {
                 if ($ri != $intervenant) { // un intervenant ne peut pas voir les services d'un autre
                     return false;
                 }
@@ -268,10 +259,10 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertStructure(Role $role, ?Structure $structure = null): bool
+    public function assertStructure(?Structure $structure = null): bool
     {
         if ($structure) {
-            if ($ri = $role->getStructure()) {
+            if ($ri = $this->getServiceContext()->getStructure()) {
                 if (!$structure->inStructure($ri)) { // une structure ne peut pas éditer les services d'une autre
                     return false;
                 }

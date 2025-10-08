@@ -33,11 +33,6 @@ class ExportRhAssertion extends AbstractAssertion
 
     protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
-
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
 
         $config = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
@@ -63,7 +58,7 @@ class ExportRhAssertion extends AbstractAssertion
 
     protected function assertIntervenantExportRh(Intervenant $intervenant): bool
     {
-        if (!$this->getRole()->hasPrivilege(Privileges::INTERVENANT_EXPORTER)) {
+        if (!$this->authorize->isAllowedPrivilege(Privileges::INTERVENANT_EXPORTER)) {
             return false;
         }
 

@@ -3,6 +3,7 @@
 namespace Framework\User;
 
 use Framework\Application\Session;
+use Framework\Container\Autowire;
 use UnicaenApp\Traits\SessionContainerTrait;
 
 class UserManager
@@ -11,34 +12,55 @@ class UserManager
     private const SESSION_PRIVILEGES  = 'user-manager/privileges';
     private const SESSION_OLD_USER_ID = 'user-manager/old-user-id';
 
-    private UserProviderInterface $userProvider;
+    private UserAdapterInterface $userAdapter;
 
     private ?UserInterface $user = null;
 
     /** @var array|UserProfileInterface[] */
     private array $profiles = [];
 
+    private ?array $privileges = null;
+
+    private array $oldSession = [];
+
     use SessionContainerTrait;
 
     public function __construct(
         private readonly Session $session,
+
+        #[Autowire(config: 'unicaen-framework')]
+        private readonly array   $config,
     )
     {
     }
 
 
 
-    public function getUserProvider(): UserProviderInterface
+    public function getUserAdapter(): UserAdapterInterface
     {
-        return $this->userProvider;
+        return $this->userAdapter;
     }
 
 
 
-    public function setUserProvider(UserProviderInterface $userProvider): UserManager
+    public function setUserAdapter(UserAdapterInterface $userAdapter): UserManager
     {
-        $this->userProvider = $userProvider;
+        $this->userAdapter = $userAdapter;
         return $this;
+    }
+
+
+
+    public function isUsurpationEnabled(): bool
+    {
+        return $this->userAdapter->isUsurpationEnabled();
+    }
+
+
+
+    public function isUsurpationEnCours(): bool
+    {
+        return $this->userAdapter->isUsurpationEnCours();
     }
 
 
@@ -111,20 +133,25 @@ class UserManager
 
         // Assignation
         if ($lastProfileId !== $profileId) {
+            $this->getUserAdapter()->onBeforeProfileChange();
+            $this->resetSession();
             $this->sessionSet(self::SESSION_PROFILE, $profileId);
-            $this->userProvider->onProfileChange($this->getProfile());
             $this->loadPrivileges();
+            $this->userAdapter->onAfterProfileChange($this->getProfile());
         }
     }
 
 
 
-    /**
-     * @return array|string[]
-     */
-    public function getPrivileges(): array
+    protected function resetSession(): void
     {
-        return $this->sessionGet(self::SESSION_PRIVILEGES);
+        $sessionKeys = $this->config['preserve_session_keys'] ?? [];
+
+        foreach ($_SESSION as $key => $null) {
+            if (!in_array($key, $sessionKeys)) {
+                unset($_SESSION[$key]);
+            }
+        }
     }
 
 
@@ -140,7 +167,7 @@ class UserManager
     {
         $this->profiles = [];
 
-        $profiles = $this->userProvider->getProfiles();
+        $profiles = $this->userAdapter->getProfiles();
         foreach ($profiles as $profile) {
             $this->profiles[$profile->getId()] = $profile;
         }
@@ -164,10 +191,13 @@ class UserManager
     {
         $profiles  = $this->getProfiles();
         $profileId = $this->sessionGet(self::SESSION_PROFILE);
+        if (!$profileId) {
+            $profileId = $this->getUserAdapter()->getProfileDefaultId();
+        }
         if (empty($profiles)) {
             $this->setProfile(null);
         } else {
-            if (!array_key_exists($profileId, $profiles)) {
+            if (!$profileId || !array_key_exists($profileId, $profiles)) {
                 $this->setProfile(current($profiles));
             }
         }
@@ -177,14 +207,34 @@ class UserManager
 
     protected function loadPrivileges(): void
     {
-        $privileges = $this->userProvider->getPrivileges($this->getProfile());
+        $this->privileges = array_fill_keys($this->getUserAdapter()->getPrivileges($this->getProfile()), null);
         if ($this->isConnected()) {
-            $privileges[] = UserProfile::PRIVILEGE_USER;
+            $this->privileges[UserProfile::PRIVILEGE_USER] = null;
         } else {
-            $privileges[] = UserProfile::PRIVILEGE_GUEST;
+            $this->privileges[UserProfile::PRIVILEGE_GUEST] = null;
         }
 
-        $this->sessionSet(self::SESSION_PRIVILEGES, $privileges);
+        $this->sessionSet(self::SESSION_PRIVILEGES, $this->privileges);
+    }
+
+
+
+    public function hasPrivilege(string $privilege): bool
+    {
+        if (null === $this->privileges) {
+            $this->privileges = $this->sessionget(self::SESSION_PRIVILEGES) ?? [];
+        }
+        return array_key_exists($privilege, $this->privileges);
+    }
+
+
+
+    public function getPrivileges(): array
+    {
+        if (null === $this->privileges) {
+            $this->privileges = $this->sessionget(self::SESSION_PRIVILEGES) ?? [];
+        }
+        return array_keys($this->privileges);
     }
 
 

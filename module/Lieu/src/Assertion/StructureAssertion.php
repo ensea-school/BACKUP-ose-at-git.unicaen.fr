@@ -3,6 +3,7 @@
 namespace Lieu\Assertion;
 
 use Application\Provider\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
@@ -16,22 +17,19 @@ use Utilisateur\Acl\Role;
  */
 class StructureAssertion extends AbstractAssertion
 {
+    use ContextServiceAwareTrait;
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch (true) {
             case $entity instanceof Structure:
                 switch ($privilege) {
                     case Privileges::STRUCTURES_ADMINISTRATION_EDITION:
                         //case Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION:
-                        return $this->assertStructure($role, $entity);
+                        return $this->assertStructure($entity);
                 }
             break;
         }
@@ -50,12 +48,8 @@ class StructureAssertion extends AbstractAssertion
      */
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         $structure = $this->getMvcEvent()->getParam('structure');
         /* @var $structure Structure */
@@ -64,7 +58,7 @@ class StructureAssertion extends AbstractAssertion
         if ($structure) switch ($action) {
             case 'saisie':
             case 'delete':
-                return $this->assertStructure($role, $structure);
+                return $this->assertStructure($structure);
             break;
         }
 
@@ -75,9 +69,11 @@ class StructureAssertion extends AbstractAssertion
 
     protected function assertStructure(Role $role, Structure $structure): bool
     {
-        if (!$role->getStructure()) return true;
+        $curStructure = $this->getServiceContext()->getStructure();
 
-        return $structure->inStructure($role->getStructure());
+        if (!$curStructure) return true;
+
+        return $structure->inStructure($curStructure);
     }
 
 }

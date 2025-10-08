@@ -7,7 +7,6 @@ use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use PieceJointe\Controller\PieceJointeController;
-use Utilisateur\Acl\Role;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -84,7 +83,6 @@ class PiecesJointesAssertion extends AbstractAssertion
         switch ($privilege) {
             case Privileges::DOSSIER_IDENTITE_EDITION:
                 return $this->assertEditionDossierContact($intervenant);
-                break;
         }
     }
 
@@ -129,9 +127,6 @@ class PiecesJointesAssertion extends AbstractAssertion
 
     protected function assertPriv($privilege): bool
     {
-        $role = $this->getRole();
-        if (!$role instanceof Role) return false;
-
-        return $role->hasPrivilege($privilege);
+        return $this->authorize->isAllowedPrivilege($privilege);
     }
 }

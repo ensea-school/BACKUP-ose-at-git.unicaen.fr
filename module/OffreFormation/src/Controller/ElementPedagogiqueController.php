@@ -365,7 +365,7 @@ class ElementPedagogiqueController extends AbstractController
             $structure = $this->params()->fromQuery('structure');
             if ($structure) $structure = $this->getServiceStructure()->get($structure);
             $form = $this->getFormOffreFormationElementPedagogiqueSynchronisation();
-            $form->setStructure($this->getServiceContext()->getStructure(true) ?: $structure);
+            $form->setStructure($this->getServiceContext()->getStructure() ?: $structure);
             $form->populate();
 
             return compact('form', 'title');

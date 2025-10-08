@@ -228,14 +228,12 @@ class ServiceService extends AbstractEntityService
      */
     public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
         $this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
-        if ($intervenant = $role->getIntervenant()) { // Si c'est un intervenant
+        if ($intervenant = $this->getServiceContext()->getIntervenant()) { // Si c'est un intervenant
             $this->finderByIntervenant($intervenant, $qb, $alias);
         }
 
@@ -319,8 +317,6 @@ class ServiceService extends AbstractEntityService
 
         $intervenantPrec = $this->getServiceIntervenant()->getPrecedent($intervenant);
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $sVolumeHoraire      = $this->getServiceVolumeHoraire();
         $sElementPedagogique = $this->getServiceElementPedagogique();
 
@@ -339,7 +335,7 @@ class ServiceService extends AbstractEntityService
         $sVolumeHoraire->finderByTypeVolumeHoraire($tvhSource, $qb);
         $sVolumeHoraire->finderByEtatVolumeHoraire($evhValide, $qb);
 
-        if ($structure = $role->getStructure()) {
+        if ($structure = $this->getServiceContext()->getStructure()) {
             $sElementPedagogique->finderByStructure($structure, $qb);
         }
 
@@ -606,8 +602,7 @@ class ServiceService extends AbstractEntityService
         /** @var Service $entity */
         $entity = parent::newEntity();
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($intervenant = $role->getIntervenant()) {
+        if ($intervenant = $this->getServiceContext()->getIntervenant()) {
             $entity->setIntervenant($intervenant);
         }
         $entity->setEtablissement($this->getServiceContext()->getEtablissement());
@@ -626,15 +621,13 @@ class ServiceService extends AbstractEntityService
      */
     public function save($entity)
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         if (!$entity->getEtablissement()) {
             $entity->setEtablissement($this->getServiceContext()->getEtablissement());
             if (!$entity->getEtablissement()) {
                 throw new \LogicException('L\'établissement n\'est pas renseigné dans les paramétrages généraux de OSE');
             }
         }
-        if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
+        if (!$entity->getIntervenant() && $intervenant = $this->getServiceContext()->getIntervenant()) {
             $entity->setIntervenant($intervenant);
         }
         if (!$this->getAuthorize()->isAllowed($entity, $entity->getTypeVolumeHoraire()->getPrivilegeEnseignementEdition())) {
@@ -740,8 +733,7 @@ class ServiceService extends AbstractEntityService
 
     public function setRealisesFromPrevus(Service $service)
     {
-        $role       = $this->getServiceContext()->getSelectedIdentityRole();
-        $rStructure = $role ? $role->getStructure() : null;
+        $rStructure = $this->getServiceContext()->getStructure();
         $sStructure = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
 
         if ($rStructure && $sStructure && $rStructure != $sStructure) {

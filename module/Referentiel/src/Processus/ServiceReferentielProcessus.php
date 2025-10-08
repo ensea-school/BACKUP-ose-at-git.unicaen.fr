@@ -30,8 +30,6 @@ class ServiceReferentielProcessus extends AbstractProcessus
      */
     public function getReferentiels(Recherche $recherche): array
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $serviceReferentiel = $this->getServiceServiceReferentiel();
         $volumeHoraireReferentielService = $this->getServiceVolumeHoraireReferentiel();
 
@@ -49,8 +47,8 @@ class ServiceReferentielProcessus extends AbstractProcessus
         if ($recherche->getIntervenant()) {
             $serviceReferentiel->finderByIntervenant($recherche->getIntervenant(), $qb);
         }
-        if (!$recherche->getIntervenant() && $role->getStructure()) {
-            $serviceReferentiel->finderByStructure($role->getStructure(), $qb);
+        if (!$recherche->getIntervenant() && $this->getServiceContext()->getStructure()) {
+            $serviceReferentiel->finderByStructure($this->getServiceContext()->getStructure(), $qb);
         }
 
         $services = $serviceReferentiel->getList($qb);

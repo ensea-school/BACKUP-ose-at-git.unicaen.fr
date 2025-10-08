@@ -6,7 +6,6 @@ use Application\Provider\Privileges;
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Utilisateur\Acl\Role;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
@@ -29,12 +28,8 @@ class ClotureAssertion extends AbstractAssertion
      */
     protected function assertEntity(ResourceInterface $entity, ?string $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch (true) {
             case $entity instanceof Intervenant:

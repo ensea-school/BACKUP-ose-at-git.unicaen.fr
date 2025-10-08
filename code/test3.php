@@ -8,14 +8,9 @@
 
 echo '<br /><br /><br /><br /><br /><br /><br />';
 
-$um = $container->get(\Framework\User\UserManager::class);
-$um->updatePrivileges();
-dump($um->getPrivileges());
+$p = $container->get(\Framework\Authorize\RuleProvider::class);
 
+$d = $p->getAll();
 
+dump($d);
 
-
-$a = $container->get(\Laminas\Authentication\AuthenticationService::class);
-$c = $a->getIdentity();
-
-dump($c);

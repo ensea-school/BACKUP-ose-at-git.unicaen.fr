@@ -2,6 +2,7 @@
 
 namespace Administration\Assertion;
 
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Utilisateur\Acl\Role;
 
@@ -13,36 +14,19 @@ use Utilisateur\Acl\Role;
  */
 class GestionAssertion extends AbstractAssertion
 {
-    /**
-     * @var boolean[]
-     */
-    protected $cache=[];
-
+    use ContextServiceAwareTrait;
 
 
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        $key = $controller.'.'.$action.'>'.$privilege;
-
-        if (!isset($this->cache[$key])){
-            $this->cache[$key] = $this->asserts([
-                $role instanceof Role,
-                $this->assertIntervenant($role, $privilege)
-            ]);
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) {
+            return false;
         }
-        return $this->cache[$key];
+
+        if ($this->getServiceContext()->getIntervenant()) {
+            return false;
+        }
+
+        return true;
     }
-
-
-
-    protected function assertIntervenant( Role $role, $privilege ): bool
-    {
-        return $this->asserts([
-            !$privilege || $role->hasPrivilege($privilege), // pareil si le rôle ne possède pas le privilège adéquat
-            !$role->getIntervenant() // les intervenants n'ont pour le moment pas accès au menu Gestion
-        ]);
-    }
-
 }

@@ -66,12 +66,10 @@ class SaisieFieldset extends AbstractFieldset
         $this->setHydrator($hydrator)
             ->setAllowedObjectBindingClass(ServiceReferentiel::class);
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $canViewMNP = $role->hasPrivilege(Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
-        $canEditMNP = $role->hasPrivilege(Privileges::MOTIF_NON_PAIEMENT_EDITION);
-        $canViewTag = $role->hasPrivilege(Privileges::TAG_VISUALISATION);
-        $canEditTag = $role->hasPrivilege(Privileges::TAG_EDITION);
+        $canViewMNP = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIEMENT_VISUALISATION));
+        $canEditMNP = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIEMENT_EDITION));
+        $canViewTag = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::TAG_VISUALISATION));
+        $canEditTag = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::TAG_EDITION));
 
         $this->add([
             'name' => 'id',
@@ -82,8 +80,6 @@ class SaisieFieldset extends AbstractFieldset
             'name' => 'idPrev',
             'type' => 'Hidden',
         ]);
-
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
 
         $this->add([
@@ -237,7 +233,7 @@ class SaisieFieldset extends AbstractFieldset
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         $cl = $this->getServiceLocalContext();
 
-        if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure() ?: $cl->getStructure()) {
+        if ($structure = $this->getServiceContext()->getStructure() ?: $cl->getStructure()) {
             $this->get('structure')->setValue($structure->getId());
         }
     }

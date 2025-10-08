@@ -63,10 +63,7 @@ class  IntervenantController extends AbstractController
 
     public function indexAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-
-        if ($intervenant = $role->getIntervenant()) {
+        if ($intervenant = $this->getServiceContext()->getIntervenant()) {
             $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
             $etapeCourante = $feuilleDeRoute->getCourante();
             if ($etapeCourante && $etapeCourante->isAllowed()) {
@@ -277,10 +274,9 @@ class  IntervenantController extends AbstractController
 
     public function ficheAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getServiceContext()->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
 
-        return compact('intervenant', 'role');
+        return compact('intervenant');
     }
 
 

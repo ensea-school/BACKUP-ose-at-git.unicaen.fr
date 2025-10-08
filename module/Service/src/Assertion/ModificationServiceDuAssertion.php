@@ -7,7 +7,6 @@ use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Service\Controller\ModificationServiceDuController;
-use Utilisateur\Acl\Role;
 
 
 /**
@@ -20,9 +19,6 @@ class ModificationServiceDuAssertion extends AbstractAssertion
 
     protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
-        $role = $this->getRole();
-        if (!$role instanceof Role) return false;
-
         if ($entity instanceof Intervenant) {
             switch ($privilege) {
                 case Privileges::MODIF_SERVICE_DU_EDITION:

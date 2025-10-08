@@ -22,7 +22,7 @@ return [
                     ],
                     'controller'  => Controller\StructureController::class,
                     'action'      => 'voir',
-                    'roles'       => ['user'],
+                    'privileges'  => ['user'],
                 ],
                 'liste'  => [
                     'route'      => '/liste',

@@ -256,9 +256,8 @@ class MiseEnPaiementRechercheForm extends AbstractForm
     protected function populateStructures(array $params, array $filters)
     {
         // Filtre des rôles
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($role->getStructure()) {
-            $filters[] = 'AND s.ids LIKE \'' . $role->getStructure()->idsFilter() . "'";
+        if ($structure = $this->getServiceContext()->getStructure()) {
+            $filters[] = 'AND s.ids LIKE \'' . $structure->idsFilter() . "'";
         }
 
         $sql = "

@@ -3,6 +3,7 @@
 namespace Application\ORM;
 
 use Doctrine\ORM\EntityManager;
+use Framework\User\UserManager;
 use Psr\Container\ContainerInterface;
 
 
@@ -23,7 +24,9 @@ class RouteEntitiesInjectorFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): RouteEntitiesInjector
     {
-        $service = new RouteEntitiesInjector;
+        $service = new RouteEntitiesInjector(
+            $container->get(UserManager::class),
+        );
         $service->setEntityManager($container->get(EntityManager::class));
 
         /* Injectez vos dépendances ICI */

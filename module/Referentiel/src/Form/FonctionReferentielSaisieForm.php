@@ -146,11 +146,10 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
     public function getStructures()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceStructure = $this->getServiceStructure();
         $qb = $serviceStructure->finderByHistorique();
-        if ($role && $role->getStructure()) {
-            $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
+        if ($structure = $this->getServiceContext()->getStructure()) {
+            $serviceStructure->finderById($structure->getId(), $qb); // Filtre
         }
 
         $structures = $serviceStructure->getList($qb);

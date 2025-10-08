@@ -62,7 +62,7 @@ class AffectationService extends AbstractEntityService
      */
     public function save($entity)
     {
-        $structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure();
+        $structure = $this->getServiceContext()->getStructure();
         if ($structure && $entity->getStructure() != $structure) {
             throw new \LogicException('Vous n\'avez pas le droit de modifier une affectation d\'une structure autre que la vôtre.');
         }

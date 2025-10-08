@@ -3,15 +3,15 @@
 namespace Mission\Assertion;
 
 use Application\Provider\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
-use Intervenant\Entity\Db\Intervenant;
+use Framework\User\UserProfile;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Utilisateur\Acl\Role;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -25,6 +25,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 {
     use EntityManagerAwareTrait;
     use WorkflowServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     /* ---- Routage général ---- */
     public function __invoke (array $page): bool // gestion des visibilités de menus
@@ -45,12 +46,11 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
                     return false;
                 }
 
-                $role = $this->getRole();
-                if (!$role) {
+                if ($this->authorize->isAllowedPrivilege(UserProfile::PRIVILEGE_GUEST)) {
                     // Visible si on n'est pas connecté
                     return true;
                 }
-                if (!$role->getIntervenant()) {
+                if (!$this->getServiceContext()->getIntervenant()) {
                     //Pas visible par les gestionnaires
                     return false;
                 }
@@ -65,34 +65,31 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertEntity (?ResourceInterface $entity = null, $privilege = null): bool
     {
-        /** @var Role $role */
-        $role = $this->getRole();
-
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch (true) {
             case $entity instanceof OffreEmploi:
                 switch ($privilege) {
                     case Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION:
-                        return $this->assertOffreEmploiVisualisation($role, $entity);
+                        return $this->assertOffreEmploiVisualisation($entity);
                     case Privileges::MISSION_OFFRE_EMPLOI_MODIFIER:
-                        return $this->assertOffreEmploiEdition($role, $entity);
+                        return $this->assertOffreEmploiEdition($entity);
                     case Privileges::MISSION_OFFRE_EMPLOI_VALIDER:
-                        return $this->assertOffreEmploiValidation($role, $entity);
+                        return $this->assertOffreEmploiValidation($entity);
                     case Privileges::MISSION_OFFRE_EMPLOI_POSTULER:
-                        return $this->assertOffreEmploiPostuler($role, $entity);
+                        return $this->assertOffreEmploiPostuler($entity);
                     case Privileges::MISSION_CANDIDATURE_VISUALISATION:
-                        return $this->assertCandidatureVisualisation($role, $entity);
+                        return $this->assertCandidatureVisualisation($entity);
                     case Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION:
-                        return $this->assertOffreEmploiSupprimer($role, $entity);
+                        return $this->assertOffreEmploiSupprimer($entity);
                 }
             break;
             case $entity instanceof Candidature:
                 switch ($privilege) {
                     case Privileges::MISSION_CANDIDATURE_VALIDER:
-                        return $this->assertCandidatureValider($role, $entity);
+                        return $this->assertCandidatureValider($entity);
                     case Privileges::MISSION_CANDIDATURE_REFUSER:
-                        return $this->assertCandidatureRefuser($role, $entity);
+                        return $this->assertCandidatureRefuser($entity);
                 }
             break;
         }
@@ -104,16 +101,11 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertController ($controller, $action = null, $privilege = null): bool
     {
-        /* @var $role Role */
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
-        $entity = $role->getIntervenant();
+        $entity = $this->getServiceContext()->getIntervenant();
         if (!$entity) {
             $entity = $this->getMvcEvent()->getParam('intervenant');
         }
@@ -134,7 +126,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             case 'accepter-candidature':
             case 'refuser-candidature':
                 if ($entity instanceof Candidature){
-                    $assert = $this->assertCandidatureValider($role, $entity);
+                    $assert = $this->assertCandidatureValider($entity);
                     return $assert;
                 }
                 break;
@@ -147,82 +139,69 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertOffreEmploiVisualisation (Role $role, OffreEmploi $offre): bool
+    protected function assertOffreEmploiVisualisation (OffreEmploi $offre): bool
     {
         return $this->asserts(
-            $this->assertStructure($role, $offre->getStructure()),
+            $this->assertStructure($offre->getStructure()),
         );
     }
 
 
 
-    protected function assertStructure (Role $role, ?Structure $structure): bool
+    protected function assertStructure (?Structure $structure): bool
     {
 
         if (!$structure) {
             return true;
         }
 
-        if (!$role->getStructure()) {
+        if (!$this->getServiceContext()->getStructure()) {
             return true;
         }
 
-        return $structure->inStructure($role->getStructure());
+        return $structure->inStructure($this->getServiceContext()->getStructure());
     }
 
 
 
-    protected function assertOffreEmploiEdition (Role $role, OffreEmploi $offre): bool
+    protected function assertOffreEmploiEdition (OffreEmploi $offre): bool
     {
 
 
         return $this->asserts([
-            $this->haveRole(),
+            $this->getServiceContext()->getAffectation(),
             $offre->canSaisie(),
-            $this->assertOffreEmploi($role, $offre),
+            $this->assertOffreEmploi($offre),
         ]);
     }
 
 
 
-    protected function haveRole (): bool
-    {
-        $role = $this->getRole();
-
-        if ($role instanceof Role) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-
-    protected function assertOffreEmploi (Role $role, OffreEmploi $offre): bool
+    protected function assertOffreEmploi (OffreEmploi $offre): bool
     {
         return $this->asserts([
-            $this->assertStructure($role, $offre->getStructure()),
+            $this->assertStructure($offre->getStructure()),
         ]);
     }
 
 
 
-    protected function assertOffreEmploiValidation (Role $role, OffreEmploi $offre): bool
+    protected function assertOffreEmploiValidation (OffreEmploi $offre): bool
     {
 
         return $this->asserts([
-            $this->haveRole(),
-            $this->assertOffreEmploi($role, $offre),
+            $this->getServiceContext()->getAffectation(),
+            $this->assertOffreEmploi($offre),
         ]);
     }
 
 
 
-    protected function assertOffreEmploiPostuler (Role $role, OffreEmploi $offre): bool
+    protected function assertOffreEmploiPostuler (OffreEmploi $offre): bool
     {
 
         //On vérifier que l'on a bien un contexte avec un intervenant
-        if (!$this->haveIntervenant() || !$offre->isValide()) {
+        if (!$this->getServiceContext()->getIntervenant() || !$offre->isValide()) {
             return false;
         }
 
@@ -232,35 +211,21 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function haveIntervenant (): bool
-    {
-        $role = $this->getRole();
-        if ($role instanceof Role) {
-            if ($role->getIntervenant() instanceof Intervenant) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-
-    protected function assertCandidatureVisualisation (Role $role, OffreEmploi $offre): bool
+    protected function assertCandidatureVisualisation (OffreEmploi $offre): bool
     {
         return $this->asserts([
-            $this->haveRole(),
+            $this->getServiceContext()->getAffectation(),
         ]);
     }
 
 
 
-    protected function assertOffreEmploiSupprimer (Role $role, OffreEmploi $offre): bool
+    protected function assertOffreEmploiSupprimer (OffreEmploi $offre): bool
     {
         return $this->asserts([
             !$offre->isValide(),
-            $this->haveRole(),
-            $this->assertOffreEmploi($role, $offre),
+            $this->getServiceContext()->getAffectation(),
+            $this->assertOffreEmploi($offre),
         ]);
     }
 
@@ -276,7 +241,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertCandidatureValider (Role $role, Candidature $candidature): bool
+    protected function assertCandidatureValider (Candidature $candidature): bool
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($candidature->getIntervenant(), $candidature->getOffre()->getStructure());
         $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CANDIDATURE_VALIDATION);
@@ -286,10 +251,10 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertCandidatureRefuser(Role $role, Candidature $candidature): bool
+    protected function assertCandidatureRefuser(Candidature $candidature): bool
     {
         $structureOffre = $candidature->getOffre()->getStructure();
-        return $this->assertStructure($role, $structureOffre);
+        return $this->assertStructure($structureOffre);
     }
 
 }

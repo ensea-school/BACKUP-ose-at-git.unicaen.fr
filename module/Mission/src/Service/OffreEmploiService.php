@@ -48,7 +48,7 @@ class OffreEmploiService extends AbstractEntityService
 
 
 
-    public function data(array $parameters, ?Role $role = null)
+    public function data(array $parameters)
     {
 
 
@@ -64,7 +64,7 @@ class OffreEmploiService extends AbstractEntityService
           oe . histoDestruction IS null        
        ";
 
-        if (empty($role)) {
+        if (!$this->getServiceContext()->getAffectation()) {
             $dql .= " AND oe.validation IS NOT NULL";
             $dql .= " AND oe.dateLimite >= CURRENT_DATE()";
         }
@@ -151,7 +151,7 @@ class OffreEmploiService extends AbstractEntityService
 
 
 
-    public function dataPublic(array $parameters, ?Role $role = null)
+    public function dataPublic(array $parameters)
     {
 
 

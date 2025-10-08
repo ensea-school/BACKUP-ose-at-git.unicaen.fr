@@ -2,12 +2,12 @@
 
 namespace Paiement\Assertion;
 
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;
-use Utilisateur\Acl\Role;
 
 
 /**
@@ -17,19 +17,15 @@ use Utilisateur\Acl\Role;
  */
 class BudgetAssertion extends AbstractAssertion
 {
+    use ContextServiceAwareTrait;
 
     /**
      * Exemple
      */
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch (true) {
             case $entity instanceof Dotation:
@@ -56,12 +52,8 @@ class BudgetAssertion extends AbstractAssertion
      */
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         return true;
     }
@@ -70,7 +62,7 @@ class BudgetAssertion extends AbstractAssertion
 
     protected function assertStructure(Structure $structure): bool
     {
-        $rs = $this->getRole()->getStructure();
+        $rs = $this->getServiceContext()->getStructure();
 
         return (!$rs || $structure->inStructure($rs));
     }

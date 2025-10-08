@@ -2,6 +2,7 @@
 
 namespace Administration\Controller;
 
+use Framework\Navigation\Navigation;
 use Psr\Container\ContainerInterface;
 
 class AdministrationControllerFactory
@@ -15,7 +16,9 @@ class AdministrationControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new AdministrationController();
+        $controller = new AdministrationController(
+            $container->get(Navigation::class),
+        );
 
         return $controller;
     }

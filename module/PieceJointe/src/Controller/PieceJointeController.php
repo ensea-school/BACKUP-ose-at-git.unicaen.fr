@@ -68,9 +68,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
     public function indexAction()
     {
-        //$this->initFilters();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
         if (!$intervenant) {
@@ -84,25 +81,18 @@ class PieceJointeController extends \Application\Controller\AbstractController
             return $menu;
         }
 
-
         return compact('intervenant');
-
-
     }
 
 
 
     public function getPiecesJointesAction(): AxiosModel
     {
-        //$this->initFilters();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
-
 
         return $this->getServiceTblPieceJointe()->data($intervenant);
     }
@@ -289,7 +279,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $pj      = $this->getEvent()->getParam('pieceJointe');
         $fichier = $this->getEvent()->getParam('fichier');
 
-        $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
+        $intervenant = $this->getServiceContext()->getIntervenant();
         if ($intervenant && $pj->getIntervenant() != $intervenant) {
             // un intervenant tente de supprimer la PJ d'un autre intervenant
             throw new \Exception('Vous ne pouvez pas supprimer la pièce jointe d\'un autre intervenant');
@@ -310,7 +300,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
     {
         /** @var PieceJointe $pj */
 
-        $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
+        $intervenant = $this->getServiceContext()->getIntervenant();
         if ($intervenant && $pj->getIntervenant() != $intervenant) {
             // un intervenant tente de supprimer la PJ d'un autre intervenant
             throw new \Exception('Vous ne pouvez pas supprimer la pièce jointe d\'un autre intervenant');

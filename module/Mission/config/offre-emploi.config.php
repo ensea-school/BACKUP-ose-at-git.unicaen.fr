@@ -22,12 +22,16 @@ return [
                     'route'      => '/:intervenant/candidature',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'candidature',
+                    'privileges' => [Privileges::MISSION_CANDIDATURE_VISUALISATION],
+                    'assertion'  => Assertion\OffreEmploiAssertion::class,
 
                 ],
                 'get-candidatures' => [
                     'route'      => '/:intervenant/get-candidatures',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'get-candidatures',
+                    'privileges' => [Privileges::MISSION_CANDIDATURE_VISUALISATION],
+                    'assertion'  => Assertion\OffreEmploiAssertion::class,
                 ],
             ],
         ],
@@ -36,13 +40,13 @@ return [
             'route'         => '/offre-emploi',
             'controller'    => OffreEmploiController::class,
             'action'        => 'index',
-            //'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+            'privileges'    => 'guest',//Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             'may_terminate' => true,
             'child_routes'  => [
                 'saisir'               => [
                     'route'      => '/saisir[/:offreEmploi]',
                     'controller' => OffreEmploiController::class,
-                    'privileges' => Privileges::MISSION_OFFRE_EMPLOI_MODIFIER,
+                    'privileges' => [Privileges::MISSION_OFFRE_EMPLOI_MODIFIER, Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION],
                     'action'     => 'saisir',
                 ],
                 'detail'               => [
@@ -55,11 +59,13 @@ return [
                     'route'      => '/get/:offreEmploi',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'get',
+                    'privilege'  => 'guest',
                 ],
                 'liste'                => [
                     'route'      => '/liste',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'liste',
+                    'privilege'  => 'guest',
                 ],
                 'supprimer'            => [
                     'route'      => '/supprimer/:offreEmploi',
@@ -99,13 +105,8 @@ return [
                     'privileges' => Privileges::MISSION_CANDIDATURE_REFUSER,
                     'assertion'  => Assertion\OffreEmploiAssertion::class,
                 ],
-
-
             ],
-
         ],
-
-
     ],
 
 
@@ -185,65 +186,6 @@ return [
 
     ],
 
-
-    'guards' => [
-        [
-            'controller' => OffreEmploiController::class,
-            'action'     => ['saisir'],
-            'privileges' => [
-                Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
-            ],
-        ],
-        [
-            'controller' => OffreEmploiController::class,
-            'action'     => ['supprimer'],
-            'privileges' => [
-                Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION,
-            ],
-        ],
-        [
-            'controller' => OffreEmploiController::class,
-            'action'     => ['valider', 'devalider'],
-            'privileges' => [
-                Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
-            ],
-        ],
-        [
-            'controller' => OffreEmploiController::class,
-            'action'     => ['accepter-candidature'],
-            'privileges' => [
-                Privileges::MISSION_CANDIDATURE_VALIDER,
-            ],
-        ],
-        [
-            'controller' => OffreEmploiController::class,
-            'action'     => ['refuser-candidature'],
-            'privileges' => [
-                Privileges::MISSION_CANDIDATURE_REFUSER,
-            ],
-        ],
-        [
-            'controller' => OffreEmploiController::class,
-            'action'     => ['postuler'],
-            'privileges' => [
-                Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
-            ],
-        ],
-        [
-            'controller' => OffreEmploiController::class,
-            'action'     => ['index', 'detail', 'liste', 'get'],
-            'roles'      => ['guest'],
-
-        ],
-        [
-            'controller' => OffreEmploiController::class,
-            'action'     => ['candidature', 'get-candidatures'],
-            'privileges' => [Privileges::MISSION_CANDIDATURE_VISUALISATION],
-            'assertion'  => Assertion\OffreEmploiAssertion::class,
-        ],
-
-
-    ],
 
     'controllers' => [
         OffreEmploiController::class => OffreEmploiControllerFactory::class,

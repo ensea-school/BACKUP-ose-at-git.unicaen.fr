@@ -118,14 +118,13 @@ class ModificationServiceDuController extends AbstractController
     public function exportCsvAction()
     {
         $annee = $this->getServiceContext()->getAnnee();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $this->em()->getFilters()->enable('historique')->init([
             ModificationServiceDu::class,
             Intervenant::class,
         ]);
 
-        $data = $this->getServiceModificationServiceDu()->getExportCsvData($annee, $role->getStructure());
+        $data = $this->getServiceModificationServiceDu()->getExportCsvData($annee, $this->getServiceContext()->getStructure());
 
         $csvModel = new CsvModel();
         $csvModel->setHeader($data['head']);

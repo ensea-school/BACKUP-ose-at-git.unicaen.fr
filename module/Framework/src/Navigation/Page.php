@@ -147,6 +147,17 @@ class Page
 
 
 
+    public function getData(?string $key = null): mixed
+    {
+        if (null !== $key) {
+            return $this->data[$key] ?? null;
+        }else{
+            return $this->data;
+        }
+    }
+
+
+
     public function getParent(): ?Page
     {
         return $this->parent;
@@ -198,5 +209,36 @@ class Page
         }
 
         throw new \Exception('La route ou l\'uri n\'ont pas été définies');
+    }
+
+
+
+    public function htmlify(): string
+    {
+        $label = $this->getLabel();
+        $title = $this->getTitle();
+
+        // get attribs for anchor element
+        $attribs = [
+            'id'     => $this->getData('id'),
+            'title'  => $title,
+            'class'  => $this->getClass(),
+            'href'   => $this->getUri([]),
+            'target' => $this->getData('target'),
+        ];
+
+        if ($this->isActive()) {
+            $attribs['aria-current'] = 'page';
+        }
+
+        foreach($attribs as $attrib => $value) {
+            if ($value) {
+                $attribs[$attrib] = ' '.$attrib.'="'.htmlspecialchars($value, ENT_QUOTES).'"';
+            }else{
+                unset($attribs[$attrib]);
+            }
+        }
+
+        return '<a' .implode('', $attribs) . '>' . $label . '</a>';
     }
 }

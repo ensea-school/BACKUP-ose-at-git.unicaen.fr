@@ -17,6 +17,7 @@ use Chargens\Form\ScenarioFormAwareTrait;
 use Chargens\Provider\ChargensProviderAwareTrait;
 use Chargens\Service\ScenarioServiceAwareTrait;
 use Chargens\Service\SeuilChargeServiceAwareTrait;
+use Framework\Navigation\Navigation;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use OffreFormation\Entity\Db\Etape;
@@ -44,10 +45,19 @@ class ChargensController extends AbstractController
     use SeuilChargeServiceAwareTrait;
     use DifferentielFormAwareTrait;
 
-
-    public function indexAction()
+    public function __construct(
+        private readonly Navigation $navigation
+    )
     {
-        return [];
+    }
+
+
+
+    public function indexAction(): array
+    {
+        $pages = $this->navigation->getCurrentPage()->getVisiblePages();
+
+        return compact('pages');
     }
 
 

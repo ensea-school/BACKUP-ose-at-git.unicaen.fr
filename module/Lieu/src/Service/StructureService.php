@@ -179,20 +179,14 @@ class StructureService extends AbstractEntityService
 
 
 
-    /**
-     * Si un rôle est spécifié, retourne la liste des structures pour lesquelles ce rôle est autorisé à officier.
-     * Si <code>true</code> est spécifié, retourne la liste des structures associées à des rôles.
-     *
-     * @param Role|true $role
-     */
-    public function finderByRole($role, ?QueryBuilder $qb = null, $alias = null)
+    public function finderByRole(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
-        if (true === $role) {
+        if ($this->getServiceContext()->getAffectation()) {
             $qb->andWhere("EXISTS ( SELECT a from Utilisateur\Entity\Db\Affectation a WHERE a.structure = $alias)");
-        } elseif ($role->getStructure()) {
-            $this->finderByStructure($role->getStructure(), $qb, $alias);
+        } elseif ($structure = $this->getServiceContext()->getStructure()) {
+            $this->finderByStructure($structure, $qb, $alias);
         }
 
         return $qb;
@@ -272,9 +266,8 @@ class StructureService extends AbstractEntityService
     public function getStructuresDemandeMiseEnPaiement(): array
     {
         $structures = [];
-        $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $qb         = $this->finderByDemandeMiseEnPaiement();
-        $this->finderByRole($role, $qb);
+        $this->finderByRole($qb);
 
         $listeStructures = $this->getList($qb);
         foreach ($listeStructures as $structure) {

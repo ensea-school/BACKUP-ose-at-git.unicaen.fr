@@ -2,6 +2,7 @@
 
 namespace Administration\Controller;
 
+use Framework\Navigation\Navigation;
 use Psr\Container\ContainerInterface;
 
 class GestionControllerFactory
@@ -15,7 +16,9 @@ class GestionControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new GestionController();
+        $controller = new GestionController(
+            $container->get(Navigation::class),
+        );
 
         return $controller;
     }

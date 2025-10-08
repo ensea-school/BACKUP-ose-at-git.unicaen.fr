@@ -3,6 +3,7 @@
 namespace Paiement\Assertion;
 
 use Application\Provider\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\CentreCoutStructure;
@@ -15,7 +16,7 @@ use Utilisateur\Acl\Role;
  */
 class CentreCoutAssertion extends AbstractAssertion
 {
-
+    use ContextServiceAwareTrait;
 
     /**
      * @param ResourceInterface $entity
@@ -25,19 +26,15 @@ class CentreCoutAssertion extends AbstractAssertion
      */
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        $role = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
         switch (true) {
             case $entity instanceof CentreCoutStructure:
                 switch ($privilege) {
                     case Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION:
-                        return $this->assertCentreCoutStructure($role, $entity);
+                        return $this->assertCentreCoutStructure($entity);
                 }
                 break;
         }
@@ -47,10 +44,10 @@ class CentreCoutAssertion extends AbstractAssertion
 
 
 
-    public function assertCentreCoutStructure(Role $role, CentreCoutStructure $centreCoutStructure): bool
+    public function assertCentreCoutStructure(CentreCoutStructure $centreCoutStructure): bool
     {
-        if ($role->getStructure() && $centreCoutStructure->getStructure()) {
-            return $centreCoutStructure->getStructure()->inStructure($role->getStructure());
+        if ($this->getServiceContext()->getStructure() && $centreCoutStructure->getStructure()) {
+            return $centreCoutStructure->getStructure()->inStructure($this->getServiceContext()->getStructure());
         }
 
         return true;

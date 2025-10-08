@@ -440,7 +440,7 @@ class NoeudProvider
         $cStructure = $this->chargens->getServiceContext()->getStructure();
         $canEdit    = false;
         if ($cStructure) {
-            $nStructure = $noeud->getStructure(true);
+            $nStructure = $noeud->getStructure();
 
             if (!$nStructure || $nStructure->inStructure($cStructure)) {
                 $canEdit = true;

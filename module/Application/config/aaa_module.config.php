@@ -112,7 +112,7 @@ $config = [
                 [
                     'controller' => 'Application\Controller\Index',
                     'action'     => ['changement-annee', 'plan'],
-                    'roles'      => ['guest'],
+                    'privileges' => ['guest'],
                 ],
             ],
         ],

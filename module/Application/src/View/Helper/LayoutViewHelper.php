@@ -23,15 +23,11 @@ class LayoutViewHelper extends AbstractHtmlElement
     use StructureServiceAwareTrait;
     use SessionContainerTrait;
 
-    private bool $usurpationEnabled = false;
-    private bool $usurpationEnCours = false;
-
-
 
     public function __construct(
         private readonly NavbarService $navbarService,
-        private readonly Navigation $navigation,
-        private readonly UserManager $userManager,
+        private readonly Navigation    $navigation,
+        private readonly UserManager   $userManager,
     )
     {
 
@@ -68,12 +64,12 @@ class LayoutViewHelper extends AbstractHtmlElement
             return ['connecte' => false];
         }
 
-        $user = $this->userManager->getUser();
-        $profile = $this->userManager->getProfile();
+        $user           = $this->userManager->getUser();
+        $profile        = $this->userManager->getProfile();
         $needStructures = false;
-        $roles = [];
+        $roles          = [];
 
-        $ps         = $this->userManager->getProfiles();
+        $ps = $this->userManager->getProfiles();
         foreach ($ps as $p) {
             /** @var Role $role */
             $r = $p->getContext('role');
@@ -97,8 +93,8 @@ class LayoutViewHelper extends AbstractHtmlElement
             'roleNom'           => $profile?->getDisplayName() ?? 'Authentifié(e)',
             'roleId'            => $profile?->getId(),
             'connecte'          => true,
-            'usurpationEnabled' => $this->isUsurpationEnabled(),
-            'usurpationEnCours' => $this->isUsurpationEnCours(),
+            'usurpationEnabled' => $this->userManager->isUsurpationEnabled(),
+            'usurpationEnCours' => $this->userManager->isUsurpationEnCours(),
             'roles'             => $roles,
             'structureId'       => null,
             'structures'        => $structures,
@@ -113,8 +109,8 @@ class LayoutViewHelper extends AbstractHtmlElement
     public function footerData(): array
     {
         $pages = $this->navigation->home->getPages();
-        foreach( $pages as $pn => $page ) {
-            if (!$page->isFooter()){
+        foreach ($pages as $pn => $page) {
+            if (!$page->isFooter()) {
                 unset($pages[$pn]);
             }
         }
@@ -135,7 +131,7 @@ class LayoutViewHelper extends AbstractHtmlElement
             return [];
         }
 
-        if ($currentPage->getParent() === $this->navigation->home){
+        if ($currentPage->getParent() === $this->navigation->home) {
             return [];
         }
 
@@ -173,36 +169,4 @@ class LayoutViewHelper extends AbstractHtmlElement
 
         return $session->structures;
     }
-
-
-
-    public function isUsurpationEnabled(): bool
-    {
-        return $this->usurpationEnabled;
-    }
-
-
-
-    public function setUsurpationEnabled(bool $usurpationEnabled): LayoutViewHelper
-    {
-        $this->usurpationEnabled = $usurpationEnabled;
-        return $this;
-    }
-
-
-
-    public function isUsurpationEnCours(): bool
-    {
-        return $this->usurpationEnCours;
-    }
-
-
-
-    public function setUsurpationEnCours(bool $usurpationEnCours): LayoutViewHelper
-    {
-        $this->usurpationEnCours = $usurpationEnCours;
-        return $this;
-    }
-
-
 }

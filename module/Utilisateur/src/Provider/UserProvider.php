@@ -4,17 +4,20 @@ namespace Utilisateur\Provider;
 
 use Application\Service\ContextService;
 use Doctrine\ORM\EntityManager;
-use Framework\User\UserInterface;
+use Framework\Application\Application;
 use Framework\User\UserProfile;
 use Framework\User\UserProfileInterface;
-use Framework\User\UserProviderInterface;
+use Framework\User\UserAdapterInterface;
 use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Statut;
 use Laminas\Authentication\AuthenticationService;
 use UnicaenAuthentification\Service\UserContext;
 use Utilisateur\Connecteur\LdapConnecteur;
 use Utilisateur\Entity\Db\Affectation;
+use Utilisateur\Entity\Db\Privilege;
+use Utilisateur\Entity\Db\Utilisateur;
 
-class UserProvider implements UserProviderInterface
+class UserProvider implements UserAdapterInterface
 {
     public function __construct(
         private readonly EntityManager         $entityManager,
@@ -29,11 +32,34 @@ class UserProvider implements UserProviderInterface
 
 
 
-    public function getUser(): ?UserInterface
+    public function getUser(): ?Utilisateur
     {
         $identity = $this->authenticationService->getIdentity();
 
         return $identity['db'] ?? null;
+    }
+
+
+
+    public function isUsurpationEnabled(): bool
+    {
+        if ($this->isUsurpationEnCours()) {
+            return true;
+        }
+
+        $usersAllowed = Application::getInstance()->config()['ldap']['autorisationsUsurpation'] ?? [];
+        return in_array(
+            $this->getUser()?->getUsername(),
+            $usersAllowed);
+    }
+
+
+
+    public function isUsurpationEnCours(): bool
+    {
+        $identity = $this->authenticationService->getIdentity();
+
+        return isset($identity['usurpation']['usurpateur']);
     }
 
 
@@ -83,13 +109,13 @@ class UserProvider implements UserProviderInterface
             return $profiles;
         }
 
-        $annee           = $this->contextService->getAnnee();
+        $annee = $this->contextService->getAnnee();
 
-        $dql = "
+        $dql   = "
             SELECT
-              i, partial s.{id, code}, partial ti.{id,libelle}
+              i, s, ti
             FROM
-              ".Intervenant::class." i
+              " . Intervenant::class . " i
               JOIN i.statut s
               JOIN s.typeIntervenant ti
             WHERE
@@ -106,15 +132,23 @@ class UserProvider implements UserProviderInterface
         $typesIntervenants = [];
 
         foreach ($intervenants as $intervenant) {
-            $ti = $intervenant->getStatut()->getTypeIntervenant();
+            $ti                              = $intervenant->getStatut()->getTypeIntervenant();
             $typesIntervenants[$ti->getId()] = $intervenant;
         }
 
-        foreach( $typesIntervenants as $intervenant ){
+        foreach ($typesIntervenants as $intervenant) {
             $profiles[] = $intervenant->getProfile();
         }
 
         return $profiles;
+    }
+
+
+
+    public function getProfileDefaultId(): null|int|string
+    {
+        // pas de profil par défaut
+        return null;
     }
 
 
@@ -124,19 +158,33 @@ class UserProvider implements UserProviderInterface
      */
     public function getPrivileges(?UserProfileInterface $profile): array
     {
+        /** @var Statut $statut */
+        if ($statut = $profile->getContext('statut')) {
+            return array_keys($statut->getPrivileges());
+        } elseif ($role = $profile->getContext('role')) {
+            /** @var Privilege[] $ps */
+            $ps         = $role->getPrivileges();
+            $privileges = [];
+            foreach ($ps as $privilege) {
+                $privileges[] = $privilege->getFullCode();
+            }
+            return $privileges;
+        }
         return [];
     }
 
 
 
-    public function onProfileChange(?UserProfile $newProfile)
+    public function onBeforeProfileChange(): void
     {
-        $roles = $this->userContext->getSelectableIdentityRoles();
-        foreach ($roles as $role) {
-            if ($role->getRoleId() == $newProfile->getId()) {
-                $this->userContext->setSelectedIdentityRole($role);
-            }
-        }
+        return;
+    }
+
+
+
+    public function onAfterProfileChange(?UserProfile $newProfile): void
+    {
+        return;
     }
 
 }

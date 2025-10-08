@@ -74,8 +74,6 @@ return [
                         'get-pieces-jointes' => [
                             'route'      => '/get-pieces-jointes',
                             'action'     => 'getPiecesJointes',
-                            'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
-
                         ],
                         'fichier'            => [
                             'route'         => '/fichier',
@@ -256,7 +254,7 @@ return [
         ],
         [
             'controller' => PieceJointeController::class,
-            'action'     => ['televerser', 'supprimer', 'archiver'],
+            'action'     => ['televerser', 'supprimer'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_EDITION,
             'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],

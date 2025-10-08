@@ -1,40 +1,30 @@
 <?php
 
 use UnicaenApp\View\Helper\TagViewHelper;
-use Laminas\Navigation\Page\Mvc;
 
 /**
- * @var $container Laminas\Navigation\Navigation
  * @var $this      \Application\View\Renderer\PhpRenderer
+ * @var $pages     array|\Framework\Navigation\Page[]
  */
 
 $rubriques = [];
 
 
-foreach ($container as $page) {
-    if ($this->navigation()->accept($page)) {
-        $rubrique = [
-            'color'       => $page->get('color'),
-            'description' => $page->get('description'),
-            'icon'        => $page->get('icon'),
-            'html'        => $this->navigation()->htmlify($page),
-            'items'       => [],
-        ];
+foreach ($pages as $page) {
+    $rubrique = [
+        'color'       => $page->getColor(),
+        'description' => $page->getData('description'),
+        'icon'        => $page->getIcon(),
+        'html'        => $page->htmlify(),
+        'items'       => [],
+    ];
 
-        if ($page->hasPages()) {
-            $children = (array)$page->getPages();
-            uasort($children, function (Mvc $a, Mvc $b) {
-                return $a->getOrder() > $b->getOrder() ? 1 : 0;
-            });
-            foreach ($children as $child) {
-                if ($this->navigation()->accept($child)) {
-                    $rubrique['items'][] = $this->navigation()->htmlify($child);
-                }
-            }
-        }
-
-        $rubriques[] = $rubrique;
+    $children = $page->getVisiblePages();
+    foreach ($children as $child) {
+        $rubrique['items'][] = $child->htmlify();
     }
+
+    $rubriques[] = $rubrique;
 }
 
 

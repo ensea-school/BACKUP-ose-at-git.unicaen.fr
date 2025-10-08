@@ -98,7 +98,6 @@ class EtatSortieService extends AbstractEntityService
 
         $entityManager = $this->getEntityManager();
         $data          = $this->generateData($etatSortie, $filtres);
-        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
 
         if (trim($etatSortie->getPdfTraitement())) {
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getPdfTraitement();
@@ -148,8 +147,6 @@ class EtatSortieService extends AbstractEntityService
 
         $entityManager = $this->getEntityManager();
         $data          = $this->generateData($etatSortie, $filtres);
-        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
-
 
         if (trim($etatSortie->getCsvTraitement() ?? '')) {
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getCsvTraitement();

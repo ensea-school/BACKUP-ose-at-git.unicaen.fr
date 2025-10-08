@@ -115,9 +115,8 @@ class MissionTypeController extends AbstractController
             }
         }
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($role->getStructure()) {
-            $structures[] = $role->getStructure();
+        if ($structure = $this->getServiceContext()->getStructure()) {
+            $structures[] = $structure;
         } else {
             $filter     = function (Structure $structure) {
                 return !$structure->estHistorise();

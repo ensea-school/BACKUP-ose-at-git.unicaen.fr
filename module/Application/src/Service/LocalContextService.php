@@ -66,7 +66,7 @@ class LocalContextService extends AbstractService
     public function getIntervenant()
     {
         if (empty($this->intervenant)) {
-            if ($intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
+            if ($intervenant = $this->getServiceContext()->getIntervenant()) {
                 $this->intervenant = $intervenant;
             } else {
                 $this->intervenant = $this->getSessionContainer()->intervenant;

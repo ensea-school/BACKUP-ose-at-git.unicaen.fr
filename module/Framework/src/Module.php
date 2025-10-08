@@ -3,8 +3,9 @@
 namespace Framework;
 
 use Application\ConfigFactory;
+use Framework\Authorize\Authorize;
 use Framework\User\UserManager;
-use Framework\User\UserProviderInterface;
+use Framework\User\UserAdapterInterface;
 use Laminas\Mvc\MvcEvent;
 
 class Module
@@ -29,12 +30,16 @@ class Module
         }
 
         $userProvider = $container->get($userProviderClass);
-        if (!$userProvider instanceof UserProviderInterface) {
-            throw new \Exception('User provider must be a '.UserProviderInterface::class);
+        if (!$userProvider instanceof UserAdapterInterface) {
+            throw new \Exception('User provider must be a '.UserAdapterInterface::class);
         }
 
         $userManager = $container->get(UserManager::class);
-        $userManager->setUserProvider($userProvider);
+        $userManager->setUserAdapter($userProvider);
         $userManager->setUser($userProvider->getUser());
+
+        /* Déclenchement du service Authorize */
+        $authorize = $container->get(Authorize::class);
+        $authorize->attach($e->getTarget()->getEventManager());
     }
 }

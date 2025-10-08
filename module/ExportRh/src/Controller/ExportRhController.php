@@ -134,8 +134,7 @@ class ExportRhController extends AbstractController
     {
 
         /* Initialisation */
-        $role               = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant        = $this->getServiceContext()->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $intervenantRh      = '';
         $form               = '';
         $nameConnecteur     = '';

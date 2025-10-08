@@ -2,6 +2,7 @@
 
 namespace Framework\Authorize;
 
+use Framework\Application\Application;
 use Framework\Container\Autowire;
 use Framework\Router\Router;
 
@@ -61,7 +62,9 @@ class GuardProvider
             }
         }
 
-        ksort($this->guards);
+        if (Application::getInstance()->inDev()) {
+            ksort($this->guards);
+        }
     }
 
 

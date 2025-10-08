@@ -8,9 +8,9 @@
 
 $sa = $container->get(\Framework\Authorize\Authorize::class);
 
-$a = $sa->isAllowedController(\Application\Controller\IndexController::class, 'index');
+//$a = $sa->isAllowedController(\Application\Controller\IndexController::class, 'index');
 
-//$a = $sa->isAllowedController(\Application\Controller\PeriodeController::class, 'index');
+$a = $sa->isAllowedController(\Application\Controller\PeriodeController::class, 'index');
 
 dump($a);
 

@@ -4,7 +4,6 @@ namespace Utilisateur\Service;
 
 use Application\Service\AbstractEntityService;
 use Doctrine\ORM\QueryBuilder;
-use Laminas\Session\Container;
 use Utilisateur\Entity\Db\Role;
 
 /**
@@ -14,9 +13,6 @@ use Utilisateur\Entity\Db\Role;
  */
 class RoleService extends AbstractEntityService
 {
-    private static ?Container $session = null;
-
-
 
     /**
      * Retourne la classe des entités
@@ -54,21 +50,4 @@ class RoleService extends AbstractEntityService
         return $qb;
     }
 
-
-
-    public static function getSession(): Container
-    {
-        if (null === self::$session) {
-            self::$session = new Container('ROLE_SESSION_CONTAINER');
-        }
-        return self::$session;
-    }
-
-
-
-    public static function clearSession(): void
-    {
-        $session = self::getSession();
-        $session->getManager()->getStorage()->clear();
-    }
 }

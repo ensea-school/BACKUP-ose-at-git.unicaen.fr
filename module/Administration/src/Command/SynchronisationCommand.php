@@ -54,7 +54,6 @@ class SynchronisationCommand extends Command
             $io->writeln("Fin du job '" . $job . "'");
             //Suppresion du cache des affectations
             $io->writeln("Suppression du cache doctrine des affectations");
-            RoleService::clearSession();
         }
 
         return Command::SUCCESS;

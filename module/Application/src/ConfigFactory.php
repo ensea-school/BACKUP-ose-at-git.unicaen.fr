@@ -71,15 +71,6 @@ class ConfigFactory
             unset($config['navigation']);
         }
 
-        if (isset($config['guards'])) {
-            $finalConfig['bjyauthorize'] = [
-                'guards' => [
-                    PrivilegeController::class => $config['guards'],
-                ],
-            ];
-            unset($config['guards']);
-        }
-
         if (!empty($routeGuards)) {
             foreach ($routeGuards as $routeGuard) {
                 $finalConfig['bjyauthorize']['guards'][PrivilegeController::class][] = $routeGuard;

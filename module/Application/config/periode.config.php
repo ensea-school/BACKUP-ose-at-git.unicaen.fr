@@ -88,23 +88,22 @@ return [
         ],
     ],
 
-    'bjyauthorize'  => [
-        'guards' => [
-            PrivilegeController::class => [
-                [
-                    'controller' => Controller\PeriodeController::class,
-                    'action'     => ['index'],
-                    'privileges' => [Privileges::PARAMETRES_PERIODES_VISUALISATION],
-                ],
-                [
-                    'controller' => Controller\PeriodeController::class,
-                    'action'     => ['saisie', 'supprimer', 'trier'],
-                    'privileges' => [Privileges::PARAMETRES_PERIODES_EDITION],
-                ],
-            ],
+
+    'guards'          => [
+        [
+            'controller' => Controller\PeriodeController::class,
+            'action'     => ['index'],
+            'privileges' => [Privileges::PARAMETRES_PERIODES_VISUALISATION],
+        ],
+        [
+            'controller' => Controller\PeriodeController::class,
+            'action'     => ['saisie', 'supprimer', 'trier'],
+            'privileges' => [Privileges::PARAMETRES_PERIODES_EDITION],
         ],
     ],
-    'controllers'   => [
+
+
+    'controllers'     => [
         'factories' => [
             Controller\PeriodeController::class => Controller\Factory\PeriodeControllerFactory::class,
         ],

@@ -2,6 +2,7 @@
 
 namespace Utilisateur\Provider;
 
+use Application\Provider\Privileges;
 use Application\Service\ContextService;
 use Doctrine\ORM\EntityManager;
 use Framework\Application\Application;
@@ -14,10 +15,20 @@ use Laminas\Authentication\AuthenticationService;
 use Utilisateur\Connecteur\LdapConnecteur;
 use Utilisateur\Entity\Db\Affectation;
 use Utilisateur\Entity\Db\Privilege;
+use Utilisateur\Entity\Db\Role;
 use Utilisateur\Entity\Db\Utilisateur;
 
 class UserProvider implements UserAdapterInterface
 {
+
+    private array $noAdminPrivileges     = [
+        Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
+        Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
+        Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
+        Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
+    ];
+
+
     public function __construct(
         private readonly EntityManager         $entityManager,
         private readonly LdapConnecteur        $ldap,
@@ -158,17 +169,37 @@ class UserProvider implements UserAdapterInterface
     {
         /** @var Statut $statut */
         if ($statut = $profile?->getContext('statut')) {
+            /** @var Statut|null $statut */
             return array_keys($statut->getPrivileges());
         } elseif ($role = $profile?->getContext('role')) {
+            /** @var Role|null $role */
             /** @var Privilege[] $ps */
-            $ps         = $role->getPrivileges();
-            $privileges = [];
-            foreach ($ps as $privilege) {
-                $privileges[] = $privilege->getFullCode();
+            if (Role::ADMINISTRATEUR === $role->getCode()) {
+                return $this->getAdministrateurPrivileges();
+            } else {
+                $ps         = $role->getPrivileges();
+                $privileges = [];
+                foreach ($ps as $privilege) {
+                    $privileges[] = $privilege->getFullCode();
+                }
+                return $privileges;
             }
-            return $privileges;
         }
         return [];
+    }
+
+
+
+    protected function getAdministrateurPrivileges(): array
+    {
+        $rc         = new \ReflectionClass(Privileges::class);
+        $privileges = array_values($rc->getConstants());
+        foreach ($privileges as $index => $privilege) {
+            if (in_array($privilege, $this->noAdminPrivileges)) {
+                unset($privileges[$index]);
+            }
+        }
+        return $privileges;
     }
 
 

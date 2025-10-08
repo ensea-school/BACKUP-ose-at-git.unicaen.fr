@@ -2,6 +2,7 @@
 
 namespace Framework\User;
 
+use Framework\Application\Application;
 use Framework\Application\Session;
 use Framework\Container\Autowire;
 use Laminas\Permissions\Acl\Role\RoleInterface;
@@ -164,6 +165,14 @@ class UserManager implements UserManagerInterface
 
 
 
+    public function clearCache(): void
+    {
+        $this->privileges = null;
+        $this->sessionSet(self::SESSION_PRIVILEGES, $this->privileges);
+    }
+
+
+
     public function isConnected(): bool
     {
         return null !== $this->getUser();
@@ -220,6 +229,10 @@ class UserManager implements UserManagerInterface
             $this->privileges[UserProfile::PRIVILEGE_USER] = null;
         } else {
             $this->privileges[UserProfile::PRIVILEGE_GUEST] = null;
+        }
+
+        if (Application::getInstance()->inDev()) {
+            ksort($this->privileges);
         }
 
         $this->sessionSet(self::SESSION_PRIVILEGES, $this->privileges);

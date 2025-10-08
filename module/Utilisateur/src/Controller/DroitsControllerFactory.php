@@ -2,6 +2,7 @@
 
 namespace Utilisateur\Controller;
 
+use Framework\User\UserManager;
 use Psr\Container\ContainerInterface;
 use Utilisateur\Service\PrivilegeService;
 
@@ -16,7 +17,9 @@ class DroitsControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new DroitsController();
+        $controller = new DroitsController(
+            $container->get(UserManager::class),
+        );
         $controller->setServicePrivilege($container->get(PrivilegeService::class));
 
         return $controller;

@@ -358,14 +358,19 @@ function popConfirm(element, options)
         };
         popConfirm = new bootstrap.Popover(element, popoptions);
         element.addEventListener('shown.bs.popover', (eventShown) => {
-            let popDivId = $(eventShown.target).attr('aria-describedby');
-            $("#" + popDivId).find("button#go").click(() => {
+            const popDivId = eventShown.target.getAttribute('aria-describedby');
+            const popDiv = document.getElementById(popDivId);
+
+            const goButton = popDiv.querySelector('button#go');
+            const nogoButton = popDiv.querySelector('button#nogo');
+
+            goButton.addEventListener('click', () => {
                 popConfirm.hide();
                 $("#" + popDivId).remove();
                 goFunc();
             });
 
-            $("#" + popDivId).find("button#nogo").click(() => {
+            nogoButton.addEventListener('click', () => {
                 popConfirm.hide();
             });
         });

@@ -20,14 +20,12 @@ MAX(ep.fc) 												                                            fc,
 COALESCE(MAX(ef.fi),0)									                                      effectif_fi,
 COALESCE(MAX(ef.fa),0)									                                      effectif_fa,
 COALESCE(MAX(ef.fc),0)									                                      effectif_fc,
-COASLESCE(SUM(CASE WHEN ti.code = 'CM' THEN vhe.heures END),0)		            heures_cm,
-COASLESCE(SUM(CASE WHEN ti.code = 'CM' THEN vhe.groupes END),0)		            nb_groupe_cm,
-COASLESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.heures END),0)		            heures_td,
-COASLESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.groupes END),0) 		          nb_groupe_td,
-COASLESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.heures END),0) 		            heures_tp,
-COASLESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.groupes END),0) 		          nb_groupe_tp,
-COASLESCE(SUM(CASE WHEN ti.code = 'Accompagnement' THEN vhe.heures END),0) 		heures_accompagnement,
-COASLESCE(SUM(CASE WHEN ti.code = 'Accompagnement' THEN vhe.groupes END),0) 	nb_groupe_accompagnement
+COALESCE(SUM(CASE WHEN ti.code = 'CM' THEN vhe.heures END),0)		            heures_cm,
+COALESCE(SUM(CASE WHEN ti.code = 'CM' THEN vhe.groupes END),0)		            nb_groupe_cm,
+COALESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.heures END),0)		            heures_td,
+COALESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.groupes END),0) 		          nb_groupe_td,
+COALESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.heures END),0) 		            heures_tp,
+COALESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.groupes END),0) 		          nb_groupe_tp
 FROM
 etape e
 LEFT JOIN type_formation tf ON e.type_formation_id = tf.id
@@ -43,5 +41,3 @@ WHERE
 e.histo_destruction IS NULL
 GROUP BY
 ep.id
-
-

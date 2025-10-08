@@ -497,7 +497,7 @@ ORDER BY
         'LIBELLE'        => 'Export offre de formation',
         'PDF_TRAITEMENT' => null,
         'AUTO_BREAK'     => false,
-        'REQUETE'        => 'SELECT * FROM v_export_offre_formation',
+        'REQUETE' => 'SELECT * FROM v_export_formation',
         'CSV_PARAMS'     => '{
             "ANNEE_ID"                  : { "visible": false },
             "STRUCTURE_ID"              : { "visible": false },
@@ -526,9 +526,6 @@ ORDER BY
             "HEURES_TD"                 : { "libelle": "Nbr heures TD"},
             "NB_GROUPE_TP"              : { "libelle": "Nbr groupes TP"},
             "HEURES_TP"                 : { "libelle": "Nbr heures TP"},
-            "NB_GROUPE_ACCOMPAGNEMENT"  : { "libelle": "Nbr groupes Accompagnement"},
-            "NB_HEURES_ACCOMPAGNEMENT"  : { "libelle": "Nbr heures Accompagnement"}
-            
         }',
     ],
 ];

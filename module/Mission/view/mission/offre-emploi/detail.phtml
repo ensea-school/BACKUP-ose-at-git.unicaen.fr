@@ -13,7 +13,6 @@ $this->headTitle()->append("Gestion des offres d'emploi");
 $canEdit               = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_MODIFIER));
 $canSupprimer          = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION));
 $canValider            = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_VALIDER));
-$canVoirCandidature    = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_CANDIDATURE_VISUALISATION));
 $canValiderCandidature = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_CANDIDATURE_VALIDER));
 $idOffre               = ($offreEmploi) ? $offreEmploi->getId() : null;
 $titre                 = ($offreEmploi) ? $offreEmploi->getTitre() : 'Liste des offres d\'emploi';

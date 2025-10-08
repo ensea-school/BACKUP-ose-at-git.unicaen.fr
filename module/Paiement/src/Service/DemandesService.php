@@ -244,6 +244,7 @@ class DemandesService extends AbstractService
             
         FROM
             tbl_paiement tp
+        LEFT JOIN structure str ON   str.id = tp.structure_id
         LEFT JOIN service s ON	s.id = tp.service_id
         LEFT JOIN service_referentiel sr ON	sr.id = tp.service_referentiel_id
         LEFT JOIN structure ssr ON ssr.id = sr.structure_id
@@ -267,7 +268,7 @@ class DemandesService extends AbstractService
 
         //Si on ne veut que les heures à payer d'une structure donnée.
         if (!empty($structure)) {
-            $sql .= " AND tp.structure_id = :structure";
+            $sql .= " AND str.ids LIKE :structure";
         }
 
         $sql .= "
@@ -288,13 +289,13 @@ class DemandesService extends AbstractService
             MAX(th.code) ASC,
             MAX(fr.libelle_long) ASC,
             tp.mise_en_paiement_id ASC
-
         ";
+
 
         $params['intervenant'] = $intervenant->getId();
 
         if (!empty($structure)) {
-            $params['structure'] = $structure->getId();
+            $params['structure'] = $structure->idsFilter();
         }
 
         $dmeps = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);

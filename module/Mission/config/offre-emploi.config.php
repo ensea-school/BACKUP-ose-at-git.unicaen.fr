@@ -40,7 +40,7 @@ return [
             'route'         => '/offre-emploi',
             'controller'    => OffreEmploiController::class,
             'action'        => 'index',
-            'privileges'    => 'guest',//Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+            'privileges'    => ['guest','user'],//Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             'may_terminate' => true,
             'child_routes'  => [
                 'saisir'               => [
@@ -59,13 +59,13 @@ return [
                     'route'      => '/get/:offreEmploi',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'get',
-                    'privilege'  => 'guest',
+                    'privileges'  => ['guest','user'],
                 ],
                 'liste'                => [
                     'route'      => '/liste',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'liste',
-                    'privilege'  => 'guest',
+                    'privileges'  => ['guest','user'],
                 ],
                 'supprimer'            => [
                     'route'      => '/supprimer/:offreEmploi',

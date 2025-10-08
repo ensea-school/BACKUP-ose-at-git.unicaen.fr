@@ -7,7 +7,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\CentreCoutStructure;
-use Utilisateur\Acl\Role;
 
 /**
  * Description of PaiementAssertion

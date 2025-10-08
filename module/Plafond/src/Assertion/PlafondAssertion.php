@@ -8,7 +8,6 @@ use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
-use Utilisateur\Acl\Role;
 
 
 /**
@@ -29,9 +28,6 @@ class PlafondAssertion extends AbstractAssertion
      */
     protected function assertController($controller, $action = null, $privilege = null): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
         $structure = $this->getMvcEvent()->getParam('structure');
         /* @var $structure Structure */
 

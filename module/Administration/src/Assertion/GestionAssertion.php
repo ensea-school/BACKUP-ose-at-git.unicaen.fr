@@ -4,7 +4,6 @@ namespace Administration\Assertion;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
-use Utilisateur\Acl\Role;
 
 
 /**

@@ -76,6 +76,8 @@ class AutowireFactory
         switch ($argumentName) {
             case 'config':
                 return $this->getConfig($argumentValue);
+            case 'service':
+                return $this->container->get($argumentValue);
         }
         throw new \Exception('Argument de changement ' . $argumentName . ' inconnu');
     }

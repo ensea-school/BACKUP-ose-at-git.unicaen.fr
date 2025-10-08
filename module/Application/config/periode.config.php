@@ -1,7 +1,4 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
 
 namespace Application;
 
@@ -9,7 +6,6 @@ namespace Application;
 use Application\Provider\Privileges;
 use Application\Service\PeriodeService;
 use Framework\Authorize\Authorize;
-use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'router' => [
@@ -19,7 +15,7 @@ return [
                 'options'       => [
                     'route'    => '/periodes',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Periode',
+                        'controller' => Controller\PeriodeController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -54,10 +50,10 @@ return [
                     'trier'     => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'      => '/trier',
+                            'route'       => '/trier',
                             'constraints' => [
                             ],
-                            'defaults'   => [
+                            'defaults'    => [
                                 'action' => 'trier',
                             ],
                         ],
@@ -79,7 +75,7 @@ return [
                                     'gestion-periode' => [
                                         'label'          => 'Périodes',
                                         'route'          => 'periodes',
-                                        'resource'       => Authorize::controllerResource('Application\Controller\Periode', 'index'),
+                                        'resource'       => Authorize::controllerResource(Controller\PeriodeController::class, 'index'),
                                         'order'          => 30,
                                         'border - color' => '#111',
                                     ],
@@ -96,12 +92,12 @@ return [
         'guards' => [
             PrivilegeController::class => [
                 [
-                    'controller' => 'Application\Controller\Periode',
+                    'controller' => Controller\PeriodeController::class,
                     'action'     => ['index'],
                     'privileges' => [Privileges::PARAMETRES_PERIODES_VISUALISATION],
                 ],
                 [
-                    'controller' => 'Application\Controller\Periode',
+                    'controller' => Controller\PeriodeController::class,
                     'action'     => ['saisie', 'supprimer', 'trier'],
                     'privileges' => [Privileges::PARAMETRES_PERIODES_EDITION],
                 ],
@@ -110,7 +106,7 @@ return [
     ],
     'controllers'   => [
         'factories' => [
-            'Application\Controller\Periode' => Controller\Factory\PeriodeControllerFactory::class,
+            Controller\PeriodeController::class => Controller\Factory\PeriodeControllerFactory::class,
         ],
     ],
     'service_manager' => [

@@ -7,7 +7,6 @@ use Application\Provider\Privileges;
 use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\TauxRemu;
-use Utilisateur\Acl\Role;
 
 
 /**
@@ -23,22 +22,15 @@ class TauxRemuAssertion extends AbstractAssertion
      */
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
-        // Si c'est bon alors on affine...
         switch (true) {
             case
                 $entity instanceof TauxRemu:
                 switch ($privilege) {
                     case Privileges::TAUX_SUPPRESSION:
                         return $this->assertTauxRemuSuppression($entity);
-                    break;
                     case Privileges::TAUX_EDITION:
                         return $this->assertTauxRemuEdition($entity);
-                    break;
                 }
-            break;
         }
 
         return true;
@@ -46,12 +38,6 @@ class TauxRemuAssertion extends AbstractAssertion
 
 
 
-    /**
-     * @param Role     $role
-     * @param TauxRemu $entity
-     *
-     * @return bool
-     */
     private function assertTauxRemuEdition(TauxRemu $entity): bool
     {
         return !$entity->isDefaut();
@@ -59,12 +45,6 @@ class TauxRemuAssertion extends AbstractAssertion
 
 
 
-    /**
-     * @param Role     $role
-     * @param TauxRemu $entity
-     *
-     * @return bool
-     */
     private function assertTauxRemuSuppression(TauxRemu $entity): bool
     {
         return !$entity->isDefaut() & !$entity->hasChildren();

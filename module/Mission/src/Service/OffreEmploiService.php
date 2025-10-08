@@ -7,7 +7,6 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenVue\View\Model\AxiosModel;
-use Utilisateur\Acl\Role;
 
 /**
  * Description of OffreEmploiService

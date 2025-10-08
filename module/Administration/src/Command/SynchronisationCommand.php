@@ -55,7 +55,6 @@ class SynchronisationCommand extends Command
             //Suppresion du cache des affectations
             $io->writeln("Suppression du cache doctrine des affectations");
             RoleService::clearSession();
-            $this->getServiceAffectation()->deleteCacheAffectation();
         }
 
         return Command::SUCCESS;

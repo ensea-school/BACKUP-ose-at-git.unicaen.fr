@@ -10,7 +10,6 @@ use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Utilisateur\Entity\Db\Affectation;
 use Utilisateur\Entity\Db\Role;
-use Utilisateur\Provider\RoleProvider;
 
 /**
  * Description of AffectationService
@@ -108,16 +107,6 @@ class AffectationService extends AbstractEntityService
         $qb->andWhere("$structureAlias = :structure")->setParameter('structure', $structure);
 
         return $qb;
-    }
-
-
-
-    public function deleteCacheAffectation(): void
-    {
-        $em = $this->getEntityManager();
-
-        $cache = $em->getConfiguration()->getResultCache();
-        $cache->deleteItem(str_replace('\\', '_', RoleProvider::class) . '_affectations');
     }
 
 }

@@ -2,9 +2,7 @@
 
 namespace Application\ORM\Filter;
 
-use Application\Service\Traits\ContextServiceAwareTrait;
 use Doctrine\ORM\Mapping\ClassMetaData;
-use Application\Entity\Db\Annee;
 
 /**
  * Description of AnneeFilter

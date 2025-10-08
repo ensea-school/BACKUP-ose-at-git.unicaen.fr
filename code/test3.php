@@ -6,11 +6,11 @@
  * @var $io         \Symfony\Component\Console\Style\SymfonyStyle
  */
 
-echo '<br /><br /><br /><br /><br /><br /><br />';
+$sa = $container->get(\Framework\Authorize\Authorize::class);
 
-$p = $container->get(\Framework\Authorize\RuleProvider::class);
+$a = $sa->isAllowedController(\Application\Controller\IndexController::class, 'index');
 
-$d = $p->getAll();
+//$a = $sa->isAllowedController(\Application\Controller\PeriodeController::class, 'index');
 
-dump($d);
+dump($a);
 

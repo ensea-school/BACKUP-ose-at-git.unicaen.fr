@@ -11,7 +11,6 @@ use Framework\User\UserAdapterInterface;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Authentication\AuthenticationService;
-use UnicaenAuthentification\Service\UserContext;
 use Utilisateur\Connecteur\LdapConnecteur;
 use Utilisateur\Entity\Db\Affectation;
 use Utilisateur\Entity\Db\Privilege;
@@ -21,7 +20,6 @@ class UserProvider implements UserAdapterInterface
 {
     public function __construct(
         private readonly EntityManager         $entityManager,
-        private readonly UserContext           $userContext,
         private readonly LdapConnecteur        $ldap,
         private readonly AuthenticationService $authenticationService,
         private readonly ContextService        $contextService,
@@ -159,9 +157,9 @@ class UserProvider implements UserAdapterInterface
     public function getPrivileges(?UserProfileInterface $profile): array
     {
         /** @var Statut $statut */
-        if ($statut = $profile->getContext('statut')) {
+        if ($statut = $profile?->getContext('statut')) {
             return array_keys($statut->getPrivileges());
-        } elseif ($role = $profile->getContext('role')) {
+        } elseif ($role = $profile?->getContext('role')) {
             /** @var Privilege[] $ps */
             $ps         = $role->getPrivileges();
             $privileges = [];

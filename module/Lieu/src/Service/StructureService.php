@@ -10,7 +10,6 @@ use Lieu\Entity\Db\Structure;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\TblPaiementServiceAwareTrait;
-use Utilisateur\Acl\Role;
 use Utilisateur\Service\AffectationServiceAwareTrait;
 
 

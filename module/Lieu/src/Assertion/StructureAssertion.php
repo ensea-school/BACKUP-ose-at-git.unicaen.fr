@@ -7,7 +7,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
-use Utilisateur\Acl\Role;
 
 
 /**
@@ -21,9 +20,6 @@ class StructureAssertion extends AbstractAssertion
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
         switch (true) {
             case $entity instanceof Structure:
                 switch ($privilege) {
@@ -67,7 +63,7 @@ class StructureAssertion extends AbstractAssertion
 
 
 
-    protected function assertStructure(Role $role, Structure $structure): bool
+    protected function assertStructure(Structure $structure): bool
     {
         $curStructure = $this->getServiceContext()->getStructure();
 

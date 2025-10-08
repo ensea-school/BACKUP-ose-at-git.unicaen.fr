@@ -4,7 +4,6 @@ namespace Formule\Assertion;
 
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
-use Utilisateur\Acl\Role;
 
 
 /**
@@ -21,9 +20,6 @@ class FormuleAssertion extends AbstractAssertion
     {
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
         switch ($action) {
             case 'details':

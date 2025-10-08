@@ -2,8 +2,10 @@
 
 namespace Framework\Authorize;
 
+use Framework\Container\Autowire;
 use Framework\Router\Router;
 use Framework\User\UserManager;
+use Framework\User\UserManagerInterface;
 use Framework\User\UserProfile;
 use Laminas\EventManager\AbstractListenerAggregate;
 use Laminas\EventManager\EventManagerInterface;
@@ -22,7 +24,9 @@ class Authorize extends AbstractListenerAggregate
 
 
     public function __construct(
-        private readonly UserManager   $userManager,
+        #[Autowire(service: UserManager::class)]
+        private readonly UserManagerInterface   $userManager,
+
         private readonly Router        $router,
         private readonly GuardProvider $guardProvider,
         private readonly RuleProvider  $ruleProvider,
@@ -70,8 +74,7 @@ class Authorize extends AbstractListenerAggregate
             return $this->userManager->isConnected();
         }
 
-        $currentRole   = $this->userManager->getProfile()?->getContext('role');
-        $currentRoleId = $currentRole?->getRoleId();
+        $currentRoleId = $this->userManager->getRole()?->getRoleId();
 
         return $role === $currentRoleId;
     }

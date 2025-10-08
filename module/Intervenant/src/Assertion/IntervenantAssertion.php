@@ -6,7 +6,6 @@ use Application\Provider\Privileges;
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Utilisateur\Acl\Role;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -36,9 +35,6 @@ class IntervenantAssertion extends AbstractAssertion
      */
     protected function assertEntity(ResourceInterface $entity, ?string $privilege = null): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
         switch (true) {
             case $entity instanceof Intervenant:
                 switch ($privilege) {

@@ -3,6 +3,7 @@
 namespace Framework\Authorize;
 
 use Framework\Container\Autowire;
+use Framework\Router\Router;
 
 class GuardProvider
 {
@@ -15,10 +16,12 @@ class GuardProvider
 
     public function __construct(
         #[Autowire(config: 'bjyauthorize/guards')]
-        private ?array $oldGuardsConfig,
+        private ?array          $oldGuardsConfig,
 
         #[Autowire(config: 'guards')]
-        private ?array $guardsConfig,
+        private ?array          $guardsConfig,
+
+        private readonly Router $router,
     )
     {
         $this->loadConfig();
@@ -43,6 +46,22 @@ class GuardProvider
             }
             $this->guardsConfig = null;
         }
+
+
+        $routes = $this->router->getRoutes();
+        foreach ($routes as $route) {
+            if ($route->getController() && $route->getAction() && $route->getPrivileges()) {
+                $rule = [
+                    'controller' => $route->getController(),
+                    'action'     => $route->getAction(),
+                    'privileges' => $route->getPrivileges(),
+                    'assertion'  => $route->getAssertion(),
+                ];
+                $this->addConfigGuards($rule);
+            }
+        }
+
+        ksort($this->guards);
     }
 
 

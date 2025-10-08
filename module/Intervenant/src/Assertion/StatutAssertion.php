@@ -6,7 +6,6 @@ use Application\Provider\Privileges;
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Utilisateur\Acl\Role;
 
 
 /**
@@ -19,9 +18,6 @@ class StatutAssertion extends AbstractAssertion
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
         switch (true) {
             case $entity instanceof Statut:
                 switch ($privilege) {

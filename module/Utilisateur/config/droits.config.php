@@ -143,9 +143,6 @@ return [
         Service\RoleService::class        => Service\RoleServiceFactory::class,
         Service\UtilisateurService::class => Service\UtilisateurServiceFactory::class,
 
-        Provider\RoleProvider::class     => Provider\RoleProviderFactory::class,
-        Provider\IdentityProvider::class => Provider\IdentityProviderFactory::class,
-
         \UnicaenPrivilege\Service\Privilege\PrivilegeService::class => Service\PrivilegeServiceFactory::class,
         Connecteur\LdapConnecteur::class                            => Connecteur\LdapConnecteurFactory::class,
         Service\PrivilegeService::class                             => Service\PrivilegeServiceFactory::class,

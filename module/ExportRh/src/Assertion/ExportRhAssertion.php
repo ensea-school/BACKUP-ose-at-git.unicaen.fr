@@ -9,7 +9,6 @@ use ExportRh\Service\ExportRhServiceAwareTrait;
 use Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Utilisateur\Acl\Role;
 
 /**
  * Description of ExportRhAssertion

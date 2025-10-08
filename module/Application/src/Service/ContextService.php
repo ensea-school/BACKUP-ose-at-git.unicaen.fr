@@ -7,15 +7,12 @@ use Application\Entity\Db\Annee;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Framework\User\UserManager;
 use Intervenant\Entity\Db\Intervenant;
-use Intervenant\Entity\Db\Statut;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Etablissement;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\EtablissementServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
-use Utilisateur\Acl\Role;
 use Utilisateur\Connecteur\LdapConnecteurAwareTrait;
 use Utilisateur\Entity\Db\Affectation;
 use Utilisateur\Entity\Db\Utilisateur;
@@ -32,13 +29,10 @@ class ContextService extends AbstractService
     use ParametresServiceAwareTrait;
     use StructureServiceAwareTrait;
     use SessionContainerTrait;
-    use UserContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use LdapConnecteurAwareTrait;
     use LocalContextServiceAwareTrait;
 
-
-    protected ?Role          $selectedIdentityRole = null;
 
     protected ?Etablissement $etablissement        = null;
 

@@ -83,7 +83,6 @@ class DroitsController extends AbstractController
                 try {
                     $this->getServiceRole()->save($role);
                     RoleService::clearSession();
-                    $this->getServiceAffectation()->deleteCacheAffectation();
                     $form->get('id')->setValue($role->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
                     $errors[] = $this->translate($e);
@@ -104,7 +103,6 @@ class DroitsController extends AbstractController
         $form  = $this->makeFormSupprimer(function () use ($role) {
             $this->getServiceRole()->delete($role);
             RoleService::clearSession();
-            $this->getServiceAffectation()->deleteCacheAffectation();
             $this->getSessionContainer()->offsetUnset('privileges' . $this->getServiceContext()->getAnnee()->getId());
         });
 
@@ -155,7 +153,6 @@ class DroitsController extends AbstractController
             break;
         }
         RoleService::clearSession();
-        $this->getServiceAffectation()->deleteCacheAffectation();
 
         return compact('role', 'privilege');
     }
@@ -240,7 +237,6 @@ class DroitsController extends AbstractController
             }
         }
         RoleService::clearSession();
-        $this->getServiceAffectation()->deleteCacheAffectation();
 
         return compact('form', 'title', 'errors');
     }
@@ -257,7 +253,6 @@ class DroitsController extends AbstractController
             $this->getServiceAffectation()->delete($affectation);
         });
         RoleService::clearSession();
-        $this->getServiceAffectation()->deleteCacheAffectation();
 
         return compact('affectation', 'title', 'form');
     }

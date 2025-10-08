@@ -4,9 +4,10 @@ namespace Framework\User;
 
 use Framework\Application\Session;
 use Framework\Container\Autowire;
+use Laminas\Permissions\Acl\Role\RoleInterface;
 use UnicaenApp\Traits\SessionContainerTrait;
 
-class UserManager
+class UserManager implements UserManagerInterface
 {
     private const SESSION_PROFILE     = 'user-manager/profile';
     private const SESSION_PRIVILEGES  = 'user-manager/privileges';
@@ -68,6 +69,13 @@ class UserManager
     public function getUser(): ?UserInterface
     {
         return $this->user;
+    }
+
+
+
+    public function getRole(): ?RoleInterface
+    {
+        return $this->getProfile()?->getContext('role');
     }
 
 
@@ -221,8 +229,11 @@ class UserManager
 
     public function hasPrivilege(string $privilege): bool
     {
-        if (null === $this->privileges) {
+        if (empty($this->privileges)) {
             $this->privileges = $this->sessionget(self::SESSION_PRIVILEGES) ?? [];
+        }
+        if (empty($this->privileges)){
+            $this->loadPrivileges();
         }
         return array_key_exists($privilege, $this->privileges);
     }

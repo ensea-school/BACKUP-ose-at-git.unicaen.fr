@@ -12,7 +12,6 @@ use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
-use Utilisateur\Acl\Role;
 
 /**
  * Description of CandidatureService
@@ -84,7 +83,7 @@ class CandidatureService extends AbstractEntityService
 
 
 
-    public function data (array $parameters, ?Role $role = null)
+    public function data (array $parameters)
     {
         $dql = "
         SELECT 

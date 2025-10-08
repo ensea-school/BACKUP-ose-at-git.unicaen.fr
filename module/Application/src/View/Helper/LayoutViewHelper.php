@@ -10,7 +10,7 @@ use Framework\User\UserManager;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use Utilisateur\Acl\Role;
+use Utilisateur\Entity\Db\Role;
 
 /**
  * Description of UtilisateurViewHelper

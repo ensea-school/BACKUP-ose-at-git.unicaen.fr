@@ -22,7 +22,6 @@ return [
             'UnicaenAuthentification\Service\UserContext',
             'UnicaenAuthentification\Authentication\Adapter\Db',
             'UnicaenAuthentification\Authentication\Storage\Usurpation',
-            'Utilisateur\Provider\IdentityProvider',
         ],
 
         'user_provider' => UserProvider::class,

@@ -14,7 +14,6 @@ use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Plafond\Form\PlafondConfigFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Utilisateur\Provider\RoleProvider;
 
 class StatutController extends AbstractController
 {
@@ -75,7 +74,6 @@ class StatutController extends AbstractController
                 $isNew = !$si->getId();
                 $this->getServiceStatut()->save($si);
                 $this->getFormPlafondConfig()->requestSaveConfigs($si, $request);
-                unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                 if ($isNew) {
                     $this->redirect()->toRoute('statut/saisie', ['statut' => $si->getId()]);
@@ -125,7 +123,6 @@ class StatutController extends AbstractController
         } else {
             try {
                 $this->getServiceStatut()->delete($statut);
-                unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                 $this->flashMessenger()->addSuccessMessage("Statut d'Intervenant supprimé avec succès.");
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));

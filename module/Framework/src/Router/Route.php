@@ -59,6 +59,14 @@ class Route
         $this->controller = $defaults['controller'] ?? $parent?->getController();
         $this->action     = $defaults['action'] ?? $parent?->getAction();
 
+        if (!empty($data['privileges'])) {
+            $this->privileges = (array)$data['privileges'];
+        }
+
+        if (!empty($data['assertion'])) {
+            $this->privileges = $data['assertion'];
+        }
+
         foreach ($defaults as $k => $v) {
             if ($k != '__NAMESPACE__' && $k != 'controller' && $k != 'action') {
                 $this->params[$k] = $v;

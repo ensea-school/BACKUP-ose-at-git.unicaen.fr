@@ -2,11 +2,14 @@
 
 namespace Framework\Container;
 
+use Doctrine\ORM\EntityManager;
 use Laminas\ServiceManager\ServiceManager;
+use UnicaenApp\Service\EntityManagerAwareInterface;
 
 class Container extends ServiceManager
 {
     private ?AutowireFactory $autowireFactory = null;
+
 
 
     private function getAutowireFactory(): AutowireFactory
@@ -18,6 +21,18 @@ class Container extends ServiceManager
     }
 
 
+
+    private function injectInitializers(mixed $object): void
+    {
+        if ($object instanceof EntityManagerAwareInterface) {
+            $object->setEntityManager(
+                $this->get(EntityManager::class),
+            );
+        }
+    }
+
+
+
     public function get($name)
     {
         if ($this->has($name)) {
@@ -26,6 +41,7 @@ class Container extends ServiceManager
         if (class_exists($name)) {
             $object = $this->getAutowireFactory()->__invoke($this, $name);
             $this->setService($name, $object);
+            $this->injectInitializers($object);
             return $object;
         }
     }

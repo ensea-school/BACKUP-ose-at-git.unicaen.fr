@@ -25,7 +25,7 @@ OSE [24.11](#ose-2411-07102025)
 
 ## Notes de mise à jour
 
-Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
+Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
 Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 
 

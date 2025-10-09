@@ -33,7 +33,7 @@ trait CandidatureServiceAwareTrait
     public function getServiceCandidature(): ?CandidatureService
     {
         if (empty($this->serviceCandidature)) {
-            $this->serviceCandidature = \Framework\Application\Application::getInstance()->container()->get(CandidatureService::class);
+            $this->serviceCandidature =\Unicaen\Framework\Application\Application::getInstance()->container()->get(CandidatureService::class);
         }
 
         return $this->serviceCandidature;

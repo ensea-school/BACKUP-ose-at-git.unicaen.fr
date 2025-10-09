@@ -31,7 +31,7 @@ trait TypeNoteServiceAwareTrait
     public function getServiceTypeNote(): ?TypeNoteService
     {
         if (empty($this->serviceTypeNote)) {
-            $this->serviceTypeNote = \Framework\Application\Application::getInstance()->container()->get(TypeNoteService::class);
+            $this->serviceTypeNote = \Unicaen\Framework\Application\Application::getInstance()->container()->get(TypeNoteService::class);
         }
 
         return $this->serviceTypeNote;

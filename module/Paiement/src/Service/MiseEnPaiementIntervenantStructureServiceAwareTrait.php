@@ -31,7 +31,7 @@ trait MiseEnPaiementIntervenantStructureServiceAwareTrait
     public function getServiceMiseEnPaiementIntervenantStructure(): ?MiseEnPaiementIntervenantStructureService
     {
         if (empty($this->serviceMiseEnPaiementIntervenantStructure)) {
-            $this->serviceMiseEnPaiementIntervenantStructure = \Framework\Application\Application::getInstance()->container()->get(MiseEnPaiementIntervenantStructureService::class);
+            $this->serviceMiseEnPaiementIntervenantStructure = \Unicaen\Framework\Application\Application::getInstance()->container()->get(MiseEnPaiementIntervenantStructureService::class);
         }
 
         return $this->serviceMiseEnPaiementIntervenantStructure;

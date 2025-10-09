@@ -4,7 +4,7 @@ namespace Chargens\Provider;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\Authorize;
 use Chargens\Entity\Db\Scenario;
 use Chargens\Entity\Noeud;
 use Lieu\Entity\Db\Structure;

@@ -3,7 +3,7 @@
 namespace Intervenant\Assertion;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 

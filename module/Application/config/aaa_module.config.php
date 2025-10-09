@@ -4,7 +4,7 @@ namespace Application;
 
 use Application\Service\OseBddAdminFactory;
 use Application\View\Helper\LocalConnectViewHelperFactory;
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 use Unicaen\BddAdmin\Bdd;
 use UnicaenAuthentification\View\Helper\LocalConnectViewHelper;
 

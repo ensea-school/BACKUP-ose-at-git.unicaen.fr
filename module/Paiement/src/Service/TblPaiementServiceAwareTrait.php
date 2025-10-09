@@ -31,7 +31,7 @@ trait TblPaiementServiceAwareTrait
     public function getServiceTblPaiement(): ?TblPaiementService
     {
         if (empty($this->serviceTblPaiement)) {
-            $this->serviceTblPaiement = \Framework\Application\Application::getInstance()->container()->get(TblPaiementService::class);
+            $this->serviceTblPaiement = \Unicaen\Framework\Application\Application::getInstance()->container()->get(TblPaiementService::class);
         }
 
         return $this->serviceTblPaiement;

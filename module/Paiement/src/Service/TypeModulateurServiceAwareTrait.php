@@ -31,7 +31,7 @@ trait TypeModulateurServiceAwareTrait
     public function getServiceTypeModulateur(): ?TypeModulateurService
     {
         if (empty($this->serviceTypeModulateur)) {
-            $this->serviceTypeModulateur = \Framework\Application\Application::getInstance()->container()->get(TypeModulateurService::class);
+            $this->serviceTypeModulateur =\Unicaen\Framework\Application\Application::getInstance()->container()->get(TypeModulateurService::class);
         }
 
         return $this->serviceTypeModulateur;

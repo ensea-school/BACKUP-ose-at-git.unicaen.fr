@@ -36,7 +36,7 @@ trait <classname>
             return $this-><variable>;
         }
         
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(<targetClassname>::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(<targetClassname>::class);
     }
 <endif useGetter>
 }

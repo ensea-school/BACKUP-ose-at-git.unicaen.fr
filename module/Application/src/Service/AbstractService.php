@@ -3,8 +3,8 @@
 namespace Application\Service;
 
 use Application\Traits\TranslatorTrait;
-use Framework\Application\Application;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Application\Application;
+use Unicaen\Framework\Authorize\Authorize;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 

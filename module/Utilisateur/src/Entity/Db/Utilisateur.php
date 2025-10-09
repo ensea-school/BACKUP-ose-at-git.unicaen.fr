@@ -2,13 +2,14 @@
 
 namespace Utilisateur\Entity\Db;
 
-use Framework\User\Bcrypt;
-use Framework\User\UserInterface;
+use Unicaen\Framework\User\Bcrypt;
+use Unicaen\Framework\User\UserInterface;
 use ZfcUser\Entity\UserInterface as ZfcUserInterface;
+use UnicaenApp\Entity\UserInterface as UnicaenAppUserInterface;
 use UnicaenVue\Axios\AxiosExtractorInterface;
 
 
-class Utilisateur implements UserInterface, ZfcUserInterface, AxiosExtractorInterface
+class Utilisateur implements UserInterface, UnicaenAppUserInterface, ZfcUserInterface, AxiosExtractorInterface
 {
     const APP_UTILISATEUR_ID = 1;
 

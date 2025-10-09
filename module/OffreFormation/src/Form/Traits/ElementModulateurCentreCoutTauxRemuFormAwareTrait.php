@@ -42,6 +42,6 @@ trait ElementModulateurCentreCoutTauxRemuFormAwareTrait
             return $this->formElementModulateurCentreCoutTauxRemu;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ElementModulateurCentreCoutTauxRemuForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ElementModulateurCentreCoutTauxRemuForm::class);
     }
 }

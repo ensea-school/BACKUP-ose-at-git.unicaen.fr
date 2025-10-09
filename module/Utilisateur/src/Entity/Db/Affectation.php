@@ -2,7 +2,7 @@
 
 namespace Utilisateur\Entity\Db;
 
-use Framework\User\UserProfile;
+use Unicaen\Framework\User\UserProfile;
 use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;

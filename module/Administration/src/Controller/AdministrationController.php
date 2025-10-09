@@ -4,7 +4,7 @@ namespace Administration\Controller;
 
 
 use Application\Controller\AbstractController;
-use Framework\Navigation\Navigation;
+use Unicaen\Framework\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 
 /**

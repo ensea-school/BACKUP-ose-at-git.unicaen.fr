@@ -5,7 +5,7 @@ namespace Application\Service;
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Entity\Db\Annee;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Framework\User\UserManager;
+use Unicaen\Framework\User\UserManager;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Etablissement;

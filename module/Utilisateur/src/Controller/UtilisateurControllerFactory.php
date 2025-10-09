@@ -2,7 +2,7 @@
 
 namespace Utilisateur\Controller;
 
-use Framework\User\UserManager;
+use Unicaen\Framework\User\UserManager;
 use Laminas\Authentication\AuthenticationService;
 use Psr\Container\ContainerInterface;
 use UnicaenApp\Mapper\Ldap\People as LdapPeopleMapper;

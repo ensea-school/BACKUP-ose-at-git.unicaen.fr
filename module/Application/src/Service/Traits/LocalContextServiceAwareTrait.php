@@ -32,7 +32,7 @@ trait LocalContextServiceAwareTrait
     public function getServiceLocalContext(): ?LocalContextService
     {
         if (empty($this->serviceLocalContext)) {
-            $this->serviceLocalContext = \Framework\Application\Application::getInstance()->container()->get(LocalContextService::class);
+            $this->serviceLocalContext = \Unicaen\Framework\Application\Application::getInstance()->container()->get(LocalContextService::class);
         }
 
         return $this->serviceLocalContext;

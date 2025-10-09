@@ -34,6 +34,6 @@ trait StatutSaisieFormAwareTrait
             return $this->formStatutSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(StatutSaisieForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(StatutSaisieForm::class);
     }
 }

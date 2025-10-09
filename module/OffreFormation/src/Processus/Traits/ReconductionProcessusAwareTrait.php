@@ -32,7 +32,7 @@ trait ReconductionProcessusAwareTrait
     public function getProcessusReconduction(): ?ReconductionProcessus
     {
         if (empty($this->processusReconduction)) {
-            $this->processusReconduction = \Framework\Application\Application::getInstance()->container()->get(ReconductionProcessus::class);
+            $this->processusReconduction = \Unicaen\Framework\Application\Application::getInstance()->container()->get(ReconductionProcessus::class);
         }
 
         return $this->processusReconduction;

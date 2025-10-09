@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Fichier;
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 use Workflow\Entity\Db\TypeValidation;
 use Workflow\Entity\Db\Validation;
 use Application\Service\Traits\ContextServiceAwareTrait;

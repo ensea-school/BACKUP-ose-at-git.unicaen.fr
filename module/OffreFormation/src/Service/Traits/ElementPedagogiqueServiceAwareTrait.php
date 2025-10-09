@@ -32,7 +32,7 @@ trait ElementPedagogiqueServiceAwareTrait
     public function getServiceElementPedagogique(): ?ElementPedagogiqueService
     {
         if (empty($this->serviceElementPedagogique)) {
-            $this->serviceElementPedagogique = \Framework\Application\Application::getInstance()->container()->get(ElementPedagogiqueService::class);
+            $this->serviceElementPedagogique = \Unicaen\Framework\Application\Application::getInstance()->container()->get(ElementPedagogiqueService::class);
         }
 
         return $this->serviceElementPedagogique;

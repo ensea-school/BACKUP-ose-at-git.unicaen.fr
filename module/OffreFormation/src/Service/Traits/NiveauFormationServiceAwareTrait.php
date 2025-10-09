@@ -32,7 +32,7 @@ trait NiveauFormationServiceAwareTrait
     public function getServiceNiveauFormation(): ?NiveauFormationService
     {
         if (empty($this->serviceNiveauFormation)) {
-            $this->serviceNiveauFormation = \Framework\Application\Application::getInstance()->container()->get(NiveauFormationService::class);
+            $this->serviceNiveauFormation = \Unicaen\Framework\Application\Application::getInstance()->container()->get(NiveauFormationService::class);
         }
 
         return $this->serviceNiveauFormation;

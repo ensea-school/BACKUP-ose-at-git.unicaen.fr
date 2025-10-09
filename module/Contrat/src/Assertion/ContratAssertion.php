@@ -8,7 +8,7 @@ use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
-use Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;

@@ -5,7 +5,7 @@ namespace Dossier\Assertion;
 use Application\Provider\Privileges;
 use Dossier\Controller\IntervenantDossierController;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
-use Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Workflow\Entity\Db\WorkflowEtape;

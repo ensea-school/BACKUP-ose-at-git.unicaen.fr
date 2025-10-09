@@ -30,7 +30,7 @@ trait StructureServiceAwareTrait
     public function getServiceStructure(): ?StructureService
     {
         if (empty($this->serviceStructure)) {
-            $this->serviceStructure = \Framework\Application\Application::getInstance()->container()->get(StructureService::class);
+            $this->serviceStructure =\Unicaen\Framework\Application\Application::getInstance()->container()->get(StructureService::class);
         }
 
         return $this->serviceStructure;

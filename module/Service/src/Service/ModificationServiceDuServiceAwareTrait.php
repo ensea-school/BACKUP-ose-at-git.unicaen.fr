@@ -30,7 +30,7 @@ trait ModificationServiceDuServiceAwareTrait
     public function getServiceModificationServiceDu(): ?ModificationServiceDuService
     {
         if (empty($this->serviceModificationServiceDu)) {
-            $this->serviceModificationServiceDu = \Framework\Application\Application::getInstance()->container()->get(ModificationServiceDuService::class);
+            $this->serviceModificationServiceDu =\Unicaen\Framework\Application\Application::getInstance()->container()->get(ModificationServiceDuService::class);
         }
 
         return $this->serviceModificationServiceDu;

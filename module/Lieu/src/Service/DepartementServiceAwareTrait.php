@@ -30,7 +30,7 @@ trait DepartementServiceAwareTrait
     public function getServiceDepartement(): ?DepartementService
     {
         if (empty($this->serviceDepartement)) {
-            $this->serviceDepartement = \Framework\Application\Application::getInstance()->container()->get(DepartementService::class);
+            $this->serviceDepartement =\Unicaen\Framework\Application\Application::getInstance()->container()->get(DepartementService::class);
         }
 
         return $this->serviceDepartement;

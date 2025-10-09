@@ -31,7 +31,7 @@ trait GitRepoServiceAwareTrait
     public function getServiceGitRepo(): ?GitRepoService
     {
         if (empty($this->serviceGitRepo)) {
-            $this->serviceGitRepo = \Framework\Application\Application::getInstance()->container()->get(GitRepoService::class);
+            $this->serviceGitRepo = \Unicaen\Framework\Application\Application::getInstance()->container()->get(GitRepoService::class);
         }
 
         return $this->serviceGitRepo;

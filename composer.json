@@ -11,7 +11,6 @@
     "require"          : {
         "php"                              : ">=8.2",
         "laminas/laminas-cli"              : "1.11.0",
-        "laminas/laminas-permissions-acl"  : "2.17.0",
         "symfony/process"                  : "7.3.3",
         "symfony/http-foundation"          : "7.3.3",
 
@@ -26,6 +25,7 @@
         "datatables.net/datatables.net-bs5": "2.1.8",
         "vakata/jstree"                    : "3.3.17",
 
+        "unicaen/framework"                : "dev-main",
         "unicaen/zfc-user"                 : "dev-php84",
         "unicaen/app"                      : "dev-php84",
         "unicaen/authentification"         : "dev-php84",
@@ -44,41 +44,39 @@
         "connecteur-ose/actul"             : "dev-master",
         "connecteur-ose/pegase"            : "dev-master"
     },
-    "replace": {
-        "laminas/laminas-cache"            : "*",
-        "unicaen/bjy-authorize"            : "*",
-        "unicaen/privilege"                : "*"
+    "replace"          : {
+        "laminas/laminas-cache": "*",
+        "laminas/laminas-cache-storage-adapter-filesystem": "*",
+        "laminas/laminas-cache-storage-adapter-memory": "*",
+        "unicaen/bjy-authorize": "*",
+        "unicaen/privilege"    : "*"
     },
     "autoload"         : {
         "psr-4": {
-            "Framework\\"     : "module/Framework/src/",
-            "Administration\\": "module/Administration/src/",
-            "Agrement\\"      : "module/Agrement/src/",
-            "Application\\"   : "module/Application/src/",
-            "Contrat\\"       : "module/Contrat/src/",
-            "Chargens\\"      : "module/Chargens/src/",
-            "Dossier\\"       : "module/Dossier/src/",
-            "Enseignement\\"  : "module/Enseignement/src/",
-            "ExportRh\\"      : "module/ExportRh/src/",
-            "EtatSortie\\"    : "module/EtatSortie/src/",
-            "Formule\\"       : "module/Formule/src/",
-            "Indicateur\\"    : "module/Indicateur/src/",
-            "Intervenant\\"   : "module/Intervenant/src/",
-            "Lieu\\"          : "module/Lieu/src/",
-            "Mission\\"       : "module/Mission/src/",
-            "OffreFormation\\": "module/OffreFormation/src/",
-            "Paiement\\"      : "module/Paiement/src/",
-            "Signature\\"     : "module/Signature/src/",
-            "PieceJointe\\"   : "module/PieceJointe/src/",
-            "Plafond\\"       : "module/Plafond/src/",
-            "Referentiel\\"   : "module/Referentiel/src/",
-            "Service\\"       : "module/Service/src/",
-            "Workflow\\"      : "module/Workflow/src/",
-            "Utilisateur\\"   : "module/Utilisateur/src/",
-
-            "Laminas\\Cache\\": "module/Framework/src/Wrapper/LaminasCache",
-            "UnicaenPrivilege\\": "module/Framework/src/Wrapper/UnicaenPrivilege",
-            "BjyAuthorize\\" : "module/Framework/src/Wrapper/BjyAuthorize"
+            "Administration\\"  : "module/Administration/src/",
+            "Agrement\\"        : "module/Agrement/src/",
+            "Application\\"     : "module/Application/src/",
+            "Contrat\\"         : "module/Contrat/src/",
+            "Chargens\\"        : "module/Chargens/src/",
+            "Dossier\\"         : "module/Dossier/src/",
+            "Enseignement\\"    : "module/Enseignement/src/",
+            "ExportRh\\"        : "module/ExportRh/src/",
+            "EtatSortie\\"      : "module/EtatSortie/src/",
+            "Formule\\"         : "module/Formule/src/",
+            "Indicateur\\"      : "module/Indicateur/src/",
+            "Intervenant\\"     : "module/Intervenant/src/",
+            "Lieu\\"            : "module/Lieu/src/",
+            "Mission\\"         : "module/Mission/src/",
+            "OffreFormation\\"  : "module/OffreFormation/src/",
+            "Paiement\\"        : "module/Paiement/src/",
+            "Signature\\"       : "module/Signature/src/",
+            "PieceJointe\\"     : "module/PieceJointe/src/",
+            "Plafond\\"         : "module/Plafond/src/",
+            "Referentiel\\"     : "module/Referentiel/src/",
+            "Service\\"         : "module/Service/src/",
+            "Workflow\\"        : "module/Workflow/src/",
+            "Utilisateur\\"     : "module/Utilisateur/src/",
+            "UnicaenPrivilege\\": "vendor/unicaen/framework/src/Wrapper/UnicaenPrivilege"
         }
     },
     "require-dev"      : {
@@ -87,7 +85,7 @@
         "phan/phan"                         : "^5.3",
         "phpmd/phpmd"                       : "*",
         "phpunit/phpunit"                   : "^9",
-        "friendsofphp/php-cs-fixer": "^3.74"
+        "friendsofphp/php-cs-fixer"         : "^3.74"
     },
     "prefer-stable"    : true,
     "config"           : {

@@ -5,7 +5,7 @@ namespace PieceJointe\Service;
 use Application\Entity\Db\Fichier;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\FichierServiceAwareTrait;
-use Framework\Authorize\UnAuthorizedException;
+use Unicaen\Framework\Authorize\UnAuthorizedException;
 use Intervenant\Entity\Db\Intervenant;
 use PieceJointe\Entity\Db\PieceJointe;
 use PieceJointe\Entity\Db\TblPieceJointe;

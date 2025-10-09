@@ -30,7 +30,7 @@ trait TypeValidationServiceAwareTrait
     public function getServiceTypeValidation(): ?TypeValidationService
     {
         if (empty($this->serviceTypeValidation)) {
-            $this->serviceTypeValidation = \Framework\Application\Application::getInstance()->container()->get(TypeValidationService::class);
+            $this->serviceTypeValidation = \Unicaen\Framework\Application\Application::getInstance()->container()->get(TypeValidationService::class);
         }
 
         return $this->serviceTypeValidation;

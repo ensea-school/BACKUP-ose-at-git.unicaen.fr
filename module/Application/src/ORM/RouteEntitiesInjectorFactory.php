@@ -3,7 +3,7 @@
 namespace Application\ORM;
 
 use Doctrine\ORM\EntityManager;
-use Framework\User\UserManager;
+use Unicaen\Framework\User\UserManager;
 use Psr\Container\ContainerInterface;
 
 

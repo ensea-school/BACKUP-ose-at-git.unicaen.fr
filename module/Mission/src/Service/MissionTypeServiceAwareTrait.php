@@ -31,7 +31,7 @@ trait MissionTypeServiceAwareTrait
     public function getServiceMissionType(): ?MissionTypeService
     {
         if (empty($this->serviceMissionType)) {
-            $this->serviceMissionType = \Framework\Application\Application::getInstance()->container()->get(MissionTypeService::class);
+            $this->serviceMissionType =\Unicaen\Framework\Application\Application::getInstance()->container()->get(MissionTypeService::class);
         }
 
         return $this->serviceMissionType;

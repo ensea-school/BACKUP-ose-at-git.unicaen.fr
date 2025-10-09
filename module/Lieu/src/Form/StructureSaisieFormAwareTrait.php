@@ -34,7 +34,7 @@ trait StructureSaisieFormAwareTrait
         if (!empty($this->formStructureSaisie)) {
             return $this->formStructureSaisie;
         }
-        $form = \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(StructureSaisieForm::class);
+        $form =\Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(StructureSaisieForm::class);
         $form->setStructure($structure);
         $form->initCentreCout();
         $form->excludeStructure();

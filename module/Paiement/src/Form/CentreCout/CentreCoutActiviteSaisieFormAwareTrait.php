@@ -34,6 +34,6 @@ trait CentreCoutActiviteSaisieFormAwareTrait
             return $this->formCentreCoutCentreCoutActiviteSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(CentreCoutActiviteSaisieForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(CentreCoutActiviteSaisieForm::class);
     }
 }

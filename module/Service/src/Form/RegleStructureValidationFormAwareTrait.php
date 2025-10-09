@@ -33,6 +33,6 @@ trait RegleStructureValidationFormAwareTrait
             return $this->formRegleStructureValidation;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(RegleStructureValidationForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(RegleStructureValidationForm::class);
     }
 }

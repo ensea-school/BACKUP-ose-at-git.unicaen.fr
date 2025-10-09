@@ -30,7 +30,7 @@ trait TypeVolumeHoraireServiceAwareTrait
     public function getServiceTypeVolumeHoraire(): ?TypeVolumeHoraireService
     {
         if (empty($this->serviceTypeVolumeHoraire)) {
-            $this->serviceTypeVolumeHoraire = \Framework\Application\Application::getInstance()->container()->get(TypeVolumeHoraireService::class);
+            $this->serviceTypeVolumeHoraire =\Unicaen\Framework\Application\Application::getInstance()->container()->get(TypeVolumeHoraireService::class);
         }
 
         return $this->serviceTypeVolumeHoraire;

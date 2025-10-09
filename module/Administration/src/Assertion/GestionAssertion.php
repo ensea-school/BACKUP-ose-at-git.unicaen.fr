@@ -3,9 +3,9 @@
 namespace Administration\Assertion;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\Authorize\AbstractAssertion;
-use Framework\Authorize\Authorize;
-use Framework\Navigation\Navigation;
+use Unicaen\Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\Authorize;
+use Unicaen\Framework\Navigation\Navigation;
 
 
 /**

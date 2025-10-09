@@ -1,6 +1,6 @@
 <?php
 
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 
 $config = Application::getInstance()->config();
 
@@ -29,7 +29,7 @@ $modules = [
     'UnicaenSiham',
     'UnicaenVue',
     'Unicaen\BddAdmin',
-    'Framework',
+    'Unicaen\Framework',
     'Application',
     'Administration',
     'Agrement',

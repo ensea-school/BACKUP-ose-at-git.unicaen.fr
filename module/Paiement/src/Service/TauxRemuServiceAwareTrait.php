@@ -31,7 +31,7 @@ trait TauxRemuServiceAwareTrait
     public function getServiceTauxRemu(): ?TauxRemuService
     {
         if (empty($this->serviceTaux)) {
-            $this->serviceTaux = \Framework\Application\Application::getInstance()->container()->get(TauxRemuService::class);
+            $this->serviceTaux = \Unicaen\Framework\Application\Application::getInstance()->container()->get(TauxRemuService::class);
         }
 
         return $this->serviceTaux;

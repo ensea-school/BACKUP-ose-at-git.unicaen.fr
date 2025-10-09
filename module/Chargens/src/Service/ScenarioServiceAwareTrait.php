@@ -30,7 +30,7 @@ trait ScenarioServiceAwareTrait
     public function getServiceScenario(): ?ScenarioService
     {
         if (empty($this->serviceScenario)) {
-            $this->serviceScenario = \Framework\Application\Application::getInstance()->container()->get(ScenarioService::class);
+            $this->serviceScenario =\Unicaen\Framework\Application\Application::getInstance()->container()->get(ScenarioService::class);
         }
 
         return $this->serviceScenario;

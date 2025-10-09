@@ -34,6 +34,6 @@ trait MotifNonPaiementSaisieFormAwareTrait
             return $this->formMotifNonPaiementMotifNonPaiementSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(MotifNonPaiementSaisieForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(MotifNonPaiementSaisieForm::class);
     }
 }

@@ -33,6 +33,6 @@ trait DependanceFormAwareTrait
             return $this->formWorkflowDependance;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(DependanceForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(DependanceForm::class);
     }
 }

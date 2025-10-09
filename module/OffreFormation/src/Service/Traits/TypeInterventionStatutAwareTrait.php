@@ -38,7 +38,7 @@ trait TypeInterventionStatutAwareTrait
     public function getServiceTypeInterventionStatut()
     {
         if (empty($this->serviceTypeInterventionStatut)) {
-            $this->serviceTypeInterventionStatut = \Framework\Application\Application::getInstance()->container()->get(TypeInterventionStatutService::class);
+            $this->serviceTypeInterventionStatut = \Unicaen\Framework\Application\Application::getInstance()->container()->get(TypeInterventionStatutService::class);
         }
 
         return $this->serviceTypeInterventionStatut;

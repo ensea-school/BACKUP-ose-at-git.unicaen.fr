@@ -31,7 +31,7 @@ trait MotifNonPaiementServiceAwareTrait
     public function getServiceMotifNonPaiement(): ?MotifNonPaiementService
     {
         if (empty($this->serviceMotifNonPaiement)) {
-            $this->serviceMotifNonPaiement = \Framework\Application\Application::getInstance()->container()->get(MotifNonPaiementService::class);
+            $this->serviceMotifNonPaiement = \Unicaen\Framework\Application\Application::getInstance()->container()->get(MotifNonPaiementService::class);
         }
 
         return $this->serviceMotifNonPaiement;

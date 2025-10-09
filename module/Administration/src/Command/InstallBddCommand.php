@@ -4,7 +4,7 @@ namespace Administration\Command;
 
 use Administration\Service\AdministrationServiceAwareTrait;
 use Application\Service\OseBddAdminFactory;
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 use Plafond\Service\PlafondServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

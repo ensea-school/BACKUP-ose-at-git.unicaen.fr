@@ -33,6 +33,6 @@ trait FonctionReferentielSaisieFormAwareTrait
             return $this->formFonctionReferentielFonctionReferentielSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(FonctionReferentielSaisieForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(FonctionReferentielSaisieForm::class);
     }
 }

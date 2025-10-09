@@ -30,7 +30,7 @@ trait ServiceAssertionAwareTrait
     public function getAssertionService(): ?ServiceAssertion
     {
         if (empty($this->assertionService)) {
-            $this->assertionService = \Framework\Application\Application::getInstance()->container()->get(ServiceAssertion::class);
+            $this->assertionService =\Unicaen\Framework\Application\Application::getInstance()->container()->get(ServiceAssertion::class);
         }
 
         return $this->assertionService;

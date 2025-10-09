@@ -36,6 +36,6 @@ trait IntervenantDossierFormAwareTrait
             return $this->formIntervenantIntervenantDossier;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(IntervenantDossierForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(IntervenantDossierForm::class);
     }
 }

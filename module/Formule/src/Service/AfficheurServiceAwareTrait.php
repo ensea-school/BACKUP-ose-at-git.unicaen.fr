@@ -31,7 +31,7 @@ trait AfficheurServiceAwareTrait
     public function getServiceAfficheur(): ?AfficheurService
     {
         if (empty($this->serviceAfficheur)) {
-            $this->serviceAfficheur = \Framework\Application\Application::getInstance()->container()->get(AfficheurService::class);
+            $this->serviceAfficheur =\Unicaen\Framework\Application\Application::getInstance()->container()->get(AfficheurService::class);
         }
 
         return $this->serviceAfficheur;

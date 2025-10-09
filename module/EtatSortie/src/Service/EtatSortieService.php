@@ -8,7 +8,7 @@ use Application\Service\AbstractEntityService;
 use EtatSortie\Entity\Db\EtatSortie;
 use Unicaen\OpenDocument\Document;
 use UnicaenApp\View\Model\CsvModel;
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 
 /**
  * Description of EtatSortieService

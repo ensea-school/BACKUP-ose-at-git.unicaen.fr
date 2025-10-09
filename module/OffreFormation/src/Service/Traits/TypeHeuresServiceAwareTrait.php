@@ -32,7 +32,7 @@ trait TypeHeuresServiceAwareTrait
     public function getServiceTypeHeures(): ?TypeHeuresService
     {
         if (empty($this->serviceTypeHeures)) {
-            $this->serviceTypeHeures = \Framework\Application\Application::getInstance()->container()->get(TypeHeuresService::class);
+            $this->serviceTypeHeures = \Unicaen\Framework\Application\Application::getInstance()->container()->get(TypeHeuresService::class);
         }
 
         return $this->serviceTypeHeures;

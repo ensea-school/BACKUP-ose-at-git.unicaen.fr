@@ -33,7 +33,7 @@ trait OffreEmploiServiceAwareTrait
     public function getServiceOffreEmploi(): ?OffreEmploiService
     {
         if (empty($this->serviceOffreEmploi)) {
-            $this->serviceOffreEmploi = \Framework\Application\Application::getInstance()->container()->get(OffreEmploiService::class);
+            $this->serviceOffreEmploi =\Unicaen\Framework\Application\Application::getInstance()->container()->get(OffreEmploiService::class);
         }
 
         return $this->serviceOffreEmploi;

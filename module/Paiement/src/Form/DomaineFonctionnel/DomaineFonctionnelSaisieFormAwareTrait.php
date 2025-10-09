@@ -34,6 +34,6 @@ trait DomaineFonctionnelSaisieFormAwareTrait
             return $this->formDomaineFonctionnelDomaineFonctionnelSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(DomaineFonctionnelSaisieForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(DomaineFonctionnelSaisieForm::class);
     }
 }

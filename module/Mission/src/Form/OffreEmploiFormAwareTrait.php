@@ -34,6 +34,6 @@ trait OffreEmploiFormAwareTrait
             return $this->formOffreEmploi;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(OffreEmploiForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(OffreEmploiForm::class);
     }
 }

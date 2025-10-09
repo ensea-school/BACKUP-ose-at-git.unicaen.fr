@@ -3,8 +3,8 @@
 namespace Application\View\Helper;
 
 use Application\Service\NavbarService;
-use Framework\Navigation\Navigation;
-use Framework\User\UserManager;
+use Unicaen\Framework\Navigation\Navigation;
+use Unicaen\Framework\User\UserManager;
 use Interop\Container\ContainerInterface;
 
 /**

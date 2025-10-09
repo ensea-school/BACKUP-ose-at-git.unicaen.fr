@@ -35,6 +35,6 @@ trait SaisieFieldsetAwareTrait
             return $this->fieldsetServiceReferentielSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(SaisieFieldset::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(SaisieFieldset::class);
     }
 }

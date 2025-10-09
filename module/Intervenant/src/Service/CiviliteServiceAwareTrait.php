@@ -30,7 +30,7 @@ trait CiviliteServiceAwareTrait
     public function getServiceCivilite(): ?CiviliteService
     {
         if (empty($this->serviceCivilite)) {
-            $this->serviceCivilite = \Framework\Application\Application::getInstance()->container()->get(CiviliteService::class);
+            $this->serviceCivilite = \Unicaen\Framework\Application\Application::getInstance()->container()->get(CiviliteService::class);
         }
 
         return $this->serviceCivilite;

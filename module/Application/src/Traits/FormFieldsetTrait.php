@@ -26,7 +26,7 @@ trait FormFieldsetTrait
     protected function getEntityManager(): EntityManager
     {
         if (!$this->entityManager) {
-            $this->entityManager = \Framework\Application\Application::getInstance()->container()->get(EntityManager::class);
+            $this->entityManager =\Unicaen\Framework\Application\Application::getInstance()->container()->get(EntityManager::class);
         }
 
         return $this->entityManager;
@@ -37,7 +37,7 @@ trait FormFieldsetTrait
     private function getControllerPluginFlashMessenger(): FlashMessenger
     {
         if (!$this->controllerPluginFlashMessenger) {
-            $this->controllerPluginFlashMessenger = \Framework\Application\Application::getInstance()->container()->get('ControllerPluginManager')->get('flashMessenger');
+            $this->controllerPluginFlashMessenger =\Unicaen\Framework\Application\Application::getInstance()->container()->get('ControllerPluginManager')->get('flashMessenger');
         }
 
         return $this->controllerPluginFlashMessenger;
@@ -47,7 +47,7 @@ trait FormFieldsetTrait
 
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false): string
     {
-        $url = \Framework\Application\Application::getInstance()->container()->get('ViewHelperManager')->get('url');
+        $url = \Unicaen\Framework\Application\Application::getInstance()->container()->get('ViewHelperManager')->get('url');
 
         /* @var $url \Laminas\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);

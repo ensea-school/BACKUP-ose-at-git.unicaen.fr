@@ -2,7 +2,7 @@
 
 namespace Administration\Controller;
 
-use Framework\Navigation\Navigation;
+use Unicaen\Framework\Navigation\Navigation;
 use Psr\Container\ContainerInterface;
 
 class AdministrationControllerFactory

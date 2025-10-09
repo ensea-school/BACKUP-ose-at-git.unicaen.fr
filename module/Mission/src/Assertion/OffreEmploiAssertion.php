@@ -4,9 +4,9 @@ namespace Mission\Assertion;
 
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\Authorize\AbstractAssertion;
-use Framework\Navigation\Page;
-use Framework\User\UserProfile;
+use Unicaen\Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Navigation\Page;
+use Unicaen\Framework\User\UserProfile;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Candidature;

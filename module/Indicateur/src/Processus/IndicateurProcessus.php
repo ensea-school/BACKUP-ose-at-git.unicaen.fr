@@ -3,7 +3,7 @@
 namespace Indicateur\Processus;
 
 use Application\Processus\AbstractProcessus;
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 use Indicateur\Entity\Db\NotificationIndicateur;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Indicateur\Service\IndicateurServiceAwareTrait;

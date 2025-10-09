@@ -32,7 +32,7 @@ trait DossierAutreServiceAwareTrait
     public function getServiceDossierAutre(): ?DossierAutreService
     {
         if (empty($this->serviceDossierAutre)) {
-            $this->serviceDossierAutre = \Framework\Application\Application::getInstance()->container()->get(DossierAutreService::class);
+            $this->serviceDossierAutre =\Unicaen\Framework\Application\Application::getInstance()->container()->get(DossierAutreService::class);
         }
 
         return $this->serviceDossierAutre;

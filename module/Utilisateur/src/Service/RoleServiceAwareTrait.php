@@ -30,7 +30,7 @@ trait RoleServiceAwareTrait
     public function getServiceRole(): ?RoleService
     {
         if (empty($this->serviceRole)) {
-            $this->serviceRole = \Framework\Application\Application::getInstance()->container()->get(RoleService::class);
+            $this->serviceRole = \Unicaen\Framework\Application\Application::getInstance()->container()->get(RoleService::class);
         }
 
         return $this->serviceRole;

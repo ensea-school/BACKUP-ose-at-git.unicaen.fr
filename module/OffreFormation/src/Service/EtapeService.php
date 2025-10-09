@@ -7,7 +7,7 @@ use Application\Provider\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\Authorize\UnAuthorizedException;
+use Unicaen\Framework\Authorize\UnAuthorizedException;
 use Doctrine\ORM\QueryBuilder;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;

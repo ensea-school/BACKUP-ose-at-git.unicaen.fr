@@ -32,7 +32,7 @@ trait AnneeServiceAwareTrait
     public function getServiceAnnee(): ?AnneeService
     {
         if (empty($this->serviceAnnee)) {
-            $this->serviceAnnee = \Framework\Application\Application::getInstance()->container()->get(AnneeService::class);
+            $this->serviceAnnee = \Unicaen\Framework\Application\Application::getInstance()->container()->get(AnneeService::class);
         }
 
         return $this->serviceAnnee;

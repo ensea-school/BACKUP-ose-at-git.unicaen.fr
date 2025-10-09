@@ -7,7 +7,7 @@ use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\Authorize;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;

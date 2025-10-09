@@ -5,12 +5,12 @@ namespace Utilisateur\Provider;
 use Application\Provider\Privileges;
 use Application\Service\ContextService;
 use Doctrine\ORM\EntityManager;
-use Framework\Application\Application;
-use Framework\Container\Autowire;
-use Framework\User\UserManager;
-use Framework\User\UserProfile;
-use Framework\User\UserProfileInterface;
-use Framework\User\UserAdapterInterface;
+use Unicaen\Framework\Application\Application;
+use Unicaen\Framework\Container\Autowire;
+use Unicaen\Framework\User\UserManager;
+use Unicaen\Framework\User\UserProfile;
+use Unicaen\Framework\User\UserProfileInterface;
+use Unicaen\Framework\User\UserAdapterInterface;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Authentication\AuthenticationService;
@@ -170,7 +170,7 @@ class UserProvider implements UserAdapterInterface
     /**
      * @return array|string[]
      */
-    public function getPrivileges(?UserProfileInterface $profile): array
+    public function getCurrentPrivileges(?UserProfileInterface $profile): array
     {
         $privileges = [];
 
@@ -194,6 +194,23 @@ class UserProvider implements UserAdapterInterface
                     $privileges[] = $privilege;
                 }
             }
+        }
+
+        return $privileges;
+    }
+
+
+
+    public function getAvailablePrivileges(): array
+    {
+        $privileges = [];
+        $dql = 'SELECT p, c FROM '.Privilege::class.' p JOIN p.categorie c';
+        $query = $this->entityManager->createQuery($dql);
+
+        /** @var Privilege[] $res */
+        $res = $query->getResult();
+        foreach( $res as $privilege ){
+            $privileges[] = $privilege->getFullCode();
         }
 
         return $privileges;

@@ -34,6 +34,6 @@ trait TypeModulateurStructureSaisieFormAwareTrait
             return $this->formModulateurTypeModulateurStructureSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TypeModulateurStructureSaisieForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TypeModulateurStructureSaisieForm::class);
     }
 }

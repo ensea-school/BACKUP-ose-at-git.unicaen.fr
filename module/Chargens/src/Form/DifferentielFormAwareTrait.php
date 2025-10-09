@@ -33,6 +33,6 @@ trait DifferentielFormAwareTrait
             return $this->formChargensDifferentiel;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(DifferentielForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(DifferentielForm::class);
     }
 }

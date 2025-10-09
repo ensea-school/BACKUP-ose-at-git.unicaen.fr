@@ -5,10 +5,10 @@ namespace Application\ORM;
 
 use Administration\Interfaces\ParametreEntityInterface;
 use Agrement\Entity\Db\TypeAgrement;
-use Framework\Cache\CacheContainerTrait;
+use Unicaen\Framework\Cache\CacheContainerTrait;
 use Application\ORM\Event\Listeners\ParametreEntityListener;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\User\UserManager;
+use Unicaen\Framework\User\UserManager;
 use Intervenant\Service\IntervenantService;
 use Laminas\Mvc\MvcEvent;
 use UnicaenApp\Service\EntityManagerAwareTrait;

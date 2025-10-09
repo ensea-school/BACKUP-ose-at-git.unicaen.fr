@@ -4,8 +4,8 @@ namespace Application\Form;
 
 use Application\Service\AbstractEntityService;
 use Application\Traits\FormFieldsetTrait;
-use Framework\Application\Application;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Application\Application;
+use Unicaen\Framework\Authorize\Authorize;
 use Laminas\Form\Element\Csrf;
 use Laminas\Form\Form;
 use Laminas\Http\Request;

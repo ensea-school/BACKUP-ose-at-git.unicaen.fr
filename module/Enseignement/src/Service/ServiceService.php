@@ -631,7 +631,7 @@ class ServiceService extends AbstractEntityService
             $entity->setIntervenant($intervenant);
         }
         if (!$this->getAuthorize()->isAllowed($entity, $entity->getTypeVolumeHoraire()->getPrivilegeEnseignementEdition())) {
-            throw new \Framework\Authorize\UnAuthorizedException('Saisie interdite');
+            throw new \Unicaen\Framework\Authorize\UnAuthorizedException('Saisie interdite');
         }
 
         $serviceAllreadyExists = null;

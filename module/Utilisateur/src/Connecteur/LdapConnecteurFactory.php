@@ -2,8 +2,8 @@
 
 namespace Utilisateur\Connecteur;
 
-use Framework\Application\Application;
-use Framework\User\UserManager;
+use Unicaen\Framework\Application\Application;
+use Unicaen\Framework\User\UserManager;
 use Psr\Container\ContainerInterface;
 
 

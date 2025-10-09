@@ -35,6 +35,6 @@ trait TauxMixiteFormAwareTrait
             return $this->formOffreFormationTauxMixiteTauxMixite;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TauxMixiteForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TauxMixiteForm::class);
     }
 }

@@ -30,7 +30,7 @@ trait FonctionReferentielServiceAwareTrait
     public function getServiceFonctionReferentiel(): ?FonctionReferentielService
     {
         if (empty($this->serviceFonctionReferentiel)) {
-            $this->serviceFonctionReferentiel = \Framework\Application\Application::getInstance()->container()->get(FonctionReferentielService::class);
+            $this->serviceFonctionReferentiel = \Unicaen\Framework\Application\Application::getInstance()->container()->get(FonctionReferentielService::class);
         }
 
         return $this->serviceFonctionReferentiel;

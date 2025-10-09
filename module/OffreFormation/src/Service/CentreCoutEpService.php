@@ -5,7 +5,7 @@ namespace OffreFormation\Service;
 use Application\Provider\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Framework\Authorize\UnAuthorizedException;
+use Unicaen\Framework\Authorize\UnAuthorizedException;
 use OffreFormation\Entity\Db\CentreCoutEp;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;

@@ -31,7 +31,7 @@ trait ChargensProviderAwareTrait
     public function getProviderChargensChargens(): ?ChargensProvider
     {
         if (empty($this->providerChargensChargens)) {
-            $this->providerChargensChargens = \Framework\Application\Application::getInstance()->container()->get(ChargensProvider::class);
+            $this->providerChargensChargens =\Unicaen\Framework\Application\Application::getInstance()->container()->get(ChargensProvider::class);
         }
 
         return $this->providerChargensChargens;

@@ -35,6 +35,6 @@ trait ElementPedagogiqueSynchronisationFormAwareTrait
             return $this->formOffreFormationElementPedagogiqueSynchronisation;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ElementPedagogiqueSynchronisationForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ElementPedagogiqueSynchronisationForm::class);
     }
 }

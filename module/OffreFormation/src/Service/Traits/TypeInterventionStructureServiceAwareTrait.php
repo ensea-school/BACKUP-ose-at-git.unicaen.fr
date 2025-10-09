@@ -32,7 +32,7 @@ trait TypeInterventionStructureServiceAwareTrait
     public function getServiceTypeInterventionStructure(): ?TypeInterventionStructureService
     {
         if (empty($this->serviceTypeInterventionStructure)) {
-            $this->serviceTypeInterventionStructure = \Framework\Application\Application::getInstance()->container()->get(TypeInterventionStructureService::class);
+            $this->serviceTypeInterventionStructure = \Unicaen\Framework\Application\Application::getInstance()->container()->get(TypeInterventionStructureService::class);
         }
 
         return $this->serviceTypeInterventionStructure;

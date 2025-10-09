@@ -4,7 +4,7 @@ namespace Paiement\Assertion;
 
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\CentreCoutStructure;
 

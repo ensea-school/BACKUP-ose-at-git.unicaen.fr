@@ -8,7 +8,7 @@ use Application\Controller\AbstractController;
 use Application\Provider\Privileges;
 use Application\Provider\Tbl\TblProvider;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\Authorize\UnAuthorizedException;
+use Unicaen\Framework\Authorize\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Form\ContratRetourFormAwareTrait;

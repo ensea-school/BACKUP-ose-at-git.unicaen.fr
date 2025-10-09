@@ -30,7 +30,7 @@ trait ServiceServiceAwareTrait
     public function getServiceService(): ?ServiceService
     {
         if (empty($this->serviceService)) {
-            $this->serviceService = \Framework\Application\Application::getInstance()->container()->get(ServiceService::class);
+            $this->serviceService = \Unicaen\Framework\Application\Application::getInstance()->container()->get(ServiceService::class);
         }
 
         return $this->serviceService;

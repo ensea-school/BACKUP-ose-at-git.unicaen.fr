@@ -7,7 +7,7 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Entity\Db\TypeIntervenant;

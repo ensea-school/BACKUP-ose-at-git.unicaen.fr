@@ -32,7 +32,7 @@ trait PieceJointeServiceAwareTrait
     public function getServicePieceJointe(): ?PieceJointeService
     {
         if (empty($this->servicePieceJointe)) {
-            $this->servicePieceJointe = \Framework\Application\Application::getInstance()->container()->get(PieceJointeService::class);
+            $this->servicePieceJointe = \Unicaen\Framework\Application\Application::getInstance()->container()->get(PieceJointeService::class);
         }
 
         return $this->servicePieceJointe;

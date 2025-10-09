@@ -30,7 +30,7 @@ trait SignatureFlowFormAwareTrait
     public function getFormSignatureFLow(): ?SignatureFlowForm
     {
         if (empty($this->formSignatureFlow)) {
-            return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(SignatureFlowForm::class);
+            return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(SignatureFlowForm::class);
         }
         return $this->formSignatureFlow;
 

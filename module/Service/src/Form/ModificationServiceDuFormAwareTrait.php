@@ -34,6 +34,6 @@ trait ModificationServiceDuFormAwareTrait
             return $this->formIntervenantModificationServiceDu;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ModificationServiceDuForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ModificationServiceDuForm::class);
     }
 }

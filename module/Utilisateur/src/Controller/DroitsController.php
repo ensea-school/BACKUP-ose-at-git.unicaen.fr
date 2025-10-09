@@ -2,11 +2,11 @@
 
 namespace Utilisateur\Controller;
 
-use Framework\Cache\CacheContainerTrait;
+use Unicaen\Framework\Cache\CacheContainerTrait;
 use Application\Controller\AbstractController;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Framework\User\UserManager;
+use Unicaen\Framework\User\UserManager;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;

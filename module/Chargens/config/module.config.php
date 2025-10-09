@@ -4,7 +4,7 @@ namespace Chargens;
 
 use Application\Provider\Privileges;
 use Chargens\Assertion\ChargensAssertion;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\Authorize;
 
 return [
     'routes' => [

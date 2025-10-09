@@ -35,7 +35,7 @@ abstract class TblContratTestCase extends OseTestCase
             Parametre::TAUX_CONGES_PAYES            => 0.1,
         ];
 
-        $c = \Framework\Application\Application::getInstance()->container()->get(TableauBordService::class);
+        $c =\Unicaen\Framework\Application\Application::getInstance()->container()->get(TableauBordService::class);
 
         $ptbl          = $c->getTableauBord(TblProvider::CONTRAT);
         $this->process = $ptbl->getProcess();

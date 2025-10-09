@@ -3,7 +3,7 @@
 namespace Paiement\Assertion;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\TypeModulateur;

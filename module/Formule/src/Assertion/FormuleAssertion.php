@@ -2,7 +2,7 @@
 
 namespace Formule\Assertion;
 
-use Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 
 

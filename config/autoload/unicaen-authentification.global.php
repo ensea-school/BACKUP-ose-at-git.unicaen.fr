@@ -1,6 +1,6 @@
 <?php
 
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 
 $config = Application::getInstance()->config();
 

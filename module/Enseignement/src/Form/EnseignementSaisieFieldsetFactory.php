@@ -2,7 +2,7 @@
 
 namespace Enseignement\Form;
 
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\Authorize;
 use Psr\Container\ContainerInterface;
 
 

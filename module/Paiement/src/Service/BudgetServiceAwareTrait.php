@@ -31,7 +31,7 @@ trait BudgetServiceAwareTrait
     public function getServiceBudget(): ?BudgetService
     {
         if (empty($this->serviceBudget)) {
-            $this->serviceBudget = \Framework\Application\Application::getInstance()->container()->get(BudgetService::class);
+            $this->serviceBudget =\Unicaen\Framework\Application\Application::getInstance()->container()->get(BudgetService::class);
         }
 
         return $this->serviceBudget;

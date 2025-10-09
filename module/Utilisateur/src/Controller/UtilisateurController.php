@@ -3,7 +3,7 @@
 namespace Utilisateur\Controller;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\User\UserManager;
+use Unicaen\Framework\User\UserManager;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;

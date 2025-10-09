@@ -33,6 +33,6 @@ trait ScenarioFiltreFormAwareTrait
             return $this->formChargensScenarioFiltre;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ScenarioFiltreForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(ScenarioFiltreForm::class);
     }
 }

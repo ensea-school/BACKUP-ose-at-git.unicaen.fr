@@ -30,7 +30,7 @@ trait ResumeServiceAwareTrait
     public function getServiceResume(): ?ResumeService
     {
         if (empty($this->serviceResume)) {
-            $this->serviceResume = \Framework\Application\Application::getInstance()->container()->get(ResumeService::class);
+            $this->serviceResume =\Unicaen\Framework\Application\Application::getInstance()->container()->get(ResumeService::class);
         }
 
         return $this->serviceResume;

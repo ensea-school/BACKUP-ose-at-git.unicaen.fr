@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\Collection;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Formule\Entity\Db\FormuleResultatIntervenant;
-use Framework\User\UserProfile;
+use Unicaen\Framework\User\UserProfile;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;

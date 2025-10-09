@@ -2,8 +2,8 @@
 
 namespace Application\Service;
 
-use Framework\Navigation\Navigation;
-use Framework\Router\Router;
+use Unicaen\Framework\Navigation\Navigation;
+use Unicaen\Framework\Router\Router;
 
 class NavbarService
 {

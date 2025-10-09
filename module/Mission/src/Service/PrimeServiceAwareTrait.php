@@ -17,7 +17,7 @@ trait PrimeServiceAwareTrait
     public function getServicePrime (): ?PrimeService
     {
         if (empty($this->servicePrime)) {
-            $this->servicePrime = \Framework\Application\Application::getInstance()->container()->get(PrimeService::class);
+            $this->servicePrime =\Unicaen\Framework\Application\Application::getInstance()->container()->get(PrimeService::class);
         }
 
         return $this->servicePrime;

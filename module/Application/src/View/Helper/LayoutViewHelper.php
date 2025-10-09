@@ -4,9 +4,9 @@ namespace Application\View\Helper;
 
 use Application\Service\NavbarService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\Navigation\Navigation;
-use Framework\Navigation\Page;
-use Framework\User\UserManager;
+use Unicaen\Framework\Navigation\Navigation;
+use Unicaen\Framework\Navigation\Page;
+use Unicaen\Framework\User\UserManager;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;

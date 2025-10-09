@@ -1,6 +1,6 @@
 <?php
 
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 
 header("HTTP/1.1 503 Service Unavailable");
 

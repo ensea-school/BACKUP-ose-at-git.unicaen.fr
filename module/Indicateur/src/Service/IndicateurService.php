@@ -3,7 +3,7 @@
 namespace Indicateur\Service;
 
 use Administration\Service\ParametresServiceAwareTrait;
-use Framework\Cache\CacheContainerTrait;
+use Unicaen\Framework\Cache\CacheContainerTrait;
 use Application\Entity\Db\Annee;
 use Application\Service\AbstractService;
 use Application\Service\ContextService;

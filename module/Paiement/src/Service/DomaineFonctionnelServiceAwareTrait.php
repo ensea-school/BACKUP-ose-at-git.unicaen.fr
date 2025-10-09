@@ -30,7 +30,7 @@ trait DomaineFonctionnelServiceAwareTrait
     public function getServiceDomaineFonctionnel(): ?DomaineFonctionnelService
     {
         if (empty($this->serviceDomaineFonctionnel)) {
-            $this->serviceDomaineFonctionnel = \Framework\Application\Application::getInstance()->container()->get(DomaineFonctionnelService::class);
+            $this->serviceDomaineFonctionnel = \Unicaen\Framework\Application\Application::getInstance()->container()->get(DomaineFonctionnelService::class);
         }
 
         return $this->serviceDomaineFonctionnel;

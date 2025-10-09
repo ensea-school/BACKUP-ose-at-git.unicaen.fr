@@ -33,6 +33,6 @@ trait FiltreFormAwareTrait
             return $this->formChargensFiltre;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(FiltreForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(FiltreForm::class);
     }
 }

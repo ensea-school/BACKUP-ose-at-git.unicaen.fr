@@ -34,6 +34,6 @@ trait NoteSaisieFormAwareTrait
             return $this->formNoteSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(NoteSaisieForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(NoteSaisieForm::class);
     }
 }

@@ -35,6 +35,6 @@ trait AffectationFormAwareTrait
             return $this->formDroitsAffectation;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(AffectationForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(AffectationForm::class);
     }
 }

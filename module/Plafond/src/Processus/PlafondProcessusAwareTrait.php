@@ -31,7 +31,7 @@ trait PlafondProcessusAwareTrait
     public function getProcessusPlafond(): ?PlafondProcessus
     {
         if (empty($this->processusPlafond)) {
-            $this->processusPlafond = \Framework\Application\Application::getInstance()->container()->get(PlafondProcessus::class);
+            $this->processusPlafond =\Unicaen\Framework\Application\Application::getInstance()->container()->get(PlafondProcessus::class);
         }
 
         return $this->processusPlafond;

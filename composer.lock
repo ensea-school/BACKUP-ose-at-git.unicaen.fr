@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e76f4274d9acca2b3e6488bd7847ee2",
+    "content-hash": "a40409b91c2501f2357749785072ed87",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -757,16 +757,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.10.2",
+            "version": "3.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "c6c16cf787eaba3112203dfcd715fa2059c62282"
+                "reference": "65edaca19a752730f290ec2fb89d593cb40afb43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/c6c16cf787eaba3112203dfcd715fa2059c62282",
-                "reference": "c6c16cf787eaba3112203dfcd715fa2059c62282",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/65edaca19a752730f290ec2fb89d593cb40afb43",
+                "reference": "65edaca19a752730f290ec2fb89d593cb40afb43",
                 "shasum": ""
             },
             "require": {
@@ -782,14 +782,14 @@
             },
             "require-dev": {
                 "doctrine/cache": "^1.11|^2.0",
-                "doctrine/coding-standard": "13.0.1",
+                "doctrine/coding-standard": "14.0.0",
                 "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2023.1",
-                "phpstan/phpstan": "2.1.22",
+                "phpstan/phpstan": "2.1.30",
                 "phpstan/phpstan-strict-rules": "^2",
-                "phpunit/phpunit": "9.6.23",
-                "slevomat/coding-standard": "8.16.2",
-                "squizlabs/php_codesniffer": "3.13.1",
+                "phpunit/phpunit": "9.6.29",
+                "slevomat/coding-standard": "8.24.0",
+                "squizlabs/php_codesniffer": "4.0.0",
                 "symfony/cache": "^5.4|^6.0|^7.0",
                 "symfony/console": "^4.4|^5.4|^6.0|^7.0"
             },
@@ -851,7 +851,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.10.2"
+                "source": "https://github.com/doctrine/dbal/tree/3.10.3"
             },
             "funding": [
                 {
@@ -867,7 +867,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-04T23:51:27+00:00"
+            "time": "2025-10-09T09:05:12+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -2370,144 +2370,6 @@
                 }
             ],
             "time": "2024-10-21T10:45:35+00:00"
-        },
-        {
-            "name": "laminas/laminas-cache-storage-adapter-filesystem",
-            "version": "2.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem.git",
-                "reference": "d1777b7abf3ac9bcbf203be6aa25786be17cd336"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-filesystem/zipball/d1777b7abf3ac9bcbf203be6aa25786be17cd336",
-                "reference": "d1777b7abf3ac9bcbf203be6aa25786be17cd336",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-cache": "^3.10.0",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
-            },
-            "conflict": {
-                "amphp/amp": "<2.6.4"
-            },
-            "provide": {
-                "laminas/laminas-cache-storage-implementation": "1.0"
-            },
-            "require-dev": {
-                "ext-pcntl": "*",
-                "ext-posix": "*",
-                "laminas/laminas-cache-storage-adapter-benchmark": "^1.1.0",
-                "laminas/laminas-cache-storage-adapter-test": "^2.0 || 2.0.x-dev",
-                "laminas/laminas-coding-standard": "~2.4",
-                "laminas/laminas-serializer": "^2.14.0",
-                "phpunit/phpunit": "^9.6.22",
-                "psalm/plugin-phpunit": "^0.19.0",
-                "vimeo/psalm": "^5.18"
-            },
-            "type": "library",
-            "extra": {
-                "laminas": {
-                    "module": "Laminas\\Cache\\Storage\\Adapter\\Filesystem",
-                    "config-provider": "Laminas\\Cache\\Storage\\Adapter\\Filesystem\\ConfigProvider"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Cache\\Storage\\Adapter\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Laminas cache adapter for filesystem",
-            "keywords": [
-                "cache",
-                "laminas"
-            ],
-            "support": {
-                "docs": "https://docs.laminas.dev/laminas-cache-storage-adapter-filesystem/",
-                "forum": "https://discourse.laminas.dev/",
-                "issues": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem/issues",
-                "rss": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem/releases.atom",
-                "source": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2025-01-23T17:29:37+00:00"
-        },
-        {
-            "name": "laminas/laminas-cache-storage-adapter-memory",
-            "version": "2.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-cache-storage-adapter-memory.git",
-                "reference": "12d2b191fee7ed0c08fd5db4441282705184f1bf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-memory/zipball/12d2b191fee7ed0c08fd5db4441282705184f1bf",
-                "reference": "12d2b191fee7ed0c08fd5db4441282705184f1bf",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-cache": "^3.0",
-                "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
-            },
-            "conflict": {
-                "laminas/laminas-servicemanager": "<3.11"
-            },
-            "provide": {
-                "laminas/laminas-cache-storage-implementation": "1.0"
-            },
-            "require-dev": {
-                "laminas/laminas-cache-storage-adapter-benchmark": "^1.1.0",
-                "laminas/laminas-cache-storage-adapter-test": "^2.3.0",
-                "laminas/laminas-coding-standard": "~2.5.0",
-                "psalm/plugin-phpunit": "^0.18.0",
-                "vimeo/psalm": "^4.29.0"
-            },
-            "type": "library",
-            "extra": {
-                "laminas": {
-                    "module": "Laminas\\Cache\\Storage\\Adapter\\Memory",
-                    "config-provider": "Laminas\\Cache\\Storage\\Adapter\\Memory\\ConfigProvider"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Cache\\Storage\\Adapter\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Laminas cache adapter for memory",
-            "keywords": [
-                "cache",
-                "laminas"
-            ],
-            "support": {
-                "docs": "https://docs.laminas.dev/laminas-cache-storage-adapter-memory/",
-                "forum": "https://discourse.laminas.dev/",
-                "issues": "https://github.com/laminas/laminas-cache-storage-adapter-memory/issues",
-                "rss": "https://github.com/laminas/laminas-cache-storage-adapter-memory/releases.atom",
-                "source": "https://github.com/laminas/laminas-cache-storage-adapter-memory"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2025-01-23T15:41:59+00:00"
         },
         {
             "name": "laminas/laminas-cli",
@@ -7697,6 +7559,29 @@
             "time": "2025-06-11T12:27:01+00:00"
         },
         {
+            "name": "unicaen/framework",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/framework.git",
+                "reference": "0e6b32d7a2e7c7cdc19790c9032fa28aabd392dd"
+            },
+            "require": {
+                "laminas/laminas-permissions-acl": "^2.17",
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Unicaen\\Framework\\": "src/",
+                    "Laminas\\Cache\\": "src/Wrapper/LaminasCache",
+                    "BjyAuthorize\\": "src/Wrapper/BjyAuthorize"
+                }
+            },
+            "description": "Framework pour applications Unicaen",
+            "time": "2025-10-09T13:50:24+00:00"
+        },
+        {
             "name": "unicaen/import",
             "version": "6.1.0",
             "source": {
@@ -12369,6 +12254,7 @@
         "connecteur-ose/pegase": 20,
         "unicaen/app": 20,
         "unicaen/authentification": 20,
+        "unicaen/framework": 20,
         "unicaen/mail": 20,
         "unicaen/utilisateur": 20,
         "unicaen/zfc-user": 20

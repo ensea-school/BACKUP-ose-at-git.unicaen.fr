@@ -33,6 +33,6 @@ trait EnvoiMailContratFormAwareTrait
             return $this->formContratEnvoiMailContrat;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(EnvoiMailContratForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(EnvoiMailContratForm::class);
     }
 }

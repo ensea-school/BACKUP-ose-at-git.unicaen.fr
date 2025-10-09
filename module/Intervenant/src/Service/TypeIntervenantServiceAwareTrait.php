@@ -31,7 +31,7 @@ trait TypeIntervenantServiceAwareTrait
     public function getServiceTypeIntervenant(): ?TypeIntervenantService
     {
         if (empty($this->serviceTypeIntervenant)) {
-            $this->serviceTypeIntervenant = \Framework\Application\Application::getInstance()->container()->get(TypeIntervenantService::class);
+            $this->serviceTypeIntervenant = \Unicaen\Framework\Application\Application::getInstance()->container()->get(TypeIntervenantService::class);
         }
 
         return $this->serviceTypeIntervenant;

@@ -2,7 +2,7 @@
 
 namespace Application\HostLocalization;
 
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 use UnicaenApp\HostLocalization\HostLocalizationInterface;
 
 class HostLocalizationOse implements HostLocalizationInterface

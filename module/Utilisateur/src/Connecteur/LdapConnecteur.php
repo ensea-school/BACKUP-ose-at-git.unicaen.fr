@@ -3,8 +3,8 @@
 namespace Utilisateur\Connecteur;
 
 use Application\Service\AbstractService;
-use Framework\Application\Application;
-use Framework\User\UserManager;
+use Unicaen\Framework\Application\Application;
+use Unicaen\Framework\User\UserManager;
 use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Entity\Ldap\AbstractEntity;
 use UnicaenApp\Entity\Ldap\People;

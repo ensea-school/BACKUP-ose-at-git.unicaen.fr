@@ -5,7 +5,7 @@ namespace Application;
 
 use Administration\Interfaces\ParametreEntityInterface;
 use Doctrine\ORM\EntityManager;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\Authorize;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 
 /**
@@ -86,7 +86,7 @@ class Util
      */
     static public function routeToControllerAction($route)
     {
-        $container = \Framework\Application\Application::getInstance()->container();
+        $container = \Unicaen\Framework\Application\Application::getInstance()->container();
         if (!$container) throw new \LogicException('Le container n\'est pas accessible!!!');
 
         if (!array_key_exists($route, self::$rcaCache)) {
@@ -244,7 +244,7 @@ class Util
         /* Si c'est une entité Doctrine, on récupère les infos du mapping */
         try {
             /** @var EntityManager $em */
-            $em = \Framework\Application\Application::getInstance()->container()->get(EntityManager::class);
+            $em = \Unicaen\Framework\Application\Application::getInstance()->container()->get(EntityManager::class);
             $cmd = $em->getClassMetadata($class);
         } catch (\Exception $e) {
             $cmd = null;

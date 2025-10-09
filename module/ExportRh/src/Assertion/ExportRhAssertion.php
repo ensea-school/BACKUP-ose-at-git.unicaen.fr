@@ -6,7 +6,7 @@ namespace ExportRh\Assertion;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use ExportRh\Service\ExportRhServiceAwareTrait;
-use Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 

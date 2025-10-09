@@ -3,7 +3,7 @@
 namespace Intervenant\Controller;
 
 use Administration\Service\ParametresServiceAwareTrait;
-use Framework\Cache\CacheContainerTrait;
+use Unicaen\Framework\Cache\CacheContainerTrait;
 use Application\Controller\AbstractController;
 use Application\Provider\Privileges;
 use Intervenant\Entity\Db\Statut;

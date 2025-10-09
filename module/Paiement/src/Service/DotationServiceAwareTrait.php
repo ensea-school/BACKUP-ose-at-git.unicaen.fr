@@ -31,7 +31,7 @@ trait DotationServiceAwareTrait
     public function getServiceDotation(): ?DotationService
     {
         if (empty($this->serviceDotation)) {
-            $this->serviceDotation = \Framework\Application\Application::getInstance()->container()->get(DotationService::class);
+            $this->serviceDotation = \Unicaen\Framework\Application\Application::getInstance()->container()->get(DotationService::class);
         }
 
         return $this->serviceDotation;

@@ -31,7 +31,7 @@ trait CcActiviteServiceAwareTrait
     public function getServiceCcActivite(): ?CcActiviteService
     {
         if (empty($this->serviceCcActivite)) {
-            $this->serviceCcActivite = \Framework\Application\Application::getInstance()->container()->get(CcActiviteService::class);
+            $this->serviceCcActivite = \Unicaen\Framework\Application\Application::getInstance()->container()->get(CcActiviteService::class);
         }
 
         return $this->serviceCcActivite;

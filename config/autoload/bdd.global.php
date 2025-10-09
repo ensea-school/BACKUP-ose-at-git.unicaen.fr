@@ -1,6 +1,6 @@
 <?php
 
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 
 $config = Application::getInstance()->config();
 
@@ -98,10 +98,10 @@ return [
                 'namespace' => 'OSE__' . __NAMESPACE__,
             ],
             'filesystem' => [
-                'class' => \Framework\Cache\DoctrineFilesystemCacheAdapter::class,
+                'class' => \Unicaen\Framework\Cache\DoctrineFilesystemCacheAdapter::class,
             ],
             'array'      => [
-                'class' => \Framework\Cache\DoctrineArrayCacheAdapter::class,
+                'class' => \Unicaen\Framework\Cache\DoctrineArrayCacheAdapter::class,
             ],
         ],
     ],

@@ -32,7 +32,7 @@ trait OffreFormationServiceAwareTrait
     public function getServiceOffreFormation(): ?OffreFormationService
     {
         if (empty($this->serviceOffreFormation)) {
-            $this->serviceOffreFormation = \Framework\Application\Application::getInstance()->container()->get(OffreFormationService::class);
+            $this->serviceOffreFormation = \Unicaen\Framework\Application\Application::getInstance()->container()->get(OffreFormationService::class);
         }
 
         return $this->serviceOffreFormation;

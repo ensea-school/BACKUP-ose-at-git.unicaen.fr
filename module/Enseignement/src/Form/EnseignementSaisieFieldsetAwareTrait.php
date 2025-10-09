@@ -33,6 +33,6 @@ trait EnseignementSaisieFieldsetAwareTrait
             return $this->fieldsetEnseignementSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(EnseignementSaisieFieldset::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(EnseignementSaisieFieldset::class);
     }
 }

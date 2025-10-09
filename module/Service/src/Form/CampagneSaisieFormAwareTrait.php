@@ -33,6 +33,6 @@ trait CampagneSaisieFormAwareTrait
             return $this->formCampagneSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(CampagneSaisieForm::class);
+         return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(CampagneSaisieForm::class);
     }
 }

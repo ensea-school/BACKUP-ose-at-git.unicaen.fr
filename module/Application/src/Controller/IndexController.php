@@ -55,7 +55,7 @@ class IndexController extends AbstractController
 
     public function planAction()
     {
-        $configPages = \Framework\Application\Application::getInstance()->container()->get('config')['navigation']['default']['home']['pages'];
+        $configPages = \Unicaen\Framework\Application\Application::getInstance()->container()->get('config')['navigation']['default']['home']['pages'];
         $isConnected = (bool)$this->getServiceContext()->getUtilisateur();
 
         return compact('configPages', 'isConnected');

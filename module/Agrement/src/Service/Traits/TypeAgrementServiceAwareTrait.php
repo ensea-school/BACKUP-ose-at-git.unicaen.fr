@@ -32,7 +32,7 @@ trait TypeAgrementServiceAwareTrait
     public function getServiceTypeAgrement(): ?TypeAgrementService
     {
         if (empty($this->serviceTypeAgrement)) {
-            $this->serviceTypeAgrement = \Framework\Application\Application::getInstance()->container()->get(TypeAgrementService::class);
+            $this->serviceTypeAgrement =\Unicaen\Framework\Application\Application::getInstance()->container()->get(TypeAgrementService::class);
         }
 
         return $this->serviceTypeAgrement;

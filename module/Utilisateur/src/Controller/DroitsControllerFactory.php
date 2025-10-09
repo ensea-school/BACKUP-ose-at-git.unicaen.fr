@@ -2,7 +2,7 @@
 
 namespace Utilisateur\Controller;
 
-use Framework\User\UserManager;
+use Unicaen\Framework\User\UserManager;
 use Psr\Container\ContainerInterface;
 use Utilisateur\Service\PrivilegeService;
 

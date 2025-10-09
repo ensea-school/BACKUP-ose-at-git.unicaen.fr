@@ -35,6 +35,6 @@ trait TypeInterventionStructureSaisieFormAwareTrait
             return $this->formTypeInterventionTypeInterventionStructureSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TypeInterventionStructureSaisieForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(TypeInterventionStructureSaisieForm::class);
     }
 }

@@ -24,7 +24,7 @@ use Dossier\Service\EmployeurServiceFactory;
 use Dossier\Tbl\Process\DossierProcess;
 use Dossier\Tbl\Process\DossierProcessFactory;
 use Dossier\View\Helper\ValidationViewHelperFactory;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\Authorize;
 use Workflow\Entity\Db\WorkflowEtape;
 
 return [

@@ -33,6 +33,6 @@ trait CorpsSaisieFormAwareTrait
             return $this->formCorpsCorpsSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(CorpsSaisieForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(CorpsSaisieForm::class);
     }
 }

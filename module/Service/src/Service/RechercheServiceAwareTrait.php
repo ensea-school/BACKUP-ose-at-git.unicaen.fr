@@ -30,7 +30,7 @@ trait RechercheServiceAwareTrait
     public function getServiceRecherche(): ?RechercheService
     {
         if (empty($this->serviceRecherche)) {
-            $this->serviceRecherche = \Framework\Application\Application::getInstance()->container()->get(RechercheService::class);
+            $this->serviceRecherche =\Unicaen\Framework\Application\Application::getInstance()->container()->get(RechercheService::class);
         }
 
         return $this->serviceRecherche;

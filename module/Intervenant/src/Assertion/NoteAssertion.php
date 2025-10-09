@@ -4,7 +4,7 @@ namespace Intervenant\Assertion;
 
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Note;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 

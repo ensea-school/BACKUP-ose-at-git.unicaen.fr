@@ -3,6 +3,7 @@
 namespace Application\Service\Traits;
 
 use Application\Service\ContextService;
+use Unicaen\Framework\Application\Application;
 
 /**
  * Description of ContextServiceAwareTrait
@@ -32,7 +33,7 @@ trait ContextServiceAwareTrait
     public function getServiceContext(): ?ContextService
     {
         if (empty($this->serviceContext)) {
-            $this->serviceContext = \Framework\Application\Application::getInstance()->container()->get(ContextService::class);
+            $this->serviceContext = Application::getInstance()->container()->get(ContextService::class);
         }
 
         return $this->serviceContext;

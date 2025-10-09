@@ -4,7 +4,7 @@ namespace Service\Form;
 
 use Application\Form\AbstractForm;
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\Authorize;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;

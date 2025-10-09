@@ -32,7 +32,7 @@ trait PeriodeServiceAwareTrait
     public function getServicePeriode(): ?PeriodeService
     {
         if (empty($this->servicePeriode)) {
-            $this->servicePeriode = \Framework\Application\Application::getInstance()->container()->get(PeriodeService::class);
+            $this->servicePeriode = \Unicaen\Framework\Application\Application::getInstance()->container()->get(PeriodeService::class);
         }
 
         return $this->servicePeriode;

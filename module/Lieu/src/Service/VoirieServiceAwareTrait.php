@@ -30,7 +30,7 @@ trait VoirieServiceAwareTrait
     public function getServiceVoirie(): ?VoirieService
     {
         if (empty($this->serviceVoirie)) {
-            $this->serviceVoirie = \Framework\Application\Application::getInstance()->container()->get(VoirieService::class);
+            $this->serviceVoirie =\Unicaen\Framework\Application\Application::getInstance()->container()->get(VoirieService::class);
         }
 
         return $this->serviceVoirie;

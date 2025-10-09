@@ -3,7 +3,7 @@
 namespace Chargens\Provider;
 
 use Doctrine\ORM\EntityManager;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\Authorize;
 use OffreFormation\Service\TypeHeuresService;
 use Psr\Container\ContainerInterface;
 use Unicaen\BddAdmin\Bdd;

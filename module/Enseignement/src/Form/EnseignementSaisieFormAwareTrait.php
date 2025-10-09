@@ -33,6 +33,6 @@ trait EnseignementSaisieFormAwareTrait
             return $this->formServiceEnseignementSaisie;
         }
 
-        return \Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(EnseignementSaisieForm::class);
+        return \Unicaen\Framework\Application\Application::getInstance()->container()->get('FormElementManager')->get(EnseignementSaisieForm::class);
     }
 }

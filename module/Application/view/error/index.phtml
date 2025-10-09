@@ -1,6 +1,6 @@
 <?php
 
-use Framework\Application\Application;
+use Unicaen\Framework\Application\Application;
 
 $this->headTitle()->append($title = 'Une erreur est survenue');
 $details = (Application::getInstance()->config()['global']['affichageErreurs'] ?? true) && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);

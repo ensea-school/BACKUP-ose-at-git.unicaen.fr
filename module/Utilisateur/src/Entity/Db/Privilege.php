@@ -4,7 +4,7 @@ namespace Utilisateur\Entity\Db;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\Authorize;
 
 class Privilege
 {

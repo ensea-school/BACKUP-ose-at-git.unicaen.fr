@@ -32,7 +32,7 @@ trait TypePieceJointeStatutServiceAwareTrait
     public function getServiceTypePieceJointeStatut(): ?TypePieceJointeStatutService
     {
         if (empty($this->serviceTypePieceJointeStatut)) {
-            $this->serviceTypePieceJointeStatut = \Framework\Application\Application::getInstance()->container()->get(TypePieceJointeStatutService::class);
+            $this->serviceTypePieceJointeStatut = \Unicaen\Framework\Application\Application::getInstance()->container()->get(TypePieceJointeStatutService::class);
         }
 
         return $this->serviceTypePieceJointeStatut;

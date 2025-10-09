@@ -3,7 +3,6 @@
 namespace Lieu;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -38,7 +37,6 @@ return [
                         'gestion-departement' => [
                             'label'          => 'Départements',
                             'route'          => 'departement',
-                            'resource'       => Authorize::controllerResource(Controller\DepartementController::class, 'index'),
                             'order'          => 10,
                             'border - color' => '#111',
                         ],

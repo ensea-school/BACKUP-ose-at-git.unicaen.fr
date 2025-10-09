@@ -57,9 +57,12 @@ class AgrementController extends AbstractController
     /**
      * Page de menu des agréments
      */
-    public function indexAction()
+    public function indexAction(): ViewModel
     {
-        return [];
+        $vm = new ViewModel();
+        $vm->setTemplate('application/menu.phtml');
+
+        return $vm;
     }
 
 

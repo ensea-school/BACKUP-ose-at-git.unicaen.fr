@@ -2,8 +2,6 @@
 
 namespace Application;
 
-use Framework\Authorize\Authorize;
-
 return [
     'unicaen-import' => [
         'differentiel_view_helpers' => [
@@ -33,27 +31,23 @@ return [
                                         'description' => "Liste des sources de données",
                                         'route'       => 'import/sources',
                                         'order'       => 20,
-                                        'resource'    => Authorize::controllerResource('Import\Controller\Source', 'index'),
                                     ],
                                     'tables'       => [
                                         'label'    => 'Tables',
                                         'route'    => 'import/tables',
                                         'order'    => 40,
-                                        'resource' => Authorize::controllerResource('Import\Controller\Table', 'index'),
                                     ],
                                     'tableau-bord' => [
                                         'label'       => "Tableau de bord principal",
                                         'description' => "Liste, table par table, les colonnes dont les données sont importables ou non, leur caractéristiques et l'état de l'import à leur niveau.",
                                         'route'       => 'import/tableau-bord',
                                         'order'       => 30,
-                                        'resource'    => Authorize::controllerResource('Import\Controller\Import', 'tableau-bord'),
                                     ],
                                     'differentiel' => [
                                         'label'       => "Écarts entre les données de l'application et ses sources",
                                         'description' => "Affiche, table par table, la liste des données différentes entre l'application et ses sources de données",
                                         'route'       => 'import/differentiel',
                                         'order'       => 10,
-                                        'resource'    => Authorize::controllerResource('Import\Controller\Differentiel', 'index'),
                                     ],
                                 ],
                             ],

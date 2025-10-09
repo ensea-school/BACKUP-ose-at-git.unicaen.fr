@@ -4,7 +4,6 @@ namespace Mission;
 
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Mission\Controller\OffreEmploiController;
 use Mission\Controller\OffreEmploiControllerFactory;
 use Mission\Service\CandidatureService;
@@ -123,7 +122,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(OffreEmploiController::class, 'candidature'),
                     'order'        => 5,
                 ],
             ],

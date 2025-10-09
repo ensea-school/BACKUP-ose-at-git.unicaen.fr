@@ -146,7 +146,6 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::DONNEES_PERSO_SAISIE,
                     'withtarget'          => true,
-                    'resource'            => Authorize::controllerResource(IntervenantDossierController::class, 'index'),
                     'order'               => 5,
                 ],
             ],

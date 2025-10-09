@@ -3,7 +3,6 @@
 namespace Administration;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -39,13 +38,11 @@ return [
                             'label'    => "Années",
                             'route'    => 'parametres/annees',
                             'order'    => 10,
-                            'resource' => Authorize::controllerResource(Controller\ParametreController::class, 'annees'),
                         ],
                         'generaux' => [
                             'label'    => "Paramètres généraux",
                             'route'    => 'parametres/generaux',
                             'order'    => 40,
-                            'resource' => Authorize::controllerResource(Controller\ParametreController::class, 'generaux'),
                         ],
                     ],
                 ],

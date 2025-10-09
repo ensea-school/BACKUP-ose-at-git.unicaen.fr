@@ -3,7 +3,6 @@
 namespace Service;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\CampagneSaisieController;
 use Service\Controller\RegleStructureValidationController;
@@ -108,7 +107,6 @@ return [
             'title'    => "Visualisation et export des services",
             'order'    => 3,
             'route'    => 'service',
-            'resource' => Authorize::controllerResource(ServiceController::class, 'index'),
         ],
 
         'intervenant' => [
@@ -122,8 +120,6 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE.','.WorkflowEtape::REFERENTIEL_SAISIE,
                     'withtarget'          => true,
-                    'resource'            => Authorize::controllerResource(ServiceController::class, 'intervenant-saisie-prevu'),
-                    'visible'             => Assertion\ServiceAssertion::class,
                     'order'               => 6,
                 ],
                 'services-realises' => [
@@ -135,8 +131,6 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE.','.WorkflowEtape::REFERENTIEL_SAISIE_REALISE,
                     'withtarget'          => true,
-                    'resource'            => Authorize::controllerResource(ServiceController::class, 'intervenant-saisie-realise'),
-                    'visible'             => Assertion\ServiceAssertion::class,
                     'order'               => 13,
                 ],
             ],
@@ -150,7 +144,6 @@ return [
                             'label'    => "Campagnes de saisie des services",
                             'route'    => 'parametres/campagnes-saisie',
                             'order'    => 20,
-                            'resource' => Authorize::controllerResource(CampagneSaisieController::class, 'campagnes-saisie'),
                         ],
                     ],
                 ],
@@ -163,7 +156,6 @@ return [
                             'route'      => 'parametres/regle-structure-validation',
                             'withtarget' => true,
                             'order'      => 30,
-                            'resource'   => Authorize::controllerResource(RegleStructureValidationController::class, 'index'),
                         ],
                     ],
                 ],

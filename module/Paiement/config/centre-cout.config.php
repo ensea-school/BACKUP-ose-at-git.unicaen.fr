@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -83,14 +82,12 @@ return [
                         'centre-cout'          => [
                             'label'    => 'Centres de coûts',
                             'route'    => 'centre-cout',
-                            'resource' => Authorize::controllerResource(Controller\CentreCoutController::class, 'index'),
                             'order'    => 10,
                             'color'    => '#BBCF55',
                         ],
                         'centre-cout-activite' => [
                             'label'    => 'Types d\'activités des centres de coûts',
                             'route'    => 'centre-cout-activite',
-                            'resource' => Authorize::controllerResource(Controller\CentreCoutController::class, 'index'),
                             'order'    => 40,
                             'color'    => '#BBCF55',
                         ],

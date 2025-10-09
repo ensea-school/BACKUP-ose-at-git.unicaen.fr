@@ -6,6 +6,7 @@ use Application\Controller\AbstractController;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Lieu\Entity\Db\Structure;
 use Lieu\Form\Element\Structure as StructureElement;
 use Lieu\Service\StructureServiceAwareTrait;
@@ -33,20 +34,23 @@ class BudgetController extends AbstractController
     use BudgetServiceAwareTrait;
 
 
-    public function indexAction ()
+    public function indexAction(): ViewModel
     {
-        return [];
+        $vm = new ViewModel();
+        $vm->setTemplate('application/menu.phtml');
+
+        return $vm;
     }
 
 
 
-    public function tableauDeBordAction ()
+    public function tableauDeBordAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            Structure::class,
-            TypeRessource::class,
-            Dotation::class,
-        ]);
+                                                                  Structure::class,
+                                                                  TypeRessource::class,
+                                                                  Dotation::class,
+                                                              ]);
 
         $structure = $this->getServiceContext()->getStructure() ?: $this->getEvent()->getParam('structure');
 
@@ -85,13 +89,13 @@ class BudgetController extends AbstractController
 
 
 
-    public function getJsonAction ()
+    public function getJsonAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            Structure::class,
-            TypeRessource::class,
-            Dotation::class,
-        ]);
+                                                                  Structure::class,
+                                                                  TypeRessource::class,
+                                                                  Dotation::class,
+                                                              ]);
 
         $structure = $this->getServiceContext()->getStructure() ?: $this->getEvent()->getParam('structure');
 
@@ -127,7 +131,7 @@ class BudgetController extends AbstractController
 
 
 
-    function getBudgetStructureAction ()
+    function getBudgetStructureAction()
     {
         $budget    = [
             'dotation'    => [
@@ -166,13 +170,13 @@ class BudgetController extends AbstractController
 
 
 
-    public function engagementsLiquidationAction ()
+    public function engagementsLiquidationAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            Structure::class,
-            TypeRessource::class,
-            Dotation::class,
-        ]);
+                                                                  Structure::class,
+                                                                  TypeRessource::class,
+                                                                  Dotation::class,
+                                                              ]);
 
         $annee     = $this->getServiceContext()->getAnnee();
         $structure = $this->getEvent()->getParam('structure');
@@ -209,7 +213,7 @@ class BudgetController extends AbstractController
 
 
 
-    public function saisieDotationAction ()
+    public function saisieDotationAction()
     {
         $annee     = $this->getEvent()->getParam('annee');
         $anneePrec = $this->getServiceAnnee()->getPrecedente($annee);
@@ -282,7 +286,7 @@ class BudgetController extends AbstractController
 
 
 
-    public function exportAction ()
+    public function exportAction()
     {
         $structure = $this->getEvent()->getParam('structure');
         if (!$structure) {
@@ -293,52 +297,52 @@ class BudgetController extends AbstractController
 
         $csvModel = new CsvModel();
         $csvModel->setHeader([
-            'annee-libelle' => 'Année universitaire',
+                                 'annee-libelle' => 'Année universitaire',
 
-            'intervenant-code'               => 'Code intervenant',
-            'intervenant-code-rh'            => 'Code RH',
-            'intervenant-nom'                => 'Intervenant',
-            'intervenant-date-naissance'     => 'Date de naissance',
-            'intervenant-statut-libelle'     => 'Statut intervenant',
-            'intervenant-type-code'          => 'Type d\'intervenant (Code)',
-            'intervenant-type-libelle'       => 'Type d\'intervenant',
-            'intervenant-grade-code'         => 'Grade (Code)',
-            'intervenant-grade-libelle'      => 'Grade',
-            'intervenant-discipline-code'    => 'Discipline intervenant (Code)',
-            'intervenant-discipline-libelle' => 'Discipline intervenant',
-            'service-structure-aff-libelle'  => 'Structure d\'affectation',
+                                 'intervenant-code'               => 'Code intervenant',
+                                 'intervenant-code-rh'            => 'Code RH',
+                                 'intervenant-nom'                => 'Intervenant',
+                                 'intervenant-date-naissance'     => 'Date de naissance',
+                                 'intervenant-statut-libelle'     => 'Statut intervenant',
+                                 'intervenant-type-code'          => 'Type d\'intervenant (Code)',
+                                 'intervenant-type-libelle'       => 'Type d\'intervenant',
+                                 'intervenant-grade-code'         => 'Grade (Code)',
+                                 'intervenant-grade-libelle'      => 'Grade',
+                                 'intervenant-discipline-code'    => 'Discipline intervenant (Code)',
+                                 'intervenant-discipline-libelle' => 'Discipline intervenant',
+                                 'service-structure-aff-libelle'  => 'Structure d\'affectation',
 
-            'service-structure-ens-libelle' => 'Structure d\'enseignement',
-            'groupe-type-formation-libelle' => 'Groupe de type de formation',
-            'type-formation-libelle'        => 'Type de formation',
-            'etape-niveau'                  => 'Niveau',
-            'etape-code'                    => 'Code formation',
-            'etape-etablissement-libelle'   => 'Formation ou établissement',
-            'element-code'                  => 'Code enseignement',
-            'element-fonction-libelle'      => 'Enseignement ou fonction référentielle',
-            'element-discipline-code'       => 'Discipline ens. (Code)',
-            'element-discipline-libelle'    => 'Discipline ens.',
-            'element-taux-fi'               => 'Taux FI',
-            'element-taux-fc'               => 'Taux FC',
-            'element-taux-fa'               => 'Taux FA',
-            'commentaires'                  => 'Commentaires',
-            'element-source-libelle'        => 'Source enseignement',
+                                 'service-structure-ens-libelle' => 'Structure d\'enseignement',
+                                 'groupe-type-formation-libelle' => 'Groupe de type de formation',
+                                 'type-formation-libelle'        => 'Type de formation',
+                                 'etape-niveau'                  => 'Niveau',
+                                 'etape-code'                    => 'Code formation',
+                                 'etape-etablissement-libelle'   => 'Formation ou établissement',
+                                 'element-code'                  => 'Code enseignement',
+                                 'element-fonction-libelle'      => 'Enseignement ou fonction référentielle',
+                                 'element-discipline-code'       => 'Discipline ens. (Code)',
+                                 'element-discipline-libelle'    => 'Discipline ens.',
+                                 'element-taux-fi'               => 'Taux FI',
+                                 'element-taux-fc'               => 'Taux FC',
+                                 'element-taux-fa'               => 'Taux FA',
+                                 'commentaires'                  => 'Commentaires',
+                                 'element-source-libelle'        => 'Source enseignement',
 
-            'type-ressource-libelle'      => 'Enveloppe',
-            'centre-couts-code'           => 'Centre de coûts ou EOTP (code)',
-            'centre-couts-libelle'        => 'Centre de coûts ou EOTP (libellé)',
-            'domaine-fonctionnel-code'    => 'Domaine fonctionnel (code)',
-            'domaine-fonctionnel-libelle' => 'Domaine fonctionnel (libellé)',
-            'etat'                        => 'État',
-            'periode-libelle'             => 'Période de paiement',
-            'date-mise-en-paiement'       => 'Date de mise en paiement',
+                                 'type-ressource-libelle'      => 'Enveloppe',
+                                 'centre-couts-code'           => 'Centre de coûts ou EOTP (code)',
+                                 'centre-couts-libelle'        => 'Centre de coûts ou EOTP (libellé)',
+                                 'domaine-fonctionnel-code'    => 'Domaine fonctionnel (code)',
+                                 'domaine-fonctionnel-libelle' => 'Domaine fonctionnel (libellé)',
+                                 'etat'                        => 'État',
+                                 'periode-libelle'             => 'Période de paiement',
+                                 'date-mise-en-paiement'       => 'Date de mise en paiement',
 
-            'heures-fi'          => 'FI',
-            'heures-fa'          => 'FA',
-            'heures-fc'          => 'FC',
-            'heures-referentiel' => 'Référentiel',
-            'heures-primes'      => 'Prime Rém. FC D714-60',
-        ]);
+                                 'heures-fi'          => 'FI',
+                                 'heures-fa'          => 'FA',
+                                 'heures-fc'          => 'FC',
+                                 'heures-referentiel' => 'Référentiel',
+                                 'heures-primes'      => 'Prime Rém. FC D714-60',
+                             ]);
         $csvModel->addLines($data);
         $csvModel->setFilename('budget_mises_en_paiement.csv');
 
@@ -347,7 +351,7 @@ class BudgetController extends AbstractController
 
 
 
-    protected function getStructureElement (?Structure $structure): StructureElement
+    protected function getStructureElement(?Structure $structure): StructureElement
     {
         $structureElement = new StructureElement('structure');
         $structureElement->init();

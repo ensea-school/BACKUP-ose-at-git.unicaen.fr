@@ -53,11 +53,12 @@ class ChargensController extends AbstractController
 
 
 
-    public function indexAction(): array
+    public function indexAction(): ViewModel
     {
-        $pages = $this->navigation->getCurrentPage()->getVisiblePages();
+        $vm = new ViewModel();
+        $vm->setTemplate('application/menu.phtml');
 
-        return compact('pages');
+        return $vm;
     }
 
 

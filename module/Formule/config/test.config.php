@@ -3,7 +3,6 @@
 namespace Formule;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -84,7 +83,6 @@ return [
                         'formule-calcul' => [
                             'label'    => 'Test de formule de calcul',
                             'route'    => 'formule-test',
-                            'resource' => Authorize::controllerResource(Controller\TestController::class, 'index'),
                             'order'    => 50,
                             'color'    => '#0C8758',
                         ],

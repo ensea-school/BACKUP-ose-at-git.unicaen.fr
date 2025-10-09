@@ -3,7 +3,6 @@
 namespace Lieu;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -61,7 +60,6 @@ return [
                         'structure' => [
                             'label'    => 'Structures',
                             'route'    => 'structure',
-                            'resource' => Authorize::controllerResource(Controller\StructureController::class, 'index'),
                             'order'    => 40,
                             'color'    => '#BBCF55',
                         ],

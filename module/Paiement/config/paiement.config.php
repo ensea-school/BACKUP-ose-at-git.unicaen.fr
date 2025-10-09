@@ -3,8 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
-use Paiement\Controller\PaiementController;
 use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\PaiementProcessFactory;
 use Workflow\Entity\Db\WorkflowEtape;
@@ -143,8 +141,6 @@ return [
                     ],
                     'withtarget'          => true,
                     'workflow-etape-code' => WorkflowEtape::SAISIE_MEP,
-                    'resource'            => Authorize::controllerResource(Controller\PaiementController::class, 'visualisationMiseEnPaiement'),
-                    'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 17,
                 ],
                 'edition-mise-en-paiement'       => [
@@ -155,8 +151,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(Controller\PaiementController::class, 'editionMiseEnPaiement'),
-                    'visible'      => Assertion\PaiementAssertion::class,
                     'order'        => 18,
                 ],
                 'detail-calculs-paiements'       => [
@@ -167,8 +161,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(Controller\PaiementController::class, 'detailsCalculs'),
-                    'visible'      => Assertion\PaiementAssertion::class,
                     'order'        => 19,
                 ],
             ],
@@ -181,51 +173,43 @@ return [
                     'route'    => 'paiement',
                     'icon'     => 'fas fa-credit-card',
                     'color'    => '#F5E79E',
-                    'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION),
                     'order'    => 40,
                     'pages'    => [
                         'etat-demande-paiement' => [
                             'label'    => "Mises en paiement",
                             'title'    => "Mises en paiement",
                             'route'    => 'paiement/etat-demande-paiement',
-                            'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION),
                         ],
                         'etat-paiement'         => [
                             'label'    => "État de paiement",
                             'title'    => "État de paiement",
                             'route'    => 'paiement/etat-paiement',
-                            'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION),
                         ],
                         'mises-en-paiement-csv' => [
                             'label'    => "Mises en paiement (CSV)",
                             'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
                             'route'    => 'paiement/mises-en-paiement-csv',
-                            'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV),
                         ],
                         'extraction-paie'       => [
                             'label'    => "Extraction paie",
                             'title'    => "Export des données de paiement au format attendu",
                             'route'    => 'paiement/extraction-paie',
-                            'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
                         'extraction-paie-prime' => [
                             'label'    => "Extraction des indemnités de fin de contrat",
                             'title'    => "Export des données pour payer les indemnités de fin de contrat des étudiantes",
                             'route'    => 'paiement/extraction-paie-prime',
-                            'resource' => Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION),
                         ],
 
                         'imputation-siham'  => [
                             'label'    => "Imputation budgétaire SIHAM",
                             'title'    => "Export des données pour chargement en masse des imputations budgétaires dans SIHAM",
                             'route'    => 'paiement/imputation-siham',
-                            'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
                         'import-numero-pec' => [
                             'label'    => "Import des numéros de prise en charge",
                             'title'    => "Importer les numéros de prise en charge pour automatiser le fichier de paie",
                             'route'    => 'paiement/import-numero-pec',
-                            'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
                     ],
                 ],
@@ -234,14 +218,12 @@ return [
                     'title'    => 'Pilotage',
                     'icon'     => 'fas fa-chart-line',
                     'route'    => 'paiement/pilotage',
-                    'resource' => Authorize::controllerResource(PaiementController::class, 'pilotage'),
                     'pages'    => [
                         'ecarts-etats' => [
                             'label'       => 'Ecarts d\'heures complémentaires (CSV)',
                             'title'       => 'Ecarts d\'heures complémentaires (CSV)',
                             'description' => 'Export CSV des HETD (ne porte que sur les heures complémentaires et non sur le service dû)',
                             'route'       => 'paiement/ecarts-etats',
-                            'resource'    => Authorize::controllerResource(PaiementController::class, 'ecartsEtats'),
                         ],
                     ],
                     'order'    => 20,

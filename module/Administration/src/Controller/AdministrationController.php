@@ -5,6 +5,7 @@ namespace Administration\Controller;
 
 use Application\Controller\AbstractController;
 use Framework\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Description of AdministrationController
@@ -30,11 +31,12 @@ class AdministrationController extends AbstractController
 
 
 
-    public function rubriqueAction()
+    public function rubriqueAction(): ViewModel
     {
-        $pages = $this->navigation->getCurrentPage()->getVisiblePages();
+        $vm = new ViewModel();
+        $vm->setTemplate('application/menu.phtml');
 
-        return compact('pages');
+        return $vm;
     }
 
 }

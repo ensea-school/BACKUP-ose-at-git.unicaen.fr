@@ -38,6 +38,9 @@ class Navigation
             $currentRoute = $router->getCurrentRoute();
             $home         = $this->home;
 
+            if (!$currentRoute) {
+                return null;
+            }
             $this->searchCurrentPage($home, $currentRoute->getName());
         }
         return $this->currentPage;

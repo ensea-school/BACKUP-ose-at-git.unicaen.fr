@@ -7,7 +7,6 @@ namespace Intervenant;
 
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -48,7 +47,6 @@ return [
                         'corps' => [
                             'label'    => 'Corps',
                             'route'    => 'corps',
-                            'resource' => Authorize::controllerResource(Controller\CorpsController::class, 'index'),
                             'order'    => 10,
                             'color'    => '#BBCF55',
                         ],

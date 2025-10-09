@@ -49,13 +49,6 @@ class DroitsController extends AbstractController
 
 
 
-    public function indexAction(): array
-    {
-        return [];
-    }
-
-
-
     public function rolesAction()
     {
         $qb    = $this->getServiceRole()->finderByHistorique();

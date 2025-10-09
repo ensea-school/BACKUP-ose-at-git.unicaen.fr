@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Paiement\Controller\TauxRemuController;
 use Paiement\Service\TauxRemuService;
 use Paiement\Service\TauxRemuServiceFactory;
@@ -60,7 +59,6 @@ return [
                         'taux' => [
                             'label'    => "Taux de rémunération",
                             'route'    => 'taux',
-                            'resource' => Authorize::controllerResource(TauxRemuController::class, 'index'),
                             'order'    => 60,
                         ],
                     ],

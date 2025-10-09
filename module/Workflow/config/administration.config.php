@@ -72,7 +72,6 @@ return [
                             'title'    => "Page d\'administration du workflow",
                             'route'    => 'workflow/administration',
                             'order'    => 60,
-                            'resource' => Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_VISUALISATION),
                         ],
                     ],
                 ],

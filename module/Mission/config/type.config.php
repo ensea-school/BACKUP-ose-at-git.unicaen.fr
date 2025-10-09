@@ -3,7 +3,6 @@
 namespace Mission;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 
 return [
@@ -58,7 +57,6 @@ return [
                         'missions-type' => [
                             'label'    => "Types de missions",
                             'route'    => 'missions-type',
-                            'resource' => Authorize::controllerResource(Controller\MissionTypeController::class, 'index'),
                             'order'    => 70,
                             'color'    => '#BBCF55',
                         ],

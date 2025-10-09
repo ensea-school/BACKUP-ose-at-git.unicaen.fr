@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -41,7 +40,6 @@ return [
                         'type-ressource' => [
                             'label'    => 'Types de ressources',
                             'route'    => 'type-ressource',
-                            'resource' => Authorize::controllerResource(Controller\TypeRessourceController::class, 'index'),
                             'order'    => 50,
                             'color'    => '#71DFD7',
                         ],

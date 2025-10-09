@@ -3,7 +3,6 @@
 namespace Referentiel;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Referentiel\Controller\FonctionReferentielController;
 use Referentiel\Controller\ServiceReferentielController;
@@ -154,7 +153,6 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::REFERENTIEL_VALIDATION,
                     'withtarget'          => true,
-                    'visible'             => Assertion\ReferentielAssertion::class,
                     'order'               => 9,
                 ],
                 'validation-referentiel-realise' => [
@@ -166,7 +164,6 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::REFERENTIEL_VALIDATION_REALISE,
                     'withtarget'          => true,
-                    'visible'             => Assertion\ReferentielAssertion::class,
                     'order'               => 15,
                 ],
             ],
@@ -180,7 +177,6 @@ return [
                         'fonction-referentiel' => [
                             'label'    => 'Référentiel fonctions',
                             'route'    => 'fonction-referentiel',
-                            'resource' => Authorize::controllerResource(FonctionReferentielController::class, 'index'),
                             'order'    => 70,
                             'color'    => '#BBCF55',
                         ],

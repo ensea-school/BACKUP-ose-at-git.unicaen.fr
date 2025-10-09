@@ -1,12 +1,14 @@
 <?php
 
+use Application\View\Renderer\PhpRenderer;
+use Application\View\Helper\LayoutViewHelper;
+
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $this         PhpRenderer
+ * @var $layoutHelper LayoutViewHelper
  */
 
-/** @var NavigatioHel $navigationHelper */
-$navigationHelper = $this->navigation('navigation');
+$layoutHelper = $this->appLayout();
+$pages        = $layoutHelper->menuData();
 
-echo $navigationHelper->menuSecondaire()->render();
-
-//echo $this->navigation()->menuSecondaire('navigation')->render();
+require 'module/Application/view/application/menu.phtml';

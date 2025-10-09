@@ -3,7 +3,6 @@
 namespace Indicateur;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -110,7 +109,6 @@ return [
                     'icon'     => 'fas fa-chart-line',
                     'title'    => "Indicateurs",
                     'route'    => 'indicateur',
-                    'resource' => Authorize::controllerResource('Indicateur\Controller\Indicateur', 'index'),
                     'order'    => 10,
                     'color'    => '#217DD8',
                     'pages'    => [
@@ -119,7 +117,6 @@ return [
                             'icon'     => 'fas fa-chart-line',
                             'title'    => "Indicateurs",
                             'route'    => 'indicateur',
-                            'resource' => Authorize::controllerResource('Indicateur\Controller\Indicateur', 'index'),
                             'order'    => 10,
                             'color'    => '#217DD8',
                         ],

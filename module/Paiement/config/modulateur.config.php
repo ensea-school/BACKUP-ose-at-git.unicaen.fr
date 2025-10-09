@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -76,7 +75,6 @@ return [
                             'label'    => 'Modulateurs des taux horaires',
                             'route'    => 'modulateur',
                             'order'    => 10,
-                            'resource' => Authorize::controllerResource(Controller\ModulateurController::class, 'index'),
                         ],
                     ],
                 ],

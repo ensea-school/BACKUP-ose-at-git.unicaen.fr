@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Workflow\Entity\Db\WorkflowEtape;
 
 return [
@@ -81,8 +80,6 @@ return [
                     ],
                     'withtarget'          => true,
                     'workflow-etape-code' => WorkflowEtape::DEMANDE_MEP,
-                    'resource'            => Authorize::controllerResource(Controller\DemandesController::class, 'demandeMiseEnPaiement'),
-                    'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 16,
                 ],
             ],

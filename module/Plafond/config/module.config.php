@@ -3,7 +3,6 @@
 namespace Plafond;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Plafond\View\Helper\PlafondConfigElementViewHelperFactory;
 
 return [
@@ -136,7 +135,6 @@ return [
                         'plafonds' => [
                             'label'    => "Plafonds",
                             'route'    => 'plafond',
-                            'resource' => Authorize::controllerResource('Plafond\Controller\Plafond', 'index'),
                             'color'    => '#9B9B9B',
                             'order'    => 60,
                         ],

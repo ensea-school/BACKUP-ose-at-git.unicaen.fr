@@ -3,7 +3,6 @@
 namespace OffreFormation;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use OffreFormation\Controller\DisciplineController;
 use OffreFormation\Controller\ElementPedagogiqueController;
 use OffreFormation\Controller\EtapeCentreCoutController;
@@ -18,9 +17,7 @@ return [
     'routes' => [
         'aof'               => [
             'route'         => '/administration-offre',
-            'controller'    => OffreFormationController::class,
-            'action'        => 'administrationOffre',
-            'may_terminate' => true,
+            'may_terminate' => false,
             'child_routes'  => [
                 'reconduction'             => [
                     'route'      => '/reconduction',
@@ -349,7 +346,6 @@ return [
             'title'    => "Gestion de l'offre de formation",
             'route'    => 'of',
             'order'    => 2,
-            'resource' => Authorize::controllerResource(OffreFormationController::class, 'index'),
         ],
         'administration' => [
             'pages' => [
@@ -360,41 +356,35 @@ return [
                             'title'    => 'Reconduction de l\'offre de formation complémentaire',
                             'route'    => 'aof/reconduction',
                             'order'    => 20,
-                            'resource' => Authorize::controllerResource(OffreFormationController::class, 'reconduction'),
                         ],
                         'reconduction-centre-cout' => [
                             'label'    => 'Reconduction des centres de coûts',
                             'title'    => 'Reconduction des centres de coûts de l\'offre de formation',
                             'route'    => 'aof/reconduction-centre-cout',
                             'order'    => 30,
-                            'resource' => Authorize::controllerResource(OffreFormationController::class, 'reconductionCentreCout'),
                         ],
                         'reconduction-modulateur'  => [
                             'label'    => 'Reconduction des modulateurs',
                             'title'    => 'Reconduction des modulateurs de l\'offre de formation',
                             'route'    => 'aof/reconduction-modulateur',
                             'order'    => 40,
-                            'resource' => Authorize::controllerResource(OffreFormationController::class, 'reconductionModulateur'),
                         ],
                         'discipline'               => [
                             'color'    => '#9F491F',
                             'label'    => "Types de disciplines",
                             'title'    => "Gestion des disciplines",
                             'route'    => 'discipline',
-                            'resource' => Authorize::controllerResource(DisciplineController::class, 'index'),
                             'order'    => 50,
                         ],
                         'type-formation'           => [
                             'label'          => 'Types de formations',
                             'route'          => 'type-formation',
-                            'resource'       => Authorize::controllerResource(TypeFormationController::class, 'index'),
                             'order'          => 60,
                             'border - color' => '#111',
                         ],
                         'type-intervention'        => [
                             'label'    => 'Types d\'interventions',
                             'route'    => 'type-intervention',
-                            'resource' => Authorize::controllerResource(TypeInterventionController::class, 'index'),
                             'order'    => 70,
                             'color'    => '#71DFD7',
                         ],

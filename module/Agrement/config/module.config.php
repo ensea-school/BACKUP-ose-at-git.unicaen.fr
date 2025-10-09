@@ -16,7 +16,6 @@ use Agrement\Service\TypeAgrementService;
 use Agrement\Service\TypeAgrementServiceFactory;
 use Agrement\View\Helper\AgrementVewHelperFactory;
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 
 return [
@@ -119,8 +118,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(AgrementController::class, 'lister'),
-                    'visible'      => AgrementAssertion::class,
                     'order'        => 10,
                 ],
                 'agrement-conseil-academique' => [
@@ -131,8 +128,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(AgrementController::class, 'lister'),
-                    'visible'      => AgrementAssertion::class,
                     'order'        => 11,
                 ],
             ],
@@ -145,8 +140,6 @@ return [
                     'title'    => "Gestion des agréments par lot",
                     'icon'     => 'fas fa-tags',
                     'route'    => 'gestion/agrement',
-                    'resource' => Authorize::controllerResource(AgrementController::class, 'index'),
-                    'visible'  => AgrementAssertion::class,
                     'order'    => 50,
                     'color'    => '#E1AC5A',
                     'pages'    => [
@@ -155,23 +148,18 @@ return [
                             'description' => 'Gestion par lots des agréments du conseil restreint',
                             'title'       => 'Conseil restreint',
                             'route'       => 'gestion/agrement/conseil-restreint',
-                            'resource'    => Authorize::controllerResource(AgrementController::class, 'saisir-lot'),
-                            'visible'     => AgrementAssertion::class,
                         ],
                         'conseil-academique' => [
                             'label'       => 'Conseil académique',
                             'description' => 'Gestion par lots des agréments du conseil académique',
                             'title'       => 'Conseil académique',
                             'route'       => 'gestion/agrement/conseil-academique',
-                            'resource'    => Authorize::controllerResource(AgrementController::class, 'saisir-lot'),
-                            'visible'     => AgrementAssertion::class,
                         ],
                         'export-csv'         => [
                             'label'       => 'Export CSV',
                             'description' => 'Export CSV des agrément donnés ou en attente',
                             'title'       => 'Export CSV',
                             'route'       => 'gestion/agrement/export-csv',
-                            'resource'    => Authorize::controllerResource(AgrementController::class, 'export-csv'),
                         ],
                     ],
                 ],

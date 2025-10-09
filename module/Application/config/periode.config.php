@@ -5,7 +5,6 @@ namespace Application;
 
 use Application\Provider\Privileges;
 use Application\Service\PeriodeService;
-use Framework\Authorize\Authorize;
 
 return [
     'router' => [
@@ -75,7 +74,6 @@ return [
                                     'gestion-periode' => [
                                         'label'          => 'Périodes',
                                         'route'          => 'periodes',
-                                        'resource'       => Authorize::controllerResource(Controller\PeriodeController::class, 'index'),
                                         'order'          => 30,
                                         'border - color' => '#111',
                                     ],

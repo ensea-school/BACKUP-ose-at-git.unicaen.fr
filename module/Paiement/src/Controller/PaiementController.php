@@ -12,6 +12,7 @@ use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
+use Laminas\View\Model\ViewModel;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TblPaiement;
 use Paiement\Entity\Db\TypeRessource;
@@ -46,9 +47,12 @@ class PaiementController extends AbstractController
     use TableauBordServiceAwareTrait;
     use NumeroPriseEnChargeServiceAwareTrait;
 
-    public function indexAction()
+    public function indexAction(): ViewModel
     {
-        return [];
+        $vm = new ViewModel();
+        $vm->setTemplate('application/menu.phtml');
+
+        return $vm;
     }
 
 
@@ -432,9 +436,12 @@ class PaiementController extends AbstractController
 
 
 
-    public function pilotageAction()
+    public function pilotageAction(): ViewModel
     {
-        return [];
+        $vm = new ViewModel();
+        $vm->setTemplate('application/menu.phtml');
+
+        return $vm;
     }
 
 

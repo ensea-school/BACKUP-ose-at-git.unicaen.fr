@@ -4,7 +4,6 @@ namespace Intervenant;
 
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -45,7 +44,6 @@ return [
                         'grade' => [
                             'label'    => 'Grades',
                             'route'    => 'grades',
-                            'resource' => Authorize::controllerResource(Controller\GradeController::class, 'index'),
                             'order'    => 30,
                             'color'    => '#BBCF55',
                         ],

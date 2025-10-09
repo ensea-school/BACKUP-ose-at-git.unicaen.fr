@@ -3,7 +3,6 @@
 namespace Formule;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -67,7 +66,6 @@ return [
                     ],
                     'action'       => 'details',
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(Controller\AffichageController::class, 'details'),
                     'order'        => 3,
                 ],
             ],

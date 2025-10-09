@@ -8,8 +8,6 @@ use Enseignement\Controller\VolumeHoraireController;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Workflow\Entity\Db\WorkflowEtape;
 
-//use Framework\Authorize\Authorize;
-
 
 return [
     'routes' => [
@@ -180,8 +178,6 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE,
                     'withtarget'          => true,
-                    'resource'            => Authorize::controllerResource(ServiceController::class, 'intervenant-saisie-prevu'),
-                    'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 6,
                 ],*/
                 'validation-enseignement-prevu'   => [
@@ -193,7 +189,6 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_VALIDATION,
                     'withtarget'          => true,
-                    'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 8,
                 ],
 
@@ -206,8 +201,6 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE,
                     'withtarget'          => true,
-                    'resource'            => Authorize::controllerResource(ServiceController::class, 'intervenant-saisie-realise'),
-                    'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 13,
                 ],*/
                 'validation-enseignement-realise' => [
@@ -219,7 +212,6 @@ return [
                     ],
                     'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE,
                     'withtarget'          => true,
-                    'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 14,
                 ],
             ],

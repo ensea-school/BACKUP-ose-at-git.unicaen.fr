@@ -3,7 +3,6 @@
 namespace Intervenant;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 
 return [
@@ -113,7 +112,6 @@ return [
             'label'    => 'Intervenant',
             'title'    => "Intervenant",
             'route'    => 'intervenant',
-            'resource' => Authorize::controllerResource(Controller\IntervenantController::class, 'index'),
             'order'    => 1,
             'pages'    => [
                 'rechercher' => [
@@ -125,7 +123,6 @@ return [
                     ],
                     'icon'         => "fas fa-magnifying-glass",
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(Controller\IntervenantController::class, 'rechercher'),
                     'order'        => 1,
                 ],
                 'voir'       => [
@@ -136,7 +133,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(Controller\IntervenantController::class, 'voir'),
                     'order'        => 2,
                 ],
             ],

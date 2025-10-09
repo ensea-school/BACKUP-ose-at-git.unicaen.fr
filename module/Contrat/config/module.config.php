@@ -9,7 +9,6 @@ use Contrat\Service\TblContratService;
 use Contrat\Service\TblContratServiceFactory;
 use Contrat\Tbl\Process\ContratProcess;
 use Contrat\Tbl\Process\ContratProcessFactory;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -245,7 +244,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(ContratController::class, 'index'),
                     'order'        => 12,
                 ],
             ],

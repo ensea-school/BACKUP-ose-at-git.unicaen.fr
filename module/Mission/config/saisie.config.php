@@ -3,7 +3,6 @@
 namespace Mission;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 
 return [
@@ -115,7 +114,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget' => true,
-                    'resource' => Authorize::controllerResource(Controller\SaisieController::class, 'index'),
                     'order' => 8,
                 ],
             ],

@@ -3,20 +3,12 @@
 namespace Utilisateur;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
         'droits' => [
             'route'         => '/droits',
-            'controller'    => Controller\DroitsController::class,
-            'action'        => 'index',
-            'privileges'    => [
-                Privileges::DROIT_ROLE_VISUALISATION,
-                Privileges::DROIT_PRIVILEGE_VISUALISATION,
-                Privileges::DROIT_AFFECTATION_VISUALISATION,
-            ],
-            'may_terminate' => true,
+            'may_terminate' => false,
             'child_routes'  => [
                 'roles'        => [
                     'route'         => '/roles',
@@ -110,7 +102,6 @@ return [
                             'description' => 'Permet de visualiser les affectations existantes et de les modifier le cas échéant. Pour rappel, une affectation est la liaison entre un rôle et un personnel.',
                             'route'       => 'droits/affectations',
                             'order'       => 10,
-                            'resource'    => Authorize::controllerResource(Controller\DroitsController::class, 'affectations'),
                         ],
                         'privileges'   => [
                             'label'       => "Privilèges",
@@ -118,7 +109,6 @@ return [
                             'description' => 'Tableau de bord listant, par rôle, les privilèges qui lui sont accordés. Le tableau permet également, si vous en avez le droit, de modifier les privilèges accordés par rôle.',
                             'route'       => 'droits/privileges',
                             'order'       => 20,
-                            'resource'    => Authorize::controllerResource(Controller\DroitsController::class, 'privileges'),
                         ],
                         'roles'        => [
                             'label'       => "Rôles",
@@ -126,7 +116,6 @@ return [
                             'description' => 'Permet de visualiser les rôles existants. Permet également de les modifier, d\'en ajouter ou d\'en supprimer si vous avez les droits requis pour cela.',
                             'route'       => 'droits/roles',
                             'order'       => 30,
-                            'resource'    => Authorize::controllerResource(Controller\DroitsController::class, 'roles'),
                         ],
                     ],
                 ],

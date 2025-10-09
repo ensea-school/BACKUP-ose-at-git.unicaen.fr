@@ -3,7 +3,6 @@
 namespace Signature;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Signature\Command\UpdateSignaturesContratsProcessesCommand;
 use Signature\Command\UpdateSignaturesContratsProcessesCommandFactory;
 use Signature\Controller\SignatureController;
@@ -73,7 +72,6 @@ return [
                             'label'      => "Gestion des circuits de signatures",
                             'title'      => "Gestion des circuits de signatures",
                             'route'      => 'signature-flow',
-                            'resource'   => Authorize::controllerResource(SignatureFlowController::class, 'index'),
                             'withtarget' => true,
                             'order'      => 10,
                         ],

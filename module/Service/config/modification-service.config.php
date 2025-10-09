@@ -3,7 +3,6 @@
 namespace Service;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\ModificationServiceDuController;
 use Service\Controller\MotifModificationServiceController;
@@ -63,7 +62,6 @@ return [
                         'motif-modification-service' => [
                             'label'    => 'Motifs de modification du service dû',
                             'route'    => 'motif-modification-service',
-                            'resource' => Authorize::controllerResource(MotifModificationServiceController::class, 'index'),
                             'order'    => 40,
                             'color'    => '#BBCF55',
                         ],
@@ -79,7 +77,6 @@ return [
                             'label'    => "Modifications de service dû (CSV)",
                             'title'    => "Modifications de service dû (CSV)",
                             'route'    => 'modification-service-du/export-csv',
-                            'resource' => Authorize::controllerResource(ModificationServiceDuController::class, 'export-csv'),
                         ],
                     ],
                 ],
@@ -95,7 +92,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(ModificationServiceDuController::class, 'saisir'),
                     'order'        => 4,
                 ],
             ],

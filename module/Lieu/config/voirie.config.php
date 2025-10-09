@@ -4,7 +4,6 @@ namespace Lieu;
 
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -45,7 +44,6 @@ return [
                         'voirie' => [
                             'label'    => 'Voiries',
                             'route'    => 'voirie',
-                            'resource' => Authorize::controllerResource(Controller\VoirieController::class, 'index'),
                             'order'    => 50,
                             'color'    => '#BBCF55',
                         ],

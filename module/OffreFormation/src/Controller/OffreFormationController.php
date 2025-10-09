@@ -6,6 +6,7 @@ use Application\Controller\AbstractController;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Laminas\View\Model\ViewModel;
 use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\CheminPedagogique;
@@ -20,7 +21,6 @@ use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\OffreFormationServiceAwareTrait;
 use Paiement\Entity\Db\TypeModulateur;
-use PHP_CodeSniffer\Reports\Csv;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
@@ -107,13 +107,6 @@ class OffreFormationController extends AbstractController
         [$structure, $niveau, $etape] = $this->getParams();
         return $this->getServiceOffreFormation()->generateCsvExport($structure, $niveau, $etape);
 
-    }
-
-
-
-    public function administrationOffreAction()
-    {
-        return [];
     }
 
 

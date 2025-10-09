@@ -3,7 +3,6 @@
 namespace EtatSortie;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -67,7 +66,6 @@ return [
                             'label'    => "États de sortie",
                             'title'    => "États de sortie",
                             'route'    => 'etat-sortie',
-                            'resource' => Authorize::controllerResource(Controller\EtatSortieController::class, 'index'),
                             'order'    => 30,
                         ],
                     ],

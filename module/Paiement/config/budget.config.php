@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -99,7 +98,6 @@ return [
                     'title'    => 'Budget',
                     'icon'     => 'fas fa-eur',
                     'route'    => 'budget',
-                    'resource' => Authorize::controllerResource(Controller\BudgetController::class, 'index'),
                     'order'    => 30,
                     'color'    => '#EB4995',
                     'pages'    => [
@@ -107,19 +105,16 @@ return [
                             'label'    => 'Tableau de bord',
                             'title'    => 'Tableau de bord',
                             'route'    => 'budget/tableau-de-bord',
-                            'resource' => Authorize::controllerResource(Controller\BudgetController::class, 'tableau-de-bord'),
                         ],
                         'engagements-liquidation' => [
                             'label'    => 'Engagements & liquidation',
                             'title'    => 'Engagements & liquidation',
                             'route'    => 'budget/engagements-liquidation',
-                            'resource' => Authorize::controllerResource(Controller\BudgetController::class, 'engagements-liquidation'),
                         ],
                         'export'                  => [
                             'label'    => 'Export des données de paiement (CSV)',
                             'title'    => 'Export des données de paiement (CSV)',
                             'route'    => 'budget/export',
-                            'resource' => Authorize::controllerResource(Controller\BudgetController::class, 'export'),
                         ],
                     ],
                 ],

@@ -42,42 +42,6 @@ class ExportRhController extends AbstractController
 
 
 
-    public function indexAction()
-    {
-        return [];
-    }
-
-
-
-    public function chercherIntervenantRhAction(): array
-    {
-        $connecteurRh = $this->getServiceExportRh();
-
-        $params = [
-            'nomUsuel' => '',
-            'prenom'   => '',
-        ];
-
-        $listIntervenantRh = [];
-
-        try {
-
-            if ($this->getRequest()->isPost()) {
-
-                $nomUsuel          = $this->getRequest()->getPost('nomUsuel');
-                $prenom            = $this->getRequest()->getPost('prenom');
-                $insee             = $this->getRequest()->getPost('insee');
-                $listIntervenantRh = $connecteurRh->getListIntervenantRh($nomUsuel, $prenom, $insee);
-            }
-        } catch (SihamException $e) {
-            $this->flashMessenger()->addErrorMessage($e->getMessage());
-        }
-
-        return compact('listIntervenantRh');
-    }
-
-
-
     public function priseEnChargeAction()
     {
         try {

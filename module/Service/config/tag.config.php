@@ -3,7 +3,6 @@
 namespace Service;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\TagController;
 
@@ -56,7 +55,6 @@ return [
                         'tag' => [
                             'label'    => 'Tags',
                             'route'    => 'tag',
-                            'resource' => Authorize::controllerResource(TagController::class, 'index'),
                             'order'    => 50,
                             'color'    => '#BBCF55',
                         ],

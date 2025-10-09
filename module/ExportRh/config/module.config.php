@@ -45,31 +45,11 @@ return [
                     'controller'    => Controller\ExportRhController::class,
                     'action'        => 'synchroniser',
                 ],
-                'administration' => [
-                    'may_terminate' => true,
-                    'route'         => '/administration',
-                    'controller'    => Controller\AdministrationController::class,
-                    'action'        => 'index',
-                    'child_routes'  => [
-                        'chercher-intervenant-rh' => [
-                            'may_terminate' => false,
-                            'route'         => '/chercher-intervenant-rh',
-                            'controller'    => Controller\AdministrationController::class,
-                            'action'        => 'chercher-intervenant-rh',
-                        ],
-                    ],
-                ],
             ],
         ],
     ],
 
     'guards' => [
-        [
-            'controller' => Controller\AdministrationController::class,
-            'action'     => ['index', 'chercher-intervenant-rh'],
-            'privileges' => [Privileges::INTERVENANT_EXPORTER],
-
-        ],
         [
             'controller' => Controller\ExportRhController::class,
             'action'     => ['exporter', 'prise-en-charge', 'renouvellement', 'synchroniser'],

@@ -1,0 +1,40 @@
+<?php
+
+use Application\View\Renderer\PhpRenderer;
+use Framework\Navigation\Page;
+use Framework\Application\Application;
+use Framework\Navigation\Navigation;
+
+/**
+ * @var $this PhpRenderer
+ * @var $title string
+ * @var $page Page
+ */
+
+if (empty($title) && empty($page)){
+    $container = Application::getInstance()->container();
+    $navigation = $container->get(Navigation::class);
+    $page = $navigation->getCurrentPage();
+    $title = $page->getTitle();
+}
+
+$this->headTitle()->append($title);
+$pages = $page->getVisiblePages();
+
+?>
+    <h1 class="page-header"><?= $title ?></h1>
+<dl>
+    <?php
+    foreach ($pages as $page) {
+        echo '<dt><a href="' . $page->getUri() . '">' . $page->getLabel() . '</a></dt>';
+        echo '<dd>' . $page->getData('description') . '</dd>';
+    }
+    ?>
+</dl>
+<style>
+
+    dt {
+        padding-top: 2em;
+    }
+
+</style>

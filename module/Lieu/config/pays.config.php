@@ -3,7 +3,6 @@
 namespace Lieu;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -38,7 +37,6 @@ return [
                         'pays' => [
                             'label'          => 'Pays',
                             'route'          => 'pays',
-                            'resource'       => Authorize::controllerResource(Controller\PaysController::class, 'index'),
                             'order'          => 30,
                             'border - color' => '#111',
                         ],

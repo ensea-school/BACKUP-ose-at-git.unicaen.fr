@@ -3,7 +3,6 @@
 namespace PieceJointe;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use PieceJointe\Controller\Factory\PieceJointeControllerFactory;
 use PieceJointe\Controller\PieceJointeController;
 use PieceJointe\Form\Factory\ModifierTypePieceJointeStatutFormFactory;
@@ -124,10 +123,6 @@ return [
                     ],
                 ],
 
-                'configuration'                     => [
-                    'route'  => '/configuration',
-                    'action' => 'configuration',
-                ],
                 'type-piece-jointe-statut'          => [
                     'route'  => '/type-piece-jointe-statut[/:codeTypeIntervenant]',
                     'action' => 'type-piece-jointe-statut',
@@ -177,7 +172,6 @@ return [
                         'intervenant',
                     ],
                     'withtarget'   => true,
-                    'resource'     => Authorize::controllerResource(PieceJointeController::class, 'index'),
                     'order'        => 7,
                 ],
             ],
@@ -193,7 +187,6 @@ return [
                             'route'      => 'piece-jointe/type-piece-jointe-statut',
                             'withtarget' => true,
                             'order'      => 20,
-                            'resource'   => Authorize::controllerResource(PieceJointeController::class, 'type-piece-jointe-statut'),
                         ],
                     ],
                 ],
@@ -212,11 +205,6 @@ return [
             'controller' => PieceJointeController::class,
             'action'     => ['modifier-type-piece-jointe-statut', 'delete-type-piece-jointe-statut'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
-        ],
-        [
-            'controller' => PieceJointeController::class,
-            'action'     => ['configuration'],
-            'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,
         ],
         [
             'controller' => PieceJointeController::class,

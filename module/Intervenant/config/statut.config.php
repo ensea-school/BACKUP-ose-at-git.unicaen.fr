@@ -3,7 +3,6 @@
 namespace Intervenant;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 
 return [
@@ -51,7 +50,6 @@ return [
                         'statut' => [
                             'label'    => 'Statuts',
                             'route'    => 'statut',
-                            'resource' => Authorize::controllerResource('Intervenant\Controller\Statut', 'index'),
                             'order'    => 40,
                             'color'    => '#BBCF55',
                         ],

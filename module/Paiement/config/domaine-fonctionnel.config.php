@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 
 return [
     'routes' => [
@@ -45,7 +44,6 @@ return [
                         'domaine-fonctionnel' => [
                             'label'    => 'Domaines fonctionnels',
                             'route'    => 'domaine-fonctionnel',
-                            'resource' => Authorize::controllerResource(Controller\DomaineFonctionnelController::class, 'index'),
                             'order'    => 20,
                             'color'    => '#BBCF55',
                         ],

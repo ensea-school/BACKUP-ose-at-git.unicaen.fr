@@ -13,7 +13,7 @@ use Framework\Navigation\Navigation;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class GestionAssertion extends AbstractAssertion
+class AdministrationAssertion extends AbstractAssertion
 {
     use ContextServiceAwareTrait;
 
@@ -33,7 +33,8 @@ class GestionAssertion extends AbstractAssertion
             return false;
         }
 
-        $adminPage = $this->navigation->home->getPage('gestion');
+
+        $adminPage = $this->navigation->home->getPage('administration');
         $adminSubPages = $adminPage->getPages();
         foreach( $adminSubPages as $adminSubPage ) {
             $subsubPages = $adminSubPage->getPages();

@@ -3,7 +3,6 @@
 namespace Lieu;
 
 use Application\Provider\Privileges;
-use Framework\Authorize\Authorize;
 use Lieu\Controller\EtablissementController;
 
 return [
@@ -61,7 +60,6 @@ return [
                         'gestion-etablissement' => [
                             'label'          => 'Établissements',
                             'route'          => 'etablissement',
-                            'resource'       => Authorize::controllerResource(Controller\EtablissementController::class, 'index'),
                             'order'          => 20,
                             'border - color' => '#111',
                         ],

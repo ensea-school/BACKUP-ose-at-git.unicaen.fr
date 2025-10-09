@@ -154,6 +154,10 @@ class UserProvider implements UserAdapterInterface
             $profiles[] = $intervenant->getProfile();
         }
 
+        usort($profiles, function ($a, $b) {
+            return $a->getDisplayName() > $b->getDisplayName() ? 1 : -1;
+        });
+
         return $profiles;
     }
 

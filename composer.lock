@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a40409b91c2501f2357749785072ed87",
+    "content-hash": "225facdffaeb35b5319ec3d7e18bff13",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7564,7 +7564,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/framework.git",
-                "reference": "0e6b32d7a2e7c7cdc19790c9032fa28aabd392dd"
+                "reference": "9e5ad6104bbc5e53e468debc539d8b9590fd8463"
             },
             "require": {
                 "laminas/laminas-permissions-acl": "^2.17",
@@ -7579,7 +7579,7 @@
                 }
             },
             "description": "Framework pour applications Unicaen",
-            "time": "2025-10-09T13:50:24+00:00"
+            "time": "2025-10-10T08:50:40+00:00"
         },
         {
             "name": "unicaen/import",
@@ -7738,38 +7738,6 @@
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
             "time": "2025-09-23T14:25:53+00:00"
-        },
-        {
-            "name": "unicaen/utilisateur",
-            "version": "dev-php84",
-            "source": {
-                "type": "git",
-                "url": "https://git.unicaen.fr/lib/unicaen/utilisateur.git",
-                "reference": "9195746364b6f443960a828e0a8d99bdac2b04c4"
-            },
-            "require": {
-                "unicaen/app": "^7.0|dev-php84",
-                "unicaen/mail": "^7.0|dev-php84",
-                "unicaen/zfc-user": "^6.1|dev-php84"
-            },
-            "require-dev": {
-                "phpunit/phpunit": ">=3.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "UnicaenUtilisateur": "src/"
-                },
-                "suggested": {
-                    "UnicaenUtilisateurLdapAdaptater": "unicaen/utilisateur-ldap-adapter",
-                    "UnicaenUtilisateurOctopusAdaptater": "unicaen/utilisateur-octopus-adapter"
-                },
-                "classmap": [
-                    "./Module.php"
-                ]
-            },
-            "description": "Module reprenant la gestion des utilisateurs, privileges et roles - Version laminas",
-            "time": "2025-06-11T12:26:06+00:00"
         },
         {
             "name": "unicaen/vue",
@@ -12256,7 +12224,6 @@
         "unicaen/authentification": 20,
         "unicaen/framework": 20,
         "unicaen/mail": 20,
-        "unicaen/utilisateur": 20,
         "unicaen/zfc-user": 20
     },
     "prefer-stable": true,

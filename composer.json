@@ -29,7 +29,6 @@
         "unicaen/zfc-user"                 : "dev-php84",
         "unicaen/app"                      : "dev-php84",
         "unicaen/authentification"         : "dev-php84",
-        "unicaen/utilisateur"              : "dev-php84",
         "unicaen/mail"                     : "dev-php84",
         "unicaen/signature"                : "1.0.7",
 
@@ -45,11 +44,12 @@
         "connecteur-ose/pegase"            : "dev-master"
     },
     "replace"          : {
-        "laminas/laminas-cache": "*",
+        "laminas/laminas-cache"                           : "*",
         "laminas/laminas-cache-storage-adapter-filesystem": "*",
-        "laminas/laminas-cache-storage-adapter-memory": "*",
-        "unicaen/bjy-authorize": "*",
-        "unicaen/privilege"    : "*"
+        "laminas/laminas-cache-storage-adapter-memory"    : "*",
+        "unicaen/bjy-authorize"                           : "*",
+        "unicaen/privilege"                               : "*",
+        "unicaen/utilisateur"                             : "*"
     },
     "autoload"         : {
         "psr-4": {

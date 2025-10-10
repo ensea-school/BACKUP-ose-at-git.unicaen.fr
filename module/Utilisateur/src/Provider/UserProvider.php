@@ -2,12 +2,13 @@
 
 namespace Utilisateur\Provider;
 
+use Application\HostLocalization\HostLocalizationOse;
 use Application\Provider\Privileges;
 use Application\Service\ContextService;
 use Doctrine\ORM\EntityManager;
 use Unicaen\Framework\Application\Application;
+use Unicaen\Framework\Cache\FilesystemCache;
 use Unicaen\Framework\Container\Autowire;
-use Unicaen\Framework\User\UserManager;
 use Unicaen\Framework\User\UserProfile;
 use Unicaen\Framework\User\UserProfileInterface;
 use Unicaen\Framework\User\UserAdapterInterface;
@@ -16,14 +17,13 @@ use Intervenant\Entity\Db\Statut;
 use Laminas\Authentication\AuthenticationService;
 use Utilisateur\Connecteur\LdapConnecteur;
 use Utilisateur\Entity\Db\Affectation;
-use Utilisateur\Entity\Db\Privilege;
 use Utilisateur\Entity\Db\Role;
 use Utilisateur\Entity\Db\Utilisateur;
 
 class UserProvider implements UserAdapterInterface
 {
 
-    private array $noAdminPrivileges     = [
+    private array $noAdminPrivileges = [
         Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
         Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
         Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
@@ -31,14 +31,17 @@ class UserProvider implements UserAdapterInterface
     ];
 
 
+
     public function __construct(
         private readonly EntityManager         $entityManager,
         private readonly LdapConnecteur        $ldap,
         private readonly AuthenticationService $authenticationService,
         private readonly ContextService        $contextService,
+        private readonly HostLocalizationOse   $hostLocalization,
+        private readonly FilesystemCache       $filesystemCache,
 
-        #[Autowire(config:'application/privileges')]
-        private readonly ?array $customPrivileges,
+        #[Autowire(config: 'application/privileges')]
+        private readonly ?array                $customPrivileges,
     )
     {
 
@@ -92,8 +95,10 @@ class UserProvider implements UserAdapterInterface
 
         $profiles = [];
 
+        $inEtablissement = $this->hostLocalization->inEtablissement();
+
         /* Recherche des affectations */
-        $dql   = "
+        $dql = "
             SELECT 
               a, r, s
             FROM 
@@ -104,7 +109,13 @@ class UserProvider implements UserAdapterInterface
               a.histoDestruction IS NULL
               AND a.utilisateur = :user
             ";
+        if (!$inEtablissement) {
+            $dql .= "AND r.accessibleExterieur = 1";
+        }
         $query = $this->entityManager->createQuery($dql);
+        $query->enableResultCache(true);
+        $query->setResultCacheId('role_profiles_' . $user->getId());
+
         $query->setParameters(['user' => $user->getId()]);
 
         /** @var Affectation[] $affectations */
@@ -119,7 +130,7 @@ class UserProvider implements UserAdapterInterface
         $utilisateurCode = $this->ldap->getUtilisateurCourantCode();
 
         if (!$utilisateurCode) {
-            // on en reste là si pas de coe trouvé
+            // on en reste là si pas de code trouvé
             return $profiles;
         }
 
@@ -138,6 +149,9 @@ class UserProvider implements UserAdapterInterface
               AND i.annee = :annee
         ";
         $query = $this->entityManager->createQuery($dql);
+        $query->enableResultCache(true);
+        $query->setResultCacheId('intervenant_profiles_' . $user->getId() . '_' . $annee->getId());
+
         $query->setParameters(['utilisateurCode' => $utilisateurCode, 'annee' => $annee->getId()]);
 
         /** @var Intervenant[] $intervenants */
@@ -176,28 +190,52 @@ class UserProvider implements UserAdapterInterface
      */
     public function getCurrentPrivileges(?UserProfileInterface $profile): array
     {
+        $role   = $profile?->getContext('role');
+        $statut = $profile?->getContext('statut');
+
+        $rolePrivileges   = $this->getRolePrivileges($role);
+        $statutPrivileges = $this->getStatutPrivileges($statut);
+        $customPrivileges = $this->customPrivileges[$role?->getCode()] ?? [];
+
+        return array_merge($rolePrivileges, $statutPrivileges, $customPrivileges);
+    }
+
+
+
+    protected function getStatutPrivileges(?Statut $statut)
+    {
+        if (!$statut) {
+            return [];
+        }
+        return array_keys($statut->getPrivileges());
+    }
+
+
+
+    protected function getRolePrivileges(?Role $role): array
+    {
+        if (!$role) {
+            return [];
+        }
+        if (Role::ADMINISTRATEUR === $role->getCode()) {
+            return $this->getAvailablePrivileges();
+        }
+
         $privileges = [];
 
-        /** @var Statut $statut */
-        if ($statut = $profile?->getContext('statut')) {
-            /** @var Statut|null $statut */
-            $privileges = array_keys($statut->getPrivileges());
-        } elseif ($role = $profile?->getContext('role')) {
-            /** @var Role|null $role */
-            /** @var Privilege[] $ps */
-            if (Role::ADMINISTRATEUR === $role->getCode()) {
-                $privileges = $this->getAdministrateurPrivileges();
-            } else {
-                $ps         = $role->getPrivileges();
-                $privileges = [];
-                foreach ($ps as $privilege) {
-                    $privileges[] = $privilege->getFullCode();
-                }
-                $customPrivileges = $this->customPrivileges[$role->getCode()] ?? [];
-                foreach( $customPrivileges as $privilege ){
-                    $privileges[] = $privilege;
-                }
-            }
+        $sql    = "
+        SELECT 
+          cp.code || '-' || p.code priv_code
+        FROM 
+          privilege p 
+          JOIN categorie_privilege cp ON cp.id = p.categorie_id
+          JOIN role_privilege rp ON rp.privilege_id = p.id
+        WHERE
+            rp.role_id = :roleId
+        ";
+        $result = $this->entityManager->getConnection()->executeQuery($sql, ['roleId' => $role->getId()]);
+        while ($privilege = $result->fetchOne()) {
+            $privileges[] = $privilege;
         }
 
         return $privileges;
@@ -208,13 +246,18 @@ class UserProvider implements UserAdapterInterface
     public function getAvailablePrivileges(): array
     {
         $privileges = [];
-        $dql = 'SELECT p, c FROM '.Privilege::class.' p JOIN p.categorie c';
-        $query = $this->entityManager->createQuery($dql);
 
-        /** @var Privilege[] $res */
-        $res = $query->getResult();
-        foreach( $res as $privilege ){
-            $privileges[] = $privilege->getFullCode();
+        $sql    = "
+        SELECT 
+          cp.code || '-' || p.code priv_code
+        FROM 
+          privilege p 
+          JOIN categorie_privilege cp ON cp.id = p.categorie_id
+          JOIN role_privilege rp ON rp.privilege_id = p.id
+        ";
+        $result = $this->entityManager->getConnection()->executeQuery($sql);
+        while ($privilege = $result->fetchOne()) {
+            $privileges[] = $privilege;
         }
 
         return $privileges;
@@ -248,4 +291,17 @@ class UserProvider implements UserAdapterInterface
         return;
     }
 
+
+
+    public function onClearCache(): void
+    {
+        $user  = $this->getUser();
+        $annee = $this->contextService->getAnnee();
+
+        if ($user) {
+            $this->filesystemCache->delete('Doctrine/intervenant_profiles_' . $user->getId() . '_' . $annee->getId());
+            $this->filesystemCache->delete('Doctrine/role_profiles_' . $user->getId());
+
+        }
+    }
 }

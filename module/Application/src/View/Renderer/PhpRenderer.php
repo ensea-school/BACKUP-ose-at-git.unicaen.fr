@@ -213,12 +213,6 @@ namespace Application\View\Renderer;
  * @method \UnicaenImport\View\Helper\DifferentielListe differentielListe($lignes)
  * @method \UnicaenMail\View\Helper\MailViewHelper mail(\UnicaenMail\Entity\Db\Mail $mail, array $options = [])
  * @method \UnicaenMail\View\Helper\MailsViewHelper mails(array $mails, array $options = [])
- * @method \UnicaenUtilisateur\View\Helper\RoleViewHelper role(UnicaenUtilisateur\Entity\Db\RoleInterface $role, array $options = [])
- * @method \UnicaenUtilisateur\View\Helper\UserCurrent userCurrent($affectationFineSiDispo = false)
- * @method \UnicaenUtilisateur\View\Helper\UserInfo userInfo($affectationPrincipale = false)
- * @method \UnicaenUtilisateur\View\Helper\UserProfile userProfile($userProfileSelectable = false)
- * @method \UnicaenUtilisateur\View\Helper\UserProfileSelect userProfileSelect()
- * @method \UnicaenUtilisateur\View\Helper\UserStatus userStatus($displayConnectionLink = true)
  * @method \UnicaenVue\View\Helper\ViteViewHelper vite()
  * @method \UnicaenVue\View\Helper\VueViewHelper vue(?string $name = null, array $props = [])
  *

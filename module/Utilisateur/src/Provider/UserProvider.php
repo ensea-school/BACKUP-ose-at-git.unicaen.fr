@@ -281,7 +281,7 @@ class UserProvider implements UserAdapterInterface
 
     public function onBeforeProfileChange(): void
     {
-        return;
+        $this->onClearCache();
     }
 
 
@@ -301,7 +301,6 @@ class UserProvider implements UserAdapterInterface
         if ($user) {
             $this->filesystemCache->delete('Doctrine/intervenant_profiles_' . $user->getId() . '_' . $annee->getId());
             $this->filesystemCache->delete('Doctrine/role_profiles_' . $user->getId());
-
         }
     }
 }

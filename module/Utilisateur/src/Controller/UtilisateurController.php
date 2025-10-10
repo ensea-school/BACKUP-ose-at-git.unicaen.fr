@@ -3,6 +3,7 @@
 namespace Utilisateur\Controller;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Unicaen\Framework\Authorize\Authorize;
 use Unicaen\Framework\User\UserManager;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
@@ -26,10 +27,11 @@ class UtilisateurController extends BaseController
 
 
 
-    public function selectionnerProfilAction($addFlashMessage = true)
+    public function selectionnerProfilAction($addFlashMessage = true): JsonModel
     {
-        $roleId = $this->axios()->fromPost('role');
+        $roleId      = $this->axios()->fromPost('role');
         $structureId = $this->axios()->fromPost('structure');
+        $route       = $this->axios()->fromPost('route');
 
         $this->userManager->setProfile($roleId);
 
@@ -46,22 +48,30 @@ class UtilisateurController extends BaseController
                 /** @var Structure $structure */
                 $structure = $profile->getContext('structure');
             }
-        }else{
+        } else {
             // intervenant
             $structure = null;
         }
 
         if ($role) {
             $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>.", $role->getLibelle());
-        }else{
+        } else {
             $message = sprintf("Vous endossez à présent le profil intervenant <strong>%s</strong>.", $profile->getDisplayName());
         }
-        if ($structure){
+        if ($structure) {
             $message .= sprintf(' pour la structure <strong>%s</strong>', $structure);
         }
         $this->flashMessenger()->addSuccessMessage($message);
 
-        exit;
+        $needGoHome = !$this->isAllowed(Authorize::routeResource($route));
+
+        $data = [
+            'data' => [
+                'needGoHome' => $needGoHome,
+            ],
+        ];
+
+        return new JsonModel($data);
     }
 
 

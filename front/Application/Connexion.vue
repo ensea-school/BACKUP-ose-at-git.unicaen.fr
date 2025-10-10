@@ -99,9 +99,13 @@ export default {
             document.body.classList.add("wait-cursor");
             unicaenVue.axios.post(
                 this.selectionProfilUrl,
-                {role: roleId, structure: structureId}
+                {role: roleId, structure: structureId, route: this.data.route}
             ).then((response) => {
-                window.location.href = unicaenVue.url('');
+                if (true === response.data.needGoHome) {
+                    window.location.href = unicaenVue.url('');
+                }else{
+                    window.location.reload();
+                }
             });
         },
     },

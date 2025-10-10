@@ -4,6 +4,7 @@ namespace Application\View\Helper;
 
 use Application\Service\NavbarService;
 use Unicaen\Framework\Navigation\Navigation;
+use Unicaen\Framework\Router\Router;
 use Unicaen\Framework\User\UserManager;
 use Interop\Container\ContainerInterface;
 
@@ -18,6 +19,7 @@ class LayoutViewHelperFactory
             $container->get(NavbarService::class),
             $container->get(Navigation::class),
             $container->get(UserManager::class),
+            $container->get(Router::class),
         );
 
         return $helper;

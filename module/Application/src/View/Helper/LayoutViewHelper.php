@@ -6,6 +6,7 @@ use Application\Service\NavbarService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Unicaen\Framework\Navigation\Navigation;
 use Unicaen\Framework\Navigation\Page;
+use Unicaen\Framework\Router\Router;
 use Unicaen\Framework\User\UserManager;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Service\StructureServiceAwareTrait;
@@ -28,6 +29,7 @@ class LayoutViewHelper extends AbstractHtmlElement
         private readonly NavbarService $navbarService,
         private readonly Navigation    $navigation,
         private readonly UserManager   $userManager,
+        private readonly Router        $router,
     )
     {
 
@@ -96,6 +98,7 @@ class LayoutViewHelper extends AbstractHtmlElement
             'usurpationEnabled' => $this->userManager->isUsurpationEnabled(),
             'usurpationEnCours' => $this->userManager->isUsurpationEnCours(),
             'roles'             => $roles,
+            'route'             => $this->router->getCurrentRoute()?->getName(),
             'structureId'       => null,
             'structures'        => $structures,
         ];

@@ -52,6 +52,7 @@ class EnseignementSaisieFieldset extends AbstractFieldset
         private readonly Authorize $authorize,
     )
     {
+        parent::__construct();
     }
 
 

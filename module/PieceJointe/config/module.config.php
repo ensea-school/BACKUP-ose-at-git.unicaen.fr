@@ -168,10 +168,6 @@ return [
                     'label'        => "Pièces justificatives",
                     'title'        => "Pièces justificatives du dossier de l'intervenant",
                     'route'        => 'piece-jointe/intervenant',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget'   => true,
                     'order'        => 7,
                 ],
             ],
@@ -185,7 +181,6 @@ return [
                             'label'      => "Pièces justificatives attendues par statut",
                             'title'      => "Permet de personnaliser les pièces justificatives à demander en fonction du statut des intervenants",
                             'route'      => 'piece-jointe/type-piece-jointe-statut',
-                            'withtarget' => true,
                             'order'      => 20,
                         ],
                     ],

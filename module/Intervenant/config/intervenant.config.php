@@ -118,21 +118,13 @@ return [
                     'label'        => " Rechercher",
                     'title'        => "Rechercher un intervenant",
                     'route'        => 'intervenant/rechercher',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
                     'icon'         => "fas fa-magnifying-glass",
-                    'withtarget'   => true,
                     'order'        => 1,
                 ],
                 'voir'       => [
                     'label'        => "Fiche individuelle",
                     'title'        => "Consultation de la fiche de l'intervenant {id}",
                     'route'        => 'intervenant/voir',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget'   => true,
                     'order'        => 2,
                 ],
             ],

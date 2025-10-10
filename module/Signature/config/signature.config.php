@@ -72,7 +72,6 @@ return [
                             'label'      => "Gestion des circuits de signatures",
                             'title'      => "Gestion des circuits de signatures",
                             'route'      => 'signature-flow',
-                            'withtarget' => true,
                             'order'      => 10,
                         ],
                     ],

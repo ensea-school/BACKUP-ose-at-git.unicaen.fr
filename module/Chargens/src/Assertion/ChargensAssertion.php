@@ -62,7 +62,7 @@ class ChargensAssertion extends AbstractAssertion
             case 'scenario-supprimer':
             case 'scenario-saisir':
                 /** @var Scenario $scenario */
-                $scenario = $this->getMvcEvent()->getParam('scenario');
+                $scenario = $this->getParam('scenario');
                 if ($scenario){
                     return $this->assertScenarioEdition($scenario);
                 }else{

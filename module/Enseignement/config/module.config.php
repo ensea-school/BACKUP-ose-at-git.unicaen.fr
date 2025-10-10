@@ -173,22 +173,12 @@ return [
                     'label'               => "Enseignements prévisionnels",
                     'title'               => "Enseignements prévisionnels de l'intervenant",
                     'route'               => 'intervenant/enseignement-prevu',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE,
-                    'withtarget'          => true,
                     'order'               => 6,
                 ],*/
                 'validation-enseignement-prevu'   => [
                     'label'               => "Validation des enseignements prévisionnels",
                     'title'               => "Validation des enseignements prévisionnels de l'intervenant",
                     'route'               => 'intervenant/validation/enseignement/prevu',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_VALIDATION,
-                    'withtarget'          => true,
                     'order'               => 8,
                 ],
 
@@ -196,22 +186,12 @@ return [
                     'label'               => "Enseignements réalisés",
                     'title'               => "Constatation des enseignements réalisés",
                     'route'               => 'intervenant/enseignement-realise',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE,
-                    'withtarget'          => true,
                     'order'               => 13,
                 ],*/
                 'validation-enseignement-realise' => [
                     'label'               => "Validation des enseignements réalisés",
                     'title'               => "Validation des enseignements réalisés de l'intervenant",
                     'route'               => 'intervenant/validation/enseignement/realise',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'workflow-etape-code' => WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE,
-                    'withtarget'          => true,
                     'order'               => 14,
                 ],
             ],

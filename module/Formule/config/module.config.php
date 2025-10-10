@@ -61,11 +61,7 @@ return [
                     'label'        => "Calcul HETD",
                     'title'        => "Calcul des heures équivalent TD {id}",
                     'route'        => 'intervenant/details',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
                     'action'       => 'details',
-                    'withtarget'   => true,
                     'order'        => 3,
                 ],
             ],

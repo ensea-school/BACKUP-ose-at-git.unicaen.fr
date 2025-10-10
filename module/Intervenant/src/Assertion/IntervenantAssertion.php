@@ -47,26 +47,9 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(Page $page): bool
-    {
-        $page = $page->getData();
-        if (isset($page['workflow-etape-code'])) {
-            $etape       = $page['workflow-etape-code'];
-            $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-            if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-
     protected function assertController(string $controller, ?string $action): bool
     {
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+        $intervenant = $this->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
         switch ($action) {

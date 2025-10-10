@@ -50,10 +50,6 @@ class RouteEntitiesInjector
 
                     $e->setParam($name, $entity);
                 break;
-                case 'typeAgrementCode':
-                    $repo = $this->getEntityManager()->getRepository(TypeAgrement::class);
-                    $e->setParam('typeAgrement', $repo->findOneBy(['code' => $value]));
-                break;
                 default:
                     if (array_key_exists($name, $entityParams)) {
                         if (0 !== (int)$value) {

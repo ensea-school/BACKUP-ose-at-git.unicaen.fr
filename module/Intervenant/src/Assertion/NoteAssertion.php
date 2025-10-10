@@ -52,7 +52,7 @@ class NoteAssertion extends AbstractAssertion
         /**
          * @var Note $note
          */
-        $note = $this->getMvcEvent()->getParam('note');
+        $note = $this->getParam('note');
 
         switch ($action) {
             case 'supprimer':

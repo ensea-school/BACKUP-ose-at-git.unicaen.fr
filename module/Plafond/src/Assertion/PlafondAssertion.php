@@ -28,7 +28,7 @@ class PlafondAssertion extends AbstractAssertion
      */
     protected function assertController(string $controller, ?string $action): bool
     {
-        $structure = $this->getMvcEvent()->getParam('structure');
+        $structure = $this->getParam('structure');
         /* @var $structure Structure */
 
         // Si c'est bon alors on affine...

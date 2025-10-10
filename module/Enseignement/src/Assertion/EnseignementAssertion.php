@@ -8,7 +8,6 @@ use Enseignement\Controller\EnseignementController;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Unicaen\Framework\Authorize\AbstractAssertion;
-use Unicaen\Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
@@ -37,49 +36,6 @@ class EnseignementAssertion extends AbstractAssertion
     use TypeVolumeHoraireServiceAwareTrait;
     use RegleStructureValidationServiceAwareTrait;
     use ServiceAssertionAwareTrait;
-
-
-
-    protected function assertPage (Page $page): bool
-    {
-        $page = $page->getData();
-        $intervenant = null;
-        if (isset($page['workflow-etape-code'])) {
-            $etape       = $page['workflow-etape-code'];
-            $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-            if (
-                $intervenant
-                && $this->getServiceContext()->getStructure()
-                && (WorkflowEtape::ENSEIGNEMENT_VALIDATION == $etape || WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE == $etape)
-            ) { // dans ce cas ce n'est pas le WF qui agit, mais on voit la validation dès qu'on a des services directement,
-                // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
-                return $this->assertHasEnseignements($intervenant, $this->getServiceContext()->getStructure(), $etape);
-            } else {
-                if (!$this->getAssertionService()->assertEtapeAtteignable($etape, $intervenant)) {
-                    return false;
-                }
-            }
-        }
-
-        if ($intervenant && isset($page['route'])) {
-            switch ($page['route']) {
-                case 'intervenant/validation/enseignement/prevu':
-                    return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_PREVU_VISUALISATION);
-                case 'intervenant/validation/enseignement/realise':
-                    return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
-                case 'intervenant/enseignement-prevu':
-                    return $this->assertPageEnseignements($intervenant, TypeVolumeHoraire::CODE_PREVU);
-                break;
-                case 'intervenant/enseignement-realise':
-                    return $this->assertPageEnseignements($intervenant, TypeVolumeHoraire::CODE_REALISE);
-                break;
-            }
-        }
-
-        return true;
-    }
-
 
 
     /**
@@ -160,7 +116,7 @@ class EnseignementAssertion extends AbstractAssertion
      */
     protected function assertController (string $controller, ?string $action): bool
     {
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+        $intervenant = $this->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
         if (!$this->getAssertionService()->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!

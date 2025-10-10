@@ -75,11 +75,6 @@ return [
                     'label'               => "Demande de mise en paiement",
                     'title'               => "Demande de mise en paiement",
                     'route'               => 'intervenant/mise-en-paiement/demande',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'withtarget'          => true,
-                    'workflow-etape-code' => WorkflowEtape::DEMANDE_MEP,
                     'order'               => 16,
                 ],
             ],

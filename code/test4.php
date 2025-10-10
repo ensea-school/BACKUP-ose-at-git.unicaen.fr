@@ -6,8 +6,6 @@
  * @var $io         \Symfony\Component\Console\Style\SymfonyStyle
  */
 
-$router = $container->get(\Unicaen\Framework\Router\Router::class);
+$navigation = $container->get(\Unicaen\Framework\Navigation\Navigation::class);
 
-$route = $router->getCurrentRoute()->getName();
-
-dump($route);
+dump($navigation->home->getPage('intervenant')->getPages());

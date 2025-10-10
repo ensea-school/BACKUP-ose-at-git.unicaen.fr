@@ -88,10 +88,6 @@ return [
                     'label'        => "Modification de service dû",
                     'title'        => "Modification de service dû de l'intervenant {id}",
                     'route'        => 'intervenant/modification-service-du',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget'   => true,
                     'order'        => 4,
                 ],
             ],

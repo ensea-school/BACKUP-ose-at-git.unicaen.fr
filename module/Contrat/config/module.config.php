@@ -240,10 +240,6 @@ return [
                     'label'        => "Contrat / avenant",
                     'title'        => "Contrat et avenants de l'intervenant",
                     'route'        => 'intervenant/contrat',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget'   => true,
                     'order'        => 12,
                 ],
             ],

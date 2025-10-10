@@ -118,10 +118,6 @@ return [
                     'label'        => "Candidatures",
                     'title'        => "Liste de vos candidatures en cours",
                     'route'        => 'intervenant/candidature',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget'   => true,
                     'order'        => 5,
                 ],
             ],

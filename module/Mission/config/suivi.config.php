@@ -79,10 +79,6 @@ return [
                     'label'               => "Suivi de missions",
                     'title'               => "Suivi de missions",
                     'route'               => 'intervenant/missions-suivi',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'withtarget'          => true,
                     'order'               => 13,
                 ],
             ],

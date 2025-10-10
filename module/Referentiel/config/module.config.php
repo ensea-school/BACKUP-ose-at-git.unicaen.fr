@@ -148,22 +148,12 @@ return [
                     'label'               => "Validation du référentiel prévisionnel",
                     'title'               => "Validation du référentiel prévisionnel de l'intervenant",
                     'route'               => 'intervenant/validation/referentiel/prevu',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'workflow-etape-code' => WorkflowEtape::REFERENTIEL_VALIDATION,
-                    'withtarget'          => true,
                     'order'               => 9,
                 ],
                 'validation-referentiel-realise' => [
                     'label'               => "Validation du référentiel réalisé",
                     'title'               => "Validation du référentiel réalisé de l'intervenant",
                     'route'               => 'intervenant/validation/referentiel/realise',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'workflow-etape-code' => WorkflowEtape::REFERENTIEL_VALIDATION_REALISE,
-                    'withtarget'          => true,
                     'order'               => 15,
                 ],
             ],

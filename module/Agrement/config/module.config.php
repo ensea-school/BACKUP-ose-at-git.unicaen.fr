@@ -84,14 +84,14 @@ return [
                     'may_terminate' => true,
                     'child_routes'  => [
                         'conseil-academique' => [
-                            'route'    => '/conseil-academique',
+                            'route'    => 'conseil-academique',
                             'action'   => 'saisir-lot',
                             'defaults' => [
                                 'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
                             ],
                         ],
                         'conseil-restreint'  => [
-                            'route'    => '/conseil-restreint',
+                            'route'    => 'conseil-restreint',
                             'action'   => 'saisir-lot',
                             'defaults' => [
                                 'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,
@@ -114,20 +114,12 @@ return [
                     'label'        => 'Agrément : Conseil restreint',
                     'title'        => 'Agrément : Conseil restreint',
                     'route'        => 'intervenant/agrement/conseil-restreint',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget'   => true,
                     'order'        => 10,
                 ],
                 'agrement-conseil-academique' => [
                     'label'        => 'Agrément : Conseil académique',
                     'title'        => 'Agrément : Conseil académique',
                     'route'        => 'intervenant/agrement/conseil-academique',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget'   => true,
                     'order'        => 11,
                 ],
             ],

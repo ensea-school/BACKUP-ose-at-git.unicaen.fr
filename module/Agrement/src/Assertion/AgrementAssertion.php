@@ -5,15 +5,14 @@ namespace Agrement\Assertion;
 use Agrement\Entity\Db\Agrement;
 use Agrement\Entity\Db\TblAgrement;
 use Agrement\Entity\Db\TypeAgrement;
+use Agrement\Service\Traits\TypeAgrementServiceAwareTrait;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Contrat\Service\TblContratServiceAwareTrait;
 use Unicaen\Framework\Authorize\AbstractAssertion;
-use Unicaen\Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
-use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -27,6 +26,7 @@ class AgrementAssertion extends AbstractAssertion
     use TblContratServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use TypeAgrementServiceAwareTrait;
 
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
@@ -75,10 +75,16 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertController(string $controller, ?string $action): bool
     {
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-        $typeAgrement = $this->getMvcEvent()->getParam('typeAgrement');
-        /* @var $typeAgrement TypeAgrement */
+        $intervenant = $this->getParam('intervenant');
+
+        $typeAgrement = $this->getParam('typeAgrement');
+        if (!$typeAgrement){
+            $typeAgrement = $this->getServiceTypeAgrement()->getByCode($this->getParam('typeAgrementCode'));
+        }
+        if (!$typeAgrement){
+         //   throw new \Exception('Le type d\'agrément doit être fourni pour que l\'assertion puisse fonctionner');
+        }
 
         switch ($action) {
             case 'lister':
@@ -119,54 +125,6 @@ class AgrementAssertion extends AbstractAssertion
         }
 
         return true;
-    }
-
-
-
-    protected function assertPage(Page $page): bool
-    {
-        $page = $page->getData();
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-        if ($this->getServiceContext()->getIntervenant() && str_starts_with($page['route'], 'gestion/')) {
-            return false;
-        }
-
-        if ($page['route'] == 'gestion/agrement'){
-            return $this->authorize->isAllowedPrivilege(Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION)
-                || $this->authorize->isAllowedPrivilege(Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION);
-        }
-
-        if ($page['route'] == 'gestion/agrement/conseil-restreint'){
-            return $this->authorize->isAllowedPrivilege(Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION);
-        }
-
-        if ($page['route'] == 'gestion/agrement/conseil-academique'){
-            return $this->authorize->isAllowedPrivilege(Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION);
-        }
-
-        if (!str_starts_with($page['route'], 'intervenant/agrement')){
-            return false; // page inconnue => on bloque par sécurité
-        }
-
-        if (!$intervenant){
-            return false;
-        }
-
-        $wfEtape   = null;
-        $privilege = null;
-        if (str_contains($page['route'], 'conseil-restreint')) {
-            $wfEtape   = WorkflowEtape::CONSEIL_RESTREINT;
-            $privilege = Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION;
-        } elseif (str_contains($page['route'], 'conseil-academique')) {
-            $wfEtape   = WorkflowEtape::CONSEIL_ACADEMIQUE;
-            $privilege = Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION;
-        }
-
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
-        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-        return $feuilleDeRoute->get($wfEtape)?->isAllowed() ?? false;
     }
 
 

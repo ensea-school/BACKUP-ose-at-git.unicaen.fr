@@ -6,6 +6,7 @@ namespace ExportRh\Assertion;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use ExportRh\Service\ExportRhServiceAwareTrait;
+use Unicaen\Framework\Application\Application;
 use Unicaen\Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -23,18 +24,12 @@ class ExportRhAssertion extends AbstractAssertion
     const PRIV_CAN_INTERVENANT_EXPORT_RH = 'intervenant-export-rh';
 
 
-    /* ---- Routage général ---- */
-    public function __invoke(array $page) // gestion des visibilités de menus
-    {
-        return $this->assertPage($page);
-    }
-
 
     protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
         // pareil si le rôle ne possède pas le privilège adéquat
 
-        $config = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
+        $config = Application::getInstance()->container()->get('config');
         $exportRhActif = $config['export-rh']['actif'];
         //Si le module export rh n'est pas activé alors on renvoie toujours false
         if (!$exportRhActif) {
@@ -61,7 +56,6 @@ class ExportRhAssertion extends AbstractAssertion
             return false;
         }
 
-        $config = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
         $anneeUniversitaireEnCours = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
         $anneeContexte = $this->getServiceContext()->getAnnee();
 

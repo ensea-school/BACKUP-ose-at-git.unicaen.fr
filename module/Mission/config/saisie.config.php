@@ -110,10 +110,6 @@ return [
                     'label' => "Missions",
                     'title' => "Missions",
                     'route' => 'intervenant/missions',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget' => true,
                     'order' => 8,
                 ],
             ],

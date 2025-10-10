@@ -41,49 +41,6 @@ class ReferentielAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(Page $page): bool
-    {
-        $page = $page->getData();
-        $intervenant = null;
-        if (isset($page['workflow-etape-code'])) {
-            $etape = $page['workflow-etape-code'];
-            $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-            if (
-                $intervenant
-                && $this->getServiceContext()->getStructure()
-                && (WorkflowEtape::REFERENTIEL_VALIDATION == $etape || WorkflowEtape::REFERENTIEL_VALIDATION_REALISE == $etape)
-            ) { // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...
-                // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
-                return $this->assertHasReferentiel($intervenant, $this->getServiceContext()->getStructure(), $etape);
-            } else {
-                if (!$this->getAssertionService()->assertEtapeAtteignable($etape, $intervenant)) {
-                    return false;
-                }
-            }
-        }
-
-        if ($intervenant && isset($page['route'])) {
-            switch ($page['route']) {
-                case 'intervenant/validation/referentiel/prevu':
-                    return $this->assertEntity($intervenant, Privileges::REFERENTIEL_PREVU_VISUALISATION);
-                    break;
-                case 'intervenant/validation/referentiel/realise':
-                    return $this->assertEntity($intervenant, Privileges::REFERENTIEL_REALISE_VISUALISATION);
-                    break;
-                case 'intervenant/referentiel-prevu':
-                    return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_PREVU);
-                    break;
-                case 'intervenant/referentiel-realise':
-                    return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_REALISE);
-                    break;
-            }
-        }
-
-        return true;
-    }
-
-
     /**
      * @param ResourceInterface $entity
      * @param string $privilege
@@ -162,7 +119,7 @@ class ReferentielAssertion extends AbstractAssertion
      */
     protected function assertController(string $controller, ?string $action): bool
     {
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+        $intervenant = $this->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
         if (!$this->getAssertionService()->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!

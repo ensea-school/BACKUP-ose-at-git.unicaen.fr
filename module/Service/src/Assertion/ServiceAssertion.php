@@ -33,47 +33,10 @@ class ServiceAssertion extends AbstractAssertion
     use RegleStructureValidationServiceAwareTrait;
 
 
-    protected function assertPage(Page $page): bool
-    {
-        $page = $page->getData();
-        $intervenant = null;
-        if (isset($page['workflow-etape-code'])) {
-            $etape       = $page['workflow-etape-code'];
-            $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-            if (
-                $intervenant
-                && $this->getServiceContext()->getStructure()
-                && (in_array($etape, [WorkflowEtape::ENSEIGNEMENT_VALIDATION, WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE, WorkflowEtape::REFERENTIEL_VALIDATION, WorkflowEtape::REFERENTIEL_VALIDATION_REALISE]))
-            ) { // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...
-                // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
-                return $this->assertHasServices($intervenant, $this->getServiceContext()->getStructure(), $etape);
-            } else {
-                if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
-                    return false;
-                }
-            }
-        }
-
-        if ($intervenant && isset($page['route'])) {
-            switch ($page['route']) {
-                case 'intervenant/services-prevus':
-                    return $this->assertPageServices($intervenant, TypeVolumeHoraire::CODE_PREVU);
-                    break;
-                case 'intervenant/services-realises':
-                    return $this->assertPageServices($intervenant, TypeVolumeHoraire::CODE_REALISE);
-                    break;
-            }
-        }
-
-        return true;
-    }
-
-
 
     protected function assertController(string $controller, ?string $action): bool
     {
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+        $intervenant = $this->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
         if (!$this->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!

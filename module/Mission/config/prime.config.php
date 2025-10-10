@@ -102,11 +102,6 @@ return [
                     'label'               => "Indemnités de fin de contrat",
                     'title'               => "Indemnités de fin de contrat",
                     'route'               => 'intervenant/prime-mission',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'workflow-etape-code' => WorkflowEtape::MISSION_PRIME,
-                    'withtarget'          => true,
                     'order'               => 14,
                 ],
             ],

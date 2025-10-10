@@ -136,31 +136,18 @@ return [
                     'label'               => "Visualisation des mises en paiement",
                     'title'               => "Visualisation des mises en paiement",
                     'route'               => 'intervenant/mise-en-paiement/visualisation',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'withtarget'          => true,
-                    'workflow-etape-code' => WorkflowEtape::SAISIE_MEP,
                     'order'               => 17,
                 ],
                 'edition-mise-en-paiement'       => [
                     'label'        => "Annulation de mises en paiement",
                     'title'        => "Annulation de mises en paiement",
                     'route'        => 'intervenant/mise-en-paiement/edition',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget'   => true,
                     'order'        => 18,
                 ],
                 'detail-calculs-paiements'       => [
                     'label'        => "Détails de calculs des paiements",
                     'title'        => "Détails de calculs des paiements",
                     'route'        => 'paiement/details-calculs',
-                    'paramsInject' => [
-                        'intervenant',
-                    ],
-                    'withtarget'   => true,
                     'order'        => 19,
                 ],
             ],

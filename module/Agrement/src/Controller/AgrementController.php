@@ -8,6 +8,7 @@ use Agrement\Form\Traits\SaisieAwareTrait;
 use Agrement\Service\AgrementService;
 use Agrement\Service\Traits\AgrementServiceAwareTrait;
 use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
+use Agrement\Service\Traits\TypeAgrementServiceAwareTrait;
 use Application\Controller\AbstractController;
 use Application\Provider\Privileges;
 use Application\Provider\Tbl\TblProvider;
@@ -36,6 +37,7 @@ class AgrementController extends AbstractController
     use StructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
+    use TypeAgrementServiceAwareTrait;
 
 
     /**
@@ -47,9 +49,9 @@ class AgrementController extends AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            Agrement::class,
-            TypeAgrement::class,
-        ]);
+                                                                  Agrement::class,
+                                                                  TypeAgrement::class,
+                                                              ]);
     }
 
 
@@ -88,11 +90,15 @@ class AgrementController extends AbstractController
     {
         $this->initFilters();
 
-        $typeAgrement = $this->getEvent()->getParam('typeAgrement');
-        $intervenant  = $this->getEvent()->getParam('intervenant');
+        $typeAgrementCode = $this->params()->fromRoute('typeAgrementCode');
+        $typeAgrement     = $this->getServiceTypeAgrement()->getByCode($typeAgrementCode);
+        $intervenant      = $this->getEvent()->getParam('intervenant');
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+        if (!$typeAgrement) {
+            throw new \Exception('Le type d\'agrément n\'est pas précisé');
         }
 
         $qb = $this->getServiceTblAgrement()->finderByTypeAgrement($typeAgrement);
@@ -313,9 +319,9 @@ class AgrementController extends AbstractController
         $listeIntervenants = $this->getServiceIntervenant()->getIntervenants($intervenant);
         foreach ($listeIntervenants as $objectIntervenant) {
             $this->getServiceWorkflow()->calculerTableauxBord([
-                TblProvider::AGREMENT,
-                TblProvider::CONTRAT,
-            ], $objectIntervenant);
+                                                                  TblProvider::AGREMENT,
+                                                                  TblProvider::CONTRAT,
+                                                              ], $objectIntervenant);
         }
     }
 }

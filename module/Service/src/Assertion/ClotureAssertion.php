@@ -51,26 +51,6 @@ class ClotureAssertion extends AbstractAssertion
 
 
 
-    protected function assertPage(Page $page): bool
-    {
-        $page = $page->getData();
-        if (isset($page['workflow-etape-code'])) {
-            $etape       = $page['workflow-etape-code'];
-            $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-            $wfEtape        = $feuilleDeRoute->get($etape);
-
-            if (!$wfEtape || !$wfEtape->isAllowed()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-
     protected function assertCloture(?Intervenant $intervenant = null): bool
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);

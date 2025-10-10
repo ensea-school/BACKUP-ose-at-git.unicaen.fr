@@ -33,15 +33,10 @@ class AdministrationService
             }
         }
 
-        // Nettoyage des proxies
-        $destPath = $em->getConfiguration()->getProxyDir();
-        if (!is_dir($destPath)) {
-            mkdir($destPath, 0775, true);
-        }
-
-        $destPath  = realpath($destPath);
+        $proxyDir = $em->getConfiguration()->getProxyDir();
+        $destPath  = realpath($proxyDir);
         $metadatas = $em->getMetadataFactory()->getAllMetadata();
-        $em->getProxyFactory()->generateProxyClasses($metadatas, $destPath);
+        $em->getProxyFactory()->generateProxyClasses($metadatas, $proxyDir);
 
         // Réattribuer les permissions
         $filesystem->chmod($cachePath, 0777, 0000, true);

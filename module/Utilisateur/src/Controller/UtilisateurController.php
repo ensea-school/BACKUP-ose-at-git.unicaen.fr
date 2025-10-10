@@ -2,25 +2,35 @@
 
 namespace Utilisateur\Controller;
 
+use Application\Controller\AbstractController;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Unicaen\Framework\Authorize\Authorize;
 use Unicaen\Framework\User\UserManager;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
-use UnicaenAuthentification\Controller\UtilisateurController as BaseController;
+use UnicaenAuthentification\Authentication\SessionIdentity;
+use UnicaenAuthentification\Authentication\Storage\Usurpation;
+use UnicaenAuthentification\Service\UserContext;
+use Utilisateur\Connecteur\LdapConnecteur;
 use Utilisateur\Entity\Db\Role;
 use Utilisateur\Service\UtilisateurServiceAwareTrait;
 
 
-class UtilisateurController extends BaseController
+class UtilisateurController extends AbstractController
 {
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
 
     public function __construct(
-        private readonly UserManager $userManager,
+        private readonly UserManager           $userManager,
+        private readonly UserContext           $userContext,
+        private readonly LdapConnecteur        $ldap,
+        private readonly AuthenticationService $authenticationService,
     )
     {
     }
@@ -72,6 +82,48 @@ class UtilisateurController extends BaseController
         ];
 
         return new JsonModel($data);
+    }
+
+
+
+    public function usurperIdentiteAction(): Response
+    {
+        $request = $this->getRequest();
+        if (!$request instanceof Request) {
+            exit(1);
+        }
+
+        $usernameUsurpe = $request->getQuery('identity', $request->getPost('identity'));
+        if (!$usernameUsurpe) {
+            return $this->redirect()->toRoute('home');
+        }
+
+
+        $utilisateurUsurpe = $this->ldap->getUtilisateur($usernameUsurpe);
+
+        if ($utilisateurUsurpe === null) {
+            $this->flashMessenger()->addErrorMessage(
+                "La demande d'usurpation du compte '$usernameUsurpe' a échoué car aucun compte utilisateur correspondant " .
+                "n'a été trouvé."
+            );
+            return $this->redirect()->toRoute('home');
+        }
+
+        $this->userContext->usurperIdentite($usernameUsurpe);
+
+        return $this->redirect()->toRoute('home');
+    }
+
+
+
+    public function stopperUsurpationAction(): Response
+    {
+        $currentIdentityArray = $this->userContext->getIdentity();
+        $usurpateur           = $currentIdentityArray[Usurpation::TYPE][Usurpation::KEY_USURPATEUR];
+        $sessionIdentity      = SessionIdentity::newInstance($usurpateur->getUsername(), $this->userContext->getAuthenticationType());
+        $this->authenticationService->getStorage()->write($sessionIdentity);
+
+        return $this->redirect()->toRoute('home');
     }
 
 

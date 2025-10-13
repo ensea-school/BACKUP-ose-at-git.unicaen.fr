@@ -45,9 +45,18 @@ foreach ($data as $d) {
     }
 
     if (!isset($transData['intervenants'][$iid]['services'][$sid])) {
+        if ($d['TYPE_FORMATION_LIBELLE']) {
+            $typeFormation = $d['TYPE_FORMATION_LIBELLE'];
+        } else {
+            if ($d['FONCTION_REFERENTIEL_LIBELLE']) {
+                $typeFormation = "Référentiel";
+            } else {
+                $typeFormation = "Hors établissment";
+            }
+        }
         $transData['intervenants'][$iid]['services'][$sid] = [
             'composante'     => $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
-            'type_formation' => $d['TYPE_FORMATION_LIBELLE'] ?: 'Référentiel',
+            'type_formation' => $typeFormation,
             'formation'      => $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
             'enseignement'   => $d['ELEMENT_LIBELLE'] ? $d['ELEMENT_LIBELLE'] : $d['FONCTION_REFERENTIEL_LIBELLE'],
             'fi'             => 0,

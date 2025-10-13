@@ -525,7 +525,7 @@ ORDER BY
             "NB_GROUPE_TD"              : { "libelle": "Nbr groupes TD"},
             "HEURES_TD"                 : { "libelle": "Nbr heures TD"},
             "NB_GROUPE_TP"              : { "libelle": "Nbr groupes TP"},
-            "HEURES_TP"                 : { "libelle": "Nbr heures TP"},
+            "HEURES_TP"                 : { "libelle": "Nbr heures TP"}
         }',
     ],
 ];

@@ -11,7 +11,7 @@ $this->headTitle()->append($title = $this->translate("Opération impossible")) ?
     <h3><?= $previous->getMessage() ?></h3>
 <?php endif ?>
 
-<?php if (Application::getInstance()->config()['global']['affichageErreurs'] ?? true): ?>
+<?php if (Application::getInstance()->inDev()): ?>
 
 <?php if (isset($this->exception) && ($this->exception instanceof \Exception || $this->exception instanceof \Error)): ?>
 

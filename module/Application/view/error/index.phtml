@@ -3,7 +3,7 @@
 use Unicaen\Framework\Application\Application;
 
 $this->headTitle()->append($title = 'Une erreur est survenue');
-$details = (Application::getInstance()->config()['global']['affichageErreurs'] ?? true) && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);
+$details = (Application::getInstance()->inDev()) && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);
 
 ?>
 <div class="alert alert-danger exception" role="alert">

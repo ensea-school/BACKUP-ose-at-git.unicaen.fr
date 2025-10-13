@@ -10,9 +10,6 @@ return [
          * Correspond à l'url à entrer pour accéder à la page d'accueil de OSE, sans http:// ou https:// */
         'domain'           => '',
 
-        /* Affichage complet des erreurs (false en production) */
-        'affichageErreurs' => true,
-
         /* Langue utilisée (la liste des langues est disponible dans le répertoire /language de l'application) */
         'locale' => 'fr_FR',
 

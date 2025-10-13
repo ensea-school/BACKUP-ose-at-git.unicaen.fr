@@ -43,8 +43,8 @@ return [
     ],
 
     'view_manager'    => [
-        'display_not_found_reason' => $config['global']['affichageErreurs'] ?? true, // display 404 reason in template
-        'display_exceptions'       => $config['global']['affichageErreurs'] ?? true,
+        'display_not_found_reason' => Application::getInstance()->inDev(), // display 404 reason in template
+        'display_exceptions'       => Application::getInstance()->inDev(),
     ],
 
     'translator' => [

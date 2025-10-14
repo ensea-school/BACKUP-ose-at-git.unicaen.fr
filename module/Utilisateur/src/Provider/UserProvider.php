@@ -245,30 +245,15 @@ class UserProvider implements UserAdapterInterface
 
     public function getAvailablePrivileges(): array
     {
-        $privileges = [];
-
-        $sql    = "
-        SELECT 
-          cp.code || '-' || p.code priv_code
-        FROM 
-          privilege p 
-          JOIN categorie_privilege cp ON cp.id = p.categorie_id
-          JOIN role_privilege rp ON rp.privilege_id = p.id
-        ";
-        $result = $this->entityManager->getConnection()->executeQuery($sql);
-        while ($privilege = $result->fetchOne()) {
-            $privileges[] = $privilege;
-        }
-
-        return $privileges;
+        $rc         = new \ReflectionClass(Privileges::class);
+        return array_values($rc->getConstants());
     }
 
 
 
     protected function getAdministrateurPrivileges(): array
     {
-        $rc         = new \ReflectionClass(Privileges::class);
-        $privileges = array_values($rc->getConstants());
+        $privileges = $this->getAvailablePrivileges();
         foreach ($privileges as $index => $privilege) {
             if (in_array($privilege, $this->noAdminPrivileges)) {
                 unset($privileges[$index]);

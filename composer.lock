@@ -4240,21 +4240,21 @@
         },
         {
             "name": "laminas/laminas-servicemanager",
-            "version": "3.23.1",
+            "version": "3.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-servicemanager.git",
-                "reference": "06594db3a644447521eace9b5efdb12dc8446a33"
+                "reference": "b172a0df568bf37ebdfb3658263156eefe3c1e8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/06594db3a644447521eace9b5efdb12dc8446a33",
-                "reference": "06594db3a644447521eace9b5efdb12dc8446a33",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/b172a0df568bf37ebdfb3658263156eefe3c1e8c",
+                "reference": "b172a0df568bf37ebdfb3658263156eefe3c1e8c",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-stdlib": "^3.19",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
                 "psr/container": "^1.0"
             },
             "conflict": {
@@ -4277,7 +4277,7 @@
                 "laminas/laminas-container-config-test": "^0.8",
                 "mikey179/vfsstream": "^1.6.12",
                 "phpbench/phpbench": "^1.4.1",
-                "phpunit/phpunit": "^10.5.51",
+                "phpunit/phpunit": "^10.5.58",
                 "psalm/plugin-phpunit": "^0.18.4",
                 "vimeo/psalm": "^5.26.1"
             },
@@ -4326,7 +4326,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2025-08-12T08:44:02+00:00"
+            "time": "2025-10-14T09:03:51+00:00"
         },
         {
             "name": "laminas/laminas-session",
@@ -7564,7 +7564,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/framework.git",
-                "reference": "a5ab1129571557c279e511badf27feadc87b0754"
+                "reference": "cdf2b490aa03c43680b7a86cefc720341b8ba348"
             },
             "require": {
                 "laminas/laminas-permissions-acl": "^2.17",
@@ -7579,7 +7579,7 @@
                 }
             },
             "description": "Framework pour applications Unicaen",
-            "time": "2025-10-14T07:35:14+00:00"
+            "time": "2025-10-14T09:48:29+00:00"
         },
         {
             "name": "unicaen/import",

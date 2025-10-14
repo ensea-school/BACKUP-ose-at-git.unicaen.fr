@@ -10,7 +10,7 @@ return [
         ],
 
         /* Instance of Unicaen\Framework\User\UserAdapterInterface */
-        'user_provider' => UserProvider::class,
+        'user_adapter' => UserProvider::class,
     ],
 
 ];

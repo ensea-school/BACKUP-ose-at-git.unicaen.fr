@@ -32,22 +32,14 @@ class TypeAgrementService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'ta';
     }
 
 
 
-    /**
-     * Retourne une entité à partir de son code
-     * Retourne null si le code est null
-     *
-     * @param string $code
-     *
-     * @return TypeAgrement
-     */
-    public function getByCode($code)
+    public function getByCode(string $code): TypeAgrement
     {
         if ($code) {
             return $this->getRepo()->findOneBy(['code' => $code]);

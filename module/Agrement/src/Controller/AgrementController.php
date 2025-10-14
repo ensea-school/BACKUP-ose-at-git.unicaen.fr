@@ -154,9 +154,13 @@ class AgrementController extends AbstractController
 
         /* @var $agrement Agrement */
         $agrement = $this->getEvent()->getParam('agrement');
+
         if (!$agrement) {
+            $typeAgrementCode = $this->getEvent()->getRouteMatch()->getParam('typeAgrementCode');
+            $typeAgrement = $this->getServiceTypeAgrement()->getByCode($typeAgrementCode);
+
             $agrement = $this->getServiceAgrement()->newEntity();
-            $agrement->setType($this->getEvent()->getParam('typeAgrement'));
+            $agrement->setType($typeAgrement);
             $agrement->setIntervenant($this->getEvent()->getParam('intervenant'));
             $agrement->setStructure($this->getEvent()->getParam('structure'));
         }
@@ -174,8 +178,8 @@ class AgrementController extends AbstractController
 
     public function saisirLotAction()
     {
-        $typeAgrement = $this->getEvent()->getParam('typeAgrement');
-        /* @var $typeAgrement TypeAgrement */
+        $typeAgrementCode = $this->getEvent()->getRouteMatch()->getParam('typeAgrementCode');
+        $typeAgrement = $this->getServiceTypeAgrement()->getByCode($typeAgrementCode);
 
         $title = sprintf("Agrément par %s", $typeAgrement->toString(true));
 
@@ -300,7 +304,7 @@ class AgrementController extends AbstractController
         if ($structure) {
             $filters['STRUCTURE_IDS'] = $structure->idsFilter();
         }
-        //On récupére l'état de sortie pour l'export des agréments
+        //On récupère l'état de sortie pour l'export des agréments
         $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'export-agrement']);
         $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
         $csvModel->setFilename('export-agrement.csv');

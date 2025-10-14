@@ -84,14 +84,14 @@ return [
                     'may_terminate' => true,
                     'child_routes'  => [
                         'conseil-academique' => [
-                            'route'    => 'conseil-academique',
+                            'route'    => '/conseil-academique',
                             'action'   => 'saisir-lot',
                             'defaults' => [
                                 'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
                             ],
                         ],
                         'conseil-restreint'  => [
-                            'route'    => 'conseil-restreint',
+                            'route'    => '/conseil-restreint',
                             'action'   => 'saisir-lot',
                             'defaults' => [
                                 'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,

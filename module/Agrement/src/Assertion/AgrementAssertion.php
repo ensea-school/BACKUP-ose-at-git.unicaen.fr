@@ -80,10 +80,10 @@ class AgrementAssertion extends AbstractAssertion
 
         $typeAgrement = $this->getParam('typeAgrement');
         if (!$typeAgrement){
-            $typeAgrement = $this->getServiceTypeAgrement()->getByCode($this->getParam('typeAgrementCode'));
-        }
-        if (!$typeAgrement){
-         //   throw new \Exception('Le type d\'agrément doit être fourni pour que l\'assertion puisse fonctionner');
+            $typeAgrementCode = $this->getParam('typeAgrementCode');
+            if ($typeAgrementCode) {
+                $typeAgrement = $this->getServiceTypeAgrement()->getByCode($typeAgrementCode);
+            }
         }
 
         switch ($action) {

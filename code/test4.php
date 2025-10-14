@@ -8,4 +8,8 @@
 
 $navigation = $container->get(\Unicaen\Framework\Navigation\Navigation::class);
 
-dump($navigation->home->getPage('intervenant')->getPages());
+$page = $navigation->home->getPage('chargens')->getPage('seuil');
+
+dump($page->getUri(['scenario' => 1]));
+
+dump($page->getUri());

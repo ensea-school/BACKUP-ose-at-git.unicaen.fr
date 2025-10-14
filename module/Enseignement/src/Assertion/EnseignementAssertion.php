@@ -44,7 +44,7 @@ class EnseignementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity (ResourceInterface $entity, $privilege = null): bool
+    protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
         // pareil si le rôle ne possède pas le privilège adéquat
         if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
@@ -65,14 +65,14 @@ class EnseignementAssertion extends AbstractAssertion
                     case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
                         return $this->assertEnseignementValidation($entity);
                 }
-            break;
+                break;
             case $entity instanceof VolumeHoraire:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
                     case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
                         return $this->assertVolumeHoraireValidation($entity);
                 }
-            break;
+                break;
             case $entity instanceof Intervenant:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_PREVU_VISUALISATION:
@@ -90,7 +90,7 @@ class EnseignementAssertion extends AbstractAssertion
                     case Privileges::ENSEIGNEMENT_EXTERIEUR:
                         return $this->assertIntervenantEnseignementExterieur($entity);
                 }
-            break;
+                break;
             case $entity instanceof Validation:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
@@ -99,7 +99,7 @@ class EnseignementAssertion extends AbstractAssertion
                     case Privileges::ENSEIGNEMENT_DEVALIDATION:
                         return $this->assertValidationDevalidation($entity);
                 }
-            break;
+                break;
         }
 
         return true;
@@ -114,7 +114,7 @@ class EnseignementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController (string $controller, ?string $action): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         $intervenant = $this->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -122,29 +122,32 @@ class EnseignementAssertion extends AbstractAssertion
         if (!$this->getAssertionService()->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!
 
         switch ($controller . '.' . $action) {
-            case EnseignementController::class . '.validation':
-                return $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION) || $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
-            break;
+            case EnseignementController::class . '.validationPrevu':
+                return $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION);
+
+            case EnseignementController::class . '.validationRealise':
+                return $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
+
             case EnseignementController::class . '.resume':
                 return $this->assertEnseignements();
-            break;
+
             case EnseignementController::class . '.importAgenda':
                 return $this->assertImportAgenda();
-            break;
-            case EnseignementController::class . '.intervenant-saisie-prevu':
+
+            case EnseignementController::class . '.intervenantSaisiePrevu':
                 return $this->assertPageEnseignements($intervenant, TypeVolumeHoraire::CODE_PREVU);
-            break;
-            case EnseignementController::class . '.intervenant-saisie-realise':
+
+            case EnseignementController::class . '.intervenantSaisieRealise':
                 return $this->assertPageEnseignements($intervenant, TypeVolumeHoraire::CODE_REALISE);
-            break;
         }
 
-        return true;
+        // Sécurité renforcée
+        return false;
     }
 
 
 
-    protected function assertPageEnseignements (?Intervenant $intervenant, string $typeVolumeHoraireCode): bool
+    protected function assertPageEnseignements(?Intervenant $intervenant, string $typeVolumeHoraireCode): bool
     {
         if (!$intervenant) return true;
 
@@ -168,29 +171,29 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignements (): bool
+    protected function assertEnseignements(): bool
     {
         return $this->asserts([
-            (
-            $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION)
-                || $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION)
-                || $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION)
-                || $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION)
-            ),
-            !$this->getServiceContext()->getIntervenant()
-        ]);
+                                  (
+                                      $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION)
+                                      || $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION)
+                                      || $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION)
+                                      || $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION)
+                                  ),
+                                  !$this->getServiceContext()->getIntervenant(),
+                              ]);
     }
 
 
 
-    protected function assertImportAgenda (): bool
+    protected function assertImportAgenda(): bool
     {
         return true;
     }
 
 
 
-    protected function assertEnseignementVisualisation (Service $service): bool
+    protected function assertEnseignementVisualisation(Service $service): bool
     {
         $typeVolumeHoraire = $service->getTypeVolumeHoraire();
         $intervenant       = $service->getIntervenant();
@@ -212,7 +215,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementEdition (Service $service): bool
+    protected function assertEnseignementEdition(Service $service): bool
     {
         $structure = $this->getServiceContext()->getStructure();
 
@@ -245,16 +248,16 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertHasEnseignements (Intervenant $intervenant, Structure $structure, string $etape): bool
+    protected function assertHasEnseignements(Intervenant $intervenant, Structure $structure, string $etape): bool
     {
         $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
         switch ($etape) {
             case WorkflowEtape::ENSEIGNEMENT_VALIDATION:
                 $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-            break;
+                break;
             case WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE:
                 $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
-            break;
+                break;
             default:
                 throw new \Exception('Etape de workflow non gérée');
         }
@@ -280,7 +283,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function hasHeures (Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire): bool
+    protected function hasHeures(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire): bool
     {
         $sql = "
         SELECT
@@ -304,7 +307,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertVolumeHoraireValidation (VolumeHoraire $volumeHoraire): bool
+    protected function assertVolumeHoraireValidation(VolumeHoraire $volumeHoraire): bool
     {
         $service = $volumeHoraire->getService();
 
@@ -313,69 +316,69 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementValidation (Service $service): bool
+    protected function assertEnseignementValidation(Service $service): bool
     {
         return $this->assertValidation($service->getIntervenant(), $service->getStructure());
     }
 
 
 
-    protected function assertValidationValidation (Validation $validation): bool
+    protected function assertValidationValidation(Validation $validation): bool
     {
         return $this->asserts([
-            !$validation->getId(),
-            $this->assertValidation($validation->getIntervenant(), $validation->getStructure()),
-        ]);
+                                  !$validation->getId(),
+                                  $this->assertValidation($validation->getIntervenant(), $validation->getStructure()),
+                              ]);
     }
 
 
 
-    protected function assertValidation (Intervenant $intervenant, ?Structure $structure): bool
+    protected function assertValidation(Intervenant $intervenant, ?Structure $structure): bool
     {
         return $this->asserts([
-            $this->getAssertionService()->assertIntervenant($intervenant),
-            $this->getAssertionService()->assertStructure($structure),
-        ]);
+                                  $this->getAssertionService()->assertIntervenant($intervenant),
+                                  $this->getAssertionService()->assertStructure($structure),
+                              ]);
     }
 
 
 
-    protected function assertValidationDevalidation (Validation $validation): bool
+    protected function assertValidationDevalidation(Validation $validation): bool
     {
         return $this->asserts([
-            $validation->getId(),
-            //$this->assertValidation($validation->getIntervenant(), $validation->getStructure()),
-            $this->getAssertionService()->assertIntervenant($validation->getIntervenant()),
-            $this->getAssertionService()->assertStructure($validation->getStructure()),
-        ]);
+                                  $validation->getId(),
+                                  //$this->assertValidation($validation->getIntervenant(), $validation->getStructure()),
+                                  $this->getAssertionService()->assertIntervenant($validation->getIntervenant()),
+                                  $this->getAssertionService()->assertStructure($validation->getStructure()),
+                              ]);
     }
 
 
 
-    protected function assertEnseignementExterieur (Service $service): bool
+    protected function assertEnseignementExterieur(Service $service): bool
     {
         return $this->asserts([
-            $this->assertIntervenantEnseignementExterieur($service->getIntervenant()),
-        ]);
+                                  $this->assertIntervenantEnseignementExterieur($service->getIntervenant()),
+                              ]);
     }
 
 
 
-    protected function assertIntervenantEnseignementExterieur (Intervenant $intervenant): bool
+    protected function assertIntervenantEnseignementExterieur(Intervenant $intervenant): bool
     {
 
         return $this->asserts([
-            $intervenant->getStatut()->getServiceExterieur(),
-            $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR),
-        ]);
+                                  $intervenant->getStatut()->getServiceExterieur(),
+                                  $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR),
+                              ]);
     }
 
 
 
-    protected function assertIntervenantEnseignement (
+    protected function assertIntervenantEnseignement(
         Intervenant $intervenant,
-        string $typeVolumeHoraireCode,
-        bool $edition = false
+        string      $typeVolumeHoraireCode,
+        bool        $edition = false
     ): bool
     {
         if (!$this->getAssertionService()->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!

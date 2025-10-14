@@ -59,38 +59,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
      */
     protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
-        $localPrivs = [
-            self::PRIV_VIEW_IDENTITE,
-            self::PRIV_EDIT_IDENTITE,
-            self::PRIV_EDIT_ADRESSE,
-            self::PRIV_VIEW_ADRESSE,
-            self::PRIV_EDIT_CONTACT,
-            self::PRIV_VIEW_CONTACT,
-            self::PRIV_EDIT_INSEE,
-            self::PRIV_VIEW_INSEE,
-            self::PRIV_VIEW_IBAN,
-            self::PRIV_EDIT_IBAN,
-            self::PRIV_VIEW_EMPLOYEUR,
-            self::PRIV_EDIT_EMPLOYEUR,
-            self::PRIV_VIEW_AUTRE1,
-            self::PRIV_EDIT_AUTRE1,
-            self::PRIV_VIEW_AUTRE2,
-            self::PRIV_EDIT_AUTRE2,
-            self::PRIV_VIEW_AUTRE3,
-            self::PRIV_EDIT_AUTRE3,
-            self::PRIV_VIEW_AUTRE4,
-            self::PRIV_EDIT_AUTRE4,
-            self::PRIV_VIEW_AUTRE5,
-            self::PRIV_EDIT_AUTRE5,
-            self::PRIV_CAN_VALIDE,
-            self::PRIV_CAN_DEVALIDE,
-            self::PRIV_CAN_EDIT,
-            self::PRIV_CAN_SUPPRIME,
-            self::PRIV_CAN_VALIDE_COMP,
-            self::PRIV_CAN_DEVALIDE_COMP,
-            self::PRIV_CAN_EDIT_COMP,
-        ];
-
         switch (true) {
             case $entity instanceof Intervenant:
                 switch ($privilege) {

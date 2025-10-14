@@ -5,7 +5,6 @@ namespace Paiement;
 use Application\Provider\Privileges;
 use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\PaiementProcessFactory;
-use Workflow\Entity\Db\WorkflowEtape;
 
 return [
     'routes' => [
@@ -27,7 +26,7 @@ return [
                 'mise-en-paiement'      => [
                     'route'       => '/mise-en-paiement/:structure/:intervenants',
                     'controller'  => Controller\PaiementController::class,
-                    'action'      => 'MiseEnPaiement',
+                    'action'      => 'miseEnPaiement',
                     'constraints' => [
                         'structure' => '[0-9]*',
                     ],
@@ -37,8 +36,9 @@ return [
                 'details-calculs'       => [
                     'route'      => '/details-calculs/:intervenant/',
                     'controller' => Controller\PaiementController::class,
-                    'action'     => 'DetailsCalculs',
+                    'action'     => 'detailsCalculs',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DETAILS,
+                    'assertion'   => Assertion\PaiementAssertion::class,
                 ],
                 'etat-paiement'         => [
                     'route'      => '/etat-paiement',

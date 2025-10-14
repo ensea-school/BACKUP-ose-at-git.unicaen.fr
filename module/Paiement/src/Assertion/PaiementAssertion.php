@@ -3,8 +3,9 @@
 namespace Paiement\Assertion;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Paiement\Controller\DemandesController;
+use Paiement\Controller\PaiementController;
 use Unicaen\Framework\Authorize\AbstractAssertion;
-use Unicaen\Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Workflow\Entity\Db\WorkflowEtape;
@@ -28,43 +29,40 @@ class PaiementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController (string $controller, ?string $action): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         $intervenant = $this->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
-        switch ($action) {
-            case 'demandemiseenpaiement':
+        switch ($controller . '.' . $action) {
+            case DemandesController::class . '.demandeMiseEnPaiement':
+            case PaiementController::class . '.visualisationMiseEnPaiement':
+            case PaiementController::class . '.editionMiseEnPaiement':
+            case PaiementController::class . '.detailsCalculs':
                 return $this->assertEtapeAtteignable(WorkflowEtape::DEMANDE_MEP, $intervenant);
-            break;
-            case 'visualisationmiseenpaiement':
 
-            break;
-            case 'editionmiseenpaiement':
-
-            break;
-            case 'etatpaiement':
+            case PaiementController::class . 'etatPaiement':
                 if ($this->getServiceContext()->getIntervenant()) return false; // pas pour les intervenants
-            break;
-            case 'extractionpaieprime':
-                return $this->assertEtapeAtteignable(WorkflowEtape::MISSION_PRIME, $intervenant);
-            break;
-            case  'miseenpaiement':
+                return true;
 
-            break;
+            case PaiementController::class . '.extractionPaiePrime':
+                return $this->assertEtapeAtteignable(WorkflowEtape::MISSION_PRIME, $intervenant);
+
+            case PaiementController::class . '.miseEnPaiement':
+                return true;
         }
 
-        return true;
+        // sécu renforcée
+        return false;
     }
 
 
 
-
-    protected function assertEtapeAtteignable (string $etape, ?Intervenant $intervenant, ?Structure $structure = null): bool
+    protected function assertEtapeAtteignable(string $etape, ?Intervenant $intervenant, ?Structure $structure = null): bool
     {
         if ($intervenant) {
             $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant, $structure);
-            $workflowEtape = $feuilleDeRoute->get($etape);
+            $workflowEtape  = $feuilleDeRoute->get($etape);
             if (!$workflowEtape || !$workflowEtape->isAllowed()) { // l'étape doit être atteignable
                 return false;
             }

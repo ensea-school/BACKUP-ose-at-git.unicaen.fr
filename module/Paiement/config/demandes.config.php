@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
-use Workflow\Entity\Db\WorkflowEtape;
 
 return [
     'routes' => [
@@ -92,11 +91,6 @@ return [
                 ],
             ],
         ],
-    ],
-
-
-    'services' => [
-        Service\DemandesService::class => Service\DemandesServiceFactory::class,
     ],
 
     'controllers' => [

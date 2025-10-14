@@ -5,7 +5,6 @@ namespace Service\Assertion;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Unicaen\Framework\Authorize\AbstractAssertion;
-use Unicaen\Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Service\Controller\ServiceController;

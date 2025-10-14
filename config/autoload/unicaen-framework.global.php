@@ -1,6 +1,7 @@
 <?php
 
 use Utilisateur\Provider\UserProvider;
+use Application\ORM\RouteEntitiesInjector;
 
 return [
     'unicaen-framework' => [
@@ -9,8 +10,13 @@ return [
             /* Clés de $_SESSION à préserver en cas de changement de profil ou d'utilisateur */
         ],
 
-        /* Instance of Unicaen\Framework\User\UserAdapterInterface */
         'user_adapter' => UserProvider::class,
+
+        'router' => [
+            'firewalls' => [
+                RouteEntitiesInjector::class,
+            ],
+        ],
     ],
 
 ];

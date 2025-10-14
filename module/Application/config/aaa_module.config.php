@@ -106,7 +106,6 @@ $config = [
     'service_manager'    => [
         'factories'  => [
             HostLocalization\HostLocalizationOse::class                 => HostLocalization\HostLocalizationOseFactory::class,
-            ORM\RouteEntitiesInjector::class                            => ORM\RouteEntitiesInjectorFactory::class,
             ORM\Event\Listeners\HistoriqueListener::class               => ORM\Event\Listeners\HistoriqueListenerFactory::class,
             Bdd::class                                                  => OseBddAdminFactory::class,
             \UnicaenMail\Service\Mail\MailService::class                => Service\MailServiceFactory::class,

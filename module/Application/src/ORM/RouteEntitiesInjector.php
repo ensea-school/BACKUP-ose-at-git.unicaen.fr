@@ -4,70 +4,54 @@ namespace Application\ORM;
 
 
 use Administration\Interfaces\ParametreEntityInterface;
-use Agrement\Entity\Db\TypeAgrement;
+use Doctrine\ORM\EntityManager;
+use Psr\Container\ContainerInterface;
 use Unicaen\Framework\Cache\CacheContainerTrait;
 use Application\ORM\Event\Listeners\ParametreEntityListener;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Unicaen\Framework\Router\ParamFirewallInterface;
 use Unicaen\Framework\User\UserManager;
 use Intervenant\Service\IntervenantService;
 use Laminas\Mvc\MvcEvent;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
  * Description of RouteEntitiesInjector
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class RouteEntitiesInjector
+class RouteEntitiesInjector implements ParamFirewallInterface
 {
     use CacheContainerTrait;
-    use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
 
+    private array $entityParams = [];
+
+
+
     public function __construct(
-        private readonly UserManager $userManager,
+        private readonly UserManager        $userManager,
+        private readonly ContainerInterface $container,
+        private readonly EntityManager      $entityManager,
     )
     {
+        $this->entityParams = $this->getCacheContainer()->entityParams('makeEntityParams');
     }
 
 
 
     public function __invoke(MvcEvent $e)
     {
-        $entityParams = $this->getCacheContainer()->entityParams('makeEntityParams');
-        $params       = $e->getRouteMatch()->getParams();
+        $params = $e->getRouteMatch()->getParams();
         foreach ($params as $name => $value) {
-            switch ($name) {
-                case 'intervenant':
-                    /** @var IntervenantService $serviceIntervenant */
-                    $serviceIntervenant = $e->getApplication()->getServiceManager()->get(IntervenantService::class);
-                    $entity = $serviceIntervenant->getByRouteParam($value);
-
-                    $profile = $this->userManager->getProfile();
-                    if ($profile && $profile->getContext('intervenant')) {
-                        $profile->setContext('intervenant', $entity);
-                    }
-
-                    $e->setParam($name, $entity);
-                break;
-                default:
-                    if (array_key_exists($name, $entityParams)) {
-                        if (0 !== (int)$value) {
-                            $repo   = $this->getEntityManager()->getRepository($entityParams[$name]);
-                            $entity = $repo->find($value);
-                            if ($entity instanceof ParametreEntityInterface) {
-                                $annee = $this->getServiceContext()->getAnnee();
-                                if ($entity->getAnnee() != $annee) {
-                                    $pel = new ParametreEntityListener();
-                                    $pel->setEntityManager($this->getEntityManager());
-                                    $entity = $pel->entityAutreAnnee($entity, $annee);
-                                }
-                            }
-                            $e->setParam($name, $entity);
-                        }
-                    }
-                break;
+            $errorMessage = null;
+            $this->check($name, $value, null, $errorMessage);
+            if ('intervenant' == $name) {
+                $profile = $this->userManager->getProfile();
+                if ($profile && $profile->getContext('intervenant')) {
+                    $profile->setContext('intervenant', $value);
+                }
             }
+            $e->setParam($name, $value);
         }
     }
 
@@ -82,7 +66,7 @@ class RouteEntitiesInjector
     {
         $entityParams = [];
 
-        $amd = $this->getEntityManager()->getMetadataFactory()->getAllMetadata();
+        $amd = $this->entityManager->getMetadataFactory()->getAllMetadata();
         foreach ($amd as $md) {
             $class                = $md->getName();
             $pos                  = strrpos($class, '\\');
@@ -92,4 +76,39 @@ class RouteEntitiesInjector
 
         return $entityParams;
     }
+
+
+
+    public function check(string $name, mixed &$value, mixed $constraint = null, ?string &$errorMessage): bool
+    {
+        switch ($name) {
+            case 'intervenant':
+                if ($value !== null) {
+                    /** @var IntervenantService $serviceIntervenant */
+                    $serviceIntervenant = $this->container->get(IntervenantService::class);
+                    $value = $serviceIntervenant->getByRouteParam($value);
+                }
+                break;
+            default:
+                if (array_key_exists($name, $this->entityParams)) {
+                    if (0 !== (int)$value) {
+                        $repo  = $this->entityManager->getRepository($this->entityParams[$name]);
+                        $value = $repo->find($value);
+                        if ($value instanceof ParametreEntityInterface) {
+                            $annee = $this->getServiceContext()->getAnnee();
+                            if ($value->getAnnee() != $annee) {
+                                $pel = new ParametreEntityListener();
+                                $pel->setEntityManager($this->entityManager);
+                                $value = $pel->entityAutreAnnee($value, $annee);
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+
+        return true;
+    }
+
+
 }

@@ -7,7 +7,6 @@ include:
   - template: Security/SAST.gitlab-ci.yml
 stages:
   - test
-  - sonarqube-check
 sast:
   stage: test
 

@@ -39,7 +39,5 @@ return [
 
     'services' => [
         Service\WorkflowService::class       => Service\WorkflowServiceFactory::class,
-        Service\TypeValidationService::class => Service\TypeValidationServiceFactory::class,
-        Service\ValidationService::class     => Service\ValidationServiceFactory::class,
     ],
 ];

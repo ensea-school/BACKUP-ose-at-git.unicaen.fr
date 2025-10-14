@@ -51,7 +51,7 @@ foreach ($data as $d) {
             if ($d['FONCTION_REFERENTIEL_LIBELLE']) {
                 $typeFormation = "Référentiel";
             } else {
-                $typeFormation = "Hors établissment";
+                $typeFormation = "Hors établissement";
             }
         }
         $transData['intervenants'][$iid]['services'][$sid] = [

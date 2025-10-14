@@ -20,7 +20,7 @@
                     <span class="label label-primary">{{ etape.numero }}</span>
 
                     <!-- Libellé et lien éventuel -->
-                    <a v-if="etape.url && etape.allowed"
+                    <a v-if="etape.url && etape.navigable"
                        title="Cliquez sur ce lien pour accéder à la page correspondant à cette étape" :href="etape.url">
                         <abbr v-if="etape.whyNonAtteignable.length > 0" :title="formatWhyNonAtteignable(etape)">{{
                                 etape.libelle

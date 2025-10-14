@@ -3,6 +3,8 @@
 namespace Workflow\Model;
 
 
+use Unicaen\Framework\Application\Application;
+use Unicaen\Framework\Authorize\Authorize;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowService;
 
@@ -25,6 +27,7 @@ class FeuilleDeRouteEtape
     public float         $objectif          = 0.0;
     public float         $realisation       = 0.0;
     public array         $whyNonAtteignable = [];
+    private Authorize    $authorize;
 
 
 
@@ -33,6 +36,9 @@ class FeuilleDeRouteEtape
         $this->feuilleDeRoute = $feuilleDeRoute;
         $this->service        = $service;
         $this->workflowEtape  = $etape;
+
+        // Récupération en direct du service Authorize
+        $this->authorize = Application::getInstance()->container()->get(Authorize::class);
     }
 
 
@@ -69,6 +75,24 @@ class FeuilleDeRouteEtape
 
     public function isAllowed(): bool
     {
-        return true;
+        return $this->atteignable || $this->realisation > 0;
+    }
+
+
+
+    public function isNavigable()
+    {
+        if (!$this->isAllowed()) {
+            return false;
+        }
+
+        if ($route = $this->workflowEtape->getRoute()) {
+            $params = [
+                'intervenant' => $this->feuilleDeRoute->getIntervenant(),
+            ];
+            return $this->authorize->isAllowedRoute($route, $params);
+        } else {
+            return true;
+        }
     }
 }

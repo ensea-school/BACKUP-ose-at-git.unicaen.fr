@@ -5,21 +5,23 @@ use Unicaen\Framework\Application\Application;
 $config = Application::getInstance()->config();
 
 $modules = [
-
+    // Dépendances externes
     'Laminas\Filter',
     'Laminas\Form',
     'Laminas\Hydrator',
     'Laminas\I18n',
     'Laminas\InputFilter',
-    'Laminas\Mvc\I18n',
     'Laminas\Mvc\Plugin\FlashMessenger',
     'Laminas\Navigation',
-    'Laminas\Paginator',
     'Laminas\Router',
     'Laminas\Session',
     'Laminas\Validator',
     'DoctrineModule',
     'DoctrineORMModule',
+
+    // Bibliothèques Unicaen
+    'Unicaen\BddAdmin',
+    'Unicaen\Framework',
     'ZfcUser',
     'UnicaenApp',
     'UnicaenAuthentification',
@@ -28,8 +30,9 @@ $modules = [
     'UnicaenTbl',
     'UnicaenSiham',
     'UnicaenVue',
-    'Unicaen\BddAdmin',
-    'Unicaen\Framework',
+    'UnicaenSignature',
+
+    // Modules de l'application
     'Application',
     'Administration',
     'Agrement',
@@ -50,12 +53,12 @@ $modules = [
     'Contrat',
     'Lieu',
     'Formule',
-    'UnicaenSignature',
     'Signature',
     'Workflow',
     'Utilisateur',
 ];
 
+// Connecteurs
 if ($config['actul']['host'] ?? null){
     $modules[] = 'Connecteur\\Actul';
 }

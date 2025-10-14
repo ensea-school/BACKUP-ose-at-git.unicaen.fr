@@ -8,7 +8,7 @@ $config = Application::getInstance()->config();
 return [
     'unicaen-mail' => [
         /**
-         * Classe de entité
+         * Classe de l'entité
          **/
         'mail_entity_class' => Mail::class,
 

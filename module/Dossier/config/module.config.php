@@ -3,6 +3,7 @@
 namespace Dossier;
 
 use Application\Provider\Privileges;
+use DoctrineORMModule\Proxy\__CG__\Utilisateur\Entity\Db\Privilege;
 use Dossier\Assertion\IntervenantDossierAssertion;
 use Dossier\Controller\AutresController;
 use Dossier\Controller\EmployeurController;
@@ -137,10 +138,10 @@ return [
         'intervenant' => [
             'pages' => [
                 'dossier' => [
-                    'label'               => "Données personnelles",
-                    'title'               => "Saisir les données personnelles d'un intervenant vacataire",
-                    'route'               => 'intervenant/dossier',
-                    'order'               => 5,
+                    'label' => "Données personnelles",
+                    'title' => "Saisir les données personnelles d'un intervenant vacataire",
+                    'route' => 'intervenant/dossier',
+                    'order' => 5,
                 ],
             ],
         ],
@@ -150,11 +151,11 @@ return [
                 'intervenants'  => [
                     'pages' => [
                         'gestion-champs-autres-dossier-intervenant' => [
-                            'label'      => "Champs personnalisés des données personnelles",
-                            'title'      => "Éditer et modifier les 5 champs personnalisables pour les données personnelles des intervenants",
-                            'route'      => 'autres-infos',
-                            'order'      => 10,
-                            'resource'   => Authorize::controllerResource(AutresController::class, 'index'),
+                            'label'    => "Champs personnalisés des données personnelles",
+                            'title'    => "Éditer et modifier les 5 champs personnalisables pour les données personnelles des intervenants",
+                            'route'    => 'autres-infos',
+                            'order'    => 10,
+                            'resource' => Authorize::controllerResource(AutresController::class, 'index'),
                         ],
                     ],
                 ],
@@ -178,8 +179,6 @@ return [
             'controller' => IntervenantDossierController::class,
             'action'     => ['index',
                              'change-statut-dossier'],
-            'privileges' => [Privileges::DOSSIER_VISUALISATION],
-            'assertion'  => IntervenantDossierAssertion::class,
         ],
 
         [
@@ -259,39 +258,42 @@ return [
     'rules'        => [
         [
             'privileges' => [
-                IntervenantDossierAssertion::PRIV_VIEW_IDENTITE,
-                IntervenantDossierAssertion::PRIV_EDIT_IDENTITE,
-                IntervenantDossierAssertion::PRIV_EDIT_ADRESSE,
-                IntervenantDossierAssertion::PRIV_VIEW_ADRESSE,
-                IntervenantDossierAssertion::PRIV_EDIT_CONTACT,
-                IntervenantDossierAssertion::PRIV_VIEW_CONTACT,
-                IntervenantDossierAssertion::PRIV_EDIT_INSEE,
-                IntervenantDossierAssertion::PRIV_VIEW_INSEE,
-                IntervenantDossierAssertion::PRIV_VIEW_IBAN,
-                IntervenantDossierAssertion::PRIV_EDIT_IBAN,
-                IntervenantDossierAssertion::PRIV_VIEW_EMPLOYEUR,
-                IntervenantDossierAssertion::PRIV_EDIT_EMPLOYEUR,
-                IntervenantDossierAssertion::PRIV_VIEW_AUTRE1,
-                IntervenantDossierAssertion::PRIV_EDIT_AUTRE1,
-                IntervenantDossierAssertion::PRIV_VIEW_AUTRE2,
-                IntervenantDossierAssertion::PRIV_EDIT_AUTRE2,
-                IntervenantDossierAssertion::PRIV_VIEW_AUTRE3,
-                IntervenantDossierAssertion::PRIV_EDIT_AUTRE3,
-                IntervenantDossierAssertion::PRIV_VIEW_AUTRE4,
-                IntervenantDossierAssertion::PRIV_EDIT_AUTRE4,
-                IntervenantDossierAssertion::PRIV_VIEW_AUTRE5,
-                IntervenantDossierAssertion::PRIV_EDIT_AUTRE5,
-                IntervenantDossierAssertion::PRIV_CAN_VALIDE,
-                IntervenantDossierAssertion::PRIV_CAN_DEVALIDE,
-                IntervenantDossierAssertion::PRIV_CAN_EDIT,
-                IntervenantDossierAssertion::PRIV_CAN_VALIDE_COMP,
-                IntervenantDossierAssertion::PRIV_CAN_DEVALIDE_COMP,
-                IntervenantDossierAssertion::PRIV_CAN_EDIT_COMP,
-                IntervenantDossierAssertion::PRIV_CAN_SUPPRIME,
-
-
+                Privileges::DOSSIER_EDITION,
+                Privileges::DOSSIER_ADRESSE_EDITION,
+                Privileges::DOSSIER_ADRESSE_VISUALISATION,
+                Privileges::DOSSIER_BANQUE_EDITION,
+                Privileges::DOSSIER_BANQUE_VISUALISATION,
+                Privileges::DOSSIER_CHAMP_AUTRE_1_EDITION,
+                Privileges::DOSSIER_CHAMP_AUTRE_1_VISUALISATION,
+                Privileges::DOSSIER_CHAMP_AUTRE_2_EDITION,
+                Privileges::DOSSIER_CHAMP_AUTRE_2_VISUALISATION,
+                Privileges::DOSSIER_CHAMP_AUTRE_3_EDITION,
+                Privileges::DOSSIER_CHAMP_AUTRE_3_VISUALISATION,
+                Privileges::DOSSIER_CHAMP_AUTRE_4_EDITION,
+                Privileges::DOSSIER_CHAMP_AUTRE_4_VISUALISATION,
+                Privileges::DOSSIER_CHAMP_AUTRE_5_EDITION,
+                Privileges::DOSSIER_CHAMP_AUTRE_5_VISUALISATION,
+                Privileges::DOSSIER_CONTACT_EDITION,
+                Privileges::DOSSIER_CONTACT_VISUALISATION,
+                Privileges::DOSSIER_DEVALIDATION,
+                Privileges::DOSSIER_DEVALIDATION_COMP,
+                Privileges::DOSSIER_DIFFERENCES,
+                Privileges::DOSSIER_EDITION,
+                Privileges::DOSSIER_EDITION_COMP,
+                Privileges::DOSSIER_EMPLOYEUR_EDITION,
+                Privileges::DOSSIER_EMPLOYEUR_VISUALISATION,
+                Privileges::DOSSIER_IDENTITE_EDITION,
+                Privileges::DOSSIER_IDENTITE_VISUALISATION,
+                Privileges::DOSSIER_INSEE_EDITION,
+                Privileges::DOSSIER_INSEE_VISUALISATION,
+                Privileges::DOSSIER_PURGER_DIFFERENCES,
+                Privileges::DOSSIER_SUPPRESSION,
+                Privileges::DOSSIER_VALIDATION,
+                Privileges::DOSSIER_VALIDATION_COMP,
+                Privileges::DOSSIER_VISUALISATION,
+                Privileges::DOSSIER_VISUALISATION_COMP,
             ],
-            'resources'  => ['Intervenant'],
+            'resources'  => ['IntervenantDossier'],
             'assertion'  => IntervenantDossierAssertion::class,
         ],
         [
@@ -308,11 +310,11 @@ return [
         EmployeurController::class          => Controller\Factory\EmployeurControllerFactory::class,
     ],
     'services'     => [
-        DossierService::class              => DossierServiceFactory::class,
-        DossierAutreService::class         => DossierAutreServiceFactory::class,
-        DossierAutreTypeService::class     => DossierAutreTypeServiceFactory::class,
-        EmployeurService::class            => EmployeurServiceFactory::class,
-        DossierProcess::class              => DossierProcessFactory::class,
+        DossierService::class          => DossierServiceFactory::class,
+        DossierAutreService::class     => DossierAutreServiceFactory::class,
+        DossierAutreTypeService::class => DossierAutreTypeServiceFactory::class,
+        EmployeurService::class        => EmployeurServiceFactory::class,
+        DossierProcess::class          => DossierProcessFactory::class,
 
     ],
     'view_helpers' => [

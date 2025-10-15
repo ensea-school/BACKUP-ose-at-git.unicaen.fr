@@ -211,7 +211,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             /*Recherche de la date d'effet à passer selon enseignement ou mission, si mission on prend la première mission de l'année universitaire
             sinon on prend les dates de début et de fin de l'année universitaire*/
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
-            $dateMission = ($this->siham->getConfig()['contrat']['missionDate'])??'MISSION';
+            $dateMission  = ($this->siham->getConfig()['contrat']['missionDate']) ?? 'MISSION';
 
             if (!empty($firstMission) && $dateMission == 'MISSION') {
                 $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
@@ -241,7 +241,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /*CONTRAT*/
             //On récupére le nombre d'heures du contrat et le taux horaire appliqué
-            $infos = $this->getInfosContrat($intervenant, $firstMission);
+            $infos  = $this->getInfosContrat($intervenant, $firstMission);
             $config = $this->siham->getConfig();
             if ($this->siham->getConfig()['contrat']) {
                 //On récupere le gradeTG pour le contrat
@@ -363,7 +363,8 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /*NATIONALITES*/
             $nationalites[] = [
-                'nationalite'   => 'FRA',//$dossierIntervenant->getPaysNationalite()->getCode(),
+                'nationalite'   => 'FRA',
+                //$dossierIntervenant->getPaysNationalite()->getCode(),
                 'temPrincipale' => 1,
             ];
 
@@ -460,10 +461,10 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
         } else {
             $infos['totalHeure'] = str_replace(',', '.', $mission->getHeures());
-            $infos['taux'] = 0;
+            $infos['taux']       = 0;
             //On va chercher la valeur du taux de la mission
             $dateDebutMission = $mission->getDateDebut();
-            $tauxRemu = $mission->getTauxRemu();
+            $tauxRemu         = $mission->getTauxRemu();
             if ($tauxRemu instanceof TauxRemu) {
                 $valeurTaux    = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $dateDebutMission);
                 $infos['taux'] = str_replace(',', '.', $valeurTaux);
@@ -529,7 +530,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             sinon on prend les dates de début et de fin de l'année universitaire*/
 
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
-            $dateMission = ($this->siham->getConfig()['contrat']['missionDate'])??'MISSION';
+            $dateMission  = ($this->siham->getConfig()['contrat']['missionDate']) ?? 'MISSION';
 
             if (!empty($firstMission) && $dateMission == 'MISSION') {
                 $dateEffet = $firstMission->getDateDebut()->format('Y-m-d');
@@ -559,7 +560,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /*CONTRAT*/
             //On récupére le nombre d'heures du contrat et le taux horaire appliqué
-            $infos = $this->getInfosContrat($intervenant, $firstMission);
+            $infos   = $this->getInfosContrat($intervenant, $firstMission);
             $config  = $this->siham->getConfig();
             $contrat = [];
             if ($this->siham->getConfig()['contrat']) {
@@ -846,8 +847,8 @@ class SihamConnecteur implements ConnecteurRhInterface
             //Valeur par défaut
             $categorieSituation = 'MC140';
             $motifSituation     = 'MC141';
-            $config = $this->siham->getConfig();
-            $configCloture = ($config['cloture'] !== false) ? $config['cloture'] : null;
+            $config             = $this->siham->getConfig();
+            $configCloture      = ($config['cloture'] !== false) ? $config['cloture'] : null;
             //On regarde si des valeurs ont été spécifié dans la configuration siham
             if ($configCloture !== null) {
                 if (array_key_exists($codeStatutSiham, $config['cloture'])) {
@@ -903,8 +904,8 @@ class SihamConnecteur implements ConnecteurRhInterface
             $params = [
                 'codeAdministration' => '',
                 'listeUO'            => [[
-                    'typeUO' => $code,
-                ]],
+                                             'typeUO' => $code,
+                                         ]],
             ];
 
             $uo = array_merge($uo, $this->siham->recupererListeUO($params));

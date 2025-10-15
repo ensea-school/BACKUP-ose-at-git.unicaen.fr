@@ -6,9 +6,9 @@
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
-use Dossier\Assertion\IntervenantDossierAssertion;
+use Application\Provider\Privileges;
 
-$viewInsee = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_INSEE);
+$viewInsee = $this->isAllowed($tblDossier->getDossier(), Privileges::DOSSIER_INSEE_VISUALISATION);
 
 /**
  * @var \Dossier\Entity\Db\IntervenantDossier $intervenantDossier

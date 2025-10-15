@@ -67,21 +67,23 @@ class IntervenantDossierController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
         /* Récupération du dossier de l'intervenant */
-        $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-        /* Récupération de la validation du dossier si elle existe */
-        $tblDossier = $intervenantDossier->getTblDossier();
+        /**
+         * @var TblDossier $tblDossier
+         */
+        $tblDossier = $this->getServiceTblDossier()->finderByIntervenant($intervenant)->getQuery()->getOneOrNullResult();
 
-        if (!$tblDossier and $intervenantDossier->getId()) {
-            $tblDossier = $intervenantDossier->getTblDossier();
+        if (!$tblDossier) {
+            $dossier = $this->getServiceDossier()->initDossierIntervenant($intervenant);
+            $this->em()->refresh($dossier);
+            $tblDossier = $dossier->getTblDossier();
         }
-        $intervenantDossierValidation               = $tblDossier->getValidation();
-        $intervenantDossierValidationComplementaire = $tblDossier->getValidationComplementaire($intervenant);
+        $intervenantDossier = $tblDossier->getDossier();
 
         $form = $this->getFormIntervenantIntervenantDossier()->setIntervenant($intervenant)->initForm();
         $form->bind($intervenantDossier);
 
         //si on vient de post et que le dossier n'est pas encore validé
-        if ($this->getRequest()->isPost() && empty($intervenantDossierValidation)) {
+        if ($this->getRequest()->isPost() && empty($tblDossier->getValidation())) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
@@ -89,8 +91,6 @@ class IntervenantDossierController extends AbstractController
                 if (empty($intervenantDossier->getStatut()) && $intervenant->getStatut()->getCode() != 'AUTRES') {
                     $intervenantDossier->setStatut($intervenant->getStatut());
                 }
-                $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
-
                 /*On reinitialise le formulaire car le statut du dossier a
                 pu être changé donc les règles d'affichage ne sont plus les mêmes */
                 $form = $this->getFormIntervenantIntervenantDossier()->setIntervenant($intervenant)->initForm();
@@ -100,16 +100,10 @@ class IntervenantDossierController extends AbstractController
                 //Recalcul des tableaux de bord nécessaires
                 $this->updateTableauxBord($intervenantDossier->getIntervenant());
                 $this->em()->refresh($intervenantDossier);
-                /**
-                 * @var TblDossier $tblDossier
-                 */
-                $tblDossier    = $intervenantDossier->getTblDossier();
-                $lastCompleted = $tblDossier->isCompletAvantRecrutement();
-
+                $this->em()->refresh($tblDossier);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement de vos données effectué');
-                //return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
 
-                if (!$lastCompleted && $tblDossier->isCompletAvantRecrutement() && $this->getServiceContext()->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
+                if ($tblDossier->isCompletAvantRecrutement() && $this->getServiceContext()->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
                     $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($this->getServiceContext()->getIntervenant());
                     $nextEtape      = $feuilleDeRoute->getNext(WorkflowEtape::DONNEES_PERSO_SAISIE);
                     if ($nextEtape && $url = $nextEtape->url) {
@@ -121,8 +115,6 @@ class IntervenantDossierController extends AbstractController
             }
         }
 
-        $intervenantDossierStatut = $intervenantDossier->getStatut();
-        //Règles pour afficher ou non les fieldsets
         $champsAutres  = $intervenantDossier->getStatut()->getChampsAutres();
         $fieldsetRules = [
             'fieldset-statut'                  => $intervenantDossier->getStatut()->getDossierStatut(),

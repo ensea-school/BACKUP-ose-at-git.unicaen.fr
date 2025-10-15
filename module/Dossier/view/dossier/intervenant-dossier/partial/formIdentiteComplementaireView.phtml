@@ -6,9 +6,9 @@
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
-use Dossier\Assertion\IntervenantDossierAssertion;
+use Application\Provider\Privileges;
 
-$viewIdentite = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
+$viewIdentite = $this->isAllowed($tblDossier->getDossier(), Privileges::DOSSIER_IDENTITE_VISUALISATION);
 
 //$Dossier = $dossier;
 

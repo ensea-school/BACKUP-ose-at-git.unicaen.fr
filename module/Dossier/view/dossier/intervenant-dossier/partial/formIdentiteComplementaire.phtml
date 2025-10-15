@@ -8,8 +8,6 @@
 
 use Dossier\Assertion\IntervenantDossierAssertion;
 
-$viewIdentiteComplementaire = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
-
 $form->prepare();
 $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
 

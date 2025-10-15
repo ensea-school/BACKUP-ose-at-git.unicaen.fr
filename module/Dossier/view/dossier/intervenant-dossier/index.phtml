@@ -8,23 +8,26 @@
  */
 
 
+use Application\Provider\Privileges;
 use Dossier\Assertion\IntervenantDossierAssertion;
 use Dossier\Form\IntervenantDossierForm;
 use Workflow\Entity\Db\WorkflowEtape;
 
-$editIdentite               = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_EDIT_IDENTITE);
-$editAdresse                = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_EDIT_ADRESSE);
-$editContact                = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_EDIT_CONTACT);
-$editInsee                  = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_EDIT_INSEE);
-$editIban                   = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_EDIT_IBAN);
-$editEmployeur              = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_EDIT_EMPLOYEUR);
-$canValider                 = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_CAN_VALIDE);
-$canDevalider               = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_CAN_DEVALIDE);
-$canEdit                    = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_CAN_EDIT);
-$canValiderComplementaire   = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_CAN_VALIDE_COMP);
-$canDevaliderComplementaire = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_CAN_DEVALIDE_COMP);
-$canEditComplementaire      = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_CAN_EDIT_COMP);
-$canSupprimer               = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_CAN_SUPPRIME);
+$intervenantDossier         = $tblDossier->getDossier();
+$viewDonneesComplementaires = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_VISUALISATION_COMP);
+$editIdentite               = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_IDENTITE_EDITION);
+$editAdresse                = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_ADRESSE_EDITION);
+$editContact                = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_CONTACT_EDITION);
+$editInsee                  = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_INSEE_EDITION);
+$editIban                   = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_BANQUE_EDITION);
+$editEmployeur              = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_EMPLOYEUR_EDITION);
+$canValider                 = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_VALIDATION);
+$canDevalider               = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_DEVALIDATION);
+$canEdit                    = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_EDITION);
+$canValiderComplementaire   = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_VALIDATION_COMP);
+$canDevaliderComplementaire = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_DEVALIDATION_COMP);
+$canEditComplementaire      = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_EDITION_COMP);
+$canSupprimer               = $this->isAllowed($intervenantDossier, Privileges::DOSSIER_SUPPRESSION);
 $formErrors                 = $this->formErrors($form);
 
 $wfEtape = $tblDossier->getValidation() ? WorkflowEtape::DONNEES_PERSO_VALIDATION : WorkflowEtape::DONNEES_PERSO_SAISIE;
@@ -171,6 +174,18 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
                     echo $this->partial('dossier/intervenant-dossier/partial/formInseeView', compact('form', 'tblDossier'));
                 }
             }
+            /*Fiedlset Employeur*/
+            if ($fieldsetRules['fieldset-employeur']) {
+                if ($editEmployeur && $canEdit) {
+                    echo $this->partial('dossier/intervenant-dossier/partial/formEmployeur', compact('form', 'tblDossier'));
+                } else {
+                    echo $this->partial('dossier/intervenant-dossier/partial/formEmployeurView', compact('form', 'tblDossier'));
+                }
+            }
+            /*Fieldset Autres*/
+            if ($fieldsetRules['fieldset-autres']) {
+                echo $this->partial('dossier/intervenant-dossier/partial/formAutres', compact('form', 'champsAutres', 'tblDossier'));
+            }
 
             ?>
         </div>
@@ -222,7 +237,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
 </div>
 
 <!--DONNEES PERSONNELLES APRES RECRUTEMENT-->
-<?php if ($tblDossier->getValidation() && $tblDossier->getApresRecrutementAttendue() > 0): ?>
+<?php if ($tblDossier->getValidation() && $tblDossier->getApresRecrutementAttendue() > 0 && $viewDonneesComplementaires): ?>
     <div class="card">
         <?php if ($tblDossier->getValidationComplementaire()): ?>
             <div class="card-header text-light bg-success">
@@ -270,7 +285,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
                     if ($editIdentite && $canEditComplementaire) {
                         echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'tblDossier'));
                     } else {
-                        echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaire', compact('form', 'tblDossier'));
+                        echo $this->partial('dossier/intervenant-dossier/partial/formIdentiteComplementaireView', compact('form', 'tblDossier'));
                     }
                 }
                 if ($fieldsetRules['fieldset-adresse'] == 2) {
@@ -316,7 +331,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
                 <div class="col-md-12">
                     <?php
                     echo $this->formHidden($this->form->get('security'));
-                    if ($canEdit) {
+                    if ($canEditComplementaire) {
                         echo $this->formSubmit($form->get('submit-button'));
                     }
 

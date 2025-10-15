@@ -95,7 +95,7 @@ class Parametre implements HistoriqueAwareInterface
     const CONTRAT_ENS = 'contrat_ens';
     // VALEURS CONTRAT_ENS
     const CONTRAT_ENS_COMPOSANTE = 'contrat_ens_composante';
-    const CONTRAT_ENS_GLOBAL    = 'contrat_ens_global';
+    const CONTRAT_ENS_GLOBAL     = 'contrat_ens_global';
 
     const CONTRAT_DATE = 'contrat_date';
 
@@ -110,10 +110,6 @@ class Parametre implements HistoriqueAwareInterface
 
     /* Signature électronique */
     const SIGNATURE_ELECTRONIQUE_PARAPHEUR = 'signature_electronique_parapheur';
-
-
-    /* Export RH*/
-    const EXPORT_RH_FRANCHISSEMENT = 'export_rh_franchissement';
 
 
     /* Messages informatifs */

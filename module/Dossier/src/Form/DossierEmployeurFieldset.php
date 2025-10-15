@@ -10,7 +10,7 @@ use UnicaenApp\Form\Element\SearchAndSelect;
  * Description of EmployeurFieldset
  *
  */
-class EmployeurFieldset extends AbstractFieldset
+class DossierEmployeurFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
 

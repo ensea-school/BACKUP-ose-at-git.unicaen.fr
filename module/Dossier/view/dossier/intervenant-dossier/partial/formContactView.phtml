@@ -6,9 +6,9 @@
  * @var $tblDossier         \Dossier\Entity\Db\TblDossier
  */
 
-use Dossier\Assertion\IntervenantDossierAssertion;
+use Application\Provider\Privileges;
 
-$viewContact = $this->isAllowed($tblDossier->getIntervenant(), IntervenantDossierAssertion::PRIV_VIEW_CONTACT);
+$viewContact = $this->isAllowed($tblDossier->getDossier(), Privileges::DOSSIER_CONTACT_VISUALISATION);
 
 /**
  * @var \Dossier\Entity\Db\IntervenantDossier $intervenantDossier

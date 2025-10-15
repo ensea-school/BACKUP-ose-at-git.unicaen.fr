@@ -146,6 +146,13 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
 
 
+    public function getResourceId(): string
+    {
+        return 'IntervenantDossier';
+    }
+
+
+
     /**
      * Retourne la représentation littérale de cet objet.
      *
@@ -161,19 +168,6 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     function __sleep()
     {
         return [];
-    }
-
-
-
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     * @see ResourceInterface
-     */
-    public function getResourceId()
-    {
-        return 'IntervenantDossier';
     }
 
 

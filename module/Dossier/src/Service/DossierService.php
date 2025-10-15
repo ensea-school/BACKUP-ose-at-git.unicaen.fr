@@ -2,10 +2,12 @@
 
 namespace Dossier\Service;
 
+use Application\Provider\Tbl\TblProvider;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Dossier\Entity\Db\IntervenantDossier;
+use Dossier\Service\Traits\TblDossierServiceAwareTrait;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
@@ -14,6 +16,7 @@ use Utilisateur\Entity\Db\Utilisateur;
 use Workflow\Entity\Db\TypeValidation;
 use Workflow\Entity\Db\Validation;
 use Workflow\Service\ValidationServiceAwareTrait;
+use Workflow\Service\WorkflowServiceAwareTrait;
 
 /**
  * Description of Intervenant Dossier
@@ -31,6 +34,8 @@ class DossierService extends AbstractEntityService
     use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use AnneeServiceAwareTrait;
+    use TblDossierServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
     /**
@@ -114,6 +119,20 @@ class DossierService extends AbstractEntityService
         $emails['pro']   = (!empty($emailsIntervenantDossierPro)) ? $emailsIntervenantDossierPro : $emailsIntervenantPro;
 
         return $emails;
+    }
+
+
+
+    public function initDossierIntervenant(Intervenant $intervenant): IntervenantDossier
+    {
+        $dossier = $this->newEntity()->fromIntervenant($intervenant);
+        $this->getEntityManager()->persist($dossier);
+        $this->getEntityManager()->flush();
+        $this->getServiceWorkflow()->calculerTableauxBord([
+                                                              TblProvider::DOSSIER,
+                                                          ], $intervenant);
+        return $dossier;
+
     }
 
 

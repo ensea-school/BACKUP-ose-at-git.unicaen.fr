@@ -261,13 +261,6 @@ Cordialement,
     ],
 
 
-    /* Export RH*/
-    Parametre::EXPORT_RH_FRANCHISSEMENT                  => [
-        "VALEUR"      => "",
-        "DESCRIPTION" => "Etape de la feuille de route à franchir pour autoriser un export vers le SIRH",
-    ],
-
-
     /* Messages informatifs */
     Parametre::PAGE_CONTACT                              => [
         "VALEUR"      => "<h3>Intervenants</h3>

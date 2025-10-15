@@ -310,7 +310,7 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertController(string $controller, ?string $action): bool
     {
-        $intervenant = $this->getParam('intervenant');
+        $intervenant = $this->getParam(Intervenant::class);
 
         if ($intervenant) {
             $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);

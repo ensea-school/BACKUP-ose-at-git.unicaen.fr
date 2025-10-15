@@ -66,9 +66,12 @@ class ChargensController extends AbstractController
     public function formationAction()
     {
         /** @var Etape $etape */
-        $etape = $this->context()->etapeFromQuery();
+        $etapeId = $this->params()->fromQuery('etape');
+        $etape = $etapeId ? $this->em()->find(Etape::class, $etapeId) : null;
+
         /** @var Scenario $scenario */
-        $scenario = $this->context()->scenarioFromQuery();
+        $scenarioId = $this->params()->fromQuery('scenario');
+        $scenario = $scenarioId ? $this->em()->find(Scenario::class, $scenarioId) : null;
 
         $contextStructure = $this->getServiceContext()->getStructure();
 
@@ -197,7 +200,8 @@ class ChargensController extends AbstractController
         $title = 'Duplication du scénario';
 
         /** @var Scenario $newScenario */
-        $newScenario = $this->context()->scenarioFromPost('destination');
+        $newScenarioId = $this->params()->fromPost('destination');
+        $newScenario = $newScenarioId ? $this->em()->find(Scenario::class,$newScenarioId ) : null;
 
         if ($oldScenario == $newScenario) {
             $this->flashMessenger()->addErrorMessage('Les scénario d\'origine et de destination sont identiques : la duplication ne peut pas avoir lieu.');

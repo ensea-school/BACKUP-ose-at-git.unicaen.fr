@@ -2,9 +2,7 @@
 
 namespace Application;
 
-
 use Application\Provider\Privileges;
-use Application\Service\PeriodeService;
 
 return [
     'router' => [
@@ -18,6 +16,7 @@ return [
                         'action'     => 'index',
                     ],
                 ],
+
                 'may_terminate' => true,
                 'child_routes'  => [
                     'saisie'    => [
@@ -86,7 +85,6 @@ return [
         ],
     ],
 
-
     'guards'          => [
         [
             'controller' => Controller\PeriodeController::class,
@@ -100,15 +98,9 @@ return [
         ],
     ],
 
-
     'controllers'     => [
         'factories' => [
             Controller\PeriodeController::class => Controller\Factory\PeriodeControllerFactory::class,
-        ],
-    ],
-    'service_manager' => [
-        'invokables' => [
-            PeriodeService::class => PeriodeService::class,
         ],
     ],
 

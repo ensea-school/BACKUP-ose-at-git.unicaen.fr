@@ -6,7 +6,6 @@ use Application\Controller\AbstractController;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Laminas\View\Model\ViewModel;
 use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\CheminPedagogique;
@@ -261,7 +260,6 @@ class OffreFormationController extends AbstractController
         $this->em()->getFilters()->enable('annee')->init([
             ElementPedagogique::class,
             Etape::class,
-
         ]);
     }
 
@@ -291,17 +289,17 @@ class OffreFormationController extends AbstractController
 
     protected function getParams()
     {
-        $structure = $this->context()->structureFromQuery() ?: $this->getServiceContext()->getStructure();
-        $niveau = $this->context()->niveauFromQuery();
-        $etape = $this->context()->etapeFromQuery();
-        if ($etape) {
-            $etape = $this->getServiceEtape()->get($etape->getId());
-        } // entité Niveau
+        if (!$structure = $this->getServiceContext()->getStructure()) {
+            $structureId = $this->params()->fromQuery('structure');
+            $structure   = $structureId ? $this->em()->find(\Lieu\Entity\Db\Structure::class, $structureId) : null;
+        }
+
+        $etapeId = $this->params()->fromQuery('etape');
+        $etape = $etapeId ? $this->em()->find(Etape::class, $etapeId) : null;
+
+        $niveau = $this->params()->fromQuery('niveau');
         if ($niveau) {
             $niveau = $this->getServiceNiveauEtape()->get($niveau);
-        } // entité Niveau
-        if ($structure && !$structure instanceof \Lieu\Entity\Db\Structure) {
-            $structure = $this->getServiceStructure()->get($structure);
         }
 
         return [$structure, $niveau, $etape];

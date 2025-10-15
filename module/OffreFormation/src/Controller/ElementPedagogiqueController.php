@@ -7,8 +7,10 @@ use Application\Filter\FloatFromString;
 use Application\Provider\Privileges;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Form\Traits\ElementModulateurCentreCoutTauxRemuFormAwareTrait;
 use OffreFormation\Form\Traits\ElementPedagogiqueSaisieAwareTrait;
 use OffreFormation\Form\Traits\ElementPedagogiqueSynchronisationFormAwareTrait;
@@ -125,14 +127,21 @@ class ElementPedagogiqueController extends AbstractController
     public function searchAction()
     {
         $this->em()->getFilters()->enable('annee')->init([
-            \OffreFormation\Entity\Db\ElementPedagogique::class,
-            \OffreFormation\Entity\Db\Etape::class,
+            ElementPedagogique::class,
+            Etape::class,
         ]);
 
-        $structure = $this->context()->structureFromQuery();
-        $niveau    = $this->context()->niveauFromQuery();
-        $etape     = $this->context()->etapeFromQuery();
-        $element   = $this->context()->elementPedagogiqueFromQuery();
+        $structureId = $this->params()->fromQuery('structure');
+        $structure = $structureId ? $this->em()->find(Structure::class, $structureId) : null;
+
+        $niveau    = $this->params()->fromQuery('niveau');
+
+        $etapeId = $this->params()->fromQuery('etape');
+        $etape     = $etapeId ? $this->em()->find(Etape::class, $etapeId) : null;
+
+        $elementId = $this->params()->fromQuery('elementPedagogique');
+        $element   = $elementId ? $this->em()->find(ElementPedagogique::class, $etapeId) : null;
+
         $term      = $this->params()->fromQuery('term');
 
         if (!$etape && !$term) {

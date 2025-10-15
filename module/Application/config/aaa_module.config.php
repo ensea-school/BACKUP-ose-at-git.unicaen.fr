@@ -138,11 +138,7 @@ $config = [
             Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
         ],
     ],
-    'controller_plugins' => [
-        'factories' => [
-            'context' => Controller\Plugin\ContextFactory::class,
-        ],
-    ],
+
     'view_manager'       => [
         'template_path_stack' => [
             __DIR__ . '/../view',

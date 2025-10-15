@@ -31,10 +31,6 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
-        // Si c'est bon alors on affine...
         switch (true) {
             case $entity instanceof TblAgrement:
                 switch ($privilege) {
@@ -76,9 +72,9 @@ class AgrementAssertion extends AbstractAssertion
     protected function assertController(string $controller, ?string $action): bool
     {
         /* @var $intervenant Intervenant */
-        $intervenant = $this->getParam('intervenant');
+        $intervenant = $this->getParam(Intervenant::class);
 
-        $typeAgrement = $this->getParam('typeAgrement');
+        $typeAgrement = $this->getParam(TypeAgrement::class);
         if (!$typeAgrement){
             $typeAgrementCode = $this->getParam('typeAgrementCode');
             if ($typeAgrementCode) {

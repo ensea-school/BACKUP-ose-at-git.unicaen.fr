@@ -29,10 +29,10 @@ class SuiviAssertion extends AbstractAssertion
     {
         $entity = $this->getServiceContext()->getIntervenant();
         if (!$entity) {
-            $entity = $this->getParam('intervenant');
+            $entity = $this->getParam(Intervenant::class);
         }
         if (!$entity) {
-            $entity = $this->getParam('volumeHoraireMission');
+            $entity = $this->getParam(VolumeHoraireMission::class);
         }
         if (!$entity) {
             return false;

@@ -5,11 +5,12 @@ namespace Application\ORM;
 
 use Administration\Interfaces\ParametreEntityInterface;
 use Doctrine\ORM\EntityManager;
+use Intervenant\Entity\Db\Intervenant;
 use Psr\Container\ContainerInterface;
 use Unicaen\Framework\Cache\CacheContainerTrait;
 use Application\ORM\Event\Listeners\ParametreEntityListener;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Unicaen\Framework\Router\ParamFirewallInterface;
+use Unicaen\Framework\Params\ParamFirewallInterface;
 use Unicaen\Framework\User\UserManager;
 use Intervenant\Service\IntervenantService;
 use Laminas\Mvc\MvcEvent;
@@ -25,6 +26,8 @@ class RouteEntitiesInjector implements ParamFirewallInterface
     use ContextServiceAwareTrait;
 
     private array $entityParams = [];
+
+    private ?string $paramClass = null;
 
 
 
@@ -44,14 +47,17 @@ class RouteEntitiesInjector implements ParamFirewallInterface
         $params = $e->getRouteMatch()->getParams();
         foreach ($params as $name => $value) {
             $errorMessage = null;
-            $this->check($name, $value, null, $errorMessage);
+            $this->check($name, $params, null, $errorMessage);
             if ('intervenant' == $name) {
                 $profile = $this->userManager->getProfile();
                 if ($profile && $profile->getContext('intervenant')) {
-                    $profile->setContext('intervenant', $value);
+                    $profile->setContext('intervenant', $params[$name]);
                 }
             }
-            $e->setParam($name, $value);
+            if ($this->paramClass) {
+                $e->setParam($name, $params[$this->paramClass]);
+                $e->getRouteMatch()->setParam($this->paramClass, $params[$this->paramClass]);
+            }
         }
     }
 
@@ -79,27 +85,31 @@ class RouteEntitiesInjector implements ParamFirewallInterface
 
 
 
-    public function check(string $name, mixed &$value, mixed $constraint = null, ?string &$errorMessage): bool
+    public function check(string $name, array &$params, mixed $constraint = null, ?string &$errorMessage): bool
     {
+        $this->paramClass = null;
         switch ($name) {
             case 'intervenant':
-                if ($value !== null) {
+                if ($params[$name] !== null) {
                     /** @var IntervenantService $serviceIntervenant */
-                    $serviceIntervenant = $this->container->get(IntervenantService::class);
-                    $value = $serviceIntervenant->getByRouteParam($value);
+                    $serviceIntervenant        = $this->container->get(IntervenantService::class);
+                    $this->paramClass          = Intervenant::class;
+                    $params[$this->paramClass] = $serviceIntervenant->getByRouteParam($params[$name]);
                 }
                 break;
             default:
                 if (array_key_exists($name, $this->entityParams)) {
-                    if (0 !== (int)$value) {
-                        $repo  = $this->entityManager->getRepository($this->entityParams[$name]);
-                        $value = $repo->find($value);
-                        if ($value instanceof ParametreEntityInterface) {
+                    if (0 !== (int)$params[$name]) {
+                        $this->paramClass          = $this->entityParams[$name];
+                        $repo                      = $this->entityManager->getRepository($this->paramClass);
+                        $params[$this->paramClass] = $repo->find($params[$name]);
+
+                        if ($params[$this->paramClass] instanceof ParametreEntityInterface) {
                             $annee = $this->getServiceContext()->getAnnee();
-                            if ($value->getAnnee() != $annee) {
+                            if ($params[$this->paramClass]->getAnnee() != $annee) {
                                 $pel = new ParametreEntityListener();
                                 $pel->setEntityManager($this->entityManager);
-                                $value = $pel->entityAutreAnnee($value, $annee);
+                                $params[$this->paramClass] = $pel->entityAutreAnnee($params[$this->paramClass], $annee);
                             }
                         }
                     }

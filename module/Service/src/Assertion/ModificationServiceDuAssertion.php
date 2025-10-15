@@ -36,7 +36,7 @@ class ModificationServiceDuAssertion extends AbstractAssertion
     protected function assertController(string $controller, ?string $action): bool
     {
         if ($controller == ModificationServiceDuController::class && $action == 'saisir') {
-            $intervenant = $this->getParam('intervenant');
+            $intervenant = $this->getParam(Intervenant::class);
             if ($intervenant) {
                 return $this->assertIntervenant($intervenant);
             }

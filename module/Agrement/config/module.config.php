@@ -26,6 +26,11 @@ return [
                     'route'         => '/:intervenant/agrement',
                     'controller'    => AgrementController::class,
                     'action'        => 'index',
+                    'privileges' => [
+                        Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                        Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                    ],
+                    'assertion'  => AgrementAssertion::class,
                     'may_terminate' => true,
                     'child_routes'  => [
                         'conseil-academique' => [
@@ -34,6 +39,11 @@ return [
                             'defaults' => [
                                 'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
                             ],
+                            'privileges' => [
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                            ],
+                            'assertion'  => AgrementAssertion::class,
                         ],
                         'conseil-restreint'  => [
                             'route'    => '/conseil-restreint',
@@ -41,6 +51,11 @@ return [
                             'defaults' => [
                                 'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,
                             ],
+                            'privileges' => [
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                            ],
+                            'assertion'  => AgrementAssertion::class,
                         ],
                         'ajouter'            => [
                             'route'       => '/:typeAgrement/ajouter[/:structure]',
@@ -49,6 +64,13 @@ return [
                                 'structure'    => '[0-9]*',
                             ],
                             'action'      => 'saisir',
+                            'privileges' => [
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
+                            ],
+                            'assertion'  => AgrementAssertion::class,
                         ],
                         'voir'               => [
                             'route'       => '/voir/:agrement',
@@ -56,6 +78,11 @@ return [
                                 'agrement' => '[0-9]*',
                             ],
                             'action'      => 'voir',
+                            'privileges' => [
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                            ],
+                            'assertion'  => AgrementAssertion::class,
                         ],
                         'saisir'             => [
                             'route'       => '/saisir/[:agrement]',
@@ -63,6 +90,13 @@ return [
                                 'agrement' => '[0-9]*',
                             ],
                             'action'      => 'saisir',
+                            'privileges' => [
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
+                            ],
+                            'assertion'  => AgrementAssertion::class,
                         ],
                         'supprimer'          => [
                             'route'       => '/supprimer/[:agrement]',
@@ -70,6 +104,11 @@ return [
                                 'agrement' => '[0-9]*',
                             ],
                             'action'      => 'supprimer',
+                            'privileges' => [
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
+                            ],
+                            'assertion'  => AgrementAssertion::class,
                         ],
                     ],
                 ],
@@ -89,6 +128,13 @@ return [
                             'defaults' => [
                                 'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
                             ],
+                            'privileges' => [
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
+                            ],
+                            'assertion'  => AgrementAssertion::class,
                         ],
                         'conseil-restreint'  => [
                             'route'    => '/conseil-restreint',
@@ -96,10 +142,18 @@ return [
                             'defaults' => [
                                 'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,
                             ],
+                            'privileges' => [
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
+                                Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
+                            ],
+                            'assertion'  => AgrementAssertion::class,
                         ],
                         'export-csv'         => [
                             'route'  => '/export-csv',
                             'action' => 'export-csv',
+                            'privileges' => Privileges::AGREMENT_EXPORT_CSV,
                         ],
                     ],
                 ],
@@ -158,45 +212,6 @@ return [
             ],
         ],
 
-    ],
-
-    'guards' => [
-        [
-            'controller' => AgrementController::class,
-            'action'     => ['index', 'lister', 'voir'],
-            'privileges' => [
-                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
-                Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
-            ],
-            'assertion'  => AgrementAssertion::class,
-        ],
-        [
-            'controller' => AgrementController::class,
-            'action'     => ['ajouter', 'saisir-lot', 'saisir'],
-            'privileges' => [
-                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
-                Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
-                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
-                Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
-            ],
-            'assertion'  => AgrementAssertion::class,
-        ],
-        [
-            'controller' => AgrementController::class,
-            'action'     => ['export-csv'],
-            'privileges' => [
-                Privileges::AGREMENT_EXPORT_CSV,
-            ],
-        ],
-        [
-            'controller' => AgrementController::class,
-            'action'     => ['supprimer'],
-            'privileges' => [
-                Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
-                Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
-            ],
-            'assertion'  => AgrementAssertion::class,
-        ],
     ],
 
     'rules' => [

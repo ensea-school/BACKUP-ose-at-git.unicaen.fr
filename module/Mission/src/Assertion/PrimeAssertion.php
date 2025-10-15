@@ -2,6 +2,7 @@
 
 namespace Mission\Assertion;
 
+use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Unicaen\Framework\Authorize\AbstractAssertion;
@@ -22,7 +23,7 @@ class PrimeAssertion extends AbstractAssertion implements EntityManagerAwareInte
 
     protected function assertController (string $controller, ?string $action): bool
     {
-        $intervenant = $this->getParam('intervenant');
+        $intervenant = $this->getParam(Intervenant::class);
 
         if ($intervenant) {
             $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);

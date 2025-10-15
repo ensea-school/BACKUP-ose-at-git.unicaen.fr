@@ -31,13 +31,13 @@ class SaisieAssertion extends AbstractAssertion
     {
         $entity = $this->getServiceContext()->getIntervenant();
         if (!$entity) {
-            $entity = $this->getParam('intervenant');
+            $entity = $this->getParam(Intervenant::class);
         }
         if (!$entity) {
-            $entity = $this->getParam('mission');
+            $entity = $this->getParam(Mission::class);
         }
         if (!$entity) {
-            $entity = $this->getParam('volumeHoraireMission');
+            $entity = $this->getParam(VolumeHoraireMission::class);
         }
         if (!$entity) {
             return false;

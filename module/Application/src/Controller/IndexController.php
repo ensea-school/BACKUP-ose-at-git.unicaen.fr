@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Administration\Service\ParametresServiceAwareTrait;
+use Application\Entity\Db\Annee;
 use Application\Provider\Privileges;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -66,7 +67,7 @@ class IndexController extends AbstractController
     public function changementAnneeAction()
     {
         /* Prise en compte du changement d'année!! */
-        $annee = $this->params()->fromRoute('annee');
+        $annee = $this->params()->fromRoute(Annee::class);
         if ($annee) {
             $annee = $this->getServiceAnnee()->get($annee);
             $this->getServiceContext()->setAnnee($annee);

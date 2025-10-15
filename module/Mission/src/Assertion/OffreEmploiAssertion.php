@@ -4,6 +4,9 @@ namespace Mission\Assertion;
 
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
+use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\VolumeHoraireMission;
 use Unicaen\Framework\Authorize\AbstractAssertion;
 use Unicaen\Framework\Navigation\Page;
 use Unicaen\Framework\User\UserProfile;
@@ -98,16 +101,16 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     {
         $entity = $this->getServiceContext()->getIntervenant();
         if (!$entity) {
-            $entity = $this->getParam('intervenant');
+            $entity = $this->getParam(Intervenant::class);
         }
         if (!$entity) {
-            $entity = $this->getParam('mission');
+            $entity = $this->getParam(Mission::class);
         }
         if (!$entity) {
-            $entity = $this->getParam('volumeHoraireMission');
+            $entity = $this->getParam(VolumeHoraireMission::class);
         }
         if (!$entity) {
-            $entity = $this->getParam('candidature');
+            $entity = $this->getParam(Candidature::class);
         }
         if (!$entity) {
             return false;

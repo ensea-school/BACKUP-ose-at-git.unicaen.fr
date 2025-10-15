@@ -18,7 +18,7 @@ class FormuleAssertion extends AbstractAssertion
 
     protected function assertController(string $controller, ?string $action): bool
     {
-        $intervenant = $this->getParam('intervenant');
+        $intervenant = $this->getParam(Intervenant::class);
         /* @var $intervenant Intervenant */
 
         switch ($action) {

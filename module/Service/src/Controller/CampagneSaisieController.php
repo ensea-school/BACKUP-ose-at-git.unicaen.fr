@@ -4,7 +4,9 @@ namespace Service\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privileges;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Form\CampagneSaisieFormAwareTrait;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -24,8 +26,11 @@ class CampagneSaisieController extends AbstractController
 
     public function campagnesSaisieAction()
     {
-        $typeIntervenant   = $this->context()->typeIntervenantFromPost();
-        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromPost();
+        $typeIntervenantId = $this->params()->fromPost('typeIntervenant');
+        $typeIntervenant   = $typeIntervenantId ? $this->em()->find(TypeIntervenant::class, $typeIntervenantId) : null;
+
+        $typeVolumeHoraireId = $this->params()->fromPost('typeVolumeHoraire');
+        $typeVolumeHoraire = $typeVolumeHoraireId ? $this->em()->find(TypeVolumeHoraire::class, $typeVolumeHoraireId) : null;
 
         $typesIntervenants    = $this->getServiceTypeIntervenant()->getList();
         $typesVolumesHoraires = $this->getServiceTypeVolumeHoraire()->getList();
@@ -46,7 +51,7 @@ class CampagneSaisieController extends AbstractController
                 $form->bind($campagne);
                 $forms[$ti->getId()][$tvh->getId()] = $form;
 
-                if ($canEdit && $ti->getId() == $typeIntervenant && $tvh->getId() == $typeVolumeHoraire) {
+                if ($canEdit && $ti->getId() == $typeIntervenant->getId() && $tvh->getId() == $typeVolumeHoraire->getId()) {
                     $form->requestSave($this->getRequest(), function () use ($campagne) {
                         if (!$campagne->getDateDebut() && !$campagne->getDateFin() && !$campagne->getMessageIntervenant() && !$campagne->getMessageAutres()) {
                             $this->getServiceCampagneSaisie()->delete($campagne);

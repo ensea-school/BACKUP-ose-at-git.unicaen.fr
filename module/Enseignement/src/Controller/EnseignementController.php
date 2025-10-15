@@ -72,7 +72,7 @@ class EnseignementController extends AbstractController
     use EtablissementServiceAwareTrait;
     use ValidationServiceAwareTrait;
 
-    public function prevuAction ()
+    public function prevuAction()
     {
         $prevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
@@ -81,12 +81,12 @@ class EnseignementController extends AbstractController
 
 
 
-    public function indexAction (?TypeVolumeHoraire $typeVolumeHoraire = null)
+    public function indexAction(?TypeVolumeHoraire $typeVolumeHoraire = null)
     {
         $this->initFilters();
         $this->em()->getFilters()->enable('historique')->init([
-            \OffreFormation\Entity\Db\CheminPedagogique::class,
-        ]);
+                                                                  \OffreFormation\Entity\Db\CheminPedagogique::class,
+                                                              ]);
 
         /* @var $intervenant Intervenant */
         $intervenant       = $this->getEvent()->getParam('intervenant');
@@ -133,21 +133,21 @@ class EnseignementController extends AbstractController
      * éventuelles
      * (services sur des enseignements fermés, etc.)
      */
-    protected function initFilters ()
+    protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Enseignement\Entity\Db\Service::class,
-            \Enseignement\Entity\Db\VolumeHoraire::class,
-            \Workflow\Entity\Db\Validation::class,
-        ]);
+                                                                  \Enseignement\Entity\Db\Service::class,
+                                                                  \Enseignement\Entity\Db\VolumeHoraire::class,
+                                                                  \Workflow\Entity\Db\Validation::class,
+                                                              ]);
         $this->em()->getFilters()->enable('annee')->init([
-            ElementPedagogique::class,
-        ]);
+                                                             ElementPedagogique::class,
+                                                         ]);
     }
 
 
 
-    public function realiseAction ()
+    public function realiseAction()
     {
         $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
 
@@ -156,7 +156,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function saisieAction ()
+    public function saisieAction()
     {
         $this->initFilters();
 
@@ -229,7 +229,7 @@ class EnseignementController extends AbstractController
 
                         $service = $this->getServiceService()->save($service);
                         $this->em()->getConnection()->setAutoCommit(false);
-                        $saved   = $service;
+                        $saved = $service;
                         $form->get('service')->get('id')->setValue($service->getId()); // transmet le nouvel ID
                         $hFin = $service->getVolumeHoraireListe()->getHeures();
                         $this->updateTableauxBord($service->getIntervenant());
@@ -255,14 +255,14 @@ class EnseignementController extends AbstractController
 
 
 
-    private function updateTableauxBord (Intervenant $intervenant, $validation = false)
+    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            TblProvider::FORMULE,
-            TblProvider::VALIDATION_ENSEIGNEMENT,
-            TblProvider::CONTRAT,
-            TblProvider::SERVICE,
-        ], $intervenant);
+                                                              TblProvider::FORMULE,
+                                                              TblProvider::VALIDATION_ENSEIGNEMENT,
+                                                              TblProvider::CONTRAT,
+                                                              TblProvider::SERVICE,
+                                                          ], $intervenant);
 
         if (!$validation) {
             $this->getServiceWorkflow()->calculerTableauxBord([TblProvider::PIECE_JOINTE], $intervenant);
@@ -271,7 +271,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function rafraichirLigneAction ()
+    public function rafraichirLigneAction()
     {
         $this->initFilters();
 
@@ -297,7 +297,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function saisieFormRefreshVhAction ()
+    public function saisieFormRefreshVhAction()
     {
         $this->initFilters();
 
@@ -311,14 +311,12 @@ class EnseignementController extends AbstractController
         $service = $this->getServiceService();
         $form    = $this->getFormServiceEnseignementSaisie();
         $form->setTypeVolumeHoraire($typeVolumeHoraire);
-        $element = $this->context()->elementPedagogiqueFromPost('element');
-        if (!$element instanceof \OffreFormation\Entity\Db\ElementPedagogique) {
-            $element = $this->getServiceElementPedagogique()->get($element);
-        }
-        $etablissement = $this->context()->etablissementFromPost();
-        if (!$etablissement instanceof Etablissement) {
-            $etablissement = $this->getServiceEtablissement()->get($etablissement);
-        }
+
+        $elementId = $this->params()->fromPost('elementPedagogique');
+        $element   = $elementId ? $this->em()->find(ElementPedagogique::class, $elementId) : null;
+
+        $etablissementId = $this->params()->fromPost('etablissement');
+        $etablissement   = $etablissementId ? $this->em()->find(Etablissement::class, $etablissementId) : null;
 
         if ($serviceId) {
             /* @var $entity Service */
@@ -349,7 +347,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function suppressionAction ()
+    public function suppressionAction()
     {
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
         if (empty($typeVolumeHoraire)) {
@@ -388,7 +386,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function initialisationAction ()
+    public function initialisationAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getProcessusPlafond()->beginTransaction();
@@ -406,7 +404,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function constatationAction ()
+    public function constatationAction()
     {
         $this->initFilters();
         $realise  = $this->getServiceTypeVolumeHoraire()->getRealise();
@@ -458,7 +456,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function importAgendaPrevisionnelAction ()
+    public function importAgendaPrevisionnelAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getServiceService()->setPrevusFromAgenda($intervenant);
@@ -469,7 +467,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function validationPrevuAction ()
+    public function validationPrevuAction()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
@@ -478,7 +476,7 @@ class EnseignementController extends AbstractController
 
 
 
-    private function validationAction (TypeVolumeHoraire $typeVolumeHoraire)
+    private function validationAction(TypeVolumeHoraire $typeVolumeHoraire)
     {
         $this->initFilters();
 
@@ -543,7 +541,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function validationRealiseAction ()
+    public function validationRealiseAction()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
 
@@ -552,7 +550,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function validerAction ()
+    public function validerAction()
     {
         $this->initFilters();
 
@@ -594,7 +592,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function devaliderAction ()
+    public function devaliderAction()
     {
         $this->initFilters();
 

@@ -846,28 +846,30 @@ class SihamConnecteur implements ConnecteurRhInterface
             //Valeur par défaut
             $categorieSituation = 'MC140';
             $motifSituation     = 'MC141';
+            $config = $this->siham->getConfig();
+            $configCloture = ($config['cloture'] !== false) ? $config['cloture'] : null;
             //On regarde si des valeurs ont été spécifié dans la configuration siham
-            if (isset($this->siham->getConfig()['cloture'])) {
-                if (array_key_exists($codeStatutSiham, $this->siham->getConfig()['cloture'])) {
-                    if (isset($this->siham->getConfig()['cloture'][$codeStatutSiham]['categorie-situation'])) {
-                        $categorieSituation = $this->siham->getConfig()['cloture'][$codeStatutSiham]['categorie-situation'];
+            if ($configCloture !== null) {
+                if (array_key_exists($codeStatutSiham, $config['cloture'])) {
+                    if (isset($config['cloture'][$codeStatutSiham]['categorie-situation'])) {
+                        $categorieSituation = $config['cloture'][$codeStatutSiham]['categorie-situation'];
                     }
-                    if (isset($this->siham->getConfig()['cloture'][$codeStatutSiham]['motif-situation'])) {
-                        $motifSituation = $this->siham->getConfig()['cloture'][$codeStatutSiham]['motif-situation'];
+                    if (isset($config['cloture'][$codeStatutSiham]['motif-situation'])) {
+                        $motifSituation = $config['cloture'][$codeStatutSiham]['motif-situation'];
                     }
-                } elseif (isset($this->siham->getConfig()['cloture']['default'])) {
-                    if (isset($this->siham->getConfig()['cloture']['default']['categorie-situation'])) {
-                        $categorieSituation = $this->siham->getConfig()['cloture']['default']['categorie-situation'];
+                } elseif (isset($config['cloture']['default'])) {
+                    if (isset($config['cloture']['default']['categorie-situation'])) {
+                        $categorieSituation = $config['cloture']['default']['categorie-situation'];
                     }
-                    if (isset($this->siham->getConfig()['cloture']['default']['motif-situation'])) {
-                        $motifSituation = $this->siham->getConfig()['cloture']['default']['motif-situation'];
+                    if (isset($config['cloture']['default']['motif-situation'])) {
+                        $motifSituation = $config['cloture']['default']['motif-situation'];
                     }
                 } else {
-                    if (isset($this->siham->getConfig()['cloture']['categorie-situation'])) {
-                        $categorieSituation = $this->siham->getConfig()['cloture']['categorie-situation'];
+                    if (isset($config['cloture']['categorie-situation'])) {
+                        $categorieSituation = $config['cloture']['categorie-situation'];
                     }
-                    if (isset($this->siham->getConfig()['cloture']['motif-situation'])) {
-                        $motifSituation = $this->siham->getConfig()['cloture']['motif-situation'];
+                    if (isset($config['cloture']['motif-situation'])) {
+                        $motifSituation = $config['cloture']['motif-situation'];
                     }
                 }
 

@@ -2,8 +2,6 @@
 
 namespace Dossier;
 
-use Application\Provider\Privileges;
-use DoctrineORMModule\Proxy\__CG__\Utilisateur\Entity\Db\Privilege;
 use Dossier\Assertion\IntervenantDossierAssertion;
 use Dossier\Controller\AutresController;
 use Dossier\Controller\EmployeurController;

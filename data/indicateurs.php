@@ -273,7 +273,7 @@ return [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire doit être pris en charge ou renouvelés dans le SI RH',
                 'libelle_pluriel'   => '%s vacataires doivent être pris en charge ou renouvelés dans le SI RH',
-                'route'             => 'intervenant/exporter-rh',
+                'route'             => 'intervenant/exporter',
                 'irrecevables'      => false,
             ],
         ],

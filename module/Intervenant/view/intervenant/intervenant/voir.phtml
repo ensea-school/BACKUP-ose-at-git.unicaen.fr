@@ -1,82 +1,33 @@
 <?php
 
-
-use Application\Provider\Privileges;
+use Unicaen\Framework\Navigation\Page;
+use Intervenant\Entity\Db\Intervenant;
+use Application\View\Renderer\PhpRenderer;
 
 /**
- * @var $this        \Application\View\Renderer\PhpRenderer
- * @var $intervenant \Intervenant\Entity\Db\Intervenant
- * @var $tab         string
+ * @var $this             PhpRenderer
+ * @var $intervenant      Intervenant
+ * @var $tab              string
+ * @var $pages            Page[]
+ * @var $notificationNote int
  */
 
 $this->intervenant($intervenant)->renderTitle('Fiche');
 
-
-$tabs = [
-    [
-        'id'            => 'fiche',
-        'label'         => '<i class="fas fa-eye"></i> Fiche',
-        'content'       => $this->partial('intervenant/intervenant/fiche.phtml', compact('intervenant')),
-        'url'           => $this->url('intervenant/fiche', ['intervenant' => $intervenant->getId()]),
-        'force-refresh' => true,
-    ],
-];
-if ($this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION)) {
-
-    $tabs[] = [
-        'id'    => 'edition',
-        'label' => '<i class="fas fa-pencil"></i> Édition',
-        'url'   => $this->url('intervenant/saisir', ['intervenant' => $intervenant->getId()]),
-    ];
-}
-
-if ($this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION)) {
-    $tabs[] = [
-        'id'            => 'synchronisation',
-        'label'         => '<i class="fas fa-download"></i> Synchronisation',
-        'url'           => $this->url('intervenant/synchronisation', ['intervenant' => $intervenant->getId()]),
+$tabs = [];
+foreach ($pages as $page) {
+    $tabs[$page->getName()] = [
+        'id'            => $page->getName(),
+        'label'         => '<i class="' . $page->getIcon() . '"></i> ' . $page->getLabel(),
+        'url'           => $page->getUri(['intervenant' => $intervenant->getId()]),
         'force-refresh' => true,
     ];
 }
 
-if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH)) {
-    $tabs[] = [
-        'id'            => 'export-rh',
-        'label'         => '<i class="fas fa-upload"></i> Export RH',
-        'url'           => $this->url('intervenant/exporter', ['intervenant' => $intervenant->getId()]),
-        'force-refresh' => true,
-    ];
-}
+$tabs['fiche']['content'] = $this->partial('intervenant/intervenant/fiche.phtml', compact('intervenant'));
 
-if ($this->isAllowed($intervenant, Privileges::INTERVENANT_SUPPRESSION)) {
-    $tabs[] = [
-        'id'            => 'suppression',
-        'label'         => '<i class="fas fa-trash-can"></i> Suppression',
-        'url'           => $this->url('intervenant/supprimer', ['intervenant' => $intervenant->getId()]),
-        'force-refresh' => true,
-    ];
-}
-
-if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_VISUALISATION))) {
-    $tabs[] = [
-        'id'            => 'derogations',
-        'label'         => '<i class="fas fa-shuffle"></i> Dérogations',
-        'url'           => $this->url('derogations', ['intervenant' => $intervenant->getId()]),
-        'force-refresh' => true,
-    ];
-}
-
-if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION))) {
-    $label = '<span class="glyphicon glyphicon-book"></span> Notes';
-    if ($notificationNote > 0) {
-        $label .= ' <span class="badge" style="background-color: #fc1010;font-size:10px;margin-bottom:5px;">' . $notificationNote . '</span>';
-    }
-    $tabs[] = [
-        'id'            => 'notes',
-        'label'         => $label,
-        'url'           => $this->url('note', ['intervenant' => $intervenant->getId()]),
-        'force-refresh' => true,
-    ];
+if (array_key_exists('notes', $tabs) && $notificationNote > 0) {
+    $tabs['notes']['label'] .= ' <span class="badge" style="background-color: #fc1010;font-size:10px;margin-bottom:5px;">' . $notificationNote . '</span>';
 }
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();

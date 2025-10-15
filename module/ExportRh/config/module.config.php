@@ -17,45 +17,58 @@ return [
             'route'         => '/intervenant',
             'action'        => 'index',
             'child_routes'  => [
-                'exporter'       => [
+                'exporter'    => [
                     'may_terminate' => false,
                     'route'         => '/:intervenant/exporter',
                     'controller'    => Controller\ExportRhController::class,
                     'action'        => 'exporter',
+                    'privileges'    => Privileges::INTERVENANT_EXPORTER,
+                    'assertion'     => ExportRhAssertion::class,
                 ],
-                'exporter-rh'    => [
-                    'route'  => '/:intervenant/voir?tab=export-rh',
-                    'action' => 'voir',
-                ],
-                'pec'            => [
+                'pec'         => [
                     'may_terminate' => false,
                     'route'         => '/:intervenant/pec',
                     'controller'    => Controller\ExportRhController::class,
                     'action'        => 'prise-en-charge',
+                    'privileges'    => Privileges::INTERVENANT_EXPORTER,
+                    'assertion'     => ExportRhAssertion::class,
                 ],
-                'ren'            => [
+                'ren'         => [
                     'may_terminate' => false,
                     'route'         => '/:intervenant/ren',
                     'controller'    => Controller\ExportRhController::class,
                     'action'        => 'renouvellement',
+                    'privileges'    => Privileges::INTERVENANT_EXPORTER,
+                    'assertion'     => ExportRhAssertion::class,
                 ],
-                'sync'           => [
+                'sync'        => [
                     'may_terminate' => false,
                     'route'         => '/:intervenant/sync',
                     'controller'    => Controller\ExportRhController::class,
                     'action'        => 'synchroniser',
+                    'privileges'    => Privileges::INTERVENANT_EXPORTER,
+                    'assertion'     => ExportRhAssertion::class,
                 ],
             ],
         ],
     ],
 
-    'guards' => [
-        [
-            'controller' => Controller\ExportRhController::class,
-            'action'     => ['exporter', 'prise-en-charge', 'renouvellement', 'synchroniser'],
-            'privileges' => [Privileges::INTERVENANT_EXPORTER],
-            'assertion'  => ExportRhAssertion::class,
-
+    'navigation' => [
+        'intervenant' => [
+            'pages' => [
+                'export-rh'  => [
+                    'label'        => 'Export RH',
+                    'title'        => 'Export vers le logiciel de gestion RH',
+                    'route'        => 'intervenant/exporter',
+                    'order'        => 10,
+                ],
+                'agrement-conseil-academique' => [
+                    'label'        => 'Agrément : Conseil académique',
+                    'title'        => 'Agrément : Conseil académique',
+                    'route'        => 'intervenant/agrement/conseil-academique',
+                    'order'        => 11,
+                ],
+            ],
         ],
     ],
 

@@ -8,61 +8,60 @@ use Intervenant\Assertion\NoteAssertion;
 
 return [
     'routes' => [
-        'note'   => [
-            'options'       => [
-                'route'    => '/note/:intervenant',
-                'defaults' => [
-                    '__NAMESPACE__' => 'Intervenant\Controller',
-                    'controller'    => 'Note',
-                    'action'        => 'index',
-                ],
-            ],
+        'note' => [
+            'route'         => '/note/:intervenant',
+            'controller'    => Controller\NoteController::class,
+            'action'        => 'index',
+            'privileges'    => Privileges::INTERVENANT_NOTE_VISUALISATION,
             'may_terminate' => true,
             'child_routes'  => [
                 'saisir'        => [
-                    'options'       => [
-                        'route'       => '/saisir[/:note]',
-                        'constraints' => [
-                            'note' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'saisir',
-                        ],
+                    'route'       => '/saisir[/:note]',
+                    'constraints' => [
+                        'note' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'controller'  => Controller\NoteController::class,
+                    'action'      => 'saisir',
+                    'privileges'  => Privileges::INTERVENANT_NOTE_AJOUT,
+                    'assertion'   => Assertion\NoteAssertion::class,
                 ],
                 'voir'          => [
-                    'options'       => [
-                        'route'       => '/voir[/:note]',
-                        'constraints' => [
-                            'note' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'voir',
-                        ],
+                    'route'       => '/voir[/:note]',
+                    'constraints' => [
+                        'note' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'controller'  => Controller\NoteController::class,
+                    'action'      => 'voir',
+                    'privileges'  => [Privileges::INTERVENANT_NOTE_VISUALISATION],
                 ],
                 'supprimer'     => [
-                    'options'       => [
-                        'route'       => '/supprimer/:note',
-                        'constraints' => [
-                            'note' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'supprimer',
-                        ],
+                    'route'       => '/supprimer/:note',
+                    'constraints' => [
+                        'note' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'controller'  => Controller\NoteController::class,
+                    'action'      => 'supprimer',
+                    'privileges'  => Privileges::INTERVENANT_NOTE_AJOUT,
+                    'assertion'   => Assertion\NoteAssertion::class,
                 ],
                 'envoyer-email' => [
-                    'options'       => [
-                        'route'    => '/envoyer-email',
-                        'defaults' => [
-                            'action' => 'envoyer-email',
-                        ],
-                    ],
-                    'may_terminate' => true,
+                    'route'      => '/envoyer-email',
+                    'controller' => Controller\NoteController::class,
+                    'action'     => 'envoyer-email',
+                    'privileges' => [Privileges::INTERVENANT_NOTE_EMAIL],
+                ],
+            ],
+        ],
+    ],
+
+    'navigation' => [
+        'intervenant-admin' => [
+            'pages' => [
+                'notes' => [
+                    'label' => 'Notes',
+                    'icon'  => 'fas fa-comment',
+                    'route' => 'note',
+                    'order' => 6,
                 ],
             ],
         ],
@@ -79,44 +78,12 @@ return [
         ],
     ],
 
-    'guards' => [
-        [
-            'controller' => 'Intervenant\Controller\Note',
-            'action'     => ['index'],
-            'privileges' => [Privileges::INTERVENANT_NOTE_VISUALISATION],
-
-        ],
-        [
-            'controller' => 'Intervenant\Controller\Note',
-            'action'     => ['voir'],
-            'privileges' => [Privileges::INTERVENANT_NOTE_VISUALISATION],
-
-        ],
-        [
-            'controller' => 'Intervenant\Controller\Note',
-            'action'     => ['envoyer-email'],
-            'privileges' => [Privileges::INTERVENANT_NOTE_EMAIL],
-
-        ],
-        [
-            'controller' => 'Intervenant\Controller\Note',
-            'action'     => ['saisir'],
-            'assertion'  => Assertion\NoteAssertion::class,
-        ],
-        [
-            'controller' => 'Intervenant\Controller\Note',
-            'action'     => ['supprimer'],
-            'assertion'  => Assertion\NoteAssertion::class,
-        ],
-    ],
-
-
     'controllers' => [
-        'Intervenant\Controller\Note'   => Controller\NoteControllerFactory::class,
+        Controller\NoteController::class => Controller\NoteControllerFactory::class,
     ],
 
     'services' => [
-        Service\NoteService::class            => Service\NoteServiceFactory::class,
-        Service\TypeNoteService::class        => Service\TypeNoteServiceFactory::class,
+        Service\NoteService::class     => Service\NoteServiceFactory::class,
+        Service\TypeNoteService::class => Service\TypeNoteServiceFactory::class,
     ],
 ];

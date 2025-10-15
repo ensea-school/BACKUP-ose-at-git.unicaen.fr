@@ -142,6 +142,16 @@ return [
                 ],
             ],
         ],
+        'intervenant-admin' => [
+            'pages'   => [
+                'derogations' => [
+                    'label' => 'Dérogations',
+                    'icon'  => 'fas fa-shuffle',
+                    'route' => 'derogations',
+                    'order' => 5,
+                ],
+            ],
+        ],
     ],
 
     'guards' => [

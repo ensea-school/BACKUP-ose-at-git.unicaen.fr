@@ -18,6 +18,8 @@ if ($priseEnCharge) {
     $action = 'intervenant/sync';
 }
 
+$this->intervenant($intervenant)->renderTitle('Export vers le logiciel RH');
+
 ?>
 <br/>
 <?php if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH)): ?>

@@ -108,24 +108,53 @@ return [
     ],
 
     'navigation' => [
-        'intervenant' => [
-            'label'    => 'Intervenant',
-            'title'    => "Intervenant",
-            'route'    => 'intervenant',
-            'order'    => 1,
-            'pages'    => [
+        'intervenant'       => [
+            'label' => 'Intervenant',
+            'title' => "Intervenant",
+            'route' => 'intervenant',
+            'order' => 1,
+            'pages' => [
                 'rechercher' => [
-                    'label'        => " Rechercher",
-                    'title'        => "Rechercher un intervenant",
-                    'route'        => 'intervenant/rechercher',
-                    'icon'         => "fas fa-magnifying-glass",
-                    'order'        => 1,
+                    'label' => " Rechercher",
+                    'title' => "Rechercher un intervenant",
+                    'route' => 'intervenant/rechercher',
+                    'icon'  => "fas fa-magnifying-glass",
+                    'order' => 1,
                 ],
                 'voir'       => [
-                    'label'        => "Fiche individuelle",
-                    'title'        => "Consultation de la fiche de l'intervenant {id}",
-                    'route'        => 'intervenant/voir',
-                    'order'        => 2,
+                    'label' => "Fiche individuelle",
+                    'title' => "Consultation de la fiche de l'intervenant {id}",
+                    'route' => 'intervenant/voir',
+                    'order' => 2,
+                ],
+            ],
+        ],
+        'intervenant-admin' => [
+            'visible' => false,
+            'pages'   => [
+                'fiche'           => [
+                    'label' => 'Fiche',
+                    'icon'  => 'fas fa-eye',
+                    'route' => 'intervenant/fiche',
+                    'order' => 1,
+                ],
+                'edition'         => [
+                    'label' => 'Édition',
+                    'icon'  => 'fas fa-pencil',
+                    'route' => 'intervenant/saisir',
+                    'order' => 2,
+                ],
+                'synchronisation' => [
+                    'label' => 'Synchronisation',
+                    'icon'  => 'fas fa-download',
+                    'route' => 'intervenant/synchronisation',
+                    'order' => 3,
+                ],
+                'suppression' => [
+                    'label' => 'Suppression',
+                    'icon'  => 'fas fa-trash-can',
+                    'route' => 'intervenant/supprimer',
+                    'order' => 4,
                 ],
             ],
         ],
@@ -192,10 +221,10 @@ return [
 
 
     'services' => [
-        Service\IntervenantService::class     => Service\IntervenantServiceFactory::class,
-        Processus\IntervenantProcessus::class => Processus\IntervenantProcessusFactory::class,
-        Service\SituationMatrimonialeService::class   => Service\SituationMatrimonialeServiceFactory::class,
-        Command\CalculFeuilleDeRouteCommand::class    => Command\CalculFeuilleDeRouteCommandFactory::class,
+        Service\IntervenantService::class           => Service\IntervenantServiceFactory::class,
+        Processus\IntervenantProcessus::class       => Processus\IntervenantProcessusFactory::class,
+        Service\SituationMatrimonialeService::class => Service\SituationMatrimonialeServiceFactory::class,
+        Command\CalculFeuilleDeRouteCommand::class  => Command\CalculFeuilleDeRouteCommandFactory::class,
     ],
 
 
@@ -210,7 +239,7 @@ return [
 
     'laminas-cli' => [
         'commands' => [
-            'calcul-feuille-de-route' => Command\CalculFeuilleDeRouteCommand::class
+            'calcul-feuille-de-route' => Command\CalculFeuilleDeRouteCommand::class,
         ],
     ],
 ];

@@ -25,7 +25,6 @@ use Dossier\Tbl\Process\DossierProcess;
 use Dossier\Tbl\Process\DossierProcessFactory;
 use Dossier\View\Helper\ValidationViewHelperFactory;
 use Unicaen\Framework\Authorize\Authorize;
-use Workflow\Entity\Db\WorkflowEtape;
 
 return [
     'routes' => [

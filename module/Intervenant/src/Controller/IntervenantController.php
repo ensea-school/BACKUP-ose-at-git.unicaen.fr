@@ -23,6 +23,7 @@ use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Unicaen\Framework\Navigation\Navigation;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenImport\Entity\Differentiel\Query;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
@@ -59,6 +60,14 @@ class  IntervenantController extends AbstractController
     use NoteServiceAwareTrait;
     use DossierServiceAwareTrait;
     use CandidatureServiceAwareTrait;
+
+
+    public function __construct(
+        private readonly Navigation $navigation,
+    )
+    {
+    }
+
 
 
     public function indexAction()
@@ -190,10 +199,13 @@ class  IntervenantController extends AbstractController
 
             return $vh;
         }
+
+        $pages = $this->navigation->home->getPage('intervenant-admin')->getPages();
+
         $notificationNote = $this->getServiceNote()->countNote($intervenant);
         $this->addIntervenantRecent($intervenant);
 
-        return compact('intervenant', 'tab', 'notificationNote');
+        return compact('intervenant', 'tab', 'pages', 'notificationNote');
     }
 
 

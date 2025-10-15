@@ -35,10 +35,12 @@ class PaiementAssertion extends AbstractAssertion
         /* @var $intervenant Intervenant */
 
         switch ($controller . '.' . $action) {
-            case DemandesController::class . '.demandeMiseEnPaiement':
+
             case PaiementController::class . '.visualisationMiseEnPaiement':
             case PaiementController::class . '.editionMiseEnPaiement':
             case PaiementController::class . '.detailsCalculs':
+            case DemandesController::class . '.demandeMiseEnPaiement':
+            case DemandesController::class . '.getDemandesMiseEnPaiement':
                 return $this->assertEtapeAtteignable(WorkflowEtape::DEMANDE_MEP, $intervenant);
 
             case PaiementController::class . 'etatPaiement':

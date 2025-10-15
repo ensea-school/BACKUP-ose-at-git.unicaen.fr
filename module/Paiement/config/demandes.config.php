@@ -55,7 +55,7 @@ return [
                         'get-demandes-mise-en-paiement' => [
                             'route'      => '/get-demandes-mise-en-paiement[/:structure]',
                             'controller' => Controller\DemandesController::class,
-                            'action'     => 'getDemandesMiseEnpaiement',
+                            'action'     => 'getDemandesMiseEnPaiement',
                             'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
                             'assertion'  => Assertion\PaiementAssertion::class,
                         ],

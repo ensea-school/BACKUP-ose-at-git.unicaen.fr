@@ -63,7 +63,7 @@ return [
                     'title'        => "Calcul des heures équivalent TD {id}",
                     'route'        => 'intervenant/details',
                     'action'       => 'details',
-                    'order'        => 2,
+                    'order'        => 7,
                 ],
             ],
         ],

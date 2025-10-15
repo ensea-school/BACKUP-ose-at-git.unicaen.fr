@@ -13,9 +13,38 @@
         "laminas/laminas-cli"              : "1.11.0",
         "symfony/process"                  : "7.3.3",
         "symfony/http-foundation"          : "7.3.3",
+        "api-platform/core"                : "4.2.2",
+        "api-platform/symfony"             : "4.2.2",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "api-platform/doctrine-orm": "^4.1.0",
+        "api-platform/symfony": "^4.1.0",
+        "doctrine/doctrine-bundle": "^2.7",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "nelmio/cors-bundle": "^2.2",
+        "phpstan/phpdoc-parser": "^2.0",
+        "runtime/frankenphp-symfony": "^0.2",
+        "symfony/asset": "7.3.*",
+        "symfony/dotenv": "7.3.*",
+        "symfony/expression-language": "7.3.*",
+        "symfony/flex": "^2.2",
+        "symfony/framework-bundle": "7.3.*",
+        "symfony/mercure-bundle": "^0.3.5",
+        "symfony/monolog-bundle": "^3.8",
+        "symfony/property-access": "7.3.*",
+        "symfony/property-info": "7.3.*",
+        "symfony/runtime": "7.3.*",
+        "symfony/security-bundle": "7.3.*",
+        "symfony/serializer": "7.3.*",
+        "symfony/twig-bundle": "7.3.*",
+        "symfony/validator": "7.3.*",
+        "symfony/yaml": "7.3.*",
+        "symfony/uid": "7.3.*",
+
 
         "doctrine/doctrine-orm-module"     : "^6.3",
         "doctrine/dbal"                    : "^3.9",
+        "nelmio/cors-bundle"               : "2.5.0",
 
         "twbs/bootstrap"                   : "5.0.2",
         "components/jquery"                : "3.7.1",
@@ -76,7 +105,13 @@
             "Service\\"         : "module/Service/src/",
             "Workflow\\"        : "module/Workflow/src/",
             "Utilisateur\\"     : "module/Utilisateur/src/",
-            "UnicaenPrivilege\\": "vendor/unicaen/framework/src/Wrapper/UnicaenPrivilege"
+            "UnicaenPrivilege\\": "vendor/unicaen/framework/src/Wrapper/UnicaenPrivilege",
+            "App\\"             : "api/src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
         }
     },
     "require-dev"      : {
@@ -85,15 +120,27 @@
         "phan/phan"                         : "^5.3",
         "phpmd/phpmd"                       : "*",
         "phpunit/phpunit"                   : "^9",
-        "friendsofphp/php-cs-fixer"         : "^3.74"
+        "friendsofphp/php-cs-fixer"         : "^3.74",
+        "api-platform/schema-generator": "^5.0",
+        "symfony/browser-kit": "7.2.*",
+        "symfony/css-selector": "7.2.*",
+        "symfony/debug-bundle": "7.2.*",
+        "symfony/maker-bundle": "^1.44",
+        "symfony/phpunit-bridge": "7.2.*",
+        "symfony/stopwatch": "7.2.*",
+        "symfony/var-dumper": "7.2.*",
+        "symfony/web-profiler-bundle": "7.2.*"
     },
     "prefer-stable"    : true,
     "config"           : {
+        "optimize-autoloader": true,
         "allow-plugins": {
-            "laminas/laminas-dependency-plugin"             : true,
-            "composer/package-versions-deprecated"          : true,
+            "laminas/laminas-dependency-plugin": true,
+            "composer/package-versions-deprecated": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "laminas-api-tools/api-tools-asset-manager"     : true
+            "laminas-api-tools/api-tools-asset-manager": true,
+            "symfony/runtime": true,
+            "symfony/flex": true
         }
     },
     "scripts"          : {
@@ -118,7 +165,11 @@
         ],
         "post-update-cmd"     : [
             "@update-public-vendor"
-        ]
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
     },
     "minimum-stability": "dev"
 }

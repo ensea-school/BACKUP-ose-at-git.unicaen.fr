@@ -2,6 +2,7 @@
 
 namespace Dossier;
 
+use Application\Provider\Privileges;
 use Dossier\Assertion\IntervenantDossierAssertion;
 use Dossier\Controller\AutresController;
 use Dossier\Controller\EmployeurController;

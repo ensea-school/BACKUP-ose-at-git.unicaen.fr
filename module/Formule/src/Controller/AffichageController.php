@@ -11,6 +11,7 @@ use Intervenant\Entity\Db\Intervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
+use UnicaenVue\View\Model\VueModel;
 
 class  AffichageController extends AbstractController
 {
@@ -18,7 +19,7 @@ class  AffichageController extends AbstractController
     use EtatVolumeHoraireServiceAwareTrait;
     use FormuleServiceAwareTrait;
 
-    public function detailsAction()
+    public function detailsAction(): VueModel
     {
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -63,7 +64,17 @@ class  AffichageController extends AbstractController
 
         $canReporter = $this->isAllowed(Privileges::getResourceId(Privileges::FORMULE_TESTS));
 
-        return compact('intervenant', 'typesVolumesHoraires', 'canReporter');
+        $vm = new VueModel();
+        $vm->setTemplate('formule/details');
+        $vm->setVariables(
+            [
+                'intervenant'          => $intervenant->getId(),
+                'typesVolumesHoraires' => $typesVolumesHoraires,
+                'canReporter'          => $canReporter,
+            ]
+        );
+
+        return $vm;
     }
 
 

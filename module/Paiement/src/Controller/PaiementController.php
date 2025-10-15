@@ -26,6 +26,7 @@ use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
+use UnicaenVue\View\Model\VueModel;
 use Workflow\Entity\Db\Validation;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -486,7 +487,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function detailsCalculsAction()
+    public function detailsCalculsAction(): VueModel
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -498,6 +499,15 @@ class PaiementController extends AbstractController
         $debugger    = new PaiementDebugger($tblPaiement->getProcess());
         $debugger->run($intervenant);
 
-        return compact('intervenant', 'debugger');
+        $data = [
+            'parametres' => $debugger->parametres(),
+            'servicesAPayer' => $debugger->servicesAPayer(),
+        ];
+
+        $vm = new VueModel();
+        $vm->setTemplate('paiement/details-calculs');
+        $vm->setVariables($data);
+
+        return $vm;
     }
 }

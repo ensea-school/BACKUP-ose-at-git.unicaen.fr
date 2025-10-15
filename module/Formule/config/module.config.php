@@ -55,14 +55,15 @@ return [
 
 
     'navigation' => [
-        'intervenant' => [
+        'intervenant-admin' => [
             'pages' => [
                 'details' => [
                     'label'        => "Calcul HETD",
+                    'icon'          => 'fas fa-square-root-variable',
                     'title'        => "Calcul des heures équivalent TD {id}",
                     'route'        => 'intervenant/details',
                     'action'       => 'details',
-                    'order'        => 3,
+                    'order'        => 2,
                 ],
             ],
         ],

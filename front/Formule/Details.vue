@@ -1,4 +1,5 @@
 <template>
+    <br />
     <div v-if="countChoix() == 0">
         <div class="alert alert-info">Aucun service saisi</div>
     </div>

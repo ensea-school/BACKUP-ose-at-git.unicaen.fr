@@ -38,7 +38,7 @@ return [
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'detailsCalculs',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DETAILS,
-                    'assertion'   => Assertion\PaiementAssertion::class,
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
                 'etat-paiement'         => [
                     'route'      => '/etat-paiement',
@@ -130,82 +130,88 @@ return [
     ],
 
     'navigation' => [
-        'intervenant' => [
+        'intervenant'       => [
             'pages' => [
                 'visualisation-mise-en-paiement' => [
-                    'label'               => "Visualisation des mises en paiement",
-                    'title'               => "Visualisation des mises en paiement",
-                    'route'               => 'intervenant/mise-en-paiement/visualisation',
-                    'order'               => 17,
-                ],
-                'edition-mise-en-paiement'       => [
-                    'label'        => "Annulation de mises en paiement",
-                    'title'        => "Annulation de mises en paiement",
-                    'route'        => 'intervenant/mise-en-paiement/edition',
-                    'order'        => 18,
-                ],
-                'detail-calculs-paiements'       => [
-                    'label'        => "Détails de calculs des paiements",
-                    'title'        => "Détails de calculs des paiements",
-                    'route'        => 'paiement/details-calculs',
-                    'order'        => 19,
+                    'label' => "Visualisation des mises en paiement",
+                    'title' => "Visualisation des mises en paiement",
+                    'route' => 'intervenant/mise-en-paiement/visualisation',
+                    'order' => 17,
                 ],
             ],
         ],
-        'gestion'     => [
+        'intervenant-admin' => [
+            'pages' => [
+                'edition-mise-en-paiement' => [
+                    'label' => "Annulation de mises en paiement",
+                    'icon'  => 'fas fa-coins',
+                    'title' => "Annulation de mises en paiement",
+                    'route' => 'intervenant/mise-en-paiement/edition',
+                    'order' => 18,
+                ],
+                'detail-calculs-paiements' => [
+                    'label' => "Détails de calculs des paiements",
+                    'icon'  => 'fas fa-magnifying-glass',
+                    'title' => "Détails de calculs des paiements",
+                    'route' => 'paiement/details-calculs',
+                    'order' => 19,
+                ],
+            ],
+        ],
+        'gestion'           => [
             'pages' => [
                 'paiement' => [
-                    'label'    => "Paiement",
-                    'title'    => "Paiement",
-                    'route'    => 'paiement',
-                    'icon'     => 'fas fa-credit-card',
-                    'color'    => '#F5E79E',
-                    'order'    => 40,
-                    'pages'    => [
+                    'label' => "Paiement",
+                    'title' => "Paiement",
+                    'route' => 'paiement',
+                    'icon'  => 'fas fa-credit-card',
+                    'color' => '#F5E79E',
+                    'order' => 40,
+                    'pages' => [
                         'etat-demande-paiement' => [
-                            'label'    => "Mises en paiement",
-                            'title'    => "Mises en paiement",
-                            'route'    => 'paiement/etat-demande-paiement',
+                            'label' => "Mises en paiement",
+                            'title' => "Mises en paiement",
+                            'route' => 'paiement/etat-demande-paiement',
                         ],
                         'etat-paiement'         => [
-                            'label'    => "État de paiement",
-                            'title'    => "État de paiement",
-                            'route'    => 'paiement/etat-paiement',
+                            'label' => "État de paiement",
+                            'title' => "État de paiement",
+                            'route' => 'paiement/etat-paiement',
                         ],
                         'mises-en-paiement-csv' => [
-                            'label'    => "Mises en paiement (CSV)",
-                            'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
-                            'route'    => 'paiement/mises-en-paiement-csv',
+                            'label' => "Mises en paiement (CSV)",
+                            'title' => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
+                            'route' => 'paiement/mises-en-paiement-csv',
                         ],
                         'extraction-paie'       => [
-                            'label'    => "Extraction paie",
-                            'title'    => "Export des données de paiement au format attendu",
-                            'route'    => 'paiement/extraction-paie',
+                            'label' => "Extraction paie",
+                            'title' => "Export des données de paiement au format attendu",
+                            'route' => 'paiement/extraction-paie',
                         ],
                         'extraction-paie-prime' => [
-                            'label'    => "Extraction des indemnités de fin de contrat",
-                            'title'    => "Export des données pour payer les indemnités de fin de contrat des étudiantes",
-                            'route'    => 'paiement/extraction-paie-prime',
+                            'label' => "Extraction des indemnités de fin de contrat",
+                            'title' => "Export des données pour payer les indemnités de fin de contrat des étudiantes",
+                            'route' => 'paiement/extraction-paie-prime',
                         ],
 
                         'imputation-siham'  => [
-                            'label'    => "Imputation budgétaire SIHAM",
-                            'title'    => "Export des données pour chargement en masse des imputations budgétaires dans SIHAM",
-                            'route'    => 'paiement/imputation-siham',
+                            'label' => "Imputation budgétaire SIHAM",
+                            'title' => "Export des données pour chargement en masse des imputations budgétaires dans SIHAM",
+                            'route' => 'paiement/imputation-siham',
                         ],
                         'import-numero-pec' => [
-                            'label'    => "Import des numéros de prise en charge",
-                            'title'    => "Importer les numéros de prise en charge pour automatiser le fichier de paie",
-                            'route'    => 'paiement/import-numero-pec',
+                            'label' => "Import des numéros de prise en charge",
+                            'title' => "Importer les numéros de prise en charge pour automatiser le fichier de paie",
+                            'route' => 'paiement/import-numero-pec',
                         ],
                     ],
                 ],
                 'pilotage' => [
-                    'label'    => 'Pilotage',
-                    'title'    => 'Pilotage',
-                    'icon'     => 'fas fa-chart-line',
-                    'route'    => 'paiement/pilotage',
-                    'pages'    => [
+                    'label' => 'Pilotage',
+                    'title' => 'Pilotage',
+                    'icon'  => 'fas fa-chart-line',
+                    'route' => 'paiement/pilotage',
+                    'pages' => [
                         'ecarts-etats' => [
                             'label'       => 'Ecarts d\'heures complémentaires (CSV)',
                             'title'       => 'Ecarts d\'heures complémentaires (CSV)',
@@ -213,8 +219,8 @@ return [
                             'route'       => 'paiement/ecarts-etats',
                         ],
                     ],
-                    'order'    => 20,
-                    'color'    => '#00A020',
+                    'order' => 20,
+                    'color' => '#00A020',
                 ],
             ],
         ],

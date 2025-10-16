@@ -18,6 +18,10 @@ charset = utf-8
 indent_style = space
 indent_size = 4
 
+# Indentation override for all JS under lib directory
+[*.yaml]
+indent_style = space
+indent_size = 4
 
 # Indentation override for all JS under lib directory
 [*.js]

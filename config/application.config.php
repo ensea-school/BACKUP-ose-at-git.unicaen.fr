@@ -43,6 +43,15 @@ class OseConfig
         ];
 
         $this->config['modules'] = require __DIR__ . '/modules.config.php';
+
+        // Connecteurs
+        if ($config['actul']['host'] ?? null){
+            $this->config['modules'][] = 'Connecteur\\Actul';
+        }
+
+        if ($config['pegase']['actif'] ?? false){
+            $this->config['modules'][] = 'Connecteur\\Pegase';
+        }
     }
 
 

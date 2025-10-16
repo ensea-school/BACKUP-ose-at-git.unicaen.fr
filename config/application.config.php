@@ -72,7 +72,7 @@ class OseConfig
         putenv('DB_HOST=' . $this->config['bdd']['host']);
         putenv('DB_PORT=' . $this->config['bdd']['port']);
         putenv('DB_NAME=' . $this->config['bdd']['dbname']);
-        putenv('DB_USER=' . $this->config['bdd']['user']);
+        putenv('DB_USER=' . $this->config['bdd']['username']);
         putenv('DB_PASSWORD=' . $this->config['bdd']['password']);
 
         putenv('MERCURE_URL=http://php/.well-known/mercure');

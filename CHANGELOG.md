@@ -30,7 +30,12 @@ OSE [24.11](#ose-2411-07102025)
 Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
 Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 
+# OSE 24.12 (à venir)
 
+## Corrections
+
+* Correction pour ne pas enregistrer d'étape lors de la saisie d'un enseignement hors établissement (#63714)
+* Correction pour afficher le libellé hors établissement dans l'export pdf des service 
 
 # OSE 24.11 (07/10/2025)
 

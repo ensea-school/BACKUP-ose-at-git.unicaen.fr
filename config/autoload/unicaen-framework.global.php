@@ -17,6 +17,10 @@ return [
                 RouteEntitiesInjector::class,
             ],
         ],
+
+        'api' => [
+            'enabled' => true,
+        ],
     ],
 
 ];

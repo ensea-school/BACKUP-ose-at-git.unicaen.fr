@@ -39,7 +39,6 @@
         "symfony/yaml"                       : "7.3.*",
         "symfony/uid"                        : "7.3.*",
 
-
         "doctrine/doctrine-orm-module"       : "^6.3",
         "doctrine/dbal"                      : "^3.9",
         "nelmio/cors-bundle"                 : "2.5.0",
@@ -130,6 +129,7 @@
         "symfony/web-profiler-bundle"       : "7.2.*"
     },
     "prefer-stable"    : true,
+    "minimum-stability": "dev",
     "config"           : {
         "optimize-autoloader": true,
         "allow-plugins"      : {
@@ -163,11 +163,6 @@
         ],
         "post-update-cmd"     : [
             "@update-public-vendor"
-        ],
-        "auto-scripts"        : {
-            "cache:clear"                : "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        }
-    },
-    "minimum-stability": "dev"
+        ]
+    }
 }

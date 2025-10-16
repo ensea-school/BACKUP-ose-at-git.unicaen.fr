@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fdb3a9cacb81e83cf514982a4c2d6dd5",
+    "content-hash": "4cda9eb4f9e578fadf841199ec667853",
     "packages": [
         {
             "name": "api-platform/core",
@@ -4462,16 +4462,16 @@
         },
         {
             "name": "laminas/laminas-navigation",
-            "version": "2.20.0",
+            "version": "2.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-navigation.git",
-                "reference": "95f63e660faeb8baff538ed5f8ebde02625c8d14"
+                "reference": "2b96343bac5fe8df1289127942639d8259369fac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-navigation/zipball/95f63e660faeb8baff538ed5f8ebde02625c8d14",
-                "reference": "95f63e660faeb8baff538ed5f8ebde02625c8d14",
+                "url": "https://api.github.com/repos/laminas/laminas-navigation/zipball/2b96343bac5fe8df1289127942639d8259369fac",
+                "reference": "2b96343bac5fe8df1289127942639d8259369fac",
                 "shasum": ""
             },
             "require": {
@@ -4482,19 +4482,19 @@
                 "zendframework/zend-navigation": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~3.0.1",
-                "laminas/laminas-config": "^3.9.0",
-                "laminas/laminas-http": "^2.19",
-                "laminas/laminas-i18n": "^2.29",
-                "laminas/laminas-mvc": "^3.7",
-                "laminas/laminas-permissions-acl": "^2.16",
+                "laminas/laminas-coding-standard": "~3.1.0",
+                "laminas/laminas-config": "^3.10.1",
+                "laminas/laminas-http": "^2.22",
+                "laminas/laminas-i18n": "^2.30",
+                "laminas/laminas-mvc": "^3.8",
+                "laminas/laminas-permissions-acl": "^2.17",
                 "laminas/laminas-router": "^3.14.0",
-                "laminas/laminas-servicemanager": "^3.22.1",
-                "laminas/laminas-uri": "^2.12.0",
-                "laminas/laminas-view": "^2.35",
-                "phpunit/phpunit": "^9.6.21",
-                "psalm/plugin-phpunit": "^0.19.0",
-                "vimeo/psalm": "^5.26.1"
+                "laminas/laminas-servicemanager": "^3.23.1",
+                "laminas/laminas-uri": "^2.13.0",
+                "laminas/laminas-view": "^2.43",
+                "phpunit/phpunit": "^9.6.29",
+                "psalm/plugin-phpunit": "^0.19.5",
+                "vimeo/psalm": "^6.13.1"
             },
             "suggest": {
                 "laminas/laminas-config": "^3.7, to provide page configuration (optional, as arrays and Traversables are also allowed)",
@@ -4539,20 +4539,20 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-10-16T18:20:23+00:00"
+            "time": "2025-10-15T18:27:32+00:00"
         },
         {
             "name": "laminas/laminas-paginator",
-            "version": "2.19.0",
+            "version": "2.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-paginator.git",
-                "reference": "d6339e7ad61491fd76b1490cf9f723d0348ce430"
+                "reference": "235b57db1f7939513465ec49f05b12228fe5391f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-paginator/zipball/d6339e7ad61491fd76b1490cf9f723d0348ce430",
-                "reference": "d6339e7ad61491fd76b1490cf9f723d0348ce430",
+                "url": "https://api.github.com/repos/laminas/laminas-paginator/zipball/235b57db1f7939513465ec49f05b12228fe5391f",
+                "reference": "235b57db1f7939513465ec49f05b12228fe5391f",
                 "shasum": ""
             },
             "require": {
@@ -4564,16 +4564,16 @@
                 "zendframework/zend-paginator": "*"
             },
             "require-dev": {
-                "laminas/laminas-cache": "^3.12.2",
-                "laminas/laminas-cache-storage-adapter-memory": "^2.3.0",
+                "laminas/laminas-cache": "^3.13.0",
+                "laminas/laminas-cache-storage-adapter-memory": "^2.4.0",
                 "laminas/laminas-coding-standard": "^2.5.0",
-                "laminas/laminas-config": "^3.9.0",
-                "laminas/laminas-filter": "^2.37",
-                "laminas/laminas-servicemanager": "^3.22.1",
-                "laminas/laminas-view": "^2.35",
-                "phpunit/phpunit": "^10.5.30",
-                "psalm/plugin-phpunit": "^0.19.0",
-                "vimeo/psalm": "^5.25"
+                "laminas/laminas-config": "^3.10.1",
+                "laminas/laminas-filter": "^2.41",
+                "laminas/laminas-servicemanager": "^3.23.1",
+                "laminas/laminas-view": "^2.43",
+                "phpunit/phpunit": "^10.5.58",
+                "psalm/plugin-phpunit": "^0.19.5",
+                "vimeo/psalm": "^6.13.1"
             },
             "suggest": {
                 "laminas/laminas-cache": "Laminas\\Cache component to support cache features",
@@ -4618,7 +4618,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-10-16T13:10:19+00:00"
+            "time": "2025-10-15T18:30:48+00:00"
         },
         {
             "name": "laminas/laminas-permissions-acl",
@@ -12117,7 +12117,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/framework.git",
-                "reference": "6ec15d55c77aa8ed1ecf9160f4afe1d1e91fc5eb"
+                "reference": "34ae4268248c007fc379c340c90b608862d9bfde"
             },
             "require": {
                 "laminas/laminas-permissions-acl": "^2.17",
@@ -12132,7 +12132,7 @@
                 }
             },
             "description": "Framework pour applications Unicaen",
-            "time": "2025-10-15T15:15:21+00:00"
+            "time": "2025-10-16T09:22:11+00:00"
         },
         {
             "name": "unicaen/import",

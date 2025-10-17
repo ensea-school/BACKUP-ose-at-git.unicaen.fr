@@ -10,16 +10,18 @@ return [
     'routes' => [
         'plafond' => [
             'route'         => '/plafond',
-            'controller'    => 'Plafond\Controller\Plafond',
+            'controller'    => Controller\PlafondController::class,
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
                 'ajouter'   => [
-                    'route'  => '/ajouter',
-                    'action' => 'editer',
+                    'route'      => '/ajouter',
+                    'controller' => Controller\PlafondController::class,
+                    'action'     => 'editer',
                 ],
                 'modifier'  => [
                     'route'       => '/modifier/:plafond',
+                    'controller'  => Controller\PlafondController::class,
                     'action'      => 'editer',
                     'constraints' => [
                         'plafond' => '[0-9]*',
@@ -27,6 +29,7 @@ return [
                 ],
                 'supprimer' => [
                     'route'       => '/supprimer/:plafond',
+                    'controller'  => Controller\PlafondController::class,
                     'action'      => 'supprimer',
                     'constraints' => [
                         'plafond' => '[0-9]*',
@@ -34,6 +37,7 @@ return [
                 ],
                 'plafonds'  => [
                     'route'       => '/plafonds/:id/:class/:typeVolumeHoraire',
+                    'controller'  => Controller\PlafondController::class,
                     'action'      => 'plafonds',
                     'constraints' => [
                         'id'                => '[0-9]*',
@@ -41,39 +45,39 @@ return [
                     ],
                 ],
 
-                'config-application' => [
-                    'route'  => '/config/application',
-                    'action' => 'config-application',
-                ],
-
                 'config-structure' => [
-                    'route'  => '/config/structure',
-                    'action' => 'config-structure',
+                    'route'      => '/config/structure',
+                    'controller' => Controller\PlafondController::class,
+                    'action'     => 'config-structure',
                 ],
 
                 'config-statut' => [
-                    'route'  => '/config/statut',
-                    'action' => 'config-statut',
+                    'route'      => '/config/statut',
+                    'controller' => Controller\PlafondController::class,
+                    'action'     => 'config-statut',
                 ],
 
                 'config-referentiel' => [
-                    'route'  => '/config/referentiel',
-                    'action' => 'config-referentiel',
+                    'route'      => '/config/referentiel',
+                    'controller' => Controller\PlafondController::class,
+                    'action'     => 'config-referentiel',
                 ],
 
                 'config-mission' => [
-                    'route'  => '/config/mission',
-                    'action' => 'config-mission',
+                    'route'      => '/config/mission',
+                    'controller' => Controller\PlafondController::class,
+                    'action'     => 'config-mission',
                 ],
 
                 'construire-calculer' => [
-                    'route'  => '/construire-calculer',
-                    'action' => 'construire-calculer',
+                    'route'      => '/construire-calculer',
+                    'controller' => Controller\PlafondController::class,
+                    'action'     => 'construire-calculer',
                 ],
 
                 'structure' => [
                     'route'         => '/structure/:structure',
-                    'controller'    => 'Plafond\Controller\Plafond',
+                    'controller'    => Controller\PlafondController::class,
                     'action'        => 'index-structure',
                     'constraints'   => [
                         'structure' => '[0-9]*',
@@ -83,7 +87,7 @@ return [
 
                 'referentiel' => [
                     'route'         => '/referentiel/:fonctionReferentiel',
-                    'controller'    => 'Plafond\Controller\Plafond',
+                    'controller'    => Controller\PlafondController::class,
                     'action'        => 'index-referentiel',
                     'constraints'   => [
                         'fonctionReferentiel' => '[0-9]*',
@@ -93,7 +97,7 @@ return [
 
                 'mission' => [
                     'route'         => '/mission/:typeMission',
-                    'controller'    => 'Plafond\Controller\Plafond',
+                    'controller'    => Controller\PlafondController::class,
                     'action'        => 'index-mission',
                     'constraints'   => [
                         'typeMission' => '[0-9]*',
@@ -105,7 +109,7 @@ return [
 
         'derogations' => [
             'route'         => '/intervenant/:intervenant/derogations',
-            'controller'    => 'Plafond\Controller\Derogation',
+            'controller'    => Controller\DerogationController::class,
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
@@ -117,33 +121,33 @@ return [
     'console' => [
         'construire' => [
             'route'      => 'plafonds construire',
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => 'construire',
         ],
         'calculer'   => [
             'route'      => 'plafonds calculer',
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => 'calculer',
         ],
     ],
 
     'navigation' => [
-        'administration' => [
+        'administration'    => [
             'pages' => [
                 'rh' => [
                     'pages' => [
                         'plafonds' => [
-                            'label'    => "Plafonds",
-                            'route'    => 'plafond',
-                            'color'    => '#9B9B9B',
-                            'order'    => 60,
+                            'label' => "Plafonds",
+                            'route' => 'plafond',
+                            'color' => '#9B9B9B',
+                            'order' => 60,
                         ],
                     ],
                 ],
             ],
         ],
         'intervenant-admin' => [
-            'pages'   => [
+            'pages' => [
                 'derogations' => [
                     'label' => 'Dérogations',
                     'icon'  => 'fas fa-shuffle',
@@ -156,17 +160,17 @@ return [
 
     'guards' => [
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['index'],
             'privileges' => Privileges::PLAFONDS_VISUALISATION,
         ],
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['editer', 'supprimer', 'construire', 'calculer', 'construire-calculer'],
             'privileges' => Privileges::PLAFONDS_EDITION,
         ],
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['plafonds'],
             'privileges' => [
                 Privileges::PLAFONDS_VISUALISATION,
@@ -179,49 +183,49 @@ return [
             ],
         ],
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['config-structure'],
             'privileges' => Privileges::PLAFONDS_CONFIG_STRUCTURE,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['config-statut'],
             'privileges' => Privileges::PLAFONDS_CONFIG_STATUT,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['config-referentiel'],
             'privileges' => Privileges::PLAFONDS_CONFIG_REFERENTIEL,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['config-mission'],
             'privileges' => Privileges::PLAFONDS_CONFIG_MISSION,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['index-structure'],
             'privileges' => Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['index-referentiel'],
             'privileges' => Privileges::REFERENTIEL_ADMIN_VISUALISATION,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
-            'controller' => 'Plafond\Controller\Plafond',
+            'controller' => Controller\PlafondController::class,
             'action'     => ['index-mission'],
             'privileges' => Privileges::MISSION_VISUALISATION_TYPE,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [
-            'controller' => 'Plafond\Controller\Derogation',
+            'controller' => Controller\DerogationController::class,
             'action'     => ['index'],
             'privileges' => Privileges::PLAFONDS_DEROGATIONS_VISUALISATION,
         ],
@@ -238,8 +242,8 @@ return [
     ],
 
     'controllers' => [
-        'Plafond\Controller\Plafond'    => Controller\PlafondControllerFactory::class,
-        'Plafond\Controller\Derogation' => Controller\DerogationControllerFactory::class,
+        Controller\PlafondController::class    => Controller\PlafondControllerFactory::class,
+        Controller\DerogationController::class => Controller\DerogationControllerFactory::class,
     ],
 
     'services' => [

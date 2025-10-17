@@ -19,6 +19,7 @@ return [
             'child_routes'  => [
                 'saisie' => [
                     'route'         => '/saisie[/:fonctionReferentiel]',
+                    'controller'    => FonctionReferentielController::class,
                     'action'        => 'saisie',
                     'may_terminate' => true,
                     'constraints'   => [
@@ -27,6 +28,7 @@ return [
                 ],
                 'delete' => [
                     'route'         => '/delete/:fonctionReferentiel',
+                    'controller'    => FonctionReferentielController::class,
                     'action'        => 'delete',
                     'may_terminate' => true,
                     'constraints'   => [
@@ -60,19 +62,21 @@ return [
                     'child_routes' => [
                         'referentiel' => [
                             'route'         => '/referentiel',
-                            'controller'    => ServiceReferentielController::class,
                             'may_terminate' => false,
                             'child_routes'  => [
                                 'prevu'     => [
                                     'route'  => '/prevu',
+                                    'controller'    => ServiceReferentielController::class,
                                     'action' => 'validation-prevu',
                                 ],
                                 'realise'   => [
                                     'route'  => '/realise',
+                                    'controller'    => ServiceReferentielController::class,
                                     'action' => 'validation-realise',
                                 ],
                                 'valider'   => [
                                     'route'       => '/valider/:typeVolumeHoraire/:structure',
+                                    'controller'    => ServiceReferentielController::class,
                                     'action'      => 'valider',
                                     'constraints' => [
                                         'typeVolumeHoraire' => '[0-9]*',
@@ -81,6 +85,7 @@ return [
                                 ],
                                 'devalider' => [
                                     'route'       => '/devalider/:validation',
+                                    'controller'    => ServiceReferentielController::class,
                                     'action'      => 'devalider',
                                     'constraints' => [
                                         'validation' => '[0-9]*',
@@ -95,25 +100,19 @@ return [
 
         'referentiel' => [
             'route'         => '/referentiel',
-            'controller'    => ServiceReferentielController::class,
             'may_terminate' => false,
             'child_routes'  => [
                 'saisie'                   => [
                     'route'       => '/saisie[/:id]',
+                    'controller'    => ServiceReferentielController::class,
                     'action'      => 'saisie',
-                    'constraints' => [
-                        'id' => '[0-9]*',
-                    ],
-                ],
-                'volumes-horaires-refresh' => [
-                    'route'       => '/volumes-horaires-refresh[/:id]',
-                    'action'      => 'volumes-horaires-refresh',
                     'constraints' => [
                         'id' => '[0-9]*',
                     ],
                 ],
                 'rafraichir-ligne'         => [
                     'route'       => '/rafraichir-ligne/:serviceReferentiel',
+                    'controller'    => ServiceReferentielController::class,
                     'action'      => 'rafraichir-ligne',
                     'constraints' => [
                         'serviceReferentiel' => '[0-9]*',
@@ -121,10 +120,12 @@ return [
                 ],
                 'constatation'             => [
                     'route'  => '/constatation',
+                    'controller'    => ServiceReferentielController::class,
                     'action' => 'constatation',
                 ],
                 'suppression'              => [
                     'route'       => '/suppression/:id',
+                    'controller'    => ServiceReferentielController::class,
                     'action'      => 'suppression',
                     'constraints' => [
                         'id' => '[0-9]*',
@@ -132,6 +133,7 @@ return [
                 ],
                 'initialisation'           => [
                     'route'       => '/initialisation/:intervenant',
+                    'controller'    => ServiceReferentielController::class,
                     'action'      => 'initialisation',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',

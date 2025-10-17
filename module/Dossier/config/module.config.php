@@ -176,8 +176,8 @@ return [
     'guards'       => [
         [
             'controller' => IntervenantDossierController::class,
-            'action'     => ['index',
-                             'change-statut-dossier'],
+            'action'     => ['index', 'change-statut-dossier'],
+            'privileges' => [Privileges::DOSSIER_VISUALISATION],
         ],
 
         [

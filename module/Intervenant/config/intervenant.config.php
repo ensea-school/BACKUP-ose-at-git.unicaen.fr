@@ -98,11 +98,6 @@ return [
                     'controller' => Controller\IntervenantController::class,
                     'action'     => 'definir-par-defaut',
                 ],
-                'feuille-de-route'   => [
-                    'route'      => '/:intervenant/feuille-de-route',
-                    'controller' => Controller\IntervenantController::class,
-                    'action'     => 'feuille-de-route',
-                ],
             ],
         ],
     ],

@@ -18,6 +18,7 @@ return [
             'child_routes'  => [
                 'delete' => [
                     'route'       => '/delete/:motifModificationServiceDu',
+                    'controller'    => MotifModificationServiceController::class,
                     'action'      => 'delete',
                     'constraints' => [
                         'motif-modification-service' => '[0-9]*',
@@ -25,6 +26,7 @@ return [
                 ],
                 'saisie' => [
                     'route'       => '/saisie/[:motifModificationServiceDu]',
+                    'controller'    => MotifModificationServiceController::class,
                     'action'      => 'saisie',
                     'constraints' => [
                         'motif-modification-service' => '[0-9]*',
@@ -44,10 +46,10 @@ return [
         ],
         'modification-service-du'    => [
             'route'        => '/modification-service-du',
-            'controller'   => ModificationServiceDuController::class,
             'child_routes' => [
                 'export-csv' => [
                     'route'  => '/export-csv',
+                    'controller'   => ModificationServiceDuController::class,
                     'action' => 'export-csv',
                 ],
             ],

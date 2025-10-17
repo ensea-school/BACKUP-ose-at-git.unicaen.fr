@@ -52,7 +52,6 @@ return [
                 ],
                 'element' => [
                     'route'         => '/element',
-                    'controller'    => ElementPedagogiqueController::class,
                     'may_terminate' => false,
                     'child_routes'  => [
                         'voir'      => [
@@ -119,19 +118,10 @@ return [
                             'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'modulateurs-centres-couts-taux-remu',
                         ],
-                        'modifier-modulateurs'                => [
-                            'route'       => '/modulateurs/modifier/:elementPedagogique',
-                            'constraints' => [
-                                'elementPedagogique' => '[0-9]*',
-                            ],
-                            'controller'  => ElementPedagogiqueController::class,
-                            'action'      => 'modifier-modulateur',
-                        ],
                     ],
                 ],
                 'etape'   => [
                     'route'         => '/etape',
-                    'controller'    => EtapeController::class,
                     'may_terminate' => false,
                     'child_routes'  => [
                         'voir'      => [

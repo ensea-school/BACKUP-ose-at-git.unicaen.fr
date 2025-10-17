@@ -35,19 +35,21 @@ return [
                     'child_routes'  => [
                         'enseignement' => [
                             'route'         => '/enseignement',
-                            'controller'    => EnseignementController::class,
                             'may_terminate' => false,
                             'child_routes'  => [
                                 'prevu'     => [
-                                    'route'  => '/prevu',
-                                    'action' => 'validation-prevu',
+                                    'route'      => '/prevu',
+                                    'controller' => EnseignementController::class,
+                                    'action'     => 'validation-prevu',
                                 ],
                                 'realise'   => [
-                                    'route'  => '/realise',
-                                    'action' => 'validation-realise',
+                                    'route'      => '/realise',
+                                    'controller' => EnseignementController::class,
+                                    'action'     => 'validation-realise',
                                 ],
                                 'valider'   => [
                                     'route'       => '/valider/:typeVolumeHoraire/:structure',
+                                    'controller'  => EnseignementController::class,
                                     'action'      => 'valider',
                                     'constraints' => [
                                         'typeVolumeHoraire' => '[0-9]*',
@@ -56,6 +58,7 @@ return [
                                 ],
                                 'devalider' => [
                                     'route'       => '/devalider/:validation',
+                                    'controller'  => EnseignementController::class,
                                     'action'      => 'devalider',
                                     'constraints' => [
                                         'validation' => '[0-9]*',
@@ -130,15 +133,14 @@ return [
 
         'volume-horaire' => [
             'route'         => '/volume-horaire',
-            'controller'    => VolumeHoraireController::class,
-            'action'        => 'index',
-            'may_terminate' => true,
+            'may_terminate' => false,
             'child_routes'  => [
                 'liste'                  => [
                     'route'       => '/liste[/:service]',
                     'constraints' => [
                         'service' => '[0-9]*',
                     ],
+                    'controller'  => VolumeHoraireController::class,
                     'action'      => 'liste',
                 ],
                 'saisie'                 => [
@@ -146,6 +148,7 @@ return [
                     'constraints' => [
                         'service' => '[0-9]*',
                     ],
+                    'controller'  => VolumeHoraireController::class,
                     'action'      => 'saisie',
                 ],
                 'saisie-calendaire'      => [
@@ -153,6 +156,7 @@ return [
                     'constraints' => [
                         'service' => '[0-9]*',
                     ],
+                    'controller'  => VolumeHoraireController::class,
                     'action'      => 'saisie-calendaire',
                 ],
                 'suppression-calendaire' => [
@@ -160,6 +164,7 @@ return [
                     'constraints' => [
                         'service' => '[0-9]*',
                     ],
+                    'controller'  => VolumeHoraireController::class,
                     'action'      => 'suppression-calendaire',
                 ],
             ],
@@ -176,10 +181,10 @@ return [
                     'order'               => 6,
                 ],*/
                 'validation-enseignement-prevu'   => [
-                    'label'               => "Validation des enseignements prévisionnels",
-                    'title'               => "Validation des enseignements prévisionnels de l'intervenant",
-                    'route'               => 'intervenant/validation/enseignement/prevu',
-                    'order'               => 8,
+                    'label' => "Validation des enseignements prévisionnels",
+                    'title' => "Validation des enseignements prévisionnels de l'intervenant",
+                    'route' => 'intervenant/validation/enseignement/prevu',
+                    'order' => 8,
                 ],
 
                 /*'enseignements-realises' => [
@@ -189,10 +194,10 @@ return [
                     'order'               => 13,
                 ],*/
                 'validation-enseignement-realise' => [
-                    'label'               => "Validation des enseignements réalisés",
-                    'title'               => "Validation des enseignements réalisés de l'intervenant",
-                    'route'               => 'intervenant/validation/enseignement/realise',
-                    'order'               => 14,
+                    'label' => "Validation des enseignements réalisés",
+                    'title' => "Validation des enseignements réalisés de l'intervenant",
+                    'route' => 'intervenant/validation/enseignement/realise',
+                    'order' => 14,
                 ],
             ],
         ],

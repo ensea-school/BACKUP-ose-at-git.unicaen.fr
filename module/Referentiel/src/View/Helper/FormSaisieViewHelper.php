@@ -46,18 +46,6 @@ class FormSaisieViewHelper extends AbstractHtmlElement
     }
 
 
-    public function getVolumesHorairesRefreshUrl()
-    {
-        $url = $this->getView()->url(
-            'referentiel/volumes-horaires-refresh',
-            [
-                'id' => $this->form->get('service')->get('id')->getValue(),
-            ]);
-
-        return $url;
-    }
-
-
     /**
      * Rendu du formulaire
      *

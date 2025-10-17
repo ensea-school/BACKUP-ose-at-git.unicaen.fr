@@ -14,15 +14,6 @@ return [
             'privileges'    => [Privileges::PARAMETRES_ETABLISSEMENT_VISUALISATION],
             'may_terminate' => true,
             'child_routes'  => [
-                'modifier'  => [
-                    'route'       => '/modifier/:id',
-                    'controller'  => Controller\EtablissementController::class,
-                    'action'      => 'modifier',
-                    'constraints' => [
-                        'id' => '[0-9]*',
-                    ],
-
-                ],
                 'recherche' => [
                     'route'      => '/recherche[/:term]',
                     'controller' => Controller\EtablissementController::class,

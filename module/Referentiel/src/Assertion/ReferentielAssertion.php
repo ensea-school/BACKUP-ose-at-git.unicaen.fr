@@ -162,10 +162,10 @@ class ReferentielAssertion extends AbstractAssertion
             case ServiceReferentielController::class . '.validationRealise':
                 return $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION);
 
-            case ServiceReferentielController::class . '.referentiel-prevu':
+            case ServiceReferentielController::class . '.referentielPrevu':
                 return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_PREVU);
 
-            case ServiceReferentielController::class . '.referentiel-realise':
+            case ServiceReferentielController::class . '.referentielRealise':
                 return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_REALISE);
         }
 

@@ -117,8 +117,8 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
         }
 
         switch ($action) {
-            case 'accepter-candidature':
-            case 'refuser-candidature':
+            case 'accepterCandidature':
+            case 'refuserCandidature':
                 if ($entity instanceof Candidature){
                     $assert = $this->assertCandidatureValider($entity);
                     return $assert;

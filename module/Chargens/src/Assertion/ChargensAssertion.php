@@ -59,8 +59,8 @@ class ChargensAssertion extends AbstractAssertion
     {
         // Si c'est bon alors on affine...
         switch ($action) {
-            case 'scenario-supprimer':
-            case 'scenario-saisir':
+            case 'scenarioSupprimer':
+            case 'scenarioSaisir':
                 /** @var Scenario $scenario */
                 $scenario = $this->getParam(Scenario::class);
                 if ($scenario){

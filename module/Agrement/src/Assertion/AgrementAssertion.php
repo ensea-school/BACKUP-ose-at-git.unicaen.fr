@@ -102,7 +102,7 @@ class AgrementAssertion extends AbstractAssertion
                 break;
 
             case 'index':
-            case 'saisir-lot':
+            case 'saisirLot':
                 if ($this->getServiceContext()->getIntervenant()) return false; // un intervenant ne peut pas voir ça...
                 if ($typeAgrement) {
                     $resource = Privileges::getResourceId($typeAgrement->getPrivilegeVisualisation());

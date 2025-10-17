@@ -45,10 +45,10 @@ class ServiceAssertion extends AbstractAssertion
             case ServiceController::class . '.resume':
                 return $this->assertResume();
                 break;
-            case ServiceController::class . '.intervenant-saisie-prevu':
+            case ServiceController::class . '.intervenantSaisiePrevu':
                 return $this->assertPageServices($intervenant, TypeVolumeHoraire::CODE_PREVU);
                 break;
-            case ServiceController::class . '.intervenant-saisie-realise':
+            case ServiceController::class . '.intervenantSaisieRealise':
                 return $this->assertPageServices($intervenant, TypeVolumeHoraire::CODE_REALISE);
                 break;
         }

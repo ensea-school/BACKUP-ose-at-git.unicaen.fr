@@ -218,14 +218,18 @@ class EnseignementController extends AbstractController
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
                         $this->em()->getConnection()->setAutoCommit(true);
-                        //Récupération de l'id de l'étape qui a été selectionné pour la recherche de la formation
-                        $etapeId = $form->get('service')
-                            ->get('element-pedagogique')
-                            ->get('etape')
-                            ->getValue();
+                        //Uniquement pour le service fait dans l'établissement
 
-                        $etape   = $etapeId ? $this->getServiceEtape()->get($etapeId) : null;
-                        $service = $service->setEtape($etape);
+                        if ($form->get('service')->get('interne-externe')->getValue() != 'service-externe') {
+                            //Récupération de l'id de l'étape qui a été selectionné pour la recherche de la formation
+                            $etapeId = $form->get('service')
+                                            ->get('element-pedagogique')
+                                            ->get('etape')
+                                            ->getValue();
+
+                            $etape   = $etapeId ? $this->getServiceEtape()->get($etapeId) : null;
+                            $service = $service->setEtape($etape);
+                        }
 
                         $service = $this->getServiceService()->save($service);
                         $this->em()->getConnection()->setAutoCommit(false);

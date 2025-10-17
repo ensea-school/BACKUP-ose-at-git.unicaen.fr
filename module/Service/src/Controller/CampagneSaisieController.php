@@ -51,7 +51,7 @@ class CampagneSaisieController extends AbstractController
                 $form->bind($campagne);
                 $forms[$ti->getId()][$tvh->getId()] = $form;
 
-                if ($canEdit && $ti->getId() == $typeIntervenant->getId() && $tvh->getId() == $typeVolumeHoraire->getId()) {
+                if ($canEdit && $ti->getId() == $typeIntervenant?->getId() && $tvh->getId() == $typeVolumeHoraire?->getId()) {
                     $form->requestSave($this->getRequest(), function () use ($campagne) {
                         if (!$campagne->getDateDebut() && !$campagne->getDateFin() && !$campagne->getMessageIntervenant() && !$campagne->getMessageAutres()) {
                             $this->getServiceCampagneSaisie()->delete($campagne);

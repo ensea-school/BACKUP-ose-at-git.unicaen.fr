@@ -29,6 +29,7 @@ return [
             Migration\v25CentreCoutsTypeMission::class,
             Migration\v25DoublonsValidations::class,
             Migration\v24ParametresAnnualises::class,
+            Migration\v25Workflow::class,
         ],
     ],
 

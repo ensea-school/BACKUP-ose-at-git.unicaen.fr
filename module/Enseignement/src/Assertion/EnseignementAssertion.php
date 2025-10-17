@@ -141,8 +141,7 @@ class EnseignementAssertion extends AbstractAssertion
                 return $this->assertPageEnseignements($intervenant, TypeVolumeHoraire::CODE_REALISE);
         }
 
-        // Sécurité renforcée
-        return false;
+        return true;
     }
 
 

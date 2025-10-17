@@ -102,7 +102,7 @@ class EtatSortieService extends AbstractEntityService
         if (trim($etatSortie->getPdfTraitement())) {
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getPdfTraitement();
             // Isolation de traitement pour éviter tout débordement...
-            $traitement = function () use ($document, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
+            $traitement = function () use ($document, $etatSortie, $data, $filtres, $entityManager, $options, $__PHP__CODE__TRAITEMENT__) {
                 $dir = getcwd();
 
                 if (Application::getInstance()->inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')) {

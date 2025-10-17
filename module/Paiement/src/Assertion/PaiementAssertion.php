@@ -54,8 +54,7 @@ class PaiementAssertion extends AbstractAssertion
                 return true;
         }
 
-        // sécu renforcée
-        return false;
+        return true;
     }
 
 

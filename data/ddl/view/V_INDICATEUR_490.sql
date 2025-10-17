@@ -1,4 +1,3 @@
---INDICATEUR A REVOIR AVEC LE NOUVEAU WORKFLOW / Vérifier l'étape export rh
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_490 AS
 SELECT i.id           intervenant_id,
        i.structure_id structure_id

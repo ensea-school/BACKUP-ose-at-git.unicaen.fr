@@ -11585,7 +11585,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/framework.git",
-                "reference": "1d796e23beb5a33960e69978845aabdec5777c74"
+                "reference": "e98d2a0418de0484a60576c59998c1ea44e73288"
             },
             "require": {
                 "laminas/laminas-permissions-acl": "^2.17",
@@ -11600,7 +11600,7 @@
                 }
             },
             "description": "Framework pour applications Unicaen",
-            "time": "2025-10-17T12:27:44+00:00"
+            "time": "2025-10-17T13:12:24+00:00"
         },
         {
             "name": "unicaen/import",

@@ -26,7 +26,7 @@ class v25Workflow extends MigrationAction
     {
         $this->getBdd()->exec('DROP TABLE TBL_WORKFLOW CASCADE CONSTRAINTS');
         $this->getBdd()->exec('DROP TABLE TBL_VALIDATION_ENSEIGNEMENT CASCADE CONSTRAINTS');
-        $this->getBdd()->exec('DROP TABLE TBL_VALIDATION_REFERRENTIEL CASCADE CONSTRAINTS');
+        $this->getBdd()->exec('DROP TABLE TBL_VALIDATION_REFERENTIEL CASCADE CONSTRAINTS');
     }
 
 }

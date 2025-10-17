@@ -19,7 +19,6 @@
         "ext-iconv"                          : "*",
         "api-platform/doctrine-orm"          : "^4.1.0",
         "doctrine/doctrine-bundle"           : "^2.7",
-        "doctrine/doctrine-migrations-bundle": "^3.2",
         "phpstan/phpdoc-parser"              : "^2.0",
         "runtime/frankenphp-symfony"         : "^0.2",
         "symfony/asset"                      : "7.3.*",
@@ -34,7 +33,6 @@
         "symfony/runtime"                    : "7.3.*",
         "symfony/security-bundle"            : "7.3.*",
         "symfony/serializer"                 : "7.3.*",
-        "symfony/twig-bundle"                : "7.3.*",
         "symfony/validator"                  : "7.3.*",
         "symfony/yaml"                       : "7.3.*",
         "symfony/uid"                        : "7.3.*",
@@ -163,6 +161,17 @@
         ],
         "post-update-cmd"     : [
             "@update-public-vendor"
-        ]
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
+    },
+    "extra": {
+        "symfony": {
+            "docker": false,
+            "allow-contrib": true
+        },
+        "config-dir": "api/config/"
     }
 }

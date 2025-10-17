@@ -254,7 +254,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                             'niveau'    => $niveau ? $niveau->getId() : null,
                             'etape'     => $etape ? $etape->getId() : null,
                         ];
-                        $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $params]);
+                        $urlExportOf = $this->url('of/export', [], ['query' => $params]);
 
                         ?>
                         <a class="btn btn-secondary btn-sm" href="<?= $urlExportOf ?>">

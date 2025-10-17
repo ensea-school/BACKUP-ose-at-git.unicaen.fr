@@ -42,13 +42,10 @@ return [
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
-                'default' => [
-                    'action'      => 'index',
-                    'route'       => '/:action[/:id]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]*',
-                    ],
+                'export' => [
+                    'route'         => '/export',
+                    'controller'  => OffreFormationController::class,
+                    'action'      => 'export',
                 ],
                 'element' => [
                     'route'         => '/element',

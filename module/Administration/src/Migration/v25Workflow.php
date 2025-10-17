@@ -24,9 +24,9 @@ class v25Workflow extends MigrationAction
 
     public function before()
     {
-        $this->getBdd()->exec('DROP TABLE TBL_WORKFLOW');
-        $this->getBdd()->exec('DROP TABLE TBL_VALIDATION_ENSEIGNEMENT');
-        $this->getBdd()->exec('DROP TABLE TBL_VALIDATION_REFERRENTIEL');
+        $this->getBdd()->exec('DROP TABLE TBL_WORKFLOW CASCADE CONSTRAINTS');
+        $this->getBdd()->exec('DROP TABLE TBL_VALIDATION_ENSEIGNEMENT CASCADE CONSTRAINTS');
+        $this->getBdd()->exec('DROP TABLE TBL_VALIDATION_REFERRENTIEL CASCADE CONSTRAINTS');
     }
 
 }

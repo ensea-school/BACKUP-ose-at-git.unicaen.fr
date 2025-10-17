@@ -3,9 +3,10 @@
 namespace Referentiel\Assertion;
 
 use Application\Provider\Privileges;
+use Application\Service\LocalContextService;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Doctrine\ORM\EntityManager;
 use Unicaen\Framework\Authorize\AbstractAssertion;
-use Unicaen\Framework\Navigation\Page;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
@@ -18,6 +19,7 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Unicaen\Framework\Authorize\Authorize;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
@@ -38,6 +40,16 @@ class ReferentielAssertion extends AbstractAssertion
     use TypeVolumeHoraireServiceAwareTrait;
     use RegleStructureValidationServiceAwareTrait;
     use ServiceAssertionAwareTrait;
+
+    public function __construct(
+        Authorize $authorize,
+        private readonly EntityManager $entityManager,
+        private readonly LocalContextService $localContext,
+    )
+    {
+        parent::__construct($authorize);
+    }
+
 
 
     /**
@@ -119,12 +131,31 @@ class ReferentielAssertion extends AbstractAssertion
      */
     protected function assertController(string $controller, ?string $action): bool
     {
-        $intervenant = $this->getParam(Intervenant::class);
+
         /* @var $intervenant Intervenant */
+        $intervenant = $this->getParam(Intervenant::class);
+
+        if (!$intervenant){
+            $intervenant = $this->localContext->getIntervenant();
+        }
 
         if (!$this->getAssertionService()->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!
 
         switch ($controller . '.' . $action) {
+            case ServiceReferentielController::class.'.saisie':
+            case ServiceReferentielController::class.'.suppression':
+                $serviceReferentiel = $this->getParam('id') ? $this->entityManager->find(ServiceReferentiel::class, $this->getParam('id')) : null;
+                if (!$serviceReferentiel){
+                    $serviceReferentiel = new ServiceReferentiel();
+                    $serviceReferentiel->setIntervenant($intervenant);
+                }
+                $typeVolumeHoraireId = $_GET['type-volume-horaire'] ?? null;
+                if ($typeVolumeHoraireId) {
+                    $typeVolumeHoraire = $this->entityManager->find(TypeVolumeHoraire::class, $typeVolumeHoraireId);
+                    $serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
+                }
+                return $this->assertServiceReferentielEdition($serviceReferentiel);
+
             case ServiceReferentielController::class . '.validationPrevu':
                 return $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION);
 
@@ -136,7 +167,6 @@ class ReferentielAssertion extends AbstractAssertion
 
             case ServiceReferentielController::class . '.referentiel-realise':
                 return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_REALISE);
-
         }
 
         return false;
@@ -213,7 +243,9 @@ class ReferentielAssertion extends AbstractAssertion
         }
 
         $asserts[] = $this->getAssertionService()->assertIntervenant($serviceReferentiel->getIntervenant());
-        $asserts[] = $this->getAssertionService()->assertCampagneSaisie($serviceReferentiel->getTypeVolumeHoraire());
+        if ($serviceReferentiel->getTypeVolumeHoraire()) {
+            $asserts[] = $this->getAssertionService()->assertCampagneSaisie($serviceReferentiel->getTypeVolumeHoraire());
+        }
         $asserts[] = $this->getAssertionService()->assertCloture($serviceReferentiel->getIntervenant());
 
         return $this->asserts($asserts);

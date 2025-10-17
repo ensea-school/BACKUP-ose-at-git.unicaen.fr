@@ -6,7 +6,6 @@ use Application\Provider\Privileges;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Referentiel\Controller\FonctionReferentielController;
 use Referentiel\Controller\ServiceReferentielController;
-use Workflow\Entity\Db\WorkflowEtape;
 
 
 return [
@@ -116,6 +115,10 @@ return [
                     'action'      => 'rafraichir-ligne',
                     'constraints' => [
                         'serviceReferentiel' => '[0-9]*',
+                    ],
+                    'privileges' => [
+                        Privileges::REFERENTIEL_PREVU_EDITION,
+                        Privileges::REFERENTIEL_REALISE_EDITION,
                     ],
                 ],
                 'constatation'             => [
@@ -241,7 +244,7 @@ return [
         ],
         [
             'controller' => ServiceReferentielController::class,
-            'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'initialisation', 'constatation'],
+            'action'     => ['saisie', 'suppression', 'initialisation', 'constatation'],
             'privileges' => [
                 Privileges::REFERENTIEL_PREVU_EDITION,
                 Privileges::REFERENTIEL_REALISE_EDITION,

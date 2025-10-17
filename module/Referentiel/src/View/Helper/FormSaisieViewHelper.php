@@ -109,7 +109,7 @@ EOS;
     </div>
 </div>
 <div class="row">
-    <div class="col-md-4" id="volumes-horaires" data-url="%s">
+    <div class="col-md-4" id="volumes-horaires">
         $rappelPrevu
         %s
     </div>
@@ -123,7 +123,6 @@ EOS;
             $template,
             $this->getView()->formControlGroup($fservice->get('fonction')),
             $this->getView()->formControlGroup($fservice->get('structure')),
-            $this->getVolumesHorairesRefreshUrl(),
             $this->getView()->formControlGroup($fservice->get('heures'))
         );
 

@@ -20,7 +20,6 @@ use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
-use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 
 
 /**
@@ -37,7 +36,6 @@ class EnseignementSaisieFieldset extends AbstractFieldset
     use NiveauEtapeServiceAwareTrait;
     use StructureServiceAwareTrait;
     use ElementPedagogiqueRechercheFieldsetAwareTrait;
-    use AuthorizeServiceAwareTrait;
 
     /**
      * etablissement par défaut

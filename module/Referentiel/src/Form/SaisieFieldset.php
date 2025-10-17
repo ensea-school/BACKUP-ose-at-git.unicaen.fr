@@ -22,9 +22,10 @@ use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Service\FonctionReferentielServiceAwareTrait;
 use Service\Entity\Db\Tag;
 use Service\Service\TagServiceAwareTrait;
+use Unicaen\Framework\Application\Application;
+use Unicaen\Framework\Authorize\Authorize;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
-use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 
 
 /**
@@ -40,7 +41,6 @@ class SaisieFieldset extends AbstractFieldset
     use FonctionReferentielServiceAwareTrait;
     use TagServiceAwareTrait;
     use MotifNonPaiementServiceAwareTrait;
-    use AuthorizeServiceAwareTrait;
     use ContextServiceAwareTrait;
 
     /**
@@ -48,10 +48,14 @@ class SaisieFieldset extends AbstractFieldset
      */
     protected $structures;
 
+    protected Authorize $authorize;
+
 
 
     public function __construct($name = null, $options = [])
     {
+        $this->authorize = Application::getInstance()->container()->get(Authorize::class);
+
         parent::__construct('service', $options);
     }
 
@@ -66,10 +70,8 @@ class SaisieFieldset extends AbstractFieldset
         $this->setHydrator($hydrator)
             ->setAllowedObjectBindingClass(ServiceReferentiel::class);
 
-        $canViewMNP = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIEMENT_VISUALISATION));
-        $canEditMNP = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIEMENT_EDITION));
-        $canViewTag = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::TAG_VISUALISATION));
-        $canEditTag = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::TAG_EDITION));
+        $canEditMNP = $this->authorize->isAllowedPrivilege(Privileges::MOTIF_NON_PAIEMENT_EDITION);
+        $canEditTag = $this->authorize->isAllowedPrivilege(Privileges::TAG_EDITION);
 
         $this->add([
             'name' => 'id',

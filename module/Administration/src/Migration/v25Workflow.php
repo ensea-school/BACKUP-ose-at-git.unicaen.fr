@@ -48,7 +48,6 @@ class v25Workflow extends MigrationAction
             $this->logSuccess('Le nouveau workflow a été initialisé avec des paramétrages par défaut, il vous faudra le configurer par vous-même');
         } catch (\Exception $e) {
             $this->logError($e->getMessage());
-            return Command::FAILURE;
         }
     }
 }

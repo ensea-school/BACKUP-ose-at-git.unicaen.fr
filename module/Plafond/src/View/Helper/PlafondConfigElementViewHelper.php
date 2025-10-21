@@ -100,7 +100,6 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
     public function script($entity = null)
     {
         $urls = [
-            '*'                        => 'plafond/config-application',
             FonctionReferentiel::class => 'plafond/config-referentiel',
             Structure::class           => 'plafond/config-structure',
             Statut::class              => 'plafond/config-statut',
@@ -109,9 +108,6 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
         if (is_object($entity)) {
             $url      = $this->getView()->url($urls[get_class($entity)]);
             $entityId = $entity->getId();
-        } else {
-            $url      = $this->getView()->url($urls['*']);
-            $entityId = null;
         }
 
         ?>
@@ -119,8 +115,7 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
 
                 WidgetInitializer.add('plafonds-config', {
 
-                    change: function (el)
-                    {
+                    change: function (el) {
                         $.ajax({
                             url: '<?= $url ?>',
                             type: 'POST',
@@ -139,14 +134,15 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
                         });
                     },
 
-                    _create: function ()
-                    {
+                    _create: function () {
                         var that = this;
                         var elsel = '[data-name=\"plafondEtatPrevu\"],[data-name=\"plafondEtatRealise\"],[data-name=\"heures\"]';
 
                         this.element.find(elsel).each(function () {
                             var thatthat = $(this);
-                            thatthat.change(function () { that.change(thatthat) });
+                            thatthat.change(function () {
+                                that.change(thatthat)
+                            });
                         });
                     },
 

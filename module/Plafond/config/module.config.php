@@ -63,16 +63,12 @@ return [
                     'action'     => 'config-referentiel',
                 ],
 
-                'config-mission'     => [
+                'config-mission' => [
                     'route'      => '/config/mission',
                     'controller' => Controller\PlafondController::class,
                     'action'     => 'config-mission',
                 ],
-                'config-application' => [
-                    'route'      => '/config/application',
-                    'controller' => Controller\PlafondController::class,
-                    'action'     => 'config-application',
-                ],
+
 
                 'construire-calculer' => [
                     'route'      => '/construire-calculer',

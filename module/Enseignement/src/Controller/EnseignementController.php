@@ -324,7 +324,7 @@ class EnseignementController extends AbstractController
         $form    = $this->getFormServiceEnseignementSaisie();
         $form->setTypeVolumeHoraire($typeVolumeHoraire);
 
-        $elementId = $this->params()->fromPost('elementPedagogique');
+        $elementId = $this->params()->fromPost('element');
         $element   = $elementId ? $this->em()->find(ElementPedagogique::class, $elementId) : null;
 
         $etablissementId = $this->params()->fromPost('etablissement');

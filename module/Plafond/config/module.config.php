@@ -63,10 +63,15 @@ return [
                     'action'     => 'config-referentiel',
                 ],
 
-                'config-mission' => [
+                'config-mission'     => [
                     'route'      => '/config/mission',
                     'controller' => Controller\PlafondController::class,
                     'action'     => 'config-mission',
+                ],
+                'config-application' => [
+                    'route'      => '/config/application',
+                    'controller' => Controller\PlafondController::class,
+                    'action'     => 'config-application',
                 ],
 
                 'construire-calculer' => [
@@ -166,7 +171,11 @@ return [
         ],
         [
             'controller' => Controller\PlafondController::class,
-            'action'     => ['editer', 'supprimer', 'construire', 'calculer', 'construire-calculer'],
+            'action'     => ['editer',
+                             'supprimer',
+                             'construire',
+                             'calculer',
+                             'construire-calculer'],
             'privileges' => Privileges::PLAFONDS_EDITION,
         ],
         [

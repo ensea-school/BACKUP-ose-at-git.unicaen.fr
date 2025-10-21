@@ -204,7 +204,15 @@ class EnseignementController extends AbstractController
                         $this->em()->getConnection()->setAutoCommit(true);
                         //Uniquement pour le service fait dans l'établissement
 
-                        if ($form->get('service')->get('interne-externe')->getValue() != 'service-externe') {
+                        $isExterne = false;
+                        if ($form->get('service')->has('interne-externe')) {
+                            if ($form->get('service')->get('interne-externe')->getValue() == 'service-externe') {
+                                $isExterne = true;
+                            }
+                        }
+
+
+                        if (!$isExterne) {
                             //Récupération de l'id de l'étape qui a été selectionné pour la recherche de la formation
                             $etapeId = $form->get('service')
                                             ->get('element-pedagogique')

@@ -6,6 +6,7 @@
         datas.pieceJointe?.validation ? 'bg-success' : 'bg-default',
         datas.pieceJointe?.id ? 'tpj-' + datas.pieceJointe.id : ''
     ]">
+
         <div class="card-header card-header-h3 ">
             <h5>
                 <div class="validation-bar float-end" data-url="">
@@ -35,8 +36,8 @@
                             REFUSER
                         </button>
                         <button
-                            v-if="this.datas.pieceJointe.validation &&
-                                  (datas.annee == datas.pieceJointe?.anneeOrigine??false) &&
+                            v-if="datas.pieceJointe.validation &&
+                                  (datas.annee == (datas.pieceJointe?.anneeOrigine??false)) &&
                                   privileges.canValider"
                             :id="'devalider-' + datas.pieceJointe?.id"
                             class="btn btn-danger"
@@ -71,7 +72,7 @@
                     </div>
                     <!-- fichier déposé -->
                     <label>Fichier(s) déposé(s) :</label>
-                    <p v-if="!this.datas.pieceJointe">Aucun</p>
+                    <p v-if="!datas.pieceJointe">Aucun</p>
                     <div class="uploaded-files-div" id="uploaded-files-div-6851831280ff7">
                         <ul>
                             <li v-for="(fichier, key) in datas.pieceJointe?.fichier" class="fichier-pj">
@@ -105,7 +106,7 @@
                                         <!-- lien de suppression du fichier -->
                                         <button v-if="!fichier.validation &&
                                                       privileges.canEditer &&
-                                                      (datas.annee == datas.pieceJointe?.anneeOrigine??false)"
+                                                      (datas.annee == (datas.pieceJointe?.anneeOrigine??false))"
                                                 :id="'supprimer-fichier-' + fichier.id"
                                                 class="delete-file btn btn-sm btn-danger ms-2 p-1 py-0"
                                                 type="button"
@@ -121,7 +122,7 @@
                                             v-if="!fichier.validation &&
                                                   datas.pieceJointe?.validation &&
                                                   privileges.canValider &&
-                                                  (datas.annee == datas.pieceJointe?.anneeOrigine??false)"
+                                                  (datas.annee == (datas.pieceJointe?.anneeOrigine??false))"
                                             :id="'valider-fichier-' + fichier.id"
                                             class="validate-file btn btn-sm btn-success ms-2 p-1 py-0"
                                             type="button"
@@ -173,6 +174,7 @@
 <script setup>
 
 import {ref, computed} from 'vue'
+import Test from "@/Formule/Test/Test.vue";
 
 const props = defineProps(['intervenant', 'datas', 'privileges']);
 

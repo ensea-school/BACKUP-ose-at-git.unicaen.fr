@@ -3,8 +3,6 @@
 namespace Administration\Migration;
 
 use Unicaen\BddAdmin\Migration\MigrationAction;
-use Unicaen\Framework\Application\Application;
-use Workflow\Service\WorkflowService;
 
 class v25Workflow extends MigrationAction
 {

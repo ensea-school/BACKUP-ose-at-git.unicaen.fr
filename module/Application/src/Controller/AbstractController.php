@@ -6,6 +6,7 @@ use Application\Form\Supprimer;
 use Application\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManager;
 use Laminas\Mvc\Controller\AbstractActionController;
+use Unicaen\Framework\Controller\Plugin\IsAllowed;
 
 /**
  * Description of AbstractController
@@ -13,7 +14,7 @@ use Laminas\Mvc\Controller\AbstractActionController;
  * @method \Application\Controller\Plugin\Context context()
  * @method \Application\Controller\Plugin\Axios axios()
  * @method \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger flashMessenger()
- * @method \BjyAuthorize\Controller\Plugin\IsAllowed isAllowed($resource, $privilege = null)
+ * @method IsAllowed isAllowed($resource, $privilege = null)
  *
  */
 abstract class AbstractController extends AbstractActionController

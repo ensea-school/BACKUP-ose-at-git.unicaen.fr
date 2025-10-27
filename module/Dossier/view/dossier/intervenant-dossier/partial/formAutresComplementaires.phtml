@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @var $this                                       \Application\View\Renderer\PhpRenderer
+ * @var $form                                       \Dossier\Form\IntervenantDossierForm
+ * @var $tblDossier                                 \Dossier\Entity\Db\TblDossier
+ * @var $champsAutresApresRecrutement               \Dossier\Entity\Db\DossierAutre[]
+ */
+
+
+$form->prepare();
+$dossierAutres = $form->get('DossierAutres');
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+
+<!-- Fiedlset Autres -->
+<?php
+
+$autres = [];
+foreach ($champsAutresApresRecrutement as $champsAutre) {
+    $canView = $this->isAllowed($tblDossier->getDossier(), constant('\Application\Provider\Privileges::DOSSIER_CHAMP_AUTRE_' . $champsAutre->getId() . '_VISUALISATION'));
+    $canEdit = $this->isAllowed($tblDossier->getDossier(), constant('\Application\Provider\Privileges::DOSSIER_CHAMP_AUTRE_' . $champsAutre->getId() . '_EDITION'));
+
+    if ($canView) {
+        $method   = 'getAutre' . $champsAutre->getId();
+        $value    = $tblDossier->getDossier()->$method();
+        $autres[] = [
+            'id'      => $champsAutre->getId(),
+            'canView' => $canView,
+            'canEdit' => $canEdit,
+            'value'   => $value,
+        ];
+    }
+}
+
+if (empty($autres)) {
+    return;
+}
+
+?>
+<div class="col-md-6">
+    <div class="card bg-default ">
+        <div class="card-header">
+            AUTRES DONNEES COMPLEMENTAIRES
+            <?php if (!empty($tblDossier)): ?>
+                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeAutreApresRecrutement()): ?>
+                    <span class="badge bg-warning text-dark">A compléter</span>
+                <?php else: ?>
+                    <span class="badge bg-success">Complet</span>
+                <?php endif; ?>
+
+            <?php endif; ?>
+        </div>
+        <div class="card-body">
+            <?php foreach ($autres as $champ): ?>
+                <div class="form-group">
+                <?php if (!$champ['canEdit']): ?>
+                    <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
+                    <div class="input-group cold-md-6 readonly">
+                        <?php
+                        if ($champ['value']) {
+                            echo ($champ['canView']) ? $champ['value'] : '***************';
+                        }
+                        ?>
+                    </div>
+                    </div>
+                <?php else: ?>
+                    <?= $this->formControlGroup($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+        </div>
+    </div>
+</div>

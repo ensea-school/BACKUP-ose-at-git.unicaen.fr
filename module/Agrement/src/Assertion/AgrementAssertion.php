@@ -129,7 +129,7 @@ class AgrementAssertion extends AbstractAssertion
     {
         /* Si c'est pour agréer et que le workflow l'interdit alors non! */
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
-        $wfEtape = $feuilleDeRoute->get($entity->getTypeAgrement()->getCode());
+        $wfEtape = $feuilleDeRoute->get(strtolower($entity->getTypeAgrement()->getCode()));
 
         if (!$wfEtape?->isAllowed()){
             return false;

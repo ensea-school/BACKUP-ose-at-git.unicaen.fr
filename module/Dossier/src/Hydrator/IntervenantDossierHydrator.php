@@ -57,18 +57,18 @@ class IntervenantDossierHydrator implements HydratorInterface
 
         /* Extract fieldset dossier identite */
         $data['DossierIdentite'] = [
-            'nomUsuel'                  => $object->getNomUsuel(),
-            'nomPatronymique'           => $object->getNomPatronymique(),
-            'prenom'                    => $object->getPrenom(),
-            'civilite'                  => ($object->getCivilite()) ? $object->getCivilite()->getId() : '',
-            'dateNaissance'        => $object->getDateNaissance(),
+            'nomUsuel'        => $object->getNomUsuel(),
+            'nomPatronymique' => $object->getNomPatronymique(),
+            'prenom'          => $object->getPrenom(),
+            'civilite'        => ($object->getCivilite()) ? $object->getCivilite()->getId() : '',
+            'dateNaissance'   => $object->getDateNaissance(),
         ];
 
         $data['DossierIdentiteComplementaire'] = [
-            'paysNaissance'        => ($object->getPaysNaissance()) ? $object->getPaysNaissance()->getId() : '',
-            'paysNationalite'      => ($object->getPaysNationalite()) ? $object->getPaysNationalite()->getId() : '',
-            'departementNaissance' => ($object->getDepartementNaissance()) ? $object->getDepartementNaissance()->getId() : '',
-            'villeNaissance'       => $object->getCommuneNaissance(),
+            'paysNaissance'             => ($object->getPaysNaissance()) ? $object->getPaysNaissance()->getId() : '',
+            'paysNationalite'           => ($object->getPaysNationalite()) ? $object->getPaysNationalite()->getId() : '',
+            'departementNaissance'      => ($object->getDepartementNaissance()) ? $object->getDepartementNaissance()->getId() : '',
+            'villeNaissance'            => $object->getCommuneNaissance(),
             'situationMatrimoniale'     => ($object->getSituationMatrimoniale()) ? $object->getSituationMatrimoniale()->getId() : '',
             'dateSituationMatrimoniale' => $object->getDateSituationMatrimoniale(),
         ];
@@ -223,7 +223,6 @@ class IntervenantDossierHydrator implements HydratorInterface
         if (isset($data['DossierContact'])) {
 
             $object->setEmailPerso(trim($data['DossierContact']['emailPersonnel']));
-            //$object->setEmailPro($data['DossierContact']['emailEtablissement']);
             $object->setTelPro(trim($data['DossierContact']['telephoneProfessionnel']));
             $object->setTelPerso(trim($data['DossierContact']['telephonePersonnel']));
         }
@@ -233,8 +232,6 @@ class IntervenantDossierHydrator implements HydratorInterface
         if (isset($data['DossierInsee'])) {
             $object->setNumeroInsee(trim($data['DossierInsee']['numeroInsee']));
             $object->setNumeroInseeProvisoire($data['DossierInsee']['numeroInseeEstProvisoire']);
-        } else {
-            $object->setNumeroInseeProvisoire(false);
         }
 
         //Hydratation de Iban
@@ -256,18 +253,19 @@ class IntervenantDossierHydrator implements HydratorInterface
         if (!empty($data['DossierStatut']['statut'])) {
             $statut = $this->getServiceStatut()->get($data['DossierStatut']['statut']);
             $object->setStatut($statut);
-        } else {
-            $object->setStatut(null);
         }
 
         //Hydratation des champs autres
         if (isset($data['DossierAutres'])) {
-            $object->setAutre1((isset($data['DossierAutres']['champ-autre-1'])) ? $data['DossierAutres']['champ-autre-1'] : '');
-            $object->setAutre2((isset($data['DossierAutres']['champ-autre-2'])) ? $data['DossierAutres']['champ-autre-2'] : '');
-            $object->setAutre3((isset($data['DossierAutres']['champ-autre-3'])) ? $data['DossierAutres']['champ-autre-3'] : '');
-            $object->setAutre4((isset($data['DossierAutres']['champ-autre-4'])) ? $data['DossierAutres']['champ-autre-4'] : '');
-            $object->setAutre5((isset($data['DossierAutres']['champ-autre-5'])) ? $data['DossierAutres']['champ-autre-5'] : '');
+            for ($i = 1; $i <= 5; $i++) {
+                $champ = 'champ-autre-' . $i;
+                if (isset($data['DossierAutres'][$champ])) {
+                    $method = 'setAutre' . $i;
+                    $object->$method($data['DossierAutres'][$champ]);
+                }
+            }
         }
+
 
         return $object;
     }

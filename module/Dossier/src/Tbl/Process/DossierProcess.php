@@ -70,16 +70,18 @@ class DossierProcess implements ProcessInterface
     protected function traitementDossiers(): void
     {
         foreach ($this->dossiers as $key => $dossier) {
+            mpg_lower($dossier);
             $dossierTbl                                 = [];
-            $dossierTbl['ANNEE_ID']                     = $dossier['ANNEE_ID'];
-            $dossierTbl['DOSSIER_ID']                   = $dossier['DOSSIER_ID'];
-            $dossierTbl['INTERVENANT_ID']               = $dossier['INTERVENANT_ID'];
-            $dossierTbl['ACTIF']                        = $dossier['DOSSIER'];
-            $dossierTbl['VALIDATION_ID']                = $dossier['VALIDATION_ID'];
-            $dossierTbl['VALIDATION_COMPLEMENTAIRE_ID'] = $dossier['VALIDATION_COMPLEMENTAIRE_ID'];
+            $dossierTbl['annee_id']                     = $dossier['annee_id'];
+            $dossierTbl['dossier_id']                   = $dossier['dossier_id'];
+            $dossierTbl['intervenant_id']               = $dossier['intervenant_id'];
+            $dossierTbl['actif']                        = $dossier['dossier'];
+            $dossierTbl['validation_id']                = $dossier['validation_id'];
+            $dossierTbl['validation_complementaire_id'] = $dossier['validation_complementaire_id'];
             $this->calculateurCompletude->calculer($dossier, $dossierTbl);
-            $this->tblData[$dossier['INTERVENANT_ID']] = $dossierTbl;
+            $this->tblData[$dossier['intervenant_id']] = $dossierTbl;
         }
+        mpg_upper($this->tblData);
     }
 
 

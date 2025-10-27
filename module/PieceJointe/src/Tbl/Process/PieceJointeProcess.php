@@ -89,9 +89,10 @@ class PieceJointeProcess implements ProcessInterface
         $piecesJointesFournies = $this->getBdd()->selectEach($sqlPiecesJointesFournies);
 
         while ($pieceJointe = $piecesJointesFournies->next()) {
-            $codeIntervenant                                                         = $pieceJointe['CODE_INTERVENANT'];
-            $typePieceJointe                                                         = $pieceJointe['TYPE_PIECE_JOINTE_ID'];
-            $annee                                                                   = $pieceJointe['ANNEE_ID'];
+            mpg_lower($pieceJointe);
+            $codeIntervenant                                                         = $pieceJointe['code_intervenant'];
+            $typePieceJointe                                                         = $pieceJointe['type_piece_jointe_id'];
+            $annee                                                                   = $pieceJointe['annee_id'];
             $this->piecesJointesFournies[$codeIntervenant][$typePieceJointe][$annee] = $pieceJointe;
             ksort($this->piecesJointesFournies[$codeIntervenant][$typePieceJointe]);
         }
@@ -141,16 +142,17 @@ class PieceJointeProcess implements ProcessInterface
     {
         //On commence par traiter toutes les pièces jointes demandées
         foreach ($this->piecesJointesDemandees as $pieceJointeDemandee) {
-            $uuid                                 = $pieceJointeDemandee['ANNEE_ID'] . '_' . $pieceJointeDemandee['INTERVENANT_ID'] . '_' . $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
+            mpg_lower($pieceJointeDemandee);
+            $uuid                                 = $pieceJointeDemandee['annee_id'] . '_' . $pieceJointeDemandee['intervenant_id'] . '_' . $pieceJointeDemandee['type_piece_jointe_id'];
             $pieceJointe                          = new PieceJointe();
             $pieceJointe->uuid                    = $uuid;
-            $pieceJointe->annee                   = $pieceJointeDemandee['ANNEE_ID'];
-            $pieceJointe->typePieceJointeId       = $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
-            $pieceJointe->intervenantId           = $pieceJointeDemandee['INTERVENANT_ID'];
+            $pieceJointe->annee                   = $pieceJointeDemandee['annee_id'];
+            $pieceJointe->typePieceJointeId       = $pieceJointeDemandee['type_piece_jointe_id'];
+            $pieceJointe->intervenantId           = $pieceJointeDemandee['intervenant_id'];
             $pieceJointe->demandee                = true;
             $pieceJointe->fournie                 = false;
             $pieceJointe->obligatoire             = true;
-            $pieceJointe->demandeApresRecrutement = $pieceJointeDemandee['DEMANDEE_APRES_RECRUTEMENT'];
+            $pieceJointe->demandeApresRecrutement = $pieceJointeDemandee['demandee_apres_recrutement'];
             $this->piecesJointes[$uuid]           = $pieceJointe;
 
         }
@@ -158,21 +160,23 @@ class PieceJointeProcess implements ProcessInterface
         foreach ($this->piecesJointesFournies as $codeIntervenant => $datas) {
             foreach ($datas as $typePieceJointeId => $piecesJointesFournies) {
                 foreach ($piecesJointesFournies as $pieceJointeFournie) {
-                    $uuid = $pieceJointeFournie['ANNEE_ID'] . '_' . $pieceJointeFournie['INTERVENANT_ID'] . '_' . $pieceJointeFournie['TYPE_PIECE_JOINTE_ID'];
+                    mpg_lower($pieceJointeFournie);
+                    $uuid = $pieceJointeFournie['annee_id'] . '_' . $pieceJointeFournie['intervenant_id'] . '_' . $pieceJointeFournie['type_piece_jointe_id'];
                     if (array_key_exists($uuid, $this->piecesJointes)) {
-                        $this->piecesJointes[$uuid]->pieceJointeId = $pieceJointeFournie['PIECE_JOINTE_ID'];
+                        $this->piecesJointes[$uuid]->pieceJointeId = $pieceJointeFournie['piece_jointe_id'];
                         $this->piecesJointes[$uuid]->fournie       = 1;
-                        $this->piecesJointes[$uuid]->validee       = !empty($pieceJointeFournie['VALIDATION_ID']);
-                        $this->piecesJointes[$uuid]->dateValiditee = $pieceJointeFournie['DATE_VALIDITEE'];
+                        $this->piecesJointes[$uuid]->validee       = !empty($pieceJointeFournie['validation_id']);
+                        $this->piecesJointes[$uuid]->dateValiditee = $pieceJointeFournie['date_validitee'];
                     }
                 }
             }
         }
         //Ensuite on cherche les pièces jointes fournies sur une potentielle année postérieure (durée de vie)
         foreach ($this->piecesJointesDemandees as $pieceJointeDemandee) {
-            $codeIntervenant   = $pieceJointeDemandee['CODE_INTERVENANT'];
-            $typePieceJointeId = $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
-            $uuid              = $pieceJointeDemandee['ANNEE_ID'] . '_' . $pieceJointeDemandee['INTERVENANT_ID'] . "_" . $pieceJointeDemandee['TYPE_PIECE_JOINTE_ID'];
+            mpg_lower($pieceJointeDemandee);
+            $codeIntervenant   = $pieceJointeDemandee['code_intervenant'];
+            $typePieceJointeId = $pieceJointeDemandee['type_piece_jointe_id'];
+            $uuid              = $pieceJointeDemandee['annee_id'] . '_' . $pieceJointeDemandee['intervenant_id'] . "_" . $pieceJointeDemandee['type_piece_jointe_id'];
             //Piece jointe demandée déjà fournie donc on passe
             if ($this->piecesJointes[$uuid]->fournie == 1) {
                 continue;
@@ -181,19 +185,20 @@ class PieceJointeProcess implements ProcessInterface
             //J'ai des pieces fournies antérieurement
             if (!empty($piecesJointesFournies)) {
                 foreach ($piecesJointesFournies as $pieceJointeFournie) {
+                    mpg_lower($pieceJointeFournie);
                     //L'année de la pièce jointe fournie est postérieur à l'année de la pièce jointe demandée
-                    if ((int)$pieceJointeDemandee['ANNEE_ID'] >= (int)$pieceJointeFournie['ANNEE_ID'] && !empty($pieceJointeFournie['VALIDATION_ID'])) {
+                    if ((int)$pieceJointeDemandee['annee_id'] >= (int)$pieceJointeFournie['annee_id'] && !empty($pieceJointeFournie['validation_id'])) {
                         if (//1 -Si la date de validité de la pièce jointe est strictement supérieure à l'année où elle est demandée
-                            (int)$pieceJointeFournie['DATE_VALIDITEE'] > (int)$pieceJointeDemandee['ANNEE_ID'] &&
+                            (int)$pieceJointeFournie['date_validitee'] > (int)$pieceJointeDemandee['annee_id'] &&
                             //2 - L'année de la pièce jointe fournie correspond au critère de durée de vie de la pièce jointe demandée
-                            (int)$pieceJointeFournie['ANNEE_ID'] > round((int)$pieceJointeDemandee['ANNEE_ID'] - (int)$pieceJointeDemandee['DUREE_VIE']) &&
+                            (int)$pieceJointeFournie['annee_id'] > round((int)$pieceJointeDemandee['annee_id'] - (int)$pieceJointeDemandee['duree_vie']) &&
                             //3 - Si la date d'archive de la pièce fournie est strictement supérieure à l'année où elle est demandée
-                            ((int)$pieceJointeFournie['DATE_ARCHIVE'] > (int)$pieceJointeDemandee['ANNEE_ID'] ||
-                             empty($pieceJointeFournie['DATE_ARCHIVE']))) {
-                            $this->piecesJointes[$uuid]->pieceJointeId = $pieceJointeFournie['PIECE_JOINTE_ID'];
-                            $this->piecesJointes[$uuid]->dateValiditee = $pieceJointeFournie['DATE_VALIDITEE'];
+                            ((int)$pieceJointeFournie['date_archive'] > (int)$pieceJointeDemandee['annee_id'] ||
+                             empty($pieceJointeFournie['date_archive']))) {
+                            $this->piecesJointes[$uuid]->pieceJointeId = $pieceJointeFournie['piece_jointe_id'];
+                            $this->piecesJointes[$uuid]->dateValiditee = $pieceJointeFournie['date_validitee'];
                             $this->piecesJointes[$uuid]->fournie       = 1;
-                            $this->piecesJointes[$uuid]->validee       = !empty($pieceJointeFournie['VALIDATION_ID']);
+                            $this->piecesJointes[$uuid]->validee       = !empty($pieceJointeFournie['validation_id']);
 
                         }
                     }
@@ -211,18 +216,20 @@ class PieceJointeProcess implements ProcessInterface
     {
         foreach ($this->piecesJointes as $uuid => $piecesJointe) {
             $this->tblData[] = [
-                'ANNEE_ID'                   => $piecesJointe->annee,
-                'TYPE_PIECE_JOINTE_ID'       => $piecesJointe->typePieceJointeId,
-                'PIECE_JOINTE_ID'            => $piecesJointe->pieceJointeId,
-                'INTERVENANT_ID'             => $piecesJointe->intervenantId,
-                'DEMANDEE'                   => $piecesJointe->demandee,
-                'FOURNIE'                    => $piecesJointe->fournie,
-                'VALIDEE'                    => $piecesJointe->validee,
-                'OBLIGATOIRE'                => $piecesJointe->obligatoire,
-                'DATE_VALIDITEE'             => $piecesJointe->dateValiditee,
-                'DEMANDEE_APRES_RECRUTEMENT' => $piecesJointe->demandeApresRecrutement,
+                'annee_id'                  => $piecesJointe->annee,
+                'type_piece_jointe_id'      => $piecesJointe->typePieceJointeId,
+                'piece_jointe_id'           => $piecesJointe->pieceJointeId,
+                'intervenant_id'            => $piecesJointe->intervenantId,
+                'demandee'                  => $piecesJointe->demandee,
+                'fournie'                   => $piecesJointe->fournie,
+                'validee'                   => $piecesJointe->validee,
+                'obligatoire'               => $piecesJointe->obligatoire,
+                'date_validitee'            => $piecesJointe->dateValiditee,
+                'demande_apres_recrutement' => $piecesJointe->demandeApresRecrutement,
             ];
         }
+
+        mpg_upper($this->tblData);
 
     }
 

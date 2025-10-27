@@ -8,14 +8,14 @@ class CalculateurCompletude
 {
 
     private const DOSSIER_BLOCS = [
-        'IDENTITE',
-        'STATUT',
-        'IDENTITE_COMP',
-        'CONTACT',
-        'ADRESSE',
-        'INSEE',
-        'BANQUE',
-        'EMPLOYEUR',
+        'identite',
+        'statut',
+        'identite_comp',
+        'contact',
+        'adresse',
+        'insee',
+        'banque',
+        'employeur',
     ];
 
     private const REALISEE = 'realisee';
@@ -25,20 +25,20 @@ class CalculateurCompletude
 
     public function calculer(array $dossier, array &$destination): void
     {
-        $destination['COMPLETUDE_STATUT']                  = isset($dossier['DOSSIER_ID']) ? $this->completudeStatut($dossier) : false;
-        $destination['COMPLETUDE_IDENTITE']                = isset($dossier['DOSSIER_ID']) ? $this->completudeIdentite($dossier) : false;
-        $destination['COMPLETUDE_IDENTITE_COMP']           = isset($dossier['DOSSIER_ID']) ? $this->completudeIdentiteComplementaire($dossier) : false;
-        $destination['COMPLETUDE_CONTACT']                 = isset($dossier['DOSSIER_ID']) ? $this->completudeContact($dossier) : false;
-        $destination['COMPLETUDE_ADRESSE']                 = isset($dossier['DOSSIER_ID']) ? $this->completudeAdresse($dossier) : false;
-        $destination['COMPLETUDE_BANQUE']                  = isset($dossier['DOSSIER_ID']) ? $this->completudeBanque($dossier) : false;
-        $destination['COMPLETUDE_INSEE']                   = isset($dossier['DOSSIER_ID']) ? $this->completudeInsee($dossier) : false;
-        $destination['COMPLETUDE_EMPLOYEUR']               = isset($dossier['DOSSIER_ID']) ? $this->completudeEmployeur($dossier) : false;
-        $destination['COMPLETUDE_AUTRE_AVANT_RECRUTEMENT'] = isset($dossier['DOSSIER_ID']) ? $this->completudeAutreAvantRecrutement($dossier) : false;
-        $destination['COMPLETUDE_AUTRE_APRES_RECRUTEMENT'] = isset($dossier['DOSSIER_ID']) ? $this->completudeAutreApresRecrutement($dossier) : false;
-        $destination['APRES_RECRUTEMENT_ATTENDUE']         = isset($dossier['DOSSIER_ID']) ? $this->calculerCompletude($dossier, $destination, 2, self::ATTENDUE) : false;
-        $destination['AVANT_RECRUTEMENT_ATTENDUE']         = isset($dossier['DOSSIER_ID']) ? $this->calculerCompletude($dossier, $destination, 1, self::ATTENDUE) : false;
-        $destination['APRES_RECRUTEMENT_REALISEE']         = isset($dossier['DOSSIER_ID']) ? $this->calculerCompletude($dossier, $destination, 2, self::REALISEE) : false;
-        $destination['AVANT_RECRUTEMENT_REALISEE']         = isset($dossier['DOSSIER_ID']) ? $this->calculerCompletude($dossier, $destination, 1, self::REALISEE) : false;
+        $destination['completude_statut']                  = isset($dossier['dossier_id']) && $this->completudeStatut($dossier);
+        $destination['completude_identite']                = isset($dossier['dossier_id']) && $this->completudeIdentite($dossier);
+        $destination['completude_identite_comp']           = isset($dossier['dossier_id']) && $this->completudeIdentiteComplementaire($dossier);
+        $destination['completude_contact']                 = isset($dossier['dossier_id']) && $this->completudeContact($dossier);
+        $destination['completude_adresse']                 = isset($dossier['dossier_id']) && $this->completudeAdresse($dossier);
+        $destination['completude_banque']                  = isset($dossier['dossier_id']) && $this->completudeBanque($dossier);
+        $destination['completude_insee']                   = isset($dossier['dossier_id']) && $this->completudeInsee($dossier);
+        $destination['completude_employeur']               = isset($dossier['dossier_id']) && $this->completudeEmployeur($dossier);
+        $destination['completude_autre_avant_recrutement'] = isset($dossier['dossier_id']) && $this->completudeAutreAvantRecrutement($dossier);
+        $destination['completude_autre_apres_recrutement'] = isset($dossier['dossier_id']) && $this->completudeAutreApresRecrutement($dossier);
+        $destination['apres_recrutement_attendue']         = isset($dossier['dossier_id']) ? $this->calculerCompletude($dossier, $destination, 2, self::ATTENDUE) : false;
+        $destination['avant_recrutement_attendue']         = isset($dossier['dossier_id']) ? $this->calculerCompletude($dossier, $destination, 1, self::ATTENDUE) : false;
+        $destination['apres_recrutement_realisee']         = isset($dossier['dossier_id']) ? $this->calculerCompletude($dossier, $destination, 2, self::REALISEE) : false;
+        $destination['avant_recrutement_realisee']         = isset($dossier['dossier_id']) ? $this->calculerCompletude($dossier, $destination, 1, self::REALISEE) : false;
     }
 
 
@@ -51,7 +51,7 @@ class CalculateurCompletude
     public function completudeStatut(array $dossier): bool
     {
         // 1. Si le statut est autre, le statut n'a pas été correctement choisi
-        if ($dossier['CODE_STATUT'] == Statut::CODE_AUTRES) {
+        if ($dossier['code_statut'] == Statut::CODE_AUTRES) {
             return false;
         }
 
@@ -68,10 +68,10 @@ class CalculateurCompletude
     public function completudeIdentite(array $dossier): bool
     {
         // 1. Champs obligatoires : civilite, nom_usuel, prénom et date de naissance
-        $champsObligatoires = ['CIVILITE_ID',
-                               'NOM_USUEL',
-                               'PRENOM',
-                               'DATE_NAISSANCE'];
+        $champsObligatoires = ['civilite_id',
+                               'nom_usuel',
+                               'prenom',
+                               'date_naissance'];
         foreach ($champsObligatoires as $champs) {
             if (empty($dossier[$champs])) {
                 return false;
@@ -91,21 +91,21 @@ class CalculateurCompletude
     public function completudeIdentiteComplementaire(array $dossier): bool
     {
         //Uniquement si la partie données identités complémentaires est activée
-        if ($dossier['DOSSIER_IDENTITE_COMP']) {
+        if ($dossier['dossier_identite_comp']) {
             // 1. Complétude de la situation matrimoniale
-            if (!empty($dossier['DOSSIER_SITUATION_MATRIMONIALE'])) {
-                $code = $dossier['SITUATION_MATRIMONIALE_CODE'] ?? null;
+            if (!empty($dossier['dossier_situation_matrimoniale'])) {
+                $code = $dossier['situation_matrimoniale_code'] ?? null;
                 // Si ce n’est pas un célibataire, on vérifie la présence du code et de la date
                 if ($code !== Statut::CODE_SITUATION_MATRIMONIALE_CELIBATAIRE &&
-                    (!$code || empty($dossier['SITUATION_MATRIMONIALE_DATE']))) {
+                    (!$code || empty($dossier['situation_matrimoniale_date']))) {
                     return false;
                 }
             }
 
             // 2. Champs obligatoires : pays naissance, nationalité, commune naissance
-            $champsObligatoires = ['PAYS_NAISSANCE_ID',
-                                   'PAYS_NATIONALITE_ID',
-                                   'COMMUNE_NAISSANCE'];
+            $champsObligatoires = ['pays_naissance_id',
+                                   'pays_nationalite_id',
+                                   'commune_naissance'];
             foreach ($champsObligatoires as $champs) {
                 if (empty($dossier[$champs])) {
                     return false;
@@ -113,9 +113,9 @@ class CalculateurCompletude
             }
 
             // 3. Département naissance requis si pays = France (insensible à la casse)
-            if (isset($dossier['LIBELLE_PAYS_NAISSANCE']) &&
-                strcasecmp($dossier['LIBELLE_PAYS_NAISSANCE'], 'france') === 0 &&
-                empty($dossier['DEPARTEMENT_NAISSANCE_ID'])
+            if (isset($dossier['libelle_pays_naissance']) &&
+                strcasecmp($dossier['libelle_pays_naissance'], 'france') === 0 &&
+                empty($dossier['departement_naissance_id'])
             ) {
                 return false;
             }
@@ -134,19 +134,19 @@ class CalculateurCompletude
      */
     public function completudeContact(array $dossier): bool
     {
-        $var = "";
-        if ($dossier['DOSSIER_CONTACT']) {
+        
+        if ($dossier['dossier_contact']) {
             // 1. Vérification des emails
-            if ($dossier['DOSSIER_EMAIL_PERSO'] && empty($dossier['EMAIL_PERSO'])) {
+            if ($dossier['dossier_email_perso'] && empty($dossier['email_perso'])) {
                 return false;
-            } elseif (empty($dossier['EMAIL_PRO']) && empty($dossier['EMAIL_PERSO'])) {
+            } elseif (empty($dossier['email_pro']) && empty($dossier['email_perso'])) {
                 return false;
             }
 
             // 2. Vérification des téléphones
-            if ($dossier['DOSSIER_TEL_PERSO'] && empty($dossier['TEL_PERSO'])) {
+            if ($dossier['dossier_tel_perso'] && empty($dossier['tel_perso'])) {
                 return false;
-            } elseif (empty($dossier['TEL_PRO'])) {
+            } elseif (empty($dossier['tel_pro'])) {
                 return false;
             }
 
@@ -164,16 +164,16 @@ class CalculateurCompletude
      */
     public function completudeAdresse(array $dossier): bool
     {
-        if ($dossier['DOSSIER_ADRESSE']) {
+        if ($dossier['dossier_adresse']) {
             // 1. Test de l'adresse
-            if (empty($dossier['ADRESSE_PRECISIONS']) &&
-                empty($dossier['ADRESSE_LIEU_DIT']) &&
-                (empty($dossier['ADRESSE_VOIE']) && empty($dossier['ADRESSE_NUMERO']))) {
+            if (empty($dossier['adresse_precisions']) &&
+                empty($dossier['adresse_lieu_dit']) &&
+                (empty($dossier['adresse_voie']) && empty($dossier['adresse_numero']))) {
                 return false;
             }
 
             // 2. Test de la commune et du code postal
-            if (empty($dossier['ADRESSE_COMMUNE']) || empty($dossier['ADRESSE_CODE_POSTAL'])) {
+            if (empty($dossier['adresse_commune']) || empty($dossier['adresse_code_postal'])) {
                 return false;
             }
         }
@@ -189,8 +189,8 @@ class CalculateurCompletude
      */
     public function completudeBanque(array $dossier): bool
     {
-        if ($dossier['DOSSIER_BANQUE']) {
-            if (empty($dossier['IBAN']) || empty($dossier['BIC'])) {
+        if ($dossier['dossier_banque']) {
+            if (empty($dossier['iban']) || empty($dossier['bic'])) {
                 return false;
             }
         }
@@ -208,8 +208,8 @@ class CalculateurCompletude
      */
     public function completudeInsee(array $dossier): bool
     {
-        if ($dossier['DOSSIER_INSEE']) {
-            if (empty($dossier['NUMERO_INSEE'])) {
+        if ($dossier['dossier_insee']) {
+            if (empty($dossier['numero_insee'])) {
                 return false;
             }
         }
@@ -227,9 +227,9 @@ class CalculateurCompletude
      */
     public function completudeEmployeur(array $dossier): bool
     {
-        if ($dossier['DOSSIER_EMPLOYEUR']) {
+        if ($dossier['dossier_employeur']) {
             // 1. Test si l'employeur est renseigné uniquement s'il est obligatoire
-            if (!$dossier['DOSSIER_EMPLOYEUR_FACULTATIF'] && empty($dossier['EMPLOYEUR_ID'])) {
+            if (!$dossier['dossier_employeur_facultatif'] && empty($dossier['employeur_id'])) {
                 return false;
             }
         }
@@ -247,8 +247,8 @@ class CalculateurCompletude
      */
     public function completudeChampsAutres(array $dossier, int $numero): bool
     {
-        if ($dossier['DOSSIER_AUTRE_' . $numero]) {
-            if ($dossier['DOSSIER_AUTRE_' . $numero . '_OBLIGATOIRE'] && empty($dossier['AUTRE_' . $numero])) {
+        if ($dossier['dossier_autre_' . $numero]) {
+            if ($dossier['dossier_autre_' . $numero . '_obligatoire'] && empty($dossier['autre_' . $numero])) {
                 return false;
             }
         }
@@ -260,9 +260,9 @@ class CalculateurCompletude
     public function completudeAutreAvantRecrutement(array $dossier): bool
     {
         for ($i = 1; $i < 6; $i++) {
-            if ($dossier['DOSSIER_AUTRE_' . $i . '_OBLIGATOIRE']
-                && empty($dossier['AUTRE_' . $i])
-                && $dossier['DOSSIER_AUTRE_' . $i] == 1
+            if ($dossier['dossier_autre_' . $i . '_obligatoire']
+                && empty($dossier['autre_' . $i])
+                && $dossier['dossier_autre_' . $i] == 1
             ) {
                 return false;
             }
@@ -277,9 +277,9 @@ class CalculateurCompletude
     public function completudeAutreApresRecrutement(array $dossier): bool
     {
         for ($i = 1; $i < 6; $i++) {
-            if ($dossier['DOSSIER_AUTRE_' . $i . '_OBLIGATOIRE']
-                && empty($dossier['AUTRE_' . $i])
-                && $dossier['DOSSIER_AUTRE_' . $i] == 2
+            if ($dossier['dossier_autre_' . $i . '_obligatoire']
+                && empty($dossier['autre_' . $i])
+                && $dossier['dossier_autre_' . $i] == 2
             ) {
                 return false;
             }
@@ -304,7 +304,7 @@ class CalculateurCompletude
         $completude = 0;
 
         foreach (self::DOSSIER_BLOCS as $value) {
-            $keyDossier = 'DOSSIER_' . $value;
+            $keyDossier = 'dossier_' . $value;
 
             if (!array_key_exists($keyDossier, $dossier)) {
                 continue;
@@ -315,7 +315,7 @@ class CalculateurCompletude
             }
 
             if ($type === self::REALISEE) {
-                $keyDestination = 'COMPLETUDE_' . $value;
+                $keyDestination = 'completude_' . $value;
                 if (!empty($destination[$keyDestination])) {
                     $completude++;
                 }
@@ -326,17 +326,17 @@ class CalculateurCompletude
 
         //Gestion des champs autres
         for ($i = 1; $i < 6; $i++) {
-            if ($dossier['DOSSIER_AUTRE_' . $i] != $etat) {
+            if ($dossier['dossier_autre_' . $i] != $etat) {
                 continue;
             }
             //Champs autre non obligatoire on passe
-            if (empty($dossier['DOSSIER_AUTRE_' . $i . '_OBLIGATOIRE'])) {
+            if (empty($dossier['dossier_autre_' . $i . '_obligatoire'])) {
                 $completude++;
                 continue;
             }
 
             if ($type === self::REALISEE) {
-                if (!empty($dossier['AUTRE_' . $i])) {
+                if (!empty($dossier['autre_' . $i])) {
                     $completude++;
                 }
             } else {

@@ -38,15 +38,9 @@ class TblDossier
 
     private bool $completudeEmployeur;
 
-    private bool $completudeAutre1;
+    private bool $completudeAutreAvantRecrutement;
 
-    private bool $completudeAutre2;
-
-    private bool $completudeAutre3;
-
-    private bool $completudeAutre4;
-
-    private bool $completudeAutre5;
+    private bool $completudeAutreApresRecrutement;
 
     private int $avantRecrutementRealisee;
 
@@ -205,9 +199,9 @@ class TblDossier
     /**
      * @return bool
      */
-    public function getCompletudeAutre1(): bool
+    public function getCompletudeAutreAvantRecrutement(): bool
     {
-        return $this->completudeAutre1;
+        return $this->completudeAutreAvantRecrutement;
     }
 
 
@@ -215,39 +209,9 @@ class TblDossier
     /**
      * @return bool
      */
-    public function getCompletudeAutre2(): bool
+    public function getCompletudeAutreApresRecrutement(): bool
     {
-        return $this->completudeAutre2;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getCompletudeAutre3(): bool
-    {
-        return $this->completudeAutre3;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getCompletudeAutre4(): bool
-    {
-        return $this->completudeAutre4;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getCompletudeAutre5(): bool
-    {
-        return $this->completudeAutre5;
+        return $this->completudeAutreApresRecrutement;
     }
 
 
@@ -282,9 +246,13 @@ class TblDossier
 
     public function isCompletAvantRecrutement(): bool
     {
-        if ($this->getAvantRecrutementAttendue() == $this->getAvantRecrutementRealisee()) {
+
+        if ($this->getAvantRecrutementAttendue() == $this->getAvantRecrutementRealisee()
+            && $this->getCompletudeStatut()
+            && $this->getCompletudeAutreAvantRecrutement()) {
             return true;
         }
+
         return false;
     }
 
@@ -292,7 +260,9 @@ class TblDossier
 
     public function isCompletApresRecrutement(): bool
     {
-        if ($this->getApresRecrutementAttendue() == $this->getApresRecrutementRealisee()) {
+        if ($this->getApresRecrutementAttendue() == $this->getApresRecrutementRealisee()
+            && $this->getCompletudeStatut()
+            && $this->getCompletudeAutreApresRecrutement()) {
             return true;
         }
         return false;
@@ -302,14 +272,14 @@ class TblDossier
 
     public function getCompletude(): bool
     {
-        return $this->getCompletudeIdentite() &&
+        return $this->getCompletudeStatut() &&
+               $this->getCompletudeIdentite() &&
                $this->getCompletudeIdentiteComp() &&
                $this->getCompletudeAdresse() &&
                $this->getCompletudeContact() &&
                $this->getCompletudeInsee() &&
                $this->getCompletudeBanque() &&
-               $this->getCompletudeEmployeur() &&
-               $this->getCompletudeStatut();
+               $this->getCompletudeEmployeur();
     }
 
 }

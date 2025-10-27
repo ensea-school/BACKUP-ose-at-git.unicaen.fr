@@ -1935,13 +1935,13 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     /**
      * @return DossierAutre[]
      */
-    public function getChampsAutres(): array
+    public function getChampsAutres(?int $step = null): array
     {
         /** @var DossierAutre[] $champsAutres */
         $champsAutres = $this->getEntityManager()->getRepository(DossierAutre::class)->findAll();
         foreach ($champsAutres as $index => $champAutre) {
             $id = $champAutre->getId();
-            if (!$this->{'getDossierAutre' . $id}()) {
+            if ($this->{'getDossierAutre' . $id}() != $step & !empty($step)) {
                 unset($champsAutres[$index]);
             }
         }

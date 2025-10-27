@@ -72,7 +72,7 @@ class IntervenantDossierController extends AbstractController
          */
         $tblDossier = $this->getServiceTblDossier()->finderByIntervenant($intervenant)->getQuery()->getOneOrNullResult();
 
-        if (!$tblDossier) {
+        if (!$tblDossier || empty($tblDossier->getDossier())) {
             $dossier = $this->getServiceDossier()->initDossierIntervenant($intervenant);
             $this->em()->refresh($dossier);
             $tblDossier = $dossier->getTblDossier();
@@ -83,7 +83,7 @@ class IntervenantDossierController extends AbstractController
         $form->bind($intervenantDossier);
 
         //si on vient de post et que le dossier n'est pas encore validé
-        if ($this->getRequest()->isPost() && empty($tblDossier->getValidation())) {
+        if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
@@ -115,16 +115,20 @@ class IntervenantDossierController extends AbstractController
             }
         }
 
-        $champsAutres  = $intervenantDossier->getStatut()->getChampsAutres();
+        $champsAutresAvantRecrutement = $intervenantDossier->getStatut()->getChampsAutres(Statut::DONNEES_PERSONNELLES_DEMANDEES);
+        $champsAutresApresRecrutement = $intervenantDossier->getStatut()->getChampsAutres(Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT);
+
         $fieldsetRules = [
-            'fieldset-statut'                  => $intervenantDossier->getStatut()->getDossierStatut(),
-            'fieldset-identite-complementaire' => $intervenantDossier->getStatut()->getDossierIdentiteComplementaire(),
-            'fieldset-adresse'                 => $intervenantDossier->getStatut()->getDossierAdresse(),
-            'fieldset-contact'                 => $intervenantDossier->getStatut()->getDossierContact(),
-            'fieldset-iban'                    => $intervenantDossier->getStatut()->getDossierBanque(),
-            'fieldset-insee'                   => $intervenantDossier->getStatut()->getDossierInsee(),
-            'fieldset-employeur'               => $intervenantDossier->getStatut()->getDossierEmployeur(),
-            'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,
+            'fieldset-statut'                   => $intervenantDossier->getStatut()->getDossierStatut(),
+            'fieldset-identite-complementaire'  => $intervenantDossier->getStatut()->getDossierIdentiteComplementaire(),
+            'fieldset-adresse'                  => $intervenantDossier->getStatut()->getDossierAdresse(),
+            'fieldset-contact'                  => $intervenantDossier->getStatut()->getDossierContact(),
+            'fieldset-iban'                     => $intervenantDossier->getStatut()->getDossierBanque(),
+            'fieldset-insee'                    => $intervenantDossier->getStatut()->getDossierInsee(),
+            'fieldset-employeur'                => $intervenantDossier->getStatut()->getDossierEmployeur(),
+            'fieldset-autres-avant-recrutement' => (!empty($champsAutresAvantRecrutement)) ? 1 : 0,
+            'fieldset-autres-apres-recrutement' => (!empty($champsAutresApresRecrutement)) ? 2 : 0,
+
         ];
 
         $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
@@ -147,7 +151,8 @@ class IntervenantDossierController extends AbstractController
         return compact(
             'form',
             'tblDossier',
-            'champsAutres',
+            'champsAutresAvantRecrutement',
+            'champsAutresApresRecrutement',
             'fieldsetRules'
         );
     }

@@ -100,6 +100,13 @@ class IntervenantDossierForm extends AbstractForm
             }
         }
 
+        //Gestion des champs autres
+        
+        $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => $dossierIntervenant->getStatut()->getChampsAutres()]);
+        $this->dossierAutresFiedlset->init();
+        $this->add($this->dossierAutresFiedlset);
+
+
         $this->setAttribute('id', 'dossier');
 
 

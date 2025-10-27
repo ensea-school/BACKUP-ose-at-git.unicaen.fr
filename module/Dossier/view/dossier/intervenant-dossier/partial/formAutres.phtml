@@ -1,11 +1,13 @@
 <?php
 
 /**
- * @var $this                         \Application\View\Renderer\PhpRenderer
- * @var $form                         \Dossier\Form\IntervenantDossierForm
- * @var $tblDossier                   \Dossier\Entity\Db\TblDossier
- * @var $champsAutres                 \Dossier\Entity\Db\DossierAutre[]
+ * @var $this                                       \Application\View\Renderer\PhpRenderer
+ * @var $form                                       \Dossier\Form\IntervenantDossierForm
+ * @var $tblDossier                                 \Dossier\Entity\Db\TblDossier
+ * @var $champsAutresAvantRecrutement               \Dossier\Entity\Db\DossierAutre[]
  */
+
+
 $form->prepare();
 $dossierAutres = $form->get('DossierAutres');
 ?>
@@ -25,14 +27,13 @@ $dossierAutres = $form->get('DossierAutres');
 <?php
 
 $autres = [];
-foreach ($champsAutres as $champsAutre) {
-    $canView = $this->isAllowed($tblDossier->getIntervenant(), constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champsAutre->getId()));
-    $canEdit = $this->isAllowed($tblDossier->getIntervenant(), constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_EDIT_AUTRE' . $champsAutre->getId()));
+foreach ($champsAutresAvantRecrutement as $champsAutre) {
+    $canView = $this->isAllowed($tblDossier->getDossier(), constant('\Application\Provider\Privileges::DOSSIER_CHAMP_AUTRE_' . $champsAutre->getId() . '_VISUALISATION'));
+    $canEdit = $this->isAllowed($tblDossier->getDossier(), constant('\Application\Provider\Privileges::DOSSIER_CHAMP_AUTRE_' . $champsAutre->getId() . '_EDITION'));
 
     if ($canView) {
-        $method = 'getAutre' . $champsAutre->getId();
-        $value  = $tblDossier->getDossier()->$method();
-
+        $method   = 'getAutre' . $champsAutre->getId();
+        $value    = $tblDossier->getDossier()->$method();
         $autres[] = [
             'id'      => $champsAutre->getId(),
             'canView' => $canView,
@@ -52,7 +53,7 @@ if (empty($autres)) {
         <div class="card-header">
             AUTRES
             <?php if (!empty($tblDossier)): ?>
-                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeAutre1()): ?>
+                <?php if (!$tblDossier->getDossier()->getTblDossier()->getCompletudeAutreAvantRecrutement()): ?>
                     <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
                     <span class="badge bg-success">Complet</span>
@@ -62,19 +63,20 @@ if (empty($autres)) {
         <div class="card-body">
             <?php foreach ($autres as $champ): ?>
                 <div class="form-group">
-                <?php if (!$champ['canEdit']): ?>
-                    <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
-                    <div class="input-group cold-md-6 readonly">
-                        <?php
-                        if ($champ['value']) {
-                            echo ($champ['canView']) ? $champ['value'] : '***************';
-                        }
-                        ?>
-                    </div>
-                    </div>
-                <?php else: ?>
-                    <?= $this->formControlGroup($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
-                <?php endif; ?>
+                    <?php if (!$champ['canEdit']): ?>
+                        <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
+                        <div class="input-group cold-md-6 readonly">
+                            <?php
+                            if ($champ['value']) {
+                                echo ($champ['canView']) ? $champ['value'] : '***************';
+                            }
+                            ?>
+                        </div>
+
+                    <?php else: ?>
+                        <?= $this->formControlGroup($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
+                    <?php endif; ?>
+                </div>
             <?php endforeach; ?>
 
         </div>

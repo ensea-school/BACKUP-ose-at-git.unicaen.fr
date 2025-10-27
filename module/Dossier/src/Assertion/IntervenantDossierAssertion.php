@@ -226,6 +226,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre1(IntervenantDossier $intervenantDossier): bool
     {
         return $this->asserts([
+                                  $this->assertStep($intervenantDossier, 'autre1'),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_EDITION),
                               ]);
@@ -245,6 +246,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre2(IntervenantDossier $intervenantDossier): bool
     {
         return $this->asserts([
+                                  $this->assertStep($intervenantDossier, 'autre2'),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_EDITION),
                               ]);
@@ -264,6 +266,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre3(IntervenantDossier $intervenantDossier): bool
     {
         return $this->asserts([
+                                  $this->assertStep($intervenantDossier, 'autre3'),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_EDITION),
                               ]);
@@ -283,6 +286,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre4(IntervenantDossier $intervenantDossier): bool
     {
         return $this->asserts([
+                                  $this->assertStep($intervenantDossier, 'autre4'),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_EDITION),
                               ]);
@@ -302,6 +306,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertEditAutre5(IntervenantDossier $intervenantDossier): bool
     {
         return $this->asserts([
+                                  $this->assertStep($intervenantDossier, 'autre5'),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_EDITION),
                               ]);
@@ -485,6 +490,21 @@ class IntervenantDossierAssertion extends AbstractAssertion
                 break;
             case 'employeur':
                 $step = $statut->getDossierEmployeur();
+                break;
+            case 'autre1':
+                $step = $statut->getDossierAutre1();
+                break;
+            case 'autre2':
+                $step = $statut->getDossierAutre2();
+                break;
+            case 'autre3':
+                $step = $statut->getDossierAutre3();
+                break;
+            case 'autre4':
+                $step = $statut->getDossierAutre4();
+                break;
+            case 'autre5':
+                $step = $statut->getDossierAutre5();
                 break;
         }
 

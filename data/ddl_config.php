@@ -25,7 +25,7 @@ return [
         ],
     ],
     'view'              => [
-        'includes'    => [
+        'includes' => [
             'V_HAS_DMEP_A_FAIRE',
             'V_TBL_CONTRAT',
             'V_INDIC_ATT_VALID_ENS_AUTRE',
@@ -43,8 +43,11 @@ return [
             'V_VOL_HORAIRE_ETAT_MULTI',
             'V_VOLUME_HORAIRE_REF_ETAT',
             'V_VOL_HORAIRE_REF_ETAT_MULTI',
-        ], 'excludes' => [
-            'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
+            'V_TBL_PIECE_JOINTE',
+        ],
+        'excludes' => [
+            'V_TBL_PLAFOND_%',
+            // Les vues plafonds sont générées et non créées à partir de la DDL
         ],
     ],
     'package'           => [

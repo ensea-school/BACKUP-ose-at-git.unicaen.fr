@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @var $form                         IntervenantDossierForm
- * @var $fieldsetRules                Array
- * @var $champsAutres                 \Application\Entity\Collection
- * @var $tblDossier                   \Dossier\Entity\Db\TblDossier
+ * @var $form                                         IntervenantDossierForm
+ * @var $fieldsetRules                                Array
+ * @var $champsAutresAvantRecrutement                 \Application\Entity\Collection
+ * @var $champsAutresApresRecrutement                 \Application\Entity\Collection
+ * @var $tblDossier                                   \Dossier\Entity\Db\TblDossier
  */
 
 
@@ -183,8 +184,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
                 }
             }
             /*Fieldset Autres*/
-            if ($fieldsetRules['fieldset-autres']) {
-                echo $this->partial('dossier/intervenant-dossier/partial/formAutres', compact('form', 'champsAutres', 'tblDossier'));
+            if ($fieldsetRules['fieldset-autres-avant-recrutement'] == 1) {
+                echo $this->partial('dossier/intervenant-dossier/partial/formAutres', compact('form', 'champsAutresAvantRecrutement', 'tblDossier'));
             }
 
             ?>
@@ -235,6 +236,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
         </div>
     </div>
 </div>
+
 
 <!--DONNEES PERSONNELLES APRES RECRUTEMENT-->
 <?php if ($tblDossier->getValidation() && $tblDossier->getApresRecrutementAttendue() > 0 && $viewDonneesComplementaires): ?>
@@ -316,6 +318,10 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
                         echo $this->partial('dossier/intervenant-dossier/partial/formInseeView', compact('form', 'tblDossier'));
                     }
                 }
+                if ($fieldsetRules['fieldset-autres-apres-recrutement'] == 2) {
+                    echo $this->partial('dossier/intervenant-dossier/partial/formAutresComplementaires', compact('form', 'champsAutresApresRecrutement', 'tblDossier'));
+                }
+
 
                 ?>
 

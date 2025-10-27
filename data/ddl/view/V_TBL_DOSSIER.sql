@@ -60,7 +60,7 @@ SELECT
 FROM
             intervenant         i
        JOIN statut             si ON si.id = i.statut_id
-  JOIN intervenant_dossier d ON d.intervenant_id = i.id
+  LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id
                                  AND d.histo_destruction IS NULL
   LEFT JOIN situation_matrimoniale sm ON sm.id = d.situation_matrimoniale_id
   LEFT JOIN pays               pn ON pn.id = d.pays_naissance_id

@@ -23,8 +23,8 @@
                     <h3>Pièces justificatives</h3>
                 </div>
                 <div class="card-body">
+
                     <pieceJointe
-                        v-if="datasPiecesJointes?.privileges"
                         v-for="pieceJointe in pieceAvantRecrutement"
                         :key="pieceJointe.id"
                         :datas="pieceJointe"
@@ -60,7 +60,8 @@
                     <h3>Pièces justificatives complémentaires</h3>
                 </div>
                 <div class="card-body">
-                    <pieceJointe
+
+                    <PieceJointe
                         v-for="pieceJointe in pieceApresRecrutement"
                         :key="pieceJointe.id"
                         :datas="pieceJointe"
@@ -78,7 +79,7 @@
 <script setup>
 
 import {ref, onMounted, computed} from 'vue'
-import pieceJointe from './PieceJointe.vue'
+import PieceJointe from './PieceJointe.vue'
 
 const props = defineProps(['intervenant']);
 
@@ -114,6 +115,8 @@ function getPiecesJointes()
 
     unicaenVue.axios.get(urlGetPiecesJointes.value).then(response => {
         datasPiecesJointes.value = response.data
+        console.log(pieceAvantRecrutement.value);
+
     }).catch(error => {
         console.error(error)
     })

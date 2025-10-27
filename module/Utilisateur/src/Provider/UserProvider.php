@@ -28,6 +28,8 @@ class UserProvider implements UserAdapterInterface
         Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
         Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
         Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
+        Privileges::MISSION_AUTOVALIDATION,
+        Privileges::MISSION_AUTOVALIDATION_REALISE,
     ];
 
 
@@ -218,7 +220,7 @@ class UserProvider implements UserAdapterInterface
             return [];
         }
         if (Role::ADMINISTRATEUR === $role->getCode()) {
-            return $this->getAvailablePrivileges();
+            return $this->getAdministrateurPrivileges();
         }
 
         $privileges = [];

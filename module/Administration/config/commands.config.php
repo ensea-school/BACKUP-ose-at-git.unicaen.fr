@@ -33,6 +33,7 @@ return [
             'update-ddl'               => \Unicaen\BddAdmin\Command\UpdateDdlCommand::class,
             'build-synchronisation'    => \UnicaenImport\Command\MajVuesFonctionsCommand::class,
             'clear-cache'              => Command\ClearCacheCommand::class,
+            'c:c'                      => Command\ClearCacheCommand::class,
             'calcul-tableaux-bord'     => Command\CalculTableauxBordCommand::class,
             'update-code'              => Command\UpdateCodeCommand::class,
             'update-employeur'         => Command\UpdateEmployeur::class,

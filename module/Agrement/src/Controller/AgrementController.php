@@ -152,9 +152,9 @@ class AgrementController extends AbstractController
     {
         $this->initFilters();
         $agrement = $this->getEvent()->getParam('agrement');
+
         if (!$agrement) {
-            $idTypeAgrement = $this->getEvent()->getRouteMatch()->getParam('typeAgrement');
-            $typeAgrement   = $this->getServiceTypeAgrement()->get($idTypeAgrement);
+            $typeAgrement = $this->getEvent()->getParam('typeAgrement');
             if ($typeAgrement) {
                 $agrement = $this->getServiceAgrement()->newEntity();
                 $agrement->setType($typeAgrement);
@@ -178,7 +178,7 @@ class AgrementController extends AbstractController
     {
         $typeAgrementCode = $this->getEvent()->getRouteMatch()->getParam('typeAgrementCode');
         $typeAgrement     = $this->getServiceTypeAgrement()->getByCode($typeAgrementCode);
-        
+
         $title = sprintf("Agrément par %s", $typeAgrement->toString(true));
 
         $form = $this->getFormAgrementSaisie();

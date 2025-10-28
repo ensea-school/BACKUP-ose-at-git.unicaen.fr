@@ -69,7 +69,6 @@ class IndexController extends AbstractController
         /* Prise en compte du changement d'année!! */
         $annee = $this->params()->fromRoute(Annee::class);
         if ($annee) {
-            $annee = $this->getServiceAnnee()->get($annee);
             $this->getServiceContext()->setAnnee($annee);
         }
 

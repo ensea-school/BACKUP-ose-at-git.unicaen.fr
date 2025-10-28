@@ -66,7 +66,7 @@ class UserProvider implements UserAdapterInterface
             return true;
         }
 
-        $usersAllowed = Application::getInstance()->config()['ldap']['autorisationsUsurpation'] ?? [];
+        $usersAllowed = Application::getInstance()->config()['ldap']['autorisationsUsurpation'] ?? Application::getInstance()->config()['ldap']['autorisationsUrsurpation'] ?? [];
         return in_array(
             $this->getUser()?->getUsername(),
             $usersAllowed);
@@ -247,7 +247,7 @@ class UserProvider implements UserAdapterInterface
 
     public function getAvailablePrivileges(): array
     {
-        $rc         = new \ReflectionClass(Privileges::class);
+        $rc = new \ReflectionClass(Privileges::class);
         return array_values($rc->getConstants());
     }
 

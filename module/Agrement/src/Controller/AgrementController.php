@@ -151,18 +151,16 @@ class AgrementController extends AbstractController
     public function saisirAction()
     {
         $this->initFilters();
-
-        /* @var $agrement Agrement */
         $agrement = $this->getEvent()->getParam('agrement');
-
         if (!$agrement) {
-            $typeAgrementCode = $this->getEvent()->getRouteMatch()->getParam('typeAgrementCode');
-            $typeAgrement = $this->getServiceTypeAgrement()->getByCode($typeAgrementCode);
-
-            $agrement = $this->getServiceAgrement()->newEntity();
-            $agrement->setType($typeAgrement);
-            $agrement->setIntervenant($this->getEvent()->getParam('intervenant'));
-            $agrement->setStructure($this->getEvent()->getParam('structure'));
+            $idTypeAgrement = $this->getEvent()->getRouteMatch()->getParam('typeAgrement');
+            $typeAgrement   = $this->getServiceTypeAgrement()->get($idTypeAgrement);
+            if ($typeAgrement) {
+                $agrement = $this->getServiceAgrement()->newEntity();
+                $agrement->setType($typeAgrement);
+                $agrement->setIntervenant($this->getEvent()->getParam('intervenant'));
+                $agrement->setStructure($this->getEvent()->getParam('structure'));
+            }
         }
 
         $form = $this->getFormAgrementSaisie();
@@ -179,8 +177,8 @@ class AgrementController extends AbstractController
     public function saisirLotAction()
     {
         $typeAgrementCode = $this->getEvent()->getRouteMatch()->getParam('typeAgrementCode');
-        $typeAgrement = $this->getServiceTypeAgrement()->getByCode($typeAgrementCode);
-
+        $typeAgrement     = $this->getServiceTypeAgrement()->getByCode($typeAgrementCode);
+        
         $title = sprintf("Agrément par %s", $typeAgrement->toString(true));
 
         $form = $this->getFormAgrementSaisie();

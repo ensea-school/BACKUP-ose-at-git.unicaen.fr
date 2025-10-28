@@ -39,7 +39,7 @@ class TypeAgrementService extends AbstractEntityService
 
 
 
-    public function getByCode(string $code): TypeAgrement
+    public function getByCode(string $code): ?TypeAgrement
     {
         if ($code) {
             return $this->getRepo()->findOneBy(['code' => $code]);
@@ -65,7 +65,8 @@ class TypeAgrementService extends AbstractEntityService
      */
     public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        [$qb,
+         $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
 
         return $qb;

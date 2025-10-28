@@ -267,6 +267,8 @@ class WorkflowService extends AbstractService
 
         $deps = [
             TblProvider::SERVICE_DU              => [TblProvider::FORMULE],
+            TblProvider::VALIDATION_ENSEIGNEMENT => [TblProvider::FORMULE,TblProvider::WORKFLOW],
+            TblProvider::VALIDATION_REFERENTIEL  => [TblProvider::FORMULE,TblProvider::WORKFLOW],
             TblProvider::FORMULE                 => [TblProvider::AGREMENT, TblProvider::PAIEMENT],
             TblProvider::CANDIDATURE             => [TblProvider::WORKFLOW],
             TblProvider::AGREMENT                => [TblProvider::WORKFLOW],
@@ -279,15 +281,12 @@ class WorkflowService extends AbstractService
             TblProvider::MISSION                 => [TblProvider::WORKFLOW],
             TblProvider::MISSION_PRIME           => [TblProvider::WORKFLOW],
             TblProvider::REFERENTIEL             => [TblProvider::WORKFLOW],
-            TblProvider::VALIDATION_ENSEIGNEMENT => [TblProvider::WORKFLOW],
-            TblProvider::VALIDATION_REFERENTIEL  => [TblProvider::WORKFLOW],
             TblProvider::WORKFLOW                => [],
             TblProvider::PLAFOND_INTERVENANT     => [],
             TblProvider::PLAFOND_STRUCTURE       => [],
             TblProvider::PLAFOND_REFERENTIEL     => [],
             TblProvider::PLAFOND_ELEMENT         => [],
             TblProvider::PLAFOND_VOLUME_HORAIRE  => [],
-
         ];
 
         if ($tableauxBords) {

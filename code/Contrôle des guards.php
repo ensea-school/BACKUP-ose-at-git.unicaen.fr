@@ -6,6 +6,8 @@
  * @var $io         \Symfony\Component\Console\Style\SymfonyStyle
  */
 
+use Unicaen\Framework\Router\Router;
+
 $router = $container->get(\Unicaen\Framework\Router\Router::class);
 
 $routes = $router->getRoutes();
@@ -13,94 +15,50 @@ $routes = $router->getRoutes();
 $ok = [
     // divers
     "/ocra_service_manager_yuml",
-    "/maintenance",
-    "/icons",
-    "/cache/js[/:version]",
-    "/cache/css[/:version]",
 
-    // unicaen/authentification
-    "/auth",
-    "/auth/creation-compte",
-    "/auth/change-password",
-    "/auth/change-email",
     "/utilisateur",
     "/utilisateur/:action[/:id]",
-
-    // unicaen/import
-    "/import",
-    "/import/tableau-bord",
-    "/import/maj-vues-fonctions",
-    "/import/sources",
-    "/import/sources/edition[/:source]",
-    "/import/sources/suppression/:source",
-    "/import/differentiel",
-    "/import/tables/modifier/:table",
-    "/import/tables/trier",
-    "/import/tables/synchro-switch",
-    "/import/tables/add-non-referenced",
-    "/import/tables",
-    "/import/differentiel/maj-vue-materialisee[/:table]",
-    "/import/differentiel/synchronisation[/:table]",
-    "/import/differentiel/details[/:table]",
-
-    // unicaen/code
-    "/unicaen-code[/:view]",
-
-    // unicaen/signature
-    "/signature/internal",
-    "/signature/internal/visa/:key",
-    "/signature/internal/document/:key",
-    "/signature/process",
-
-    // unicaen/siham
-    "/siham",
 ];
 
 
-$guards = $container->get(\Unicaen\Framework\Authorize\GuardProvider::class)->getAll();
+$guardProvider = $container->get(\Unicaen\Framework\Authorize\GuardProvider::class);
+$authorize = $container->get(\Unicaen\Framework\Authorize\Authorize::class);
 
-foreach($routes as $route) {
+foreach ($routes as $route) {
     $controller = $route->getController();
-    $action = $route->getAction();
+    $action     = $route->getAction();
 
-    $privileges = $route->getPrivileges();
-
-    if (in_array($route->getRoute(), $ok)){
+    if (in_array($route->getRoute(), $ok)) {
         continue;
     }
 
-    if (empty($controller)){
+    if (empty($controller)) {
         // pas d'action derrière
         continue;
     }
-    if (empty($action)){
+    if (empty($action)) {
         continue;
     }
 
-    if (!empty($privileges)){
-        // privileges OK
+    $guard  = $guardProvider->get($controller, $action);
+
+    $actionRule = $guardProvider->get($controller, $action);
+    if ($actionRule && ($actionRule->privileges || $actionRule->roles || $actionRule->assertion)) {
         continue;
     }
 
-    $guard = $guards[$controller][$action] ?? null;
-    $privileges = $guard?->privileges;
-
-    if (!empty($privileges)){
-        // privileges OK
+    $controllerRule = $guardProvider->get($controller);
+    if ($controllerRule && ($controllerRule->privileges || $controllerRule->roles || $controllerRule->assertion)) {
         continue;
     }
 
-    if (!empty($guard->roles)){
-        continue;
-    }
-    if (!empty($guard->assertion)){
-        continue;
-    }
+    if (!(bool)($actionRule || $controllerRule)) {
+        echo '<h2>' . $route->getName() . '</h2>';
+        echo "uri: ".$route->getRoute().'<br />';
+        echo "controller: ".$controller.'<br />';
+        echo "action: ".$action.'<br />';
 
-    echo '<h2>'.$route->getRoute().'</h2>';
-    //$url = $this->url($route->getRoute());
-    //echo $url;
-    dump($controller.'.'.$action);
-    dump($route);
-    dump($guard);
+        dump($controller . '.' . $action);
+        dump($route);
+    }
 }

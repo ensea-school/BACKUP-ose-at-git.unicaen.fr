@@ -17,11 +17,17 @@ foreach ($pages as $page) {
         $url = null;
     }
     if ($url) {
-        echo "\t<li class='nav-item$active'>\n";
-        echo "\t\t" . '<a class="nav-link" title="' . $page->getTitle() . '" href="' . $this->url($page->getRoute(), [], [], true) . '">' . "\n";
-        echo "\t\t\t<span class=\"" . $page->getIcon() . "\"></span>\n" . $page->getLabel();
-        echo "\t\t</a>\n";
-        if ($subPages = $page->getVisiblePages()) {
+        $subPages = $page->getVisiblePages();
+
+        if (!$page->getPages() || $subPages) {
+            // on affiche l'item s'il n'a aucun enfant ou bien s'il a des enfants visibles
+            echo "\t<li class='nav-item$active'>\n";
+            echo "\t\t" . '<a class="nav-link" title="' . $page->getTitle() . '" href="' . $this->url($page->getRoute(), [], [], true) . '">' . "\n";
+            echo "\t\t\t<span class=\"" . $page->getIcon() . "\"></span>\n" . $page->getLabel();
+            echo "\t\t</a>\n";
+        }
+
+        if ($subPages) {
             echo "\t\t" . '<ul>' . "\n";
             foreach ($subPages as $subPage) {
                 $active = $subPage->isActive() ? ' active' : '';

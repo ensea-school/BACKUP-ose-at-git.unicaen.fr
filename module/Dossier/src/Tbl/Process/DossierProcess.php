@@ -34,6 +34,8 @@ class DossierProcess implements ProcessInterface
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
+        mpg_lower($params);
+
         $this->loadDossiers($params);
         $this->traitementDossiers();
         $this->enregistrement($tableauBord, $params);
@@ -90,11 +92,13 @@ class DossierProcess implements ProcessInterface
     {
         try {
             $key   = $tableauBord->getOption('key');
-            $table = $this->getBdd()->getTable('TBL_DOSSIER');
+            $tableName = 'tbl_dossier';
+            mpg_upper($tableName);
+            $table = $this->getBdd()->getTable($tableName);
 
             $options = [
                 'where'       => $params,
-                'transaction' => !isset($params['INTERVENANT_ID']),
+                'transaction' => !isset($params['intervenant_id']),
             ];
 
             $table->merge($this->tblData, $key, $options);
@@ -110,7 +114,9 @@ class DossierProcess implements ProcessInterface
 
     protected function dossierSql(): string
     {
-        return $this->getServiceBdd()->getViewDefinition('V_TBL_DOSSIER');
+        $view = 'v_tbl_dossier';
+        mpg_upper($view);
+        return $this->getServiceBdd()->getViewDefinition($view);
     }
 
 

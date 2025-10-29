@@ -13,7 +13,7 @@ class Kernel extends BaseKernel
     public function getCacheDir(): string
     {
         $appConfig = Application::getInstance()->config();
-        $cacheDir  = $appConfig['module_listener_options']['cache_dir'] ?? getcwd() . '/cache';
+        $cacheDir  = $appConfig['module_listener_options']['cache_dir'] ?? getcwd() . '/var/cache';
 
         return $cacheDir;
     }
@@ -22,7 +22,7 @@ class Kernel extends BaseKernel
 
     public function getLogDir(): string
     {
-        return getcwd() . '/data/log';
+        return getcwd() . '/var/log';
     }
 
 

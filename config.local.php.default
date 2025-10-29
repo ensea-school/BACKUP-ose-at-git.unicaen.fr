@@ -466,12 +466,6 @@ return [
 
             'logger' => [
                 'enable'          => true,
-                'level'           => \Monolog\Logger::DEBUG,
-                'file'            => __DIR__ . '/cache/unicaen-signature.log',
-                'stdout'          => false,
-                'file_permission' => 0666,
-                'customLogger'    => null,
-
             ],
 
             'hook_recipients' => [

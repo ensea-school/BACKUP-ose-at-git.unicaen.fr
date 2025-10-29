@@ -17,7 +17,7 @@ return [
         'logger'                 => [
             'enable'          => $config['unicaen-signature']['log'] ?? true,
             'level'           => \Monolog\Logger::DEBUG,
-            'file'            => 'data/log/unicaen-signature.log',
+            'file'            => 'var/log/unicaen-signature.log',
             'stdout'          => false,
             'file_permission' => 0666,
             'customLogger'    => null,

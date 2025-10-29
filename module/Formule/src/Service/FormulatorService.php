@@ -45,7 +45,7 @@ class FormulatorService
 
     public function cacheDir(): string
     {
-        return getcwd() . '/cache/formules/';
+        return getcwd() . '/var/cache/formules/';
     }
 
 

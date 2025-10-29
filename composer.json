@@ -144,11 +144,27 @@
         "phpcs"               : "./vendor/bin/phpcs -p ./module --standard=PSR12",
         "setup-dirs": [
             "mkdir -p var/session",
-            "mkdir -p var/log",
-            "mkdir -p var/cache",
             "chmod 777 var/session",
+
+            "mkdir -p var/log",
             "chmod 777 var/log",
-            "chmod 777 var/cache"
+
+            "mkdir -p var/cache",
+            "chmod 777 var/cache",
+
+            "mkdir -p var/cache/DoctrineProxy",
+            "chmod 777 var/cache/DoctrineProxy",
+
+            "mkdir -p data/fichiers",
+            "chmod 777 data/fichiers",
+
+            "mkdir -p data/signature",
+            "chmod 777 data/signature"
+        ],
+        "setup-bins": [
+            "chmod 755 bin/ose",
+            "chmod 755 bin/ose-code",
+            "chmod 755 bin/ose-test"
         ],
         "update-public-vendor": [
             "rm -rf public/vendor",
@@ -166,10 +182,12 @@
         ],
         "post-install-cmd"    : [
             "@setup-dirs",
+            "@setup-bins",
             "@update-public-vendor"
         ],
         "post-update-cmd"     : [
             "@setup-dirs",
+            "@setup-bins",
             "@update-public-vendor"
         ],
         "auto-scripts": {

@@ -31,31 +31,6 @@ class InstallCommand extends Command
 
         $io->title($this->getDescription());
 
-        $io->section("Mise en place des répertoires de travail");
-
-        $dirs = [
-            'var',
-            'var/cache',
-            'var/session',
-            'var/log',
-
-            'data/fichiers',
-            'data/signature',
-        ];
-
-        foreach( $dirs as $dir ) {
-            if (!$filesystem->exists($dir)) {
-                $filesystem->mkdir($dir);
-            }
-            $filesystem->chmod($dir, 0777);
-        }
-
-        $filesystem->chmod('bin/ose', 0755);
-        $filesystem->chmod('bin/ose-code', 0755);
-        $filesystem->chmod('bin/ose-test', 0755);
-
-        $io->comment('Initialisation des répertoires de travail OK');
-
         if ($this->hasConfigBdd()) {
             $this->runCommand($output, 'install-bdd', ['--oseappli-pwd' => 'no']);
         } else {

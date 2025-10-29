@@ -37,6 +37,7 @@ SELECT
 	d.autre_5									            autre_5,
 	si.dossier 		 							          dossier,
 	si.code                   					  code_statut,
+  si.dossier_statut					            dossier_statut,
 	si.dossier_identite_comp					    dossier_identite_comp,
 	si.dossier_situation_matrimoniale     dossier_situation_matrimoniale,
 	si.dossier_contact							      dossier_contact,

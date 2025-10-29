@@ -179,9 +179,9 @@ class WorkflowProcess implements ProcessInterface
     {
         $cache = $this->getCacheContainer();
 
-        //if (empty($cache->alimentationSql)) {
-        $cache->alimentationSql = $this->makeSql();
-        //}
+        if (empty($cache->alimentationSql)) {
+            $cache->alimentationSql = $this->makeSql();
+        }
 
         $this->workflows = [];
 

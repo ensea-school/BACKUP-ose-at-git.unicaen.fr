@@ -33,30 +33,22 @@ class InstallCommand extends Command
 
         $io->section("Mise en place des répertoires de travail");
 
-        if (!$filesystem->exists('cache')) {
-            $filesystem->mkdir('cache');
-        }
-        $filesystem->chmod('cache', 0777);
+        $dirs = [
+            'var',
+            'var/cache',
+            'var/session',
+            'var/log',
 
-        if (!$filesystem->exists('cache/Doctrine')) {
-            $filesystem->mkdir('cache/Doctrine');
-        }
-        $filesystem->chmod('cache/Doctrine', 0777);
+            'data/fichiers',
+            'data/signature',
+        ];
 
-        if (!$filesystem->exists('data/fichiers')) {
-            $filesystem->mkdir('data/fichiers');
+        foreach( $dirs as $dir ) {
+            if (!$filesystem->exists($dir)) {
+                $filesystem->mkdir($dir);
+            }
+            $filesystem->chmod($dir, 0777);
         }
-        $filesystem->chmod('data/fichiers', 0777);
-
-        if (!$filesystem->exists('data/log')) {
-            $filesystem->mkdir('data/log');
-        }
-        $filesystem->chmod('data/log', 0777);
-
-        if (!$filesystem->exists('data/signature')) {
-            $filesystem->mkdir('data/signature');
-        }
-        $filesystem->chmod('data/signature', 0777);
 
         $filesystem->chmod('bin/ose', 0755);
         $filesystem->chmod('bin/ose-code', 0755);

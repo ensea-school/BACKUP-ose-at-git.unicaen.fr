@@ -35,7 +35,7 @@ class OseConfig
                 './module',
                 './vendor',
             ],
-            'cache_dir'                => 'cache/',
+            'cache_dir'                => 'var/cache/',
             'config_cache_enabled'     => PHP_SAPI !== 'cli', // pas de cache en mode cli
             'config_cache_key'         => 'application.config.cache',
             'module_map_cache_enabled' => true,

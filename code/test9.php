@@ -6,10 +6,6 @@
  * @var $io         \Symfony\Component\Console\Style\SymfonyStyle
  */
 
-$s = $container->get(\Framework\Navigation\Navigation::class);
+dump($_SESSION);
 
-dump($s->home->getPages());
-
-$pages = $s->home->getPage('intervenant');
-
-dd($pages);
+phpinfo();

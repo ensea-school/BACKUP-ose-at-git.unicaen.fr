@@ -83,7 +83,7 @@ return [
                 'result_cache'     => 'filesystem',
                 'hydration_cache'  => 'array',
                 'generate_proxies' => $config['bdd']['generateProxies'] ?? true,
-                'proxy_dir'        => 'cache/DoctrineProxy',
+                'proxy_dir'        => 'var/cache/DoctrineProxy',
             ],
         ],
         'eventmanager'  => [

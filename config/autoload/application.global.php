@@ -11,10 +11,17 @@ return [
     ],
 
     'session_config' => [
-        // Session cookie will expire in 1 hour.
+        // Durée de la session en secondes => 1h
+        'remember_me_seconds' => 60 * 60 * 1,
+
+        // Durée de vie du cookie => 1h
         'cookie_lifetime' => 60 * 60 * 1,
-        // Session data will be stored on server maximum for 30 days.
+
+        // Durée de vie des données de session => 30 jours
         'gc_maxlifetime'  => 60 * 60 * 24 * 30,
+
+        // Répertoire où sont stockées les sessions
+        'save_path' => 'var/session',
     ],
 
     'session_manager' => [

@@ -23,7 +23,7 @@ class AdministrationService
         $filesystem = new Filesystem();
 
         // Suppression des fichiers de cache
-        $cachePath = getcwd() . '/cache';
+        $cachePath = getcwd() . '/var/cache';
         if ($filesystem->exists($cachePath)) {
             $content = scandir($cachePath);
             foreach( $content as $toRemove) {

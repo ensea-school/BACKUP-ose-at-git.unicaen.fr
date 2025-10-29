@@ -167,6 +167,9 @@
             "chmod 755 bin/ose-test"
         ],
         "update-public-vendor": [
+            "[ -d cache ] && rm -Rf cache || true",
+            "[ -d data/log ] && rm -Rf data/log || true",
+
             "rm -rf public/vendor",
             "mkdir public/vendor",
 

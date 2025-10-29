@@ -16,12 +16,14 @@ $this->intervenant($intervenant)->renderTitle('Fiche');
 
 $tabs = [];
 foreach ($pages as $page) {
-    $tabs[$page->getName()] = [
-        'id'            => $page->getName(),
-        'label'         => '<i class="' . $page->getIcon() . '"></i> ' . $page->getLabel(),
-        'url'           => $page->getUri(['intervenant' => $intervenant->getId()]),
-        'force-refresh' => true,
-    ];
+    if ($page->isVisible()) {
+        $tabs[$page->getName()] = [
+            'id'            => $page->getName(),
+            'label'         => '<i class="' . $page->getIcon() . '"></i> ' . $page->getLabel(),
+            'url'           => $page->getUri(['intervenant' => $intervenant->getId()]),
+            'force-refresh' => true,
+        ];
+    }
 }
 
 $tabs['fiche']['content'] = $this->partial('intervenant/intervenant/fiche.phtml', compact('intervenant'));

@@ -3,19 +3,29 @@
 namespace Intervenant\Processus;
 
 
-use Application\Service\Traits\ContextServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareTrait;
+use Application\Provider\Privileges;
+use Application\Service\ContextService;
+use Doctrine\ORM\EntityManager;
+use Unicaen\Framework\Authorize\Authorize;
 use UnicaenApp\Util;
 
 class RechercheProcessus
 {
-    use EntityManagerAwareTrait;
-    use ContextServiceAwareTrait;
 
     /**
      * @var bool
      */
     protected $showHisto = false;
+
+
+
+    public function __construct(
+        private readonly EntityManager  $entityManager,
+        private readonly ContextService $context,
+        private readonly Authorize      $authorize
+    )
+    {
+    }
 
 
 
@@ -25,7 +35,7 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercher ($critere, $limit = 50, string $key = ':CODE')
+    public function rechercher($critere, $limit = 50, string $key = ':CODE')
     {
         try {
             return $this->rechercheGenerique($critere, $limit, $key, false);
@@ -36,11 +46,11 @@ class RechercheProcessus
 
 
 
-    private function rechercheGenerique ($critere, $limit = 50, string $key = ':CODE', $onlyLocale = false)
+    private function rechercheGenerique($critere, $limit = 50, string $key = ':CODE', $onlyLocale = false)
     {
         if (strlen($critere) < 2) return [];
 
-        $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
+        $anneeId = (int)$this->context->getAnnee()->getId();
         $critere = self::reduce($critere);
 
         $criteres = explode('_', $critere);
@@ -76,11 +86,12 @@ class RechercheProcessus
         $intervenants = [];
 
 
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        $stmt = $this->entityManager->getConnection()->executeQuery($sql);
         while ($r = $stmt->fetch()) {
             $k = $this->makeKey($r, $key);
             if (!isset($intervenants[$k])) {
                 $intervenants[$k] = [
+                    'canView'                => $this->authorize->isAllowedPrivilege(Privileges::INTERVENANT_FICHE),
                     'civilite'               => $r['CIVILITE'],
                     'nom'                    => $r['NOM_USUEL'],
                     'prenom'                 => $r['PRENOM'],
@@ -115,7 +126,7 @@ class RechercheProcessus
 
 
 
-    private function sqlSource (): string
+    private function sqlSource(): string
     {
         return "
         SELECT
@@ -145,7 +156,7 @@ class RechercheProcessus
 
 
 
-    private function sqlLocale (): string
+    private function sqlLocale(): string
     {
         $sql = "
         SELECT
@@ -181,7 +192,7 @@ class RechercheProcessus
 
 
 
-    protected function makeKey (array $data, string $key): string
+    protected function makeKey(array $data, string $key): string
     {
         $resKey = $key;
         foreach ($data as $k => $v) {
@@ -198,7 +209,7 @@ class RechercheProcessus
     /**
      * @return bool
      */
-    public function isShowHisto (): bool
+    public function isShowHisto(): bool
     {
         return $this->showHisto;
     }
@@ -210,7 +221,7 @@ class RechercheProcessus
      *
      * @return RechercheProcessus
      */
-    public function setShowHisto (bool $showHisto): RechercheProcessus
+    public function setShowHisto(bool $showHisto): RechercheProcessus
     {
         $this->showHisto = $showHisto;
 
@@ -225,10 +236,12 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercherLocalement ($critere, $limit = 50, string $key = ':CODE')
+    public function rechercherLocalement($critere, $limit = 50, string $key = ':CODE')
     {
         return $this->rechercheGenerique($critere, $limit, $key, true);
     }
+
+
 
     /**
      * @param string $str      Chaine à nettoyer
@@ -237,7 +250,7 @@ class RechercheProcessus
      * @return string
      */
 
-    private static function reduce (string $str, string $encoding = 'UTF-8'): string
+    private static function reduce(string $str, string $encoding = 'UTF-8'): string
     {
         $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ€@()…,<> /?€%!":';
         $to   = 'aaaaaacdeeeeiiiioooooouuuuynaaaaaacdeeeeiiiioooooouuuuynea________________';

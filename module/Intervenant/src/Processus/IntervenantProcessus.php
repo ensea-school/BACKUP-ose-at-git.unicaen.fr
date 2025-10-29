@@ -4,6 +4,7 @@ namespace Intervenant\Processus;
 
 use Application\Processus\AbstractProcessus;
 use Intervenant\Entity\Db\Intervenant;
+use Unicaen\Framework\Application\Application;
 
 
 /**
@@ -34,8 +35,8 @@ class IntervenantProcessus extends AbstractProcessus
     public function recherche(): RechercheProcessus
     {
         if (!$this->recherche) {
-            $this->recherche = new RechercheProcessus;
-            $this->recherche->setEntityManager($this->getEntityManager());
+            // @todo utiliser l'injection de dépendances...
+            $this->recherche = Application::getInstance()->container()->get(RechercheProcessus::class);
         }
 
         return $this->recherche;

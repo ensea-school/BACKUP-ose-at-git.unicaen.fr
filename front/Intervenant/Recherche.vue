@@ -23,7 +23,7 @@
     <table v-if="intervenants.length > 0" class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th style="width:90px"></th>
+            <th v-if="canView" style="width:90px"></th>
             <th>Civilité</th>
             <th>Nom</th>
             <th>Prenom</th>
@@ -36,14 +36,14 @@
         <tbody>
         <tr v-for="(intervenant,code) in intervenants" :class="{'bg-danger': intervenant.destruction!==null}"
             :title="(intervenant.destruction!==null) ? 'Fiche historisé' : ''">
-            <td style="">
+            <td v-if="intervenant.canView">
                 <a :href="urlFiche(intervenant['code'])"><i class="fas fa-eye"></i> Fiche</a>
             </td>
-            <td>{{ intervenant['civilite'] }}</td>
-            <td>{{ intervenant['nom'] }}</td>
-            <td>{{ intervenant['prenom'] }}</td>
-            <td>{{ intervenant['structure'] }}</td>
-            <td>{{ intervenant['statut'] }}</td>
+            <td>{{ intervenant.civilite }}</td>
+            <td>{{ intervenant.nom }}</td>
+            <td>{{ intervenant.prenom }}</td>
+            <td>{{ intervenant.structure }}</td>
+            <td>{{ intervenant.statut }}</td>
             <td>
                 <u-date :value="intervenant['date-naissance']"/>
             </td>
@@ -87,6 +87,7 @@ export default {
         return {
             searchTerm: '',
             noResult: 0,
+            canView: false,
             intervenants: [],
             checkedTypes: ['vacataire', 'permanent', 'etudiant'],
         };
@@ -129,7 +130,11 @@ export default {
                         let datas = response.data;
                         let datasFiltered = [];
 
+                        this.canView = false;
                         for (const intervenant in datas) {
+                            if (datas[intervenant].canView) {
+                                this.canView = true;
+                            }
                             if (datas[intervenant].typeIntervenantCode == 'E' && this.checkedTypes.includes('vacataire')) {
                                 datasFiltered.push(datas[intervenant]);
                                 continue;

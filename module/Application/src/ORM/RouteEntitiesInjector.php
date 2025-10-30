@@ -48,12 +48,6 @@ class RouteEntitiesInjector implements ParamFirewallInterface
         foreach ($params as $name => $value) {
             $errorMessage = null;
             $this->check($name, $params, null, $errorMessage);
-            if ('intervenant' == $name) {
-                $profile = $this->userManager->getProfile();
-                if ($profile && $profile->getContext('intervenant')) {
-                    $profile->setContext('intervenant', $params[$name]);
-                }
-            }
             if ($this->paramClass) {
                 $e->setParam($name, $params[$this->paramClass]);
                 $e->getRouteMatch()->setParam($this->paramClass, $params[$this->paramClass]);
@@ -91,10 +85,19 @@ class RouteEntitiesInjector implements ParamFirewallInterface
         switch ($name) {
             case 'intervenant':
                 if ($params[$name] !== null) {
-                    /** @var IntervenantService $serviceIntervenant */
-                    $serviceIntervenant        = $this->container->get(IntervenantService::class);
-                    $this->paramClass          = Intervenant::class;
-                    $params[$this->paramClass] = $serviceIntervenant->getByRouteParam($params[$name]);
+                    $profile = $this->userManager->getProfile();
+                    if (!empty($profile->getContext('intervenant'))) {
+                        // le paramètre en entrée est toujours l'intervenant courant si s'en est un
+                        $intervenant               = $profile->getContext('intervenant');
+                        $params[$name]             = $intervenant->getId();
+                        $this->paramClass          = Intervenant::class;
+                        $params[$this->paramClass] = $intervenant;
+                    } else {
+                        /** @var IntervenantService $serviceIntervenant */
+                        $serviceIntervenant        = $this->container->get(IntervenantService::class);
+                        $this->paramClass          = Intervenant::class;
+                        $params[$this->paramClass] = $serviceIntervenant->getByRouteParam($params[$name]);
+                    }
                 }
                 break;
             default:

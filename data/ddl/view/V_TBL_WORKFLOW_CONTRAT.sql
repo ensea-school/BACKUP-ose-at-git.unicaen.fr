@@ -18,6 +18,7 @@ FROM (
     tbl_contrat c
   WHERE
     c.volume_horaire_index = 0
+    AND c.actif = 1
     /*@intervenant_id=c.intervenant_id*/
     /*@annee_id=c.annee_id*/
   ) c

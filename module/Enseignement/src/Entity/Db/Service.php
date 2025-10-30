@@ -293,15 +293,9 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     * @see ResourceInterface
-     */
     public function getResourceId(): string
     {
-        return 'Service';
+        return self::class;
     }
 
 

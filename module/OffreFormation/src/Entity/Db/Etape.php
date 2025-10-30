@@ -403,13 +403,8 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'Etape';
+        return self::class;
     }
 }

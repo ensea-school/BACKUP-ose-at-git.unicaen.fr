@@ -3,6 +3,7 @@
 namespace Service;
 
 use Application\Provider\Privileges;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\ModificationServiceDuController;
 use Service\Controller\MotifModificationServiceController;
@@ -99,7 +100,7 @@ return [
     'rules' => [
         [
             'privileges' => Privileges::MODIF_SERVICE_DU_EDITION,
-            'resources'  => 'Intervenant',
+            'resources'  => Intervenant::class,
             'assertion'  => Assertion\ModificationServiceDuAssertion::class,
         ],
     ],

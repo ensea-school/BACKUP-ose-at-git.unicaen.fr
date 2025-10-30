@@ -74,9 +74,9 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
 
 
 
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'VolumeHoraireMission';
+        return self::class;
     }
 
 

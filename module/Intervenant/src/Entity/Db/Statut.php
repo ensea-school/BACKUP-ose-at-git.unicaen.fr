@@ -253,9 +253,9 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'Statut';
+        return self::class;
     }
 
 

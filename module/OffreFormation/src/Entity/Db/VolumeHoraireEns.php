@@ -102,14 +102,9 @@ class VolumeHoraireEns implements HistoriqueAwareInterface, ImportAwareInterface
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'VolumeHoraireEns';
+        return self::class;
     }
 
 }

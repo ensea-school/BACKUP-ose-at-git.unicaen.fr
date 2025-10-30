@@ -381,15 +381,9 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     * @see ResourceInterface
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'Intervenant';
+        return self::class;
     }
 
 

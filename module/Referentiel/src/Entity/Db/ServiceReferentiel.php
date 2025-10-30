@@ -150,6 +150,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
 
     public function getResourceId(): string
     {
-        return 'ServiceReferentiel';
+        return self::class;
     }
 }

@@ -14,8 +14,6 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
-    const RESOURCE_ID = 'PieceJointe';
-
     /**
      * @var integer
      */
@@ -237,13 +235,8 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'PieceJointe';
+        return self::class;
     }
 }

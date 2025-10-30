@@ -35,9 +35,9 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     protected ?\DateTime $dateCommission = null;
 
 
-    public function getResourceId ()
+    public function getResourceId (): string
     {
-        return 'Candidature';
+        return self::class;
     }
 
 

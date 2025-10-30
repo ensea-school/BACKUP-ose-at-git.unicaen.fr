@@ -54,7 +54,7 @@ class TypeInterventionStructure implements HistoriqueAwareInterface, ResourceInt
 
     public function getResourceId(): string
     {
-        return 'TypeInterventionStructure';
+        return self::class;
     }
 
 

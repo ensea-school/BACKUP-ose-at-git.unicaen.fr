@@ -3,6 +3,7 @@
 namespace Intervenant;
 
 use Application\Provider\Privileges;
+use Intervenant\Entity\Db\Intervenant;
 
 
 return [
@@ -164,7 +165,7 @@ return [
                 Privileges::INTERVENANT_EDITION_AVANCEE,
                 Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
             ],
-            'resources'  => ['Intervenant'],
+            'resources'  => [Intervenant::class],
             'assertion'  => Assertion\IntervenantAssertion::class,
         ],
     ],

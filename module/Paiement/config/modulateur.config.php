@@ -3,6 +3,9 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
+use Lieu\Entity\Db\Structure;
+use Paiement\Entity\Db\TypeModulateur;
+use Paiement\Entity\Db\TypeModulateurStructure;
 
 return [
     'routes' => [
@@ -99,12 +102,12 @@ return [
     'rules' => [
         [
             'privileges' => Privileges::MODULATEUR_VISUALISATION,
-            'resources'  => ['TypeModulateur', 'Structure'],
+            'resources'  => [TypeModulateur::class, Structure::class],
             'assertion'  => Assertion\ModulateurAssertion::class,
         ],
         [
             'privileges' => Privileges::MODULATEUR_EDITION,
-            'resources'  => ['TypeModulateurStructure'],
+            'resources'  => [TypeModulateurStructure::class],
             'assertion'  => Assertion\ModulateurAssertion::class,
         ],
     ],

@@ -178,8 +178,8 @@ class Note implements ResourceInterface, HistoriqueAwareInterface
 
 
 
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'Note';
+        return self::class;
     }
 }

@@ -5,6 +5,8 @@ namespace Agrement;
 use Agrement\Assertion\AgrementAssertion;
 use Agrement\Controller\AgrementController;
 use Agrement\Controller\Factory\AgrementControllerFactory;
+use Agrement\Entity\Db\Agrement;
+use Agrement\Entity\Db\TblAgrement;
 use Agrement\Entity\Db\TypeAgrement;
 use Agrement\Form\Factory\AgrementFormFactory;
 use Agrement\Form\Saisie;
@@ -16,6 +18,7 @@ use Agrement\Service\TypeAgrementService;
 use Agrement\Service\TypeAgrementServiceFactory;
 use Agrement\View\Helper\AgrementVewHelperFactory;
 use Application\Provider\Privileges;
+use Lieu\Entity\Db\Structure;
 
 
 return [
@@ -222,7 +225,7 @@ return [
                 Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
                 Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
             ],
-            'resources'  => ['TblAgrement', 'Agrement', 'Structure'],
+            'resources'  => [TblAgrement::class, Agrement::class, Structure::class],
             'assertion'  => AgrementAssertion::class,
         ],
     ],

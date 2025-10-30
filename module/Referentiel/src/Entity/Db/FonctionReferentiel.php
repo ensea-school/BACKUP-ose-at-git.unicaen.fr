@@ -54,7 +54,7 @@ class FonctionReferentiel implements ParametreEntityInterface, PlafondPerimetreI
 
     public function getResourceId(): string
     {
-        return 'FonctionReferentiel';
+        return self::class;
     }
 
 

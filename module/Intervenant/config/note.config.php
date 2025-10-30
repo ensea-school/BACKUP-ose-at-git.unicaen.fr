@@ -4,6 +4,7 @@ namespace Intervenant;
 
 use Application\Provider\Privileges;
 use Intervenant\Assertion\NoteAssertion;
+use Intervenant\Entity\Db\Note;
 
 
 return [
@@ -73,7 +74,7 @@ return [
                 NoteAssertion::PRIV_EDITER_NOTE,
                 NoteAssertion::PRIV_SUPPRIMER_NOTE,
             ],
-            'resources'  => 'Note',
+            'resources'  => Note::class,
             'assertion'  => Assertion\NoteAssertion::class,
         ],
     ],

@@ -33,9 +33,9 @@ class Prime implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function getResourceId ()
+    public function getResourceId (): string
     {
-        return 'Prime';
+        return self::class;
     }
 
 

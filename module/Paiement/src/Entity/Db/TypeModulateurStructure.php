@@ -54,7 +54,7 @@ class TypeModulateurStructure implements HistoriqueAwareInterface, ResourceInter
 
     public function getResourceId(): string
     {
-        return 'TypeModulateurStructure';
+        return self::class;
     }
 
 

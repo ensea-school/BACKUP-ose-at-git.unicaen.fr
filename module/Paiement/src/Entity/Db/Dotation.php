@@ -128,14 +128,9 @@ class Dotation implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'Dotation';
+        return self::class;
     }
 
 }

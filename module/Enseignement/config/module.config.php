@@ -3,10 +3,14 @@
 namespace Enseignement;
 
 use Application\Provider\Privileges;
+use Enseignement\Entity\Db\Service;
+use Enseignement\Entity\Db\VolumeHoraire;
+use Intervenant\Entity\Db\Intervenant;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use Workflow\Entity\Db\WorkflowEtape;
+use Workflow\Entity\Db\Validation;
 
 
 return [
@@ -17,16 +21,20 @@ return [
                     'route'      => '/:intervenant/enseignement-prevu',
                     'controller' => EnseignementController::class,
                     'action'     => 'prevu',
+                    'privileges' => Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                    'assertion'  => Assertion\EnseignementAssertion::class,
                     'defaults'   => [
-                        'type-volume-horaire-code' => 'PREVU',
+                        'type-volume-horaire-code' => TypeVolumeHoraire::CODE_PREVU,
                     ],
                 ],
                 'enseignement-realise' => [
                     'route'      => '/:intervenant/enseignement-realise',
                     'controller' => EnseignementController::class,
                     'action'     => 'realise',
+                    'privileges' => Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                    'assertion'  => Assertion\EnseignementAssertion::class,
                     'defaults'   => [
-                        'type-volume-horaire-code' => 'REALISE',
+                        'type-volume-horaire-code' => TypeVolumeHoraire::CODE_REALISE,
                     ],
                 ],
                 'validation'           => [
@@ -41,16 +49,30 @@ return [
                                     'route'      => '/prevu',
                                     'controller' => EnseignementController::class,
                                     'action'     => 'validation-prevu',
+                                    'privileges' => [
+                                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                                        Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
+                                    ],
+                                    'assertion'  => Assertion\EnseignementAssertion::class,
                                 ],
                                 'realise'   => [
                                     'route'      => '/realise',
                                     'controller' => EnseignementController::class,
                                     'action'     => 'validation-realise',
+                                    'privileges' => [
+                                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                                        Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
+                                    ],
+                                    'assertion'  => Assertion\EnseignementAssertion::class,
                                 ],
                                 'valider'   => [
                                     'route'       => '/valider/:typeVolumeHoraire/:structure',
                                     'controller'  => EnseignementController::class,
                                     'action'      => 'valider',
+                                    'privileges'  => [
+                                        Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
+                                        Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
+                                    ],
                                     'constraints' => [
                                         'typeVolumeHoraire' => '[0-9]*',
                                         'structure'         => '[0-9]*',
@@ -60,6 +82,7 @@ return [
                                     'route'       => '/devalider/:validation',
                                     'controller'  => EnseignementController::class,
                                     'action'      => 'devalider',
+                                    'privileges'  => Privileges::ENSEIGNEMENT_DEVALIDATION,
                                     'constraints' => [
                                         'validation' => '[0-9]*',
                                     ],
@@ -74,22 +97,22 @@ return [
             'route'        => '/enseignement',
             'controller'   => EnseignementController::class,
             'child_routes' => [
-                /*      'prevu'   => [
-                          'route'      => 'prevu',
-                          'controller' => EnseignementController::class,
-                          'action'     => 'prevu',
-                          'defaults'   => [
-                              'type-volume-horaire-code' => 'PREVU',
-                          ],
-                      ],
-                      'realise' => [
-                          'route'      => 'realise',
-                          'controller' => EnseignementController::class,
-                          'action'     => 'realise',
-                          'defaults'   => [
-                              'type-volume-horaire-code' => 'REALISE',
-                          ],
-                      ],*/
+                'prevu'                  => [
+                    'route'      => 'prevu',
+                    'controller' => EnseignementController::class,
+                    'action'     => 'prevu',
+                    'defaults'   => [
+                        'type-volume-horaire-code' => 'PREVU',
+                    ],
+                ],
+                'realise'                => [
+                    'route'      => 'realise',
+                    'controller' => EnseignementController::class,
+                    'action'     => 'realise',
+                    'defaults'   => [
+                        'type-volume-horaire-code' => 'REALISE',
+                    ],
+                ],
                 'saisie'                 => [
                     'route'       => '/saisie/:type-volume-horaire-code[/:service]',
                     'action'      => 'saisie',
@@ -142,6 +165,10 @@ return [
                     ],
                     'controller'  => VolumeHoraireController::class,
                     'action'      => 'liste',
+                    'privileges'  => [
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                    ],
                 ],
                 'saisie'                 => [
                     'route'       => '/saisie/:service',
@@ -150,6 +177,11 @@ return [
                     ],
                     'controller'  => VolumeHoraireController::class,
                     'action'      => 'saisie',
+                    'privileges'  => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
+                    'assertion'   => Assertion\EnseignementAssertion::class,
                 ],
                 'saisie-calendaire'      => [
                     'route'       => '/saisie-calendaire/:service',
@@ -158,6 +190,11 @@ return [
                     ],
                     'controller'  => VolumeHoraireController::class,
                     'action'      => 'saisie-calendaire',
+                    'privileges'  => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
+                    'assertion'   => Assertion\EnseignementAssertion::class,
                 ],
                 'suppression-calendaire' => [
                     'route'       => '/suppression-calendaire/:service',
@@ -166,6 +203,11 @@ return [
                     ],
                     'controller'  => VolumeHoraireController::class,
                     'action'      => 'suppression-calendaire',
+                    'privileges'  => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
+                    'assertion'   => Assertion\EnseignementAssertion::class,
                 ],
             ],
         ],
@@ -174,12 +216,12 @@ return [
     'navigation' => [
         'intervenant' => [
             'pages' => [
-                /*'enseignements-prevus'   => [
+                'enseignements-prevus'   => [
                     'label'               => "Enseignements prévisionnels",
                     'title'               => "Enseignements prévisionnels de l'intervenant",
                     'route'               => 'intervenant/enseignement-prevu',
                     'order'               => 6,
-                ],*/
+                ],
                 'validation-enseignement-prevu'   => [
                     'label' => "Validation des enseignements prévisionnels",
                     'title' => "Validation des enseignements prévisionnels de l'intervenant",
@@ -187,12 +229,12 @@ return [
                     'order' => 8,
                 ],
 
-                /*'enseignements-realises' => [
+                'enseignements-realises' => [
                     'label'               => "Enseignements réalisés",
                     'title'               => "Constatation des enseignements réalisés",
                     'route'               => 'intervenant/enseignement-realise',
                     'order'               => 13,
-                ],*/
+                ],
                 'validation-enseignement-realise' => [
                     'label' => "Validation des enseignements réalisés",
                     'title' => "Validation des enseignements réalisés de l'intervenant",
@@ -211,7 +253,7 @@ return [
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                 Privileges::ENSEIGNEMENT_REALISE_EDITION,
             ],
-            'resources'  => ['Service', 'Intervenant'],
+            'resources'  => [Service::class, Intervenant::class],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
@@ -221,19 +263,19 @@ return [
                 Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
                 Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
             ],
-            'resources'  => ['Service', 'VolumeHoraire', 'Validation'],
+            'resources'  => [Service::class, VolumeHoraire::class, Validation::class],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
             'privileges' => Privileges::ENSEIGNEMENT_DEVALIDATION,
-            'resources'  => 'Validation',
+            'resources'  => Validation::class,
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
             'privileges' => [
                 Privileges::ENSEIGNEMENT_EXTERIEUR,
             ],
-            'resources'  => ['Intervenant', 'Service'],
+            'resources'  => [Intervenant::class, Service::class],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
@@ -243,28 +285,12 @@ return [
                 Privileges::TAG_EDITION,
                 Privileges::TAG_VISUALISATION,
             ],
-            'resources'  => 'Intervenant',
+            'resources'  => Intervenant::class,
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
     ],
 
     'guards' => [
-        [
-            'controller' => EnseignementController::class,
-            'action'     => ['prevu'],
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-            ],
-            'assertion'  => Assertion\EnseignementAssertion::class,
-        ],
-        [
-            'controller' => EnseignementController::class,
-            'action'     => ['realise'],
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-            ],
-            'assertion'  => Assertion\EnseignementAssertion::class,
-        ],
         [
             'controller' => EnseignementController::class,
             'action'     => ['saisie', 'rafraichir-ligne', 'saisie-form-refresh-vh', 'suppression', 'initialisation', 'constatation'],
@@ -276,56 +302,6 @@ return [
             ],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
-
-        [
-            'controller' => VolumeHoraireController::class,
-            'action'     => ['liste'],
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-            ],
-        ],
-        [
-            'controller' => VolumeHoraireController::class,
-            'action'     => ['saisie', 'saisie-calendaire', 'suppression-calendaire'],
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_PREVU_EDITION,
-                Privileges::ENSEIGNEMENT_REALISE_EDITION,
-            ],
-            'assertion'  => Assertion\EnseignementAssertion::class,
-        ],
-        [
-            'controller' => EnseignementController::class,
-            'action'     => ['validation-prevu'],
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-            ],
-            'assertion'  => Assertion\EnseignementAssertion::class,
-        ],
-        [
-            'controller' => EnseignementController::class,
-            'action'     => ['validation-realise'],
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-            ],
-            'assertion'  => Assertion\EnseignementAssertion::class,
-        ],
-        [
-            'controller' => EnseignementController::class,
-            'action'     => ['valider'],
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
-                Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
-            ],
-        ],
-        [
-            'controller' => EnseignementController::class,
-            'action'     => ['devalider'],
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_DEVALIDATION,
-            ],
-        ],
-
     ],
 
 

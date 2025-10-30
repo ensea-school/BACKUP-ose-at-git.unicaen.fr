@@ -148,7 +148,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
     public function getResourceId(): string
     {
-        return 'IntervenantDossier';
+        return self::class;
     }
 
 

@@ -3,6 +3,7 @@
 namespace Plafond;
 
 use Application\Provider\Privileges;
+use Intervenant\Entity\Db\Intervenant;
 use Plafond\View\Helper\PlafondConfigElementViewHelperFactory;
 
 return [
@@ -241,7 +242,7 @@ return [
             'privileges' => [
                 Privileges::PLAFONDS_DEROGATIONS_EDITION,
             ],
-            'resources'  => 'Intervenant',
+            'resources'  => Intervenant::class,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
     ],

@@ -19,10 +19,6 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     use HistoriqueAwareTrait;
     use FichierServiceAwareTrait;
 
-    /**
-     *
-     */
-    const RESOURCE_ID = 'Fichier';
 
     /**
      * @var integer
@@ -348,13 +344,8 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return self::RESOURCE_ID;
+        return self::class;
     }
 }

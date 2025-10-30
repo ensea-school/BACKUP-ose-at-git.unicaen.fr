@@ -3,6 +3,7 @@
 namespace Lieu;
 
 use Application\Provider\Privileges;
+use Lieu\Entity\Db\Structure;
 
 return [
     'routes' => [
@@ -72,7 +73,7 @@ return [
     'rules' => [
         [
             'privileges' => Privileges::STRUCTURES_ADMINISTRATION_EDITION,
-            'resources'  => 'Structure',
+            'resources'  => Structure::class,
             'assertion'  => Assertion\StructureAssertion::class,
         ],
     ],

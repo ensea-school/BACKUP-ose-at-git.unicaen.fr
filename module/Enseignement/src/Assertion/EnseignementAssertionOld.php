@@ -5,7 +5,6 @@ namespace Enseignement\Assertion;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Enseignement\Controller\EnseignementController;
-use Enseignement\Controller\VolumeHoraireController;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Unicaen\Framework\Authorize\AbstractAssertion;
@@ -17,7 +16,6 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Unicaen\Framework\Authorize\UnAuthorizedException;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
@@ -29,7 +27,7 @@ use Workflow\Service\WorkflowServiceAwareTrait;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class EnseignementAssertion extends AbstractAssertion
+class EnseignementAssertionOld extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -94,7 +92,7 @@ class EnseignementAssertion extends AbstractAssertion
                 break;
         }
 
-        throw new UnAuthorizedException('Action interdite pour la resource ' . $entity->getResourceId() . ', privilège ' . $privilege);
+        return true;
     }
 
 
@@ -107,12 +105,6 @@ class EnseignementAssertion extends AbstractAssertion
         if (!$this->getAssertionService()->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!
 
         switch ($controller . '.' . $action) {
-            case EnseignementController::class . '.prevu':
-                return true;
-
-            case EnseignementController::class . '.realise':
-                return true;
-
             case EnseignementController::class . '.validationPrevu':
                 return true;
 
@@ -130,113 +122,9 @@ class EnseignementAssertion extends AbstractAssertion
 
             case EnseignementController::class . '.intervenantSaisieRealise':
                 return $this->assertPageEnseignements($intervenant, TypeVolumeHoraire::CODE_REALISE);
-
-            case VolumeHoraireController::class . '.saisie':
-            case VolumeHoraireController::class . '.saisieCalendaire':
-            case VolumeHoraireController::class . '.suppressionCalendaire':
-                return true;
-
-            case EnseignementController::class . '.saisie':
-            case EnseignementController::class . '.rafraichirLigne':
-            case EnseignementController::class . '.saisieFormRefreshVh':
-            case EnseignementController::class . '.suppression':
-            case EnseignementController::class . '.initialisation':
-            case EnseignementController::class . '.constatation':
-                return true;
         }
 
-        throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non traitée');
-    }
-
-
-
-    protected function assertStructure(Intervenant $intervenant): bool
-    {
-
-    }
-
-
-
-    protected function assertPrevu(VolumeHoraire|Service|Intervenant $entite): bool
-    {
-        if ($entite instanceof VolumeHoraire) {
-            $entite = $entite->getService();
-        }
-
-        if ($entite instanceof Service) {
-            $entite = $entite->getIntervenant();
-        }
-
-        $statut         = $entite->getStatut();
-        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entite);
-
-        return $this->asserts(
-            $statut->getServicePrevu(),
-            $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_SAISIE)?->isAllowed()
-        );
-    }
-
-
-
-    protected function assertRealise(VolumeHoraire|Service|Intervenant $entite): bool
-    {
-        if ($entite instanceof VolumeHoraire) {
-            $entite = $entite->getService();
-        }
-
-        if ($entite instanceof Service) {
-            $entite = $entite->getIntervenant();
-        }
-
-        $statut         = $entite->getStatut();
-        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entite);
-
-        return $this->asserts(
-            $statut->getServiceRealise(),
-            $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE)?->isAllowed()
-        );
-    }
-
-
-
-    protected function assertValidationPrevu(VolumeHoraire|Service|Intervenant $entite): bool
-    {
-        if ($entite instanceof VolumeHoraire) {
-            $entite = $entite->getService();
-        }
-
-        if ($entite instanceof Service) {
-            $entite = $entite->getIntervenant();
-        }
-
-        $statut         = $entite->getStatut();
-        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entite);
-
-        return $this->asserts(
-            $statut->getServicePrevu(),
-            $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_VALIDATION)?->isAllowed()
-        );
-    }
-
-
-
-    protected function assertValidationRealise(VolumeHoraire|Service|Intervenant $entite): bool
-    {
-        if ($entite instanceof VolumeHoraire) {
-            $entite = $entite->getService();
-        }
-
-        if ($entite instanceof Service) {
-            $entite = $entite->getIntervenant();
-        }
-
-        $statut         = $entite->getStatut();
-        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entite);
-
-        return $this->asserts(
-            $statut->getServiceRealise(),
-            $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE)?->isAllowed()
-        );
+        return true;
     }
 
 
@@ -449,16 +337,22 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementExterieur(Service|Intervenant $entite): bool
+    protected function assertEnseignementExterieur(Service $service): bool
     {
-        if ($entite instanceof Service) {
-            $entite = $entite->getIntervenant();
-        }
+        return $this->asserts([
+                                  $this->assertIntervenantEnseignementExterieur($service->getIntervenant()),
+                              ]);
+    }
 
-        return $this->asserts(
-            $entite->getStatut()->getServiceExterieur(),
-            $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR),
-        );
+
+
+    protected function assertIntervenantEnseignementExterieur(Intervenant $intervenant): bool
+    {
+
+        return $this->asserts([
+                                  $intervenant->getStatut()->getServiceExterieur(),
+                                  $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR),
+                              ]);
     }
 
 

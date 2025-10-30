@@ -75,9 +75,9 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getResourceId ()
+    public function getResourceId (): string
     {
-        return 'OffreEmploi';
+        return self::class;
     }
 
 

@@ -3,6 +3,7 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
+use Paiement\Entity\Db\CentreCoutStructure;
 
 return [
     'routes' => [
@@ -113,7 +114,7 @@ return [
     'rules' => [
         [
             'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION,
-            'resources'  => 'CentreCoutStructure',
+            'resources'  => CentreCoutStructure::class,
             'assertion'  => Assertion\CentreCoutAssertion::class,
         ],
     ],

@@ -3,10 +3,12 @@
 namespace Service;
 
 use Application\Provider\Privileges;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\CampagneSaisieController;
 use Service\Controller\RegleStructureValidationController;
 use Service\Controller\ServiceController;
+use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WorkflowEtape;
 
 
@@ -111,7 +113,7 @@ return [
 
         'intervenant' => [
             'pages' => [
-                'services-prevus'   => [
+            /*    'services-prevus'   => [
                     'label'               => "Enseignements prévisionnels",
                     'title'               => "Enseignements prévisionnels de l'intervenant",
                     'route'               => 'intervenant/services-prevus',
@@ -122,7 +124,7 @@ return [
                     'title'               => "Constatation des enseignements réalisés",
                     'route'               => 'intervenant/services-realises',
                     'order'               => 13,
-                ],
+                ],*/
             ],
         ],
 
@@ -158,7 +160,7 @@ return [
                 Privileges::CLOTURE_CLOTURE,
                 Privileges::CLOTURE_REOUVERTURE,
             ],
-            'resources'  => ['Validation', 'Intervenant'],
+            'resources'  => [Validation::class, Intervenant::class],
             'assertion'  => Assertion\ClotureAssertion::class,
         ],
     ],

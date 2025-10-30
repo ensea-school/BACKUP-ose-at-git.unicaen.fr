@@ -206,7 +206,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
 
     public function getResourceId(): string
     {
-        return 'VolumeHoraire';
+        return self::class;
     }
 
 

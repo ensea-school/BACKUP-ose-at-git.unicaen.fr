@@ -3,10 +3,12 @@
 namespace Dossier;
 
 use Application\Provider\Privileges;
+use Contrat\Entity\Db\Contrat;
 use Dossier\Assertion\IntervenantDossierAssertion;
 use Dossier\Controller\AutresController;
 use Dossier\Controller\EmployeurController;
 use Dossier\Controller\IntervenantDossierController;
+use Dossier\Entity\Db\IntervenantDossier;
 use Dossier\Form\AutresForm;
 use Dossier\Form\EmployeurSaisieForm;
 use Dossier\Form\Factory\AutresFormFactory;
@@ -292,14 +294,14 @@ return [
                 Privileges::DOSSIER_VISUALISATION,
                 Privileges::DOSSIER_VISUALISATION_COMP,
             ],
-            'resources'  => ['IntervenantDossier'],
+            'resources'  => IntervenantDossier::class,
             'assertion'  => IntervenantDossierAssertion::class,
         ],
         [
             'privileges' => [
                 Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
             ],
-            'resources'  => ['Contrat'],
+            'resources'  => [Contrat::class],
         ],
 
     ],

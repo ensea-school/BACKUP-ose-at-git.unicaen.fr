@@ -249,9 +249,9 @@ class Modulateur implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return "Modulateur";
+        return self::class;
     }
 
 }

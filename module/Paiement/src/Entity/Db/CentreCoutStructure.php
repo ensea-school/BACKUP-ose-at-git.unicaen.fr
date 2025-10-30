@@ -49,9 +49,9 @@ class CentreCoutStructure implements HistoriqueAwareInterface, ImportAwareInterf
 
 
 
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'CentreCoutStructure';
+        return self::class;
     }
 
 

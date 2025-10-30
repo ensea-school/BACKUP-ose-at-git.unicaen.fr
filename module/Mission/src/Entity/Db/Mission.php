@@ -164,9 +164,9 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'Mission';
+        return self::class;
     }
 
 

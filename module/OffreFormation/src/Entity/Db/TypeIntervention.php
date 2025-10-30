@@ -491,14 +491,9 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'TypeIntervention';
+        return self::class;
     }
 
 

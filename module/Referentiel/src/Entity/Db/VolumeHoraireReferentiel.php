@@ -194,7 +194,7 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
     public function getResourceId(): string
     {
-        return 'VolumeHoraireReferentiel';
+        return self::class;
     }
 
 

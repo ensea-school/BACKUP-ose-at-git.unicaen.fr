@@ -64,6 +64,6 @@ class TblAgrement implements ResourceInterface
 
     public function getResourceId(): string
     {
-        return 'TblAgrement';
+        return self::class;
     }
 }

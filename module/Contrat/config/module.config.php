@@ -5,6 +5,7 @@ namespace Contrat;
 use Application\Provider\Privileges;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Controller\ContratController;
+use Contrat\Entity\Db\Contrat;
 use Contrat\Service\TblContratService;
 use Contrat\Service\TblContratServiceFactory;
 use Contrat\Tbl\Process\ContratProcess;
@@ -266,7 +267,7 @@ return [
                 ContratAssertion::PRIV_SUPPRIMER_FICHIER,
                 ContratAssertion::PRIV_EXPORT,
             ],
-            'resources'  => 'Contrat',
+            'resources'  => Contrat::class,
             'assertion'  => Assertion\ContratAssertion::class,
         ],
     ],

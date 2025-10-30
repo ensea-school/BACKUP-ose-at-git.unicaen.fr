@@ -4,6 +4,8 @@ namespace Chargens;
 
 use Application\Provider\Privileges;
 use Chargens\Assertion\ChargensAssertion;
+use Chargens\Entity\Db\Scenario;
+use Lieu\Entity\Db\Structure;
 use Unicaen\Framework\Authorize\Authorize;
 
 return [
@@ -224,7 +226,7 @@ return [
     'rules' => [
         [
             'privileges' => ChargensAssertion::SCENARIO_EDITION,
-            'resources'  => ['Scenario', 'Structure'],
+            'resources'  => [Scenario::class, Structure::class],
             'assertion'  => Assertion\ChargensAssertion::class,
         ],
         [
@@ -232,7 +234,7 @@ return [
                 Privileges::CHARGENS_SEUIL_ETABLISSEMENT_EDITION,
                 Privileges::CHARGENS_SEUIL_COMPOSANTE_EDITION,
             ],
-            'resources'  => ['Structure'],
+            'resources'  => [Structure::class],
             'assertion'  => Assertion\ChargensAssertion::class,
         ],
     ],

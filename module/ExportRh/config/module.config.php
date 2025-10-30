@@ -8,6 +8,7 @@ use ExportRh\Connecteur\Siham\SihamConnecteur;
 use ExportRh\Connecteur\Siham\SihamConnecteurFactory;
 use ExportRh\Form\ExportRhForm;
 use ExportRh\Form\Factory\ExportRhFormFactory;
+use Intervenant\Entity\Db\Intervenant;
 
 return [
 
@@ -78,7 +79,7 @@ return [
                 Privileges::INTERVENANT_EXPORTER,
                 ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH,
             ],
-            'resources'  => 'Intervenant',
+            'resources'  => Intervenant::class,
             'assertion'  => ExportRhAssertion::class,
         ],
     ],

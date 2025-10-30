@@ -3,6 +3,9 @@
 namespace Paiement;
 
 use Application\Provider\Privileges;
+use Lieu\Entity\Db\Structure;
+use Paiement\Entity\Db\Dotation;
+use Paiement\Entity\Db\TypeRessource;
 
 return [
     'routes' => [
@@ -141,7 +144,7 @@ return [
                 Privileges::BUDGET_EDITION_ENGAGEMENT_COMPOSANTE,
                 Privileges::BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT,
             ],
-            'resources'  => ['Dotation', 'Structure', 'TypeRessource'],
+            'resources'  => [Dotation::class, Structure::class, TypeRessource::class],
             'assertion'  => Assertion\BudgetAssertion::class,
         ],
     ],

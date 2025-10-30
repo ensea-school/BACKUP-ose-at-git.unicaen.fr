@@ -3,6 +3,7 @@
 namespace Intervenant;
 
 use Application\Provider\Privileges;
+use Intervenant\Entity\Db\Statut;
 
 
 return [
@@ -62,7 +63,7 @@ return [
     'rules' => [
         [
             'privileges' => Privileges::INTERVENANT_STATUT_EDITION,
-            'resources'  => 'Statut',
+            'resources'  => Statut::class,
             'assertion'  => Assertion\StatutAssertion::class,
         ],
     ],

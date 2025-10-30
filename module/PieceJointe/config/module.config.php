@@ -3,8 +3,10 @@
 namespace PieceJointe;
 
 use Application\Provider\Privileges;
+use Intervenant\Entity\Db\Intervenant;
 use PieceJointe\Controller\Factory\PieceJointeControllerFactory;
 use PieceJointe\Controller\PieceJointeController;
+use PieceJointe\Entity\Db\PieceJointe;
 use PieceJointe\Form\Factory\ModifierTypePieceJointeStatutFormFactory;
 use PieceJointe\Form\Factory\TypePieceJointeSaisieFormFactory;
 use PieceJointe\Form\ModifierTypePieceJointeStatutForm;
@@ -268,7 +270,7 @@ return [
 
 
             ],
-            'resources'  => ['PieceJointe', 'Intervenant'],
+            'resources'  => [PieceJointe::class, Intervenant::class],
             'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
 

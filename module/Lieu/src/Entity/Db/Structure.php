@@ -429,14 +429,9 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId ()
+    public function getResourceId (): string
     {
-        return 'Structure';
+        return self::class;
     }
 
 

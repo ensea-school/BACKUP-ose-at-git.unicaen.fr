@@ -3,6 +3,7 @@
 namespace OffreFormation;
 
 use Application\Provider\Privileges;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Controller\DisciplineController;
 use OffreFormation\Controller\ElementPedagogiqueController;
 use OffreFormation\Controller\EtapeCentreCoutController;
@@ -12,6 +13,13 @@ use OffreFormation\Controller\ModulateurController;
 use OffreFormation\Controller\OffreFormationController;
 use OffreFormation\Controller\TypeFormationController;
 use OffreFormation\Controller\TypeInterventionController;
+use OffreFormation\Entity\Db\CentreCoutEp;
+use OffreFormation\Entity\Db\ElementModulateur;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Entity\Db\TypeInterventionStructure;
+use OffreFormation\Entity\Db\VolumeHoraireEns;
 
 return [
     'routes' => [
@@ -541,42 +549,42 @@ return [
     'rules'        => [
         [
             'privileges' => Privileges::ODF_ELEMENT_EDITION,
-            'resources'  => ['ElementPedagogique', 'Structure'],
+            'resources'  => [ElementPedagogique::class, Structure::class],
             'assertion'  => Assertion\OffreDeFormationAssertion::class,
         ],
         [
             'privileges' => Privileges::ODF_ETAPE_EDITION,
-            'resources'  => ['Etape', 'Structure'],
+            'resources'  => [Etape::class, Structure::class],
             'assertion'  => Assertion\OffreDeFormationAssertion::class,
         ],
         [
             'privileges' => Privileges::ODF_CENTRES_COUT_EDITION,
-            'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'CentreCoutEp'],
+            'resources'  => [Etape::class, Structure::class, ElementPedagogique::class, CentreCoutEp::class],
             'assertion'  => Assertion\OffreDeFormationAssertion::class,
         ],
         [
             'privileges' => Privileges::ODF_MODULATEURS_EDITION,
-            'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'ElementModulateur'],
+            'resources'  => [Etape::class, Structure::class, ElementPedagogique::class, ElementModulateur::class],
             'assertion'  => Assertion\OffreDeFormationAssertion::class,
         ],
         [
             'privileges' => Privileges::ODF_TAUX_MIXITE_EDITION,
-            'resources'  => ['Etape', 'Structure', 'ElementPedagogique'],
+            'resources'  => [Etape::class, Structure::class, ElementPedagogique::class],
             'assertion'  => Assertion\OffreDeFormationAssertion::class,
         ],
         [
             'privileges' => Privileges::ODF_ELEMENT_VH_EDITION,
-            'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'VolumeHoraireEns', 'TypeIntervention'],
+            'resources'  => [Etape::class, Structure::class, ElementPedagogique::class, VolumeHoraireEns::class, TypeIntervention::class],
             'assertion'  => Assertion\OffreDeFormationAssertion::class,
         ],
         [
             'privileges' => Privileges::ODF_ELEMENT_SYNCHRONISATION,
-            'resources'  => ['ElementPedagogique'],
+            'resources'  => ElementPedagogique::class,
             'assertion'  => Assertion\OffreDeFormationAssertion::class,
         ],
         [
             'privileges' => Privileges::TYPE_INTERVENTION_EDITION,
-            'resources'  => ['TypeInterventionStructure'],
+            'resources'  => TypeInterventionStructure::class,
             'assertion'  => Assertion\TypeInterventionAssertion::class,
         ],
 

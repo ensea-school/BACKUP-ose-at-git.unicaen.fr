@@ -6,6 +6,8 @@ namespace Mission;
 use Application\Provider\Privileges;
 use Mission\Controller\OffreEmploiController;
 use Mission\Controller\OffreEmploiControllerFactory;
+use Mission\Entity\Db\Candidature;
+use Mission\Entity\Db\OffreEmploi;
 use Mission\Service\CandidatureService;
 use Mission\Service\CandidatureServiceFactory;
 use Mission\Service\OffreEmploiService;
@@ -166,7 +168,7 @@ return [
                 Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION,
 
             ],
-            'resources'  => 'OffreEmploi',
+            'resources'  => OffreEmploi::class,
             'assertion'  => Assertion\OffreEmploiAssertion::class,
         ],
         [
@@ -174,7 +176,7 @@ return [
                 Privileges::MISSION_CANDIDATURE_VALIDER,
                 Privileges::MISSION_CANDIDATURE_REFUSER,
             ],
-            'resources'  => 'Candidature',
+            'resources'  => Candidature::class,
             'assertion'  => Assertion\OffreEmploiAssertion::class,
         ],
 

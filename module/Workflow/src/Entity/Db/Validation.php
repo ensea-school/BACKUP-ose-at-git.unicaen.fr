@@ -160,6 +160,6 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
 
     public function getResourceId(): string
     {
-        return 'Validation';
+        return self::class;
     }
 }

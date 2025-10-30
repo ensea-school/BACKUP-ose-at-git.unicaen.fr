@@ -404,14 +404,9 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'TypeRessource';
+        return self::class;
     }
 
 }

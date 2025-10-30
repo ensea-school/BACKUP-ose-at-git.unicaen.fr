@@ -4,6 +4,7 @@ namespace Paiement;
 
 use Application\Provider\Privileges;
 use Paiement\Controller\TauxRemuController;
+use Paiement\Entity\Db\TauxRemu;
 use Paiement\Service\TauxRemuService;
 use Paiement\Service\TauxRemuServiceFactory;
 
@@ -70,12 +71,12 @@ return [
     'rules' => [
         [
             'privileges' => Privileges::TAUX_EDITION,
-            'resources'  => 'TauxRemu',
+            'resources'  => TauxRemu::class,
             'assertion'  => Assertion\TauxRemuAssertion::class,
         ],
         [
             'privileges' => Privileges::TAUX_SUPPRESSION,
-            'resources'  => 'TauxRemu',
+            'resources'  => TauxRemu::class,
             'assertion'  => Assertion\TauxRemuAssertion::class,
         ],
     ],

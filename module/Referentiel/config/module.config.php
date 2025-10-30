@@ -3,9 +3,14 @@
 namespace Referentiel;
 
 use Application\Provider\Privileges;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Referentiel\Controller\FonctionReferentielController;
 use Referentiel\Controller\ServiceReferentielController;
+use Referentiel\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
+use Workflow\Entity\Db\Validation;
 
 
 return [
@@ -190,7 +195,7 @@ return [
                 Privileges::REFERENTIEL_REALISE_EDITION,
                 Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
             ],
-            'resources'  => ['ServiceReferentiel', 'Intervenant'],
+            'resources'  => [ServiceReferentiel::class, Intervenant::class],
             'assertion'  => Assertion\ReferentielAssertion::class,
         ],
         [
@@ -200,17 +205,17 @@ return [
                 Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
                 Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
             ],
-            'resources'  => ['ServiceReferentiel', 'VolumeHoraireReferentiel', 'Validation'],
+            'resources'  => [ServiceReferentiel::class, VolumeHoraireReferentiel::class, Validation::class],
             'assertion'  => Assertion\ReferentielAssertion::class,
         ],
         [
             'privileges' => Privileges::REFERENTIEL_DEVALIDATION,
-            'resources'  => 'Validation',
+            'resources'  => Validation::class,
             'assertion'  => Assertion\ReferentielAssertion::class,
         ],
         [
             'privileges' => Privileges::REFERENTIEL_ADMIN_EDITION,
-            'resources'  => 'FonctionReferentiel',
+            'resources'  => FonctionReferentiel::class,
             'assertion'  => Assertion\ReferentielAssertion::class,
         ],
     ],

@@ -3,6 +3,8 @@
 namespace Mission;
 
 use Application\Provider\Privileges;
+use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\VolumeHoraireMission;
 
 
 return [
@@ -93,7 +95,7 @@ return [
                 Privileges::MISSION_VALIDATION_REALISE,
                 Privileges::MISSION_DEVALIDATION_REALISE
             ],
-            'resources' => ['VolumeHoraireMission', 'Mission'],
+            'resources' => [VolumeHoraireMission::class, Mission::class],
             'assertion' => Assertion\SuiviAssertion::class,
         ],
     ],

@@ -520,15 +520,9 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     * @see ResourceInterface
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
-        return 'Contrat';
+        return self::class;
     }
 
 

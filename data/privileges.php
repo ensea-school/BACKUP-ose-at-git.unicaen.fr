@@ -345,7 +345,6 @@ return [
         'libelle'    => 'Pilotage',
         'privileges' => [
             'ecarts-etats'  => 'Ecarts d\'heures entre états',
-            'visualisation' => 'Visualisation',
         ],
     ],
 

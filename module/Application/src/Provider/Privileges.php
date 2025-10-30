@@ -268,7 +268,6 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const PIECE_JUSTIFICATIVE_VALIDATION                       = 'piece-justificative-validation';
     const PIECE_JUSTIFICATIVE_VISUALISATION                    = 'piece-justificative-visualisation';
     const PILOTAGE_ECARTS_ETATS                                = 'pilotage-ecarts-etats';
-    const PILOTAGE_VISUALISATION                               = 'pilotage-visualisation';
     const PLAFONDS_CONFIG_MISSION                              = 'plafonds-config-mission';
     const PLAFONDS_CONFIG_REFERENTIEL                          = 'plafonds-config-referentiel';
     const PLAFONDS_CONFIG_STATUT                               = 'plafonds-config-statut';

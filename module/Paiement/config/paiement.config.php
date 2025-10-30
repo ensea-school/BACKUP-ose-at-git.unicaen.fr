@@ -89,7 +89,7 @@ return [
                     'route'      => '/pilotage',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'pilotage',
-                    'privileges' => Privileges::PILOTAGE_VISUALISATION,
+                    'privileges' => [Privileges::PILOTAGE_ECARTS_ETATS,Privileges::MODIF_SERVICE_DU_EXPORT_CSV],
                 ],
                 'ecarts-etats'          => [
                     'route'      => '/ecarts-etats',

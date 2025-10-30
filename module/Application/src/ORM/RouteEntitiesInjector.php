@@ -86,7 +86,7 @@ class RouteEntitiesInjector implements ParamFirewallInterface
             case 'intervenant':
                 if ($params[$name] !== null) {
                     $profile = $this->userManager->getProfile();
-                    if (!empty($profile->getContext('intervenant'))) {
+                    if ($profile?->getContext('intervenant')) {
                         // le paramètre en entrée est toujours l'intervenant courant si s'en est un
                         $intervenant               = $profile->getContext('intervenant');
                         $params[$name]             = $intervenant->getId();

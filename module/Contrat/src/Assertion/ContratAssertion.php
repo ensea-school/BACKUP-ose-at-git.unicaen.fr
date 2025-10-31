@@ -129,10 +129,10 @@ class ContratAssertion extends AbstractAssertion
     protected function assertListerFichiers(Contrat $contrat): bool
     {
         return $this->asserts(
-                                  $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_VISUALISATION),
-                                  $this->assertVisualisation($contrat),
-                                  !$contrat->estUnProjet(),
-                              );
+            $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_VISUALISATION),
+            $this->assertVisualisation($contrat),
+            !$contrat->estUnProjet(),
+        );
     }
 
 
@@ -207,7 +207,7 @@ class ContratAssertion extends AbstractAssertion
     protected function assertWorkflow(Contrat $contrat): bool
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($contrat->getIntervenant(), $contrat->getStructure());
-        $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
+        $wfEtape        = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
 
         return $wfEtape->isAllowed();
     }
@@ -312,14 +312,21 @@ class ContratAssertion extends AbstractAssertion
             case ContratController::class . '.supprimerProcessSignature':
             case ContratController::class . '.rafraichirProcessSignature':
                 $intervenant = $this->getParam(Intervenant::class);
+                if (!$intervenant) {
+                    $contrat = $this->getParam(Contrat::class);
+                    if ($contrat) {
+                        $intervenant = $contrat->getIntervenant();
+                    }
+                }
                 if ($intervenant) {
                     $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-                    $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
+                    $wfEtape        = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
                     if ($wfEtape && $wfEtape->isAllowed()) return true;
-                }else{
-                    throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non autorisée');
                 }
-            default: throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non traitée');
+
+                throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non autorisée');
+            default:
+                throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non traitée');
         }
     }
 }

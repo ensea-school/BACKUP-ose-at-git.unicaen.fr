@@ -6,12 +6,14 @@ use Administration\Entity\Db\Parametre;
 use Administration\Service\ParametresServiceAwareTrait;
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Contrat\Controller\ContratController;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
 use Unicaen\Framework\Authorize\AbstractAssertion;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
+use Unicaen\Framework\Authorize\UnAuthorizedException;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
@@ -57,12 +59,6 @@ class ContratAssertion extends AbstractAssertion
      */
     protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
-        $localPrivs = [
-            self::PRIV_LISTER_FICHIERS,
-            self::PRIV_AJOUTER_FICHIER,
-            self::PRIV_SUPPRIMER_FICHIER,
-        ];
-
         switch (true) {
             case $entity instanceof Contrat:
                 switch ($privilege) {
@@ -70,16 +66,6 @@ class ContratAssertion extends AbstractAssertion
                     case Privileges::CONTRAT_CONTRAT_GENERATION:
                     case self::PRIV_EXPORT:
                         return $this->assertGeneration($entity);
-                }
-                break;
-        }
-
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !in_array($privilege, $localPrivs) && !$this->authorize->isAllowedPrivilege($privilege)) return false; // @todo traiter les privilèges locaux!!
-
-        switch (true) {
-            case $entity instanceof Contrat:
-                switch ($privilege) {
                     case self::PRIV_LISTER_FICHIERS:
                         return $this->assertListerFichiers($entity);
 
@@ -110,11 +96,13 @@ class ContratAssertion extends AbstractAssertion
 
                     case Privileges::CONTRAT_SUPPRESSION:
                         return $this->assertSuppression($entity);
+                    case Privileges::CONTRAT_ENVOI_EMAIL:
+                        return true;
                 }
                 break;
         }
 
-        return true;
+        throw new UnAuthorizedException('Action interdite pour la resource ' . $entity->getResourceId() . ', privilège ' . $privilege);
     }
 
 
@@ -140,11 +128,11 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertListerFichiers(Contrat $contrat): bool
     {
-        return $this->asserts([
+        return $this->asserts(
                                   $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_VISUALISATION),
                                   $this->assertVisualisation($contrat),
                                   !$contrat->estUnProjet(),
-                              ]);
+                              );
     }
 
 
@@ -269,7 +257,6 @@ class ContratAssertion extends AbstractAssertion
         if (!$contrat->estUnAvenant()) {
             $contratService = $this->getServiceContrat();
             $devalid        = !$contratService->hasAvenant($contrat);
-//            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut dévalider un contrat que si aucun avenant n'existe
         } else {
             $devalid = true;
         }
@@ -310,14 +297,29 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertController(string $controller, ?string $action): bool
     {
-        $intervenant = $this->getParam(Intervenant::class);
-
-        if ($intervenant) {
-            $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-            $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
-            if (!$wfEtape || !$wfEtape->isAllowed()) return false;
+        switch ($controller . '.' . $action) {
+            case ContratController::class . '.index':
+            case ContratController::class . '.exporter':
+            case ContratController::class . '.creer':
+            case ContratController::class . '.creerMission':
+            case ContratController::class . '.supprimer':
+            case ContratController::class . '.valider':
+            case ContratController::class . '.devalider':
+            case ContratController::class . '.deposerFichier':
+            case ContratController::class . '.supprimerFichier':
+            case ContratController::class . '.saisirRetour':
+            case ContratController::class . '.creerProcessSignature':
+            case ContratController::class . '.supprimerProcessSignature':
+            case ContratController::class . '.rafraichirProcessSignature':
+                $intervenant = $this->getParam(Intervenant::class);
+                if ($intervenant) {
+                    $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+                    $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
+                    if ($wfEtape && $wfEtape->isAllowed()) return true;
+                }else{
+                    throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non autorisée');
+                }
+            default: throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non traitée');
         }
-
-        return true;
     }
 }

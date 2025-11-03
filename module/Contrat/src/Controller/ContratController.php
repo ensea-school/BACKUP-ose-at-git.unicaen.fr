@@ -99,7 +99,7 @@ class ContratController extends AbstractController
 
         $contratsNonContractualises = [];
         $contratsContractualises    = [];
-        $isMission = 0;
+        $isMission                  = 0;
         foreach ($contrats as $contrat) {
             if (empty($contrat->getContrat())) {
                 $contratsNonContractualises[$contrat->getUuid()] = $contrat;
@@ -268,7 +268,7 @@ class ContratController extends AbstractController
         }
 
         $tblContratContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
-        $contrat               = $this->getProcessusContrat()->creer($contrat, $tblContratContrat);
+        $contrat           = $this->getProcessusContrat()->creer($contrat, $tblContratContrat);
 
         if ($this->getRequest()->isPost()) {
             try {
@@ -378,10 +378,15 @@ class ContratController extends AbstractController
         /* @var Contrat $contrat */
         $contrat = $this->getEvent()->getParam('contrat');
         //On teste si on a le droit de télécharger le contrat
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
-            throw new UnAuthorizedException("Génération du contrat interdite.");
-        }
+        if ($contrat->estUnProjet()) {
+            if (!$this->isAllowed($contrat, Privileges::CONTRAT_PROJET_GENERATION)) {
+                throw new UnAuthorizedException("Génération du projet interdite.");
 
+            }
+        } elseif (!$this->isAllowed($contrat, Privileges::CONTRAT_CONTRAT_GENERATION)) {
+            throw new UnAuthorizedException("Génération du contrat interdite.");
+
+        }
         $this->getServiceContrat()->generer($contrat);
         die();
     }
@@ -396,7 +401,7 @@ class ContratController extends AbstractController
 
         $title = 'Envoi du contrat à l\'intervenant';
 
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
+        if (!$this->isAllowed($contrat, Privileges::CONTRAT_ENVOI_EMAIL)) {
             throw new UnAuthorizedException("Interdiction d'envoyer le contrat par email");
         }
         $intervenant        = $contrat->getIntervenant();
@@ -468,7 +473,7 @@ class ContratController extends AbstractController
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
 
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_AJOUTER_FICHIER)) {
+        if (!$this->isAllowed($contrat, Privileges::CONTRAT_DEPOT_RETOUR_SIGNE)) {
             throw new UnAuthorizedException('Vous n\'avez pas de droit de déposer ce fichier');
         }
 
@@ -497,8 +502,8 @@ class ContratController extends AbstractController
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
 
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)) {
-            throw new UnAuthorizedException('Vous n\'avez pas de droit de visualiser les fichierzs dépôsés');
+        if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)) {
+            throw new UnAuthorizedException('Vous n\'avez pas de droit de visualiser les fichiers dépôsés');
         }
 
         return [
@@ -550,7 +555,7 @@ class ContratController extends AbstractController
 
         $fichier = $this->getEvent()->getParam('fichier');
 
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_SUPPRIMER_FICHIER)) {
+        if (!$this->isAllowed($contrat, Privileges::CONTRAT_DEPOT_RETOUR_SIGNE)) {
             throw new UnAuthorizedException('Vous n\'avez pas de droit de supprimer ce fichier');
         }
 

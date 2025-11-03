@@ -1,5 +1,6 @@
 <?php
 
+use Application\Provider\Privileges;
 use Contrat\Assertion\ContratAssertion;
 
 $contrat = $this->contrat;
@@ -7,7 +8,7 @@ $contrat = $this->contrat;
 $fichiers = $contrat ? $contrat->getFichier() : [];
 /* @var $fichiers \Application\Entity\Db\Fichier[] */
 
-$canDelete = $this->isAllowed($contrat, ContratAssertion::PRIV_SUPPRIMER_FICHIER);
+$canDelete = $this->isAllowed($contrat, Privileges::CONTRAT_SUPPRESSION);
 ?>
 
 <?php if (count($fichiers)): ?>

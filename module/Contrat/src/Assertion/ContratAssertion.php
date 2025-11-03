@@ -31,12 +31,6 @@ class ContratAssertion extends AbstractAssertion
     use ContratServiceAwareTrait;
     use ContextServiceAwareTrait;
 
-    const PRIV_LISTER_FICHIERS   = 'contrat-lister-fichiers';
-    const PRIV_SUPPRIMER_FICHIER = 'contrat-supprimer-fichier';
-    const PRIV_AJOUTER_FICHIER   = 'contrat-ajouter-fichier';
-    const PRIV_EXPORT            = 'contrat-export-all';
-
-
 
     /**
      * @return \Application\Service\ContextService|null
@@ -59,20 +53,19 @@ class ContratAssertion extends AbstractAssertion
      */
     protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
     {
+        $intervenant = $this->getParam(Intervenant::class)
+            ?? $this->getParam(Contrat::class)?->getIntervenant();
+
+        if (!$this->isEtapeAccessible($intervenant)) {
+            return false;
+        };
         switch (true) {
             case $entity instanceof Contrat:
                 switch ($privilege) {
                     case Privileges::CONTRAT_PROJET_GENERATION:
                     case Privileges::CONTRAT_CONTRAT_GENERATION:
-                    case self::PRIV_EXPORT:
-                        return $this->assertGeneration($entity);
-                    case self::PRIV_LISTER_FICHIERS:
-                        return $this->assertListerFichiers($entity);
-
-                    case self::PRIV_AJOUTER_FICHIER:
-                    case self::PRIV_SUPPRIMER_FICHIER:
-                        return $this->assertModifierFichier($entity);
-
+                    case Privileges::CONTRAT_ENVOI_EMAIL:
+                        return true;
                     case Privileges::CONTRAT_VISUALISATION:
                         return $this->assertVisualisation($entity);
 
@@ -96,43 +89,11 @@ class ContratAssertion extends AbstractAssertion
 
                     case Privileges::CONTRAT_SUPPRESSION:
                         return $this->assertSuppression($entity);
-                    case Privileges::CONTRAT_ENVOI_EMAIL:
-                        return true;
                 }
                 break;
         }
 
         throw new UnAuthorizedException('Action interdite pour la resource ' . $entity->getResourceId() . ', privilège ' . $privilege);
-    }
-
-
-
-    protected function assertGeneration(Contrat $contrat): bool
-    {
-        //Si je suis connecté en tant qu'intervenant
-        if ($this->getContextService()->getIntervenant()) {
-            //Si le role à le même intervenant que le contrat et que le contrat est validé
-            if ($this->getServiceContext()->getIntervenant() == $contrat->getIntervenant() && !$contrat->estUnProjet()) {
-                return true;
-            }
-        }
-
-        if ($contrat->estUnProjet()) {
-            return $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_PROJET_GENERATION);
-        } else {
-            return $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_CONTRAT_GENERATION);
-        }
-    }
-
-
-
-    protected function assertListerFichiers(Contrat $contrat): bool
-    {
-        return $this->asserts(
-            $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_VISUALISATION),
-            $this->assertVisualisation($contrat),
-            !$contrat->estUnProjet(),
-        );
     }
 
 
@@ -170,19 +131,6 @@ class ContratAssertion extends AbstractAssertion
     {
         return $contrat->getStructure() == null || $contrat->getStructure()->inStructure($structure);
     }
-
-
-
-    protected function assertModifierFichier(Contrat $contrat): bool
-    {
-        return $this->asserts([
-                                  $this->authorize->isAllowedPrivilege(Privileges::CONTRAT_DEPOT_RETOUR_SIGNE),
-                                  empty($contrat->getDateRetourSigne()),
-                                  $this->assertDepotRetourSigne($contrat),
-                              ]);
-    }
-
-
 
     protected function assertDepotRetourSigne(Contrat $contrat): bool
     {
@@ -311,22 +259,32 @@ class ContratAssertion extends AbstractAssertion
             case ContratController::class . '.creerProcessSignature':
             case ContratController::class . '.supprimerProcessSignature':
             case ContratController::class . '.rafraichirProcessSignature':
-                $intervenant = $this->getParam(Intervenant::class);
-                if (!$intervenant) {
-                    $contrat = $this->getParam(Contrat::class);
-                    if ($contrat) {
-                        $intervenant = $contrat->getIntervenant();
-                    }
-                }
-                if ($intervenant) {
-                    $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-                    $wfEtape        = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
-                    if ($wfEtape && $wfEtape->isAllowed()) return true;
-                }
+                $intervenant = $this->getParam(Intervenant::class)
+                    ?? $this->getParam(Contrat::class)?->getIntervenant();
 
-                throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non autorisée');
+                return $this->isEtapeAccessible($intervenant);
             default:
                 throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non traitée');
         }
+    }
+
+
+
+    /**
+     * @param Intervenant $intervenant
+     * @return bool
+     */
+    public function isEtapeAccessible(mixed $intervenant): bool
+    {
+        if (!$intervenant) {
+            return false;
+        }
+
+        $wfEtape = $this
+            ->getServiceWorkflow()
+            ->getFeuilleDeRoute($intervenant)
+            ->get(WorkflowEtape::CONTRAT);
+
+        return $wfEtape?->isAllowed() ?? false;
     }
 }

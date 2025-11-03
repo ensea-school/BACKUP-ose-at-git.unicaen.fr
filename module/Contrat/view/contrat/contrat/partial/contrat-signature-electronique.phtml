@@ -19,16 +19,16 @@ $retourSigne    = $contrat->getDateRetourSigne();
 $dateEnvoiEmail = $contrat->getDateEnvoiEmail();
 $uploader       = $this->uploader();
 
-$urlExport = $this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)
+$urlExport = $this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)
         ? $this->url('contrat/exporter', ['contrat' => $contrat->getId()]) // oui car on peut le voir!!
         : null;
 
-$urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
+$urlLister = $this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)
         ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
         : null;
 
 $fichiers                    = $contrat->getFichier();
-$urlTelechargerContratSigned = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
+$urlTelechargerContratSigned = $this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)
         ? (count($fichiers)) ? $this->url('contrat/telecharger-fichier', ['contrat' => $contrat->getId(), 'fichier' => $fichiers[0]->getId(), 'nomFichier' => $fichiers[0]->getNom()]) : null
         : null;
 
@@ -60,7 +60,7 @@ $urlSaisieRetour = $this->isAllowed($contrat, Privileges::CONTRAT_SAISIE_DATE_RE
         ? $this->url('contrat/saisir-retour', ['contrat' => $contrat->getId()])
         : null;
 
-$urlAjouter = $this->isAllowed($contrat, ContratAssertion::PRIV_AJOUTER_FICHIER)
+$urlAjouter = $this->isAllowed($contrat, Privileges::CONTRAT_DEPOT_RETOUR_SIGNE)
         ? $this->url('contrat/deposer-fichier', ['contrat' => $contrat->getId()], [], true)
         : null;
 

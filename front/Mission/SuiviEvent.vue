@@ -25,6 +25,7 @@
             </button>
         </div>
     </div>
+    <u-confirm-dialog ref="confirmDialog"/>
 </template>
 
 <script>
@@ -65,11 +66,24 @@ export default {
             });
         },
 
-        supprimer(event)
+        async supprimer(event)
         {
-            popConfirm(event.currentTarget, (response) => {
-                this.suivi.refresh();
-            });
+            const url = event.currentTarget.dataset.url;
+            const confirmed = await this.$refs.confirmDialog.open(
+                "Voulez-vous vraiment supprimer ces heures ?",
+                "Confirmer la suppression"
+            );
+            if (!url) {
+                console.error("Aucune URL trouvée sur le bouton !");
+                return;
+            }
+            if (confirmed) {
+                const response = await unicaenVue.axios.get(url);
+                if (response && response.data) {
+                    this.suivi.refresh();
+                }
+            }
+
         },
 
         valider(event)
@@ -79,11 +93,23 @@ export default {
             });
         },
 
-        devalider(event)
+        async devalider(event)
         {
-            popConfirm(event.currentTarget, (response) => {
-                this.suivi.refresh();
-            });
+            const url = event.currentTarget.dataset.url;
+            const confirmed = await this.$refs.confirmDialog.open(
+                "Voulez-vous vraiment dévalider ces heures ?",
+                "Confirmer la dévalidation"
+            );
+            if (!url) {
+                console.error("Aucune URL trouvée sur le bouton !");
+                return;
+            }
+            if (confirmed) {
+                const response = await unicaenVue.axios.get(url);
+                if (response && response.data) {
+                    this.suivi.refresh();
+                }
+            }
         },
 
     },

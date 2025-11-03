@@ -266,18 +266,22 @@ export default {
         async supprimer(event)
         {
             const url = event.currentTarget.href;
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
             const confirmed = await this.$refs.confirmDialog.open(
-                "Voulez-vous vraiment supprimer cette mission ?",
-                "Confirmer la suppression"
+                content,
+                title
             );
             if (!url) {
                 console.error("Aucune URL trouvée sur le bouton !");
                 return;
             }
+
+
             if (confirmed) {
                 const response = await unicaenVue.axios.get(url);
                 if (response && response.data) {
-                    this.$emit('refresh', response.data);
+                    this.$emit('supprimer', this.mission);
                 }
             }
 
@@ -286,14 +290,15 @@ export default {
         async valider(event)
         {
             const url = event.currentTarget.href;
-
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
             if (!url) {
                 console.error("Aucune URL trouvée sur le bouton !");
                 return;
             }
             const confirmed = await this.$refs.confirmDialog.open(
-                "Voulez-vous vraiment valider cette mission ?",
-                "Confirmer la validation"
+                content,
+                title
             );
 
             if (confirmed) {
@@ -308,13 +313,15 @@ export default {
         async devalider(event)
         {
             const url = event.currentTarget.href;
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
             if (!url) {
                 console.error("Aucune URL trouvée sur le bouton !");
                 return;
             }
             const confirmed = await this.$refs.confirmDialog.open(
-                "Voulez-vous vraiment dévalider cette mission ?",
-                "Confirmer la dévalidation"
+                content,
+                title
             );
 
             if (confirmed) {
@@ -327,13 +334,15 @@ export default {
         async volumeHoraireSupprimer(event)
         {
             const url = unicaenVue.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
             if (!url) {
                 console.error("Aucune URL trouvée sur le bouton !");
                 return;
             }
             const confirmed = await this.$refs.confirmDialog.open(
-                "Voulez-vous vraiment valider cette mission ?",
-                "Confirmer la validation"
+                content,
+                title
             );
 
             if (confirmed) {
@@ -346,13 +355,15 @@ export default {
         async volumeHoraireValider(event)
         {
             const url = unicaenVue.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
             if (!url) {
                 console.error("Aucune URL trouvée sur le bouton !");
                 return;
             }
             const confirmed = await this.$refs.confirmDialog.open(
-                "Voulez-vous vraiment valider les volumes horaires ?",
-                "Confirmer la validation"
+                content,
+                title
             );
 
             if (confirmed) {
@@ -365,13 +376,15 @@ export default {
         async volumeHoraireDevalider(event)
         {
             const url = unicaenVue.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
             if (!url) {
                 console.error("Aucune URL trouvée sur le bouton !");
                 return;
             }
             const confirmed = await this.$refs.confirmDialog.open(
-                "Voulez-vous vraiment dévalider cette mission ?",
-                "Confirmer la validation"
+                content,
+                title
             );
 
             if (confirmed) {

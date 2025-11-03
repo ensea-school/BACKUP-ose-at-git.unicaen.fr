@@ -9,17 +9,23 @@
     </div>
     <div class="event-actions">
         <div class="btn-group btn-group-sm">
-            <button v-if="event.canEdit" class="btn btn-light" @click="modifier" title="Modifier le suivi" :data-url="modifierUrl">
+            <button v-if="event.canEdit" class="btn btn-light" @click="modifier" data-title="Modifier le suivi"
+                    title="Modifier le suivi"
+                    :data-url="modifierUrl">
                 <u-icon name="pen-to-square"/>
             </button>
-            <button v-if="event.canValider" class="btn btn-light" @click="valider" title="Valider le suivi" :data-url="validerUrl">
+            <button v-if="event.canValider" class="btn btn-light" @click="valider" data-title="Valider le suivi"
+                    title="Valider le suivi"
+                    :data-url="validerUrl">
                 <u-icon name="check" class="text-success"/>
             </button>
-            <button v-if="event.canDevalider" class="btn btn-light" @click="devalider" title="Dévalider le suivi" :data-url="devaliderUrl"
+            <button v-if="event.canDevalider" class="btn btn-light" @click="devalider" data-title="Dévalider le suivi"
+                    title="Dévalider le suivi" :data-url="devaliderUrl"
                     data-content="Voulez-vous vraiment dévalider ce suivi ?">
                 <u-icon name="xmark" class="text-danger"/>
             </button>
-            <button v-if="event.canSupprimer" class="btn btn-light" @click="supprimer" title="Supprimer le suivi" :data-url="supprimerUrl"
+            <button v-if="event.canSupprimer" class="btn btn-light" @click="supprimer" data-title="Supprimer le suivi"
+                    title="Supprimer le suivi" :data-url="supprimerUrl"
                     data-content="Voulez-vous vraiment supprimer ce suivi ?">
                 <u-icon name="trash-can" class="text-danger"/>
             </button>
@@ -69,9 +75,11 @@ export default {
         async supprimer(event)
         {
             const url = event.currentTarget.dataset.url;
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
             const confirmed = await this.$refs.confirmDialog.open(
-                "Voulez-vous vraiment supprimer ces heures ?",
-                "Confirmer la suppression"
+                content,
+                title
             );
             if (!url) {
                 console.error("Aucune URL trouvée sur le bouton !");
@@ -96,9 +104,11 @@ export default {
         async devalider(event)
         {
             const url = event.currentTarget.dataset.url;
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
             const confirmed = await this.$refs.confirmDialog.open(
-                "Voulez-vous vraiment dévalider ces heures ?",
-                "Confirmer la dévalidation"
+                content,
+                title
             );
             if (!url) {
                 console.error("Aucune URL trouvée sur le bouton !");

@@ -34,7 +34,7 @@ class MissionForm extends AbstractForm
         $tmData   = [];
         foreach ($typesMissions as $typeMission) {
             $tmData[$typeMission->getId()] = [
-                'accompagnementEtudiant' => $typeMission->isAccompagnementEtudiants(),
+                'accompagnementEtudiants' => $typeMission->isAccompagnementEtudiants(),
                 'besoinFormation'        => $typeMission->isBesoinFormation(),
                 'tauxRemu'               => $typeMission->getTauxRemu()?->getId(),
                 'tauxRemuMajore'         => $typeMission->getTauxRemuMajore()?->getId(),

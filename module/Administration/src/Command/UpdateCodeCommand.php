@@ -70,7 +70,7 @@ class UpdateCodeCommand extends Command
         // Récupération des sources
         $io->section("Mise à jour des fichiers à partir de GIT");
         $this->exec("git reset --hard"); // purge des modifs locales
-        $tbr = $repo->tagIsValid($version) ? 'tags/' : '';
+        $tbr = $repo->tagIsValid($version) ? 'tags/' : 'origin/';
         if ($version == $repo->getCurrentBranche()) {
             $updcmd = 'git pull';
         } else {

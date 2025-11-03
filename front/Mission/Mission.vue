@@ -95,6 +95,8 @@
                                    data-content="Êtes-vous sur de vouloir supprimer la mission ?"
                                    data-title="Suppression de la mission"
                                    @click.prevent="supprimer">Supprimer</a>
+
+
                             </div>
                         </div>
                     </div>
@@ -188,6 +190,8 @@
                            data-content="Êtes-vous sur de vouloir supprimer le volume horaire ?"
                            data-title="Suppression du volume horaire"
                            @click.prevent="volumeHoraireSupprimer">Supprimer</a>
+
+
                     </td>
                 </tr>
                 </tbody>
@@ -197,19 +201,24 @@
 
         </template>
     </u-modal>
+    <u-confirm-dialog ref="confirmDialog"/>
 
 </template>
 
 <script>
+
 
 export default {
     name: 'Mission',
     props: {
         mission: {required: true}
     },
+
     data()
     {
         return {
+            boxOne: '',
+            boxTwo: '',
             validationText: this.calcValidation(this.mission.validation),
 
             saisieUrl: unicaenVue.url('mission/saisie/:mission', {mission: this.mission.id}),
@@ -254,44 +263,136 @@ export default {
                 this.refresh();
             });
         },
-        supprimer(event)
+        async supprimer(event)
         {
-            popConfirm(event.currentTarget, (response) => {
-                this.$emit('supprimer', this.mission);
-            });
+            const url = event.currentTarget.href;
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
+            const confirmed = await this.$refs.confirmDialog.open(
+                content,
+                title
+            );
+            if (!url) {
+                console.error("Aucune URL trouvée sur le bouton !");
+                return;
+            }
+
+
+            if (confirmed) {
+                const response = await unicaenVue.axios.get(url);
+                if (response && response.data) {
+                    this.$emit('supprimer', this.mission);
+                }
+            }
+
         },
-        valider(event)
+
+        async valider(event)
         {
-            popConfirm(event.currentTarget, (response) => {
-                this.$emit('refresh', response.data);
-            });
+            const url = event.currentTarget.href;
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
+            if (!url) {
+                console.error("Aucune URL trouvée sur le bouton !");
+                return;
+            }
+            const confirmed = await this.$refs.confirmDialog.open(
+                content,
+                title
+            );
+
+            if (confirmed) {
+                const response = await unicaenVue.axios.get(url);
+                if (response && response.data) {
+                    this.$emit('refresh', response.data);
+                }
+            }
+
+
         },
-        devalider(event)
+        async devalider(event)
         {
-            popConfirm(event.currentTarget, (response) => {
-                this.$emit('refresh', response.data);
-            });
+            const url = event.currentTarget.href;
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
+            if (!url) {
+                console.error("Aucune URL trouvée sur le bouton !");
+                return;
+            }
+            const confirmed = await this.$refs.confirmDialog.open(
+                content,
+                title
+            );
+
+            if (confirmed) {
+                const response = await unicaenVue.axios.get(url);
+                if (response && response.data) {
+                    this.$emit('refresh', response.data);
+                }
+            }
         },
-        volumeHoraireSupprimer(event)
+        async volumeHoraireSupprimer(event)
         {
-            event.currentTarget.href = unicaenVue.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
-            popConfirm(event.currentTarget, (response) => {
-                this.$emit('refresh', response.data);
-            });
+            const url = unicaenVue.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
+            if (!url) {
+                console.error("Aucune URL trouvée sur le bouton !");
+                return;
+            }
+            const confirmed = await this.$refs.confirmDialog.open(
+                content,
+                title
+            );
+
+            if (confirmed) {
+                const response = await unicaenVue.axios.get(url);
+                if (response && response.data) {
+                    this.$emit('refresh', response.data);
+                }
+            }
         },
-        volumeHoraireValider(event)
+        async volumeHoraireValider(event)
         {
-            event.currentTarget.href = unicaenVue.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
-            popConfirm(event.currentTarget, (response) => {
-                this.$emit('refresh', response.data);
-            });
+            const url = unicaenVue.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
+            if (!url) {
+                console.error("Aucune URL trouvée sur le bouton !");
+                return;
+            }
+            const confirmed = await this.$refs.confirmDialog.open(
+                content,
+                title
+            );
+
+            if (confirmed) {
+                const response = await unicaenVue.axios.get(url);
+                if (response && response.data) {
+                    this.$emit('refresh', response.data);
+                }
+            }
         },
-        volumeHoraireDevalider(event)
+        async volumeHoraireDevalider(event)
         {
-            event.currentTarget.href = unicaenVue.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
-            popConfirm(event.currentTarget, (response) => {
-                this.$emit('refresh', response.data);
-            });
+            const url = unicaenVue.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            const title = event.currentTarget.dataset.title;
+            const content = event.currentTarget.dataset.content;
+            if (!url) {
+                console.error("Aucune URL trouvée sur le bouton !");
+                return;
+            }
+            const confirmed = await this.$refs.confirmDialog.open(
+                content,
+                title
+            );
+
+            if (confirmed) {
+                const response = await unicaenVue.axios.get(url);
+                if (response && response.data) {
+                    this.$emit('refresh', response.data);
+                }
+            }
         },
         refresh()
         {

@@ -70,7 +70,7 @@ update-bdd: ## Mise à jour de la base de données
 
 update-ddl: ## Mise à jour des définitions de la base de données
 	docker exec -it $(APP_NAME)-php /var/www/html/bin/ose update-ddl
-	docker exec -it $(APP_NAME)-php chown -R $(DEV_HOST_USER_ID):$(DEV_HOST_USER_ID) *
+	docker exec -it $(APP_NAME)-php chown -R $(DEV_HOST_USER_ID):$(DEV_HOST_USER_ID) vendor/*
 .PHONY: update-bdd
 
 
@@ -78,7 +78,7 @@ update-ddl: ## Mise à jour des définitions de la base de données
 compile: ## Compilation avec Vite & Sass côté front
 	docker exec -it $(APP_NAME)-nodejs npx sass --style=compressed public/css/app.scss public/css/app.css
 	docker exec -it $(APP_NAME)-nodejs npx vite build
-	docker exec -it $(APP_NAME)-nodejs chown -R $(DEV_HOST_USER_ID):$(DEV_HOST_USER_ID) *
+	docker exec -it $(APP_NAME)-nodejs chown -R $(DEV_HOST_USER_ID):$(DEV_HOST_USER_ID) public/*
 .PHONY: compile
 
 

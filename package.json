@@ -11,7 +11,6 @@
     "build-css": "sass --style=compressed public/css/app.scss public/css/app.css"
   },
   "dependencies": {
-    "bootstrap": "^5.3.8",
     "dotenv": "16.4.7",
     "sass": "1.72.0",
     "unicaen-vue": "file:./vendor/unicaen/vue"

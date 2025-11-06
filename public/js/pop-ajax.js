@@ -300,7 +300,63 @@ $(function () {
 });
 
 
+// Recours à l'utilisation du popConfirm standard
 function popConfirm(element, options)
+{
+    if (typeof options == 'function') {
+        options = {
+            confirm: options
+        };
+    }
+
+    if (!options) {
+        options = {};
+    }
+    if (!options.title) {
+        options.title = element.dataset.title;
+    }
+    if (!options.title) {
+        options.title = "Demande de confirmation";
+    }
+
+    if (!options.content) {
+        options.content = element.dataset.content;
+    }
+    if (!options.content) {
+        options.content = "Confirmez-vous cette action ?";
+    }
+
+    if (!options.confirm) {
+        options.confirm = () => {
+        };
+    }
+    if (!options.url) {
+        options.url = element.href;
+    }
+    if (!options.url) {
+        options.url = element.dataset.url;
+    }
+
+    if (options.url) {
+        goFunc = () => {
+            unicaenVue.axios.get(options.url).then(response => {
+                options.confirm(response, element);
+            });
+        };
+    } else {
+        goFunc = () => {
+            options.confirm(element);
+        };
+    }
+
+    if (confirm(options.content)){
+        goFunc();
+    }
+}
+
+
+// ancien popConform sauvegardé
+function popConfirmOld(element, options)
 {
     var popConfirm = bootstrap.Popover.getInstance(element);
     if (!popConfirm) {
@@ -328,13 +384,14 @@ function popConfirm(element, options)
         }
 
         if (!options.confirm) {
-            options.confirm = () => {};
+            options.confirm = () => {
+            };
         }
         if (!options.url) {
             options.url = element.href;
         }
         if (!options.url) {
-             options.url = element.dataset.url;
+            options.url = element.dataset.url;
         }
 
         if (options.url) {

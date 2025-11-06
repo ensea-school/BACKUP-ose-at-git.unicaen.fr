@@ -73,23 +73,25 @@ echo $this->form()->closeTag();
     {
         var tmId = typeMissionSelect().val();
         var tmData = typeMissionSelect().data('tm');
+        if (tmId) {
+            if (tmData[tmId]['accompagnementEtudiants']) {
+                $('.etudiants-suivis').show();
+            } else {
+                $('.etudiants-suivis').hide();
+            }
 
-        if (tmData[tmId]['accompagnementEtudiant']) {
-            $('.etudiants-suivis').show();
-        } else {
-            $('.etudiants-suivis').hide();
+            if (tmData[tmId]['besoinFormation']) {
+                $('.heures-formation').show();
+            } else {
+                $('.heures-formation').hide();
+            }
+
+            if (init !== true) {
+                formElement().find('[name=tauxRemu]').val(tmData[tmId]['tauxRemu']);
+                formElement().find('[name=tauxRemuMajore]').val(tmData[tmId]['tauxRemuMajore']);
+            }
         }
 
-        if (tmData[tmId]['besoinFormation']) {
-            $('.heures-formation').show();
-        } else {
-            $('.heures-formation').hide();
-        }
-
-        if (init !== true) {
-            formElement().find('[name=tauxRemu]').val(tmData[tmId]['tauxRemu']);
-            formElement().find('[name=tauxRemuMajore]').val(tmData[tmId]['tauxRemuMajore']);
-        }
     }
 
     $(function () {

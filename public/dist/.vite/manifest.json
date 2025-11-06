@@ -1,18 +1,18 @@
 {
-  "_vendor-CDedzHch.js": {
-    "file": "assets/vendor-CDedzHch.js",
+  "_vendor-BjZdYsi6.js": {
+    "file": "assets/vendor-BjZdYsi6.js",
     "name": "vendor"
   },
   "main.js": {
-    "file": "assets/main-Dbq4I3-l.js",
+    "file": "assets/main-BS47Qp0L.js",
     "name": "main",
     "src": "main.js",
     "isEntry": true,
     "imports": [
-      "_vendor-CDedzHch.js"
+      "_vendor-BjZdYsi6.js"
     ],
     "css": [
-      "assets/main-CHDQN6up.css"
+      "assets/main-CzSrHz4H.css"
     ]
   }
 }

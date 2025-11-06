@@ -262,8 +262,6 @@ class ContratController extends AbstractController
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)) {
             $this->flashMessenger()->addErrorMessage('Vous n\'avez pas le droit de valider ce projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat'));
 
-            //$form = null;
-
             return new MessengerViewModel;
         }
 

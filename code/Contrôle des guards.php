@@ -13,11 +13,17 @@ $router = $container->get(\Unicaen\Framework\Router\Router::class);
 $routes = $router->getRoutes();
 
 $ok = [
-    // divers
-    "/ocra_service_manager_yuml",
+    // pages publiques
+    "/maintenance",
+    "/icons",
+    "/cache/js[/:version]",
+    "/cache/css[/:version]",
 
-    "/utilisateur",
-    "/utilisateur/:action[/:id]",
+    //"/utilisateur",
+    //"/utilisateur/:action[/:id]",
+
+    // Unicaen Code : pas accessible en prod
+    "/unicaen-code[/:view]",
 ];
 
 
@@ -52,7 +58,7 @@ foreach ($routes as $route) {
         continue;
     }
 
-    if (!(bool)($actionRule || $controllerRule)) {
+    if ((bool)($actionRule || $controllerRule)) {
         echo '<h2>' . $route->getName() . '</h2>';
         echo "uri: ".$route->getRoute().'<br />';
         echo "controller: ".$controller.'<br />';

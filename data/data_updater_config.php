@@ -16,7 +16,7 @@ return [
 
     /* Nomenclatures fixes et jamais paramétrables */
     'CIVILITE'                   => [
-        'actions' => ['install', 'update'],
+        'actions' => ['install'],
         'key'     => ['LIBELLE_COURT'],
     ],
     'SITUATION_MATRIMONIALE'     => [

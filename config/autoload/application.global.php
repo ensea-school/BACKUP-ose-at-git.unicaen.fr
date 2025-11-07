@@ -11,14 +11,14 @@ return [
     ],
 
     'session_config' => [
-        // Durée de la session en secondes => 1h
-        'remember_me_seconds' => 60 * 60 * 1,
+        // Durée de la session en secondes => 10h
+        'remember_me_seconds' => 10 * 60 * 60 * 1,
 
-        // Durée de vie du cookie => 1h
-        'cookie_lifetime' => 60 * 60 * 1,
+        // Durée de vie du cookie => 10h
+        'cookie_lifetime' => 10 * 60 * 60 * 1,
 
-        // Durée de vie des données de session => 30 jours
-        'gc_maxlifetime'  => 60 * 60 * 24 * 30,
+        // Durée de vie des données de session => 10 heures
+        'gc_maxlifetime'  => 60 * 60 * 10,
 
         // Répertoire où sont stockées les sessions
         'save_path' => 'var/session',

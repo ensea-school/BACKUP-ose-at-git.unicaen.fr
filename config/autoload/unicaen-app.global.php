@@ -14,7 +14,7 @@ return [
         /**
          * Période d'exécution de la requête de rafraîchissement de la session utilisateur, en millisecondes.
          */
-        'session_refresh_period' => 10 * 60 * 1000, // 10*60*1000 ms = 10 min
+        'session_refresh_period' => 9 * 60 * 60 * 1000, // 9 heures
 
         'ldap' => [
             'connection'  => [

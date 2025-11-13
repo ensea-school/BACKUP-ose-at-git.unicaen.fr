@@ -80,7 +80,7 @@ class EnseignementAssertion extends AbstractAssertion
                         return $this->assertIntervenantEnseignement($entity, TypeVolumeHoraire::CODE_REALISE, true);
 
                     case Privileges::ENSEIGNEMENT_EXTERIEUR:
-                        return $this->assertIntervenantEnseignementExterieur($entity);
+                        return $this->assertEnseignementExterieur($entity);
                 }
                 break;
             case $entity instanceof Validation:
@@ -394,7 +394,8 @@ class EnseignementAssertion extends AbstractAssertion
 
         $conn = $this->getServiceContext()->getEntityManager()->getConnection();
 
-        $res = $conn->fetchOne($sql, ['intervenant' => $intervenant->getId(), 'typeVolumeHoraire' => $typeVolumeHoraire->getId()]);
+        $res = $conn->fetchOne($sql, ['intervenant'       => $intervenant->getId(),
+                                      'typeVolumeHoraire' => $typeVolumeHoraire->getId()]);
 
         return (float)$res > 0;
     }
@@ -455,9 +456,10 @@ class EnseignementAssertion extends AbstractAssertion
             $entite = $entite->getIntervenant();
         }
 
-        return $this->asserts(
-            $entite->getStatut()->getServiceExterieur(),
-            $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR),
+        return $this->asserts([
+                                  $entite->getStatut()->getServiceExterieur(),
+                                  $this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR),
+                              ]
         );
     }
 

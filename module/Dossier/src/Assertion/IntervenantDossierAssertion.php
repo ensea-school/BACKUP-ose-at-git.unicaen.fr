@@ -104,7 +104,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'identite'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_IDENTITE_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_IDENTITE_EDITION),
                               ]);
     }
@@ -124,7 +123,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'adresse'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_ADRESSE_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_ADRESSE_EDITION),
                               ]);
     }
@@ -145,7 +143,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'contact'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CONTACT_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CONTACT_EDITION),
                               ]);
     }
@@ -165,7 +162,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'insee'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_INSEE_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_INSEE_EDITION),
                               ]);
     }
@@ -186,7 +182,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'iban'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_BANQUE_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_BANQUE_EDITION),
                               ]);
     }
@@ -206,7 +201,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'employeur'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_EMPLOYEUR_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_EMPLOYEUR_EDITION),
                               ]);
     }
@@ -227,7 +221,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'autre1'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_1_EDITION),
                               ]);
     }
@@ -247,7 +240,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'autre2'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_2_EDITION),
                               ]);
     }
@@ -267,7 +259,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'autre3'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_3_EDITION),
                               ]);
     }
@@ -287,7 +278,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'autre4'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_4_EDITION),
                               ]);
     }
@@ -307,7 +297,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
     {
         return $this->asserts([
                                   $this->assertStep($intervenantDossier, 'autre5'),
-                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_VISUALISATION),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_CHAMP_AUTRE_5_EDITION),
                               ]);
     }
@@ -439,15 +428,12 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
     protected function assertDossierEdition(IntervenantDossier $intervenantDossier): bool
-
     {
-        if (
-            !$this->assertEtapeAtteignable(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenantDossier->getIntervenant()) ||
-            $intervenantDossier->getTblDossier()->getValidation()) {
-            return false;
-        }
-
-        return true;
+        return $this->asserts([
+                                  $this->assertEtapeAtteignable(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenantDossier->getIntervenant()),
+                                  !$intervenantDossier->getTblDossier()->getValidation(),
+                                  $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_EDITION),
+                              ]);
     }
 
 

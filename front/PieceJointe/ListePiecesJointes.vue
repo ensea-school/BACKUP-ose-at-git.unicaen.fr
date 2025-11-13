@@ -6,7 +6,7 @@
         <div class="tab-pane fade show active" id="avantRecrutement" role="tabpanel"
              aria-labelledby="avantRecrutement-tab">
             <div
-                v-for="(message, key) in datasPiecesJointes?.messagesPiecesJointes || []"
+                v-for="(message, key) in messAvantRecrutement || []"
                 :key="'msg-' + key"
                 :class="'mt-3 messenger alert alert-dismissible alert-' + message.type">
                 <span class="fas fa-info-circle"></span>
@@ -42,7 +42,7 @@
         <div class="tab-pane fade show" id="apresRecrutement" role="tabpanel"
              aria-labelledby="apresRecrutement-tab">
             <div
-                v-for="(message, key) in datasPiecesJointes?.messagesPiecesJointes || []"
+                v-for="(message, key) in messApresRecrutement || []"
                 :key="'msg-' + key"
                 :class="'mt-3 messenger alert alert-dismissible alert-' + message.type">
                 <span class="fas fa-info-circle"></span>
@@ -89,12 +89,15 @@ const datasPiecesJointes = ref(null)
 const urlGetPiecesJointes = computed(() =>
     unicaenVue.url('piece-jointe/intervenant/:intervenant/get-pieces-jointes', {
         intervenant: props.intervenant,
-        test: 'test'
     })
 )
 
 const pieceAvantRecrutement = computed(() =>
     datasPiecesJointes.value?.piecesJointes?.filter(p => !p.demandeApresRecrutement) || []
+)
+
+const messAvantRecrutement = computed(() =>
+    datasPiecesJointes.value?.messagesPiecesJointes?.filter(p => p.avantRecrutement) || []
 )
 
 const hasPiecesAvantRecrutement = computed(() =>
@@ -104,6 +107,11 @@ const hasPiecesAvantRecrutement = computed(() =>
 const pieceApresRecrutement = computed(() =>
     datasPiecesJointes.value?.piecesJointes?.filter(p => p.demandeApresRecrutement) || []
 )
+
+const messApresRecrutement = computed(() =>
+    datasPiecesJointes.value?.messagesPiecesJointes?.filter(p => !p.avantRecrutement) || []
+)
+
 
 const hasPiecesApresRecrutement = computed(() =>
     pieceApresRecrutement.value.length > 0
@@ -115,8 +123,6 @@ function getPiecesJointes()
 
     unicaenVue.axios.get(urlGetPiecesJointes.value).then(response => {
         datasPiecesJointes.value = response.data
-        console.log(pieceAvantRecrutement.value);
-
     }).catch(error => {
         console.error(error)
     })
@@ -131,7 +137,5 @@ onMounted(() => {
 <style scoped>
 
 </style>
-<script setup lang="ts">
-</script>
 <script setup lang="ts">
 </script>

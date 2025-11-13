@@ -143,17 +143,17 @@ class PieceJointeProcess implements ProcessInterface
         //On commence par traiter toutes les pièces jointes demandées
         foreach ($this->piecesJointesDemandees as $pieceJointeDemandee) {
             mpg_lower($pieceJointeDemandee);
-            $uuid                                 = $pieceJointeDemandee['annee_id'] . '_' . $pieceJointeDemandee['intervenant_id'] . '_' . $pieceJointeDemandee['type_piece_jointe_id'];
-            $pieceJointe                          = new PieceJointe();
-            $pieceJointe->uuid                    = $uuid;
-            $pieceJointe->annee                   = $pieceJointeDemandee['annee_id'];
-            $pieceJointe->typePieceJointeId       = $pieceJointeDemandee['type_piece_jointe_id'];
-            $pieceJointe->intervenantId           = $pieceJointeDemandee['intervenant_id'];
-            $pieceJointe->demandee                = true;
-            $pieceJointe->fournie                 = false;
-            $pieceJointe->obligatoire             = true;
-            $pieceJointe->demandeApresRecrutement = $pieceJointeDemandee['demandee_apres_recrutement'];
-            $this->piecesJointes[$uuid]           = $pieceJointe;
+            $uuid                                  = $pieceJointeDemandee['annee_id'] . '_' . $pieceJointeDemandee['intervenant_id'] . '_' . $pieceJointeDemandee['type_piece_jointe_id'];
+            $pieceJointe                           = new PieceJointe();
+            $pieceJointe->uuid                     = $uuid;
+            $pieceJointe->annee                    = $pieceJointeDemandee['annee_id'];
+            $pieceJointe->typePieceJointeId        = $pieceJointeDemandee['type_piece_jointe_id'];
+            $pieceJointe->intervenantId            = $pieceJointeDemandee['intervenant_id'];
+            $pieceJointe->demandee                 = true;
+            $pieceJointe->fournie                  = false;
+            $pieceJointe->obligatoire              = true;
+            $pieceJointe->demandeeApresRecrutement = $pieceJointeDemandee['demandee_apres_recrutement'];
+            $this->piecesJointes[$uuid]            = $pieceJointe;
 
         }
         //On parcourt maintenant les pièces jointes fournies pour voir si elles ont été fourni sur l'année demandée
@@ -216,16 +216,16 @@ class PieceJointeProcess implements ProcessInterface
     {
         foreach ($this->piecesJointes as $uuid => $piecesJointe) {
             $this->tblData[] = [
-                'annee_id'                  => $piecesJointe->annee,
-                'type_piece_jointe_id'      => $piecesJointe->typePieceJointeId,
-                'piece_jointe_id'           => $piecesJointe->pieceJointeId,
-                'intervenant_id'            => $piecesJointe->intervenantId,
-                'demandee'                  => $piecesJointe->demandee,
-                'fournie'                   => $piecesJointe->fournie,
-                'validee'                   => $piecesJointe->validee,
-                'obligatoire'               => $piecesJointe->obligatoire,
-                'date_validitee'            => $piecesJointe->dateValiditee,
-                'demande_apres_recrutement' => $piecesJointe->demandeApresRecrutement,
+                'annee_id'                   => $piecesJointe->annee,
+                'type_piece_jointe_id'       => $piecesJointe->typePieceJointeId,
+                'piece_jointe_id'            => $piecesJointe->pieceJointeId,
+                'intervenant_id'             => $piecesJointe->intervenantId,
+                'demandee'                   => $piecesJointe->demandee,
+                'fournie'                    => $piecesJointe->fournie,
+                'validee'                    => $piecesJointe->validee,
+                'obligatoire'                => $piecesJointe->obligatoire,
+                'date_validitee'             => $piecesJointe->dateValiditee,
+                'demandee_apres_recrutement' => $piecesJointe->demandeeApresRecrutement,
             ];
         }
 

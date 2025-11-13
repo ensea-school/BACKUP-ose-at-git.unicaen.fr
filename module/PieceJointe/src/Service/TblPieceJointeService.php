@@ -92,21 +92,33 @@ class TblPieceJointeService extends AbstractEntityService
                             'fournie',
                             'validee',
                             'demandeApresRecrutement',
-                            ['typePieceJointe', ['id', 'libelle', 'urlModeleDoc']],
+                            ['typePieceJointe',
+                             ['id',
+                              'libelle',
+                              'urlModeleDoc']],
                             ['pieceJointe',
                              ['id',
-                              ['validation', ['id', 'histoCreation']],
+                              ['validation',
+                               ['id',
+                                'histoCreation']],
                               ['fichier',
                                ['id',
                                 'nom',
-                                ['validation', ['id']],
+                                ['validation',
+                                 ['id']],
                                ]],
                              ],
                             ],
                         ],
                        ],
-                       'messagesPiecesJointes', ['type', 'text'],
-                       'privileges', ['canEditer', 'canValider', 'canDevalider', 'canTelecharger'],
+                       'messagesPiecesJointes',
+                       ['type',
+                        'text'],
+                       'privileges',
+                       ['canEditer',
+                        'canValider',
+                        'canDevalider',
+                        'canTelecharger'],
         ];
 
 
@@ -164,19 +176,22 @@ class TblPieceJointeService extends AbstractEntityService
 
         if ($workflowEtapePjSaisie != null) {
             if (!$workflowEtapePjSaisie->isFranchie()) {
-                $msg['type'] = 'danger';
-                $msg['text'] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
-                $msgs[]      = $msg;
+                $msg['avantRecrutement'] = 1;
+                $msg['type']             = 'danger';
+                $msg['text']             = "Des pièces justificatives obligatoires n'ont pas été fournies.";
+                $msgs[]                  = $msg;
                 unset($msg);
             } elseif ($workflowEtapePjSaisie->isFranchie() && $workflowEtapePjValide->isFranchie()) {
-                $msg['type'] = 'success';
-                $msg['text'] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
-                $msgs[]      = $msg;
+                $msg['avantRecrutement'] = 1;
+                $msg['type']             = 'success';
+                $msg['text']             = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
+                $msgs[]                  = $msg;
                 unset($msg);
             } elseif ($workflowEtapePjSaisie->isFranchie() && !$workflowEtapePjValide->isFranchie()) {
-                $msg['type'] = 'success';
-                $msg['text'] = "Toutes les pièces justificatives obligatoires ont été fournies.";
-                $msgs[]      = $msg;
+                $msg['avantRecrutement'] = 1;
+                $msg['type']             = 'success';
+                $msg['text']             = "Toutes les pièces justificatives obligatoires ont été fournies.";
+                $msgs[]                  = $msg;
                 unset($msg);
                 $msg['type'] = 'warning';
                 $msg['text'] = "Mais certaines doivent encore être validées par un gestionnaire.";
@@ -184,6 +199,36 @@ class TblPieceJointeService extends AbstractEntityService
                 unset($msg);
             }
         }
+
+        $workflowEtapePjSaisieComplementaire      = $feuilleDeRoute->get(WorkflowEtape::PJ_COMPL_SAISIE);
+        $workflowEtapePjValideApresComplementaire = $feuilleDeRoute->get(WorkflowEtape::PJ_COMPL_VALIDATION);
+
+        if ($workflowEtapePjSaisieComplementaire != null) {
+            if (!$workflowEtapePjSaisieComplementaire->isFranchie()) {
+                $msg['avantRecrutement'] = 0;
+                $msg['type']             = 'danger';
+                $msg['text']             = "Des pièces justificatives complémentaires obligatoires n'ont pas été fournies.";
+                $msgs[]                  = $msg;
+                unset($msg);
+            } elseif ($workflowEtapePjSaisieComplementaire->isFranchie() && $workflowEtapePjValideApresComplementaire->isFranchie()) {
+                $msg['avantRecrutement'] = 0;
+                $msg['type']             = 'success';
+                $msg['text']             = "Toutes les pièces justificatives complémentaires obligatoires ont été fournies et validées.";
+                $msgs[]                  = $msg;
+                unset($msg);
+            } elseif ($workflowEtapePjSaisieComplementaire->isFranchie() && !$workflowEtapePjValideApresComplementaire->isFranchie()) {
+                $msg['avantRecrutement'] = 0;
+                $msg['type']             = 'success';
+                $msg['text']             = "Toutes les pièces justificatives complémentaires obligatoires ont été fournies.";
+                $msgs[]                  = $msg;
+                unset($msg);
+                $msg['type'] = 'warning';
+                $msg['text'] = "Mais certaines doivent encore être validées par un gestionnaire.";
+                $msgs[]      = $msg;
+                unset($msg);
+            }
+        }
+
 
         return $msgs;
     }

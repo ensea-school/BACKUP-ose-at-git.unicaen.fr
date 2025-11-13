@@ -59,11 +59,11 @@ return [
         ],
         'DEMANDEE_APRES_RECRUTEMENT' => [
             'name'        => 'DEMANDEE_APRES_RECRUTEMENT',
-            'type'        => 'int',
+            'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
             'scale'       => NULL,
-            'precision'   => NULL,
+            'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
             'position'    => 12,

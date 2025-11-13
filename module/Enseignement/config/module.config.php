@@ -5,7 +5,10 @@ namespace Enseignement;
 use Application\Provider\Privileges;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
+use Enseignement\Service\ServiceService;
+use Enseignement\Service\VolumeHoraireService;
 use Intervenant\Entity\Db\Intervenant;
+use Service\Assertion\ServiceAssertion;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
@@ -216,24 +219,24 @@ return [
     'navigation' => [
         'intervenant' => [
             'pages' => [
-                'enseignements-prevus'   => [
-                    'label'               => "Enseignements prévisionnels",
-                    'title'               => "Enseignements prévisionnels de l'intervenant",
-                    'route'               => 'intervenant/enseignement-prevu',
-                    'order'               => 6,
+                'enseignements-prevus'          => [
+                    'label' => "Enseignements prévisionnels",
+                    'title' => "Enseignements prévisionnels de l'intervenant",
+                    'route' => 'intervenant/enseignement-prevu',
+                    'order' => 6,
                 ],
-                'validation-enseignement-prevu'   => [
+                'validation-enseignement-prevu' => [
                     'label' => "Validation des enseignements prévisionnels",
                     'title' => "Validation des enseignements prévisionnels de l'intervenant",
                     'route' => 'intervenant/validation/enseignement/prevu',
                     'order' => 8,
                 ],
 
-                'enseignements-realises' => [
-                    'label'               => "Enseignements réalisés",
-                    'title'               => "Constatation des enseignements réalisés",
-                    'route'               => 'intervenant/enseignement-realise',
-                    'order'               => 13,
+                'enseignements-realises'          => [
+                    'label' => "Enseignements réalisés",
+                    'title' => "Constatation des enseignements réalisés",
+                    'route' => 'intervenant/enseignement-realise',
+                    'order' => 13,
                 ],
                 'validation-enseignement-realise' => [
                     'label' => "Validation des enseignements réalisés",
@@ -253,7 +256,8 @@ return [
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                 Privileges::ENSEIGNEMENT_REALISE_EDITION,
             ],
-            'resources'  => [Service::class, Intervenant::class],
+            'resources'  => [Service::class,
+                             Intervenant::class],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
@@ -263,7 +267,9 @@ return [
                 Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
                 Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
             ],
-            'resources'  => [Service::class, VolumeHoraire::class, Validation::class],
+            'resources'  => [Service::class,
+                             VolumeHoraire::class,
+                             Validation::class],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
@@ -275,7 +281,8 @@ return [
             'privileges' => [
                 Privileges::ENSEIGNEMENT_EXTERIEUR,
             ],
-            'resources'  => [Intervenant::class, Service::class],
+            'resources'  => [Intervenant::class,
+                             Service::class],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
@@ -286,14 +293,19 @@ return [
                 Privileges::TAG_VISUALISATION,
             ],
             'resources'  => Intervenant::class,
-            'assertion'  => Assertion\EnseignementAssertion::class,
+            'assertion'  => ServiceAssertion::class,
         ],
     ],
 
     'guards' => [
         [
             'controller' => EnseignementController::class,
-            'action'     => ['saisie', 'rafraichir-ligne', 'saisie-form-refresh-vh', 'suppression', 'initialisation', 'constatation'],
+            'action'     => ['saisie',
+                             'rafraichir-ligne',
+                             'saisie-form-refresh-vh',
+                             'suppression',
+                             'initialisation',
+                             'constatation'],
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_EDITION,
                 Privileges::ENSEIGNEMENT_REALISE_EDITION,
@@ -314,8 +326,8 @@ return [
     'services' => [
         Processus\EnseignementProcessus::class           => InvokableFactory::class,
         Processus\ValidationEnseignementProcessus::class => InvokableFactory::class,
-        Service\ServiceService::class                    => InvokableFactory::class,
-        Service\VolumeHoraireService::class              => InvokableFactory::class,
+        ServiceService::class                            => InvokableFactory::class,
+        VolumeHoraireService::class                      => InvokableFactory::class,
     ],
 
 

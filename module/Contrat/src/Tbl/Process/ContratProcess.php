@@ -283,16 +283,16 @@ class ContratProcess implements ProcessInterface
         $vh->tauxRemuMajoreId       = (int)$data['taux_remu_majore_id'] ?: null;
         $vh->dateFinMission         = $data['date_fin_mission'] ? new DateTime($data['date_fin_mission']) : null;
         $vh->dateDebutMission       = $data['date_debut_mission'] ? new DateTime($data['date_debut_mission']) : null;
-        $vh->cm                     = (float)$data['cm'];
-        $vh->td                     = (float)$data['td'];
-        $vh->tp                     = (float)$data['tp'];
-        $vh->autres                 = (float)$data['autres'];
-        $vh->heures                 = (float)$data['heures'];
-        $vh->hetd                   = (float)$data['hetd'];
+        $vh->cm                     = (float)$data['cm'] ?: 0.0;
+        $vh->td                     = (float)$data['td'] ?: 0.0;
+        $vh->tp                     = (float)$data['tp'] ?: 0.0;
+        $vh->autres                 = (float)$data['autres'] ?: 0.0;
+        $vh->heures                 = (float)$data['heures'] ?: 0.0;
+        $vh->hetd                   = (float)$data['hetd'] ?: 0.0;
         $vh->autreLibelle           = $data['autre_libelle'];
         $vh->missionLibelle         = $data['mission_libelle'];
         $vh->typeMissionLibelle     = $data['type_mission_libelle'];
-        $vh->heuresFormation        = (float)$data['heures_formation'];
+        $vh->heuresFormation        = (float)$data['heures_formation'] ?: 0.0;
     }
 
 

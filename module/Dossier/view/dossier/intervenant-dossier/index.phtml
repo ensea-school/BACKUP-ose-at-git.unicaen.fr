@@ -176,7 +176,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
                 }
             }
             /*Fiedlset Employeur*/
-            if ($fieldsetRules['fieldset-employeur']) {
+            if ($fieldsetRules['fieldset-employeur'] == 1) {
                 if ($editEmployeur && $canEdit) {
                     echo $this->partial('dossier/intervenant-dossier/partial/formEmployeur', compact('form', 'tblDossier'));
                 } else {
@@ -193,8 +193,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
     </div>
     <div class="card-footer border-0 d-flex justify-content-end">
 
-        <!--Etape 2-->
-        <!--bouton de validation des données personnelles complémentaires-->
         <div class="row">
             <div class="col-md-12">
                 <?php
@@ -316,6 +314,14 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
                         echo $this->partial('dossier/intervenant-dossier/partial/formInsee', compact('form', 'tblDossier'));
                     } else {
                         echo $this->partial('dossier/intervenant-dossier/partial/formInseeView', compact('form', 'tblDossier'));
+                    }
+                }
+                /*Fiedlset Employeur*/
+                if ($fieldsetRules['fieldset-employeur'] == 2) {
+                    if ($editEmployeur && $canEditComplementaire) {
+                        echo $this->partial('dossier/intervenant-dossier/partial/formEmployeur', compact('form', 'tblDossier'));
+                    } else {
+                        echo $this->partial('dossier/intervenant-dossier/partial/formEmployeurView', compact('form', 'tblDossier'));
                     }
                 }
                 if ($fieldsetRules['fieldset-autres-apres-recrutement'] == 2) {

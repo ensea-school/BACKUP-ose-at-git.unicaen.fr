@@ -6,7 +6,7 @@ return [
     'name'        => 'TBL_CONTRAT_VOLUME_HORAIRE_FK',
     'table'       => 'TBL_CONTRAT',
     'rtable'      => 'VOLUME_HORAIRE',
-    'delete_rule' => NULL,
+    'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
         'VOLUME_HORAIRE_ID' => 'ID',

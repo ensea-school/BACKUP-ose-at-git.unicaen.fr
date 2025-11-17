@@ -36,6 +36,10 @@ class TauxForm extends AbstractForm
                        'options' => [
                            'label' => 'Valeur a la date d\'effet',
                        ],
+                       'attributes' => [
+                           'step' => 'any',
+                           'inputmode' => 'decimal',
+                       ],
                    ]);
         $this->add([
             'name'    => 'date',

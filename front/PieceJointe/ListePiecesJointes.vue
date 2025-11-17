@@ -38,7 +38,7 @@
     </template>
 
     <!-- Affichage des pièces jointes post recrutement -->
-    <template v-if="hasPiecesApresRecrutement && datasPiecesJointes?.privileges">
+    <template v-if="hasPiecesApresRecrutement && datasPiecesJointes?.privileges?.canVisualiserComp">
         <div class="tab-pane fade show" id="apresRecrutement" role="tabpanel"
              aria-labelledby="apresRecrutement-tab">
             <div

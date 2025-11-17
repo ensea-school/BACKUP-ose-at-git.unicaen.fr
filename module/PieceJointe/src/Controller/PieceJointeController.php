@@ -170,6 +170,9 @@ class PieceJointeController extends \Application\Controller\AbstractController
     public function validerAction(): bool
     {
         $this->initFilters();
+        $pj          = $this->getEvent()->getParam('pieceJointe');
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        
 
         if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION))) {
             return false;
@@ -323,9 +326,9 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
                 $mail = new Email();
                 $mail->to($to)
-                    ->from($from)
-                    ->subject($subject)
-                    ->html($content);
+                     ->from($from)
+                     ->subject($subject)
+                     ->html($content);
 
                 if (!empty($copy)) {
                     $mail->cc($copy);
@@ -406,7 +409,8 @@ class PieceJointeController extends \Application\Controller\AbstractController
         AND ti.code = :code";
 
         /* @var $tpjss TypePieceJointeStatut[] */
-        $query                     = $this->em()->createQuery($dql)->setParameters(['annee' => $this->getServiceContext()->getAnnee()->getId(), 'code' => $codeIntervenant]);
+        $query                     = $this->em()->createQuery($dql)->setParameters(['annee' => $this->getServiceContext()->getAnnee()->getId(),
+                                                                                    'code'  => $codeIntervenant]);
         $tpjss                     = $query->getResult();
         $typesPiecesJointesStatuts = [];
         foreach ($tpjss as $tpjs) {

@@ -117,15 +117,19 @@ return [
     'piece-justificative' => [
         'libelle'    => 'Pièces justificatives',
         'privileges' => [
-            'visualisation'         => 'Visualisation',
-            'edition'               => 'Édition',
-            'validation'            => 'Validation',
-            'refus-piece'           => 'Refus - Pièce justificative',
-            'devalidation'          => 'Dévalidation',
-            'archivage'             => 'Archivage',
-            'gestion-edition'       => 'Gestion des pièces justificatives (édition)',
-            'gestion-visualisation' => 'Gestion des pièces justificatives (visualisation)',
-            'telechargement'        => 'Téléchargement',
+            'visualisation'                => 'Visualisation',
+            'visualisation-complementaire' => 'Visualisation complementaire',
+            'edition'                      => 'Édition',
+            'edition-complementaire'       => 'Édition complementaire',
+            'validation'                   => 'Validation',
+            'validation-complementaire'    => 'Validation complementaire',
+            'refus-piece'                  => 'Refus - Pièce justificative',
+            'devalidation'                 => 'Dévalidation',
+            'devalidation-complementaire'  => 'Dévalidation complementaire',
+            'archivage'                    => 'Archivage',
+            'gestion-edition'              => 'Gestion des pièces justificatives (édition)',
+            'gestion-visualisation'        => 'Gestion des pièces justificatives (visualisation)',
+            'telechargement'               => 'Téléchargement',
         ],
     ],
 
@@ -344,7 +348,7 @@ return [
     'pilotage' => [
         'libelle'    => 'Pilotage',
         'privileges' => [
-            'ecarts-etats'  => 'Ecarts d\'heures entre états',
+            'ecarts-etats' => 'Ecarts d\'heures entre états',
         ],
     ],
 

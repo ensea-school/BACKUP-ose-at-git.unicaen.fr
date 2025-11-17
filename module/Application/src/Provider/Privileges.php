@@ -267,6 +267,10 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const PIECE_JUSTIFICATIVE_TELECHARGEMENT                   = 'piece-justificative-telechargement';
     const PIECE_JUSTIFICATIVE_VALIDATION                       = 'piece-justificative-validation';
     const PIECE_JUSTIFICATIVE_VISUALISATION                    = 'piece-justificative-visualisation';
+    const PIECE_JUSTIFICATIVE_EDITION_COMP                     = 'piece-justificative-edition-complementaire';
+    const PIECE_JUSTIFICATIVE_VISUALISATION_COMP               = 'piece-justificative-visualisation-complementaire';
+    const PIECE_JUSTIFICATIVE_VALIDATION_COMP                  = 'piece-justificative-validation-complementaire';
+    const PIECE_JUSTIFICATIVE_DEVALIDATION_COMP                = 'piece-justificative-devalidation-complementaire';
     const PILOTAGE_ECARTS_ETATS                                = 'pilotage-ecarts-etats';
     const PLAFONDS_CONFIG_MISSION                              = 'plafonds-config-mission';
     const PLAFONDS_CONFIG_REFERENTIEL                          = 'plafonds-config-referentiel';

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d06079194b05b46d83b4b19b4affad78",
+    "content-hash": "2b980c3086b33b8e662906e5559019af",
     "packages": [
         {
             "name": "api-platform/core",
@@ -11571,11 +11571,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.6.0",
+            "version": "6.6.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "d40f4bb3aca55c1abaae1261f6e86d96bf1090eb"
+                "reference": "28e320b3ad01f02275a5a80cf899a11cef52d0d9"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -11592,7 +11592,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2025-06-11T12:27:01+00:00"
+            "time": "2025-10-30T14:55:33+00:00"
         },
         {
             "name": "unicaen/framework",
@@ -13782,16 +13782,16 @@
         },
         {
             "name": "phpcsstandards/phpcsutils",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHPCSUtils.git",
-                "reference": "fa82d14ad1c1713224a52c66c78478145fe454ba"
+                "reference": "d71128c702c180ca3b27c761b6773f883394f162"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/fa82d14ad1c1713224a52c66c78478145fe454ba",
-                "reference": "fa82d14ad1c1713224a52c66c78478145fe454ba",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/d71128c702c180ca3b27c761b6773f883394f162",
+                "reference": "d71128c702c180ca3b27c761b6773f883394f162",
                 "shasum": ""
             },
             "require": {
@@ -13871,7 +13871,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-11-11T00:17:56+00:00"
+            "time": "2025-11-17T12:58:33+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",

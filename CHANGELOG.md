@@ -37,6 +37,7 @@ Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 * Correction pour ne pas enregistrer d'étape lors de la saisie d'un enseignement hors établissement (#63714)
 * Correction pour afficher le libellé hors établissement dans l'export pdf des service 
 * Correction état de sortie de l'offre de formation (#63732)
+* Modification pour fiabiliser l'action d'une validation d'une mission (#59140)
 
 # OSE 24.11 (07/10/2025)
 

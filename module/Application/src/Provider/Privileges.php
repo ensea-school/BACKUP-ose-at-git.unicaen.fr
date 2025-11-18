@@ -258,7 +258,6 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const PARAMETRES_PERIODES_VISUALISATION                    = 'parametres-periodes-visualisation';
     const PARAMETRES_REGLES_STRUCTURE_VALIDATION_EDITION       = 'parametres-regles-structure-validation-edition';
     const PARAMETRES_REGLES_STRUCTURE_VALIDATION_VISUALISATION = 'parametres-regles-structure-validation-visualisation';
-    const PIECE_JUSTIFICATIVE_ARCHIVAGE                        = 'piece-justificative-archivage';
     const PIECE_JUSTIFICATIVE_DEVALIDATION                     = 'piece-justificative-devalidation';
     const PIECE_JUSTIFICATIVE_EDITION                          = 'piece-justificative-edition';
     const PIECE_JUSTIFICATIVE_GESTION_EDITION                  = 'piece-justificative-gestion-edition';

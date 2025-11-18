@@ -38,7 +38,7 @@
                         <button
                             v-if="datas.pieceJointe.validation &&
                                   (datas.annee == (datas.pieceJointe?.anneeOrigine??false)) &&
-                                  canValider(datas)"
+                                  canDevalier(datas)"
                             :id="'devalider-' + datas.pieceJointe?.id"
                             class="btn btn-danger"
                             type="button"
@@ -323,6 +323,18 @@ function canEditer(pieceJointe)
         return props.privileges.canEditerComp;
     } else {
         return props.privileges.canEditer;
+    }
+
+    return false;
+}
+
+function canDevalier(pieceJointe)
+{
+
+    if (pieceJointe.demandeApresRecrutement) {
+        return props.privileges.canDevaliderComp;
+    } else {
+        return props.privileges.canDevalider;
     }
 
     return false;

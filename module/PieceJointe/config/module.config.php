@@ -3,10 +3,8 @@
 namespace PieceJointe;
 
 use Application\Provider\Privileges;
-use Intervenant\Entity\Db\Intervenant;
 use PieceJointe\Controller\Factory\PieceJointeControllerFactory;
 use PieceJointe\Controller\PieceJointeController;
-use PieceJointe\Entity\Db\PieceJointe;
 use PieceJointe\Form\Factory\ModifierTypePieceJointeStatutFormFactory;
 use PieceJointe\Form\Factory\TypePieceJointeSaisieFormFactory;
 use PieceJointe\Form\ModifierTypePieceJointeStatutForm;
@@ -163,7 +161,7 @@ return [
     ],
 
 
-    'navigation'  => [
+    'navigation' => [
         'intervenant' => [
             'pages' => [
                 'pieces-jointes-saisie' => [
@@ -191,7 +189,7 @@ return [
         ],
 
     ],
-    'guards'      => [
+    'guards'     => [
 
         [
             'controller' => PieceJointeController::class,
@@ -223,22 +221,17 @@ return [
         [
             'controller' => PieceJointeController::class,
             'action'     => ['index',
-                             'getPiecesJointes'],
+                             'getPiecesJointes',
+                             'infos',
+                             'lister',],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
             'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
         [
             'controller' => PieceJointeController::class,
-            'action'     => ['infos',
-                             'lister',
-                             'validation',
-                             'refuser'],
-            'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
-        ],
-        [
-            'controller' => PieceJointeController::class,
             'action'     => ['telecharger'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT,
+            'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
         [
             'controller' => PieceJointeController::class,
@@ -249,14 +242,9 @@ return [
         ],
         [
             'controller' => PieceJointeController::class,
-            'action'     => ['archiver'],
-            'privileges' => Privileges::PIECE_JUSTIFICATIVE_ARCHIVAGE,
-            'assertion'  => Assertion\PiecesJointesAssertion::class,
-        ],
-        [
-            'controller' => PieceJointeController::class,
             'action'     => ['valider',
-                             'validerFichier'],
+                             'validerFichier',
+                             'refuser'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_VALIDATION,
             'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
@@ -265,24 +253,10 @@ return [
             'action'     => ['devalider'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION,
             'assertion'  => Assertion\PiecesJointesAssertion::class,
+
         ],
     ],
-    'rules'       => [
-        [
-            'privileges' => [
-                Privileges::PIECE_JUSTIFICATIVE_VALIDATION,
-                Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION,
-                Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
-                Privileges::PIECE_JUSTIFICATIVE_EDITION,
-                
-            ],
-            'resources'  => [PieceJointe::class,
-                             Intervenant::class],
-            'assertion'  => Assertion\PiecesJointesAssertion::class,
-        ],
 
-
-    ],
     'controllers' => [
         PieceJointeController::class => PieceJointeControllerFactory::class,
     ],

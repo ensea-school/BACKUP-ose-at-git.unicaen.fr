@@ -120,39 +120,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
 
 
-    /**
-     * @param Intervenant $intervenant
-     *
-     * @return array
-     */
-    protected function makeMessages(Intervenant $intervenant)
-    {
-        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-
-        $workflowEtapePjSaisie = $feuilleDeRoute->get(WorkflowEtape::PJ_SAISIE);
-        $workflowEtapePjValide = $feuilleDeRoute->get(WorkflowEtape::PJ_VALIDATION);
-        $msgs                  = [];
-
-        if ($workflowEtapePjSaisie != null) {
-            if (!$workflowEtapePjSaisie->isFranchie()) {
-                $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
-            } elseif ($workflowEtapePjSaisie->isFranchie() && $workflowEtapePjValide->isFranchie()) {
-                $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
-            } elseif ($workflowEtapePjSaisie->isFranchie() && !$workflowEtapePjValide->isFranchie()) {
-                $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
-                $msgs['warning'][] = "Mais certaines doivent encore être validées par un gestionnaire.";
-            }
-        } else {
-            //Si aucune pièce n'est demandé mais que le workflow n'a pas été recalculé, on evite un message d'erreur
-            $msgs['success'] = "";
-        }
-
-
-        return $msgs;
-    }
-
-
-
     public function validationAction()
     {
 
@@ -172,11 +139,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $this->initFilters();
         $pj          = $this->getEvent()->getParam('pieceJointe');
         $intervenant = $this->getEvent()->getParam('intervenant');
-        
 
-        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION))) {
-            return false;
-        }
 
         /** @var PieceJointe $pj */
         $pj = $this->getEvent()->getParam('pieceJointe');
@@ -192,9 +155,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
     {
         $this->initFilters();
 
-        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION))) {
-            return false;
-        }
 
         $pj          = $this->getEvent()->getParam('pieceJointe');
         $fichier     = $this->getEvent()->getParam('fichier');
@@ -209,9 +169,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
     public function devaliderAction(): bool
     {
-        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION))) {
-            return false;
-        }
         $this->initFilters();
 
         /** @var PieceJointe $pj */
@@ -227,9 +184,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
     public function televerserAction(): AxiosModel
     {
-        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION))) {
-            $errors[] = "Vous n'avez pas le droit de téléverser des pièces jointes.";
-        }
         $intervenant     = $this->getEvent()->getParam('intervenant');
         $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
         $errors          = [];
@@ -250,9 +204,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
     public function telechargerAction()
     {
-        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT))) {
-            throw new \Exception("Vous n'avez pas le droit de télécharger cette pièce jointes.");
-        }
+
         /** @var Fichier $fichier */
         $fichier = $this->getEvent()->getParam('fichier');
 
@@ -274,10 +226,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
     public function supprimerAction(): bool
     {
-
-        if (!$this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION))) {
-            return false;
-        }
 
         $pj      = $this->getEvent()->getParam('pieceJointe');
         $fichier = $this->getEvent()->getParam('fichier');
@@ -302,12 +250,6 @@ class PieceJointeController extends \Application\Controller\AbstractController
     public function refuserAction()
     {
         /** @var PieceJointe $pj */
-
-        $intervenant = $this->getServiceContext()->getIntervenant();
-        if ($intervenant && $pj->getIntervenant() != $intervenant) {
-            // un intervenant tente de supprimer la PJ d'un autre intervenant
-            throw new \Exception('Vous ne pouvez pas supprimer la pièce jointe d\'un autre intervenant');
-        }
 
         $pj = $this->getEvent()->getParam('pieceJointe');
 

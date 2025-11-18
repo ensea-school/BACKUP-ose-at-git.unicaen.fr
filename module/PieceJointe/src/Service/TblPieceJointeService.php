@@ -203,9 +203,10 @@ class TblPieceJointeService extends AbstractEntityService
                 $msg['text']             = "Toutes les pièces justificatives obligatoires ont été fournies.";
                 $msgs[]                  = $msg;
                 unset($msg);
-                $msg['type'] = 'warning';
-                $msg['text'] = "Mais certaines doivent encore être validées par un gestionnaire.";
-                $msgs[]      = $msg;
+                $msg['avantRecrutement'] = 1;
+                $msg['type']             = 'warning';
+                $msg['text']             = "Mais certaines doivent encore être validées par un gestionnaire.";
+                $msgs[]                  = $msg;
                 unset($msg);
             }
         }
@@ -232,9 +233,10 @@ class TblPieceJointeService extends AbstractEntityService
                 $msg['text']             = "Toutes les pièces justificatives complémentaires obligatoires ont été fournies.";
                 $msgs[]                  = $msg;
                 unset($msg);
-                $msg['type'] = 'warning';
-                $msg['text'] = "Mais certaines doivent encore être validées par un gestionnaire.";
-                $msgs[]      = $msg;
+                $msg['avantRecrutement'] = 0;
+                $msg['type']             = 'warning';
+                $msg['text']             = "Mais certaines doivent encore être validées par un gestionnaire.";
+                $msgs[]                  = $msg;
                 unset($msg);
             }
         }

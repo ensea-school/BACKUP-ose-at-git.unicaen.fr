@@ -3,6 +3,8 @@
 namespace Workflow\Tbl\Process;
 
 
+use Intervenant\Entity\Db\Statut;
+use Unicaen\Framework\Application\Application;
 use Unicaen\Framework\Cache\CacheContainerTrait;
 use Application\Entity\Db\Perimetre;
 use Application\Service\AnneeService;
@@ -179,7 +181,7 @@ class WorkflowProcess implements ProcessInterface
     {
         $cache = $this->getCacheContainer();
 
-        if (empty($cache->alimentationSql)) {
+        if (empty($cache->alimentationSql) || Application::getInstance()->inDev()) {
             $cache->alimentationSql = $this->makeSql();
         }
 
@@ -348,16 +350,42 @@ class WorkflowProcess implements ProcessInterface
             // Données personnelles
             [
                 'etapes' => [WorkflowEtape::DONNEES_PERSO_SAISIE, WorkflowEtape::DONNEES_PERSO_VALIDATION],
-                'sql'    => 'si.dossier',
+                'sql'    => 'CASE WHEN si.dossier = 1 AND (
+     si.dossier_statut = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . ' 
+  OR si.dossier_identite_comp = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR si.dossier_contact = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR dossier_adresse = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR dossier_banque = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR dossier_insee = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR dossier_employeur = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR dossier_autre_1 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR dossier_autre_2 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR dossier_autre_3 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR dossier_autre_4 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  OR dossier_autre_5 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
+  ) THEN 1 ELSE 0 END',
             ],
             [
                 'etapes' => [WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE, WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
-                'sql'    => 'si.dossier',
+                'sql'    => 'CASE WHEN si.dossier = 1 AND (
+     si.dossier_statut = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . ' 
+  OR si.dossier_identite_comp = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR si.dossier_contact = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR dossier_adresse = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR dossier_banque = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR dossier_insee = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR dossier_employeur = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR dossier_autre_1 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR dossier_autre_2 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR dossier_autre_3 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR dossier_autre_4 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  OR dossier_autre_5 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
+  ) THEN 1 ELSE 0 END',
             ],
 
 
             // Pièces justificatives
-            [//DEMANDEE_APRES_RECRUTEMENT
+            [
                 'etapes' => [WorkflowEtape::PJ_SAISIE, WorkflowEtape::PJ_VALIDATION],
                 'sql'    => "CASE
     WHEN EXISTS(

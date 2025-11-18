@@ -16,6 +16,7 @@ use Plafond\Interfaces\PlafondPerimetreInterface;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use Utilisateur\Entity\Db\Privilege;
 
 
 /**
@@ -1899,7 +1900,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::PIECE_JUSTIFICATIVE_VISUALISATION          => $this->pieceJustificativeVisualisation,
             Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT         => $this->pieceJustificativeVisualisation,
             Privileges::PIECE_JUSTIFICATIVE_EDITION                => $this->pieceJustificativeEdition,
-            Privileges::PIECE_JUSTIFICATIVE_ARCHIVAGE              => $this->pieceJustificativeEdition,
+            Privileges::PIECE_JUSTIFICATIVE_VISUALISATION_COMP     => $this->pieceJustificativeVisualisation,
+            Privileges::PIECE_JUSTIFICATIVE_EDITION_COMP           => $this->pieceJustificativeEdition,
             Privileges::ENSEIGNEMENT_PREVU_VISUALISATION           => $this->servicePrevu && $this->servicePrevuVisualisation,
             Privileges::ENSEIGNEMENT_REALISE_VISUALISATION         => $this->serviceRealise && $this->serviceRealiseVisualisation,
             Privileges::ENSEIGNEMENT_PREVU_EDITION                 => $this->servicePrevu && $this->servicePrevuEdition,

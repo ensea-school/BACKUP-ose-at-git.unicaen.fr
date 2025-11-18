@@ -56,12 +56,12 @@ class PiecesJointesAssertion extends AbstractAssertion
             return false;
         }
 
-        $wfEtape = $this
-            ->getServiceWorkflow()
-            ->getFeuilleDeRoute($intervenant)
-            ->get(WorkflowEtape::PJ_COMPL_SAISIE);
+        $fdr = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
 
-        return $wfEtape?->isAllowed() ?? false;
+        $wfEtape = $fdr->get(WorkflowEtape::PJ_SAISIE);
+        $wfEtapeCompl = $fdr->get(WorkflowEtape::PJ_COMPL_SAISIE);
+
+        return ($wfEtape?->isAllowed() ?? false) || ($wfEtapeCompl?->isAllowed() ?? false);
     }
 
 

@@ -178,7 +178,8 @@ return [
     'guards'       => [
         [
             'controller' => IntervenantDossierController::class,
-            'action'     => ['index', 'change-statut-dossier'],
+            'action'     => ['index',
+                             'change-statut-dossier'],
             'privileges' => [Privileges::DOSSIER_VISUALISATION],
         ],
 
@@ -297,12 +298,7 @@ return [
             'resources'  => IntervenantDossier::class,
             'assertion'  => IntervenantDossierAssertion::class,
         ],
-        [
-            'privileges' => [
-                Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
-            ],
-            'resources'  => [Contrat::class],
-        ],
+
 
     ],
     'controllers'  => [

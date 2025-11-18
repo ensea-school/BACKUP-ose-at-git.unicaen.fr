@@ -19,6 +19,28 @@ class IntervenantDossierAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
 
+
+    /**
+     * @param string $controller
+     * @param string $action
+     * @param string $privilege
+     *
+     * @return boolean
+     */
+    protected function assertController(string $controller, ?string $action): bool
+    {
+        $intervenant = $this->getParam(Intervenant::class);
+
+        switch ($controller) {
+            case IntervenantDossierController::class . 'index':
+                return $this->assertDossierEdition($intervenant);
+        }
+
+        return true;
+    }
+
+
+
     /**
      * @param ResourceInterface $entity
      * @param string            $privilege
@@ -394,35 +416,6 @@ class IntervenantDossierAssertion extends AbstractAssertion
                                   $intervenantDossier->getTblDossier()->getValidation(),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_SUPPRESSION),
                               ]);
-    }
-
-
-
-    /**
-     * @param string $controller
-     * @param string $action
-     * @param string $privilege
-     *
-     * @return boolean
-     */
-    protected function assertController(string $controller, ?string $action): bool
-    {
-        $intervenant = $this->getParam(Intervenant::class);
-
-        switch ($controller) {
-            case IntervenantDossierController::class:
-                switch ($action) {
-                    case 'index':
-                        if (!$this->authorize->isAllowedPrivilege(Privileges::DOSSIER_VISUALISATION)) {
-                            return false;
-                        }
-
-                        return $this->assertDossierEdition($intervenant);
-                }
-                break;
-        }
-
-        return true;
     }
 
 

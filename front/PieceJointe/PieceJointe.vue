@@ -12,7 +12,7 @@
                 <div class="validation-bar float-end" data-url="">
                     <div v-if="datas.pieceJointe">
                         <!-- actions de validation de la pièce jointe entière -->
-                        <button v-if="!datas.pieceJointe.validation && privileges.canValider"
+                        <button v-if="!datas.pieceJointe.validation && canValider(datas)"
                                 :id="'valider-' + datas.pieceJointe?.id"
                                 class="btn btn-success me-2"
                                 type="button"
@@ -38,7 +38,7 @@
                         <button
                             v-if="datas.pieceJointe.validation &&
                                   (datas.annee == (datas.pieceJointe?.anneeOrigine??false)) &&
-                                  privileges.canValider"
+                                  canDevalier(datas)"
                             :id="'devalider-' + datas.pieceJointe?.id"
                             class="btn btn-danger"
                             type="button"
@@ -105,7 +105,7 @@
                                     <div>
                                         <!-- lien de suppression du fichier -->
                                         <button v-if="!fichier.validation &&
-                                                      privileges.canEditer &&
+                                                      canEditer(datas) &&
                                                       (datas.annee == (datas.pieceJointe?.anneeOrigine??false))"
                                                 :id="'supprimer-fichier-' + fichier.id"
                                                 class="delete-file btn btn-sm btn-danger ms-2 p-1 py-0"
@@ -121,7 +121,7 @@
                                         <button
                                             v-if="!fichier.validation &&
                                                   datas.pieceJointe?.validation &&
-                                                  privileges.canValider &&
+                                                  canValider(datas) &&
                                                   (datas.annee == (datas.pieceJointe?.anneeOrigine??false))"
                                             :id="'valider-fichier-' + fichier.id"
                                             class="validate-file btn btn-sm btn-success ms-2 p-1 py-0"
@@ -140,7 +140,7 @@
                         </ul>
                     </div>
                 </div>
-                <div v-if="privileges.canEditer" class="col-md-6">
+                <div v-if="canEditer(datas)" class="col-md-6">
                     <div class="row">
                         <!-- Formulaire sur 4 colonnes -->
                         <div class="col-md-8">
@@ -304,6 +304,40 @@ function truncate(str, maxLength)
 {
     if (!str) return '';
     return str.length > maxLength ? str.slice(0, maxLength) + '…' : str;
+}
+
+function canValider(pieceJointe)
+{
+    if (pieceJointe.demandeApresRecrutement) {
+        return props.privileges.canValiderComp;
+    } else {
+        return props.privileges.canValider;
+    }
+
+    return false;
+}
+
+function canEditer(pieceJointe)
+{
+    if (pieceJointe.demandeApresRecrutement) {
+        return props.privileges.canEditerComp;
+    } else {
+        return props.privileges.canEditer;
+    }
+
+    return false;
+}
+
+function canDevalier(pieceJointe)
+{
+
+    if (pieceJointe.demandeApresRecrutement) {
+        return props.privileges.canDevaliderComp;
+    } else {
+        return props.privileges.canDevalider;
+    }
+
+    return false;
 }
 
 </script>

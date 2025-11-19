@@ -56,7 +56,7 @@
         "unicaen/mail"                       : "dev-php84",
         "unicaen/signature"                  : "1.0.7",
 
-        "unicaen/code"                       : "6.6.0",
+        "unicaen/code"                       : "6.6.1",
         "unicaen/import"                     : "6.1.0",
         "unicaen/tbl"                        : "6.3.1",
         "unicaen/open-document"              : "6.1.3",

@@ -77,11 +77,16 @@ class TblPieceJointeService extends AbstractEntityService
         $datas->piecesJointes         = $query->getResult();
         $datas->messagesPiecesJointes = $this->makeMessages($intervenant);
         $datas->privileges            = [
-            'canEditer'      => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION)),
-            'canValider'     => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION)),
-            'canDevalider'   => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION)),
-            'canRefuser'     => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_REFUS_PIECE)),
-            'canTelecharger' => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT)),
+            'canVisualiser'     => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VISUALISATION)),
+            'canEditer'         => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION)),
+            'canValider'        => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION)),
+            'canDevalider'      => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION)),
+            'canRefuser'        => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_REFUS_PIECE)),
+            'canTelecharger'    => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT)),
+            'canEditerComp'     => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION_COMP)),
+            'canValiderComp'    => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION_COMP)),
+            'canDevaliderComp'  => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION_COMP)),
+            'canVisualiserComp' => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VISUALISATION_COMP)),
         ];
 
 
@@ -115,10 +120,15 @@ class TblPieceJointeService extends AbstractEntityService
                        ['type',
                         'text'],
                        'privileges',
-                       ['canEditer',
+                       ['canVisualiser',
+                        'canEditer',
                         'canValider',
                         'canDevalider',
-                        'canTelecharger'],
+                        'canTelecharger',
+                        'canEditerComp',
+                        'canValiderComp',
+                        'canDevaliderComp',
+                        'caenVisualiser',],
         ];
 
 
@@ -193,9 +203,10 @@ class TblPieceJointeService extends AbstractEntityService
                 $msg['text']             = "Toutes les pièces justificatives obligatoires ont été fournies.";
                 $msgs[]                  = $msg;
                 unset($msg);
-                $msg['type'] = 'warning';
-                $msg['text'] = "Mais certaines doivent encore être validées par un gestionnaire.";
-                $msgs[]      = $msg;
+                $msg['avantRecrutement'] = 1;
+                $msg['type']             = 'warning';
+                $msg['text']             = "Mais certaines doivent encore être validées par un gestionnaire.";
+                $msgs[]                  = $msg;
                 unset($msg);
             }
         }
@@ -222,9 +233,10 @@ class TblPieceJointeService extends AbstractEntityService
                 $msg['text']             = "Toutes les pièces justificatives complémentaires obligatoires ont été fournies.";
                 $msgs[]                  = $msg;
                 unset($msg);
-                $msg['type'] = 'warning';
-                $msg['text'] = "Mais certaines doivent encore être validées par un gestionnaire.";
-                $msgs[]      = $msg;
+                $msg['avantRecrutement'] = 0;
+                $msg['type']             = 'warning';
+                $msg['text']             = "Mais certaines doivent encore être validées par un gestionnaire.";
+                $msgs[]                  = $msg;
                 unset($msg);
             }
         }

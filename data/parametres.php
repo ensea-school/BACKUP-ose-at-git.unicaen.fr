@@ -70,6 +70,12 @@ return [
         "DESCRIPTION" => "État de sortie pour les états de paiement",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
+    Parametre::ES_EXPORT_FORMATION => [
+        "VALEUR"      => "export-offre-formation",
+        "DESCRIPTION" => "État de sortie pour l'export offre de formation",
+        "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
+    ],
+
 
 
     /* Divers */

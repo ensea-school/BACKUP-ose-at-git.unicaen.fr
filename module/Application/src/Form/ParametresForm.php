@@ -371,6 +371,19 @@ class ParametresForm extends AbstractForm
 
         $this->add([
                        'type'       => 'Select',
+                       'name'       => 'es_export_formation',
+                       'options'    => [
+                           'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
+                           'label'         => 'État de sortie pour l\'export de l\'offre de formation',
+                       ],
+                       'attributes' => [
+                           'class'            => 'selectpicker',
+                           'data-live-search' => 'true',
+                       ],
+                   ]);
+
+        $this->add([
+                       'type'       => 'Select',
                        'name'       => 'scenario_charges_services',
                        'options'    => [
                            'value_options' => Util::collectionAsOptions($this->getServiceScenario()->getList($this->getServiceScenario()->finderByHistorique())),

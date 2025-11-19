@@ -41,6 +41,7 @@ Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 * Correction du problème de saisie des taux a virgules (#63956)
 * Correction sur le fait de pouvoir saisir une date de retour signé dans le futur (#63989)
 * Le TBL_CONTRAT ne bloque plus la suppression d'une fiche d'intervenant (#64075)
+* Correction erreur lignes certaines doublonnées sur V_EXPORT_DMEP (#64107)
 
 
 # OSE 24.11 (07/10/2025)

@@ -38,6 +38,10 @@ Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 * Correction pour afficher le libellé hors établissement dans l'export pdf des service 
 * Correction état de sortie de l'offre de formation (#63732)
 * Modification pour fiabiliser l'action d'une validation d'une mission (#59140)
+* Correction du problème de saisie des taux a virgules (#63956)
+* Correction sur le fait de pouvoir saisir une date de retour signé dans le futur (#63989)
+* Le TBL_CONTRAT ne bloque plus la suppression d'une fiche d'intervenant (#64075)
+
 
 # OSE 24.11 (07/10/2025)
 

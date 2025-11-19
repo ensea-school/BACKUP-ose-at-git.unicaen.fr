@@ -229,14 +229,14 @@ class EmployeurService extends AbstractEntityService
         //Employeur étrangé
         $data                            = [];
         $data['SIREN']                   = '999999999';
-        $data['RAISON_SOCIALE']          = 'EMPLOYEUR ETRANGÉ';
-        $data['NOM_COMMERCIAL']          = 'EMPLOYEUR ETRANGÉ';
+        $data['RAISON_SOCIALE'] = 'EMPLOYEUR ETRANGER';
+        $data['NOM_COMMERCIAL'] = 'EMPLOYEUR ETRANGER';
         $data['SOURCE_CODE']             = '999999999';
         $data['SOURCE_ID']               = $idSource;
         $data['HISTO_DESTRUCTEUR_ID']    = null;
         $data['HISTO_DESTRUCTION']       = null;
         $data['IDENTIFIANT_ASSOCIATION'] = null;
-        $data['CRITERE_RECHERCHE']       = \UnicaenApp\Util::reduce('Employeur étrangé 999999999');
+        $data['CRITERE_RECHERCHE'] = \UnicaenApp\Util::reduce('Employeur étranger 999999999');
         $options['where']                = 'SIREN = \'999999999\'';
         $options['soft-delete']          = true;
         $datas                           = [];

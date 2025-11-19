@@ -35,7 +35,7 @@ LEFT JOIN element_pedagogique ep ON ep.etape_id = e.id AND ep.histo_destruction 
 LEFT JOIN discipline d ON d.id = ep.discipline_id
 LEFT JOIN periode p ON p.id = ep.periode_id
 LEFT JOIN effectifs ef ON ef.element_pedagogique_id = ep.id
-LEFT JOIN volume_horaire_ens vhe ON vhe.element_pedagogique_id = ep.id
+LEFT JOIN volume_horaire_ens vhe ON vhe.element_pedagogique_id = ep.id and vhe.histo_destruction is null
 LEFT JOIN type_intervention ti ON ti.id = vhe.type_intervention_id
 WHERE
 e.histo_destruction IS NULL

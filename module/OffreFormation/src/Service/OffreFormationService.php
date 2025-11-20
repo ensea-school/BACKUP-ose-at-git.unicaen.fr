@@ -6,6 +6,7 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
@@ -298,7 +299,7 @@ class OffreFormationService extends AbstractEntityService
     public function generateCsvExport(?Structure $structure, ?NiveauEtape $niveau, ?Etape $etape): CsvModel
     {
         /* Préparation et affichage */
-        $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'export-offre-formation']);
+        $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_export_formation');
         $annee = $this->getServiceContext()->getAnnee()->getId();
 
         $fileName = 'Export-offre-formation - ' . date('dmY') . '.csv';

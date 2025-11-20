@@ -12,7 +12,7 @@
         "php"                                : ">=8.2",
         "laminas/laminas-cli"                : "1.11.0",
         "symfony/process"                    : "7.3.3",
-        "symfony/http-foundation"            : "7.3.3",
+        "symfony/http-foundation"            : "7.3.*",
         "api-platform/core"                  : "4.2.2",
         "api-platform/symfony"               : "4.2.2",
         "ext-ctype"                          : "*",

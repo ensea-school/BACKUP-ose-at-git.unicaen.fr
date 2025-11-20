@@ -260,17 +260,20 @@ class IndicateurService extends AbstractService
             $html    .= $htmlLog;
             $email->subject('COPIE | ' . $data['subject']);
             //Contexte utilisateur
-            $utilisateur = $this->getServiceContext()->getUtilisateur();
             foreach($emailCopy as $value)
             {
-                $email->addBcc($value);
+                if (!empty($value)) {
+                    $email->addBcc($value);
+                }
 
             }
         }
         else{
             $email->subject($data['subject']);
             foreach ($emails as $value => $name) {
-                $email->addBcc(new Address($value, $name));
+                if (!empty($value)) {
+                    $email->addBcc(new Address($value, $name));
+                }
             }
         }
         $email->html($html);

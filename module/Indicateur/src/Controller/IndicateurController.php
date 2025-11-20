@@ -334,10 +334,12 @@ class IndicateurController extends AbstractController
                     }
                 }
                 if ($post['copy']) {
-                    //envoi une copie du mail à l'utilisateur s'il l'a demandé
-                    $emailUtilisateur = [$this->getServiceContext()->getUtilisateur()->getEmail()];
-                    $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName,$emailUtilisateur);
-                    $this->getMailService()->send($email);
+                    $emailUtilisateur = $this->getServiceContext()->getUtilisateur()->getEmail();
+                    if (!empty($emailUtilisateur)) {
+                        $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName, [$emailUtilisateur]);
+                        $this->getMailService()->send($email);
+                    }
+
                 }
                 if ($post['cci'] && !empty($post['cci'])) {
                     $emailsCci = explode(';', $post['cci']);

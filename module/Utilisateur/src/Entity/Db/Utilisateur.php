@@ -33,7 +33,8 @@ class Utilisateur implements UserInterface, UnicaenAppUserInterface, ZfcUserInte
 
     public function axiosDefinition(): array
     {
-        return ['email', 'displayName'];
+        return ['email',
+                'displayName'];
     }
 
 
@@ -163,7 +164,8 @@ class Utilisateur implements UserInterface, UnicaenAppUserInterface, ZfcUserInte
             $bcrypt   = new Bcrypt();
             $password = $bcrypt->create($password);
         }
-
+        $this->password = $password;
+        
         $this->setPasswordResetToken(null);
     }
 

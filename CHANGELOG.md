@@ -32,6 +32,11 @@ Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 
 # OSE 24.12 (à venir)
 
+## Nouveautés
+
+* Ajout d'un nouveau paramétre général pour sélectionner l'état de sortie voulu pour l'export de l'offre de formation
+
+
 ## Corrections
 
 * Correction pour ne pas enregistrer d'étape lors de la saisie d'un enseignement hors établissement (#63714)

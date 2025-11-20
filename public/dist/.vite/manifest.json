@@ -1,15 +1,15 @@
 {
-  "_vendor-Rl39KpUh.js": {
-    "file": "assets/vendor-Rl39KpUh.js",
+  "_vendor-KzP7jRq0.js": {
+    "file": "assets/vendor-KzP7jRq0.js",
     "name": "vendor"
   },
   "main.js": {
-    "file": "assets/main-CvUT0ogH.js",
+    "file": "assets/main-C137TWer.js",
     "name": "main",
     "src": "main.js",
     "isEntry": true,
     "imports": [
-      "_vendor-Rl39KpUh.js"
+      "_vendor-KzP7jRq0.js"
     ],
     "css": [
       "assets/main-DcqHEHht.css"

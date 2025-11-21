@@ -1,5 +1,7 @@
 <?php
 
+use Service\Entity\Db\EtatVolumeHoraire;
+
 return [
     'ADRESSE_NUMERO_COMPL' => [
         [
@@ -133,25 +135,25 @@ return [
     'ETAT_VOLUME_HORAIRE' => [
         [
             'ID'      => 1,
-            'CODE'    => 'saisi',
+            'CODE'    => EtatVolumeHoraire::CODE_SAISI,
             'LIBELLE' => 'Saisi',
-            'ORDRE'   => 1,
+            'ORDRE'   => EtatVolumeHoraire::ORDRE_SAISI,
         ],
         [
             'ID'      => 2,
-            'CODE'    => 'valide',
+            'CODE'    => EtatVolumeHoraire::CODE_VALIDE,
             'LIBELLE' => 'Validé',
             'ORDRE'   => 2,
         ],
         [
             'ID'      => 3,
-            'CODE'    => 'contrat-edite',
+            'CODE'    => EtatVolumeHoraire::CODE_CONTRAT_EDITE,
             'LIBELLE' => 'Contrat édité',
             'ORDRE'   => 3,
         ],
         [
             'ID'      => 4,
-            'CODE'    => 'contrat-signe',
+            'CODE'    => EtatVolumeHoraire::CODE_CONTRAT_SIGNE,
             'LIBELLE' => 'Contrat signé',
             'ORDRE'   => 4,
         ],

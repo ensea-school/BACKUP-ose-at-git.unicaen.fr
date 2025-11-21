@@ -12,6 +12,8 @@ class EtatVolumeHoraire
     const CODE_CONTRAT_EDITE = 'contrat-edite';
     const CODE_CONTRAT_SIGNE = 'contrat-signe';
 
+    const ORDRE_SAISI = 1;
+
     private int    $id;
 
     private string $code;

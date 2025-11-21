@@ -262,12 +262,8 @@ class VolumeHoraireListe
         }
         if (false !== $this->etatVolumeHoraire) {
             $etatVolumeHoraire = $volumeHoraire->getEtatVolumeHoraire();
-            if (true === $this->etatVolumeHoraire) {
-                if (null === $etatVolumeHoraire) return false;
-            } else {
-                if (null === $etatVolumeHoraire) return false;
-                if ($etatVolumeHoraire->getOrdre() < $this->etatVolumeHoraire->getOrdre()) return false;
-            }
+            $ordre = $etatVolumeHoraire?->getOrdre() ?: EtatVolumeHoraire::ORDRE_SAISI;
+            if ($ordre < $this->etatVolumeHoraire->getOrdre()) return false;
         }
         if (false !== $this->periode) {
             $periode = $volumeHoraire->getPeriode();

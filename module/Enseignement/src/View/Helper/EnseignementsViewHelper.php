@@ -355,6 +355,12 @@ class EnseignementsViewHelper extends AbstractHtmlElement
             'class'    => $class,
             'data-url' => $this->getView()->ligneEnseignement($this, $service)->getRefreshUrl(),
         ];
+
+        if (!$service->getIntervenant()->getStructure() && !$service->getElementPedagogique()){
+            $attribs['class'] .= ' bg-danger';
+            $attribs['title'] = 'Il est impossible pour un intervenant n\'ayant pas de structure d\'affectation de faire des heures d\'enseignement hors établissement';
+        }
+
         if (!$show) $attribs['style'] = 'display:none';
         $out = '<tr ' . $this->htmlAttribs($attribs) . '>';
         $out .= $this->renderInterieurLigne($service, $details);

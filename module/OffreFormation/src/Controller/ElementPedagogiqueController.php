@@ -132,7 +132,11 @@ class ElementPedagogiqueController extends AbstractController
         ]);
 
         $structureId = $this->params()->fromQuery('structure');
-        $structure = $structureId ? $this->em()->find(Structure::class, $structureId) : null;
+        if ($structureId === 'ALL' || empty($structureId)) {
+            $structure = null;
+        } else {
+            $structure = $this->em()->find(Structure::class, $structureId);
+        }
 
         $niveau    = $this->params()->fromQuery('niveau');
 
@@ -140,7 +144,7 @@ class ElementPedagogiqueController extends AbstractController
         $etape     = $etapeId ? $this->em()->find(Etape::class, $etapeId) : null;
 
         $elementId = $this->params()->fromQuery('elementPedagogique');
-        $element   = $elementId ? $this->em()->find(ElementPedagogique::class, $etapeId) : null;
+        $element   = $elementId ? $this->em()->find(ElementPedagogique::class, $elementId) : null;
 
         $term      = $this->params()->fromQuery('term');
 

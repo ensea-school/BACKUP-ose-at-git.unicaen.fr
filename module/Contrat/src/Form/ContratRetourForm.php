@@ -29,6 +29,7 @@ class ContratRetourForm extends AbstractForm
                 'label' => "Date de retour $contratToString signé",
             ],
             'attributes' => [
+                'max' => date('Y-m-d'), // interdit toute date future
             ],
         ]);
 

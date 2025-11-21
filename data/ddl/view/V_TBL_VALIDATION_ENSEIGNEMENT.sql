@@ -43,6 +43,8 @@ FROM
        END
 WHERE
   (vh.histo_destruction IS NULL OR t.validation_id IS NOT NULL)
+  -- structure d'affectation obligatoire si enseignement extérieur
+  AND NOT (i.structure_id IS NULL AND ep.structure_id IS NULL)
   /*@intervenant_id=i.id*/
   /*@annee_id=i.annee_id*/
   /*@statut_id=si.id*/

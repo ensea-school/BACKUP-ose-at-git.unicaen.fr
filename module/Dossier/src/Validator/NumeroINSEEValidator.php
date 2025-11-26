@@ -27,10 +27,11 @@ final class NumeroINSEEValidator extends NumeroINSEE
     use CiviliteServiceAwareTrait;
     use PaysServiceAwareTrait;
 
-    const MSG_CIVILITE = 'msgCivilite';
-    const MSG_ANNEE    = 'msgAnnee';
-    const MSG_MOIS     = 'msgMois';
-    const MSG_DEPT     = 'msgDepartement';
+    const MSG_CIVILITE  = 'msgCivilite';
+    const MSG_ANNEE     = 'msgAnnee';
+    const MSG_MOIS      = 'msgMois';
+    const MSG_DEPT      = 'msgDepartement';
+    const DEP_POLYNESIE = '987';
 
 
     /**
@@ -68,11 +69,11 @@ final class NumeroINSEEValidator extends NumeroINSEE
             self::MSG_MOIS     => "Le numéro n'est pas cohérent avec le mois de naissance saisi",
             self::MSG_DEPT     => "Le numéro n'est pas cohérent avec le pays et l'éventuel département de naissance saisi",
         ]);
-        $this->pays = $options['paysDeNaissance'] ?? false;
-        $this->dateNaissance = $options['dateDeNaissance'] ?? false;
-        $this->departement = $options['departementDeNaissance'] ?? false;
-        $this->civilite = $options['civilite'] ?? false;
-        $this->provisoire = $options['provisoire'] ?? false;
+        $this->pays             = $options['paysDeNaissance'] ?? false;
+        $this->dateNaissance    = $options['dateDeNaissance'] ?? false;
+        $this->departement      = $options['departementDeNaissance'] ?? false;
+        $this->civilite         = $options['civilite'] ?? false;
+        $this->provisoire       = $options['provisoire'] ?? false;
 
         parent::__construct($options);
     }
@@ -81,6 +82,15 @@ final class NumeroINSEEValidator extends NumeroINSEE
 
     public function isValid($value, $context = null)
     {
+        //Cas particulier des numéros INSEE de la Polynesie qui doit comporter au minimum 7 chiffres sans vérification avec
+        //le département, date de naissance etc....
+        $departement = (int)$this->departement;
+        $code        = $this->getServiceDepartement()->get($departement)?->getCode();
+        if (($this->getServiceDepartement()->get($departement)?->getCode()) === self::DEP_POLYNESIE) {
+            return preg_match('/^[0-9]{7,}$/', $value) === 1;
+        }
+
+
         if (!parent::isValid($value)) {
             return false;
         }
@@ -117,9 +127,13 @@ final class NumeroINSEEValidator extends NumeroINSEE
     private function isValidCivilite(): bool
     {
         if ($this->civilite->estUneFemme()) {
-            $sexes = [2, 4, 8]; // femme, personne étrangère de sexe féminin ou en cours d'immatriculation en France
+            $sexes = [2,
+                      4,
+                      8]; // femme, personne étrangère de sexe féminin ou en cours d'immatriculation en France
         } else {
-            $sexes = [1, 3, 7]; // homme, personne étrangère de sexe masculin ou en cours d'immatriculation en France
+            $sexes = [1,
+                      3,
+                      7]; // homme, personne étrangère de sexe masculin ou en cours d'immatriculation en France
         }
 
         $sexe = (int)substr($this->value, 0, 1);
@@ -212,7 +226,13 @@ final class NumeroINSEEValidator extends NumeroINSEE
         $anneeNaissance = (int)$this->dateNaissance->format('Y');
 
         /* Liste des départements d'Île de France */
-        $ileDeFrance = ['075', '078', '091', '092', '093', '094', '095'];
+        $ileDeFrance = ['075',
+                        '078',
+                        '091',
+                        '092',
+                        '093',
+                        '094',
+                        '095'];
 
 
         if ($iDepartement == '099') {
@@ -248,7 +268,11 @@ final class NumeroINSEEValidator extends NumeroINSEE
     {
         $iDepartement = $this->getDepartement();
 
-        $departements = [91, 92, 93, 94, 99];
+        $departements = [91,
+                         92,
+                         93,
+                         94,
+                         99];
 
         if (in_array($iDepartement, $departements)) {
             return true;
@@ -265,7 +289,8 @@ final class NumeroINSEEValidator extends NumeroINSEE
     {
         $iDepartement = $this->getDepartement();
 
-        $departements = [95, 99];
+        $departements = [95,
+                         99];
 
         if (in_array($iDepartement, $departements)) {
             return true;
@@ -282,7 +307,8 @@ final class NumeroINSEEValidator extends NumeroINSEE
     {
         $iDepartement = $this->getDepartement();
 
-        $departements = [96, 99];
+        $departements = [96,
+                         99];
 
         if (in_array($iDepartement, $departements)) {
             return true;
@@ -317,7 +343,6 @@ final class NumeroINSEEValidator extends NumeroINSEE
         if ($iDepartement == '99') {
             return 99; // étranger
         }
-
 
 
         return (int)$iDepartement;

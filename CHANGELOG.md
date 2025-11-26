@@ -36,6 +36,7 @@ Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 ## Corrections
 
 * Les mises en paiement en trop apparaissent de nouveau dans les IHM liées aux paiements (#64243)
+* Alimentation du dossier personnel de l'intervenant avec la situation matrimoniale de l'intervenant si elle est renseignée dans la table intervenant (#63648)
 
 
 # OSE 24.12 (21/11/2025)

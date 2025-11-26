@@ -31,6 +31,13 @@ OSE [24.12](#ose-2412-21112025)
 Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
 Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 
+# OSE 24.13 (à venir)
+
+## Corrections
+
+* Les mises en paiement en trop apparaissent de nouveau dans les IHM liées aux paiements (#64243)
+
+
 # OSE 24.12 (21/11/2025)
 
 ## Nouveautés

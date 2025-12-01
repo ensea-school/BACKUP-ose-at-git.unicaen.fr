@@ -1386,6 +1386,7 @@ return [
         'MISSION_INDEMNITEES',
         'PJ_ACTIVE',
         'DOSSIER_SITUATION_MATRIMONIALE',
+        'EXPORT_RH',
     ],
     'STRUCTURE'                           => [
         'ID',

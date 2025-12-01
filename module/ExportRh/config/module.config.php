@@ -18,7 +18,7 @@ return [
             'route'         => '/intervenant',
             'action'        => 'index',
             'child_routes'  => [
-                'exporter'    => [
+                'exporter' => [
                     'may_terminate' => false,
                     'route'         => '/:intervenant/exporter',
                     'controller'    => Controller\ExportRhController::class,
@@ -26,7 +26,7 @@ return [
                     'privileges'    => Privileges::INTERVENANT_EXPORTER,
                     'assertion'     => ExportRhAssertion::class,
                 ],
-                'pec'         => [
+                'pec'      => [
                     'may_terminate' => false,
                     'route'         => '/:intervenant/pec',
                     'controller'    => Controller\ExportRhController::class,
@@ -34,7 +34,7 @@ return [
                     'privileges'    => Privileges::INTERVENANT_EXPORTER,
                     'assertion'     => ExportRhAssertion::class,
                 ],
-                'ren'         => [
+                'ren'      => [
                     'may_terminate' => false,
                     'route'         => '/:intervenant/ren',
                     'controller'    => Controller\ExportRhController::class,
@@ -42,7 +42,7 @@ return [
                     'privileges'    => Privileges::INTERVENANT_EXPORTER,
                     'assertion'     => ExportRhAssertion::class,
                 ],
-                'sync'        => [
+                'sync'     => [
                     'may_terminate' => false,
                     'route'         => '/:intervenant/sync',
                     'controller'    => Controller\ExportRhController::class,
@@ -57,17 +57,17 @@ return [
     'navigation' => [
         'intervenant' => [
             'pages' => [
-                'export-rh'  => [
-                    'label'        => 'Export RH',
-                    'title'        => 'Export vers le logiciel de gestion RH',
-                    'route'        => 'intervenant/exporter',
-                    'order'        => 10,
+                'export-rh'                   => [
+                    'label' => 'Export RH',
+                    'title' => 'Export vers le logiciel de gestion RH',
+                    'route' => 'intervenant/exporter',
+                    'order' => 10,
                 ],
                 'agrement-conseil-academique' => [
-                    'label'        => 'Agrément : Conseil académique',
-                    'title'        => 'Agrément : Conseil académique',
-                    'route'        => 'intervenant/agrement/conseil-academique',
-                    'order'        => 11,
+                    'label' => 'Agrément : Conseil académique',
+                    'title' => 'Agrément : Conseil académique',
+                    'route' => 'intervenant/agrement/conseil-academique',
+                    'order' => 11,
                 ],
             ],
         ],
@@ -75,11 +75,8 @@ return [
 
     'rules' => [
         [
-            'privileges' => [
-                Privileges::INTERVENANT_EXPORTER,
-                ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH,
-            ],
             'resources'  => Intervenant::class,
+            'privileges' => Privileges::INTERVENANT_EXPORTER,
             'assertion'  => ExportRhAssertion::class,
         ],
     ],

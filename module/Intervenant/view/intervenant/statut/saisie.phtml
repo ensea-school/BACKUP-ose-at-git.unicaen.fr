@@ -306,8 +306,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                                 <a target="_blank" href="<?= $this->url('etat-sortie'); ?>">Page d'administration des
                                     états de sortie</a>
                             <?php endif; ?>
-
                         </div>
+                        <?= $this->formControlGroup($form->get('exportRh')); ?>
                     </div>
                 </div>
             </div>

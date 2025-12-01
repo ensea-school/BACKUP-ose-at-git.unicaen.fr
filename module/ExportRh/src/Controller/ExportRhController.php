@@ -84,17 +84,17 @@ class ExportRhController extends AbstractController
         } catch (\Exception $e) {
 
             $this->flashMessenger()->addErrorMessage($e->getMessage());
-            return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+            return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
 
         }
 
-        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+        return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
 
     }
 
 
 
-    public function exporterAction()
+    public function exporterAction(): array
     {
 
         /* Initialisation */
@@ -104,7 +104,6 @@ class ExportRhController extends AbstractController
         $nameConnecteur     = '';
         $affectationEnCours = '';
         $contratEnCours     = '';
-        $whyNotAtteignable  = null;
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
@@ -116,14 +115,6 @@ class ExportRhController extends AbstractController
         $renouvellement               = false;
         $priseEnCharge                = false;
 
-        /*Vérifier si l'étape du worflow pour faire une PEC ou REN est franchie*/
-        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-        $wfEtape        = $feuilleDeRoute->get(WorkflowEtape::EXPORT_RH);
-        $canExport      = $wfEtape && $wfEtape->isAllowed();
-        if (!$canExport) {
-            $whyNotAtteignable = implode(', ', $wfEtape->whyNonAtteignable);
-        }
-
         /**
          * Etape 1 : On cherche si l'intervenant est déjà dans le SI RH
          * Etape 2 : Si pas dans le SI RH alors c'est une prise en charge
@@ -133,10 +124,6 @@ class ExportRhController extends AbstractController
          *
          */
         try {
-
-            $excludeStatut = $this->exportRhService->getExcludeStatutOse();
-
-
             if (!array_key_exists($intervenant->getStatut()->getCode(), $this->exportRhService->getExcludeStatutOse()) && $typeIntervenant != 'P') {
                 $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
             }
@@ -171,24 +158,18 @@ class ExportRhController extends AbstractController
         }
 
 
-        $vm = new ViewModel();
-        $vm->setTemplate('export-rh/export-rh/exporter');
-        $vm->setVariables(compact('typeIntervenant',
-                                  'intervenant',
-                                  'intervenantRh',
-                                  'intervenantDossier',
-                                  'intervenantDossierValidation',
-                                  'canExport',
-                                  'whyNotAtteignable',
-                                  'form',
-                                  'renouvellement',
-                                  'priseEnCharge',
-                                  'nameConnecteur',
-                                  'affectationEnCours',
-                                  'contratEnCours',
-                                  'excludeStatut'));
-
-        return $vm;
+        return compact('typeIntervenant',
+                       'intervenant',
+                       'intervenantRh',
+                       'intervenantDossier',
+                       'intervenantDossierValidation',
+                       'form',
+                       'renouvellement',
+                       'priseEnCharge',
+                       'nameConnecteur',
+                       'affectationEnCours',
+                       'contratEnCours',
+        );
     }
 
 
@@ -236,11 +217,9 @@ class ExportRhController extends AbstractController
             }
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
-            return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
-
-
+            return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
         }
-        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+        return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
     }
 
 
@@ -257,7 +236,7 @@ class ExportRhController extends AbstractController
                 $posts  = $this->getRequest()->getPost();
                 $result = $this->exportRhService->synchroniserDonneesPersonnellesIntervenantRh($intervenant, $posts);
                 if ($result !== false) {
-                    $this->flashMessenger()->addSuccessMessage('Les données personnelles ont bien été synchronisé');
+                    $this->flashMessenger()->addSuccessMessage('Les données personnelles ont bien été synchronisées');
                 } else {
                     $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la synchronisation des données personnelles');
                 }
@@ -266,7 +245,7 @@ class ExportRhController extends AbstractController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
 
-        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
+        return $this->redirect()->toRoute('intervenant/exporter', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'export-rh']]);
 
     }
 

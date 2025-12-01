@@ -633,6 +633,18 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
+        'EXPORT_RH'                      => [
+            'name'        => 'EXPORT_RH',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 105,
+            'commentaire' => NULL,
+        ],
         'FORMULE_VISUALISATION'          => [
             'name'        => 'FORMULE_VISUALISATION',
             'type'        => 'bool',

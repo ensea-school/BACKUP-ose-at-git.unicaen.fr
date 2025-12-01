@@ -77,7 +77,7 @@ class StatutSaisieForm extends AbstractForm
             'codeIndemnitePrime'            => 'Code indémnité primes mission (ex : 0204, 2251 etc...)',
             'typePaiePrime'                 => 'Type ou carte primes mission (ex : 20, P etc...)',
             'missionDecret'                 => 'Decret nécessaire pour postuler',
-
+            'exportRh'                      => 'Export vers le logiciel RH',
         ];
 
         $dveElements = [
@@ -122,7 +122,6 @@ class StatutSaisieForm extends AbstractForm
             'dossierInsee',
             'dossierStatut',
             'dossierEmployeur',
-
         ];
 
         for ($i = 1; $i <= 5; $i++) {

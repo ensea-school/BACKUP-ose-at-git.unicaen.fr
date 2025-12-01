@@ -147,14 +147,15 @@ class ServiceAssertion extends AbstractAssertion
 
     public function assertCampagneSaisie(TypeVolumeHoraire $typeVolumeHoraire): bool
     {
-        if ($this->getServiceContext()->getIntervenant()) {
+        if ($contextIntervenant = $this->getServiceContext()->getIntervenant()) {
             $campagneSaisie = $this->getServiceCampagneSaisie()->getBy(
-                $this->getServiceContext()->getIntervenant()->getStatut()->getTypeIntervenant(),
+                $contextIntervenant->getStatut()->getTypeIntervenant(),
                 $typeVolumeHoraire
             );
-            if (!$campagneSaisie->estOuverte()) return false;
+            return $campagneSaisie->estOuverte();
         }
 
+        // pour les gestionnaires : saisie toujours possible
         return true;
     }
 
@@ -178,17 +179,6 @@ class ServiceAssertion extends AbstractAssertion
         }
 
         return true;
-    }
-
-
-
-    public function assertMotifNonPaiement(Intervenant $intervenant): bool
-    {
-        // filtrer pour la structure ? ?
-        return $this->asserts([
-                                  $intervenant->getStatut()->getMotifNonPaiement(),
-                                  $this->assertIntervenant($intervenant),
-                              ]);
     }
 
 

@@ -5,10 +5,7 @@ namespace Enseignement;
 use Application\Provider\Privileges;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
-use Enseignement\Service\ServiceService;
-use Enseignement\Service\VolumeHoraireService;
 use Intervenant\Entity\Db\Intervenant;
-use Service\Assertion\ServiceAssertion;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
@@ -119,14 +116,23 @@ return [
                 'saisie'                 => [
                     'route'       => '/saisie/:type-volume-horaire-code[/:service]',
                     'action'      => 'saisie',
+                    'privileges'  => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
+                    'assertion'   => Assertion\EnseignementAssertion::class,
                     'constraints' => [
                         'service' => '[0-9]*',
                     ],
-
                 ],
                 'rafraichir-ligne'       => [
                     'route'       => '/rafraichir-ligne/:service',
                     'action'      => 'rafraichir-ligne',
+                    'privileges'  => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
+                    'assertion'   => Assertion\EnseignementAssertion::class,
                     'constraints' => [
                         'service' => '[0-9]*',
                     ],
@@ -134,6 +140,11 @@ return [
                 'saisie-form-refresh-vh' => [
                     'route'       => '/saisie-form-refresh-vh[/:service]',
                     'action'      => 'saisie-form-refresh-vh',
+                    'privileges'  => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
+                    'assertion'   => Assertion\EnseignementAssertion::class,
                     'constraints' => [
                         'id'      => '[0-9]*',
                         'service' => '[0-9]*',
@@ -142,17 +153,32 @@ return [
                 'suppression'            => [
                     'route'       => '/suppression/:service',
                     'action'      => 'suppression',
+                    'privileges'  => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
+                    'assertion'   => Assertion\EnseignementAssertion::class,
                     'constraints' => [
                         'service' => '[0-9]*',
                     ],
                 ],
                 'initialisation'         => [
-                    'route'  => '/initialisation/:intervenant',
-                    'action' => 'initialisation',
+                    'route'      => '/initialisation/:intervenant',
+                    'action'     => 'initialisation',
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
+                    'assertion'  => Assertion\EnseignementAssertion::class,
                 ],
                 'constatation'           => [
-                    'route'  => '/constatation',
-                    'action' => 'constatation',
+                    'route'      => '/constatation',
+                    'action'     => 'constatation',
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                    ],
+                    'assertion'  => Assertion\EnseignementAssertion::class,
                 ],
             ],
         ],
@@ -248,6 +274,7 @@ return [
         ],
     ],
 
+
     'rules' => [
         [
             'privileges' => [
@@ -256,8 +283,7 @@ return [
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                 Privileges::ENSEIGNEMENT_REALISE_EDITION,
             ],
-            'resources'  => [Service::class,
-                             Intervenant::class],
+            'resources'  => [Service::class, Intervenant::class],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
@@ -267,9 +293,7 @@ return [
                 Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
                 Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
             ],
-            'resources'  => [Service::class,
-                             VolumeHoraire::class,
-                             Validation::class],
+            'resources'  => [Service::class, VolumeHoraire::class, Validation::class],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
@@ -278,11 +302,8 @@ return [
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_EXTERIEUR,
-            ],
-            'resources'  => [Intervenant::class,
-                             Service::class],
+            'privileges' => Privileges::ENSEIGNEMENT_EXTERIEUR,
+            'resources'  => [Intervenant::class,Service::class],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
@@ -293,25 +314,6 @@ return [
                 Privileges::TAG_VISUALISATION,
             ],
             'resources'  => Intervenant::class,
-            'assertion'  => ServiceAssertion::class,
-        ],
-    ],
-
-    'guards' => [
-        [
-            'controller' => EnseignementController::class,
-            'action'     => ['saisie',
-                             'rafraichir-ligne',
-                             'saisie-form-refresh-vh',
-                             'suppression',
-                             'initialisation',
-                             'constatation'],
-            'privileges' => [
-                Privileges::ENSEIGNEMENT_PREVU_EDITION,
-                Privileges::ENSEIGNEMENT_REALISE_EDITION,
-                Privileges::REFERENTIEL_PREVU_EDITION,
-                Privileges::REFERENTIEL_REALISE_EDITION,
-            ],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],
     ],
@@ -326,8 +328,8 @@ return [
     'services' => [
         Processus\EnseignementProcessus::class           => InvokableFactory::class,
         Processus\ValidationEnseignementProcessus::class => InvokableFactory::class,
-        ServiceService::class                            => InvokableFactory::class,
-        VolumeHoraireService::class                      => InvokableFactory::class,
+        Service\ServiceService::class                    => InvokableFactory::class,
+        Service\VolumeHoraireService::class              => InvokableFactory::class,
     ],
 
 

@@ -10,6 +10,7 @@ use Application\Entity\Db\Perimetre;
 use Application\Service\AnneeService;
 use Intervenant\Entity\Db\Intervenant;
 use Unicaen\BddAdmin\Bdd;
+use Unicaen\Framework\Container\Autowire;
 use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddService;
@@ -35,12 +36,14 @@ class WorkflowProcess implements ProcessInterface
     private array $workflows = [];
 
 
-
     public function __construct(
         private readonly BddService      $bddService,
         private readonly Bdd             $bdd,
         private readonly AnneeService    $anneeService,
         private readonly WorkflowService $workflowService,
+
+        #[Autowire(config: 'export-rh/actif')]
+        private readonly bool $exportRhEnabled,
     )
     {
     }
@@ -74,6 +77,7 @@ class WorkflowProcess implements ProcessInterface
         } else {
             $this->load($params);
             foreach ($this->workflows as $intervenantId => $wf) {
+                $this->traitementExportRh($this->workflows[$intervenantId]);
                 $this->calculDependances($this->workflows[$intervenantId]);
             }
             $this->save($tableauBord, $params);
@@ -82,7 +86,15 @@ class WorkflowProcess implements ProcessInterface
 
 
 
-    protected function calculDependances(array &$workflow)
+    protected function traitementExportRh(array &$workflow): void
+    {
+        if (!$this->exportRhEnabled && array_key_exists(WorkflowEtape::EXPORT_RH, $workflow)) {
+            unset($workflow[WorkflowEtape::EXPORT_RH]);
+        }
+    }
+
+
+    protected function calculDependances(array &$workflow): void
     {
         foreach ($workflow as $etapeCode => $etape) {
             $dependances = $etape->etape->getDependances();
@@ -416,7 +428,7 @@ class WorkflowProcess implements ProcessInterface
             ],
             [
                 'etapes' => [WorkflowEtape::EXPORT_RH],
-                'sql'    => '1', // @todo à retravailler
+                'sql'    => 'si.export_rh',
             ],
 
 

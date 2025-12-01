@@ -86,6 +86,7 @@
         <many-to-one field="avenantEtatSortie" target-entity="EtatSortie\Entity\Db\EtatSortie">
             <join-column name="AVENANT_ETAT_SORTIE_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <field name="exportRh" type="boolean" column="EXPORT_RH" nullable="false"/>
 
         <field name="servicePrevu" type="boolean" column="SERVICE_PREVU" nullable="false"/>
         <field name="servicePrevuVisualisation" type="boolean" column="SERVICE_PREVU_VISU" nullable="false"/>

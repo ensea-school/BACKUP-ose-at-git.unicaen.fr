@@ -385,8 +385,8 @@ return [
         ],
     ],
     WorkflowEtape::EXPORT_RH                       => [
-        'libelle_intervenant' => "Je visualise mes données RH",
-        "libelle_autres"      => "Je visualise les données RH",
+        'libelle_intervenant' => "J'exporte vers le logiciel RH",
+        "libelle_autres"      => "J'exporte vers le logiciel RH",
         "route"               => "intervenant/exporter",
         "desc_non_franchie"   => "L'export vers le logiciel RH n'a pas été fait",
         "perimetre"           => Perimetre::ETABLISSEMENT,

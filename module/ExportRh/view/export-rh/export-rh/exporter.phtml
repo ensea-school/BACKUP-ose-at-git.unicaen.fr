@@ -22,235 +22,221 @@ $this->intervenant($intervenant)->renderTitle('Export vers le logiciel RH');
 
 ?>
 <br/>
-<?php if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH)): ?>
+<?php if ($this->isAllowed($intervenant, \Application\Provider\Privileges::INTERVENANT_EXPORTER)): ?>
 
-<form class="form-export-rh" action="<?= $this->url($action, ['intervenant' => $intervenant->getId()]) ?>" method="post">
+<form class="form-export-rh" action="<?= $this->url($action, ['intervenant' => $intervenant->getId()]) ?>"
+      method="post">
     <?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
 
+    <div class="well">
+        <?php if (empty($intervenantRh)): ?>
+            <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
+                (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                n'a
+                pas été trouvé
+                dans <?= $nameConnecteur; ?>. Vous pouvez si vous le souhaitez prendre en charge cet intervenant avec
+                les
+                données de son dossier, résumées ci-dessous :</p>
+        <?php else: ?>
 
-    <?php if ($typeIntervenant == TypeIntervenant::CODE_PERMANENT || array_key_exists($intervenant->getStatut()->getCode(), $excludeStatut)): ?>
-        <div class="messenger alert alert-warning">
-            L'export des données intervenants vers <?= $nameConnecteur; ?> est disponible uniquement pour les vacataires
-            (hors <?= implode(', ', $excludeStatut) ?> )
-        </div>
-    <?php elseif (!$canExport): ?>
-        <div class="messenger alert alert-warning">
-            L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
-            (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
-            n'a pas encore franchi l'étape de la feuille de route permettant la PEC ou la REN. <?= $whyNonAtteignable ?>"
-        </div>
-
-
-    <?php elseif ($canExport): ?>
-
-        <div class="well">
-            <?php if (empty($intervenantRh)): ?>
+            <?php if (!empty($affectationEnCours) && !empty($contratEnCours)): ?>
                 <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
                     (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
-                    n'a
-                    pas été trouvé
-                    dans <?= $nameConnecteur; ?>. Vous pouvez si vous le souhaitez prendre en charge cet intervenant avec les
-                    données de son dossier, résumées ci-dessous :</p>
+                    est bien dans
+                    <?= $nameConnecteur ?>
+                    (<strong><?= $intervenantRh->getPrenom() . ' ' . $intervenantRh->getNomUsuel() ?> / MATRICULE
+                        : <?= $intervenantRh->getCodeRh() ?></strong>). Il
+                    possède déjà actuellement une affectation pour l'année
+                    universitaire <?= $intervenant->getAnnee()->getLibelle() ?> ainsi qu'un contrat. Vous pouvez mettre
+                    à jour ses données personnelles si
+                    vous le souhaitez avec le bouton synchronisation en bas de page.</p>
+            <?php elseif (!empty($affectationEnCours) && empty($contratsEnCours)): ?>
+                <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
+                    (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                    est bien dans
+                    <?= $nameConnecteur ?>
+                    (<strong><?= $intervenantRh->getPrenom() . ' ' . $intervenantRh->getNomUsuel() ?> / MATRICULE
+                        : <?= $intervenantRh->getCodeRh() ?></strong>).Il
+                    possède une affectation mais pas encore de contrat
+                    pour l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données
+                    personnelles si vous le souhaitez avec
+                    le bouton synchronisation en bas de page</p>
             <?php else: ?>
-
-                <?php if (!empty($affectationEnCours) && !empty($contratEnCours)): ?>
-                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
-                        (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
-                        est bien dans
-                        <?= $nameConnecteur ?>
-                        (<strong><?= $intervenantRh->getPrenom() . ' ' . $intervenantRh->getNomUsuel() ?> / MATRICULE
-                            : <?= $intervenantRh->getCodeRh() ?></strong>). Il
-                        possède déjà actuellement une affectation pour l'année
-                        universitaire <?= $intervenant->getAnnee()->getLibelle() ?> ainsi qu'un contrat. Vous pouvez mettre à jour ses données personnelles si
-                        vous le souhaitez avec le bouton synchronisation en bas de page.</p>
-                <?php elseif (!empty($affectationEnCours) && empty($contratsEnCours)): ?>
-                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
-                        (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
-                        est bien dans
-                        <?= $nameConnecteur ?>
-                        (<strong><?= $intervenantRh->getPrenom() . ' ' . $intervenantRh->getNomUsuel() ?> / MATRICULE
-                            : <?= $intervenantRh->getCodeRh() ?></strong>).Il
-                        possède une affectation mais pas encore de contrat
-                        pour l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec
-                        le bouton synchronisation en bas de page</p>
-                <?php else: ?>
-                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
-                        (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
-                        est bien dans
-                        <?= $nameConnecteur ?>
-                        (<strong><?= $intervenantRh->getPrenom() . ' ' . $intervenantRh->getNomUsuel() ?> / MATRICULE
-                            : <?= $intervenantRh->getCodeRh() ?></strong>).Il ne
-                        possède pas encore d'affectation pour
-                        l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez le renouveler pour cette année à l'aide du formulaire ci-dessous.</p>
-                <?php endif; ?>
+                <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
+                    (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                    est bien dans
+                    <?= $nameConnecteur ?>
+                    (<strong><?= $intervenantRh->getPrenom() . ' ' . $intervenantRh->getNomUsuel() ?> / MATRICULE
+                        : <?= $intervenantRh->getCodeRh() ?></strong>).Il ne
+                    possède pas encore d'affectation pour
+                    l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez le renouveler pour cette année à
+                    l'aide du formulaire ci-dessous.</p>
             <?php endif; ?>
-        </div>
-        <?php if (!empty($form)): ?>
-            <?php
-            $form->prepare();
-            $generiqueFieldset  = $form->get('generiqueFieldset');
-            $connecteurFieldset = $form->get('connecteurForm');
+        <?php endif; ?>
+    </div>
+    <?php if (!empty($form)): ?>
+        <?php
+        $form->prepare();
+        $generiqueFieldset  = $form->get('generiqueFieldset');
+        $connecteurFieldset = $form->get('connecteurForm');
 
-            ?>
-            <!-- BLOC AFFECTATION -->
-            <?php if (!empty($affectationEnCours)): ?>
+        ?>
+        <!-- BLOC AFFECTATION -->
+        <?php if (!empty($affectationEnCours)): ?>
 
-                <div class="card bg-default">
-                    <div class="card-header">Dernière affectation connue dans <?= $nameConnecteur ?> </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Champs</th>
-                                <th>Données</th>
+            <div class="card bg-default">
+                <div class="card-header">Dernière affectation connue dans <?= $nameConnecteur ?> </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Champs</th>
+                            <th>Données</th>
 
-                            </tr>
-                            </thead>
-                            <tbody>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Affecté a</td>
+                            <td><?= $affectationEnCours->libLongCodeUOAffectation ?></td>
+                        </tr>
+                        <tr>
+                            <td>Date début</td>
+                            <td>
+                                <?php
+                                $date = new DateTime($affectationEnCours->dateDebutAffectation);
+                                echo $date->format('d-m-Y');
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Date fin</td>
+                            <td>
+                                <?php
+                                $date = new DateTime($affectationEnCours->dateFinAffectation);
+                                echo $date->format('d-m-Y');
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Type de rattachement</td>
+                            <td><?= $affectationEnCours->libLongTypeRattachement ?></td>
+                        </tr>
+                        <?php if (!empty($intervenant->getExportDate())): ?>
                             <tr>
-                                <td>Affecté a</td>
-                                <td><?= $affectationEnCours->libLongCodeUOAffectation ?></td>
+                                <td>Exporté vers <?= $nameConnecteur ?> le</td>
+                                <td><?= $intervenant->getExportDate()->format('d-m-Y') ?></td>
                             </tr>
-                            <tr>
-                                <td>Date début</td>
-                                <td>
-                                    <?php
-                                    $date = new DateTime($affectationEnCours->dateDebutAffectation);
-                                    echo $date->format('d-m-Y');
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Date fin</td>
-                                <td>
-                                    <?php
-                                    $date = new DateTime($affectationEnCours->dateFinAffectation);
-                                    echo $date->format('d-m-Y');
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Type de rattachement</td>
-                                <td><?= $affectationEnCours->libLongTypeRattachement ?></td>
-                            </tr>
-                            <?php if (!empty($intervenant->getExportDate())): ?>
-                                <tr>
-                                    <td>Exporté vers <?= $nameConnecteur ?> le</td>
-                                    <td><?= $intervenant->getExportDate()->format('d-m-Y') ?></td>
-                                </tr>
-                            <?php endif ?>
-                            </tbody>
-                        </table>
-                    </div>
+                        <?php endif ?>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
 
-            <?php else: ?>
-                <div class="card bg-default">
-                    <div class="card-header">Affectation <?= $nameConnecteur ?></div>
-                    <div class="card-body" style="text-align:center;">
-                        Aucune affectation en cours dans SIHAM
-                    </div>
+        <?php else: ?>
+            <div class="card bg-default">
+                <div class="card-header">Affectation <?= $nameConnecteur ?></div>
+                <div class="card-body" style="text-align:center;">
+                    Aucune affectation en cours dans SIHAM
                 </div>
-            <?php endif; ?>
-            <?php if (!empty($contratEnCours)): ?>
-                <div class="card bg-default">
-                    <div class="card-header">Dernier contrat connu dans <?= $nameConnecteur ?></div>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Champs</th>
-                                <th>Données</th>
+            </div>
+        <?php endif; ?>
+        <?php if (!empty($contratEnCours)): ?>
+            <div class="card bg-default">
+                <div class="card-header">Dernier contrat connu dans <?= $nameConnecteur ?></div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Champs</th>
+                            <th>Données</th>
 
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Type de contrat</td>
-                                <td><?= $contratEnCours->libLongTypeContrat ?></td>
-                            </tr>
-                            <tr>
-                                <td>Date début contrat</td>
-                                <td>
-                                    <?php
-                                    $date = new DateTime($contratEnCours->dateDebutContrat);
-                                    echo $date->format('d-m-Y');
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Date fin de contrat</td>
-                                <td>
-                                    <?php
-                                    $date = new DateTime($contratEnCours->dateFinReelleContrat);
-                                    echo $date->format('d-m-Y');
-                                    ?>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Type de contrat</td>
+                            <td><?= $contratEnCours->libLongTypeContrat ?></td>
+                        </tr>
+                        <tr>
+                            <td>Date début contrat</td>
+                            <td>
+                                <?php
+                                $date = new DateTime($contratEnCours->dateDebutContrat);
+                                echo $date->format('d-m-Y');
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Date fin de contrat</td>
+                            <td>
+                                <?php
+                                $date = new DateTime($contratEnCours->dateFinReelleContrat);
+                                echo $date->format('d-m-Y');
+                                ?>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-            <?php else: ?>
-                <div class="card bg-default">
-                    <div class="card-header">Contrat <?= $nameConnecteur ?> en cours</div>
-                    <div class="card-body" style="text-align:center;">
-                        Aucun contrat en cours dans SIHAM
-                    </div>
+            </div>
+        <?php else: ?>
+            <div class="card bg-default">
+                <div class="card-header">Contrat <?= $nameConnecteur ?> en cours</div>
+                <div class="card-body" style="text-align:center;">
+                    Aucun contrat en cours dans SIHAM
                 </div>
-            <?php endif; ?>
-
-            <?php if ($priseEnCharge): ?>
-                <!--Partie générique du formulaire-->
-                <?php
-                echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/dataPEC', compact('generiqueFieldset', 'intervenantRh', 'intervenantDossier', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
-                ?>
-                <!-- Formulaire spécifique au connecteur-->
-                <?php
-                echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
-                ?>
-                </form>
-
-                <p>
-                    <button id="sihamButton" class="btn btn-primary">Prendre en charge l'intervenant dans <?= $nameConnecteur; ?></button>
-                </p>
-            <?php elseif ($renouvellement): ?>
-                <!--Partie générique du formulaire-->
-                <?php
-                echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/dataREN', compact('generiqueFieldset', 'intervenantRh', 'intervenantDossier', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
-                ?>
-                <!-- Formulaire spécifique au connecteur-->
-                <?php
-                echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
-                ?>
-                </form>
-                <p>
-                    <button id="sihamButton" class="btn btn-primary">Renouveler l'intervenant dans <?= $nameConnecteur; ?></button>
-                </p>
-            <?php else: ?>
-                <!--Partie générique du formulaire-->
-                <?php
-                echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/dataSYNC', compact('generiqueFieldset', 'intervenantRh', 'intervenantDossier', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
-                ?>
-                </form>
-                <p>
-                    <button id="sihamButton" class="btn btn-primary">Synchroniser les données personnelles dans <?= $nameConnecteur; ?></button>
-                </p>
-            <?php endif; ?>
-            <button id="sihamButton-inprogress"  class="btn btn-primary d-none" disabled type="button">
-                <span id="spinner" aria-hidden="true" class="spinner-border spinner-border-sm" role="status"></span>
-                &nbsp;Veuillez patienter...
-            </button>
+            </div>
         <?php endif; ?>
 
+        <?php if ($priseEnCharge): ?>
+            <!--Partie générique du formulaire-->
+            <?php
+            echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/dataPEC', compact('generiqueFieldset', 'intervenantRh', 'intervenantDossier', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
+            ?>
+            <!-- Formulaire spécifique au connecteur-->
+            <?php
+            echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
+            ?>
+            </form>
 
+            <p>
+                <button id="sihamButton" class="btn btn-primary">Prendre en charge l'intervenant
+                    dans <?= $nameConnecteur; ?></button>
+            </p>
+        <?php elseif ($renouvellement): ?>
+            <!--Partie générique du formulaire-->
+            <?php
+            echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/dataREN', compact('generiqueFieldset', 'intervenantRh', 'intervenantDossier', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
+            ?>
+            <!-- Formulaire spécifique au connecteur-->
+            <?php
+            echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/connecteurForm', compact('connecteurFieldset', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
+            ?>
+            </form>
+            <p>
+                <button id="sihamButton" class="btn btn-primary">Renouveler l'intervenant
+                    dans <?= $nameConnecteur; ?></button>
+            </p>
+        <?php else: ?>
+            <!--Partie générique du formulaire-->
+            <?php
+            echo $this->partial('export-rh/export-rh/' . $nameConnecteur . '/dataSYNC', compact('generiqueFieldset', 'intervenantRh', 'intervenantDossier', 'nameConnecteur', 'intervenant', 'renouvellement', 'priseEnCharge'));
+            ?>
+            </form>
+            <p>
+                <button id="sihamButton" class="btn btn-primary">Synchroniser les données personnelles
+                    dans <?= $nameConnecteur; ?></button>
+            </p>
+        <?php endif; ?>
+        <button id="sihamButton-inprogress" class="btn btn-primary d-none" disabled type="button">
+            <span id="spinner" aria-hidden="true" class="spinner-border spinner-border-sm" role="status"></span>
+            &nbsp;Veuillez patienter...
+        </button>
     <?php endif; ?>
-<?php else: ?>
-    <div class="alert alert-warning">Le module export RH n'est disponible que pour l'année universitaire en cours.</div>
 <?php endif; ?>
 <script type="text/javascript">
-    $("document").ready(function ()
-    {
+    $("document").ready(function () {
 
         $("#sihamButton").click(function () {
 

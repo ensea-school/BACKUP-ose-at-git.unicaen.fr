@@ -149,6 +149,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool $contratGeneration = false;
 
+    private bool $exportRh = false;
+
     private bool $servicePrevu = true;
 
     private bool $servicePrevuVisualisation = true;
@@ -264,7 +266,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function axiosDefinition(): array
     {
         return ['libelle',
-                'code'];
+            'code'];
     }
 
 
@@ -1131,6 +1133,21 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     {
         $this->contratGeneration = $contratGeneration;
 
+        return $this;
+    }
+
+
+
+    public function isExportRh(): bool
+    {
+        return $this->exportRh;
+    }
+
+
+
+    public function setExportRh(bool $exportRh): Statut
+    {
+        $this->exportRh = $exportRh;
         return $this;
     }
 

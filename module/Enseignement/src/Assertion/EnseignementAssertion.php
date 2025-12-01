@@ -337,8 +337,12 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertValidation(Service|VolumeHoraire|Intervenant $entite, string $typeVolumeHoraireCode): bool
+    protected function assertValidation(Service|VolumeHoraire|Intervenant|Validation $entite, string $typeVolumeHoraireCode): bool
     {
+        if ($entite instanceof Validation) {
+            $entite = $entite->getIntervenant();
+        }
+
         if ($entite instanceof VolumeHoraire) {
             $entite = $entite->getService();
         }

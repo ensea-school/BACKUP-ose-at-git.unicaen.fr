@@ -28,8 +28,15 @@ OSE [24.12](#ose-2412-21112025)
 
 ## Notes de mise à jour
 
-Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
-Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
+* /!\ ATTENTION /!\ Le workflow a été réinitialisé, vous devrez le réadpter à vos besoins (Administration/Workflow). 
+
+* Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
+
+* Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
+
+* La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
+
+
 
 # OSE 24.13 (à venir)
 

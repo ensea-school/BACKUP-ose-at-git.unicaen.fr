@@ -11,9 +11,6 @@ use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
-use Laminas\View\Model\ViewModel;
-use UnicaenSiham\Exception\SihamException;
-use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 class ExportRhController extends AbstractController

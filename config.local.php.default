@@ -419,13 +419,6 @@ return [
             ],
 
         ],
-        //Statuts OSE exclus de la PEC/REN de SIHAM
-        'exclude-statut-ose'       => [
-            'BIATSS'             => 'BIATSS',
-            'SS_EMPLOI_NON_ETUD' => 'Sans emploi, non étudiant',
-            'IMP'                => 'Vacataire académique sur convention',
-
-        ],
         //Permet de définir le type d'affectation que l'on prend en compte pour vérifier si affectation existe
         'type-affectation'         => [
             'FUN',

@@ -87,7 +87,7 @@ class TblContratService extends AbstractEntityService
 
 
 
-    public function getInformationContratByUuid(mixed $uuid): TblContrat
+    public function getInformationContratByUuid(mixed $uuid): ?TblContrat
     {
         $em = $this->getEntityManager();
 
@@ -106,12 +106,11 @@ class TblContratService extends AbstractEntityService
             ->setParameter('uuid', $uuid);
 
         return $query->getOneOrNullResult();
-
     }
 
 
 
-    public function getInformationContratById(int $id): TblContrat
+    public function getInformationContratById(int $id): ?TblContrat
     {
         $em = $this->getEntityManager();
 

@@ -70,7 +70,7 @@ update-bdd: ## Mise à jour de la base de données
 
 update-ddl: ## Mise à jour des définitions de la base de données
 	docker exec -it $(APP_NAME)-php /var/www/html/bin/ose update-ddl
-	docker exec -it $(APP_NAME)-php chown -R $(DEV_HOST_USER_ID):$(DEV_HOST_USER_ID) vendor/*
+	docker exec -it $(APP_NAME)-php chown -R $(DEV_HOST_USER_ID):$(DEV_HOST_USER_ID) data/ddl
 .PHONY: update-bdd
 
 

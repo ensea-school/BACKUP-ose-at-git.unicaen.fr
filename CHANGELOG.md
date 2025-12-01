@@ -24,11 +24,20 @@ OSE [24.12](#ose-2412-21112025)
 ## Corrections
 
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
+* Ajout d'une exception dans le validateur de numéro insee des données personnelles pour simplifier le contrôle de la donnée dans le cas d'un département de naissance "Polynésie Française" (#63903).
 
 ## Notes de mise à jour
 
 Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
 Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
+
+# OSE 24.13 (à venir)
+
+## Corrections
+
+* Les mises en paiement en trop apparaissent de nouveau dans les IHM liées aux paiements (#64243)
+* Alimentation du dossier personnel de l'intervenant avec la situation matrimoniale de l'intervenant si elle est renseignée dans la table intervenant (#63648)
+
 
 # OSE 24.12 (21/11/2025)
 

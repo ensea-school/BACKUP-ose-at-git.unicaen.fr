@@ -31,6 +31,7 @@ class PiecesJointesAssertion extends AbstractAssertion
             case PieceJointeController::class . '.lister':
             case PieceJointeController::class . '.getPiecesJointes':
             case PieceJointeController::class . '.televerser':
+            case PieceJointeController::class . '.telecharger':
                 return $this->isEtapeAccessible($intervenant);
             case PieceJointeController::class . '.supprimer':
                 return $this->assertEdition($intervenant, $pieceJointe);
@@ -58,7 +59,7 @@ class PiecesJointesAssertion extends AbstractAssertion
 
         $fdr = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
 
-        $wfEtape = $fdr->get(WorkflowEtape::PJ_SAISIE);
+        $wfEtape      = $fdr->get(WorkflowEtape::PJ_SAISIE);
         $wfEtapeCompl = $fdr->get(WorkflowEtape::PJ_COMPL_SAISIE);
 
         return ($wfEtape?->isAllowed() ?? false) || ($wfEtapeCompl?->isAllowed() ?? false);

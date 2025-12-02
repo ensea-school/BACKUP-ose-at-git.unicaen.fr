@@ -16,6 +16,7 @@
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="150" nullable="false"/>
         <field name="urlModeleDoc" type="string" column="URL_MODELE_DOC" length="256" nullable="true"/>
+        <field name="description" type="string" column="DESCRIPTION" length="4000" nullable="true"/>
         <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
         <many-to-one field="histoModificateur" target-entity="Utilisateur\Entity\Db\Utilisateur">
             <join-columns>

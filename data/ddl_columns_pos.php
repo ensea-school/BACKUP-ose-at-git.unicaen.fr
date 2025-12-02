@@ -1914,6 +1914,7 @@ return [
         'HISTO_DESTRUCTEUR_ID',
         'URL_MODELE_DOC',
         'ORDRE',
+        'DESCRIPTION',
     ],
     'TYPE_PIECE_JOINTE_STATUT'            => [
         'ID',

@@ -46,6 +46,8 @@ class TypePieceJointe implements HistoriqueAwareInterface
      */
     private $urlModeleDoc;
 
+    private ?string $description = null;
+
     /**
      * @var integer
      */
@@ -143,6 +145,21 @@ class TypePieceJointe implements HistoriqueAwareInterface
     public function getUrlModeleDoc()
     {
         return $this->urlModeleDoc;
+    }
+
+
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+
+
+    public function setDescription(?string $description): TypePieceJointe
+    {
+        $this->description = $description;
+        return $this;
     }
 
 

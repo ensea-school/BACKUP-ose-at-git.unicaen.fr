@@ -201,19 +201,6 @@ class ExportRhService extends AbstractService
 
 
 
-    public function getExcludeStatutOse (): array
-    {
-        $config             = $this->config;
-        $configUnicaenSiham = $config['unicaen-siham'];
-        if (array_key_exists('exclude-statut-ose', $configUnicaenSiham)) {
-            return $configUnicaenSiham['exclude-statut-ose'];
-        }
-
-        return [];
-    }
-
-
-
     public function haveToSyncCode (): bool
     {
         $config = $this->config;

@@ -22,6 +22,8 @@ class Plafond
 
     protected bool $ok = true;
 
+    protected ?string $messageErreur = null;
+
     protected Collection $plafondStructure;
 
     protected Collection $plafondReferentiel;
@@ -123,6 +125,21 @@ class Plafond
     public function setOk(bool $ok): Plafond
     {
         $this->ok = $ok;
+        return $this;
+    }
+
+
+
+    public function getMessageErreur(): ?string
+    {
+        return $this->messageErreur;
+    }
+
+
+
+    public function setMessageErreur(?string $messageErreur): Plafond
+    {
+        $this->messageErreur = $messageErreur;
         return $this;
     }
 

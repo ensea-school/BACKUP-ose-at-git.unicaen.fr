@@ -29,7 +29,13 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITI
             <tr>
                 <td><?= $plafond->getPlafondPerimetre() ?></td>
                 <td><?= $plafond->getNumero() ?></td>
-                <td style="width:50%"><?= $plafond; ?></td>
+                <td style="width:50%"><?php
+                    echo $plafond;
+
+                    if (!$plafond->isOk()){
+                        echo '<div class="alert alert-danger">'.($plafond->getMessageErreur() ?? 'La requête plafond est en erreur. Veuillez la vérifier').'</div>';
+                    }
+                ?></td>
                 <?php if ($canEdit): ?>
                     <td>
                         <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>" title="Modifier le plafond"><i

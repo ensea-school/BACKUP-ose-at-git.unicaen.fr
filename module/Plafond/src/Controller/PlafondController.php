@@ -35,6 +35,11 @@ class PlafondController extends AbstractController
         $title    = 'Gestion des plafonds';
         $plafonds = $this->getServicePlafond()->getList();
 
+        // Test des requêtes pour affichage erreurs
+        foreach($plafonds as $plafond){
+            $this->getServicePlafond()->testRequete($plafond);
+        }
+
         return compact('title', 'plafonds');
     }
 

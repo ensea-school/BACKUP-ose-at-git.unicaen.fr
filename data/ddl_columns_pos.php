@@ -1120,6 +1120,7 @@ return [
         'REQUETE',
         'NUMERO',
         'OK',
+        'MESSAGE_ERREUR',
     ],
     'PLAFOND_ETAT'                        => [
         'ID',

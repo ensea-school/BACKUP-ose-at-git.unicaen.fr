@@ -45,6 +45,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'MESSAGE_ERREUR'       => [
+            'name'        => 'MESSAGE_ERREUR',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 2000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 8,
+            'commentaire' => NULL,
+        ],
         'NUMERO'               => [
             'name'        => 'NUMERO',
             'type'        => 'int',

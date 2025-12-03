@@ -22,7 +22,7 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
     {
         $this->setAttribute('class', 'plafond-form');
 
-        $this->spec(Plafond::class);
+        $this->spec(Plafond::class, ['ok', 'messageErreur']);
         $this->build();
 
         $this->setLabels([

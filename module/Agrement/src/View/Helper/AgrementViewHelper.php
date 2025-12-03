@@ -37,7 +37,7 @@ class AgrementViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke (Agrement $agrement = null, TblAgrement $tblAgrement = null)
+    public function __invoke (?Agrement $agrement = null, ?TblAgrement $tblAgrement = null)
     {
         if ($agrement) $this->setAgrement($agrement);
         if ($tblAgrement) $this->setTblAgrement($tblAgrement);

@@ -181,7 +181,11 @@ class ContratController extends AbstractController
 
         $volumeHorairesCreation = $this->getServiceTblContrat()->getInformationContratByUuid($uuid);
         $contrat                = new Contrat();
-        $contrat                = $this->getProcessusContrat()->creer($contrat, $volumeHorairesCreation);
+        if ($volumeHorairesCreation) {
+            $contrat = $this->getProcessusContrat()->creer($contrat, $volumeHorairesCreation);
+        }else{
+            $contrat->setIntervenant($intervenant);
+        }
 
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {

@@ -10,6 +10,8 @@
         <field name="libelle" type="string" column="LIBELLE" length="150" nullable="false"/>
         <field name="message" type="string" column="MESSAGE" length="500" nullable="true"/>
         <field name="requete" type="string" column="REQUETE" length="4000" nullable="false"/>
+        <field name="ok" type="boolean" column="OK" nullable="false"/>
+        <field name="messageErreur" type="string" column="MESSAGE_ERREUR" length="2000" nullable="true"/>
 
         <many-to-one field="plafondPerimetre" target-entity="Plafond\Entity\Db\PlafondPerimetre">
             <join-columns>

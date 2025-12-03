@@ -241,7 +241,8 @@ class EnseignementAssertion extends AbstractAssertion
             // Test relatif aux campagnes de saisie
             if ($entite->getTypeVolumeHoraire()) {
                 if ($entite->getTypeVolumeHoraire()->getCode() !== $typeVolumeHoraireCode) {
-                    throw new \Exception('Incohérence entre le type de volume horaire du service et le test d\'assertion');
+                    //throw new \Exception('Incohérence entre le type de volume horaire du service et le test d\'assertion');
+                    return false;
                 }
 
                 if (!$this->getAssertionService()->assertCampagneSaisie($entite->getTypeVolumeHoraire())) {
@@ -337,8 +338,12 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertValidation(Service|VolumeHoraire|Intervenant $entite, string $typeVolumeHoraireCode): bool
+    protected function assertValidation(Service|VolumeHoraire|Intervenant|Validation $entite, string $typeVolumeHoraireCode): bool
     {
+        if ($entite instanceof Validation) {
+            $entite = $entite->getIntervenant();
+        }
+
         if ($entite instanceof VolumeHoraire) {
             $entite = $entite->getService();
         }

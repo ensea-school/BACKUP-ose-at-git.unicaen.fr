@@ -121,10 +121,7 @@ class ExportRhController extends AbstractController
          *
          */
         try {
-            if (!array_key_exists($intervenant->getStatut()->getCode(), $this->exportRhService->getExcludeStatutOse()) && $typeIntervenant != 'P') {
-                $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
-            }
-
+            $intervenantRh = $this->exportRhService->getIntervenantRh($intervenant);
 
             //On a trouvé un intervenant dans le SI RH
             if (!empty($intervenantRh)) {

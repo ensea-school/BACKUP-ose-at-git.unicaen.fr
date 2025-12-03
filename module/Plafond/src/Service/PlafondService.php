@@ -596,11 +596,27 @@ class PlafondService extends AbstractEntityService
 
     public function testRequete(Plafond $plafond): array
     {
+        $result = $this->doTestRequete($plafond);
+
+        $success = $result['success'] || $result['no-data'];
+        if ($success != $plafond->isOk()){
+            $plafond->setOk($success);
+            $plafond->setMessageErreur($result['error'] ?? null);
+            $this->save($plafond);
+        }
+
+        return $result;
+    }
+
+
+
+    protected function doTestRequete(Plafond $plafond): array
+    {
         $colsPos = require getcwd() . '/data/ddl_columns_pos.php';
         $cols = $colsPos['TBL_PLAFOND_' . strtoupper($plafond->getPlafondPerimetre()->getCode())];
         $cols = array_diff($cols, ['ID', 'PLAFOND_ID', 'PLAFOND_ETAT_ID', 'DEROGATION', 'DEPASSEMENT', 'PLAFOND']);
 
-        $return = ['success' => true];
+        $return = ['success' => true, 'no-data' => false];
 
         try {
             $sql = 'SELECT * FROM (' . $plafond->getRequete() . ') r WHERE ROWNUM = 1';
@@ -608,6 +624,7 @@ class PlafondService extends AbstractEntityService
 
             if (empty($res)) {
                 $return['success'] = false;
+                $return['no-data'] = true;
                 $return['error'] = 'Le plafond ne retourne aucune donnée';
 
                 return $return;

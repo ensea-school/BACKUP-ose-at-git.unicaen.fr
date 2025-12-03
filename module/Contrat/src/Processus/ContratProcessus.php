@@ -325,7 +325,7 @@ class ContratProcessus extends AbstractProcessus
     /**
      * @throws Exception
      */
-    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null, $pieceJointe = true): Email
+    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, ?string $cci = null, ?string $subject = null, $pieceJointe = true): Email
     {
 
 

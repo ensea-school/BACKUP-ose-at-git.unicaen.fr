@@ -50,6 +50,13 @@ class TypePieceJointeSaisieForm extends AbstractForm
             ],
             'type'    => 'Text',
         ]);
+        $this->add([
+                       'name'    => 'description',
+                       'options' => [
+                           'label' => "Description",
+                       ],
+                       'type'    => 'Textarea',
+                   ]);
 
         $this->add(new Csrf('security'));
 

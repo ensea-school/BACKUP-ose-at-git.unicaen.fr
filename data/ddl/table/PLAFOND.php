@@ -57,6 +57,18 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
+        'OK'                   => [
+            'name'        => 'OK',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 7,
+            'commentaire' => NULL,
+        ],
         'PLAFOND_PERIMETRE_ID' => [
             'name'        => 'PLAFOND_PERIMETRE_ID',
             'type'        => 'int',

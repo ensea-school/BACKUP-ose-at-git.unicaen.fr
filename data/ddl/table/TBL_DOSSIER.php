@@ -9,7 +9,7 @@ return [
     'commentaire' => 'Données personnelles',
     'sequence'    => 'TBL_DOSSIER_ID_SEQ',
     'columns'     => [
-        'ACTIF'                        => [
+        'ACTIF'                              => [
             'name'        => 'ACTIF',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 4,
             'commentaire' => '1 Si l\'intervenant a un dossier, 0 sinon',
         ],
-        'ANNEE_ID'                     => [
+        'ANNEE_ID'                           => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -33,7 +33,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'APRES_RECRUTEMENT_ATTENDUE'   => [
+        'APRES_RECRUTEMENT_ATTENDUE'         => [
             'name'        => 'APRES_RECRUTEMENT_ATTENDUE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -42,10 +42,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 20,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
-        'APRES_RECRUTEMENT_REALISEE'   => [
+        'APRES_RECRUTEMENT_REALISEE'         => [
             'name'        => 'APRES_RECRUTEMENT_REALISEE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -54,10 +54,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 22,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
-        'AVANT_RECRUTEMENT_ATTENDUE'   => [
+        'AVANT_RECRUTEMENT_ATTENDUE'         => [
             'name'        => 'AVANT_RECRUTEMENT_ATTENDUE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -66,10 +66,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 21,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
-        'AVANT_RECRUTEMENT_REALISEE'   => [
+        'AVANT_RECRUTEMENT_REALISEE'         => [
             'name'        => 'AVANT_RECRUTEMENT_REALISEE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -78,10 +78,10 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 23,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE_ADRESSE'           => [
+        'COMPLETUDE_ADRESSE'                 => [
             'name'        => 'COMPLETUDE_ADRESSE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -93,19 +93,7 @@ return [
             'position'    => 11,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE_AUTRE_AVANT_RECRUTEMENT'           => [
-            'name'        => 'COMPLETUDE_AUTRE_AVANT_RECRUTEMENT',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => '0',
-            'position'    => 15,
-            'commentaire' => NULL,
-        ],
-        'COMPLETUDE_AUTRE_APRES_RECRUTEMENT'           => [
+        'COMPLETUDE_AUTRE_APRES_RECRUTEMENT' => [
             'name'        => 'COMPLETUDE_AUTRE_APRES_RECRUTEMENT',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -114,11 +102,22 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => '0',
-            'position'    => 16,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
-
-        'COMPLETUDE_BANQUE'            => [
+        'COMPLETUDE_AUTRE_AVANT_RECRUTEMENT' => [
+            'name'        => 'COMPLETUDE_AUTRE_AVANT_RECRUTEMENT',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => '0',
+            'position'    => 20,
+            'commentaire' => NULL,
+        ],
+        'COMPLETUDE_BANQUE'                  => [
             'name'        => 'COMPLETUDE_BANQUE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -130,7 +129,7 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE_CONTACT'           => [
+        'COMPLETUDE_CONTACT'                 => [
             'name'        => 'COMPLETUDE_CONTACT',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -142,7 +141,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE_EMPLOYEUR'         => [
+        'COMPLETUDE_EMPLOYEUR'               => [
             'name'        => 'COMPLETUDE_EMPLOYEUR',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -154,7 +153,7 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE_IDENTITE'          => [
+        'COMPLETUDE_IDENTITE'                => [
             'name'        => 'COMPLETUDE_IDENTITE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -166,7 +165,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE_IDENTITE_COMP'     => [
+        'COMPLETUDE_IDENTITE_COMP'           => [
             'name'        => 'COMPLETUDE_IDENTITE_COMP',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -178,7 +177,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE_INSEE'             => [
+        'COMPLETUDE_INSEE'                   => [
             'name'        => 'COMPLETUDE_INSEE',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -190,7 +189,7 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
-        'COMPLETUDE_STATUT'            => [
+        'COMPLETUDE_STATUT'                  => [
             'name'        => 'COMPLETUDE_STATUT',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -202,7 +201,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'DOSSIER_ID'                   => [
+        'DOSSIER_ID'                         => [
             'name'        => 'DOSSIER_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -214,7 +213,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'ID'                           => [
+        'ID'                                 => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -226,7 +225,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'               => [
+        'INTERVENANT_ID'                     => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -238,7 +237,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'VALIDATION_COMPLEMENTAIRE_ID' => [
+        'VALIDATION_COMPLEMENTAIRE_ID'       => [
             'name'        => 'VALIDATION_COMPLEMENTAIRE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -247,10 +246,10 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 24,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
-        'VALIDATION_ID'                => [
+        'VALIDATION_ID'                      => [
             'name'        => 'VALIDATION_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

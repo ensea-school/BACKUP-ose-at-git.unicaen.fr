@@ -6,22 +6,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Plafond\Interfaces\PlafondConfigInterface;
 
-/**
- * Plafond
- */
 class Plafond
 {
     use PlafondPerimetreAwareTrait;
 
-    protected ?int       $id      = null;
+    protected ?int $id = null;
 
-    protected int        $numero  = 0;
+    protected int $numero = 0;
 
-    protected string     $libelle = 'Nouveau plafond';
+    protected string $libelle = 'Nouveau plafond';
 
-    protected ?string    $message = null;
+    protected ?string $message = null;
 
-    protected string     $requete = '';
+    protected string $requete = '';
+
+    protected bool $ok = true;
 
     protected Collection $plafondStructure;
 
@@ -82,9 +81,6 @@ class Plafond
 
 
 
-    /**
-     * @return string|null
-     */
     public function getMessage(): ?string
     {
         return $this->message;
@@ -92,11 +88,6 @@ class Plafond
 
 
 
-    /**
-     * @param string|null $message
-     *
-     * @return Plafond
-     */
     public function setMessage(?string $message): Plafond
     {
         $this->message = $message;
@@ -122,12 +113,27 @@ class Plafond
 
 
 
+    public function isOk(): bool
+    {
+        return $this->ok;
+    }
+
+
+
+    public function setOk(bool $ok): Plafond
+    {
+        $this->ok = $ok;
+        return $this;
+    }
+
+
+
     /**
      * Get PlafondStructure
      *
-     * @return PlafondStructure[]
+     * @return Collection|PlafondStructure[]
      */
-    public function getPlafondStructure(): Collection
+    public function getPlafondStructure(): Collection|array
     {
         return $this->plafondStructure;
     }
@@ -137,9 +143,9 @@ class Plafond
     /**
      * Get PlafondReferentiel
      *
-     * @return PlafondReferentiel[]
+     * @return Collection|PlafondReferentiel[]
      */
-    public function getPlafondReferentiel(): Collection
+    public function getPlafondReferentiel(): Collection|array
     {
         return $this->plafondReferentiel;
     }
@@ -149,9 +155,9 @@ class Plafond
     /**
      * Get PlafondMission
      *
-     * @return PlafondMission[]
+     * @return Collection|PlafondMission[]
      */
-    public function getPlafondMission(): Collection
+    public function getPlafondMission(): Collection|array
     {
         return $this->plafondMission;
     }
@@ -161,9 +167,9 @@ class Plafond
     /**
      * Get PlafondStatut
      *
-     * @return PlafondStatut[]
+     * @return Collection|PlafondStatut[]
      */
-    public function getPlafondStatut(): Collection
+    public function getPlafondStatut(): Collection|array
     {
         return $this->plafondStatut;
     }
@@ -191,12 +197,6 @@ class Plafond
 
 
 
-    /**
-     * The __toString method allows a class to decide how it will react when it is converted to a string.
-     *
-     * @return string
-     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
-     */
     public function __toString(): string
     {
         return $this->getLibelle();

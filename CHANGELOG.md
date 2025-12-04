@@ -44,6 +44,8 @@ OSE [24.12](#ose-2412-21112025)
 
 * Les mises en paiement en trop apparaissent de nouveau dans les IHM liées aux paiements (#64243)
 * Alimentation du dossier personnel de l'intervenant avec la situation matrimoniale de l'intervenant si elle est renseignée dans la table intervenant (#63648)
+* Amélioration de la demande de paiement en lot afin d’afficher les intervenants ayant des HETD restantes à payer, en notifiant qu’il existe des incohérences de paiement sur leurs demandes précédentes (trop-perçu, etc.). Les cas notifiés ne pourront pas être traités en masse mais une indication affichera qu'il faut reprendre les demandes de mise en paiement manuellement sur l'intervenant.
+
 
 
 # OSE 24.12 (21/11/2025)

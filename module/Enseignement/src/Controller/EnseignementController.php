@@ -207,7 +207,6 @@ class EnseignementController extends AbstractController
         }
         $hDeb    = $service->getVolumeHoraireListe()->getHeures();
         $request = $this->getRequest();
-
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
@@ -217,9 +216,7 @@ class EnseignementController extends AbstractController
                     $form->saveToContext();
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
-                        $this->em()->getConnection()->setAutoCommit(true);
                         //Uniquement pour le service fait dans l'établissement
-
                         $isExterne = false;
                         if ($form->get('service')->has('interne-externe')) {
                             if ($form->get('service')->get('interne-externe')->getValue() == 'service-externe') {
@@ -240,7 +237,6 @@ class EnseignementController extends AbstractController
                         }
 
                         $service = $this->getServiceService()->save($service);
-                        $this->em()->getConnection()->setAutoCommit(false);
                         $saved = $service;
                         $form->get('service')->get('id')->setValue($service->getId()); // transmet le nouvel ID
                         $hFin = $service->getVolumeHoraireListe()->getHeures();

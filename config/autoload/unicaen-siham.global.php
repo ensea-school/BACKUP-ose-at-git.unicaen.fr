@@ -27,9 +27,7 @@ return [
         'cloture' => $config['export-rh']['cloture'] ?? false,
 
         'filters' => $config['export-rh']['filters'] ?? [],
-
-        'exclude-statut-ose' => $config['export-rh']['exclude-statut-ose'] ?? false,
-
+        
         'type-affectation' => $config['export-rh']['type-affectation'] ?? null,
 
         'unites-organisationelles' => $config['export-rh']['unites-organisationelles'] ?? [],

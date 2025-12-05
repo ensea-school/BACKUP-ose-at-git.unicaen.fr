@@ -172,13 +172,6 @@ suivantes et faire le paramètrage souhaité :
             ],
         ],
         
-        //Permet d'excluse les statuts pour lesquels on ne souhaite pas faire de PEC ou REN
-        'exclude-statut-ose' => [
-            'BIATSS'             => 'BIATSS',
-            'SS_EMPLOI_NON_ETUD' => 'Sans emploi, non étudiant',
-            'IMP'                => 'Vacataire académique sur convention',
-
-        ],
 
         'type-affectation'         => [
             'FUN',

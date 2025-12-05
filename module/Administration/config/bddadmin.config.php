@@ -30,11 +30,12 @@ return [
             Migration\v25DoublonsValidations::class,
             Migration\v24ParametresAnnualises::class,
             Migration\v25Workflow::class,
+            Migration\v25ExportRh::class,
         ],
     ],
 
     'services' => [
-        DataSource\DataSource::class                 => DataSource\DataSourceFactory::class,
+        DataSource\DataSource::class => DataSource\DataSourceFactory::class,
     ],
 
 ];

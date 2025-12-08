@@ -361,6 +361,7 @@ class ServiceController extends AbstractController
     public function exportPdfAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
+        $etatSortie  = $this->getEvent()->getParam('etatSortie');
         /* @var $intervenant Intervenant */
         $annee     = $this->getServiceContext()->getAnnee();
         $structure = $this->getServiceContext()->getStructure();
@@ -375,8 +376,11 @@ class ServiceController extends AbstractController
             $recherche->setIntervenant($intervenant);
         }
 
-        $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_services_pdf');
-        $fileName   = 'Listing des services - ' . date('dmY') . '.pdf';
+
+        if (!$etatSortie) {
+            $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_services_pdf');
+        }
+        $fileName = 'Listing des services - ' . date('dmY') . '.pdf';
 
         $filters             = $recherche->getFilters();
         $filters['ANNEE_ID'] = $annee->getId();

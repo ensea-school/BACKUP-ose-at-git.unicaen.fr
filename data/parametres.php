@@ -60,22 +60,29 @@ return [
         "DESCRIPTION" => "État de sortie pour l'édition PDF des services",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
+    Parametre::ES_SERVICES_PDF2                           => [
+        "VALEUR"      => null,
+        "DESCRIPTION" => "État de sortie secondaire pour l'édition PDF des services",
+    ],
     Parametre::ES_SERVICES_CSV                            => [
         "VALEUR"      => "export_services",
         "DESCRIPTION" => "État de sortie pour l'édition CSV des services",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
+    ],
+    Parametre::ES_SERVICES_CSV2                           => [
+        "VALEUR"      => null,
+        "DESCRIPTION" => "État de sortie secondaire pour l'édition CSV des services",
     ],
     Parametre::ES_ETAT_PAIEMENT                           => [
         "VALEUR"      => "etat_paiement",
         "DESCRIPTION" => "État de sortie pour les états de paiement",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
-    Parametre::ES_EXPORT_FORMATION => [
+    Parametre::ES_EXPORT_FORMATION                        => [
         "VALEUR"      => "export-offre-formation",
         "DESCRIPTION" => "État de sortie pour l'export offre de formation",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
-
 
 
     /* Divers */

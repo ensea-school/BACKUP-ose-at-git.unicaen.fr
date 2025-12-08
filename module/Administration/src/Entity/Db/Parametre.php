@@ -26,9 +26,11 @@ class Parametre implements HistoriqueAwareInterface
     const ES_EXTRACTION_PAIE       = 'es_extraction_paie';
     const ES_EXTRACTION_INDEMNITES = 'es_extraction_indemnites';
     const ES_SERVICES_PDF          = 'es_services_pdf';
+    const ES_SERVICES_PDF2         = 'es_services_pdf_secondaire';
     const ES_SERVICES_CSV          = 'es_services_csv';
+    const ES_SERVICES_CSV2         = 'es_services_csv_secondaire';
     const ES_ETAT_PAIEMENT         = 'es_etat_paiement';
-    const ES_EXPORT_FORMATION = 'es_export_formation';
+    const ES_EXPORT_FORMATION      = 'es_export_formation';
 
 
     /* Divers */

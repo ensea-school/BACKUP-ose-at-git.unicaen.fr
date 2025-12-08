@@ -171,12 +171,12 @@ class ParametresForm extends AbstractForm
 
         $etablissement = new SearchAndSelect('etablissement');
         $etablissement->setRequired(true)
-            ->setSelectionRequired(true)
-            ->setAutocompleteSource(
-                $this->getUrl('etablissement/recherche')
-            )
-            ->setLabel("Établissement :")
-            ->setAttributes(['title' => "Saisissez le libellé (2 lettres au moins)"]);
+                      ->setSelectionRequired(true)
+                      ->setAutocompleteSource(
+                          $this->getUrl('etablissement/recherche')
+                      )
+                      ->setLabel("Établissement :")
+                      ->setAttributes(['title' => "Saisissez le libellé (2 lettres au moins)"]);
         $this->add($etablissement);
 
         $this->add([
@@ -344,10 +344,35 @@ class ParametresForm extends AbstractForm
 
         $this->add([
                        'type'       => 'Select',
+                       'name'       => 'es_services_pdf_secondaire',
+                       'options'    => [
+                           'value_options' => ['' => '(Sélectionnez un état de sortie)'] + Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
+                           'label'         => 'État de sortie secondaire pour l\'édition PDF des services',
+                       ],
+                       'attributes' => [
+                           'class'            => 'selectpicker',
+                           'data-live-search' => 'true',
+                       ],
+                   ]);
+
+        $this->add([
+                       'type'       => 'Select',
                        'name'       => 'es_services_csv',
                        'options'    => [
                            'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
                            'label'         => 'État de sortie pour l\'export CSV des services',
+                       ],
+                       'attributes' => [
+                           'class'            => 'selectpicker',
+                           'data-live-search' => 'true',
+                       ],
+                   ]);
+        $this->add([
+                       'type'       => 'Select',
+                       'name'       => 'es_services_csv_secondaire',
+                       'options'    => [
+                           'value_options' => ['' => '(Sélectionnez un état de sortie)'] + Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
+                           'label'         => 'État de sortie secondaire pour l\'export CSV des services',
                        ],
                        'attributes' => [
                            'class'            => 'selectpicker',

@@ -25,12 +25,18 @@ return [
                     'action' => 'resume',
                 ],
                 'export-csv' => [
-                    'route'  => '/export-csv',
-                    'action' => 'export-csv',
+                    'route'       => '/export-csv/[:etatSortie]',
+                    'action'      => 'export-csv',
+                    'constraints' => [
+                        'etatSortie' => '[0-9]*',
+                    ],
                 ],
                 'export-pdf' => [
-                    'route'  => '/export-pdf',
-                    'action' => 'export-pdf',
+                    'route'       => '/export-pdf/[:etatSortie]',
+                    'action'      => 'export-pdf',
+                    'constraints' => [
+                        'etatSortie' => '[0-9]*',
+                    ],
                 ],
                 'horodatage' => [
                     'route'       => '/horodatage/:intervenant/:typeVolumeHoraire/:referentiel',
@@ -105,26 +111,26 @@ return [
 
     'navigation' => [
         'service' => [
-            'label'    => 'Services',
-            'title'    => "Visualisation et export des services",
-            'order'    => 3,
-            'route'    => 'service',
+            'label' => 'Services',
+            'title' => "Visualisation et export des services",
+            'order' => 3,
+            'route' => 'service',
         ],
 
         'intervenant' => [
             'pages' => [
-            /*    'services-prevus'   => [
-                    'label'               => "Enseignements prévisionnels",
-                    'title'               => "Enseignements prévisionnels de l'intervenant",
-                    'route'               => 'intervenant/services-prevus',
-                    'order'               => 6,
-                ],
-                'services-realises' => [
-                    'label'               => "Enseignements réalisés",
-                    'title'               => "Constatation des enseignements réalisés",
-                    'route'               => 'intervenant/services-realises',
-                    'order'               => 13,
-                ],*/
+                /*    'services-prevus'   => [
+                        'label'               => "Enseignements prévisionnels",
+                        'title'               => "Enseignements prévisionnels de l'intervenant",
+                        'route'               => 'intervenant/services-prevus',
+                        'order'               => 6,
+                    ],
+                    'services-realises' => [
+                        'label'               => "Enseignements réalisés",
+                        'title'               => "Constatation des enseignements réalisés",
+                        'route'               => 'intervenant/services-realises',
+                        'order'               => 13,
+                    ],*/
             ],
         ],
 
@@ -133,9 +139,9 @@ return [
                 'configuration' => [
                     'pages' => [
                         'campagnes-saisie' => [
-                            'label'    => "Campagnes de saisie des services",
-                            'route'    => 'parametres/campagnes-saisie',
-                            'order'    => 20,
+                            'label' => "Campagnes de saisie des services",
+                            'route' => 'parametres/campagnes-saisie',
+                            'order' => 20,
                         ],
                     ],
                 ],
@@ -143,10 +149,10 @@ return [
                 'intervenants' => [
                     'pages' => [
                         'regle-structure-validation' => [
-                            'label'      => "Règles de validation des enseignements",
-                            'title'      => "Permet de définir les priorités de validation de volumes horaires par type d'intervenant",
-                            'route'      => 'parametres/regle-structure-validation',
-                            'order'      => 30,
+                            'label' => "Règles de validation des enseignements",
+                            'title' => "Permet de définir les priorités de validation de volumes horaires par type d'intervenant",
+                            'route' => 'parametres/regle-structure-validation',
+                            'order' => 30,
                         ],
                     ],
                 ],
@@ -160,7 +166,8 @@ return [
                 Privileges::CLOTURE_CLOTURE,
                 Privileges::CLOTURE_REOUVERTURE,
             ],
-            'resources'  => [Validation::class, Intervenant::class],
+            'resources'  => [Validation::class,
+                             Intervenant::class],
             'assertion'  => Assertion\ClotureAssertion::class,
         ],
     ],
@@ -168,7 +175,8 @@ return [
     'guards' => [
         [
             'controller' => ServiceController::class,
-            'action'     => ['index', 'resume'],
+            'action'     => ['index',
+                             'resume'],
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
@@ -205,7 +213,8 @@ return [
         ],
         [
             'controller' => RegleStructureValidationController::class,
-            'action'     => ['saisie', 'delete'],
+            'action'     => ['saisie',
+                             'delete'],
             'privileges' => [
                 Privileges::PARAMETRES_REGLES_STRUCTURE_VALIDATION_EDITION,
             ],

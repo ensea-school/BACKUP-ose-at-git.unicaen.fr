@@ -20,13 +20,16 @@ if ($rechercheForm):
                 <?= $this->form()->openTag($rechercheForm->prepare()); ?>
                 <div class="row">
                     <div class="col-sm-2"><label class="control-label">Intervenant</label></div>
-                    <div class="col-sm-5"><label class="control-label"><?= $rechercheForm->get('type-intervenant')->getLabel() ?></label><br/>
+                    <div class="col-sm-5"><label
+                                class="control-label"><?= $rechercheForm->get('type-intervenant')->getLabel() ?></label><br/>
                         <?= $this->formRadio($rechercheForm->get('type-intervenant')); ?></div>
-                    <div class="col-sm-5" id="structure-aff-div"><?= $this->formControlGroup($rechercheForm->get('structure-aff')); ?></div>
+                    <div class="col-sm-5"
+                         id="structure-aff-div"><?= $this->formControlGroup($rechercheForm->get('structure-aff')); ?></div>
                 </div>
                 <div class="row">
                     <div class="col-sm-2">&nbsp;</div>
-                    <div class="col-sm-10 form-group"><label class="control-label"><?= $rechercheForm->get('intervenant')->getLabel() ?></label><br/>
+                    <div class="col-sm-10 form-group"><label
+                                class="control-label"><?= $rechercheForm->get('intervenant')->getLabel() ?></label><br/>
                         <?= $this->formSearchAndSelect($rechercheForm->get('intervenant')); ?></div>
                 </div>
                 <hr/>
@@ -40,6 +43,7 @@ if ($rechercheForm):
                     <div class="col-sm-5 form-group"><?= $this->formControlGroup($rechercheForm->get('type-volume-horaire')); ?></div>
                     <div class="col-sm-5 form-group"><?= $this->formControlGroup($rechercheForm->get('etat-volume-horaire')); ?></div>
                 </div>
+                <hr/>
                 <div class="row">
                     <div class="col-sm-2">&nbsp;</div>
                     <div class="col-sm-10">

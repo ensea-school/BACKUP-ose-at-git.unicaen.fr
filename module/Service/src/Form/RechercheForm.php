@@ -2,8 +2,10 @@
 
 namespace Service\Form;
 
+use Administration\Service\ParametresServiceAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Provider\Privileges;
+use EtatSortie\Service\EtatSortieServiceAwareTrait;
 use Unicaen\Framework\Authorize\Authorize;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
@@ -43,6 +45,8 @@ class RechercheForm extends AbstractForm
     use IntervenantServiceAwareTrait;
     use NiveauEtapeServiceAwareTrait;
     use ElementPedagogiqueRechercheFieldsetAwareTrait;
+    use ParametresServiceAwareTrait;
+    use EtatSortieServiceAwareTrait;
 
     /**
      *
@@ -136,11 +140,11 @@ class RechercheForm extends AbstractForm
         $hydrator->setServiceNiveauEtape($this->getServiceNiveauEtape());
 
         $this->setHydrator($hydrator)
-            ->setAllowedObjectBindingClass(Recherche::class);
+             ->setAllowedObjectBindingClass(Recherche::class);
 
         $this->setAttribute('method', 'get')
-            ->setAttribute('class', 'service-recherche')
-            ->setAttribute('id', $this->getId());
+             ->setAttribute('class', 'service-recherche')
+             ->setAttribute('id', $this->getId());
 
         $typeIntervenant = new \Laminas\Form\Element\Radio('type-intervenant');
         $typeIntervenant
@@ -207,14 +211,33 @@ class RechercheForm extends AbstractForm
         $action = new Hidden('action');
         $action->setValue('afficher');
         $this->add($action);
+        $esPdf           = $this->getServiceEtatSortie()->get($this->getServiceParametres()->get('es_services_pdf'));
+        $esPdfSecondaire = $this->getServiceEtatSortie()->get($this->getServiceParametres()->get('es_services_pdf_secondaire'));
+        $esCsv           = $this->getServiceEtatSortie()->get($this->getServiceParametres()->get('es_services_csv'));
+        $esCsvSecondaire = $this->getServiceEtatSortie()->get($this->getServiceParametres()->get('es_services_csv_secondaire'));
+
 
         $this->addActionButton('submit-resume', 'Afficher (résumé)', $this->getUrl('service/resume'), true);
         $this->addActionButton('submit-details', 'Afficher (détails)', $this->getUrl('service'));
         if ($this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXPORT_CSV)) {
-            $this->addActionButton('submit-export-csv', 'Exporter (CSV)', $this->getUrl('service/export-csv'));
+            if ($esCsv) {
+                $this->addActionButton('submit-export-csv', 'Export (CSV)', $this->getUrl('service/export-csv'));
+            }
         }
         if ($this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXPORT_PDF)) {
-            $this->addActionButton('submit-export-pdf', 'Exporter (PDF)', $this->getUrl('service/export-pdf'));
+            if ($esPdf) {
+                $this->addActionButton('submit-export-pdf', 'Export (PDF)', $this->getUrl('service/export-pdf'));
+            }
+        }
+        if ($this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXPORT_CSV)) {
+            if ($esCsvSecondaire) {
+                $this->addActionButton('submit-export-csv2', 'Export secondaire (CSV)', $this->getUrl('service/export-csv'));
+            }
+        }
+        if ($this->authorize->isAllowedPrivilege(Privileges::ENSEIGNEMENT_EXPORT_PDF)) {
+            if ($esPdfSecondaire) {
+                $this->addActionButton('submit-export-pdf2', 'Export secondaire (PDF)', $this->getUrl('service/export-pdf', ['etatSortie' => $esPdfSecondaire->getId()]));
+            }
         }
     }
 

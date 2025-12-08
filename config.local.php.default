@@ -148,7 +148,7 @@ return [
         'port'                         => 389,
 
         /* Option d'utilisation de SSL (non définie par défaut)
-         * valeurs possibles : LDAP_OPT_X_TLS_NEVER, LDAP_OPT_X_TLS_HARD, LDAP_OPT_X_TLS_DEMAND, LDAP_OPT_X_TLS_ALLOW, LDAP_OPT_X_TLS_TRY
+         * valeurs possibles : true ou false
          * @see https://docs.laminas.dev/laminas-authentication/adapter/ldap/
          */
         'useSsl'                       => null,

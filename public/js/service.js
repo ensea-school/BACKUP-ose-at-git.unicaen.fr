@@ -297,7 +297,9 @@ $.widget("ose.enseignements", {
 
         $("body").on('save-volume-horaire', function (event, popAjax) {
             var serviceId = popAjax.element.data('service');
-            popAjax.hide();
+            if ($("div .alert-warning", event.div).length ? false : true) { // si aucune erreur n'a été rencontrée
+                popAjax.hide();
+            }
             that.onAfterSaisie(serviceId);
         });
     }

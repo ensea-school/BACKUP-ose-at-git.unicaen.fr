@@ -25,6 +25,8 @@ OSE [24.12](#ose-2412-21112025)
 
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
 * Ajout d'une exception dans le validateur de numéro insee des données personnelles pour simplifier le contrôle de la donnée dans le cas d'un département de naissance "Polynésie Française" (#63903).
+* Le blocage se fait correctement pour les plafonds de périmètre volume horaire (#62434)
+* Le blocage se fait de nouveau correcttment pour les plafonds de périmètre intervenant (#63728)
 
 ## Notes de mise à jour
 

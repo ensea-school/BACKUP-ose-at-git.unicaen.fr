@@ -51,26 +51,30 @@ class PlafondProcessus extends AbstractProcessus
 
 
 
-    /**
-     * @param PlafondDataInterface $entity
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     *
-     * @return bool
-     */
-    public function endTransaction(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $isDiminution = false): bool
+    public function endTransaction(PlafondDataInterface|array $entities, TypeVolumeHoraire $typeVolumeHoraire, bool $isDiminution = false): bool
     {
-        //$this->getEntityManager()->flush();
+        if (!is_array($entities)){
+            $entities = [$entities];
+        }
+
 
         if ($isDiminution) {
             $passed = true; // ça passe à tous les coups si on diminue le volume d'heures
         } else {
-            $passed = $this->controle($entity, $typeVolumeHoraire, true);
+            $passed = true;
+            foreach( $entities as $entity) {
+                if (!$this->controle($entity, $typeVolumeHoraire, true)){
+                    $passed = false;
+                }
+            }
         }
 
         if ($passed) {
             try {
                 $this->getEntityManager()->commit();
-                $this->getServicePlafond()->calculerDepuisEntite($entity); // on met à jour les TBLs
+                foreach( $entities as $entity) {
+                    $this->getServicePlafond()->calculerDepuisEntite($entity); // on met à jour les TBLs
+                }
             }catch(ConnectionException $e){
                 $this->getEntityManager()->rollback();
             }

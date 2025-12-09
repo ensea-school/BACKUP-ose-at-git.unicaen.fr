@@ -31,6 +31,7 @@ final class NumeroINSEEValidator extends NumeroINSEE
     const MSG_ANNEE     = 'msgAnnee';
     const MSG_MOIS      = 'msgMois';
     const MSG_DEPT      = 'msgDepartement';
+    const MSG_POLY      = 'msgPoly';
     const DEP_POLYNESIE = '987';
 
 
@@ -59,21 +60,25 @@ final class NumeroINSEEValidator extends NumeroINSEE
      */
     private $departement;
 
+    private ?int $codePostalAdresse;
+
 
 
     public function __construct($options = null)
     {
-        $this->messageTemplates = array_merge($this->messageTemplates, [
+        $this->messageTemplates  = array_merge($this->messageTemplates, [
             self::MSG_CIVILITE => "Le numéro n'est pas cohérent avec la civilité saisie",
             self::MSG_ANNEE    => "Le numéro n'est pas cohérent avec l'année de naissance saisie",
             self::MSG_MOIS     => "Le numéro n'est pas cohérent avec le mois de naissance saisi",
             self::MSG_DEPT     => "Le numéro n'est pas cohérent avec le pays et l'éventuel département de naissance saisi",
+            self::MSG_POLY     => "Votre numéro NIR ne correspond pas à une domiciliation ou un naissance en Polynesie.",
         ]);
-        $this->pays             = $options['paysDeNaissance'] ?? false;
-        $this->dateNaissance    = $options['dateDeNaissance'] ?? false;
-        $this->departement      = $options['departementDeNaissance'] ?? false;
-        $this->civilite         = $options['civilite'] ?? false;
-        $this->provisoire       = $options['provisoire'] ?? false;
+        $this->pays              = $options['paysDeNaissance'] ?? false;
+        $this->dateNaissance     = $options['dateDeNaissance'] ?? false;
+        $this->departement       = $options['departementDeNaissance'] ?? false;
+        $this->civilite          = $options['civilite'] ?? false;
+        $this->provisoire        = $options['provisoire'] ?? false;
+        $this->codePostalAdresse = $options['codePostalAdresse'] ?? null;
 
         parent::__construct($options);
     }
@@ -82,15 +87,27 @@ final class NumeroINSEEValidator extends NumeroINSEE
 
     public function isValid($value, $context = null)
     {
-        //Cas particulier des numéros INSEE de la Polynesie qui doit comporter au minimum 7 chiffres sans vérification avec
-        //le département, date de naissance etc....
-        $departement = (int)$this->departement;
-        $code        = $this->getServiceDepartement()->get($departement)?->getCode();
-        if (($this->getServiceDepartement()->get($departement)?->getCode()) === self::DEP_POLYNESIE) {
-            return preg_match('/^[0-9]{7,}$/', $value) === 1;
+        //Cas particulier des numéros INSEE de la Polynesie qui doit comporter au minimum 7 chiffres
+        //1 - Cas domiciliation en polynesie, numéro insee polynesien obligatoire
+        $isPolynesieCodePostal = !empty($this->codePostalAdresse) && preg_match('/^987\d{2}$/', $this->codePostalAdresse) === 1;
+        if ($isPolynesieCodePostal) {
+            if (preg_match('/^[0-9]{7,}$/', $value) !== 1) {
+                $this->error(self::MSG_POLY);
+                return false;
+            }
+            return true;
+
+        }
+        //2 - Cas polynésien domicilé en France mais qui peut garder son numéro INSEE à 7 chiffres ou basculer sur un numéro insee de métropole
+        if (($this->getServiceDepartement()->get($this->departement)?->getCode()) === self::DEP_POLYNESIE) {
+            if (preg_match('/^[0-9]{7,}$/', $value) === 1 || parent::isValid($value)) {
+                return true;
+            }
+            $this->error(self::MSG_POLY);
+            return false;
         }
 
-
+        
         if (!parent::isValid($value)) {
             return false;
         }
@@ -99,7 +116,6 @@ final class NumeroINSEEValidator extends NumeroINSEE
         $departementDeNaissance = $this->departement;
         $dateDeNaissance        = $this->dateNaissance;
         $paysDeNaissance        = $this->pays;
-        $civilite               = $this->civilite;
 
         $this->provisoire = $this->getProvisoire();
 

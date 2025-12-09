@@ -64,6 +64,7 @@ class IntervenantDossierForm extends AbstractForm
             'dossierIntervenant'                    => $dossierIntervenant,
             'dossierIdentiteFieldset'               => &$this->dossierIdentiteFieldset,
             'dossierIdentiteComplementaireFieldset' => &$this->dossierIdentiteComplementaireFieldset,
+            'dossierAdresseFieldset'                => &$this->dossierAdresseFieldset,
         ];
 
 
@@ -101,7 +102,7 @@ class IntervenantDossierForm extends AbstractForm
         }
 
         //Gestion des champs autres
-        
+
         $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => $dossierIntervenant->getStatut()->getChampsAutres()]);
         $this->dossierAutresFiedlset->init();
         $this->add($this->dossierAutresFiedlset);

@@ -69,10 +69,12 @@ class DossierInseeFieldset extends AbstractFieldset
     {
         $dossierIdentiteComplementaireFieldset = $this->getOption('dossierIdentiteComplementaireFieldset');
         $dossierIdentiteFieldset               = $this->getOption('dossierIdentiteFieldset');
+        $dossierAdresseFieldset                = $this->getOption('dossierAdresseFieldset');
         $departementDeNaissance                = $dossierIdentiteComplementaireFieldset->get('departementNaissance')->getValue();
         $paysDeNaissance                       = $dossierIdentiteComplementaireFieldset->get('paysNaissance')->getValue();
         $dateDeNaissance                       = $dossierIdentiteFieldset->get('dateNaissance')->getValue();
         $civilite                              = $dossierIdentiteFieldset->get('civilite')->getValue();
+        $codePostalAdresse                     = $dossierAdresseFieldset->get('codePostal')->getValue();
 
 
         $numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
@@ -87,6 +89,7 @@ class DossierInseeFieldset extends AbstractFieldset
                                                  'paysDeNaissance'        => $paysDeNaissance,
                                                  'dateDeNaissance'        => $dateDeNaissance,
                                                  'civilite'               => $civilite,
+                                                 'codePostalAdresse'      => $codePostalAdresse,
                                              ]),
                 ],
             ],

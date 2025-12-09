@@ -29,11 +29,13 @@
 * [Mise en place de l'export RH](Export-Rh/fonctionnalite.md)
 
 
-## Configuration
+## Configuration technique
 
-- [Configuration du stockage des fichiers](Stockage-fichiers.md)
-- [Mise en place de la signature électronique](Signature-Electronique/configuration.md)
-* [Plafonds](Plafonds/Plafonds.md)
+* [Configuration du stockage des fichiers](Stockage-fichiers.md)
+* [Mise en place de la signature électronique](Signature-Electronique/configuration.md)
 * [Detecter si on est connecté depuis l'établissement ou bien depuis l'extérieur](detection-etablissement-ou-extérieur.md)
-* [Stockage des fichiers](Stockage-fichiers.md)
+
+## Paramétrages avancés
+
 * [Paramétrage des périodes](Insertion-Periodes/Insertion_Periodes.md)
+* [Plafonds](Plafonds/Plafonds.md)

@@ -1,17 +1,3 @@
-**ATTENTION** : cette docmuentation est valable à partir de la version 17 de OSE. Pour les versions antérieures le
-module exportRh n'est pas disponible.
-
-# Principe
-
-Le module ExportRh de OSE permet de rendre une disponible au sein de l'applicatif une fonctionnalité d'export des
-données intervenants dans le SI RH. Pour le moment, seul SIHAM est pris en charge par ce module.
-
-Si vous activez le module export et que vous avez SIHAM, vous pourrez pour un intervenant, vacataire et uniquement pour
-l'année universitaire en cours, lancer une prise en charge ou un renouvellement directement dans SIHAM à partir de OSE.
-
-A noter que le renouvellement, ou la prise en charge SIHAM n'est possible que si le contrat OSE a une date de retour
-signée.
-
 # Configuration du connecteur SIHAM
 
 Pour utiliser le module ExportRh Siham vous devez ajouter dans le fichier de configuration config.local.php les lignes
@@ -24,6 +10,7 @@ suivantes et faire le paramètrage souhaité :
         'connecteur' => 'siham',//Le nom du connecteur dont vous avez besoin, pour le moment seul le connecteur SIHAM a été développé.
         'sync-code'  => false,//Permet de venir forcer le code de l'intervenant avec le matricule siham en retour d'un renouvellement ou d'une prise en charge
         'sync-source'  => '',//Code de la source à remplacer après la synchronisation
+        'sync-code-rh' => true,//Mise à jour automatique de la colonne code_rh de la table intervenant avec le matricule siham
 
         // Options concernant l'appel du web service .
         'api' => [
@@ -110,19 +97,34 @@ suivantes et faire le paramètrage souhaité :
             ],
         ],
 
-        'code-administration' => 'UCN',
-        'code-etablissement'  => '0141408E',
+        'code-administration'             => 'UCN',
+        'code-etablissement'              => '0141408E',
         
         //Permet de renseigner le code typeUO à remonter dans la liste des structures  sélectionnable dans l'export RH
         //Vous pouvez mettre plusieurs code séparés par des virgules
         'code-type-structure-affectation' => 'CODEA,CODEB,....',
         
-         //Parametrage de la cloture d'un dossier
-        'cloture'                         => [
-            'categorie-situation' => 'MC140',
-            'motif-situation'     => 'MC601',
-        ],
-        
+        //Paramétrage des informations nécessaires pour la création du contat dans SIHAM
+        'contrat'                         => [
+             'active'     => true,
+             'missionDate'       => 'UNIV',//Paramètrage pour forcer la date universitaire pour les contrats missions
+             'parameters' => [
+                 'natureContrat'     => 'CO',
+                 'typeContrat'       => 'TC01',
+                 'typeLienJuridique' => 'TL01',
+                 'modeRemuneration'  => 'MR08',
+                 'modeDeGestion'     => 'MG08',
+                 'temoinValidite'    => '1',
+                 'categorieContrat'  => '1',
+                 'gradeTG'           => [
+                     'C2038' => '0499010000',
+                     'C2041' => '0499010000',
+                     'C2052' => '0499020000',
+                     'C1204' => '0499010000',
+                 ],
+
+             ],
+         ],
         //ou avec un paramètrage affiné par code statut siham
          //Parametrage de la cloture d'un dossier
         'cloture'                         => [

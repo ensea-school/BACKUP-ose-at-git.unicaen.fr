@@ -1,51 +1,45 @@
 # Installation de l'environnement de développement de OSE
 
-OSE a besoin de npm et node.js
-
-NPM doit être installé sur la machine au moyen du gestionnaire de packages
-
-Pour utiliser la version 19 de node sur Ubuntu, utiliser la commande :
-
+## Si vous utilisez dev-infra
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash -
+git clone https://git.unicaen.fr/open-source/OSE.git ose-dev
+cd ose-dev
+cp config.local.php.default config.local.php
+cp .env.example .env
+cp doc/Docker/dev-infra/docker-compose.yaml .
+make start
 ```
 
-Reste à l'installer en passant par le gestionnaire de paquets de la distribution.
-```bash
-apt install npm
-```
+- Configurez votre [config.local.php](../config.local.php)
+- Configurez votre [.env](../.env).
+- [Configurez & redémarrez votre DevInfra](Docker/dev-infra/dev-infra.md)
+- Accédez à l'application : [https://ose-dev.localhost.unicaen.fr](https://ose-dev.localhost.unicaen.fr)
 
-Attention : l'utilisation de npm doit se faire toujours depuis la machine hôte et pas à l'intérieur du conteneurDocker.
-
-Il faut ensuite installer les dépendances (Vue, Vite, Sass, etc.)
-
-Dans le dossier du projet :
-```bash
-npx npm install
-```
-
-Reste à démarrer Vite en mode dév :
+## Si vous n'utilisez pas DevInfra
 
 ```bash
-npx vite dev
+git clone https://git.unicaen.fr/open-source/OSE.git ose-dev
+cd ose-dev
+cp config.local.php.default config.local.php 
+cp .env.example .env
+cp docker-compose.yaml.example docker-compose.yaml
+make start
 ```
 
-Ceci permet de faire du "hot loading". C'est-à-dire que les modifications du composant peuvent se voir dans le navigateur sans avoir à rafraichir la page.
-
-
+- Configurez votre [config.local.php](../config.local.php)
+- Configurez votre [.env](../.env).
+- Accédez à l'application : [http://localhost:8080](http://localhost:8080)
 
 ## Commandes usuelles
 
-### Mise à jour des dépendances Node
-
-Le fichier package.json gère les dépendances et la config de NPM
-Si on veut mettre à jour les dépendances (équivalent de composer update), il faut lancer
+OSE est doté d'un Makefile qui vous permettra de lancer la plupart des commandes usuelles.
 
 ```bash
-npx npm update
+# affiche la doc du makefile
+make help
 ```
 
-### Préparation pour le déploiement
+## Préparation pour le déploiement
 
 Vite est un outil de développement web rapide qui permet de créer facilement
 des projets web avec Vue.js ou autre.

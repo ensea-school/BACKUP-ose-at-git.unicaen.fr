@@ -29,7 +29,7 @@ https://mediatheque-pedagogique.unicaen.fr/dsi/ose/
 
 ## Documentation technique
 
-[`Documentation`](doc/doc.md).
+[Documentation](doc/doc.md)
 
 ## Nous contacter
 

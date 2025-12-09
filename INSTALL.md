@@ -10,6 +10,16 @@ Le serveur web doit être installé par vos soins.
 Le serveur web n'héberge aucune donnée, hormis des fichiers de configuration et de cache. Toutes les données
 d'explloitation sont donc stockées en base de données.
 
+# Docker
+
+OSE est installable via Docker.
+Cependant, ce mode de déploiement est pour l'instant réservé aux environnements de développement
+et de préproduction.
+
+Au besoin, vous trouverez la documentation [ici](doc/Docker/doc.md).
+
+Pour une installation hors Docker, veuillez suivre la procédure ci-dessous :
+
 # Serveur de base de donnée
 
 ### Spécifications

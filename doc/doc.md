@@ -17,7 +17,7 @@
 * [Utilisation de OSE via scripts PHP](scripts.md)
 
 
-## IMPORT : Synchronisation des données en provenance su SI
+## IMPORT : Synchronisation des données en provenance du SI
 
 * [Connecteurs IMPORT](Connecteurs-Import/Connecteurs-IMPORT.md)
 * [Connecteur Actul +](https://git.unicaen.fr/open-source/connecteur-ose/actul/-/blob/master/doc/doc.md)

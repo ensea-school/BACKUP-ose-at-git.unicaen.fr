@@ -20,6 +20,8 @@
 ## IMPORT : Synchronisation des données en provenance su SI
 
 * [Connecteurs IMPORT](Connecteurs-Import/Connecteurs-IMPORT.md)
+* [Connecteur Actul +](https://git.unicaen.fr/open-source/connecteur-ose/actul/-/blob/master/doc/doc.md)
+* [Connecteur Pégase](https://git.unicaen.fr/open-source/connecteur-ose/pegase/-/blob/master/doc/doc.md?ref_type=heads)
 
 
 ## EXPORT : Exploiter les données issues de OSE

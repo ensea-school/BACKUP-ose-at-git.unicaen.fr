@@ -7,7 +7,8 @@ OSE permet :
 - de calculer le coût d'une offre de formation
 - de suivre les emplois étudiants
 
-Présentation rapide de l'application : http://ose.unicaen.fr/presentation
+* [Présentation rapide de l'application](http://ose.unicaen.fr/presentation)
+* [Ressources vidéo](https://mediatheque-pedagogique.unicaen.fr/dsi/ose)
 
 ## Nouveautés
 
@@ -23,9 +24,6 @@ Une [`procédure d'installation`](INSTALL.md) est à votre disposition pour mett
 
 La [`procédure de mise à jour`](UPDATE.md) vous indiquera comment mettre à niveau votre instance.
 
-## Ressources vidéos
-
-https://mediatheque-pedagogique.unicaen.fr/dsi/ose/
 
 ## Documentation technique
 

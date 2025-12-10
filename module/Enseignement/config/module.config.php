@@ -245,12 +245,12 @@ return [
     'navigation' => [
         'intervenant' => [
             'pages' => [
-                'enseignements-prevus'          => [
+                /*'enseignements-prevus'          => [
                     'label' => "Enseignements prévisionnels",
                     'title' => "Enseignements prévisionnels de l'intervenant",
                     'route' => 'intervenant/enseignement-prevu',
                     'order' => 6,
-                ],
+                ],*/
                 'validation-enseignement-prevu' => [
                     'label' => "Validation des enseignements prévisionnels",
                     'title' => "Validation des enseignements prévisionnels de l'intervenant",
@@ -258,12 +258,12 @@ return [
                     'order' => 8,
                 ],
 
-                'enseignements-realises'          => [
+                /*'enseignements-realises'          => [
                     'label' => "Enseignements réalisés",
                     'title' => "Constatation des enseignements réalisés",
                     'route' => 'intervenant/enseignement-realise',
                     'order' => 13,
-                ],
+                ],*/
                 'validation-enseignement-realise' => [
                     'label' => "Validation des enseignements réalisés",
                     'title' => "Validation des enseignements réalisés de l'intervenant",

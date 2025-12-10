@@ -9,7 +9,6 @@ use Service\Controller\CampagneSaisieController;
 use Service\Controller\RegleStructureValidationController;
 use Service\Controller\ServiceController;
 use Workflow\Entity\Db\Validation;
-use Workflow\Entity\Db\WorkflowEtape;
 
 
 return [
@@ -119,18 +118,18 @@ return [
 
         'intervenant' => [
             'pages' => [
-                /*    'services-prevus'   => [
-                        'label'               => "Enseignements prévisionnels",
-                        'title'               => "Enseignements prévisionnels de l'intervenant",
-                        'route'               => 'intervenant/services-prevus',
-                        'order'               => 6,
-                    ],
-                    'services-realises' => [
-                        'label'               => "Enseignements réalisés",
-                        'title'               => "Constatation des enseignements réalisés",
-                        'route'               => 'intervenant/services-realises',
-                        'order'               => 13,
-                    ],*/
+                'services-prevus'   => [
+                    'label' => "Enseignements prévisionnels",
+                    'title' => "Enseignements prévisionnels de l'intervenant",
+                    'route' => 'intervenant/services-prevus',
+                    'order' => 6,
+                ],
+                'services-realises' => [
+                    'label' => "Enseignements réalisés",
+                    'title' => "Constatation des enseignements réalisés",
+                    'route' => 'intervenant/services-realises',
+                    'order' => 13,
+                ],
             ],
         ],
 

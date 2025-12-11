@@ -163,6 +163,15 @@ class EnseignementAssertion extends AbstractAssertion
             }
         }
 
+        if (!$typeVolumeHoraireCode) {
+            if (EnseignementController::class . '.initialisation' === $controller . '.' . $action){
+                $typeVolumeHoraireCode = TypeVolumeHoraire::CODE_PREVU;
+            }
+            if (EnseignementController::class . '.constatation' === $controller . '.' . $action){
+                $typeVolumeHoraireCode = TypeVolumeHoraire::CODE_REALISE;
+            }
+        }
+
         /** @var null|Service $service */
         $service = $this->getParam(Service::class);
 

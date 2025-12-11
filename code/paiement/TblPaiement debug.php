@@ -12,7 +12,7 @@ $ptbl = $c->getTableauBord(\Application\Provider\Tbl\TblProvider::PAIEMENT);
 
 
 $params = [
-    'INTERVENANT_ID' => 32779,
+    'INTERVENANT_ID' => 1132339,
     //'INTERVENANT_ID' => 20970,
     //'SERVICE_REFERENTIEL_ID' => 19194
     //'SERVICE_ID' => 258206,
@@ -24,7 +24,7 @@ $params = [
 
 $debut = microtime(true);
 
-$data = $ptbl->getProcess()->getData($params);
+$data = $ptbl->getProcess()->getViewData($params);
 echo '<h2>Data en entrée</h2>';
 echo phpDump($data);
 
@@ -32,7 +32,9 @@ echo phpDump($data);
 $ptbl->calculer($params);
 
 
-$res = phpDump($bdd->getTable('TBL_PAIEMENT')->select($params));
+$resData = $bdd->getTable('TBL_PAIEMENT')->select($params);
+mpg_lower($resData);
+$res = phpDump($resData);
 echo '<h2>Résultat</h2>';
 echo phpDump($res);
 

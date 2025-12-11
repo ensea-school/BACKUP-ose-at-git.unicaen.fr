@@ -16,12 +16,12 @@ class MiseEnPaiement
 
     public function fromBdd(array $data)
     {
-        $this->id = (int)$data['MISE_EN_PAIEMENT_ID'];
-        $this->heuresAA = (int)round((float)$data['MEP_HEURES'] * 100);
-        $this->date = $data['DATE_MISE_EN_PAIEMENT'] ? substr($data['DATE_MISE_EN_PAIEMENT'], 0, 10) : null;
-        $this->periodePaiement = (int)$data['PERIODE_PAIEMENT_ID'] ?: null;
-        $this->centreCout = (int)$data['MEP_CENTRE_COUT_ID'];
-        $this->domaineFonctionnel = (int)$data['MEP_DOMAINE_FONCTIONNEL_ID'];
+        $this->id = (int)$data['mise_en_paiement_id'];
+        $this->heuresAA = (int)round((float)$data['mep_heures'] * 100);
+        $this->date = $data['date_mise_en_paiement'] ? substr($data['date_mise_en_paiement'], 0, 10) : null;
+        $this->periodePaiement = (int)$data['periode_paiement_id'] ?: null;
+        $this->centreCout = (int)$data['mep_centre_cout_id'];
+        $this->domaineFonctionnel = (int)$data['mep_domaine_fonctionnel_id'];
     }
 
 

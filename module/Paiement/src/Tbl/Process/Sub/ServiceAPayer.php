@@ -28,19 +28,19 @@ class ServiceAPayer
 
     public function fromBdd(array $data)
     {
-        $this->key = $data['KEY'];
-        $this->annee = (int)$data['ANNEE_ID'] ?: null;
-        $this->typeIntervenant = (int)@$data['TYPE_INTERVENANT_ID'] ?: null;
-        $this->intervenant = (int)@$data['INTERVENANT_ID'] ?: null;
-        $this->structure = (int)@$data['STRUCTURE_ID'] ?: null;
-        $this->mission = (int)@$data['MISSION_ID'] ?: null;
-        $this->service = (int)@$data['SERVICE_ID'] ?: null;
-        $this->serviceReferentiel = (int)@$data['SERVICE_REFERENTIEL_ID'] ?: null;
-        $this->typeHeures = (int)@$data['TYPE_HEURES_ID'] ?: null;
-        $this->defDomaineFonctionnel = (int)@$data['DEF_DOMAINE_FONCTIONNEL_ID'] ?: null;
-        $this->defCentreCout = (int)@$data['DEF_CENTRE_COUT_ID'] ?: null;
-        $this->tauxCongesPayes = (float)$data['TAUX_CONGES_PAYES'] ?: null;
-        $this->heures = (int)round((float)$data['HEURES'] * 100) ?: null;
+        $this->key = $data['key'];
+        $this->annee = (int)$data['annee_id'] ?: null;
+        $this->typeIntervenant = (int)@$data['type_intervenant_id'] ?: null;
+        $this->intervenant = (int)@$data['intervenant_id'] ?: null;
+        $this->structure = (int)@$data['structure_id'] ?: null;
+        $this->mission = (int)@$data['mission_id'] ?: null;
+        $this->service = (int)@$data['service_id'] ?: null;
+        $this->serviceReferentiel = (int)@$data['service_referentiel_id'] ?: null;
+        $this->typeHeures = (int)@$data['type_heures_id'] ?: null;
+        $this->defDomaineFonctionnel = (int)@$data['def_domaine_fonctionnel_id'] ?: null;
+        $this->defCentreCout = (int)@$data['def_centre_cout_id'] ?: null;
+        $this->tauxCongesPayes = (float)$data['taux_conges_payes'] ?: null;
+        $this->heures = (int)round((float)$data['heures'] * 100) ?: null;
         $this->lignesAPayer = [];
         $this->misesEnPaiement = [];
     }

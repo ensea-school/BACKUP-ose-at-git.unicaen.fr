@@ -82,7 +82,7 @@ class PaiementProcess implements ProcessInterface
 
 
 
-    public function getData(array $params = []): array
+    public function getViewData(array $params = []): array
     {
         $conn = $this->getServiceBdd()->getEntityManager()->getConnection();
 
@@ -94,6 +94,7 @@ class PaiementProcess implements ProcessInterface
         $aPayerStmt = $conn->executeQuery($sql);
         $res        = [];
         while ($lap = $aPayerStmt->fetchAssociative()) {
+            mpg_lower($lap);
             $res[] = $lap;
 
         }
@@ -132,6 +133,11 @@ class PaiementProcess implements ProcessInterface
     protected function traitement(bool $export = true, bool $consolidation = true)
     {
         foreach ($this->services as $sid => $serviceAPayer) {
+            $serviceAPayer->heures = 0;
+            foreach( $serviceAPayer->lignesAPayer as $lap ){
+                $serviceAPayer->heures += $lap->heuresAA + $lap->heuresAC;
+            }
+
             $this->repartiteur->repartir($serviceAPayer);
             $this->rapprocheur->rapprocher($serviceAPayer);
             if ($consolidation) {
@@ -151,14 +157,17 @@ class PaiementProcess implements ProcessInterface
         // Enregistrement en BDD
         $key = $tableauBord->getOption('key');
 
-        $table = $this->getBdd()->getTable('TBL_PAIEMENT');
+        $tableName = 'tbl_paiement';
+        mpg_upper($tableName);
+        $table = $this->getBdd()->getTable($tableName);
 
         $options = [
             'where'       => $params,
-            'transaction' => !isset($params['INTERVENANT_ID']),
+            'transaction' => !isset($params['intervenant_id']),
         ];
 
         // on merge dans la table
+        mpg_upper($this->tblData);
         $table->merge($this->tblData, $key, $options);
         // on vide pour limiter la conso de RAM
         $this->tblData = [];
@@ -179,22 +188,17 @@ class PaiementProcess implements ProcessInterface
         while ($lap = $aPayerStmt->fetchAssociative()) {
             $this->loadLigneAPayer($lap);
         }
-
-        foreach($this->services as $sk => $serviceAPayer) {
-            $serviceAPayer->heures = 0;
-            foreach( $serviceAPayer->lignesAPayer as $lap ){
-                $serviceAPayer->heures += $lap->heuresAA + $lap->heuresAC;
-            }
-        }
     }
 
 
 
     protected function loadLigneAPayer(array $data)
     {
-        $key    = $data['KEY'];
-        $lapKey = (int)$data['A_PAYER_ID'];
-        $mepKey = (int)$data['MISE_EN_PAIEMENT_ID'];
+        mpg_lower($data);
+
+        $key    = $data['key'];
+        $lapKey = (int)$data['a_payer_id'];
+        $mepKey = (int)$data['mise_en_paiement_id'];
 
         if (!array_key_exists($key, $this->services)) {
             $sap = new ServiceAPayer();
@@ -203,8 +207,8 @@ class PaiementProcess implements ProcessInterface
         }
 
         $lap             = new LigneAPayer();
-        $tauxRemu        = (int)$data['TAUX_REMU_ID'];
-        $horaireDebut    = (string)$data['HORAIRE_DEBUT'];
+        $tauxRemu        = (int)$data['taux_remu_id'];
+        $horaireDebut    = (string)$data['horaire_debut'];
         $lap->tauxValeur = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $horaireDebut);
         $lap->pourcAA    = $this->repartiteur->fromBdd($data);
         $lap->fromBdd($data);
@@ -223,6 +227,8 @@ class PaiementProcess implements ProcessInterface
 
     protected function heuresAPayerSql(): string
     {
-        return $this->getServiceBdd()->getViewDefinition('V_TBL_PAIEMENT');
+        $viewName = 'v_tbl_paiement';
+        mpg_upper($viewName);
+        return $this->getServiceBdd()->getViewDefinition($viewName);
     }
 }

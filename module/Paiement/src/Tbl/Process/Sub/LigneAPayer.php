@@ -24,11 +24,11 @@ class LigneAPayer
 
     public function fromBdd(array $data)
     {
-        $this->id = (int)$data['A_PAYER_ID'];
-        $this->tauxRemu = (int)$data['TAUX_REMU_ID'];
-        $this->periode = $data['PERIODE_ENS_ID'] ? (int)$data['PERIODE_ENS_ID'] : null;
-        $this->heuresAA = (int)round((float)$data['HEURES'] * 100);
-        $this->volumeHoraireId = $data['VOLUME_HORAIRE_ID'] ? (int)$data['VOLUME_HORAIRE_ID'] : null;
+        $this->id = (int)$data['a_payer_id'];
+        $this->tauxRemu = (int)$data['taux_remu_id'];
+        $this->periode = $data['periode_ens_id'] ? (int)$data['periode_ens_id'] : null;
+        $this->heuresAA = (int)round((float)$data['heures'] * 100);
+        $this->volumeHoraireId = $data['volume_horaire_id'] ? (int)$data['volume_horaire_id'] : null;
     }
 
 

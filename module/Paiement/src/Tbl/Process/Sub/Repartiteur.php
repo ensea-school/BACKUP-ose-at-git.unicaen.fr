@@ -75,11 +75,11 @@ class Repartiteur
     public function fromBdd(array $data): float
     {
         return $this->calculPourcAA(
-            semestriel: $data['CALCUL_SEMESTRIEL'] === '1',
-            periodeCode: $data['PERIODE_ENS_CODE'],
-            anneeId: (int)$data['ANNEE_ID'],
-            horaireDebut: (string)$data['HORAIRE_DEBUT'],
-            horaireFin: (string)$data['HORAIRE_FIN'],
+            semestriel: $data['calcul_semestriel'] === '1',
+            periodeCode: $data['periode_ens_code'],
+            anneeId: (int)$data['annee_id'],
+            horaireDebut: (string)$data['horaire_debut'],
+            horaireFin: (string)$data['horaire_fin'],
         );
     }
 

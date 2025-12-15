@@ -38,9 +38,9 @@
     <div class="alert alert-info" role="alert">
         Seules les HETD <strong>(hors référentiel)</strong> avec des centres de coûts pré-paramètrés peuvent bénéficier
         d'une demande de mise en paiement
-        automatisées. Pour les
+        automatisée. Pour les
         autres, il faudra
-        passer sur chaque fiches intervenant pour faire les demandes en sélectionnant le centre de coût manuellement.
+        passer sur chaque fiche intervenant pour faire les demandes en sélectionnant le centre de coût manuellement.
     </div>
 
     <!--BUDGET-->
@@ -337,7 +337,7 @@
                 </button>
                 <a v-if="this.canMiseEnPaiement" id="btn-mep" :href="this.urlMiseEnPaiement"
                    class="ms-2 btn btn-secondary">
-                    Aller au mise en paiement
+                    Aller aux mises en paiement
                 </a>
 
             </div>

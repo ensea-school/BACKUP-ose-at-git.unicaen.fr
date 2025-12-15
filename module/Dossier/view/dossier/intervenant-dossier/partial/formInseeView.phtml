@@ -42,16 +42,16 @@ $dossierInsee = $form->get('DossierInsee');
                     ?>
                 </div>
             </div>
-            <div class="form-group">
-                <?= $this->formLabel($dossierInsee->get('numeroInseeEstProvisoire')); ?>
-                <div class="input-group cold-md-6 readonly">
-                    <?php
-                    if ($viewInsee) {
+            <?php if ($viewInsee): ?>
+                <div class="form-group">
+                    <?= $this->formLabel($dossierInsee->get('numeroInseeEstProvisoire')); ?>
+                    <div class="input-group cold-md-6 readonly">
+                        <?php
                         echo ($tblDossier->getDossier()->getNumeroInseeProvisoire()) ? 'OUI' : 'NON';
-                    }
-                    ?>
+                        ?>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

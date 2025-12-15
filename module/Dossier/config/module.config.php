@@ -181,6 +181,7 @@ return [
             'action'     => ['index',
                              'change-statut-dossier'],
             'privileges' => [Privileges::DOSSIER_VISUALISATION],
+            'assertion'  => IntervenantDossierAssertion::class,
         ],
 
         [

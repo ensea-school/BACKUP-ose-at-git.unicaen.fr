@@ -30,13 +30,45 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertController(string $controller, ?string $action): bool
     {
         $intervenant = $this->getParam(Intervenant::class);
-
         switch ($controller) {
-            case IntervenantDossierController::class . 'index':
-                return $this->assertDossierEdition($intervenant);
+            case IntervenantDossierController::class:
+                switch ($action) {
+                    case 'index':
+                    case 'valider':
+                    case 'validerComplementaire':
+                    case 'devalider':
+                    case 'devaliderComplementaire':
+                    case 'supprimer':
+                    case 'purgerDifferences':
+                    case 'differences':
+                    case 'changeStatutDossier':
+                        return $this->assertEtapeAtteignable($intervenant);
+                }
         }
 
         return true;
+
+
+    }
+
+
+
+    /**
+     * @param Intervenant $intervenant
+     * @return bool
+     */
+    public function isEtapeAccessible(mixed $intervenant): bool
+    {
+        if (!$intervenant) {
+            return false;
+        }
+
+        $wfEtape = $this
+            ->getServiceWorkflow()
+            ->getFeuilleDeRoute($intervenant)
+            ->get(WorkflowEtape::DONNEES_PERSO_SAISIE);
+
+        return $wfEtape?->isAllowed() ?? false;
     }
 
 
@@ -423,7 +455,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
     protected function assertDossierEdition(IntervenantDossier $intervenantDossier): bool
     {
         return $this->asserts([
-                                  $this->assertEtapeAtteignable(WorkflowEtape::DONNEES_PERSO_SAISIE, $intervenantDossier->getIntervenant()),
+                                  $this->assertEtapeAtteignable($intervenantDossier->getIntervenant()),
                                   !$intervenantDossier->getTblDossier()->getValidation(),
                                   $this->authorize->isAllowedPrivilege(Privileges::DOSSIER_EDITION),
                               ]);
@@ -431,13 +463,15 @@ class IntervenantDossierAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable(string $etape, Intervenant $intervenant): bool
+    protected function assertEtapeAtteignable(?Intervenant $intervenant): bool
     {
+        if (!$intervenant) {
+            return false;
+        }
 
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
-        return $feuilleDeRoute->get($etape)?->isAllowed() ?: false;
+        return $feuilleDeRoute->get(WorkflowEtape::DONNEES_PERSO_SAISIE)?->isAllowed() ?: false;
 
-        return true;
     }
 
 

@@ -20,6 +20,7 @@ use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
+use Laminas\Http\Response;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
@@ -59,7 +60,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function indexAction()
+    public function indexAction(): array|Response
     {
         $this->initFilters();
         $intervenant = $this->getServiceContext()->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
@@ -159,7 +160,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function changeStatutDossierAction()
+    public function changeStatutDossierAction(): Response
     {
         if ($this->getRequest()->isPost()) {
             $data        = $this->getRequest()->getPost();
@@ -194,7 +195,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function validerAction()
+    public function validerAction(): MessengerViewModel
     {
         $this->initFilters();
 
@@ -288,7 +289,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function supprimerAction()
+    public function supprimerAction(): MessengerViewModel
     {
         $this->initFilters();
 
@@ -308,7 +309,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function differencesAction()
+    public function differencesAction(): array
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -336,7 +337,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function purgerDifferencesAction()
+    public function purgerDifferencesAction(): MessengerViewModel|array
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -363,7 +364,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
+    private function updateTableauxBord(Intervenant $intervenant, $validation = false): void
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
                                                               TblProvider::DOSSIER,

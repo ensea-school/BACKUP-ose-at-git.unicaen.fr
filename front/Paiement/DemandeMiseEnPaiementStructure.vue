@@ -308,7 +308,9 @@
                                                             <option v-for="item in datas.domaineFonctionnelPaiement"
                                                                     :selected="item.domaineFonctionnelId == value.domaineFonctionnel.domaineFonctionnelId"
                                                                     :value="item.domaineFonctionnelId">
-                                                                {{ item.domaineFonctionnelLibelle }}
+                                                                {{
+                                                                    item.domaineFonctionnelCode + ' - ' + item.domaineFonctionnelLibelle
+                                                                }}
                                                             </option>
 
 
@@ -468,14 +470,18 @@
                                                             <option v-for="item in datas.domaineFonctionnelPaiement"
                                                                     :selected="item.domaineFonctionnelId == value.domaineFonctionnel.domaineFonctionnelId"
                                                                     :value="item.domaineFonctionnelId">
-                                                                {{ item.domaineFonctionnelLibelle }}
+                                                                {{
+                                                                    item.domaineFonctionnelCode + ' - ' + item.domaineFonctionnelLibelle
+                                                                }}
                                                             </option>
 
 
                                                         </select>
                                                     </td>
                                                     <td v-if="value.heuresDemandees != 0 ">
-                                                        {{ value.domaineFonctionnel.libelle }}
+                                                        {{
+                                                            value.domaineFonctionnel.code + ' - ' + value.domaineFonctionnel.libelle
+                                                        }}
                                                     </td>
                                                     <td v-html="heuresStatutToString(value)">
                                                     </td>

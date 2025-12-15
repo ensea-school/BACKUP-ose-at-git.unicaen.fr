@@ -35,8 +35,8 @@ class CalculateurCompletude
         $destination['completude_employeur']               = isset($dossier['dossier_id']) && $this->completudeEmployeur($dossier);
         $destination['completude_autre_avant_recrutement'] = isset($dossier['dossier_id']) && $this->completudeAutreAvantRecrutement($dossier);
         $destination['completude_autre_apres_recrutement'] = isset($dossier['dossier_id']) && $this->completudeAutreApresRecrutement($dossier);
-        $destination['apres_recrutement_attendue']         = isset($dossier['dossier_id']) ? $this->calculerCompletude($dossier, $destination, 2, self::ATTENDUE) : false;
-        $destination['avant_recrutement_attendue']         = isset($dossier['dossier_id']) ? $this->calculerCompletude($dossier, $destination, 1, self::ATTENDUE) : false;
+        $destination['apres_recrutement_attendue']         = $this->calculerCompletude($dossier, $destination, 2, self::ATTENDUE);
+        $destination['avant_recrutement_attendue']         = $this->calculerCompletude($dossier, $destination, 1, self::ATTENDUE);
         $destination['apres_recrutement_realisee']         = isset($dossier['dossier_id']) ? $this->calculerCompletude($dossier, $destination, 2, self::REALISEE) : false;
         $destination['avant_recrutement_realisee']         = isset($dossier['dossier_id']) ? $this->calculerCompletude($dossier, $destination, 1, self::REALISEE) : false;
     }
@@ -134,7 +134,7 @@ class CalculateurCompletude
      */
     public function completudeContact(array $dossier): bool
     {
-        
+
         if ($dossier['dossier_contact']) {
             // 1. Vérification des emails
             if ($dossier['dossier_email_perso'] && empty($dossier['email_perso'])) {

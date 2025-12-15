@@ -48,6 +48,7 @@ OSE [24.12](#ose-2412-21112025)
 * Alimentation du dossier personnel de l'intervenant avec la situation matrimoniale de l'intervenant si elle est renseignée dans la table intervenant (#63648)
 * Amélioration de la demande de paiement en lot afin d’afficher les intervenants ayant des HETD restantes à payer, en notifiant qu’il existe des incohérences de paiement sur leurs demandes précédentes (trop-perçu, etc.). Les cas notifiés ne pourront pas être traités en masse mais une indication affichera qu'il faut reprendre les demandes de mise en paiement manuellement sur l'intervenant.
 * Activation de la synchronisation du code rh de la table intervenant lors d'un renouvellement SIHAM (#63497)
+* Modification affichage libellé du domaine fonctionnel dans les demandes de mise en paiement pour les missions étudiants
 
 
 

@@ -185,7 +185,7 @@ WHERE
    1=1
    /*@intervenant_id=i.id*/
    /*@annee_id=i.annee_id*/
-   /*@service_referentiel_id=frsr.service_referentiel_id*/
+   /*@service_referentiel_id=frvh.service_referentiel_id*/
 
 UNION ALL
 
@@ -239,7 +239,7 @@ WHERE
   AND frvh.id IS NULL
   /*@intervenant_id=i.id*/
   /*@annee_id=i.annee_id*/
-  /*@SERVICE_ID=s.id*/
+  /*@service_id=s.id*/
 
 UNION ALL
 
@@ -304,7 +304,7 @@ WHERE
   tm.valide = 1
   /*@annee_id=tm.annee_id*/
   /*@intervenant_id=tm.intervenant_id*/
-  /*@MISSION_ID=tm.mission_id*/
+  /*@mission_id=tm.mission_id*/
   AND (vhm.auto_validation = 1 OR v.id IS NOT NULL)
 
 ORDER BY

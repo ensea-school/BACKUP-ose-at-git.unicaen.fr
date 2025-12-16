@@ -45,9 +45,43 @@ class Exporteur
                 'HEURES_PAYEES_AA'           => $smep->periodePaiement ? round($heuresAA / 100, 2) : 0.0,
                 'HEURES_PAYEES_AC'           => $smep->periodePaiement ? round($heuresAc / 100, 2) : 0.0,
             ];
-            $destination[] = $ldata;
+            $foundLine = $this->createKey($ldata);
+            if (array_key_exists($foundLine,$destination)) {
+                var_dump($ldata['intervenant_id'].' ');
+                $destination[$foundLine]['heures_a_payer_aa']   = round($destination[$foundLine]['heures_a_payer_aa'] + $ldata['heures_a_payer_aa'], 2);
+                $destination[$foundLine]['heures_a_payer_ac']   = round($destination[$foundLine]['heures_a_payer_ac'] + $ldata['heures_a_payer_ac'], 2);
+                $destination[$foundLine]['heures_demandees_aa'] = round($destination[$foundLine]['heures_demandees_aa'] + $ldata['heures_demandees_aa'], 2);
+                $destination[$foundLine]['heures_demandees_ac'] = round($destination[$foundLine]['heures_demandees_ac'] + $ldata['heures_demandees_ac'], 2);
+                $destination[$foundLine]['heures_payees_aa']    = round($destination[$foundLine]['heures_payees_aa'] + $ldata['heures_payees_aa'], 2);
+                $destination[$foundLine]['heures_payees_ac']    = round($destination[$foundLine]['heures_payees_ac'] + $ldata['heures_payees_ac'], 2);
+            } else {
+                $destination[$foundLine] = $ldata;
+            }
         }
 
+    }
+
+
+
+    protected function createKey(array $line): string
+    {
+        $keyData = $line['annee_id']
+            . '|' . $line['service_id']
+            . '|' . $line['service_referentiel_id']
+            . '|' . $line['mission_id']
+            . '|' . $line['type_intervenant_id']
+            . '|' . $line['intervenant_id']
+            . '|' . $line['structure_id']
+            . '|' . $line['type_heures_id']
+            . '|' . $line['periode_ens_id']
+            . '|' . $line['mise_en_paiement_id']
+            . '|' . $line['periode_paiement_id']
+            . '|' . $line['centre_cout_id']
+            . '|' . $line['domaine_fonctionnel_id']
+            . '|' . $line['taux_remu_id']
+            . '|' . $line['taux_horaire']
+            . '|' . $line['taux_conges_payes'];
+        return $keyData;
     }
 
 
@@ -85,7 +119,7 @@ class Exporteur
                 'HEURES_PAYEES_AA'           => $mep->periodePaiement ? round($mep->heuresAA / 100, 2) : 0.0,
                 'HEURES_PAYEES_AC'           => $mep->periodePaiement ? round($mep->heuresAC / 100, 2) : 0.0,
             ];
-            $destination[] = $ldata;
+            $destination[$this->createKey($ldata)] = $ldata;
         }
 
         if ($rapAA + $rapAC > 0) {
@@ -113,7 +147,7 @@ class Exporteur
                 'HEURES_PAYEES_AA'           => 0.0,
                 'HEURES_PAYEES_AC'           => 0.0,
             ];
-            $destination[] = $ldata;
+            $destination[$this->createKey($ldata)] = $ldata;
         }
     }
 }

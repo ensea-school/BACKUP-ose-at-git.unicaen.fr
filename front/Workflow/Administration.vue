@@ -13,20 +13,23 @@
                 {{ etape.libelleAutres }}</h3>
             <div class="dependances">
                 <table v-if="etape.dependances.length" class="table table-bordered">
+                    <thead>
                     <tr>
                         <th style="width:45%">Étape{{ etape.dependances.length > 1 ? 's' : '' }}
                             antérieure{{ etape.dependances.length > 1 ? 's' : '' }}
                         </th>
                         <th style="width:15%"><abbr
                             title="Périmètre de franchissement à l'échelle d'une composante ou bien de l'établissement
-Si composante, on se fiche de ce qui se passe chez les autres
-Si établissement, tout compte">Périmètre</abbr>
+    Si composante, on se fiche de ce qui se passe chez les autres
+    Si établissement, tout compte">Périmètre</abbr>
                         </th>
                         <th style="width:45%">Règle de franchissement</th>
                         <th style="width:15%">
                             <abbr title="Filtrage éventuel par type d'intervenant">Intervenant</abbr>
                         </th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr v-for="d in etape.dependances" :class="{ 'inactive': !d.active }">
                         <td>
                             <a v-if="canEdit"
@@ -49,6 +52,7 @@ Si établissement, tout compte">Périmètre</abbr>
                         <td class="attrib" v-else><abbr title="Aucun filtre par type d'intervenant"
                                                         class="type_intervenant_tous">Tous</abbr></td>
                     </tr>
+                    </tbody>
                 </table>
                 <div v-else class="alert alert-warning">Pas de dépendance</div>
 
@@ -147,6 +151,12 @@ td {
 
 .dependances {
     margin-left: 5em;
+}
+
+.dependances thead th {
+    font-weight: 100;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .dependances .attrib {

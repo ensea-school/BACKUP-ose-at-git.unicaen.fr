@@ -38,9 +38,9 @@
     <div class="alert alert-info" role="alert">
         Seules les HETD <strong>(hors référentiel)</strong> avec des centres de coûts pré-paramètrés peuvent bénéficier
         d'une demande de mise en paiement
-        automatisées. Pour les
+        automatisée. Pour les
         autres, il faudra
-        passer sur chaque fiches intervenant pour faire les demandes en sélectionnant le centre de coût manuellement.
+        passer sur chaque fiche intervenant pour faire les demandes en sélectionnant le centre de coût manuellement.
     </div>
 
     <!--BUDGET-->
@@ -102,8 +102,8 @@
                                                        name="allPermanents" type="checkbox"
                                                        @click="toggleCheckbox"></th>
                                 <th scope="col">Intervenant</th>
-                                <th>HETD payables</th>
-                                <th>HETD non payables</th>
+                                <th>HETD payables en lot</th>
+                                <th>HETD sans centre de coût</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -112,24 +112,29 @@
                                 <td><input :id="'permanent-' + intervenant.datasIntervenant.id"
                                            :data-paie-etat="totalRessourcePaieEtat(intervenant.heures)"
                                            :data-ressource-propre="totalRessourcePropre(intervenant.heures)"
-                                           :disabled="totalPayable(intervenant.heures) == 0 "
+                                           :disabled="totalPayable(intervenant) == 0 || intervenant.datasIntervenant.incoherencePaiement"
                                            :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
-                                           :title="totalPayable(intervenant.heures) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
+                                           :title="totalPayable(intervenant) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
                                            checked="checked"
                                            class="checkbox-permanent"
                                            type="checkbox"
                                            @change="refreshTotalConsommation()"></td>
-                                <td><a :href="urlIntervenant(intervenant)"
+                                <td>
+                                    <i title="La fiche intervenant contient des incohérences de paiement (trop payé, etc...), une revue manuelle des paiements est nécessaire."
+                                       v-if="intervenant.datasIntervenant.incoherencePaiement"
+                                       class="fas fa-triangle-exclamation" style="color:#a40000;cursor: help;"></i>&nbsp;
+
+                                    <a :href="urlIntervenant(intervenant)"
                                        target="_blank">{{
                                         intervenant.datasIntervenant.nom_usuel.toUpperCase() + ' ' + intervenant.datasIntervenant.prenom
                                     }}</a></td>
                                 <td><span
                                     :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
                                     style="text-decoration:underline dotted;cursor: help;">
-                                    {{ totalPayable(intervenant.heures) }} h</span></td>
+                                    {{ totalPayable(intervenant) }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
                                           title="Manque un centre de coût et/ou un domaine fonctionnel">{{
-                                        totalNonPayable(intervenant.heures)
+                                        totalNonPayable(intervenant)
                                     }} h</span></td>
                             </tr>
                             </tbody>
@@ -157,36 +162,42 @@
                                            name="allVacataire" type="checkbox"
                                            @click="toggleCheckbox"></th>
                                 <th>Intervenant</th>
-                                <th>HETD payables</th>
-                                <th>HETD non payables</th>
+                                <th>HETD payables en lot</th>
+                                <th>HETD sans centre de coût</th>
                             </tr>
                             </thead>
                             <tbody>
 
                             <tr v-for="intervenant in this.vacataires">
-                                <td><input :id="'vacataire-' + intervenant.datasIntervenant.id"
+                                <td>
+                                    <input
+                                        :id="'vacataire-' + intervenant.datasIntervenant.id"
                                            :data-paie-etat="totalRessourcePaieEtat(intervenant.heures)"
                                            :data-ressource-propre="totalRessourcePropre(intervenant.heures)"
-                                           :disabled="totalPayable(intervenant.heures) == 0 "
+                                        :disabled="totalPayable(intervenant) == 0 || intervenant.datasIntervenant.incoherencePaiement"
                                            :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
-                                           :title="totalPayable(intervenant.heures) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
+                                        :title="totalPayable(intervenant) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
                                            checked="checked"
                                            class="checkbox-vacataire"
                                            type="checkbox"
                                            @change="refreshTotalConsommation()">
                                 </td>
-                                <td><a :href="urlIntervenant(intervenant)"
+                                <td>
+                                    <i title="La fiche intervenant contient des incohérences de paiement (trop payé, etc...), une revue manuelle des paiements est nécessaire."
+                                       v-if="intervenant.datasIntervenant.incoherencePaiement"
+                                       class="fas fa-triangle-exclamation" style="color:#a40000;cursor: help;"></i>&nbsp;
+                                    <a :href="urlIntervenant(intervenant)"
                                        target="_blank">{{
                                         intervenant.datasIntervenant.nom_usuel.toUpperCase() + ' ' + intervenant.datasIntervenant.prenom
                                     }}</a></td>
                                 <td><span
                                     :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
                                     style="text-decoration:underline dotted;cursor: help;">{{
-                                        totalPayable(intervenant.heures)
+                                        totalPayable(intervenant)
                                     }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
                                           title="Manque un centre de coût et/ou un domaine fonctionnel">{{
-                                        totalNonPayable(intervenant.heures)
+                                        totalNonPayable(intervenant)
                                     }} h</span></td>
 
                             </tr>
@@ -215,8 +226,8 @@
                                            name="allEtudiants" type="checkbox"
                                            @click="toggleCheckbox"></th>
                                 <th>Intervenant</th>
-                                <th>HETD payables</th>
-                                <th>HETD non payables</th>
+                                <th>HETD payables en lot</th>
+                                <th>HETD sans centre de coût</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -225,22 +236,27 @@
                                 <td><input :id="'etudiant-' + intervenant.datasIntervenant.id"
                                            :data-paie-etat="totalRessourcePaieEtat(intervenant.heures)"
                                            :data-ressource-propre="totalRessourcePropre(intervenant.heures)"
-                                           :disabled="totalPayable(intervenant.heures) == 0 "
+                                           :disabled="totalPayable(intervenant) == 0 "
                                            :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
-                                           :title="totalPayable(intervenant.heures) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
+                                           :title="totalPayable(intervenant) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
                                            checked="checked" class="checkbox-etudiant" type="checkbox"
                                            @change="refreshTotalConsommation()"></td>
-                                <td><a :href="urlIntervenant(intervenant)"
+                                <td>
+                                    <i title="La fiche intervenant contient des incohérences de paiement (trop payé, etc...), une revue manuelle des paiements est nécessaire."
+                                       v-if="intervenant.datasIntervenant.incoherencePaiement"
+                                       class="fas fa-triangle-exclamation" style="color:#a40000;cursor: help;"></i>&nbsp;
+
+                                    <a :href="urlIntervenant(intervenant)"
                                        target="_blank">{{
                                         intervenant.datasIntervenant.nom_usuel.toUpperCase() + ' ' + intervenant.datasIntervenant.prenom
                                     }}</a></td>
                                 <td><span
                                     :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
                                     style="text-decoration:underline dotted;cursor: help;">
-                                    {{ totalPayable(intervenant.heures) }} h</span></td>
+                                    {{ totalPayable(intervenant) }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
                                           title="Manque un centre de coût et/ou un domaine fonctionnel">{{
-                                        totalNonPayable(intervenant.heures)
+                                        totalNonPayable(intervenant)
                                     }} h</span></td>
                             </tr>
                             </tbody>
@@ -268,8 +284,8 @@
                                            type="checkbox" @click="toggleCheckbox">
                                 </th>
                                 <th>Intervenant</th>
-                                <th>HETD payables</th>
-                                <th>HETD non payables</th>
+                                <th>HETD payables en lot</th>
+                                <th>HETD sans centre de coût</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -278,24 +294,29 @@
                                 <td><input :id="'autre-' + intervenant.datasIntervenant.id"
                                            :data-paie-etat="totalRessourcePaieEtat(intervenant.heures)"
                                            :data-ressource-propre="totalRessourcePropre(intervenant.heures)"
-                                           :disabled="totalPayable(intervenant.heures) == 0 "
+                                           :disabled="totalPayable(intervenant) == 0 "
                                            :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
-                                           :title="totalPayable(intervenant.heures) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
+                                           :title="totalPayable(intervenant) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
                                            checked="checked"
                                            class="checkbox-autre"
                                            type="checkbox"
                                            @change="refreshTotalConsommation()"></td>
-                                <td><a :href="urlIntervenant(intervenant)"
+                                <td>
+                                    <i title="La fiche intervenant contient des incohérences de paiement (trop payé, etc...), une revue manuelle des paiements est nécessaire."
+                                       v-if="intervenant.datasIntervenant.incoherencePaiement"
+                                       class="fas fa-triangle-exclamation" style="color:#a40000;cursor: help;"></i>&nbsp;
+
+                                    <a :href="urlIntervenant(intervenant)"
                                        target="_blank">{{
                                         intervenant.datasIntervenant.nom_usuel.toUpperCase() + ' ' + intervenant.datasIntervenant.prenom
                                     }}</a></td>
                                 <td><span
                                     :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
                                     style="text-decoration:underline dotted;cursor: help;">
-                                    {{ totalPayable(intervenant.heures) }} h</span></td>
+                                    {{ totalPayable(intervenant) }} h</span></td>
                                 <td><span style="text-decoration:underline dotted;cursor: help;"
                                           title="Manque un centre de coût et/ou un domaine fonctionnel">{{
-                                        totalNonPayable(intervenant.heures)
+                                        totalNonPayable(intervenant)
                                     }} h</span></td>
                             </tr>
                             </tbody>
@@ -316,7 +337,7 @@
                 </button>
                 <a v-if="this.canMiseEnPaiement" id="btn-mep" :href="this.urlMiseEnPaiement"
                    class="ms-2 btn btn-secondary">
-                    Aller au mise en paiement
+                    Aller aux mises en paiement
                 </a>
 
             </div>
@@ -480,10 +501,19 @@ export default {
 
         },
 
-        totalPayable(heures)
+        totalPayable(intervenant)
         {
+            // Si intervenant n'est pas encore chargé
+            if (!intervenant || !intervenant.datasIntervenant) {
+                return 0;
+            }
             let total = 0;
-            heures.forEach((item, index) => {
+
+
+            if (intervenant?.datasIntervenant?.incoherencePaiement) {
+                return intervenant.datasIntervenant.totalHeures.toLocaleString('fr-FR', {maximumFractionDigits: 2});
+            }
+            intervenant.heures.forEach((item, index) => {
                 if (item.centreCout.code != '') {
                     if (item.missionId != '' || item.serviceRefId != '') {
                         if (item.domaineFonctionnel.code != '') {
@@ -499,10 +529,19 @@ export default {
             return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
 
         },
-        totalNonPayable(heures)
+        totalNonPayable(intervenant)
         {
+            // Si intervenant n'est pas encore chargé
+            if (!intervenant || !intervenant.datasIntervenant) {
+                return 0;
+            }
+
             let total = 0;
-            heures.forEach((item, index) => {
+            if (intervenant?.datasIntervenant?.incoherencePaiement) {
+                return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
+            }
+
+            intervenant.heures.forEach((item, index) => {
                 if (item.centreCout.code == '') {
                     total += item.heuresAPayer;
                 } else {
@@ -548,7 +587,6 @@ export default {
             this.etudiants = [];
             this.autres = [];
             this.intervenants = [];
-            console.log(datas);
 
 
             for (const [index, intervenant] of Object.entries(datas)) {

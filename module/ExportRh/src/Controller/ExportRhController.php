@@ -204,6 +204,10 @@ class ExportRhController extends AbstractController
                         if ($this->exportRhService->haveToSyncSource()) {
                             $this->getServiceIntervenant()->updateSource($intervenant);
                         }
+                        //On met à jour le code rh si l'option est activée
+                        if ($this->exportRhService->haveToSyncCodeRh()) {
+                            $this->getServiceIntervenant()->updateCodeRh($intervenant, $matricule);
+                        }
                     } else {
                         $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la tentative de renouvellement de l\'intervenant');
                     }

@@ -811,6 +811,7 @@ class DemandesService extends AbstractService
         $dmeps                   = $this->getEntityManager()->createQuery($dql)->setParameters(['structure' => $structure, 'annee' => $annee])->getResult();
         $dmep                    = [];
         $intervenantsTotalHeures = [];
+        $intervenantPaiementErreur = [];
         foreach ($dmeps as $value) {
             /**
              * @var TblPaiement $value
@@ -822,7 +823,11 @@ class DemandesService extends AbstractService
             }
             $intervenantsTotalHeures[$intervenant->getId()] ['heuresDemandees'] += $value->getHeuresDemandees();
             $intervenantsTotalHeures[$intervenant->getId()] ['heuresAPayer']    += $value->getHeuresAPayer();
-
+            /*Dés qu'on a une ligne de paiement avec plus d'heures demandées que d'heures à payer on sort
+            l'intervenant du traitement de paiement en masse, il faudra faire un paiement manuel */
+            if ($value->getHeuresAPayer() < $value->getHeuresDemandees()) {
+                $intervenantPaiementErreur[] = $intervenant->getId();
+            }
 
             if (empty($value->getMiseEnPaiement())) {
                 $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant, $structure);
@@ -843,8 +848,12 @@ class DemandesService extends AbstractService
                             'structure'       => ($intervenant->getStructure()) ? $intervenant->getStructure()->getLibelleCourt() : '',
                             'statut'          => $intervenant->getStatut()->getLibelle(),
                             'typeIntervenant' => $intervenant->getStatut()->getTypeIntervenant()->getLibelle(),
+                            'incoherencePaiement' => false,
+                            'totalHeures'         => 0,
                         ];
                     }
+
+
                     //On prend uniquement les heures ou hetd qui ne sont pas du référentiel
 
                     $dmep[$intervenant->getId()]['heures'][] = [
@@ -865,12 +874,24 @@ class DemandesService extends AbstractService
             }
         }
 
-        //On enlève les intervenants dont le nombre d'heures demandées en paiement est supérieur au nombre d'heure à payer
+        /*on flaggue les intervenants avec des paiements incohérent (ligne trop payée, etc...) pour ne pas les traiter dans le
+        paiement en masse mais quand même indiquer qu'il y a des problèmes sur les demandes de mise
+        en paiement de cet intervenant, traitement manuelle nécessaire*/
         foreach ($intervenantsTotalHeures as $intervenantId => $heures) {
-            if ($heures['heuresDemandees'] > $heures['heuresAPayer']) {
-                if (array_key_exists($intervenantId, $dmep)) {
+            if (array_key_exists($intervenantId, $dmep)) {
+                $dmep[$intervenantId]['datasIntervenant']['totalHeures'] = $heures['heuresAPayer'] - $heures['heuresDemandees'];
+                if ($heures['heuresDemandees'] >= $heures['heuresAPayer']) {
+                    $dmep[$intervenantId]['datasIntervenant']['incoherencePaiement'] = true;
                     unset($dmep[$intervenantId]);
                 }
+            }
+        }
+        /*on flaggue les intervenants avec des paiements incohérent (ligne trop payée, etc...) pour ne pas les traiter dans le
+        paiement en masse mais quand même indiquer qu'il y a des problèmes sur les demandes de mise
+        en paiement de cet intervenant, traitement manuelle nécessaire*/
+        foreach ($intervenantPaiementErreur as $intervenantId) {
+            if (array_key_exists($intervenantId, $dmep)) {
+                $dmep[$intervenantId]['datasIntervenant']['incoherencePaiement'] = true;
             }
         }
 

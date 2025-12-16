@@ -171,7 +171,7 @@ class DemandesController extends AbstractController
         //on supprimer la demande de mise en paiement
         try {
             $this->getServiceDemandes()->supprimerDemandeMiseEnPaiement($idDmep);
-            $this->flashMessenger()->addSuccessMessage("Demande de mise en paiement supprimer.");
+            $this->flashMessenger()->addSuccessMessage("Demande de mise en paiement supprimée.");
             $this->updateTableauxBord($intervenant);
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
@@ -223,7 +223,7 @@ class DemandesController extends AbstractController
                     $this->updateTableauxBord($intervenant);
                 }
             }
-            $this->flashMessenger()->addSuccessMessage("Les demandes de mise en paiement ont bien été effectuée");
+            $this->flashMessenger()->addSuccessMessage("Les demandes de mise en paiement ont bien été effectuées");
 
             return $this->redirect()->toRoute('paiement/demande-mise-en-paiement-lot');
         }

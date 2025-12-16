@@ -11,15 +11,37 @@ ENV HTTP_PROXY=$HTTP_PROXY
 ENV HTTPS_PROXY=$HTTPS_PROXY
 ENV NO_PROXY=$NO_PROXY
 
-
 # Met à jour la liste des paquets
 RUN apk update
-RUN apk add --no-cache bash git
+
+#Nécessaire depuis nouvelle version php:8.2-fpm-alpine
+RUN apk add --no-cache \
+    autoconf \
+    automake \
+    make \
+    gcc \
+    g++ \
+    bash \
+    libc-dev \
+    libxml2-dev \
+    libzip-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    krb5-dev \
+    openldap-dev \
+    postgresql-dev \
+    gcompat \
+    libaio
+
+
 
 # Configuration du fuseau horaire sur Paris
 RUN apk add --no-cache tzdata && \
     cp /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone
+
+
 
 # Lien pour l'exécutable interne de OSE
 RUN ln -sf /var/www/html/bin/ose /usr/local/bin/ose

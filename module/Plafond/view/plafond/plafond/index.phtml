@@ -17,10 +17,10 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITI
         <thead>
         <tr>
             <th>Périmètre</th>
-            <th>Numéro</th>
+            <th style="text-align: center">Numéro</th>
             <th>Plafond</th>
             <?php if ($canEdit): ?>
-                <th>Actions</th>
+                <th style="text-align: center">Actions</th>
             <?php endif; ?>
         </tr>
         </thead>
@@ -28,7 +28,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITI
         <?php foreach ($plafonds as $plafond): ?>
             <tr>
                 <td><?= $plafond->getPlafondPerimetre() ?></td>
-                <td><?= $plafond->getNumero() ?></td>
+                <td style="text-align: center"><?= $plafond->getNumero() ?></td>
                 <td style="width:50%"><?php
                     echo $plafond;
 
@@ -37,7 +37,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITI
                     }
                     ?></td>
                 <?php if ($canEdit): ?>
-                    <td>
+                    <td style="text-align: center">
                         <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>"
                            title="Modifier le plafond"><i
                                     class="fas fa-pen-to-square"></i></a>

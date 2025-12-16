@@ -85,36 +85,6 @@ class Exporteur
 
 
 
-    protected function foundLine(array &$destination, array $line): mixed
-    {
-        $isKeys = [
-            'heures_a_payer_aa',
-            'heures_a_payer_ac',
-            'heures_demandees_aa',
-            'heures_demandees_ac',
-            'heures_payees_aa',
-            'heures_payees_ac',
-        ];
-
-        foreach ($destination as $k => $dline) {
-            $same = true;
-            foreach ($line as $key => $value) {
-                if (!in_array($key, $isKeys)) {
-                    if ($dline[$key] !== $value) {
-                        $same = false;
-                        break;
-                    }
-                }
-            }
-            if ($same) {
-                return $k;
-            }
-        }
-        return null;
-    }
-
-
-
     protected function exporterLAP(ServiceAPayer $sap, LigneAPayer $lap, array &$destination)
     {
         $rapAA = $lap->heuresAA;

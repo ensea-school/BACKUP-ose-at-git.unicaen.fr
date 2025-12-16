@@ -12,9 +12,9 @@ $ptbl = $c->getTableauBord(\Application\Provider\Tbl\TblProvider::PAIEMENT);
 
 
 $params = [
-    'INTERVENANT_ID' => 1132339,
+    //'INTERVENANT_ID' => 1132339,
     //'INTERVENANT_ID' => 20970,
-    //'SERVICE_REFERENTIEL_ID' => 19194
+    'SERVICE_REFERENTIEL_ID' => 22040
     //'SERVICE_ID' => 258206,
     //'ANNEE_ID' => 2014,
 ];

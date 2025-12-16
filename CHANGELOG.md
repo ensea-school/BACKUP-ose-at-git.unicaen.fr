@@ -27,6 +27,7 @@ OSE [24.12](#ose-2412-21112025)
 * Ajout d'une exception dans le validateur de numéro insee des données personnelles pour simplifier le contrôle de la donnée dans le cas d'un département de naissance "Polynésie Française" (#63903).
 * Le blocage se fait correctement pour les plafonds de périmètre volume horaire (#62434)
 * Le blocage se fait de nouveau correcttment pour les plafonds de périmètre intervenant (#63728)
+* Correction de problèmes de paiements en cas de diminution des heures pour du référentiel (#64105)
 
 ## Notes de mise à jour
 

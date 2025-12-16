@@ -4109,4 +4109,111 @@ final class ProcessTest extends OseTestCase
 
         $this->process($data, $await);
     }
+
+
+
+    public function testVhRefNeg()
+    {
+        $this->useParametres([
+                                 ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
+                                 ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_SEMESTRE_DATE],
+                                 ['pourc_s1_pour_annee_civile', '1'],
+                                 ['pourc_aa_referentiel', '0.4'],
+                             ]);
+
+        $data = [
+            [
+                'key' => 'r-22040-10',
+                'calcul_semestriel' => '1',
+                'a_payer_id' => '161890',
+                'annee_id' => '2024',
+                'service_id' => NULL,
+                'service_referentiel_id' => '22040',
+                'mission_id' => NULL,
+                'volume_horaire_id' => '161890',
+                'type_intervenant_id' => '1',
+                'intervenant_id' => '826610',
+                'structure_id' => '417',
+                'type_heures_id' => '10',
+                'def_domaine_fonctionnel_id' => '26',
+                'def_centre_cout_id' => NULL,
+                'taux_remu_id' => '1',
+                'taux_conges_payes' => '1',
+                'heures' => '64',
+                'periode_ens_id' => NULL,
+                'periode_ens_code' => NULL,
+                'horaire_debut' => '2024-09-01 00:00:00',
+                'horaire_fin' => '2025-08-31 00:00:00',
+                'mise_en_paiement_id' => '276334',
+                'date_mise_en_paiement' => NULL,
+                'periode_paiement_id' => NULL,
+                'mep_centre_cout_id' => '141',
+                'mep_heures' => '64',
+                'mep_domaine_fonctionnel_id' => '26',
+            ],
+            [
+                'key' => 'r-22040-10',
+                'calcul_semestriel' => '1',
+                'a_payer_id' => '161895',
+                'annee_id' => '2024',
+                'service_id' => NULL,
+                'service_referentiel_id' => '22040',
+                'mission_id' => NULL,
+                'volume_horaire_id' => '161895',
+                'type_intervenant_id' => '1',
+                'intervenant_id' => '826610',
+                'structure_id' => '417',
+                'type_heures_id' => '10',
+                'def_domaine_fonctionnel_id' => '26',
+                'def_centre_cout_id' => NULL,
+                'taux_remu_id' => '1',
+                'taux_conges_payes' => '1',
+                'heures' => '-34',
+                'periode_ens_id' => NULL,
+                'periode_ens_code' => NULL,
+                'horaire_debut' => '2024-09-01 00:00:00',
+                'horaire_fin' => '2025-08-31 00:00:00',
+                'mise_en_paiement_id' => '276334',
+                'date_mise_en_paiement' => NULL,
+                'periode_paiement_id' => NULL,
+                'mep_centre_cout_id' => '141',
+                'mep_heures' => '64',
+                'mep_domaine_fonctionnel_id' => '26',
+            ],
+        ];
+
+        // 64h sont saisies puis validées
+        // 64h sont demandées en paiement
+        // 64 => 30h (-34 calculé)
+        // Validation diff -34
+
+        $await = [
+            [
+                'annee_id'               => 2024,
+                'service_id'             => NULL,
+                'service_referentiel_id' => 22040,
+                'mission_id'             => NULL,
+                'type_intervenant_id'    => 1,
+                'intervenant_id'         => 826610,
+                'structure_id'           => 417,
+                'type_heures_id'         => 10,
+                'periode_ens_id'         => NULL,
+                'mise_en_paiement_id'    => 276334,
+                'periode_paiement_id'    => NULL,
+                'centre_cout_id'         => 141,
+                'domaine_fonctionnel_id' => 26,
+                'taux_remu_id'           => 1,
+                'taux_horaire'           => 43.5,
+                'taux_conges_payes'      => 1.0,
+                'heures_a_payer_aa'      => 12.0,
+                'heures_a_payer_ac'      => 18.0,
+                'heures_demandees_aa'    => 46.0,
+                'heures_demandees_ac'    => 18.0,
+                'heures_payees_aa'       => 0.0,
+                'heures_payees_ac'       => 0.0,
+            ],
+        ];
+
+        $this->process($data, $await);
+    }
 }

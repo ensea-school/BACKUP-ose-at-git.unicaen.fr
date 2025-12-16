@@ -27,7 +27,6 @@ OSE [24.12](#ose-2412-21112025)
 * Ajout d'une exception dans le validateur de numéro insee des données personnelles pour simplifier le contrôle de la donnée dans le cas d'un département de naissance "Polynésie Française" (#63903).
 * Le blocage se fait correctement pour les plafonds de périmètre volume horaire (#62434)
 * Le blocage se fait de nouveau correcttment pour les plafonds de périmètre intervenant (#63728)
-* Correction de problèmes de paiements en cas de diminution des heures pour du référentiel (#64105)
 
 ## Notes de mise à jour
 
@@ -41,15 +40,16 @@ OSE [24.12](#ose-2412-21112025)
 
 
 
-# OSE 24.13 (à venir)
+# OSE 24.13 (16/12/2025)
 
 ## Corrections
 
 * Les mises en paiement en trop apparaissent de nouveau dans les IHM liées aux paiements (#64243)
-* Alimentation du dossier personnel de l'intervenant avec la situation matrimoniale de l'intervenant si elle est renseignée dans la table intervenant (#63648)
+* Correction de problèmes de paiements en cas de diminution des heures pour du référentiel (#64105)
 * Amélioration de la demande de paiement en lot afin d’afficher les intervenants ayant des HETD restantes à payer, en notifiant qu’il existe des incohérences de paiement sur leurs demandes précédentes (trop-perçu, etc.). Les cas notifiés ne pourront pas être traités en masse mais une indication affichera qu'il faut reprendre les demandes de mise en paiement manuellement sur l'intervenant.
+* Modification affichage libellé du domaine fonctionnel dans les demandes de mise en paiement pour les missions étudiantes
+* Alimentation du dossier personnel de l'intervenant avec la situation matrimoniale de l'intervenant si elle est renseignée dans la table intervenant (#63648)
 * Activation de la synchronisation du code rh de la table intervenant lors d'un renouvellement SIHAM (#63497)
-* Modification affichage libellé du domaine fonctionnel dans les demandes de mise en paiement pour les missions étudiants
 
 
 

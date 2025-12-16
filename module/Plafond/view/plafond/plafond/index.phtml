@@ -16,11 +16,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITI
     <table class="table table-sm table-hover table-bordered plafonds-config">
         <thead>
         <tr>
-            <th rowspan="2">Périmètre</th>
-            <th rowspan="2">Numéro</th>
-            <th rowspan="2">Plafond</th>
+            <th>Périmètre</th>
+            <th>Numéro</th>
+            <th>Plafond</th>
             <?php if ($canEdit): ?>
-                <th rowspan="2">Actions</th>
+                <th>Actions</th>
             <?php endif; ?>
         </tr>
         </thead>
@@ -32,13 +32,14 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITI
                 <td style="width:50%"><?php
                     echo $plafond;
 
-                    if (!$plafond->isOk()){
-                        echo '<div class="alert alert-danger">'.($plafond->getMessageErreur() ?? 'La requête plafond est en erreur. Veuillez la vérifier').'</div>';
+                    if (!$plafond->isOk()) {
+                        echo '<div class="alert alert-danger">' . ($plafond->getMessageErreur() ?? 'La requête plafond est en erreur. Veuillez la vérifier') . '</div>';
                     }
-                ?></td>
+                    ?></td>
                 <?php if ($canEdit): ?>
                     <td>
-                        <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>" title="Modifier le plafond"><i
+                        <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>"
+                           title="Modifier le plafond"><i
                                     class="fas fa-pen-to-square"></i></a>
                         <a class="pop-ajax"
                            href="<?= $this->url('plafond/supprimer', ['plafond' => $plafond->getId()]) ?>"
@@ -60,5 +61,6 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITI
 <?php if ($canEdit): ?>
     <a href="<?= $this->url('plafond/ajouter') ?>" class="btn btn-secondary">Création d'un nouveau plafond</a>
 <?php endif; ?>
-    <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction & calcul de tous les plafonds</a>
+    <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction & calcul de
+        tous les plafonds</a>
 <?= $this->plafondConfig()->script() ?>

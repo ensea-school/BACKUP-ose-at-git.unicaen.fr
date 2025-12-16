@@ -52,7 +52,7 @@
 
             const avancementSelect = form.querySelector('select[name="avancement"]');
 
-            //console.log(avancementSelect, avancements[etapePrecedanteValue]);
+            const avancementValue = avancementSelect.value;
 
             while (avancementSelect.firstChild) {
                 avancementSelect.removeChild(avancementSelect.firstChild);
@@ -61,6 +61,7 @@
                 const option = new Option(value, key);
                 avancementSelect.appendChild(option);
             });
+            avancementSelect.value = avancementValue;
         }
     }
 

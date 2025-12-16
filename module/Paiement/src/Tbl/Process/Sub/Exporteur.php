@@ -47,7 +47,6 @@ class Exporteur
             ];
             $foundLine = $this->createKey($ldata);
             if (array_key_exists($foundLine,$destination)) {
-                var_dump($ldata['INTERVENANT_ID'].' ');
                 $destination[$foundLine]['HEURES_A_PAYER_AA']   = round($destination[$foundLine]['HEURES_A_PAYER_AA'] + $ldata['HEURES_A_PAYER_AA'], 2);
                 $destination[$foundLine]['HEURES_A_PAYER_AC']   = round($destination[$foundLine]['HEURES_A_PAYER_AC'] + $ldata['HEURES_A_PAYER_AC'], 2);
                 $destination[$foundLine]['HEURES_DEMANDEES_AA'] = round($destination[$foundLine]['HEURES_DEMANDEES_AA'] + $ldata['HEURES_DEMANDEES_AA'], 2);

@@ -47,13 +47,13 @@ class Exporteur
             ];
             $foundLine = $this->createKey($ldata);
             if (array_key_exists($foundLine,$destination)) {
-                var_dump($ldata['intervenant_id'].' ');
-                $destination[$foundLine]['heures_a_payer_aa']   = round($destination[$foundLine]['heures_a_payer_aa'] + $ldata['heures_a_payer_aa'], 2);
-                $destination[$foundLine]['heures_a_payer_ac']   = round($destination[$foundLine]['heures_a_payer_ac'] + $ldata['heures_a_payer_ac'], 2);
-                $destination[$foundLine]['heures_demandees_aa'] = round($destination[$foundLine]['heures_demandees_aa'] + $ldata['heures_demandees_aa'], 2);
-                $destination[$foundLine]['heures_demandees_ac'] = round($destination[$foundLine]['heures_demandees_ac'] + $ldata['heures_demandees_ac'], 2);
-                $destination[$foundLine]['heures_payees_aa']    = round($destination[$foundLine]['heures_payees_aa'] + $ldata['heures_payees_aa'], 2);
-                $destination[$foundLine]['heures_payees_ac']    = round($destination[$foundLine]['heures_payees_ac'] + $ldata['heures_payees_ac'], 2);
+                var_dump($ldata['INTERVENANT_ID'].' ');
+                $destination[$foundLine]['HEURES_A_PAYER_AA']   = round($destination[$foundLine]['HEURES_A_PAYER_AA'] + $ldata['HEURES_A_PAYER_AA'], 2);
+                $destination[$foundLine]['HEURES_A_PAYER_AC']   = round($destination[$foundLine]['HEURES_A_PAYER_AC'] + $ldata['HEURES_A_PAYER_AC'], 2);
+                $destination[$foundLine]['HEURES_DEMANDEES_AA'] = round($destination[$foundLine]['HEURES_DEMANDEES_AA'] + $ldata['HEURES_DEMANDEES_AA'], 2);
+                $destination[$foundLine]['HEURES_DEMANDEES_AC'] = round($destination[$foundLine]['HEURES_DEMANDEES_AC'] + $ldata['HEURES_DEMANDEES_AC'], 2);
+                $destination[$foundLine]['HEURES_PAYEES_AA']    = round($destination[$foundLine]['HEURES_PAYEES_AA'] + $ldata['HEURES_PAYEES_AA'], 2);
+                $destination[$foundLine]['HEURES_PAYEES_AC']    = round($destination[$foundLine]['HEURES_PAYEES_AC'] + $ldata['HEURES_PAYEES_AC'], 2);
             } else {
                 $destination[$foundLine] = $ldata;
             }
@@ -65,22 +65,22 @@ class Exporteur
 
     protected function createKey(array $line): string
     {
-        $keyData = $line['annee_id']
-            . '|' . $line['service_id']
-            . '|' . $line['service_referentiel_id']
-            . '|' . $line['mission_id']
-            . '|' . $line['type_intervenant_id']
-            . '|' . $line['intervenant_id']
-            . '|' . $line['structure_id']
-            . '|' . $line['type_heures_id']
-            . '|' . $line['periode_ens_id']
-            . '|' . $line['mise_en_paiement_id']
-            . '|' . $line['periode_paiement_id']
-            . '|' . $line['centre_cout_id']
-            . '|' . $line['domaine_fonctionnel_id']
-            . '|' . $line['taux_remu_id']
-            . '|' . $line['taux_horaire']
-            . '|' . $line['taux_conges_payes'];
+        $keyData = $line['ANNEE_ID']
+            . '|' . $line['SERVICE_ID']
+            . '|' . $line['SERVICE_REFERENTIEL_ID']
+            . '|' . $line['MISSION_ID']
+            . '|' . $line['TYPE_INTERVENANT_ID']
+            . '|' . $line['INTERVENANT_ID']
+            . '|' . $line['STRUCTURE_ID']
+            . '|' . $line['TYPE_HEURES_ID']
+            . '|' . $line['PERIODE_ENS_ID']
+            . '|' . $line['MISE_EN_PAIEMENT_ID']
+            . '|' . $line['PERIODE_PAIEMENT_ID']
+            . '|' . $line['CENTRE_COUT_ID']
+            . '|' . $line['DOMAINE_FONCTIONNEL_ID']
+            . '|' . $line['TAUX_REMU_ID']
+            . '|' . $line['TAUX_HORAIRE']
+            . '|' . $line['TAUX_CONGES_PAYES'];
         return $keyData;
     }
 

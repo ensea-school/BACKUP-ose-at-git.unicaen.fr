@@ -3,6 +3,7 @@
 namespace Paiement\Tbl\Process;
 
 
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use Paiement\Tbl\Process\Sub\Consolidateur;
@@ -13,6 +14,7 @@ use Paiement\Tbl\Process\Sub\Rapprocheur;
 use Paiement\Tbl\Process\Sub\Repartiteur;
 use Paiement\Tbl\Process\Sub\ServiceAPayer;
 use Unicaen\BddAdmin\BddAwareTrait;
+use UnicaenTbl\Event;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -28,6 +30,7 @@ class PaiementProcess implements ProcessInterface
     use ParametresServiceAwareTrait;
     use TauxRemuServiceAwareTrait;
     use BddAwareTrait;
+    use AnneeServiceAwareTrait;
 
     /** @var array|ServiceAPayer[] */
     protected array $services = [];
@@ -37,6 +40,7 @@ class PaiementProcess implements ProcessInterface
     protected Rapprocheur   $rapprocheur;
     protected Consolidateur $consolidateur;
     protected Exporteur     $exporteur;
+    protected TableauBord   $tableauBord;
 
 
 
@@ -74,10 +78,22 @@ class PaiementProcess implements ProcessInterface
 
     public function run(TableauBord $tableauBord, array $params = []): void
     {
-        $this->init();
-        $this->loadAPayer($params);
-        $this->traitement();
-        $this->enregistrement($tableauBord, $params);
+        $this->tableauBord = $tableauBord;
+
+        if (empty($params)) {
+            $annees = $this->getServiceAnnee()->getActives();
+            foreach ($annees as $annee) {
+                $this->run($tableauBord, ['ANNEE_ID' => $annee->getId()]);
+            }
+        } else {
+            $this->init();
+            $tableauBord->onAction(Event::GET);
+            $this->loadAPayer($params);
+            $tableauBord->onAction(Event::PROCESS, 0, count($this->tblData));
+            $this->traitement();
+            $tableauBord->onAction(Event::SET, 0, count($this->tblData));
+            $this->enregistrement($tableauBord, $params);
+        }
     }
 
 
@@ -131,7 +147,13 @@ class PaiementProcess implements ProcessInterface
 
     protected function traitement(bool $export = true, bool $consolidation = true)
     {
+        $index      = 0;
+        $count      = count($this->services);
+
         foreach ($this->services as $sid => $serviceAPayer) {
+            $index++;
+            $this->tableauBord->onAction(Event::PROGRESS, $index, $count);
+
             $this->repartiteur->repartir($serviceAPayer);
             $this->rapprocheur->rapprocher($serviceAPayer);
             if ($consolidation) {
@@ -176,7 +198,10 @@ class PaiementProcess implements ProcessInterface
             . $this->getServiceBdd()->makeWhere($params);
 
         $aPayerStmt = $conn->executeQuery($sql);
+        $index = 0;
         while ($lap = $aPayerStmt->fetchAssociative()) {
+            $index++;
+            $this->tableauBord->onAction(Event::PROGRESS, $index, 0);
             $this->loadLigneAPayer($lap);
         }
 

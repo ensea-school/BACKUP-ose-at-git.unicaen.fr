@@ -1,6 +1,6 @@
 # Version stable
 
-OSE [24.12](#ose-2412-21112025)
+OSE [24.13](#ose-2413-16122025)
 
 
 # OSE 25 (à venir)

@@ -154,9 +154,9 @@ class EnseignementAssertion extends AbstractAssertion
             $typeVolumeHoraireId =
                 $_GET['type-volume-horaire']
                 ?? $_GET['params']['type-volume-horaire']
-                ?? $_POST['type-volume-horaire']
-                ?? $_POST['params']['type-volume-horaire']
-                ?? null; // @todo à revoir
+                   ?? $_POST['type-volume-horaire']
+                      ?? $_POST['params']['type-volume-horaire']
+                         ?? null; // @todo à revoir
 
             if ($typeVolumeHoraireId) {
                 $typeVolumeHoraireCode = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraireId)?->getCode();
@@ -164,10 +164,10 @@ class EnseignementAssertion extends AbstractAssertion
         }
 
         if (!$typeVolumeHoraireCode) {
-            if (EnseignementController::class . '.initialisation' === $controller . '.' . $action){
+            if (EnseignementController::class . '.initialisation' === $controller . '.' . $action) {
                 $typeVolumeHoraireCode = TypeVolumeHoraire::CODE_PREVU;
             }
-            if (EnseignementController::class . '.constatation' === $controller . '.' . $action){
+            if (EnseignementController::class . '.constatation' === $controller . '.' . $action) {
                 $typeVolumeHoraireCode = TypeVolumeHoraire::CODE_REALISE;
             }
         }
@@ -285,7 +285,7 @@ class EnseignementAssertion extends AbstractAssertion
             $entite = $entite->getIntervenant();
         }
 
-        if (!$entite->getStructure()){
+        if (!$entite->getStructure()) {
             // Un intervenant n'ayant aucune structure d'affectation ne peut pas suivre d'enseignement à l'extérieur
             // Prérequis indispensable pour savoir qui aura à valider ses enseignements
             return false;
@@ -330,11 +330,18 @@ class EnseignementAssertion extends AbstractAssertion
 //        }
 
         /// @todo compléter...
+        /// A consolider, logique temporaire pour accéder de nouveau à la saisi d'enseignement
+        if ($entite instanceof Service) {
+            $structure = $entite->getStructure();
+        } elseif ($entite instanceof Intervenant) {
+            $structure = $entite->getStructure();
+        } else {
+            $structure = $entite;
+        }
 
-        // une structure ne peut pas éditer les services d'une autre
 
         // On ne peut éditer que dans sa structure & ses filles
-        return $entite->inStructure($contextStructure);
+        return $structure->inStructure($contextStructure);
     }
 
 

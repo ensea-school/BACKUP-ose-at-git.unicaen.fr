@@ -40,7 +40,7 @@ class PaiementProcess implements ProcessInterface
     protected Rapprocheur   $rapprocheur;
     protected Consolidateur $consolidateur;
     protected Exporteur     $exporteur;
-    protected TableauBord   $tableauBord;
+    protected ?TableauBord   $tableauBord = null;
 
 
 
@@ -155,7 +155,7 @@ class PaiementProcess implements ProcessInterface
 
         foreach ($this->services as $sid => $serviceAPayer) {
             $index++;
-            $this->tableauBord->onAction(Event::PROGRESS, $index, $count);
+            $this->tableauBord?->onAction(Event::PROGRESS, $index, $count);
             $serviceAPayer->heures = 0;
             foreach( $serviceAPayer->lignesAPayer as $lap ){
                 $serviceAPayer->heures += $lap->heuresAA + $lap->heuresAC;
@@ -212,7 +212,7 @@ class PaiementProcess implements ProcessInterface
         $index = 0;
         while ($lap = $aPayerStmt->fetchAssociative()) {
             $index++;
-            $this->tableauBord->onAction(Event::PROGRESS, $index, 0);
+            $this->tableauBord?->onAction(Event::PROGRESS, $index, 0);
             $this->loadLigneAPayer($lap);
         }
     }

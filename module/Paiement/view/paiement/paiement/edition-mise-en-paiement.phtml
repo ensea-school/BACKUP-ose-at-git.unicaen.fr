@@ -6,8 +6,10 @@
  * @var $paiements   \Paiement\Entity\Db\MiseEnPaiement[]
  */
 
+$url = $this->url('intervenant/mise-en-paiement/edition', ['intervenant' => $intervenant->getId()], ['force_canonical' => true]);
+
 ?>
-<form method="post" id="mepform">
+<form method="post" id="mepform" action="<?= $url ?>">
     <table class="table table-bordered table-xs table-hover table-sort">
         <thead>
         <tr>
@@ -15,7 +17,7 @@
             <th>Composante</th>
             <th>Enseignement</th>
             <th>Centre de coûts</th>
-            <th>Domaine fonctionel</th>
+            <th>Domaine fonctionnel</th>
             <th>Période</th>
             <th>Type</th>
             <th>HETD</th>

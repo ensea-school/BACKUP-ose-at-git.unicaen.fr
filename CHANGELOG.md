@@ -21,6 +21,10 @@ OSE [24.13](#ose-2413-16122025)
 
 * Optimisation générale de l'application
 
+## Améliorations
+
+* La tolérance de dépassement de plafond est passée de 0,05 à 0,02 (#55890)
+
 ## Corrections
 
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)

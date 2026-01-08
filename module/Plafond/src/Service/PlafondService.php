@@ -520,7 +520,7 @@ class PlafondService extends AbstractEntityService
             }
 
             $view .= "\n  COALESCE(pd.heures, 0) derogation,";
-            $view .= "\n  CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement";
+            $view .= "\n  CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.02 THEN 1 ELSE 0 END depassement";
             $view .= "\nFROM\n  (";
             $plafonds = $perimetre->getPlafond();
             $first = true;

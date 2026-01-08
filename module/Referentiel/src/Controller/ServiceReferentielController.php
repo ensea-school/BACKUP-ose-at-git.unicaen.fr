@@ -177,11 +177,10 @@ class ServiceReferentielController extends AbstractController
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
                 $hFin = $entity->getVolumeHoraireReferentielListe()->getHeures();
-                //$this->updateTableauxBord($intervenant, $typeVolumeHoraire);
-                if (!$this->getProcessusPlafond()->endTransaction($entity, $typeVolumeHoraire, $hFin < $hDeb)) {
-                    // rien ici
-                }
                 $this->updateTableauxBord($intervenant, $typeVolumeHoraire);
+                if (!$this->getProcessusPlafond()->endTransaction($entity, $typeVolumeHoraire, $hFin < $hDeb)) {
+                    $this->updateTableauxBord($intervenant, $typeVolumeHoraire);
+                }
             } else {
                 $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
             }

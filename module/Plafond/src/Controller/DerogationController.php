@@ -40,6 +40,7 @@ class DerogationController extends AbstractController
             foreach ($reponse as $pc) {
                 if (!isset($data[$pc->getId()])) {
                     $data[$pc->getId()] = [
+                        'numero'     => $pc->getNumero(),
                         'libelle'    => $pc->getLibelle(),
                         'derogation' => floatToString($pc->getDerogation()),
                     ];

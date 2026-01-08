@@ -87,16 +87,23 @@
             </join-columns>
         </many-to-one>
         <one-to-many field="cheminPedagogique" target-entity="OffreFormation\Entity\Db\CheminPedagogique"
-                     mapped-by="elementPedagogique"/>
-        <!-- NB: Ajout de relations à la main -->
-        <one-to-many field="service" target-entity="Enseignement\Entity\Db\Service" mapped-by="elementPedagogique"/>
-
-        <one-to-many field="elementModulateur" target-entity="OffreFormation\Entity\Db\ElementModulateur" mapped-by="element">
+                     mapped-by="elementPedagogique" orphan-removal="true">
             <cascade>
                 <cascade-all/>
             </cascade>
         </one-to-many>
-        <one-to-many field="volumeHoraireEns" target-entity="OffreFormation\Entity\Db\VolumeHoraireEns" mapped-by="elementPedagogique">
+
+        <!-- NB: Ajout de relations à la main -->
+        <one-to-many field="service" target-entity="Enseignement\Entity\Db\Service" mapped-by="elementPedagogique"/>
+
+        <one-to-many field="elementModulateur" target-entity="OffreFormation\Entity\Db\ElementModulateur"
+                     mapped-by="element">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+        <one-to-many field="volumeHoraireEns" target-entity="OffreFormation\Entity\Db\VolumeHoraireEns"
+                     mapped-by="elementPedagogique">
             <cascade>
                 <cascade-all/>
             </cascade>
@@ -131,6 +138,7 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <one-to-many field="centreCoutEp" target-entity="OffreFormation\Entity\Db\CentreCoutEp" mapped-by="elementPedagogique"/>
+        <one-to-many field="centreCoutEp" target-entity="OffreFormation\Entity\Db\CentreCoutEp"
+                     mapped-by="elementPedagogique"/>
     </entity>
 </doctrine-mapping>

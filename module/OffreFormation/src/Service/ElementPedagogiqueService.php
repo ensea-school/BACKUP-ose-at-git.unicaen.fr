@@ -6,6 +6,8 @@ use Application\Entity\Db\Annee;
 use Application\Provider\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Laminas\Form\Element;
+use OffreFormation\Entity\Db\CheminPedagogique;
 use Unicaen\Framework\Authorize\UnAuthorizedException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -161,7 +163,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return ElementPedagogique
      */
-    public function getByCode ($code, ?Annee $annee = null)
+    public function getByCode($code, ?Annee $annee = null)
     {
         if (null == $code) return null;
 
@@ -169,7 +171,8 @@ where rang = 1 AND rownum <= :limit
             $annee = $this->getServiceContext()->getAnnee();
         }
 
-        return $this->getRepo()->findOneBy(['code' => $code, 'annee' => $annee->getId()]);
+        return $this->getRepo()->findOneBy(['code'  => $code,
+                                            'annee' => $annee->getId()]);
     }
 
 
@@ -232,7 +235,8 @@ where rang = 1 AND rownum <= :limit
      */
     public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        [$qb,
+         $alias] = $this->initQuery($qb, $alias);
 
         $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
@@ -255,17 +259,78 @@ where rang = 1 AND rownum <= :limit
             throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cet enseignement.');
         }
 
-        // si absence de chemin pédagogique, création du chemin
-        if (!$entity->getCheminPedagogique()->count()) {
-            $cp = $this->getServiceCheminPedagogique()->newEntity();
-            /* @var $cp \OffreFormation\Entity\Db\CheminPedagogique */
-            $cp
-                ->setEtape($entity->getEtape())
-                ->setElementPedagogique($entity);
+        /**
+         * @var $serviceCheminPedagogique \OffreFormation\Service\CheminPedagogiqueService
+         */
+        $serviceCheminPedagogique = $this->getServiceCheminPedagogique();
 
-            $entity->addCheminPedagogique($cp);
+        if ($serviceCheminPedagogique->exist($entity)) {
+            return parent::save($entity);
+        }
 
-            $this->getEntityManager()->persist($cp);
+
+        if (!$entity->getId()) {
+            $serviceCheminPedagogique->create($entity);
+            return parent::save($entity);
+        }
+
+        if ($entity->getSource()->getImportable()) {
+            return parent::save($entity);
+        }
+
+        $serviceCheminPedagogique->replaceCheminsPedagogiques($entity);
+
+        return parent::save($entity);
+
+
+        $etape  = $entity->getEtape();
+        $exists = $this->entityManager
+                      ->getRepository(CheminPedagogique::class)
+                      ->count([
+                                  'etape'              => $etape,
+                                  'elementPedagogique' => $entity,
+                                  'histoDestruction'   => null,
+                              ]) > 0;
+
+        //1- Aucun chemin pédagogique existant pour l'EP et l'étape donnés, n'existe pas on va devoir le créer
+        if (!$exists) {
+            if (!$entity->getId()) {
+                //2- Création d'un EP : on doit créer le chemin pédagogique car aucun n'existe
+                $newCheminPedagogique = $this->getServiceCheminPedagogique()->newEntity();
+                $newCheminPedagogique->setEtape($entity->getEtape())
+                                     ->setElementPedagogique($entity);
+
+                $entity->addCheminPedagogique($newCheminPedagogique);
+                $this->getServiceCheminPedagogique()->save($newCheminPedagogique);
+
+            } else {
+                //3 - Modification d'un EP : on modifie le chemin mais uniquement si il s'agit d'un élément pédagogique non importé
+                $source = $entity->getSource();
+                if (!$source->getImportable()) {
+                    //4 - On supprime les anciens chemins pédagogiques qui ne servent plus
+                    $cheminsPedagogiques = $entity->getCheminPedagogique();
+                    foreach ($cheminsPedagogiques as $chemin) {
+                        $etape = $chemin->getEtape();
+                        $etape->removeCheminPedagogique($chemin);
+                        $elementPedagogoqie = $chemin->getElementPedagogique();
+                        $elementPedagogoqie->removeCheminPedagogique($chemin);
+                        $this->getEntityManager()->persist($etape);
+                        $this->getEntityManager()->persist($elementPedagogoqie);
+                        /**
+                         * @var $chemin CheminPedagogique
+                         */
+                        if ($chemin->estNonHistorise()) {
+                            $this->getServiceCheminPedagogique()->delete($chemin);
+                        }
+                    }
+                    //5- Puis on crée le nouveau chemin pédagogique nécessaire
+                    $newCheminPedagogique = $this->getServiceCheminPedagogique()->newEntity();
+                    $newCheminPedagogique->setEtape($entity->getEtape())
+                                         ->setElementPedagogique($entity);
+                    $entity->addCheminPedagogique($newCheminPedagogique);
+                    $this->getServiceCheminPedagogique()->save($newCheminPedagogique);
+                }
+            }
         }
 
         return parent::save($entity);
@@ -341,9 +406,9 @@ where rang = 1 AND rownum <= :limit
     {
         /** @var ElementTauxRegimes $etr */
         $etr = $this->getEntityManager()->getRepository(ElementTauxRegimes::class)->findOneBy([
-            'elementPedagogique' => $elementPedagogique,
-            'histoDestruction'   => null,
-        ]);
+                                                                                                  'elementPedagogique' => $elementPedagogique,
+                                                                                                  'histoDestruction'   => null,
+                                                                                              ]);
 
         $sourceOse = $this->getServiceSource()->getOse();
         $hasTaux   = ($tauxFi || $tauxFc || $tauxFa);
@@ -455,7 +520,8 @@ where rang = 1 AND rownum <= :limit
      */
     public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        [$qb,
+         $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy($this->getAlias() . '.libelle');
 
         return $qb;
@@ -486,9 +552,12 @@ where rang = 1 AND rownum <= :limit
     {
         if ($length && ($remain = count($result) - $length) > 0) {
             $result   = array_slice($result, 0, $length);
-            $result[] = ['id' => null, 'label' => "<em><small>$remain résultats restant, affinez vos critères, svp.</small></em>"];
+            $result[] = ['id'    => null,
+                         'label' => "<em><small>$remain résultats restant, affinez vos critères, svp.</small></em>"];
         }
 
         return $result;
     }
+
+
 }

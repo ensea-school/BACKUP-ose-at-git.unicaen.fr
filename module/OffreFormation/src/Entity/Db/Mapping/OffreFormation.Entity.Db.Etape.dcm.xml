@@ -65,9 +65,15 @@
                 <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <one-to-many field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique" mapped-by="etape"/>
-        <one-to-many field="cheminPedagogique" target-entity="OffreFormation\Entity\Db\CheminPedagogique" mapped-by="etape"
-                     fetch="EXTRA_LAZY"/>
+        <one-to-many field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique"
+                     mapped-by="etape"/>
+        <one-to-many field="cheminPedagogique" target-entity="OffreFormation\Entity\Db\CheminPedagogique"
+                     mapped-by="etape"
+                     fetch="EXTRA_LAZY" orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
         <many-to-many field="niveauFormation" target-entity="OffreFormation\Entity\Db\NiveauFormation">
             <join-table name="V_ETAPE_NIVEAU_FORMATION">
                 <join-columns>

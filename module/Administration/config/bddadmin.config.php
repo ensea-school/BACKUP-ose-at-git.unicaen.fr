@@ -31,6 +31,7 @@ return [
             Migration\v24ParametresAnnualises::class,
             Migration\v25Workflow::class,
             Migration\v25ExportRh::class,
+            Migration\v25CheminPedagogique::class,
         ],
     ],
 

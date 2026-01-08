@@ -26,7 +26,7 @@ $autoSave = isset($autoSave) ? $autoSave : true;
     <tbody>
     <?php foreach ($configs as $config): ?>
         <tr>
-            <td style="width:50%"><?= $config->getPlafond() ?></td>
+            <td style="width:50%"><span class="badge bg-secondary"><?= $config->getPlafond()->getNumero() ?></span> <?= $config->getPlafond() ?></td>
             <td><?= $this->plafondConfig($config)->etatPrevu($canEdit); ?></td>
             <td><?= $this->plafondConfig($config)->etatRealise($canEdit); ?></td>
             <td><?= $this->plafondConfig($config)->heures($canEdit); ?></td>

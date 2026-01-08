@@ -208,7 +208,11 @@ class PaiementController extends AbstractController
         }
         $this->updateTableauxBord($intervenant);
 
-        return compact('intervenant', 'paiements');
+        if ($this->getRequest()->isPost()) {
+            return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'edition-mise-en-paiement']]);
+        } else {
+            return compact('intervenant', 'paiements');
+        }
     }
 
 
@@ -500,7 +504,7 @@ class PaiementController extends AbstractController
         $debugger->run($intervenant);
 
         $data = [
-            'parametres' => $debugger->parametres(),
+            'parametres'     => $debugger->parametres(),
             'servicesAPayer' => $debugger->servicesAPayer(),
         ];
 

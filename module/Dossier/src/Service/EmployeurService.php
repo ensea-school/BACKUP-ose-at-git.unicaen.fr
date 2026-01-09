@@ -160,9 +160,14 @@ class EmployeurService extends AbstractEntityService
             * $data[8] = Date de dernier traitement de l'unité légale
             * $data[9] = Unité pouvant employer des personnes
             * $data[10] = Identifiant association
-            * $data[12] = Siret
+            * $data[11] = Siret
             *
             */
+
+            //On ignore la premiere ligne du fichier qui est un header
+            if ($data[0] == 'siren') {
+                continue;
+            }
 
             $nomCommercial = (!empty($data[5])) ? $data[5] : '';
             $nomCommercial .= (!empty($data[6])) ? ' ' . $data[6] : '';
@@ -173,7 +178,7 @@ class EmployeurService extends AbstractEntityService
             //SIREN
             $siren = $data[0];
             //SIRET
-            $siret = (isset($data[12])) ? $data[0] . $data[12] : '';
+            $siret = (isset($data[11])) ? $data[0] . $data[11] : '';
 
             //IDENTIFIANT ASSOCIATION
             $identifiantAssociation = $data[10];
@@ -229,14 +234,14 @@ class EmployeurService extends AbstractEntityService
         //Employeur étrangé
         $data                            = [];
         $data['SIREN']                   = '999999999';
-        $data['RAISON_SOCIALE'] = 'EMPLOYEUR ETRANGER';
-        $data['NOM_COMMERCIAL'] = 'EMPLOYEUR ETRANGER';
+        $data['RAISON_SOCIALE']          = 'EMPLOYEUR ETRANGER';
+        $data['NOM_COMMERCIAL']          = 'EMPLOYEUR ETRANGER';
         $data['SOURCE_CODE']             = '999999999';
         $data['SOURCE_ID']               = $idSource;
         $data['HISTO_DESTRUCTEUR_ID']    = null;
         $data['HISTO_DESTRUCTION']       = null;
         $data['IDENTIFIANT_ASSOCIATION'] = null;
-        $data['CRITERE_RECHERCHE'] = \UnicaenApp\Util::reduce('Employeur étranger 999999999');
+        $data['CRITERE_RECHERCHE']       = \UnicaenApp\Util::reduce('Employeur étranger 999999999');
         $options['where']                = 'SIREN = \'999999999\'';
         $options['soft-delete']          = true;
         $datas                           = [];

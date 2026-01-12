@@ -32,15 +32,14 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     use ContextServiceAwareTrait;
 
 
-    protected function assertPage (Page $page): bool
+    protected function assertPage(Page $page): bool
     {
         $page = $page->getData();
         switch ($page['route']) {
             case 'offre-emploi':
             case 'candidature':
                 //Si il n'y a pas d'offre d'emploi alors il ne peut pas y avoir des candidatures
-                if(!$this->canHaveCandidature())
-                {
+                if (!$this->canHaveCandidature()) {
                     return false;
                 }
 
@@ -61,7 +60,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertEntity (?ResourceInterface $entity = null, $privilege = null): bool
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null): bool
     {
         if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
 
@@ -81,7 +80,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
                     case Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION:
                         return $this->assertOffreEmploiSupprimer($entity);
                 }
-            break;
+                break;
             case $entity instanceof Candidature:
                 switch ($privilege) {
                     case Privileges::MISSION_CANDIDATURE_VALIDER:
@@ -89,7 +88,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
                     case Privileges::MISSION_CANDIDATURE_REFUSER:
                         return $this->assertCandidatureRefuser($entity);
                 }
-            break;
+                break;
         }
 
         return true;
@@ -97,29 +96,20 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertController (string $controller, ?string $action): bool
+    protected function assertController(string $controller, ?string $action): bool
     {
         $entity = $this->getServiceContext()->getIntervenant();
         if (!$entity) {
             $entity = $this->getParam(Intervenant::class);
         }
         if (!$entity) {
-            $entity = $this->getParam(Mission::class);
-        }
-        if (!$entity) {
-            $entity = $this->getParam(VolumeHoraireMission::class);
-        }
-        if (!$entity) {
             $entity = $this->getParam(Candidature::class);
-        }
-        if (!$entity) {
-            return false;
         }
 
         switch ($action) {
             case 'accepterCandidature':
             case 'refuserCandidature':
-                if ($entity instanceof Candidature){
+                if ($entity instanceof Candidature) {
                     $assert = $this->assertCandidatureValider($entity);
                     return $assert;
                 }
@@ -127,13 +117,18 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             case 'candidature':
                 return $this->canHaveCandidature();
                 break;
+            case 'get':
+            case 'liste':
+            case 'index':
+                return true;
+
         }
-        return true;
+        return false;
     }
 
 
 
-    protected function assertOffreEmploiVisualisation (OffreEmploi $offre): bool
+    protected function assertOffreEmploiVisualisation(OffreEmploi $offre): bool
     {
         return $this->asserts(
             $this->assertStructure($offre->getStructure()),
@@ -142,7 +137,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertStructure (?Structure $structure): bool
+    protected function assertStructure(?Structure $structure): bool
     {
 
         if (!$structure) {
@@ -158,40 +153,40 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertOffreEmploiEdition (OffreEmploi $offre): bool
+    protected function assertOffreEmploiEdition(OffreEmploi $offre): bool
     {
 
 
         return $this->asserts([
-            $this->getServiceContext()->getAffectation(),
-            $offre->canSaisie(),
-            $this->assertOffreEmploi($offre),
-        ]);
+                                  $this->getServiceContext()->getAffectation(),
+                                  $offre->canSaisie(),
+                                  $this->assertOffreEmploi($offre),
+                              ]);
     }
 
 
 
-    protected function assertOffreEmploi (OffreEmploi $offre): bool
+    protected function assertOffreEmploi(OffreEmploi $offre): bool
     {
         return $this->asserts([
-            $this->assertStructure($offre->getStructure()),
-        ]);
+                                  $this->assertStructure($offre->getStructure()),
+                              ]);
     }
 
 
 
-    protected function assertOffreEmploiValidation (OffreEmploi $offre): bool
+    protected function assertOffreEmploiValidation(OffreEmploi $offre): bool
     {
 
         return $this->asserts([
-            $this->getServiceContext()->getAffectation(),
-            $this->assertOffreEmploi($offre),
-        ]);
+                                  $this->getServiceContext()->getAffectation(),
+                                  $this->assertOffreEmploi($offre),
+                              ]);
     }
 
 
 
-    protected function assertOffreEmploiPostuler (OffreEmploi $offre): bool
+    protected function assertOffreEmploiPostuler(OffreEmploi $offre): bool
     {
 
         //On vérifier que l'on a bien un contexte avec un intervenant
@@ -205,23 +200,25 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertCandidatureVisualisation (OffreEmploi $offre): bool
+    protected function assertCandidatureVisualisation(OffreEmploi $offre): bool
     {
         return $this->asserts([
-            $this->getServiceContext()->getAffectation(),
-        ]);
+                                  $this->getServiceContext()->getAffectation(),
+                              ]);
     }
 
 
 
-    protected function assertOffreEmploiSupprimer (OffreEmploi $offre): bool
+    protected function assertOffreEmploiSupprimer(OffreEmploi $offre): bool
     {
         return $this->asserts([
-            !$offre->isValide(),
-            $this->getServiceContext()->getAffectation(),
-            $this->assertOffreEmploi($offre),
-        ]);
+                                  !$offre->isValide(),
+                                  $this->getServiceContext()->getAffectation(),
+                                  $this->assertOffreEmploi($offre),
+                              ]);
     }
+
+
 
     protected function canHaveCandidature(): bool
     {
@@ -235,10 +232,10 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertCandidatureValider (Candidature $candidature): bool
+    protected function assertCandidatureValider(Candidature $candidature): bool
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($candidature->getIntervenant(), $candidature->getOffre()->getStructure());
-        $wfEtape = $feuilleDeRoute->get(WorkflowEtape::CANDIDATURE_VALIDATION);
+        $wfEtape        = $feuilleDeRoute->get(WorkflowEtape::CANDIDATURE_VALIDATION);
 
         return $wfEtape && $wfEtape->isAllowed();
     }

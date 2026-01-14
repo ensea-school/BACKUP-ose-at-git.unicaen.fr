@@ -150,7 +150,7 @@ class WorkflowProcess implements ProcessInterface
             if ($prec->partiel > 0) {
                 $partiel = true;
             }
-            if ($prec->realisation >= $prec->objectif) {
+            if ($prec->realisation > 0 && $prec->realisation >= $prec->objectif) {
                 $partiel = true;
             } else {
                 $integral = false;

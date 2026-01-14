@@ -1,199 +1,260 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OSE\n"
-"POT-Creation-Date: 2019-02-19 17:47+0100\n"
-"PO-Revision-Date: 2019-02-19 17:50+0100\n"
+"POT-Creation-Date: 2026-01-14 10:28+0100\n"
+"PO-Revision-Date: 2026-01-14 10:30+0100\n"
 "Last-Translator: Laurent Lécluse <laurent.lecluse@unicaen.fr>\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: translate;setLabel;setLegend;_\n"
-"X-Poedit-SearchPath-0: module/Application\n"
+"X-Poedit-SearchPath-0: module\n"
 "X-Poedit-SearchPathExcluded-0: public/vendor\n"
-"X-Poedit-SearchPathExcluded-1: vendor/unicaen/import/public/ace-builds-"
-"master\n"
 
-#: module/Application/src/Application/Controller/BudgetController.php:217
-#: module/Application/src/Application/Controller/BudgetController.php:218
-msgid "Dont, au titre de "
-msgstr ""
-
-#: module/Application/src/Application/Controller/BudgetController.php:219
-msgid "Année civile "
-msgstr ""
-
-#: module/Application/src/Application/Controller/BudgetController.php:323
-msgid "Composante"
-msgstr ""
-
-#: module/Application/src/Application/Controller/EtablissementController.php:38
-msgid "Recherchez l'établissement concerné :"
-msgstr ""
-
-#: module/Application/src/Application/Controller/StructureController.php:39
-msgid "Recherchez la structure concernée :"
-msgstr ""
-
-#: module/Application/src/Application/Form/Droits/AffectationForm.php:68
-msgid "Utilisateur"
-msgstr ""
-
-#: module/Application/src/Application/Form/Intervenant/HeuresCompForm.php:29
-msgid "Type de service :"
-msgstr ""
-
-#: module/Application/src/Application/Form/Intervenant/HeuresCompForm.php:35
-#: module/Application/src/Application/Form/Service/RechercheForm.php:201
-msgid "État :"
-msgstr ""
-
-#: module/Application/src/Application/Form/ParametresForm.php:138
-#: module/Application/src/Application/Form/Service/SaisieFieldset.php:100
+#: module/Administration/src/Form/ParametresForm.php:178
+#: module/Enseignement/src/Form/EnseignementSaisieFieldset.php:108
 msgid "Établissement :"
 msgstr ""
 
-#: module/Application/src/Application/Form/Service/RechercheForm.php:150
-msgid "Statut :"
-msgstr ""
-
-#: module/Application/src/Application/Form/Service/RechercheForm.php:181
-#: module/Application/src/Application/Form/Service/SaisieFieldset.php:71
-#: module/Application/src/Application/Form/ServiceReferentiel/SaisieFieldset.php:79
-msgid "Intervenant :"
-msgstr ""
-
-#: module/Application/src/Application/Form/Service/RechercheForm.php:188
-msgid "Enseignement :"
-msgstr ""
-
-#: module/Application/src/Application/Form/Service/RechercheForm.php:194
-msgid "Type :"
-msgstr ""
-
-#: module/Application/src/Application/Traits/TranslatorTrait.php:43
+#: module/Application/src/Traits/TranslatorTrait.php:43
 msgid "bdd "
 msgstr ""
 
-#: module/Application/src/Application/View/Helper/AppLink.php:108
-msgid "Page d'accueil de l'application"
-msgstr ""
-
-#: module/Application/src/Application/View/Helper/ServiceReferentiel/FormSaisie.php:128
-msgid "Prévu => réalisé"
-msgstr ""
-
-#: module/Application/src/Application/translate.php:9
+#: module/Application/src/translate.php:9
 msgid "bdd .SERVICE__UN"
 msgstr ""
 "Vous ne pouvez pas enregistrer cet enseignement car il en existe déjà un de "
 "similaire."
 
-#: module/Application/src/Application/translate.php:10
+#: module/Application/src/translate.php:10
 msgid "bdd ORA-01722"
 msgstr "Nombre invalide"
 
-#: module/Application/src/Application/translate.php:11
+#: module/Application/src/translate.php:11
 msgid "bdd .MEP_FR_SERVICE_FK"
 msgstr ""
 "Vous ne pouvez pas dévalider ces heures d'enseignement, car des demandes de "
 "mise en paiement ou des mises en paiement ont été faites."
 
-#: module/Application/src/Application/translate.php:12
+#: module/Application/src/translate.php:12
 msgid "bdd .MEP_FR_SERVICE_REF_FK"
 msgstr ""
 "Vous ne pouvez pas dévalider ces heures de référentiel, car des demandes de "
 "mise en paiement ou des mises en paiement ont été faites."
 
-#: module/Application/src/Application/translate.php:13
+#: module/Application/src/translate.php:13
 msgid "bdd .EP_CODE_UN"
 msgstr ""
 "Un enseignement existe déjà avec le même code. Merci de choisir un autre "
 "code d'enseignement."
 
-#: module/Application/src/Application/translate.php:14
+#: module/Application/src/translate.php:14
 msgid "bdd .ETAPE_SOURCE_UN"
 msgstr ""
 "Une formation existe déjà avec le même code. Merci de choisir un autre code "
 "de formation."
 
-#: module/Application/view/application/index/index.phtml:53
-msgid "Tableau synthétique des enseignements concernant ma composante..."
+#: module/Dossier/src/Form/DossierAutresFieldset.php:77
+msgid " <span class=\"text-danger\">*</span>"
 msgstr ""
 
-#: module/Application/view/application/index/index.phtml:66
+#: module/Dossier/src/Form/DossierContactFieldset.php:117
+msgid "Téléphone personnel <span class=\"text-danger\">*</span>"
+msgstr ""
+
+#: module/Dossier/src/Form/DossierContactFieldset.php:121
+msgid "E-mail personnel <span class=\"text-danger\">*</span>"
+msgstr ""
+
+#: module/Dossier/src/Form/DossierEmployeurFieldset.php:34
+msgid "Employeurs <span class=\"text-danger\">*</span>:"
+msgstr ""
+
+#: module/Dossier/src/Form/DossierIdentiteComplementaireFieldset.php:149
+msgid "Situation matrimoniale <span class=\"text-danger\">*</span>"
+msgstr ""
+
+#: module/Dossier/src/Form/DossierIdentiteComplementaireFieldset.php:171
+msgid "depuis le <span class=\"text-danger\">*</span>"
+msgstr ""
+
+#: module/Dossier/src/Form/EmployeurSaisieForm.php:21
+msgid "Raison sociale"
+msgstr ""
+
+#: module/Dossier/src/Form/EmployeurSaisieForm.php:22
+msgid "Nom commercial"
+msgstr ""
+
+#: module/Enseignement/src/Form/EnseignementSaisieFieldset.php:79
+#: module/Service/src/Form/RechercheForm.php:185
+msgid "Intervenant :"
+msgstr ""
+
+#: module/Intervenant/src/Form/CorpsSaisieForm.php:25
+#: module/Intervenant/src/Form/GradeSaisieForm.php:26
+#: module/OffreFormation/src/Form/GroupeTypeFormation/GroupeTypeFormationSaisieForm.php:32
+#: module/OffreFormation/src/Form/TypeFormation/TypeFormationSaisieForm.php:31
+#: module/Paiement/src/Form/MotifNonPaiement/MotifNonPaiementSaisieForm.php:21
+msgid "Libellé court"
+msgstr ""
+
+#: module/Intervenant/src/Form/CorpsSaisieForm.php:26
+#: module/Intervenant/src/Form/GradeSaisieForm.php:27
+#: module/OffreFormation/src/Form/GroupeTypeFormation/GroupeTypeFormationSaisieForm.php:33
+#: module/OffreFormation/src/Form/TypeFormation/TypeFormationSaisieForm.php:32
+#: module/Paiement/src/Form/MotifNonPaiement/MotifNonPaiementSaisieForm.php:22
+msgid "Libellé long"
+msgstr ""
+
+#: module/Intervenant/src/Form/EditionForm.php:259
+#: module/Utilisateur/src/Form/AffectationForm.php:62
+msgid "Utilisateur"
+msgstr ""
+
+#: module/Intervenant/src/Processus/SuppressionProcessus.php:638
+msgid " <span style=\"font-weight:bold;color:red\" title=\""
+msgstr ""
+
+#: module/Lieu/src/Form/Element/Structure.php:23
+msgid "Structure"
+msgstr ""
+
+#: module/OffreFormation/src/Form/ElementModulateurCentreCoutTauxRemuForm.php:80
+msgid " : "
+msgstr ""
+
+#: module/OffreFormation/src/Form/ElementModulateurCentreCoutTauxRemuForm.php:168
+#: module/OffreFormation/src/Form/EtapeTauxRemu/EtapeTauxRemuForm.php:197
+msgid "tauxRemu"
+msgstr ""
+
+#: module/OffreFormation/src/Form/EtapeTauxRemu/ElementTauxRemuFieldset.php:89
+msgid "taux"
+msgstr ""
+
+#: module/OffreFormation/src/Form/GroupeTypeFormation/GroupeTypeFormationSaisieForm.php:34
+msgid ""
+"Le niveau (1 pour L1, etc...) devra être précisé dans les formations "
+"correspondantes"
+msgstr ""
+
+#: module/Paiement/src/Controller/BudgetController.php:255
+#: module/Paiement/src/Controller/BudgetController.php:256
+msgid "Dont, au titre de "
+msgstr ""
+
+#: module/Paiement/src/Controller/BudgetController.php:257
+msgid "Année civile "
+msgstr ""
+
+#: module/Paiement/src/Form/TauxForm.php:32
+msgid "Taux de référence"
+msgstr ""
+
+#: module/Referentiel/src/View/Helper/FormSaisieViewHelper.php:97
+msgid "Prévu => réalisé"
+msgstr ""
+
+#: module/Service/src/Form/RechercheForm.php:157
+msgid "Statut :"
+msgstr ""
+
+#: module/Service/src/Form/RechercheForm.php:192
+msgid "Enseignement :"
+msgstr ""
+
+#: module/Service/src/Form/RechercheForm.php:198
+msgid "Type :"
+msgstr ""
+
+#: module/Service/src/Form/RechercheForm.php:205
+msgid "État :"
+msgstr ""
+
+#: module/Application/view/application/index/index.phtml:64
 msgid "Connectez-vous..."
 msgstr ""
 
-#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:17
-msgid "Expéditeur du mail"
-msgstr ""
-
-#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:20
-msgid "Nombre de mails à envoyer"
-msgstr ""
-
-#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:23
-msgid "Objet du mail"
-msgstr ""
-
-#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:24
-msgid "Corps du mail"
-msgstr ""
-
-#: module/Intervenant/view/intervenant/intervenant/cloturer-saisie.phtml:2
-msgid "J'ai terminé la saisie de la totalité de mon service réalisé."
-msgstr ""
-
-#: module/Intervenant/view/intervenant/intervenant/partial/cloture.phtml:43
-msgid "J'ai terminé la saisie de la totalité de mon service réalisé"
-msgstr ""
-
-#: module/Intervenant/view/intervenant/intervenant/partial/cloture.phtml:60
-msgid "L'intervenant a terminé la saisie de la totalité de son service réalisé"
-msgstr ""
-
-#: module/Application/view/error/exception.phtml:1
+#: module/Application/view/error/exception.phtml:5
 msgid "Opération impossible"
 msgstr ""
 
-#: module/Application/view/error/exception.phtml:17
-#: module/Application/view/error/index.phtml:13
+#: module/Application/view/error/exception.phtml:20
+#: module/Application/view/error/index.phtml:14
 msgid "Additional information"
 msgstr "Informations supplémentaires"
 
-#: module/Application/view/error/exception.phtml:20
-#: module/Application/view/error/exception.phtml:44
-#: module/Application/view/error/index.phtml:16
-#: module/Application/view/error/index.phtml:42
+#: module/Application/view/error/exception.phtml:23
+#: module/Application/view/error/exception.phtml:47
+#: module/Application/view/error/index.phtml:17
+#: module/Application/view/error/index.phtml:43
 msgid "File"
 msgstr "Fichier"
 
-#: module/Application/view/error/exception.phtml:24
-#: module/Application/view/error/exception.phtml:48
-#: module/Application/view/error/index.phtml:47
+#: module/Application/view/error/exception.phtml:27
+#: module/Application/view/error/exception.phtml:51
+#: module/Application/view/error/index.phtml:48
 msgid "Message"
 msgstr "Message"
 
-#: module/Application/view/error/exception.phtml:28
-#: module/Application/view/error/exception.phtml:52
-#: module/Application/view/error/index.phtml:21
-#: module/Application/view/error/index.phtml:51
+#: module/Application/view/error/exception.phtml:31
+#: module/Application/view/error/exception.phtml:55
+#: module/Application/view/error/index.phtml:22
+#: module/Application/view/error/index.phtml:52
 msgid "Stack trace"
 msgstr "Pile d'exécution"
 
-#: module/Application/view/error/exception.phtml:38
-#: module/Application/view/error/index.phtml:32
+#: module/Application/view/error/exception.phtml:41
+#: module/Application/view/error/index.phtml:33
 msgid "Previous exceptions"
 msgstr "Erreurs précédentes"
 
-#: module/Application/view/error/exception.phtml:69
+#: module/Application/view/error/exception.phtml:72
 msgid "No Exception available"
 msgstr "Aucune erreur trouvée"
+
+#: module/Indicateur/view/indicateur/indicateur/envoi-mail-intervenants.phtml:18
+msgid "Expéditeur du mail"
+msgstr ""
+
+#: module/Indicateur/view/indicateur/indicateur/envoi-mail-intervenants.phtml:21
+msgid "Nombre de mails à envoyer"
+msgstr ""
+
+#: module/Indicateur/view/indicateur/indicateur/envoi-mail-intervenants.phtml:24
+msgid "Cci (E-mails séparés par un point virgule)"
+msgstr ""
+
+#: module/Indicateur/view/indicateur/indicateur/envoi-mail-intervenants.phtml:25
+msgid "Envoyer sur l'email professionnel et l'email personnel de l'intervenant"
+msgstr ""
+
+#: module/Indicateur/view/indicateur/indicateur/envoi-mail-intervenants.phtml:26
+msgid "Objet du mail"
+msgstr ""
+
+#: module/Indicateur/view/indicateur/indicateur/envoi-mail-intervenants.phtml:27
+msgid "Corps du mail"
+msgstr ""
+
+#: module/Indicateur/view/indicateur/indicateur/envoi-mail-intervenants.phtml:28
+msgid ""
+"Recevoir une copie de l'email envoyé (incluant la liste des destinataires)"
+msgstr ""
+
+#: module/Service/view/service/intervenant/cloture.phtml:43
+msgid "J'ai terminé la saisie de la totalité de mon service réalisé"
+msgstr ""
+
+#: module/Service/view/service/intervenant/cloture.phtml:60
+msgid "L'intervenant a terminé la saisie de la totalité de son service réalisé"
+msgstr ""
 
 #~ msgid "ETAPE_SOURCE_UN"
 #~ msgstr ""

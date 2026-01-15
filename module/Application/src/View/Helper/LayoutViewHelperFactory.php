@@ -7,6 +7,7 @@ use Unicaen\Framework\Navigation\Navigation;
 use Unicaen\Framework\Router\Router;
 use Unicaen\Framework\User\UserManager;
 use Interop\Container\ContainerInterface;
+use Utilisateur\Provider\UserProvider;
 
 /**
  * Class LayoutViewHelperFactory
@@ -20,6 +21,7 @@ class LayoutViewHelperFactory
             $container->get(Navigation::class),
             $container->get(UserManager::class),
             $container->get(Router::class),
+            $container->get(UserProvider::class),
         );
 
         return $helper;

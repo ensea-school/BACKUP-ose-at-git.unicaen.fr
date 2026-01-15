@@ -6,6 +6,7 @@ use Application\HostLocalization\HostLocalizationOse;
 use Application\Provider\Privileges;
 use Application\Service\ContextService;
 use Doctrine\ORM\EntityManager;
+use Lieu\Entity\Db\Structure;
 use Unicaen\Framework\Application\Application;
 use Unicaen\Framework\Cache\FilesystemCache;
 use Unicaen\Framework\Container\Autowire;
@@ -15,6 +16,7 @@ use Unicaen\Framework\User\UserAdapterInterface;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Authentication\AuthenticationService;
+use UnicaenApp\Traits\SessionContainerTrait;
 use Utilisateur\Connecteur\LdapConnecteur;
 use Utilisateur\Entity\Db\Affectation;
 use Utilisateur\Entity\Db\Role;
@@ -22,6 +24,7 @@ use Utilisateur\Entity\Db\Utilisateur;
 
 class UserProvider implements UserAdapterInterface
 {
+    use SessionContainerTrait;
 
     private array $noAdminPrivileges = [
         Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
@@ -79,6 +82,30 @@ class UserProvider implements UserAdapterInterface
         $identity = $this->authenticationService->getIdentity();
 
         return isset($identity['usurpation']['usurpateur']);
+    }
+
+
+
+    public function setCustomStructure(null|int|Structure $structure): void
+    {
+        if ($structure instanceof Structure){
+            $structure = $structure->getId();
+        }
+
+        $this->getSessionContainer()->structure = $structure;
+    }
+
+
+
+    public function getCustomStructure(): ?Structure
+    {
+        $structure = $this->getSessionContainer()?->structure;
+
+        if (!$structure){
+            return null;
+        }
+
+        return $this->entityManager->getRepository(Structure::class)->find($structure);
     }
 
 
@@ -173,6 +200,19 @@ class UserProvider implements UserAdapterInterface
         usort($profiles, function ($a, $b) {
             return $a->getDisplayName() > $b->getDisplayName() ? 1 : -1;
         });
+
+        $customStructure = $this->getCustomStructure();
+        // s'il y a une structure "custom", alors on l'injecte dans tous les profils compatibles
+        if ($customStructure) {
+            foreach ($profiles as $profile) {
+                $role = $profile->getContext('role');
+                if ($role instanceof Role) {
+                    if ($role->getPeutChangerStructure()) {
+                        $profile->setContext('structure', $customStructure);
+                    }
+                }
+            }
+        }
 
         return $profiles;
     }

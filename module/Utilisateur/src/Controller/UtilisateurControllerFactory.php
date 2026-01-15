@@ -7,6 +7,7 @@ use Unicaen\Framework\User\UserManager;
 use Psr\Container\ContainerInterface;
 use UnicaenAuthentification\Service\UserContext;
 use Utilisateur\Connecteur\LdapConnecteur;
+use Utilisateur\Provider\UserProvider;
 
 class UtilisateurControllerFactory
 {
@@ -24,6 +25,7 @@ class UtilisateurControllerFactory
             $container->get(UserContext::class),
             $container->get(LdapConnecteur::class),
             $container->get(AuthenticationService::class),
+            $container->get(UserProvider::class),
         );
 
         return $controller;

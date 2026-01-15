@@ -12,6 +12,7 @@ use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Utilisateur\Entity\Db\Role;
+use Utilisateur\Provider\UserProvider;
 
 /**
  * Description of UtilisateurViewHelper
@@ -30,6 +31,7 @@ class LayoutViewHelper extends AbstractHtmlElement
         private readonly Navigation    $navigation,
         private readonly UserManager   $userManager,
         private readonly Router        $router,
+        private readonly UserProvider  $userProvider,
     )
     {
 
@@ -99,7 +101,7 @@ class LayoutViewHelper extends AbstractHtmlElement
             'usurpationEnCours' => $this->userManager->isUsurpationEnCours(),
             'roles'             => $roles,
             'route'             => $this->router->getCurrentRoute()?->getName(),
-            'structureId'       => null,
+            'structureId'       => $this->userProvider->getCustomStructure()?->getId(),
             'structures'        => $structures,
         ];
     }

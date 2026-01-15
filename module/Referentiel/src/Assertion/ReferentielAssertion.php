@@ -20,6 +20,7 @@ use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Unicaen\Framework\Authorize\Authorize;
+use Unicaen\Framework\Authorize\UnAuthorizedException;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Service\ValidationServiceAwareTrait;
@@ -42,8 +43,8 @@ class ReferentielAssertion extends AbstractAssertion
     use ServiceAssertionAwareTrait;
 
     public function __construct(
-        Authorize $authorize,
-        private readonly EntityManager $entityManager,
+        Authorize                            $authorize,
+        private readonly EntityManager       $entityManager,
         private readonly LocalContextService $localContext,
     )
     {
@@ -52,30 +53,55 @@ class ReferentielAssertion extends AbstractAssertion
 
 
 
-    /**
-     * @param ResourceInterface $entity
-     * @param string            $privilege
-     *
-     * @return boolean
-     */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null): bool
+    protected function assertEntity(ResourceInterface $entity, ?string $privilege = null): bool
     {
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->authorize->isAllowedPrivilege($privilege)) return false;
-
-        // Si c'est bon alors on affine...
         switch (true) {
-            case $entity instanceof ServiceReferentiel:
+            case $entity instanceof Intervenant:
                 switch ($privilege) {
                     case Privileges::REFERENTIEL_PREVU_VISUALISATION:
-                    case Privileges::REFERENTIEL_REALISE_VISUALISATION:
-                        return $this->assertServiceReferentielVisualisation($entity);
+                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_PREVU, false);
                     case Privileges::REFERENTIEL_PREVU_EDITION:
+                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_PREVU, true);
+                    case Privileges::REFERENTIEL_REALISE_VISUALISATION:
+                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_REALISE, false);
                     case Privileges::REFERENTIEL_REALISE_EDITION:
-                        return $this->assertServiceReferentielEdition($entity);
+                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_REALISE, true);
+                    case Privileges::MOTIF_NON_PAIEMENT_VISUALISATION:
+                        return true;
+                }
+                break;
+            case $entity instanceof Validation:
+                switch ($privilege) {
+                    case Privileges::REFERENTIEL_PREVU_VALIDATION:
+                    case Privileges::REFERENTIEL_REALISE_VALIDATION:
+                    case Privileges::REFERENTIEL_PREVU_AUTOVALIDATION:
+                    case Privileges::REFERENTIEL_REALISE_AUTOVALIDATION:
+                        return $this->assertValidationValidation($entity);
+                    case Privileges::REFERENTIEL_DEVALIDATION:
+                        return $this->assertValidationDevalidation($entity);
+                }
+                break;
+            case $entity instanceof ServiceReferentiel:
+                switch ($privilege) {
                     case Privileges::REFERENTIEL_PREVU_VALIDATION:
                     case Privileges::REFERENTIEL_REALISE_VALIDATION:
                         return $this->assertServiceReferentielValidation($entity);
+
+                    case Privileges::REFERENTIEL_PREVU_AUTOVALIDATION:
+                        return true;
+                    case Privileges::REFERENTIEL_REALISE_AUTOVALIDATION:
+                        return true;
+
+                    case Privileges::REFERENTIEL_PREVU_VISUALISATION:
+                        return $this->assertServiceReferentielVisualisation($entity);
+                    case Privileges::REFERENTIEL_PREVU_EDITION:
+                        return $this->assertServiceReferentielEdition($entity);
+                    case Privileges::REFERENTIEL_REALISE_VISUALISATION:
+                        return $this->assertServiceReferentielVisualisation($entity);
+                    case Privileges::REFERENTIEL_REALISE_EDITION:
+                        return $this->assertServiceReferentielEdition($entity);
+                    case Privileges::MOTIF_NON_PAIEMENT_VISUALISATION:
+                        return true;
                 }
                 break;
             case $entity instanceof VolumeHoraireReferentiel:
@@ -83,30 +109,11 @@ class ReferentielAssertion extends AbstractAssertion
                     case Privileges::REFERENTIEL_PREVU_VALIDATION:
                     case Privileges::REFERENTIEL_REALISE_VALIDATION:
                         return $this->assertVolumeHoraireReferentielValidation($entity);
-                }
-                break;
-            case $entity instanceof Intervenant:
-                switch ($privilege) {
-                    case Privileges::REFERENTIEL_PREVU_VISUALISATION:
-                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_PREVU, false);
 
-                    case Privileges::REFERENTIEL_PREVU_EDITION:
-                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_PREVU, true);
-
-                    case Privileges::REFERENTIEL_REALISE_VISUALISATION:
-                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_REALISE, false);
-
-                    case Privileges::REFERENTIEL_REALISE_EDITION:
-                        return $this->assertIntervenantReferentiel($entity, TypeVolumeHoraire::CODE_REALISE, true);
-                }
-                break;
-            case $entity instanceof Validation:
-                switch ($privilege) {
-                    case Privileges::REFERENTIEL_PREVU_VALIDATION:
-                    case Privileges::REFERENTIEL_REALISE_VALIDATION:
-                        return $this->assertValidationValidation($entity);
-                    case Privileges::REFERENTIEL_DEVALIDATION:
-                        return $this->assertValidationDevalidation($entity);
+                    case Privileges::REFERENTIEL_PREVU_AUTOVALIDATION:
+                        return true;
+                    case Privileges::REFERENTIEL_REALISE_AUTOVALIDATION:
+                        return true;
                 }
                 break;
             case $entity instanceof FonctionReferentiel:
@@ -117,35 +124,32 @@ class ReferentielAssertion extends AbstractAssertion
                 break;
         }
 
-        return true;
+        throw new UnAuthorizedException('Action interdite pour la resource ' . $entity->getResourceId() . ', privilège ' . $privilege);
     }
 
 
 
-    /**
-     * @param string $controller
-     * @param string $action
-     * @param string $privilege
-     *
-     * @return boolean
-     */
     protected function assertController(string $controller, ?string $action): bool
     {
 
         /* @var $intervenant Intervenant */
         $intervenant = $this->getParam(Intervenant::class);
 
-        if (!$intervenant){
+        if (!$intervenant) {
             $intervenant = $this->localContext->getIntervenant();
         }
 
         if (!$this->getAssertionService()->assertIntervenant($intervenant)) return false; // si on n'est pas le bon intervenant!!
 
         switch ($controller . '.' . $action) {
-            case ServiceReferentielController::class.'.saisie':
-            case ServiceReferentielController::class.'.suppression':
+            case ServiceReferentielController::class . '.prevu':
+                return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_PREVU);
+            case ServiceReferentielController::class . '.realise':
+                return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_REALISE);
+            case ServiceReferentielController::class . '.saisie':
+            case ServiceReferentielController::class . '.suppression':
                 $serviceReferentiel = $this->getParam('id') ? $this->entityManager->find(ServiceReferentiel::class, $this->getParam('id')) : null;
-                if (!$serviceReferentiel){
+                if (!$serviceReferentiel) {
                     $serviceReferentiel = new ServiceReferentiel();
                     $serviceReferentiel->setIntervenant($intervenant);
                 }
@@ -155,21 +159,17 @@ class ReferentielAssertion extends AbstractAssertion
                     $serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
                 }
                 return $this->assertServiceReferentielEdition($serviceReferentiel);
-
+            case ServiceReferentielController::class . '.initialisation':
+                return true;
+            case ServiceReferentielController::class . '.constatation':
+                return true;
             case ServiceReferentielController::class . '.validationPrevu':
                 return $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION);
-
             case ServiceReferentielController::class . '.validationRealise':
                 return $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION);
-
-            case ServiceReferentielController::class . '.referentielPrevu':
-                return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_PREVU);
-
-            case ServiceReferentielController::class . '.referentielRealise':
-                return $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_REALISE);
         }
 
-        return false;
+        throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non traitée');
     }
 
 

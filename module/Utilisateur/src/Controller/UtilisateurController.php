@@ -17,6 +17,7 @@ use UnicaenAuthentification\Authentication\Storage\Usurpation;
 use UnicaenAuthentification\Service\UserContext;
 use Utilisateur\Connecteur\LdapConnecteur;
 use Utilisateur\Entity\Db\Role;
+use Utilisateur\Provider\UserProvider;
 use Utilisateur\Service\UtilisateurServiceAwareTrait;
 
 
@@ -31,6 +32,7 @@ class UtilisateurController extends AbstractController
         private readonly UserContext           $userContext,
         private readonly LdapConnecteur        $ldap,
         private readonly AuthenticationService $authenticationService,
+        private readonly UserProvider          $userProvider,
     )
     {
     }
@@ -54,6 +56,7 @@ class UtilisateurController extends AbstractController
             if ($role->getPeutChangerStructure()) {
                 $structure = $this->getServiceStructure()->get($structureId);
                 $profile->setContext('structure', $structure);
+                $this->userProvider->setCustomStructure($structure);
             } else {
                 /** @var Structure $structure */
                 $structure = $profile->getContext('structure');

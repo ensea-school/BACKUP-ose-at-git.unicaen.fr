@@ -183,7 +183,7 @@ class WorkflowProcess implements ProcessInterface
             case Perimetre::ETABLISSEMENT:
                 return true;
             case Perimetre::COMPOSANTE:
-                return $structure == $precStructure || 0 === $precStructure;
+                return $structure == $precStructure || 0 === $precStructure || 0 === $structure;
         }
     }
 

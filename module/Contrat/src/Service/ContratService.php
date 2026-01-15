@@ -95,7 +95,8 @@ class ContratService extends AbstractEntityService
      */
     public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        [$qb,
+         $alias] = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.intervenant, $alias.typeContrat, $alias.numeroAvenant");
 
@@ -115,7 +116,8 @@ class ContratService extends AbstractEntityService
      */
     public function finderByValidation($validation, ?QueryBuilder $qb = null, $alias = null)
     {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
+        [$qb,
+         $alias] = $this->initQuery($qb, $alias);
 
         if ($validation instanceof \Workflow\Entity\Db\Validation) {
             $qb
@@ -173,12 +175,12 @@ class ContratService extends AbstractEntityService
                                 $contrat->getIntervenant()->getNomUsuel(),
                                 $contrat->getIntervenant()->getCode());
             //Récupération de la configuration de unicaen signature
-            $content = $document->saveToData();
+            $content         = $document->saveToData();
             $contratFilePath = $this->unicaenSignatureConfig['documents_path'] . '/' . $fileName;
-            $filesystem = new Filesystem();
+            $filesystem      = new Filesystem();
             $filesystem->appendToFile($contratFilePath, $content);
             $filesystem->chmod($contratFilePath, 0777);
-            $filename        = basename($contratFilePath);
+            $filename = basename($contratFilePath);
             //Récupération du circuit de signature si la signature est activé pour l'état de sortie de ce contrat
             $intervenant       = $contrat->getIntervenant();
             $etatSortieContrat = $intervenant->getStatut()->getContratEtatSortie();
@@ -216,7 +218,8 @@ class ContratService extends AbstractEntityService
 
                         foreach ($signatureFlowDatas['steps'] as $key => $step) {
                             //Si l'étape de process concerne un rôle de l'application on va chercher les utilisateurs de ce role.
-                            if (in_array($step['recipient_method'], ['by_etablissement', 'by_etablissement_and_intervenant']) && empty($step['recipients'])) {
+                            if (in_array($step['recipient_method'], ['by_etablissement',
+                                                                     'by_etablissement_and_intervenant']) && empty($step['recipients'])) {
                                 $role = '';
                                 if (array_key_exists('by_etablissement', $step['options'])) {
                                     $role = $this->getServiceRole()->get($step['options']['by_etablissement']);
@@ -264,7 +267,8 @@ class ContratService extends AbstractEntityService
 
                             }
                             //Si l'étape de process concerne l'intervenant du contrat on va chercher l'email de l'intervenant.
-                            if (in_array($step['recipient_method'], ['by_intervenant', 'by_etablissement_and_intervenant']) && empty($step['recipients'])) {
+                            if (in_array($step['recipient_method'], ['by_intervenant',
+                                                                     'by_etablissement_and_intervenant']) && empty($step['recipients'])) {
                                 $intervenant = $contrat->getIntervenant();
                                 $nom         = $intervenant->getNomUsuel();
                                 $prenom      = $intervenant->getPrenom();
@@ -351,7 +355,7 @@ class ContratService extends AbstractEntityService
         if ($save) {
             //On récupere le contenu du contrat pour le stocker temporairement afin de pouvoir l'envoyer dans le parapheur
             $content = $document->saveToData();
-            $file = $this->unicaenSignatureConfig['documents_path'] . '/' . $fileName;
+            $file    = $this->unicaenSignatureConfig['documents_path'] . '/' . $fileName;
             file_put_contents($this->unicaenSignatureConfig['documents_path'] . '/' . $fileName, $content);
             chmod($this->unicaenSignatureConfig['documents_path'] . '/' . $fileName, 0777);
 
@@ -387,7 +391,9 @@ class ContratService extends AbstractEntityService
 
         foreach ($files as $file) {
             $path          = $file['tmp_name'];
-            $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
+            $nomFichier    = str_replace([',',
+                                          ';',
+                                          ':'], '', $file['name']);
             $typeFichier   = $file['type'];
             $tailleFichier = $file['size'];
 
@@ -581,11 +587,12 @@ class ContratService extends AbstractEntityService
                  pour qu'il puisse être physiquement envoyé dans Esup*/
                 $fichierContratContent = $fichierContrat->getContenu();
                 $fichierContratNom     = $fichierContrat->getNom();
-                $filename = $path . '/' . $fichierContratNom;
+                $filename              = $path . '/' . $fichierContratNom;
                 //file_put_contents($path . '/' . $fichierContratNom, $fichierContratContent);
                 $filesystem = new Filesystem();
                 $filesystem->appendToFile($filename, $fichierContratContent);
-                $filesystem->chmod($path . '/' . $fichierContratNom, 0777);
+                // $filesystem->chmod($path . '/' . $fichierContratNom, 0777, 0000, true);
+
 
             }
             return $fichierContrat;
@@ -624,7 +631,9 @@ class ContratService extends AbstractEntityService
 
         foreach ($files as $file) {
             $path          = $file['tmp_name'];
-            $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
+            $nomFichier    = str_replace([',',
+                                          ';',
+                                          ':'], '', $file['name']);
             $typeFichier   = $file['type'];
             $tailleFichier = $file['size'];
 
@@ -680,7 +689,7 @@ class ContratService extends AbstractEntityService
     {
         $dql = "
             SELECT tblc, c,m
-            FROM ".TblContrat::class." tblc
+            FROM " . TblContrat::class . " tblc
             JOIN tblc.intervenant i
             JOIN tblc.contrat c
             JOIN tblc.mission m
@@ -701,6 +710,7 @@ class ContratService extends AbstractEntityService
 
         return null;
     }
+
 
 
     public function getContratWithProcessWaiting()

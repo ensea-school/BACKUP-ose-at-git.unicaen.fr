@@ -115,9 +115,10 @@ class  OffreEmploiController extends AbstractController
         $params['annee'] = $annee;
 
         $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_MODIFIER));
+        $canVisu = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION));
 
 
-        if ($canEdit) {
+        if ($canVisu || $canEdit) {
             if ($structure = $this->getServiceContext()->getStructure()) {
                 $params['structure'] = $structure->idsFilter();
             }
@@ -163,7 +164,8 @@ class  OffreEmploiController extends AbstractController
         $this->em()->clear();
 
         $annee = $this->getServiceContext()->getAnnee();
-        $model = $this->getServiceOffreEmploi()->data(['offreEmploi' => $offreEmploi, 'annee' => $annee]);
+        $model = $this->getServiceOffreEmploi()->data(['offreEmploi' => $offreEmploi,
+                                                       'annee'       => $annee]);
         $model->returnFirstItem();
 
         return $model;
@@ -302,9 +304,9 @@ class  OffreEmploiController extends AbstractController
             $offreEmploi = $this->getEvent()->getParam('offreEmploi');
         }
 
-        $utilisateur = $this->getServiceContext()->getUtilisateur();
-        $intervenant = $this->getServiceContext()->getIntervenant();
-        $canPostuler = $this->isAllowed($offreEmploi, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
+        $utilisateur        = $this->getServiceContext()->getUtilisateur();
+        $intervenant        = $this->getServiceContext()->getIntervenant();
+        $canPostuler        = $this->isAllowed($offreEmploi, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
         $canVoirCandidature = (empty($intervenant)) ? $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_CANDIDATURE_VISUALISATION)) : false;
 
 
@@ -331,9 +333,8 @@ class  OffreEmploiController extends AbstractController
 
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
 
-        $etapeDonneesPersos            = $feuilleDeRoute->get(WorkflowEtape::DONNEES_PERSO_SAISIE);
-        if(!empty($etapeDonneesPersos))
-        {
+        $etapeDonneesPersos = $feuilleDeRoute->get(WorkflowEtape::DONNEES_PERSO_SAISIE);
+        if (!empty($etapeDonneesPersos)) {
             $renseignerDonneesPersonnelles = !$etapeDonneesPersos->isFranchie();
         }
 

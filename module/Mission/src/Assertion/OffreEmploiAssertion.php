@@ -4,12 +4,10 @@ namespace Mission\Assertion;
 
 use Application\Provider\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Intervenant\Entity\Db\Intervenant;
-use Mission\Entity\Db\Mission;
-use Mission\Entity\Db\VolumeHoraireMission;
+use Mission\Controller\OffreEmploiController;
 use Unicaen\Framework\Authorize\AbstractAssertion;
+use Unicaen\Framework\Authorize\UnAuthorizedException;
 use Unicaen\Framework\Navigation\Page;
-use Unicaen\Framework\User\UserProfile;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Candidature;
@@ -36,19 +34,10 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     {
         $page = $page->getData();
         switch ($page['route']) {
-            case 'offre-emploi':
             case 'candidature':
+            case 'offre-emploi':
                 //Si il n'y a pas d'offre d'emploi alors il ne peut pas y avoir des candidatures
-                if (!$this->canHaveCandidature()) {
-                    return false;
-                }
-
-                if ($this->authorize->isAllowedPrivilege(UserProfile::PRIVILEGE_GUEST)) {
-                    // Visible si on n'est pas connecté
-                    return true;
-                }
-                if (!$this->getServiceContext()->getIntervenant()) {
-                    //Pas visible par les gestionnaires
+                if (!$this->canHaveCandidature() || !$this->canHaveOffreEmploi()) {
                     return false;
                 }
 
@@ -84,9 +73,9 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             case $entity instanceof Candidature:
                 switch ($privilege) {
                     case Privileges::MISSION_CANDIDATURE_VALIDER:
-                        return $this->assertCandidatureValider($entity);
+                        return $this->canValiderRefuserCandidature($entity);
                     case Privileges::MISSION_CANDIDATURE_REFUSER:
-                        return $this->assertCandidatureRefuser($entity);
+                        return $this->canValiderRefuserCandidature($entity);
                 }
                 break;
         }
@@ -98,32 +87,24 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertController(string $controller, ?string $action): bool
     {
-        $entity = $this->getServiceContext()->getIntervenant();
-        if (!$entity) {
-            $entity = $this->getParam(Intervenant::class);
-        }
-        if (!$entity) {
-            $entity = $this->getParam(Candidature::class);
-        }
 
-        switch ($action) {
-            case 'accepterCandidature':
-            case 'refuserCandidature':
-                if ($entity instanceof Candidature) {
-                    $assert = $this->assertCandidatureValider($entity);
-                    return $assert;
-                }
-                break;
-            case 'candidature':
+        $candidature = $this->getParam(Candidature::class);
+        $offreEmploi = $this->getParam(OffreEmploi::class);
+
+
+        switch ($controller . '.' . $action) {
+            case OffreEmploiController::class . '.accepterCandidature':
+                return $this->canValiderRefuserCandidature($candidature);
+            case OffreEmploiController::class . '.candidature':
                 return $this->canHaveCandidature();
-                break;
-            case 'get':
-            case 'liste':
-            case 'index':
-                return true;
-
+            case OffreEmploiController::class . '.saisir':
+                return $this->canModifierOffreEmploi($offreEmploi);
+            case OffreEmploiController::class . '.supprimer':
+                return $this->canSupprimerOffreEmploi($offreEmploi);
+            default:
+                throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non traitée');
         }
-        return false;
+
     }
 
 
@@ -139,7 +120,6 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertStructure(?Structure $structure): bool
     {
-
         if (!$structure) {
             return true;
         }
@@ -222,30 +202,82 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function canHaveCandidature(): bool
     {
-        $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL AND validation_id IS NOT NULL';
-        $conn  = $this->getEntityManager()->getConnection();
+        $query = <<<'SQL'
+        SELECT id 
+        FROM offre_emploi 
+        WHERE histo_destruction IS NULL 
+          AND validation_id IS NOT NULL
+        SQL;
+
+        $conn = $this->getEntityManager()->getConnection();
         if (false === $conn->executeQuery($query)->fetchOne()) {
             return false;
         }
+
         return true;
     }
 
 
 
-    protected function assertCandidatureValider(Candidature $candidature): bool
+    protected function canHaveOffreEmploi(): bool
+    {
+        $query = <<<'SQL'
+        SELECT
+        a.id
+        FROM affectation a
+        WHERE EXISTS (
+            SELECT 1
+            FROM role_privilege rp
+            JOIN privilege p
+                ON p.id = rp.privilege_id
+            WHERE rp.role_id = a.role_id
+              AND p.code = 'offre-emploi-ajouter'
+        )
+        SQL;
+
+        $conn = $this->getEntityManager()->getConnection();
+        if (false === $conn->executeQuery($query, ['privilege_code' => 'offre-emploi-ajouter'])->fetchOne()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    protected function canValiderRefuserCandidature(Candidature $candidature): bool
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($candidature->getIntervenant(), $candidature->getOffre()->getStructure());
         $wfEtape        = $feuilleDeRoute->get(WorkflowEtape::CANDIDATURE_VALIDATION);
-
-        return $wfEtape && $wfEtape->isAllowed();
-    }
-
-
-
-    protected function assertCandidatureRefuser(Candidature $candidature): bool
-    {
         $structureOffre = $candidature->getOffre()->getStructure();
-        return $this->assertStructure($structureOffre);
+
+        return $wfEtape && $wfEtape->isAllowed() && $this->assertStructure($structureOffre);
     }
+
+
+
+    protected function canModifierOffreEmploi(OffreEmploi $offreEmploi): bool
+    {
+        $structureOffre = $offreEmploi->getStructure();
+
+
+        if ($offreEmploi->isValide() || !$this->assertStructure($structureOffre)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    protected function canSupprimerOffreEmploi(OffreEmploi $offreEmploi): bool
+    {
+        $structureOffre = $offreEmploi->getStructure();
+        $candidatures   = $offreEmploi->getCandidatures();
+
+        return empty($candidatures) && !$this->assertStructure($structureOffre);
+
+    }
+
 
 }

@@ -8,7 +8,9 @@
                 <!--                <span v-if="nbPostesRestants > 0" class="badge rounded-pill bg-success">{{ nbPostesRestants }} poste(s) restant(s)</span>&nbsp;
                                 <span v-if="nbPostesRestants <= 0" class="badge rounded-pill bg-danger">Tous les postes sont pourvus</span>&nbsp;-->
                 <span v-if="offre.validation" class="badge rounded-pill bg-success">Validée le <u-date
-                    :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
+                    :value="offre.validation.histoCreation"/> par {{
+                        offre.validation.histoCreateur.displayName
+                    }}</span>
                 <span v-if="!offre.validation" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
             </div>
 
@@ -49,14 +51,17 @@
         <div v-if="!this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-user"></i>
             <div class="ms-2">
-                Vous devez <a :href="connectionLink" class="text-decoration-underline alert-link">être identifé</a> pour pouvoir
+                Vous devez <a :href="connectionLink" class="text-decoration-underline alert-link">être identifé</a> pour
+                pouvoir
                 postuler.
             </div>
         </div>
-        <div v-if="!offre.canPostuler && this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
+        <div v-if="!offre.canPostuler && this.utilisateur" class="alert alert-primary d-flex align-items-center"
+             role="alert">
             <i class="fa-solid fa-circle-xmark"></i>
             <div class="ms-2">
-                Vous n'avez pas les droits pour postuler à cette offre, merci de contacter votre administration de rattachement.
+                Vous n'avez pas les droits pour postuler à cette offre, merci de contacter votre administration de
+                rattachement.
             </div>
         </div>
         <div v-if="isCandidat && this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
@@ -118,8 +123,10 @@
                         :value="candidature.validation.histoCreation"/> par {{
                             candidature.validation.histoCreateur.displayName
                         }}</span>
-                        <span v-if="!candidature.validation && candidature.motif !== null" class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
-                        <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
+                        <span v-if="!candidature.validation && candidature.motif !== null"
+                              class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
+                        <span v-if="!candidature.validation && candidature.motif === null"
+                              class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                     </td>
                     <td v-if="this.canValiderCandidature">
                         <a :href="urlVoirCandidature(candidature)"

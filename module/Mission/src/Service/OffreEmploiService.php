@@ -70,11 +70,11 @@ class OffreEmploiService extends AbstractEntityService
 
 
         $dql .= dqlAndWhere([
-            'offreEmploi' => 'oe',
-            'annee'       => 'tm.annee',
-            'structure'   => 'str.ids',
+                                'offreEmploi' => 'oe',
+                                'annee'       => 'tm.annee',
+                                'structure'   => 'str.ids',
 
-        ], $parameters);
+                            ], $parameters);
 
         $dql .= " ORDER BY
           oe . dateDebut DESC
@@ -86,11 +86,16 @@ class OffreEmploiService extends AbstractEntityService
 
         $properties = [
             'id',
-            ['typeMission', ['libelle']],
+            ['typeMission',
+             ['libelle']],
             'dateDebut',
             'dateFin',
             'dateLimite',
-            ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
+            ['structure',
+             ['libelleLong',
+              'libelleCourt',
+              'code',
+              'id']],
             'titre',
             'description',
             'nombreHeures',
@@ -101,7 +106,25 @@ class OffreEmploiService extends AbstractEntityService
             'candidats',
             'candidaturesValides',
             'valide',
-            ['candidatures', ['id', 'motif', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
+            ['candidatures',
+             ['id',
+              'motif',
+              ['intervenant',
+               ['id',
+                'nomUsuel',
+                'prenom',
+                'emailPro',
+                'code',
+                ['structure',
+                 ['libelleLong',
+                  'libelleCourt',
+                  'code',
+                  'id']],
+                ['statut',
+                 ['libelle',
+                  'code']]]],
+              'histoCreation',
+              'validation']],
         ];
 
 
@@ -170,9 +193,9 @@ class OffreEmploiService extends AbstractEntityService
        ";
 
         $dql .= dqlAndWhere([
-            'offreEmploi' => 'oe',
-            'annee'       => 'tm.annee',
-        ], $parameters);
+                                'offreEmploi' => 'oe',
+                                'annee'       => 'tm.annee',
+                            ], $parameters);
 
         $dql .= " ORDER BY
           oe . dateDebut DESC
@@ -187,11 +210,16 @@ class OffreEmploiService extends AbstractEntityService
 
         $properties = [
             'id',
-            ['typeMission', ['libelle']],
+            ['typeMission',
+             ['libelle']],
             'dateDebut',
             'dateFin',
             'dateLimite',
-            ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
+            ['structure',
+             ['libelleLong',
+              'libelleCourt',
+              'code',
+              'id']],
             'titre',
             'description',
             'nombreHeures',

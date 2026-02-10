@@ -157,7 +157,7 @@ class ContratAssertion extends AbstractAssertion
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($contrat->getIntervenant(), $contrat->getStructure());
         $wfEtape        = $feuilleDeRoute->get(WorkflowEtape::CONTRAT);
 
-        return $wfEtape->isAllowed();
+        return $wfEtape?->isAllowed() ?? false;
     }
 
 

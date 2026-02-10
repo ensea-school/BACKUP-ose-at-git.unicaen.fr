@@ -228,6 +228,9 @@ class WorkflowProcess implements ProcessInterface
             }
 
             if (array_key_exists($structure, $ie->structures)) {
+                if($structure==0){
+                    continue;
+                }
                 throw new \Exception('Erreur workflow pour l\'intervenant ID=' . $intevenant . ' : la structure ID=' . $structure . ' est référencée en double');
             }
 

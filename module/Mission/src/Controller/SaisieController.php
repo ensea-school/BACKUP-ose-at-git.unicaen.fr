@@ -146,18 +146,18 @@ class SaisieController extends AbstractController
 
         $form = $this->getFormMission();
 
-        if ($mission->isValide()){
+        if ($mission->isValide()) {
             $form->editValide();
         }
 
         if ($this->getServiceContext()->getStructure()) {
-            if (!$mission->getStructure()){
+            if (!$mission->getStructure()) {
                 $mission->setStructure($this->getServiceContext()->getStructure());
             }
         }
 
         $hDeb = $mission->getHeures();
-        $form->bindRequestSave($mission, $this->getRequest(), function ($mission) use($hDeb) {
+        $form->bindRequestSave($mission, $this->getRequest(), function ($mission) use ($hDeb) {
             $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
             $this->getProcessusPlafond()->beginTransaction();
             try {
@@ -192,13 +192,13 @@ class SaisieController extends AbstractController
         /** @var Mission $mission */
         $mission = $this->getEvent()->getParam('mission');
 
-        if ($mission->canSupprimer()){
+        if ($mission->canSupprimer()) {
             $this->getProcessusPlafond()->beginTransaction();
             try {
                 $this->getServiceMission()->delete($mission);
                 //On historise les volumes horaires de la mission
                 $volumesHoraires = $mission->getVolumesHorairesPrevus();
-                foreach( $volumesHoraires as $volumesHoraire ){
+                foreach ($volumesHoraires as $volumesHoraire) {
                     $this->getServiceMission()->deleteVolumeHoraire($volumesHoraire);
                 }
                 $this->updateTableauxBord($mission);
@@ -207,7 +207,7 @@ class SaisieController extends AbstractController
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
             $this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, true);
-        }else{
+        } else {
             $this->flashMessenger()->addErrorMessage('Vous n\'avez pas la possibilité de supprimer cette mission : elle a déjà été validée ou a fait l\'objet d\'un contrat');
         }
 
@@ -227,6 +227,9 @@ class SaisieController extends AbstractController
             $this->getServiceValidation()->validerMission($mission);
             $this->getServiceMission()->save($mission);
             $this->updateTableauxBord($mission);
+            $perimetre = $this->getProcessusPlafond()->getServicePlafond()->getPerimetre('structure');
+            $this->getProcessusPlafond()->getServicePlafond()->calculer($perimetre);
+
             $this->flashMessenger()->addSuccessMessage('Mission validée');
         }
 
@@ -246,6 +249,8 @@ class SaisieController extends AbstractController
             $mission->removeValidation($validation);
             $this->getServiceValidation()->delete($validation);
             $this->updateTableauxBord($mission);
+            $perimetre = $this->getProcessusPlafond()->getServicePlafond()->getPerimetre('structure');
+            $this->getProcessusPlafond()->getServicePlafond()->calculer($perimetre);
             $this->flashMessenger()->addSuccessMessage("Validation de la mission <strong>retirée</strong> avec succès.");
         } else {
             $this->flashMessenger()->addInfoMessage("La mission n'était pas validée");
@@ -322,8 +327,8 @@ class SaisieController extends AbstractController
     private function updateTableauxBord(Mission $mission)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            TblProvider::MISSION,
-            TblProvider::CONTRAT,
-        ], $mission->getIntervenant());
+                                                              TblProvider::MISSION,
+                                                              TblProvider::CONTRAT,
+                                                          ], $mission->getIntervenant());
     }
 }

@@ -43,6 +43,11 @@ OSE [24.13](#ose-2413-16122025)
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
 
+# OSE 24.14 (à venir)
+
+## Corrections
+
+* Correction sur l'export de l'offre de formation
 
 # OSE 24.13 (16/12/2025)
 

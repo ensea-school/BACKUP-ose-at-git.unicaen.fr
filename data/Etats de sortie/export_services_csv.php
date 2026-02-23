@@ -72,7 +72,8 @@ foreach ($data as $d) {
         'annee-libelle'             => (string)$options['annee'],
 
         'intervenant-code'               => $d['INTERVENANT_CODE'],
-        'intervenant-nom'                => $d['INTERVENANT_NOM'],
+        'intervenant-nom'    => $d['NOM_USUEL'],
+        'intervenant-prenom' => $d['PRENOM'],
         'intervenant-date-naissance'     => $d['INTERVENANT_DATE_NAISSANCE'],
         'intervenant-statut-libelle'     => $d['INTERVENANT_STATUT_LIBELLE'],
         'intervenant-type-libelle'       => $d['INTERVENANT_TYPE_LIBELLE'],
@@ -175,7 +176,8 @@ $head = [
     'service-date-modification' => 'Date de modif. du service',
 
     'intervenant-code'               => 'Code intervenant',
-    'intervenant-nom'                => 'Intervenant',
+    'intervenant-nom'    => 'Nom usuel',
+    'intervenant-prenom' => 'Prénom',
     'intervenant-date-naissance'     => 'Date de naissance',
     'intervenant-statut-libelle'     => 'Statut intervenant',
     'intervenant-type-libelle'       => 'Type d\'intervenant',

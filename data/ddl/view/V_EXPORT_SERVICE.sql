@@ -247,6 +247,8 @@ SELECT
   i.code                            intervenant_code,
   i.code_rh                          intervenant_code_rh,
   i.nom_usuel || ' ' || i.prenom    intervenant_nom,
+  i.nom_usuel                       nom_usuel,
+  i.prenom                          prenom,
   i.date_naissance                  intervenant_date_naissance,
   si.libelle                        intervenant_statut_libelle,
   ti.code                           intervenant_type_code,

@@ -49,7 +49,30 @@ OSE [24.13](#ose-2413-16122025)
 
 * Correction sur l'export de l'offre de formation
 * Correction sur le blocage du plafond référentiel (#50123)
-* 
+
+## Notes de mise à jour
+
+* /!\ ATTENTION /!\ Les requêtes des plafonds ne se mettent pas à jour lors d'une update de version, afin de ne pas écraser vos potentiels modifications manuelles. Certains plafonds livrés avec OSE comportaient des erreurs, il vous faut donc corriger manuellement l'erreur de requête. Pour cette version le plafond 15 "Heures max . de référentiel par structure" a été corrigé, veuillez remplacer par la requête suivante : 
+
+```sql
+SELECT
+  i.annee_id                 annee_id,
+  vhr.type_volume_horaire_id type_volume_horaire_id,
+  s.id                       structure_id,
+  SUM(vhr.heures)            heures
+FROM
+  service_referentiel       sr
+  JOIN intervenant           i ON i.id = sr.intervenant_id
+  JOIN structure             s ON s.id = sr.structure_id
+  JOIN volume_horaire_ref  vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+WHERE
+  sr.histo_destruction IS NULL
+GROUP BY
+  i.annee_id, vhr.type_volume_horaire_id, s.id
+
+
+
+
 # OSE 24.13 (16/12/2025)
 
 ## Corrections

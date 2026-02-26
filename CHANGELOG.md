@@ -83,11 +83,11 @@ Depuis la v24, certaines structures de tables ont évolué. Cette vérification 
 
 Pour rappel, les requêtes de plafonds existantes en base ne sont pas automatiquement mises à jour lors d’un changement de version. Il vous appartient donc de contrôler et, le cas échéant, d’adapter les requêtes déjà présentes afin de garantir leur conformité avec le modèle de données actuel, voici quelques changements notables de la v24 : 
 
-    * La table formule_resultat a été renommée en formule_resultat_intervenant
-    * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
-    * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
-    * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
-    * Les colonnes service_referentiel ont été renommées en heures_service_referentiel
+  * La table formule_resultat a été renommée en formule_resultat_intervenant
+  * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
+  * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
+  * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
+  * Les colonnes service_referentiel ont été renommées en heures_service_referentiel
 
 
 # OSE 24.13 (16/12/2025)

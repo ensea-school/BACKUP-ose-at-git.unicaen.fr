@@ -52,7 +52,7 @@ OSE [24.13](#ose-2413-16122025)
 
 ## Notes de mise à jour
 
-* /!\ ATTENTION /!\ Les requêtes associées aux plafonds ne sont volontairement pas réinitialisées lors des montées de version, afin de préserver les éventuelles personnalisations réalisées localement.
+/!\ ATTENTION /!\ Les requêtes associées aux plafonds ne sont volontairement pas réinitialisées lors des montées de version, afin de préserver les éventuelles personnalisations réalisées localement.
 
 Il a toutefois été identifié que certains plafonds livrés en standard avec OSE comportaient des anomalies dans leurs requêtes SQL. Une correction manuelle est donc nécessaire de votre côté pour les environnements concernés.
 

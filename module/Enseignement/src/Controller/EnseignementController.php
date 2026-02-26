@@ -201,7 +201,8 @@ class EnseignementController extends AbstractController
                     $form->saveToContext();
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
-                        $this->em()->getConnection()->setAutoCommit(true);
+                        //Correction evite les autocommits pour un rollback fonctionnel.
+                        $this->em()->getConnection()->setAutoCommit(false);
                         //Uniquement pour le service fait dans l'établissement
 
                         $isExterne = false;
@@ -229,7 +230,11 @@ class EnseignementController extends AbstractController
                         $form->get('service')->get('id')->setValue($service->getId()); // transmet le nouvel ID
                         $hFin = $service->getVolumeHoraireListe()->getHeures();
                         $this->updateTableauxBord($service->getIntervenant());
-                        if (!$this->getProcessusPlafond()->endTransaction($service, $typeVolumeHoraire, $hFin < $hDeb)) {
+                        $entities = [$service];
+                        foreach ($service->getVolumeHoraire() as $volumeHoraire) {
+                            $entities[] = $volumeHoraire;
+                        }
+                        if (!$this->getProcessusPlafond()->endTransaction($entities, $typeVolumeHoraire, $hFin < $hDeb)) {
                             $this->updateTableauxBord($service->getIntervenant());
                         }
                     } catch (\Exception $e) {
@@ -258,6 +263,10 @@ class EnseignementController extends AbstractController
             'validation_enseignement',
             'contrat',
             'service',
+            'plafond_intervenant',
+            'plafond_structure',
+            'plafond_referentiel',
+            'plafond_element',
         ], $intervenant);
 
         if (!$validation) {

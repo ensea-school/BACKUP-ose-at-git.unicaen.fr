@@ -341,13 +341,11 @@ class PlafondService extends AbstractEntityService
                 $join .= "JOIN TYPE_INTERVENTION entity2 ON entity2.id = pd.TYPE_INTERVENTION_ID";
                 $libVal = "entity1.code || ' ' || entity2.code ";
                 $groupBy = 'entity1.code, entity2.code';
-                //$filters[] = [];
-                throw new \Exception('à finaliser');
                 foreach($entities as $entity){
-
+                    $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$entity->getService()->getElementPedagogique()->getId();
+                    $filters['pd.INTERVENANT_ID']         = (int)$entity->getService()->getIntervenant()->getId();
+                    $filters['pd.TYPE_INTERVENTION_ID']   = (int)$entity->getTypeIntervention()->getId();
                 }
-                $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$pqr->entity->getService()->getElementPedagogique()->getId();
-                $filters['pd.TYPE_INTERVENTION_ID'] = (int)$pqr->entity->getTypeIntervention()->getId();
                 break;
 
             case ServiceReferentiel::class:
@@ -360,6 +358,11 @@ class PlafondService extends AbstractEntityService
                     }
                     if ($fonction = $entity->getFonctionReferentiel()){
                         $fonctions[$fonction->getId()] = $fonction;
+                        //On regarde si la fonction referentiel à un parent
+                        $fonctionParent = $fonction->getParent() ?? null;
+                        if ($fonctionParent) {
+                            $fonctions[$fonctionParent->getId()] = $fonctionParent;
+                        }
                     }
                 }
 
@@ -673,7 +676,7 @@ class PlafondService extends AbstractEntityService
         if ($entity instanceof VolumeHoraire) {
             if ($entity->getService()) {
                 if ($entity->getService()->getElementPedagogique()) {
-                    $this->calculer(PlafondPerimetre::VOLUME_HORAIRE, 'ELEMENT_PEDAGOGIQUE_ID', $entity->getService()->getElementPedagogique());
+                    $this->calculer(PlafondPerimetre::VOLUME_HORAIRE, 'ELEMENT_PEDAGOGIQUE_ID', $entity->getService()->getElementPedagogique()->getId());
                 }
 
                 $this->calculerDepuisEntite($entity->getService());

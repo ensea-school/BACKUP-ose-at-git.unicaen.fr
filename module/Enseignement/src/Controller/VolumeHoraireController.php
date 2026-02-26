@@ -144,7 +144,12 @@ class VolumeHoraireController extends AbstractController
                 $this->getServiceService()->save($service);
                 $hFin = $volumeHoraireListe->getHeures();
                 $this->updateTableauxBord($service->getIntervenant());
-                if (!$this->getProcessusPlafond()->endTransaction($service, $vhl->getTypeVolumeHoraire(), $hFin < $hDeb)) {
+                $entities = [$service];
+                foreach ($service->getVolumeHoraire() as $volumeHoraire) {
+                    $entities[] = $volumeHoraire;
+                }
+                if (!$this->getProcessusPlafond()->endTransaction($entities, $vhl->getTypeVolumeHoraire(), $hFin < $hDeb)) {
+
                     $this->updateTableauxBord($service->getIntervenant());
                 } else {
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
@@ -194,7 +199,14 @@ class VolumeHoraireController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule', 'validation_enseignement', 'service', 'piece_jointe_fournie',
+                                                              'formule',
+                                                              'validation_enseignement',
+                                                              'service',
+                                                              'piece_jointe_fournie',
+                                                              'plafond_intervenant',
+                                                              'plafond_structure',
+                                                              'plafond_referentiel',
+                                                              'plafond_element',
         ], $intervenant);
     }
 

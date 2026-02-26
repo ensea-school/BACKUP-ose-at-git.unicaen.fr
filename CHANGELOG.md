@@ -77,7 +77,7 @@ WHERE
   sr.histo_destruction IS NULL
 GROUP BY
   i.annee_id, vhr.type_volume_horaire_id, s.id
-
+```
 :warning: Point de vigilance: Merci de vérifier que les requêtes associées à vos plafonds demeurent pleinement opérationnelles.
 Depuis la v24, certaines structures de tables ont évolué. Cette vérification avait déjà été recommandée dans les notes de mise à jour de la v24.
 

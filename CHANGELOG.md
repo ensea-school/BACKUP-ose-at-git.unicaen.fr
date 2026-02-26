@@ -56,7 +56,7 @@ OSE [24.13](#ose-2413-16122025)
 
 Il a toutefois été identifié que certains plafonds livrés en standard avec OSE comportaient des anomalies dans leurs requêtes SQL. Une correction manuelle est donc nécessaire de votre côté pour les environnements concernés.
 
-Dans le cadre de cette version,** le plafond n°15 – « Heures max. de référentiel par structure »** a été corrigé.
+Dans le cadre de cette version,**le plafond n°15 – « Heures max. de référentiel par structure »** a été corrigé.
 Nous vous invitons à remplacer la requête existante par la requête suivante :
 
 ```sql

@@ -52,7 +52,7 @@ OSE [24.13](#ose-2413-16122025)
 * Correction blocage saisie d'heures d'enseignements par rapport à un plafond (#63728)
 * Correction sur les plafonds 15 et 17 pour le référentiel (#53371)
 * Marge de calcul pour les plafonds réduites à 0.02 (#55890)
-* Correction bug affichage page détails de calcul des paiements
+* Correction bug affichage page détails de calcul des paiements (#64868)
 
 ## Notes de mise à jour
 

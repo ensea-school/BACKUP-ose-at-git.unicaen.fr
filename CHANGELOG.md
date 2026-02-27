@@ -45,6 +45,10 @@ OSE [24.13](#ose-2413-16122025)
 
 # OSE 24.14 (à venir)
 
+## Nouveautés
+
+* Nouvelle formule de Savoie Mont Blanc (#59415)
+
 ## Corrections
 
 * Correction sur l'export de l'offre de formation

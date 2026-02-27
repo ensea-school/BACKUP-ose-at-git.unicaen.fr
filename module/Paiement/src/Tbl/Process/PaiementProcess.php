@@ -152,7 +152,7 @@ class PaiementProcess implements ProcessInterface
 
         foreach ($this->services as $sid => $serviceAPayer) {
             $index++;
-            $this->tableauBord->onAction(Event::PROGRESS, $index, $count);
+            $this->tableauBord?->onAction(Event::PROGRESS, $index, $count);
 
             $this->repartiteur->repartir($serviceAPayer);
             $this->rapprocheur->rapprocher($serviceAPayer);
@@ -201,7 +201,7 @@ class PaiementProcess implements ProcessInterface
         $index = 0;
         while ($lap = $aPayerStmt->fetchAssociative()) {
             $index++;
-            $this->tableauBord->onAction(Event::PROGRESS, $index, 0);
+            $this->tableauBord?->onAction(Event::PROGRESS, $index, 0);
             $this->loadLigneAPayer($lap);
         }
 

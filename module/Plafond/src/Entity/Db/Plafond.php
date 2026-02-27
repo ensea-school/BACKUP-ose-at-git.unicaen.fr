@@ -23,6 +23,10 @@ class Plafond
 
     protected string     $requete = '';
 
+    protected bool $ok = true;
+
+    protected ?string $messageErreur = null;
+
     protected Collection $plafondStructure;
 
     protected Collection $plafondReferentiel;
@@ -122,12 +126,42 @@ class Plafond
 
 
 
+    public function isOk(): bool
+    {
+        return $this->ok;
+    }
+
+
+
+    public function setOk(bool $ok): Plafond
+    {
+        $this->ok = $ok;
+        return $this;
+    }
+
+
+
+    public function getMessageErreur(): ?string
+    {
+        return $this->messageErreur;
+    }
+
+
+
+    public function setMessageErreur(?string $messageErreur): Plafond
+    {
+        $this->messageErreur = $messageErreur;
+        return $this;
+    }
+
+
+
     /**
      * Get PlafondStructure
      *
      * @return PlafondStructure[]
      */
-    public function getPlafondStructure(): Collection
+    public function getPlafondStructure(): Collection|array
     {
         return $this->plafondStructure;
     }
@@ -139,7 +173,7 @@ class Plafond
      *
      * @return PlafondReferentiel[]
      */
-    public function getPlafondReferentiel(): Collection
+    public function getPlafondReferentiel(): Collection|array
     {
         return $this->plafondReferentiel;
     }
@@ -151,7 +185,7 @@ class Plafond
      *
      * @return PlafondMission[]
      */
-    public function getPlafondMission(): Collection
+    public function getPlafondMission(): Collection|array
     {
         return $this->plafondMission;
     }
@@ -163,7 +197,7 @@ class Plafond
      *
      * @return PlafondStatut[]
      */
-    public function getPlafondStatut(): Collection
+    public function getPlafondStatut(): Collection|array
     {
         return $this->plafondStatut;
     }
@@ -191,12 +225,6 @@ class Plafond
 
 
 
-    /**
-     * The __toString method allows a class to decide how it will react when it is converted to a string.
-     *
-     * @return string
-     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
-     */
     public function __toString(): string
     {
         return $this->getLibelle();

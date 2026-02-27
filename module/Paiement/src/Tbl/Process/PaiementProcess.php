@@ -40,7 +40,7 @@ class PaiementProcess implements ProcessInterface
     protected Rapprocheur   $rapprocheur;
     protected Consolidateur $consolidateur;
     protected Exporteur     $exporteur;
-    protected TableauBord   $tableauBord;
+    protected ?TableauBord $tableauBord = null;
 
 
 

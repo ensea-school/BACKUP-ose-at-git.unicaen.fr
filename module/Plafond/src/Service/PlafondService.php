@@ -599,11 +599,33 @@ class PlafondService extends AbstractEntityService
 
     public function testRequete(Plafond $plafond): array
     {
-        $colsPos = require getcwd() . '/data/ddl_columns_pos.php';
-        $cols = $colsPos['TBL_PLAFOND_' . strtoupper($plafond->getPlafondPerimetre()->getCode())];
-        $cols = array_diff($cols, ['ID', 'PLAFOND_ID', 'PLAFOND_ETAT_ID', 'DEROGATION', 'DEPASSEMENT', 'PLAFOND']);
+        $result = $this->doTestRequete($plafond);
 
-        $return = ['success' => true];
+        $success = $result['success'] || $result['no-data'];
+        if ($success != $plafond->isOk()) {
+            $plafond->setOk($success);
+            $plafond->setMessageErreur($result['error'] ?? null);
+            $this->save($plafond);
+        }
+
+        return $result;
+    }
+
+
+
+    protected function doTestRequete(Plafond $plafond): array
+    {
+        $colsPos = require getcwd() . '/data/ddl_columns_pos.php';
+        $cols    = $colsPos['TBL_PLAFOND_' . strtoupper($plafond->getPlafondPerimetre()->getCode())];
+        $cols    = array_diff($cols, ['ID',
+                                      'PLAFOND_ID',
+                                      'PLAFOND_ETAT_ID',
+                                      'DEROGATION',
+                                      'DEPASSEMENT',
+                                      'PLAFOND']);
+
+        $return = ['success' => true,
+                   'no-data' => false];
 
         try {
             $sql = 'SELECT * FROM (' . $plafond->getRequete() . ') r WHERE ROWNUM = 1';
@@ -611,18 +633,19 @@ class PlafondService extends AbstractEntityService
 
             if (empty($res)) {
                 $return['success'] = false;
-                $return['error'] = 'Le plafond ne retourne aucune donnée';
+                $return['no-data'] = true;
+                $return['error']   = 'Le plafond ne retourne aucune donnée';
 
                 return $return;
             }
 
-            $res = $res[0];
+            $res               = $res[0];
             $return['columns'] = array_keys($res);
 
             foreach ($cols as $col) {
                 if (!isset($res[$col])) {
                     $return['sucess'] = false;
-                    $return['error'] = 'Colonne ' . $col . ' manquante';
+                    $return['error']  = 'Colonne ' . $col . ' manquante';
 
                     return $return;
                 }
@@ -631,7 +654,7 @@ class PlafondService extends AbstractEntityService
             return $return;
         } catch (\Exception $e) {
             $return['success'] = false;
-            $return['error'] = $e->getMessage();
+            $return['error']   = $e->getMessage();
 
             return $return;
         }

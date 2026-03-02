@@ -113,8 +113,8 @@ FROM
        JOIN parametre                        ccp ON ccp.nom = 'centres_couts_paye'
        JOIN type_volume_horaire              tvh ON tvh.code = 'REALISE'
        JOIN etat_volume_horaire              evh ON evh.code = 'valide'
-  LEFT JOIN element_pedagogique               ep ON ep.id = s.element_pedagogique_id AND ccp.valeur = 'enseignement' OR ti.code = 'E'
-  LEFT JOIN STRUCTURE                        str ON str.id = COALESCE( ep.structure_id, i.structure_id )
+  LEFT JOIN element_pedagogique              ep ON ep.id = s.element_pedagogique_id
+  LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' OR ti.code = 'E' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
   LEFT JOIN formule_resultat_intervenant     fri ON fri.type_volume_horaire_id = tvh.id
                                                 AND fri.etat_volume_horaire_id = evh.id
                                                 AND fri.intervenant_id = i.id

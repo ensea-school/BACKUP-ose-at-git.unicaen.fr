@@ -481,12 +481,12 @@ $.widget("ose.serviceFiltres", {
         });
         this.getElementIntervenant().autocomplete("option", "source", url);
 
-        if (this.getElementTypeIntervenantSelected().val() !== undefined && this.getElementTypeIntervenantSelected().data('intervenant-exterieur-id') == this.getElementTypeIntervenantSelected().val()) {
+        /*if (this.getElementTypeIntervenantSelected().val() !== undefined && this.getElementTypeIntervenantSelected().data('intervenant-exterieur-id') == this.getElementTypeIntervenantSelected().val()) {
             this.element.find('#structure-aff-div').hide();
             this.getElementStructureAff().val('');
         } else {
             this.element.find('#structure-aff-div').show();
-        }
+        }*/
     },
 
     getElementStructureAff: function () {

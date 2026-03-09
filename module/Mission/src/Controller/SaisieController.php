@@ -226,9 +226,6 @@ class SaisieController extends AbstractController
             $this->getServiceValidation()->validerMission($mission);
             $this->getServiceMission()->save($mission);
             $this->updateTableauxBord($mission);
-            $perimetre = $this->getProcessusPlafond()->getServicePlafond()->getPerimetre('structure');
-            $this->getProcessusPlafond()->getServicePlafond()->calculer($perimetre);
-
             $this->flashMessenger()->addSuccessMessage('Mission validée');
         }
 
@@ -248,8 +245,6 @@ class SaisieController extends AbstractController
             $mission->removeValidation($validation);
             $this->getServiceValidation()->delete($validation);
             $this->updateTableauxBord($mission);
-            $perimetre = $this->getProcessusPlafond()->getServicePlafond()->getPerimetre('structure');
-            $this->getProcessusPlafond()->getServicePlafond()->calculer($perimetre);
             $this->flashMessenger()->addSuccessMessage("Validation de la mission <strong>retirée</strong> avec succès.");
         } else {
             $this->flashMessenger()->addInfoMessage("La mission n'était pas validée");

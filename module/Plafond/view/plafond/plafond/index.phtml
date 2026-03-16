@@ -28,7 +28,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITI
         <?php foreach ($plafonds as $plafond): ?>
             <tr>
                 <td><?= $plafond->getPlafondPerimetre() ?></td>
-                <td style="text-align: center"><?= $plafond->getNumero() ?></td>
+                <td><?= $plafond->getNumero() ?></td>
                 <td style="width:50%"><?php
                     echo $plafond;
 
@@ -36,6 +36,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_EDITI
                         echo '<div class="alert alert-danger">' . ($plafond->getMessageErreur() ?? 'La requête plafond est en erreur. Veuillez la vérifier') . '</div>';
                     }
                     ?></td>
+
                 <?php if ($canEdit): ?>
                     <td style="text-align: center">
                         <a href="<?= $this->url('plafond/modifier', ['plafond' => $plafond->getId()]) ?>"

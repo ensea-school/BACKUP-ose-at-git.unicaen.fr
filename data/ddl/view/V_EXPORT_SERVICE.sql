@@ -248,6 +248,8 @@ SELECT
   i.code                            intervenant_code,
   i.code_rh                          intervenant_code_rh,
   i.nom_usuel || ' ' || i.prenom    intervenant_nom,
+  i.nom_usuel                       nom_usuel,
+  i.prenom                          prenom,
   i.date_naissance                  intervenant_date_naissance,
   si.libelle                        intervenant_statut_libelle,
   ti.code                           intervenant_type_code,
@@ -310,7 +312,7 @@ FROM
   LEFT JOIN histo_intervenant_service   his ON his.intervenant_id = i.id AND his.type_volume_horaire_id = tvh.id AND his.referentiel = 0
   LEFT JOIN grade                         g ON g.id     = i.grade_id
   LEFT JOIN discipline                   di ON di.id    = i.discipline_id
-  LEFT JOIN STRUCTURE                  saff ON saff.id  = i.structure_id AND ti.code = 'P'
+  LEFT JOIN STRUCTURE                  saff ON saff.id  = i.structure_id
   LEFT JOIN element_pedagogique          ep ON ep.id    = t.element_pedagogique_id
   LEFT JOIN discipline                   de ON de.id    = ep.discipline_id
   LEFT JOIN STRUCTURE                  sens ON sens.id  = NVL(t.structure_ens_id, ep.structure_id)

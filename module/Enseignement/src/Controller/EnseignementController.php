@@ -207,6 +207,7 @@ class EnseignementController extends AbstractController
         }
         $hDeb    = $service->getVolumeHoraireListe()->getHeures();
         $request = $this->getRequest();
+
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
@@ -216,7 +217,10 @@ class EnseignementController extends AbstractController
                     $form->saveToContext();
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
+                        //Correction evite les autocommits pour un rollback fonctionnel.
+                        $this->em()->getConnection()->setAutoCommit(false);
                         //Uniquement pour le service fait dans l'établissement
+
                         $isExterne = false;
                         if ($form->get('service')->has('interne-externe')) {
                             if ($form->get('service')->get('interne-externe')->getValue() == 'service-externe') {
@@ -270,10 +274,14 @@ class EnseignementController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-                                                              TblProvider::FORMULE,
-                                                              TblProvider::VALIDATION_ENSEIGNEMENT,
-                                                              TblProvider::CONTRAT,
-                                                              TblProvider::SERVICE,
+            'formule',
+            'validation_enseignement',
+            'contrat',
+            'service',
+            'plafond_intervenant',
+            'plafond_structure',
+            'plafond_referentiel',
+            'plafond_element',
                                                           ], $intervenant);
 
         if (!$validation) {

@@ -197,7 +197,13 @@ class ServiceReferentielController extends AbstractController
 
     private function updateTableauxBord (Intervenant $intervenant, ?TypeVolumeHoraire $typeVolumeHoraire=null, bool $validation = false)
     {
-        $tbls = [TblProvider::FORMULE, TblProvider::VALIDATION_REFERENTIEL, TblProvider::REFERENTIEL];
+        $tbls = ['formule',
+                 'validation_referentiel',
+                 'referentiel',
+                 'plafond_intervenant',
+                 'plafond_structure',
+                 'plafond_referentiel',
+                 'plafond_element'];
         if ($typeVolumeHoraire && $typeVolumeHoraire->isRealise()){
             if ($validation){
                 $tbls[] = TblProvider::PAIEMENT;

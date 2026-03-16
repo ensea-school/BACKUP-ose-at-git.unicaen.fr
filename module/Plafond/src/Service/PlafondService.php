@@ -343,7 +343,6 @@ class PlafondService extends AbstractEntityService
                 $groupBy = 'entity1.code, entity2.code';
                 foreach($entities as $entity){
                     $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$entity->getService()->getElementPedagogique()->getId();
-                    $filters['pd.TYPE_INTERVENTION_ID']   = (int)$entity->getTypeIntervention()->getId();
                     $filters['pd.INTERVENANT_ID']         = (int)$entity->getService()->getIntervenant()->getId();
                     $filters['pd.TYPE_INTERVENTION_ID']   = (int)$entity->getTypeIntervention()->getId();
                 }
@@ -359,6 +358,11 @@ class PlafondService extends AbstractEntityService
                     }
                     if ($fonction = $entity->getFonctionReferentiel()){
                         $fonctions[$fonction->getId()] = $fonction;
+                        //On regarde si la fonction referentiel à un parent
+                        $fonctionParent = $fonction->getParent() ?? null;
+                        if ($fonctionParent) {
+                            $fonctions[$fonctionParent->getId()] = $fonctionParent;
+                        }
                     }
                 }
 
@@ -612,10 +616,16 @@ class PlafondService extends AbstractEntityService
     protected function doTestRequete(Plafond $plafond): array
     {
         $colsPos = require getcwd() . '/data/ddl_columns_pos.php';
-        $cols = $colsPos['TBL_PLAFOND_' . strtoupper($plafond->getPlafondPerimetre()->getCode())];
-        $cols = array_diff($cols, ['ID', 'PLAFOND_ID', 'PLAFOND_ETAT_ID', 'DEROGATION', 'DEPASSEMENT', 'PLAFOND']);
+        $cols    = $colsPos['TBL_PLAFOND_' . strtoupper($plafond->getPlafondPerimetre()->getCode())];
+        $cols    = array_diff($cols, ['ID',
+                                      'PLAFOND_ID',
+                                      'PLAFOND_ETAT_ID',
+                                      'DEROGATION',
+                                      'DEPASSEMENT',
+                                      'PLAFOND']);
 
-        $return = ['success' => true, 'no-data' => false];
+        $return = ['success' => true,
+                   'no-data' => false];
 
         try {
             $sql = 'SELECT * FROM (' . $plafond->getRequete() . ') r WHERE ROWNUM = 1';
@@ -624,18 +634,18 @@ class PlafondService extends AbstractEntityService
             if (empty($res)) {
                 $return['success'] = false;
                 $return['no-data'] = true;
-                $return['error'] = 'Le plafond ne retourne aucune donnée';
+                $return['error']   = 'Le plafond ne retourne aucune donnée';
 
                 return $return;
             }
 
-            $res = $res[0];
+            $res               = $res[0];
             $return['columns'] = array_keys($res);
 
             foreach ($cols as $col) {
                 if (!isset($res[$col])) {
                     $return['sucess'] = false;
-                    $return['error'] = 'Colonne ' . $col . ' manquante';
+                    $return['error']  = 'Colonne ' . $col . ' manquante';
 
                     return $return;
                 }
@@ -644,7 +654,7 @@ class PlafondService extends AbstractEntityService
             return $return;
         } catch (\Exception $e) {
             $return['success'] = false;
-            $return['error'] = $e->getMessage();
+            $return['error']   = $e->getMessage();
 
             return $return;
         }

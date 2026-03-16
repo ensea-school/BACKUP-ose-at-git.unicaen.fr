@@ -75,6 +75,7 @@ class PlafondProcessus extends AbstractProcessus
                 foreach( $entities as $entity) {
                     $this->getServicePlafond()->calculerDepuisEntite($entity); // on met à jour les TBLs
                 }
+
             }catch(ConnectionException $e){
                 $this->getEntityManager()->rollback();
             }

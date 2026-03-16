@@ -24,6 +24,10 @@ class Plafond
 
     protected ?string $messageErreur = null;
 
+    protected bool $ok = true;
+
+    protected ?string $messageErreur = null;
+
     protected Collection $plafondStructure;
 
     protected Collection $plafondReferentiel;

@@ -39,6 +39,7 @@ export default {
         return {
             data: {types: []},
             serviceLigne: "",
+
         };
     },
     mounted()
@@ -64,6 +65,9 @@ export default {
                     }else{
                         this.serviceLigne = "* " + this.data.serviceStatutaire+ "h de service statutaire";
                     }
+                }
+                if (this.data.solde < 0) {
+                    this.serviceLigne += ", soit actuellement " + Math.abs(this.data.solde) + "h en sous service";
                 }
             });
         },

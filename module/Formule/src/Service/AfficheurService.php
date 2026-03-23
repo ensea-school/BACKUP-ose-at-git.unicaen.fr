@@ -60,6 +60,7 @@ class AfficheurService
         $data = [
             'serviceStatutaire' => $fr->getHeuresServiceStatutaire(),
             'serviceDu'         => $fr->getServiceDu(),
+            'solde' => $fr->getSolde(),
             'types'              => &$types,
         ];
 

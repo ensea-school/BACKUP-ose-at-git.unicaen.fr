@@ -53,6 +53,8 @@ OSE [24.14]
 
 ## Corrections
 
+* Tenir compte de l'arborescence des sous structures pour la bascule du prévisionnel vers le réalisé (#63508)
+
 
 
 # OSE 24.14 (09/03/2026)

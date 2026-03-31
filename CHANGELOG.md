@@ -54,6 +54,7 @@ OSE [24.14]
 ## Corrections
 
 * Tenir compte de l'arborescence des sous structures pour la bascule du prévisionnel vers le réalisé (#63508)
+* Correction des doublons d’éléments pédagogiques dans les listes de recherche lors de la saisie des enseignements (#66130)
 
 
 

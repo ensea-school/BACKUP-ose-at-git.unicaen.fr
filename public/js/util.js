@@ -205,6 +205,7 @@ Util = {
         });
 
         select.selectpicker('destroy');
+        select.find('option.bs-title-option').remove();
         select.selectpicker();
         if (1 == shown) {
             select.selectpicker('val', lastShown);

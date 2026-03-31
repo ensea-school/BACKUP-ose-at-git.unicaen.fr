@@ -55,6 +55,7 @@ OSE [24.14]
 
 * Tenir compte de l'arborescence des sous structures pour la bascule du prévisionnel vers le réalisé (#63508)
 * Correction des doublons d’éléments pédagogiques dans les listes de recherche lors de la saisie des enseignements (#66130)
+* Correction de la fenêtre modale de recherche de saisie de service : suppression des lignes blanches et des doublons d’éléments pédagogiques dans la liste de résultats (#64663)
 
 
 

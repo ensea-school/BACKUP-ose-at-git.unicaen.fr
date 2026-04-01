@@ -7,6 +7,9 @@ include:
   - template: Security/SAST.gitlab-ci.yml
 stages:
   - test
+  - deploy
+
+
 sast:
   stage: test
 
@@ -26,4 +29,32 @@ sonarqube-check:
   allow_failure: true
   only:
     - master
+  
+
+sync_ose_doc_to_central:
+  stage: deploy
+  image: alpine:3.20
+  rules:
+    - changes:
+        - doc/**/*
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  before_script:
+    - apk add --no-cache git rsync
+    - git config --global user.name "antony le courtes"
+    - git config --global user.email "antony.lecourtes@unicean.fr"
+  script:
+    - export TARGET_DIR="Ose"
+    - git clone "https://${DOCS_REPO_USER}:${DOCS_REPO_TOKEN}@${DOCS_REPO_URL#https://}" central-docs
+    - cd central-docs
+    - mkdir -p "${TARGET_DIR}"
+    - find "${TARGET_DIR}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+    - rsync -a "${CI_PROJECT_DIR}/doc/" "${TARGET_DIR}/"
+    - git add "${TARGET_DIR}"
+    - |
+      if git diff --cached --quiet; then
+        echo "Aucun changement à pousser"
+        exit 0
+      fi
+    - git commit -m "Sync OSE doc from ${CI_PROJECT_PATH} @ ${CI_COMMIT_SHORT_SHA}"
+    - git push origin HEAD:${CI_COMMIT_BRANCH}
 

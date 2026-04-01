@@ -6,9 +6,49 @@ include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
 stages:
+  - syncdoc
   - test
-  - deploy
 
+sync_ose_doc_to_central:
+  stage: syncdoc
+  image: alpine:3.20
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        - doc/**/*
+        - .gitlab-ci.yml
+    - when: never
+  before_script:
+    - apk add --no-cache git rsync
+    - git config --global user.name "GitLab CI"
+    - git config --global user.email "ci@local"
+  script:
+    - export TARGET_DIR="${CENTRAL_DOCS_SUBDIR:-OSE}"
+    - export TARGET_BRANCH="${CENTRAL_DOCS_BRANCH:-main}"
+    - test -n "$DOCS_REPO_URL" || (echo "DOCS_REPO_URL manquante" && exit 1)
+    - test -n "$DOCS_REPO_TOKEN" || (echo "DOCS_REPO_TOKEN manquante" && exit 1)
+
+    # Clone du dépôt central
+    - git clone "https://oauth2:${DOCS_REPO_TOKEN}@${DOCS_REPO_URL#https://}" central-docs
+    - cd central-docs
+
+    # On se place sur la branche cible
+    - git checkout "${TARGET_BRANCH}" || git checkout -b "${TARGET_BRANCH}"
+
+    # Synchronisation de la doc sans suppression des fichiers manuels côté cible
+    - mkdir -p "${TARGET_DIR}"
+    - rsync -a "${CI_PROJECT_DIR}/doc/" "${TARGET_DIR}/"
+
+    # Commit uniquement s'il y a un vrai changement
+    - git add "${TARGET_DIR}"
+    - |
+      if git diff --cached --quiet; then
+        echo "Aucun changement à pousser"
+        exit 0
+      fi
+
+    - git commit -m "Sync OSE doc from ${CI_PROJECT_PATH} @ ${CI_COMMIT_SHORT_SHA}"
+    - git push origin HEAD:"${TARGET_BRANCH}"
 
 sast:
   stage: test
@@ -31,30 +71,5 @@ sonarqube-check:
     - master
 
 
-sync_ose_doc_to_central:
-  stage: deploy
-  image: alpine:3.20
-  rules:
-    - changes:
-        - doc/**/*
-    - if: '$CI_COMMIT_BRANCH == "master"'
-  before_script:
-    - apk add --no-cache git rsync
-    - git config --global user.name "antony le courtes"
-    - git config --global user.email "antony.lecourtes@unicean.fr"
-  script:
-    - export TARGET_DIR="Ose"
-    - git clone "https://${DOCS_REPO_USER}:${DOCS_REPO_TOKEN}@${DOCS_REPO_URL#https://}" central-docs
-    - cd central-docs
-    - mkdir -p "${TARGET_DIR}"
-    - find "${TARGET_DIR}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-    - rsync -a "${CI_PROJECT_DIR}/doc/" "${TARGET_DIR}/"
-    - git add "${TARGET_DIR}"
-    - |
-      if git diff --cached --quiet; then
-        echo "Aucun changement à pousser"
-        exit 0
-      fi
-    - git commit -m "Sync OSE doc from ${CI_PROJECT_PATH} @ ${CI_COMMIT_SHORT_SHA}"
-    - git push origin HEAD:${CI_COMMIT_BRANCH}
+
 

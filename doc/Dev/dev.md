@@ -1,6 +1,7 @@
 # Installation de l'environnement de développement de OSE
 
-## Si vous utilisez dev-infra
+## Si vous utilisez dev-infra local
+
 ```bash
 git clone https://git.unicaen.fr/open-source/OSE.git ose-dev
 cd ose-dev
@@ -55,16 +56,15 @@ npx vite build
 Les fichiers ainsi générés seront placés dans le répertoire public/dist.
 Enfin, commitez le tout et testez avant de déployer!!!
 
-
-
 ## Création de composants Vue
 
-
 Sites officiels :
+
 - https://vuejs.org/
 - https://vitejs.dev/
 
-Doc Vue de Stéphane : 
+Doc Vue de Stéphane :
+
 - https://git.unicaen.fr/bouvry/presentation-dev/-/blob/master/src/vuejs.md
 
 Les composants doivent être placés dnas le répertoire front/components.
@@ -107,6 +107,7 @@ L'exemple ci-dessus charge et affiche le composant situé dans le fichier front/
 On lui transmet les propriétés intervenant, canAddMission et un tableau d'options.
 
 ### Utiliser un composant Vue depuis un autre :
+
 <template>
     <!-- Utilisation du "popover" comme sous-composant -->
     <popover title="Mon titre cool"></popover>
@@ -134,32 +135,37 @@ export default {
 
 </script>
 
-
 ## Communication front/serveur en AJAX avec axios
 
 Site officiel : https://axios-http.com/fr/docs/intro
 
 Depuis un morceau de code javascript :
+
 ```js
 
 // Données à poster
 let data = {
-    'param1' => 'mon premier paramètre',
-    'param2' => 'mon deuxième paramètre'
-};
+    'param1'
+=>
+'mon premier paramètre',
+    'param2'
+=>
+'mon deuxième paramètre'
+}
+;
 
 // URL à utiliser. Ici, on la construit à partir d'une route avec unicaenVue.url
-let url = unicaenVue.url('mission/modifier/:intervenant', {intervenant: 1000000}); 
+let url = unicaenVue.url('mission/modifier/:intervenant', {intervenant: 1000000});
 
 // on utilise axios pour poster et récupérer le résultat
 unicaenVue.axios.post(
     url,
     data
 ).then((response) => {
-    
+
     // récup des données renvoyées par le serveur
     console.log(response.data);
-    
+
     // on peut aussi récupérer les messages envoyés par le flashMessenger :
     console.log(response.messages);
 });

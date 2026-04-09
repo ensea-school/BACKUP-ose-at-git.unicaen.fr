@@ -32,7 +32,8 @@ RUN apk add --no-cache \
     openldap-dev \
     postgresql-dev \
     gcompat \
-    libaio
+    libaio \
+    git
 
 
 

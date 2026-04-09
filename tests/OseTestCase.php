@@ -13,6 +13,18 @@ class OseTestCase extends TestCase
         if ('' === $path){
             $this->calc = $actual;
         }
+        $var = $actual;
+        if ($actual instanceof Collection) {
+            $actual = $actual->toArray();
+        }
+
+        if (is_array($actual)
+            && !array_key_exists('ANNEE_ID', $actual)
+            && !array_key_exists('lignesAPayer', $actual)
+            && !array_key_exists('heuresAA', $actual)
+        ) {
+            $actual = array_values($actual);
+        }
 
         $k1 = array_keys($actual);
         $k2 = array_keys($expected);

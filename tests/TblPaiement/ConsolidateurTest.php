@@ -141,20 +141,20 @@ final class ConsolidateurTest extends OseTestCase
                     'periode'         => 12,
                     'heuresAA'        => 15,
                     'misesEnPaiement' => [
-                        1 => ['heuresAA' => 10],
-                        2 => ['heuresAA' => 5],
+                        0 => ['heuresAA' => 10],
+                        1 => ['heuresAA' => 5],
                     ],
                 ],
                 [
                     'periode'         => 13,
                     'heuresAC'        => 6,
                     'misesEnPaiement' => [
-                        2 => ['heuresAC' => 6],
+                        0 => ['heuresAC' => 6],
                     ],
                 ],
             ],
             'misesEnPaiement' => [
-                2 => ['heuresAC' => 13],
+                0 => ['heuresAC' => 13],
             ],
         ];
 

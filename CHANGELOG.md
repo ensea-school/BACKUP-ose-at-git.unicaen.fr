@@ -51,7 +51,6 @@ OSE [24.14]
 * Nouvelle formule Strasbourg (#64228)
 * Nouvelle formule de Polytechnique (#66161)
 * Nouvelle formule de Saclay (#65310)
-* Nouvelle formule de Lyon 3 (#38136)
 * Ajout du solde de service dû dans la partie Calcul HETD de la saisie d'enseignements (#66006)
 * Ajout de la possiblité d'éditer le téléphone personnel dans la fiche intervenant
 

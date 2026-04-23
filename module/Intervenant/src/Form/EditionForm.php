@@ -64,6 +64,7 @@ class EditionForm extends AbstractForm
         'codeRh'             => ['type' => 'string'],
         'utilisateurCode'    => ['type' => 'string'],
         'emailPerso'         => ['type' => 'string'],
+        'telPerso' => ['type' => 'string'],
         'source'             => ['type' => Source::class],
         'sourceCode'         => ['type' => 'string'],
         'syncStatut'         => ['type' => 'bool'],
@@ -241,14 +242,17 @@ class EditionForm extends AbstractForm
             'type'       => Email::class,
             'options'    => [
                 'label' => 'E-mail personnel',
-                //'label_options' => ['disable_html_escape' => true],
             ],
-            'attributes' => [
-                //'placeholder' => "Email établissement",
-                //'class'     => 'form-control left-border-none dossierElement',
-            ],
-            'type'       => Email::class,
-        ]);
+                   ]);
+
+        $this->add([
+                       'name'    => 'telPerso',
+                       'type'    => 'Text',
+                       'options' => [
+                           'label' => 'Tél. personnel',
+                       ],
+
+                   ]);
 
         $utilisateur = new SearchAndSelect('utilisateur');
         $utilisateur->setRequired(false)
@@ -572,6 +576,7 @@ class EditionForm extends AbstractForm
                     ['name' => EmailAddress::class],
                 ],
             ],
+            'telPerso' => ['required' => false],
             'statut'                       => ['required' => false],
             'structure'                    => ['required' => false],
             'discipline'                   => ['required' => false],

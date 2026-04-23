@@ -103,6 +103,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
         $canViewAdresseIntervenant = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE));
         if (!$canViewAdresseIntervenant) {
             unset($vars['coordonnees']);
+            unset($vars['identifiants']);
         }
 
 

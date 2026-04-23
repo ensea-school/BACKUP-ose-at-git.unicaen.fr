@@ -41,7 +41,8 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
      */
     public function getNiveauToString()
     {
-        return $this->getTypeFormation()->getGroupe()->getLibelleCourt() . $this->getNiveau();
+
+        return $this->getTypeFormation()?->getGroupe()?->getLibelleCourt() . $this->getNiveau();
     }
 
 

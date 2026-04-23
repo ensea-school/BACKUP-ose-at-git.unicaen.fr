@@ -735,11 +735,14 @@ class ServiceService extends AbstractEntityService
     {
         $rStructure = $this->getServiceContext()->getStructure();
         $sStructure = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
-
-        if ($rStructure && $sStructure && $rStructure != $sStructure) {
-            $intervenant = $service->getIntervenant();
-            if (!($intervenant->getStatut()->estPermanent() && $intervenant->getStructure() == $rStructure)) {
-                return; // on ne reporte pas de service si l'utilisateur est d'une composante différente de celle du service
+        $intervenant = $service->getIntervenant();
+        //On ne reporte pas le service d'une autre composante que celle de son affectation
+        if ($rStructure && $sStructure && !$sStructure->inStructure($rStructure)) {
+            //Sauf si il s'agit d'un intervenant permanent et que cette intervenant est affecté
+            //dans la même composante que le gestionnaire (sous structures comprise)
+            if (!($intervenant->getStatut()->estPermanent() && $intervenant->getStructure()->inStructure($rStructure))) {
+                //Sinon on annule l'action de report sur prévisionnel vers le réalisé
+                return;
             }
         }
 

@@ -342,7 +342,9 @@ class PlafondService extends AbstractEntityService
                 $libVal = "entity1.code || ' ' || entity2.code ";
                 $groupBy = 'entity1.code, entity2.code';
                 foreach($entities as $entity){
-                    $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$entity->getService()->getElementPedagogique()?->getId();
+                    if ($entity->getService()->getElementPedagogique()) {
+                        $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$entity->getService()->getElementPedagogique()?->getId();
+                    }
                     $filters['pd.INTERVENANT_ID']         = (int)$entity->getService()->getIntervenant()->getId();
                     $filters['pd.TYPE_INTERVENTION_ID']   = (int)$entity->getTypeIntervention()->getId();
                 }

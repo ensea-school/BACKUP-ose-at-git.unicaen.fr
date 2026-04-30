@@ -42,6 +42,11 @@ OSE [24.14]
 
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
+# OSE 24.16 (à venir)
+
+## Corrections
+
+* Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400) 
 
 # OSE 24.15 (28/04/26)
 

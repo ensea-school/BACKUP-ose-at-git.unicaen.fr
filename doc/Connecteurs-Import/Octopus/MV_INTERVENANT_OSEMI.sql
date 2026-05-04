@@ -239,7 +239,7 @@ FROM i
          LEFT JOIN octo.individu@octoprod ind ON ind.c_individu_chaine = induni.c_individu_chaine
          LEFT JOIN octo.v_via_individu_insee@octoprod vindinsee ON ind.c_individu_chaine = vindinsee.individu_id
          LEFT JOIN octo.v_via_individu_iban@octoprod vindiban ON vindiban.individu_id = ind.c_individu_chaine
-         LEFT JOIN iban_dossier ibandossier ON ibandossier.code = ind.c_individu_chaine
+         LEFT JOIN iban_dossier ibandossier ON ibandossier.code = TO_CHAR(ind.c_individu_chaine)
          LEFT JOIN octo.v_individu@octoprod vind ON vind.c_individu_chaine = induni.c_individu_chaine
     --On récupére la structure principale de l'individu
          LEFT JOIN structure_aff_enseigne sae ON sae.individu_id = induni.c_individu_chaine

@@ -34,7 +34,7 @@ OSE [24.14]
 
 ## Notes de mise à jour
 
-* :warning: **Attention** : Le workflow a été réinitialisé, vous devrez le réadpter à vos besoins (Administration/Workflow). 
+* :warning: **Attention** : Le workflow a été réinitialisé, vous devrez le réadpter à vos besoins (Administration/Workflow).
 
 * Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
 
@@ -46,7 +46,8 @@ OSE [24.14]
 
 ## Corrections
 
-* Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400) 
+* Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400)
+* Ajout d'une commande pour mettre à jour le champs ids des structures
 
 # OSE 24.15 (28/04/26)
 
@@ -112,13 +113,13 @@ GROUP BY
 :warning: Point de vigilance: Merci de vérifier que les requêtes associées à vos plafonds demeurent pleinement opérationnelles.
 Depuis la v24, certaines structures de tables ont évolué. Cette vérification avait déjà été recommandée dans les notes de mise à jour de la v24.
 
-Pour rappel, les requêtes de plafonds existantes en base ne sont pas automatiquement mises à jour lors d’un changement de version. Il vous appartient donc de contrôler et, le cas échéant, d’adapter les requêtes déjà présentes afin de garantir leur conformité avec le modèle de données actuel, voici quelques changements notables de la v24 : 
+Pour rappel, les requêtes de plafonds existantes en base ne sont pas automatiquement mises à jour lors d’un changement de version. Il vous appartient donc de contrôler et, le cas échéant, d’adapter les requêtes déjà présentes afin de garantir leur conformité avec le modèle de données actuel, voici quelques changements notables de la v24 :
 
-  * La table formule_resultat a été renommée en formule_resultat_intervenant
-  * Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
-  * Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
-  * Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
-  * Les colonnes service_referentiel ont été renommées en heures_service_referentiel
+* La table formule_resultat a été renommée en formule_resultat_intervenant
+* Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
+* Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
+* Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
+* Les colonnes service_referentiel ont été renommées en heures_service_referentiel
 
 
 # OSE 24.13 (16/12/2025)
@@ -144,7 +145,7 @@ Pour rappel, les requêtes de plafonds existantes en base ne sont pas automatiqu
 ## Corrections
 
 * Correction pour ne pas enregistrer d'étape lors de la saisie d'un enseignement hors établissement (#63714)
-* Correction pour afficher le libellé hors établissement dans l'export pdf des service 
+* Correction pour afficher le libellé hors établissement dans l'export pdf des service
 * Correction état de sortie de l'offre de formation (#63732)
 * Modification pour fiabiliser l'action d'une validation d'une mission (#59140)
 * Correction du problème de saisie des taux a virgules (#63956)

@@ -1,6 +1,6 @@
 # Version stable
 
-OSE [24.10](#ose-2410-15092025)
+OSE [24.14]
 
 
 # OSE 25 (à venir)
@@ -19,24 +19,156 @@ OSE [24.10](#ose-2410-15092025)
 
 * Possibilité d'exploiter 2 états de sortie différents via le menu "Services"
 
+* Optimisation générale de l'application
+
+## Améliorations
+
+* La tolérance de dépassement de plafond est passée de 0,05 à 0,02 (#55890)
+
 ## Corrections
 
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
+* Ajout d'une exception dans le validateur de numéro insee des données personnelles pour simplifier le contrôle de la donnée dans le cas d'un département de naissance "Polynésie Française" (#63903).
+* Le blocage se fait correctement pour les plafonds de périmètre volume horaire (#62434)
+* Le blocage se fait de nouveau correcttment pour les plafonds de périmètre intervenant (#63728)
 
 ## Notes de mise à jour
 
-Passage à PHP 8.4 : Une fois passé en version 25, Vous devrez monter en version 8.4 de PHP.
+* :warning: **Attention** : Le workflow a été réinitialisé, vous devrez le réadpter à vos besoins (Administration/Workflow).
+
+* Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
+
+* Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
+
+* La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
+
+# OSE 24.16 (à venir)
+
+## Corrections
+
+* Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400)
+* Ajout d'une commande pour mettre à jour le champs ids des structures
+
+# OSE 24.15 (28/04/26)
+
+## Nouveautés
+
+* Nouvelle formule Paris Sorbonne Nouvelle (#65298)
+* Nouvelle formule Strasbourg (#64228)
+* Nouvelle formule de Polytechnique (#66161)
+* Nouvelle formule de Saclay (#65310)
+* Ajout du solde de service dû dans la partie Calcul HETD de la saisie d'enseignements (#66006)
+* Ajout de la possiblité d'éditer le téléphone personnel dans la fiche intervenant
+
+## Corrections
+
+* Tenir compte de l'arborescence des sous structures pour la bascule du prévisionnel vers le réalisé (#63508)
+* Correction des doublons d’éléments pédagogiques dans les listes de recherche lors de la saisie des enseignements (#66130)
+* Correction de la fenêtre modale de recherche de saisie de service : suppression des lignes blanches et des doublons d’éléments pédagogiques dans la liste de résultats (#64663)
+* Correction sur la commande de création d'utilisateur creer-utilisateur (#66396)
 
 
 
-# OSE 24.11 (à venir)
+# OSE 24.14 (09/03/2026)
+
+## Nouveautés
+
+* Nouvelle formule de Savoie Mont Blanc (#59415)
+
+## Corrections
+
+* Correction sur l'export de l'offre de formation
+* Correction sur le blocage du plafond référentiel (#50123)
+* Correction blocage saisie d'heures d'enseignements par rapport à un plafond (#63728)
+* Correction sur les plafonds 15 et 17 pour le référentiel (#53371)
+* Marge de calcul pour les plafonds réduites à 0.02 (#55890)
+* Correction bug affichage page détails de calcul des paiements (#64868)
+* Correction sur l'export des services lors du choix du filtre composante d'affectation (#65652)
+
+## Notes de mise à jour
+
+:warning: **Attention** :  Les requêtes associées aux plafonds ne sont volontairement pas réinitialisées lors des montées de version, afin de préserver les éventuelles personnalisations réalisées localement.
+
+Il a toutefois été identifié que certains plafonds livrés en standard avec OSE comportaient des anomalies dans leurs requêtes SQL. Une correction manuelle est donc nécessaire de votre côté pour les environnements concernés.
+
+Dans le cadre de cette version,**le plafond n°15 – « Heures max. de référentiel par structure »** a été corrigé.
+Nous vous invitons à remplacer la requête existante par la requête suivante :
+
+```sql
+SELECT
+  i.annee_id                 annee_id,
+  vhr.type_volume_horaire_id type_volume_horaire_id,
+  s.id                       structure_id,
+  SUM(vhr.heures)            heures
+FROM
+  service_referentiel       sr
+  JOIN intervenant           i ON i.id = sr.intervenant_id
+  JOIN structure             s ON s.id = sr.structure_id
+  JOIN volume_horaire_ref  vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+WHERE
+  sr.histo_destruction IS NULL
+GROUP BY
+  i.annee_id, vhr.type_volume_horaire_id, s.id
+```
+:warning: Point de vigilance: Merci de vérifier que les requêtes associées à vos plafonds demeurent pleinement opérationnelles.
+Depuis la v24, certaines structures de tables ont évolué. Cette vérification avait déjà été recommandée dans les notes de mise à jour de la v24.
+
+Pour rappel, les requêtes de plafonds existantes en base ne sont pas automatiquement mises à jour lors d’un changement de version. Il vous appartient donc de contrôler et, le cas échéant, d’adapter les requêtes déjà présentes afin de garantir leur conformité avec le modèle de données actuel, voici quelques changements notables de la v24 :
+
+* La table formule_resultat a été renommée en formule_resultat_intervenant
+* Les tables formule_resultat_service et formule_resultat_service_ref ont été supprimées
+* Les tables formule_resultat_vh et formule_resultat_vh_ref ont été fusionnées dans formule_resultat_volume_horaire
+* Les colonnes heures_compl_fc_majorees ont été renommées en heures_primes
+* Les colonnes service_referentiel ont été renommées en heures_service_referentiel
+
+
+# OSE 24.13 (16/12/2025)
+
+## Corrections
+
+* Les mises en paiement en trop apparaissent de nouveau dans les IHM liées aux paiements (#64243)
+* Correction de problèmes de paiements en cas de diminution des heures pour du référentiel (#64105)
+* Amélioration de la demande de paiement en lot afin d’afficher les intervenants ayant des HETD restantes à payer, en notifiant qu’il existe des incohérences de paiement sur leurs demandes précédentes (trop-perçu, etc.). Les cas notifiés ne pourront pas être traités en masse mais une indication affichera qu'il faut reprendre les demandes de mise en paiement manuellement sur l'intervenant.
+* Modification affichage libellé du domaine fonctionnel dans les demandes de mise en paiement pour les missions étudiantes
+* Alimentation du dossier personnel de l'intervenant avec la situation matrimoniale de l'intervenant si elle est renseignée dans la table intervenant (#63648)
+* Activation de la synchronisation du code rh de la table intervenant lors d'un renouvellement SIHAM (#63497)
+
+
+
+# OSE 24.12 (21/11/2025)
+
+## Nouveautés
+
+* Ajout d'un nouveau paramétre général pour sélectionner l'état de sortie voulu pour l'export de l'offre de formation
+
+
+## Corrections
+
+* Correction pour ne pas enregistrer d'étape lors de la saisie d'un enseignement hors établissement (#63714)
+* Correction pour afficher le libellé hors établissement dans l'export pdf des service
+* Correction état de sortie de l'offre de formation (#63732)
+* Modification pour fiabiliser l'action d'une validation d'une mission (#59140)
+* Correction du problème de saisie des taux a virgules (#63956)
+* Correction sur le fait de pouvoir saisir une date de retour signé dans le futur (#63989)
+* Le TBL_CONTRAT ne bloque plus la suppression d'une fiche d'intervenant (#64075)
+* Correction erreur lignes certaines doublonnées sur V_EXPORT_DMEP (#64107)
+
+
+# OSE 24.11 (07/10/2025)
+
+## Nouveautés
+
+* Nouvel état de sortie pour l'offre de formation permettant d'affiner par rapport au besoin de chaque établissement l'export de l'offre de formation
 
 ## Corrections
 
 * Bonne prise en compte de l'ordonnancement des statuts au niveau des données personnelles (#63380)
 * Correction sur les pieces jointes demandées par rapport à un seuil d'HETD (#62910)
 * Sur le formulaire de saisie d'enseignement, la recherche d'enseignement se fait bien sur le code et non le source_code
-
+* Correction sur le formulaire d'édition d'un groupe type de formation
+* Afficher les demandes de mise en paiement d'une sous structure lorsqu'on possède un rôle de structure parente à celles-ci (#63508)
+* Correction pour masquer les candidatures des autres étudiants sur le détail d'une offre d'emploi
+* Demandes de mises en paiement : lien rétabli entre les composantes actrices et les centres de coûts (#63491)
 
 # OSE 24.10 (15/09/2025)
 

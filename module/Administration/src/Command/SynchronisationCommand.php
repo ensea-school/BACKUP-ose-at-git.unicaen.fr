@@ -5,6 +5,7 @@ namespace Administration\Command;
 use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Doctrine\Common\Cache\FilesystemCache;
+use Lieu\Service\StructureServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,6 +22,7 @@ class SynchronisationCommand extends Command
 {
     use ImportProcessusAwareTrait;
     use AffectationServiceAwareTrait;
+    use StructureServiceAwareTrait;
 
     protected function configure(): void
     {
@@ -56,7 +58,12 @@ class SynchronisationCommand extends Command
             //Suppresion du cache des affectations
             $io->writeln("Suppression du cache doctrine des affectations");
             $this->getServiceAffectation()->deleteCacheAffectation();
+
+            // Traitements supplémentaires
+            $this->getServiceStructure()->updateStructures();
         }
+
+
 
         return Command::SUCCESS;
     }

@@ -44,6 +44,10 @@ OSE [24.14]
 
 # OSE 24.16 (à venir)
 
+## Nouveautés
+
+* Intégration de la formule de Lyon 3 (#38136)
+
 ## Corrections
 
 * Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400)

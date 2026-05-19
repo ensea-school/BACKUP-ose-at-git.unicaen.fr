@@ -164,9 +164,16 @@ class ReferentielAssertion extends AbstractAssertion
             case ServiceReferentielController::class . '.constatation':
                 return true;
             case ServiceReferentielController::class . '.validationPrevu':
-                return $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION);
+                return $this->asserts([
+                                          $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION),
+                                          $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_REALISE),
+                                      ]);
             case ServiceReferentielController::class . '.validationRealise':
-                return $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION);
+                return $this->asserts([
+                                          $this->authorize->isAllowedPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION),
+                                          $this->assertPageReferentiel($intervenant, TypeVolumeHoraire::CODE_REALISE),
+                                      ]);
+
         }
 
         throw new UnAuthorizedException('Action de contrôleur ' . $controller . ':' . $action . ' non traitée');

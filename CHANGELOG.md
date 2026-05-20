@@ -1,6 +1,6 @@
 # Version stable
 
-OSE [24.14]
+OSE [24.15]
 
 
 # OSE 25 (à venir)

@@ -48,6 +48,10 @@ OSE [24.15]
 
 * Intégration de la formule de Lyon 3 (#38136)
 
+## Améliorations
+
+* Amélioration de la saisie des services hors établissement afin de permettre la saisie de plusieurs lignes de services pour un même établissement extérieur (#66473)
+
 ## Corrections
 
 * Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400)

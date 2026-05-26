@@ -62,6 +62,9 @@ OSE [24.15]
 * Nouvelle formule Strasbourg (#64228)
 * Nouvelle formule de Polytechnique (#66161)
 * Nouvelle formule de Saclay (#65310)
+* Nouvelle formule de Nanterre (#66492)
+* Nouvelle formule de Montpellier (#65128)
+* Nouvelle formule Bretagne Sud 2023 (#62278)
 * Ajout du solde de service dû dans la partie Calcul HETD de la saisie d'enseignements (#66006)
 * Ajout de la possiblité d'éditer le téléphone personnel dans la fiche intervenant
 

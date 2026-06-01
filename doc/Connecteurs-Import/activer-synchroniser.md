@@ -155,6 +155,27 @@ END;
 /
 ```
 
+#### 5. Forcer manuellement la synchronisation de tous les éléments pédagogiques d'une étape
+
+```sql
+BEGIN
+    FOR r IN (
+        SELECT code
+        FROM src_element_pedagogique
+        WHERE code LIKE 'M1PRO5%'
+    )
+    LOOP
+        unicaen_import.synchronisation(
+            'ELEMENT_PEDAGOGIQUE',
+            'WHERE code = ''' || r.code || '''
+               AND import_action <> ''delete''
+               AND annee_id = 2025'
+        );
+    END LOOP;
+END;
+/
+```
+
 ---
 
 #### Points d’attention

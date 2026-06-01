@@ -17,3 +17,4 @@ composer.phar
 /.php-cs-fixer.cache
 supervisord.*
 /docker-compose.yaml
+/.codex

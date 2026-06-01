@@ -25,6 +25,7 @@ return [
             Migration\v24FonctionReferentielParent::class,
             Migration\v24ParametresAnnualises::class,
             Migration\v24LongeurColonnesTblContrat::class,
+            Migration\v24ContrainteUniciteService::class,
         ],
     ],
 

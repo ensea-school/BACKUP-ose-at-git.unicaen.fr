@@ -571,13 +571,15 @@ class ServiceService extends AbstractEntityService
     public function getBy(
         Intervenant   $intervenant,
                       $elementPedagogique,
-        Etablissement $etablissement
+        Etablissement $etablissement,
+        string        $description = null
     )
     {
         $result = $this->getRepo()->findBy([
                                                'intervenant'        => $intervenant,
                                                'elementPedagogique' => $elementPedagogique,
                                                'etablissement'      => $etablissement,
+                                               'description' => $description,
                                            ]);
 
         if (count($result) > 1) {

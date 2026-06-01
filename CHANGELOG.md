@@ -51,6 +51,7 @@ OSE [24.15]
 ## Améliorations
 
 * Amélioration de la saisie des services hors établissement afin de permettre la saisie de plusieurs lignes de services pour un même établissement extérieur (#66473)
+* Homogénéisation des formats du BIC et amélioration des règles de validation du BIC de 8 ou 11 caractéres (#66718)
 
 ## Corrections
 

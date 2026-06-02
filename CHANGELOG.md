@@ -47,6 +47,7 @@ OSE [24.15]
 ## Nouveautés
 
 * Intégration de la formule de Lyon 3 (#38136)
+* Ajout d'une config 'is_redirected' pour activer ou desactiver la redirection d'email
 
 ## Améliorations
 

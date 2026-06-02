@@ -10,7 +10,8 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use UnicaenMail\Service\Mail\MailService;
 
-class MailServiceFactory {
+class MailServiceFactory
+{
 
     /**
      * @param ContainerInterface $container
@@ -18,21 +19,26 @@ class MailServiceFactory {
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function __invoke(ContainerInterface $container) : MailService
+    public function __invoke(ContainerInterface $container): MailService
     {
         $config = $container->get('Configuration')['unicaen-mail'];
 
         /* Injection de l'utilisateur courant pour le redirect de mails */
-        $context = $container->get(ContextService::class);
-        $email = $context->getUtilisateur()?->getEmail();
-        $redirectTo = $config['module']['default']['redirect_to'];
-        if ($email && !empty($redirectTo)) {
-            $config['module']['default']['redirect_to'] = $email;
+        $context       = $container->get(ContextService::class);
+        $email         = $context->getUtilisateur()?->getEmail();
+        $is_redirected = $config['module']['default']['is_redirected_ose'];
+        if ($email && $is_redirected) {
+            $redirectTo    = $config['module']['default']['redirect_to'];
+            if ($email && empty($redirectTo)) {
+                $config['module']['default']['redirect_to'] = $email;
+            }
+        } else {
+            $config['module']['default']['redirect_to'] = [];
         }
 
 
         $transport = new EsmtpTransport(host: $config['transport_options']['host'], port: $config['transport_options']['port']);
-        $mailer = new Mailer($transport);
+        $mailer    = new Mailer($transport);
 
         /**
          * @var EntityManager $entityManager

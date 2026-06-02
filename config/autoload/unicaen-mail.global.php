@@ -17,12 +17,13 @@ return [
         'transport_options' => [
             'host' => $conf['mail']['smtpHost'] ?? 'localhost',
             'port' => $conf['mail']['smtpPort'] ?? null,
-            'tls' => $conf['mail']['tls'] ?? true,
+            'tls'  => $conf['mail']['tls'] ?? true,
         ],
 
-        'redirect_to' => $conf['mail']['redirection'] ?? null,
-        'do_not_send' => $conf['mail']['envoiDesactive'] ?? true,
-        'redirect'    => !empty($conf['mail']['redirection'] ?? null),
+        'is_redirected_ose' => $conf['mail']['is_redirected'] ?? false,
+        'redirect_to'       => $conf['mail']['redirection'] ?? null,
+        'do_not_send'       => $conf['mail']['envoiDesactive'] ?? true,
+        'redirect'          => !empty($conf['mail']['redirection'] ?? null),
 
         'subject_prefix' => 'OSE',
         'from_name'      => 'Application',
@@ -34,12 +35,13 @@ return [
 
         'module' => [
             'default' => [
-                'redirect_to'    => $conf['mail']['redirection'] ?? null,
-                'do_not_send'    => $conf['mail']['envoiDesactive'] ?? true,
-                'redirect'       => !empty($conf['mail']['redirection'] ?? null),
-                'subject_prefix' => 'OSE',
-                'from_name'      => 'OSE | Application',
-                'from_email'     => $conf['mail']['from'] ?? null,
+                'redirect_to'       => $conf['mail']['redirection'] ?? null,
+                'do_not_send'       => $conf['mail']['envoiDesactive'] ?? true,
+                'is_redirected_ose' => $conf['mail']['is_redirected'] ?? false,
+                'redirect'          => !empty($conf['mail']['redirection'] ?? null),
+                'subject_prefix'    => 'OSE',
+                'from_name'         => 'OSE | Application',
+                'from_email'        => $conf['mail']['from'] ?? null,
 
             ],
 

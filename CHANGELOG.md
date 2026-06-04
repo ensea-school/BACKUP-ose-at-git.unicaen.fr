@@ -59,7 +59,7 @@ OSE [24.15]
 * Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400)
 * Ajout d'une commande pour mettre à jour le champs ids des structures
 * Correction export siham dans le cas où un code type structure affectation ne renvoie aucune valeur dans SIHAM (#65318)
-
+* Correction sur l'affiche des structures (#66726)
 # OSE 24.15 (28/04/26)
 
 ## Nouveautés

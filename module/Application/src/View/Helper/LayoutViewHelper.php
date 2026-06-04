@@ -101,7 +101,7 @@ class LayoutViewHelper extends AbstractHtmlElement
             $session->structures = [];
             foreach ($s as $structure) {
                 if ($structure->getLevel() > 0) {
-                    $session->structures[$structure->getId()] = str_repeat('&nbsp;', $structure->getLevel() * 4) . (string)$structure;
+                    $session->structures[$structure->getId()] = str_repeat("\xc2\xa0", $structure->getLevel() * 4) . (string)$structure;
                 } else {
                     $session->structures[$structure->getId()] = (string)$structure;
                 }

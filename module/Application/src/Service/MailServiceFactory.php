@@ -27,7 +27,7 @@ class MailServiceFactory
         $context       = $container->get(ContextService::class);
         $email         = $context->getUtilisateur()?->getEmail();
         $is_redirected = $config['module']['default']['is_redirected_ose'];
-        if ($email && $is_redirected) {
+        if ($is_redirected) {
             $redirectTo    = $config['module']['default']['redirect_to'];
             if ($email && empty($redirectTo)) {
                 $config['module']['default']['redirect_to'] = $email;

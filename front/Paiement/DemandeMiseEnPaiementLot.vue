@@ -82,6 +82,7 @@
     </div>
     <div id="dmep" class="accordion">
         <form id="formProcessDemandeMiseEnPaiement" action="" method="post">
+            <input type="hidden" :value="selectedStructure"/>
             <!--Permanents-->
             <div v-if="this.permanents.length > 0" class="accordion-item">
                 <h2 id="dmep-permanents-heading" class="accordion-header">
@@ -290,7 +291,7 @@
                             </thead>
                             <tbody>
 
-                            <tr v-for="intervenant in this.etudiants">
+                            <tr v-for="intervenant in this.autres">
                                 <td><input :id="'autre-' + intervenant.datasIntervenant.id"
                                            :data-paie-etat="totalRessourcePaieEtat(intervenant.heures)"
                                            :data-ressource-propre="totalRessourcePropre(intervenant.heures)"
@@ -589,7 +590,14 @@ export default {
             this.intervenants = [];
 
 
-            for (const [index, intervenant] of Object.entries(datas)) {
+            const intervenants = Object.values(datas).sort((a, b) => {
+                const nomA = `${a.datasIntervenant.nom_usuel} ${a.datasIntervenant.prenom}`;
+                const nomB = `${b.datasIntervenant.nom_usuel} ${b.datasIntervenant.prenom}`;
+
+                return nomA.localeCompare(nomB, 'fr', {sensitivity: 'base'});
+            });
+
+            for (const intervenant of intervenants) {
                 switch (intervenant.datasIntervenant.typeIntervenant) {
                     case 'Vacataire':
                         this.vacataires.push(intervenant);

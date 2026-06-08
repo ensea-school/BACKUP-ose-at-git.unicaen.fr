@@ -218,14 +218,16 @@ class DemandesController extends AbstractController
 
         if ($this->getRequest()->isPost()) {
             $datasIntervenant = $this->getRequest()->getPost('intervenant');
+            $dataStructure = $this->getRequest()->getPost('selectedStructure');
             if (empty($datasIntervenant)) {
                 return false;
             }
             $intervenantIds = array_keys($datasIntervenant);
+            $structure = $this->getServiceStructure()->get($dataStructure);
             foreach ($intervenantIds as $id) {
                 $intervenant = $this->getServiceIntervenant()->get($id);
                 if ($intervenant) {
-                    $this->getServiceDemandes()->demandesMisesEnPaiementIntervenant($intervenant);
+                    $this->getServiceDemandes()->demandesMisesEnPaiementIntervenant($intervenant, $structure);
                     $this->updateTableauxBord($intervenant);
                 }
             }

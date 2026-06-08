@@ -48,28 +48,30 @@ class DemandesService extends AbstractService
 
 
 
-    public function demandesMisesEnPaiementIntervenant(?Intervenant $intervenant): void
+    public function demandesMisesEnPaiementIntervenant(Intervenant $intervenant, Structure $structure): void
     {
-        if ($intervenant instanceof Intervenant) {
+        if ($intervenant instanceof Intervenant && $structure instanceof Structure) {
             $heuresADemander = $this->getServiceTblPaiement()->getDemandesMisesEnPaiementByIntervenant($intervenant);
             //On fait les demandes de mise en paiement des heures à payer avec un centre de cout pré-paramétré
             foreach ($heuresADemander as $heures) {
-                //On récupère les données nécessaires à la demande de mis en paiement
-                $data                   = [];
-                $data['heures']         = $heures->getHeuresAPayerAA() + $heures->getHeuresAPayerAC();
-                $data['centre-cout-id'] = ($heures->getCentreCout()) ? $heures->getCentreCout()->getId() : '';;
-                $data['domaine-fonctionnel-id'] = ($heures->getDomaineFonctionnel()) ? $heures->getDomaineFonctionnel()->getId() : '';
-                $data['service-id']             = ($heures->getService()) ? $heures->getService()->getId() : '';
-                $data['service-referentiel-id'] = ($heures->getServiceReferentiel()) ? $heures->getServiceReferentiel()->getId() : '';
-                $data['mission-id']             = ($heures->getMission()) ? $heures->getMission()->getId() : '';
-                $data['type-heures-id']         = ($heures->getTypeHeures()) ? $heures->getTypeHeures()->getId() : '';
-                /* @va $miseEnPaiement MiseEnPaiement */
-                //On enregistre la demande de mise en paiement
-                $miseEnPaiement = $this->getServiceMiseEnPaiement()->newEntity();
-                $this->hydrateFromChangements($miseEnPaiement, $data);
-                $this->getServiceMiseEnPaiement()->save($miseEnPaiement);
-                //on détruit les datas temporaires
-                unset($data);
+                if ($heures->getStructure()->getId() == $structure->getId()) {
+                    //On récupère les données nécessaires à la demande de mis en paiement
+                    $data                   = [];
+                    $data['heures']         = $heures->getHeuresAPayerAA() + $heures->getHeuresAPayerAC();
+                    $data['centre-cout-id'] = ($heures->getCentreCout()) ? $heures->getCentreCout()->getId() : '';;
+                    $data['domaine-fonctionnel-id'] = ($heures->getDomaineFonctionnel()) ? $heures->getDomaineFonctionnel()->getId() : '';
+                    $data['service-id']             = ($heures->getService()) ? $heures->getService()->getId() : '';
+                    $data['service-referentiel-id'] = ($heures->getServiceReferentiel()) ? $heures->getServiceReferentiel()->getId() : '';
+                    $data['mission-id']             = ($heures->getMission()) ? $heures->getMission()->getId() : '';
+                    $data['type-heures-id']         = ($heures->getTypeHeures()) ? $heures->getTypeHeures()->getId() : '';
+                    /* @va $miseEnPaiement MiseEnPaiement */
+                    //On enregistre la demande de mise en paiement
+                    $miseEnPaiement = $this->getServiceMiseEnPaiement()->newEntity();
+                    $this->hydrateFromChangements($miseEnPaiement, $data);
+                    $this->getServiceMiseEnPaiement()->save($miseEnPaiement);
+                    //on détruit les datas temporaires
+                    unset($data);
+                }
             }
         }
     }

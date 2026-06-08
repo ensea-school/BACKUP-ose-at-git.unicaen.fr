@@ -169,7 +169,11 @@ where rang = 1 AND rownum <= :limit
             $annee = $this->getServiceContext()->getAnnee();
         }
 
-        return $this->getRepo()->findOneBy(['code' => $code, 'annee' => $annee->getId()]);
+        return $this->getRepo()->findOneBy([
+            'code'             => $code,
+            'annee'            => $annee->getId(),
+            'histoDestruction' => null,
+        ]);
     }
 
 

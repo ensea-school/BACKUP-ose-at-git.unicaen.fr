@@ -44,6 +44,59 @@ OSE [24.15]
 
 # OSE 24.16 (à venir)
 
+## Corrections
+
+* Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400)
+* Ajout d'une commande pour mettre à jour le champs ids des structures
+
+# OSE 24.15 (28/04/26)
+
+## Nouveautés
+
+* Nouvelle formule Paris Sorbonne Nouvelle (#65298)
+* Nouvelle formule Strasbourg (#64228)
+* Nouvelle formule de Polytechnique (#66161)
+* Nouvelle formule de Saclay (#65310)
+* Ajout du solde de service dû dans la partie Calcul HETD de la saisie d'enseignements (#66006)
+* Ajout de la possiblité d'éditer le téléphone personnel dans la fiche intervenant
+
+## Corrections
+
+* Tenir compte de l'arborescence des sous structures pour la bascule du prévisionnel vers le réalisé (#63508)
+* Correction des doublons d’éléments pédagogiques dans les listes de recherche lors de la saisie des enseignements (#66130)
+* Correction de la fenêtre modale de recherche de saisie de service : suppression des lignes blanches et des doublons d’éléments pédagogiques dans la liste de résultats (#64663)
+* Correction sur la commande de création d'utilisateur creer-utilisateur (#66396)
+
+
+
+# OSE 24.14 (09/03/2026)
+
+## Nouveautés
+
+* Nouvelle formule de Savoie Mont Blanc (#59415)
+
+## Corrections
+
+* Correction sur l'export de l'offre de formation
+* Correction sur le blocage du plafond référentiel (#50123)
+* Correction blocage saisie d'heures d'enseignements par rapport à un plafond (#63728)
+* Correction sur les plafonds 15 et 17 pour le référentiel (#53371)
+* Marge de calcul pour les plafonds réduites à 0.02 (#55890)
+* Correction bug affichage page détails de calcul des paiements (#64868)
+* Correction sur l'export des services lors du choix du filtre composante d'affectation (#65652)
+
+## Notes de mise à jour
+
+* :warning: **Attention** : Le workflow a été réinitialisé, vous devrez le réadpter à vos besoins (Administration/Workflow).
+
+* Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
+
+* Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
+
+* La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
+
+# OSE 24.16 (à venir)
+
 ## Nouveautés
 
 * Intégration de la formule de Lyon 3 (#38136)
@@ -82,6 +135,7 @@ OSE [24.15]
 * Correction sur la commande de création d'utilisateur creer-utilisateur (#66396)
 
 
+Pour rappel, les requêtes de plafonds existantes en base ne sont pas automatiquement mises à jour lors d’un changement de version. Il vous appartient donc de contrôler et, le cas échéant, d’adapter les requêtes déjà présentes afin de garantir leur conformité avec le modèle de données actuel, voici quelques changements notables de la v24 :
 
 # OSE 24.14 (09/03/2026)
 

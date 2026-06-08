@@ -908,9 +908,13 @@ class SihamConnecteur implements ConnecteurRhInterface
                                          ]],
             ];
 
-            $uo = array_merge($uo, $this->siham->recupererListeUO($params));
-        }
+            $result = $this->siham->recupererListeUO($params);
 
+            if (!empty($result)) {
+                $uo = array_merge($uo, $result);
+            }
+
+        }
         ksort($uo);
 
         return $uo;

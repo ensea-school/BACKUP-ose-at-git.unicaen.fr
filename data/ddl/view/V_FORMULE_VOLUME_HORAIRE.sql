@@ -41,7 +41,7 @@ FROM
   LEFT JOIN STRUCTURE                    str ON str.id = ep.structure_id
   LEFT JOIN etape                          e ON e.id = ep.etape_id
   LEFT JOIN type_formation                tf ON tf.id = e.type_formation_id
-  LEFT JOIN type_intervention_statut     tis ON tis.type_intervention_id = ti.id AND tis.statut_id = i.statut_id
+  LEFT JOIN type_intervention_statut     tis ON tis.type_intervention_id = ti.id AND tis.statut_id = i.statut_id AND tis.histo_destruction IS NULL
   LEFT JOIN formule_resultat_intervenant fri ON fri.intervenant_id = s.intervenant_id
                                             AND fri.type_volume_horaire_id = vh.type_volume_horaire_id
                                             AND fri.etat_volume_horaire_id = vhe.etat_volume_horaire_id

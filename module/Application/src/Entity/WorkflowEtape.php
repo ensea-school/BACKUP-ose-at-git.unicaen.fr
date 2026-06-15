@@ -85,11 +85,11 @@ class WorkflowEtape implements ResourceInterface
 
 
     /**
-     * @param Structure $structure
+     * @param ?Structure $structure
      *
      * @return TblWorkflow|null
      */
-    public function getStructureEtape( Structure $structure )
+    public function getStructureEtape(?Structure $structure )
     {
         $etapes = $this->getEtapes();
         foreach( $etapes as $etape ){

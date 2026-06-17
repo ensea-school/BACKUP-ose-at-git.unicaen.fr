@@ -49,6 +49,7 @@ return [
         Command\MajExportsCommand::class             => Command\MajExportsCommandFactory::class,
         Command\CreerUtilisateurCommand::class       => Command\CreerUtilisateurCommandFactory::class,
         Command\FichiersVersFilesystemCommand::class => Command\FichiersVersFilesystemCommandFactory::class,
+        Command\VerifierEspaceDisqueCommand::class   => Command\VerifierEspaceDisqueCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -71,6 +72,7 @@ return [
             'maj-exports'              => Command\MajExportsCommand::class,
             'creer-utilisateur'        => Command\CreerUtilisateurCommand::class,
             'fichiers-vers-filesystem' => Command\FichiersVersFilesystemCommand::class,
+            'verifier-espace-disque'   => Command\VerifierEspaceDisqueCommand::class,
         ],
     ],
 ];

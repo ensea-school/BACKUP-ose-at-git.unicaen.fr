@@ -172,6 +172,11 @@ class FormuleDetailsExtractor implements ExtractionInterface
             $valeur                               = $this->trace->getValeur($typeHetd);
             $this->intervenant['hetd'][$typeHetd] = $this->valeurToJson($valeur);
         }
+        //Mécanique d'arrondis du total si écart entre service du et total heure est de 0.01 HETD
+        if ($this->intervenant['hetd']['HeuresService']['valeur'] > 0 && $this->intervenant['serviceDu'] > 0 && abs($this->intervenant['hetd']['HeuresService']['valeur'] - $this->intervenant['serviceDu']) <= 0.01) {
+            $this->intervenant['hetd']['HeuresService']['valeur'] = $this->intervenant['serviceDu'];
+
+        }
     }
 
 

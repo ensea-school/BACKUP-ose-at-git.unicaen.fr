@@ -33,12 +33,6 @@ class AfficheurService
 
     public function resultatToJson(FormuleResultatIntervenant $fr): array
     {
-        /*$fr = new FormuleResultatIntervenant();
-        //$fr->setHeuresServiceStatutaire(192);
-        $fr->setHeuresServiceFi(50);
-        $fr->setHeuresComplFc(48);
-        $fr->setHeuresPrimes(50);*/
-
         $hasServiceStatutaire   = ($fr->getHeuresServiceStatutaire() > 0) || $fr->getHeures('service') > 0;
         $hasModificationService = abs($fr->getHeuresServiceStatutaire() - $fr->getHeuresServiceModifie()) > 0.01;
         $hasNonPayable          = $fr->getHeures('non-payable') > 0.0;
@@ -117,7 +111,10 @@ class AfficheurService
                 }
             }
         }
-
+        //Mécanique d'arrondis du total si écart entre service du et total heure est de 0.01 HETD
+        if ($data['heures']['total']['total'] > 0 && $data['serviceDu'] > 0 && abs($data['heures']['total']['total'] - $data['serviceDu']) <= 0.01) {
+            $data['heures']['total']['total'] = $data['serviceDu'];
+        }
         return $data;
     }
 

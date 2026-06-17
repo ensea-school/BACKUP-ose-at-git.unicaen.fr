@@ -50,6 +50,7 @@ OSE [24.15]
 * Ajout d'une commande pour mettre à jour le champs ids des structures
 * Ajout filtre structure pour les demandes de mise en paiement par lot des intervenants (#66596)
 * Ne pas tenir compte des types interventions par statut pour le calcul des HETD lorsqu'ils sont historisés (#66758)
+* Correction sur l'arrondis des totaux HETD dans la page service réalisé et détails HETD (#66537)
 
 # OSE 24.15 (28/04/26)
 

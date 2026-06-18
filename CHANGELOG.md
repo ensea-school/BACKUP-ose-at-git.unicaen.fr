@@ -1,6 +1,6 @@
 # Version stable
 
-OSE [24.15]
+OSE [24.16]
 
 
 # OSE 25 (à venir)
@@ -42,7 +42,7 @@ OSE [24.15]
 
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
-# OSE 24.16 (à venir)
+# OSE 24.16 (18/06/2026)
 
 ## Nouveautés
 

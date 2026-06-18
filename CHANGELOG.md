@@ -48,6 +48,7 @@ OSE [24.15]
 
 * Nouvelle Montpellier (#65128)
 * Nouvelle formule de ENGEES (#66165)
+* Ajout d'une clé de configuration 'is_redirected' pour activer ou desactiver la redirection d'email
 
 ## Corrections
 
@@ -58,6 +59,8 @@ OSE [24.15]
 * Correction sur l'arrondis des totaux HETD dans la page service réalisé et détails HETD (#66537)
 * Correction formule de Paris 8 (#48203)
 * Correction formule Nanterre (#66492)
+* Correction mineure sur l'affichage des structures hierarchisé (#66726)
+* Tentative de correction pour l'erreur d'affichage des contrats pour structure 'null'
 
 # OSE 24.15 (28/04/26)
 

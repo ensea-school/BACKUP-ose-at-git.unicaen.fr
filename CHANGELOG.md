@@ -44,6 +44,11 @@ OSE [24.15]
 
 # OSE 24.16 (à venir)
 
+## Nouveautés
+
+* Nouvelle Montpellier (#65128)
+* Nouvelle formule de ENGEES (#66165)
+
 ## Corrections
 
 * Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400)
@@ -51,6 +56,8 @@ OSE [24.15]
 * Ajout filtre structure pour les demandes de mise en paiement par lot des intervenants (#66596)
 * Ne pas tenir compte des types interventions par statut pour le calcul des HETD lorsqu'ils sont historisés (#66758)
 * Correction sur l'arrondis des totaux HETD dans la page service réalisé et détails HETD (#66537)
+* Correction formule de Paris 8 (#48203)
+* Correction formule Nanterre (#66492)
 
 # OSE 24.15 (28/04/26)
 

@@ -16,7 +16,7 @@
         "twbs/bootstrap"                   : "5.0.2",
         "components/jquery"                : "3.7.1",
         "components/font-awesome"          : "6.5.2",
-        "tinymce/tinymce"                  : "7.6.0",
+        "tinymce/tinymce"                  : "7.9.3",
         "snapappointments/bootstrap-select": "1.14.0-beta3",
         "datatables.net/datatables.net-bs5": "2.1.8",
         "vakata/jstree"                    : "3.3.17",

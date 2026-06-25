@@ -1,6 +1,6 @@
 # Version stable
 
-OSE [24.16]
+OSE [24.17]
 
 
 # OSE 25 (à venir)
@@ -41,6 +41,14 @@ OSE [24.16]
 * Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
+
+# OSE 24.17 (25/06/2026)
+
+## Notes de mise à jour
+
+Cette version n’apporte pas de nouveauté ni de correction fonctionnelle.
+
+Il s’agit d’une version dédiée à la mise à jour des dépendances, certaines bibliothèques présentant des vulnérabilités nécessitant la publication d’une nouvelle version mineure, rapprochée de la 24.16.
 
 # OSE 24.16 (18/06/2026)
 

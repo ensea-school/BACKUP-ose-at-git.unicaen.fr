@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e658865d19f567c81b0d7c9a6a1cad0a",
+    "content-hash": "99a683296ca9417e5fe3f3a3a0c6cf29",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -300,20 +300,27 @@
         },
         {
             "name": "connecteur-ose/pegase",
-            "version": "dev-master",
+            "version": "dev-pegase-webservice",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/open-source/connecteur-ose/pegase.git",
-                "reference": "720f974cbb6f89aad15264e6468674039803590c"
+                "reference": "678bb5f827ad4e4ba8cf7ff5601f1e5298806907"
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.3",
+                "guzzlehttp/psr7": "^1.7 || ^2.0",
+                "php": "^8.1",
+                "unicaen/bddadmin": "^1"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Connecteur\\Pegase\\": "src/"
+                    "Connecteur\\Pegase\\": "src/",
+                    "PegaseOdf\\": "src/pegase-odf/"
                 }
             },
             "description": "Connecteur Pégase pour OSE",
-            "time": "2026-03-25T10:26:44+00:00"
+            "time": "2026-06-15T09:33:58+00:00"
         },
         {
             "name": "datatables.net/datatables.net",
@@ -4301,32 +4308,32 @@
         },
         {
             "name": "laminas/laminas-mvc-plugin-prg",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mvc-plugin-prg.git",
-                "reference": "b51e7ba892e52c6a80ce8c7dc7f8c429e3937516"
+                "reference": "4c2062ad9f19d6c2a4430357300d42ebc0485bd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-prg/zipball/b51e7ba892e52c6a80ce8c7dc7f8c429e3937516",
-                "reference": "b51e7ba892e52c6a80ce8c7dc7f8c429e3937516",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc-plugin-prg/zipball/4c2062ad9f19d6c2a4430357300d42ebc0485bd3",
+                "reference": "4c2062ad9f19d6c2a4430357300d42ebc0485bd3",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-mvc": "^3.3.3",
                 "laminas/laminas-session": "^2.12.1",
                 "laminas/laminas-stdlib": "^3.10.1",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
             },
             "conflict": {
                 "zendframework/zend-mvc-plugin-prg": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~2.5.0",
+                "laminas/laminas-coding-standard": "~3.1.0",
                 "phpunit/phpunit": "^10.4",
-                "psalm/plugin-phpunit": "^0.18.0",
-                "vimeo/psalm": "^5.16"
+                "psalm/plugin-phpunit": "^0.19.0",
+                "vimeo/psalm": "^6.16"
             },
             "type": "library",
             "extra": {
@@ -4359,11 +4366,11 @@
             },
             "funding": [
                 {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
+                    "url": "https://crowdfunding.linuxfoundation.org/initiatives/laminas-project",
+                    "type": "custom"
                 }
             ],
-            "time": "2023-12-01T06:06:12+00:00"
+            "time": "2026-06-23T12:20:39+00:00"
         },
         {
             "name": "laminas/laminas-navigation",

@@ -43,6 +43,25 @@ OSE [24.17]
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
 ---
+# OSE 24.18 A venir
+
+## Nouveautés
+* Connecteur Pégase basé sur les API
+
+## Améliorations
+* Le plafond 15 ne comptabilise plus les heures qui ne sont calculer ni en HC ni en service
+
+## Notes de mise à jour
+
+Si vous utilisez le connecteur Pégase basé sur DRE, pensez bien à couper votre synchronisation avant de faire la mise à jour. 
+Si vous souhaitez continuez d'utiliser le connecteur DRE et ne pas passer sur le nouveau connecteur suite à la mise à jour il vous faudra :
+- modifier le composer.json pour avoir ```"connecteur-ose/pegase" : "dev-master"``` ligne 66
+- Lancer la commande
+```bash
+  php composer.phar update connecteur-ose/pegase
+  ./bin/ose clear-cache
+```
+Cette procédure sera a éxécuter à chaque mise à jour tant que vous resterez sur la version DRE du connecteur.
 
 # OSE 24.17 (25/06/2026)
 

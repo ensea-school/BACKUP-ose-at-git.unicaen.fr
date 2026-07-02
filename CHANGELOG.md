@@ -49,7 +49,10 @@ OSE [24.17]
 * Connecteur Pégase basé sur les API
 
 ## Améliorations
-* Le plafond 15 ne comptabilise plus les heures qui ne sont calculer ni en HC ni en service
+* Le sql proposé pour le plafond 15 ne comptabilise plus les heures qui ne sont calculer ni en HC ni en service
+
+## Corrections
+* Séléctionner un niveau n'empeche plus d'exporter une formation
 
 ## Notes de mise à jour
 

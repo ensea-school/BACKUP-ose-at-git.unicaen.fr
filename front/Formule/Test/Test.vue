@@ -13,7 +13,7 @@
                 <tr>
                     <th>Formule</th>
                     <td class="saisie"><select v-model="intervenant.formule" class="dinput">
-                        <option v-for="formule in formules" :value="formule.id">{{ formule.libelle }}</option>
+                        <option v-for="formule in sortedFormules" :value="formule.id">{{ formule.libelle }}</option>
                     </select></td>
                 </tr>
                 <tr>
@@ -704,6 +704,10 @@ export default {
         },
     },
     computed: {
+        sortedFormules()
+        {
+            return Object.values(this.formules).sort((a, b) => a.libelle.localeCompare(b.libelle, 'fr', {sensitivity: 'base'}));
+        },
         filteredTypesIntervention()
         {
             let ti = Object.values(this.typesIntervention).filter(value => value);

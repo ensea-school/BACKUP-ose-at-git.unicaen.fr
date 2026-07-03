@@ -198,7 +198,6 @@ class ContratService extends AbstractEntityService
                         $signatureFlowDatas['label'] .= " - " . $intervenant->__toString();
 
 
-                        $recipients = [];
                         //On regarde si on a le paramétrage hook_recepient dans la config
                         //pour forcer l'envoie toujours à la même personne
                         $recipientsHook = [];
@@ -217,6 +216,8 @@ class ContratService extends AbstractEntityService
                         //On doit aller chercher les destinataires pour la signature électronique
 
                         foreach ($signatureFlowDatas['steps'] as $key => $step) {
+                            $recipients = [];
+
                             //Si l'étape de process concerne un rôle de l'application on va chercher les utilisateurs de ce role.
                             if (in_array($step['recipient_method'], ['by_etablissement', 'by_etablissement_and_intervenant']) && empty($step['recipients'])) {
                                 $role = '';

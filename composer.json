@@ -35,7 +35,7 @@
         "unicaen/bddadmin"                 : "1.5.0",
         "unicaen/signature"                : "1.0.6",
         "connecteur-ose/actul"             : "dev-master",
-        "connecteur-ose/pegase"            : "dev-master"
+        "connecteur-ose/pegase"            : "dev-pegase-webservice"
     },
     "autoload"         : {
         "psr-4": {

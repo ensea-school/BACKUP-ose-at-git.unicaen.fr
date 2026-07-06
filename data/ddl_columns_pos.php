@@ -2717,6 +2717,7 @@ return [
         'LASTUPDATE',
         'SIGNATUREFLOW_ID',
         'LABEL',
+        'DESCRIPTION',
     ],
     'UNICAEN_SIGNATURE_PROCESS_STEP'      => [
         'ID',

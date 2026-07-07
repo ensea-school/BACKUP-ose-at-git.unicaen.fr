@@ -47,12 +47,16 @@ OSE [24.17]
 
 ## Nouveautés
 * Connecteur Pégase basé sur les API
+* Dans le cas de la signature électronique (ESUP Signature) il est maintenant possible de désactiver manuellement la signature électronique pour un intervenant donné et passer sur le dépôt manuel du contrat signé (#62163)
+* Nouvelles formules : Rouen, La Rochelle
 
 ## Améliorations
 * Le sql proposé pour le plafond 15 ne comptabilise plus les heures qui ne sont calculer ni en HC ni en service
 
 ## Corrections
 * Séléctionner un niveau n'empeche plus d'exporter une formation
+* Correction pour rendre obligatoire la saisie d'un objet mail dans l'envoi de mail via les notes de l'intervenant (#67039)
+* Correction sur l'envoi des signataires dans esup-signature (#65655)
 
 ## Notes de mise à jour
 

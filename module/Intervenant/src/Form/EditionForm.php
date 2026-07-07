@@ -70,6 +70,7 @@ class EditionForm extends AbstractForm
         'syncStructure'      => ['type' => 'bool'],
         'syncPec'            => ['type' => 'bool'],
         'irrecevable'        => ['type' => 'bool'],
+        'desactiverSignature' => ['type' => 'bool'],
         'montantIndemniteFc' => ['type' => 'float'],
         'validiteDebut'      => ['type' => \DateTime::class],
         'validiteFin'        => ['type' => \DateTime::class],
@@ -385,6 +386,14 @@ class EditionForm extends AbstractForm
             ],
             'type'    => 'Checkbox',
         ]);
+
+        $this->add([
+                       'name' => 'desactiverSignature',
+                       'options' => [
+                           'label' => 'Désactiver la signature électronique pour cet intervenant',
+                       ],
+                       'type' => 'Checkbox',
+                   ]);
 
         $this->add([
             'name' => 'id',

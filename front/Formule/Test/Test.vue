@@ -635,6 +635,7 @@ export default {
             tauxAutre5Visibility: false,
             resMode: 'hetd',
             debug: {},
+            testId: this.id || 0,
             intervenant: {
                 formule: undefined,
                 tauxCmServiceDu: 1.5,
@@ -725,9 +726,10 @@ export default {
         charger()
         {
             unicaenVue.axios.get(
-                unicaenVue.url("formule-test/saisir-data/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0})
+                unicaenVue.url("formule-test/saisir-data/:id", {id: this.testId})
             ).then(response => {
                 this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
+                this.testId = this.intervenant.id || this.testId;
                 this.volumesHoraires = response.data.volumesHoraires;
                 this.debug = {};
                 this.addVolumeHoraire();
@@ -737,13 +739,14 @@ export default {
         enregistrer()
         {
             unicaenVue.axios.post(
-                unicaenVue.url("formule-test/enregistrer/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0}),
+                unicaenVue.url("formule-test/enregistrer/:id", {id: this.testId}),
                 {
                     intervenant: this.intervenant,
                     volumesHoraires: this.volumesHoraires,
                 }
             ).then(response => {
                 this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
+                this.testId = this.intervenant.id || this.testId;
                 this.volumesHoraires = response.data.volumesHoraires;
                 if (response.data.debug) {
                     this.debug = response.data.debug;
@@ -757,7 +760,7 @@ export default {
         calculer()
         {
             unicaenVue.axios.post(
-                unicaenVue.url("formule-test/enregistrer/:id", {id: this.id ? this.id : this.intervenant.id ? this.intervenant.id : 0}),
+                unicaenVue.url("formule-test/enregistrer/:id", {id: this.testId}),
                 {
                     intervenant: this.intervenant,
                     volumesHoraires: this.volumesHoraires,
@@ -860,7 +863,10 @@ export default {
                 try {
                     const jsonContent = JSON.parse(e.target.result);
 
-                    jsonContent.intervenant.id = this.intervenant.id;
+                    jsonContent.intervenant.id = this.testId || undefined;
+                    for (const volumeHoraire of jsonContent.volumesHoraires) {
+                        delete volumeHoraire.id;
+                    }
 
                     this.intervenant = jsonContent.intervenant;
                     this.volumesHoraires = jsonContent.volumesHoraires;

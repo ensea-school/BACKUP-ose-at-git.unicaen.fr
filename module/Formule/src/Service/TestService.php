@@ -208,7 +208,7 @@ class TestService extends AbstractEntityService
     public function fromJson(FormuleTestIntervenant $formuleTestIntervenant, array $intervenantData, array $volumesHorairesData): void
     {
         $intervenantHydrator = new GenericHydrator($this->getEntityManager());
-        $intervenantHydrator->spec($formuleTestIntervenant, ['arrondisseurTrace']);
+        $intervenantHydrator->spec($formuleTestIntervenant, ['id', 'arrondisseurTrace']);
         $intervenantHydrator->hydrate($intervenantData, $formuleTestIntervenant);
 
         $volumeHoraireHydrator = new GenericHydrator($this->getEntityManager());

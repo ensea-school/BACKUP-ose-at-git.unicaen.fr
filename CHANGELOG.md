@@ -43,13 +43,15 @@ OSE [24.17]
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
 ---
-# OSE 24.18 A venir
+
+# OSE 24.18 (A venir)
 
 ## Nouveautés
-* Connecteur Pégase basé sur les API
+* /!\ Connecteur Pégase basé sur les API 
 
 ## Améliorations
 * Le sql proposé pour le plafond 15 ne comptabilise plus les heures qui ne sont calculer ni en HC ni en service
+* Nouvelle de formule UGA (#67184)
 
 ## Corrections
 * Séléctionner un niveau n'empeche plus d'exporter une formation

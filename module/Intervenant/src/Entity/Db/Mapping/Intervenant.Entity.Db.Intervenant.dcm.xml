@@ -101,6 +101,7 @@
         <field name="syncPec" type="boolean" column="SYNC_PEC" nullable="false"/>
         <field name="syncUtilisateurCode" type="boolean" column="SYNC_UTILISATEUR_CODE" nullable="false"/>
         <field name="irrecevable" type="boolean" column="IRRECEVABLE" nullable="true"/>
+        <field name="desactiverSignature" type="boolean" column="DESACTIVER_SIGNATURE" nullable="true"/>
         <field name="numeroPec" type="string" column="NUMERO_PEC" length="255" nullable="true"/>
 
 

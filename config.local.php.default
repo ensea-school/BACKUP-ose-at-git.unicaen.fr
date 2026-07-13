@@ -235,9 +235,11 @@ return [
          * reçoive le mail à sa place).
          * Fournir sous forme de tableau
          * Pour ne pas activer la redirection des mails, laissez vide le tableau ('redirection' => [],).
+         * Pour activer la redirection vers l’adresse e-mail de l’utilisateur courant, renseigner la clé is_redirected à true et laisser le champ redirection vide.
          */
-        'redirection'    => ['mail@mon-domaine.fr'],
 
+        'is_redirected' => true,
+        'redirection'    => ['mail@mon-domaine.fr'],
         /* Envoi de mail activé ou non (false = mails envoyés, true = système d'envoi de mails inactif) */
         'envoiDesactive' => false,
     ],

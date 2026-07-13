@@ -13,7 +13,7 @@
                 <tr>
                     <th>Formule</th>
                     <td class="saisie"><select v-model="intervenant.formule" class="dinput">
-                        <option v-for="formule in formules" :value="formule.id">{{ formule.libelle }}</option>
+                        <option v-for="formule in sortedFormules" :value="formule.id">{{ formule.libelle }}</option>
                     </select></td>
                 </tr>
                 <tr>
@@ -628,6 +628,7 @@ export default {
         return {
             indexUrl: unicaenVue.url('formule-test'),
             dataUrl: unicaenVue.url('formule-test/data'),
+            currentId: this.id ? this.id : 0,
             tauxAutre1Visibility: true,
             tauxAutre2Visibility: false,
             tauxAutre3Visibility: false,
@@ -704,6 +705,10 @@ export default {
         },
     },
     computed: {
+        sortedFormules()
+        {
+            return Object.values(this.formules).sort((a, b) => a.libelle.localeCompare(b.libelle, 'fr', {sensitivity: 'base'}));
+        },
         filteredTypesIntervention()
         {
             let ti = Object.values(this.typesIntervention).filter(value => value);
@@ -723,59 +728,54 @@ export default {
         }
     },
     methods: {
+        testUrl(route)
+        {
+            return unicaenVue.url(route + "/:id", {id: this.currentId});
+        },
+        updateData(response)
+        {
+            this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
+            this.volumesHoraires = response.data.volumesHoraires;
+            this.currentId = this.intervenant.id ? this.intervenant.id : this.currentId;
+            if (response.data.debug) {
+                this.debug = response.data.debug;
+            } else {
+                this.debug = {};
+            }
+            this.addVolumeHoraire();
+            this.updateStructures();
+        },
         charger()
         {
             unicaenVue.axios.get(
-                unicaenVue.url("formule-test/saisir-data/:id", {id: this.testId})
+                this.testUrl("formule-test/saisir-data")
             ).then(response => {
-                this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
-                this.testId = this.intervenant.id || this.testId;
-                this.volumesHoraires = response.data.volumesHoraires;
-                this.debug = {};
-                this.addVolumeHoraire();
-                this.updateStructures();
+                this.updateData(response);
             });
         },
         enregistrer()
         {
             unicaenVue.axios.post(
-                unicaenVue.url("formule-test/enregistrer/:id", {id: this.testId}),
+                this.testUrl("formule-test/enregistrer"),
                 {
                     intervenant: this.intervenant,
                     volumesHoraires: this.volumesHoraires,
                 }
             ).then(response => {
-                this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
-                this.testId = this.intervenant.id || this.testId;
-                this.volumesHoraires = response.data.volumesHoraires;
-                if (response.data.debug) {
-                    this.debug = response.data.debug;
-                } else {
-                    this.debug = {};
-                }
-                this.addVolumeHoraire();
-                this.updateStructures();
+                this.updateData(response);
             });
         },
         calculer()
         {
             unicaenVue.axios.post(
-                unicaenVue.url("formule-test/enregistrer/:id", {id: this.testId}),
+                this.testUrl("formule-test/enregistrer"),
                 {
                     intervenant: this.intervenant,
                     volumesHoraires: this.volumesHoraires,
                     simpleCalcul: true
                 }
             ).then(response => {
-                this.intervenant = this.dropTauxNonUtilises(response.data.intervenant);
-                this.volumesHoraires = response.data.volumesHoraires;
-                if (response.data.debug) {
-                    this.debug = response.data.debug;
-                } else {
-                    this.debug = {};
-                }
-                this.addVolumeHoraire();
-                this.updateStructures();
+                this.updateData(response);
             });
         },
         exporter: function () {
@@ -870,6 +870,10 @@ export default {
 
                     this.intervenant = jsonContent.intervenant;
                     this.volumesHoraires = jsonContent.volumesHoraires;
+                    delete this.intervenant.id;
+                    this.volumesHoraires.forEach(volumeHoraire => {
+                        delete volumeHoraire.id;
+                    });
                     this.updateStructures();
                 } catch (error) {
                     console.error("Erreur lors de l'analyse du contenu JSON :", error);

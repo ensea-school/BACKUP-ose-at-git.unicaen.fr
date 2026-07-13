@@ -297,6 +297,18 @@ return [
             'position'    => 17,
             'commentaire' => NULL,
         ],
+        'DESACTIVER_SIGNATURE'        => [
+            'name'        => 'DESACTIVER_SIGNATURE',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 66,
+            'commentaire' => NULL,
+        ],
         'DISCIPLINE_ID'               => [
             'name'        => 'DISCIPLINE_ID',
             'type'        => 'int',

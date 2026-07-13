@@ -128,6 +128,7 @@ class NoteController extends AbstractController
         $form = $this->getFormMailerIntervenant()->setIntervenant($intervenant)->initForm();
 
         if ($this->getRequest()->isPost()) {
+
             try {
                 $data    = $this->getRequest()->getPost();
                 $from    = $data['from'];
@@ -136,14 +137,19 @@ class NoteController extends AbstractController
                 $content = $data['content'];
                 $copy    = $data['copy'];
 
+                if (empty($data['subject'])) {
+                    throw new \Exception('Vous devez préciser un objet au mail');
+                    //$this->flashMessenger()->addErrorMessage('Vous devez préciser un objet au mail');
+                    //exit;
+                }
+
                 $mail = new Email();
                 $mail->from($from);
                 $mail->to($to);
                 $mail->subject($subject);
                 $mail->text($content);
                 $mail->html($content);
-                if(!empty($copy))
-                {
+                if (!empty($copy)) {
                     $mail->cc($copy);
                 }
                 $this->getMailService()->send($mail);
@@ -153,6 +159,8 @@ class NoteController extends AbstractController
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
+
+
         }
 
         return compact('intervenant', 'form', 'title');

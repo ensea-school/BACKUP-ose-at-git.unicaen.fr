@@ -27,14 +27,13 @@ class MailServiceFactory
         $context       = $container->get(ContextService::class);
         $email         = $context->getUtilisateur()?->getEmail();
         $is_redirected = $config['module']['default']['is_redirected_ose'];
+        $redirectTo    = $config['module']['default']['redirect_to'];
         if ($is_redirected) {
-            $redirectTo    = $config['module']['default']['redirect_to'];
             if ($email && empty($redirectTo)) {
                 $config['module']['default']['redirect_to'] = $email;
             }
-        } else {
-            $config['module']['default']['redirect_to'] = [];
         }
+        $config['module']['default']['redirect'] = !empty($config['module']['default']['redirect_to']);
 
 
         $transport = new EsmtpTransport(host: $config['transport_options']['host'], port: $config['transport_options']['port']);

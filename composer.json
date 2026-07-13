@@ -42,7 +42,7 @@
         "twbs/bootstrap"                     : "5.0.*",
         "components/jquery"                  : "3.7.*",
         "components/font-awesome"            : "6.5.*",
-        "tinymce/tinymce"                    : "7.6.*",
+        "tinymce/tinymce"                  : "7.9.3",
         "snapappointments/bootstrap-select"  : "1.14.0-beta3",
         "datatables.net/datatables.net-bs5"  : "2.1.*",
         "vakata/jstree"                      : "3.3.*",
@@ -52,7 +52,7 @@
         "unicaen/app"                        : "8.0.0",
         "unicaen/authentification"           : "8.0.0",
         "unicaen/mail"                       : "7.3.2",
-        "unicaen/signature"                  : "1.0.7",
+        "unicaen/signature"                  : "2.0.0",
 
         "unicaen/code"                       : "6.6.2",
         "unicaen/import"                     : "6.1.0",
@@ -63,7 +63,7 @@
         "unicaen/bddadmin"                   : "1.7.0",
 
         "connecteur-ose/actul"               : "dev-master",
-        "connecteur-ose/pegase"              : "dev-master"
+        "connecteur-ose/pegase"              : "dev-pegase-webservice"
     },
     "replace"          : {
         "laminas/laminas-cache"                           : "*",

@@ -83,7 +83,7 @@ class LigneEnseignementViewHelper extends AbstractHtmlElement
             $out .= '<td>' . $this->renderIntervenant($service->getIntervenant()) . '</td>';
         }
         if ($liste->getColumnVisibility('structure-aff')) {
-            if ($service->getIntervenant()->getStatut()->estPermanent()) {
+            if ($service->getIntervenant()->getStructure() != null) {
                 $out .= '<td>' . $this->renderStructure($service->getIntervenant()->getStructure()) . "</td>\n";
             } else {
                 $out .= "<td>&nbsp;</td>\n";

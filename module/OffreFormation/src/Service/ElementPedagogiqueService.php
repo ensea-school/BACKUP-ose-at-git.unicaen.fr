@@ -172,7 +172,9 @@ where rang = 1 AND rownum <= :limit
         }
 
         return $this->getRepo()->findOneBy(['code'  => $code,
-                                            'annee' => $annee->getId()]);
+                                            'annee' => $annee->getId(),
+            'histoDestruction' => null,
+        ]);
     }
 
 

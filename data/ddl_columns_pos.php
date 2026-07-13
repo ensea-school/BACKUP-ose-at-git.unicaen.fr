@@ -873,6 +873,7 @@ return [
         'SITUATION_MATRIMONIALE_DATE',
         'SITUATION_MATRIMONIALE_ID',
         'FORMULE_CALCUL_ARRONDISSEUR',
+        'DESACTIVER_SIGNATURE',
     ],
     'INTERVENANT_DOSSIER'                 => [
         'ID',
@@ -1121,6 +1122,7 @@ return [
         'NUMERO',
         'OK',
         'MESSAGE_ERREUR',
+        'OK',
     ],
     'PLAFOND_ETAT'                        => [
         'ID',
@@ -2737,6 +2739,7 @@ return [
         'LASTUPDATE',
         'SIGNATUREFLOW_ID',
         'LABEL',
+        'DESCRIPTION',
     ],
     'UNICAEN_SIGNATURE_PROCESS_STEP'      => [
         'ID',

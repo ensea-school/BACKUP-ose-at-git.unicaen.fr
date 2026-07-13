@@ -190,7 +190,6 @@ class ServiceService extends AbstractEntityService
 
         $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
         $serviceIntervenant->finderByStructure($structure, $qb);
-        $serviceIntervenant->finderByType($this->getServiceTypeIntervenant()->getPermanent(), $qb);
 
         return $qb;
     }

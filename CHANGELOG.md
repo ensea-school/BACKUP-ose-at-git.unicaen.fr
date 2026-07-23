@@ -54,6 +54,8 @@ OSE [24.17]
 ## Améliorations
 * Le sql proposé pour le plafond 15 ne comptabilise plus les heures qui ne sont calculer ni en HC ni en service
 * Nouvelle de formule UGA (#67184)
+* Nouvelle formule de Havre (#66751)
+* Correction au niveau de la PEC/REN Siham et l'alimenation des la listes des composantes d'affectation (#67403)
 
 ## Corrections
 * Séléctionner un niveau n'empeche plus d'exporter une formation

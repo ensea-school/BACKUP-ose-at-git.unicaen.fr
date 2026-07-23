@@ -56,6 +56,7 @@ OSE [24.17]
 * Nouvelle de formule UGA (#67184)
 * Nouvelle formule de Havre (#66751)
 * Correction au niveau de la PEC/REN Siham et l'alimenation des la listes des composantes d'affectation (#67403)
+* Correction pour appliquer la même règle que pour la date de fin de contrat pour la clôture du dossier dans le cadre des missions étudiantes (#67129)
 
 ## Corrections
 * Séléctionner un niveau n'empeche plus d'exporter une formation

@@ -910,11 +910,11 @@ class SihamConnecteur implements ConnecteurRhInterface
             $result = $this->siham->recupererListeUO($params);
 
             if (!empty($result)) {
-                $uo = array_merge($uo, $result);
+                $uo = array_replace($uo, $result);
             }
 
         }
-        ksort($uo);
+        asort($uo);
 
         return $uo;
     }

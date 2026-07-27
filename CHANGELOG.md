@@ -55,6 +55,7 @@ OSE [24.17]
 * Le sql proposé pour le plafond 15 ne comptabilise plus les heures qui ne sont calculer ni en HC ni en service
 * Nouvelle de formule UGA (#67184)
 * Nouvelle formule de Havre (#66751)
+* Adaptation de la formule de Montpellier (#67329)
 * Correction au niveau de la PEC/REN Siham et l'alimenation des la listes des composantes d'affectation (#67403)
 * Correction pour appliquer la même règle que pour la date de fin de contrat pour la clôture du dossier dans le cadre des missions étudiantes (#67129)
 * Possiblité de payer le service référentiel avec les demandes de mise en paiement en lot (#66596)

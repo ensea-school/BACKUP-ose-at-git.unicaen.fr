@@ -16,18 +16,6 @@ ENV PATH="/opt/unoconvert/bin:${PATH}"
 
 # Met à jour la liste des paquets
 RUN apk update
-
-RUN apk add --no-cache \
-        python3 \
-        py3-pip \
-        py3-virtualenv \
-    && python3 -m venv /opt/unoconvert \
-    && /opt/unoconvert/bin/pip install \
-        --no-cache-dir \
-        "unoserver==${UNOSERVER_VERSION}" \
-    && ln -s /opt/unoconvert/bin/unoconvert /usr/local/bin/unoconvert \
-    && ln -s /opt/unoconvert/bin/unoping /usr/local/bin/unoping
-
 #Nécessaire depuis nouvelle version php:8.2-fpm-alpine
 RUN apk add --no-cache \
     autoconf \

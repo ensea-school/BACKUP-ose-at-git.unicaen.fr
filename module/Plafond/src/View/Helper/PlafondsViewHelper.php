@@ -115,13 +115,16 @@ class PlafondsViewHelper extends AbstractHtmlElement
         $text = '';
 
         $max = $plafond->getPlafond() + $plafond->getDerogation();
+
+
+        $unite = ($plafond->isPlafondEnEuros()) ? '€' : 'h';
         if ($plafond->getHeures() > $max) {
             $max = $plafond->getHeures();
             if ($plafond->getHeures() > 0) {
                 if ($plafond->getPlafond() == 0) {
-                    $text = floatToString($plafond->getHeures()) . 'h pour aucune autorisée';
+                    $text = number_format(floatToString($plafond->getHeures()), 0, ',', ' ') . ' ' . $unite . ' pour aucune autorisée';
                 } else {
-                    $text = floatToString($plafond->getHeures()) . 'h pour ' . floatToString($plafond->getPlafond() + $plafond->getDerogation()) . ' max.';
+                    $text = number_format(floatToString($plafond->getHeures()), 0, ',', ' ') . ' ' . $unite . ' pour ' . number_format(floatToString($plafond->getPlafond() + $plafond->getDerogation()), 0, ',', ' ') . ' ' . $unite . ' max.';
                 }
             }
 

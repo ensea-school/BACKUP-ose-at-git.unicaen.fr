@@ -28,9 +28,16 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
         $this->setLabels([
             'numero'  => 'Numéro (3 chiffres max.)',
             'libelle' => 'Libellé',
+                             'plafondEnEuros' => "Plafond en euros et non en HETD",
         ]);
 
         $this->remove('plafondPerimetre');
+        $this->remove('ok');
+        $this->add([
+                       'name' => 'ok',
+                       'type' => 'hidden',
+                   ]);
+
         $this->add([
             'name'       => 'plafondPerimetre',
             'options'    => [

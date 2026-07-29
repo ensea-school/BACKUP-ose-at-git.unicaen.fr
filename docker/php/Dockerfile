@@ -5,14 +5,28 @@ ARG APP_ENV
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
 ARG NO_PROXY
+ARG UNOSERVER_VERSION=3.7
 
 ENV TZ=$TZ
 ENV HTTP_PROXY=$HTTP_PROXY
 ENV HTTPS_PROXY=$HTTPS_PROXY
 ENV NO_PROXY=$NO_PROXY
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH="/opt/unoconvert/bin:${PATH}"
 
 # Met à jour la liste des paquets
 RUN apk update
+
+RUN apk add --no-cache \
+        python3 \
+        py3-pip \
+        py3-virtualenv \
+    && python3 -m venv /opt/unoconvert \
+    && /opt/unoconvert/bin/pip install \
+        --no-cache-dir \
+        "unoserver==${UNOSERVER_VERSION}" \
+    && ln -s /opt/unoconvert/bin/unoconvert /usr/local/bin/unoconvert \
+    && ln -s /opt/unoconvert/bin/unoping /usr/local/bin/unoping
 
 #Nécessaire depuis nouvelle version php:8.2-fpm-alpine
 RUN apk add --no-cache \

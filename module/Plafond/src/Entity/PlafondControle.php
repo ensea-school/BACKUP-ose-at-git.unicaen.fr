@@ -31,6 +31,8 @@ class PlafondControle
 
     private float  $derogation  = 0;
 
+    private bool $plafondEnEuros = false;
+
 
 
     /**
@@ -289,6 +291,22 @@ class PlafondControle
 
 
 
+    public function isPlafondEnEuros(): bool
+    {
+        return $this->plafondEnEuros;
+    }
+
+
+
+    public function setPlafondEnEuros(bool $plafondEnEuros): PlafondControle
+    {
+        $this->plafondEnEuros = $plafondEnEuros;
+
+        return $this;
+    }
+
+
+
     /**
      * The __toString method allows a class to decide how it will react when it is converted to a string.
      *
@@ -297,13 +315,15 @@ class PlafondControle
      */
     public function __toString()
     {
-        $errStr = 'Le plafond "%s" a été dépassé. Il est en effet de %s heures pour %s heures saisies.';
+
+        $unite  = ($this->isPlafondEnEuros()) ? '€' : 'heures';
+        $errStr = 'Le plafond "%s" a été dépassé. Il est en effet de %s ' . $unite . ' pour %s ' . $unite . ' saisies.';
 
         return sprintf(
             $errStr,
             $this->getMessage(),
-            floatToString(round($this->getPlafond()+$this->getDerogation(),2)),
-            floatToString($this->getHeures())
+            number_format(floatToString(round($this->getPlafond() + $this->getDerogation(), 2)), 0, ',', ' '),
+            number_format(floatToString($this->getHeures()), 0, ',', ' ')
         );
     }
 
@@ -345,7 +365,12 @@ class PlafondControle
         if (isset($a['DEROGATION'])) {
             $pc->setDerogation((float)$a['DEROGATION']);
         }
+        if (isset($a['PLAFOND_EN_EUROS'])) {
+            $pc->setPlafondEnEuros((bool)$a['PLAFOND_EN_EUROS']);
+        }
 
         return $pc;
     }
+
+
 }

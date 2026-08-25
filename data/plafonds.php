@@ -67,5 +67,11 @@ return [
             'message'   => 'Durée du travail dépassant le maximum autorisé (a. D811-3) pour :sujet',
             'requete'   => file_get_contents($sqlDir . '19.sql'),
         ],
+        21 => [
+            'libelle' => 'Plafond enveloppe en € des missions étudiantes par composante',
+            'perimetre' => 'structure',
+            'message' => 'Enveloppe en € des missions étudiantes pour :sujet',
+            'requete' => file_get_contents($sqlDir . '21.sql'),
+        ],
     ],
 ];

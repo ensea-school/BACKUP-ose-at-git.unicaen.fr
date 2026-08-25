@@ -21,6 +21,8 @@ class Plafond
 
     protected ?string    $message = null;
 
+    protected bool $plafondEnEuros = false;
+
     protected string     $requete = '';
 
     protected bool $ok = true;
@@ -228,6 +230,22 @@ class Plafond
     public function __toString(): string
     {
         return $this->getLibelle();
+    }
+
+
+
+    public function isPlafondEnEuros(): bool
+    {
+        return $this->plafondEnEuros;
+    }
+
+
+
+    public function setPlafondEnEuros(bool $plafondEnEuros): Plafond
+    {
+        $this->plafondEnEuros = $plafondEnEuros;
+
+        return $this;
     }
 
 }

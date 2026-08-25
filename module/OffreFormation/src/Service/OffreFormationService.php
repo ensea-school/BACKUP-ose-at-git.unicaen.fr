@@ -72,7 +72,7 @@ class OffreFormationService extends AbstractEntityService
               OffreFormation\Entity\Db\Etape e
               JOIN e.structure s
               JOIN e.typeFormation tf
-              JOIN tf.groupe gtf
+              LEFT JOIN tf.groupe gtf
               LEFT JOIN e.elementPedagogique ep
               LEFT JOIN ep.structure epstr
               LEFT JOIN ep.volumeHoraireEns vme
@@ -101,7 +101,7 @@ class OffreFormationService extends AbstractEntityService
             if ($object instanceof Etape) {
                 $n = NiveauEtape::getInstanceFromEtape($object);
                 if ($object->estNonHistorise()) {
-                    $gtf = $object->getTypeFormation()->getGroupe()->getPertinenceNiveau();
+                    $gtf = $object->getTypeFormation()->getGroupe()?->getPertinenceNiveau();
                     if ($gtf) {
                         $niveaux[$n->getId()] = $n;
                     } else {

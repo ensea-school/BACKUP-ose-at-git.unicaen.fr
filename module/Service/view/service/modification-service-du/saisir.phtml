@@ -33,8 +33,20 @@ echo $this->messenger()->addMessagesFromFlashMessenger();
 } ?>
 
 <?php
-$form->setAttribute('id', $formId = uniqid('form-'))->prepare();
+$form->setAttribute('id', $formId = uniqid('form-'));
 $modificationServiceDu = $form->get('fs');
+$collection = $modificationServiceDu->get('modificationServiceDu');
+
+// Les nouvelles lignes ne doivent proposer que les motifs encore actifs.
+$templateMotifElement = $collection->getTargetElement()->get('motif');
+$templateOptions = $templateMotifElement->getValueOptions();
+foreach ($motifsObsoletes as $motifObsoleteId) {
+    unset($templateOptions[$motifObsoleteId]);
+}
+$templateMotifElement->setValueOptions($templateOptions);
+
+// Le prototype des nouvelles lignes est construit pendant prepare().
+$form->prepare();
 ?>
 
 <?php
@@ -42,7 +54,7 @@ echo $this->form()->openTag($form);
 
 //echo $this->formCollection()->setElementHelper($this->formControlGroup())->render($modificationServiceDu->get('modificationServiceDu'));
 echo '<fieldset>' . "\n";
-foreach ($modificationServiceDu->get('modificationServiceDu')->getIterator() as $fieldset) {
+foreach ($collection->getIterator() as $fieldset) {
     $motif = $fieldset->getObject()->getMotif();
     /* @var $object \Service\Entity\Db\ModificationServiceDu */
 
@@ -50,13 +62,19 @@ foreach ($modificationServiceDu->get('modificationServiceDu')->getIterator() as 
     /* @var $motifElement \Laminas\Form\Element\Select */
 
     echo '<fieldset><div class="form-group">';
-    if ($motif && $motif->getHistoDestruction()) {
-        $motifElement->setAttribute('class', $motifElement->getAttribute('class') . ' bg-danger');
-        $motifElement->setValueOptions(array_merge($motifElement->getValueOptions(), [$motif->getId() => $motif->getLibelle() . ' (MOTIF OBSOLÈTE)']));
-        echo $this->formControlGroup($motifElement);
-    } else {
-        echo $this->formControlGroup($motifElement);
+
+    $options = $motifElement->getValueOptions();
+    foreach ($motifsObsoletes as $motifObsoleteId) {
+        unset($options[$motifObsoleteId]);
     }
+
+    if ($motif && $motif->getHistoDestruction()) {
+        $options[$motif->getId()] =
+            $motif->getLibelle();
+    }
+    $motifElement->setValueOptions($options);
+
+    echo $this->formControlGroup($motifElement);
 
     echo $this->formControlGroup($fieldset->get('heures'));
     echo $this->formControlGroup($fieldset->get('commentaires'));

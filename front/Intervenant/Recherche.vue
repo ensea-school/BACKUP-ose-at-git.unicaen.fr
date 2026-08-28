@@ -122,7 +122,8 @@ export default {
 
                 unicaenVue.axios.post(
                     unicaenVue.url("intervenant/recherche-json"), {
-                        term: this.searchTerm
+                        term: this.searchTerm,
+                        types: this.checkedTypes,
                     }
                 )
                     .then(response => {

@@ -60,6 +60,7 @@ OSE [24.17]
 * Correction pour appliquer la même règle que pour la date de fin de contrat pour la clôture du dossier dans le cadre des missions étudiantes (#67129)
 * Possiblité de payer le service référentiel avec les demandes de mise en paiement en lot (#66596)
 * Possiblité de supprimer des motifs de modification de service sans impacter les années passées (#67398)
+* Amélioration de la recherche d'intervenants pour une meilleure pertinence des résultats et du classement par ordre alphabétique (#67401)
 
 ## Corrections
 * Séléctionner un niveau n'empèche plus d'exporter une formation

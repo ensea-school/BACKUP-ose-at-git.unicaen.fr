@@ -67,6 +67,7 @@ OSE [24.17]
 * Correction pour rendre obligatoire la saisie d'un objet mail dans l'envoi de mail via les notes de l'intervenant (#67039)
 * Correction sur l'envoi des signataires dans esup-signature (#65655)
 * Correction sur l'affichage de la page "Calcul HETD" qui pouvait afficher une page blanche (#67098)
+* Correction pour l'ajout d'une url dans le corps d'un mail envoyé à l'intervenant avec l'éditeur TinyMCE via l'onglet note de la fiche d'intervenant (#67417)
 
 ## Notes de mise à jour
 

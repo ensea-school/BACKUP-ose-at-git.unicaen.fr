@@ -65,6 +65,7 @@ OSE [24.17]
 * Séléctionner un niveau n'empèche plus d'exporter une formation
 * Correction pour rendre obligatoire la saisie d'un objet mail dans l'envoi de mail via les notes de l'intervenant (#67039)
 * Correction sur l'envoi des signataires dans esup-signature (#65655)
+* Correction sur l'affichage de la page "Calcul HETD" qui pouvait afficher une page blanche (#67098)
 
 ## Notes de mise à jour
 

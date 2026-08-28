@@ -25,18 +25,24 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercher ($critere, $limit = 50, string $key = ':CODE')
+    public function rechercher ($critere, $limit = 50, string $key = ':CODE', array $typeIntervenantCodes = [])
     {
         try {
-            return $this->rechercheGenerique($critere, $limit, $key, false);
+            return $this->rechercheGenerique($critere, $limit, $key, false, $typeIntervenantCodes);
         } catch (\Exception $e) {
-            return $this->rechercheGenerique($critere, $limit, $key, true);
+            return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes);
         }
     }
 
 
 
-    private function rechercheGenerique ($critere, $limit = 50, string $key = ':CODE', $onlyLocale = false)
+    private function rechercheGenerique (
+        $critere,
+        $limit = 50,
+        string $key = ':CODE',
+        $onlyLocale = false,
+        array $typeIntervenantCodes = []
+    )
     {
         if (strlen($critere) < 2) return [];
 
@@ -49,8 +55,8 @@ class RechercheProcessus
         WITH vrec AS (
             ' . $this->sqlLocale() . '  
         )
-        SELECT * FROM vrec WHERE 
-          rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
+        SELECT * FROM (
+          SELECT * FROM vrec WHERE annee_id = ' . $anneeId;
         $sqlCri  = '';
         $criCode = 0;
 
@@ -71,7 +77,20 @@ class RechercheProcessus
             $orc[] = 'code LIKE \'%' . $criCode . '%\'';
         }
         $orc = implode(' OR ', $orc);
-        $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
+
+        $validTypeCodes = array_values(array_intersect(['E', 'P', 'S'], $typeIntervenantCodes));
+        if ([] !== $validTypeCodes) {
+            $quotedTypeCodes = array_map(
+                static fn(string $code): string => "'" . $code . "'",
+                $validTypeCodes
+            );
+            $sql .= ' AND type_intervenant_code IN (' . implode(', ', $quotedTypeCodes) . ')';
+        }
+
+        $sql .= ' AND (' . $orc . ')
+          ORDER BY nom_usuel, prenom
+        ) WHERE rownum <= ' . (int)$limit . '
+        ORDER BY nom_usuel, prenom';
 
         $intervenants = [];
 
@@ -225,9 +244,14 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercherLocalement ($critere, $limit = 50, string $key = ':CODE')
+    public function rechercherLocalement (
+        $critere,
+        $limit = 50,
+        string $key = ':CODE',
+        array $typeIntervenantCodes = []
+    )
     {
-        return $this->rechercheGenerique($critere, $limit, $key, true);
+        return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes);
     }
 
     /**

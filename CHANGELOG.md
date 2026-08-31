@@ -61,6 +61,7 @@ OSE [24.17]
 * Possiblité de payer le service référentiel avec les demandes de mise en paiement en lot (#66596)
 * Possiblité de supprimer des motifs de modification de service sans impacter les années passées (#67398)
 * Amélioration de la recherche d'intervenants pour une meilleure pertinence des résultats et du classement par ordre alphabétique (#67401)
+* Augmentation du timeout CSRF pour les formulaires des données personnelles (#67532)
 
 ## Corrections
 * Séléctionner un niveau n'empèche plus d'exporter une formation

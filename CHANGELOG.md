@@ -47,7 +47,7 @@ OSE [24.17]
 # OSE 24.18 (A venir)
 
 ## Nouveautés
-* /!\ Connecteur Pégase basé sur les API
+* Connecteur Pégase basé sur les APIs
 * Dans le cas de la signature électronique (ESUP Signature) il est maintenant possible de désactiver manuellement la signature électronique pour un intervenant donné et passer sur le dépôt manuel du contrat signé (#62163)
 * Nouvelles formules : Rouen, La Rochelle
 

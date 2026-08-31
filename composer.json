@@ -1,11 +1,11 @@
 {
     "name"             : "unicaen/ose",
-    "version"          : "1.0.0",
+    "version"          : "24.18",
     "description"      : "Organisation des Services d'Enseignement (OSE)",
     "repositories"     : [
         {
             "type": "composer",
-            "url" : "https://gest.unicaen.fr/packagist"
+            "url" : "https://packagist.unicaen.fr"
         }
     ],
     "require"          : {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04c83e8a34b711f64b9a82fea73c208c",
+    "content-hash": "8838df509f8715eeec2fa2fa4a3b0735",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -8449,11 +8449,11 @@
         },
         {
             "name": "unicaen/vue",
-            "version": "6.3.3",
+            "version": "6.4.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/vue.git",
-                "reference": "0a6a964de9049cc4b8032088bdf03809f90dc358"
+                "reference": "52335b7fe5f63ea864c21ca0ae125075a2a6349e"
             },
             "type": "library",
             "autoload": {
@@ -8465,7 +8465,7 @@
                 ]
             },
             "description": "Module pour utiliser Vue.js",
-            "time": "2025-03-31T13:26:31+00:00"
+            "time": "2026-05-12T13:55:10+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -10207,16 +10207,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "fb19eedd2bb67ff8cf7a5502ad329e701d6398a3"
+                "reference": "98dbc9412932af5825e6d5aa5d6bc4de7d82538a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/fb19eedd2bb67ff8cf7a5502ad329e701d6398a3",
-                "reference": "fb19eedd2bb67ff8cf7a5502ad329e701d6398a3",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/98dbc9412932af5825e6d5aa5d6bc4de7d82538a",
+                "reference": "98dbc9412932af5825e6d5aa5d6bc4de7d82538a",
                 "shasum": ""
             },
             "require": {
@@ -10248,9 +10248,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.3"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.4"
             },
-            "time": "2026-07-08T07:01:06+00:00"
+            "time": "2026-08-30T16:25:38+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

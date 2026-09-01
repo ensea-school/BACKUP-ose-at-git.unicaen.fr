@@ -119,7 +119,15 @@ class IntervenantDossierForm extends AbstractForm
         /**
          * Csrf
          */
-        $this->add(new Csrf('security'));
+        $this->add([
+            'name'    => 'security',
+            'type'    => Csrf::class,
+            'options' => [
+                'csrf_options' => [
+                    'timeout' => 1800,
+                ],
+            ],
+        ]);
 
         /**
          * Submit

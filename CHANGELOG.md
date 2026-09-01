@@ -44,7 +44,7 @@ OSE [24.17]
 
 ---
 
-# OSE 24.18 (A venir)
+# OSE 24.18 (01/09/2026)
 
 ## Nouveautés
 * Connecteur Pégase basé sur les APIs

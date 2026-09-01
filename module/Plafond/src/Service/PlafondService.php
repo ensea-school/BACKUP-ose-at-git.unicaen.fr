@@ -230,7 +230,10 @@ class PlafondService extends AbstractEntityService
 
         if ($entity instanceof Mission) {
             $this->controlePop($entity->getTypeMission(), $pqr);
-            $this->controlePop($entity->getIntervenant(), $pqr);
+            // Pour une mission, la structure à contrôler est celle de la mission.
+            // Ajouter directement l'intervenant évite que controlePop() ne remonte
+            // également vers sa structure d'affectation.
+            $pqr->add($entity->getIntervenant());
             $this->controlePop($entity->getStructure(), $pqr);
         }
 

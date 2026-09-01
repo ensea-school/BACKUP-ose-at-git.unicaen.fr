@@ -1,7 +1,6 @@
 SELECT
   i.annee_id      				                    annee_id,
   s.id  						                    structure_id,
-  MAX(i.id)                                         intervenant_id,
   vhm.type_volume_horaire_id 			 			type_volume_horaire_id,
   ROUND(SUM(vhm.heures * trv.valeur)*1.1) 				heures
 FROM mission m

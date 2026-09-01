@@ -302,11 +302,14 @@ class Indicateur
 
     public function getLibelle(int $count): string
     {
-        if ($count > 1) {
-            return sprintf($this->getLibellePluriel(), $count);
-        } else {
-            return sprintf($this->getLibelleSingulier(), $count);
-        }
+        $libelle = $count > 1
+            ? $this->getLibellePluriel()
+            : $this->getLibelleSingulier();
+
+        // Seul le premier %s est réservé au compteur. Les autres caractères %
+        // peuvent faire partie du libellé (par exemple « 80% ») et ne doivent
+        // pas être interprétés comme des spécificateurs de format par sprintf().
+        return preg_replace('/%s/', (string)$count, $libelle, 1);
     }
 
 }

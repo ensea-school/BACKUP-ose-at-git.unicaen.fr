@@ -68,16 +68,18 @@ return [
             'requete'   => file_get_contents($sqlDir . '19.sql'),
         ],
         21 => [
-            'libelle' => 'Plafond enveloppe informatif en € des missions étudiantes par composante (80%)',
+            'libelle' => 'Plafond informatif (80%) budget en € des missions étudiantes par composante',
             'perimetre' => 'structure',
-            'message' => 'Enveloppe en € des missions étudiantes (80%) pour :sujet',
+            'message' => 'Budget en € des missions étudiantes (80%) pour :sujet',
             'requete' => file_get_contents($sqlDir . '21.sql'),
+            'euro' => true,
         ],
         22 => [
-            'libelle' => 'Plafond enveloppe bloquant en € des missions étudiantes par composante (90%)',
+            'libelle' => 'Plafond bloquant (90%) budget en € des missions étudiantes par composante',
             'perimetre' => 'structure',
-            'message' => 'Enveloppe en € des missions étudiantes (90%) pour :sujet',
+            'message' => 'Budget en € des missions étudiantes (90%) pour :sujet',
             'requete' => file_get_contents($sqlDir . '22.sql'),
+            'euro' => true,
         ],
     ],
 ];

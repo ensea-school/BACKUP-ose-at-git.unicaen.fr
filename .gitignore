@@ -18,3 +18,4 @@ composer.phar
 supervisord.*
 /docker-compose.yaml
 /.codex
+/.aiignore

@@ -14,11 +14,13 @@ return [
         Command\CalculTableauxBordCommand::class     => Command\CalculTableauxBordCommandFactory::class,
         Command\UpdateCommand::class                 => Command\UpdateCommandFactory::class,
         Command\UpdateCodeCommand::class             => Command\UpdateCodeCommandFactory::class,
+        Command\UpdateStructuresCommand::class       => Command\UpdateStructuresCommandFactory::class,
         Command\UpdateEmployeur::class               => Command\UpdateEmployeurFactory::class,
         Command\SynchronisationCommand::class        => Command\SynchronisationCommandFactory::class,
         Command\MajExportsCommand::class             => Command\MajExportsCommandFactory::class,
         Command\CreerUtilisateurCommand::class       => Command\CreerUtilisateurCommandFactory::class,
         Command\FichiersVersFilesystemCommand::class => Command\FichiersVersFilesystemCommandFactory::class,
+        Command\VerifierEspaceDisqueCommand::class   => Command\VerifierEspaceDisqueCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -36,11 +38,13 @@ return [
             'c:c'                      => Command\ClearCacheCommand::class,
             'calcul-tableaux-bord'     => Command\CalculTableauxBordCommand::class,
             'update-code'              => Command\UpdateCodeCommand::class,
+            'update-strctures'         => Command\UpdateStructuresCommand::class,
             'update-employeur'         => Command\UpdateEmployeur::class,
             'synchronisation'          => Command\SynchronisationCommand::class,
             'maj-exports'              => Command\MajExportsCommand::class,
             'creer-utilisateur'        => Command\CreerUtilisateurCommand::class,
             'fichiers-vers-filesystem' => Command\FichiersVersFilesystemCommand::class,
+            'verifier-espace-disque'   => Command\VerifierEspaceDisqueCommand::class,
         ],
     ],
 ];

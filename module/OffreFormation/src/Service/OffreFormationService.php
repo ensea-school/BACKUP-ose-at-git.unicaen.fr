@@ -314,7 +314,7 @@ class OffreFormationService extends AbstractEntityService
             $filters['ETAPE_ID'] = $etape->getId();
         }
         if ($niveau) {
-            $filters['NIVEAU'] = $niveau->getLib();
+            $filters['NIVEAU'] = (string)$niveau;
         }
         $csv = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, []);
         $csv->setFilename($fileName);

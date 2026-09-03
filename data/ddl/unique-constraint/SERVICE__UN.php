@@ -11,6 +11,7 @@ return [
         'ELEMENT_PEDAGOGIQUE_ID',
         'ETABLISSEMENT_ID',
         'HISTO_DESTRUCTION',
+        'DESCRIPTION'
     ],
 ];
 

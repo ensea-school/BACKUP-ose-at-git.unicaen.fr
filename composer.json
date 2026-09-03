@@ -58,7 +58,7 @@
     "unicaen/vue": "6.4.1",
     "unicaen/bddadmin": "1.7.0",
     "connecteur-ose/actul": "dev-master",
-    "connecteur-ose/pegase": "dev-master"
+        "connecteur-ose/pegase"              : "dev-master"
   },
   "replace": {
     "laminas/laminas-cache": "*",

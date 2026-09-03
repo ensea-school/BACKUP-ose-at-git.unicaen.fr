@@ -317,6 +317,8 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
     protected bool $irrecevable = false;
 
+    protected bool $desactiverSignature = false;
+
     /**
      * @var string|null
      */
@@ -1725,6 +1727,20 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     }
 
 
+
+    public function isDesactiverSignature(): bool
+    {
+        return $this->desactiverSignature;
+    }
+
+
+
+    public function setDesactiverSignature(bool $desactiverSignature): Intervenant
+    {
+        $this->desactiverSignature = $desactiverSignature;
+
+        return $this;
+    }
 
     public function getProfile(): UserProfile
     {

@@ -322,6 +322,10 @@ class IndicateurController extends AbstractController
                 } else {
                     $emailsList = $emails;
                 }
+                if (empty($emailsList)) {
+                    $this->flashMessenger()->addErrorMessage("Aucun mail n'a été envoyé : aucun intervenant sélectionné ne possède d'adresse email.");
+                    return $this->redirect()->toRoute('indicateur/result', ['indicateur' => $indicateur->getId()]);
+                }
                 $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName);
                 $this->getMailService()->send($email);
 
@@ -342,9 +346,11 @@ class IndicateurController extends AbstractController
 
                 }
                 if ($post['cci'] && !empty($post['cci'])) {
-                    $emailsCci = explode(';', $post['cci']);
-                    $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName,$emailsCci);
-                    $this->getMailService()->send($email);
+                    $emailsCci = array_filter(array_map('trim', explode(';', $post['cci'])));
+                    if (!empty($emailsCci)) {
+                        $email = $this->getServiceIndicateur()->createMessage($post, $emailsList, $subject, $fromName, $emailsCci);
+                        $this->getMailService()->send($email);
+                    }
 
                 }
                 $count   = count($emailsList);

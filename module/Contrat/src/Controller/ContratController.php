@@ -119,7 +119,8 @@ class ContratController extends AbstractController
         $libelleCircuitSignature    = null;
         if (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))
             && $intervenant->getStatut()->getContratEtatSortie()?->isSignatureActivation()
-            && $intervenant->getStatut()->getContratEtatSortie()?->getSignatureCircuit()) {
+            && $intervenant->getStatut()->getContratEtatSortie()?->getSignatureCircuit()
+            && !$intervenant->isDesactiverSignature()) {
             $contratSignatureActivation = true;
             $libelleCircuitSignature    = $intervenant->getStatut()->getContratEtatSortie()->getSignatureCircuit()->getLabel();
 

@@ -58,13 +58,19 @@ class ExportRhForm extends AbstractForm
             $intervenantAffectation = $intervenant->getStructure()->getLibelleCourt();
             //On récupére les libellés de composante dispo dans le form
             $elementAffectation = $this->get('connecteurForm')->get('affectation');
-            $listeComposantes   = $this->get('connecteurForm')->get('affectation')->getValueOptions();
+            $listeComposantes = $elementAffectation->getValueOptions();
+            $intervenantAffectationNormalise = mb_strtolower(trim((string)$intervenantAffectation), 'UTF-8');
             foreach ($listeComposantes as $code => $composante) {
-                //On prend que le libelle court ed SIHAM pour le comparer au libelle court de OSE
-                $libelleAffectation = explode(' ', $composante, 2);
-                $libelleCourt       = $libelleAffectation[1];
-                if (strtolower($intervenantAffectation) == strtolower($libelleCourt)) {
+
+                // On découpe en 2 parties max : "CODE libellé court"
+                $parts = preg_split('/\s+/', trim($composante), 2);
+                if (count($parts) < 2) {
+                    continue; // format inattendu
+                }
+                $libelleCourt = mb_strtolower(trim($parts[1]), 'UTF-8');
+                if ($intervenantAffectationNormalise === $libelleCourt) {
                     $elementAffectation->setValue($code);
+                    break; // on s'arrête au premier match
                 }
             }
         }

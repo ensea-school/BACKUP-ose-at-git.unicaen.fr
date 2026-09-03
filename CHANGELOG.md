@@ -1,6 +1,6 @@
 # Version stable
 
-OSE [24.15]
+OSE [24.17]
 
 
 # OSE 25 (à venir)
@@ -30,7 +30,7 @@ OSE [24.15]
 * Le formulaire de saisie de mission ne propose plus de mission par défaut, le selecteur est vide pour éviter les conflits de type de mission et de taux (#56779)
 * Ajout d'une exception dans le validateur de numéro insee des données personnelles pour simplifier le contrôle de la donnée dans le cas d'un département de naissance "Polynésie Française" (#63903).
 * Le blocage se fait correctement pour les plafonds de périmètre volume horaire (#62434)
-* Le blocage se fait de nouveau correcttment pour les plafonds de périmètre intervenant (#63728)
+* Le blocage se fait de nouveau correctement pour les plafonds de périmètre intervenant (#63728)
 
 ## Notes de mise à jour
 
@@ -42,21 +42,79 @@ OSE [24.15]
 
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
-# OSE 24.16 (à venir)
+---
+
+# OSE 24.18 (01/09/2026)
+
+## Nouveautés
+* Connecteur Pégase basé sur les APIs
+* Dans le cas de la signature électronique (ESUP Signature) il est maintenant possible de désactiver manuellement la signature électronique pour un intervenant donné et passer sur le dépôt manuel du contrat signé (#62163)
+* Nouvelles formules : Rouen, La Rochelle
+
+## Améliorations
+* Le sql proposé pour le plafond 15 ne comptabilise plus les heures qui ne sont calculées ni en HC ni en service
+* Nouvelle formule UGA (#67184)
+* Nouvelle formule du Havre (#66751)
+* Adaptation de la formule de Montpellier (#67329)
+* Correction au niveau de la PEC/REN Siham et l'alimenation de la liste des composantes d'affectation (#67403)
+* Correction pour appliquer la même règle que pour la date de fin de contrat pour la clôture du dossier dans le cadre des missions étudiantes (#67129)
+* Possiblité de payer le service référentiel avec les demandes de mise en paiement en lot (#66596)
+* Possiblité de supprimer des motifs de modification de service sans impacter les années passées (#67398)
+* Amélioration de la recherche d'intervenants pour une meilleure pertinence des résultats et du classement par ordre alphabétique (#67401)
+* Augmentation du timeout CSRF pour les formulaires des données personnelles (#67532)
+
+## Corrections
+* Séléctionner un niveau n'empèche plus d'exporter une formation
+* Correction pour rendre obligatoire la saisie d'un objet mail dans l'envoi de mail via les notes de l'intervenant (#67039)
+* Correction sur l'envoi des signataires dans esup-signature (#65655)
+* Correction sur l'affichage de la page "Calcul HETD" qui pouvait afficher une page blanche (#67098)
+* Correction pour l'ajout d'une url dans le corps d'un mail envoyé à l'intervenant avec l'éditeur TinyMCE via l'onglet note de la fiche d'intervenant (#67417)
+
+## Notes de mise à jour
+
+Si vous utilisez le connecteur Pégase basé sur DRE, pensez bien à couper votre synchronisation avant de faire la mise à jour. 
+Si vous souhaitez continuez d'utiliser le connecteur DRE et ne pas passer sur le nouveau connecteur suite à la mise à jour il vous faudra :
+- modifier le composer.json pour avoir ```"connecteur-ose/pegase" : "dev-master"``` ligne 66
+- Lancer la commande
+```bash
+  php composer.phar update connecteur-ose/pegase
+  ./bin/ose clear-cache
+```
+Cette procédure sera a éxécuter à chaque mise à jour tant que vous resterez sur la version DRE du connecteur.
+
+# OSE 24.17 (25/06/2026)
+
+## Notes de mise à jour
+
+Cette version n’apporte pas de nouveauté ni de correction fonctionnelle.
+
+Il s’agit d’une version dédiée à la mise à jour des dépendances, certaines bibliothèques présentant des vulnérabilités nécessitant la publication d’une nouvelle version mineure, rapprochée de la 24.16.
+
+# OSE 24.16 (18/06/2026)
 
 ## Nouveautés
 
+* Nouvelle formule Montpellier (#65128)
+* Nouvelle formule de ENGEES (#66165)
 * Intégration de la formule de Lyon 3 (#38136)
+* Ajout d'une config 'is_redirected' pour activer ou desactiver la redirection d'email
 
 ## Améliorations
 
 * Amélioration de la saisie des services hors établissement afin de permettre la saisie de plusieurs lignes de services pour un même établissement extérieur (#66473)
+* Homogénéisation des formats du BIC et amélioration des règles de validation du BIC de 8 ou 11 caractéres (#66718)
 
 ## Corrections
 
 * Correction sur la saisie d'enseignement "Hors établissement" avec un plafond activé (#66400)
 * Ajout d'une commande pour mettre à jour le champs ids des structures
 * Correction export siham dans le cas où un code type structure affectation ne renvoie aucune valeur dans SIHAM (#65318)
+* Ajout filtre structure pour les demandes de mise en paiement par lot des intervenants (#66596)
+* Ne pas tenir compte des types interventions par statut pour le calcul des HETD lorsqu'ils sont historisés (#66758)
+* Correction sur l'arrondis des totaux HETD dans la page service réalisé et détails HETD (#66537)
+* Correction formule de Paris 8 (#48203)
+* Correction mineure sur l'affichage des structures hierarchisé (#66726)
+* Tentative de correction pour l'erreur d'affichage des contrats pour structure 'null'
 
 # OSE 24.15 (28/04/26)
 
@@ -80,6 +138,7 @@ OSE [24.15]
 * Correction sur la commande de création d'utilisateur creer-utilisateur (#66396)
 
 
+Pour rappel, les requêtes de plafonds existantes en base ne sont pas automatiquement mises à jour lors d’un changement de version. Il vous appartient donc de contrôler et, le cas échéant, d’adapter les requêtes déjà présentes afin de garantir leur conformité avec le modèle de données actuel, voici quelques changements notables de la v24 :
 
 # OSE 24.14 (09/03/2026)
 
@@ -114,9 +173,9 @@ SELECT
   SUM(vhr.heures)            heures
 FROM
   service_referentiel       sr
-  JOIN intervenant           i ON i.id = sr.intervenant_id
-  JOIN structure             s ON s.id = sr.structure_id
-  JOIN volume_horaire_ref  vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+    JOIN intervenant           i ON i.id = sr.intervenant_id
+    JOIN structure             s ON s.id = sr.structure_id
+    JOIN volume_horaire_ref  vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
 WHERE
   sr.histo_destruction IS NULL
 GROUP BY
@@ -472,7 +531,7 @@ Nous vous invitons :
     * pays_nationalite      renommée en paysNationalite
 
 
-
+---
 
 # OSE 23.15 (24/04/2025)
 

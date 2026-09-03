@@ -17,4 +17,4 @@ APP_DIR="$(dirname "$DIR")"
 
 cd $APP_DIR;
 
-./vendor/bin/laminas $@
+./vendor/bin/laminas "$@"

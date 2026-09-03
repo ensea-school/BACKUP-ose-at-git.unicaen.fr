@@ -244,8 +244,8 @@ class IndicateurService extends AbstractService
     public function createMessage($data,$emails,$subject, $fromName, array $emailCopy = []):Email
     {
         $email = new Email();
-        $from = (isset($data['from'])) ? $data['from'] : $this->getFrom();
-        $email->from(new Address($from,$fromName));
+        $from = trim((isset($data['from'])) ? $data['from'] : $this->getFrom());
+        $email->from(new Address($from, $fromName));
         $html = $data['body'];
         if(!empty($emailCopy))
         {
@@ -262,6 +262,7 @@ class IndicateurService extends AbstractService
             //Contexte utilisateur
             foreach($emailCopy as $value)
             {
+                $value = trim($value);
                 if (!empty($value)) {
                     $email->addBcc($value);
                 }
@@ -271,6 +272,7 @@ class IndicateurService extends AbstractService
         else{
             $email->subject($data['subject']);
             foreach ($emails as $value => $name) {
+                $value = trim($value);
                 if (!empty($value)) {
                     $email->addBcc(new Address($value, $name));
                 }

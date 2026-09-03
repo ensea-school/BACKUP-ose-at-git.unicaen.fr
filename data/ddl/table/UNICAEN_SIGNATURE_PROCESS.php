@@ -33,6 +33,18 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
+        'DESCRIPTION'      => [
+            'name'        => 'DESCRIPTION',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 9,
+            'commentaire' => NULL,
+        ],
         'DOCUMENT_NAME'    => [
             'name'        => 'DOCUMENT_NAME',
             'type'        => 'string',

@@ -1,206 +1,194 @@
 {
-    "name"             : "unicaen/ose",
-    "version"          : "1.0.0",
-    "description"      : "Organisation des Services d'Enseignement (OSE)",
-    "repositories"     : [
-        {
-            "type": "composer",
-            "url" : "https://gest.unicaen.fr/packagist"
-        }
-    ],
-    "require"          : {
-        "php"                                : ">=8.2",
-        "laminas/laminas-cli"                : "1.11.*",
-        "symfony/process"                    : "7.3.*",
-        "symfony/http-foundation"            : "7.3.*",
-        "api-platform/core"                  : "4.2.*",
-        "api-platform/symfony"               : "4.2.*",
-        "ext-ctype"                          : "*",
-        "ext-iconv"                          : "*",
-        "api-platform/doctrine-orm"          : "^4.1",
-        "doctrine/doctrine-bundle"           : "^2.7",
-        "phpstan/phpdoc-parser"              : "^2.0",
-        "runtime/frankenphp-symfony"         : "^0.2",
-        "symfony/asset"                      : "7.3.*",
-        "symfony/dotenv"                     : "7.3.*",
-        "symfony/expression-language"        : "7.3.*",
-        "symfony/flex"                       : "^2.2",
-        "symfony/framework-bundle"           : "7.3.*",
-        "symfony/mercure-bundle"             : "^0.3",
-        "symfony/monolog-bundle"             : "^3.8",
-        "symfony/property-access"            : "7.3.*",
-        "symfony/property-info"              : "7.3.*",
-        "symfony/runtime"                    : "7.3.*",
-        "symfony/security-bundle"            : "7.3.*",
-        "symfony/serializer"                 : "7.3.*",
-        "symfony/validator"                  : "7.3.*",
-        "symfony/yaml"                       : "7.3.*",
-        "symfony/uid"                        : "7.3.*",
-
-        "nelmio/cors-bundle"                 : "2.5.*",
-
-        "twbs/bootstrap"                     : "5.0.*",
-        "components/jquery"                  : "3.7.*",
-        "components/font-awesome"            : "6.5.*",
-        "tinymce/tinymce"                    : "7.6.*",
-        "snapappointments/bootstrap-select"  : "1.14.0-beta3",
-        "datatables.net/datatables.net-bs5"  : "2.1.*",
-        "vakata/jstree"                      : "3.3.*",
-
-        "unicaen/framework"                  : "0.9.0",
-        "unicaen/zfc-user"                   : "7.0.0",
-        "unicaen/app"                        : "8.0.0",
-        "unicaen/authentification"           : "8.0.0",
-        "unicaen/mail"                       : "7.3.2",
-        "unicaen/signature"                  : "1.0.7",
-
-        "unicaen/code"                       : "6.6.2",
-        "unicaen/import"                     : "6.1.0",
-        "unicaen/tbl"                        : "6.3.1",
-        "unicaen/open-document"              : "6.1.3",
-        "unicaen/siham"                      : "6.2.1",
-        "unicaen/vue"                        : "6.4.0",
-        "unicaen/bddadmin"                   : "1.7.0",
-
-        "connecteur-ose/actul"               : "dev-master",
-        "connecteur-ose/pegase"              : "dev-master"
-    },
-    "replace"          : {
-        "laminas/laminas-cache"                           : "*",
-        "laminas/laminas-cache-storage-adapter-filesystem": "*",
-        "laminas/laminas-cache-storage-adapter-memory"    : "*",
-        "unicaen/bjy-authorize"                           : "*",
-        "unicaen/privilege"                               : "*",
-        "unicaen/utilisateur"                             : "*"
-    },
-    "autoload"         : {
-        "psr-4": {
-            "Administration\\"  : "module/Administration/src/",
-            "Agrement\\"        : "module/Agrement/src/",
-            "Application\\"     : "module/Application/src/",
-            "Contrat\\"         : "module/Contrat/src/",
-            "Chargens\\"        : "module/Chargens/src/",
-            "Dossier\\"         : "module/Dossier/src/",
-            "Enseignement\\"    : "module/Enseignement/src/",
-            "ExportRh\\"        : "module/ExportRh/src/",
-            "EtatSortie\\"      : "module/EtatSortie/src/",
-            "Formule\\"         : "module/Formule/src/",
-            "Indicateur\\"      : "module/Indicateur/src/",
-            "Intervenant\\"     : "module/Intervenant/src/",
-            "Lieu\\"            : "module/Lieu/src/",
-            "Mission\\"         : "module/Mission/src/",
-            "OffreFormation\\"  : "module/OffreFormation/src/",
-            "Paiement\\"        : "module/Paiement/src/",
-            "Signature\\"       : "module/Signature/src/",
-            "PieceJointe\\"     : "module/PieceJointe/src/",
-            "Plafond\\"         : "module/Plafond/src/",
-            "Referentiel\\"     : "module/Referentiel/src/",
-            "Service\\"         : "module/Service/src/",
-            "Workflow\\"        : "module/Workflow/src/",
-            "Utilisateur\\"     : "module/Utilisateur/src/",
-            "UnicaenPrivilege\\": "vendor/unicaen/framework/src/Wrapper/UnicaenPrivilege",
-            "App\\"             : "api/src/"
-        }
-    },
-    "autoload-dev"     : {
-        "psr-4": {
-            "App\\Tests\\": "api/tests/"
-        }
-    },
-    "require-dev"      : {
-        "squizlabs/php_codesniffer"         : "*",
-        "phpcompatibility/php-compatibility": "*",
-        "phan/phan"                         : "^5.3",
-        "phpmd/phpmd"                       : "*",
-        "phpunit/phpunit"                   : "^9",
-        "friendsofphp/php-cs-fixer"         : "^3.74",
-        "api-platform/schema-generator"     : "^5.0",
-        "symfony/browser-kit"               : "7.3.*",
-        "symfony/css-selector"              : "7.3.*",
-        "symfony/debug-bundle"              : "7.3.*",
-        "symfony/maker-bundle"              : "^1.44",
-        "symfony/phpunit-bridge"            : "7.3.*",
-        "symfony/stopwatch"                 : "7.3.*",
-        "symfony/var-dumper"                : "7.3.*",
-        "symfony/web-profiler-bundle"       : "7.3.*"
-    },
-    "prefer-stable"    : true,
-    "minimum-stability": "stable",
-    "config"           : {
-        "optimize-autoloader": true,
-        "allow-plugins"      : {
-            "laminas/laminas-dependency-plugin"             : true,
-            "composer/package-versions-deprecated"          : true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "laminas-api-tools/api-tools-asset-manager"     : true,
-            "symfony/runtime"                               : true,
-            "symfony/flex"                                  : true
-        }
-    },
-    "scripts"          : {
-        "sniffer:php8"        : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
-        "phpcs"               : "./vendor/bin/phpcs -p ./module --standard=PSR12",
-        "setup-dirs": [
-            "mkdir -p var/session",
-            "chmod 777 var/session",
-
-            "mkdir -p var/log",
-            "chmod 777 var/log",
-
-            "mkdir -p var/cache",
-            "chmod 777 var/cache",
-
-            "mkdir -p var/cache/DoctrineProxy",
-            "chmod 777 var/cache/DoctrineProxy",
-
-            "mkdir -p data/fichiers",
-            "chmod 777 data/fichiers",
-
-            "mkdir -p data/signature",
-            "chmod 777 data/signature"
-        ],
-        "setup-bins": [
-            "chmod 755 bin/ose",
-            "chmod 755 bin/ose-code",
-            "chmod 755 bin/ose-test"
-        ],
-        "update-public-vendor": [
-            "[ -d cache ] && rm -Rf cache || true",
-            "[ -d data/log ] && rm -Rf data/log || true",
-
-            "rm -rf public/vendor",
-            "mkdir public/vendor",
-
-            "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
-            "cp -R vendor/components/jquery public/vendor/jquery",
-            "cp -R vendor/components/font-awesome public/vendor/font-awesome",
-            "cp -R vendor/tinymce/tinymce public/vendor/tinymce",
-            "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select",
-            "cp -R vendor/datatables.net/datatables.net public/vendor/datatables",
-            "cp -R vendor/datatables.net/datatables.net-bs5/* public/vendor/datatables/",
-            "cp -R vendor/vakata/jstree/dist public/vendor/jstree",
-            "cp public/vendor/datatables/css/dataTables.bootstrap5.min.css public/vendor/datatables/css/dataTables.bootstrap5.min.scss"
-        ],
-        "post-install-cmd"    : [
-            "@setup-dirs",
-            "@setup-bins",
-            "@update-public-vendor"
-        ],
-        "post-update-cmd"     : [
-            "@setup-dirs",
-            "@setup-bins",
-            "@update-public-vendor"
-        ],
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        }
-    },
-    "extra": {
-        "symfony": {
-            "docker": false,
-            "allow-contrib": true
-        },
-        "config-dir": "api/config/"
+  "name": "unicaen/ose",
+  "version": "1.0.0",
+  "description": "Organisation des Services d'Enseignement (OSE)",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packagist.unicaen.fr"
     }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "laminas/laminas-cli": "1.11.*",
+    "symfony/process": "7.4.*",
+    "symfony/http-foundation": "7.4.*",
+    "api-platform/core": "4.2.*",
+    "api-platform/symfony": "4.2.*",
+    "ext-ctype": "*",
+    "ext-iconv": "*",
+    "api-platform/doctrine-orm": "^4.1",
+    "doctrine/doctrine-bundle": "^2.7",
+    "phpstan/phpdoc-parser": "^2.0",
+    "runtime/frankenphp-symfony": "^0.2",
+    "symfony/asset": "7.4.*",
+    "symfony/dotenv": "7.4.*",
+    "symfony/expression-language": "7.4.*",
+    "symfony/flex": "^2.2",
+    "symfony/framework-bundle": "7.4.*",
+    "symfony/mercure-bundle": "^0.3",
+    "symfony/monolog-bundle": "^3.8",
+    "symfony/property-access": "7.4.*",
+    "symfony/property-info": "7.4.*",
+    "symfony/runtime": "7.4.*",
+    "symfony/security-bundle": "7.4.*",
+    "symfony/serializer": "7.4.*",
+    "symfony/validator": "7.4.*",
+    "symfony/yaml": "7.4.*",
+    "symfony/uid": "7.4.*",
+    "nelmio/cors-bundle": "2.5.*",
+    "twbs/bootstrap": "5.0.*",
+    "components/jquery": "3.7.*",
+    "components/font-awesome": "6.5.*",
+    "tinymce/tinymce": "7.9.3",
+    "snapappointments/bootstrap-select": "1.14.0-beta3",
+    "datatables.net/datatables.net-bs5": "2.1.*",
+    "vakata/jstree": "3.3.*",
+    "unicaen/framework": "0.9.0",
+    "unicaen/zfc-user": "7.0.0",
+    "unicaen/app": "8.0.0",
+    "unicaen/authentification": "8.0.0",
+    "unicaen/mail": "7.3.2",
+    "unicaen/signature": "1.0.7",
+    "unicaen/code": "6.6.2",
+    "unicaen/import": "6.1.0",
+    "unicaen/tbl": "6.3.1",
+    "unicaen/open-document": "6.1.3",
+    "unicaen/siham": "6.2.1",
+    "unicaen/vue": "6.4.1",
+    "unicaen/bddadmin": "1.7.0",
+    "connecteur-ose/actul": "dev-master",
+    "connecteur-ose/pegase": "dev-master"
+  },
+  "replace": {
+    "laminas/laminas-cache": "*",
+    "laminas/laminas-cache-storage-adapter-filesystem": "*",
+    "laminas/laminas-cache-storage-adapter-memory": "*",
+    "unicaen/bjy-authorize": "*",
+    "unicaen/privilege": "*",
+    "unicaen/utilisateur": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Administration\\": "module/Administration/src/",
+      "Agrement\\": "module/Agrement/src/",
+      "Application\\": "module/Application/src/",
+      "Contrat\\": "module/Contrat/src/",
+      "Chargens\\": "module/Chargens/src/",
+      "Dossier\\": "module/Dossier/src/",
+      "Enseignement\\": "module/Enseignement/src/",
+      "ExportRh\\": "module/ExportRh/src/",
+      "EtatSortie\\": "module/EtatSortie/src/",
+      "Formule\\": "module/Formule/src/",
+      "Indicateur\\": "module/Indicateur/src/",
+      "Intervenant\\": "module/Intervenant/src/",
+      "Lieu\\": "module/Lieu/src/",
+      "Mission\\": "module/Mission/src/",
+      "OffreFormation\\": "module/OffreFormation/src/",
+      "Paiement\\": "module/Paiement/src/",
+      "Signature\\": "module/Signature/src/",
+      "PieceJointe\\": "module/PieceJointe/src/",
+      "Plafond\\": "module/Plafond/src/",
+      "Referentiel\\": "module/Referentiel/src/",
+      "Service\\": "module/Service/src/",
+      "Workflow\\": "module/Workflow/src/",
+      "Utilisateur\\": "module/Utilisateur/src/",
+      "UnicaenPrivilege\\": "vendor/unicaen/framework/src/Wrapper/UnicaenPrivilege",
+      "App\\": "api/src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Tests\\": "api/tests/"
+    }
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "*",
+    "phpcompatibility/php-compatibility": "*",
+    "phan/phan": "^5.3",
+    "phpmd/phpmd": "*",
+    "phpunit/phpunit": "^9",
+    "friendsofphp/php-cs-fixer": "^3.74",
+    "api-platform/schema-generator": "^5.0",
+    "symfony/browser-kit": "7.4.*",
+    "symfony/css-selector": "7.4.*",
+    "symfony/debug-bundle": "7.4.*",
+    "symfony/maker-bundle": "^1.44",
+    "symfony/phpunit-bridge": "7.4.*",
+    "symfony/stopwatch": "7.4.*",
+    "symfony/var-dumper": "7.4.*",
+    "symfony/web-profiler-bundle": "7.4.*"
+  },
+  "prefer-stable": true,
+  "minimum-stability": "stable",
+  "config": {
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "laminas/laminas-dependency-plugin": true,
+      "composer/package-versions-deprecated": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "laminas-api-tools/api-tools-asset-manager": true,
+      "symfony/runtime": true,
+      "symfony/flex": true
+    }
+  },
+  "scripts": {
+    "sniffer:php8": "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
+    "phpcs": "./vendor/bin/phpcs -p ./module --standard=PSR12",
+    "setup-dirs": [
+      "mkdir -p var/session",
+      "chmod 777 var/session",
+      "mkdir -p var/log",
+      "chmod 777 var/log",
+      "mkdir -p var/cache",
+      "chmod 777 var/cache",
+      "mkdir -p var/cache/DoctrineProxy",
+      "chmod 777 var/cache/DoctrineProxy",
+      "mkdir -p data/fichiers",
+      "chmod 777 data/fichiers",
+      "mkdir -p data/signature",
+      "chmod 777 data/signature"
+    ],
+    "setup-bins": [
+      "chmod 755 bin/ose",
+      "chmod 755 bin/ose-code",
+      "chmod 755 bin/ose-test"
+    ],
+    "update-public-vendor": [
+      "[ -d cache ] && rm -Rf cache || true",
+      "[ -d data/log ] && rm -Rf data/log || true",
+      "rm -rf public/vendor",
+      "mkdir public/vendor",
+      "cp -R vendor/twbs/bootstrap/dist public/vendor/bootstrap",
+      "cp -R vendor/components/jquery public/vendor/jquery",
+      "cp -R vendor/components/font-awesome public/vendor/font-awesome",
+      "cp -R vendor/tinymce/tinymce public/vendor/tinymce",
+      "cp -R vendor/snapappointments/bootstrap-select public/vendor/bootstrap-select",
+      "cp -R vendor/datatables.net/datatables.net public/vendor/datatables",
+      "cp -R vendor/datatables.net/datatables.net-bs5/* public/vendor/datatables/",
+      "cp -R vendor/vakata/jstree/dist public/vendor/jstree",
+      "cp public/vendor/datatables/css/dataTables.bootstrap5.min.css public/vendor/datatables/css/dataTables.bootstrap5.min.scss"
+    ],
+    "post-install-cmd": [
+      "@setup-dirs",
+      "@setup-bins",
+      "@update-public-vendor"
+    ],
+    "post-update-cmd": [
+      "@setup-dirs",
+      "@setup-bins",
+      "@update-public-vendor"
+    ],
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd"
+    }
+  },
+  "extra": {
+    "symfony": {
+      "docker": false,
+      "allow-contrib": true
+    },
+    "config-dir": "api/config/"
+  }
 }

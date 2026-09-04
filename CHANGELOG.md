@@ -44,6 +44,11 @@ OSE [24.17]
 
 ---
 
+# OSE 24.19 (à venir)
+
+## Corrections
+* Bug signature électronique du contrat suite à la montée de version en unicaen/signature 2.0.0 (#67587)
+
 # OSE 24.18 (01/09/2026)
 
 ## Nouveautés

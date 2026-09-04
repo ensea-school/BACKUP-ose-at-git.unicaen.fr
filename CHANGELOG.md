@@ -46,6 +46,10 @@ OSE [24.17]
 
 # OSE 24.19 (à venir)
 
+## Nouveautés
+* Nouveaux plafonds pour les missions étudiantes, permettant de gérer des enveloppes budgétaires en euros par structure lors de la création des missions.
+* Nouveau privilège « Édition avancée », permettant de mieux contrôler l’accès à la modification des taux des missions étudiantes.
+
 ## Corrections
 * Bug signature électronique du contrat suite à la montée de version en unicaen/signature 2.0.0 (#67587)
 

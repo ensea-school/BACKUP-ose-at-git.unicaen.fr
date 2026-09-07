@@ -373,6 +373,10 @@ class  IntervenantController extends AbstractController
                         }
                     }
 
+                    if ($request->isXmlHttpRequest()) {
+                        return $this->redirect()->toRoute('intervenant/saisir', ['intervenant' => $intervenant->getId()]);
+                    }
+
                     return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'edition']]);
                 } catch (\Exception $e) {
                     $errors[] = $this->translate($e);

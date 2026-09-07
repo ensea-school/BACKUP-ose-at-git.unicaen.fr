@@ -86,7 +86,7 @@ class EditionForm extends AbstractForm
         $hydrator->spec(Intervenant::class);
         $this->setHydrator($hydrator);
         $this->setAttribute('action', $this->getCurrentUrl());
-        $this->setAttribute('class', 'form-intervenant-edition no-intranavigation');
+        $this->setAttribute('class', 'form-intervenant-edition');
 
 
         $this->add([
@@ -495,14 +495,14 @@ class EditionForm extends AbstractForm
     public function activerEditionAvancee()
     {
         $elements = ['source', 'code', 'numeroPec', 'numeroInsee'];
-        foreach ($this->getElements() as $element) {
-            if (in_array($element->getName(), $elements)) {
+        foreach ($elements as $elementName) {
+            /** @var Element $element */
+            $element = $this->get($elementName);
+            $element->removeAttribute('readonly');
+            $element->removeAttribute('disabled');
+            $element->removeAttribute('title');
 
-                /** @var Element $element */
-                $element->removeAttribute('readonly');
-                $element->removeAttribute('disabled');
-                $element->removeAttribute('title');
-            }
+            $this->getHydrator()->setReadOnly($elementName, false);
         }
     }
 
@@ -510,6 +510,19 @@ class EditionForm extends AbstractForm
 
     public function protection($object)
     {
+        // Le formulaire pouvant être réutilisé, on retire d'abord les protections
+        // appliquées lors d'un précédent bind avant de traiter l'objet courant.
+        foreach ($this->getElements() as $element) {
+            /** @var Element $element */
+            $element->removeAttribute('readonly');
+            $element->removeAttribute('disabled');
+            $element->removeAttribute('title');
+
+            if (array_key_exists($element->getName(), $this->hydratorElements)) {
+                $this->getHydrator()->setReadOnly($element->getName(), false);
+            }
+        }
+
         if ($this->isReadOnly()) {
 
             foreach ($this->getElements() as $element) {

@@ -50,10 +50,14 @@ OSE [24.17]
 * Nouveaux plafonds pour les missions étudiantes, permettant de gérer des enveloppes budgétaires en euros par structure lors de la création des missions.
 * Nouveau privilège « Édition avancée », permettant de mieux contrôler l’accès à la modification des taux des missions étudiantes.
 * Ajout de l'adresse mail perso dans la fiche intervenant
+* Nouvelle formule de Lyon1 (#66872)
+* Nouvelle formule pour UHA (#67328)
+* Nouvelle formule de ENSCR (#67095) 
 
 ## Corrections
 * Bug signature électronique du contrat suite à la montée de version en unicaen/signature 2.0.0 (#67587)
 * Nouvelle version du connecteur Pégase pour corriger les problèmes de remontés de composantes (#67581)
+* Modification de la formules de UBO (#62216)
 
 
 

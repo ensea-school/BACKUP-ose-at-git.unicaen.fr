@@ -58,6 +58,7 @@ OSE [24.17]
 * Bug signature électronique du contrat suite à la montée de version en unicaen/signature 2.0.0 (#67587)
 * Nouvelle version du connecteur Pégase pour corriger les problèmes de remontés de composantes (#67581)
 * Modification de la formules de UBO (#62216)
+* Correction sur le formulaire d'édition de l'intervenant pour éviter les champs grisés (#67226)
 
 
 

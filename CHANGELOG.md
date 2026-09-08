@@ -44,7 +44,7 @@ OSE [24.17]
 
 ---
 
-# OSE 24.19 (à venir)
+# OSE 24.19 (08/09/2026)
 
 ## Nouveautés
 * Nouveaux plafonds pour les missions étudiantes, permettant de gérer des enveloppes budgétaires en euros par structure lors de la création des missions.

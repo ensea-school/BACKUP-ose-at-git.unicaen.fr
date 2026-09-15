@@ -3,6 +3,7 @@
 namespace Administration\Migration;
 
 use Unicaen\BddAdmin\Migration\MigrationAction;
+use Unicaen\BddAdmin\Ddl\Ddl;
 
 class v24ContrainteUniciteService extends MigrationAction
 {
@@ -16,7 +17,7 @@ class v24ContrainteUniciteService extends MigrationAction
 
     public function utile(): bool
     {
-        return true;
+        return $this->manager()->has(Ddl::UNIQUE_CONSTRAINT, 'SERVICE__UN');
     }
 
 

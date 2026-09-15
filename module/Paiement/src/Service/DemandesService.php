@@ -64,6 +64,11 @@ class DemandesService extends AbstractService
                     $data['mission-id']             = ($heures->getMission()) ? $heures->getMission()->getId() : '';
                     $data['type-heures-id']         = ($heures->getTypeHeures()) ? $heures->getTypeHeures()->getId() : '';
                     /* @va $miseEnPaiement MiseEnPaiement */
+                    //Si c'est du référentiel mais je n'ai pas de domaine fonctionnel je ne fais pas la demande de mise en paiement
+                    if (!empty($data['service-referentiel-id']) && empty($data['domaine-fonctionnel-id'])) {
+                        unset($data);
+                        continue;
+                    }
                     //On enregistre la demande de mise en paiement
                     $miseEnPaiement = $this->getServiceMiseEnPaiement()->newEntity();
                     $this->hydrateFromChangements($miseEnPaiement, $data);
@@ -839,7 +844,7 @@ class DemandesService extends AbstractService
                     continue;
                 }
                 //On ne prend pas le référentiel dans les demandes de mise en paiement en lot
-                if (!$value->getServiceReferentiel()) {
+                // if (!$value->getServiceReferentiel()) {
                     if (!array_key_exists($intervenant->getId(), $dmep)) {
 
                         $dmep[$intervenant->getId()]['datasIntervenant'] = [
@@ -872,7 +877,7 @@ class DemandesService extends AbstractService
                                                  'code'    => ($value->getDomaineFonctionnel()) ? $value->getDomaineFonctionnel()->getSourceCode() : '',
                         ],
                     ];
-                }
+                //}
             }
         }
 

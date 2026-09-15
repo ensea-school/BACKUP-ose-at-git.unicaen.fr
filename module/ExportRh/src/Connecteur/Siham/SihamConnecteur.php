@@ -831,14 +831,15 @@ class SihamConnecteur implements ConnecteurRhInterface
         try {
             //On regarde si on est dans le cas d'une cloture pour une mission étudiante pour mettre la bonne date de sortie
             $firstMission = $this->getServiceContrat()->getFirstContratMission($intervenant);
-            if (!empty($firstMission)) {
+            $dateMission = ($this->siham->getConfig()['contrat']['missionDate']) ?? 'MISSION';
+
+            if (!empty($firstMission) && $dateMission == 'MISSION') {
                 $dateSortie = $firstMission->getDateFin()->format('Y-m-d');
             } else {
                 $anneeUniversitaire = $intervenant->getAnnee();
                 $dateSortie         = $anneeUniversitaire->getDateFin()->format('Y-m-d');
             }
 
-            $matricule = '';
             //On récupére le code RH par le INSEE
             $matricule = $this->trouverCodeRhByInsee($intervenant);
             if (!empty($intervenant->getCodeRh()) && empty($matricule)) {
@@ -911,11 +912,11 @@ class SihamConnecteur implements ConnecteurRhInterface
             $result = $this->siham->recupererListeUO($params);
 
             if (!empty($result)) {
-                $uo = array_merge($uo, $result);
+                $uo = array_replace($uo, $result);
             }
 
         }
-        ksort($uo);
+        asort($uo);
 
         return $uo;
     }

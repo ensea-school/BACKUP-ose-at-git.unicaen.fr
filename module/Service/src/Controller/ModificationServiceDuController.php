@@ -30,10 +30,9 @@ class ModificationServiceDuController extends AbstractController
 
     public function saisirAction()
     {
-        $this->em()->getFilters()->enable('historique')->init([
-            ModificationServiceDu::class,
-            MotifModificationServiceDu::class,
-        ]);
+        $historiqueFilter = $this->em()->getFilters()->enable('historique');
+        $historiqueFilter->enableForEntity(ModificationServiceDu::class);
+        $historiqueFilter->disableForEntity(MotifModificationServiceDu::class);
 
 
         /** @var Intervenant $intervenant */
@@ -66,8 +65,12 @@ class ModificationServiceDuController extends AbstractController
         /** @var MotifModificationServiceDu[] $mds */
         $mds = $this->getServiceMotifModificationServiceDu()->getList();
         $multiplicateurs = [];
+        $motifsObsoletes = [];
         foreach( $mds as $md ){
             $multiplicateurs[$md->getId()] = $md->getMultiplicateur();
+            if ($md->getHistoDestruction()) {
+                $motifsObsoletes[] = $md->getId();
+            }
         }
 
         $variables = [
@@ -75,6 +78,7 @@ class ModificationServiceDuController extends AbstractController
             'intervenant'     => $intervenant,
             'title'           => "Modifications de service dû",
             'multiplicateurs' => $multiplicateurs,
+            'motifsObsoletes' => $motifsObsoletes,
             'canEdit'         => $canEdit,
         ];
 

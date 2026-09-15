@@ -6,6 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Plafond\Interfaces\PlafondConfigInterface;
 
+/**
+ * Plafond
+ */
 class Plafond
 {
     use PlafondPerimetreAwareTrait;
@@ -18,13 +21,15 @@ class Plafond
 
     protected ?string $message = null;
 
+    protected bool $plafondEnEuros = false;
+
     protected string $requete = '';
 
     protected bool $ok = true;
 
     protected ?string $messageErreur = null;
 
-    
+
     protected Collection $plafondStructure;
 
     protected Collection $plafondReferentiel;
@@ -84,6 +89,9 @@ class Plafond
 
 
 
+    /**
+     * @return string|null
+     */
     public function getMessage(): ?string
     {
         return $this->message;
@@ -91,6 +99,11 @@ class Plafond
 
 
 
+    /**
+     * @param string|null $message
+     *
+     * @return Plafond
+     */
     public function setMessage(?string $message): Plafond
     {
         $this->message = $message;
@@ -149,7 +162,7 @@ class Plafond
     /**
      * Get PlafondStructure
      *
-     * @return Collection|PlafondStructure[]
+     * @return PlafondStructure[]
      */
     public function getPlafondStructure(): Collection|array
     {
@@ -161,7 +174,7 @@ class Plafond
     /**
      * Get PlafondReferentiel
      *
-     * @return Collection|PlafondReferentiel[]
+     * @return PlafondReferentiel[]
      */
     public function getPlafondReferentiel(): Collection|array
     {
@@ -173,7 +186,7 @@ class Plafond
     /**
      * Get PlafondMission
      *
-     * @return Collection|PlafondMission[]
+     * @return PlafondMission[]
      */
     public function getPlafondMission(): Collection|array
     {
@@ -185,7 +198,7 @@ class Plafond
     /**
      * Get PlafondStatut
      *
-     * @return Collection|PlafondStatut[]
+     * @return PlafondStatut[]
      */
     public function getPlafondStatut(): Collection|array
     {
@@ -218,6 +231,22 @@ class Plafond
     public function __toString(): string
     {
         return $this->getLibelle();
+    }
+
+
+
+    public function isPlafondEnEuros(): bool
+    {
+        return $this->plafondEnEuros;
+    }
+
+
+
+    public function setPlafondEnEuros(bool $plafondEnEuros): Plafond
+    {
+        $this->plafondEnEuros = $plafondEnEuros;
+
+        return $this;
     }
 
 }

@@ -196,7 +196,7 @@ class GenericHydrator implements HydratorInterface
 
     public function setReadOnly(string $element, bool $readOnly = true)
     {
-        $this->spec[$element]['readOnly'] = $readOnly;
+        $this->spec[$element]['readonly'] = $readOnly;
     }
 
 

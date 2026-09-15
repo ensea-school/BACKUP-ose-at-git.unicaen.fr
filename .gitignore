@@ -48,3 +48,4 @@ supervisord.*
 ###< symfony/phpunit-bridge ###
 
 /.codex
+/.aiignore

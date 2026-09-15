@@ -135,9 +135,23 @@ class  IntervenantController extends AbstractController
         $recherche->setShowHisto($canShowHistorises);
         $intervenants = [];
         $term = $this->axios()->fromPost('term');
+        $requestedTypes = (array)$this->axios()->fromPost('types', []);
+        $typeCodesByFilter = [
+            'vacataire' => 'E',
+            'permanent' => 'P',
+            'etudiant'  => 'S',
+        ];
+        $typeCodes = [];
+        foreach ($requestedTypes as $requestedType) {
+            if (isset($typeCodesByFilter[$requestedType])) {
+                $typeCodes[] = $typeCodesByFilter[$requestedType];
+            }
+        }
 
         if (!empty($term)) {
-            $intervenants = $recherche->rechercher($term, 40);
+            $intervenants = array_values(
+                $recherche->rechercher($term, 40, ':CODE', $typeCodes)
+            );
         }
 
         return new AxiosModel($intervenants);
@@ -367,6 +381,10 @@ class  IntervenantController extends AbstractController
                         if ($etape && $etape->url) {
                             return $this->redirect()->toUrl($etape->url);
                         }
+                    }
+
+                    if ($request->isXmlHttpRequest()) {
+                        return $this->redirect()->toRoute('intervenant/saisir', ['intervenant' => $intervenant->getId()]);
                     }
 
                     return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'edition']]);

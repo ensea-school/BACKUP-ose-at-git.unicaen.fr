@@ -28,7 +28,7 @@ WITH i AS (
                AND inds.t_etudiant = 'O'
               -- On remonte maitnenant les doctorants
               -- AND inds.t_doctorant ='N'
-               AND inds.c_source IN ('APO', 'OCTO')
+               AND inds.c_source IN ('APO', 'OCTO', 'PEGA')
          ) t
 
 

@@ -186,6 +186,7 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const MISSION_DEVALIDATION                                 = 'mission-devalidation';
     const MISSION_DEVALIDATION_REALISE                         = 'mission-devalidation-realise';
     const MISSION_EDITION                                      = 'mission-edition';
+    const MISSION_EDITION_AVANCEE                              = 'mission-edition-avancee';
     const MISSION_EDITION_CENTRE_COUT_TYPE                     = 'mission-edition-centre-cout-type';
     const MISSION_EDITION_REALISE                              = 'mission-edition-realise';
     const MISSION_EDITION_TYPE                                 = 'mission-edition-type';

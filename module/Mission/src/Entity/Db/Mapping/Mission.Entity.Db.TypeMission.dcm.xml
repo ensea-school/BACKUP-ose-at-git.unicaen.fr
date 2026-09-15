@@ -8,7 +8,7 @@
         <unique-constraints>
             <unique-constraint name="TYPE_MISSION_UN" columns="CODE,ANNEE_ID,HISTO_DESTRUCTION"/>
         </unique-constraints>
-        <field name="code" type="string" column="CODE" length="20" nullable="false"/>
+        <field name="code" type="string" column="CODE" length="30" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="100" nullable="false"/>
         <many-to-one field="tauxRemu" target-entity="Paiement\Entity\Db\TauxRemu">
             <join-column name="TAUX_REMU_ID" referenced-column-name="ID"/>

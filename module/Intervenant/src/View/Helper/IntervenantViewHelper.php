@@ -79,7 +79,8 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 //"Date de naissance" => (string)$entity->getDateNaissance()->format(Constants::DATE_FORMAT),
             ],
             'coordonnees'  => [
-                "Email"           => $entity->getEmailPro() ?: '<span class="inconnu">(Inconnu)</span>',
+                "Email perso"     => $entity->getEmailPerso() ?: '<span class="inconnu">(Inconnu)</span>',
+                "Email pro"       => $entity->getEmailPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone perso" => $entity->getTelPerso() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone pro"   => $entity->getTelPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Adresse"         => nl2br($entity->getAdresse(false) ?? ''),
@@ -211,9 +212,9 @@ class IntervenantViewHelper extends AbstractHtmlElement
             if ($canAddIntervenant && $intervenant->getId()) {
                 echo $v->tag('li', ['class' => 'ajout-intervenant float-end'])->html(
                     $v->tag('a', [
-                            'href'  => $v->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]),
-                            'title' => 'Ajout d\'un nouveau statut à l\'intervenant',
-                        ]
+                                   'href'  => $v->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]),
+                                   'title' => 'Ajout d\'un nouveau statut à l\'intervenant',
+                               ]
                     )->html($v->tag('i', ['class' => 'fas fa-plus'])->html(''))
                 );
             }

@@ -10,6 +10,7 @@ use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\TypeMission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
@@ -146,9 +147,29 @@ class SaisieController extends AbstractController
 
         $form = $this->getFormMission();
 
+        $canEditAvancee = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_AVANCEE));
+
         if ($mission->isValide()) {
             $form->editValide();
         }
+
+        if (!$canEditAvancee) {
+            $form->editSimple();
+            // Lors d'un ajout, les champs désactivés ne sont pas transmis par le navigateur.
+            // On impose donc côté serveur les taux définis par le type de mission sélectionné.
+            if ($this->getRequest()->isPost() && !$mission->getId()) {
+                $typeMissionId = $this->getRequest()->getPost('typeMission');
+                $typeMission   = $typeMissionId
+                    ? $this->em()->find(TypeMission::class, $typeMissionId)
+                    : null;
+
+                if ($typeMission) {
+                    $mission->setTauxRemu($typeMission->getTauxRemu());
+                }
+            }
+        }
+
+
 
         if ($this->getServiceContext()->getStructure()) {
             if (!$mission->getStructure()) {

@@ -155,8 +155,8 @@ class NiveauEtape
     {
         $this->etape      = $etape;
         $this->niv        = $this->etape->getNiveau();
-        $this->lib        = $this->etape->getTypeFormation()->getGroupe()->getLibelleCourt();
-        $this->pertinence = $this->etape->getTypeFormation()->getGroupe()->getPertinenceNiveau();
+        $this->lib = $this->etape->getTypeFormation()->getGroupe()?->getLibelleCourt();
+        $this->pertinence = $this->etape->getTypeFormation()->getGroupe()?->getPertinenceNiveau();
 
         return $this;
     }

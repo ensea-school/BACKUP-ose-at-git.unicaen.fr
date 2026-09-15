@@ -85,6 +85,10 @@ class AfficheurService
             }
         }
 
+        if ($hasServiceStatutaire) {
+            $this->reconcileServiceWithServiceDu($data['heures']['service'], $data['serviceDu']);
+        }
+
         if (count($types) > 1) {
             $types[] = 'total';
             foreach ($data['heures'] as $categorie => $values) {
@@ -109,28 +113,41 @@ class AfficheurService
                     }
                 }
             }
-        }
 
-        //Mécanique d'arrondis du total si écart entre service du et total heure est de 0.01 HETD
-        $hasMultipleTypes = count($types) > 1;
-        $serviceDu        = $data['serviceDu'];
-
-        $total = $hasMultipleTypes
-            ? $data['heures']['total']['total']
-            : current($data['heures']['total']);
-
-        $hasRoundingDifference = abs($total - $serviceDu) <= 0.01;
-
-        if ($total > 0 && $serviceDu > 0 && $hasRoundingDifference) {
-            $key = $hasMultipleTypes
-                ? 'total'
-                : array_key_first($data['heures']['total']);
-
-            $data['heures']['total'][$key]   = $serviceDu;
-            $data['heures']['service'][$key] = $serviceDu;
         }
 
         return $data;
     }
+
+
+
+    /**
+     * Répercute un écart d'arrondi d'un centième sur la plus grande composante
+     * du service afin que la somme affichée corresponde au service dû.
+     */
+    private function reconcileServiceWithServiceDu(array &$service, float $serviceDu): void
+    {
+        if ($serviceDu <= 0.0 || [] === $service) {
+            return;
+        }
+
+        $roundedService = array_map(static fn(float $hours): float => round($hours, 2), $service);
+        $difference     = round(round($serviceDu, 2) - array_sum($roundedService), 2);
+
+        if (abs($difference) !== 0.01) {
+            return;
+        }
+
+        $keyToAdjust = array_keys(
+            $roundedService,
+            max($roundedService),
+            true
+        )[0];
+
+        $roundedService[$keyToAdjust] = round($roundedService[$keyToAdjust] + $difference, 2);
+        $service = $roundedService;
+    }
+
+
 
 }

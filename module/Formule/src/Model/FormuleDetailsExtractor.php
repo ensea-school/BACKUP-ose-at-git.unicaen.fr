@@ -172,10 +172,78 @@ class FormuleDetailsExtractor implements ExtractionInterface
             $valeur                               = $this->trace->getValeur($typeHetd);
             $this->intervenant['hetd'][$typeHetd] = $this->valeurToJson($valeur);
         }
-        //Mécanique d'arrondis du total si écart entre service du et total heure est de 0.01 HETD
-        if ($this->intervenant['hetd']['HeuresService']['valeur'] > 0 && $this->intervenant['serviceDu'] > 0 && abs($this->intervenant['hetd']['HeuresService']['valeur'] - $this->intervenant['serviceDu']) <= 0.01) {
-            $this->intervenant['hetd']['HeuresService']['valeur'] = $this->intervenant['serviceDu'];
 
+        $this->reconcileIntervenantService();
+
+    }
+
+
+
+    /**
+     * Répercute un écart d'un centième entre le service calculé et le service dû
+     * sur les valeurs affichées, tout en conservant leurs valeurs originales.
+     */
+    private function reconcileIntervenantService(): void
+    {
+        $serviceKey = Ligne::CAT_SERVICE;
+
+        if (!isset($this->intervenant['hetd'][$serviceKey])) {
+            return;
+        }
+
+        $serviceDu        = round($this->intervenant['serviceDu'], 2);
+        $calculatedService = round($this->intervenant['hetd'][$serviceKey]['valeur'], 2);
+        $difference        = round($serviceDu - $calculatedService, 2);
+
+        if ($serviceDu <= 0.0 || abs($difference) !== 0.01) {
+            return;
+        }
+
+        $componentKeys = array_map(
+            static fn(string $type): string => Ligne::CAT_SERVICE . $type,
+            Ligne::TYPES
+        );
+        $componentKeys = array_values(array_filter(
+            $componentKeys,
+            fn(string $key): bool => isset($this->intervenant['hetd'][$key])
+        ));
+
+        if ([] !== $componentKeys) {
+            usort(
+                $componentKeys,
+                fn(string $left, string $right): int =>
+                    abs($this->intervenant['hetd'][$right]['valeur'])
+                    <=> abs($this->intervenant['hetd'][$left]['valeur'])
+            );
+
+            $componentKey = $componentKeys[0];
+            $this->intervenant['hetd'][$componentKey]['valeur'] = round(
+                $this->intervenant['hetd'][$componentKey]['valeur'] + $difference,
+                2
+            );
+
+            $enseignementKeys = array_map(
+                static fn(string $type): string => Ligne::CAT_SERVICE . $type,
+                Ligne::TYPES_ENSEIGNEMENT
+            );
+            $enseignementKey = Ligne::CAT_SERVICE . Ligne::TYPE_ENSEIGNEMENT;
+
+            if (in_array($componentKey, $enseignementKeys, true)
+                && isset($this->intervenant['hetd'][$enseignementKey])) {
+                $this->intervenant['hetd'][$enseignementKey]['valeur'] = round(
+                    $this->intervenant['hetd'][$enseignementKey]['valeur'] + $difference,
+                    2
+                );
+            }
+        }
+
+        $this->intervenant['hetd'][$serviceKey]['valeur'] = $serviceDu;
+
+        if (isset($this->intervenant['hetd'][Ligne::TOTAL])) {
+            $this->intervenant['hetd'][Ligne::TOTAL]['valeur'] = round(
+                $this->intervenant['hetd'][Ligne::TOTAL]['valeur'] + $difference,
+                2
+            );
         }
     }
 

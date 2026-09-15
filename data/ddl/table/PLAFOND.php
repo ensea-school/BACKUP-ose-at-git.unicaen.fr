@@ -105,6 +105,18 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
+        'PLAFOND_EN_EUROS'              => [
+            'name'        => 'PLAFOND_EN_EUROS',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 7,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

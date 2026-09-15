@@ -238,6 +238,7 @@ class DataSource
                 'LIBELLE'              => $p['libelle'],
                 'MESSAGE'              => $p['message'] ?? null,
                 'PLAFOND_PERIMETRE_ID' => $perimetreId,
+                'PLAFOND_EN_EUROS'     => $p['plafond_en_euros'] ?? false,
                 'REQUETE'              => $p['requete'],
             ];
             $plafonds[]  = $plafond;

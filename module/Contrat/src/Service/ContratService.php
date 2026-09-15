@@ -301,7 +301,7 @@ class ContratService extends AbstractEntityService
                     //Création du processus de signature
                     $process = $this->getProcessService()->createUnconfiguredProcess($filename, $signatureFlow->getId());
                     //Création des différentes étapes de signature du circuit
-                    $this->getProcessService()->configureProcess($process, $signatureFlowDatas);
+                    $this->getProcessService()->configureProcess($process, $signatureFlowDatas, $signatureFlow);
                     $contrat->setProcessSignature($process);
                     //Déclenchement de la première étape de signature du circuit
                     $this->getProcessService()->trigger($process, true);

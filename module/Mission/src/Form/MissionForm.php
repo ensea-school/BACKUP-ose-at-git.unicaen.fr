@@ -151,6 +151,16 @@ class MissionForm extends AbstractForm
         return $this;
     }
 
+    public function editSimple(): self
+    {
+        $elementsAvances = ['tauxRemu', 'tauxRemuMajore'];
+
+        // On met en lecture seule la gestion des taux si on a pas le privilege d'édition avancee
+        $this->readOnly(true, $elementsAvances);
+
+        return $this;
+    }
+
 
 
     public function isValide(): bool

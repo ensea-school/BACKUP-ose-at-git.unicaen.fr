@@ -85,6 +85,8 @@ class PlafondService extends AbstractEntityService
         $sqls = $this->dataMakeQueries($entity, $typeVolumeHoraire);
 
         $sql = implode("\n\nUNION ALL\n\n", $sqls);
+
+
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         $depassements = [];
         foreach ($res as $r) {
@@ -228,7 +230,10 @@ class PlafondService extends AbstractEntityService
 
         if ($entity instanceof Mission) {
             $this->controlePop($entity->getTypeMission(), $pqr);
-            $this->controlePop($entity->getIntervenant(), $pqr);
+            // Pour une mission, la structure à contrôler est celle de la mission.
+            // Ajouter directement l'intervenant évite que controlePop() ne remonte
+            // également vers sa structure d'affectation.
+            $pqr->add($entity->getIntervenant());
             $this->controlePop($entity->getStructure(), $pqr);
         }
 
@@ -443,17 +448,18 @@ class PlafondService extends AbstractEntityService
 
         $sql = "
             SELECT
-              p.id           id,
-              p.numero       numero,
-              p.libelle      libelle,
+              p.id               id,
+              p.numero           numero,
+              p.libelle          libelle,
               CASE WHEN p.message IS NOT NULL THEN replace(p.message, ':sujet', $libVal) ELSE p.libelle END message,
-              pp.code        perimetre,
-              pe.code        etat,
-              pe.bloquant    bloquant,
-              pd.depassement depassement,
-              SUM(pd.heures) heures,
-              pd.plafond     plafond,
-              pd.derogation  derogation
+              pp.code            perimetre,
+              pe.code            etat,
+              pe.bloquant        bloquant,
+              pd.depassement     depassement,
+              SUM(pd.heures)     heures,
+              pd.plafond         plafond,
+              pd.derogation      derogation,
+              p.plafond_en_euros plafond_en_euros
             FROM 
               " . ($pqr->useView ? 'v_' : '') . "tbl_plafond_" . $perimetre . " pd
               JOIN plafond               p ON p.id = pd.plafond_id
@@ -466,7 +472,7 @@ class PlafondService extends AbstractEntityService
               $sqlFilters
             GROUP BY
               p.id, p.numero, p.libelle, p.message, pp.code, pe.code,
-              pe.bloquant, pd.depassement, pd.plafond, pd.derogation,
+              pe.bloquant, pd.depassement, pd.plafond, pd.derogation,p.plafond_en_euros,
               $groupBy
         ";
 

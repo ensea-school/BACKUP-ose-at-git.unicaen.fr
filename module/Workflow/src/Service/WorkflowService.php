@@ -267,20 +267,24 @@ class WorkflowService extends AbstractService
 
         $deps = [
             TblProvider::SERVICE_DU              => [TblProvider::FORMULE],
-            TblProvider::VALIDATION_ENSEIGNEMENT => [TblProvider::FORMULE,TblProvider::WORKFLOW],
-            TblProvider::VALIDATION_REFERENTIEL  => [TblProvider::FORMULE,TblProvider::WORKFLOW],
-            TblProvider::FORMULE                 => [TblProvider::AGREMENT, TblProvider::PAIEMENT],
+            TblProvider::FORMULE                 => [TblProvider::AGREMENT,
+                                                     TblProvider::PAIEMENT],
             TblProvider::CANDIDATURE             => [TblProvider::WORKFLOW],
             TblProvider::AGREMENT                => [TblProvider::WORKFLOW],
             TblProvider::CLOTURE_REALISE         => [TblProvider::WORKFLOW],
-            TblProvider::CONTRAT                 => [TblProvider::VALIDATION_ENSEIGNEMENT, TblProvider::VALIDATION_REFERENTIEL],
+            TblProvider::CONTRAT                 => [TblProvider::VALIDATION_ENSEIGNEMENT,
+                                                     TblProvider::VALIDATION_REFERENTIEL],
             TblProvider::DOSSIER                 => [TblProvider::WORKFLOW],
             TblProvider::PAIEMENT                => [TblProvider::WORKFLOW],
             TblProvider::PIECE_JOINTE            => [TblProvider::WORKFLOW],
             TblProvider::SERVICE                 => [TblProvider::WORKFLOW],
+            TblProvider::VALIDATION_ENSEIGNEMENT => [TblProvider::FORMULE,
+                                                     TblProvider::WORKFLOW],
             TblProvider::MISSION                 => [TblProvider::WORKFLOW],
             TblProvider::MISSION_PRIME           => [TblProvider::WORKFLOW],
             TblProvider::REFERENTIEL             => [TblProvider::WORKFLOW],
+            TblProvider::VALIDATION_REFERENTIEL  => [TblProvider::FORMULE,
+                                                     TblProvider::WORKFLOW],
             TblProvider::WORKFLOW                => [],
             TblProvider::PLAFOND_INTERVENANT     => [],
             TblProvider::PLAFOND_STRUCTURE       => [],
@@ -299,7 +303,16 @@ class WorkflowService extends AbstractService
             $tbls = $deps;
         }
 
-        foreach ($deps as $dep => $null) {
+        //Petit hack pour mettre toujours le tbl workflow en dernier dans le tbls,
+        // pour qu'il soit toujours calculer en dernier car il dépend de tous les autres tbl
+
+        if (array_key_exists('workflow', $tbls)) {
+            $workflowValue = $tbls['workflow'];
+            unset($tbls['workflow']);
+            $tbls['workflow'] = $workflowValue;
+        }
+
+        foreach ($tbls as $dep => $null) {
             if (isset($tbls[$dep])) {
                 if ($intervenant instanceof Intervenant) {
                     $value = $intervenant->getId();
@@ -316,8 +329,9 @@ class WorkflowService extends AbstractService
         }
 
         /* Mise à jour des entités */
-        if (array_key_exists($intervenant->getId(), $this->feuillesDeRoute)) {
-            foreach ($this->feuillesDeRoute[$intervenant->getId()] as $fdr) {
+        $intervenantId = $intervenant instanceof Intervenant ? $intervenant->getId() : (int)$intervenant;
+        if (array_key_exists($intervenantId, $this->feuillesDeRoute)) {
+            foreach ($this->feuillesDeRoute[$intervenantId] as $fdr) {
                 foreach ($fdr as $etp) {
                     /** @var $etp WorkflowEtape */
                     foreach ($etp->getEtapes() as $etape) {

@@ -36,6 +36,7 @@ class WorkflowProcess implements ProcessInterface
     private array $workflows = [];
 
 
+
     public function __construct(
         private readonly BddService      $bddService,
         private readonly Bdd             $bdd,
@@ -43,7 +44,7 @@ class WorkflowProcess implements ProcessInterface
         private readonly WorkflowService $workflowService,
 
         #[Autowire(config: 'export-rh/actif')]
-        private readonly bool $exportRhEnabled,
+        private readonly bool            $exportRhEnabled,
     )
     {
     }
@@ -92,6 +93,7 @@ class WorkflowProcess implements ProcessInterface
             unset($workflow[WorkflowEtape::EXPORT_RH]);
         }
     }
+
 
 
     protected function calculDependances(array &$workflow): void
@@ -162,14 +164,17 @@ class WorkflowProcess implements ProcessInterface
                 if ($debute) {
                     return true;
                 }
+                break;
             case WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT:
                 if ($partiel) {
                     return true;
                 }
+                break;
             case WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT:
                 if ($integral) {
                     return true;
                 }
+                break;
         }
 
         return false;
@@ -228,7 +233,7 @@ class WorkflowProcess implements ProcessInterface
             }
 
             if (array_key_exists($structure, $ie->structures)) {
-                if($structure==0){
+                if ($structure == 0) {
                     continue;
                 }
                 throw new \Exception('Erreur workflow pour l\'intervenant ID=' . $intevenant . ' : la structure ID=' . $structure . ' est référencée en double');
@@ -310,7 +315,7 @@ class WorkflowProcess implements ProcessInterface
         $dems       = "\n" . $this->sqlActivationEtapes();
         $subQueries = "\n" . $this->sqlAlimentation() . "\n";
 
-        return "
+        $var = "
         SELECT
           i.annee_id                                           annee_id,
           i.id                                                 intervenant_id,
@@ -346,13 +351,16 @@ class WorkflowProcess implements ProcessInterface
         $tests = [
             // Candidatures, missions, indemnités fin contrat
             [
-                'etapes' => [WorkflowEtape::CANDIDATURE_SAISIE, WorkflowEtape::CANDIDATURE_VALIDATION],
+                'etapes' => [WorkflowEtape::CANDIDATURE_SAISIE,
+                             WorkflowEtape::CANDIDATURE_VALIDATION],
                 'sql'    => 'si.offre_emploi_postuler',
             ],
             [
                 'etapes' => [
-                    WorkflowEtape::MISSION_SAISIE, WorkflowEtape::MISSION_VALIDATION,
-                    WorkflowEtape::MISSION_SAISIE_REALISE, WorkflowEtape::MISSION_VALIDATION_REALISE,
+                    WorkflowEtape::MISSION_SAISIE,
+                    WorkflowEtape::MISSION_VALIDATION,
+                    WorkflowEtape::MISSION_SAISIE_REALISE,
+                    WorkflowEtape::MISSION_VALIDATION_REALISE,
                 ],
                 'sql'    => 'si.mission',
             ],
@@ -364,7 +372,8 @@ class WorkflowProcess implements ProcessInterface
 
             // Données personnelles
             [
-                'etapes' => [WorkflowEtape::DONNEES_PERSO_SAISIE, WorkflowEtape::DONNEES_PERSO_VALIDATION],
+                'etapes' => [WorkflowEtape::DONNEES_PERSO_SAISIE,
+                             WorkflowEtape::DONNEES_PERSO_VALIDATION],
                 'sql'    => 'CASE WHEN si.dossier = 1 AND (
      si.dossier_statut = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . ' 
   OR si.dossier_identite_comp = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
@@ -381,7 +390,8 @@ class WorkflowProcess implements ProcessInterface
   ) THEN 1 ELSE 0 END',
             ],
             [
-                'etapes' => [WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE, WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
+                'etapes' => [WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE,
+                             WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
                 'sql'    => 'CASE WHEN si.dossier = 1 AND (
      si.dossier_statut = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . ' 
   OR si.dossier_identite_comp = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
@@ -401,14 +411,16 @@ class WorkflowProcess implements ProcessInterface
 
             // Pièces justificatives
             [
-                'etapes' => [WorkflowEtape::PJ_SAISIE, WorkflowEtape::PJ_VALIDATION],
+                'etapes' => [WorkflowEtape::PJ_SAISIE,
+                             WorkflowEtape::PJ_VALIDATION],
                 'sql'    => "CASE
     WHEN EXISTS(
     SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id AND si.pj_active = 1 AND tpjs.demandee_apres_recrutement = 0
   ) THEN 1 ELSE 0 END",
             ],
             [
-                'etapes' => [WorkflowEtape::PJ_COMPL_SAISIE, WorkflowEtape::PJ_COMPL_VALIDATION],
+                'etapes' => [WorkflowEtape::PJ_COMPL_SAISIE,
+                             WorkflowEtape::PJ_COMPL_VALIDATION],
                 'sql'    => "CASE
     WHEN EXISTS(
     SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id AND si.pj_active = 1 AND tpjs.demandee_apres_recrutement = 1
@@ -437,22 +449,26 @@ class WorkflowProcess implements ProcessInterface
 
             // Enseignements
             [
-                'etapes' => [WorkflowEtape::ENSEIGNEMENT_SAISIE, WorkflowEtape::ENSEIGNEMENT_VALIDATION],
+                'etapes' => [WorkflowEtape::ENSEIGNEMENT_SAISIE,
+                             WorkflowEtape::ENSEIGNEMENT_VALIDATION],
                 'sql'    => 'si.service_prevu',
             ],
             [
-                'etapes' => [WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE, WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE],
+                'etapes' => [WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE,
+                             WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE],
                 'sql'    => 'si.service_realise',
             ],
 
 
             // Référentiel
             [
-                'etapes' => [WorkflowEtape::REFERENTIEL_SAISIE, WorkflowEtape::REFERENTIEL_VALIDATION],
+                'etapes' => [WorkflowEtape::REFERENTIEL_SAISIE,
+                             WorkflowEtape::REFERENTIEL_VALIDATION],
                 'sql'    => 'si.referentiel_prevu',
             ],
             [
-                'etapes' => [WorkflowEtape::REFERENTIEL_SAISIE_REALISE, WorkflowEtape::REFERENTIEL_VALIDATION_REALISE],
+                'etapes' => [WorkflowEtape::REFERENTIEL_SAISIE_REALISE,
+                             WorkflowEtape::REFERENTIEL_VALIDATION_REALISE],
                 'sql'    => 'si.referentiel_realise',
             ],
 
@@ -463,7 +479,8 @@ class WorkflowProcess implements ProcessInterface
                 'sql'    => 'si.cloture',
             ],
             [
-                'etapes' => [WorkflowEtape::DEMANDE_MEP, WorkflowEtape::SAISIE_MEP],
+                'etapes' => [WorkflowEtape::DEMANDE_MEP,
+                             WorkflowEtape::SAISIE_MEP],
                 'sql'    => 'si.paiement',
             ],
         ];

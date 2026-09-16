@@ -71,6 +71,7 @@ class ElementModulateurCentreCoutTauxRemuForm extends AbstractForm
         $typeModulateurs = $this->getServiceTypeModulateur()->finderByElementPedagogique($elementPedagogique)->getQuery()->getResult();
         if (!empty($typeModulateurs)) {
             foreach ($typeModulateurs as $typeModulateur) {
+                $modulateursValues = [];
                 $values = $typeModulateur->getModulateur();
                 foreach ($values as $value) {
                     $modulateursValues[$typeModulateur->getCode()][$value->getCode()] = $value->getLibelle();
@@ -78,7 +79,7 @@ class ElementModulateurCentreCoutTauxRemuForm extends AbstractForm
                 $selectName       = 'modulateur-' . $typeModulateur->getCode();
                 $selectModulateur = new Select($selectName);
                 $selectModulateur->setLabel($typeModulateur->getLibelle() . " : ");
-                $selectModulateur->setValueOptions(['' => '(Aucun)'] + $modulateursValues[$typeModulateur->getCode()]);
+                $selectModulateur->setValueOptions(['' => '(Aucun)'] + $modulateursValues[$typeModulateur->getCode()] ?? []);
                 $elementsModulateurs = $elementPedagogique->getElementModulateur();
                 foreach ($elementsModulateurs as $elementModulateur) {
                     $typeModulateur = $elementModulateur->getModulateur()->getTypeModulateur();

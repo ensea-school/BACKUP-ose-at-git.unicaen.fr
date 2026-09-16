@@ -192,7 +192,7 @@ return [
         "libelle_autres"      => "J'accède aux enseignements prévisionnels",
         "route"               => "intervenant/services-prevus",
         "desc_non_franchie"   => "Aucun enseignement prévisionnel n'a été saisi",
-        "perimetre"           => Perimetre::COMPOSANTE,
+        "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => 'Au moins 1h d\'enseignement prévisionnel a été saisie',
@@ -212,7 +212,7 @@ return [
         "libelle_autres"      => "J'accède au référentiel prévisionnel",
         "route"               => "intervenant/services-prevus",
         "desc_non_franchie"   => "Aucun référentiel prévisionnel n'a été saisi",
-        "perimetre"           => Perimetre::COMPOSANTE,
+        "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => 'Au moins 1h de référentiel prévisionnel a été saisie',
@@ -251,7 +251,7 @@ return [
         "libelle_autres"      => "Je visualise la validation des enseignements prévisionnels",
         "route"               => "intervenant/validation/enseignement/prevu",
         "desc_non_franchie"   => "Les enseignements prévisionnels n'ont pas été validés",
-        "perimetre"           => Perimetre::COMPOSANTE,
+        "perimetre"           => Perimetre::ETABLISSEMENT,
         "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => 'Une partie des heures d\'enseignements prévisionnels doit avoir été validée',
@@ -308,7 +308,8 @@ return [
         "libelle_autres"      => "Je visualise l'agrément 'Conseil restreint'",
         "route"               => "intervenant/agrement/conseil-restreint",
         "desc_non_franchie"   => "L'agrément du Conseil restreint n'a pas été saisi",
-        "perimetre"           => Perimetre::COMPOSANTE, // par défaut, adaptable selon paramétrage...
+        "perimetre"           => Perimetre::COMPOSANTE,
+        // par défaut, adaptable selon paramétrage...
         "contraintes"         => [],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => null,
@@ -339,7 +340,8 @@ return [
         "libelle_autres"      => "Je visualise l'agrément 'Conseil académique'",
         "route"               => "intervenant/agrement/conseil-academique",
         "desc_non_franchie"   => "L'agrément du Conseil académique n'a pas été saisi",
-        "perimetre"           => Perimetre::ETABLISSEMENT, // par défaut, adaptable selon paramétrage...
+        "perimetre"           => Perimetre::ETABLISSEMENT,
+        // par défaut, adaptable selon paramétrage...
         "contraintes"         => [WorkflowEtape::CONSEIL_RESTREINT],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => null,
@@ -359,7 +361,8 @@ return [
         "route"               => "intervenant/contrat",
         "desc_non_franchie"   => "Le contrat n'a pas été établi",
         "perimetre"           => Perimetre::COMPOSANTE,
-        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_VALIDATION, WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
+        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_VALIDATION,
+                                  WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => 'Au moins un projet de contrat doit avoir été créé',
             WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT => 'Au moins un contrat ou avenant nécessaire doit avoir été finalisé',
@@ -390,7 +393,8 @@ return [
         "route"               => "intervenant/exporter",
         "desc_non_franchie"   => "L'export vers le logiciel RH n'a pas été fait",
         "perimetre"           => Perimetre::ETABLISSEMENT,
-        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_VALIDATION, WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
+        "contraintes"         => [WorkflowEtape::DONNEES_PERSO_VALIDATION,
+                                  WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => null,
             WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT => null,
@@ -470,7 +474,9 @@ return [
         "route"               => "intervenant/services-realises",
         "desc_non_franchie"   => "La clôture de saisie des services réalisés n'a pas été effectuée",
         "perimetre"           => Perimetre::ETABLISSEMENT,
-        "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE, WorkflowEtape::REFERENTIEL_SAISIE_REALISE, WorkflowEtape::MISSION_SAISIE_REALISE],
+        "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE,
+                                  WorkflowEtape::REFERENTIEL_SAISIE_REALISE,
+                                  WorkflowEtape::MISSION_SAISIE_REALISE],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => null,
             WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT => null,
@@ -568,7 +574,10 @@ return [
         "desc_non_franchie"   => "Aucune demande de mise en paiement n'a été faite",
         "desc_sans_objectif"  => "Le nombre d'heures de service réalisées ET validées n'est pas suffisant pour déclencher le paiement d'heures complémentaires.",
         "perimetre"           => Perimetre::COMPOSANTE,
-        "contraintes"         => [WorkflowEtape::CLOTURE_REALISE, WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE, WorkflowEtape::REFERENTIEL_VALIDATION_REALISE, WorkflowEtape::MISSION_VALIDATION_REALISE],
+        "contraintes"         => [WorkflowEtape::CLOTURE_REALISE,
+                                  WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE,
+                                  WorkflowEtape::REFERENTIEL_VALIDATION_REALISE,
+                                  WorkflowEtape::MISSION_VALIDATION_REALISE],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => 'Au moins une demande de mise en paiement doit avoir été faite',
             WorkflowEtapeDependance::AVANCEMENT_TERMINE_PARTIELLEMENT => null,

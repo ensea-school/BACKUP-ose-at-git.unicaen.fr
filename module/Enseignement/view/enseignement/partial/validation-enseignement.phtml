@@ -56,7 +56,12 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
             <small>(cliquez pour afficher/cacher)</small>
         </a>
         <div class="collapse <?= $validation->getId() ? '' : 'in' ?>" id="details-enseignements-<?= $id ?>">
-            <?= $this->enseignements($typeVolumeHoraire, current($services)->getIntervenant(), $services)->setReadonly(true)->render(); ?>
+            <?php $firstService = current($services); ?>
+            <?php if ($firstService): ?>
+                <?= $this->enseignements($typeVolumeHoraire, $firstService->getIntervenant(), $services)->setReadonly(true)->render(); ?>
+            <?php else: ?>
+                <em>Aucun enseignement à afficher.</em>
+            <?php endif; ?>
         </div>
 
     </div>

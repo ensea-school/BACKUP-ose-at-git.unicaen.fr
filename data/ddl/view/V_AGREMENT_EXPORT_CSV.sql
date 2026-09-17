@@ -148,11 +148,21 @@ LEFT JOIN heures_s
     ON heures_s.intervenant_id = i.id
     AND heures_s.structure_id = s.id
 
-WHERE EXISTS (
-    SELECT 1
-    FROM tbl_workflow twf
-    WHERE twf.intervenant_id = ta.intervenant_id
-      AND twf.annee_id = ta.annee_id
-      AND twf.etape_id IN (189, 190)
-      AND twf.atteignable = 1
-)
+LEFT JOIN WF_ETAPE WFER
+    ON WFER.CODE = 'CONSEIL_RESTREINT'
+
+LEFT JOIN WF_ETAPE WFEA
+    ON WFEA.CODE = 'CONSEIL_ACADEMIQUE'
+
+LEFT JOIN tbl_workflow twf
+    ON twf.intervenant_id = ta.intervenant_id
+
+
+WHERE (
+    twf.etape_id = WFER.ID
+        AND twf.atteignable = 1
+    )
+   OR (
+    twf.etape_id = WFEA.ID
+        AND twf.atteignable = 1
+    )

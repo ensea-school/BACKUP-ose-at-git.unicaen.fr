@@ -72,6 +72,9 @@ class LayoutViewHelper extends AbstractHtmlElement
             $structures = $this->getStructures();
         }
 
+        $structure = $this->getServiceContext()->getStructure();
+
+
         return [
             'utilisateurNom'    => $utilisateur->getDisplayName(),
             'roleNom'           => $roleNom,
@@ -80,7 +83,7 @@ class LayoutViewHelper extends AbstractHtmlElement
             'usurpationEnabled' => $this->isUsurpationEnabled(),
             'usurpationEnCours' => $this->isUsurpationEnCours(),
             'roles'             => $roles,
-            'structureId'       => null,
+            'structureId'       => $structure ? $structure->getId() : null,
             'structures'        => $structures,
         ];
     }

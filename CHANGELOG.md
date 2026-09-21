@@ -53,6 +53,7 @@ OSE [24.17]
 * Correction du bouton d'export des formations lorsqu'un niveau est séléctionner (#67743)
 * Correction pour pouvoir mettre à jour en cours d'année un RIB dans SIHAM via la synchronisation des données personnelles (#67090)
 * Réduction de la taille du champs description de la table service pour des raisons de taille max d'index selon version d'Oracle (#67765)
+* Correction de la formule de Rouen pour application de la nouvelle formule à partir de 2026/2027 (#66435)
 
 
 # OSE 24.19 (08/09/2026)

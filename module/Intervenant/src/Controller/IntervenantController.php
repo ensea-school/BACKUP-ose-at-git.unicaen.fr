@@ -332,17 +332,62 @@ class  IntervenantController extends AbstractController
             $form->activerEditionAvancee();
         }
 
+        $canViewAdresseIntervenant = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE));
+        $canEditContactIntervenant = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_CONTACT_EDITION));
+        $canViewIdentiteIntervenant = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_IDENTITE_VISUALISATION));
+        $canEditIdentiteIntervenant = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_IDENTITE_EDITION));
+        $canViewInseeIntervenant = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_VISUALISATION));
+        $canEditInseeIntervenant = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_EDITION));
+
+        $protectedFields = [];
+        if (!$canViewAdresseIntervenant) {
+            $protectedFields = array_merge($protectedFields, [
+                'code',
+                'codeRh',
+                'emailPerso',
+                'telPerso',
+                'utilisateur',
+                'intervenant-edition-login',
+                'intervenant-edition-password',
+            ]);
+        }
+        if (!$canEditContactIntervenant) {
+            $protectedFields = array_merge($protectedFields, ['emailPerso', 'telPerso']);
+        }
+        if (!$canViewIdentiteIntervenant || !$canEditIdentiteIntervenant) {
+            $protectedFields[] = 'dateNaissance';
+        }
+        if (!$canViewInseeIntervenant || !$canEditInseeIntervenant) {
+            $protectedFields[] = 'numeroInsee';
+        }
+
+        if (!empty($protectedFields)) {
+            $protectedFields = array_unique($protectedFields);
+            $form->protegerChamps($protectedFields);
+        }
+
         $ancienStatut = $intervenant->getStatut();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $oriData = $form->getHydrator()->extract($intervenant);
             $postData = $request->getPost()->toArray();
+            if (!empty($protectedFields)) {
+                // Ces valeurs sensibles restent celles déjà portées par l'entité :
+                // elles ne sont ni rendues dans la page, ni acceptées depuis le POST.
+                foreach ($protectedFields as $elementName) {
+                    unset($postData[$elementName]);
+                }
+            }
+
+            if (!$canViewAdresseIntervenant) {
+                $postData['userChange'] = '0';
+            }
             $data = array_merge($oriData, $postData);
             $form->setData($data);
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
-                    if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
+                    if ($canViewAdresseIntervenant && $form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
                         $nom = $intervenant->getNomUsuel();
                         $prenom = $intervenant->getPrenom();
                         $dateNaissance = $intervenant->getDateNaissance();
@@ -386,7 +431,17 @@ class  IntervenantController extends AbstractController
 
         $vm = new ViewModel();
         $vm->setTemplate('intervenant/intervenant/saisir');
-        $vm->setVariables(compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut', 'actionDetail'));
+        $vm->setVariables(compact(
+            'intervenant',
+            'form',
+            'errors',
+            'title',
+            'definiParDefaut',
+            'actionDetail',
+            'canViewAdresseIntervenant',
+            'canViewIdentiteIntervenant',
+            'canViewInseeIntervenant'
+        ));
 
         return $vm;
     }

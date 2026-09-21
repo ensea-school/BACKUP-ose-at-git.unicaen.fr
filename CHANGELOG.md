@@ -43,6 +43,13 @@ OSE [24.17]
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
 ---
+# OSE 24.20 (A venir)
+## Nouveautés
+
+## Corrections
+* Correction pour la saisie d'un élément pédagogique sur une structure fille (#67684)
+* Le formulaire d'édition de l'intervenant prend bien en compte les privilèges d'éditions et de visualisation pour l'affichage des informations (#67531)
+* Correction du bouton d'export des formations lorsqu'un niveau est séléctionner (#67743)
 
 # OSE 24.19 (08/09/2026)
 

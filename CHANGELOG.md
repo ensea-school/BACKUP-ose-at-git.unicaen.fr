@@ -52,6 +52,7 @@ OSE [24.17]
 * Le formulaire d'édition de l'intervenant prend bien en compte les privilèges d'éditions et de visualisation pour l'affichage des informations (#67531)
 * Correction du bouton d'export des formations lorsqu'un niveau est séléctionner (#67743)
 * Correction pour pouvoir mettre à jour en cours d'année un RIB dans SIHAM via la synchronisation des données personnelles (#67090)
+* Réduction de la taille du champs description de la table service pour des raisons de taille max d'index selon version d'Oracle (#67765)
 
 
 # OSE 24.19 (08/09/2026)

@@ -44,12 +44,15 @@ OSE [24.17]
 
 ---
 # OSE 24.20 (A venir)
+
 ## Nouveautés
 
 ## Corrections
 * Correction pour la saisie d'un élément pédagogique sur une structure fille (#67684)
 * Le formulaire d'édition de l'intervenant prend bien en compte les privilèges d'éditions et de visualisation pour l'affichage des informations (#67531)
 * Correction du bouton d'export des formations lorsqu'un niveau est séléctionner (#67743)
+* Correction pour pouvoir mettre à jour en cours d'année un RIB dans SIHAM via la synchronisation des données personnelles (#67090)
+
 
 # OSE 24.19 (08/09/2026)
 

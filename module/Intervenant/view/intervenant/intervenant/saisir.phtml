@@ -1,12 +1,15 @@
 <?php
 
 /**
- * @var $this            \Application\View\Renderer\PhpRenderer
- * @var $intervenant     \Intervenant\Entity\Db\Intervenant
- * @var $changed         bool
- * @var $errors          array
- * @var $definiParDefaut bool
- * @var $actionDetail    string
+ * @var $this                      \Application\View\Renderer\PhpRenderer
+ * @var $intervenant               \Intervenant\Entity\Db\Intervenant
+ * @var $changed                   bool
+ * @var $errors                    array
+ * @var $definiParDefaut           bool
+ * @var $actionDetail              string
+ * @var $canViewAdresseIntervenant bool
+ * @var $canViewIdentiteIntervenant bool
+ * @var $canViewInseeIntervenant bool
  */
 
 if ($intervenant && 'dupliquer' == $actionDetail) {
@@ -34,25 +37,31 @@ if ($errors) {
                             <?= $this->formControlGroup($form->get('prenom')); ?>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <?= $this->formControlGroup($form->get('dateNaissance')); ?>
+                    <?php if ($canViewIdentiteIntervenant): ?>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?= $this->formControlGroup($form->get('dateNaissance')); ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?= $this->formControlGroup($form->get('code')); ?>
+                    <?php endif; ?>
+                    <?php if ($canViewAdresseIntervenant): ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?= $this->formControlGroup($form->get('code')); ?>
+                            </div>
+                            <div class="col-md-6">
+                                <?= $this->formControlGroup($form->get('codeRh')); ?>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <?= $this->formControlGroup($form->get('codeRh')); ?>
-                        </div>
-                    </div>
+                    <?php endif; ?>
                     <!--INSEE ET NUMERO DE PRISE EN CHARGE-->
                     <div class="row">
 
-                        <div class="col-md-6">
-                            <?= $this->formControlGroup($form->get('numeroInsee')); ?>
-                        </div>
+                        <?php if ($canViewInseeIntervenant): ?>
+                            <div class="col-md-6">
+                                <?= $this->formControlGroup($form->get('numeroInsee')); ?>
+                            </div>
+                        <?php endif; ?>
                         <div class="col-md-6">
                             <?= $this->formControlGroup($form->get('numeroPec')); ?>
                         </div>
@@ -84,10 +93,12 @@ if ($errors) {
                         <div class="col-md-4"><?= $this->formControlGroup($form->get('civilite')); ?></div>
                         <div class="col-md-8"><?= $this->formControlGroup($form->get('nomPatronymique')); ?></div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6"><?= $this->formControlGroup($form->get('emailPerso')); ?></div>
-                        <div class="col-md-6"><?= $this->formControlGroup($form->get('telPerso')); ?></div>
-                    </div>
+                    <?php if ($canViewAdresseIntervenant): ?>
+                        <div class="row">
+                            <div class="col-md-6"><?= $this->formControlGroup($form->get('emailPerso')); ?></div>
+                            <div class="col-md-6"><?= $this->formControlGroup($form->get('telPerso')); ?></div>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-md-6"><?= $this->formControlGroup($form->get('validiteDebut')); ?></div>
                         <div class="col-md-6"><?= $this->formControlGroup($form->get('validiteFin')); ?></div>
@@ -105,16 +116,19 @@ if ($errors) {
             <div class="card bg-default">
                 <div class="card-header">Liens avec le système d'information</div>
                 <div class="card-body">
+                    <?php if ($canViewAdresseIntervenant): ?>
                     <div class="row">
                         <div class="col-md-12">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active">
-                                    <a class="nav-link active" href="#exists-user" data-bs-target="#exists-user" aria-controls="exists-user" role="tab"
+                                    <a class="nav-link active" href="#exists-user" data-bs-target="#exists-user"
+                                       aria-controls="exists-user" role="tab"
                                        data-bs-toggle="tab">Compte existant</a>
                                 </li>
                                 <li role="presentation">
-                                    <a class="nav-link" href="#new-user" data-bs-target="#new-user" aria-controls=new-user" role="tab" data-bs-toggle="tab">Créer
+                                    <a class="nav-link" href="#new-user" data-bs-target="#new-user"
+                                       aria-controls=new-user" role="tab" data-bs-toggle="tab">Créer
                                         un nouveau compte</a></li>
                             </ul>
 
@@ -132,6 +146,7 @@ if ($errors) {
                             </div>
                         </div>
                     </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-md-6"><?= $this->formControlGroup($form->get('source')); ?></div>
                         <div class="col-md-6"><?= $this->formControlGroup($form->get('sourceCode')); ?></div>

@@ -508,6 +508,26 @@ class EditionForm extends AbstractForm
 
 
 
+    public function protegerChamps(array $elements)
+    {
+        foreach ($elements as $elementName) {
+            if (!$this->has($elementName)) {
+                continue;
+            }
+
+            /** @var Element $element */
+            $element = $this->get($elementName);
+            $element->setAttribute('readonly', true);
+            $element->setAttribute('disabled', true);
+
+            if (array_key_exists($elementName, $this->hydratorElements)) {
+                $this->getHydrator()->setReadOnly($elementName, true);
+            }
+        }
+    }
+
+
+
     public function protection($object)
     {
         // Le formulaire pouvant être réutilisé, on retire d'abord les protections

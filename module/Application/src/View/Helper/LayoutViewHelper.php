@@ -83,7 +83,7 @@ class LayoutViewHelper extends AbstractHtmlElement
             'usurpationEnabled' => $this->isUsurpationEnabled(),
             'usurpationEnCours' => $this->isUsurpationEnCours(),
             'roles'             => $roles,
-            'structureId'       => $structure ? $structure->getId() : null,
+            'structureId'       => $structure?->getId(),
             'structures'        => $structures,
         ];
     }

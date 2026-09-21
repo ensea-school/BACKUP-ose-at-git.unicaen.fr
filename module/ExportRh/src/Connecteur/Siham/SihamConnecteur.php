@@ -730,7 +730,8 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             if ($datas['generiqueFieldset']['iban']) {
                 $anneeUniversitaire = $intervenant->getAnnee();
-                $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
+                $dateDuJour         = new \DateTime();
+                $dateEffet          = $dateDuJour->format('Y-m-d');
                 $coordonnees        = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
 
                 $params = [

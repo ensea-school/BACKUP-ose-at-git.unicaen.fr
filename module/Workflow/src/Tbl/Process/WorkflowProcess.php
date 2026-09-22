@@ -105,7 +105,12 @@ class WorkflowProcess implements ProcessInterface
                     // La dépendance est inactive => on passe
                     continue;
                 }
-                if ($dependance->getTypeIntervenant() && $etape->typeIntervenantId !== $dependance->getTypeIntervenant()->getId()) {
+                $isClotureDependance = $dependance->getEtapePrecedante()->getCode() === WorkflowEtape::CLOTURE_REALISE;
+                if ($isClotureDependance && !$etape->cloture) {
+                    // La clôture est requise par le statut, pas par le type d'intervenant.
+                    continue;
+                }
+                if (!$isClotureDependance && $dependance->getTypeIntervenant() && $etape->typeIntervenantId !== $dependance->getTypeIntervenant()->getId()) {
                     // La dépendance est relative à un autre type d'intervenant
                     continue;
                 }
@@ -225,6 +230,7 @@ class WorkflowProcess implements ProcessInterface
                 $ie->typeIntervenantId   = (int)$d['type_intervenant_id'];
                 $ie->typeIntervenantCode = $d['type_intervenant_code'];
                 $ie->statut              = (int)$d['statut_id'];
+                $ie->cloture             = (bool)$d['cloture'];
                 $ie->intervenant         = $intevenant;
 
                 $this->workflows[$intevenant][$etape->getCode()] = $ie;
@@ -315,7 +321,7 @@ class WorkflowProcess implements ProcessInterface
         $dems       = "\n" . $this->sqlActivationEtapes();
         $subQueries = "\n" . $this->sqlAlimentation() . "\n";
 
-        $var = "
+        return "
         SELECT
           i.annee_id                                           annee_id,
           i.id                                                 intervenant_id,
@@ -326,6 +332,7 @@ class WorkflowProcess implements ProcessInterface
           CASE WHEN w.intervenant_id IS NULL THEN 0 ELSE 1 END atteignable,
           ROUND(COALESCE(w.realisation,0),2)                   realisation,
           i.statut_id                                          statut_id,
+          si.cloture                                           cloture,
           ti.id                                                type_intervenant_id,
           ti.code                                              type_intervenant_code
         FROM

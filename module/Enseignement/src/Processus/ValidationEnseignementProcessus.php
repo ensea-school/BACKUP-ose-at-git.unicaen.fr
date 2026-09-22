@@ -46,7 +46,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
           tve.typeVolumeHoraire = :typeVolumeHoraire
           AND tve.autoValidation = false
           AND tve.intervenant = :intervenant
-          " . ($structure ? 'AND tve.structure = :structure' : '') . "
+          " . ($structure ? 'AND str.ids LIKE :structure' : '') . "
         ORDER BY
           v.id, str.libelleCourt
         ";
@@ -54,7 +54,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
         $query = $this->getEntityManager()->createQuery($dql);
         $query->setParameters(compact('typeVolumeHoraire', 'intervenant'));
         if ($structure) {
-            $query->setParameter('structure', $structure);
+            $query->setParameter('structure', $structure->idsFilter());
         }
         $res = $query->execute();
         /* @var $res TblValidationEnseignement[] */
@@ -108,9 +108,9 @@ class ValidationEnseignementProcessus extends AbstractProcessus
 
         $query = $this->getEntityManager()->createQuery($dql);
         $query->setParameters([
-            'typeVolumeHoraire' => $typeVolumeHoraire,
-            'intervenant'       => $validation->getIntervenant(),
-        ]);
+                                  'typeVolumeHoraire' => $typeVolumeHoraire,
+                                  'intervenant'       => $validation->getIntervenant(),
+                              ]);
         if ($typeVolumeHoraire != $prevu) {
             $query->setParameter('prevu', $prevu);
         }
@@ -148,8 +148,8 @@ class ValidationEnseignementProcessus extends AbstractProcessus
         $typeValidation = $this->getServiceTypeValidation()->getEnseignement();
 
         $validation = $this->getServiceValidation()->newEntity($typeValidation)
-            ->setIntervenant($intervenant)
-            ->setStructure($structure);
+                           ->setIntervenant($intervenant)
+                           ->setStructure($structure);
 
         return $validation;
     }

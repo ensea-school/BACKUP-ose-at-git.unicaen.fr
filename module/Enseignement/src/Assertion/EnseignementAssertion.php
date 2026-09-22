@@ -198,6 +198,8 @@ class EnseignementAssertion extends AbstractAssertion
             case EnseignementController::class . '.rafraichirLigne':
             case EnseignementController::class . '.saisieFormRefreshVh':
             case EnseignementController::class . '.suppression':
+                return $this->assertEdition($service ?? $intervenant, $typeVolumeHoraireCode);
+
             case EnseignementController::class . '.initialisation':
             case EnseignementController::class . '.constatation':
                 return $this->assertEdition($intervenant, $typeVolumeHoraireCode);
@@ -262,14 +264,15 @@ class EnseignementAssertion extends AbstractAssertion
             $entite = $entite->getIntervenant();
         }
 
-        $statut = $entite->getStatut();
-
+        $statut         = $entite->getStatut();
+        $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entite);
+        //Correction pour que le assert s'arrete dés qu'un test est false
         return match ($typeVolumeHoraireCode) {
-            TypeVolumeHoraire::CODE_PREVU   => $statut->getServicePrevuEdition(),
-            TypeVolumeHoraire::CODE_REALISE => $this->asserts(
-                $statut->getServiceRealiseEdition(),
-                $this->getAssertionService()->assertCloture($entite)
-            ),
+            TypeVolumeHoraire::CODE_PREVU   => $statut->getServicePrevuEdition()
+                                               && $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_SAISIE)?->isAllowed(),
+            TypeVolumeHoraire::CODE_REALISE => $statut->getServiceRealiseEdition()
+                                               && $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE)?->isAllowed()
+                                               && $this->getAssertionService()->assertCloture($entite),
             default                         => false,
         };
     }
@@ -312,6 +315,12 @@ class EnseignementAssertion extends AbstractAssertion
             return true;
         }
 
+        if ($entite instanceof Service && !$entite->getId() && !$entite->getElementPedagogique() && !$entite->getEtablissement()) {
+            // Le formulaire de création est encore vide : le contrôle du périmètre sera fait
+            // sur le service renseigné lors de son enregistrement.
+            return true;
+        }
+
         $structure = $this->getServiceContext()->getStructure();
 
 //        $asserts = [];
@@ -346,10 +355,34 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertStructureValidation(Service $service): bool
+    protected function assertStructureValidation(Service|Validation $entite, string $typeVolumeHoraireCode): bool
     {
-        /// @todo à coder : exploitation des règles de validation
-        return false;
+        //Mise en place des régles de validation des enseignements (affectation vs enseignement) selon le paramétrage
+        // de OSE
+        $contextStructure = $this->getServiceContext()->getStructure();
+        if (!$contextStructure) {
+            return true;
+        }
+
+        if ($entite instanceof Validation) {
+            return $entite->getStructure()?->inStructure($contextStructure) ?? false;
+        }
+
+        $intervenant       = $entite->getIntervenant();
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
+        $regle             = $this->getServiceRegleStructureValidation()->getBy($typeVolumeHoraire, $intervenant);
+
+        if (!$regle) {
+            return false;
+        }
+
+        $structureAffectation  = $intervenant->getStructure();
+        $structureEnseignement = $entite->getElementPedagogique()?->getStructure();
+        $structureValidation   = $regle->getPriorite() === 'affectation'
+            ? $structureAffectation ?? $structureEnseignement
+            : $structureEnseignement ?? $structureAffectation;
+
+        return $structureValidation?->inStructure($contextStructure) ?? false;
     }
 
 
@@ -357,6 +390,9 @@ class EnseignementAssertion extends AbstractAssertion
     protected function assertValidation(Service|VolumeHoraire|Intervenant|Validation $entite, string $typeVolumeHoraireCode): bool
     {
         if ($entite instanceof Validation) {
+            if (!$this->assertStructureValidation($entite, $typeVolumeHoraireCode)) {
+                return false;
+            }
             $entite = $entite->getIntervenant();
         }
 
@@ -365,7 +401,7 @@ class EnseignementAssertion extends AbstractAssertion
         }
 
         if ($entite instanceof Service) {
-            if (!$this->assertStructureValidation($entite)) {
+            if (!$this->assertStructureValidation($entite, $typeVolumeHoraireCode)) {
                 return false;
             }
 

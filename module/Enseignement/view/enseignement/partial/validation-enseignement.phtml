@@ -18,13 +18,13 @@ if ($this->isAllowed($validation, $typeVolumeHoraire->getPrivilegeEnseignementVa
     $validerUrl = $this->url('intervenant/validation/enseignement/valider', [
         'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
         'structure'         => $structure->getId(),
-    ], [], true);
+    ],                       [], true);
 }
 
 if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_DEVALIDATION)) {
     $devaliderUrl = $this->url('intervenant/validation/enseignement/devalider', [
         'validation' => $validation->getId(),
-    ], [], true);
+    ],                         [], true);
 }
 
 $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-' . $structure->getId();
@@ -69,7 +69,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
     <?php if ($validerUrl || $devaliderUrl): ?>
         <div class="card-footer">
             <!-- Actions -->
-            <?php if ($validerUrl): ?>
+            <?php if ($validerUrl && empty($validation->getId())): ?>
                 <a
                         href="<?= $validerUrl ?>"
                         class="validation-delete btn btn-primary btn-primary pop-ajax"

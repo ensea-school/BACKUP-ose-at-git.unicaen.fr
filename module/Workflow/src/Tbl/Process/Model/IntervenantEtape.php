@@ -11,6 +11,7 @@ class IntervenantEtape
     public int    $typeIntervenantId;
     public string $typeIntervenantCode;
     public int    $statut;
+    public bool   $cloture;
     public int    $intervenant;
 
     public readonly WorkflowEtape $etape;

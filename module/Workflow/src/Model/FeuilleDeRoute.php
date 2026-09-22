@@ -160,6 +160,7 @@ class FeuilleDeRoute
           w.etape_code,
           w.structure_id,
           str.libelle_court structure_libelle,
+          str.ids structure_ids,
           w.atteignable,
           w.objectif,
           w.partiel,
@@ -183,6 +184,7 @@ class FeuilleDeRoute
             $etapeCode         = $d['etape_code'];
             $structureId       = (int)$d['structure_id'];
             $structureLiblelle = $d['structure_libelle'];
+            $structureIds      = $d['structure_ids'];
             $atteignable       = (bool)$d['atteignable'];
             $objectif          = (float)$d['objectif'];
             $realisation       = (float)$d['realisation'];
@@ -190,7 +192,7 @@ class FeuilleDeRoute
 
             $etape = $this->workflowEtapes[$etapeCode];
 
-            $this->buildEtape($etape, $structureId, $structureLiblelle, $atteignable, $objectif, $realisation, $whyNonAtteignable);
+            $this->buildEtape($etape, $structureId, $structureLiblelle, $structureIds, $atteignable, $objectif, $realisation, $whyNonAtteignable);
         }
 
         foreach ($this->fdr as $fdre) {
@@ -204,7 +206,7 @@ class FeuilleDeRoute
 
 
 
-    private function buildEtape(WorkflowEtape $etape, int $structureId, ?string $structureLibelle, bool $atteignable, float $objectif, float $realisation, ?string $whyNonAtteignable): void
+    private function buildEtape(WorkflowEtape $etape, int $structureId, ?string $structureLibelle, ?string $structureIds, bool $atteignable, float $objectif, float $realisation, ?string $whyNonAtteignable): void
     {
         $affectation = $this->service->getServiceContext()->getAffectation();
         $intervenant = $this->service->getServiceContext()->getIntervenant();
@@ -217,8 +219,8 @@ class FeuilleDeRoute
             $inMain      = true;
             $inStructure = $structureId !== 0 ? $structureId : null;
         } else {
-            // Périmètre composante : on ne garde que le global ou bien uniquement ce qui concerne la composante
-            if ($structureId === 0 || $structureId === $this->getStructure()->getId()) {
+            // Périmètre composante : on garde le global, la composante et ses sous-structures.
+            if ($structureId === 0 || str_contains($structureIds ?? '', '-' . $this->getStructure()->getId() . '-')) {
                 $inMain = true;
             }
         }

@@ -500,8 +500,7 @@ class EnseignementController extends AbstractController
     {
         $this->initFilters();
 
-        $filterStructure = null; // pour filtrer les affichages à la structure concernée uniquement
-        // pas de filtre pour qu'une composante puisse voir ses enseignements validée par d'autres en prévisionnel
+        $filterStructure = $this->getServiceContext()->getStructure();
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */

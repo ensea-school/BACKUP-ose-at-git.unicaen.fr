@@ -585,7 +585,6 @@ return [
         ],
         'dependances'         => [
             WorkflowEtape::CLOTURE_REALISE                 => [
-                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
                 'perimetre'        => Perimetre::ETABLISSEMENT,
                 'avancement'       => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
             ],

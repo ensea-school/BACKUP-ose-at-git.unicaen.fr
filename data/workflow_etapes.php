@@ -192,7 +192,7 @@ return [
         "libelle_autres"      => "J'accède aux enseignements prévisionnels",
         "route"               => "intervenant/services-prevus",
         "desc_non_franchie"   => "Aucun enseignement prévisionnel n'a été saisi",
-        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => 'Au moins 1h d\'enseignement prévisionnel a été saisie',
@@ -212,7 +212,7 @@ return [
         "libelle_autres"      => "J'accède au référentiel prévisionnel",
         "route"               => "intervenant/services-prevus",
         "desc_non_franchie"   => "Aucun référentiel prévisionnel n'a été saisi",
-        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => 'Au moins 1h de référentiel prévisionnel a été saisie',
@@ -251,7 +251,7 @@ return [
         "libelle_autres"      => "Je visualise la validation des enseignements prévisionnels",
         "route"               => "intervenant/validation/enseignement/prevu",
         "desc_non_franchie"   => "Les enseignements prévisionnels n'ont pas été validés",
-        "perimetre"           => Perimetre::ETABLISSEMENT,
+        "perimetre"           => Perimetre::COMPOSANTE,
         "contraintes"         => [WorkflowEtape::ENSEIGNEMENT_SAISIE],
         'avancements'         => [
             WorkflowEtapeDependance::AVANCEMENT_DEBUTE                => 'Une partie des heures d\'enseignements prévisionnels doit avoir été validée',
@@ -585,6 +585,7 @@ return [
         ],
         'dependances'         => [
             WorkflowEtape::CLOTURE_REALISE                 => [
+                'type_intervenant' => TypeIntervenant::CODE_PERMANENT,
                 'perimetre'        => Perimetre::ETABLISSEMENT,
                 'avancement'       => WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT,
             ],

@@ -10,15 +10,16 @@ $.widget("ose.elementPedagogiqueRecherche", {
         var etapeId = this.getFormationElement().val();
         var elementId = this.getElementId();
 
+        var relationStructureId = structureId ? structureId : 'ALL';
         var niveauxValues = [];
-        if (!this.relations[structureId ? structureId : 'ALL']){
-            structureId = 'ALL';
+        if (!this.relations[relationStructureId]){
+            relationStructureId = 'ALL';
         }
-        for (nId in this.relations[structureId ? structureId : 'ALL']) {
+        for (nId in this.relations[relationStructureId]) {
             niveauxValues.push(nId);
         }
 
-        var etapesValues = this.relations[structureId ? structureId : 'ALL'][niveauId ? niveauId : 'ALL'];
+        var etapesValues = this.relations[relationStructureId][niveauId ? niveauId : 'ALL'];
         if ($.inArray(etapeId, etapesValues) == -1) {
             etapeId = "";
         }
@@ -27,7 +28,7 @@ $.widget("ose.elementPedagogiqueRecherche", {
         Util.filterSelectPicker(this.getFormationElement(), etapesValues);
 
         var query = {
-            structure: structureId,
+            structure: structureId ? structureId : 'ALL',
             niveau: niveauId,
             etape: etapeId,
             elementPedagogique: elementId

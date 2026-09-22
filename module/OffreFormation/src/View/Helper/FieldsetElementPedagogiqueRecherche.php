@@ -95,7 +95,20 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHtmlElement
             $html .= vsprintf('<div class="row">' . implode(PHP_EOL, $rowTemplate) . '</div>', $rowArgs);
         }
 
-        $helper = $this->getView()->plugin('formSearchAndSelect')->setAutocompleteMinLength(2);
+        $autocompleteQuery = array_filter([
+            'structure'          => $this->structureElement->getValue(),
+            'niveau'             => $this->niveauElement->getValue(),
+            'etape'              => $this->etapeElement->getValue(),
+            'elementPedagogique' => $this->elementElement->getValue(),
+        ], static fn ($value) => $value !== null && $value !== '');
+        $autocompleteSource = $this->fieldset->get('element')->getAutoCompleteSource();
+        if ($autocompleteQuery) {
+            $autocompleteSource .= '?' . http_build_query($autocompleteQuery);
+        }
+
+        $helper = $this->getView()->plugin('formSearchAndSelect')
+            ->setAutocompleteMinLength(2)
+            ->setAutocompleteSource($autocompleteSource);
         $html .= '<div class="row"><div class="col-md-12">';
         $html .= '<label class=" control-label" for="structure">'.$this->elementElement->getLabel().'</label>';
         $html .= '<div id="ep-search">'.$helper($this->elementElement).'</div>';

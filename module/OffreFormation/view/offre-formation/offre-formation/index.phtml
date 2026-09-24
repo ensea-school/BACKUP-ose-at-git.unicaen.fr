@@ -251,7 +251,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     if ($canExport) {
                         $params = [
                             'structure' => $structure ? $structure->getId() : null,
-                            'niveau'    => $niveau ? $niveau->getId() : null,
+                            'niveau'    => $niveau ? (($niveau->getPertinence()) ? $niveau->getId() : $niveau->getLib()) : null,
                             'etape'     => $etape ? $etape->getId() : null,
                         ];
                         $urlExportOf = $this->url('of/export', [], ['query' => $params]);

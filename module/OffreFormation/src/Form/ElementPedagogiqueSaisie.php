@@ -5,6 +5,7 @@ namespace OffreFormation\Form;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
@@ -20,6 +21,7 @@ use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
  */
 class ElementPedagogiqueSaisie extends AbstractForm
 {
+    use ContextServiceAwareTrait;
     use LocalContextServiceAwareTrait;
     use EtapeServiceAwareTrait;
     use PeriodeServiceAwareTrait;
@@ -170,10 +172,14 @@ class ElementPedagogiqueSaisie extends AbstractForm
         $localContext = $this->getServiceLocalContext();
 
         // init étape
-        $qb = $this->getServiceEtape()->finderByContext();
-        $this->get('etape')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceEtape()->getList($qb)));
-        if (($etape = $localContext->getEtape())) {
+        $etape = $localContext->getEtape();
+        if ($etape && $this->etapeInCurrentStructureScope($etape)) {
+            $this->get('etape')->setValueOptions(\UnicaenApp\Util::collectionAsOptions([$etape]));
             $this->get('etape')->setValue($etape->getId());
+        } else {
+            $this->get('etape')->setValueOptions(
+                \UnicaenApp\Util::collectionAsOptions($this->getServiceEtape()->getList($this->finderEtapesByLocalContext()))
+            );
         }
 
         $this->get('discipline')->setValueOptions(
@@ -192,6 +198,39 @@ class ElementPedagogiqueSaisie extends AbstractForm
         if ($structure = $localContext->getStructure()) {
             $this->get('structure')->setValue($structure->getId());
         }
+    }
+
+
+
+    private function etapeInCurrentStructureScope(\OffreFormation\Entity\Db\Etape $etape): bool
+    {
+        $currentStructure = $this->getServiceContext()->getStructure();
+        if (!$currentStructure) {
+            return true;
+        }
+
+        $etapeStructure = $etape->getStructure();
+
+        return $etapeStructure && $etapeStructure->inStructure($currentStructure);
+    }
+
+
+
+    private function finderEtapesByLocalContext(): \Doctrine\ORM\QueryBuilder
+    {
+        $serviceEtape = $this->getServiceEtape();
+        $qb           = $serviceEtape->finderByAnnee($this->getServiceContext()->getAnnee());
+        $alias        = $serviceEtape->getAlias();
+
+        if ($structure = $this->getServiceLocalContext()->getStructure()) {
+            $serviceEtape->finderByProperty('structure', $structure, $qb, $alias);
+        } elseif ($structure = $this->getServiceContext()->getStructure()) {
+            $serviceEtape->finderByProperty('structure', $structure, $qb, $alias);
+        }
+
+        $serviceEtape->finderByHistorique($qb, $alias);
+
+        return $qb;
     }
 
 

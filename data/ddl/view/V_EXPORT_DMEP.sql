@@ -18,12 +18,6 @@ mep AS (
     mep.date_mise_en_paiement,
     mep.periode_paiement_id,
     mep.centre_cout_id,
-
-    /*
-     * Priorité au domaine présent dans TBL_PAIEMENT.
-     * Si aucun domaine n'est présent dans TBL_PAIEMENT,
-     * on conserve celui de MISE_EN_PAIEMENT.
-     */
     COALESCE(
       tbl_p.domaine_fonctionnel_id,
       mep.domaine_fonctionnel_id

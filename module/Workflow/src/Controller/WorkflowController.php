@@ -42,6 +42,14 @@ class WorkflowController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
 
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($intervenant);
+        $etapes         = array_values(array_filter(
+                                           $feuilleDeRoute->getEtapes(),
+                                           static fn($etape) => $etape->isVisible(),
+                                       ));
+
+        foreach ($etapes as $numero => $etape) {
+            $etape->numero = $numero + 1;
+        }
 
         $properties = [
             'code',
@@ -55,19 +63,20 @@ class WorkflowController extends AbstractController
             'realisationPourc',
             'objectif',
             'realisation',
-            ['structures', [
-                'libelle',
-                'atteignable',
-                'whyNonAtteignable',
-                'courante',
-                'navigable',
-                'realisationPourc',
-                'objectif',
-                'realisation',
-            ]],
+            ['structures',
+             [
+                 'libelle',
+                 'atteignable',
+                 'whyNonAtteignable',
+                 'courante',
+                 'navigable',
+                 'realisationPourc',
+                 'objectif',
+                 'realisation',
+             ]],
         ];
 
-        return new AxiosModel(array_values($feuilleDeRoute->getEtapes()), $properties);
+        return new AxiosModel($etapes, $properties);
     }
 
 

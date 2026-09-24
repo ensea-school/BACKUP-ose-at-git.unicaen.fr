@@ -4,7 +4,7 @@ SELECT
   tsd.intervenant_id           intervenant_id,
   ts.structure_id              structure_id,
   1                            objectif,
-  1                            partiel,
+  CASE WHEN COALESCE(SUM(ts.heures),0) > 0 THEN 1 ELSE 0 END partiel,
   COALESCE(SUM(ts.heures),0)   realisation
 FROM
             tbl_service_du tsd

@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_TBL_WORKFLOW_MISSION AS
 SELECT
   'mission_saisie'                                                  etape_code,
   m.intervenant_id                                                  intervenant_id,
-  NULL                                                              structure_id,
+  m.structure_id                                                    structure_id,
   SUM(1)                                                            objectif,
   SUM(CASE WHEN m.mission_id IS NULL THEN 0 ELSE 1 END)             partiel,
   SUM(CASE WHEN m.mission_id IS NULL THEN 0 ELSE 1 END)             realisation
@@ -13,7 +13,8 @@ WHERE
   /*@intervenant_id=m.intervenant_id*/
   /*@annee_id=m.annee_id*/
 GROUP BY
-  m.intervenant_id, m.structure_id, m.intervenant_structure_id
+  m.intervenant_id,
+  m.structure_id
 
 UNION ALL
 

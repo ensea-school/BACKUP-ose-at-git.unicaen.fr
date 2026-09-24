@@ -146,6 +146,10 @@ class WorkflowProcess implements ProcessInterface
      */
     public function isDependanceOk(int $avancement, array $precs): bool
     {
+        if (empty($precs)) {
+            return false;
+        }
+
         $debute   = false;
         $partiel  = false;
         $integral = true;

@@ -4,7 +4,7 @@ SELECT
   tsd.intervenant_id           intervenant_id,
   ts.structure_id              structure_id,
   1                            objectif,
-  1                            partiel,
+  CASE WHEN COALESCE(SUM(ts.heures),0) > 0 THEN 1 ELSE 0 END partiel,
   COALESCE(SUM(ts.heures),0)   realisation
 FROM
             tbl_service_du tsd
@@ -12,7 +12,7 @@ FROM
        JOIN statut          si ON si.id = i.statut_id
   LEFT JOIN tbl_referentiel ts ON ts.intervenant_id = tsd.intervenant_id AND ts.type_volume_horaire_code = 'REALISE' AND ts.heures > 0
 WHERE
-  si.referentiel_prevu = 1
+  si.referentiel_realise = 1
   /*@intervenant_id=i.id*/
   /*@annee_id=i.annee_id*/
   /*@statut_id=si.id*/

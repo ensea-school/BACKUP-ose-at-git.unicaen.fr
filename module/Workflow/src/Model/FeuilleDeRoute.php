@@ -178,21 +178,38 @@ class FeuilleDeRoute
         $sqlParams = ['intervenant' => $this->intervenant->getId()];
         $stmt      = $this->service->getBdd()->selectEach($sql, $sqlParams);
 
+        $rowsByEtape   = [];
+        $activeEtapes  = [];
+
         while ($d = $stmt->next()) {
             mpg_lower($d);
 
-            $etapeCode         = $d['etape_code'];
-            $structureId       = (int)$d['structure_id'];
-            $structureLiblelle = $d['structure_libelle'];
-            $structureIds      = $d['structure_ids'];
-            $atteignable       = (bool)$d['atteignable'];
-            $objectif          = (float)$d['objectif'];
-            $realisation       = (float)$d['realisation'];
-            $whyNonAtteignable = $d['why_non_atteignable'];
+            $etapeCode = $d['etape_code'];
 
-            $etape = $this->workflowEtapes[$etapeCode];
+            if (!isset($activeEtapes[$etapeCode])) {
+                $activeEtapes[$etapeCode] = $this->workflowEtapes[$etapeCode];
+            }
 
-            $this->buildEtape($etape, $structureId, $structureLiblelle, $structureIds, $atteignable, $objectif, $realisation, $whyNonAtteignable);
+            $rowsByEtape[$etapeCode][] = $d;
+        }
+
+        foreach ($activeEtapes as $etapeCode => $etape) {
+            foreach ($rowsByEtape[$etapeCode] as $d) {
+                $this->buildEtape(
+                    $etape,
+                    (int)$d['structure_id'],
+                    $d['structure_libelle'],
+                    $d['structure_ids'],
+                    (bool)$d['atteignable'],
+                    (float)$d['objectif'],
+                    (float)$d['realisation'],
+                    $d['why_non_atteignable']
+                );
+            }
+
+            if ($this->getStructure() && !isset($this->fdr[$etapeCode])) {
+                $this->buildEtapeVide($etape);
+            }
         }
 
         foreach ($this->fdr as $fdre) {
@@ -208,9 +225,6 @@ class FeuilleDeRoute
 
     private function buildEtape(WorkflowEtape $etape, int $structureId, ?string $structureLibelle, ?string $structureIds, bool $atteignable, float $objectif, float $realisation, ?string $whyNonAtteignable): void
     {
-        $affectation = $this->service->getServiceContext()->getAffectation();
-        $intervenant = $this->service->getServiceContext()->getIntervenant();
-
         $inStructure = null;
         $inMain      = false;
 
@@ -227,16 +241,7 @@ class FeuilleDeRoute
 
         if ($inMain) {
             if (!array_key_exists($etape->getCode(), $this->fdr)) {
-                $fdre          = new FeuilleDeRouteEtape($this, $this->service, $etape);
-                $fdre->numero  = count($this->fdr) + 1;
-                $fdre->libelle = $etape->getLibelle((bool)$intervenant);
-
-                if ($intervenant && !$affectation) {
-                    $fdre->url = $this->service->getUrl($etape->getRouteIntervenant() ?: $etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
-                } else {
-                    $fdre->url = $this->service->getUrl($etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
-                }
-
+                $fdre = $this->createEtape($etape);
                 $fdre->whyNonAtteignable = $this->makeWhyNonAtteignable($whyNonAtteignable);
 
                 $this->fdr[$etape->getCode()] = $fdre;
@@ -269,6 +274,39 @@ class FeuilleDeRoute
             $fdres->realisation             = $realisation;
             $fdre->structures[$structureId] = $fdres;
         }
+    }
+
+
+
+    private function buildEtapeVide(WorkflowEtape $etape): void
+    {
+        $fdre                     = $this->createEtape($etape);
+        $fdre->atteignable        = false;
+        $fdre->objectif           = 1;
+        $fdre->realisation        = 0;
+        $fdre->whyNonAtteignable  = [$etape->getDescNonFranchie()];
+
+        $this->fdr[$etape->getCode()] = $fdre;
+    }
+
+
+
+    private function createEtape(WorkflowEtape $etape): FeuilleDeRouteEtape
+    {
+        $affectation = $this->service->getServiceContext()->getAffectation();
+        $intervenant = $this->service->getServiceContext()->getIntervenant();
+
+        $fdre          = new FeuilleDeRouteEtape($this, $this->service, $etape);
+        $fdre->numero  = count($this->fdr) + 1;
+        $fdre->libelle = $etape->getLibelle((bool)$intervenant);
+
+        if ($intervenant && !$affectation) {
+            $fdre->url = $this->service->getUrl($etape->getRouteIntervenant() ?: $etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
+        } else {
+            $fdre->url = $this->service->getUrl($etape->getRoute(), ['intervenant' => $this->intervenant->getId()]);
+        }
+
+        return $fdre;
     }
 
 

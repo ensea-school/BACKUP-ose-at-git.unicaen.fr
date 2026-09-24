@@ -217,6 +217,19 @@ final class ProcessTest extends OseTestCase
 
 
 
+    public function testIntegralSansPrecedent()
+    {
+        $avancement = WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT;
+
+        $precs = [];
+
+        $expected = false;
+
+        $this->processDep($avancement, $precs, $expected);
+    }
+
+
+
     public function testIntegralMultipleNo()
     {
         $avancement = WorkflowEtapeDependance::AVANCEMENT_TERMINE_INTEGRALEMENT;

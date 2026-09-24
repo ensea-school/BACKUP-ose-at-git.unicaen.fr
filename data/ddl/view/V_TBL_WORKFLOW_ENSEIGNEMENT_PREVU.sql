@@ -4,7 +4,7 @@ SELECT
   tsd.intervenant_id                                                    intervenant_id,
   COALESCE(ts.structure_id,i.structure_id)                              structure_id,
   AVG(GREATEST(CASE WHEN si.service_prevu = 1 THEN tsd.service_statutaire ELSE 1 END, 1)) objectif,
-  AVG(GREATEST(CASE WHEN si.service_prevu = 1 THEN tsd.service_statutaire ELSE 1 END, 1)) partiel,
+  CASE WHEN COALESCE(SUM(ts.heures),0) > 0 THEN AVG(GREATEST(CASE WHEN si.service_prevu = 1 THEN tsd.service_statutaire ELSE 1 END, 1)) ELSE 0 END partiel,
   SUM(ts.heures)                                                        realisation
 FROM
             tbl_service_du tsd

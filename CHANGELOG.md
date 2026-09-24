@@ -55,6 +55,8 @@ OSE [24.17]
 * Réduction de la taille du champs description de la table service pour des raisons de taille max d'index selon version d'Oracle (#67765)
 * Correction de la formule de Rouen pour application de la nouvelle formule à partir de 2026/2027 (#66435)
 * Adaptation de la formule de Montpellier (#67863)
+* Correction des données du conseil restreint dans l'export des agréments (#67658)
+* Correction des données du domaine fonctionnel dans l'export des données de paiement (#67834)
 
 
 # OSE 24.19 (08/09/2026)

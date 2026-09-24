@@ -136,7 +136,7 @@ class FeuilleDeRoute
 
         foreach($this->fdr as $code => $wfEtape){
             if ($isNext){
-                if ($wfEtape->atteignable && !$wfEtape->isFranchie()){
+                if ($wfEtape->isVisible() && $wfEtape->atteignable && !$wfEtape->isFranchie()){
                     if (!$needAllowed || $wfEtape->isAllowed()){
                         return $wfEtape;
                     }

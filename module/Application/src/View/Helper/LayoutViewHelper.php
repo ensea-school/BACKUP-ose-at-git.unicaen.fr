@@ -11,8 +11,11 @@ use Unicaen\Framework\User\UserManager;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantService;
 use Utilisateur\Entity\Db\Role;
 use Utilisateur\Provider\UserProvider;
+use Workflow\Service\WorkflowService;
 
 /**
  * Description of UtilisateurViewHelper
@@ -32,6 +35,8 @@ class LayoutViewHelper extends AbstractHtmlElement
         private readonly UserManager   $userManager,
         private readonly Router        $router,
         private readonly UserProvider  $userProvider,
+        private readonly WorkflowService $workflowService,
+        private readonly IntervenantService $intervenantService,
     )
     {
 
@@ -146,7 +151,58 @@ class LayoutViewHelper extends AbstractHtmlElement
             return [];
         }
 
-        return $refPage->getVisiblePages();
+        $pages = $refPage->getVisiblePages();
+
+        if ($refPage->getName() !== 'intervenant' || !($intervenant = $this->getMenuIntervenant())) {
+            return $pages;
+        }
+
+        $feuilleDeRoute = $this->workflowService->getFeuilleDeRoute($intervenant);
+        $ordres         = [];
+        foreach ($feuilleDeRoute->getEtapes() as $etape) {
+            $ordres[$etape->workflowEtape->getRoute()][] = $etape->numero;
+        }
+
+        uasort($pages, function (Page $pageA, Page $pageB) use ($ordres): int {
+            $ordrePage = static function (Page $page) use ($ordres): ?int {
+                $ordresPage = $ordres[$page->getRoute()] ?? [];
+
+                return $ordresPage ? min($ordresPage) : null;
+            };
+
+            $ordreA = $ordrePage($pageA);
+            $ordreB = $ordrePage($pageB);
+
+            if (null === $ordreA || null === $ordreB) {
+                if (null === $ordreA && null !== $ordreB) {
+                    return -1;
+                }
+                if (null !== $ordreA && null === $ordreB) {
+                    return 1;
+                }
+            }
+
+            if ($ordreA !== $ordreB) {
+                return $ordreA <=> $ordreB;
+            }
+
+            return ($pageA->getData('order') ?? 0) <=> ($pageB->getData('order') ?? 0);
+        });
+
+        return $pages;
+    }
+
+
+
+    private function getMenuIntervenant(): ?Intervenant
+    {
+        if ($intervenant = $this->getServiceContext()->getIntervenant()) {
+            return $intervenant;
+        }
+
+        $intervenantId = $this->router->getCurrentParams()['intervenant'] ?? null;
+
+        return $intervenantId ? $this->intervenantService->getByRouteParam((string) $intervenantId) : null;
     }
 
 

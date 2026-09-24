@@ -2,7 +2,11 @@ CREATE OR REPLACE FORCE VIEW V_TBL_WORKFLOW_REFERENTIEL_REALISE AS
 SELECT
   'referentiel_saisie_realise' etape_code,
   tsd.intervenant_id           intervenant_id,
-  ts.structure_id              structure_id,
+  CASE WHEN rsv.priorite = 'affectation' THEN
+    COALESCE(i.structure_id, ts.structure_id)
+  ELSE
+    COALESCE(ts.structure_id, i.structure_id)
+  END                          structure_id,
   1                            objectif,
   CASE WHEN COALESCE(SUM(ts.heures),0) > 0 THEN 1 ELSE 0 END partiel,
   COALESCE(SUM(ts.heures),0)   realisation
@@ -11,6 +15,8 @@ FROM
        JOIN intervenant      i ON i.id = tsd.intervenant_id
        JOIN statut          si ON si.id = i.statut_id
   LEFT JOIN tbl_referentiel ts ON ts.intervenant_id = tsd.intervenant_id AND ts.type_volume_horaire_code = 'REALISE' AND ts.heures > 0
+  LEFT JOIN regle_structure_validation rsv ON rsv.type_intervenant_id = si.type_intervenant_id
+                                           AND rsv.type_volume_horaire_id = ts.type_volume_horaire_id
 WHERE
   si.referentiel_realise = 1
   /*@intervenant_id=i.id*/
@@ -19,4 +25,5 @@ WHERE
 GROUP BY
   tsd.intervenant_id,
   ts.structure_id,
-  i.structure_id
+  i.structure_id,
+  rsv.priorite

@@ -16,6 +16,7 @@ FROM
 WHERE
   tvr.auto_validation = 0
   AND vhr.histo_destruction IS NULL
+  AND vhr.heures > 0
   /*@intervenant_id=tvr.intervenant_id*/
   /*@annee_id=tvr.annee_id*/
 GROUP BY

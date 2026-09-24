@@ -41,7 +41,9 @@ FROM
          ELSE 'saisi'
        END
 WHERE
-  1=1
+  s.histo_destruction IS NULL
+  AND vh.histo_destruction IS NULL
+  AND vh.heures > 0
   /*@intervenant_id=i.id*/
   /*@annee_id=i.annee_id*/
   /*@statut_id=si.id*/

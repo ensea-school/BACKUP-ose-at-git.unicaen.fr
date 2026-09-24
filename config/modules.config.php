@@ -1,6 +1,8 @@
 <?php
 
-return [
+use Unicaen\Framework\Application\Application;
+
+$modules = [
     // Dépendances externes
     'Laminas\Filter',
     'Laminas\Form',
@@ -53,3 +55,13 @@ return [
     'Workflow',
     'Utilisateur',
 ];
+
+if (Application::getInstance()->config()['actul']['host'] ?? null){
+    $modules[] = 'Connecteur\\Actul';
+}
+
+if (Application::getInstance()->config()['pegase']['actif'] ?? false){
+    $modules[] = 'Connecteur\\Pegase';
+}
+
+return $modules;

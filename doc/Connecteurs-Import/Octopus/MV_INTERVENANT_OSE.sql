@@ -1,6 +1,5 @@
 CREATE
 MATERIALIZED VIEW MV_INTERVENANT AS
-
 WITH i AS (
 
      SELECT DISTINCT code,
@@ -54,8 +53,8 @@ WITH i AS (
              FROM octo.individu_unique@octoprod uni
                       JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
    					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
-  					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND icto.code_ose IS NULL
-             WHERE inds.d_debut - 184 <= SYSDATE
+  					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id
+              WHERE (inds.d_debut<= SYSDATE AND COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) >= SYSDATE)
                --On ne remonte pas de statut autre pour ceux qui ont déjà un certain type de contrat
 	           --AND icto.individu_id IS NULL
                --Combinaison des témoins octopus pour récupérer les bonnes populations

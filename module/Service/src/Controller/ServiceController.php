@@ -154,7 +154,7 @@ class ServiceController extends AbstractController
         if ('afficher' == $action || 'trier' == $action) {
             $params = [
                 'tri'              => $tri,
-                'isoler-non-payes' => false,
+                'isoler-non-payes' => true,
                 'regroupement'     => 'intervenant',
             ];
             if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {

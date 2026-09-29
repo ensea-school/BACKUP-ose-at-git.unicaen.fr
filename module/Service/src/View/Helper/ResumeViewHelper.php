@@ -64,6 +64,7 @@ class ResumeViewHelper extends AbstractHtmlElement
             'heures'            => 0,
             'total'             => 0,
             'type-intervention' => [],
+            'heures-non-payees' => 0,
             'heures-ref'        => 0,
         ];
 
@@ -79,6 +80,7 @@ class ResumeViewHelper extends AbstractHtmlElement
         if ($hasTi) {
             $res .= '    <th style="width:40%" colspan="' . count($typesIntervention) . '">Enseignements</th>' . "\n";
         }
+        $res .= '    <th style="width:10%" rowspan="' . ($hasTi ? '2' : '1') . '">Heures non payées</th>' . "\n";
         $res .= '    <th style="width:10%" rowspan="' . ($hasTi ? '2' : '1') . '">Référentiel</th>' . "\n";
         $res .= '    <th style="width:10%" rowspan="' . ($hasTi ? '2' : '1') . '">Service dû</th>' . "\n";
         $res .= '    <th style="width:10%" rowspan="' . ($hasTi ? '2' : '1') . '"><a href="' . $urlTriHetd . '">Solde HETD</a></th>' . "\n";
@@ -97,6 +99,8 @@ class ResumeViewHelper extends AbstractHtmlElement
             if (!isset($line['heures-ref'])) $line['heures-ref'] = 0;
             if (!isset($line['heures-service-statutaire'])) $line['heures-service-statutaire'] = 0;
             if (!isset($line['heures-service-du-modifie'])) $line['heures-service-du-modifie'] = 0;
+            if (!isset($line['heures-non-payees'])) $line['heures-non-payees'] = 0;
+            if (!isset($line['solde'])) $line['solde'] = 0;
 
 
             $na = '<abbr title="Non applicable (intervenant vacataire))">NA</abbr>';
@@ -115,8 +119,11 @@ class ResumeViewHelper extends AbstractHtmlElement
                     $res                                           .= '<td style="text-align:right;white-space:nowrap">' . \UnicaenApp\Util::formattedNumber($line['type-intervention-' . $ti->getCode()]) . '</td>' . "\n";
                 }
             }
+            $totaux['heures-non-payees'] += $line['heures-non-payees'];
+            $totaux['heures']             += $line['heures-non-payees'];
             $totaux['heures-ref'] += $line['heures-ref'];
             $totaux['total']      += isset($line['total']) ? $line['total'] : 0;
+            $res                  .= '<td style="text-align:right;white-space:nowrap">' . \UnicaenApp\Util::formattedNumber($line['heures-non-payees']) . '</td>' . "\n";
             $res                  .= '<td style="text-align:right;white-space:nowrap">' . ($intervenantPermanent ? \UnicaenApp\Util::formattedNumber($line['heures-ref']) : $na) . '</td>' . "\n";
             $res                  .= $this->renderServiceDu($line['heures-service-statutaire'] + $line['heures-service-du-modifie']);
             $res                  .= $this->renderSoldeHetd($line['solde'], $intervenantPermanent);
@@ -131,6 +138,7 @@ class ResumeViewHelper extends AbstractHtmlElement
                 $res .= '        <th style="text-align:right;white-space:nowrap"><abbr title="' . $ti->getLibelle() . '">' . \UnicaenApp\Util::formattedNumber($totaux['type-intervention-' . $ti->getCode()]) . '</abbr></th>' . "\n";
             }
         }
+        $res .= '<th rowspan="' . ($hasTi ? '2' : '1') . '" style="text-align:right;white-space:nowrap">' . \UnicaenApp\Util::formattedNumber($totaux['heures-non-payees']) . '</th>' . "\n";
         $res .= '<th rowspan="' . ($hasTi ? '2' : '1') . '" style="text-align:right;white-space:nowrap">' . \UnicaenApp\Util::formattedNumber($totaux['heures-ref']) . '</th>' . "\n";
         $res .= '<th rowspan="' . ($hasTi ? '2' : '1') . '">&nbsp;</th>' . "\n";
         $res .= '<th rowspan="' . ($hasTi ? '2' : '1') . '"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">' . \UnicaenApp\Util::formattedNumber($totaux['total']) . '</span></th>' . "\n";

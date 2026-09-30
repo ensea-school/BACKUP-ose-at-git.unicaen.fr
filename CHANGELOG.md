@@ -57,7 +57,7 @@ OSE [24.17]
 * Adaptation de la formule de Montpellier (#67863)
 * Correction des données du conseil restreint dans l'export des agréments (#67658)
 * Correction des données du domaine fonctionnel dans l'export des données de paiement (#67834)
-
+* Ajout d'un paramétrage dans les status, afin de pouvoir activer la visibilité des tags par statut. (#67974)
 
 # OSE 24.19 (08/09/2026)
 

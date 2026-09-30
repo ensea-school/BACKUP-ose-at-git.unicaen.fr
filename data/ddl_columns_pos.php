@@ -1389,6 +1389,7 @@ return [
         'MISSION_INDEMNITEES',
         'PJ_ACTIVE',
         'DOSSIER_SITUATION_MATRIMONIALE',
+        'TAG_VISU',
     ],
     'STRUCTURE'                           => [
         'ID',

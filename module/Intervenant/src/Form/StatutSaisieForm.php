@@ -82,7 +82,7 @@ class StatutSaisieForm extends AbstractForm
             'codeIndemnitePrime'            => 'Code indémnité primes mission (ex : 0204, 2251 etc...)',
             'typePaiePrime'                 => 'Type ou carte primes mission (ex : 20, P etc...)',
             'missionDecret'                 => 'Decret nécessaire pour postuler',
-
+            'tagVisualisation'              => 'L\'intervenant peut voir les tags sur les lignes de service',
         ];
 
         $dveElements = [
@@ -573,6 +573,7 @@ class StatutSaisieForm extends AbstractForm
                             ],
                         ],
                     ]);
+
 
         $this->build();
         $this->setAttribute('class', 'statut');

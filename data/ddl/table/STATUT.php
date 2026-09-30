@@ -1257,6 +1257,18 @@ return [
             'position'    => 99,
             'commentaire' => NULL,
         ],
+        'TAG_VISU'                => [
+            'name'        => 'TAG_VISU',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 105,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

@@ -19,6 +19,8 @@ use Contrat\Entity\Db\TblContrat;
  * @var array              $infosSignature
  * @var bool               $contratSignatureActivation
  * @var bool               $isMission
+ * @var bool               $modelContratPresent
+ * @var bool               $modelAvenantPresent
  */
 
 $this->intervenant($intervenant)->renderTitle("Contrat/avenant");
@@ -115,9 +117,9 @@ echo $this->messenger() ?>
             <?php foreach ($contratsContractualises as $tblContrat) {
                 $contrat = $tblContrat->getContrat();
                 if ($contratSignatureActivation && !((!empty($contrat->getDateRetourSigne() || !$contrat->getFichier()->isEmpty()) && empty($contrat->getProcessSignature())))):
-                    echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['tblContrat' => $tblContrat, 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'contratSignatureActivation' => $contratSignatureActivation, 'libelleCircuitSignature' => $libelleCircuitSignature, 'infosSignature' => $infosSignature]);
+                    echo $this->partial('contrat/contrat/partial/contrat-signature-electronique', ['tblContrat' => $tblContrat, 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'contratSignatureActivation' => $contratSignatureActivation, 'libelleCircuitSignature' => $libelleCircuitSignature, 'infosSignature' => $infosSignature, 'modelContratPresent' => $modelContratPresent, 'modelAvenantPresent' => $modelAvenantPresent]);
                 else:
-                    echo $this->partial('contrat/contrat/partial/contrat', ['tblContrat' => $tblContrat, 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]);
+                    echo $this->partial('contrat/contrat/partial/contrat', ['tblContrat' => $tblContrat, 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'modelContratPresent' => $modelContratPresent, 'modelAvenantPresent' => $modelAvenantPresent]);
                 endif;
             } ?>
         </div>

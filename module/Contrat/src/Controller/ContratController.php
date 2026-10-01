@@ -117,12 +117,18 @@ class ContratController extends AbstractController
         $contratSignatureActivation = false;
         $infosSignature             = [];
         $libelleCircuitSignature    = null;
+
+        $modelContratPresent = $intervenant->getStatut()->getContratEtatSortie()!== null;
+        $modelAvenantPresent = $intervenant->getStatut()->getAvenantEtatSortie()!== null;
+
+        dump($intervenant->getStatut()->getContratEtatSortie());
+        // recupere en fonction du statut, modele de contrat et/ou d'avenant
         if (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))
-            && $intervenant->getStatut()->getContratEtatSortie()->isSignatureActivation()
-            && $intervenant->getStatut()->getContratEtatSortie()->getSignatureCircuit()
+            && $intervenant->getStatut()->getContratEtatSortie()?->isSignatureActivation()
+            && $intervenant->getStatut()->getContratEtatSortie()?->getSignatureCircuit()
             && !$intervenant->isDesactiverSignature()) {
             $contratSignatureActivation = true;
-            $libelleCircuitSignature    = $intervenant->getStatut()->getContratEtatSortie()->getSignatureCircuit()->getLabel();
+            $libelleCircuitSignature    = $intervenant->getStatut()->getContratEtatSortie()?->getSignatureCircuit()->getLabel();
 
             /**
              * @var Contrat     $contrat
@@ -160,6 +166,8 @@ class ContratController extends AbstractController
             'infosSignature',
             'libelleCircuitSignature',
             'isMission',
+            'modelContratPresent',
+            'modelAvenantPresent'
         );
     }
 

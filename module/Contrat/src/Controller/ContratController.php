@@ -266,13 +266,12 @@ class ContratController extends AbstractController
             return new MessengerViewModel;
         }
 
-        $tblContratContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
-        $contrat               = $this->getProcessusContrat()->creer($contrat, $tblContratContrat);
-
         if ($this->getRequest()->isPost()) {
             try {
+                $contrat = $this->getProcessusContrat()->requalification($contrat);
                 $this->getProcessusContrat()->valider($contrat);
                 $this->updateTableauxBord($contrat->getIntervenant());
+                $this->getProcessusContrat()->requalifierContratsIntervenant($contrat->getIntervenant(), $contrat);
 
                 $this->flashMessenger()->addSuccessMessage(
                     "Validation " . lcfirst($contrat->toString(true, true)) . " enregistrée avec succès."
@@ -304,8 +303,10 @@ class ContratController extends AbstractController
             if ($this->getRequest()->isPost()) {
                 try {
 
+                    $contrat = $this->getProcessusContrat()->requalification($contrat);
                     $this->getProcessusContrat()->devalider($contrat);
                     $this->updateTableauxBord($contrat->getIntervenant());
+                    $this->getProcessusContrat()->requalifierContratsIntervenant($contrat->getIntervenant(), $contrat);
 
                     $this->flashMessenger()->addSuccessMessage(
                         "Dévalidation " . lcfirst($contrat->toString(true, true)) . " effectuée avec succès."
@@ -381,7 +382,10 @@ class ContratController extends AbstractController
             throw new UnAuthorizedException("Génération du contrat interdite.");
         }
 
-        $this->getServiceContrat()->generer($contrat);
+        $tblContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
+        $isAvenant  = $tblContrat?->getTypeContrat()->estUnAvenant();
+
+        $this->getServiceContrat()->generer($contrat, true, false, $isAvenant);
         die();
     }
 

@@ -157,7 +157,8 @@ class SihamConnecteur implements ConnecteurRhInterface
 
         $params =
             [
-                'numeroInsee' => $numeroInsee,
+                'numeroInsee'     => $numeroInsee,
+                'dateObservation' => $intervenant->getAnnee()->getDateDebut()->format('Y-m-d'),
             ];
 
         $listeAgents = $this->siham->recupererListeAgents($params);

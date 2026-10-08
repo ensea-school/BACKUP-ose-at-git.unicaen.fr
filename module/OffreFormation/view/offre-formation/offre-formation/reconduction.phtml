@@ -94,19 +94,17 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                                 } ?>">
                                     <?php if ($ec['reconduction'] == 'oui'): ?>
                                         <?php if ($ec['reconductionFait'] == 'oui'): ?>
-                                            <th><input title="Formation déjà reconduite pour l'année prochaine"
-                                                       type="checkbox"
-                                                       class="checkbox-formation" disabled="disabled" name="etape[]"
-                                                       value="<?= $ec['etape']->getId(); ?>"/> <span
-                                                        class="badge bg-warning text-dark"
-                                                        style="margin:0 auto;">Reconduit</span>
+                                            <th><span title="Formation déjà reconduite pour l'année prochaine"
+                                                      class="badge bg-warning text-dark"
+                                                      style="margin:0 auto;">Reconduit</span>
                                             </th>
                                         <?php else: ?>
-                                            <th><input title="Formation non reconductible" type="checkbox"
-                                                       class="checkbox-formation" disabled="disabled" name="etape[]"
-                                                       value="<?= $ec['etape']->getId(); ?>"/> <span
+                                            <?php $etapePegaseN1 = $ec['etapeN1'] && $ec['etapeN1']->getCode() != $ec['etape']->getCode() ? $ec['etapeN1'] : null; ?>
+                                            <th class="text-nowrap">
+                                                <span
                                                         class="badge bg-warning text-dark"
-                                                        style="margin:0 auto;">Non reconductible</span>
+                                                        style="margin:0 auto;"
+                                                        <?php if ($etapePegaseN1): ?>title="Etape non trouvée en N+1, les enseignements seront rattachés à l'étape équivalente provenant de PEGASE"<?php endif; ?>><?= $etapePegaseN1 ? 'N+1 Pégase : ' . $etapePegaseN1->getCode() : 'Non reconductible' ?></span>
                                             </th>
                                         <?php endif; ?>
                                     <?php else: ?>
@@ -141,11 +139,8 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                                         } ?>">
                                         <?php if ($ep['reconduction'] == 'oui'): ?>
                                             <td>
-                                                <input title="Elément pédagogique déjà reconduit pour l'année prochaine"
-                                                       class="checkbox-element" disabled="disabled" type="checkbox"
-                                                       name="element[<?php echo $ec['etape']->getId(); ?>][]"
-                                                       value="<?= $ep['element']->getId(); ?>"/>
-                                                <span class="badge bg-warning text-dark">Reconduit</span>
+                                                <span title="Elément pédagogique déjà reconduit pour l'année prochaine"
+                                                      class="badge bg-warning text-dark">Reconduit</span>
                                             </td>
                                         <?php else: ?>
                                             <td><input class="checkbox-element" type="checkbox" checked="checked"

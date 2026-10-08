@@ -45,8 +45,6 @@ OSE [24.17]
 ---
 # OSE 24.20 (A venir)
 
-## Nouveautés
-
 ## Corrections
 * Correction pour la saisie d'un élément pédagogique sur une structure fille (#67684)
 * Le formulaire d'édition de l'intervenant prend bien en compte les privilèges d'éditions et de visualisation pour l'affichage des informations (#67531)
@@ -58,6 +56,7 @@ OSE [24.17]
 * Correction des données du conseil restreint dans l'export des agréments (#67658)
 * Correction des données du domaine fonctionnel dans l'export des données de paiement (#67834)
 * Ajout d'un paramétrage dans les status, afin de pouvoir activer la visibilité des tags par statut. (#67974)
+* Ajout d'un paramètre date observation devenu obligatoire pour l'appel du webservice 'ListeAgentsWebService' de Siham (#68102)
 
 # OSE 24.19 (08/09/2026)
 

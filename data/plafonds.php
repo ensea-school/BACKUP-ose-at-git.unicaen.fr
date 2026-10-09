@@ -72,14 +72,14 @@ return [
             'perimetre' => 'structure',
             'message' => 'Budget en € des missions étudiantes (80%) pour :sujet',
             'requete' => file_get_contents($sqlDir . '21.sql'),
-            'euro' => true,
+            'plafond_en_euros' => true,
         ],
         22 => [
             'libelle' => 'Plafond bloquant (90%) budget en € des missions étudiantes par composante',
             'perimetre' => 'structure',
             'message' => 'Budget en € des missions étudiantes (90%) pour :sujet',
             'requete' => file_get_contents($sqlDir . '22.sql'),
-            'euro' => true,
+            'plafond_en_euros' => true,
         ],
     ],
 ];

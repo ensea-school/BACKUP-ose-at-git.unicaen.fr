@@ -19,3 +19,4 @@ supervisord.*
 /docker-compose.yaml
 /.codex
 /.aiignore
+/CLAUDE.md

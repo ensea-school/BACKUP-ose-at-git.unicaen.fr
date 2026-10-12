@@ -45,6 +45,9 @@ OSE [24.20]
 ---
 # OSE 24.20 (12/10/26)
 
+## Nouveautés
+* Mise en place de la version 1.0.3 du connecteur OSE-Pégase --> https://git.unicaen.fr/open-source/connecteur-ose/pegase/-/blob/2baf28c6203f1622e057e8680a98605085dbc595/CHANGELOG.md
+
 ## Corrections
 * Correction de la vue des contrats pour ignorer les éléments et services historisés
 * Correction d'une erreur PHP dans l'onglet modulateur (#67657)
@@ -60,7 +63,7 @@ OSE [24.20]
 * Correction des données du conseil restreint dans l'export des agréments (#67658)
 * Correction des données du domaine fonctionnel dans l'export des données de paiement (#67834)
 * Ajout d'un paramétrage dans les status, afin de pouvoir activer la visibilité des tags par statut. (#67974)
-* Ajout d'un bouton de désactivation pour les contrats/avenants (#63931)
+* Ajout d'une désactivation pour la génération des contrats/avenants en l'absence de modèle (#63931)
 * Correction du mauvais recalcul des contrats après validation et de l'export basé sur des contrats non actualisés
 * Simplification des règles de filtrage des caractères spéciaux pour l'export RH (#68101)
 * Ajout du paramètre date d'observation obligatoire pour l'appel SIHAM `ListeAgentsWebService` (#68102)

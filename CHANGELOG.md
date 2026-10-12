@@ -1,6 +1,6 @@
 # Version stable
 
-OSE [24.17]
+OSE [24.20]
 
 
 # OSE 25 (à venir)
@@ -43,11 +43,15 @@ OSE [24.17]
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
 ---
-# OSE 24.20 (A venir)
+# OSE 24.20 (12/10/26)
 
 ## Nouveautés
 
 ## Corrections
+* Correction de la vue des contrats pour ignorer les éléments et services historisés
+* Correction d'une erreur PHP dans l'onglet modulateur (#67657)
+* Mise à niveau des exports pour utiliser le code plutôt que le source_code
+* Correction du sélecteur de structure dans l'interface de choix de rôle/connexion
 * Correction pour la saisie d'un élément pédagogique sur une structure fille (#67684)
 * Le formulaire d'édition de l'intervenant prend bien en compte les privilèges d'éditions et de visualisation pour l'affichage des informations (#67531)
 * Correction du bouton d'export des formations lorsqu'un niveau est séléctionner (#67743)
@@ -58,6 +62,13 @@ OSE [24.17]
 * Correction des données du conseil restreint dans l'export des agréments (#67658)
 * Correction des données du domaine fonctionnel dans l'export des données de paiement (#67834)
 * Ajout d'un paramétrage dans les status, afin de pouvoir activer la visibilité des tags par statut. (#67974)
+* Ajout d'un bouton de désactivation pour les contrats/avenants (#63931)
+* Correction du mauvais recalcul des contrats après validation et de l'export basé sur des contrats non actualisés
+* Simplification des règles de filtrage des caractères spéciaux pour l'export RH (#68101)
+* Ajout du paramètre date d'observation obligatoire pour l'appel SIHAM `ListeAgentsWebService` (#68102)
+* Correction de la reconduction de l'offre complémentaire après bascule Apogée vers Pégase
+* Correction de l'affichage de la reconduction de l'offre complémentaire
+* Correction pour contourner un problème d'optimisation Oracle 21.3 (#67687)
 
 # OSE 24.19 (08/09/2026)
 
@@ -67,7 +78,7 @@ OSE [24.17]
 * Ajout de l'adresse mail perso dans la fiche intervenant
 * Nouvelle formule de Lyon1 (#66872)
 * Nouvelle formule pour UHA (#67328)
-* Nouvelle formule de ENSCR (#67095) 
+* Nouvelle formule de ENSCR (#67095)
 
 ## Corrections
 * Bug signature électronique du contrat suite à la montée de version en unicaen/signature 2.0.0 (#67587)
@@ -105,7 +116,7 @@ OSE [24.17]
 
 ## Notes de mise à jour
 
-Si vous utilisez le connecteur Pégase basé sur DRE, pensez bien à couper votre synchronisation avant de faire la mise à jour. 
+Si vous utilisez le connecteur Pégase basé sur DRE, pensez bien à couper votre synchronisation avant de faire la mise à jour.
 Si vous souhaitez continuez d'utiliser le connecteur DRE et ne pas passer sur le nouveau connecteur suite à la mise à jour il vous faudra :
 - modifier le composer.json pour avoir ```"connecteur-ose/pegase" : "dev-master"``` ligne 66
 - Lancer la commande

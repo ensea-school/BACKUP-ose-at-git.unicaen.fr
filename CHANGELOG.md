@@ -46,6 +46,7 @@ OSE [24.20]
 # OSE 24.20 (12/10/26)
 
 ## Nouveautés
+* Mise en place de la version 1.0.3 du connecteur OSE-Pégase --> https://git.unicaen.fr/open-source/connecteur-ose/pegase/-/blob/2baf28c6203f1622e057e8680a98605085dbc595/CHANGELOG.md
 
 ## Corrections
 * Correction de la vue des contrats pour ignorer les éléments et services historisés

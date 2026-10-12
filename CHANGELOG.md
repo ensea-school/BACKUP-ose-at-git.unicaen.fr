@@ -63,7 +63,7 @@ OSE [24.20]
 * Correction des données du conseil restreint dans l'export des agréments (#67658)
 * Correction des données du domaine fonctionnel dans l'export des données de paiement (#67834)
 * Ajout d'un paramétrage dans les status, afin de pouvoir activer la visibilité des tags par statut. (#67974)
-* Ajout d'un bouton de désactivation pour les contrats/avenants (#63931)
+* Ajout d'une désactivation pour la génération des contrats/avenants en l'absence de modèle (#63931)
 * Correction du mauvais recalcul des contrats après validation et de l'export basé sur des contrats non actualisés
 * Simplification des règles de filtrage des caractères spéciaux pour l'export RH (#68101)
 * Ajout du paramètre date d'observation obligatoire pour l'appel SIHAM `ListeAgentsWebService` (#68102)

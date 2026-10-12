@@ -301,11 +301,11 @@
         },
         {
             "name": "connecteur-ose/pegase",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/open-source/connecteur-ose/pegase.git",
-                "reference": "db0290adba419489b4fbaef5f3b5deb00002a7e6"
+                "reference": "2baf28c6203f1622e057e8680a98605085dbc595"
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.3",
@@ -321,7 +321,7 @@
                 }
             },
             "description": "Connecteur Pégase pour OSE",
-            "time": "2026-09-14T08:00:11+00:00"
+            "time": "2026-10-12T11:21:48+00:00"
         },
         {
             "name": "datatables.net/datatables.net",

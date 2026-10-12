@@ -45,8 +45,6 @@ OSE [24.20]
 ---
 # OSE 24.20 (12/10/26)
 
-## Nouveautés
-
 ## Corrections
 * Correction de la vue des contrats pour ignorer les éléments et services historisés
 * Correction d'une erreur PHP dans l'onglet modulateur (#67657)

@@ -121,7 +121,6 @@ class ContratController extends AbstractController
         $modelContratPresent = $intervenant->getStatut()->getContratEtatSortie()!== null;
         $modelAvenantPresent = $intervenant->getStatut()->getAvenantEtatSortie()!== null;
 
-        dump($intervenant->getStatut()->getContratEtatSortie());
         // recupere en fonction du statut, modele de contrat et/ou d'avenant
         if (!empty($this->getServiceParametres()->get('signature_electronique_parapheur'))
             && $intervenant->getStatut()->getContratEtatSortie()?->isSignatureActivation()

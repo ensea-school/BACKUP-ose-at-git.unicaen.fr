@@ -13,7 +13,7 @@ use Contrat\Entity\Db\TypeContrat;
  * @var bool $modelAvenantPresent
  */
 
-$modelPresent = $tblContrat->getTypeContrat()->getCode() == TypeContrat::CODE_CONTRAT ? $modelContratPresent : $modelAvenantPresent;
+$modelPresent = $tblContrat->getTypeContrat()->getCode() == TypeContrat::CODE_CONTRAT ? $modelContratPresent : ($modelAvenantPresent || $modelContratPresent);
 $contrat = $tblContrat->getContrat();
 
 $validation     = $tblContrat->getValidation();

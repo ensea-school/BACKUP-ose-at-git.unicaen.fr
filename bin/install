@@ -62,7 +62,7 @@ $depCommands = [
     'git'     => 'Gestionnaire de versions',
     'php'     => 'Langage PHP',
     'wget'    => 'Téléchargement en ligne de commande',
-    'unoconv' => ['description' => 'Convertisseur OpenDocument vers PDF', 'facultatif' => false],
+    'unoconv' => ['description' => 'Convertisseur OpenDocument vers PDF', 'facultatif' => true],
 ];
 
 // Liste des modules PHP qui doivent être installés

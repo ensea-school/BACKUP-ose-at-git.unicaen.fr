@@ -145,7 +145,7 @@ class Effectifs implements HistoriqueAwareInterface, ImportAwareInterface
      *
      * @return Effectifs
      */
-    public function setElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    public function setElementPedagogique(?\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
         $this->elementPedagogique = $elementPedagogique;
 

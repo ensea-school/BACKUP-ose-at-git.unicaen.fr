@@ -76,7 +76,7 @@ class ClotureAssertion extends AbstractAssertion
 
 
 
-    protected function assertCloture(Intervenant $intervenant = null)
+    protected function assertCloture(?Intervenant $intervenant = null)
     {
         return $this->asserts([
             $intervenant,
@@ -86,7 +86,7 @@ class ClotureAssertion extends AbstractAssertion
 
 
 
-    protected function assertReouverture(Intervenant $intervenant = null)
+    protected function assertReouverture(?Intervenant $intervenant = null)
     {
         $hasNoDMEP = false;
         if ($intervenant) {

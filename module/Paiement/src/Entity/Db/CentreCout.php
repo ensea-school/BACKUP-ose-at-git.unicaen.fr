@@ -139,7 +139,7 @@ class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
      *
      * @return CentreCout
      */
-    public function setParent(CentreCout $parent = null)
+    public function setParent(?CentreCout $parent = null)
     {
         $this->parent = $parent;
 
@@ -191,7 +191,7 @@ class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
      *
      * @return CentreCout
      */
-    public function setTypeRessource(\Paiement\Entity\Db\TypeRessource $typeRessource = null)
+    public function setTypeRessource(?\Paiement\Entity\Db\TypeRessource $typeRessource = null)
     {
         $this->typeRessource = $typeRessource;
 
@@ -219,7 +219,7 @@ class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
      *
      * @return CentreCout
      */
-    public function setActivite(\Paiement\Entity\Db\CcActivite $activite = null)
+    public function setActivite(?\Paiement\Entity\Db\CcActivite $activite = null)
     {
         $this->activite = $activite;
 

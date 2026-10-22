@@ -87,7 +87,7 @@ class PaiementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable ($etape, Intervenant $intervenant = null, Structure $structure = null)
+    protected function assertEtapeAtteignable ($etape, ?Intervenant $intervenant = null, ?Structure $structure = null)
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant, $structure);

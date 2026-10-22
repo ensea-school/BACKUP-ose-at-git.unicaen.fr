@@ -20,7 +20,7 @@ class ElementTauxMixiteFieldsetViewHelper extends AbstractHtmlElement
      *
      * @return self|string
      */
-    public function __invoke(TauxMixiteFieldset $fieldset = null)
+    public function __invoke(?TauxMixiteFieldset $fieldset = null)
     {
         if (null === $fieldset) {
             return $this;

@@ -17,7 +17,7 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
 class StructureAssertion extends AbstractAssertion
 {
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null)
     {
         $role = $this->getRole();
 

@@ -98,7 +98,7 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertEdition(Intervenant $intervenant = null)
+    protected function assertEdition(?Intervenant $intervenant = null)
     {
         $role = $this->getRole();
         if ($role instanceof Role && $role->getStructure() && $intervenant->getStructure()) {
@@ -110,7 +110,7 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
+    protected function assertEtapeAtteignable($etape, ?Intervenant $intervenant = null)
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);

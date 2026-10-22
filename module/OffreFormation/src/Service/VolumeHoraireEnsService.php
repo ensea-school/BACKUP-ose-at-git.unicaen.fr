@@ -56,7 +56,7 @@ class VolumeHoraireEnsService extends AbstractEntityService
      *
      * @return \OffreFormation\Entity\Db\VolumeHoraireEns
      */
-    public function newEntity(ElementPedagogique $elementPedagogique = null, TypeIntervention $typeIntervention = null)
+    public function newEntity(?ElementPedagogique $elementPedagogique = null, ?TypeIntervention $typeIntervention = null)
     {
         /** @var VolumeHoraireEns $entity */
         $entity = parent::newEntity();

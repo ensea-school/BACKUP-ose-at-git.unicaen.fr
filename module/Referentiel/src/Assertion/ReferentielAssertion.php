@@ -201,7 +201,7 @@ class ReferentielAssertion extends AbstractAssertion
     }
 
 
-    protected function assertPageReferentiel(Role $role, Intervenant $intervenant = null, string $typeVolumeHoraireCode)
+    protected function assertPageReferentiel(Role $role, ?Intervenant $intervenant, string $typeVolumeHoraireCode)
     {
         if (!$intervenant) return true;
 

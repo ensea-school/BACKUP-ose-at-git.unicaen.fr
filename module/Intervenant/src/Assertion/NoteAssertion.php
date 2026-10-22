@@ -87,7 +87,7 @@ class NoteAssertion extends AbstractAssertion
     }
 
 
-    protected function assertSuppressionNote(Note $note = null)
+    protected function assertSuppressionNote(?Note $note = null)
     {
         if (empty($note)) {
             return false;
@@ -109,7 +109,7 @@ class NoteAssertion extends AbstractAssertion
         return false;
     }
 
-    protected function assertEditionNote(Note $note = null): bool
+    protected function assertEditionNote(?Note $note = null): bool
     {
         if (empty($note)) return false;
 

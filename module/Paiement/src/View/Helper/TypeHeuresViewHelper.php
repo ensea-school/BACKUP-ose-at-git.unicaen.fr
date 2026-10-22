@@ -22,7 +22,7 @@ class TypeHeuresViewHelper extends AbstractHelper
      *
      * @return self
      */
-    public function __invoke(TypeHeures $typeHeures = null)
+    public function __invoke(?TypeHeures $typeHeures = null)
     {
         if ($typeHeures) $this->setTypeHeures($typeHeures);
 

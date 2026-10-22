@@ -23,7 +23,7 @@ class NotificationIndicateurService extends AbstractService
     /**
      * Abonne un personnel à un indicateur.
      */
-    public function abonner(Indicateur $indicateur, ?string $frequence = null, bool $inHome = false, Affectation $affectation = null): ?NotificationIndicateur
+    public function abonner(Indicateur $indicateur, ?string $frequence = null, bool $inHome = false, ?Affectation $affectation = null): ?NotificationIndicateur
     {
         $em = $this->getEntityManager();
 

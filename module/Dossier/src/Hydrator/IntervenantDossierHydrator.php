@@ -38,7 +38,7 @@ class IntervenantDossierHydrator implements HydratorInterface
      *
      * @param Statut $defaultStatut
      */
-    public function __construct(Statut $defaultStatut = null)
+    public function __construct(?Statut $defaultStatut = null)
     {
         $this->setDefaultStatut($defaultStatut);
     }

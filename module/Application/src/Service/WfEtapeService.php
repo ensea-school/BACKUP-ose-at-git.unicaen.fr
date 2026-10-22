@@ -58,7 +58,7 @@ class WfEtapeService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->orderBy($alias . '.ordre');
@@ -74,7 +74,7 @@ class WfEtapeService extends AbstractEntityService
      * @return Select
      */
 
-    public function getWfEtapeElement(Collection $wfEtapes = null)
+    public function getWfEtapeElement(?Collection $wfEtapes = null)
     {
         $wfEtapesElement = new Select('select-wfetapes');
         $wfEtapesElement->setLabel('Liste étapes');

@@ -103,7 +103,7 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertDossierEdition(Intervenant $intervenant = null)
+    protected function assertDossierEdition(?Intervenant $intervenant = null)
     {
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant)) {
             return false;
@@ -114,7 +114,7 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertPieceJointeAction(Intervenant $intervenant = null)
+    protected function assertPieceJointeAction(?Intervenant $intervenant = null)
     {
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_PJ_SAISIE, $intervenant)) {
             return false;
@@ -125,7 +125,7 @@ class PiecesJointesAssertion extends AbstractAssertion
 
 
 
-    protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
+    protected function assertEtapeAtteignable($etape, ?Intervenant $intervenant = null)
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);

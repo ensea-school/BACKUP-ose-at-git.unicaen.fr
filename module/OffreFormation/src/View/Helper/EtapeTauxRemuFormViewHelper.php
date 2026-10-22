@@ -26,7 +26,7 @@ class EtapeTauxRemuFormViewHelper extends AbstractHtmlElement
      *
      * @return self|string
      */
-    public function __invoke(EtapetauxRemuForm $form = null)
+    public function __invoke(?EtapetauxRemuForm $form = null)
     {
         if (null === $form) {
             return $this;

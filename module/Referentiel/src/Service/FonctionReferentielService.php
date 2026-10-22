@@ -58,7 +58,7 @@ class FonctionReferentielService extends AbstractEntityService
      *
      * @return QueryBuilder|mixed|null
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

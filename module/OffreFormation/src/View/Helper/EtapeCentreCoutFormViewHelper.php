@@ -26,7 +26,7 @@ class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
      *
      * @return self|string
      */
-    public function __invoke(EtapeCentreCoutForm $form = null)
+    public function __invoke(?EtapeCentreCoutForm $form = null)
     {
         if (null === $form) {
             return $this;

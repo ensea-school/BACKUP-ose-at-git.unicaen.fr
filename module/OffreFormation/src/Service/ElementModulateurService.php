@@ -53,7 +53,7 @@ class ElementModulateurService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

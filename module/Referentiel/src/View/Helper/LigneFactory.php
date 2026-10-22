@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
  */
 class LigneFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $helper = new LigneViewHelper();
 

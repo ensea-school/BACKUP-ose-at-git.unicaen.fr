@@ -375,7 +375,7 @@ class IntervenantService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy (QueryBuilder $qb = null, $alias = null)
+    public function orderBy (?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -395,7 +395,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByType (TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
+    public function finderByType (TypeIntervenant $typeIntervenant, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $sStatut = $this->getServiceStatut();

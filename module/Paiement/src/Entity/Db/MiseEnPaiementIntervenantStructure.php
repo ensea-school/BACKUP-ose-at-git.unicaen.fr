@@ -62,7 +62,7 @@ class MiseEnPaiementIntervenantStructure
      * @param \Paiement\Entity\Db\MiseEnPaiement $miseEnPaiement
      * @return MiseEnPaiementIntervenantStructure
      */
-    public function setMiseEnPaiement(\Paiement\Entity\Db\MiseEnPaiement $miseEnPaiement = null)
+    public function setMiseEnPaiement(?\Paiement\Entity\Db\MiseEnPaiement $miseEnPaiement = null)
     {
         $this->miseEnPaiement = $miseEnPaiement;
 
@@ -85,7 +85,7 @@ class MiseEnPaiementIntervenantStructure
      * @param \Intervenant\Entity\Db\Intervenant $intervenant
      * @return MiseEnPaiementIntervenantStructure
      */
-    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(?\Intervenant\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -108,7 +108,7 @@ class MiseEnPaiementIntervenantStructure
      * @param \Lieu\Entity\Db\Structure $structure
      * @return MiseEnPaiementIntervenantStructure
      */
-    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
+    public function setStructure(?\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -131,7 +131,7 @@ class MiseEnPaiementIntervenantStructure
      * @param \Application\Entity\Db\Periode $periode
      * @return MiseEnPaiementIntervenantStructure
      */
-    public function setPeriode(\Application\Entity\Db\Periode $periode = null)
+    public function setPeriode(?\Application\Entity\Db\Periode $periode = null)
     {
         $this->periode = $periode;
 

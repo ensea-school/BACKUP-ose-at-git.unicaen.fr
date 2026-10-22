@@ -90,7 +90,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
      *
      * @return Validation
      */
-    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(?\Intervenant\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -118,7 +118,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
      *
      * @return Validation
      */
-    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
+    public function setStructure(?\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -146,7 +146,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
      *
      * @return Validation
      */
-    public function setTypeValidation(\Application\Entity\Db\TypeValidation $typeValidation = null)
+    public function setTypeValidation(?\Application\Entity\Db\TypeValidation $typeValidation = null)
     {
         $this->typeValidation = $typeValidation;
 

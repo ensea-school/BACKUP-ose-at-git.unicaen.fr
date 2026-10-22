@@ -41,7 +41,7 @@ class ScenarioService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
         /** @var $qb QueryBuilder */
         [$qb, $alias] = $this->initQuery($qb, $alias);

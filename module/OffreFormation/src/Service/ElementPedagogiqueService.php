@@ -161,7 +161,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return ElementPedagogique
      */
-    public function getByCode($code, Annee $annee = null)
+    public function getByCode($code, ?Annee $annee = null)
     {
         if (null == $code) return null;
 
@@ -234,7 +234,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -457,7 +457,7 @@ where rang = 1 AND rownum <= :limit
      *
      * @return QueryBuilder|null
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy($this->getAlias() . '.libelle');

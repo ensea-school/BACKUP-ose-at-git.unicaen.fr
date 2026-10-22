@@ -118,7 +118,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertPageServices(Role $role, Intervenant $intervenant = null, string $typeVolumeHoraireCode)
+    protected function assertPageServices(Role $role, ?Intervenant $intervenant, string $typeVolumeHoraireCode)
     {
         if (!$intervenant) return true;
 
@@ -252,7 +252,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertIntervenant(Role $role, Intervenant $intervenant = null)
+    public function assertIntervenant(Role $role, ?Intervenant $intervenant = null)
     {
         if ($intervenant) {
             if ($ri = $role->getIntervenant()) {
@@ -282,7 +282,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    public function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
+    public function assertEtapeAtteignable($etape, ?Intervenant $intervenant = null)
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);

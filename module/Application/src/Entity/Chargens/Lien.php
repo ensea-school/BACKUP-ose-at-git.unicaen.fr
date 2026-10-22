@@ -255,7 +255,7 @@ class Lien
      *
      * @return bool
      */
-    public function hasScenarioLien(Scenario $scenario = null)
+    public function hasScenarioLien(?Scenario $scenario = null)
     {
         if (!$scenario) {
             $scenario = $this->provider->getScenario();
@@ -275,7 +275,7 @@ class Lien
      *
      * @return ScenarioLien
      */
-    public function getScenarioLien(Scenario $scenario = null)
+    public function getScenarioLien(?Scenario $scenario = null)
     {
         if (!$scenario) {
             $scenario = $this->provider->getScenario();
@@ -317,7 +317,7 @@ class Lien
     /**
      * @return $this
      */
-    public function removeScenarioLien(Scenario $scenario = null)
+    public function removeScenarioLien(?Scenario $scenario = null)
     {
         if ($scenario) {
             unset($this->scenarioLien[$scenario->getId()]);

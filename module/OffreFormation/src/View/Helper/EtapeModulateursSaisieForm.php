@@ -29,7 +29,7 @@ class EtapeModulateursSaisieForm extends AbstractHelper
      *
      * @return self|string
      */
-    public function __invoke(EtapeModulateursSaisie $form = null)
+    public function __invoke(?EtapeModulateursSaisie $form = null)
     {
         if (null === $form) {
             return $this;

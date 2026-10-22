@@ -12,7 +12,7 @@ use Psr\Container\ContainerInterface;
 class ContextFactory
 {
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $context = new Context();
 

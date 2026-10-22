@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
  */
 class MouchardCompleterContextFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $mouchardCompleterContext = new MouchardCompleterContext();
 

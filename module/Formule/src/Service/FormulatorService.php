@@ -190,7 +190,7 @@ class FormulatorService
                     if (isset($trace['vh'][$i])) {
                         $msg .= "\n\nValeurs en ligne calculées :";
                         foreach ($trace['vh'][$i] as $cell => $val) {
-                            $tableurVal = $tableur->getCellFloatVal($cell . (string)$tableur->mainLine() + $i);
+                            $tableurVal = $tableur->getCellFloatVal($cell . ((string)$tableur->mainLine() + $i));
                             $msg        .= "\n$cell = $val";
                             if ($this->diffFloat($val, $tableurVal)) {
                                 $msg .= ' calculé (' . $tableurVal . ' dans le tableur)';

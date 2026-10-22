@@ -41,7 +41,7 @@ class CorpsService extends AbstractEntityService
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelleLong");

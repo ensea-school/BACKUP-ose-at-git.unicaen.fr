@@ -10,7 +10,7 @@ use Psr\Container\ContainerInterface;
  */
 class ListeCalendaireFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $helper = new ListeCalendaireViewHelper();
 

@@ -30,6 +30,10 @@ WITH t AS ( SELECT
   frvh.heures_compl_fi              heures_compl_fi,
   frvh.heures_compl_fa              heures_compl_fa,
   frvh.heures_compl_fc              heures_compl_fc,
+  frvh.heures_non_payable_fi        heures_non_payable_fi,
+  frvh.heures_non_payable_fa        heures_non_payable_fa,
+  frvh.heures_non_payable_fc        heures_non_payable_fc,
+  0                                 heures_non_payable_referentiel,
   frvh.heures_primes                heures_primes,
   0                                 heures_compl_referentiel,
   frvh.total                        total,
@@ -76,6 +80,10 @@ SELECT
   0                                 heures_compl_fi,
   0                                 heures_compl_fa,
   0                                 heures_compl_fc,
+  0                                 heures_non_payable_fi,
+  0                                 heures_non_payable_fa,
+  0                                 heures_non_payable_fc,
+  0                                 heures_non_payable_referentiel,
   0                                 heures_primes,
   0                                 heures_compl_referentiel,
   0                                 total,
@@ -129,6 +137,10 @@ SELECT
   0                                 heures_compl_fi,
   0                                 heures_compl_fa,
   0                                 heures_compl_fc,
+  0                                 heures_non_payable_fi,
+  0                                 heures_non_payable_fa,
+  0                                 heures_non_payable_fc,
+  frvr.heures_non_payable_referentiel heures_non_payable_referentiel,
   0                                 heures_primes,
   frvr.heures_compl_referentiel     heures_compl_referentiel,
   frvr.total                        total,
@@ -176,6 +188,10 @@ SELECT
   0                                 heures_compl_fi,
   0                                 heures_compl_fa,
   0                                 heures_compl_fc,
+  0                                 heures_non_payable_fi,
+  0                                 heures_non_payable_fa,
+  0                                 heures_non_payable_fc,
+  0                                 heures_non_payable_referentiel,
   0                                 heures_primes,
   NULL                              heures_compl_referentiel,
   0                                 total,
@@ -294,6 +310,10 @@ SELECT
   t.heures_compl_fi                 heures_compl_fi,
   t.heures_compl_fa                 heures_compl_fa,
   t.heures_compl_fc                 heures_compl_fc,
+  t.heures_non_payable_fi           heures_non_payable_fi,
+  t.heures_non_payable_fa           heures_non_payable_fa,
+  t.heures_non_payable_fc           heures_non_payable_fc,
+  t.heures_non_payable_referentiel  heures_non_payable_referentiel,
   t.heures_primes                   heures_primes,
   t.heures_compl_referentiel        heures_compl_referentiel,
   t.total                           total,
@@ -302,26 +322,26 @@ SELECT
 
 FROM
   t
-  JOIN intervenant                        i ON i.id     = t.intervenant_id AND i.histo_destruction IS NULL
-  JOIN statut                            si ON si.id    = i.statut_id
-  JOIN type_intervenant                  ti ON ti.id    = si.type_intervenant_id
-  JOIN etablissement                   etab ON etab.id  = t.etablissement_id
-  JOIN type_volume_horaire              tvh ON tvh.id   = t.type_volume_horaire_id
-  JOIN etat_volume_horaire              evh ON evh.id   = t.etat_volume_horaire_id
-  LEFT JOIN histo_intervenant_service   his ON his.intervenant_id = i.id AND his.type_volume_horaire_id = tvh.id AND his.referentiel = 0
-  LEFT JOIN grade                         g ON g.id     = i.grade_id
-  LEFT JOIN discipline                   di ON di.id    = i.discipline_id
-  LEFT JOIN STRUCTURE                  saff ON saff.id  = i.structure_id
-  LEFT JOIN element_pedagogique          ep ON ep.id    = t.element_pedagogique_id
-  LEFT JOIN discipline                   de ON de.id    = ep.discipline_id
-  LEFT JOIN STRUCTURE                  sens ON sens.id  = NVL(t.structure_ens_id, ep.structure_id)
-  LEFT JOIN periode                       p ON p.id     = t.periode_id
-  LEFT JOIN SOURCE                      src ON src.id   = ep.source_id OR (ep.source_id IS NULL AND src.code = 'OSE')
-  LEFT JOIN etape                       etp ON etp.id   = CASE WHEN t.etape_id IS NOT NULL THEN t.etape_id ELSE ep.etape_id END
-  LEFT JOIN type_formation               tf ON tf.id    = etp.type_formation_id AND tf.histo_destruction IS NULL
-  LEFT JOIN groupe_type_formation       gtf ON gtf.id   = tf.groupe_id AND gtf.histo_destruction IS NULL
-  LEFT JOIN v_formule_intervenant        fi ON fi.intervenant_id = i.id
-  LEFT JOIN ponds                     ponds ON ponds.element_pedagogique_id = ep.id
-  LEFT JOIN fonction_referentiel         fr ON fr.id    = t.fonction_referentiel_id
-  LEFT JOIN type_validation              tv ON tvh.code = 'REALISE' AND tv.code = 'CLOTURE_REALISE'
-  LEFT JOIN validation                    v ON v.intervenant_id = i.id AND v.type_validation_id = tv.id AND v.histo_destruction IS NULL
+    JOIN intervenant                        i ON i.id     = t.intervenant_id AND i.histo_destruction IS NULL
+    JOIN statut                            si ON si.id    = i.statut_id
+    JOIN type_intervenant                  ti ON ti.id    = si.type_intervenant_id
+    JOIN etablissement                   etab ON etab.id  = t.etablissement_id
+    JOIN type_volume_horaire              tvh ON tvh.id   = t.type_volume_horaire_id
+    JOIN etat_volume_horaire              evh ON evh.id   = t.etat_volume_horaire_id
+    LEFT JOIN histo_intervenant_service   his ON his.intervenant_id = i.id AND his.type_volume_horaire_id = tvh.id AND his.referentiel = 0
+    LEFT JOIN grade                         g ON g.id     = i.grade_id
+    LEFT JOIN discipline                   di ON di.id    = i.discipline_id
+    LEFT JOIN STRUCTURE                  saff ON saff.id  = i.structure_id
+    LEFT JOIN element_pedagogique          ep ON ep.id    = t.element_pedagogique_id
+    LEFT JOIN discipline                   de ON de.id    = ep.discipline_id
+    LEFT JOIN STRUCTURE                  sens ON sens.id  = NVL(t.structure_ens_id, ep.structure_id)
+    LEFT JOIN periode                       p ON p.id     = t.periode_id
+    LEFT JOIN SOURCE                      src ON src.id   = ep.source_id OR (ep.source_id IS NULL AND src.code = 'OSE')
+    LEFT JOIN etape                       etp ON etp.id   = CASE WHEN t.etape_id IS NOT NULL THEN t.etape_id ELSE ep.etape_id END
+    LEFT JOIN type_formation               tf ON tf.id    = etp.type_formation_id AND tf.histo_destruction IS NULL
+    LEFT JOIN groupe_type_formation       gtf ON gtf.id   = tf.groupe_id AND gtf.histo_destruction IS NULL
+    LEFT JOIN v_formule_intervenant        fi ON fi.intervenant_id = i.id
+    LEFT JOIN ponds                     ponds ON ponds.element_pedagogique_id = ep.id
+    LEFT JOIN fonction_referentiel         fr ON fr.id    = t.fonction_referentiel_id
+    LEFT JOIN type_validation              tv ON tvh.code = 'REALISE' AND tv.code = 'CLOTURE_REALISE'
+    LEFT JOIN validation                    v ON v.intervenant_id = i.id AND v.type_validation_id = tv.id AND v.histo_destruction IS NULL

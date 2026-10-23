@@ -111,6 +111,12 @@ return [
         ],
     ],
     'caches' => [
+        // Par défaut, l'adaptateur Memory refuse d'écrire dès que le process PHP dépasse la moitié de memory_limit
+        'doctrinemodule.cache.array'      => [
+            'options' => [
+                'memory_limit' => 0,
+            ],
+        ],
         'doctrinemodule.cache.filesystem' => [
             'options' => [
                 'cache_dir' => 'cache/Doctrine',

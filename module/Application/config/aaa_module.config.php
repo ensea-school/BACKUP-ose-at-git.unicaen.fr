@@ -140,6 +140,7 @@ $config = [
             Service\ContextService::class                               => Service\Factory\ContextServiceFactory::class,
             'MouchardCompleterContext'                                  => MouchardCompleterContextFactory::class,
             \UnicaenPrivilege\Service\Privilege\PrivilegeService::class => Service\Factory\PrivilegeServiceFactory::class,
+            \UnicaenTbl\Service\BddService::class                       => Service\Factory\TblBddServiceFactory::class,
             Connecteur\LdapConnecteur::class                            => Connecteur\Factory\LdapConnecteurFactory::class,
             Cache\CacheService::class                                   => Cache\Factory\CacheServiceFactory::class,
             Service\UtilisateurService::class                           => Service\Factory\UtilisateurServiceFactory::class,

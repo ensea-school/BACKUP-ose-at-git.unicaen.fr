@@ -152,6 +152,7 @@ $config = [
         'aliases'    => [
             'HostLocalization' => HostLocalization\HostLocalizationOse::class,
             Service\PrivilegeService::class => \UnicaenPrivilege\Service\Privilege\PrivilegeService::class,
+            \UnicaenPrivilege\Provider\Privilege\PrivilegeProvider::class => \UnicaenPrivilege\Service\Privilege\PrivilegeService::class,
         ],
     ],
     'view_helpers'       => [

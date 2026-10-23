@@ -5,6 +5,7 @@ namespace Application\Entity\Db;
 use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenPrivilege\Entity\Db\PerimetreCategorieInterface;
 use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
 use UnicaenUtilisateur\Entity\Db\RoleInterface;
 use UnicaenUtilisateur\Entity\Db\UserInterface;
@@ -78,9 +79,9 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    public function setDisplayed(bool $accessibleExterieur): void
+    public function setDisplayed(bool $accessibleExterieur): RoleInterface
     {
-
+        return $this;
     }
 
 
@@ -144,9 +145,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return self
      */
-    public function setLibelle($libelle): void
+    public function setLibelle($libelle): RoleInterface
     {
         $this->libelle = $libelle;
+
+        return $this;
     }
 
 
@@ -206,9 +209,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return self
      */
-    public function setAccessibleExterieur(bool $accessibleExterieur): void
+    public function setAccessibleExterieur(bool $accessibleExterieur): RoleInterface
     {
         $this->accessibleExterieur = $accessibleExterieur;
+
+        return $this;
     }
 
 
@@ -296,9 +301,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return self
      */
-    public function addPrivilege(PrivilegeInterface $privilege): void
+    public function addPrivilege(PrivilegeInterface $privilege): RoleInterface
     {
         $this->privileges[] = $privilege;
+
+        return $this;
     }
 
 
@@ -308,9 +315,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @param Privilege $privilege
      */
-    public function removePrivilege(PrivilegeInterface $privilege): void
+    public function removePrivilege(PrivilegeInterface $privilege): RoleInterface
     {
         $this->privileges->removeElement($privilege);
+
+        return $this;
     }
 
 
@@ -320,7 +329,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPrivileges()
+    public function getPrivileges(): Collection
     {
         return $this->privileges;
     }
@@ -349,16 +358,20 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    public function setId(?int $id): void
+    public function setId(?int $id): RoleInterface
     {
         // TODO: Implement setId() method.
+
+        return $this;
     }
 
 
 
-    public function setRoleId(?string $roleId): void
+    public function setRoleId(?string $roleId): RoleInterface
     {
         // TODO: Implement setRoleId() method.
+
+        return $this;
     }
 
 
@@ -370,9 +383,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    public function setDescription(?string $description): void
+    public function setDescription(?string $description): RoleInterface
     {
         // TODO: Implement setDescription() method.
+
+        return $this;
     }
 
 
@@ -384,9 +399,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    public function setDefault(bool $default): void
+    public function setDefault(bool $default): RoleInterface
     {
         // TODO: Implement setDefault() method.
+
+        return $this;
     }
 
 
@@ -398,9 +415,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    public function setAuto(bool $auto): void
+    public function setAuto(bool $auto): RoleInterface
     {
         // TODO: Implement setAuto() method.
+
+        return $this;
     }
 
 
@@ -412,9 +431,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    public function setParent(?RoleInterface $parent = null): void
+    public function setParent(?RoleInterface $parent = null): RoleInterface
     {
         // TODO: Implement setParent() method.
+
+        return $this;
     }
 
 
@@ -426,9 +447,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    public function setLdapFilter(?string $ldapFilter): void
+    public function setLdapFilter(?string $ldapFilter): RoleInterface
     {
         // TODO: Implement setLdapFilter() method.
+
+        return $this;
     }
 
 
@@ -450,6 +473,31 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     public function removeUser(UserInterface $user): void
     {
         // TODO: Implement removeUser() method.
+    }
+
+
+
+    public function addPerimetreCategorie(PerimetreCategorieInterface $perimetreCategorie): RoleInterface
+    {
+        // TODO: Implement addPerimetreCategorie() method.
+
+        return $this;
+    }
+
+
+
+    public function removePerimetreCategorie(PerimetreCategorieInterface $perimetreCategorie): RoleInterface
+    {
+        // TODO: Implement removePerimetreCategorie() method.
+
+        return $this;
+    }
+
+
+
+    public function getPerimetreCategories(): Collection
+    {
+        return new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 }

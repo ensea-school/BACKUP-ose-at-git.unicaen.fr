@@ -105,9 +105,15 @@ return [
                 'namespace' => 'OSE__' . __NAMESPACE__,
             ],
             'filesystem' => [
-                'class'     => 'Doctrine\Common\Cache\FilesystemCache',
-                'directory' => 'cache/Doctrine',
-                'namespace' => 'DoctrineModule',
+                'class'    => \DoctrineModule\Cache\LaminasStorageCache::class,
+                'instance' => 'doctrinemodule.cache.filesystem',
+            ],
+        ],
+    ],
+    'caches' => [
+        'doctrinemodule.cache.filesystem' => [
+            'options' => [
+                'cache_dir' => 'cache/Doctrine',
             ],
         ],
     ],

@@ -17,7 +17,7 @@ class TblPieceJointeServiceFactory
      *
      * @return TblPieceJointeService
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): Tbl
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): TblPieceJointeService
     {
         $service = new TblPieceJointeService();
         $service->setEntityManager($container->get(Constants::BDD));

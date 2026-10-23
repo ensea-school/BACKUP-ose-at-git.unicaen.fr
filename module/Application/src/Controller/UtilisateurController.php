@@ -10,7 +10,6 @@ use Laminas\View\Model\JsonModel;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenAuthentification\Controller\UtilisateurController as BaseController;
 use UnicaenUtilisateur\Formatter\RoleFormatter;
-use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 
 
 class UtilisateurController extends BaseController
@@ -18,7 +17,6 @@ class UtilisateurController extends BaseController
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
-    use UserServiceAwareTrait;
 
 
     /**

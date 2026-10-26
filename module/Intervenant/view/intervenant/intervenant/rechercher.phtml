@@ -1,29 +1,13 @@
+
 <?php
-/* @var $recents [] */
-?>
-<h1 class="page-header">Rechercher un intervenant</h1>
-
-<?= $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
-
-<div style="padding:1em">
-
-    <?php
-
-    echo $this->vue('intervenant/recherche', []);
 
     $canAddIntervenant = $this->isAllowed(\Application\Provider\Privilege\Privileges::getResourceId(\Application\Provider\Privilege\Privileges::INTERVENANT_CREATION));
 
-    if ($canAddIntervenant) {
-        $url = $this->url('intervenant/creer');
-        echo $this->tag('a', ['class' => 'btn btn-primary', 'href' => $url])->html("Ajout d'un nouvel intervenant");
-    }
+?>
 
+<?= $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
 
-    if (!empty($recents)) {
-        echo '<h3 style="margin-top:20px;">Intervenants récemment consultés :</h3>';
-        echo $this->partial('liste', ['intervenants' => $recents]);
-    }
-
-
-    ?>
-</div>
+<?= $this->vue('intervenant/recherche', [
+        'canAddIntervenant' => $canAddIntervenant,
+        'urlCreation' => $this->url('intervenant/creer'),
+]); ?>

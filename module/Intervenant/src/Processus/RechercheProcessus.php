@@ -6,11 +6,14 @@ namespace Intervenant\Processus;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
+use Application\Provider\Privilege\Privileges;
+
 
 class RechercheProcessus
 {
     use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
+
 
     /**
      * @var bool
@@ -25,12 +28,14 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercher ($critere, $limit = 50, string $key = ':CODE', array $typeIntervenantCodes = [])
+
+
+    public function rechercher ($critere, $limit = 50, string $key = ':CODE', array $typeIntervenantCodes = [],bool $affichageNumeroPerso)
     {
         try {
-            return $this->rechercheGenerique($critere, $limit, $key, false, $typeIntervenantCodes);
+            return $this->rechercheGenerique($critere, $limit, $key, false, $typeIntervenantCodes, $affichageNumeroPerso);
         } catch (\Exception $e) {
-            return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes);
+            return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes, $affichageNumeroPerso);
         }
     }
 
@@ -41,8 +46,10 @@ class RechercheProcessus
         $limit = 50,
         string $key = ':CODE',
         $onlyLocale = false,
-        array $typeIntervenantCodes = []
+        array $typeIntervenantCodes = [],
+        bool $affichageNumeroPerso
     )
+
     {
         if (strlen($critere) < 2) return [];
 
@@ -108,11 +115,13 @@ class RechercheProcessus
                     'statut'                 => $r['STATUT'],
                     'typeIntervenantCode'    => $r['TYPE_INTERVENANT_CODE'],
                     'typeIntervenantLibelle' => $r['TYPE_INTERVENANT_LIBELLE'],
-                    'numero-personnel'       => $r['CODE_RH'],
                     'destruction'            => $r['HISTO_DESTRUCTION'],
                     'code'                   => $r['CODE'],
 
                 ];
+                if ($affichageNumeroPerso == true) {
+                    $intervenants[$k]['numero-personnel'] = $r['CODE_RH'];
+                }
             } else {
                 if ($intervenants[$k]['destruction'] && !$r['HISTO_DESTRUCTION']) {
                     $intervenants[$k]['destruction'] = null;

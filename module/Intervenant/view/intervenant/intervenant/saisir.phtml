@@ -11,10 +11,12 @@
  * @var $canViewIdentiteIntervenant bool
  * @var $canViewInseeIntervenant bool
  */
+use Application\Provider\Privilege\Privileges;
 
 if ($intervenant && 'dupliquer' == $actionDetail) {
     $this->intervenant($intervenant)->renderTitle('Ajout de statut');
 }
+$canEditLienSysteme = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_LIEN_SYSTEME_INFORMATION));
 
 echo $this->form()->openTag($form->prepare());
 
@@ -112,6 +114,7 @@ if ($errors) {
                 </div>
             </div>
         </div>
+        <?php if ($canEditLienSysteme): ?>
         <div class="col-md-6">
             <div class="card bg-default">
                 <div class="card-header">Liens avec le système d'information</div>
@@ -159,6 +162,7 @@ if ($errors) {
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
     <script>
 

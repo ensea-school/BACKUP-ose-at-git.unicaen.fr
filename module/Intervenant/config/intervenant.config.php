@@ -19,6 +19,11 @@ return [
                     'controller' => Controller\IntervenantController::class,
                     'action'     => 'rechercher',
                 ],
+                'rechercher-json'            => [
+                    'route'      => '/rechercher-json',
+                    'controller' => Controller\IntervenantController::class,
+                    'action'     => 'rechercher-json',
+                ],
                 'recherche-intervenant' => [
                     'route'      => '/recherche-intervenant',
                     'controller' => Controller\IntervenantController::class,
@@ -161,7 +166,7 @@ return [
     'guards' => [
         [
             'controller' => Controller\IntervenantController::class,
-            'action'     => ['rechercher', 'recherche', 'recherche-json', 'recherche-intervenant'],
+            'action'     => ['rechercher','rechercher-json', 'recherche', 'recherche-json', 'recherche-intervenant'],
             'privileges' => [
                 Privileges::INTERVENANT_RECHERCHE,
             ],

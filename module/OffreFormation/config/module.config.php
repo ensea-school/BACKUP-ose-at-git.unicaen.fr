@@ -230,6 +230,18 @@ return [
                     ],
                     'action'      => 'supprimer',
                 ],
+                'index-json' => [
+                    'route'  => '/index-json',
+                    'action' => 'index-json',
+                ],
+                'modifier-json' => [
+                    'route'  => '/modifier-json',
+                    'action' => 'modifier-json',
+                ],
+                'supprimer-json' => [
+                    'route'  => '/supprimer-json',
+                    'action' => 'supprimer-json',
+                ],
             ],
         ],
         'type-intervention' => [
@@ -516,7 +528,7 @@ return [
         /* discipline */
         [
             'controller' => DisciplineController::class,
-            'action'     => ['index'],
+            'action'     => ['index', 'index-json'],
             'privileges' => [
                 Privileges::DISCIPLINE_GESTION,
             ],
@@ -530,7 +542,7 @@ return [
         ],
         [
             'controller' => DisciplineController::class,
-            'action'     => ['saisir', 'supprimer'],
+            'action'     => ['saisir', 'supprimer', 'modifier-json', 'supprimer-json'],
             'privileges' => [
                 Privileges::DISCIPLINE_EDITION,
             ],

@@ -43,6 +43,15 @@ OSE [24.20]
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
 ---
+# OSE 24.21 (à venir)
+
+## Nouveautés
+* Nouvelle formule de l'ENSEA (#66961)
+
+## Corrections
+* Le bouton de génération d'un avenant n'est plus désactivé lorsqu'aucun modèle d'avenant spécifique n'est défini : le modèle de contrat est utilisé (#63931)
+
+
 # OSE 24.20 (12/10/26)
 
 ## Nouveautés

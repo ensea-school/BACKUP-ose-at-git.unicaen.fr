@@ -47,7 +47,7 @@ class RechercheProcessus
         string $key = ':CODE',
         $onlyLocale = false,
         array $typeIntervenantCodes = [],
-        bool $affichageNumeroPerso
+        bool $affichageNumeroPerso = false,
     )
 
     {
@@ -257,10 +257,11 @@ class RechercheProcessus
         $critere,
         $limit = 50,
         string $key = ':CODE',
-        array $typeIntervenantCodes = []
+        array $typeIntervenantCodes = [],
+        bool $affichageNumeroPerso = false,
     )
     {
-        return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes);
+        return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes, $affichageNumeroPerso);
     }
 
     /**

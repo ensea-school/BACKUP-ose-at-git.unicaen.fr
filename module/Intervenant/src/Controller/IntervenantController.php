@@ -118,6 +118,7 @@ class  IntervenantController extends AbstractController
                 if (!$intervenant) {
                     unset($recents[$i]);
                     unset($container->recents[$i]);
+                    continue;
 
                 }
                 if (!$affichageNumeroPerso && array_key_exists('numero-personnel', $recent)) {

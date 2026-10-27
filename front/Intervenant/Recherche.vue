@@ -110,7 +110,7 @@
                     <u-date :value="intervenant['date-naissance']" />
                 </td>
 
-                <td v-if="intervenant['numero-personnel']">{{ intervenant['numero-personnel'] }}</td>
+                <td v-if="numeroPersonnel">{{ intervenant['numero-personnel'] }}</td>
             </tr>
             </tbody>
         </table>

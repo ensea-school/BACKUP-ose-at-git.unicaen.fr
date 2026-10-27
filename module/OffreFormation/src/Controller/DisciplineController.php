@@ -26,23 +26,8 @@ class DisciplineController extends AbstractController
 
     public function indexAction()
     {
-        $this->em()->getFilters()->enable('historique')->init([
-            Discipline::class,
-        ]);
-        $qb = $this->getServiceDiscipline()->initQuery()[0];
-        $this->getServiceDiscipline()->join($this->getServiceSource(), $qb, 'source', true);
-
-        $disciplines = $this->getServiceDiscipline()->getList($qb);
-
-        $libellesCodesCorresp = [];
-        for ($i = 1; $i <= 4; $i++) {
-            $lcc = $this->getServiceParametres()->get('discipline_codes_corresp_' . $i . '_libelle');
-            if ($lcc) {
-                $libellesCodesCorresp[$i] = $lcc;
-            }
-        }
-
-        return compact('disciplines', 'libellesCodesCorresp');
+        // Les données sont chargées par le composant Vue via indexJsonAction
+        return [];
     }
 
     public function indexJsonAction()
@@ -90,13 +75,10 @@ class DisciplineController extends AbstractController
             ];
         }
 
-        $sourceImportable = $discipline->getSource()->getImportable();
 
         $result[] = [
             $libellesCodesCorresp,
-            $disciplinesListe,
-            $sourceImportable
-        ];
+            $disciplinesListe];
 
         return new AxiosModel($result);
     }
@@ -107,37 +89,6 @@ class DisciplineController extends AbstractController
         return [];
     }
 
-
-    public function saisirAction()
-    {
-        $discipline = $this->getEvent()->getParam('discipline');
-        $errors = [];
-
-        $form = $this->getFormDiscipline();
-        if (empty($discipline)) {
-            $title = 'Création d\'une nouvelle discipline';
-            $discipline = $this->getServiceDiscipline()->newEntity();
-            $form->setObject($discipline);
-        } else {
-            $title = 'Édition de la discipine';
-            $form->bind($discipline);
-        }
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                try {
-                    $this->getServiceDiscipline()->save($discipline);
-                    $form->get('id')->setValue($discipline->getId()); // transmet le nouvel ID
-                } catch (\Exception $e) {
-                    $errors[] = $this->translate($e);
-                }
-            }
-        }
-
-        return compact('form', 'title', 'errors');
-    }
 
     public function modifierJsonAction()
     {
@@ -193,20 +144,6 @@ class DisciplineController extends AbstractController
             ]);
         }
     }
-
-    public function supprimerAction()
-    {
-        $discipline = $this->getEvent()->getParam('discipline');
-
-        $title = "Suppression de la discipline";
-
-        $form = $this->makeFormSupprimer(function () use ($discipline) {
-            $this->getServiceDiscipline()->delete($discipline);
-        });
-
-        return compact('discipline', 'title', 'form');
-    }
-
 
     public function supprimerJsonAction()
     {

@@ -85,7 +85,6 @@ async function sauvegarderDiscipline(discipline) {
             unicaenVue.url('discipline/modifier-json'),
             data
         );
-        console.log(response);
         if (!response.data.success) {
             console.error(response.data.errors);
             return false;

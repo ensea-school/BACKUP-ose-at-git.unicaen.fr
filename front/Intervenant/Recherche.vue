@@ -1,4 +1,3 @@
-```vue
 <template>
     <h1 class="page-header">Rechercher un intervenant</h1>
     <div class="p-3">
@@ -206,7 +205,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const props = defineProps({
     canAddIntervenant: {
@@ -229,7 +228,7 @@ let timer = null;
 const inputRecherche = ref(null);
 const numeroPersonnel = ref(false);
 
-loadRecent()
+onMounted(loadRecent);
 
 function rechercher() {
     if (searchTerm.value === '') {
@@ -247,33 +246,25 @@ function urlFiche(code) {
     );
 }
 
-function loadRecent() {
-    if (timer) {
-        clearTimeout(timer);
-        timer = null;
+async function loadRecent() {
+    try {
+        const response = await unicaenVue.axios.get(
+            unicaenVue.url('intervenant/rechercher-json')
+        );
+
+        const datas = response.data;
+
+        // Convertit l'objet en tableau d'intervenants
+        recents.value = Array.isArray(datas)
+            ? datas
+            : Object.values(datas);
+
+        numeroPersonnel.value = recents.value.some(
+            recent => Boolean(recent['numero-personnel'])
+        );
+    } catch (error) {
+        console.error(error);
     }
-
-    timer = setTimeout(async () => {
-        try {
-            const response = await unicaenVue.axios.get(
-                unicaenVue.url('intervenant/rechercher-json')
-            );
-
-            const datas = response.data;
-
-            // Convertit l'objet en tableau d'intervenants
-            recents.value = Array.isArray(datas)
-                ? datas
-                : Object.values(datas);
-
-            numeroPersonnel.value = recents.value.some(
-                recent => Boolean(recent['numero-personnel'])
-            );
-
-        } catch (error) {
-            console.error(error);
-        }
-    }, 300);
 }
 
 

@@ -50,6 +50,7 @@ OSE [24.20]
 
 ## Corrections
 * Le bouton de génération d'un avenant n'est plus désactivé lorsqu'aucun modèle d'avenant spécifique n'est défini : le modèle de contrat est utilisé (#63931)
+* Suppression d'un debug visible au niveau de la page contrat
 
 
 # OSE 24.20 (12/10/26)

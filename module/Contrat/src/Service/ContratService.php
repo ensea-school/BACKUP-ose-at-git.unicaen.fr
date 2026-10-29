@@ -324,14 +324,16 @@ class ContratService extends AbstractEntityService
 
 
 
-    public function generer(Contrat $contrat, $download = true, $save = false)
+    public function generer(Contrat $contrat, $download = true, $save = false, ?bool $isAvenant = null)
     {
-        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+        $isAvenant = $isAvenant ?? $contrat->estUnAvenant();
+
+        $fileName = sprintf(($isAvenant ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
                             $contrat->getIntervenant()->getNomUsuel(),
                             $contrat->getIntervenant()->getCode());
 
-        if ($contrat->estUnAvenant()) {
+        if ($isAvenant) {
             $modele = $contrat->getIntervenant()->getStatut()->getAvenantEtatSortie();
             if (!$modele) {
                 $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();

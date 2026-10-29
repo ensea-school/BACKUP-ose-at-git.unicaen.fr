@@ -1,6 +1,7 @@
 <?php
 /* @var $intervenants array */
 ?>
+
 <table class="table table-bordered table-sm">
     <thead>
     <tr>
@@ -11,7 +12,10 @@
         <th style="width:15%">Structure</th>
         <th style="width:15%">Statut</th>
         <th style="width:15%">Date de naissance</th>
-        <th style="width:10%">N° personnel</th>
+        <?php if (isset($intervenants) && !empty($intervenants)
+                && array_filter($intervenants, fn($i) => isset($i['numero-personnel']))): ?>
+            <th style="width:10%">N° personnel</th>
+        <?php endif; ?>
     </tr>
     </thead>
     <tbody class="table-hover">
@@ -35,7 +39,9 @@
             <?php endif; ?>
         </td>
         <td><?= $intervenant['date-naissance']->format(\Application\Constants::DATE_FORMAT) ?></td>
-        <td><?= $intervenant['numero-personnel'] ?></td>
+        <?php if (isset($intervenant['numero-personnel'])): ?>
+            <td><?= $this->escapeHtml($intervenant['numero-personnel']) ?></td>
+        <?php endif; ?>
     </tr>
     </tbody>
     <?php endforeach; ?>

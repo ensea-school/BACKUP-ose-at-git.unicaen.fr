@@ -207,19 +207,17 @@ return [
                     ],
                     'action'      => 'voir',
                 ],
-                'saisir'    => [
-                    'route'       => '/saisir[/:discipline]',
-                    'constraints' => [
-                        'discipline' => '[0-9]*',
-                    ],
-                    'action'      => 'saisir',
+                'index-json' => [
+                    'route'  => '/index-json',
+                    'action' => 'index-json',
                 ],
-                'supprimer' => [
-                    'route'       => '/supprimer/:discipline',
-                    'constraints' => [
-                        'discipline' => '[0-9]*',
-                    ],
-                    'action'      => 'supprimer',
+                'modifier-json' => [
+                    'route'  => '/modifier-json',
+                    'action' => 'modifier-json',
+                ],
+                'supprimer-json' => [
+                    'route'  => '/supprimer-json',
+                    'action' => 'supprimer-json',
                 ],
             ],
         ],
@@ -500,7 +498,7 @@ return [
         /* discipline */
         [
             'controller' => DisciplineController::class,
-            'action'     => ['index'],
+            'action'     => ['index', 'index-json'],
             'privileges' => [
                 Privileges::DISCIPLINE_GESTION,
             ],
@@ -514,7 +512,7 @@ return [
         ],
         [
             'controller' => DisciplineController::class,
-            'action'     => ['saisir', 'supprimer'],
+            'action'     => ['modifier-json', 'supprimer-json'],
             'privileges' => [
                 Privileges::DISCIPLINE_EDITION,
             ],

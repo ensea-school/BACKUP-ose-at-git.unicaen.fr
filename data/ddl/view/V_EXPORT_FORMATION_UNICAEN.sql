@@ -1,5 +1,20 @@
 CREATE OR REPLACE FORCE VIEW V_EXPORT_FORMATION_UNICAEN AS
-WITH ep_base AS (
+WITH mutualisation AS (
+    SELECT
+        cp.element_pedagogique_id AS ep_id,
+        COUNT(DISTINCT cp.etape_id) AS nb_autres_etapes
+    FROM chemin_pedagogique cp
+    JOIN element_pedagogique ep
+        ON ep.id = cp.element_pedagogique_id
+    JOIN etape e
+        ON e.id = cp.etape_id
+       AND e.histo_destruction IS NULL
+    WHERE cp.histo_destruction IS NULL
+      AND cp.etape_id <> ep.etape_id
+    GROUP BY cp.element_pedagogique_id
+),
+
+ep_base AS (
     SELECT
         e.annee_id,
         s.id                     AS structure_id,
@@ -19,13 +34,23 @@ WITH ep_base AS (
         ep.fi,
         ep.fa,
         ep.fc,
-        NVL(ef.fi, 0)            AS effectif_fi,
-        NVL(ef.fa, 0)            AS effectif_fa,
-        NVL(ef.fc, 0)            AS effectif_fc
+        -- effectifs et charge uniquement sur la ligne de la formation porteuse, pour ne pas les compter plusieurs fois
+        CASE WHEN ep.etape_id = e.id THEN NVL(ef.fi, 0) END AS effectif_fi,
+        CASE WHEN ep.etape_id = e.id THEN NVL(ef.fa, 0) END AS effectif_fa,
+        CASE WHEN ep.etape_id = e.id THEN NVL(ef.fc, 0) END AS effectif_fc,
+        CASE WHEN mut.nb_autres_etapes > 0 THEN 'Oui' ELSE 'Non' END AS mutualise,
+        CASE WHEN ep.etape_id = e.id THEN 'Oui' ELSE 'Non' END AS formation_porteuse,
+        ep_e.code                AS code_etape_porteuse,
+        ep_e.libelle             AS libelle_etape_porteuse
     FROM etape e
+    JOIN chemin_pedagogique cp
+        ON cp.etape_id = e.id
+       AND cp.histo_destruction IS NULL
     JOIN element_pedagogique ep
-        ON ep.etape_id = e.id
+        ON ep.id = cp.element_pedagogique_id
        AND ep.histo_destruction IS NULL
+    JOIN etape ep_e ON ep_e.id = ep.etape_id
+    LEFT JOIN mutualisation mut ON mut.ep_id = ep.id
     LEFT JOIN type_formation tf ON tf.id = e.type_formation_id
     LEFT JOIN groupe_type_formation gtf ON gtf.id = tf.groupe_id
     LEFT JOIN structure s ON s.id = e.structure_id
@@ -87,6 +112,10 @@ SELECT
     b.niveau,
     b.code_enseignement,
     b.libelle_enseignement,
+    b.mutualise,
+    b.formation_porteuse,
+    b.code_etape_porteuse,
+    b.libelle_etape_porteuse,
     b.code_discipline,
     b.libelle_discipline,
     b.periode,
@@ -100,20 +129,20 @@ SELECT
     cc.centre_cout_fi,
     cc.centre_cout_fa,
     cc.centre_cout_fc,
-    COALESCE(SUM(CASE WHEN ti.code = 'CM' THEN vhe.heures END), 0) AS heures_cm,
-    COALESCE(SUM(CASE WHEN ti.code = 'CM' THEN vhe.groupes END), 0) AS nb_groupe_cm,
-    COALESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.heures END), 0) AS heures_td,
-    COALESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.groupes END), 0) AS nb_groupe_td,
-    COALESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.heures END), 0) AS heures_tp,
-    COALESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.groupes END), 0) AS nb_groupe_tp,
-    COALESCE(SUM(CASE WHEN ti.code = 'Accompagnement' THEN vhe.heures END), 0) AS heures_accompagnement,
-    COALESCE(SUM(CASE WHEN ti.code = 'Accompagnement' THEN vhe.groupes END), 0) AS nb_groupe_accompagnement
+    CASE WHEN b.formation_porteuse = 'Oui' THEN COALESCE(SUM(CASE WHEN ti.code = 'CM' THEN vhe.heures END), 0) END AS heures_cm,
+    CASE WHEN b.formation_porteuse = 'Oui' THEN COALESCE(SUM(CASE WHEN ti.code = 'CM' THEN vhe.groupes END), 0) END AS nb_groupe_cm,
+    CASE WHEN b.formation_porteuse = 'Oui' THEN COALESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.heures END), 0) END AS heures_td,
+    CASE WHEN b.formation_porteuse = 'Oui' THEN COALESCE(SUM(CASE WHEN ti.code = 'TD' THEN vhe.groupes END), 0) END AS nb_groupe_td,
+    CASE WHEN b.formation_porteuse = 'Oui' THEN COALESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.heures END), 0) END AS heures_tp,
+    CASE WHEN b.formation_porteuse = 'Oui' THEN COALESCE(SUM(CASE WHEN ti.code = 'TP' THEN vhe.groupes END), 0) END AS nb_groupe_tp,
+    CASE WHEN b.formation_porteuse = 'Oui' THEN COALESCE(SUM(CASE WHEN ti.code = 'Accompagnement' THEN vhe.heures END), 0) END AS heures_accompagnement,
+    CASE WHEN b.formation_porteuse = 'Oui' THEN COALESCE(SUM(CASE WHEN ti.code = 'Accompagnement' THEN vhe.groupes END), 0) END AS nb_groupe_accompagnement
 
 FROM ep_base b
 LEFT JOIN cc_agrege cc ON cc.ep_id = b.ep_id
 LEFT JOIN volume_horaire_ens vhe ON vhe.element_pedagogique_id = b.ep_id
 LEFT JOIN type_intervention ti ON ti.id = vhe.type_intervention_id
-
+where b.annee_id = 2026
 GROUP BY
     b.annee_id,
     b.structure_id,
@@ -135,6 +164,10 @@ GROUP BY
     b.effectif_fi,
     b.effectif_fa,
     b.effectif_fc,
+    b.mutualise,
+    b.formation_porteuse,
+    b.code_etape_porteuse,
+    b.libelle_etape_porteuse,
     cc.centre_cout_fi,
     cc.centre_cout_fa,
     cc.centre_cout_fc

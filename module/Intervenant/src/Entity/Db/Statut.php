@@ -231,6 +231,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private ?string $typePaiePrime = null;
 
+    private bool $tagVisualisation = false;
+
 
 
     public function __toString(): string
@@ -1471,6 +1473,21 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
         return $this;
     }
 
+    public function getTagVisualisation(): bool
+    {
+        return $this->tagVisualisation;
+    }
+
+
+
+    public function setTagVisualisation(bool $tagVisualisation): Statut
+    {
+        $this->tagVisualisation = $tagVisualisation;
+
+        return $this;
+    }
+
+
 
 
     public function getCodesCorresp1(): ?string
@@ -1943,6 +1960,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::MISSION_OFFRE_EMPLOI_POSTULER              => $this->offreEmploiPostuler,
             Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION         => $this->offreEmploiPostuler,
             Privileges::MISSION_CANDIDATURE_VISUALISATION          => $this->offreEmploiPostuler,
+            Privileges::TAG_VISUALISATION                          => $this->tagVisualisation,
 
         ];
 

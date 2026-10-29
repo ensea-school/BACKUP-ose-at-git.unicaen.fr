@@ -309,15 +309,40 @@ class ContratProcessus extends AbstractProcessus
      *
      * @param Contrat $contrat
      *
-     * @return $this
+     * @return Contrat
      */
-    public function requalification(Contrat $contrat): self
+    public function requalification(Contrat $contrat): Contrat
     {
         //On recupere les informations de la tbl_contrat pour s'assurer que le contrat a les bonne données a l'enregistrement
         //Utile si un contrat a été créer depuis la création du projet par exemple
+        $tblContrat = $this->getServiceTblContrat()->getInformationContratById($contrat->getId());
+        if (!$tblContrat) {
+            throw new LogicException("Impossible de retrouver les informations recalculées du contrat {$contrat->getId()}.");
+        }
+
+        return $this->creer($contrat, $tblContrat);
+
+    }
 
 
-        return $contrat;
+
+    public function requalifierContratsIntervenant(Intervenant $intervenant, ?Contrat $contratExclu = null): self
+    {
+        $tblContrats = $this->getServiceTblContrat()->getContratsByIntervenant($intervenant);
+        foreach ($tblContrats as $tblContrat) {
+            $contrat = $tblContrat->getContrat();
+            if (!$contrat) {
+                continue;
+            }
+            if ($contratExclu && $contrat->getId() === $contratExclu->getId()) {
+                continue;
+            }
+
+            $this->creer($contrat, $tblContrat);
+            $this->getServiceContrat()->save($contrat);
+        }
+
+        return $this;
     }
 
 

@@ -35,7 +35,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
         <div class="alert alert-warning" role="alert">
             <strong>IMPORTANT</strong><br/>
             Vous pouvez ici reconduire les formations et éléments pédagogiques de l'année en cours pour l'année
-            universitaire prochaine. Les lignes avec fond gris sont déjà reconduites pour l'année prochaine.
+            universitaire prochaine. Les éléments pédagogiques déjà reconduits pour l'année prochaine ne sont pas affichés.
         </div>
 
         <h3>Offre de formation complémentaire / Année universitaire : <?php echo $anneeEnCours->getLibelle(); ?></h3>
@@ -71,9 +71,6 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                         des formations.</a></p>
             <?php else: ?>
                 <?php if ($reconductionTotale == 'non'): ?>
-                    <div class="well">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
-                        universitaire.
-                    </div>
                     <form action="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>"
                           method="POST" id="form-reconduction">
 
@@ -94,19 +91,17 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                                 } ?>">
                                     <?php if ($ec['reconduction'] == 'oui'): ?>
                                         <?php if ($ec['reconductionFait'] == 'oui'): ?>
-                                            <th><input title="Formation déjà reconduite pour l'année prochaine"
-                                                       type="checkbox"
-                                                       class="checkbox-formation" disabled="disabled" name="etape[]"
-                                                       value="<?= $ec['etape']->getId(); ?>"/> <span
-                                                        class="badge bg-warning text-dark"
-                                                        style="margin:0 auto;">Reconduit</span>
+                                            <th><span title="Formation déjà reconduite pour l'année prochaine"
+                                                      class="badge bg-warning text-dark"
+                                                      style="margin:0 auto;">Reconduit</span>
                                             </th>
                                         <?php else: ?>
-                                            <th><input title="Formation non reconductible" type="checkbox"
-                                                       class="checkbox-formation" disabled="disabled" name="etape[]"
-                                                       value="<?= $ec['etape']->getId(); ?>"/> <span
+                                            <?php $etapePegaseN1 = $ec['etapeN1'] && $ec['etapeN1']->getCode() != $ec['etape']->getCode() ? $ec['etapeN1'] : null; ?>
+                                            <th class="text-nowrap">
+                                                <span
                                                         class="badge bg-warning text-dark"
-                                                        style="margin:0 auto;">Non reconductible</span>
+                                                        style="margin:0 auto;"
+                                                        <?php if ($etapePegaseN1): ?>title="Etape non trouvée en N+1, les enseignements seront rattachés à l'étape équivalente provenant de PEGASE"<?php endif; ?>><?= $etapePegaseN1 ? 'N+1 Pégase : ' . $etapePegaseN1->getCode() : 'Non reconductible' ?></span>
                                             </th>
                                         <?php endif; ?>
                                     <?php else: ?>
@@ -135,23 +130,11 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                                 <?php } ?>
 
                                 <?php foreach ($ec['elements_pedagogique'] as $ep): ?>
-                                    <tr id="<?= $ep['element']->getId() ?>"
-                                        class="<?php if ($ep['reconduction'] == 'oui') {
-                                            echo "active";
-                                        } ?>">
-                                        <?php if ($ep['reconduction'] == 'oui'): ?>
-                                            <td>
-                                                <input title="Elément pédagogique déjà reconduit pour l'année prochaine"
-                                                       class="checkbox-element" disabled="disabled" type="checkbox"
-                                                       name="element[<?php echo $ec['etape']->getId(); ?>][]"
-                                                       value="<?= $ep['element']->getId(); ?>"/>
-                                                <span class="badge bg-warning text-dark">Reconduit</span>
-                                            </td>
-                                        <?php else: ?>
-                                            <td><input class="checkbox-element" type="checkbox" checked="checked"
-                                                       name="element[<?php echo $ec['etape']->getId(); ?>][]"
-                                                       value="<?= $ep['element']->getId(); ?>"/></td>
-                                        <?php endif; ?>
+                                    <?php if ($ep['reconduction'] == 'oui') continue; //Elément déjà reconduit : inutile de l'afficher ?>
+                                    <tr id="<?= $ep['element']->getId() ?>">
+                                        <td><input class="checkbox-element" type="checkbox" checked="checked"
+                                                   name="element[<?php echo $ec['etape']->getId(); ?>][]"
+                                                   value="<?= $ep['element']->getId(); ?>"/></td>
                                         <td class="element"><?= $ep['element']->getCode() ?></td>
                                         <td class="element"><?= $this->elementPedagogique($ep['element'])->renderLink($ep['element']->getLibelle()) ?></td>
                                         <td class="periode"><?= $ep['element']->getPeriode() ?: "" ?></td>

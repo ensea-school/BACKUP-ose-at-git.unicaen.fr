@@ -96,6 +96,13 @@ class  IntervenantController extends AbstractController
         return compact('recents');
     }
 
+    public function rechercherJsonAction()
+    {
+        $recents = $this->getIntervenantsRecents();
+
+        return new AxiosModel($recents);
+    }
+
 
 
     /**
@@ -104,6 +111,7 @@ class  IntervenantController extends AbstractController
      */
     protected function getIntervenantsRecents()
     {
+        $affichageNumeroPerso = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE));
         $container = $this->getSessionContainer();
         //$container->recents = [];
         if (isset($container->recents)) {
@@ -117,6 +125,14 @@ class  IntervenantController extends AbstractController
                 if (!$intervenant) {
                     unset($recents[$i]);
                     unset($container->recents[$i]);
+                    continue;
+
+                }
+                if (!$affichageNumeroPerso && array_key_exists('numero-personnel', $recent)) {
+                    unset($recents[$i]['numero-personnel']);
+                    unset($container->recents[$i]['numero-personnel']);
+                }elseif ($affichageNumeroPerso && !array_key_exists('numero-personnel', $recent)) {
+                    $recents[$i]['numero-personnel'] = $intervenant->getCodeRh();
                 }
             }
 
@@ -128,11 +144,14 @@ class  IntervenantController extends AbstractController
 
 
 
+
+
     public function rechercheJsonAction()
     {
         $recherche = $this->getProcessusIntervenant()->recherche();
         $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
         $recherche->setShowHisto($canShowHistorises);
+        $affichageNumeroPerso = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE));
         $intervenants = [];
         $term = $this->axios()->fromPost('term');
         $requestedTypes = (array)$this->axios()->fromPost('types', []);
@@ -150,7 +169,7 @@ class  IntervenantController extends AbstractController
 
         if (!empty($term)) {
             $intervenants = array_values(
-                $recherche->rechercher($term, 40, ':CODE', $typeCodes)
+                $recherche->rechercher($term, 40, ':CODE', $typeCodes, $affichageNumeroPerso)
             );
         }
 
@@ -233,6 +252,11 @@ class  IntervenantController extends AbstractController
     protected function addIntervenantRecent(Intervenant $intervenant)
     {
         $container = $this->getSessionContainer();
+
+        $affichageNumeroPerso = $this->isAllowed(
+            Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE)
+        );
+
         if (!isset($container->recents)) {
             $container->recents = [];
         }
@@ -262,9 +286,12 @@ class  IntervenantController extends AbstractController
                 'structure'        => (string)$intervenant->getStructure(),
                 'statut'           => (string)$intervenant->getStatut(),
                 'code'             => $intervenant->getCode(),
-                'numero-personnel' => $intervenant->getCodeRh(),
                 '__horo_ajout__'   => (int)date('U'),
             ];
+
+            if ($affichageNumeroPerso) {
+                $container->recents[$intervenant->getCode()]['numero-personnel'] = $intervenant->getCodeRh();
+            }
         } else {
             if (!isset($container->recents[$intervenant->getCode()]['statut'])) {
                 $container->recents[$intervenant->getCode()]['statut'] = [$container->recents[$intervenant->getCode()]['statut']];

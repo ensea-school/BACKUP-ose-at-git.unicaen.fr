@@ -234,6 +234,8 @@ class OffreFormationService extends AbstractEntityService
             $codesEtapeN1[] = $v->getCode();
         }
 
+        $mappingEtape = $this->createMappingEtapeNEtapeN1($etapes, $etapesN1, $anneeSuivante);
+
         foreach ($etapes as $v) {
             if ($v->getHistoDestruction() != null) {
                 continue;
@@ -241,6 +243,9 @@ class OffreFormationService extends AbstractEntityService
             $offresComplementaires[$v->getId()]['reconduction_partiel'] = 'non';
             $offresComplementaires[$v->getId()]['elements_pedagogique'] = [];
             $offresComplementaires[$v->getId()]['etape']                = $v;
+            $offresComplementaires[$v->getId()]['etapeN1']              = isset($mappingEtape[$v->getId()])
+                ? $this->getEntityManager()->find(Etape::class, $mappingEtape[$v->getId()])
+                : null;
             if ($v->getSource() == $source) {
                 $offresComplementaires[$v->getId()]['reconduction']     = (in_array($v->getCode(), $codesEtapeN1)) ? 'oui' : 'non';
                 $offresComplementaires[$v->getId()]['reconductionFait'] = (in_array($v->getCode(), $codesEtapeN1)) ? 'oui' : 'non';
@@ -265,14 +270,12 @@ class OffreFormationService extends AbstractEntityService
             $offresComplementaires[$etapeId]['elements_pedagogique'][$v->getId()]['element']      = $v;
         }
 
-        $mappingEtape = $this->createMappingEtapeNEtapeN1($etapes, $etapesN1);
-
         return [$offresComplementaires, $mappingEtape, $reconductionTotale];
     }
 
 
 
-    public function createMappingEtapeNEtapeN1($etapesN, $etapesN1)
+    public function createMappingEtapeNEtapeN1($etapesN, $etapesN1, $anneeSuivante)
     {
         $codesEtapeN  = [];
         $codesEtapeN1 = [];
@@ -290,10 +293,39 @@ class OffreFormationService extends AbstractEntityService
         foreach ($codesEtapeN as $k => $v) {
             if (array_key_exists($k, $codesEtapeN1)) {
                 $mappingEtape[$v] = $codesEtapeN1[$k];
+                continue;
+            }
+            //Passage Apogée => Pégase : l'étape N+1 peut porter le code Pégase (ex : PHYSL1_201 => VET-PHYSL1-201)
+            $etapeN1 = $this->getEtapePegaseCorrespondante($k, $anneeSuivante);
+            if ($etapeN1) {
+                $mappingEtape[$v] = $etapeN1->getId();
             }
         }
 
         return $mappingEtape;
+    }
+
+
+
+    /**
+     * Recherche l'étape de source Pégase de l'année suivante correspondant à un code Apogée selon la convention de codage Pégase
+     * (préfixe "VET-" et "_" remplacés par "-", ex : PHYSL1_201 => VET-PHYSL1-201)
+     */
+    private function getEtapePegaseCorrespondante(string $code, $annee): ?Etape
+    {
+        $sourcePegase = $this->getServiceSource()->getByCode('Pegase');
+        if (!$sourcePegase) {
+            return null;
+        }
+
+        $codePegase = 'VET-' . str_replace('_', '-', $code);
+
+        return $this->getEntityManager()->getRepository(Etape::class)->findOneBy([
+            'code'             => $codePegase,
+            'annee'            => $annee,
+            'source'           => $sourcePegase,
+            'histoDestruction' => null,
+        ]);
     }
 
     public function generateCsvExport(?Structure $structure, ?NiveauEtape $niveau, ?Etape $etape): CsvModel

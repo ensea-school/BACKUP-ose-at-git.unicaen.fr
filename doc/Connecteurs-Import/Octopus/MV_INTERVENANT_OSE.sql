@@ -1,5 +1,6 @@
 CREATE
 MATERIALIZED VIEW MV_INTERVENANT AS
+
 WITH i AS (
 
      SELECT DISTINCT code,
@@ -53,8 +54,8 @@ WITH i AS (
              FROM octo.individu_unique@octoprod uni
                       JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
    					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
-  					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id
-              WHERE (inds.d_debut<= SYSDATE AND COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) >= SYSDATE)
+  					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND icto.code_ose IS NULL
+             WHERE inds.d_debut - 184 <= SYSDATE
                --On ne remonte pas de statut autre pour ceux qui ont déjà un certain type de contrat
 	           --AND icto.individu_id IS NULL
                --Combinaison des témoins octopus pour récupérer les bonnes populations
@@ -228,8 +229,8 @@ SELECT DISTINCT
     CAST(NULL AS varchar2(255))                                                        adresse_voie,
     CAST(NULL AS varchar2(255))                                                        adresse_lieu_dit,
     adr.code_postal                                                                    adresse_code_postal,
-    adr.ville_nom                                                                      adresse_commune,
-    pays.code_pays                                                                     z_adresse_pays_id,
+    adr.ville                                                                      adresse_commune,
+    pays.code_pays                                                                    z_adresse_pays_id,
     /* INSEE */
     COALESCE(TRIM(vindinsee.no_insee), TRIM(vindinsee.no_insee_provisoire))            numero_insee,
     CASE
@@ -272,7 +273,7 @@ FROM i
          LEFT JOIN octo.individu@octoprod ind ON ind.c_individu_chaine = induni.c_individu_chaine
          LEFT JOIN octo.v_via_individu_insee@octoprod vindinsee ON ind.c_individu_chaine = vindinsee.individu_id
          LEFT JOIN octo.v_via_individu_iban@octoprod vindiban ON vindiban.individu_id = ind.c_individu_chaine
-         LEFT JOIN iban_dossier ibandossier ON ibandossier.code = TO_CHAR(ind.c_individu_chaine)
+         LEFT JOIN iban_dossier ibandossier ON ibandossier.code =  TO_CHAR(ind.c_individu_chaine)
          LEFT JOIN octo.v_individu@octoprod vind ON vind.c_individu_chaine = induni.c_individu_chaine
     --On récupére la structure principale de l'individu
          LEFT JOIN structure_aff_enseigne sae ON sae.individu_id = induni.c_individu_chaine
@@ -283,16 +284,13 @@ FROM i
          LEFT JOIN ind_grade indg ON induni.c_individu_chaine = indg.individu_id
          LEFT JOIN octo.grade@octoprod grade ON indg.grade_id = grade.id
     --On récupére l'adresse principale de l'individu
-         LEFT JOIN octo.v_individu_adresse_perso@octoprod adr
+         LEFT JOIN octo.individu_adresse_perso@octoprod adr
                    ON adr.individu_id = induni.c_individu_chaine
-                       AND (t_principale = 'O' AND adr.source_id IN ('HARP', 'SIHAM'))
-         LEFT JOIN octo.pays@octoprod pays ON pays.id = adr.pays_id
+                       AND adr.c_source='SIHAM'
+         LEFT JOIN octo.pays@octoprod pays ON pays.code_pays = adr.c_pays
     --On récupére le téléphone pro principal de l'indivdu
          LEFT JOIN telephone_pro_principal telpro ON telpro.individu_id = induni.c_individu_chaine
          LEFT JOIN compte ON compte.individu_id = induni.c_individu_chaine
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
 WHERE i.validite_fin >= (sysdate - (365 * 2)) AND  1 = (CASE WHEN str2.code IS NULL AND i.z_type = 'permanent' AND i.z_statut_id NOT IN ('BIATSS', 'PAMSU') THEN 0 ELSE 1 END )
-
-
-

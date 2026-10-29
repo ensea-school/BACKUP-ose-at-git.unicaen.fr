@@ -9,7 +9,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
-use OffreFormation\Service\ElementModulateurService;
 use OffreFormation\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
@@ -50,8 +49,7 @@ class ReconductionProcessus extends AbstractProcessus
 
     protected $centreCoutEpService;
 
-    protected ?ElementModulateurService $elementModulateurService = null;
-
+    protected $elementModulateurService;
 
 
     public function __construct()

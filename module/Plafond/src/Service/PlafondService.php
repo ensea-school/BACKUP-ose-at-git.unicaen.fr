@@ -459,7 +459,10 @@ class PlafondService extends AbstractEntityService
               SUM(pd.heures)     heures,
               pd.plafond         plafond,
               pd.derogation      derogation,
-              p.plafond_en_euros plafond_en_euros
+              p.plafond_en_euros plafond_en_euros,
+              -- ANNEE_ID doit être lu : sinon Oracle 21.3 l'élague des sous-requêtes des vues V_TBL_PLAFOND_*
+              -- et plante : ORA-00600 [evaopn2.h:kaf_qeeCol], [ANNEE_ID]
+              pd.annee_id        annee_id
             FROM 
               " . ($pqr->useView ? 'v_' : '') . "tbl_plafond_" . $perimetre . " pd
               JOIN plafond               p ON p.id = pd.plafond_id
@@ -472,7 +475,7 @@ class PlafondService extends AbstractEntityService
               $sqlFilters
             GROUP BY
               p.id, p.numero, p.libelle, p.message, pp.code, pe.code,
-              pe.bloquant, pd.depassement, pd.plafond, pd.derogation,p.plafond_en_euros,
+              pe.bloquant, pd.depassement, pd.plafond, pd.derogation,p.plafond_en_euros, pd.annee_id,
               $groupBy
         ";
 

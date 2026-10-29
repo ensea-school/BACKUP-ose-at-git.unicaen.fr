@@ -157,7 +157,8 @@ class SihamConnecteur implements ConnecteurRhInterface
 
         $params =
             [
-                'numeroInsee' => $numeroInsee,
+                'numeroInsee'     => $numeroInsee,
+                'dateObservation' => $intervenant->getAnnee()->getDateDebut()->format('Y-m-d'),
             ];
 
         $listeAgents = $this->siham->recupererListeAgents($params);
@@ -494,8 +495,8 @@ class SihamConnecteur implements ConnecteurRhInterface
         if (empty($str)) {
             return $str;
         }
-        $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ()…,<> /?€%!":’\'+.';
-        $to   = 'AAAAAACDEEEEIIIIOOOOOOUUUUYNaaaaaacdeeeeiiiioooooouuuuyn                  ';
+        $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ()…,<> /?€%!":’+.';
+        $to   = 'AAAAAACDEEEEIIIIOOOOOOUUUUYNaaaaaacdeeeeiiiioooooouuuuyn              \'  ';
 
         $rstr = '';
         $ok   = true;

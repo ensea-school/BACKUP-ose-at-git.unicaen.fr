@@ -70,7 +70,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             <div class="indicateurs-result">
                 <small><a href="javascript:cocherTout()">Cocher tout</a> / <a href="javascript:decocherTout()">Décocher
                         tout</a></small>
-                <table class="table table-bordered table-sm table-hover table-sort">
+                <table id="indicateurs-result-table" class="table table-bordered table-sm table-hover table-sort">
                     <thead>
                     <tr>
                         <?php if ($mailUrl): ?>
@@ -138,27 +138,28 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
 <?php if ($mailUrl): ?>
     <script>
 
+        function getIntervenantCheckboxes()
+        {
+            return $('#indicateurs-result-table').DataTable().$('.indic-intervenant');
+        }
+
         function cocherTout()
         {
-            $(".indic-intervenant").prop("checked", true);
+            getIntervenantCheckboxes().prop("checked", true);
         }
 
 
         function decocherTout()
         {
-            $(".indic-intervenant").prop("checked", false);
+            getIntervenantCheckboxes().prop("checked", false);
         }
 
         function envoiMail()
         {
             var url = <?= json_encode($mailUrl) ?>;
-            var ids = '';
-            $(".indic-intervenant:checked").each(function () {
-
-                if (ids != '') ids += '-';
-                ids += $(this).val();
-
-            });
+            var ids = getIntervenantCheckboxes().filter(':checked').map(function () {
+                return $(this).val();
+            }).get().join('-');
 
             url += '?intervenants=' + ids;
 

@@ -3,12 +3,17 @@
 use Application\Provider\Privileges;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\TblContrat;
+use Contrat\Entity\Db\TypeContrat;
+
 
 /**
  * @var              $this          \Application\View\Renderer\PhpRenderer
  * @var TblContrat   $tblContrat
+ * @var bool $modelContratPresent
+ * @var bool $modelAvenantPresent
  */
 
+$modelPresent = $tblContrat->getTypeContrat()->getCode() == TypeContrat::CODE_CONTRAT ? $modelContratPresent : ($modelAvenantPresent || $modelContratPresent);
 $contrat = $tblContrat->getContrat();
 
 $validation     = $tblContrat->getValidation();
@@ -69,35 +74,64 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
 
 <div class="contrat card bg-<?= $card ?>" id="contrat-<?= $contrat->getId() ?>">
     <div class="card-header card-header-h3">
-        <?php if ($urlExport && $urlEmail): ?>
-            <span class="float-end">
-                <?php if ($disableEmail): ?>
-                    <a class="disabled btn btn-seconrary" href="<?= $urlEmail ?>"
-                       title="L'intervenant du contrat n'a pas renseigné son email.">
-                <?php endif; ?>
-                        <?php if (!$disableEmail): ?>
-                    <a data-event="envoi-mail-contrat" class="ajax-modal btn btn-secondary"
-                       title="Envoyer le contrat par mail"
 
-                       href="<?= $urlEmail ?>">
+        <!-- Envoi par mail -->
+        <?php if ($urlExport && $urlEmail): ?>
+            <span class="float-end"
+                  >
+                <?php if ($modelPresent): ?>
+
+                <?php if ($disableEmail): ?>
+                    <a class="disabled btn btn-secondary"
+                       href="<?= $urlEmail ?>"
+                       title="L'intervenant du contrat n'a pas renseigné son email.">
+                <?php else: ?>
+                    <a data-event="envoi-mail-contrat"
+                       class="ajax-modal btn btn-secondary"
+                       href="<?= $urlEmail ?>"
+                       title="Envoyer le contrat par mail">
                 <?php endif; ?>
-                <i class="fas fa-paper-plane-top"></i> Envoyer par mail
-            </a>
+                        <?php else: ?>
+                <a class="disabled btn btn-secondary"
+                   href="#"
+                   aria-disabled="true"
+                   tabindex="-1"
+                   title="Modèle absent pour ce contrat"
+                   data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
+
+                <?php endif; ?>
+                    <i class="fas fa-paper-plane-top"></i> Envoyer par mail
+                </a>
             </span>
         <?php endif; ?>
-        <!-- Lien de téléchargement du fichier -->
-        <?php if ($urlExport): ?>
 
+        <!-- Export PDF -->
+        <?php if ($urlExport): ?>
             <span class="float-end">
-            <a class="btn btn-secondary" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
+            <?php if ($modelPresent): ?>
+                <a class="btn btn-secondary"
+                    href="<?= $urlExport ?>"
+                    title="Exporter le contrat/avenant au format PDF">
+            <?php else: ?>
+                <a class="disabled btn btn-secondary"
+                    href="#"
+                    aria-disabled="true"
+                    tabindex="-1"
+                    title="Modèle absent pour ce contrat">
+            <?php endif; ?>
                 <i class="fas fa-upload"></i> Exporter en PDF
             </a>
-            </span>
-        <?php endif; ?>
-        <!-- Lien de téléchargement du fichier -->
 
-        <h3><?= $contrat->toString() ?>
-            <?php if ($contrat->getStructure() != null): ?>- <?= $contrat->getStructure() ?><?php endif; ?></h3>
+        </span>
+        <?php endif; ?>
+
+        <h3>
+            <?= $contrat->toString() ?>
+            <?php if ($contrat->getStructure() != null): ?>
+                - <?= $contrat->getStructure() ?>
+            <?php endif; ?>
+        </h3>
+
     </div>
 
     <div class="card-body">

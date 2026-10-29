@@ -8,9 +8,12 @@ use Application\Service\ContextService;
 use Doctrine\ORM\EntityManager;
 use Unicaen\Framework\Authorize\Authorize;
 use UnicaenApp\Util;
+use Application\Provider\Privilege\Privileges;
+
 
 class RechercheProcessus
 {
+
 
     /**
      * @var bool
@@ -35,12 +38,14 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercher ($critere, $limit = 50, string $key = ':CODE', array $typeIntervenantCodes = [])
+
+
+    public function rechercher ($critere, $limit = 50, string $key = ':CODE', array $typeIntervenantCodes = [],bool $affichageNumeroPerso)
     {
         try {
-            return $this->rechercheGenerique($critere, $limit, $key, false, $typeIntervenantCodes);
+            return $this->rechercheGenerique($critere, $limit, $key, false, $typeIntervenantCodes, $affichageNumeroPerso);
         } catch (\Exception $e) {
-            return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes);
+            return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes, $affichageNumeroPerso);
         }
     }
 
@@ -51,8 +56,10 @@ class RechercheProcessus
         $limit = 50,
         string $key = ':CODE',
         $onlyLocale = false,
-        array $typeIntervenantCodes = []
+        array $typeIntervenantCodes = [],
+        bool $affichageNumeroPerso = false,
     )
+
     {
         if (strlen($critere) < 2) return [];
 
@@ -119,11 +126,13 @@ class RechercheProcessus
                     'statut'                 => $r['STATUT'],
                     'typeIntervenantCode'    => $r['TYPE_INTERVENANT_CODE'],
                     'typeIntervenantLibelle' => $r['TYPE_INTERVENANT_LIBELLE'],
-                    'numero-personnel'       => $r['CODE_RH'],
                     'destruction'            => $r['HISTO_DESTRUCTION'],
                     'code'                   => $r['CODE'],
 
                 ];
+                if ($affichageNumeroPerso == true) {
+                    $intervenants[$k]['numero-personnel'] = $r['CODE_RH'];
+                }
             } else {
                 if ($intervenants[$k]['destruction'] && !$r['HISTO_DESTRUCTION']) {
                     $intervenants[$k]['destruction'] = null;
@@ -259,10 +268,11 @@ class RechercheProcessus
         $critere,
         $limit = 50,
         string $key = ':CODE',
-        array $typeIntervenantCodes = []
+        array $typeIntervenantCodes = [],
+        bool $affichageNumeroPerso = false,
     )
     {
-        return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes);
+        return $this->rechercheGenerique($critere, $limit, $key, true, $typeIntervenantCodes, $affichageNumeroPerso);
     }
 
 

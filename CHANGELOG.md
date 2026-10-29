@@ -51,6 +51,7 @@ OSE [24.20]
 ## Corrections
 * Le bouton de génération d'un avenant n'est plus désactivé lorsqu'aucun modèle d'avenant spécifique n'est défini : le modèle de contrat est utilisé (#63931)
 * Suppression d'un debug visible au niveau de la page contrat
+* Le connecteur OSE-Pégase est disponible en version **1.0.6**. Pensez à adapter votre vue `SRC_ETAPE` à partir du fichier fourni par le connecteur pour le domaine fonctionnel.
 
 
 # OSE 24.20 (12/10/26)

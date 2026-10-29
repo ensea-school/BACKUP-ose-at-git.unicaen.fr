@@ -24,6 +24,8 @@ WHERE
   /*@statut_id=si.id*/
 GROUP BY
   tsd.intervenant_id,
-  ts.structure_id,
-  i.structure_id,
-  rsv.priorite
+  CASE WHEN rsv.priorite = 'affectation' THEN
+    COALESCE(i.structure_id, ts.structure_id)
+  ELSE
+    COALESCE(ts.structure_id, i.structure_id)
+  END

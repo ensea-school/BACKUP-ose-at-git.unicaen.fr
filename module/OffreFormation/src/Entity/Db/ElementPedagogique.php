@@ -176,14 +176,19 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
         $etapes          = [];
 
         if (($chemins = $this->getCheminPedagogique())) {
-            foreach ($this->getCheminPedagogique() as $cp) {
+            $cps = [];
+            foreach ($chemins as $cp) {
                 /* @var $cp \OffreFormation\Entity\Db\CheminPedagogique */
                 if (!$principaleIncluse && $etapePrincipale === $cp->getEtape()) {
                     continue;
                 }
-                $etapes[$cp->getOrdre()] = $cp->getEtape();
+                $cps[] = $cp;
             }
-            ksort($etapes);
+            // plusieurs chemins peuvent avoir le même ordre (1 par défaut) : on ne s'en sert que pour trier
+            usort($cps, fn($a, $b) => $a->getOrdre() <=> $b->getOrdre());
+            foreach ($cps as $cp) {
+                $etapes[] = $cp->getEtape();
+            }
         }
 
         return $etapes;

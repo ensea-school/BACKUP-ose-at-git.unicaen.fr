@@ -88,7 +88,7 @@ function booleanToString($value, $trueVal = '1', $falseVal = '0')
  * @param Annee $anneeDebut
  * @param Annee $anneeFin
  *
- * @return string
+ * @return strig
  */
 function validiteIntervalle($anneeDebut, $anneeFin): string
 {

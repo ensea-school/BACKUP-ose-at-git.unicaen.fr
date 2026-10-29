@@ -567,7 +567,7 @@ class ServiceService extends AbstractEntityService
         Intervenant   $intervenant,
                       $elementPedagogique,
         Etablissement $etablissement,
-        string        $description = null
+        ?string        $description
     )
     {
         $result = $this->getRepo()->findBy([

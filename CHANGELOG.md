@@ -34,8 +34,6 @@ OSE [24.20]
 
 ## Notes de mise à jour
 
-* Le connecteur OSE-Pégase est disponible en version **1.0.6**. Pensez à adapter votre vue `SRC_ETAPE` à partir du fichier fourni par le connecteur pour le domaine fonctionnel.
-
 * :warning: **Attention** : Le workflow a été réinitialisé, vous devrez le réadpter à vos besoins (Administration/Workflow).
 
 * Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
@@ -45,6 +43,17 @@ OSE [24.20]
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
 ---
+# OSE 24.21 (à venir)
+
+## Nouveautés
+* Nouvelle formule de l'ENSEA (#66961)
+
+## Corrections
+* Le bouton de génération d'un avenant n'est plus désactivé lorsqu'aucun modèle d'avenant spécifique n'est défini : le modèle de contrat est utilisé (#63931)
+* Suppression d'un debug visible au niveau de la page contrat
+* Le connecteur OSE-Pégase est disponible en version **1.0.6**. Pensez à adapter votre vue `SRC_ETAPE` à partir du fichier fourni par le connecteur pour le domaine fonctionnel.
+
+
 # OSE 24.20 (12/10/26)
 
 ## Nouveautés

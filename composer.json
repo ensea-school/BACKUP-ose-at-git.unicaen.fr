@@ -75,6 +75,13 @@
         "platform"     : {
             "php": "8.3"
         },
+        "policy"       : {
+            "advisories": {
+                "ignore-id": {
+                    "PKSA-bdqg-yq3b-xsg6": "XSS du plugin TinyMCE media, non utilisé par OSE (seul le plugin link est chargé)"
+                }
+            }
+        },
         "allow-plugins": {
             "laminas/laminas-dependency-plugin"             : true,
             "composer/package-versions-deprecated"          : true,

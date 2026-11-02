@@ -67,16 +67,16 @@ class ExportRhAssertion extends AbstractAssertion
             return false;
         }
 
-        $config = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
+        return true;
+
+        /*$config = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
         $anneeUniversitaireEnCours = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
         $anneeContexte = $this->getServiceContext()->getAnnee();
-
         //Si nous ne sommes dans l'année universitaire en cours le module export reste inactif
-        if ($anneeContexte->getId() == $anneeUniversitaireEnCours->getId() || $anneeContexte->getId() == $anneeUniversitaireEnCours->getId() - 1) {
-            return true;
-        }
+        if ($anneeContexte->getId() == $anneeUniversitaireEnCours->getId() || $anneeContexte->getId() ==
+        }*/
 
-        return false;
+
     }
 
 }

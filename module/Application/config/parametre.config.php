@@ -7,7 +7,6 @@ use Application\Form\Factory\EtatSortieFormFactory;
 use Application\Form\Factory\ParametresFormFactory;
 use Application\Form\ParametresForm;
 use Application\Provider\Privilege\Privileges;
-use Mpdf\Form;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [

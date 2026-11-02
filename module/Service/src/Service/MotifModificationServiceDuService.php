@@ -33,7 +33,7 @@ class MotifModificationServiceDuService extends AbstractEntityService
 
 
 
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");
@@ -43,7 +43,7 @@ class MotifModificationServiceDuService extends AbstractEntityService
 
 
 
-    public function getList(QueryBuilder $qb = null, $alias = null)
+    public function getList(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery();
 

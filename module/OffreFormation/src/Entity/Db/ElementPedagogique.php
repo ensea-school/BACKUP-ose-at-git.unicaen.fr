@@ -798,7 +798,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCentreCoutEp(TypeHeures $th = null): \Doctrine\Common\Collections\Collection
+    public function getCentreCoutEp(?TypeHeures $th = null): \Doctrine\Common\Collections\Collection
     {
         if (!$th) {
             return $this->centreCoutEp;

@@ -233,7 +233,7 @@ class WfEtapeDep
      *
      * @return WfEtapeDep
      */
-    public function setEtapeSuiv(\Application\Entity\Db\WfEtape $etapeSuiv = null)
+    public function setEtapeSuiv(?\Application\Entity\Db\WfEtape $etapeSuiv = null)
     {
         $this->etapeSuiv = $etapeSuiv;
 
@@ -261,7 +261,7 @@ class WfEtapeDep
      *
      * @return WfEtapeDep
      */
-    public function setEtapePrec(\Application\Entity\Db\WfEtape $etapePrec = null)
+    public function setEtapePrec(?\Application\Entity\Db\WfEtape $etapePrec = null)
     {
         $this->etapePrec = $etapePrec;
 

@@ -217,7 +217,7 @@ class ValidationService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByType ($type, QueryBuilder $qb = null, $alias = null)
+    public function finderByType ($type, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -241,7 +241,7 @@ class ValidationService extends AbstractEntityService
      *
      * @return array
      */
-    public function lister (TypeValidation $typeValidation, Intervenant $intervenant, Structure $structure = null)
+    public function lister (TypeValidation $typeValidation, Intervenant $intervenant, ?Structure $structure = null)
     {
         $dql = "
         SELECT

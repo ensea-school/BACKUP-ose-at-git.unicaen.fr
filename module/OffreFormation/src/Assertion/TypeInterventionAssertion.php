@@ -22,7 +22,7 @@ class TypeInterventionAssertion extends AbstractAssertion
     use ContextServiceAwareTrait;
     use ParametresServiceAwareTrait;
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null)
     {
         $role = $this->getRole();
         // Si le rôle n'est pas renseigné alors on s'en va...

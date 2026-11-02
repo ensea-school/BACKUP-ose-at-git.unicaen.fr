@@ -117,7 +117,7 @@ class ScenarioNoeud
      *
      * @return ScenarioNoeudEffectif|ScenarioNoeudEffectif[]
      */
-    public function getEffectif(TypeHeures $typeHeures = null, Etape $etape = null)
+    public function getEffectif(?TypeHeures $typeHeures = null, ?Etape $etape = null)
     {
         if (!$typeHeures) {
             return $this->effectif;
@@ -158,7 +158,7 @@ class ScenarioNoeud
      *
      * @return $this
      */
-    public function removeEffectif(TypeHeures $typeHeures = null, Etape $etape = null)
+    public function removeEffectif(?TypeHeures $typeHeures = null, ?Etape $etape = null)
     {
         if ($typeHeures && $etape) {
             unset($this->effectif[$typeHeures->getId()][$etape->getId()]);
@@ -190,7 +190,7 @@ class ScenarioNoeud
      *
      * @return ScenarioNoeudSeuil|ScenarioNoeudSeuil[]
      */
-    public function getSeuil(TypeIntervention $typeIntervention = null)
+    public function getSeuil(?TypeIntervention $typeIntervention = null)
     {
         if (!$typeIntervention) {
             return $this->seuil;
@@ -228,7 +228,7 @@ class ScenarioNoeud
     /**
      * @return $this
      */
-    public function removeSeuil(TypeIntervention $typeIntervention = null)
+    public function removeSeuil(?TypeIntervention $typeIntervention = null)
     {
         if ($typeIntervention) {
             unset($this->seuil[$typeIntervention->getId()]);
@@ -258,7 +258,7 @@ class ScenarioNoeud
      *
      * @return array|integer|null
      */
-    public function getSeuilParDefaut(TypeIntervention $typeIntervention = null)
+    public function getSeuilParDefaut(?TypeIntervention $typeIntervention = null)
     {
         return $this->getNoeud()->getSeuilParDefaut($this->getScenario(), $typeIntervention);
     }

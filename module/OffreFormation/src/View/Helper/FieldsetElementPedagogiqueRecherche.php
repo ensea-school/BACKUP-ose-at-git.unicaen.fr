@@ -34,7 +34,7 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHtmlElement
      * @param ElementPedagogiqueRechercheFieldset $fieldset
      * @return FieldsetElementPedagogiqueRecherche|string
      */
-    public function __invoke(ElementPedagogiqueRechercheFieldset $fieldset = null)
+    public function __invoke(?ElementPedagogiqueRechercheFieldset $fieldset = null)
     {
         $this->fieldset = $fieldset;
         return $this;

@@ -30,7 +30,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke(Intervenant $intervenant = null)
+    public function __invoke(?Intervenant $intervenant = null)
     {
         if ($intervenant) $this->setIntervenant($intervenant);
 

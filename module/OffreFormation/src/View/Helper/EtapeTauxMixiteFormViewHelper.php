@@ -27,7 +27,7 @@ class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
      *
      * @return self|string
      */
-    public function __invoke(TauxMixiteForm $form = null)
+    public function __invoke(?TauxMixiteForm $form = null)
     {
         if (null === $form) {
             return $this;

@@ -52,7 +52,7 @@ class ModificationServiceDuService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -74,7 +74,7 @@ class ModificationServiceDuService extends AbstractEntityService
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param string                     $alias
      */
-    public function getTotal(QueryBuilder $qb = null, $alias = null)
+    public function getTotal(?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $list  = $this->getList($qb);
@@ -88,7 +88,7 @@ class ModificationServiceDuService extends AbstractEntityService
 
 
 
-    public function getExportCsvData(Annee $annee, Structure $structure = null)
+    public function getExportCsvData(Annee $annee, ?Structure $structure = null)
     {
         $params = ['annee' => $annee->getId()];
 

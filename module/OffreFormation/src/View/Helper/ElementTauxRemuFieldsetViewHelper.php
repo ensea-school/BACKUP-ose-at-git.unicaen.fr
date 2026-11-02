@@ -20,7 +20,7 @@ class ElementTauxRemuFieldsetViewHelper extends AbstractHtmlElement
      *
      * @return self|string
      */
-    public function __invoke(ElementTauxRemuFieldset $fieldset = null)
+    public function __invoke(?ElementTauxRemuFieldset $fieldset = null)
     {
         if (null === $fieldset) {
             return $this;

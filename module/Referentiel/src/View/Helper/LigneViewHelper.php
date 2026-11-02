@@ -334,7 +334,7 @@ class LigneViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function setServiceReferentiel(ServiceReferentiel $serviceReferentiel = null)
+    public function setServiceReferentiel(?ServiceReferentiel $serviceReferentiel = null)
     {
         $typeVolumeHoraire = $serviceReferentiel->getTypeVolumeHoraire();
         $this->forcedReadOnly = !$this->getView()->isAllowed($serviceReferentiel, $typeVolumeHoraire->getPrivilegeReferentielEdition());

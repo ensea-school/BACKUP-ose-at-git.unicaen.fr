@@ -4,7 +4,7 @@ namespace Administration\Command;
 
 use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\AffectationServiceAwareTrait;
-use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\Cache\Cache;
 use Lieu\Service\StructureServiceAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -69,9 +69,9 @@ class SynchronisationCommand extends Command
     }
 
     /**
-     * @param FilesystemCache $doctrineCache
+     * @param Cache $doctrineCache
      */
-    public function setDoctrineCache(FilesystemCache $doctrineCache)
+    public function setDoctrineCache(Cache $doctrineCache)
     {
         $this->doctrineCache = $doctrineCache;
 

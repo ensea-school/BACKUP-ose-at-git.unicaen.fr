@@ -17,7 +17,7 @@ class AppLinkFactory
     use AnneeServiceAwareTrait;
 
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $router = \AppAdmin::inCli() ? 'HttpRouter' : 'Router';
         $match  = $container->get('application')->getMvcEvent()->getRouteMatch();

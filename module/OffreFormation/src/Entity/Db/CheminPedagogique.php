@@ -84,7 +84,7 @@ class CheminPedagogique implements HistoriqueAwareInterface, ImportAwareInterfac
      *
      * @return CheminPedagogique
      */
-    public function setElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    public function setElementPedagogique(?\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
         $this->elementPedagogique = $elementPedagogique;
 
@@ -112,7 +112,7 @@ class CheminPedagogique implements HistoriqueAwareInterface, ImportAwareInterfac
      *
      * @return CheminPedagogique
      */
-    public function setEtape(\OffreFormation\Entity\Db\Etape $etape = null)
+    public function setEtape(?\OffreFormation\Entity\Db\Etape $etape = null)
     {
         $this->etape = $etape;
 

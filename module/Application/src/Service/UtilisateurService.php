@@ -10,7 +10,6 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use UnicaenApp\Util;
-use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 
 /**
  * Description of Utilisateur
@@ -21,7 +20,6 @@ class UtilisateurService extends AbstractEntityService
 {
     use ParametresServiceAwareTrait;
     use LdapConnecteurAwareTrait;
-    use UserServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 

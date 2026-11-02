@@ -206,7 +206,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertPageEnseignements (Role $role, Intervenant $intervenant = null, string $typeVolumeHoraireCode)
+    protected function assertPageEnseignements (Role $role, ?Intervenant $intervenant, string $typeVolumeHoraireCode)
     {
         if (!$intervenant) return true;
 

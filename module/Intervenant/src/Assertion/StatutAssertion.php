@@ -17,7 +17,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 class StatutAssertion extends AbstractAssertion
 {
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null)
     {
         $role = $this->getRole();
 

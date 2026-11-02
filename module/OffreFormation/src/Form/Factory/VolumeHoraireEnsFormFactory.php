@@ -21,7 +21,7 @@ class VolumeHoraireEnsFormFactory
      *
      * @return VolumeHoraireEnsForm
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $formOffreFormationVolumeHoraireEns = new VolumeHoraireEnsForm;
 

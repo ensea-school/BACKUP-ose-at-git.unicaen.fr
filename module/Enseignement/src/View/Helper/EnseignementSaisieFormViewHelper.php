@@ -104,7 +104,7 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
      *
      * @return EnseignementSaisieForm|string
      */
-    public function __invoke(EnseignementSaisieForm $form = null)
+    public function __invoke(?EnseignementSaisieForm $form = null)
     {
         $this->form = $form;
         $this->form->prepare();

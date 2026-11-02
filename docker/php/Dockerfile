@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 ARG TZ
 ARG APP_ENV
@@ -16,7 +16,7 @@ ENV PATH="/opt/unoconvert/bin:${PATH}"
 
 # Met à jour la liste des paquets
 RUN apk update
-#Nécessaire depuis nouvelle version php:8.2-fpm-alpine
+#Nécessaire depuis php:8.2-fpm-alpine
 RUN apk add --no-cache \
     autoconf \
     automake \

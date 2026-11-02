@@ -58,7 +58,7 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
      *
      * @return CentreCoutEp
      */
-    public function setElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    public function setElementPedagogique(?\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
         $this->elementPedagogique = $elementPedagogique;
 
@@ -86,7 +86,7 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
      *
      * @return TypeHeuresEp
      */
-    public function setTypeHeures(\OffreFormation\Entity\Db\TypeHeures $typeHeures = null)
+    public function setTypeHeures(?\OffreFormation\Entity\Db\TypeHeures $typeHeures = null)
     {
         $this->typeHeures = $typeHeures;
 
@@ -114,7 +114,7 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
      *
      * @return CentreCoutEp
      */
-    public function setCentreCout(\Paiement\Entity\Db\CentreCout $centreCout = null)
+    public function setCentreCout(?\Paiement\Entity\Db\CentreCout $centreCout = null)
     {
         $this->centreCout = $centreCout;
 

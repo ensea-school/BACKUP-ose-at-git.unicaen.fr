@@ -16,7 +16,7 @@ use Application\Service\Traits\PrivilegeServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
-use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\Cache\Cache;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -42,14 +42,14 @@ class DroitsController extends AbstractController
     use SessionContainerTrait;
     use CacheContainerTrait;
 
-    protected FilesystemCache $doctrineCache;
+    protected Cache $doctrineCache;
 
 
 
     /**
-     * @param FilesystemCache $doctrineCache
+     * @param Cache $doctrineCache
      */
-    public function __construct(FilesystemCache $doctrineCache)
+    public function __construct(Cache $doctrineCache)
     {
         $this->doctrineCache = $doctrineCache;
     }

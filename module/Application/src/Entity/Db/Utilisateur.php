@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\UserInterface;
 use UnicaenUtilisateur\Entity\Db\AbstractUser;
 use UnicaenVue\Axios\AxiosExtractorInterface;
@@ -29,11 +31,11 @@ class Utilisateur extends AbstractUser implements UserInterface, AxiosExtractorI
 
 
     /**
-     * @return \Laminas\Permissions\Acl\Role\RoleInterface[]
+     * @return Collection|\Laminas\Permissions\Acl\Role\RoleInterface[]
      */
-    public function getRoles()
+    public function getRoles(): Collection
     {
-        return [];
+        return new ArrayCollection();
     }
 
 

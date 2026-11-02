@@ -13,7 +13,7 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
 class ModulateurAssertion extends AbstractAssertion
 {
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null)
     {
 
         $role = $this->getRole();

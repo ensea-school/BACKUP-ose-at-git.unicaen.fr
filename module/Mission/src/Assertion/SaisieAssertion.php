@@ -83,7 +83,7 @@ class SaisieAssertion extends AbstractAssertion
 
 
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity = null, $privilege = null)
     {
         /** @var Role $role */
         $role = $this->getRole();

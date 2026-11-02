@@ -80,7 +80,7 @@ class AffectationRecherche implements HistoriqueAwareInterface, ImportAwareInter
      *
      * @return AffectationRecherche
      */
-    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(?\Intervenant\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 

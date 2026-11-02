@@ -85,7 +85,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEtape(Etape $etape, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtape(Etape $etape, ?QueryBuilder $qb = null, $alias = null)
     {
         $serviceElement = $this->getServiceElementPedagogique();
 
@@ -106,7 +106,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByNiveauEtape(NiveauEtape $niveauEtape, QueryBuilder $qb = null, $alias = null)
+    public function finderByNiveauEtape(NiveauEtape $niveauEtape, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($niveauEtape && $niveauEtape->getId() !== '|') {
@@ -136,7 +136,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByComposante(Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByComposante(Structure $structure, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -182,7 +182,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByStructureAff(Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructureAff(Structure $structure, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -204,7 +204,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByStructureEns(Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructureEns(Structure $structure, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -225,7 +225,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(?QueryBuilder $qb = null, $alias = null)
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -251,7 +251,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeIntervenant(?TypeIntervenant $typeIntervenant = null, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($typeIntervenant) {
@@ -424,7 +424,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($typeVolumeHoraire) {
@@ -447,7 +447,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
@@ -571,7 +571,7 @@ class ServiceService extends AbstractEntityService
         Intervenant   $intervenant,
                       $elementPedagogique,
         Etablissement $etablissement,
-        string        $description = null
+        ?string        $description = null
     )
     {
         $result = $this->getRepo()->findBy([

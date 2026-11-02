@@ -43,7 +43,17 @@ OSE [24.20]
 * La clé de configuration export-rh/exclude-statut-ose est obsolète, merci de la supprimer UNE FOIS passé en V25.
 
 ---
-# OSE 24.21 (à venir)
+# OSE 24.22 (à venir)
+
+## Améliorations
+* Permettre des exports RH pour un intervenant sur les années passées (#68325)
+
+## Notes de mise à jour
+
+Attention, cette version nécessite une montée en version de votre version de PHP en 8.4, ceci afin de prévenir la fin de la maintenance de PHP 8.2 au 31/12/26.
+
+
+# OSE 24.21 (29/10/26)
 
 ## Nouveautés
 * Nouvelle formule de l'ENSEA (#66961)

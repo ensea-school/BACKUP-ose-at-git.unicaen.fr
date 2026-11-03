@@ -9,7 +9,12 @@ SELECT
 FROM
   tbl_paiement p
 WHERE
-  p.heures_a_payer_aa + p.heures_a_payer_ac > 0
+  (
+    p.heures_a_payer_aa + p.heures_a_payer_ac > 0
+    -- On conserve les demandes existantes même s'il n'y a plus rien à payer (ex. : réalisé supprimé ou dévalidé),
+    -- afin que l'étape reste accessible pour les consulter ou les annuler
+    OR p.heures_demandees_aa + p.heures_demandees_ac > 0
+  )
   /*@intervenant_id=p.intervenant_id*/
   /*@annee_id=p.annee_id*/
 GROUP BY

@@ -241,7 +241,9 @@ class EnseignementAssertion extends AbstractAssertion
             }
         }
 
+        $structureService = null;
         if ($entite instanceof Service) {
+            $structureService = $entite->getStructure();
 
             // Test pour les enseignements faits à l'extérieur
             $isExterieur = $entite->getEtablissement() && $entite->getEtablissement() !== $this->getServiceContext()->getEtablissement();
@@ -269,9 +271,9 @@ class EnseignementAssertion extends AbstractAssertion
         //Correction pour que le assert s'arrete dés qu'un test est false
         return match ($typeVolumeHoraireCode) {
             TypeVolumeHoraire::CODE_PREVU   => $statut->getServicePrevuEdition()
-                                               && $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_SAISIE)?->isAllowed(),
+                                               && $feuilleDeRoute->isAllowedPourStructure(WorkflowEtape::ENSEIGNEMENT_SAISIE, $structureService),
             TypeVolumeHoraire::CODE_REALISE => $statut->getServiceRealiseEdition()
-                                               && $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE)?->isAllowed()
+                                               && $feuilleDeRoute->isAllowedPourStructure(WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE, $structureService)
                                                && $this->getAssertionService()->assertCloture($entite),
             default                         => false,
         };
@@ -368,32 +370,59 @@ class EnseignementAssertion extends AbstractAssertion
             return $entite->getStructure()?->inStructure($contextStructure) ?? false;
         }
 
-        $intervenant       = $entite->getIntervenant();
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
-        $regle             = $this->getServiceRegleStructureValidation()->getBy($typeVolumeHoraire, $intervenant);
-
-        if (!$regle) {
+        if (!$this->hasRegleStructureValidation($entite, $typeVolumeHoraireCode)) {
             return false;
         }
 
+        return $this->getStructureValidation($entite, $typeVolumeHoraireCode)?->inStructure($contextStructure) ?? false;
+    }
+
+
+
+    private function hasRegleStructureValidation(Service $service, string $typeVolumeHoraireCode): bool
+    {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
+
+        return (bool)$this->getServiceRegleStructureValidation()->getBy($typeVolumeHoraire, $service->getIntervenant());
+    }
+
+
+
+    /**
+     * Structure en charge de la validation d'un service, selon la règle de validation paramétrée
+     * (priorité à la structure d'affectation ou à la structure d'enseignement)
+     */
+    private function getStructureValidation(Service $service, string $typeVolumeHoraireCode): ?Structure
+    {
+        $intervenant       = $service->getIntervenant();
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
+        $regle             = $this->getServiceRegleStructureValidation()->getBy($typeVolumeHoraire, $intervenant);
+
         $structureAffectation  = $intervenant->getStructure();
-        $structureEnseignement = $entite->getElementPedagogique()?->getStructure();
-        $structureValidation   = $regle->getPriorite() === 'affectation'
+        $structureEnseignement = $service->getElementPedagogique()?->getStructure();
+
+        if (!$regle) {
+            return $structureEnseignement ?? $structureAffectation;
+        }
+
+        return $regle->getPriorite() === 'affectation'
             ? $structureAffectation ?? $structureEnseignement
             : $structureEnseignement ?? $structureAffectation;
-
-        return $structureValidation?->inStructure($contextStructure) ?? false;
     }
 
 
 
     protected function assertValidation(Service|VolumeHoraire|Intervenant|Validation $entite, string $typeVolumeHoraireCode): bool
     {
+        // Structure concernée par la validation, pour contrôler le workflow sur cette structure précise
+        $structureValidation = null;
+
         if ($entite instanceof Validation) {
             if (!$this->assertStructureValidation($entite, $typeVolumeHoraireCode)) {
                 return false;
             }
-            $entite = $entite->getIntervenant();
+            $structureValidation = $entite->getStructure();
+            $entite              = $entite->getIntervenant();
         }
 
         if ($entite instanceof VolumeHoraire) {
@@ -405,7 +434,8 @@ class EnseignementAssertion extends AbstractAssertion
                 return false;
             }
 
-            $entite = $entite->getIntervenant();
+            $structureValidation = $this->getStructureValidation($entite, $typeVolumeHoraireCode);
+            $entite              = $entite->getIntervenant();
         }
 
         $statut         = $entite->getStatut();
@@ -414,11 +444,11 @@ class EnseignementAssertion extends AbstractAssertion
         return match ($typeVolumeHoraireCode) {
             TypeVolumeHoraire::CODE_PREVU   => $this->asserts(
                 $statut->getServicePrevu(),
-                $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_VALIDATION)?->isAllowed()
+                $feuilleDeRoute->isAllowedPourStructure(WorkflowEtape::ENSEIGNEMENT_VALIDATION, $structureValidation)
             ),
             TypeVolumeHoraire::CODE_REALISE => $this->asserts(
                 $statut->getServiceRealise(),
-                $feuilleDeRoute->get(WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE)?->isAllowed()
+                $feuilleDeRoute->isAllowedPourStructure(WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE, $structureValidation)
             ),
             default                         => false,
         };

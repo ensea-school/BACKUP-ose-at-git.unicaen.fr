@@ -30,9 +30,13 @@ class NoteAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case self::PRIV_SUPPRIMER_NOTE:
                         return $this->assertSuppressionNote($entity);
+                        break;
                     case self::PRIV_EDITER_NOTE:
                         return $this->assertEditionNote($entity);
+                        break;
+
                 }
+                break;
         }
 
         return true;

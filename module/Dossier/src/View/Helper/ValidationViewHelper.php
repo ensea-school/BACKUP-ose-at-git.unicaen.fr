@@ -24,7 +24,7 @@ class ValidationViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke(Validation $validation = null)
+    public function __invoke(?Validation $validation = null)
     {
         $this->setValidation($validation);
 

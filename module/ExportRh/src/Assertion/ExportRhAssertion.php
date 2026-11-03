@@ -72,12 +72,17 @@ class ExportRhAssertion extends AbstractAssertion
             return false;
         }
 
-        //Si nous ne sommes dans l'année universitaire en cours le module export reste inactif
+        return true;
+
+        /*$config = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
         $anneeUniversitaireEnCours = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
         $anneeContexte             = $this->getServiceContext()->getAnnee();
-        if (!($anneeContexte->getId() == $anneeUniversitaireEnCours->getId() || $anneeContexte->getId() == $anneeUniversitaireEnCours->getId() - 1)) {
-            return false;
-        }
+        //Si nous ne sommes dans l'année universitaire en cours le module export reste inactif
+        if ($anneeContexte->getId() == $anneeUniversitaireEnCours->getId() || $anneeContexte->getId() ==
+        }*/
+
+
+        //}
 
         // on teste au niveau du workflow
         $wfEtape = $this

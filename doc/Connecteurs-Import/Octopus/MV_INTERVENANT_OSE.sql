@@ -97,14 +97,15 @@ WITH i AS (
              -- On prend en priorite l'affectation siham, sinon l'affectation principale dans Octopus
              -- Dans le cadre d'un étudiant on prend l'affectation APOGEE
              -- Si plusieurs, alors c'est celle qui commence le + tard qui est prise en comtpe
-            SELECT
-                individu_id,
-                MAX(structure_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1  WHEN source_id = 'OCTOREFID' THEN 2  WHEN source_id = 'APO' THEN 3 ELSE 999 END DESC , t_principale, date_debut)   structure_id,
-                MAX(source_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1 WHEN source_id = 'OCTOREFID' THEN 2 WHEN source_id = 'APO' THEN 3 ELSE 999 END DESC,t_principale, date_debut) source_id
-             FROM octo.individu_affectation@octoprod
-             WHERE type_id = 4
-             AND COALESCE(date_fin, SYSDATE) + 1 >= (SYSDATE - (365 * 2))
-             GROUP BY individu_id
+              SELECT
+                  individu_id,
+                  MAX(structure_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1  WHEN source_id = 'OCTOREFID' THEN 2  WHEN source_id = 'APO' THEN 3 ELSE 999 END DESC , t_principale, date_debut)   structure_id,
+                  MAX(source_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1 WHEN source_id = 'OCTOREFID' THEN 2 WHEN source_id = 'APO' THEN 3 ELSE 999 END DESC,t_principale, date_debut) source_id
+               FROM octo.individu_affectation@octoprod aff
+               WHERE type_id in(4,2) AND aff.t_principale = 'O'
+               AND COALESCE(date_fin, SYSDATE) + 1 >= (SYSDATE - (365 * 2))
+               GROUP BY individu_id, type_id
+               ORDER BY type_id ASC
          ),
      --CNU arrangé
      cnua AS (

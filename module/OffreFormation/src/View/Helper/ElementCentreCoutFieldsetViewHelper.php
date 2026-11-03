@@ -19,7 +19,7 @@ class ElementCentreCoutFieldsetViewHelper extends AbstractHtmlElement
      *
      * @return self|string
      */
-    public function __invoke(ElementCentreCoutFieldset $fieldset = null)
+    public function __invoke(?ElementCentreCoutFieldset $fieldset = null)
     {
         if (null === $fieldset) {
             return $this;

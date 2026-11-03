@@ -21,7 +21,7 @@ class FonctionReferentielViewHelper extends AbstractHelper
      *
      * @return self
      */
-    public function __invoke(FonctionReferentiel $fonctionReferentiel = null)
+    public function __invoke(?FonctionReferentiel $fonctionReferentiel = null)
     {
         if ($fonctionReferentiel) $this->setFonctionReferentiel($fonctionReferentiel);
 

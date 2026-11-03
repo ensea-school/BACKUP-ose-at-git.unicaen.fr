@@ -27,7 +27,7 @@ class ElementModulateursSaisieFieldset extends AbstractHtmlElement
      * @param ElementModulateursFieldset $fieldset
      * @return self|string
      */
-    public function __invoke(ElementModulateursFieldset $fieldset = null)
+    public function __invoke(?ElementModulateursFieldset $fieldset = null)
     {
         if (null === $fieldset) {
             return $this;

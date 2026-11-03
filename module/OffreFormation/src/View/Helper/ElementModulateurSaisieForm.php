@@ -27,7 +27,7 @@ class ElementModulateurSaisieForm extends AbstractHelper
      *
      * @return self|string
      */
-    public function __invoke(ElementModulateurSaisieForm $form = null)
+    public function __invoke(?ElementModulateurSaisieForm $form = null)
     {
         if (null === $form) {
             return $this;

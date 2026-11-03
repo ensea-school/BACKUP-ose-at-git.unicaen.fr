@@ -178,7 +178,13 @@ class StructureService extends AbstractEntityService
 
 
 
-    public function finderByRole(?QueryBuilder $qb = null, $alias = null)
+    /**
+     * Si un rôle est spécifié, retourne la liste des structures pour lesquelles ce rôle est autorisé à officier.
+     * Si <code>true</code> est spécifié, retourne la liste des structures associées à des rôles.
+     *
+     * @param Role|true $role
+     */
+    public function finderByRole($role, ?QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

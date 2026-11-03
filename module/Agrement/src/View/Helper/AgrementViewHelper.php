@@ -95,7 +95,7 @@ class AgrementViewHelper extends AbstractHtmlElement
             "Type d'agrément"       => (string)$entity->getType(),
             "Date de la décision"   => $entity->getDateDecision()->format(Constants::DATE_FORMAT),
             "Année d'agrémentation" => (string)$tblAgrement->getAnneeAgrement()->getLibelle(),
-            "Valable jusqu'au"      => '31 août ' . (integer)$tblAgrement->getAnneeAgrement()->getId() + (integer)$tblAgrement->getDureeVie(),
+            "Valable jusqu'au"      => '31 août ' . ((integer)$tblAgrement->getAnneeAgrement()->getId() + (integer)$tblAgrement->getDureeVie()),
         ];
 
         if (!$this->short) {

@@ -7,7 +7,7 @@ SELECT
   tvr.intervenant_id                                       intervenant_id,
   tvr.structure_id                                         structure_id,
   SUM(vhr.heures)                                          objectif,
-  SUM(vhr.heures)                                          partiel,
+  SUM(CASE WHEN tvr.valide = 1 THEN vhr.heures ELSE 0 END) partiel,
   SUM(CASE WHEN tvr.valide = 1 THEN vhr.heures ELSE 0 END) realisation
 FROM
   tbl_validation_referentiel tvr

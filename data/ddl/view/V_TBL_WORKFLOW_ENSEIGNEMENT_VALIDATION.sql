@@ -7,7 +7,7 @@ SELECT
   tve.intervenant_id                                      intervenant_id,
   tve.structure_id                                        structure_id,
   SUM(vh.heures)                                          objectif,
-  SUM(vh.heures)                                          partiel,
+  SUM(CASE WHEN tve.valide = 1 THEN vh.heures ELSE 0 END) partiel,
   SUM(CASE WHEN tve.valide = 1 THEN vh.heures ELSE 0 END) realisation
 FROM
   tbl_validation_enseignement tve

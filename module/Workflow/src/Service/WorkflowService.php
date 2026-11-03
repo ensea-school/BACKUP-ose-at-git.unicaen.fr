@@ -11,6 +11,7 @@ use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Unicaen\BddAdmin\BddAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use Unicaen\Framework\Application\Application;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Entity\Db\WorkflowEtapeDependance;
@@ -304,6 +305,10 @@ class WorkflowService extends AbstractService
             $tbls = $deps;
         }
 
+        // Les tableaux de bord doivent être calculés dans l'ordre de leurs dépendances :
+        // ex. la formule après validation_enseignement et service_du, sinon elle travaille sur des données périmées
+        $tbls = $this->ordonnerTbls($tbls, $deps);
+
         //Petit hack pour mettre toujours le tbl workflow en dernier dans le tbls,
         // pour qu'il soit toujours calculer en dernier car il dépend de tous les autres tbl
 
@@ -325,6 +330,7 @@ class WorkflowService extends AbstractService
                     $this->getServiceTableauBord()->calculer($dep, ['INTERVENANT_ID' => $value]);
                 } catch (\Exception $e) {
                     $errors[$dep] = $e;
+                    $this->signalerErreurCalcul($dep, (int)$value, $e);
                 }
             }
         }
@@ -343,6 +349,90 @@ class WorkflowService extends AbstractService
         }
 
         return $errors;
+    }
+
+
+
+    /**
+     * Signale l'échec du calcul d'un tableau de bord, qui sinon passerait inaperçu :
+     * - dans le journal d'erreurs PHP (diagnostic côté serveur)
+     * - par un message à l'utilisateur, en contexte web
+     */
+    private function signalerErreurCalcul(string $tbl, int $intervenantId, \Throwable $e): void
+    {
+        error_log(sprintf(
+            '[OSE] Échec du calcul du tableau de bord "%s" pour l\'intervenant ID=%d : %s',
+            $tbl, $intervenantId, $e->getMessage()
+        ));
+
+        if (PHP_SAPI === 'cli') {
+            return;
+        }
+
+        try {
+            $flashMessenger = Application::getInstance()->container()->get('ControllerPluginManager')->get('flashMessenger');
+            $flashMessenger->addWarningMessage(sprintf(
+                "Le calcul du tableau de bord <strong>%s</strong> a échoué pour cet intervenant (ID %d) : "
+                . "les données affichées peuvent ne pas être à jour.<br /><small>%s</small>",
+                htmlspecialchars($tbl), $intervenantId, htmlspecialchars($e->getMessage())
+            ));
+        } catch (\Throwable) {
+            // Pas de messagerie disponible : l'erreur reste tracée dans le journal
+        }
+    }
+
+
+
+    /**
+     * Trie les tableaux de bord à calculer de sorte que chacun soit calculé après tous ceux dont il dépend.
+     *
+     * $deps[X] = [Y, Z] signifie que Y et Z dépendent de X : X doit donc être calculé avant eux.
+     * L'ordre initial est conservé autant que possible (tri topologique stable).
+     *
+     * @param array $tbls [nom du tbl => mixed]
+     * @param array $deps [nom du tbl => [tbls qui en dépendent]]
+     * @return array [nom du tbl => mixed], ordonné
+     */
+    private function ordonnerTbls(array $tbls, array $deps): array
+    {
+        // Nombre de prérequis restant à calculer pour chaque tbl de la liste
+        $prerequis = array_fill_keys(array_keys($tbls), 0);
+        foreach ($tbls as $tbl => $null) {
+            foreach ($deps[$tbl] ?? [] as $suivant) {
+                if (array_key_exists($suivant, $prerequis)) {
+                    $prerequis[$suivant]++;
+                }
+            }
+        }
+
+        $ordonnes = [];
+        while (!empty($prerequis)) {
+            $prochain = null;
+            foreach ($prerequis as $tbl => $nb) {
+                if (0 === $nb) {
+                    $prochain = $tbl;
+                    break;
+                }
+            }
+
+            if (null === $prochain) {
+                // Dépendance circulaire : on garde l'ordre restant tel quel plutôt que de bloquer
+                foreach ($prerequis as $tbl => $nb) {
+                    $ordonnes[$tbl] = $tbls[$tbl];
+                }
+                break;
+            }
+
+            $ordonnes[$prochain] = $tbls[$prochain];
+            unset($prerequis[$prochain]);
+            foreach ($deps[$prochain] ?? [] as $suivant) {
+                if (array_key_exists($suivant, $prerequis)) {
+                    $prerequis[$suivant]--;
+                }
+            }
+        }
+
+        return $ordonnes;
     }
 
 

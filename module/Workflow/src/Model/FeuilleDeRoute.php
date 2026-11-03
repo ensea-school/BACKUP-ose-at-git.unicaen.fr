@@ -216,6 +216,11 @@ class FeuilleDeRoute
             if (count($fdre->structures) == 1) {
                 //$fdre->structures = []; // Pas de détail par structures s'il n'y en a qu'une
             }
+            if (!$this->getStructure() && $fdre->atteignable) {
+                // Périmètre établissement : étape atteignable pour au moins une structure,
+                // les motifs de blocage restent consultables dans le détail par structure
+                $fdre->whyNonAtteignable = [];
+            }
         }
 
         $this->builted = true;
@@ -242,7 +247,12 @@ class FeuilleDeRoute
         if ($inMain) {
             if (!array_key_exists($etape->getCode(), $this->fdr)) {
                 $fdre = $this->createEtape($etape);
-                $fdre->whyNonAtteignable = $this->makeWhyNonAtteignable($whyNonAtteignable);
+                $fdre->whyNonAtteignable = [];
+                if (!$this->getStructure()) {
+                    // Périmètre établissement : l'étape est atteignable dès qu'au moins une structure l'est
+                    // (on part de "non atteignable" et chaque structure atteignable la débloque)
+                    $fdre->atteignable = false;
+                }
 
                 $this->fdr[$etape->getCode()] = $fdre;
             }else{
@@ -251,9 +261,19 @@ class FeuilleDeRoute
 
             $fdre->objectif    += $objectif;
             $fdre->realisation += $realisation;
-            if (!$atteignable) {
-                $fdre->atteignable = false;
 
+            if (!$this->getStructure()) {
+                // Périmètre établissement : il suffit qu'une structure soit atteignable
+                // Le détail (et les blocages) par structure reste disponible dans $fdre->structures
+                if ($atteignable) {
+                    $fdre->atteignable = true;
+                }
+            } elseif (!$atteignable) {
+                // Périmètre composante : toutes les lignes de la composante doivent être atteignables
+                $fdre->atteignable = false;
+            }
+
+            if (!$atteignable) {
                 $arrayWNA = $this->makeWhyNonAtteignable($whyNonAtteignable);
                 foreach ($arrayWNA as $wa) {
                     if (!in_array($wa, $fdre->whyNonAtteignable)) {
@@ -272,8 +292,52 @@ class FeuilleDeRoute
             $fdres->atteignable             = $atteignable;
             $fdres->objectif                = $objectif;
             $fdres->realisation             = $realisation;
+            $fdres->structureIds            = $structureIds;
+            $fdres->whyNonAtteignable       = $atteignable ? [] : $this->makeWhyNonAtteignable($whyNonAtteignable);
             $fdre->structures[$structureId] = $fdres;
         }
+    }
+
+
+
+    /**
+     * Indique si une étape est accessible pour une structure donnée.
+     *
+     * En périmètre établissement, une étape globale est accessible dès qu'une structure l'est :
+     * les actions portant sur une structure précise (agrément, service, validation...) doivent donc
+     * vérifier l'état de l'étape pour CETTE structure (ou la composante qui la contient).
+     *
+     * Si la structure n'est pas fournie, ou si l'étape n'a pas de détail par structure, l'état global est retourné.
+     */
+    public function isAllowedPourStructure(string $etapeCode, ?Structure $structure): bool
+    {
+        $fdre = $this->get($etapeCode);
+        if (!$fdre) {
+            return false;
+        }
+
+        if (!$structure || empty($fdre->structures)) {
+            return $fdre->isAllowed();
+        }
+
+        $trouvee = false;
+        foreach ($fdre->structures as $strId => $fdres) {
+            $concernee = $strId === $structure->getId()
+                // la structure fournie est une sous-structure de celle du workflow
+                || str_contains($structure->getIds() ?? '', '-' . $strId . '-')
+                // la structure du workflow est une sous-structure de celle fournie
+                || str_contains($fdres->structureIds ?? '', '-' . $structure->getId() . '-');
+
+            if ($concernee) {
+                $trouvee = true;
+                if ($fdres->isAllowed()) {
+                    return true;
+                }
+            }
+        }
+
+        // Structure inconnue du workflow pour cette étape : on s'en remet à l'état global
+        return $trouvee ? false : $fdre->isAllowed();
     }
 
 

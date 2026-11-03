@@ -28,6 +28,9 @@ class FeuilleDeRouteEtape
     public float         $objectif          = 0.0;
     public float         $realisation       = 0.0;
     public array         $whyNonAtteignable = [];
+
+    /** Chemin arborescent de la structure ("-1-12-125-"), renseigné uniquement pour le détail par structure */
+    public ?string       $structureIds      = null;
     private Authorize    $authorize;
     private Router    $router;
 

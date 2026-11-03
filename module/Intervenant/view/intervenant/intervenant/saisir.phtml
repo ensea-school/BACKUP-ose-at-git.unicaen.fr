@@ -11,7 +11,7 @@
  * @var $canViewIdentiteIntervenant bool
  * @var $canViewInseeIntervenant bool
  */
-use Application\Provider\Privilege\Privileges;
+use Application\Provider\Privileges;
 
 if ($intervenant && 'dupliquer' == $actionDetail) {
     $this->intervenant($intervenant)->renderTitle('Ajout de statut');

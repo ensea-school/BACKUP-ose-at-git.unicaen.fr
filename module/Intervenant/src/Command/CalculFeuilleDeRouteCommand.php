@@ -52,7 +52,17 @@ class CalculFeuilleDeRouteCommand extends Command
         $io->writeln('Année universitaire : ' . $intervenant->getAnnee());
         $io->writeln('Statut de l\'intervenant : ' . $intervenant->getStatut());
         $io->writeln('Calcul en cours ...');
-        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+        $errors = $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+
+        if (!empty($errors)) {
+            foreach ($errors as $tbl => $error) {
+                $io->error('Échec du calcul du tableau de bord "' . $tbl . '" : ' . $error->getMessage());
+            }
+            $io->warning('Feuille de route de ' . $intervenant . ' actualisée, mais ' . count($errors) . ' tableau(x) de bord en erreur.');
+
+            return Command::FAILURE;
+        }
+
         $io->success('Feuille de route de ' . $intervenant . ' actualisée avec succés !');
 
         return Command::SUCCESS;

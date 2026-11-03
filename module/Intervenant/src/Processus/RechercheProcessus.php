@@ -8,7 +8,6 @@ use Application\Service\ContextService;
 use Doctrine\ORM\EntityManager;
 use Unicaen\Framework\Authorize\Authorize;
 use UnicaenApp\Util;
-use Application\Provider\Privilege\Privileges;
 
 
 class RechercheProcessus
@@ -40,7 +39,7 @@ class RechercheProcessus
      */
 
 
-    public function rechercher ($critere, $limit = 50, string $key = ':CODE', array $typeIntervenantCodes = [],bool $affichageNumeroPerso)
+    public function rechercher ($critere, $limit = 50, string $key = ':CODE', array $typeIntervenantCodes = [], bool $affichageNumeroPerso = false)
     {
         try {
             return $this->rechercheGenerique($critere, $limit, $key, false, $typeIntervenantCodes, $affichageNumeroPerso);

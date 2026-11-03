@@ -654,15 +654,11 @@ class ContratController extends AbstractController
 
     private function updateTableauxBord(Intervenant $intervenant)
     {
-        $errors = $this->getServiceWorkflow()->calculerTableauxBord([
-                                                                        TblProvider::FORMULE,
-                                                                        TblProvider::CONTRAT,
-                                                                    ], $intervenant);
-        if (!empty($errors)) {
-            foreach ($errors as $error) {
-                $this->flashMessenger()->addErrorMessage($error->getMessage());
-            }
-        }
+        // Les éventuelles erreurs de calcul sont signalées par WorkflowService::calculerTableauxBord()
+        $this->getServiceWorkflow()->calculerTableauxBord([
+                                                              TblProvider::FORMULE,
+                                                              TblProvider::CONTRAT,
+                                                          ], $intervenant);
     }
 
 }

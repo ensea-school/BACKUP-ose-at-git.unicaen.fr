@@ -58,24 +58,15 @@ class PlafondProcessus extends AbstractProcessus
         }
 
 
-        if ($isDiminution) {
-            $passed = true; // ça passe à tous les coups si on diminue le volume d'heures
-        } else {
-            $passed = true;
-            foreach( $entities as $entity) {
-                if (!$this->controle($entity, $typeVolumeHoraire, true)){
-                    $passed = false;
-                }
-            }
-        }
+        // ça passe à tous les coups si on diminue le volume d'heures
+        // sinon, un seul contrôle groupé pour toutes les entités
+        $passed = $isDiminution || $this->controle($entities, $typeVolumeHoraire, true);
 
         if ($passed) {
             try {
                 $this->getEntityManager()->commit();
-                foreach( $entities as $entity) {
-                    $this->getServicePlafond()->calculerDepuisEntite($entity); // on met à jour les TBLs
-                }
-
+                // on met à jour les TBLs, chaque calcul n'étant lancé qu'une seule fois
+                $this->getServicePlafond()->calculerDepuisEntites($entities);
             }catch(ConnectionException $e){
                 $this->getEntityManager()->rollback();
             }
@@ -90,15 +81,15 @@ class PlafondProcessus extends AbstractProcessus
 
 
     /**
-     * @param PlafondDataInterface $entity
+     * @param PlafondDataInterface|PlafondDataInterface[] $entities
      * @param TypeVolumeHoraire $typeVolumeHoraire
      *
      * @return bool
      */
-    public function controle(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): bool
+    public function controle(PlafondDataInterface|array $entities, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): bool
     {
         $blocage = false;
-        $reponse = $this->getServicePlafond()->controle($entity, $typeVolumeHoraire, $pourBlocage);
+        $reponse = $this->getServicePlafond()->controle($entities, $typeVolumeHoraire, $pourBlocage);
         if (!empty($reponse)) {
             foreach ($reponse as $controle) {
                 if ($controle->isBloquant() && $controle->isDepassement()) {

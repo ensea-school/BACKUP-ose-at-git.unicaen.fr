@@ -55,6 +55,11 @@ class PlafondService extends AbstractEntityService
     protected array $perimetres;
 
     /**
+     * Calculs de TBL en attente (clé = périmètre|param|valeur), null hors collecte
+     */
+    private ?array $calculsEnAttente = null;
+
+    /**
      * @var PlafondEtat[]
      */
     protected array $etats;
@@ -170,14 +175,17 @@ class PlafondService extends AbstractEntityService
      *
      * @return PlafondControle[]
      */
-    public function controle(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire): array
+    public function controle(PlafondDataInterface|array $entities, TypeVolumeHoraire $typeVolumeHoraire): array
     {
         $pqr = new PlafondQueryParams();
         $pqr->typeVolumeHoraire = $typeVolumeHoraire;
         $pqr->useView = true;
         $pqr->depassementsUniquement = true;
 
-        $this->controlePop($entity, $pqr);
+        // Plusieurs entités => une seule requête (PlafondQueryParams dédoublonne par classe + id)
+        foreach (is_array($entities) ? $entities : [$entities] as $entity) {
+            $this->controlePop($entity, $pqr);
+        }
 
         $sqls = [];
         $this->makeQuery($pqr, $sqls);
@@ -340,20 +348,29 @@ class PlafondService extends AbstractEntityService
                 $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = $entities;
                 break;
 
-            case VolumeHoraire::class: // à retravailler : pas utilisé pour le moment
+            case VolumeHoraire::class:
                 $perimetre = PlafondPerimetre::VOLUME_HORAIRE;
                 $join = "JOIN ELEMENT_PEDAGOGIQUE entity1 ON entity1.id = pd.ELEMENT_PEDAGOGIQUE_ID\n";
                 $join .= "JOIN TYPE_INTERVENTION entity2 ON entity2.id = pd.TYPE_INTERVENTION_ID";
                 $libVal = "entity1.code || ' ' || entity2.code ";
                 $groupBy = 'entity1.code, entity2.code';
-                foreach($entities as $entity){
-                    $elementPedagogique = $entity->getService()->getElementPedagogique();
-                    if ($elementPedagogique) {
-                        $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$elementPedagogique->getId();
+
+                // Listes (IN) : plusieurs volumes horaires peuvent être contrôlés en une seule requête
+                $elements = $intervenants = $typesIntervention = [];
+                foreach ($entities as $entity) {
+                    $service = $entity->getService();
+                    if ($ep = $service->getElementPedagogique()) {
+                        $elements[$ep->getId()] = $ep;
                     }
-                    $filters['pd.INTERVENANT_ID']         = (int)$entity->getService()->getIntervenant()->getId();
-                    $filters['pd.TYPE_INTERVENTION_ID']   = (int)$entity->getTypeIntervention()->getId();
+                    $intervenants[$service->getIntervenant()->getId()]          = $service->getIntervenant();
+                    $typesIntervention[$entity->getTypeIntervention()->getId()] = $entity->getTypeIntervention();
                 }
+                if (empty($elements)) {
+                    return ''; // service externe : pas de plafond au volume horaire
+                }
+                $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = $elements;
+                $filters['pd.INTERVENANT_ID']         = $intervenants;
+                $filters['pd.TYPE_INTERVENTION_ID']   = $typesIntervention;
                 break;
 
             case ServiceReferentiel::class:
@@ -775,9 +792,42 @@ class PlafondService extends AbstractEntityService
      * @param string|null $param
      * @param string|null $value
      */
+    /**
+     * Met à jour les TBL plafonds pour plusieurs entités, en ne lançant
+     * qu'une seule fois chaque calcul (périmètre + paramètre + valeur).
+     *
+     * @param PlafondDataInterface[] $entities
+     */
+    public function calculerDepuisEntites(array $entities): void
+    {
+        $this->calculsEnAttente = [];
+        try {
+            foreach ($entities as $entity) {
+                $this->calculerDepuisEntite($entity);
+            }
+            $calculs = $this->calculsEnAttente;
+        } finally {
+            $this->calculsEnAttente = null;
+        }
+
+        foreach ($calculs as [$perimetre, $param, $value]) {
+            $this->calculer($perimetre, $param, $value);
+        }
+    }
+
+
+
     public function calculer($perimetre, ?string $param = null, ?string $value = null)
     {
         if ($perimetre instanceof PlafondPerimetre) $perimetre = $perimetre->getCode();
+
+        // En cours de collecte (calculerDepuisEntites) : on mémorise le calcul, dédoublonné, au lieu de le lancer
+        if ($this->calculsEnAttente !== null) {
+            $this->calculsEnAttente[$perimetre . '|' . $param . '|' . $value] = [$perimetre, $param, $value];
+
+            return;
+        }
+
         $tblName = 'plafond_' . $perimetre;
         if ($param){
             $params = [$param => $value];

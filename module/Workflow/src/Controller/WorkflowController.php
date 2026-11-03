@@ -90,12 +90,9 @@ class WorkflowController extends AbstractController
             $errors = $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
         }
 
+        // En cas d'erreur, les messages sont émis directement par WorkflowService::calculerTableauxBord()
         if (empty($errors)) {
             $this->flashMessenger()->addSuccessMessage('Feuille de route actualisée.');
-        } else {
-            foreach ($errors as $error) {
-                $this->flashMessenger()->addErrorMessage($error->getMessage());
-            }
         }
 
         return $this->feuilleDeRouteDataAction();

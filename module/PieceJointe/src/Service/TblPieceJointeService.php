@@ -76,6 +76,9 @@ class TblPieceJointeService extends AbstractEntityService
         $datas                        = new \stdClass();
         $datas->piecesJointes         = $query->getResult();
         $datas->messagesPiecesJointes = $this->makeMessages($intervenant);
+        $datas->etapes                = [
+            'pjComplAccessible' => (bool)($this->getServiceWorkflow()->getFeuilleDeRoute($intervenant)->get(WorkflowEtape::PJ_COMPL_SAISIE)?->atteignable ?? false),
+        ];
         $datas->privileges            = [
             'canVisualiser'     => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VISUALISATION)),
             'canEditer'         => $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION)),
@@ -117,6 +120,7 @@ class TblPieceJointeService extends AbstractEntityService
                         ],
                        ],
                        'messagesPiecesJointes',
+                       'etapes',
                        ['type',
                         'text'],
                        'privileges',

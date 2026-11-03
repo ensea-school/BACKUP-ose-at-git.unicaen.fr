@@ -41,6 +41,11 @@
     <template v-if="hasPiecesApresRecrutement && datasPiecesJointes?.privileges?.canVisualiserComp">
         <div class="tab-pane fade show" id="apresRecrutement" role="tabpanel"
              aria-labelledby="apresRecrutement-tab">
+            <div v-if="!pjComplAccessible" class="mt-3 messenger alert alert-info">
+                <span class="fas fa-info-circle"></span>
+                L'étape des pièces justificatives complémentaires n'est pas encore accessible :
+                seules les pièces déjà fournies sont affichées.
+            </div>
             <div
                 v-for="(message, key) in messApresRecrutement || []"
                 :key="'msg-' + key"
@@ -104,12 +109,23 @@ const hasPiecesAvantRecrutement = computed(() =>
     pieceAvantRecrutement.value.length > 0
 )
 
-const pieceApresRecrutement = computed(() =>
-    datasPiecesJointes.value?.piecesJointes?.filter(p => p.demandeApresRecrutement) || []
+const pjComplAccessible = computed(() =>
+    datasPiecesJointes.value?.etapes?.pjComplAccessible ?? false
 )
 
+// Si l'étape PJ complémentaires n'est pas (encore) atteignable dans le workflow, on n'affiche que les pièces
+// déjà fournies, afin qu'elles restent consultables, modifiables et supprimables.
+const pieceApresRecrutement = computed(() =>
+    datasPiecesJointes.value?.piecesJointes?.filter(p =>
+        p.demandeApresRecrutement && (pjComplAccessible.value || p.pieceJointe)
+    ) || []
+)
+
+// Les messages d'état (pièces manquantes, etc.) n'ont de sens que si l'étape est accessible
 const messApresRecrutement = computed(() =>
-    datasPiecesJointes.value?.messagesPiecesJointes?.filter(p => !p.avantRecrutement) || []
+    pjComplAccessible.value
+        ? datasPiecesJointes.value?.messagesPiecesJointes?.filter(p => !p.avantRecrutement) || []
+        : []
 )
 
 

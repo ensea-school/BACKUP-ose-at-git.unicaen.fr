@@ -129,9 +129,10 @@ class AgrementAssertion extends AbstractAssertion
     {
         /* Si c'est pour agréer et que le workflow l'interdit alors non! */
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
-        $wfEtape = $feuilleDeRoute->get(strtolower($entity->getTypeAgrement()->getCode()));
 
-        if (!$wfEtape?->isAllowed()){
+        // Contrôle sur la structure de l'agrément : en périmètre établissement, l'étape globale peut être
+        // accessible pour une composante et pas pour une autre
+        if (!$feuilleDeRoute->isAllowedPourStructure(strtolower($entity->getTypeAgrement()->getCode()), $entity->getStructure())) {
             return false;
         }
 
@@ -156,9 +157,8 @@ class AgrementAssertion extends AbstractAssertion
     protected function assertAgrementSaisie(Agrement $entity): bool
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
-        $wfEtape = $feuilleDeRoute->get($entity->getType()->getWorkflowEtapeCode());
 
-        if (!$wfEtape->isAllowed()) {
+        if (!$feuilleDeRoute->isAllowedPourStructure($entity->getType()->getWorkflowEtapeCode(), $entity->getStructure())) {
             return false;
         }
 
@@ -196,9 +196,8 @@ class AgrementAssertion extends AbstractAssertion
     private function assertAgrementSuppression(Agrement $entity): bool
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($entity->getIntervenant());
-        $wfEtape = $feuilleDeRoute->get($entity->getType()->getWorkflowEtapeCode());
 
-        if (!$wfEtape->isAllowed()){
+        if (!$feuilleDeRoute->isAllowedPourStructure($entity->getType()->getWorkflowEtapeCode(), $entity->getStructure())) {
             return false;
         }
 

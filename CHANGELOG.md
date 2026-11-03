@@ -31,6 +31,7 @@ OSE [24.20]
 * Ajout d'une exception dans le validateur de numéro insee des données personnelles pour simplifier le contrôle de la donnée dans le cas d'un département de naissance "Polynésie Française" (#63903).
 * Le blocage se fait correctement pour les plafonds de périmètre volume horaire (#62434)
 * Le blocage se fait de nouveau correctement pour les plafonds de périmètre intervenant (#63728)
+* Validation des enseignements : un bloc "à valider" n'apparaît plus pour des heures qui s'annulent après une dévalidation
 
 ## Notes de mise à jour
 

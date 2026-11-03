@@ -23,6 +23,7 @@ use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Http\Response;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Unicaen\Framework\Application\Application;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 use Workflow\Entity\Db\Validation;
 use Workflow\Entity\Db\WorkflowEtape;
@@ -209,13 +210,40 @@ class IntervenantDossierController extends AbstractController
         try {
             $this->getServiceValidation()->validerDossier($intervenantDossier);
             $this->updateTableauxBord($intervenant, true);
-            $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
             $this->flashMessenger()->addSuccessMessage("Validation des données personnelles <strong>enregistrée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
+
+            return new MessengerViewModel;
         }
 
+        // Synchronisation de l'intervenant avec le système d'information source.
+        // Elle intervient après la validation, qui est déjà enregistrée : un échec ne doit pas la masquer.
+        $this->synchroniserIntervenant($intervenant);
+
         return new MessengerViewModel;
+    }
+
+
+
+    /**
+     * Met à jour l'intervenant depuis sa source (connecteur d'import),
+     * sauf si la synchronisation est désactivée (maintenance.desactivationSynchronisation)
+     */
+    private function synchroniserIntervenant(Intervenant $intervenant): void
+    {
+        if (Application::getInstance()->config()['maintenance']['desactivationSynchronisation'] ?? false) {
+            return;
+        }
+
+        try {
+            $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
+        } catch (\Throwable $e) {
+            $this->flashMessenger()->addWarningMessage(
+                "Les données ont bien été validées, mais la synchronisation de l'intervenant avec le système d'information a échoué : "
+                . $this->translate($e)
+            );
+        }
     }
 
 

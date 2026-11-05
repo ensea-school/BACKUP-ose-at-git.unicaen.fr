@@ -1,6 +1,6 @@
 {
     "name"             : "unicaen/ose",
-    "version"          : "24.20",
+    "version"          : "24.21",
     "description"      : "Organisation des Services d'Enseignement (OSE)",
     "repositories"     : [
         {
@@ -73,7 +73,7 @@
     "prefer-stable"    : true,
     "config"           : {
         "platform"     : {
-            "php": "8.3"
+            "php": "8.4"
         },
         "policy"       : {
             "advisories": {
@@ -90,7 +90,7 @@
         }
     },
     "scripts"          : {
-        "sniffer:php83"       : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.3",
+        "sniffer:php84"       : "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.4",
         "phpcs"               : "./vendor/bin/phpcs -p ./module --standard=PSR12",
         "update-public-vendor": [
             "rm -rf public/vendor",

@@ -14,22 +14,202 @@ use Application\View\Renderer\PhpRenderer;
 
 $this->intervenant($intervenant)->renderTitle('Fiche');
 
+/* Regroupement des onglets : tout onglet non listé ici tombe dans "Consulter".
+ * Les actions sensibles sont rangées dans le menu "Plus". */
+$groupes = [
+    'consulter' => ['label' => 'Consulter', 'pages' => []],
+    'gerer'     => ['label' => 'Gérer', 'pages' => ['edition', 'derogations', 'synchronisation']],
+    'plus'      => ['label' => 'Actions sensibles', 'pages' => ['edition-mise-en-paiement', 'suppression']],
+];
+
 $tabs = [];
 foreach ($pages as $page) {
     if ($page->isVisible()) {
-        $tabs[$page->getName()] = [
-            'id'            => $page->getName(),
-            'label'         => '<i class="' . $page->getIcon() . '"></i> ' . $page->getLabel(),
-            'url'           => $page->getUri(['intervenant' => $intervenant->getId()]),
-            'force-refresh' => true,
+        $name   = $page->getName();
+        $groupe = 'consulter';
+        foreach ($groupes as $g => $groupeDef) {
+            if (in_array($name, $groupeDef['pages'])) {
+                $groupe = $g;
+            }
+        }
+        $tabs[$name] = [
+            'id'      => $name,
+            'icon'    => $page->getIcon(),
+            'label'   => $page->getLabel(),
+            'url'     => $page->getUri(['intervenant' => $intervenant->getId()]),
+            'groupe'  => $groupe,
+            'content' => '',
         ];
     }
 }
 
-$tabs['fiche']['content'] = $this->partial('intervenant/intervenant/fiche.phtml', compact('intervenant'));
-
-if (array_key_exists('notes', $tabs) && $notificationNote > 0) {
-    $tabs['notes']['label'] .= ' <span class="badge" style="background-color: #fc1010;font-size:10px;margin-bottom:5px;">' . $notificationNote . '</span>';
+if (array_key_exists('fiche', $tabs)) {
+    $tabs['fiche']['content'] = $this->partial('intervenant/intervenant/fiche.phtml', compact('intervenant'));
 }
 
-echo $this->tabajax($tabs, $tab);
+$selected = array_key_exists((string)$tab, $tabs) ? $tab : array_key_first($tabs);
+
+$parGroupe = [];
+foreach ($tabs as $name => $t) {
+    $parGroupe[$t['groupe']][$name] = $t;
+}
+
+$tabLink = function (array $t, string $class) use ($selected, $notificationNote) {
+    $classes = [$class];
+    if ($t['id'] === $selected) $classes[] = 'active';
+
+    $label = '<i class="' . $this->escapeHtmlAttr($t['icon']) . '"></i> ' . $this->escapeHtml($t['label']);
+    if ($t['id'] === 'notes' && $notificationNote > 0) {
+        $label .= ' <span class="badge rounded-pill bg-danger ms-1">' . (int)$notificationNote . '</span>';
+    }
+
+    return '<a class="' . implode(' ', $classes) . '"'
+        . ' href="' . $this->escapeHtmlAttr($t['url']) . '"'
+        . ' role="tab" data-bs-toggle="tab"'
+        . ' data-bs-target="#' . $this->escapeHtmlAttr($t['id']) . '"'
+        . ' aria-controls="' . $this->escapeHtmlAttr($t['id']) . '"'
+        . ' data-force-refresh="1">'
+        . $label . '</a>';
+};
+
+?>
+<div class="tab-ajax intervenant-tabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <?php foreach (['consulter', 'gerer'] as $g): ?>
+            <?php $first = true;
+            foreach ($parGroupe[$g] ?? [] as $t): ?>
+                <li class="nav-item<?= $first ? ' groupe-debut' : '' ?>" role="presentation"
+                    <?= $first ? 'data-groupe="' . $this->escapeHtmlAttr($groupes[$g]['label']) . '"' : '' ?>>
+                    <?= $tabLink($t, 'nav-link') ?>
+                </li>
+                <?php $first = false; endforeach; ?>
+        <?php endforeach; ?>
+
+        <?php if (!empty($parGroupe['plus'])): ?>
+            <?php $plusActif = array_key_exists($selected, $parGroupe['plus']); ?>
+            <li class="nav-item dropdown onglets-plus" role="presentation">
+                <button type="button" class="nav-link dropdown-toggle<?= $plusActif ? ' active' : '' ?>"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-ellipsis"></i> Plus
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><h6 class="dropdown-header"><?= $this->escapeHtml($groupes['plus']['label']) ?></h6></li>
+                    <?php foreach ($parGroupe['plus'] as $t): ?>
+                        <li><?= $tabLink($t, 'dropdown-item text-danger') ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </li>
+        <?php endif; ?>
+    </ul>
+
+    <div class="tab-content">
+        <?php foreach ($tabs as $t): ?>
+            <div role="tabpanel" class="tab-pane<?= $t['id'] === $selected ? ' active' : '' ?>"
+                 id="<?= $this->escapeHtmlAttr($t['id']) ?>"
+                 data-url="<?= $this->escapeHtmlAttr($t['url']) ?>"><?= $t['content'] ?></div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<script>
+    /* tab-ajax.js stoppe la propagation du clic (return false) : Bootstrap ne voit pas le clic
+     * et ne referme pas le menu "Plus". On le referme donc nous-mêmes (phase de capture). */
+    document.querySelectorAll('.intervenant-tabs .onglets-plus').forEach(function (plus) {
+        plus.addEventListener('click', function (e) {
+            if (!e.target.closest('.dropdown-item')) return;
+            var toggle = plus.querySelector('.dropdown-toggle');
+            var dropdown = bootstrap.Dropdown.getInstance(toggle);
+            if (dropdown) dropdown.hide();
+        }, true);
+    });
+</script>
+
+<style>
+    /* Fiche intervenant : onglets regroupés (Consulter / Gérer / menu Plus) */
+    .intervenant-tabs > .nav-tabs {
+        padding-top: 1.4rem;
+        align-items: flex-end;
+    }
+
+    .intervenant-tabs > .nav-tabs > .nav-item > .nav-link {
+        padding: .75rem .75rem .7rem;
+        white-space: nowrap;
+        position: relative;
+        border: 0;
+        border-radius: 0;
+    }
+
+    /* Onglet actif : texte et icône de la même couleur (bleu, rouge pour "Plus"), trait court arrondi sous le libellé */
+    .intervenant-tabs > .nav-tabs > .nav-item > .nav-link.active {
+        color: var(--mdb-primary, #3b71ca);
+        font-weight: 700;
+        background: none;
+    }
+
+    .intervenant-tabs > .nav-tabs > .nav-item > .nav-link.active > i,
+    .intervenant-tabs > .nav-tabs > .nav-item > .nav-link.active > svg {
+        color: inherit;
+    }
+
+    .intervenant-tabs > .nav-tabs > .nav-item > .nav-link.active::before {
+        content: "";
+        position: absolute;
+        left: .75rem;
+        right: .75rem;
+        bottom: 0;
+        height: 3px;
+        border-radius: 3px 3px 0 0;
+        background: var(--mdb-primary, #3b71ca);
+    }
+
+    .intervenant-tabs > .nav-tabs > .onglets-plus > .dropdown-toggle.active::before {
+        background: var(--mdb-danger, #dc4c64);
+    }
+
+    .intervenant-tabs > .nav-tabs > .groupe-debut {
+        position: relative;
+    }
+
+    .intervenant-tabs > .nav-tabs > .groupe-debut::before {
+        content: attr(data-groupe);
+        position: absolute;
+        top: -1.25rem;
+        left: .75rem;
+        font-size: .68rem;
+        font-weight: 600;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--mdb-secondary, #9fa6b2);
+        white-space: nowrap;
+    }
+
+    .intervenant-tabs > .nav-tabs > .groupe-debut:not(:first-child) {
+        margin-left: .7rem;
+    }
+
+    .intervenant-tabs > .nav-tabs > .groupe-debut:not(:first-child)::after {
+        content: "";
+        position: absolute;
+        left: -.35rem;
+        top: -1rem;
+        bottom: .5rem;
+        border-left: 1px solid var(--mdb-border-color, #e0e0e0);
+    }
+
+    .intervenant-tabs > .nav-tabs > .onglets-plus {
+        margin-left: auto;
+    }
+
+    .intervenant-tabs > .nav-tabs > .onglets-plus > .dropdown-toggle {
+        background: none;
+    }
+
+    .intervenant-tabs > .nav-tabs > .onglets-plus > .dropdown-toggle.active {
+        color: var(--mdb-danger, #dc4c64);
+    }
+
+    .intervenant-tabs .onglets-plus .dropdown-item.active,
+    .intervenant-tabs .onglets-plus .dropdown-item:active {
+        background-color: #fbe9ec;
+    }
+</style>

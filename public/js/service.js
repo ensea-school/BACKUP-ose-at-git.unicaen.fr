@@ -297,7 +297,10 @@ $.widget("ose.enseignements", {
 
         $("body").on('save-volume-horaire', function (event, popAjax) {
             var serviceId = popAjax.element.data('service');
-            if ($("div .alert-warning", event.div).length ? false : true) { // si aucune erreur n'a été rencontrée
+            // On ne cherche les avertissements que dans le popover, pas dans toute la page
+            // (la page du réalisé contient d'autres .alert-warning : prévu -> réalisé, clôture...)
+            var popEl = popAjax.getPopoverElement();
+            if (!popEl || popEl.find(".alert-warning").length === 0) { // si aucune erreur n'a été rencontrée
                 popAjax.hide();
             }
             that.onAfterSaisie(serviceId);

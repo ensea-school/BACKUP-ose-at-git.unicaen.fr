@@ -58,23 +58,20 @@ class PlafondsViewHelper extends AbstractHtmlElement
 
     public function render(): string
     {
-        $contenu = $this->affichage();
-        if (!empty($contenu)) {
-            $params = [
-                'id' => $this->entity->getId(),
-                'class' => str_replace('\\', '_', get_class($this->entity)),
-                'typeVolumeHoraire' => $this->typeVolumeHoraire->getId(),
-            ];
+        // Le conteneur est toujours rendu, même vide, pour pouvoir être rafraîchi en Ajax
+        // (ex. : saisie du premier service d'un intervenant)
+        $params = [
+            'id' => $this->entity->getId(),
+            'class' => str_replace('\\', '_', get_class($this->entity)),
+            'typeVolumeHoraire' => $this->typeVolumeHoraire->getId(),
+        ];
 
-            $attrs = [
-                'class' => 'plafonds',
-                'data-url' => $this->getView()->url('plafond/plafonds', $params),
-            ];
+        $attrs = [
+            'class' => 'plafonds',
+            'data-url' => $this->getView()->url('plafond/plafonds', $params),
+        ];
 
-            return $this->getView()->tag('div', $attrs)->html($contenu);
-        } else {
-            return '';
-        }
+        return $this->getView()->tag('div', $attrs)->html($this->affichage());
     }
 
 
@@ -85,7 +82,7 @@ class PlafondsViewHelper extends AbstractHtmlElement
 
         $html = $this->getView()->tag('h4')->text('Plafonds');
         foreach ($this->plafonds as $plafond) {
-            if ($plafond->getHeures() > 0) {
+           if ($plafond->getHeures() > 0) {
                 $html .= $this->affichagePlafond($plafond);
                 $aff = true;
             }

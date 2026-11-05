@@ -335,7 +335,18 @@ $.widget("ose.serviceForm", {
             this.getElementElementPedagogiqueListe().selectpicker('val', '');
             this.element.find('#element-externe').show();
         }
+        this.updateSubmit();
         this.updateVolumesHoraires();
+    },
+
+    /* Service hors établissement impossible si l'intervenant n'a pas de structure d'affectation :
+       le bouton d'enregistrement est remplacé par un message */
+    updateSubmit: function () {
+        var message = this.element.find('#externe-sans-structure');
+        var bloque = message.length > 0 && 'service-externe' == this.getInterneExterne();
+
+        message.toggle(bloque);
+        this.getElementSubmit().toggle(!bloque);
     },
 
     updateVolumesHoraires: function () {
@@ -402,6 +413,7 @@ $.widget("ose.serviceForm", {
             that.element.find("#waiting-save-volume-horaire").show();
         });
 
+        this.updateSubmit();
         this.initVolumesHoraires();
     },
 

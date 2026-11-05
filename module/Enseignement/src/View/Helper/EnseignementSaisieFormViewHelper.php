@@ -170,6 +170,16 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
         $res .= '</div>';
         $res .= '<br />';
         $res .= $this->getView()->formRow($this->form->get('submit'));
+        $intervenant = $this->form->getIntervenant() ?? $fservice->getObject()->getIntervenant();
+        if ($fservice->has('interne-externe') && $intervenant && !$intervenant->getStructure()) {
+            // Pas de classe "alert" ici : elle empêcherait la fenêtre de se fermer après un enregistrement en interne
+            // Le conteneur (affiché/masqué en JS) ne doit pas porter de classe d-* : elles sont en !important
+            $res .= '<div id="externe-sans-structure" style="display:none">'
+                . '<div class="text-muted border rounded px-3 py-2 d-inline-block">'
+                . '<i class="fas fa-info-circle text-danger"></i> '
+                . 'Impossible d\'enregistrer un service hors établissement : l\'intervenant n\'a pas de structure d\'affectation.'
+                . '</div></div>';
+        }
         $res .= '<button id="waiting-save-volume-horaire" style="display:none;" class="btn btn-primary" type="button" disabled>';
         $res .= '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
         $res .= 'Veuillez patienter...';

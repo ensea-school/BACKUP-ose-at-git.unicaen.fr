@@ -81,8 +81,14 @@ class PlafondProcessus extends AbstractProcessus
                     $this->getServicePlafond()->calculerDepuisEntite($entity); // on met à jour les TBLs
                 }
 
-            }catch(ConnectionException $e){
-                $this->getEntityManager()->rollback();
+            } catch (ConnectionException $e) {
+                // Commit refusé (ex. : transaction marquée « rollback only » suite à une erreur de calcul
+                // d'un tableau de bord) : on le signale au lieu de faire croire que c'est enregistré
+                if ($this->getEntityManager()->getConnection()->isTransactionActive()) {
+                    $this->getEntityManager()->rollback();
+                }
+                $this->flashMessenger->addErrorMessage("L'enregistrement a échoué : une erreur est survenue lors du calcul des données liées. Aucune modification n'a été enregistrée.");
+                $passed = false;
             }
         } else {
             $this->getEntityManager()->rollback();

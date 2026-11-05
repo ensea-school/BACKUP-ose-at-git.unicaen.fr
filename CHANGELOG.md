@@ -49,6 +49,8 @@ OSE [24.20]
 ## Améliorations
 * Permettre des exports RH pour un intervenant sur les années passées (#68325)
 * Correction pour que la modal de modification d'une ligne de service se ferme après l'enregistrement (#68263)
+* Un service hors établissement ne peut plus être saisi pour un intervenant sans structure d'affectation : il n'était pas enregistré, sans aucun message. Un message remplace désormais le bouton d'enregistrement (#68195)
+
 
 ## Notes de mise à jour
 

@@ -99,7 +99,7 @@ class ReferentielAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity, $privilege = null)
     {
         $role = $this->getRole();
 

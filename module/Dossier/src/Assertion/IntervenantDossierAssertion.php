@@ -57,7 +57,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity, $privilege = null)
     {
         $localPrivs = [
             self::PRIV_VIEW_IDENTITE,

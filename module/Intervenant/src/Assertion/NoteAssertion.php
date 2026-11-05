@@ -22,7 +22,7 @@ class NoteAssertion extends AbstractAssertion
     const PRIV_SUPPRIMER_NOTE = 'intervenant-supprimer-note';
     const PRIV_EDITER_NOTE = 'intervenant-editer-note';
 
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity, $privilege = null)
     {
 
         $localPrivs = [

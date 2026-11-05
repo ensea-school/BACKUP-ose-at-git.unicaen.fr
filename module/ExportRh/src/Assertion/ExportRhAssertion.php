@@ -31,7 +31,7 @@ class ExportRhAssertion extends AbstractAssertion
     }
 
 
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity, $privilege = null)
     {
 
         $role = $this->getRole();

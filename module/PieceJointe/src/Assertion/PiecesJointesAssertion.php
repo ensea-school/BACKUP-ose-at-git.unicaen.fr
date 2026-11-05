@@ -74,7 +74,7 @@ class PiecesJointesAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity, $privilege = null)
     {
         return true;
     }

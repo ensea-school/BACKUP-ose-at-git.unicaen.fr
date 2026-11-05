@@ -18,7 +18,7 @@ use UnicaenPrivilege\Assertion\AbstractAssertion;
 class ModificationServiceDuAssertion extends AbstractAssertion
 {
 
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity(?ResourceInterface $entity, $privilege = null)
     {
         $role = $this->getRole();
         if (!$role instanceof Role) return false;

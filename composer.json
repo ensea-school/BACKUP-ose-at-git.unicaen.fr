@@ -22,7 +22,7 @@
         "datatables.net/datatables.net-bs5": "2.1.8",
         "vakata/jstree"                    : "3.3.17",
 
-        "unicaen/app"                      : "8.0.0",
+        "unicaen/app"                      : "8.0.2",
         "unicaen/authentification"         : "8.0.3",
         "unicaen/privilege"                : "8.0.1",
         "unicaen/utilisateur"              : "8.1.0",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4a9f15a759f83271cf96715d1f50f25",
+    "content-hash": "57f71616f6f3a471c00d0430ce75267d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -768,6 +768,7 @@
                     "type": "tidelift"
                 }
             ],
+            "abandoned": true,
             "time": "2025-01-01T22:12:03+00:00",
             "published-time": "2025-01-01T22:13:20+00:00"
         },
@@ -3877,96 +3878,6 @@
             "published-time": "2025-12-30T11:31:08+00:00"
         },
         {
-            "name": "laminas/laminas-log",
-            "version": "2.17.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-log.git",
-                "reference": "abc93b0c597e5dd55a18d29f0ae3b18c2f0e3f0c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-log/zipball/abc93b0c597e5dd55a18d29f0ae3b18c2f0e3f0c",
-                "reference": "abc93b0c597e5dd55a18d29f0ae3b18c2f0e3f0c",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-servicemanager": "^3.21.0",
-                "laminas/laminas-stdlib": "^3.0",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
-                "psr/log": "^1.1.2"
-            },
-            "conflict": {
-                "zendframework/zend-log": "*"
-            },
-            "provide": {
-                "psr/log-implementation": "1.0.0"
-            },
-            "require-dev": {
-                "ext-dom": "*",
-                "ext-json": "*",
-                "ext-xml": "*",
-                "firephp/firephp-core": "^0.5.3",
-                "laminas/laminas-coding-standard": "~2.3.0",
-                "laminas/laminas-db": "^2.6",
-                "laminas/laminas-escaper": "^2.5",
-                "laminas/laminas-filter": "^2.5",
-                "laminas/laminas-mail": "^2.6.1",
-                "laminas/laminas-validator": "^2.10.1",
-                "mikey179/vfsstream": "^1.6.7",
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9.5.10"
-            },
-            "suggest": {
-                "ext-mongo": "mongo extension to use Mongo writer",
-                "ext-mongodb": "mongodb extension to use MongoDB writer",
-                "laminas/laminas-db": "Laminas\\Db component to use the database log writer",
-                "laminas/laminas-escaper": "Laminas\\Escaper component, for use in the XML log formatter",
-                "laminas/laminas-mail": "Laminas\\Mail component to use the email log writer",
-                "laminas/laminas-validator": "Laminas\\Validator component to block invalid log messages"
-            },
-            "type": "library",
-            "extra": {
-                "laminas": {
-                    "component": "Laminas\\Log",
-                    "config-provider": "Laminas\\Log\\ConfigProvider"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Log\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Robust, composite logger with filtering, formatting, and PSR-3 support",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "laminas",
-                "log",
-                "logging"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-log/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-log/issues",
-                "rss": "https://github.com/laminas/laminas-log/releases.atom",
-                "source": "https://github.com/laminas/laminas-log"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "abandoned": "monolog/monolog",
-            "time": "2024-12-05T15:59:56+00:00",
-            "published-time": "2024-12-05T16:00:50+00:00"
-        },
-        {
             "name": "laminas/laminas-modulemanager",
             "version": "2.19.0",
             "source": {
@@ -5893,30 +5804,30 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.4",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=8.0.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "3.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Psr\\Log\\": "Psr/Log/"
+                    "Psr\\Log\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -5937,10 +5848,10 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/1.1.4"
+                "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
-            "time": "2021-05-03T11:20:27+00:00",
-            "published-time": "2021-05-03T11:22:56+00:00"
+            "time": "2024-09-11T13:17:53+00:00",
+            "published-time": "2024-09-11T13:21:14+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -8182,14 +8093,13 @@
         },
         {
             "name": "unicaen/mail",
-            "version": "7.6.2",
+            "version": "7.6.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/mail.git",
-                "reference": "74606614529466b6bff73729216c3b2a60831695"
+                "reference": "42bd81ab1c0d554915f2019e13d5f2b32ce02b3d"
             },
             "require": {
-                "laminas/laminas-log": "*",
                 "symfony/mailer": "^7",
                 "unicaen/privilege": "^6|^7|^8"
             },
@@ -8203,7 +8113,7 @@
                 ]
             },
             "description": "Module d'envoi de mail",
-            "time": "2026-09-30T14:58:35+00:00"
+            "time": "2026-10-30T09:03:34+00:00"
         },
         {
             "name": "unicaen/open-document",
@@ -13085,7 +12995,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.3"
+        "php": "~8.3.0 || ~8.4.0"
     },
     "platform-dev": {},
     "platform-overrides": {

@@ -50,6 +50,7 @@ return [
         Command\CreerUtilisateurCommand::class       => Command\CreerUtilisateurCommandFactory::class,
         Command\FichiersVersFilesystemCommand::class => Command\FichiersVersFilesystemCommandFactory::class,
         Command\VerifierEspaceDisqueCommand::class   => Command\VerifierEspaceDisqueCommandFactory::class,
+//        Command\ReportSuiviAlternanceCommand::class  => Command\ReportSuiviAlternanceCommandFactory::class,
     ],
 
     'laminas-cli' => [
@@ -73,6 +74,7 @@ return [
             'creer-utilisateur'        => Command\CreerUtilisateurCommand::class,
             'fichiers-vers-filesystem' => Command\FichiersVersFilesystemCommand::class,
             'verifier-espace-disque'   => Command\VerifierEspaceDisqueCommand::class,
+            'ReportSuiviAlternance'    => Command\ReportSuiviAlternanceCommand::class,
         ],
     ],
 ];

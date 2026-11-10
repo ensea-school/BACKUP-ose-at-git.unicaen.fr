@@ -44,7 +44,7 @@
     "snapappointments/bootstrap-select": "1.14.0-beta3",
     "datatables.net/datatables.net-bs5": "2.1.*",
     "vakata/jstree": "3.3.*",
-    "unicaen/framework": "0.9.0",
+    "unicaen/framework": "0.9.1",
     "unicaen/zfc-user": "7.0.0",
     "unicaen/app": "8.0.0",
     "unicaen/authentification": "8.0.0",

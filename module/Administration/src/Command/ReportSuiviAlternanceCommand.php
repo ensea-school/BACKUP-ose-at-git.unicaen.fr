@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Unicaen\BddAdmin\BddAwareTrait;
+use Unicaen\BddAdmin\Table;
 
 class ReportSuiviAlternanceCommand extends Command
 {
@@ -16,7 +17,7 @@ class ReportSuiviAlternanceCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Report des éléments de la source Suivialternance et de leurs chemins pédagogiques de l’année précédente')
+        $this->setDescription('Report des éléments de la source Suivialternance (chemins pédagogiques, effectifs, volumes horaires et centres de coûts) de l’année précédente')
             ->addOption('annee', 'a', InputOption::VALUE_REQUIRED, 'ID de l’année cible');
     }
 
@@ -45,6 +46,9 @@ class ReportSuiviAlternanceCommand extends Command
 
             $elements = $this->bdd->getTable('ELEMENT_PEDAGOGIQUE');
             $chemins = $this->bdd->getTable('CHEMIN_PEDAGOGIQUE');
+            $effectifs = $this->bdd->getTable('EFFECTIFS');
+            $volumes  = $this->bdd->getTable('VOLUME_HORAIRE_ENS');
+            $centresCouts = $this->bdd->getTable('CENTRE_COUT_EP');
             $etapes   = [];
             $sourcesCodesEtapes = [];
             foreach ($this->bdd->getTable('ETAPE')->select(['ANNEE_ID' => $annee, 'HISTO_DESTRUCTION' => null]) as $etape) {
@@ -57,7 +61,7 @@ class ReportSuiviAlternanceCommand extends Command
             }
             $existants = [];
             foreach ($elements->select(['ANNEE_ID' => $annee, 'SOURCE_ID' => $sourceId, 'HISTO_DESTRUCTION' => null]) as $element) {
-                $existants[$element['SOURCE_CODE']] = true;
+                $existants[$element['SOURCE_CODE']] = (int)$element['ID'];
             }
 
             $this->bdd->beginTransaction();
@@ -68,14 +72,23 @@ class ReportSuiviAlternanceCommand extends Command
             $nbExistants = 0;
             $nbElementsIgnores = 0;
             $nbCheminsIgnores = 0;
+            $nbEffectifs = 0;
+            $nbVolumes = 0;
+            $nbCentresCouts = 0;
             foreach ($elements->select(['ANNEE_ID' => $annee - 1, 'SOURCE_ID' => $sourceId, 'HISTO_DESTRUCTION' => null]) as $element) {
                 $nbTotal++;
-                if (isset($existants[$element['SOURCE_CODE']])) {
+                $ancienId   = (int)$element['ID'];
+                $sourceCode = $element['SOURCE_CODE'];
+
+                // Élément déjà reporté : on complète seulement ses effectifs et volumes horaires éventuellement manquants.
+                if (isset($existants[$sourceCode])) {
                     $nbExistants++;
+                    $nbEffectifs += $this->reporterEffectifs($effectifs, $ancienId, $existants[$sourceCode], $sourceCode, $annee);
+                    $nbVolumes   += $this->reporterVolumesHoraires($volumes, $ancienId, $existants[$sourceCode], $sourceCode, $annee);
+                    $nbCentresCouts += $this->reporterCentresCouts($centresCouts, $ancienId, $existants[$sourceCode]);
                     continue;
                 }
 
-                $ancienId            = $element['ID'];
                 $element = $this->preparerCopie($element);
                 $element['ANNEE_ID'] = $annee;
                 try {
@@ -88,7 +101,7 @@ class ReportSuiviAlternanceCommand extends Command
                 // insert() attribue le nouvel ID de séquence directement dans le tableau.
                 $elements->insert($element);
                 $nbElements++;
-                $existants[$element['SOURCE_CODE']] = true;
+                $existants[$sourceCode] = (int)$element['ID'];
 
                 foreach ($chemins->select(['ELEMENT_PEDAGOGIQUE_ID' => $ancienId, 'HISTO_DESTRUCTION' => null]) as $chemin) {
                     $ancienCheminId                   = $chemin['ID'];
@@ -106,11 +119,15 @@ class ReportSuiviAlternanceCommand extends Command
                     $chemins->insert($chemin);
                     $nbChemins++;
                 }
+
+                $nbEffectifs += $this->reporterEffectifs($effectifs, $ancienId, (int)$element['ID'], $sourceCode, $annee);
+                $nbVolumes   += $this->reporterVolumesHoraires($volumes, $ancienId, (int)$element['ID'], $sourceCode, $annee);
+                $nbCentresCouts += $this->reporterCentresCouts($centresCouts, $ancienId, (int)$element['ID']);
             }
             $this->bdd->commitTransaction();
             $transaction = false;
             $anneeSource = $annee - 1;
-            $io->success("Report Suivialternance $anneeSource vers $annee : $nbTotal élément(s) source, $nbElements élément(s) et $nbChemins chemin(s) créé(s), $nbExistants élément(s) déjà présent(s).");
+            $io->success("Report Suivialternance $anneeSource vers $annee : $nbTotal élément(s) source, $nbElements élément(s), $nbChemins chemin(s), $nbEffectifs effectif(s), $nbVolumes volume(s) horaire(s) et $nbCentresCouts centre(s) de coûts créé(s), $nbExistants élément(s) déjà présent(s).");
             if ($nbElementsIgnores || $nbCheminsIgnores) {
                 $io->warning("Sans correspondance d’étape : $nbElementsIgnores élément(s) et $nbCheminsIgnores chemin(s) ignoré(s).");
             }
@@ -122,6 +139,109 @@ class ReportSuiviAlternanceCommand extends Command
             $io->error('Report annulé : ' . $e->getMessage());
             return Command::FAILURE;
         }
+    }
+
+
+
+    /**
+     * Copie les effectifs de l'ancien élément vers le nouveau, s'il n'en a pas déjà.
+     * Code source Suivialternance : "<annee>-<code élément>".
+     */
+    private function reporterEffectifs(Table $effectifs, int $ancienElementId, int $nouvelElementId, string $elementSourceCode, int $annee): int
+    {
+        if ($effectifs->select(['ELEMENT_PEDAGOGIQUE_ID' => $nouvelElementId, 'HISTO_DESTRUCTION' => null])) {
+            return 0;
+        }
+
+        $nb = 0;
+        foreach ($effectifs->select(['ELEMENT_PEDAGOGIQUE_ID' => $ancienElementId, 'HISTO_DESTRUCTION' => null]) as $effectif) {
+            $effectif                           = $this->preparerCopie($effectif);
+            $effectif['ELEMENT_PEDAGOGIQUE_ID'] = $nouvelElementId;
+            $effectif['ANNEE_ID']               = $annee;
+            $effectif['SOURCE_CODE']            = $this->reporterSourceCode($effectif['SOURCE_CODE'], $annee, $annee . '-' . $elementSourceCode);
+            $effectifs->insert($effectif);
+            $nb++;
+        }
+
+        return $nb;
+    }
+
+
+
+    /**
+     * Copie les volumes horaires d'enseignement de l'ancien élément vers le nouveau,
+     * pour les types d'intervention qui n'y sont pas déjà.
+     * Code source Suivialternance : "<annee>_<code élément>_<TYPE INTERVENTION>".
+     */
+    private function reporterVolumesHoraires(Table $volumes, int $ancienElementId, int $nouvelElementId, string $elementSourceCode, int $annee): int
+    {
+        $typesExistants = [];
+        foreach ($volumes->select(['ELEMENT_PEDAGOGIQUE_ID' => $nouvelElementId, 'HISTO_DESTRUCTION' => null]) as $volume) {
+            $typesExistants[$volume['TYPE_INTERVENTION_ID']] = true;
+        }
+
+        $nb = 0;
+        foreach ($volumes->select(['ELEMENT_PEDAGOGIQUE_ID' => $ancienElementId, 'HISTO_DESTRUCTION' => null]) as $volume) {
+            if (isset($typesExistants[$volume['TYPE_INTERVENTION_ID']])) {
+                continue;
+            }
+            $volume                           = $this->preparerCopie($volume);
+            $volume['ELEMENT_PEDAGOGIQUE_ID'] = $nouvelElementId;
+            if (null !== $volume['SOURCE_CODE']) {
+                $volume['SOURCE_CODE'] = $this->reporterSourceCode($volume['SOURCE_CODE'], $annee, $annee . '_' . $volume['SOURCE_CODE']);
+            }
+            $volumes->insert($volume);
+            $typesExistants[$volume['TYPE_INTERVENTION_ID']] = true;
+            $nb++;
+        }
+
+        return $nb;
+    }
+
+
+
+    /**
+     * Copie les centres de coûts de l'ancien élément vers le nouveau, pour les couples
+     * centre de coûts / type d'heures qui n'y sont pas déjà.
+     * Code source construit comme dans ReconductionProcessus et CentreCoutEpService.
+     */
+    private function reporterCentresCouts(Table $centresCouts, int $ancienElementId, int $nouvelElementId): int
+    {
+        $existants = [];
+        foreach ($centresCouts->select(['ELEMENT_PEDAGOGIQUE_ID' => $nouvelElementId, 'HISTO_DESTRUCTION' => null]) as $ccEp) {
+            $existants[$ccEp['CENTRE_COUT_ID'] . '_' . $ccEp['TYPE_HEURES_ID']] = true;
+        }
+
+        $nb = 0;
+        foreach ($centresCouts->select(['ELEMENT_PEDAGOGIQUE_ID' => $ancienElementId, 'HISTO_DESTRUCTION' => null]) as $ccEp) {
+            $cle = $ccEp['CENTRE_COUT_ID'] . '_' . $ccEp['TYPE_HEURES_ID'];
+            if (isset($existants[$cle])) {
+                continue;
+            }
+            $ccEp                           = $this->preparerCopie($ccEp);
+            $ccEp['ELEMENT_PEDAGOGIQUE_ID'] = $nouvelElementId;
+            $ccEp['SOURCE_CODE']            = uniqid($cle . '_' . $nouvelElementId);
+            $centresCouts->insert($ccEp);
+            $existants[$cle] = true;
+            $nb++;
+        }
+
+        return $nb;
+    }
+
+
+
+    /**
+     * Remplace le préfixe d'année précédente du code source par l'année cible, ou à défaut retourne $defaut.
+     */
+    private function reporterSourceCode(?string $sourceCode, int $annee, string $defaut): string
+    {
+        $prefixe = (string)($annee - 1);
+        if (null !== $sourceCode && str_starts_with($sourceCode, $prefixe)) {
+            return $annee . substr($sourceCode, strlen($prefixe));
+        }
+
+        return $defaut;
     }
 
 

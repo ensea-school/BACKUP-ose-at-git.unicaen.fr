@@ -92,10 +92,6 @@ class TransfertParametrageService
      * Applique le paramétrage fourni à l'année sélectionnée et, si $anneesSuivantes, à toutes les années suivantes.
      * Sinon, les années suivantes sont laissées telles qu'elles étaient.
      * Les années passées ne sont jamais modifiées.
-     *
-     * L'import est différentiel : seuls les éléments qui diffèrent sont modifiés, et ils le sont via
-     * l'ORM, comme une saisie à l'écran (historique compris). Tout est fait dans une seule transaction.
-     *
      * @return array{etapes: int, ajoutees: int, modifiees: int, supprimees: int, anneesAlignees: int, anneeFin: ?int, avertissements: string[]}
      */
     public function importerJson(string $json, bool $anneesSuivantes = true): array

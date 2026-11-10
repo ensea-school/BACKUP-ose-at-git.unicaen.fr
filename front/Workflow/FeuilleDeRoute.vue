@@ -22,6 +22,11 @@
                     <span v-if="derniereMaj" class="fdr-maj" title="Heure du dernier calcul de la feuille de route">
                         <i class="far fa-clock"></i> Mise à jour à {{ derniereMaj }}
                     </span>
+                    <button v-if="diagnostic" type="button" class="btn btn-light btn-sm fdr-refresh"
+                            title="Comprendre pourquoi chaque étape est proposée, accessible ou bloquée pour cet intervenant"
+                            @click="diagnosticOuvert = true">
+                        <i class="fas fa-stethoscope"></i> Diagnostic
+                    </button>
                     <button type="button" class="btn btn-light btn-sm fdr-refresh"
                             :disabled="actualisation"
                             title="Recalculer la feuille de route à partir des dernières données saisies"
@@ -32,7 +37,33 @@
                 </div>
             </div>
 
-            <div v-if="feuilleDeRoute && feuilleDeRoute.length" class="fdr-liste">
+            <!-- Calcul en cours : squelette de la feuille de route, surmonté d'un message -->
+            <div v-if="actualisation || chargement" class="fdr-attente" role="status" aria-live="polite">
+                <div class="fdr-squelette" aria-hidden="true">
+                    <div v-for="(largeur, index) in lignesSquelette" :key="index" class="fdr-squelette-etape">
+                        <span class="fdr-squelette-numero"></span>
+                        <span class="fdr-squelette-libelle" :style="{ width: largeur }"></span>
+                        <span class="fdr-squelette-badge"></span>
+                    </div>
+                </div>
+
+                <div class="fdr-attente-carte">
+                    <span class="fdr-attente-icone">
+                        <i class="fas fa-route"></i>
+                    </span>
+                    <div class="fdr-attente-textes">
+                        <div class="fdr-attente-titre">
+                            {{ actualisation ? 'Actualisation en cours' : 'Chargement en cours' }}
+                        </div>
+                        <div class="fdr-attente-texte">
+                            {{ actualisation ? 'Recalcul des étapes à partir des dernières données saisies…' : 'Récupération de la feuille de route…' }}
+                        </div>
+                        <div class="fdr-attente-barre"><span></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-else-if="feuilleDeRoute && feuilleDeRoute.length" class="fdr-liste">
 
                 <div v-for="etape in feuilleDeRoute" :key="etape.code"
                      class="fdr-etape"
@@ -130,16 +161,23 @@
             </div>
         </div>
     </div>
+
+    <DiagnosticFeuilleDeRoute v-if="diagnosticOuvert" :intervenant="intervenant" @fermer="diagnosticOuvert = false"/>
 </template>
 <script setup>
 
 import {computed, defineProps, onMounted, ref} from "vue";
+import DiagnosticFeuilleDeRoute from './DiagnosticFeuilleDeRoute.vue';
 
 const props = defineProps({
     intervenant: {type: Number},
     // Affichage sur toute la largeur disponible (ex. : page d'accueil)
     pleineLargeur: {type: Boolean, default: false},
+    // Bouton de diagnostic (réservé aux personnes qui peuvent consulter le paramétrage du workflow)
+    diagnostic: {type: Boolean, default: false},
 });
+
+const diagnosticOuvert = ref(false);
 
 const feuilleDeRoute = ref([]);
 
@@ -148,6 +186,24 @@ const nbFaites = computed(() => (feuilleDeRoute.value || []).filter(e => e.reali
 const pourcFaites = computed(() => nbEtapes.value ? Math.round(nbFaites.value * 100 / nbEtapes.value) : 0);
 
 const actualisation = ref(false);
+const chargement = ref(true);
+
+// Largeurs des libellés du squelette, variées pour imiter de vraies étapes
+const LARGEURS_SQUELETTE = ['60%', '45%', '70%', '50%', '65%', '40%'];
+
+// Autant de lignes que d'étapes affichées (6 par défaut), pour garder la hauteur de la feuille de route
+const lignesSquelette = computed(() => {
+    const nbLignes = nbEtapes.value || LARGEURS_SQUELETTE.length;
+    const lignes = [];
+    for (let i = 0; i < nbLignes; i++) {
+        lignes.push(LARGEURS_SQUELETTE[i % LARGEURS_SQUELETTE.length]);
+    }
+    return lignes;
+});
+
+// Durée minimale d'affichage du message d'attente, pour éviter un clignotement quand le calcul est très rapide
+const DUREE_MIN_ATTENTE = 2000;
+const attendre = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const derniereMaj = ref(null);
 
 const heureCourante = () => new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'});
@@ -169,6 +225,8 @@ const load = () => {
     ).then(response => {
         feuilleDeRoute.value = response.data;
         derniereMaj.value = heureCourante();
+    }).finally(() => {
+        chargement.value = false;
     });
 };
 
@@ -178,9 +236,12 @@ const refresh = () => {
     }
     actualisation.value = true;
 
-    unicaenVue.axios.get(
-        unicaenVue.url('workflow/feuille-de-route-refresh/:intervenant', {intervenant: props.intervenant})
-    ).then(response => {
+    Promise.all([
+        unicaenVue.axios.get(
+            unicaenVue.url('workflow/feuille-de-route-refresh/:intervenant', {intervenant: props.intervenant})
+        ),
+        attendre(DUREE_MIN_ATTENTE),
+    ]).then(([response]) => {
         if (response?.data) {
             feuilleDeRoute.value = response.data;
             derniereMaj.value = heureCourante();
@@ -330,6 +391,172 @@ onMounted(() => {
 .fdr-refresh:disabled {
     opacity: .7;
     cursor: progress;
+}
+
+/* Attente pendant le calcul : squelette animé + carte de message */
+.fdr-attente {
+    position: relative;
+    margin-bottom: 1rem;
+    animation: fdr-apparition .25s ease-out;
+}
+
+.fdr-squelette {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+.fdr-squelette-etape {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    height: 2.4rem;
+    padding: 0 .8rem;
+    background: #fff;
+    border: 1px solid var(--mdb-border-color, #e0e0e0);
+    border-left: 3px solid #e0e0e0;
+    border-radius: .5em;
+    animation: fdr-pulsation 1.4s ease-in-out infinite;
+}
+
+.fdr-squelette-numero,
+.fdr-squelette-libelle,
+.fdr-squelette-badge {
+    display: block;
+    background: linear-gradient(90deg, #eeeeee 25%, #f7f7f7 50%, #eeeeee 75%);
+    background-size: 200% 100%;
+    animation: fdr-reflet 1.4s linear infinite;
+}
+
+.fdr-squelette-numero {
+    flex: 0 0 auto;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: .35rem;
+}
+
+.fdr-squelette-libelle {
+    height: .7rem;
+    border-radius: 1rem;
+}
+
+.fdr-squelette-badge {
+    flex: 0 0 auto;
+    width: 4.5rem;
+    height: 1.1rem;
+    margin-left: auto;
+    border-radius: 1rem;
+}
+
+.fdr-attente-carte {
+    position: absolute;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    width: min(26rem, calc(100% - 2rem));
+    padding: .9rem 1.1rem;
+    background: #fff;
+    border: 1px solid var(--mdb-border-color, #e0e0e0);
+    border-radius: .6rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .12);
+}
+
+.fdr-attente-icone {
+    position: relative;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background: #dfe7f6;
+    color: var(--mdb-primary, #3b71ca);
+}
+
+/* Anneau tournant autour de l'icône */
+.fdr-attente-icone::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--mdb-primary, #3b71ca);
+    animation: fdr-rotation .9s linear infinite;
+}
+
+.fdr-attente-textes {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.fdr-attente-titre {
+    font-weight: 500;
+    color: var(--mdb-body-color, #4f4f4f);
+}
+
+.fdr-attente-texte {
+    margin-top: .1rem;
+    font-size: .8rem;
+    color: #757575;
+}
+
+/* Barre de progression indéterminée */
+.fdr-attente-barre {
+    position: relative;
+    height: .25rem;
+    margin-top: .55rem;
+    border-radius: 1rem;
+    background: #e0e0e0;
+    overflow: hidden;
+}
+
+.fdr-attente-barre span {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40%;
+    border-radius: 1rem;
+    background: var(--mdb-primary, #3b71ca);
+    animation: fdr-progression 1.3s ease-in-out infinite;
+}
+
+@keyframes fdr-apparition {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fdr-pulsation {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .55; }
+}
+
+@keyframes fdr-reflet {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+}
+
+@keyframes fdr-rotation {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fdr-progression {
+    from { left: -40%; }
+    to   { left: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fdr-squelette-etape,
+    .fdr-squelette-numero,
+    .fdr-squelette-libelle,
+    .fdr-squelette-badge,
+    .fdr-attente-barre span,
+    .fdr-attente-icone::after {
+        animation: none;
+    }
 }
 
 .fdr-liste {

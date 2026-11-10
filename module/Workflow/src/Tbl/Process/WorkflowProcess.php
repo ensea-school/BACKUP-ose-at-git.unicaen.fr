@@ -30,6 +30,13 @@ class WorkflowProcess implements ProcessInterface
 {
     use CacheContainerTrait;
 
+    // Résultat de l'évaluation d'une dépendance, pour le diagnostic de la feuille de route
+    const DEPENDANCE_INACTIVE                = 'inactive';
+    const DEPENDANCE_CLOTURE_NON_REQUISE     = 'cloture-non-requise';
+    const DEPENDANCE_AUTRE_TYPE_INTERVENANT  = 'autre-type-intervenant';
+    const DEPENDANCE_PRECEDANTE_ABSENTE      = 'precedante-absente';
+    const DEPENDANCE_EVALUEE                 = 'evaluee';
+
     /**
      * @var array|IntervenantEtape[][]
      */
@@ -52,16 +59,47 @@ class WorkflowProcess implements ProcessInterface
 
 
     /**
-     * @param Intervenant $intervenant
-     * @return IntervenantEtape[]
-     * @throws \Exception
+     * Recalcule en mémoire (sans rien enregistrer) le workflow d'un intervenant, en conservant le détail
+     * de chaque décision : étapes activées par le statut et évaluation de chaque dépendance.
+     *
+     * @return array{workflow: IntervenantEtape[], dependances: array, sansDonnees: array<string,bool>, activation: array<string,bool>, exportRhActif: bool}
      */
-    public function debugTrace(Intervenant $intervenant): array
+    public function diagnostiquer(Intervenant $intervenant): array
     {
         $this->load(['intervenant_id' => $intervenant->getId()]);
-        $this->calculDependances($this->workflows[$intervenant->getId()]);
+        $workflow = $this->workflows[$intervenant->getId()] ?? [];
 
-        return $this->workflows[$intervenant->getId()];
+        $this->traitementExportRh($workflow);
+
+        // Avant les dépendances, une étape est non atteignable uniquement si aucune donnée source ne l'alimente
+        $sansDonnees = [];
+        foreach ($workflow as $code => $etape) {
+            $sansDonnees[$code] = !array_filter($etape->structures, fn(IntervenantEtapeStructure $s) => $s->atteignable);
+        }
+
+        $trace = [];
+        $this->calculDependances($workflow, $trace);
+
+        // Étapes activées par le statut de l'intervenant, y compris celles qui n'apparaissent pas dans son workflow
+        $sql = "
+        SELECT e.code etape_code, CASE " . $this->sqlActivationEtapes() . " END actif
+        FROM intervenant i
+          JOIN statut si ON si.id = i.statut_id
+          JOIN workflow_etape e ON e.annee_id = i.annee_id AND e.histo_destruction IS NULL
+        WHERE i.id = :intervenant";
+        $activation = [];
+        foreach ($this->bdd->select($sql, ['intervenant' => $intervenant->getId()]) as $d) {
+            mpg_lower($d);
+            $activation[$d['etape_code']] = (bool)$d['actif'];
+        }
+
+        return [
+            'workflow'      => $workflow,
+            'dependances'   => $trace,
+            'sansDonnees'   => $sansDonnees,
+            'activation'    => $activation,
+            'exportRhActif' => $this->exportRhEnabled,
+        ];
     }
 
 
@@ -96,29 +134,37 @@ class WorkflowProcess implements ProcessInterface
 
 
 
-    protected function calculDependances(array &$workflow): void
+    /**
+     * @param array|null $trace si fourni, reçoit le détail de l'évaluation de chaque dépendance (diagnostic)
+     */
+    protected function calculDependances(array &$workflow, ?array &$trace = null): void
     {
         foreach ($workflow as $etapeCode => $etape) {
             $dependances = $etape->etape->getDependances();
             foreach ($dependances as $dependance) {
                 if (!$dependance->isActive()) {
                     // La dépendance est inactive => on passe
+                    $this->tracer($trace, $etapeCode, $dependance, self::DEPENDANCE_INACTIVE);
                     continue;
                 }
                 $isClotureDependance = $dependance->getEtapePrecedante()->getCode() === WorkflowEtape::CLOTURE_REALISE;
                 if ($isClotureDependance && !$etape->cloture) {
                     // La clôture est requise par le statut, pas par le type d'intervenant.
+                    $this->tracer($trace, $etapeCode, $dependance, self::DEPENDANCE_CLOTURE_NON_REQUISE);
                     continue;
                 }
                 if (!$isClotureDependance && $dependance->getTypeIntervenant() && $etape->typeIntervenantId !== $dependance->getTypeIntervenant()->getId()) {
                     // La dépendance est relative à un autre type d'intervenant
+                    $this->tracer($trace, $etapeCode, $dependance, self::DEPENDANCE_AUTRE_TYPE_INTERVENANT);
                     continue;
                 }
                 $etapePrec = $workflow[$dependance->getEtapePrecedante()->getCode()] ?? null;
                 if (!$etapePrec) {
                     // Le test n'est pas pertinent => l'étape précédente n'existe pas
+                    $this->tracer($trace, $etapeCode, $dependance, self::DEPENDANCE_PRECEDANTE_ABSENTE);
                     continue;
                 }
+                $structuresTrace = [];
                 foreach ($etape->structures as $structure) {
                     $precStructures = $etapePrec->structures;
                     foreach ($precStructures as $strId => $precStructure) {
@@ -132,9 +178,21 @@ class WorkflowProcess implements ProcessInterface
                         $structure->atteignable         = false;
                         $structure->whyNonAtteignable[] = $etapePrec->etape->getDescNonFranchie();
                     }
+                    $structuresTrace[$structure->structure] = ['ok' => $isOk, 'precedantes' => $precStructures];
                 }
+                $this->tracer($trace, $etapeCode, $dependance, self::DEPENDANCE_EVALUEE, $structuresTrace);
             }
         }
+    }
+
+
+
+    private function tracer(?array &$trace, string $etapeCode, WorkflowEtapeDependance $dependance, string $statut, array $structures = []): void
+    {
+        if (null === $trace) {
+            return;
+        }
+        $trace[$etapeCode][] = ['dependance' => $dependance, 'statut' => $statut, 'structures' => $structures];
     }
 
 
@@ -357,14 +415,20 @@ class WorkflowProcess implements ProcessInterface
 
 
 
-    private function sqlActivationEtapes(): string
+    /**
+     * Règles d'activation des étapes en fonction du paramétrage du statut de l'intervenant.
+     *
+     * @return array<array{etapes: string[], sql: string, libelle: string}>
+     */
+    public function reglesActivation(): array
     {
-        $tests = [
+        return [
             // Candidatures, missions, indemnités fin contrat
             [
                 'etapes' => [WorkflowEtape::CANDIDATURE_SAISIE,
                              WorkflowEtape::CANDIDATURE_VALIDATION],
-                'sql'    => 'si.offre_emploi_postuler',
+                'sql'     => 'si.offre_emploi_postuler',
+                'libelle' => 'Postuler à une offre d\'emploi',
             ],
             [
                 'etapes' => [
@@ -373,11 +437,13 @@ class WorkflowProcess implements ProcessInterface
                     WorkflowEtape::MISSION_SAISIE_REALISE,
                     WorkflowEtape::MISSION_VALIDATION_REALISE,
                 ],
-                'sql'    => 'si.mission',
+                'sql'     => 'si.mission',
+                'libelle' => 'Missions : visualisation/modification de mission',
             ],
             [
                 'etapes' => [WorkflowEtape::MISSION_PRIME],
-                'sql'    => 'si.mission_indemnitees',
+                'sql'     => 'si.mission_indemnitees',
+                'libelle' => 'Gestion des indemnités de fin de contrat',
             ],
 
 
@@ -385,7 +451,7 @@ class WorkflowProcess implements ProcessInterface
             [
                 'etapes' => [WorkflowEtape::DONNEES_PERSO_SAISIE,
                              WorkflowEtape::DONNEES_PERSO_VALIDATION],
-                'sql'    => 'CASE WHEN si.dossier = 1 AND (
+                'sql'     => 'CASE WHEN si.dossier = 1 AND (
      si.dossier_statut = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . ' 
   OR si.dossier_identite_comp = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
   OR si.dossier_contact = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
@@ -399,11 +465,12 @@ class WorkflowProcess implements ProcessInterface
   OR dossier_autre_4 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
   OR dossier_autre_5 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES . '
   ) THEN 1 ELSE 0 END',
+                'libelle' => 'Données personnelles activées, avec au moins une rubrique demandée avant le recrutement',
             ],
             [
                 'etapes' => [WorkflowEtape::DONNEES_PERSO_COMPL_SAISIE,
                              WorkflowEtape::DONNEES_PERSO_COMPL_VALIDATION],
-                'sql'    => 'CASE WHEN si.dossier = 1 AND (
+                'sql'     => 'CASE WHEN si.dossier = 1 AND (
      si.dossier_statut = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . ' 
   OR si.dossier_identite_comp = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
   OR si.dossier_contact = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
@@ -417,6 +484,7 @@ class WorkflowProcess implements ProcessInterface
   OR dossier_autre_4 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
   OR dossier_autre_5 = ' . Statut::DONNEES_PERSONNELLES_DEMANDEES_POST_RECRUTEMENT . '
   ) THEN 1 ELSE 0 END',
+                'libelle' => 'Données personnelles activées, avec au moins une rubrique demandée après le recrutement',
             ],
 
 
@@ -424,37 +492,43 @@ class WorkflowProcess implements ProcessInterface
             [
                 'etapes' => [WorkflowEtape::PJ_SAISIE,
                              WorkflowEtape::PJ_VALIDATION],
-                'sql'    => "CASE
+                'sql'     => "CASE
     WHEN EXISTS(
     SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id AND si.pj_active = 1 AND tpjs.demandee_apres_recrutement = 0
   ) THEN 1 ELSE 0 END",
+                'libelle' => 'Pièces justificatives activées, avec au moins une pièce demandée avant le recrutement',
             ],
             [
                 'etapes' => [WorkflowEtape::PJ_COMPL_SAISIE,
                              WorkflowEtape::PJ_COMPL_VALIDATION],
-                'sql'    => "CASE
+                'sql'     => "CASE
     WHEN EXISTS(
     SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id AND si.pj_active = 1 AND tpjs.demandee_apres_recrutement = 1
   ) THEN si.pj_active ELSE 0 END",
+                'libelle' => 'Pièces justificatives activées, avec au moins une pièce demandée après le recrutement',
             ],
 
 
             // Agréments, contrat, export RH
             [
                 'etapes' => [WorkflowEtape::CONSEIL_RESTREINT],
-                'sql'    => 'si.conseil_restreint',
+                'sql'     => 'si.conseil_restreint',
+                'libelle' => 'Conseil restreint',
             ],
             [
                 'etapes' => [WorkflowEtape::CONSEIL_ACADEMIQUE],
-                'sql'    => 'si.conseil_aca',
+                'sql'     => 'si.conseil_aca',
+                'libelle' => 'Conseil académique',
             ],
             [
                 'etapes' => [WorkflowEtape::CONTRAT],
-                'sql'    => 'si.contrat',
+                'sql'     => 'si.contrat',
+                'libelle' => 'Contrat',
             ],
             [
                 'etapes' => [WorkflowEtape::EXPORT_RH],
-                'sql'    => 'si.export_rh',
+                'sql'     => 'si.export_rh',
+                'libelle' => 'Export vers le logiciel RH',
             ],
 
 
@@ -462,12 +536,14 @@ class WorkflowProcess implements ProcessInterface
             [
                 'etapes' => [WorkflowEtape::ENSEIGNEMENT_SAISIE,
                              WorkflowEtape::ENSEIGNEMENT_VALIDATION],
-                'sql'    => 'si.service_prevu',
+                'sql'     => 'si.service_prevu',
+                'libelle' => 'Enseignements : prévisionnel',
             ],
             [
                 'etapes' => [WorkflowEtape::ENSEIGNEMENT_SAISIE_REALISE,
                              WorkflowEtape::ENSEIGNEMENT_VALIDATION_REALISE],
-                'sql'    => 'si.service_realise',
+                'sql'     => 'si.service_realise',
+                'libelle' => 'Enseignements : réalisé',
             ],
 
 
@@ -475,26 +551,37 @@ class WorkflowProcess implements ProcessInterface
             [
                 'etapes' => [WorkflowEtape::REFERENTIEL_SAISIE,
                              WorkflowEtape::REFERENTIEL_VALIDATION],
-                'sql'    => 'si.referentiel_prevu',
+                'sql'     => 'si.referentiel_prevu',
+                'libelle' => 'Référentiel : prévisionnel',
             ],
             [
                 'etapes' => [WorkflowEtape::REFERENTIEL_SAISIE_REALISE,
                              WorkflowEtape::REFERENTIEL_VALIDATION_REALISE],
-                'sql'    => 'si.referentiel_realise',
+                'sql'     => 'si.referentiel_realise',
+                'libelle' => 'Référentiel : réalisé',
             ],
 
 
             // Clôture & paiements
             [
                 'etapes' => [WorkflowEtape::CLOTURE_REALISE],
-                'sql'    => 'si.cloture',
+                'sql'     => 'si.cloture',
+                'libelle' => 'Clôture du service réalisé',
             ],
             [
                 'etapes' => [WorkflowEtape::DEMANDE_MEP,
                              WorkflowEtape::SAISIE_MEP],
-                'sql'    => 'si.paiement',
+                'sql'     => 'si.paiement',
+                'libelle' => 'Paiement',
             ],
         ];
+    }
+
+
+
+    private function sqlActivationEtapes(): string
+    {
+        $tests = $this->reglesActivation();
 
 
         $result = "";

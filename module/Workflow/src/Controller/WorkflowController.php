@@ -7,6 +7,8 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
+use Workflow\Service\DiagnosticFeuilleDeRouteServiceAwareTrait;
+use Workflow\Service\EtatLieuxIntervenantServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -15,6 +17,8 @@ class WorkflowController extends AbstractController
     use ContextServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use TableauBordServiceAwareTrait;
+    use DiagnosticFeuilleDeRouteServiceAwareTrait;
+    use EtatLieuxIntervenantServiceAwareTrait;
 
 
     public function calculerToutAction(): array
@@ -96,6 +100,49 @@ class WorkflowController extends AbstractController
         }
 
         return $this->feuilleDeRouteDataAction();
+    }
+
+
+
+    public function feuilleDeRouteDiagnosticAction(): AxiosModel
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        try {
+            $diagnostic = $this->getServiceDiagnosticFeuilleDeRoute()->diagnostiquer($intervenant);
+        } catch (\Throwable $e) {
+            $this->flashMessenger()->addErrorMessage('Le diagnostic n\'a pas pu être établi : ' . htmlspecialchars($this->translate($e)));
+            $diagnostic = null;
+        }
+
+        return new AxiosModel($diagnostic);
+    }
+
+
+
+    public function feuilleDeRouteEtatLieuxAction()
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $service     = $this->getServiceEtatLieuxIntervenant();
+
+        try {
+            $pdf = $service->genererPdf($intervenant);
+        } catch (\Throwable $e) {
+            $this->flashMessenger()->addErrorMessage('L\'état des lieux n\'a pas pu être généré : ' . htmlspecialchars($this->translate($e)));
+
+            return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
+        }
+
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $service->getNomFichier($intervenant) . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Pragma: no-cache');
+        header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        echo $pdf;
+        die();
     }
 
 

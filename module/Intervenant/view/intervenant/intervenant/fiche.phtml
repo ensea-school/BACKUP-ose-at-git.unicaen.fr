@@ -1,4 +1,7 @@
 <?php
+
+use Application\Provider\Privileges;
+
 /* @var  $this \Application\View\Renderer\PhpRenderer */
 /* @var $intervenant \Intervenant\Entity\Db\Intervenant */
 
@@ -14,4 +17,6 @@ echo $this->vue('workflow/feuille-de-route', [
     'intervenant'   => $intervenant->getId(),
     'urlRefresh'    => $urlRefresh,
     'pleineLargeur' => true,
+    // Diagnostic réservé aux personnes qui peuvent consulter le paramétrage du workflow
+    'diagnostic'    => $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_VISUALISATION)),
 ]);

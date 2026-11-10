@@ -23,6 +23,18 @@ return [
                     'action'     => 'feuilleDeRouteRefresh',
                     'privileges' => Privileges::INTERVENANT_FICHE,
                 ],
+                'feuille-de-route-diagnostic' => [
+                    'route'      => '/feuille-de-route-diagnostic/:intervenant',
+                    'controller' => Controller\WorkflowController::class,
+                    'action'     => 'feuilleDeRouteDiagnostic',
+                    'privileges' => Privileges::WORKFLOW_DEPENDANCES_VISUALISATION,
+                ],
+                'feuille-de-route-etat-lieux' => [
+                    'route'      => '/feuille-de-route-etat-lieux/:intervenant',
+                    'controller' => Controller\WorkflowController::class,
+                    'action'     => 'feuilleDeRouteEtatLieux',
+                    'privileges' => Privileges::WORKFLOW_DEPENDANCES_VISUALISATION,
+                ],
                 'feuille-de-route-nav'     => [
                     'route'      => '/feuille-de-route-nav/:intervenant',
                     'controller' => Controller\WorkflowController::class,
@@ -38,6 +50,8 @@ return [
     ],
 
     'services' => [
-        Service\WorkflowService::class       => Service\WorkflowServiceFactory::class,
+        Service\WorkflowService::class                 => Service\WorkflowServiceFactory::class,
+        Service\DiagnosticFeuilleDeRouteService::class => Service\DiagnosticFeuilleDeRouteServiceFactory::class,
+        Service\EtatLieuxIntervenantService::class     => Service\EtatLieuxIntervenantServiceFactory::class,
     ],
 ];

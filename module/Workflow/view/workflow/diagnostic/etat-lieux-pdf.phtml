@@ -1,0 +1,251 @@
+<?php
+
+use Workflow\Service\DiagnosticFeuilleDeRouteService as Diag;
+
+/* @var $etat array */
+
+$h = fn(mixed $texte): string => $this->escapeHtml((string)$texte);
+
+$d           = $etat['diagnostic'];
+$i           = $d['intervenant'];
+$sections    = $etat['sections'];
+$parametrage = $etat['parametrage'];
+
+$compter = fn(callable $filtre): int => count(array_filter($d['etapes'], $filtre));
+$stats   = [
+    'prevues'    => $compter(fn($e) => $e['activation']['prevue']),
+    'terminees'  => $compter(fn($e) => $e['etat'] === Diag::ETAT_FRANCHIE),
+    'bloquees'   => $compter(fn($e) => $e['etat'] === Diag::ETAT_BLOQUEE),
+    'alertes'    => $compter(fn($e) => (bool)$e['alerte']),
+    'masquees'   => $compter(fn($e) => $e['activation']['prevue'] && $e['visibilite'] && !$e['visibilite']['visible']),
+];
+
+$classesEtat = [
+    Diag::ETAT_FRANCHIE   => 'etat-franchie',
+    Diag::ETAT_EN_COURS   => 'etat-en-cours',
+    Diag::ETAT_A_FAIRE    => 'etat-a-faire',
+    Diag::ETAT_BLOQUEE    => 'etat-bloquee',
+    Diag::ETAT_NON_PREVUE => 'etat-non-prevue',
+    Diag::ETAT_DESACTIVEE => 'etat-non-prevue',
+];
+$symboles = [
+    Diag::CONDITION_REMPLIE     => ['✔', 'ok'],
+    Diag::CONDITION_NON_REMPLIE => ['✘', 'ko'],
+    Diag::CONDITION_PARTIELLE   => ['◐', 'partiel'],
+    Diag::CONDITION_IGNOREE     => ['–', 'ignore'],
+];
+
+$tableau = function (array $section) use ($h): string {
+    $html = '<h2>' . $h($section['titre']) . '</h2>';
+    if (isset($section['erreur'])) {
+        return $html . '<p class="erreur">Information indisponible : ' . $h($section['erreur']) . '</p>';
+    }
+    if (empty($section['lignes'])) {
+        return $html . '<p class="note">' . $h($section['vide'] ?? 'Aucune donnée.') . '</p>';
+    }
+    if (!empty($section['note'])) {
+        $html .= '<p class="note">' . $h($section['note']) . '</p>';
+    }
+    $html .= '<table><tr>';
+    foreach ($section['colonnes'] as $colonne) {
+        $html .= '<th>' . $h($colonne) . '</th>';
+    }
+    $html .= '</tr>';
+    foreach ($section['lignes'] as $ligne) {
+        $html .= '<tr>';
+        foreach ($ligne as $n => $cellule) {
+            $html .= '<td' . ($n === 0 ? ' class="libelle"' : '') . '>' . $h($cellule) . '</td>';
+        }
+        $html .= '</tr>';
+    }
+
+    return $html . '</table>';
+};
+
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page { margin: 1.3cm 1.4cm 1.5cm; }
+        body { font-family: "DejaVu Sans", sans-serif; font-size: 8pt; color: #4f4f4f; }
+        h1 { margin: 0; font-size: 20pt; font-weight: normal; color: #3b71ca; }
+        h2 { margin: 12pt 0 3pt; font-size: 11pt; color: #3b71ca; page-break-after: avoid; }
+        h3 { margin: 0; font-size: 8.5pt; }
+        p { margin: 0 0 1.5pt; }
+        table { width: 100%; border-collapse: collapse; margin: 3pt 0 6pt; }
+        th { padding: 2.5pt 3pt; background: #3b71ca; color: #fff; text-align: left; font-weight: normal; }
+        td { padding: 2.5pt 3pt; border-bottom: .5pt solid #e0e0e0; vertical-align: top; }
+        tr { page-break-inside: avoid; }
+        .note { color: #757575; font-size: 7pt; }
+        .sous-titre { color: #757575; font-size: 10pt; margin-bottom: 8pt; }
+        .libelle { font-weight: bold; }
+        .erreur { background: #fbe7e9; color: #8a2232; padding: 3pt; }
+        .encart { padding: 4pt 6pt; margin: 4pt 0; border-left: 3pt solid; }
+        .encart-ok { background: #e7f6ec; border-color: #14a44d; color: #0d6832; }
+        .encart-attention { background: #fdf5e6; border-color: #e4a11b; color: #73510d; }
+        .encart-alerte { background: #fbe7e9; border-color: #dc4c64; color: #8a2232; }
+        .stats td { border: 0; background: #f5f7fb; text-align: center; color: #757575; }
+        .stats strong { display: block; font-size: 15pt; font-weight: normal; color: #3b71ca; }
+        .etape { margin: 5pt 0; padding: 3pt 5pt; border: .5pt solid #e0e0e0; border-left: 3pt solid #3b71ca; page-break-inside: avoid; }
+        .etat-franchie { border-left-color: #14a44d; }
+        .etat-en-cours { border-left-color: #e4a11b; }
+        .etat-bloquee { border-left-color: #9fa6b2; }
+        .etat-non-prevue { border-left-color: #e0e0e0; color: #9e9e9e; }
+        .etat { float: right; font-size: 7pt; padding: 0 4pt; border-radius: 3pt; background: #eeeeee; }
+        .etat-franchie .etat { background: #d7f0df; color: #0d6832; }
+        .etat-en-cours .etat { background: #fbebc6; color: #73510d; }
+        .etat-a-faire .etat { background: #dfe7f6; color: #2c58a0; }
+        .etat-bloquee .etat { background: #e6e7e9; color: #40464f; }
+        .resume { color: #616161; }
+        .condition { margin: 1.5pt 0 0 8pt; font-size: 7.5pt; }
+        .ok { color: #14a44d; } .ko { color: #dc4c64; } .partiel { color: #e4a11b; } .ignore { color: #9e9e9e; }
+        .detail { color: #757575; font-size: 7pt; margin-left: 8pt; }
+        .saut { page-break-before: always; }
+        .pied { position: fixed; bottom: -.9cm; left: 0; right: 0; text-align: center; font-size: 7pt; color: #757575; }
+        .page:after { content: counter(page); }
+    </style>
+</head>
+<body>
+
+<div class="pied">
+    OSE <?= $h($etat['version']) ?> · État des lieux de <?= $h($i['nom']) ?> · <?= $h($i['annee']) ?> · <?= $h($d['date']) ?> · Page <span class="page"></span>
+</div>
+
+<h1>État des lieux de l'intervenant</h1>
+<p class="sous-titre">Feuille de route, paramétrage et données — document à joindre à une demande d'assistance</p>
+
+<table>
+    <tr>
+        <td class="libelle" style="width: 17%">Intervenant</td>
+        <td style="width: 33%"><?= $h($i['nom']) ?></td>
+        <td class="libelle" style="width: 17%">Année universitaire</td>
+        <td style="width: 33%"><?= $h($i['annee']) ?></td>
+    </tr>
+    <tr>
+        <td class="libelle">Statut</td>
+        <td><?= $h($i['statut']) ?></td>
+        <td class="libelle">Type d'intervenant</td>
+        <td><?= $h($i['typeIntervenant']) ?></td>
+    </tr>
+    <tr>
+        <td class="libelle">Établi le</td>
+        <td><?= $h($d['date']) ?></td>
+        <td class="libelle">Par</td>
+        <td><?= $h(implode(' — ', array_filter([$d['utilisateur']['nom'], $d['utilisateur']['role'], $d['utilisateur']['structure']]))) ?></td>
+    </tr>
+    <tr>
+        <td class="libelle">Version de OSE</td>
+        <td colspan="3"><?= $h($etat['version']) ?></td>
+    </tr>
+</table>
+
+<table class="stats">
+    <tr>
+        <td><strong><?= $stats['prevues'] ?></strong>étapes prévues</td>
+        <td><strong><?= $stats['terminees'] ?></strong>terminées</td>
+        <td><strong><?= $stats['bloquees'] ?></strong>bloquées</td>
+        <td><strong><?= $stats['alertes'] ?></strong>incohérences</td>
+        <td><strong><?= $stats['masquees'] ?></strong>masquées pour l'auteur</td>
+    </tr>
+</table>
+
+<?php if ($d['aJour']): ?>
+    <div class="encart encart-ok">La feuille de route affichée est à jour avec les données et le paramétrage actuels.</div>
+<?php else: ?>
+    <div class="encart encart-attention">
+        <strong>La feuille de route affichée n'est pas à jour</strong> : le recalcul donne un résultat différent pour
+        <?= $h(implode(', ', $d['ecarts'])) ?>. Le diagnostic ci-dessous correspond au recalcul.
+    </div>
+<?php endif; ?>
+
+<h2>1. Feuille de route, étape par étape</h2>
+<p class="note">
+    Pour chaque étape du workflow : pourquoi elle est prévue (statut), l'évaluation de chacune de ses conditions
+    (✔ remplie, ✘ non remplie, ◐ remplie pour une partie des composantes, – ignorée) et l'avancement par composante.
+</p>
+
+<?php foreach ($d['etapes'] as $e): ?>
+    <div class="etape <?= $classesEtat[$e['etat']] ?>">
+        <span class="etat"><?= $h($e['etatLibelle']) ?><?= $e['courante'] ? ' · étape en cours' : '' ?></span>
+        <h3><?= (int)$e['ordre'] ?>. <?= $h($e['libelle']) ?></h3>
+        <p class="resume"><?= $h($e['resume']) ?></p>
+        <?php if ($e['alerte']): ?>
+            <div class="encart encart-alerte"><?= $h($e['alerte']) ?></div>
+        <?php endif; ?>
+        <?php if ($e['activation']['prevue']): ?>
+            <p class="detail"><?= $h($e['activation']['texte']) ?></p>
+        <?php endif; ?>
+        <?php if ($e['visibilite'] && !$e['visibilite']['visible']): ?>
+            <p class="detail">Masquée dans la feuille de route de l'auteur du document : <?= $h(lcfirst($e['visibilite']['texte'])) ?></p>
+        <?php endif; ?>
+        <?php foreach ($e['conditions'] as $c): [$symbole, $classe] = $symboles[$c['resultat']]; ?>
+            <p class="condition">
+                <span class="<?= $classe ?>"><?= $symbole ?></span>
+                Requiert « <?= $h($c['etapeRequise']) ?> » <span class="note">(<?= $h($c['regle']) ?>)</span> :
+                <span class="<?= $classe ?>"><?= $h($c['texte']) ?></span>
+            </p>
+        <?php endforeach; ?>
+        <?php if (count($e['structures']) > 1 || ($e['structures'] && $e['etat'] === Diag::ETAT_EN_COURS)): ?>
+            <p class="detail">
+                Avancement :
+                <?= $h(implode(' · ', array_map(fn($s) => $s['libelle'] . ' ' . $s['pourc'] . ' %' . ($s['atteignable'] ? '' : ' (bloquée)'), $e['structures']))) ?>
+            </p>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
+
+<div class="saut"></div>
+<h1 style="font-size: 15pt">2. Paramétrage et données de l'intervenant</h1>
+
+<?= $tableau($sections['identite']) ?>
+<?= $tableau($sections['statut']) ?>
+<?= $tableau($sections['dossier']) ?>
+<?= $tableau($sections['pj']) ?>
+<?= $tableau($sections['service']) ?>
+<?= $tableau($sections['referentiel']) ?>
+<?= $tableau($sections['agrement']) ?>
+<?= $tableau($sections['contrat']) ?>
+<?= $tableau($sections['cloture']) ?>
+<?= $tableau($sections['paiement']) ?>
+
+<h2>3. Paramétrage du workflow de l'établissement</h2>
+<?php if (isset($parametrage['erreur'])): ?>
+    <p class="erreur">Information indisponible : <?= $h($parametrage['erreur']) ?></p>
+<?php else: ?>
+    <p class="note">
+        Écarts au paramétrage standard de OSE et incohérences, limités aux étapes prévues pour cet intervenant
+        (<?= (int)$parametrage['total'] ?> écart(s) au total sur l'ensemble du workflow).
+    </p>
+    <?php if ($parametrage['anomalies']): ?>
+        <table>
+            <tr><th style="width: 12%">Niveau</th><th style="width: 30%">Étape</th><th>Incohérence</th></tr>
+            <?php foreach ($parametrage['anomalies'] as $a): ?>
+                <tr>
+                    <td class="<?= $a['niveau'] === 'Erreur' ? 'ko' : 'partiel' ?>"><?= $h($a['niveau']) ?></td>
+                    <td><?= (int)$a['numero'] ?>. <?= $h($a['etape']) ?></td>
+                    <td><?= $h($a['constat']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
+    <?php if ($parametrage['ecarts']): ?>
+        <table>
+            <tr><th style="width: 28%">Étape</th><th style="width: 22%">Élément</th><th style="width: 25%">Standard</th><th>Paramétrage actuel</th></tr>
+            <?php foreach ($parametrage['ecarts'] as $ecart): ?>
+                <tr>
+                    <td><?= (int)$ecart['numero'] ?>. <?= $h($ecart['etape']) ?></td>
+                    <td><?= $h($ecart['element']) ?></td>
+                    <td><?= $h($ecart['standard']) ?></td>
+                    <td><?= $h($ecart['actuel']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php elseif (!$parametrage['anomalies']): ?>
+        <p>Les étapes concernées par cet intervenant sont paramétrées comme le standard de OSE.</p>
+    <?php endif; ?>
+<?php endif; ?>
+
+</body>
+</html>

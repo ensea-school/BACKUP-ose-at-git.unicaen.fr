@@ -249,7 +249,7 @@ class WorkflowEtape implements ParametreEntityInterface
 
     public function removeDependance(WorkflowEtapeDependance $dependance): WorkflowEtape
     {
-        $this->dependances->remove($dependance);
+        $this->dependances->removeElement($dependance);
         return $this;
     }
 

@@ -1,18 +1,18 @@
 {
-  "_vendor-CI6MOOlT.js": {
-    "file": "assets/vendor-CI6MOOlT.js",
+  "_vendor-BXrANCv1.js": {
+    "file": "assets/vendor-BXrANCv1.js",
     "name": "vendor"
   },
   "main.js": {
-    "file": "assets/main-BWke9pxS.js",
+    "file": "assets/main-DgnAbcnw.js",
     "name": "main",
     "src": "main.js",
     "isEntry": true,
     "imports": [
-      "_vendor-CI6MOOlT.js"
+      "_vendor-BXrANCv1.js"
     ],
     "css": [
-      "assets/main-C081AUsz.css"
+      "assets/main-Cy-0EtWb.css"
     ]
   }
 }

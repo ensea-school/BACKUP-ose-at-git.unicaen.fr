@@ -37,7 +37,7 @@ OSE [24.20]
 
 * :warning: **Attention** : Le workflow a été réinitialisé, vous devrez le réadpter à vos besoins (Administration/Workflow).
 
-* Compatible avec les versions 8.2, 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
+* Compatible avec les versions 8.3 et 8.4 de PHP. Vous pourrez mettre à jour OSE, puis monter en PHP8.4 après.
 
 * Pensez à installer l'extention php calendar si ce n'est pas déjà le cas.
 
@@ -48,10 +48,13 @@ OSE [24.20]
 
 ## Améliorations
 * Permettre des exports RH pour un intervenant sur les années passées (#68325)
+* Correction pour que la modal de modification d'une ligne de service se ferme après l'enregistrement (#68263)
+* Un service hors établissement ne peut plus être saisi pour un intervenant sans structure d'affectation : il n'était pas enregistré, sans aucun message. Un message remplace désormais le bouton d'enregistrement (#68195)
+
 
 ## Notes de mise à jour
 
-Attention, cette version nécessite une montée en version de votre version de PHP en 8.4, ceci afin de prévenir la fin de la maintenance de PHP 8.2 au 31/12/26.
+Attention, cette version nécessite une montée en version de votre version de PHP en 8.3 ou 8.4, ceci afin de prévenir la fin de la maintenance de PHP 8.2 au 31/12/26.
 
 
 # OSE 24.21 (29/10/26)

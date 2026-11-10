@@ -159,10 +159,13 @@ const emit = defineEmits(['fermer']);
 const fond = ref(null);
 const chargement = ref(true);
 const diagnostic = ref(null);
-const filtre = ref('toutes');
+// On ouvre toujours sur les étapes prévues, comme la feuille de route ; les autres onglets restent à un clic
+const filtre = ref('prevues');
 const ouvertes = ref(new Set());
 const copie = ref(false);
 const etatLieuxUrl = unicaenVue.url('workflow/feuille-de-route-etat-lieux/:intervenant', {intervenant: props.intervenant});
+const diagnosticUrl = unicaenVue.url('workflow/feuille-de-route-diagnostic/:intervenant', {intervenant:
+    props.intervenant});
 
 const filtres = computed(() => {
     const etapes = diagnostic.value?.etapes || [];
@@ -227,15 +230,9 @@ const copier = () => {
 onMounted(() => {
     nextTick(() => fond.value?.focus());
     unicaenVue.axios.get(
-        unicaenVue.url('workflow/feuille-de-route-diagnostic/:intervenant', {intervenant: props.intervenant})
+        diagnosticUrl
     ).then(response => {
         diagnostic.value = response.data;
-        if (diagnostic.value) {
-            // On ouvre directement sur ce qui pose question
-            const f = filtres.value;
-            filtre.value = f.find(x => x.code === 'alertes').nb ? 'alertes'
-                : (f.find(x => x.code === 'bloquees').nb ? 'bloquees' : 'prevues');
-        }
     }).finally(() => {
         chargement.value = false;
     });

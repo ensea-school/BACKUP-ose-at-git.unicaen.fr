@@ -1,0 +1,209 @@
+<?php
+
+use Workflow\Service\RapportParametrageService;
+
+/* @var $rapport array */
+
+$h = fn(mixed $texte): string => $this->escapeHtml((string)$texte);
+
+$infos = $rapport['infos'];
+$stats = $rapport['stats'];
+
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page { margin: 1.3cm 1.5cm 1.5cm; }
+        body { font-family: "DejaVu Sans", sans-serif; font-size: 8pt; color: #4f4f4f; }
+        h1 { margin: 0; font-size: 21pt; font-weight: normal; color: #3b71ca; }
+        h2 { margin: 14pt 0 4pt; font-size: 12pt; color: #3b71ca; }
+        h3 { margin: 0 0 1pt; font-size: 9pt; }
+        p { margin: 0 0 1.5pt; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; margin: 4pt 0 8pt; }
+        th { padding: 3pt; background: #3b71ca; color: #fff; text-align: left; }
+        td { padding: 3pt; border-bottom: .5pt solid #e0e0e0; vertical-align: top; word-wrap: break-word; }
+        tr { page-break-inside: avoid; }
+        small, .note { color: #757575; font-size: 7pt; }
+        .sous-titre { color: #757575; font-size: 10pt; margin-bottom: 8pt; }
+        .libelle { font-weight: bold; }
+        .erreur { background: #f8d7da; }
+        .attention { background: #fff3cd; }
+        .stats td { border: 0; background: #f5f7fb; text-align: center; color: #757575; }
+        .stats strong { display: block; font-size: 16pt; font-weight: normal; color: #3b71ca; }
+        .etape { margin-top: 9pt; page-break-inside: avoid; }
+        .pied { position: fixed; bottom: -.9cm; left: 0; right: 0; text-align: center; font-size: 7pt; color: #757575; }
+        .page:after { content: counter(page); }
+    </style>
+</head>
+<body>
+
+<div class="pied">
+    OSE · Paramétrage du workflow · <?= $h($infos['etablissement']) ?> · <?= $h($infos['annee']) ?> · Page <span class="page"></span>
+</div>
+
+<h1>Paramétrage du workflow</h1>
+<p class="sous-titre">Rapport de diagnostic à joindre à une demande d'assistance</p>
+
+<table>
+    <tr>
+        <td class="libelle" style="width: 14%">Établissement</td>
+        <td style="width: 36%"><?= $h($infos['etablissement']) ?></td>
+        <td class="libelle" style="width: 14%">Année universitaire</td>
+        <td style="width: 36%"><?= $h($infos['annee']) ?></td>
+    </tr>
+    <tr>
+        <td class="libelle">Généré le</td>
+        <td><?= $h($infos['date']) ?></td>
+        <td class="libelle">Par</td>
+        <td><?= $h($infos['utilisateur']) ?></td>
+    </tr>
+    <tr>
+        <td class="libelle">Version de OSE</td>
+        <td colspan="3"><?= $h($infos['version']) ?></td>
+    </tr>
+</table>
+
+<table class="stats">
+    <tr>
+        <td><strong><?= $stats['etapes'] ?></strong>étapes</td>
+        <td><strong><?= $stats['actives'] ?></strong>conditions actives</td>
+        <td><strong><?= $stats['desactivees'] ?></strong>conditions désactivées</td>
+        <td><strong><?= $stats['ecarts'] ?></strong>écarts au standard</td>
+        <td><strong><?= $stats['anomalies'] ?></strong>incohérences</td>
+    </tr>
+</table>
+
+<h2>1. Incohérences détectées</h2>
+<?php if (empty($rapport['anomalies'])): ?>
+    <p>Aucune incohérence détectée dans le paramétrage.</p>
+<?php else: ?>
+    <table>
+        <thead>
+        <tr>
+            <th style="width: 9%">Niveau</th>
+            <th style="width: 35%">Étape</th>
+            <th>Constat</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($rapport['anomalies'] as $anomalie): ?>
+            <?php $classe = RapportParametrageService::NIVEAU_ERREUR === $anomalie['niveau'] ? 'erreur' : 'attention'; ?>
+            <tr>
+                <td class="libelle <?= $classe ?>"><?= $h($anomalie['niveau']) ?></td>
+                <td><?= $anomalie['numero'] ?>. <?= $h($anomalie['etape']) ?></td>
+                <td><?= $h($anomalie['constat']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+
+<h2>2. Écarts au paramétrage standard</h2>
+<p class="note">Le standard est le paramétrage livré avec la version de OSE installée.</p>
+<?php if (empty($rapport['ecarts'])): ?>
+    <p>Le paramétrage est identique au standard.</p>
+<?php else: ?>
+    <table>
+        <thead>
+        <tr>
+            <th style="width: 27%">Étape</th>
+            <th style="width: 23%">Élément</th>
+            <th style="width: 25%">Standard</th>
+            <th style="width: 25%">Établissement</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($rapport['ecarts'] as $ecart): ?>
+            <tr>
+                <td><?= $ecart['numero'] ?>. <?= $h($ecart['etape']) ?></td>
+                <td><?= $h($ecart['element']) ?></td>
+                <td><?= $h($ecart['standard']) ?></td>
+                <td><?= $h($ecart['actuel']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+
+<h2>3. Ordre des étapes</h2>
+<table>
+    <thead>
+    <tr>
+        <th style="width: 4%">N°</th>
+        <th style="width: 5%">Std</th>
+        <th>Étape</th>
+        <th style="width: 23%">Code</th>
+        <th style="width: 12%">Périmètre</th>
+        <th style="width: 13%">Conditions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($rapport['etapes'] as $etape): ?>
+        <?php
+        $actives     = count(array_filter($etape['dependances'], fn(array $d) => $d['active']));
+        $desactivees = count($etape['dependances']) - $actives;
+        ?>
+        <tr>
+            <td><?= $etape['numero'] ?></td>
+            <td class="<?= $etape['numeroStandard'] === $etape['numero'] ? '' : 'attention' ?>"><?= $etape['numeroStandard'] ?? '–' ?></td>
+            <td><?= $h($etape['libelleAutres']) ?></td>
+            <td><small><?= $h($etape['code']) ?></small></td>
+            <td><?= $h($etape['perimetre']) ?></td>
+            <td><?= $actives ?><?= $desactivees ? ' + ' . $desactivees . ' désactivée(s)' : '' ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<h2>4. Détail des étapes et de leurs conditions</h2>
+<?php foreach ($rapport['etapes'] as $etape): ?>
+    <div class="etape">
+        <h3><?= $etape['numero'] ?>. <?= $h($etape['libelleAutres']) ?></h3>
+        <p><small><?= $h($etape['code']) ?> · Périmètre : <?= $h($etape['perimetre']) ?></small></p>
+        <p>Libellé intervenant : <?= $h($etape['libelleIntervenant']) ?></p>
+        <p>Message si non franchie : <?= $h($etape['descNonFranchie']) ?></p>
+        <?php if ($etape['descSansObjectif']): ?>
+            <p>Message si sans objectif : <?= $h($etape['descSansObjectif']) ?></p>
+        <?php endif; ?>
+        <?php if ($etape['debloque']): ?>
+            <p>Débloque : <?= $h(implode(' ; ', $etape['debloque'])) ?></p>
+        <?php endif; ?>
+
+        <?php if (empty($etape['dependances'])): ?>
+            <p class="note">Aucune condition : l'étape est accessible dès le début du parcours.</p>
+        <?php else: ?>
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 33%">Étape requise</th>
+                    <th style="width: 13%">Avancement exigé</th>
+                    <th>Signification</th>
+                    <th style="width: 10%">Périmètre</th>
+                    <th style="width: 10%">Intervenants</th>
+                    <th style="width: 8%">État</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($etape['dependances'] as $dependance): ?>
+                    <tr>
+                        <td>
+                            <?= $dependance['precedanteNumero'] ?? '?' ?>. <?= $h($dependance['precedante']) ?><br>
+                            <small><?= $h($dependance['precedanteCode']) ?></small>
+                        </td>
+                        <td><?= $h($dependance['niveau']) ?></td>
+                        <td><?= $h($dependance['regle']) ?></td>
+                        <td><?= $h($dependance['perimetre'] ?: '(aucun)') ?></td>
+                        <td><?= $h($dependance['typeIntervenant'] ?? 'Tous') ?></td>
+                        <td class="<?= $dependance['active'] ? '' : 'attention' ?>"><?= $dependance['active'] ? 'Active' : 'Désactivée' ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
+
+</body>
+</html>

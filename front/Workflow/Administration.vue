@@ -19,6 +19,24 @@
                 <i :class="toutesMasquees ? 'fas fa-up-right-and-down-left-from-center' : 'fas fa-down-left-and-up-right-to-center'"></i>
                 {{ toutesMasquees ? 'Déplier' : 'Replier' }} toutes les étapes
             </button>
+            <a v-if="canEdit" class="btn btn-light btn-sm" :href="rapportUrl"
+               title="Télécharger le rapport PDF du paramétrage du workflow, à joindre à une demande d'assistance">
+                <i class="fas fa-spider"></i>
+                Debuggage
+            </a>
+            <a v-if="canEdit" class="btn btn-light btn-sm" :href="exportUrl"
+               title="Télécharger la configuration du workflow (fichier JSON), pour la recharger sur une autre instance d'OSE">
+                <i class="fas fa-file-export"></i>
+                Exporter le workflow
+            </a>
+            <button v-if="canEdit" type="button" class="btn btn-light btn-sm" :disabled="importEnCours"
+                    title="Remplacer le paramétrage du workflow de l'année en cours par celui d'un fichier exporté"
+                    @click="fichierImport.click()">
+                <i :class="importEnCours ? 'fas fa-spinner fa-spin' : 'fas fa-file-import'"></i>
+                Importer un workfloww
+            </button>
+            <input v-if="canEdit" ref="fichierImport" type="file" accept=".json,application/json" hidden
+                   @change="importer">
         </div>
     </div>
 
@@ -185,13 +203,121 @@
         </div>
     </VueDraggable>
 
+    <!-- Confirmation d'import -->
+    <Teleport to="body">
+        <div v-if="importModale" class="wf-modale-fond" @click.self="fermerImport"
+             @keydown.esc="fermerImport" tabindex="-1" ref="modaleImport">
+            <div class="wf-modale" role="dialog" aria-modal="true" aria-labelledby="wf-modale-titre">
+                <div class="wf-modale-entete">
+                    <h4 id="wf-modale-titre"><i class="fas fa-file-import"></i> Importer une configuration du workflow</h4>
+                    <button type="button" class="btn-close" title="Fermer" @click="fermerImport"></button>
+                </div>
+
+                <div class="wf-modale-corps">
+                    <div class="wf-fichier">
+                        <i class="fas fa-file-code"></i>
+                        <span>{{ importModale.fichier.name }}</span>
+                    </div>
+
+                    <div v-if="importModale.erreur" class="wf-callout wf-callout-danger">
+                        <i class="fas fa-circle-xmark"></i>
+                        <div>{{ importModale.erreur }}</div>
+                    </div>
+
+                    <template v-else>
+                        <dl class="wf-origine">
+                            <dt>Établissement</dt>
+                            <dd>{{ importModale.origine.etablissement || 'Non renseigné' }}</dd>
+                            <dt>Année</dt>
+                            <dd>{{ importModale.origine.annee ? importModale.origine.annee + '/' + (importModale.origine.annee + 1) : 'Non renseignée' }}</dd>
+                            <dt>Version d'OSE</dt>
+                            <dd>{{ importModale.origine.version || 'Non renseignée' }}</dd>
+                            <dt>Exporté le</dt>
+                            <dd>{{ importModale.date }}<span v-if="importModale.origine.utilisateur"> par {{ importModale.origine.utilisateur }}</span></dd>
+                            <dt>Contenu</dt>
+                            <dd>
+                                <span class="badge badge-primary">{{ importModale.nbEtapes }} étape{{ importModale.nbEtapes > 1 ? 's' : '' }}</span>
+                                <span class="badge badge-info">{{ importModale.nbDependances }} dépendance{{ importModale.nbDependances > 1 ? 's' : '' }}</span>
+                            </dd>
+                        </dl>
+
+                        <fieldset class="wf-portee">
+                            <legend>Années concernées</legend>
+                            <label :class="{'wf-portee-choisie': portee === 'suivantes'}">
+                                <input type="radio" value="suivantes" v-model="portee">
+                                <span>
+                                    <strong>{{ annee }} et les années suivantes</strong>
+                                    <small>Les années suivantes sont alignées sur {{ annee }}.</small>
+                                </span>
+                            </label>
+                            <label :class="{'wf-portee-choisie': portee === 'annee'}">
+                                <input type="radio" value="annee" v-model="portee">
+                                <span>
+                                    <strong>{{ annee }} uniquement</strong>
+                                    <small>Les années suivantes gardent leur paramétrage actuel.</small>
+                                </span>
+                            </label>
+                        </fieldset>
+
+                        <div class="wf-annees">
+                            <div class="wf-annee wf-annee-passee">
+                                <i class="fas fa-lock"></i>
+                                <span>Années précédentes</span>
+                                <small>non modifiées</small>
+                            </div>
+                            <i class="fas fa-chevron-right wf-annee-fleche"></i>
+                            <div class="wf-annee wf-annee-cible">
+                                <i class="fas fa-file-import"></i>
+                                <span>{{ annee }}</span>
+                                <small>remplacée</small>
+                            </div>
+                            <i class="fas fa-chevron-right wf-annee-fleche"></i>
+                            <div :class="['wf-annee', portee === 'suivantes' ? 'wf-annee-cible' : 'wf-annee-passee']">
+                                <i :class="portee === 'suivantes' ? 'fas fa-forward' : 'fas fa-lock'"></i>
+                                <span>Années suivantes</span>
+                                <small>{{ portee === 'suivantes' ? 'alignées sur ' + annee : 'non modifiées' }}</small>
+                            </div>
+                        </div>
+
+                        <div class="wf-callout wf-callout-warning">
+                            <i class="fas fa-triangle-exclamation"></i>
+                            <div>
+                                <template v-if="portee === 'suivantes'">
+                                    Le paramétrage du workflow (ordre, libellés et dépendances des étapes) de
+                                    <strong>{{ annee }}</strong> et de <strong>toutes les années suivantes</strong> sera
+                                    <strong>remplacé</strong> par celui de ce fichier, y compris les personnalisations
+                                    déjà faites sur une année future.
+                                </template>
+                                <template v-else>
+                                    Le paramétrage du workflow (ordre, libellés et dépendances des étapes) de
+                                    <strong>{{ annee }}</strong> sera <strong>remplacé</strong> par celui de ce fichier.
+                                    Les autres années ne seront pas modifiées.
+                                </template>
+                                Pensez à exporter la configuration actuelle si vous souhaitez pouvoir y revenir.
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="wf-modale-pied">
+                    <button type="button" class="btn btn-light" @click="fermerImport">Annuler</button>
+                    <button v-if="!importModale.erreur" type="button" class="btn btn-primary" @click="confirmerImport">
+                        <i class="fas fa-file-import"></i> Importer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </Teleport>
+
 </template>
 <script setup>
-import {ref, computed, onMounted, defineProps} from 'vue';
+import {ref, computed, nextTick, onMounted, defineProps} from 'vue';
 import {VueDraggable} from 'vue-draggable-plus'
 
 const props = defineProps({
     canEdit: {type: Boolean},
+    annee: {type: String},
+    anneePassee: {type: Boolean},
 });
 
 const etapes = ref([]);
@@ -309,6 +435,65 @@ const load = () => {
 const saisieUrl = unicaenVue.url('workflow/administration/saisie-dependance');
 const suppressionUrl = unicaenVue.url('workflow/administration/suppression-dependance');
 const personnalisationUrl = unicaenVue.url('workflow/administration/modification-etape');
+const rapportUrl = unicaenVue.url('workflow/administration/rapport');
+const exportUrl = unicaenVue.url('workflow/administration/export');
+
+const fichierImport = ref(null);
+const importEnCours = ref(false);
+
+const importModale = ref(null);
+// Sur une année passée, on modifie par défaut cette seule année ; sinon l'année et les suivantes
+const portee = ref('suivantes');
+const modaleImport = ref(null);
+
+const importer = (event) => {
+    const fichier = event.target.files[0];
+    event.target.value = '';
+    if (!fichier) return;
+
+    const lecteur = new FileReader();
+    lecteur.onload = () => {
+        const modale = {fichier, erreur: null, origine: {}, date: '', nbEtapes: 0, nbDependances: 0};
+        try {
+            const data = JSON.parse(lecteur.result);
+            if (data.format !== 'ose-workflow-parametrage' || !Array.isArray(data.etapes)) {
+                throw new Error();
+            }
+            modale.origine = data.origine || {};
+            modale.date = modale.origine.date ? new Date(modale.origine.date).toLocaleString('fr-FR', {dateStyle: 'long', timeStyle: 'short'}) : 'Date inconnue';
+            modale.nbEtapes = data.etapes.length;
+            modale.nbDependances = data.etapes.reduce((n, e) => n + (e.dependances?.length || 0), 0);
+        } catch (e) {
+            modale.erreur = 'Ce fichier n\'est pas un export de configuration du workflow OSE.';
+        }
+        portee.value = props.anneePassee ? 'annee' : 'suivantes';
+        importModale.value = modale;
+        nextTick(() => modaleImport.value?.focus());
+    };
+    lecteur.readAsText(fichier);
+};
+
+const fermerImport = () => {
+    importModale.value = null;
+};
+
+const confirmerImport = () => {
+    const formData = new FormData();
+    formData.append('fichier', importModale.value.fichier);
+    formData.append('portee', portee.value);
+    fermerImport();
+
+    importEnCours.value = true;
+    unicaenVue.axios.post(
+        unicaenVue.url('workflow/administration/import'),
+        formData,
+        {headers: {'Content-Type': 'multipart/form-data'}}
+    ).then(response => {
+        etapes.value = response.data;
+    }).finally(() => {
+        importEnCours.value = false;
+    });
+};
 
 const saisie = (event) => {
     modAjax(event.currentTarget, (widget) => {
@@ -782,4 +967,236 @@ onMounted(() => {
     }
 }
 
+
+/* Modale de confirmation d'import */
+.wf-modale-fond {
+    position: fixed;
+    inset: 0;
+    z-index: 1060;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, .45);
+    outline: none;
+    animation: wf-fondu .15s ease-out;
+}
+
+.wf-modale {
+    width: 100%;
+    max-width: 560px;
+    background: #fff;
+    border-radius: .5em;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .25);
+    animation: wf-apparition .2s ease-out;
+}
+
+.wf-modale-entete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--mdb-border-color, #e0e0e0);
+}
+
+.wf-modale-entete h4 {
+    margin: 0;
+    font-weight: 300;
+    color: var(--mdb-body-color, #4f4f4f);
+}
+
+.wf-modale-entete h4 i {
+    color: var(--mdb-primary, #3b71ca);
+    margin-right: .4rem;
+}
+
+.wf-modale-corps {
+    padding: 1.25rem;
+    color: var(--mdb-body-color, #4f4f4f);
+}
+
+.wf-modale-pied {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+    padding: .75rem 1.25rem;
+    background: #fafafa;
+    border-top: 1px solid var(--mdb-border-color, #e0e0e0);
+    border-radius: 0 0 .5em .5em;
+}
+
+.wf-fichier {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem .75rem;
+    margin-bottom: 1rem;
+    background: #fafafa;
+    border: 1px solid var(--mdb-border-color, #e0e0e0);
+    border-radius: .5em;
+    font-weight: 600;
+    word-break: break-all;
+}
+
+.wf-fichier i {
+    color: var(--mdb-primary, #3b71ca);
+}
+
+.wf-origine {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: .35rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.wf-origine dt {
+    font-weight: 400;
+    color: var(--mdb-secondary, #9fa6b2);
+}
+
+.wf-origine dd {
+    margin: 0;
+    font-weight: 600;
+}
+
+.wf-origine .badge {
+    margin-right: .3rem;
+}
+
+.wf-origine .badge-primary {
+    color: #2c58a0;
+}
+
+.wf-origine .badge-info {
+    color: #1c657d;
+}
+
+.wf-callout {
+    display: flex;
+    gap: .75rem;
+    padding: .75rem 1rem;
+    border-radius: .5em;
+    border-left: 4px solid;
+}
+
+.wf-callout > i {
+    margin-top: .2rem;
+}
+
+.wf-callout-warning {
+    background: #fdf5e6;
+    border-color: #e4a11b;
+    color: #73510d;
+}
+
+.wf-callout-danger {
+    background: #fbe7e9;
+    border-color: var(--mdb-danger, #dc4c64);
+    color: #8a2232;
+}
+
+.wf-portee {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    margin-bottom: 1rem;
+}
+
+.wf-portee legend {
+    font-size: .85rem;
+    font-weight: 400;
+    color: var(--mdb-secondary, #9fa6b2);
+    margin-bottom: .1rem;
+}
+
+.wf-portee label {
+    display: flex;
+    align-items: flex-start;
+    gap: .6rem;
+    padding: .5rem .75rem;
+    border: 1px solid var(--mdb-border-color, #e0e0e0);
+    border-radius: .5em;
+    cursor: pointer;
+    transition: border-color .15s, background-color .15s;
+}
+
+.wf-portee label:hover {
+    border-color: #c4d3ee;
+}
+
+.wf-portee input {
+    margin-top: .25rem;
+    accent-color: var(--mdb-primary, #3b71ca);
+}
+
+.wf-portee span {
+    display: flex;
+    flex-direction: column;
+}
+
+.wf-portee small {
+    color: var(--mdb-secondary, #9fa6b2);
+}
+
+.wf-portee-choisie {
+    background: #ebf0fa;
+    border-color: var(--mdb-primary, #3b71ca) !important;
+}
+
+.wf-portee-choisie strong {
+    color: #2c58a0;
+}
+
+.wf-annees {
+    display: flex;
+    align-items: stretch;
+    gap: .4rem;
+    margin-bottom: 1rem;
+}
+
+.wf-annee {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .15rem;
+    padding: .5rem .4rem;
+    border-radius: .5em;
+    border: 1px solid var(--mdb-border-color, #e0e0e0);
+    text-align: center;
+    font-size: .85rem;
+}
+
+.wf-annee span {
+    font-weight: 600;
+}
+
+.wf-annee small {
+    font-size: .75rem;
+}
+
+.wf-annee-passee {
+    background: #fafafa;
+    color: var(--mdb-secondary, #9fa6b2);
+}
+
+.wf-annee-cible {
+    background: #ebf0fa;
+    border-color: #c4d3ee;
+    color: #2c58a0;
+}
+
+.wf-annee-fleche {
+    align-self: center;
+    color: var(--mdb-secondary, #9fa6b2);
+    font-size: .75rem;
+}
+
+@keyframes wf-fondu {
+    from { opacity: 0; }
+}
+
+@keyframes wf-apparition {
+    from { opacity: 0; transform: translateY(-12px); }
+}
 </style>

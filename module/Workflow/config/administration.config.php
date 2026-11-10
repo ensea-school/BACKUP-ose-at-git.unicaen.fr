@@ -22,6 +22,24 @@ return [
                             'action'     => 'data',
                             'privileges' => [Privileges::WORKFLOW_DEPENDANCES_VISUALISATION],
                         ],
+                        'rapport'                => [
+                            'route'      => '/rapport',
+                            'controller' => Controller\AdministrationController::class,
+                            'action'     => 'rapport',
+                            'privileges' => [Privileges::WORKFLOW_DEPENDANCES_VISUALISATION],
+                        ],
+                        'export'                 => [
+                            'route'      => '/export',
+                            'controller' => Controller\AdministrationController::class,
+                            'action'     => 'export',
+                            'privileges' => [Privileges::WORKFLOW_DEPENDANCES_VISUALISATION],
+                        ],
+                        'import'                 => [
+                            'route'      => '/import',
+                            'controller' => Controller\AdministrationController::class,
+                            'action'     => 'import',
+                            'privileges' => [Privileges::WORKFLOW_DEPENDANCES_EDITION],
+                        ],
                         'tri'                    => [
                             'route'      => '/tri',
                             'controller' => Controller\AdministrationController::class,
@@ -84,7 +102,9 @@ return [
     ],
 
     'services' => [
-        Command\WorkflowResetCommand::class => Command\WorflowResetCommandFactory::class,
+        Command\WorkflowResetCommand::class        => Command\WorflowResetCommandFactory::class,
+        Service\RapportParametrageService::class   => Service\RapportParametrageServiceFactory::class,
+        Service\TransfertParametrageService::class => Service\TransfertParametrageServiceFactory::class,
     ],
 
     'forms' => [

@@ -4,12 +4,17 @@ namespace Workflow\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Provider\Privileges;
+use Administration\Service\ParametresServiceAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
 use UnicaenVue\View\Model\VueModel;
 use Workflow\Entity\Db\WorkflowEtape;
 use Workflow\Entity\Db\WorkflowEtapeDependance;
 use Workflow\Form\DependanceFormAwareTrait;
 use Workflow\Form\EtapeFormAwareTrait;
+use Workflow\Service\ImportInvalideException;
+use Workflow\Service\RapportParametrageServiceAwareTrait;
+use Workflow\Service\TransfertParametrageServiceAwareTrait;
 use Workflow\Service\WorkflowServiceAwareTrait;
 
 
@@ -20,7 +25,11 @@ use Workflow\Service\WorkflowServiceAwareTrait;
  */
 class AdministrationController extends AbstractController
 {
+    use ContextServiceAwareTrait;
+    use ParametresServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use RapportParametrageServiceAwareTrait;
+    use TransfertParametrageServiceAwareTrait;
     use EtapeFormAwareTrait;
     use DependanceFormAwareTrait;
 
@@ -28,6 +37,8 @@ class AdministrationController extends AbstractController
     {
         $props = [
             'canEdit' => $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_EDITION)),
+            'annee'       => $this->getServiceContext()->getAnnee()->getLibelle(),
+            'anneePassee' => $this->getServiceContext()->getAnnee()->getId() < (int)$this->getServiceParametres()->get('annee'),
         ];
 
         $vueModel = new VueModel();
@@ -76,6 +87,99 @@ class AdministrationController extends AbstractController
         ];
 
         return new AxiosModel($etapes, $properties);
+    }
+
+
+
+    public function rapportAction()
+    {
+        $service = $this->getServiceRapportParametrage();
+
+        try {
+            $pdf = $service->genererPdf();
+        } catch (\Throwable $e) {
+            $this->flashMessenger()->addErrorMessage('Le rapport n\'a pas pu être généré : ' . $this->translate($e));
+
+            return $this->redirect()->toRoute('workflow/administration');
+        }
+
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $service->getNomFichier() . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Pragma: no-cache');
+        header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        echo $pdf;
+        die();
+    }
+
+
+
+    public function exportAction()
+    {
+        try {
+            $json = $this->getServiceTransfertParametrage()->exporterJson();
+        } catch (\Throwable $e) {
+            $this->flashMessenger()->addErrorMessage('Le paramétrage n\'a pas pu être exporté : ' . $this->translate($e));
+
+            return $this->redirect()->toRoute('workflow/administration');
+        }
+
+        $nomFichier = $this->getServiceRapportParametrage()->getNomFichier('workflow-configuration', 'json');
+
+        header('Content-type: application/json; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $nomFichier . '"');
+        header('Pragma: no-cache');
+        header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        echo $json;
+        die();
+    }
+
+
+
+    public function importAction(): AxiosModel
+    {
+        $fichier = $this->getRequest()->getFiles()->get('fichier');
+
+        try {
+            if (!$fichier || UPLOAD_ERR_OK !== ($fichier['error'] ?? UPLOAD_ERR_NO_FILE)) {
+                throw new \RuntimeException('Aucun fichier n\'a été reçu.');
+            }
+
+            $anneesSuivantes = 'annee' !== $this->getRequest()->getPost('portee');
+            $resultat        = $this->getServiceTransfertParametrage()->importerJson(file_get_contents($fichier['tmp_name']), $anneesSuivantes);
+
+            $annee = $this->getServiceContext()->getAnnee();
+            $this->flashMessenger()->addSuccessMessage(sprintf(
+                'Paramétrage du workflow importé pour l\'année %s %s : '
+                . '%d étape(s) mise(s) à jour, %d dépendance(s) ajoutée(s), %d modifiée(s), %d supprimée(s)%s. '
+                . ($anneesSuivantes ? 'Les années passées n\'ont pas été modifiées. ' : 'Les autres années n\'ont pas été modifiées. ')
+                . 'Pensez à recalculer le tableau de bord workflow (bin/ose calcul-tableaux-bord) pour mettre à jour les feuilles de route.',
+                $annee->getLibelle(),
+                $anneesSuivantes ? sprintf('et les suivantes (jusqu\'à %d/%d)', $resultat['anneeFin'], $resultat['anneeFin'] + 1) : 'uniquement',
+                $resultat['etapes'], $resultat['ajoutees'], $resultat['modifiees'], $resultat['supprimees'],
+                $resultat['anneesAlignees'] ? sprintf(' ; %d année(s) suivante(s) qui avaient été personnalisées ont été réalignées', $resultat['anneesAlignees']) : ''
+            ));
+            foreach ($resultat['avertissements'] as $avertissement) {
+                $this->flashMessenger()->addWarningMessage(htmlspecialchars($avertissement));
+            }
+        } catch (ImportInvalideException $e) {
+            $erreurs = $e->getErreurs();
+            $message = '<strong>Fichier non conforme, aucune modification n\'a été faite.</strong><ul class="mb-0">';
+            foreach (array_slice($erreurs, 0, 10) as $erreur) {
+                $message .= '<li>' . htmlspecialchars($erreur) . '</li>';
+            }
+            if (count($erreurs) > 10) {
+                $message .= '<li>... et ' . (count($erreurs) - 10) . ' autre(s) erreur(s)</li>';
+            }
+            $this->flashMessenger()->addErrorMessage($message . '</ul>');
+        } catch (\Throwable $e) {
+            $this->flashMessenger()->addErrorMessage('Import impossible, aucune modification n\'a été faite : '
+                . htmlspecialchars($this->translate($e)));
+        }
+
+        return $this->dataAction();
     }
 
 

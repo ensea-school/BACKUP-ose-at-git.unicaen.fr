@@ -8,6 +8,7 @@ use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Mission\Entity\Db\OffreEmploi;
 use Mission\Entity\Db\TypeMission;
+use Mission\Validator\DateMissionValidator;
 
 
 /**
@@ -51,6 +52,34 @@ class OffreEmploiForm extends AbstractForm
         ]);
 
         $this->addSubmit();
+    }
+
+    public function getInputFilterSpecification()
+    {
+
+        $dateDebut = new \DateTime($this->get('dateDebut')->getValue());
+        $dateFin   = new \DateTime($this->get('dateFin')->getValue());
+        $annee     = $this->getServiceContext()->getAnnee();
+
+        return [
+            'dateDebut'      => [
+                'required'   => true,
+                'validators' => [
+                    new DateMissionValidator(['annee'        => $annee,
+                        'dateDebut'    => $dateDebut,
+                        'dateFin'      => $dateFin,
+                        'dateVerifiee' => $dateDebut,
+                    ]),
+                ],
+            ],
+            'dateFin'        => [
+                'required' => true,
+            ],
+            'tauxRemuMajore' => [
+                'required' => false,
+            ],
+
+        ];
     }
 
 }

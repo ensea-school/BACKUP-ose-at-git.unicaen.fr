@@ -10,6 +10,7 @@
  * @var $canViewAdresseIntervenant bool
  * @var $canViewIdentiteIntervenant bool
  * @var $canViewInseeIntervenant bool
+ * @var $canViewDonneesEssentielles bool
  */
 use Application\Provider\Privilege\Privileges;
 
@@ -46,7 +47,7 @@ if ($errors) {
                             </div>
                         </div>
                     <?php endif; ?>
-                    <?php if ($canViewAdresseIntervenant): ?>
+                    <?php if ($canViewDonneesEssentielles): ?>
                         <div class="row">
                             <div class="col-md-6">
                                 <?= $this->formControlGroup($form->get('code')); ?>

@@ -15,10 +15,20 @@ class ReportSuiviAlternanceCommand extends Command
 {
     use BddAwareTrait;
 
+    /**
+     * Étapes dont le code a changé d'une année sur l'autre : code de l'année précédente => code de l'année cible.
+     * Les préfixes VET-/vet-/Vet- sont ajoutés automatiquement au code cible.
+     */
+    private const CORRESPONDANCES_ETAPES = [
+        'BUDEB2_102'  => 'BUDEB2-602',
+        'BUDEB3_112' => 'BUDEB3-612',
+    ];
+
     protected function configure(): void
     {
         $this->setDescription('Report des éléments de la source Suivialternance (chemins pédagogiques, effectifs, volumes horaires et centres de coûts) de l’année précédente')
-            ->addOption('annee', 'a', InputOption::VALUE_REQUIRED, 'ID de l’année cible');
+            ->addOption('annee', 'a', InputOption::VALUE_REQUIRED, 'ID de l’année cible')
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Simulation : exécute le report puis annule tout (rollback), sans rien enregistrer en base');
     }
 
 
@@ -26,10 +36,15 @@ class ReportSuiviAlternanceCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io    = new SymfonyStyle($input, $output);
-        $annee = (int)$input->getOption('annee');
+        $annee  = (int)$input->getOption('annee');
+        $dryRun = (bool)$input->getOption('dry-run');
         if ($annee <= 2013) {
             $io->error('L’option -a (ou --annee) est obligatoire et doit être un identifiant d’année entier supérieur à 2013.');
             return Command::INVALID;
+        }
+
+        if ($dryRun) {
+            $io->note('Mode simulation (--dry-run) : aucune modification ne sera enregistrée en base.');
         }
 
         $transaction = false;
@@ -101,6 +116,9 @@ class ReportSuiviAlternanceCommand extends Command
                 // insert() attribue le nouvel ID de séquence directement dans le tableau.
                 $elements->insert($element);
                 $nbElements++;
+                if ($dryRun || $io->isVerbose()) {
+                    $io->writeln("Élément $sourceCode créé (étape " . $sourcesCodesEtapes[$element['ETAPE_ID']] . ')');
+                }
                 $existants[$sourceCode] = (int)$element['ID'];
 
                 foreach ($chemins->select(['ELEMENT_PEDAGOGIQUE_ID' => $ancienId, 'HISTO_DESTRUCTION' => null]) as $chemin) {
@@ -124,10 +142,15 @@ class ReportSuiviAlternanceCommand extends Command
                 $nbVolumes   += $this->reporterVolumesHoraires($volumes, $ancienId, (int)$element['ID'], $sourceCode, $annee);
                 $nbCentresCouts += $this->reporterCentresCouts($centresCouts, $ancienId, (int)$element['ID']);
             }
-            $this->bdd->commitTransaction();
+            if ($dryRun) {
+                $this->bdd->rollbackTransaction();
+            } else {
+                $this->bdd->commitTransaction();
+            }
             $transaction = false;
             $anneeSource = $annee - 1;
-            $io->success("Report Suivialternance $anneeSource vers $annee : $nbTotal élément(s) source, $nbElements élément(s), $nbChemins chemin(s), $nbEffectifs effectif(s), $nbVolumes volume(s) horaire(s) et $nbCentresCouts centre(s) de coûts créé(s), $nbExistants élément(s) déjà présent(s).");
+            $prefixe     = $dryRun ? '[Simulation, rien n’a été enregistré] ' : '';
+            $io->success($prefixe . "Report Suivialternance $anneeSource vers $annee : $nbTotal élément(s) source, $nbElements élément(s), $nbChemins chemin(s), $nbEffectifs effectif(s), $nbVolumes volume(s) horaire(s) et $nbCentresCouts centre(s) de coûts créé(s), $nbExistants élément(s) déjà présent(s).");
             if ($nbElementsIgnores || $nbCheminsIgnores) {
                 $io->warning("Sans correspondance d’étape : $nbElementsIgnores élément(s) et $nbCheminsIgnores chemin(s) ignoré(s).");
             }
@@ -252,6 +275,9 @@ class ReportSuiviAlternanceCommand extends Command
             throw new RuntimeException("L’étape $ancienId n’appartient pas à l’année précédente.");
         }
         $code = $codes[$ancienId];
+        if (isset(self::CORRESPONDANCES_ETAPES[$code])) {
+            $code = self::CORRESPONDANCES_ETAPES[$code];
+        }
         $codeAvecTirets = str_replace('_', '-', $code);
         $candidats = array_unique([
             $code, 'VET-' . $code, 'vet-' . $code, 'Vet-' . $code,
@@ -263,7 +289,7 @@ class ReportSuiviAlternanceCommand extends Command
             }
             return (int)$etapes[$candidat][0];
         }
-        throw new RuntimeException("Aucune étape pour le code $code en $annee, avec ou sans préfixe VET-/vet-/Vet- et remplacement des _ par des -.");
+        throw new RuntimeException("Aucune étape pour le code {$codes[$ancienId]}" . ($code !== $codes[$ancienId] ? " (correspondance $code)" : '') . " en $annee, avec ou sans préfixe VET-/vet-/Vet- et remplacement des _ par des -.");
     }
 
 

@@ -51,6 +51,7 @@ OSE [24.20]
 * Correction pour que la modal de modification d'une ligne de service se ferme après l'enregistrement (#68263)
 * Un service hors établissement ne peut plus être saisi pour un intervenant sans structure d'affectation : il n'était pas enregistré, sans aucun message. Un message remplace désormais le bouton d'enregistrement (#68195)
 * Controle de la cohérence des dates a la création d'une offre d'emploi. (#68322)
+* Ajout d'un privilege pour l'affichage des données essentielles de l'intervenant. (#68426)
 
 ## Notes de mise à jour
 

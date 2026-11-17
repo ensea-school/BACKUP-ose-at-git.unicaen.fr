@@ -256,8 +256,13 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function canModifierOffreEmploi(OffreEmploi $offreEmploi): bool
+    protected function canModifierOffreEmploi(?OffreEmploi $offreEmploi): bool
     {
+        // Création d'une nouvelle offre : pas d'entité, seul le privilège compte
+        if (!$offreEmploi) {
+            return true;
+        }
+
         $structureOffre = $offreEmploi->getStructure();
 
 

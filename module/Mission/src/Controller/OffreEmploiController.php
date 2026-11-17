@@ -317,6 +317,13 @@ class  OffreEmploiController extends AbstractController
 
     public function candidatureAction()
     {
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $menu = new ViewModel();
+            $menu->setTemplate('intervenant/intervenant/menu');
+
+            return $menu;
+        }
+
         /**
          * @var Intervenant   $intervenant
          * @var WorkflowEtape $etapeDonneesPersos

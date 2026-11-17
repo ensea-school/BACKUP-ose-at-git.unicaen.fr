@@ -119,13 +119,22 @@ export default {
         {
             modAjax(event.currentTarget, (widget) => {
                 this.reload();
+                this.refreshWorkflow();
             });
         },
         refuserCandidature(event)
         {
             popConfirm(event.currentTarget, (response) => {
                 this.reload();
+                this.refreshWorkflow();
             });
+        },
+        refreshWorkflow()
+        {
+            // L'acceptation/le refus d'une candidature fait évoluer le workflow (accès aux missions...) :
+            // mise à jour du menu de gauche et du bouton de la feuille de route
+            $("#sidebar").refresh();
+            window.dispatchEvent(new CustomEvent("Workflow/Nav.refresh"));
         },
         urlOffre(candidature)
         {

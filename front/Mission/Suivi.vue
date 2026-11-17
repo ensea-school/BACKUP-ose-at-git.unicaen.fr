@@ -89,6 +89,11 @@ export default {
             if (this.isMounted) {
                 // Mise à jour des plafonds
                 $(".plafonds").refresh();
+
+                // Le workflow a pu évoluer (heures réalisées saisies/validées => paiement...) :
+                // mise à jour du menu de gauche et du bouton de la feuille de route
+                $("#sidebar").refresh();
+                window.dispatchEvent(new CustomEvent("Workflow/Nav.refresh"));
             }else{
                 this.isMounted = true;
             }

@@ -30,7 +30,7 @@
                         :datas="pieceJointe"
                         :privileges="datasPiecesJointes.privileges"
                         :intervenant="intervenant"
-                        @refresh="getPiecesJointes"
+                        @refresh="refresh"
                     />
                 </div>
             </div>
@@ -72,7 +72,7 @@
                         :datas="pieceJointe"
                         :privileges="datasPiecesJointes.privileges"
                         :intervenant="intervenant"
-                        @refresh="getPiecesJointes"
+                        @refresh="refresh"
                     />
                 </div>
             </div>
@@ -142,6 +142,15 @@ function getPiecesJointes()
     }).catch(error => {
         console.error(error)
     })
+}
+
+// Après une action sur une pièce (dépôt, validation, archivage...), le workflow a pu changer :
+// on recharge la liste, le menu de gauche de l'intervenant et le bouton de la feuille de route
+function refresh()
+{
+    getPiecesJointes()
+    $('#sidebar').refresh()
+    window.dispatchEvent(new CustomEvent('Workflow/Nav.refresh'))
 }
 
 // Initialisation

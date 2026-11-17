@@ -31,6 +31,7 @@ export default {
 
         return {
             load: false,
+            dejaCharge: false,
             primes: [],
             ajoutUrl: unicaenVue.url('prime/:intervenant/saisie/', {intervenant: this.intervenant})
         };
@@ -59,6 +60,14 @@ export default {
             ).then(response => {
                 this.primes = response.data;
                 this.load = true;
+
+                if (this.dejaCharge) {
+                    // Après une action (déclaration, validation, refus...), le workflow a pu évoluer :
+                    // mise à jour du menu de gauche et du bouton de la feuille de route
+                    $("#sidebar").refresh();
+                    window.dispatchEvent(new CustomEvent("Workflow/Nav.refresh"));
+                }
+                this.dejaCharge = true;
             });
         },
 

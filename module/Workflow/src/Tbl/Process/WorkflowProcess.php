@@ -38,6 +38,16 @@ class WorkflowProcess implements ProcessInterface
     const DEPENDANCE_EVALUEE                 = 'evaluee';
 
     /**
+     * Étapes facultatives : si elles n'existent pas dans le périmètre de la structure évaluée,
+     * la dépendance est ignorée pour cette structure au lieu de la bloquer.
+     * Une mission peut être créée sans passer par une candidature.
+     */
+    const ETAPES_FACULTATIVES_PAR_STRUCTURE = [
+        WorkflowEtape::CANDIDATURE_SAISIE,
+        WorkflowEtape::CANDIDATURE_VALIDATION,
+    ];
+
+    /**
      * @var array|IntervenantEtape[][]
      */
     private array $workflows = [];
@@ -164,7 +174,8 @@ class WorkflowProcess implements ProcessInterface
                     $this->tracer($trace, $etapeCode, $dependance, self::DEPENDANCE_PRECEDANTE_ABSENTE);
                     continue;
                 }
-                $structuresTrace = [];
+                $structuresTrace    = [];
+                $isEtapeFacultative = in_array($etapePrec->etape->getCode(), self::ETAPES_FACULTATIVES_PAR_STRUCTURE, true);
                 foreach ($etape->structures as $structure) {
                     $precStructures = $etapePrec->structures;
                     foreach ($precStructures as $strId => $precStructure) {
@@ -173,7 +184,15 @@ class WorkflowProcess implements ProcessInterface
                         }
                     }
 
-                    $isOk = $this->isDependanceOk($dependance->getAvancement(), $precStructures);
+                    if (empty($precStructures) && $isEtapeFacultative) {
+                        // Étape facultative (candidature) présente uniquement dans d'autres structures que celle évaluée :
+                        // dans cette structure, c'est comme s'il n'y en avait pas => pas de blocage, comme lorsque
+                        // l'intervenant n'a aucune candidature (DEPENDANCE_PRECEDANTE_ABSENTE).
+                        // Ex : mission créée manuellement à la DRH alors que la seule candidature porte sur une autre composante
+                        $isOk = true;
+                    } else {
+                        $isOk = $this->isDependanceOk($dependance->getAvancement(), $precStructures);
+                    }
                     if (!$isOk) {
                         $structure->atteignable         = false;
                         $structure->whyNonAtteignable[] = $etapePrec->etape->getDescNonFranchie();

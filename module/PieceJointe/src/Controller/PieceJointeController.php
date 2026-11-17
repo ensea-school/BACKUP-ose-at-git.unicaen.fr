@@ -330,6 +330,13 @@ class PieceJointeController extends \Application\Controller\AbstractController
             }
         }
 
+        // Si aucun statut n'existe pour le type demandé (ex : établissement sans vacataires extérieurs),
+        // on bascule sur le premier type d'intervenant disposant de statuts, sinon le tableau n'a aucune colonne
+        $codesDisponibles = array_map(fn(TypeIntervenant $ti) => $ti->getCode(), $typesIntervenants);
+        if (!empty($codesDisponibles) && !in_array($codeIntervenant, $codesDisponibles)) {
+            $codeIntervenant = reset($codesDisponibles);
+        }
+
 
         $statutsIntervenants = [];
         foreach ($statuts as $statut) {

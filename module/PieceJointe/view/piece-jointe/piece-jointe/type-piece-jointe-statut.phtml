@@ -39,6 +39,15 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
         .pj-ou {
             font-weight: bold;
         }
+
+        /* Largeur naturelle : 1 colonne de 40px par statut, la colonne des types de PJ garde une largeur lisible */
+        #tblTpjs {
+            width: auto;
+        }
+
+        #tblTpjs tbody th {
+            min-width: 320px;
+        }
     </style>
 
     <script type="text/javascript">
@@ -154,7 +163,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
         <div style="clear:both"></div>
     </div>
 
-    <table id="tblTpjs" class="table-bordered table-sm table-header table-header-rotated" style="width:1121px">
+    <table id="tblTpjs" class="table-bordered table-sm table-header table-header-rotated">
         <thead>
         <tr>
             <th class="rotate-45 si" data-si=""><span>&nbsp;</span></th>

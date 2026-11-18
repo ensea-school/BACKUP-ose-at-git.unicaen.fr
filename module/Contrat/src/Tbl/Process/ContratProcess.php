@@ -46,6 +46,9 @@ class ContratProcess implements ProcessInterface
     /** @var array|Contrat[][] */
     private array $intervenants = [];
 
+    /** @var array<int, int|null> */
+    private array $tauxRemuStatuts = [];
+
     private array $tblData = [];
 
 
@@ -92,7 +95,8 @@ class ContratProcess implements ProcessInterface
         $this->parametreTauxRemuId      = (int)$parametres->get(Parametre::TAUX_REMU);
         $this->parametreTauxCongesPayes = (float)$parametres->get(Parametre::TAUX_CONGES_PAYES);
 
-        $this->intervenants = [];
+        $this->intervenants   = [];
+        $this->tauxRemuStatuts = [];
     }
 
 
@@ -155,6 +159,9 @@ class ContratProcess implements ProcessInterface
         $contrat->envoye        = $data['envoye'] === '1';
         $contrat->retourne      = $data['retourne'] === '1';
         $contrat->signe         = $data['signe'] === '1';
+
+        // Le taux du statut doit aussi être disponible pour les projets créés depuis les volumes horaires.
+        $this->tauxRemuStatuts[$contrat->intervenantId] = (int)($data['taux_remu_id'] ?? 0) ?: null;
     }
 
 
@@ -645,7 +652,7 @@ class ContratProcess implements ProcessInterface
         }
 
         if (empty($contrat->tauxRemuId)) {
-            $contrat->tauxRemuId = $this->parametreTauxRemuId;
+            $contrat->tauxRemuId = $this->tauxRemuStatuts[$contrat->intervenantId] ?? $this->parametreTauxRemuId;
         }
 
         if (empty($contrat->tauxRemuMajoreId)) {

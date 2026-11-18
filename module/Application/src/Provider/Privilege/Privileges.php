@@ -158,6 +158,7 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const INTERVENANT_STATUT_VISUALISATION                     = 'intervenant-statut-visualisation';
     const INTERVENANT_SUPPRESSION                              = 'intervenant-suppression';
     const INTERVENANT_VISUALISATION_HISTORISES                 = 'intervenant-visualisation-historises';
+    const INTERVENANT_ESSENTIELLES                             = 'intervenant-essentielles';
     const JOUR_FERIE_EDITION                                   = 'jour-ferie-edition';
     const JOUR_FERIE_VISUALISATION                             = 'jour-ferie-visualisation';
     const MAIL_MAIL_AFFICHER                                   = 'mail-mail_afficher';

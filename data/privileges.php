@@ -43,6 +43,7 @@ return [
             'recherche'                => 'Recherche',
             'fiche'                    => 'Visualisation de la fiche',
             'adresse'                  => 'Visualisation de l\'adresse',
+            'essentielles'             => 'Visualisation des données essentielles',
             'calcul-hetd'              => 'Calcul HETD',
             'creation'                 => 'Création',
             'ajout-statut'             => 'Ajout d\'un nouveau statut',

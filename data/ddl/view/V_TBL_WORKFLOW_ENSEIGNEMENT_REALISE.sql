@@ -41,7 +41,7 @@ FROM
                               AND sp.type_volume_horaire_code = 'PREVU'
                               AND sp.heures > 0
        JOIN tbl_contrat     tc ON tc.intervenant_id = sp.intervenant_id
-                              AND tc.structure_id = sp.structure_id
+                              AND (tc.structure_id = sp.structure_id OR tc.structure_id IS NULL)
                               AND tc.volume_horaire_index = 0
                               AND tc.actif = 1
 WHERE

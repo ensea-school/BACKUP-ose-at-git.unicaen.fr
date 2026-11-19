@@ -4,7 +4,10 @@ namespace Workflow\Model;
 
 use Lieu\Entity\Db\Structure;
 use Intervenant\Entity\Db\Intervenant;
+use Application\Entity\Db\Perimetre;
 use Workflow\Entity\Db\WorkflowEtape;
+use Workflow\Tbl\Process\Model\IntervenantEtapeStructure;
+use Workflow\Tbl\Process\WorkflowProcess;
 use Workflow\Service\WorkflowService;
 
 class FeuilleDeRoute
@@ -195,20 +198,36 @@ class FeuilleDeRoute
 
         foreach ($activeEtapes as $etapeCode => $etape) {
             foreach ($rowsByEtape[$etapeCode] as $d) {
+                $atteignable = (bool)$d['atteignable'];
+                $why         = $d['why_non_atteignable'];
+
+                // Ligne sans composante (ex. contrat couvrant plusieurs composantes) : tbl_workflow exige les
+                // dépendances de toutes les composantes. On les ré-évalue selon le contexte (voir la constante).
+                if (!$atteignable
+                    && (int)$d['structure_id'] === 0
+                    && in_array($etapeCode, self::ETAPES_SANS_COMPOSANTE_EVALUEES_PAR_COMPOSANTE, true)
+                ) {
+                    $motifs = [];
+                    if ($this->dependancesOkPourStructure($etape, $rowsByEtape, $motifs)) {
+                        $atteignable = true;
+                        $why         = null;
+                    }
+                }
+
                 $this->buildEtape(
                     $etape,
                     (int)$d['structure_id'],
                     $d['structure_libelle'],
                     $d['structure_ids'],
-                    (bool)$d['atteignable'],
+                    $atteignable,
                     (float)$d['objectif'],
                     (float)$d['realisation'],
-                    $d['why_non_atteignable']
+                    $why
                 );
             }
 
             if ($this->getStructure() && !isset($this->fdr[$etapeCode])) {
-                $this->buildEtapeVide($etape);
+                $this->buildEtapeVide($etape, $rowsByEtape);
             }
         }
 
@@ -342,15 +361,110 @@ class FeuilleDeRoute
 
 
 
-    private function buildEtapeVide(WorkflowEtape $etape): void
+    /**
+     * Étapes dont la ligne sans composante (ex. contrat couvrant plusieurs composantes) est ré-évaluée à l'affichage :
+     * tbl_workflow y exige les dépendances de TOUTES les composantes, alors qu'ici
+     *  - depuis une composante, seules les dépendances de cette composante comptent ;
+     *  - sans composante, il suffit qu'une composante ait satisfait la dépendance (ex. un agrément).
+     */
+    private const ETAPES_SANS_COMPOSANTE_EVALUEES_PAR_COMPOSANTE = [
+        WorkflowEtape::CONTRAT,
+    ];
+
+
+
+    /**
+     * Étape par composante pour laquelle tbl_workflow n'a aucune ligne dans la composante du contexte
+     * (étape active pour le statut, mais rien de saisi/créé dans cette composante).
+     *
+     * Elle est atteignable si toutes ses dépendances directes applicables sont satisfaites pour cette composante
+     * (aucune dépendance applicable = atteignable). Sinon elle reste bloquée avec les motifs.
+     * ex. un intervenant qui fait du prévisionnel en chimie et une heure de réalisé à l'IUT : le contrat
+     * (sans composante ou propre à l'IUT) suffit à ouvrir le réalisé de l'IUT.
+     */
+    private function buildEtapeVide(WorkflowEtape $etape, array $rowsByEtape = []): void
     {
-        $fdre                     = $this->createEtape($etape);
-        $fdre->atteignable        = false;
-        $fdre->objectif           = 1;
-        $fdre->realisation        = 0;
-        $fdre->whyNonAtteignable  = [$etape->getDescNonFranchie()];
+        $fdre              = $this->createEtape($etape);
+        $fdre->objectif    = 1;
+        $fdre->realisation = 0;
+
+        $why               = [];
+        $fdre->atteignable = $this->dependancesOkPourStructure($etape, $rowsByEtape, $why);
+        $fdre->whyNonAtteignable = $fdre->atteignable ? [] : ($why ?: [$etape->getDescNonFranchie()]);
 
         $this->fdr[$etape->getCode()] = $fdre;
+    }
+
+
+
+    /**
+     * Évalue les dépendances d'une étape pour la structure du contexte, quand tbl_workflow n'a aucune ligne
+     * pour cette structure (même règle que WorkflowProcess::calculDependances).
+     *
+     * @param array $rowsByEtape lignes brutes de tbl_workflow pour l'intervenant, indexées par code d'étape
+     * @param array $why         motifs de blocage (en sortie)
+     */
+    private function dependancesOkPourStructure(WorkflowEtape $etape, array $rowsByEtape, array &$why): bool
+    {
+        $structure = $this->getStructure(); // null = sans composante (admin)
+        $statut    = $this->intervenant->getStatut();
+        $typeId    = $statut?->getTypeIntervenant()?->getId();
+
+        foreach ($etape->getDependances() as $dependance) {
+            if (!$dependance->isActive()) {
+                continue;
+            }
+            $precEtape = $dependance->getEtapePrecedante();
+            $isCloture = $precEtape->getCode() === WorkflowEtape::CLOTURE_REALISE;
+            if ($isCloture && !$statut?->getCloture()) {
+                continue;
+            }
+            if (!$isCloture && $dependance->getTypeIntervenant() && $typeId !== $dependance->getTypeIntervenant()->getId()) {
+                continue;
+            }
+            if (!isset($this->workflowEtapes[$precEtape->getCode()])) {
+                continue; // étape précédente inexistante pour cet intervenant
+            }
+
+            $precs = [];
+            foreach ($rowsByEtape[$precEtape->getCode()] ?? [] as $d) {
+                $strId  = (int)$d['structure_id'];
+                $strIds = $d['structure_ids'] ?? '';
+                if ($structure
+                    && $dependance->getPerimetre()?->getCode() === Perimetre::COMPOSANTE
+                    && $strId !== 0
+                    && !str_contains($strIds, '-' . $structure->getId() . '-')
+                    && !str_contains($structure->getIds() ?? '', '-' . $strId . '-')
+                ) {
+                    continue;
+                }
+                $ies              = new IntervenantEtapeStructure();
+                $ies->structure   = $strId;
+                $ies->objectif    = (float)$d['objectif'];
+                $ies->partiel     = (float)$d['partiel'];
+                $ies->realisation = (float)$d['realisation'];
+                $precs[$strId]    = $ies;
+            }
+
+            if (!$structure && $dependance->getPerimetre()?->getCode() === Perimetre::COMPOSANTE) {
+                // Sans composante (admin) : il suffit qu'une composante ait satisfait la dépendance
+                $ok = false;
+                foreach ($precs as $prec) {
+                    if (WorkflowProcess::evaluerAvancement($dependance->getAvancement(), [$prec])) {
+                        $ok = true;
+                        break;
+                    }
+                }
+            } else {
+                $ok = WorkflowProcess::evaluerAvancement($dependance->getAvancement(), $precs);
+            }
+
+            if (!$ok) {
+                $why[] = $precEtape->getDescNonFranchie();
+            }
+        }
+
+        return empty($why);
     }
 
 

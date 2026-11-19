@@ -79,7 +79,7 @@ class RouteEntitiesInjector implements ParamFirewallInterface
 
 
 
-    public function check(string $name, array &$params, mixed $constraint, ?string &$errorMessage): bool
+    public function check(string $name, array &$params, mixed $constraint = null, ?string &$errorMessage = null): bool
     {
         $this->paramClass = null;
         switch ($name) {

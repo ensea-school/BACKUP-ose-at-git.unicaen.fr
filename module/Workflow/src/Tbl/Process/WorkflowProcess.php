@@ -223,6 +223,19 @@ class WorkflowProcess implements ProcessInterface
      */
     public function isDependanceOk(int $avancement, array $precs): bool
     {
+        return self::evaluerAvancement($avancement, $precs);
+    }
+
+
+
+    /**
+     * Règle d'avancement d'une dépendance, partagée avec la feuille de route
+     * (évaluation d'une étape par composante qui n'a pas encore de ligne dans tbl_workflow).
+     *
+     * @param array|IntervenantEtapeStructure[] $precs
+     */
+    public static function evaluerAvancement(int $avancement, array $precs): bool
+    {
         if (empty($precs)) {
             return false;
         }

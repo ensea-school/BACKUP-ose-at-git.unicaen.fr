@@ -148,11 +148,11 @@ LEFT JOIN heures_s
     ON heures_s.intervenant_id = i.id
     AND heures_s.structure_id = s.id
 
-LEFT JOIN WF_ETAPE WFER
-    ON WFER.CODE = 'CONSEIL_RESTREINT'
+LEFT JOIN workflow_etape WFER
+    ON WFER.CODE = 'conseil_restreint'
 
-LEFT JOIN WF_ETAPE WFEA
-    ON WFEA.CODE = 'CONSEIL_ACADEMIQUE'
+LEFT JOIN workflow_etape WFEA
+    ON WFEA.CODE = 'conseil_academique'
 
 LEFT JOIN tbl_workflow twf
     ON twf.intervenant_id = ta.intervenant_id

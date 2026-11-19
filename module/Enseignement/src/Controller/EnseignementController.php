@@ -211,8 +211,13 @@ class EnseignementController extends AbstractController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
+                $isExterne = $form->get('service')->has('interne-externe')
+                    && $form->get('service')->get('interne-externe')->getValue() == 'service-externe';
+
                 if (!$this->isAllowed($service, $typeVolumeHoraire->getPrivilegeEnseignementEdition())) {
                     $this->flashMessenger()->addErrorMessage("Vous n'êtes pas autorisé à créer ou modifier ce service.");
+                } elseif ($isExterne && $service->getIntervenant() && !$service->getIntervenant()->getStructure()) {
+                    $this->flashMessenger()->addErrorMessage("Impossible d'enregistrer un service hors établissement : l'intervenant n'a pas de structure d'affectation.");
                 } else {
                     $form->saveToContext();
                     $this->getProcessusPlafond()->beginTransaction();
@@ -220,15 +225,6 @@ class EnseignementController extends AbstractController
                         //Correction evite les autocommits pour un rollback fonctionnel.
                         $this->em()->getConnection()->setAutoCommit(false);
                         //Uniquement pour le service fait dans l'établissement
-
-                        $isExterne = false;
-                        if ($form->get('service')->has('interne-externe')) {
-                            if ($form->get('service')->get('interne-externe')->getValue() == 'service-externe') {
-                                $isExterne = true;
-                            }
-                        }
-
-
                         if (!$isExterne) {
                             //Récupération de l'id de l'étape qui a été selectionné pour la recherche de la formation
                             $etapeId = $form->get('service')
@@ -250,9 +246,14 @@ class EnseignementController extends AbstractController
                             $entities[] = $volumeHoraire;
                         }
                         if (!$this->getProcessusPlafond()->endTransaction($entities, $typeVolumeHoraire, $hFin < $hDeb)) {
+                            $saved = null; // rien n'a été enregistré : pas de rafraîchissement de la ligne
+                            // Retour en autocommit, sinon le recalcul ci-dessous reste dans une transaction jamais validée
+                            // qui verrouille les tables de calcul (et bloque les autres connexions)
+                            $this->em()->getConnection()->setAutoCommit(true);
                             $this->updateTableauxBord($service->getIntervenant());
                         }
                     } catch (\Exception $e) {
+                        $saved = null;
                         $this->flashMessenger()->addErrorMessage($this->translate($e));
                         $this->em()->rollback();
                     }

@@ -75,6 +75,22 @@ update-ddl: ## Mise à jour des définitions de la base de données
 
 
 
+# Dossier des clones locaux des bibliothèques unicaen (surchargeable : make lib LIB=x UNICAEN_LOCAL_DIR=...)
+UNICAEN_LOCAL_DIR ?= $(HOME)/www/unicaen
+
+lib: ## Bascule une lib unicaen local <-> distant : make lib LIB=bddadmin [MODE=local|remote]
+	@if [ -z "$(LIB)" ]; then echo "Usage : make lib LIB=<nom> [MODE=local|remote]"; exit 1; fi
+	@./docker/lib-switch.sh $(APP_NAME)-php $(UNICAEN_LOCAL_DIR) $(LIB) $(or $(MODE),toggle)
+.PHONY: lib
+
+
+
+libs: ## Affiche pour chaque lib unicaen si elle est en version locale ou distante
+	@./docker/lib-switch.sh $(APP_NAME)-php $(UNICAEN_LOCAL_DIR)
+.PHONY: libs
+
+
+
 compile: ## Compilation avec Vite & Sass côté front
 	docker exec -it $(APP_NAME)-nodejs npx sass --style=compressed public/css/app.scss public/css/app.css
 	docker exec -it $(APP_NAME)-nodejs npx vite build

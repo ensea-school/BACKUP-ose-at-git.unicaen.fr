@@ -297,7 +297,10 @@ $.widget("ose.enseignements", {
 
         $("body").on('save-volume-horaire', function (event, popAjax) {
             var serviceId = popAjax.element.data('service');
-            if ($("div .alert-warning", event.div).length ? false : true) { // si aucune erreur n'a été rencontrée
+            // On ne cherche les avertissements que dans le popover, pas dans toute la page
+            // (la page du réalisé contient d'autres .alert-warning : prévu -> réalisé, clôture...)
+            var popEl = popAjax.getPopoverElement();
+            if (!popEl || popEl.find(".alert-warning").length === 0) { // si aucune erreur n'a été rencontrée
                 popAjax.hide();
             }
             that.onAfterSaisie(serviceId);
@@ -332,7 +335,18 @@ $.widget("ose.serviceForm", {
             this.getElementElementPedagogiqueListe().selectpicker('val', '');
             this.element.find('#element-externe').show();
         }
+        this.updateSubmit();
         this.updateVolumesHoraires();
+    },
+
+    /* Service hors établissement impossible si l'intervenant n'a pas de structure d'affectation :
+       le bouton d'enregistrement est remplacé par un message */
+    updateSubmit: function () {
+        var message = this.element.find('#externe-sans-structure');
+        var bloque = message.length > 0 && 'service-externe' == this.getInterneExterne();
+
+        message.toggle(bloque);
+        this.getElementSubmit().toggle(!bloque);
     },
 
     updateVolumesHoraires: function () {
@@ -399,6 +413,7 @@ $.widget("ose.serviceForm", {
             that.element.find("#waiting-save-volume-horaire").show();
         });
 
+        this.updateSubmit();
         this.initVolumesHoraires();
     },
 

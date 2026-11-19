@@ -111,7 +111,7 @@ class  IntervenantController extends AbstractController
      */
     protected function getIntervenantsRecents()
     {
-        $affichageNumeroPerso = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE));
+        $affichageNumeroPerso = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ESSENTIELLES));
         $container = $this->getSessionContainer();
         //$container->recents = [];
         if (isset($container->recents)) {
@@ -151,7 +151,7 @@ class  IntervenantController extends AbstractController
         $recherche = $this->getProcessusIntervenant()->recherche();
         $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
         $recherche->setShowHisto($canShowHistorises);
-        $affichageNumeroPerso = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE));
+        $affichageNumeroPerso = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ESSENTIELLES));
         $intervenants = [];
         $term = $this->axios()->fromPost('term');
         $requestedTypes = (array)$this->axios()->fromPost('types', []);
@@ -254,7 +254,7 @@ class  IntervenantController extends AbstractController
         $container = $this->getSessionContainer();
 
         $affichageNumeroPerso = $this->isAllowed(
-            Privileges::getResourceId(Privileges::INTERVENANT_ADRESSE)
+            Privileges::getResourceId(Privileges::INTERVENANT_ESSENTIELLES)
         );
 
         if (!isset($container->recents)) {
@@ -374,6 +374,7 @@ class  IntervenantController extends AbstractController
         $canEditIdentiteIntervenant = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_IDENTITE_EDITION));
         $canViewInseeIntervenant = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_VISUALISATION));
         $canEditInseeIntervenant = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_INSEE_EDITION));
+        $canViewDonneesEssentielles = $isNew || $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ESSENTIELLES));
 
         $protectedFields = [];
         if (!$canViewAdresseIntervenant) {
@@ -477,7 +478,8 @@ class  IntervenantController extends AbstractController
             'actionDetail',
             'canViewAdresseIntervenant',
             'canViewIdentiteIntervenant',
-            'canViewInseeIntervenant'
+            'canViewInseeIntervenant',
+            'canViewDonneesEssentielles'
         ));
 
         return $vm;

@@ -66,6 +66,8 @@ Attention, cette version nécessite une montée en version de votre version de P
 ## Corrections
 * Le bouton de génération d'un avenant n'est plus désactivé lorsqu'aucun modèle d'avenant spécifique n'est défini : le modèle de contrat est utilisé (#63931)
 * Suppression d'un debug visible au niveau de la page contrat
+* Les jauges de plafonds apparaissent dès la saisie de la première ligne de service, sans avoir à recharger la page
+* La fenêtre de modification d'une ligne de service se ferme de nouveau après l'enregistrement dans les services réalisés
 * Le connecteur OSE-Pégase est disponible en version **1.0.6**. Pensez à adapter votre vue `SRC_ETAPE` à partir du fichier fourni par le connecteur pour le domaine fonctionnel.
 * Correction de l'affichage des formations mutualisées dans le détail d'un élément pédagogique (#68321)
 

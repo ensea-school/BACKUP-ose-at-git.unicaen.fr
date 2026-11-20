@@ -4,7 +4,7 @@
     "name": "vendor"
   },
   "main.js": {
-    "file": "assets/main-pCEc1e2L.js",
+    "file": "assets/main-BaDOrYYc.js",
     "name": "main",
     "src": "main.js",
     "isEntry": true,
@@ -12,7 +12,7 @@
       "_vendor-mqXOUcWi.js"
     ],
     "css": [
-      "assets/main-oj4tSSls.css"
+      "assets/main-6g8HAOJt.css"
     ]
   }
 }

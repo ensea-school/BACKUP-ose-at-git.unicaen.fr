@@ -30,7 +30,8 @@ class RechercheProcessus
      */
 
 
-    public function rechercher ($critere, $limit = 50, string $key = ':CODE', array $typeIntervenantCodes = [],bool $affichageNumeroPerso)
+    public function rechercher ($critere, $limit = 50, string $key = ':CODE', array $typeIntervenantCodes = [],bool
+    $affichageNumeroPerso = false)
     {
         try {
             return $this->rechercheGenerique($critere, $limit, $key, false, $typeIntervenantCodes, $affichageNumeroPerso);

@@ -72,10 +72,12 @@ class  OffreEmploiController extends AbstractController
             try {
                 $this->getServiceOffreEmploi()->save($offreEmploi);
                 $hFin = $offreEmploi->getNombreHeures() * $offreEmploi->getNombrePostes();
-                $this->getProcessusPlafond()->endTransaction($offreEmploi->getStructure(), $typeVolumeHoraire, $hFin < $hDeb);
-                $this->flashMessenger()->addSuccessMessage(
-                    "Enregistrement effectué"
-                );
+                // Si un plafond est dépassé, endTransaction annule l'enregistrement et signale lui-même le dépassement
+                if ($this->getProcessusPlafond()->endTransaction($offreEmploi->getStructure(), $typeVolumeHoraire, $hFin < $hDeb)) {
+                    $this->flashMessenger()->addSuccessMessage(
+                        "Enregistrement effectué"
+                    );
+                }
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
                 $this->em()->rollback();

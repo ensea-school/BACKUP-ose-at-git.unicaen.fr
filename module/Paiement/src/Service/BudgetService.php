@@ -111,26 +111,20 @@ class BudgetService extends AbstractService
 
         ];
         $dotation = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
-        $liquidation = $this->getTblLiquidation($structure);
 
         if (!empty($dotation)) {
-            $dotation    = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
             $liquidation = $this->getTblLiquidation($structure);
-            foreach ($dotation as $key => $values) {
-                if ($key == $structure->getId()) {
-                    foreach ($values as $k => $v) {
-                        if ($k != 'total') {
-                            $typeRessources                                                = $this->getServiceTypeRessource()->get($k);
-                            $budget['dotation'][$typeRessources->getCode()]['heures']      = $v;
-                            $budget['dotation'][$typeRessources->getCode()]['libelle']     = $typeRessources->getLibelle();
-                            $budget['consommation'][$typeRessources->getCode()]['heures']  = (key_exists($k, $liquidation)) ? $liquidation[$k] : 0;
-                            $budget['consommation'][$typeRessources->getCode()]['libelle'] = $typeRessources->getLibelle();
-                        } else {
-                            $budget['dotation']['total'] = $values['total'];
-                        }
-                    }
-                    break;
+            foreach ($dotation[$structure->getId()] ?? [] as $k => $v) {
+                if ($k == 'total') {
+                    $budget['dotation']['total'] = $v;
+                    continue;
                 }
+                $typeRessource = $this->getServiceTypeRessource()->get($k);
+                $code          = $typeRessource->getCode();
+                $libelle       = $typeRessource->getLibelle();
+
+                $budget['dotation'][$code]     = ['heures' => $v, 'libelle' => $libelle];
+                $budget['consommation'][$code] = ['heures' => $liquidation[$k] ?? 0, 'libelle' => $libelle];
             }
             $budget['consommation']['total'] = $liquidation['total'];
 

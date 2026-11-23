@@ -101,11 +101,11 @@ class ExportProvider
             throw new \Exception('Fichier inexistant ou inaccessible');
         }
         if (($handle = fopen($filename, "r")) !== false) {
-            $head = fgetcsv($handle, 9999, ";");
+            $head = fgetcsv($handle, 9999, ';', '"', escape: '\\');
             if (!$this->checkGoodCSV($head)) {
                 throw new \Exception('Le fichier CSV fourni n\'est pas un export des charges d\'enseignement');
             }
-            while (($d = fgetcsv($handle, 9999, ";")) !== false) {
+            while (($d = fgetcsv($handle, 9999, ';', '"', escape: '\\')) !== false) {
 
                 $l      = [
                     'annee'                      => $d[0],

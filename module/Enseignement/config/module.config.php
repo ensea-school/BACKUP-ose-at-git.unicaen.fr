@@ -126,6 +126,14 @@ return [
                     'route'  => '/constatation',
                     'action' => 'constatation',
                 ],
+                'transfert-donnees'      => [
+                    'route'  => '/transfert-donnees',
+                    'action' => 'transfert-donnees',
+                ],
+                'transfert-executer'     => [
+                    'route'  => '/transfert-executer',
+                    'action' => 'transfert-executer',
+                ],
             ],
         ],
 
@@ -262,12 +270,23 @@ return [
         ],
         [
             'controller' => EnseignementController::class,
-            'action'     => ['saisie', 'rafraichir-ligne', 'saisie-form-refresh-vh', 'suppression', 'initialisation', 'constatation'],
+            'action'     => ['saisie', 'rafraichir-ligne', 'saisie-form-refresh-vh', 'suppression', 'initialisation', 'constatation', 'transfert-executer'],
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_EDITION,
                 Privileges::ENSEIGNEMENT_REALISE_EDITION,
                 Privileges::REFERENTIEL_PREVU_EDITION,
                 Privileges::REFERENTIEL_REALISE_EDITION,
+            ],
+            'assertion'  => Assertion\EnseignementAssertion::class,
+        ],
+        [
+            'controller' => EnseignementController::class,
+            'action'     => ['transfert-donnees'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                Privileges::ENSEIGNEMENT_REALISE_EDITION,
             ],
             'assertion'  => Assertion\EnseignementAssertion::class,
         ],

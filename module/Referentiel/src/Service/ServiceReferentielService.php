@@ -339,20 +339,92 @@ class ServiceReferentielService extends AbstractEntityService
      * @param Intervenant $intervenant
      *
      */
-    public function setPrevusFromPrevus(Intervenant $intervenant)
+    public function setPrevusFromPrevus(
+        Intervenant $intervenant,
+        ?array $selectedServiceIds = null,
+        bool $replaceSelectedPrevisionnel = false
+    )
     {
-        $old = $this->getPrevusFromPrevusData($intervenant);
+        $old = $selectedServiceIds === null
+            ? $this->getPrevusFromPrevusData($intervenant)
+            : $this->getPrevusFromPrevusData($intervenant, true, $replaceSelectedPrevisionnel);
+
+        if ($selectedServiceIds !== null && $replaceSelectedPrevisionnel) {
+            $transferts = [];
+            foreach ($old as $o) {
+                if (!$o['transferable'] || !in_array((int)$o['source-id'], $selectedServiceIds, true)) continue;
+
+                $service = $o['service'];
+                $key = $service ? 'target-' . $service->getId() : 'source-' . $o['source-id'];
+                if (!isset($transferts[$key])) {
+                    $transferts[$key] = ['service' => $service, 'items' => []];
+                }
+                $transferts[$key]['items'][] = $o;
+            }
+
+            foreach ($transferts as $transfert) {
+                $items = $transfert['items'];
+                $premier = reset($items);
+                $service = $transfert['service'];
+
+                if ($service) {
+                    foreach ($service->getVolumeHoraireReferentiel() as $volumeHoraireExistant) {
+                        if ($volumeHoraireExistant->estNonHistorise()
+                            && $volumeHoraireExistant->getTypeVolumeHoraire()
+                            && $volumeHoraireExistant->getTypeVolumeHoraire()->getId() === $premier['type-volume-horaire']->getId()) {
+                            // Le remplacement historise les heures prévisionnelles existantes, même validées.
+                            $volumeHoraireExistant->setRemove(true);
+                        }
+                    }
+                }
+
+                if (!$service) {
+                    $service = $this->newEntity();
+                    $service->setIntervenant($intervenant);
+                    $service->setFonctionReferentiel($premier['fonction']);
+                    $service->setStructure($premier['structure']);
+                    $service->setTag($premier['tag']);
+                    $service->setMotifNonPaiement($premier['motif-non-paiement']);
+                    $service->setCommentaires($premier['commentaires']);
+                    $service->setTypeVolumeHoraire($premier['type-volume-horaire']);
+                }
+
+                foreach ($items as $o) {
+                    $volumeHoraire = $this->getServiceVolumeHoraireReferentiel()->newEntity();
+                    $volumeHoraire->setTypeVolumeHoraire($o['type-volume-horaire']);
+                    $volumeHoraire->setHeures($o['heures']);
+                    $volumeHoraire->setServiceReferentiel($service);
+                    $service->addVolumeHoraireReferentiel($volumeHoraire);
+                }
+
+                $service->setHistoDestructeur(null);
+                $this->save($service);
+            }
+
+            return;
+        }
 
         // Enregistrement des services trouvés dans la nouvelle année
         foreach ($old as $o) {
+            if ($selectedServiceIds !== null && (!$o['transferable']
+                || !in_array((int)$o['source-id'], $selectedServiceIds, true))) {
+                continue;
+            }
             $service = $o['service'];
+            if ($selectedServiceIds !== null && $o['warning']) {
+                $service->getVolumeHoraireReferentielListe()
+                    ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+                    ->setHeures(0);
+            }
             if (!$service) {
                 $service = $this->newEntity();
                 $service->setIntervenant($intervenant);
 
-                $annee                 = $this->getServiceContext()->getAnnee()->getId();
-                $fonctionAnneeCourante = $this->getServiceFonctionReferentiel()->getFonctionByCodeAndAnnee($o['fonction']->getCode(), $annee);
-                $service->setFonctionReferentiel($fonctionAnneeCourante);
+                $fonction = $this->getServiceFonctionReferentiel()->getFonctionByCodeAndAnnee(
+                    $o['fonction']->getCode(),
+                    $this->getServiceContext()->getAnnee()->getId()
+                );
+                $service->setFonctionReferentiel($fonction);
 
                 $service->setStructure($o['structure']);
                 $service->setCommentaires($o['commentaires']);
@@ -376,7 +448,11 @@ class ServiceReferentielService extends AbstractEntityService
 
 
 
-    public function getPrevusFromPrevusData(Intervenant $intervenant)
+    public function getPrevusFromPrevusData(
+        Intervenant $intervenant,
+        bool $withStatus = false,
+        bool $matchTargetComments = false
+    )
     {
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $tvhSource = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
@@ -395,8 +471,10 @@ class ServiceReferentielService extends AbstractEntityService
 
         $this->finderByHistorique($qb);
         $this->finderByIntervenant($intervenantPrec, $qb);
-        $this->getServiceFonctionReferentiel()->finderByHistorique($qb); // pour éviter que des fonctions devenues historiques ne soient reconduites
-        $this->getServiceStructure()->finderByHistorique($qb);           // idem pour les structures anciennes!!
+        if (!$withStatus) {
+            $this->getServiceFonctionReferentiel()->finderByHistorique($qb); // pour éviter que des fonctions devenues historiques ne soient reconduites
+            $this->getServiceStructure()->finderByHistorique($qb);           // idem pour les structures anciennes!!
+        }
         $sVolumeHoraireReferentiel->finderByHistorique($qb);
         $sVolumeHoraireReferentiel->finderByTypeVolumeHoraire($tvhSource, $qb);
         $sVolumeHoraireReferentiel->finderByEtatVolumeHoraire($evhValide, $qb);
@@ -407,6 +485,65 @@ class ServiceReferentielService extends AbstractEntityService
         foreach ($s as $service) {
 
             /* @var $service ServiceReferentiel */
+
+            if ($withStatus) {
+                $fonctionSource = $service->getFonctionReferentiel();
+                $structure = $service->getStructure();
+                $heures = $service->getVolumeHoraireReferentielListe()->getHeures();
+                if ($heures <= 0) {
+                    continue;
+                }
+
+                $fonctionCourante = $this->getServiceFonctionReferentiel()->getFonctionByCodeAndAnnee(
+                    $fonctionSource->getCode(),
+                    (string)$this->getServiceContext()->getAnnee()->getId()
+                );
+                $reason = null;
+                if (!$fonctionSource->estNonHistorise() || !$structure->estNonHistorise()) {
+                    $reason = 'La fonction ou la structure source est devenue historique.';
+                } elseif (!$fonctionCourante) {
+                    $reason = 'Aucune fonction équivalente n’est disponible dans l’année courante.';
+                }
+
+                $newService = $fonctionCourante
+                    ? $this->getBy(
+                        $intervenant,
+                        $fonctionCourante,
+                        $structure,
+                        $service->getTag(),
+                        $service->getMotifNonPaiement(),
+                        $matchTargetComments ? $service->getCommentaires() : null
+                    )
+                    : null;
+                $targetHours = 0;
+                if ($newService && $newService->estNonHistorise()) {
+                    $newService->setTypeVolumeHoraire($tvhPrevu);
+                    $targetList = $newService->getVolumeHoraireReferentielListe()->setTypeVolumeHoraire($tvhPrevu);
+                    $targetHours = $targetList->getHeures();
+                } else {
+                    $newService = null;
+                }
+
+                $old[] = [
+                    'source-id' => $service->getId(),
+                    'type-volume-horaire' => $tvhPrevu,
+                    'fonction' => $fonctionCourante ?: $fonctionSource,
+                    'structure' => $structure,
+                    'tag' => $service->getTag(),
+                    'motif-non-paiement' => $service->getMotifNonPaiement(),
+                    'commentaires' => $service->getCommentaires(),
+                    'heures' => $heures,
+                    'service' => $newService,
+                    'label' => $fonctionSource->getCode() . ' — ' . $fonctionSource->getLibelleCourt() . ' (' . $structure->getLibelleCourt() . ')',
+                    'transferable' => $reason === null,
+                    'warning' => $targetHours > 0,
+                    'warning-message' => null,
+                    'existing-hours' => $targetHours,
+                    'reason' => $reason,
+                    'hours-total' => $heures,
+                ];
+                continue;
+            }
 
             $ok = $service->getFonctionReferentiel()->estNonHistorise()
                 && $service->getStructure()->estNonHistorise();

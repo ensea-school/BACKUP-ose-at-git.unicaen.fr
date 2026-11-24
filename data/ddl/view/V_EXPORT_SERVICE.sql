@@ -226,7 +226,13 @@ FROM
 WHERE
   ep.histo_destruction IS NULL
 GROUP BY
-  ep.id
+    ep.id
+), chemins AS (
+    SELECT
+        element_pedagogique_id,
+        COUNT(*) AS nb_chemins
+    FROM chemin_pedagogique
+    GROUP BY element_pedagogique_id
 )
 SELECT
   t.id                              id,
@@ -250,6 +256,7 @@ SELECT
     ELSE gtf.id * 256 + niveau END  niveau_formation_id,
   etp.id                            etape_id,
   ep.id                             element_pedagogique_id,
+  NVL(chemins.nb_chemins, 0)        element_nb_chemins,
   t.periode_id                      periode_id,
   t.type_intervention_id            type_intervention_id,
   t.fonction_referentiel_id         fonction_referentiel_id,
@@ -290,6 +297,7 @@ SELECT
   ep.taux_fi                        element_taux_fi,
   ep.taux_fc                        element_taux_fc,
   ep.taux_fa                        element_taux_fa,
+  ep.taux_foad                      element_taux_foad,
   t.service_ref_formation           service_ref_formation,
   t.commentaires                    commentaires,
   p.libelle_court                   periode_libelle,
@@ -341,7 +349,10 @@ FROM
     LEFT JOIN type_formation               tf ON tf.id    = etp.type_formation_id AND tf.histo_destruction IS NULL
     LEFT JOIN groupe_type_formation       gtf ON gtf.id   = tf.groupe_id AND gtf.histo_destruction IS NULL
     LEFT JOIN v_formule_intervenant        fi ON fi.intervenant_id = i.id
-    LEFT JOIN ponds                     ponds ON ponds.element_pedagogique_id = ep.id
+    LEFT JOIN ponds ponds
+              ON ponds.element_pedagogique_id = ep.id
+    LEFT JOIN chemins chemins
+              ON chemins.element_pedagogique_id = ep.id
     LEFT JOIN fonction_referentiel         fr ON fr.id    = t.fonction_referentiel_id
     LEFT JOIN type_validation              tv ON tvh.code = 'REALISE' AND tv.code = 'CLOTURE_REALISE'
     LEFT JOIN validation                    v ON v.intervenant_id = i.id AND v.type_validation_id = tv.id AND v.histo_destruction IS NULL

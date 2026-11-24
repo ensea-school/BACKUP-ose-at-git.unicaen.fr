@@ -9,6 +9,7 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
+use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Referentiel\Entity\Db\FonctionReferentiel;
@@ -287,6 +288,172 @@ class ServiceReferentielController extends AbstractController
         $vm->setTemplate('enseignement/constatation');
 
         return $vm;
+    }
+
+
+    public function transfertDonneesAction()
+    {
+        $this->initFilters();
+        $intervenantId = (int)$this->params()->fromQuery('intervenant', 0);
+        $intervenant = $intervenantId ? $this->getServiceServiceReferentiel()->getServiceIntervenant()->get($intervenantId) : null;
+        $mode = $this->params()->fromQuery('mode', '');
+        $replaceExistingPrevisionnel = filter_var(
+            $this->params()->fromQuery('replaceExistingPrevisionnel', false),
+            FILTER_VALIDATE_BOOLEAN
+        );
+        if (!$intervenant) {
+            return new JsonModel(['rows' => [], 'message' => 'Intervenant introuvable.']);
+        }
+
+        $rows = [];
+        if ($mode === 'prevu-to-prevu') {
+            foreach ($this->getTransfertPrevuReferentielData($intervenant, $replaceExistingPrevisionnel) as $item) {
+                $rows[] = [
+                    'id' => (int)$item['source-id'],
+                    'label' => $item['label'],
+                    'heures' => $item['hours-total'],
+                    'transferable' => $item['transferable'],
+                    'warning' => $item['warning'],
+                    'warningMessage' => $item['warning-message'],
+                    'existingHours' => $item['existing-hours'] ?? 0,
+                    'reason' => $item['reason'],
+                ];
+            }
+        } elseif ($mode === 'prevu-to-realise') {
+            $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
+            $recherche = new Recherche($this->getServiceTypeVolumeHoraire()->getPrevu(), $this->getServiceEtatVolumeHoraire()->getValide());
+            $recherche->setIntervenant($intervenant);
+            foreach ($this->getProcessusServiceReferentiel()->getReferentiels($recherche) as $service) {
+                $service->setTypeVolumeHoraire($realise);
+                $prevu = $service->getVolumeHoraireReferentielListe()->getChild()
+                    ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+                    ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
+                $hours = $prevu->getHeures();
+                if ($hours <= 0) continue;
+
+                $realiseList = $service->getVolumeHoraireReferentielListe()->getChild()
+                    ->setTypeVolumeHoraire($realise);
+                $realiseHours = $realiseList->getHeures();
+                $allowed = $this->isAllowed($service, Privileges::REFERENTIEL_REALISE_EDITION);
+                $rows[] = [
+                    'id' => (int)$service->getId(),
+                    'label' => $service->getFonctionReferentiel()->getCode() . ' — ' . $service->getFonctionReferentiel()->getLibelleCourt() . ' (' . $service->getStructure()->getLibelleCourt() . ')',
+                    'heures' => $hours,
+                    'transferable' => $allowed,
+                    'warning' => $realiseHours > 0,
+                    'warningMessage' => null,
+                    'existingHours' => $realiseHours,
+                    'reason' => $allowed ? null : 'Vous ne disposez pas des droits de saisie sur ce référentiel réalisé dans votre composante.',
+                ];
+            }
+        } else {
+            return new JsonModel(['rows' => [], 'message' => 'Type de transfert inconnu.']);
+        }
+
+        return new JsonModel(['rows' => $rows]);
+    }
+
+
+    private function getTransfertPrevuReferentielData(Intervenant $intervenant, bool $matchTargetComments = false): array
+    {
+        $data = $this->getServiceServiceReferentiel()->getPrevusFromPrevusData($intervenant, true, $matchTargetComments);
+        foreach ($data as &$item) {
+            if (!$item['transferable']) continue;
+
+            $target = $item['service'] ?? $this->getServiceServiceReferentiel()->newEntity()
+                ->setIntervenant($intervenant)
+                ->setFonctionReferentiel($item['fonction'])
+                ->setStructure($item['structure']);
+            $target->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
+            if (!$this->isAllowed($target, Privileges::REFERENTIEL_PREVU_EDITION)) {
+                $item['transferable'] = false;
+                $item['reason'] = 'Vous ne disposez pas des droits de saisie sur ce référentiel dans votre composante.';
+            }
+        }
+        unset($item);
+
+        return $data;
+    }
+
+
+    public function transfertExecuterAction()
+    {
+        $payload = json_decode((string)$this->getRequest()->getContent(), true) ?: [];
+        $intervenantId = (int)($payload['intervenant'] ?? 0);
+        $intervenant = $intervenantId ? $this->getServiceServiceReferentiel()->getServiceIntervenant()->get($intervenantId) : null;
+        $mode = $payload['mode'] ?? '';
+        $ids = array_values(array_unique(array_map('intval', $payload['ids'] ?? [])));
+        $replaceExistingPrevisionnel = !empty($payload['replaceExistingPrevisionnel']);
+        if (!$intervenant) return new JsonModel(['success' => false, 'message' => 'Intervenant introuvable.']);
+        if (!$ids) return new JsonModel(['success' => false, 'message' => 'Aucun référentiel sélectionné.']);
+        if (!in_array($mode, ['prevu-to-prevu', 'prevu-to-realise'], true)) {
+            return new JsonModel(['success' => false, 'message' => 'Type de transfert inconnu.']);
+        }
+
+        $type = $mode === 'prevu-to-prevu'
+            ? $this->getServiceTypeVolumeHoraire()->getPrevu()
+            : $this->getServiceTypeVolumeHoraire()->getRealise();
+        $services = [];
+        if ($mode === 'prevu-to-prevu') {
+            $eligible = [];
+            foreach ($this->getTransfertPrevuReferentielData($intervenant, $replaceExistingPrevisionnel) as $item) {
+                if ($item['transferable']) $eligible[] = (int)$item['source-id'];
+            }
+            $ids = array_values(array_intersect($ids, $eligible));
+        } else {
+            if (!$this->isAllowed($intervenant, Privileges::REFERENTIEL_REALISE_EDITION)) {
+                return new JsonModel(['success' => false, 'message' => 'Vous n’êtes pas autorisé à modifier le référentiel réalisé.']);
+            }
+            $this->initFilters();
+            foreach ($ids as $id) {
+                $service = $this->getServiceServiceReferentiel()->get($id);
+                if (!$service || $service->getIntervenant()->getId() !== $intervenant->getId()) continue;
+                $service->setTypeVolumeHoraire($type);
+                if (!$this->isAllowed($service, Privileges::REFERENTIEL_REALISE_EDITION)) continue;
+                $prevu = $service->getVolumeHoraireReferentielListe()->getChild()
+                    ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+                    ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
+                if ($prevu->getHeures() > 0) $services[] = $service;
+            }
+            $ids = array_map(static fn(ServiceReferentiel $service) => (int)$service->getId(), $services);
+        }
+        if (!$ids) return new JsonModel(['success' => false, 'message' => 'Aucun des référentiels sélectionnés ne peut être transféré.']);
+
+        try {
+            $this->getProcessusPlafond()->beginTransaction();
+            if ($mode === 'prevu-to-prevu') {
+                $this->getServiceServiceReferentiel()->setPrevusFromPrevus($intervenant, $ids, $replaceExistingPrevisionnel);
+            } else {
+                foreach ($services as $service) {
+                    $service->setTypeVolumeHoraire($type);
+                    $this->getServiceServiceReferentiel()->setRealisesFromPrevus($service);
+                }
+            }
+            $this->updateTableauxBord($intervenant, $type);
+            $messages = [];
+            foreach ($this->getProcessusPlafond()->getServicePlafond()->controle($intervenant, $type) as $controle) {
+                if ($controle->isBloquant() && $controle->isDepassement()) $messages[] = (string)$controle;
+            }
+            if ($messages) {
+                $this->em()->rollback();
+                $this->getProcessusPlafond()->getBdd()->setDoctrineConnection(null);
+                return new JsonModel([
+                    'success' => false,
+                    'blocked' => true,
+                    'message' => 'La bascule a été annulée : aucun changement n’a été enregistré. ' . implode(' ', array_unique($messages)),
+                ]);
+            }
+            $ok = $this->getProcessusPlafond()->endTransaction($intervenant, $type);
+        } catch (\Throwable $e) {
+            if ($this->em()->getConnection()->isTransactionActive()) $this->em()->rollback();
+            $this->getProcessusPlafond()->getBdd()->setDoctrineConnection(null);
+            return new JsonModel([
+                'success' => false,
+                'message' => 'La bascule a été annulée : aucun changement n’a été enregistré. ' . $this->translate($e),
+            ]);
+        }
+        if (!$ok) return new JsonModel(['success' => false, 'message' => 'La bascule a été annulée par le contrôle des plafonds ; aucun changement n’a été enregistré.']);
+        return new JsonModel(['success' => true]);
     }
 
 

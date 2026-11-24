@@ -7806,11 +7806,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "8.0.3",
+            "version": "8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "58163c6a818534f03c85d7bebd79fa61ae1b6111"
+                "reference": "8706e96831eaefa0e1156686c4863c36f2e0c68a"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -7862,7 +7862,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2026-11-17T15:03:09+00:00"
+            "time": "2026-11-24T10:15:06+00:00"
         },
         {
             "name": "unicaen/authentification",
@@ -7897,11 +7897,11 @@
         },
         {
             "name": "unicaen/bddadmin",
-            "version": "1.8.2",
+            "version": "1.8.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
-                "reference": "b4b3edbed24be4aefea2b12d2a859d809b178fe1"
+                "reference": "2eeda7d3a43e914bef5213b2767ac231f2120c3d"
             },
             "require": {
                 "php": ">=8.2"
@@ -7914,7 +7914,7 @@
                 }
             },
             "description": "Module pour administrer des bases de données Postgresql et Oracle",
-            "time": "2026-11-23T15:38:53+00:00"
+            "time": "2026-11-24T06:01:32+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",

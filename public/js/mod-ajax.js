@@ -75,6 +75,16 @@ $.widget("unicaen.modAjax", {
         that.element[0].addEventListener('hidden.bs.modal', () => {
             that.hide(true);
         });
+
+        /* À la fermeture, on vide le contenu chargé en Ajax :
+         * la modale reste dans le DOM, et ses éléments (onglets #fiche, #edition, etc.) entreraient
+         * en conflit d'ID avec ceux d'une autre modale ouverte ensuite (Bootstrap cible les onglets via document.querySelector) */
+        that.getModalElement()[0].addEventListener('hidden.bs.modal', () => {
+            if (that.options.forced && that.options.url) {
+                that.contentDiv.empty();
+                that.ajaxLoaded = false;
+            }
+        });
     },
 
 

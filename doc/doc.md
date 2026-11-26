@@ -19,5 +19,6 @@
 ## Configuration
 
 * [Plafonds](Plafonds/Plafonds.md)
+* [Module Charges d'enseignement](Charges/Charges.md)
 * [Detecter si on est connecté depuis l'établissement ou bien depuis l'extérieur](detection-etablissement-ou-extérieur.md)
 * [Stockage des fichiers](Stockage-fichiers.md)

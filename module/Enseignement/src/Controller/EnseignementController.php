@@ -477,6 +477,207 @@ class EnseignementController extends AbstractController
 
 
 
+    public function transfertDonneesAction()
+    {
+        $intervenantId = (int)$this->params()->fromQuery('intervenant', 0);
+        $intervenant = $intervenantId ? $this->getServiceIntervenant()->get($intervenantId) : null;
+        $mode = $this->params()->fromQuery('mode', '');
+        $rows = [];
+        if ($mode === 'prevu-to-realise') {
+            $this->initFilters();
+        }
+
+        if (!$intervenant) {
+            return new JsonModel(['rows' => [], 'message' => 'Intervenant introuvable.']);
+        }
+
+        if ($mode === 'prevu-to-prevu') {
+            foreach ($this->getTransfertPrevuEnseignementData($intervenant) as $item) {
+                $rows[] = [
+                    'id' => $item['source-id'],
+                    'label' => $item['label'],
+                    'heures' => $item['hours-total'],
+                    'transferable' => $item['transferable'],
+                    'warning' => $item['warning'],
+                    'warningMessage' => $item['warning-message'] ?? null,
+                    'existingHours' => $item['existing-hours'] ?? 0,
+                    'period' => $item['period'] ?? null,
+                    'component' => $item['component'] ?? null,
+                    'reason' => $item['reason'],
+                ];
+            }
+        } elseif ($mode === 'prevu-to-realise') {
+            $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
+            $recherche = new Recherche($this->getServiceTypeVolumeHoraire()->getPrevu(), $this->getServiceEtatVolumeHoraire()->getValide());
+            $recherche->setIntervenant($intervenant);
+            foreach ($this->getProcessusEnseignement()->getEnseignements($recherche) as $service) {
+                $service->setTypeVolumeHoraire($realise);
+                $prevus = $service->getVolumeHoraireListe()->createChild()
+                    ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+                    ->setValidation(true);
+                $hours = $prevus->getHeures();
+                if ($hours <= 0) {
+                    continue;
+                }
+                $element = $service->getElementPedagogique();
+                $hasRight = $this->isAllowed($service, Privileges::ENSEIGNEMENT_REALISE_EDITION);
+                $inScope = $this->getServiceService()->canTransferPrevusToRealise($service);
+                $allowed = $hasRight && $inScope;
+                $realiseHours = $service->getVolumeHoraireListe()->createChild()
+                    ->setTypeVolumeHoraire($realise)->getHeures();
+                $rows[] = [
+                    'id' => $service->getId(),
+                    'label' => $element ? $element->getCode() . ' — ' . $element->getLibelle() : 'Enseignement hors offre de formation',
+                    'heures' => $hours,
+                    'transferable' => $allowed,
+                    'warning' => $realiseHours > 0,
+                    'warningMessage' => null,
+                    'existingHours' => $realiseHours,
+                    'period' => $element && $element->getPeriode() ? $element->getPeriode()->getLibelleCourt() : null,
+                    'component' => $element && $element->getStructure() ? $element->getStructure()->getLibelleCourt() : null,
+                    'reason' => !$hasRight
+                        ? 'Vous ne disposez pas des droits de saisie sur cet enseignement dans votre composante.'
+                        : (!$inScope ? 'Cet enseignement est hors de votre périmètre de gestion.' : null),
+                ];
+            }
+        }
+
+        return new JsonModel(['rows' => $rows]);
+    }
+
+
+
+    private function getTransfertPrevuEnseignementData(Intervenant $intervenant): array
+    {
+        $data = $this->getServiceService()->getPrevusFromPrevusData($intervenant, true);
+        foreach ($data as &$item) {
+            if (!$item['transferable']) continue;
+
+            $target = $item['service'] ?? $this->getServiceService()->newEntity()
+                ->setIntervenant($intervenant)
+                ->setElementPedagogique($item['element-pedagogique'])
+                ->setEtablissement($item['etablissement']);
+            $target->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
+            if (!$this->isAllowed($target, Privileges::ENSEIGNEMENT_PREVU_EDITION)) {
+                $item['transferable'] = false;
+                $item['reason'] = 'Vous ne disposez pas des droits de saisie sur cet enseignement dans votre composante.';
+            }
+        }
+        unset($item);
+
+        return $data;
+    }
+
+
+    public function transfertExecuterAction()
+    {
+        $payload = json_decode((string)$this->getRequest()->getContent(), true) ?: [];
+        $intervenantId = (int)($payload['intervenant'] ?? 0);
+        $intervenant = $intervenantId ? $this->getServiceIntervenant()->get($intervenantId) : null;
+        $mode = $payload['mode'] ?? '';
+        $ids = array_values(array_unique(array_map('intval', $payload['ids'] ?? [])));
+        if ($mode === 'prevu-to-realise') {
+            $this->initFilters();
+        }
+
+        if (!$intervenant) {
+            return new JsonModel(['success' => false, 'message' => 'Intervenant introuvable.']);
+        }
+
+        if (!$ids) {
+            return new JsonModel(['success' => false, 'message' => 'Aucun enseignement sélectionné.']);
+        }
+
+        if (!in_array($mode, ['prevu-to-prevu', 'prevu-to-realise'], true)) {
+            return new JsonModel(['success' => false, 'message' => 'Type de transfert inconnu.']);
+        }
+
+        if ($mode === 'prevu-to-prevu') {
+            $eligibleIds = [];
+            foreach ($this->getTransfertPrevuEnseignementData($intervenant) as $item) {
+                if ($item['transferable']) {
+                    $eligibleIds[] = (int)$item['source-id'];
+                }
+            }
+            $ids = array_values(array_intersect($ids, $eligibleIds));
+            if (!$ids) {
+                return new JsonModel(['success' => false, 'message' => 'Aucun des enseignements sélectionnés ne peut être transféré.']);
+            }
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        } else {
+            if (!$this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_REALISE_EDITION)) {
+                return new JsonModel(['success' => false, 'message' => "Vous n’êtes pas autorisé à modifier le service réalisé."]);
+            }
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
+            $services = [];
+            foreach ($ids as $id) {
+                $service = $this->getServiceService()->get($id);
+                if (!$service) {
+                    continue;
+                }
+                $service->setTypeVolumeHoraire($typeVolumeHoraire);
+                if ($service->getIntervenant()->getId() !== $intervenant->getId()
+                    || !$this->isAllowed($service, Privileges::ENSEIGNEMENT_REALISE_EDITION)
+                    || !$this->getServiceService()->canTransferPrevusToRealise($service)) {
+                    continue;
+                }
+                $prevu = $service->getVolumeHoraireListe()->createChild()
+                    ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+                    ->setValidation(true);
+                if ($prevu->getHeures() > 0) {
+                    $services[] = $service;
+                }
+            }
+            if (!$services) {
+                return new JsonModel(['success' => false, 'message' => 'Aucun des enseignements sélectionnés ne peut être transféré.']);
+            }
+        }
+
+        $this->getProcessusPlafond()->beginTransaction();
+        try {
+            if ($mode === 'prevu-to-prevu') {
+                $this->getServiceService()->setPrevusFromPrevus($intervenant, $ids);
+            } else {
+                foreach ($services as $service) {
+                    $service->setTypeVolumeHoraire($typeVolumeHoraire);
+                    $this->getServiceService()->setRealisesFromPrevus($service);
+                }
+            }
+            $this->updateTableauxBord($intervenant);
+            $messages = [];
+            foreach ($this->getProcessusPlafond()->getServicePlafond()->controle($intervenant, $typeVolumeHoraire) as $controle) {
+                if ($controle->isBloquant() && $controle->isDepassement()) $messages[] = (string)$controle;
+            }
+            if ($messages) {
+                $this->em()->rollback();
+                $this->getProcessusPlafond()->getBdd()->setDoctrineConnection(null);
+                return new JsonModel([
+                    'success' => false,
+                    'blocked' => true,
+                    'message' => 'La bascule a été annulée : aucun changement n’a été enregistré. ' . implode(' ', array_unique($messages)),
+                ]);
+            }
+            $ok = $this->getProcessusPlafond()->endTransaction($intervenant, $typeVolumeHoraire);
+        } catch (\Throwable $e) {
+            if ($this->em()->getConnection()->isTransactionActive()) {
+                $this->em()->rollback();
+            }
+            $this->getProcessusPlafond()->getBdd()->setDoctrineConnection(null);
+
+            return new JsonModel([
+                'success' => false,
+                'message' => 'La bascule a été annulée : aucun changement n’a été enregistré. ' . $this->translate($e),
+            ]);
+        }
+        if (!$ok) {
+            return new JsonModel(['success' => false, 'message' => 'La bascule a été annulée par le contrôle des plafonds ; aucun changement n’a été enregistré.']);
+        }
+
+        return new JsonModel(['success' => true]);
+    }
+
+
+
     public function importAgendaPrevisionnelAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');

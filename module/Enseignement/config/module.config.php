@@ -180,6 +180,14 @@ return [
                     ],
                     'assertion'  => Assertion\EnseignementAssertion::class,
                 ],
+                'transfert-donnees'      => [
+                    'route'  => '/transfert-donnees',
+                    'action' => 'transfert-donnees',
+                ],
+                'transfert-executer'     => [
+                    'route'  => '/transfert-executer',
+                    'action' => 'transfert-executer',
+                ],
             ],
         ],
 

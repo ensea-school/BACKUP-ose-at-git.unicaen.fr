@@ -150,7 +150,7 @@ class EmployeurService extends AbstractEntityService
         $row     = 0;
         $datas   = [];
         $options = [];
-        while (($data = fgetcsv($csvFile, 1000, ",")) !== false) {
+        while (($data = fgetcsv($csvFile, 1000, ",",'"','//')) !== false) {
 
             /*
             * $data[0] = Siren

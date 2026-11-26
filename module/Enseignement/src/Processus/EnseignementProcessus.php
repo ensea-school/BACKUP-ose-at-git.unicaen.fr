@@ -63,48 +63,85 @@ class EnseignementProcessus extends AbstractProcessus
         $structureService          = $this->getServiceStructure();
         $etapeService              = $this->getServiceEtape();
         $periodeService            = $this->getServicePeriode();
+        $intervenantService        = $this->getServiceIntervenant();
 
         $qb = $service->initQuery()[0];
         /* @var $qb \Doctrine\ORM\QueryBuilder */
 
         //@formatter:off
         $service
-            ->join(     IntervenantService::class,      $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
-            ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'code', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
-            ->leftjoin( $volumeHoraireService,          $qb, 'volumeHoraire',       ['id', 'heures', 'autoValidation', 'horaireDebut', 'horaireFin'] );
+            ->join(     IntervenantService::class,  $qb, 'intervenant',        ['id', 'nomUsuel', 'prenom', 'sourceCode'] )
+            ->leftJoin( $elementPedagogiqueService, $qb, 'elementPedagogique', ['id', 'code', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
+            ->leftJoin( $volumeHoraireService,      $qb, 'volumeHoraire',      ['id', 'heures', 'autoValidation', 'horaireDebut', 'horaireFin', 'histoDestruction'] );
 
         $elementPedagogiqueService
-            ->leftJoin( $structureService,              $qb, 'structure',           ['id', 'libelleCourt'] )
-            ->leftJoin( $etapeService,                  $qb, 'etape',               ['id', 'code', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] )
-            ->leftJoin( $periodeService,                $qb, 'periode',             ['id', 'code', 'libelleLong', 'libelleCourt', 'ordre'] )
-            ->leftJoin( TypeInterventionService::class,  $qb, 'typeIntervention',    ['id', 'code', 'libelle', 'ordre'] );
+            ->leftJoin( $structureService, $qb, 'structure', ['id', 'libelleCourt'] )
+            ->leftJoin( $etapeService,     $qb, 'etape',     ['id', 'code', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] );
 
         $volumeHoraireService
-            ->leftJoin( MotifNonPaiementService::class,  $qb, 'motifNonPaiement',    ['id', 'libelleCourt', 'libelleLong'] )
-            ->leftJoin( EtatVolumeHoraireService::class, $qb, 'etatVolumeHoraire',   ['id','code','libelle','ordre'] );
-
+            ->leftJoin( $periodeService,                 $qb, 'periode',          ['id', 'code', 'libelleLong', 'libelleCourt', 'ordre'] )
+            ->leftJoin( TypeInterventionService::class,  $qb, 'typeIntervention', ['id', 'code', 'libelle', 'ordre'] )
+            ->leftJoin( MotifNonPaiementService::class,  $qb, 'motifNonPaiement', ['id', 'libelleCourt', 'libelleLong'] )
+            ->leftJoin( EtatVolumeHoraireService::class, $qb, 'etatVolumeHoraire',['id', 'code', 'libelle', 'ordre'] );
         //@formatter:on
 
+        $aServ  = $service->getAlias();
+        $aVh    = $volumeHoraireService->getAlias();
+        $aInt   = $intervenantService->getAlias();
+        $aEtp   = $etapeService->getAlias();
+
+        // Étape portée directement par le service (prioritaire, comme dans la vue)
+        $qb->leftJoin("$aServ.etape", 'etpServ')
+            ->addSelect('partial etpServ.{id, code, libelle, niveau, histoDestruction, sourceCode}');
+
+        // Filtres d'historique (comme la vue)
+        $qb->andWhere("$aServ.histoDestruction IS NULL");
+        $qb->andWhere("$aInt.histoDestruction IS NULL");
+        $qb->andWhere("($aVh.id IS NULL OR $aVh.histoDestruction IS NULL)");
+
         $service->finderByContext($qb);
-        $service->finderByFilterObject($recherche, new \Laminas\Hydrator\ClassMethodsHydrator(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
+        $service->finderByFilterObject(
+            $recherche,
+            new \Laminas\Hydrator\ClassMethodsHydrator(false),
+            $qb,
+            null,
+            ['typeVolumeHoraire', 'etatVolumeHoraire', 'etape']   // 'etape' géré à la main ci-dessous
+        );
+
+        // Type de volume horaire (prévu / réalisé)
+        if ($tvh = $recherche->getTypeVolumeHoraire()) {
+            $qb->andWhere("$aVh.typeVolumeHoraire = :tvh")
+                ->setParameter('tvh', $tvh);
+        }
+
+        // État : un VH validé compte aussi comme saisi
+        if ($evh = $recherche->getEtatVolumeHoraire()) {
+            $qb->andWhere('etatvh.ordre >= :ordreEtat')
+                ->setParameter('ordreEtat', $evh->getOrdre());
+        }
+
+        // Étape : service.etape prioritaire, sinon étape de l'élément
+        if ($etape = $recherche->getEtape()) {
+            $qb->andWhere("COALESCE(etpServ.id, $aEtp.id) = :etapeId")
+                ->setParameter('etapeId', $etape->getId());
+        }
 
         if ($intervenant) {
             $service->finderByIntervenant($intervenant, $qb);
         }
+
         $structureService->orderBy($qb);
         $etapeService->orderBy($qb);
         $periodeService->orderBy($qb);
         $qb->orderBy($elementPedagogiqueService->getAlias() . '.code');
-        $this->getServiceVolumeHoraire()->orderBy($qb);
+        $volumeHoraireService->orderBy($qb);
         $this->getServiceTypeIntervention()->orderBy($qb);
 
         if (!$intervenant && $this->getServiceContext()->getStructure()) {
             $service->finderByComposante($this->getServiceContext()->getStructure(), $qb);
         }
 
-        $services = $service->getList($qb);
-
-        return $services;
+        return $service->getList($qb);
     }
 
 

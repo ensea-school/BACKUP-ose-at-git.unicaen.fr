@@ -147,6 +147,14 @@ return [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ],
                 ],
+                'transfert-donnees'        => [
+                    'route'  => '/transfert-donnees',
+                    'action' => 'transfert-donnees',
+                ],
+                'transfert-executer'       => [
+                    'route'  => '/transfert-executer',
+                    'action' => 'transfert-executer',
+                ],
             ],
         ],
     ],
@@ -249,11 +257,22 @@ return [
         ],
         [
             'controller' => ServiceReferentielController::class,
-            'action'     => ['saisie', 'suppression', 'initialisation', 'constatation'],
+            'action'     => ['saisie', 'suppression', 'initialisation', 'constatation', 'transfert-executer'],
             'privileges' => [
                 Privileges::REFERENTIEL_PREVU_EDITION,
                 Privileges::REFERENTIEL_REALISE_EDITION,
                 Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
+            ],
+            'assertion'  => Assertion\ReferentielAssertion::class,
+        ],
+        [
+            'controller' => ServiceReferentielController::class,
+            'action'     => ['transfert-donnees'],
+            'privileges' => [
+                Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                Privileges::REFERENTIEL_REALISE_VISUALISATION,
+                Privileges::REFERENTIEL_PREVU_EDITION,
+                Privileges::REFERENTIEL_REALISE_EDITION,
             ],
             'assertion'  => Assertion\ReferentielAssertion::class,
         ],

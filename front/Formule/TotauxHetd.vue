@@ -1,21 +1,22 @@
 <template>
-    <b-row v-if="data.types.length > 0">
+    <b-row v-if="data.types.length > 0 || hasPrimes">
         <b-col cols="6">
             <h2>Totaux en heures équivalent TD</h2>
             <table class="table table-bordered">
                 <tr>
                     <th>&nbsp;</th>
+                    <th v-if="soloPrimes">Primes</th>
                     <th v-for="type in data.types" :key="type">{{ tradType(type) }}</th>
                 </tr>
-                <tr v-for="(types,categorie) in data.heures" :key="categorie">
-                    <th>{{ tradCategorie(categorie) }}</th>
+                <tr v-for="(types,categorie) in lignes" :key="categorie">
+                    <th>{{ soloPrimes ? 'Heures' : tradCategorie(categorie) }}</th>
                     <template v-if="categorie !== 'primes'">
                         <td class="nombre" v-for="(heures,type) in types" :key="type">
                             <u-heures :valeur="heures"/>
                         </td>
                     </template>
                     <template v-else>
-                        <td class="nombre" :colspan="types.length">
+                        <td class="nombre" :colspan="Math.max(1, data.types.length)">
                             <u-heures :valeur="data.heures.primes.total"/>
                         </td>
                     </template>
@@ -50,6 +51,28 @@ export default {
         window.addEventListener("Formule/TotauxHetd.refresh", (event) => {
             this.load();
         });
+    },
+    computed: {
+        hasPrimes()
+        {
+            return !!(this.data.heures && this.data.heures.primes);
+        },
+        // intervenant n'ayant que des primes : pas de type FI/FA/FC
+        soloPrimes()
+        {
+            return this.data.types.length === 0 && this.hasPrimes;
+        },
+        // ignore les catégories vides (ex : intervenant n'ayant que des primes, donc sans type FI/FA/FC)
+        lignes()
+        {
+            const res = {};
+            for (const [categorie, valeurs] of Object.entries(this.data.heures || {})) {
+                if (categorie === 'primes' || Object.keys(valeurs).length > 0) {
+                    res[categorie] = valeurs;
+                }
+            }
+            return res;
+        },
     },
     methods: {
         load()

@@ -41,6 +41,9 @@ if ($enseignements !== false) {
 if ($referentiels !== false) {
     echo '<h2>Référentiel</h2>';
     $ref = $this->referentiels($typeVolumeHoraire, $intervenant, $referentiels);
+    if ($typeVolumeHoraire->isPrevu()) {
+        $ref->setReplaceSelectedPrevisionnel();
+    }
     $ref->setHorodatage(true);
     echo $ref;
 }

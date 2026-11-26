@@ -37,6 +37,8 @@ class ReferentielsViewHelper extends AbstractHtmlElement
 
     private bool $horodatage = false;
 
+    private bool $replaceSelectedPrevisionnel = false;
+
     private array $services = [];
 
     private array $columns = [
@@ -89,7 +91,16 @@ class ReferentielsViewHelper extends AbstractHtmlElement
         $this->setTypeVolumeHoraire($typeVolumeHoraire);
         $this->setIntervenant($intervenant);
         $this->setServices($referentiels);
+        $this->replaceSelectedPrevisionnel = false;
         $this->calcDefaultColumnsVisibility();
+
+        return $this;
+    }
+
+
+    public function setReplaceSelectedPrevisionnel(bool $replace = true): self
+    {
+        $this->replaceSelectedPrevisionnel = $replace;
 
         return $this;
     }
@@ -211,16 +222,22 @@ class ReferentielsViewHelper extends AbstractHtmlElement
 
 
         $out = '';
+        $transfertAction = '';
 
         if ($this->getIntervenant()) {
             if ($this->isInRealise()) {
-                $out .= $this->renderActionPrevuToRealise();
+                $transfertAction = $this->renderActionPrevuToRealise();
             } else {
-                $out .= $this->renderActionPrevuToPrevu();
+                $transfertAction = $this->renderActionPrevuToPrevu();
             }
+            $out .= $transfertAction;
         }
 
         $out .= $this->renderActionSaisie() . "<br/><br/>";
+
+        if ($transfertAction !== '') {
+            $out .= $this->renderTransfertModal();
+        }
 
         return $out;
     }
@@ -230,33 +247,14 @@ class ReferentielsViewHelper extends AbstractHtmlElement
     {
         $out = '';
 
-        if ($this->getServiceServiceReferentiel()->getPrevusFromPrevusData($this->getIntervenant())) {
+        if ($this->getServiceServiceReferentiel()->getPrevusFromPrevusData($this->getIntervenant(), true)) {
             $attribs = [
-                'class'          => 'btn btn-warning referentiel-prevu-to-prevu-show',
-                'data-bs-toggle' => 'modal',
-                'data-bs-target' => '#referentiel-prevu-to-prevu-modal',
-                //'data-event'    => 'service-constatation',
-                //'href'          => $this->getAddUrl(),
+                'class'          => 'btn btn-warning transfert-referentiels-show',
+                'data-mode'      => 'prevu-to-prevu',
                 'title'          => "Initialiser le service référentiel prévisionnel avec le service référentiel prévisionnel validé l'année dernière",
             ];
             $source = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'))->getLibelle();
             $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
-            $out .= '<div class="modal fade" id="referentiel-prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-md">';
-            $out .= '<div class="modal-content">';
-            $out .= '<div class="modal-header">';
-            $out .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
-            $out .= '</div>';
-            $out .= '<div class="modal-body">';
-            $out .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
-            $out .= '</div>';
-            $out .= '<div class="modal-footer">';
-            $out .= '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary referentiel-prevu-to-prevu" data-intervenant="' . $this->getIntervenant()->getId() . '">OK</button>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
         }
 
         return $out;
@@ -268,34 +266,26 @@ class ReferentielsViewHelper extends AbstractHtmlElement
         $out = '';
 
         $attribs = [
-            'class'          => 'btn btn-warning referentiel-prevu-to-realise-show',
-            'data-bs-toggle' => 'modal',
-            'data-bs-target' => '#referentiel-prevu-to-realise-modal',
-            //'data-event'    => 'service-constatation',
-            //'href'          => $this->getAddUrl(),
+            'class'          => 'btn btn-warning transfert-referentiels-show',
+            'data-mode'      => 'prevu-to-realise',
             'title'          => "Saisir comme réalisées l'ensemble des heures prévisionnelles de référentiel"
                 . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
         ];
         $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
-        $out .= '<div class="modal fade" id="referentiel-prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-        $out .= '<div class="modal-dialog modal-md">';
-        $out .= '<div class="modal-content">';
-        $out .= '<div class="modal-header">';
-        $out .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles de référentiel</h4>';
-        $out .= '</div>';
-        $out .= '<div class="modal-body">';
-        $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles de référentiel ?</p>';
-        $out .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
-        $out .= '</div>';
-        $out .= '<div class="modal-footer">';
-        $out .= '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>';
-        $out .= '<button type="button" class="btn btn-primary referentiel-prevu-to-realise">OK</button>';
-        $out .= '</div>';
-        $out .= '</div>';
-        $out .= '</div>';
-        $out .= '</div>';
 
         return $out;
+    }
+
+
+    protected function renderTransfertModal(): string
+    {
+        $intervenant = $this->getIntervenant();
+
+        return $this->getView()->vue('transfert-referentiels', [
+            'intervenantId' => $intervenant->getId(),
+            'loaderUrl'     => $this->getView()->basePath() . '/images/wait.gif',
+            'replaceExistingPrevisionnel' => $this->replaceSelectedPrevisionnel,
+        ]);
     }
 
 

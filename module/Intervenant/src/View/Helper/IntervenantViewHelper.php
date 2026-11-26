@@ -91,7 +91,8 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Composante d'affectation" => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Grade"                    => $entity->getGrade() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Discipline"               => (!empty($entity->getDiscipline()) && $entity->getDiscipline() != '00 Non renseignée') ? $entity->getDiscipline() : '<span class="inconnu">(Inconnue)</span>',
-                "Dernière modification le" => $entity->getHistoModification()->format(Constants::DATE_FORMAT),
+                "Création de la fiche le"  => $entity->getHistoCreation()->format(Constants::DATE_FORMAT).'<span> par </span>'. $entity->getHistoCreateur(),
+                "Dernière modification le" => $entity->getHistoModification()->format(Constants::DATE_FORMAT).'<span> par </span>'. $entity->getHistoModificateur(),
             ],
             'identifiants' => [
                 "Id"                           => $entity->getId(),

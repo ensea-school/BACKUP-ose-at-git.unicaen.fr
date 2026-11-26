@@ -72,10 +72,12 @@ class  OffreEmploiController extends AbstractController
             try {
                 $this->getServiceOffreEmploi()->save($offreEmploi);
                 $hFin = $offreEmploi->getNombreHeures() * $offreEmploi->getNombrePostes();
-                $this->getProcessusPlafond()->endTransaction($offreEmploi->getStructure(), $typeVolumeHoraire, $hFin < $hDeb);
-                $this->flashMessenger()->addSuccessMessage(
-                    "Enregistrement effectué"
-                );
+                // Si un plafond est dépassé, endTransaction annule l'enregistrement et signale lui-même le dépassement
+                if ($this->getProcessusPlafond()->endTransaction($offreEmploi->getStructure(), $typeVolumeHoraire, $hFin < $hDeb)) {
+                    $this->flashMessenger()->addSuccessMessage(
+                        "Enregistrement effectué"
+                    );
+                }
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
                 $this->em()->rollback();
@@ -207,15 +209,29 @@ class  OffreEmploiController extends AbstractController
 
             if (!empty($dateCommission)) {
 
-                $dateCommission = new \DateTime($dateCommission);
-                $candidature->setDateCommission($dateCommission);
-                $this->getServiceValidation()->validerCandidature($candidature);
-                $this->getServiceCandidature()->save($candidature);
-                //Envoyer mail de confirmation d'acceptation de candidature
-                $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_ACCEPTATION, Candidature::OBJET_MAIL_ACCEPTATION);
-                $this->flashMessenger()->addSuccessMessage("La candidature est bien acceptée");
-                $mission = $this->getServiceMission()->createMissionFromCandidature($candidature);
-                $this->getServiceWorkflow()->calculerTableauxBord([], $candidature->getIntervenant());
+                $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
+                $this->getProcessusPlafond()->beginTransaction();
+                try {
+                    $candidature->setDateCommission(new \DateTime($dateCommission));
+                    $this->getServiceValidation()->validerCandidature($candidature); // flush dans la transaction
+                    $this->getServiceCandidature()->save($candidature);
+                    $mission = $this->getServiceMission()->createMissionFromCandidature($candidature);
+
+                    if ($this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, false)) {
+                        // commit OK : seulement maintenant les effets de bord
+                        $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_ACCEPTATION, Candidature::OBJET_MAIL_ACCEPTATION);
+                        $this->flashMessenger()->addSuccessMessage("La candidature est bien acceptée");
+                        $this->getServiceWorkflow()->calculerTableauxBord([], $candidature->getIntervenant());
+                    } else {
+                        // rollback fait par endTransaction, le message du plafond est déjà en flash
+                        $this->em()->refresh($candidature);
+                        $this->flashMessenger()->addErrorMessage("La candidature n'a pas été acceptée.");
+                    }
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
+                    $this->em()->rollback();
+                }
             } else {
                 $this->flashMessenger()->addErrorMessage("Vous n'avez pas renseigné la date de commission de recurtement");
             }

@@ -35,6 +35,7 @@
 
 * [Configuration du stockage des fichiers](Stockage-fichiers.md)
 * [Mise en place de la signature électronique](Signature-Electronique/configuration.md)
+* [Module Charges d'enseignement](Charges/Charges.md)
 * [Detecter si on est connecté depuis l'établissement ou bien depuis l'extérieur](detection-etablissement-ou-extérieur.md)
 
 ## Paramétrages avancés

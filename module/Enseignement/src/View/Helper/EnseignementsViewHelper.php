@@ -199,16 +199,22 @@ class EnseignementsViewHelper extends AbstractHtmlElement
         if (!$canAddService) return '';
 
         $out = '';
+        $transfertAction = '';
 
         if ($this->getIntervenant()) {
             if ($this->isInRealise()) {
-                $out .= $this->renderActionPrevuToRealise();
+                $transfertAction = $this->renderActionPrevuToRealise();
             } else {
-                $out .= $this->renderActionPrevuToPrevu();
+                $transfertAction = $this->renderActionPrevuToPrevu();
             }
+            $out .= $transfertAction;
         }
 
         $out .= $this->renderActionSaisie();
+
+        if ($transfertAction !== '') {
+            $out .= $this->renderTransfertModal();
+        }
 
         return $out;
     }
@@ -221,33 +227,12 @@ class EnseignementsViewHelper extends AbstractHtmlElement
 
         if ($typeVolumeHoraire = $this->getProcessusEnseignement()->initializePrevu($this->getIntervenant())) {
             $attribs = [
-                'class'          => 'btn btn-warning prevu-to-prevu-show',
-                'data-bs-toggle' => 'modal',
-                'data-bs-target' => '#prevu-to-prevu-modal',
+                'class'          => 'btn btn-warning transfert-enseignements-show',
+                'data-mode'      => 'prevu-to-prevu',
                 'title'          => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
             ];
             $source = $typeVolumeHoraire->getLibelle();
             $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
-            $out .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-md">';
-            $out .= '<div class="modal-content">';
-            $out .= '<div class="modal-header">';
-            $out .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
-            $out .= '</div>';
-            $out .= '<div class="modal-body">';
-            $out .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
-            $out .= '<div class="alert alert-info" id="prevu-to-prevu-attente" style="display:none">';
-            $out .= '<img src="' . $this->getView()->basePath() . '/images/wait.gif" alt="Attente..."/>';
-            $out .= '<div>Reprise des enseignements de l\'année dernière en cours... Merci de patienter.</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '<div class="modal-footer">';
-            $out .= '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->getIntervenant()->getId() . '">OK</button>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
         }
 
         return $out;
@@ -261,33 +246,27 @@ class EnseignementsViewHelper extends AbstractHtmlElement
 
         if ($this->getProcessusEnseignement()->initializeRealise($this->getIntervenant())) {
             $attribs = [
-                'class'          => 'btn btn-warning prevu-to-realise-show',
-                'data-bs-toggle' => 'modal',
-                'data-bs-target' => '#prevu-to-realise-modal',
+                'class'          => 'btn btn-warning transfert-enseignements-show',
+                'data-mode'      => 'prevu-to-realise',
                 'title'          => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
                     . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
             ];
             $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
-            $out .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-md">';
-            $out .= '<div class="modal-content">';
-            $out .= '<div class="modal-header">';
-            $out .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
-            $out .= '</div>';
-            $out .= '<div class="modal-body">';
-            $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
-            $out .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
-            $out .= '</div>';
-            $out .= '<div class="modal-footer">';
-            $out .= '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary prevu-to-realise">OK</button>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
         }
 
         return $out;
+    }
+
+
+
+    protected function renderTransfertModal(): string
+    {
+        $intervenant = $this->getIntervenant();
+
+        return $this->getView()->vue('transfert-enseignements', [
+            'intervenantId' => $intervenant->getId(),
+            'loaderUrl'     => $this->getView()->basePath() . '/images/wait.gif',
+        ]);
     }
 
 

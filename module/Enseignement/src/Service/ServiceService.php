@@ -269,14 +269,29 @@ class ServiceService extends AbstractEntityService
      * @param Intervenant $intervenant
      *
      */
-    public function setPrevusFromPrevus(Intervenant $intervenant)
+    public function setPrevusFromPrevus(Intervenant $intervenant, ?array $selectedServiceIds = null)
     {
-        $old               = $this->getPrevusFromPrevusData($intervenant);
+        $old               = $this->getPrevusFromPrevusData($intervenant, true);
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-
-        // Enregistrement des services trouvés dans la nouvelle année
         foreach ($old as $o) {
+            if (!$o['transferable'] || (!empty($o['target-existing']) && $selectedServiceIds === null)
+                || ($selectedServiceIds !== null && !in_array($o['source-id'], $selectedServiceIds, true))) {
+                continue;
+            }
             $service = $o['service'];
+            if (!empty($o['target-existing'])) {
+                $existing = $service->getVolumeHoraireListe()->createChild()->setTypeVolumeHoraire($typeVolumeHoraire);
+                foreach ($existing->getSousListes([
+                    VolumeHoraireListe::FILTRE_PERIODE,
+                    VolumeHoraireListe::FILTRE_TYPE_INTERVENTION,
+                    VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT,
+                    VolumeHoraireListe::FILTRE_TAG,
+                    VolumeHoraireListe::FILTRE_HORAIRE_DEBUT,
+                    VolumeHoraireListe::FILTRE_HORAIRE_FIN,
+                ]) as $liste) {
+                    $liste->setHeures(0);
+                }
+            }
             if (!$service) {
                 $service = $this->newEntity();
                 $service->setIntervenant($intervenant);
@@ -308,7 +323,7 @@ class ServiceService extends AbstractEntityService
 
 
 
-    public function getPrevusFromPrevusData(Intervenant $intervenant)
+    public function getPrevusFromPrevusData(Intervenant $intervenant, bool $withStatus = false)
     {
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $tvhSource = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
@@ -334,7 +349,7 @@ class ServiceService extends AbstractEntityService
         $sVolumeHoraire->finderByTypeVolumeHoraire($tvhSource, $qb);
         $sVolumeHoraire->finderByEtatVolumeHoraire($evhValide, $qb);
 
-        if ($structure = $this->getServiceContext()->getStructure()) {
+        if (!$withStatus && ($structure = $this->getServiceContext()->getStructure())) {
             $sElementPedagogique->finderByStructure($structure, $qb);
         }
 
@@ -355,6 +370,20 @@ class ServiceService extends AbstractEntityService
                 $newElement = null; // s'il n'est pas actif alors on ne reporte pas
             }
 
+            $sourceLabel = $oldElement ? $oldElement->getCode() . ' — ' . $oldElement->getLibelle() : 'Enseignement hors offre de formation';
+            $metadataElement = $newElement ?: $oldElement;
+            $metadata = [
+                'period' => $metadataElement && $metadataElement->getPeriode()
+                    ? $metadataElement->getPeriode()->getLibelleCourt()
+                    : null,
+                'component' => $metadataElement && $metadataElement->getStructure()
+                    ? $metadataElement->getStructure()->getLibelleCourt()
+                    : null,
+            ];
+            $blockedReason = $oldElement && !$newElement
+                ? 'Aucun enseignement actif correspondant dans l’année courante (code modifié ou enseignement fermé).'
+                : null;
+
             $newPeriode = $newElement ? $newElement->getPeriode() : null;
 
             if (empty($oldElement) || !empty($newElement)) {
@@ -363,11 +392,8 @@ class ServiceService extends AbstractEntityService
                     'etablissement'       => $service->getEtablissement(),
                     'heures'              => [],
                 ];
-                $id = $newElement ? $newElement->getSourceCode() : '';
-                $id .= '-';
-                $id .= $service->getEtablissement()->getSourceCode();
-
                 $vhl = $service->getVolumeHoraireListe();
+                $sourceHoursTotal = $vhl->getHeures();
 
                 $periodes          = $vhl->getPeriodes();
                 $typesIntervention = $vhl->getTypesIntervention();
@@ -399,14 +425,62 @@ class ServiceService extends AbstractEntityService
                     } else {
                         $newHeures = 0;
                     }
-                    if ($newHeures == 0) { // on n'insère pas le service si des heures ont déjà été saisies!!
-                        $o['service'] = $newService;
-                        $old[$id]     = $o;
+                    $o['service'] = $newService;
+                    $o['source-id'] = $service->getId();
+                    $o['label'] = $sourceLabel;
+                    $o['period'] = $metadata['period'];
+                    $o['component'] = $metadata['component'];
+                    $o['transferable'] = true;
+                    $o['warning'] = $newHeures > 0;
+                    $o['target-existing'] = $newHeures > 0;
+                    $o['existing-hours'] = $newHeures;
+                    $copiedHours = array_sum(array_column($o['heures'], 'heures'));
+                    if ($copiedHours < $sourceHoursTotal) {
+                        $o['warning'] = true;
+                        $o['warning-message'] = 'Certaines heures ne sont pas reportées car leur période ne correspond plus.';
+                    } else {
+                        $o['warning-message'] = null;
                     }
+                    $o['reason'] = null;
+                    $old[$service->getId()] = $o;
+                } elseif ($withStatus && $service->getVolumeHoraireListe()->getHeures() > 0) {
+                    $old[$service->getId()] = [
+                        'source-id' => $service->getId(),
+                        'label' => $sourceLabel,
+                        'period' => $metadata['period'],
+                        'component' => $metadata['component'],
+                        'hours-total' => $service->getVolumeHoraireListe()->getHeures(),
+                        'transferable' => false,
+                        'warning' => false,
+                        'reason' => 'Les périodes de cet enseignement ne correspondent plus à celles de l’année courante.',
+                        'service' => null,
+                    ];
+                }
+            } elseif ($withStatus) {
+                $vhl = $service->getVolumeHoraireListe();
+                $hours = $vhl->getHeures();
+                if ($hours > 0) {
+                    $old[$service->getId()] = [
+                        'source-id' => $service->getId(),
+                        'label' => $sourceLabel,
+                        'period' => $metadata['period'],
+                        'component' => $metadata['component'],
+                        'hours-total' => $hours,
+                        'transferable' => false,
+                        'warning' => false,
+                        'reason' => $blockedReason,
+                        'service' => null,
+                    ];
                 }
             }
         }
 
+        if ($withStatus) {
+            foreach ($old as &$item) {
+                $item['hours-total'] = array_sum(array_column($item['heures'] ?? [], 'heures')) ?: ($item['hours-total'] ?? 0);
+            }
+            unset($item);
+        }
         return $old;
     }
 
@@ -734,18 +808,7 @@ class ServiceService extends AbstractEntityService
 
     public function setRealisesFromPrevus(Service $service)
     {
-        $rStructure = $this->getServiceContext()->getStructure();
-        $sStructure = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
-        $intervenant = $service->getIntervenant();
-        //On ne reporte pas le service d'une autre composante que celle de son affectation
-        if ($rStructure && $sStructure && !$sStructure->inStructure($rStructure)) {
-            //Sauf si il s'agit d'un intervenant permanent et que cette intervenant est affecté
-            //dans la même composante que le gestionnaire (sous structures comprise)
-            if (!($intervenant->getStatut()->estPermanent() && $intervenant->getStructure()->inStructure($rStructure))) {
-                //Sinon on annule l'action de report sur prévisionnel vers le réalisé
-                return;
-            }
-        }
+        if (!$this->canTransferPrevusToRealise($service)) return;
 
         $prevus = $service
             ->getVolumeHoraireListe()->createChild()
@@ -791,6 +854,24 @@ class ServiceService extends AbstractEntityService
         }
 
         $this->save($service);
+    }
+
+
+
+    public function canTransferPrevusToRealise(Service $service): bool
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $roleStructure = $role ? $role->getStructure() : null;
+        $serviceStructure = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
+        $intervenant = $service->getIntervenant();
+
+        if ($roleStructure && $serviceStructure && !$serviceStructure->inStructure($roleStructure)) {
+            return (bool)($intervenant->getStatut()->estPermanent()
+                && $intervenant->getStructure()
+                && $intervenant->getStructure()->inStructure($roleStructure));
+        }
+
+        return true;
     }
 
 
